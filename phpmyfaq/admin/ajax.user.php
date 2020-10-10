@@ -122,7 +122,7 @@ if (
                 if (!$newUser->createUser($userName, $userPassword)) {
                     $errorMessage[] = $newUser->error();
                 } else {
-                    $newUser->userdata->set(['display_name', 'email'], [$userRealName, $userEmail]);
+                    $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
                     $newUser->setStatus('active');
                     $newUser->setSuperAdmin($userIsSuperAdmin);
                     $mailHelper = new MailHelper($faqConfig);

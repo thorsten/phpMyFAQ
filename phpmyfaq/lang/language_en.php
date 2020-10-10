@@ -1333,5 +1333,6 @@ $PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
+$PMF_LANG['ad_user_is_visible'] = 'Visible';
 $PMF_LANG['ad_categ_save_order'] = 'Save order';
 $PMF_LANG['ad_add_user_change_password'] = 'User must change password after first login';

@@ -517,6 +517,7 @@ if (
           <th><?= $PMF_LANG['ad_entry_id'] ?></th>
           <th><?= $PMF_LANG['ad_user_status'] ?></th>
           <th><?= $PMF_LANG['ad_user_is_superadmin'] ?></th>
+          <th><?= $PMF_LANG['ad_user_is_visible'] ?></th>
           <th><?= $PMF_LANG['msgNewContentName'] ?></th>
           <th><?= $PMF_LANG['ad_auth_user'] ?></th>
           <th><?= $PMF_LANG['msgNewContentMail'] ?></th>
@@ -564,6 +565,9 @@ if (
             ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
             <td class="text-center">
               <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
+            </td>
+            <td>
+              <i class="fa <?= $user->getUserData('is_visible') ? 'fa-user' : 'fa-user-o' ?>"></i>
             </td>
             <td><?= $user->getUserData('display_name') ?></td>
             <td><?= $user->getLogin() ?></td>
