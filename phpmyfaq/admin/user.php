@@ -654,20 +654,35 @@ if (
             </div>
 
             <div class="form-group row">
-              <label class="col-lg-4 col-form-label"
-                     for="add_user_password"><?= $PMF_LANG['ad_adus_password'] ?></label>
+              <div class="col-lg-4"></div>
               <div class="col-lg-8">
-                <input type="password" name="add_user_password" id="add_user_password" tabindex="4"
-                       class="form-control">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="add_user_automatic_password"
+                         name="add_user_automatic_password">
+                  <label class="form-check-label" for="add_user_automatic_password">
+                    <?= $PMF_LANG['ad_add_user_change_password'] ?>
+                  </label>
+                </div>
               </div>
             </div>
 
-            <div class="form-group row">
-              <label class="col-lg-4 col-form-label"
-                     for="add_user_password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
-              <div class="col-lg-8">
-                <input type="password" name="add_user_password_confirm" id="add_user_password_confirm"
-                       class="form-control" tabindex="5">
+            <div id="add_user_show_password_inputs">
+              <div class="form-group row">
+                <label class="col-lg-4 col-form-label"
+                       for="add_user_password"><?= $PMF_LANG['ad_adus_password'] ?></label>
+                <div class="col-lg-8">
+                  <input type="password" name="add_user_password" id="add_user_password" class="form-control"
+                         autocomplete="off" tabindex="4">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-4 col-form-label"
+                       for="add_user_password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
+                <div class="col-lg-8">
+                  <input type="password" name="add_user_password_confirm" id="add_user_password_confirm"
+                         class="form-control" autocomplete="off" tabindex="5">
+                </div>
               </div>
             </div>
 
@@ -698,71 +713,6 @@ if (
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('addUserModal');
-      const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
-      const addUser = document.getElementById('pmf-add-user-action');
-      const addUserForm = document.getElementById('pmf-add-user-form');
-      const addUserError = document.getElementById('pmf-add-user-error-message');
-      const addUserMessage = document.getElementById('pmf-user-message');
-
-      addUser.addEventListener('click', (event) => {
-        event.preventDefault();
-        const csrf = document.getElementById('add_user_csrf').value;
-        const userName = document.getElementById('add_user_name').value;
-        const realName = document.getElementById('add_user_realname').value;
-        const email = document.getElementById('add_user_email').value;
-        const password = document.getElementById('add_user_password').value;
-        const passwordConfirm = document.getElementById('add_user_password_confirm').value;
-        const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
-
-        addUserForm.classList.add('was-validated');
-
-        const userData = {
-          userName, realName, email, password, passwordConfirm, isSuperAdmin
-        };
-
-        postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
-          .then(async (response) => {
-            if (response.status !== 201) {
-              const errors = await response.json();
-              let errorMessage = '';
-
-              errors.forEach((error) => {
-                errorMessage += `${error}<br>`;
-              });
-
-              addUserError.classList.remove('d-none');
-              addUserError.innerHTML = errorMessage;
-            } else {
-              const result = await response.json();
-
-              addUserMessage.innerHTML = `<p class="alert alert-success">${result.data}</p>`;
-
-              modal.style.display = 'none';
-              modal.classList.remove('show');
-              modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
-            }
-          })
-          .catch((error) => {
-            console.log('Final Request failure: ', error);
-          });
-      });
-
-      async function postUserData(url = '', data = {}) {
-        return await fetch(url, {
-          method: 'POST',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
-          body: JSON.stringify(data)
-        });
-      }
-    });
-
     /**
      * Ajax call to delete user
      *

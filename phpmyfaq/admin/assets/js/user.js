@@ -23,7 +23,7 @@
 function getUserRights(userId) {
   'use strict';
 
-  $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId, data => {
+  $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId, (data) => {
     $.each(data, (i, val) => {
       $('#user_right_' + val).attr('checked', true);
     });
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonOverridePassword = $('.pmf-user-password-override-action');
 
   button.data('type', 'check');
-  button.on('click', event => {
+  button.on('click', (event) => {
     const checkbox = $('.permission');
     event.preventDefault();
     if (button.data('type') === 'check') {
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  buttonOverridePassword.on('click', event => {
+  buttonOverridePassword.on('click', (event) => {
     event.preventDefault();
 
     // Fetch data
@@ -71,12 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       data: $('#pmf-modal-user-password-override form').serialize(),
       dataType: 'json',
-      beforeSend: function() {
+      beforeSend: function () {
         $('#pmf-admin-saving-data-indicator').html(
           '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>'
         );
       },
-      success: function(message) {
+      success: function (message) {
         $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
         $('#pmf-modal-user-password-override').modal('hide');
         $('#pmf-admin-saving-data-indicator').fadeOut();
@@ -95,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'GET',
         dataType: 'JSON',
         data: 'q=' + request,
-        success: data => {
+        success: (data) => {
           response(
-            data.map(item => {
+            data.map((item) => {
               return {
                 user_id: item.user_id,
                 name: item.name,
@@ -107,12 +107,86 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       });
     },
-    displayText: item => {
+    displayText: (item) => {
       return typeof item !== 'undefined' && typeof item.name !== 'undefined' ? item.name : item;
     },
-    afterSelect: user => {
+    afterSelect: (user) => {
       $('#user_list_select').val(user.user_id);
       updateUser(user.user_id);
     },
   });
+
+  const modal = document.getElementById('addUserModal');
+  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
+  const addUser = document.getElementById('pmf-add-user-action');
+  const addUserForm = document.getElementById('pmf-add-user-form');
+  const addUserError = document.getElementById('pmf-add-user-error-message');
+  const addUserMessage = document.getElementById('pmf-user-message');
+  const passwordToggle = document.getElementById('add_user_automatic_password');
+  const passwordInputs = document.getElementById('add_user_show_password_inputs');
+
+  passwordToggle.addEventListener('click', () => {
+    passwordInputs.classList.toggle('d-none');
+  });
+
+  addUser.addEventListener('click', (event) => {
+    event.preventDefault();
+    const csrf = document.getElementById('add_user_csrf').value;
+    const userName = document.getElementById('add_user_name').value;
+    const realName = document.getElementById('add_user_realname').value;
+    const email = document.getElementById('add_user_email').value;
+    const password = document.getElementById('add_user_password').value;
+    const passwordConfirm = document.getElementById('add_user_password_confirm').value;
+    const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
+
+    addUserForm.classList.add('was-validated');
+
+    const userData = {
+      userName,
+      realName,
+      email,
+      password,
+      passwordConfirm,
+      isSuperAdmin,
+    };
+
+    postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
+      .then(async (response) => {
+        if (response.status !== 201) {
+          const errors = await response.json();
+          let errorMessage = '';
+
+          errors.forEach((error) => {
+            errorMessage += `${error}<br>`;
+          });
+
+          addUserError.classList.remove('d-none');
+          addUserError.innerHTML = errorMessage;
+        } else {
+          const result = await response.json();
+
+          addUserMessage.innerHTML = `<p class="alert alert-success">${result.data}</p>`;
+
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+          modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+        }
+      })
+      .catch((error) => {
+        console.log('Final Request failure: ', error);
+      });
+  });
+
+  async function postUserData(url = '', data = {}) {
+    return await fetch(url, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data),
+    });
+  }
 });
