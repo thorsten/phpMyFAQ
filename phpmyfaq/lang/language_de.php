@@ -1329,6 +1329,9 @@ $PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
 $PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
 $PMF_LANG['loginPageMessage'] = 'Login für ';
 
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';
+
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Benutzername soll sichtbar sein';
 $PMF_LANG['ad_categ_save_order'] = 'Sortierung speichern';

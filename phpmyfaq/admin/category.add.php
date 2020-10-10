@@ -149,6 +149,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                                 <input type="radio" name="grouppermission" value="all" checked>
                                   <?= $PMF_LANG['ad_entry_all_groups'] ?>
                               </label>
+                              <br>
                               <label class="radio">
                                 <input type="radio" name="grouppermission" value="restricted">
                                   <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
@@ -168,6 +169,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             <input type="radio" name="userpermission" value="all" checked>
                               <?= $PMF_LANG['ad_entry_all_users'] ?>
                           </label>
+                          <br>
                           <label class="radio">
                             <input type="radio" name="userpermission" value="restricted">
                               <?= $PMF_LANG['ad_entry_restricted_users'] ?>
