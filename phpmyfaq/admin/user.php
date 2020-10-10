@@ -44,7 +44,7 @@ if (
     $defaultUserAction = 'list';
     $defaultUserStatus = 'active';
     $userActionList = [
-        'udpate_rights',
+        'update_rights',
         'update_data',
         'delete_confirm',
         'delete',
