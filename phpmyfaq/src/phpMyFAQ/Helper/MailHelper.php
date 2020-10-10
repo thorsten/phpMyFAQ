@@ -51,7 +51,7 @@ class MailHelper
      * @param string $password
      * @return bool
      */
-    public function sendMailToNewUser(User $user, $password): bool
+    public function sendMailToNewUser(User $user, string $password): bool
     {
         global $PMF_LANG;
 
@@ -59,7 +59,7 @@ class MailHelper
             "You have been registered as a new user:" .
             "\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" . 'Check it out here: %s',
             $user->getUserData('display_name'),
-            $user->getUserData(),
+            $user->getUserData('login_name'),
             $password,
             $this->config->getDefaultUrl()
         );

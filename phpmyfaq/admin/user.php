@@ -19,13 +19,10 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
-use phpMyFAQ\Mail;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -240,94 +237,6 @@ if (
         }
     }
 
-    // save new user
-    if ($userAction === 'addsave' && $user->perm->checkRight($user->getUserId(), 'add_user')) {
-        $newUser = new User($faqConfig);
-        $message = '';
-        $messages = [];
-        $userName = Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
-        $userRealName = Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
-        $userPassword = Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-        $userEmail = Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
-        $userPassword = Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-        $userPasswordConfirm = Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
-        $userIsSuperAdmin = Filter::filterInput(INPUT_POST, 'user_is_superadmin', FILTER_SANITIZE_STRING);
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-        $csrfOkay = true;
-
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-            $csrfOkay = false;
-        }
-
-        if ($userPassword !== $userPasswordConfirm) {
-            $userPassword = '';
-            $userPasswordConfirm = '';
-            $messages[] = $PMF_LANG['ad_user_error_passwordsDontMatch'];
-        }
-
-        // check login name
-        if (!$newUser->isValidLogin($userName)) {
-            $userName = '';
-            $messages[] = $PMF_LANG['ad_user_error_loginInvalid'];
-        }
-        if ($newUser->getUserByLogin($userName)) {
-            $userName = '';
-            $messages[] = $PMF_LANG['ad_adus_exerr'];
-        }
-        // check realname
-        if ($userRealName == '') {
-            $userRealName = '';
-            $messages[] = $PMF_LANG['ad_user_error_noRealName'];
-        }
-        // check e-mail
-        if (is_null($userEmail)) {
-            $userEmail = '';
-            $messages[] = $PMF_LANG['ad_user_error_noEmail'];
-        }
-
-        // ok, let's go
-        if (count($messages) === 0 && $csrfOkay) {
-            // create user account (login and password)
-            if (!$newUser->createUser($userName, $userPassword)) {
-                $messages[] = $newUser->error();
-            } else {
-                // set user data (realname, email)
-                $newUser->userdata->set(['display_name', 'email'], [$userRealName, $userEmail]);
-                // set user status
-                $newUser->setStatus($defaultUserStatus);
-                $newUser->setSuperAdmin($userIsSuperAdmin === 'on' ? true : false);
-            }
-        }
-
-        // no errors, send notification to user and show list
-        if (count($messages) === 0) {
-            $text = sprintf(
-                "You have been registered as a new user:\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" . 'Check it out here: %s',
-                $userRealName,
-                $userName,
-                $userPassword,
-                $faqConfig->getDefaultUrl()
-            );
-
-            $mail = new Mail($faqConfig);
-            $mail->addTo($userEmail, $userName);
-            $mail->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
-            $mail->message = $text;
-            $result = $mail->send();
-
-            $userAction = $defaultUserAction;
-            $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adus_suc']);
-            // display error messages and show form again
-        } else {
-            $userAction = 'add';
-            $message = '<p class="alert alert-danger">';
-            foreach ($messages as $err) {
-                $message .= $err . '<br>';
-            }
-            $message .= '</p>';
-        }
-    }
-
     if (!isset($message)) {
         $message = '';
     }
@@ -355,6 +264,8 @@ if (
           </div>
         </div>
       </div>
+
+      <div id="pmf-user-message"><?= $message ?></div>
 
       <script>
         /**
@@ -519,7 +430,7 @@ if (
               </button>
             </div>
             <div class="modal-body">
-              <form action="#" method="post" accept-charset="utf-8">
+              <form action="#" method="post" accept-charset="utf-8" autocomplete="off">
                 <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
                 <input type="hidden" name="user_id" id="modal_user_id" value="<?= $userId ?>">
 
@@ -598,7 +509,7 @@ if (
         </div>
       </div>
 
-      <div id="user_message"><?= $message ?></div>
+      <div id="pmf-user-message"><?= $message ?></div>
 
       <table class="table table-striped">
         <thead class="thead-dark">
@@ -711,10 +622,13 @@ if (
           </button>
         </div>
         <div class="modal-body">
-          <form action="#" method="post" role="form" id="pmf-add-user-form" class="needs-validation" novalidate>
+          <form action="#" method="post" role="form" id="pmf-add-user-form" class="needs-validation" autocomplete="off"
+                novalidate>
 
             <input type="hidden" id="add_user_csrf" name="add_user_csrf"
                    value="<?= $currentUser->getCsrfTokenFromSession() ?>">
+
+            <div class="alert alert-danger d-none" id="pmf-add-user-error-message"></div>
 
             <div class="form-group row">
               <label class="col-lg-4 col-form-label" for="add_user_name"><?= $PMF_LANG['ad_adus_name'] ?></label>
@@ -743,7 +657,7 @@ if (
               <label class="col-lg-4 col-form-label"
                      for="add_user_password"><?= $PMF_LANG['ad_adus_password'] ?></label>
               <div class="col-lg-8">
-                <input type="password" name="add_user_password" id="add_user_password" required tabindex="4"
+                <input type="password" name="add_user_password" id="add_user_password" tabindex="4"
                        class="form-control">
               </div>
             </div>
@@ -752,7 +666,7 @@ if (
               <label class="col-lg-4 col-form-label"
                      for="add_user_password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
               <div class="col-lg-8">
-                <input type="password" name="add_user_password_confirm" id="add_user_password_confirm" required
+                <input type="password" name="add_user_password_confirm" id="add_user_password_confirm"
                        class="form-control" tabindex="5">
               </div>
             </div>
@@ -786,8 +700,11 @@ if (
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const modal = document.getElementById('addUserModal');
+      const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
       const addUser = document.getElementById('pmf-add-user-action');
       const addUserForm = document.getElementById('pmf-add-user-form');
+      const addUserError = document.getElementById('pmf-add-user-error-message');
+      const addUserMessage = document.getElementById('pmf-user-message');
 
       addUser.addEventListener('click', (event) => {
         event.preventDefault();
@@ -806,30 +723,30 @@ if (
         };
 
         postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
-          .then(async (data) => {
-            if (data.status !== 201) {
-              console.log('1. Request failure: ', data);
+          .then(async (response) => {
+            if (response.status !== 201) {
+              const errors = await response.json();
+              let errorMessage = '';
+
+              errors.forEach((error) => {
+                errorMessage += `${error}<br>`;
+              });
+
+              addUserError.classList.remove('d-none');
+              addUserError.innerHTML = errorMessage;
             } else {
-              const result = await data.json();
-              console.log('result to handle', result);
+              const result = await response.json();
+
+              addUserMessage.innerHTML = `<p class="alert alert-success">${result.data}</p>`;
 
               modal.style.display = 'none';
               modal.classList.remove('show');
+              modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
             }
           })
           .catch((error) => {
             console.log('Final Request failure: ', error);
           });
-          /*
-          .then((response) => response.json())
-          .then((responseData) => {
-            console.log(responseData);
-            //
-          })
-          .catch((error) => {
-            console.log('error', error);
-          })
-          */
       });
 
       async function postUserData(url = '', data = {}) {
@@ -858,7 +775,7 @@ if (
 
         $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=' + userId + '&csrf=' + csrf,
           (response) => {
-            $('#user_message').html(response);
+            $('#pmf-user-message').html(response);
             $('.row_user_id_' + userId).fadeOut('slow');
           });
       }

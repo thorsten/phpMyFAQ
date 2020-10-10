@@ -85,6 +85,7 @@ if (
             break;
 
         case 'add_user':
+
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
@@ -98,7 +99,6 @@ if (
 
             $userName = Filter::filterVar($postData['userName'], FILTER_SANITIZE_STRING);
             $userRealName = Filter::filterVar($postData['realName'], FILTER_SANITIZE_STRING);
-            $userPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_STRING);
             $userEmail = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
             $userPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_STRING);
             $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_SANITIZE_STRING);
@@ -134,6 +134,7 @@ if (
                 $http->sendJsonWithHeaders($successMessage);
                 exit(1);
             }
+
             $http->setStatus(400);
             $http->sendJsonWithHeaders($errorMessage);
             break;
