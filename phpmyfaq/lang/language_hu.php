@@ -718,7 +718,7 @@ $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Record sorting (accor
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');
 $LANG_CONF['records.defaultActivation'] = array(0 => 'checkbox', 1 => 'Activate new records (default: deactivated)');
 $LANG_CONF['records.defaultAllowComments'] = array(0 => 'checkbox', 1 => 'Allow comments for new records (default: disallowed)');
-$PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
+$PMF_LANG['err_inactiveArticle'] = 'Access denied';
 $PMF_LANG['msgArticleCategories'] = 'Categories for this entry';
 $PMF_LANG['ad_entry_solution_id'] = 'Unique solution ID';
 $PMF_LANG['ad_entry_faq_record'] = 'Bejegyzés';
