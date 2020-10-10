@@ -37,6 +37,7 @@ phpmyfaq/src/libs/monolog
 phpmyfaq/src/libs/myclabs
 phpmyfaq/src/libs/parsedown
 phpmyfaq/src/libs/phpseclib
+phpmyfaq/src/libs/phpunit
 phpmyfaq/src/libs/psr
 phpmyfaq/src/libs/react
 phpmyfaq/src/libs/swiftmailer
@@ -74,4 +75,3 @@ backup/*
 
 # PHPUnit
 .phpunit.result.cache
-phpmyfaq/lang/language_es-es.php
