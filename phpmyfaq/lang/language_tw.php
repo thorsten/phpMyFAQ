@@ -574,7 +574,7 @@ $PMF_LANG['ad_categ_select'] = "選取類別語言";
 $PMF_LANG['msgSitemap'] = "網站地圖";
 
 // added v1.5.2 - 2005-09-23 by Lars 開發者
-$PMF_LANG['err_inactiveArticle'] = "此 entry 在修正中，目前不能對外顯示。(This entry is in revision and can not be displayed.)";
+$PMF_LANG['err_inactiveArticle'] = "此 entry 在修正中，目前不能對外顯示。(Access denied)";
 $PMF_LANG['msgArticleCategories'] = "此 entry 所屬的類別 (Categories for this entry)";
 
 // added v1.6.0 - 2006-02-02 by Thorsten 開發者

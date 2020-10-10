@@ -570,7 +570,7 @@ $PMF_LANG['ad_categ_select'] = 'Ангиллын хэл сонгох';
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
 // added v1.5.2 - 2005-09-23 by Lars
-$PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
+$PMF_LANG['err_inactiveArticle'] = 'Access denied';
 $PMF_LANG['msgArticleCategories'] = 'Энэ бичлэгийг ангилал';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
