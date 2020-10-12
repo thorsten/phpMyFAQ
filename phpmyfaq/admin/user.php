@@ -566,7 +566,7 @@ if (
             <td class="text-center">
               <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
             </td>
-            <td>
+            <td class="text-center">
               <i class="fa <?= $user->getUserData('is_visible') ? 'fa-user' : 'fa-user-o' ?>"></i>
             </td>
             <td><?= $user->getUserData('display_name') ?></td>

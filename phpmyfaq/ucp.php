@@ -53,6 +53,8 @@ if ($user->isLoggedIn()) {
             'realname' => $user->getUserData('display_name'),
             'msgEmail' => $PMF_LANG['msgNewContentMail'],
             'email' => $user->getUserData('email'),
+            'msgIsVisible' => $PMF_LANG['ad_user_data_is_visible'],
+            'is_visible' => $user->getUserData('is_visible'),
             'msgPassword' => $PMF_LANG['ad_auth_passwd'],
             'msgConfirm' => $PMF_LANG['ad_user_confirm'],
             'msgSave' => $PMF_LANG['msgSave'],

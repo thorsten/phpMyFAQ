@@ -808,7 +808,9 @@ switch ($action) {
         }
         break;
 
+    //
     // Save user data from UCP
+    //
     case 'saveuserdata':
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
@@ -817,8 +819,9 @@ switch ($action) {
         }
 
         $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_STRING);
         $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
         $confirm = Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
 
@@ -835,8 +838,9 @@ switch ($action) {
         }
 
         $userData = [
-            'display_name' => $author,
+            'display_name' => $userName,
             'email' => $email,
+            'is_visible' => $isVisible === 'on' ? 1 : 0
         ];
         $success = $user->setUserData($userData);
 
@@ -861,6 +865,9 @@ switch ($action) {
         }
         break;
 
+    //
+    // Change password
+    //
     case 'changepassword':
 
         $username = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
@@ -891,6 +898,9 @@ switch ($action) {
         }
         break;
 
+    //
+    // Request removal of user
+    //
     case 'request-removal':
 
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
