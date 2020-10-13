@@ -104,7 +104,10 @@ class Html5 extends Export
                     $this->xml->writeElement('h1', $this->category->getPath($data['category_id'], ' >> '));
                 }
 
-                $this->xml->writeElement('h2', strip_tags($data['topic']));
+                $this->xml->startElement('h2');
+                $this->xml->writeAttribute('id', "entry-" . $data['solution_id']);
+                $this->xml->text(strip_tags($data['topic']));
+                $this->xml->endElement();
                 $this->xml->startElement('p');
                 $this->xml->writeCdata(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
                 $this->xml->endElement();
