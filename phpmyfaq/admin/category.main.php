@@ -298,12 +298,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     unset($category);
                 }
 
-                if ($faqConfig->get('main.enableCategoryRestrictions')) {
-                    $category = new Category($faqConfig, $currentAdminGroups, true);
-                } else {
-                    $category = new Category($faqConfig, $currentAdminGroups, false);
-                }
-
+                $category = new Category($faqConfig, $currentAdminGroups, false);
                 $category->setUser($currentAdminUser);
                 $category->setGroups($currentAdminGroups);
                 $category->getMissingCategories();
@@ -322,12 +317,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                     // Has permissions, show lock icon
                     if ($category->hasPermissions($cat['id'])) {
-                        $categoryName .= ' <i class="fa fa-lock"></i>';
+                        $categoryName .= ' <i class="fa fa-lock" aria-hidden="true"></i>';
                     }
 
                     // Category is shown on start page
-                    if (isset($cat['show_home'])) {
-                        $categoryName .= ' <i class="fa fa-star"></i>';
+                    if ((int)$cat['show_home'] === 1) {
+                        $categoryName .= ' <i class="fa fa-star" aria-hidden="true"></i>';
+                    }
+
+                    // Category is inactive
+                    if ((int)$cat['active'] === 0) {
+                        $categoryName .= ' <i class="fa fa-eye-slash" aria-hidden="true"></i>';
                     }
 
                     // Level of the category
