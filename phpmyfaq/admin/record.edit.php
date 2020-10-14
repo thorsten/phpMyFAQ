@@ -356,7 +356,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= $PMF_LANG['ad_entry_theme'] ?>"
-                                           value="<?= $faqData['title'] ?>">
+                                           value="<?= htmlspecialchars($faqData['title']) ?>">
                                 </div>
 
                                 <!-- Answer -->

@@ -207,19 +207,23 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         // If Elasticsearch is enabled, update active or delete inactive FAQ document
         if ($faqConfig->get('search.enableElasticsearch')) {
             $esInstance = new Elasticsearch($faqConfig);
-            $esInstance->delete($solutionId);
-            if ('yes' === $active) {
-                $esInstance->index(
-                    [
-                        'id' => $recordId,
-                        'lang' => $recordLang,
-                        'solution_id' => $solutionId,
-                        'question' => $recordData['thema'],
-                        'answer' => $recordData['content'],
-                        'keywords' => $keywords,
-                        'category_id' => $categories['rubrik'][0]
-                    ]
-                );
+            try {
+                $esInstance->delete($solutionId);
+                if ('yes' === $active) {
+                    $esInstance->index(
+                        [
+                            'id' => $recordId,
+                            'lang' => $recordLang,
+                            'solution_id' => $solutionId,
+                            'question' => $recordData['thema'],
+                            'answer' => $recordData['content'],
+                            'keywords' => $keywords,
+                            'category_id' => $categories['rubrik'][0]
+                        ]
+                    );
+                }
+            } catch (Missing404Exception $e) {
+                // @todo handle exception
             }
         }
 
