@@ -24,9 +24,11 @@ namespace phpMyFAQ;
  */
 class Session
 {
+    /** @var string Name of the remember me cookie */
     public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
+
+    /** @var string Name of the session cookie */
     public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
-    private const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
 
     /**
      * @var Configuration
@@ -44,10 +46,155 @@ class Session
     }
 
     /**
+     * Returns the timestamp of a session.
+     *
+     * @param int $sessionId Session ID
+     *
+     * @return int
+     */
+    public function getTimeFromSessionId(int $sessionId)
+    {
+        $timestamp = 0;
+
+        $query = sprintf('SELECT time FROM %sfaqsessions WHERE sid = %d', Database::getTablePrefix(), $sessionId);
+
+        $result = $this->config->getDb()->query($query);
+
+        if ($result) {
+            $res = $this->config->getDb()->fetchObject($result);
+            $timestamp = $res->time;
+        }
+
+        return $timestamp;
+    }
+
+    /**
+     * Returns all session from a date.
+     *
+     * @param int $firstHour First hour
+     * @param int $lastHour Last hour
+     *
+     * @return array
+     */
+    public function getSessionsByDate(int $firstHour, int $lastHour): array
+    {
+        $sessions = [];
+
+        $query = sprintf(
+            'SELECT sid, ip, time FROM %sfaqsessions WHERE time > %d AND time < %d ORDER BY time',
+            Database::getTablePrefix(),
+            $firstHour,
+            $lastHour
+        );
+
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
+            $sessions[$row->sid] = [
+                'ip' => $row->ip,
+                'time' => $row->time,
+            ];
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Returns the number of sessions.
+     *
+     * @return int
+     */
+    public function getNumberOfSessions(): int
+    {
+        $num = 0;
+
+        $query = sprintf('SELECT COUNT(sid) as num_sessions FROM %sfaqsessions', Database::getTablePrefix());
+
+        $result = $this->config->getDb()->query($query);
+        if ($result) {
+            $row = $this->config->getDb()->fetchObject($result);
+            $num = $row->num_sessions;
+        }
+
+        return $num;
+    }
+
+    /**
+     * Deletes the sessions for a given timespan.
+     *
+     * @param int $first First session ID
+     * @param int $last Last session ID
+     *
+     * @return bool
+     */
+    public function deleteSessions(int $first, int $last): bool
+    {
+        $query = sprintf(
+            'DELETE FROM %sfaqsessions WHERE time >= %d AND time <= %d',
+            Database::getTablePrefix(),
+            $first,
+            $last
+        );
+
+        $this->config->getDb()->query($query);
+
+        return true;
+    }
+
+    /**
+     * Deletes all entries in the table.
+     *
+     * @return mixed
+     */
+    public function deleteAllSessions()
+    {
+        $query = sprintf('DELETE FROM %sfaqsessions', Database::getTablePrefix());
+
+        return $this->config->getDb()->query($query);
+    }
+
+    /**
+     * Checks the Session ID.
+     *
+     * @param int $sessionIdToCheck Session ID
+     * @param string $ip IP
+     * @throws
+     */
+    public function checkSessionId(int $sessionIdToCheck, string $ip)
+    {
+        global $sessionId, $user;
+
+        $query = sprintf(
+            "SELECT sid FROM %sfaqsessions WHERE sid = %d AND ip = '%s' AND time > %d",
+            Database::getTablePrefix(),
+            $sessionIdToCheck,
+            $ip,
+            $_SERVER['REQUEST_TIME'] - 86400
+        );
+        $result = $this->config->getDb()->query($query);
+
+        if ($this->config->getDb()->numRows($result) == 0) {
+            $this->userTracking('old_session', $sessionIdToCheck);
+        } else {
+            // Update global session id
+            $sessionId = $sessionIdToCheck;
+            // Update db tracking
+            $query = sprintf(
+                "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
+                Database::getTablePrefix(),
+                $_SERVER['REQUEST_TIME'],
+                ($user ? $user->getUserId() : '-1'),
+                $sessionIdToCheck,
+                $ip
+            );
+            $this->config->getDb()->query($query);
+        }
+    }
+
+    /**
      * Tracks the user and log what he did.
      *
      * @param string $action Action string
-     * @param string $data
+     * @param string|null $data
      *
      * @throws Exception
      */
@@ -100,12 +247,7 @@ class Session
                     }
 
                     $query = sprintf(
-                        "
-                        INSERT INTO 
-                            %sfaqsessions
-                        (sid, user_id, ip, time)
-                            VALUES
-                        (%d, %d, '%s', %d)",
+                        "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
                         Database::getTablePrefix(),
                         $sessionId,
                         ($user ? $user->getUserId() : -1),
@@ -116,13 +258,13 @@ class Session
                 }
 
                 $data = $sessionId . ';' .
-                        str_replace(';', ',', $action) . ';' .
-                        $data . ';' .
-                        $remoteAddress . ';' .
-                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
-                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' .
-                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
-                        $_SERVER['REQUEST_TIME'] . ";\n";
+                    str_replace(';', ',', $action) . ';' .
+                    $data . ';' .
+                    $remoteAddress . ';' .
+                    str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
+                    str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' .
+                    str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
+                    $_SERVER['REQUEST_TIME'] . ";\n";
                 $file = PMF_ROOT_DIR . '/data/tracking' . date('dmY');
 
                 if (!is_file($file)) {
@@ -139,200 +281,48 @@ class Session
     }
 
     /**
-     * Returns the timestamp of a session.
+     * Store the Session ID into a persistent cookie expiring
+     * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
-     * @param int $sid Session ID
-     *
-     * @return int
-     */
-    public function getTimeFromSessionId(int $sid)
-    {
-        $timestamp = 0;
-
-        $query = sprintf(
-            '
-            SELECT
-                time
-            FROM
-                %sfaqsessions
-            WHERE
-                sid = %d',
-            Database::getTablePrefix(),
-            $sid
-        );
-
-        $result = $this->config->getDb()->query($query);
-
-        if ($result) {
-            $res = $this->config->getDb()->fetchObject($result);
-            $timestamp = $res->time;
-        }
-
-        return $timestamp;
-    }
-
-    /**
-     * Returns all session from a date.
-     *
-     * @param int $firstHour First hour
-     * @param int $lastHour  Last hour
-     *
-     * @return array
-     */
-    public function getSessionsByDate(int $firstHour, int $lastHour): array
-    {
-        $sessions = [];
-
-        $query = sprintf(
-            '
-            SELECT
-                sid, ip, time
-            FROM
-                %sfaqsessions
-            WHERE
-                time > %d
-            AND
-                time < %d
-            ORDER BY
-                time',
-            Database::getTablePrefix(),
-            $firstHour,
-            $lastHour
-        );
-
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
-            $sessions[$row->sid] = array(
-                'ip' => $row->ip,
-                'time' => $row->time,
-            );
-        }
-
-        return $sessions;
-    }
-
-    /**
-     * Returns the number of sessions.
-     *
-     * @return int
-     */
-    public function getNumberOfSessions(): int
-    {
-        $num = 0;
-
-        $query = sprintf(
-            '
-            SELECT
-                COUNT(sid) as num_sessions
-            FROM
-                %sfaqsessions',
-            Database::getTablePrefix()
-        );
-
-        $result = $this->config->getDb()->query($query);
-        if ($result) {
-            $row = $this->config->getDb()->fetchObject($result);
-            $num = $row->num_sessions;
-        }
-
-        return $num;
-    }
-
-    /**
-     * Deletes the sessions for a given timespan.
-     *
-     * @param int $first First session ID
-     * @param int $last  Last session ID
+     * @param string $name Cookie name
+     * @param string|null $sessionId Session ID
+     * @param int $timeout Cookie timeout
      *
      * @return bool
      */
-    public function deleteSessions(int $first, int $last): bool
+    public function setCookie(string $name, $sessionId = '', int $timeout = PMF_SESSION_EXPIRED_TIME): bool
     {
-        $query = sprintf(
-            '
-            DELETE FROM
-                %sfaqsessions
-            WHERE
-                time >= %d
-            AND
-                time <= %d',
-            Database::getTablePrefix(),
-            $first,
-            $last
-        );
+        $protocol = 'http';
+        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
+            $protocol = 'https';
+        }
 
-        $this->config->getDb()->query($query);
-
-        return true;
-    }
-
-    /**
-     * Deletes all entries in the table.
-     *
-     * @return mixed
-     */
-    public function deleteAllSessions()
-    {
-        $query = sprintf('DELETE FROM %sfaqsessions', Database::getTablePrefix());
-
-        return $this->config->getDb()->query($query);
-    }
-
-    /**
-     * Checks the Session ID.
-     *
-     * @param  int    $sessionIdToCheck Session ID
-     * @param  string $ip               IP
-     * @throws
-     */
-    public function checkSessionId(int $sessionIdToCheck, string $ip)
-    {
-        global $sessionId, $user;
-
-        $query = sprintf(
-            "
-            SELECT
-                sid
-            FROM
-                %sfaqsessions
-            WHERE
-                sid = %d
-            AND
-                ip = '%s'
-            AND
-                time > %d",
-            Database::getTablePrefix(),
-            $sessionIdToCheck,
-            $ip,
-            $_SERVER['REQUEST_TIME'] - 86400
-        );
-        $result = $this->config->getDb()->query($query);
-
-        if ($this->config->getDb()->numRows($result) == 0) {
-            $this->userTracking('old_session', $sessionIdToCheck);
-        } else {
-            // Update global session id
-            $sessionId = $sessionIdToCheck;
-            // Update db tracking
-            $query = sprintf(
-                "
-                UPDATE
-                    %sfaqsessions
-                SET
-                    time = %d,
-                    user_id = %d
-                WHERE
-                    sid = %d
-                    AND ip = '%s'",
-                Database::getTablePrefix(),
-                $_SERVER['REQUEST_TIME'],
-                ($user ? $user->getUserId() : '-1'),
-                $sessionIdToCheck,
-                $ip
+        if (PHP_VERSION_ID < 70300) {
+            return setcookie(
+                $name,
+                $sessionId,
+                $_SERVER['REQUEST_TIME'] + $timeout,
+                dirname($_SERVER['SCRIPT_NAME']) . '; samesite=strict',
+                parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
+                'https' === $protocol,
+                true
             );
-            $this->config->getDb()->query($query);
+        } else {
+            return setcookie(
+                $name,
+                $sessionId,
+                [
+                    'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
+                    'path' => dirname($_SERVER['SCRIPT_NAME']),
+                    'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
+                    'samesite' => 'strict',
+                    'secure' => 'https' === $protocol,
+                    'httponly' => true,
+                ]
+            );
         }
     }
+
     /**
      * Returns the number of anonymous users and registered ones.
      * These are the numbers of unique users who have performed
@@ -345,7 +335,7 @@ class Session
      */
     public function getUsersOnline(int $activityTimeWindow = 300): array
     {
-        $users = array(0, 0);
+        $users = [0, 0];
 
         if ($this->config->get('main.enableUserTracking')) {
             $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
@@ -353,15 +343,7 @@ class Session
             if (!$this->config->get('security.enableLoginOnly')) {
                 // Count all sids within the time window for public installations
                 $query = sprintf(
-                    '
-                    SELECT
-                        count(sid) AS anonymous_users
-                    FROM
-                        %sfaqsessions
-                    WHERE
-                        user_id = -1
-                    AND
-                        time > %d',
+                    'SELECT count(sid) AS anonymous_users FROM %sfaqsessions WHERE user_id = -1 AND time > %d',
                     Database::getTablePrefix(),
                     $timeNow
                 );
@@ -374,15 +356,9 @@ class Session
                 }
             }
 
-            // Count all faquser records within the time window
+            // Count all faq user records within the time window
             $query = sprintf(
-                '
-                SELECT
-                    count(session_id) AS registered_users
-                FROM
-                    %sfaquser
-                WHERE
-                    session_timestamp > %d',
+                'SELECT count(session_id) AS registered_users FROM %sfaquser WHERE session_timestamp > %d',
                 Database::getTablePrefix(),
                 $timeNow
             );
@@ -411,15 +387,7 @@ class Session
         $endDate = $_SERVER['REQUEST_TIME'];
 
         $query = sprintf(
-            '
-            SELECT
-                time
-            FROM
-                %sfaqsessions
-            WHERE
-                time > %d
-            AND
-                time < %d;',
+            'SELECT time FROM %sfaqsessions WHERE time > %d AND time < %d;',
             Database::getTablePrefix(),
             $startDate,
             $endDate
@@ -439,33 +407,5 @@ class Session
         }
 
         return $stats;
-    }
-
-    /**
-     * Store the Session ID into a persistent cookie expiring
-     * PMF_SESSION_EXPIRED_TIME seconds after the page request.
-     *
-     * @param string      $name      Cookie name
-     * @param string|null $sessionId Session ID
-     * @param int         $timeout   Cookie timeout
-     *
-     * @return bool
-     */
-    public function setCookie(string $name, $sessionId = '', int $timeout = PMF_SESSION_EXPIRED_TIME): bool
-    {
-        $protocol = 'http';
-        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
-            $protocol = 'https';
-        }
-
-        return setcookie(
-            $name,
-            $sessionId,
-            $_SERVER['REQUEST_TIME'] + $timeout,
-            dirname($_SERVER['SCRIPT_NAME']),
-            parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
-            'https' === $protocol,
-            true
-        );
     }
 }
