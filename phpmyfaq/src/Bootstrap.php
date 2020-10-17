@@ -145,6 +145,8 @@ $faqConfig->getAll();
 ini_set('session.use_only_cookies', 1); // Avoid any PHP version to move sessions on URLs
 ini_set('session.auto_start', 0); // Prevent error to use session_start() if it's active in php.ini
 ini_set('session.use_trans_sid', 0);
+ini_set('session.cookie_samesite', 'Strict');
+ini_set('session.cookie_httponly', true);
 ini_set('url_rewriter.tags', '');
 
 //

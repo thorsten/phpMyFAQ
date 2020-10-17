@@ -298,9 +298,7 @@ class System
      * Returns true or false on SQLite3.
      *
      * @static
-     *
      * @param string $dbType
-     *
      * @return bool
      */
     public static function isSqlite(string $dbType): bool

@@ -12,7 +12,7 @@ Version 3.1.0-alpha
 - added possibility to add users without password (Thorsten)
 - removed REST API v1 (Thorsten)
 
-Version 3.0.5 - 2020-10-
+Version 3.0.5 - 2020-10-17
 - minor improvements (Thorsten)
 - fixed minor bugs (Thorsten)
 
