@@ -67,6 +67,24 @@ if (
             $http->sendJsonWithHeaders($userdata);
             break;
 
+        case 'get_all_user_data':
+            $allUsers = $user->getAllUsers(false);
+            $userData = [];
+            foreach ($allUsers as $userId) {
+                $user->getUserById($userId, true);
+                $userObject = new \stdClass();
+                $userObject->id = $user->getUserId();
+                $userObject->status = $user->getStatus();
+                $userObject->isSuperAdmin = $user->isSuperAdmin();
+                $userObject->isVisible = $user->getUserData('is_visible');
+                $userObject->displayName = $user->getUserData('display_name');
+                $userObject->userName = $user->getLogin();
+                $userObject->email = $user->getUserData('email');
+                $userData[] = $userObject;
+            }
+            $http->sendJsonWithHeaders($userData);
+            break;
+
         case 'get_user_rights':
             $user->getUserById($userId, true);
             $http->sendJsonWithHeaders($user->perm->getUserRights($userId));
@@ -85,7 +103,6 @@ if (
             break;
 
         case 'add_user':
-
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
@@ -169,16 +186,16 @@ if (
             break;
 
         case 'overwrite_password':
-            $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
-
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
                 exit(1);
             }
+
+            $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
             $user->getUserById($userId, true);
             $auth = new Auth($faqConfig);

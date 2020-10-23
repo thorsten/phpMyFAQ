@@ -29,12 +29,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (
-    $user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->checkRight(
-        $user->getUserId(),
-        'delete_user'
-    ) || $user->perm->checkRight($user->getUserId(), 'add_user')
-) {
+if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->checkRight($user->getUserId(),
+        'delete_user') || $user->perm->checkRight($user->getUserId(), 'add_user')) {
     ?>
   <script src="assets/js/user.js"></script>
     <?php
@@ -90,12 +86,8 @@ if (
                 $perm->grantUserRight($userId, $rightId);
             }
             $idUser = $user->getUserById($userId, true);
-            $message .= sprintf(
-                '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                $PMF_LANG['ad_msg_savedsuc_1'],
-                $user->getLogin(),
-                $PMF_LANG['ad_msg_savedsuc_2']
-            );
+            $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+                $PMF_LANG['ad_msg_savedsuc_1'], $user->getLogin(), $PMF_LANG['ad_msg_savedsuc_2']);
             $message .= '<script>updateUser(' . $userId . ');</script>';
             $user = new CurrentUser($faqConfig);
         }
@@ -128,18 +120,12 @@ if (
                 }
             }
 
-            if (
-                !$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus) /*||
-                !$user->setSuperAdmin($isSuperAdmin)*/
-            ) {
+            if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus) /*||
+                !$user->setSuperAdmin($isSuperAdmin)*/) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             } else {
-                $message .= sprintf(
-                    '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                    $PMF_LANG['ad_msg_savedsuc_1'],
-                    $user->getLogin(),
-                    $PMF_LANG['ad_msg_savedsuc_2']
-                );
+                $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+                    $PMF_LANG['ad_msg_savedsuc_1'], $user->getLogin(), $PMF_LANG['ad_msg_savedsuc_2']);
                 $message .= '<script>updateUser(' . $userId . ');</script>';
             }
         }
@@ -158,16 +144,14 @@ if (
             $user->getUserById($userId, true);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message .= sprintf(
-                    '<p class="alert alert-danger">%s</p>',
-                    $PMF_LANG['ad_user_error_protectedAccount']
-                );
+                $message .= sprintf('<p class="alert alert-danger">%s</p>',
+                    $PMF_LANG['ad_user_error_protectedAccount']);
                 $userAction = $defaultUserAction;
             } else {
                 ?>
 
               <div
-                  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">
                   <i aria-hidden="" class="fa fa-user"></i>
                     <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
@@ -244,7 +228,7 @@ if (
     // show list of users
     if ($userAction === 'list') { ?>
       <div
-          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
           <i aria-hidden="true" class="fa fa-user"></i>
             <?= $PMF_LANG['ad_user'] ?>
@@ -398,12 +382,12 @@ if (
                              class="form-check-input permission">
                       <label class="form-check-label">
                           <?php
-                            if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                                echo $PMF_LANG['rightsLanguage'][$right['name']];
-                            } else {
-                                echo $right['description'];
-                            }
-                            ?>
+                          if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+                              echo $PMF_LANG['rightsLanguage'][$right['name']];
+                          } else {
+                              echo $right['description'];
+                          }
+                          ?>
                       </label>
                     </div>
                   <?php endforeach; ?>
@@ -475,11 +459,8 @@ if (
         $lastPage = $page * $perPage;
         $firstPage = $lastPage - $perPage;
 
-        $baseUrl = sprintf(
-            '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
-            $faqConfig->getDefaultUrl(),
-            $page
-        );
+        $baseUrl = sprintf('%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d', $faqConfig->getDefaultUrl(),
+            $page);
 
         // Pagination options
         $options = [
@@ -493,7 +474,7 @@ if (
         ?>
 
       <div
-          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
           <i aria-hidden="true" class="fa fa-user"></i>
             <?= $PMF_LANG['ad_user'] ?>
@@ -505,6 +486,9 @@ if (
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>
               <?php endif ?>
+              <button type="button" class="btn btn-sm btn-info" id="pmf-button-export-users">
+                <i class="fa fa-download" aria-label="true"></i> Export users as CSV
+              </button>
           </div>
         </div>
       </div>
@@ -531,7 +515,7 @@ if (
             </tr>
             </tfoot>
           <?php endif;
-            ?>
+          ?>
         <tbody>
         <?php
         $counter = $displayedCounter = 0;
@@ -551,18 +535,18 @@ if (
           <tr class="row_user_id_<?= $user->getUserId() ?>">
             <td><?= $user->getUserId() ?></td>
             <td class="text-center"><i class="fa <?php
-            switch ($user->getStatus()) {
-                case 'active':
-                    echo 'fa-check-circle-o';
-                    break;
-                case 'blocked':
-                    echo 'fa-ban';
-                    break;
-                case 'protected':
-                    echo 'fa-lock';
-                    break;
-            }
-            ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
+                switch ($user->getStatus()) {
+                    case 'active':
+                        echo 'fa-check-circle-o';
+                        break;
+                    case 'blocked':
+                        echo 'fa-ban';
+                        break;
+                    case 'protected':
+                        echo 'fa-lock';
+                        break;
+                }
+                ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
             <td class="text-center">
               <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
             </td>
@@ -664,7 +648,7 @@ if (
                   <input class="form-check-input" type="checkbox" id="add_user_automatic_password"
                          name="add_user_automatic_password">
                   <label class="form-check-label" for="add_user_automatic_password">
-                    <?= $PMF_LANG['ad_add_user_change_password'] ?>
+                      <?= $PMF_LANG['ad_add_user_change_password'] ?>
                   </label>
                 </div>
               </div>
