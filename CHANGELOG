@@ -11,6 +11,10 @@ Version 3.1.0-alpha
 - added drag and drop sorting for main categories (Paolo Caparrelli, Thorsten)
 - added possibility to add users without password (Thorsten)
 - removed REST API v1 (Thorsten)
+- removed RSS support (Thorsten)
+
+Version 3.0.6 - 2020-11-
+- added support for PHP 8.0
 
 Version 3.0.5 - 2020-10-17
 - minor improvements (Thorsten)

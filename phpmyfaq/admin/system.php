@@ -65,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         ];
         foreach ($systemInformation as $name => $info): ?>
           <tr>
-            <td class="col-lg-2"><strong><?= $name ?></strong></td>
+            <td style="width: 20%"><strong><?= $name ?></strong></td>
             <td><?= $info ?></td>
           </tr>
         <?php endforeach;
