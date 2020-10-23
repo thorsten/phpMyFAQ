@@ -57,11 +57,6 @@ try {
 
 // Define the header of the page
 $newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
-if ($faqConfig->get('main.enableRssFeeds')) {
-    $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
-} else {
-    $newsFeed = '';
-}
 
 // Get all data from the news record
 $news = $oNews->getNewsEntry($newsId);
@@ -120,7 +115,6 @@ $template->parse(
     'mainPageContent',
     [
         'writeNewsHeader' => $newsMainHeader,
-        'writeNewsRSS' => $newsFeed,
         'writeHeader' => $newsHeader,
         'mainPageContent' => $newsContent,
         'writeDateMsg' => $newsDate,

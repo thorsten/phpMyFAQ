@@ -406,14 +406,9 @@ $PMF_LANG['ad_attach_2'] = 'فضلاً قم بتحديد وصلة عنوان ا�
 $PMF_LANG['ad_attach_3'] = 'ملف attachment.php لا يمكن فتحه بدون صلاحية .';
 $PMF_LANG['ad_attach_4'] = 'يجب أن يكون حجم الملف المرفق أقل من ';
 $PMF_LANG['ad_menu_export'] = 'تصدير الأسئلة';
-$PMF_LANG['ad_export_1'] = ' RSS-Feed بناء ';
 $PMF_LANG['ad_export_2'] = '.';
 $PMF_LANG['ad_export_file'] = 'خطأ : غير قادر على كتابة الملف';
-$PMF_LANG['ad_export_news'] = ' RSS-Feed الأخبار ';
-$PMF_LANG['ad_export_topten'] = ' RSS-Feed أعلي 10';
-$PMF_LANG['ad_export_latest'] = 'أخر 5 مداخلات RSS-Feed';
 $PMF_LANG['ad_export_pdf'] = 'PDF - تصدير جميع المداخلات بصيغة';
-$PMF_LANG['ad_export_generate'] = ' RSS-Feed بناء';
 $PMF_LANG['rightsLanguage']['0'] = 'إضافة مستخدمين';
 $PMF_LANG['rightsLanguage']['1'] = 'تحريرمستخدمين';
 $PMF_LANG['rightsLanguage']['2'] = 'حذف مستخدمين';

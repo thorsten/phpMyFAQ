@@ -409,14 +409,9 @@ $PMF_LANG['ad_attach_2'] = 'Kies eerst in de configuratie voor een link voor de 
 $PMF_LANG['ad_attach_3'] = 'Het bestand attachment.php kan niet worden geopend zonder de juiste rechten.';
 $PMF_LANG['ad_attach_4'] = 'De bijlage moet kleiner zijn dan %s bytes.';
 $PMF_LANG['ad_menu_export'] = 'Exporteer uw FAQ';
-$PMF_LANG['ad_export_1'] = 'Maak RSS-Bron voor';
-$PMF_LANG['ad_export_2'] = '.';
 $PMF_LANG['ad_export_file'] = 'Fout: kan niet naar bestand schrijven.';
-$PMF_LANG['ad_export_news'] = 'Nieuws RSS-Bron';
-$PMF_LANG['ad_export_topten'] = 'Top 10 RSS-Bron';
-$PMF_LANG['ad_export_latest'] = '5 laatste vragen RSS-Bron';
 $PMF_LANG['ad_export_pdf'] = 'PDF-Export van alle vragen';
-$PMF_LANG['ad_export_generate'] = 'bouw RSS-Bron';
+
 $PMF_LANG['rightsLanguage']['adduser'] = 'Gebruiker toevoegen';
 $PMF_LANG['rightsLanguage']['edituser'] = 'Bewerk gebruiker';
 $PMF_LANG['rightsLanguage']['delete_user'] = 'Verwijder gebruiker';
@@ -926,7 +921,6 @@ $PMF_LANG['ad_tag_delete_success'] = 'Het label is gewist.';
 $PMF_LANG['ad_tag_delete_error'] = 'Het label is niet gewist vanwege een fout.';
 $PMF_LANG['seoCenter'] = 'SEO';
 $LANG_CONF['search.enableHighlighting'] = array(0 => 'checkbox', 1 => 'Highlight search terms');
-$LANG_CONF['main.enableRssFeeds'] = array(0 => 'checkbox', 1 => 'RSS Feeds (standaard: geactiveerd)');
 $LANG_CONF['records.allowCommentsForGuests'] = array(0 => 'checkbox', 1 => 'Laat commentaren toe voor gasten (standaard: geactiveerd)');
 $LANG_CONF['records.allowQuestionsForGuests'] = array(0 => 'checkbox', 1 => 'Laat gasten toe vragen toe te voegen (standaard: geactiveerd)');
 $LANG_CONF['records.allowNewFaqsForGuests'] = array(0 => 'checkbox', 1 => 'Laat toevoegen van FAQs toe (standaard: geactiveerd)');

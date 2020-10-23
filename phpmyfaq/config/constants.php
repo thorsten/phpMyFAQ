@@ -80,20 +80,6 @@ define('PMF_NUMBER_RECORDS_TOPTEN', 10);
 define('PMF_NUMBER_RECORDS_LATEST', 5);
 
 /**
- * This is the max number of open questions returned by the feed
- *
- * @var int
- */
-define('PMF_RSS_OPENQUESTIONS_MAX', 50);
-
-/**
- * This is the flag with which Latest and Topten RSS feeds will be forced to use the current PMF SEO URL schema
- *
- * @var bool
- */
-define('PMF_RSS_USE_SEO', true);
-
-/**
  * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
  *
  * @var bool

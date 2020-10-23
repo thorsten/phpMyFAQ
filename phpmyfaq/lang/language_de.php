@@ -1181,7 +1181,6 @@ $PMF_LANG['msgSeeFAQinFrontend'] = 'Zur FAQ im Frontend';
 $PMF_LANG['msgRelatedTags'] = 'Suchwort hinzufügen';
 $PMF_LANG['msgPopularTags'] = 'Beliebte Suchwörter';
 $LANG_CONF['search.enableHighlighting'] = [0 => "checkbox", 1 => "Gefundene Wörter hervorheben"];
-$LANG_CONF['main.enableRssFeeds'] = [0 => "checkbox", 1 => "RSS Feeds aktivieren"];
 $LANG_CONF['records.allowCommentsForGuests'] = [0 => "checkbox", 1 => "Erlaube Kommentare von Gästen "];
 $LANG_CONF['records.allowQuestionsForGuests'] = [0 => "checkbox", 1 => "Erlaube Fragen von Gästen "];
 $LANG_CONF['records.allowNewFaqsForGuests'] = [0 => "checkbox", 1 => "Erlaube neue FAQs von Gästen "];

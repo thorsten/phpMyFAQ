@@ -497,14 +497,8 @@ $PMF_LANG["ad_attach_2"] = "Prosím v nastaveniach najprv zvoľte odkaz pre prí
 $PMF_LANG["ad_attach_3"] = "Súbor príloha.php nemôže byť otvorený bez správnej autentifikácie.";
 $PMF_LANG["ad_attach_4"] = "Priložený súbor musí mať menšiu veľkosť ako %s Bytov.";
 $PMF_LANG["ad_menu_export"] = "Exportovať Vašu FAQ";
-$PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Chyba: Súbor nemožno zapísať.";
-$PMF_LANG["ad_export_news"] = "News RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 posledných záznamov RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Exportovať všetky záznamy";
-$PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "pridať užívateľa";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "upraviť užívateľa";

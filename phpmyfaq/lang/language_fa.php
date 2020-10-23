@@ -407,14 +407,8 @@ $PMF_LANG['ad_attach_2'] = 'لطفا در تنظیمات یک پیوند برا�
 $PMF_LANG['ad_attach_3'] = 'فایل attachment.php بدون مجوزهای لازم اجرا نمیشود.';
 $PMF_LANG['ad_attach_4'] = 'فایل الصاقی باید از %s بایت کوچکتر باشد.';
 $PMF_LANG['ad_menu_export'] = 'استخراج پرسش‌های متداول';
-$PMF_LANG['ad_export_1'] = 'ساخت RSS-Feed روی';
-$PMF_LANG['ad_export_2'] = '.';
 $PMF_LANG['ad_export_file'] = 'اشتباه: فایل نوشته نشد.';
-$PMF_LANG['ad_export_news'] = 'فید خبرها';
-$PMF_LANG['ad_export_topten'] = 'فید ۱۰ تای برتر';
-$PMF_LANG['ad_export_latest'] = 'فید آخرین پنج مطلب';
 $PMF_LANG['ad_export_pdf'] = 'خروجی PDF برای تمام مطالب';
-$PMF_LANG['ad_export_generate'] = 'ساخت فید';
 $PMF_LANG['rightsLanguage']['0'] = 'افزودن کاربر';
 $PMF_LANG['rightsLanguage']['1'] = 'اصلاح کاربر';
 $PMF_LANG['rightsLanguage']['2'] = 'حذف کاربر';

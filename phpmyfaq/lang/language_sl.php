@@ -498,14 +498,8 @@ $PMF_LANG["ad_attach_2"] = "Prosim izberi povezavo za priponke v nastvaitvah.";
 $PMF_LANG["ad_attach_3"] = "Datoteka attachment.php ne more biti odprta brez avtorizacije.";
 $PMF_LANG["ad_attach_4"] = "Priponka mora biti manjša od %s bitov.";
 $PMF_LANG["ad_menu_export"] = "Izvozi tvoj FAQ";
-$PMF_LANG["ad_export_1"] = "Ustvari RSS-Feed on";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Napaka: Ne morem pisati datoteke.";
-$PMF_LANG["ad_export_news"] = "Novice RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Naj 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 zadnjih vnosov RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Izvoz vseh vnosov";
-$PMF_LANG["ad_export_generate"] = "ustvari RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "dodaj uporabnika";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "uredi uporabnika";

@@ -500,14 +500,8 @@ $PMF_LANG["ad_attach_2"] = "Prvo izaberite link za fajlove (attachments)";
 $PMF_LANG["ad_attach_3"] = "Fajl attachment.php ne mo&#382;e biti otvoren bez autentikacije";
 $PMF_LANG["ad_attach_4"] = "Zaka&#269;en fajl mora biti manji od %s bajtova";
 $PMF_LANG["ad_menu_export"] = "Snimi (Export) FAQ";
-$PMF_LANG["ad_export_1"] = "Napravi RSS-Feed za";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Gre&#353;ka: Fajl nije mogao biti napravljen/snimljen.";
-$PMF_LANG["ad_export_news"] = "Novosti RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 zadnjih unosa RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export za sve unose";
-$PMF_LANG["ad_export_generate"] = "kreiraj RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "dodavanja korisnika";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "izmena korisnika";

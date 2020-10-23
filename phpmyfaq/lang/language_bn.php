@@ -503,14 +503,8 @@ $PMF_LANG["ad_attach_2"] = "Please choose a link for attachments first in config
 $PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentification.";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
-$PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Error: Cannot write file.";
-$PMF_LANG["ad_export_news"] = "News RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 latest records RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export of all records";
-$PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "ব্যবহারকারী যোগ";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "ব্যবহারকারী সম্পাদনা";

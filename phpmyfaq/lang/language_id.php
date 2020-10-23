@@ -497,14 +497,8 @@ $PMF_LANG["ad_attach_2"] = "Silakan pilih link untuk lampiran dalam konfigurasi 
 $PMF_LANG["ad_attach_3"] = "Berkas attachment.php tidak bisa dibuka tanpa otentifikasi yang benar.";
 $PMF_LANG["ad_attach_4"] = "Berkas yang ingin dilampirkan harus lebih kecil dari %s byte.";
 $PMF_LANG["ad_menu_export"] = "Ekspor isi materi anda";
-$PMF_LANG["ad_export_1"] = "Buat Pasokan-RSS pada";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Error: Tidak bisa membuat berkas.";
-$PMF_LANG["ad_export_news"] = "Pasokan-RSS Berita";
-$PMF_LANG["ad_export_topten"] = "Pasokan-RSS 10 teratas";
-$PMF_LANG["ad_export_latest"] = "Pasokan-RSS 5 data terbaru";
 $PMF_LANG["ad_export_pdf"] = "Ekspor semua data ke PDF";
-$PMF_LANG["ad_export_generate"] = "bangun Pasokan-RSS";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "tambah pengguna";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "edit pengguna";

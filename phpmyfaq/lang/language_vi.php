@@ -494,14 +494,9 @@ $PMF_LANG["ad_attach_2"] = "Trước hết, vui lòng chọn một thư mục ch
 $PMF_LANG["ad_attach_3"] = "Tập tin attachment.php không thể mở nếu bạn chưa đăng nhập.";
 $PMF_LANG["ad_attach_4"] = "Tài liệu đính kèm phải nhỏ hơn %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Xuất nội dung Câu hỏi thường gặp";
-$PMF_LANG["ad_export_1"] = "Tạo RSS-Feed kích hoạt";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Lỗi: Không thể viết tập tin.";
-$PMF_LANG["ad_export_news"] = "News RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 nội dung lưu RSS-Feed gần nhất";
 $PMF_LANG["ad_export_pdf"] = "PDF-Xuất tất cả các nội dung";
-$PMF_LANG["ad_export_generate"] = "Tạo RSS-Feed";
+
 $PMF_LANG["rightsLanguage"]['add_user'] = "thêm thành viên";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "chỉnh sửa thành viên";
 $PMF_LANG["rightsLanguage"]['delete_user'] = "xóa thành viên";

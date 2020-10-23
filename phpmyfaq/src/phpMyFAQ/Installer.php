@@ -344,7 +344,6 @@ class Installer
         'main.dateFormat' => 'Y-m-d H:i',
         'main.maintenanceMode' => 'false',
         'main.enableGravatarSupport' => 'false',
-        'main.enableRssFeeds' => 'true',
         'main.enableGzipCompression' => 'true',
         'main.enableLinkVerification' => 'true',
         'main.customPdfHeader' => '',

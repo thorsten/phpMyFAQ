@@ -405,14 +405,9 @@ $PMF_LANG['ad_attach_2'] = 'Escolha um link para anexos na configuração';
 $PMF_LANG['ad_attach_3'] = 'O arquivo attachment.php não pode ser acessado sem autenticação.';
 $PMF_LANG['ad_attach_4'] = 'O anexo deve ser inferior a %s Bytes.';
 $PMF_LANG['ad_menu_export'] = 'Exportar o seu FAQ';
-$PMF_LANG['ad_export_1'] = 'Criado arquivo RSS em ';
-$PMF_LANG['ad_export_2'] = '.';
 $PMF_LANG['ad_export_file'] = 'Erro: Impossível escrever arquivo.';
-$PMF_LANG['ad_export_news'] = 'Notícias RSS';
-$PMF_LANG['ad_export_topten'] = 'Top 10 RSS';
-$PMF_LANG['ad_export_latest'] = '5 Últimos registros RSS';
 $PMF_LANG['ad_export_pdf'] = 'Exportar todos os registros em PDF';
-$PMF_LANG['ad_export_generate'] = 'criar RSS';
+
 $PMF_LANG['rightsLanguage']['add_user'] = 'adicionar usuário';
 $PMF_LANG['rightsLanguage']['edit_user'] = 'editar usuário';
 $PMF_LANG['rightsLanguage']['delete_user'] = 'excluir usuário';

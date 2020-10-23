@@ -40,7 +40,6 @@ define('FAQ_QUERY_TYPE_APPROVAL', 'faq_approval');
 define('FAQ_QUERY_TYPE_EXPORT_PDF', 'faq_export_pdf');
 define('FAQ_QUERY_TYPE_EXPORT_XHTML', 'faq_export_xhtml');
 define('FAQ_QUERY_TYPE_EXPORT_XML', 'faq_export_xml');
-define('FAQ_QUERY_TYPE_RSS_LATEST', 'faq_rss_latest');
 
 /*
  * Sorting type definitions
@@ -2390,9 +2389,6 @@ class Faq
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
                 $query .= "\nORDER BY fcr.category_id, fd.id";
-                break;
-            case FAQ_QUERY_TYPE_RSS_LATEST:
-                $query .= "\nORDER BY fd.updated DESC";
                 break;
             default:
                 // Normal ordering

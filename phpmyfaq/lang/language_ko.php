@@ -498,14 +498,8 @@ $PMF_LANG["ad_attach_2"] = "환경설정에서 첨부파일을 위한 링크를 
 $PMF_LANG["ad_attach_3"] = "attachment.php 파일은 권한 없이 열수 없습니다.";
 $PMF_LANG["ad_attach_4"] = "첨부파일의 사이즈는 %s Bytes 보다 작아야 합니다.";
 $PMF_LANG["ad_menu_export"] = "FAQ 내보내기";
-$PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "에러: 파일쓰기에 실패하였습니다.";
-$PMF_LANG["ad_export_news"] = "News RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "최근 5개의 RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF- 모든 내용을 내보내기";
-$PMF_LANG["ad_export_generate"] = "RSS-Feed 만들기";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "사용자 추가";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "사용자 수정";

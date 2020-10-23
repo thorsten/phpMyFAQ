@@ -506,14 +506,9 @@ $PMF_LANG["ad_attach_2"] = "Lehendabizi eranskinentzat esteka bat aukeratu konfi
 $PMF_LANG["ad_attach_3"] = "attachment.php fitxategia ezin da ireki baimen egokirik gabe.";
 $PMF_LANG["ad_attach_4"] = "Fitxategi erantsiak %s byte-ekoa baino txikiagoa izan behar du.";
 $PMF_LANG["ad_menu_export"] = "Zure FAQa esportatu";
-$PMF_LANG["ad_export_1"] = "RSS-Feed-a sortu";
 $PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Errorea: Ezin dut fitxategia idatzi.";
-$PMF_LANG["ad_export_news"] = "RSS-Feed albisteak";
-$PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "Azken 5 RSS-Feed-ak";
 $PMF_LANG["ad_export_pdf"] = "PDF-Erregistro guztiak esportatu";
-$PMF_LANG["ad_export_generate"] = "RSSF-Feed sortu";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "erabiltzailea gehitu";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "erabiltzailea editatu";

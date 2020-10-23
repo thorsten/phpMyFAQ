@@ -696,15 +696,16 @@ if ($step == 3) {
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
         }
-    }
 
-    if (version_compare($version, '3.1.0-alpha', '<=')) {
         // Add isVisible flag for user data
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
         }
+
+        // Remove RSS support
+        $faqConfig->delete('main.enableRssFeeds');
     }
 
     // Always the last step: Update version number

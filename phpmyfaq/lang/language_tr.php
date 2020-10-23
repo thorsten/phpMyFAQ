@@ -1173,7 +1173,6 @@ $PMF_LANG['msgSeeFAQinFrontend'] = "Siteyi ziyaret et";
 $PMF_LANG["msgRelatedTags"] = "Arama terimi ekle";
 $PMF_LANG["msgPopularTags"] = "Aranan popüler kelimeler";
 $LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Highlight search terms");
-$LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds");
 $LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Allow comments for guests");
 $LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Allow adding questions for guests");
 $LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Allow adding new FAQs");

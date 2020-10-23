@@ -501,14 +501,8 @@ $PMF_LANG["ad_attach_2"] = "Dewiswch ddolen ar gyfer atodiadau yn gyntaf yn y ff
 $PMF_LANG["ad_attach_3"] = "Ni ellir agor yr atodiad ffeil .php heb awdurdodaeth gywir.";
 $PMF_LANG["ad_attach_4"] = "Rhaid i'r ffeil atodedig fod yn llai na %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Allforio eich Cwestiynau Cyffredin";
-$PMF_LANG["ad_export_1"] = "Adeiladu RSS-Bwydo ar";
-$PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Gwall: Ni ellir ysgrifennu'r ffeil.";
-$PMF_LANG["ad_export_news"] = "RSS-Bwydo Newyddion";
-$PMF_LANG["ad_export_topten"] = "10 Uchaf RSS-Bwydo";
-$PMF_LANG["ad_export_latest"] = "5 cofnod diweddaraf RSS-Bwydo";
 $PMF_LANG["ad_export_pdf"] = "PDF-Allforio pob cofnod";
-$PMF_LANG["ad_export_generate"] = "Adeiladu RSS-Bwydo";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "ychwanegu defnyddiwr";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "golygu defnyddiwr";
