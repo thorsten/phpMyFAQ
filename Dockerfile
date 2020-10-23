@@ -1,20 +1,20 @@
 #
-# This image uses a php:7.4-apache base image and do not have any phpMyFAQ code with it.
+# This image uses a php:8.0-rc-apache base image and do not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:7.4-apache
+FROM php:8.0-rc-apache
 
-#=== Install gd PHP dependencies ===
+#=== Install gd php dependencie ===
 RUN set -x \
- && buildDeps="libfreetype6-dev libjpeg62-turbo-dev libpng-dev" \
+ && buildDeps="libpng-dev libjpeg-dev libfreetype6-dev" \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
  \
- && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install -j$(nproc) gd \
+ && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+ && docker-php-ext-install gd \
  \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
