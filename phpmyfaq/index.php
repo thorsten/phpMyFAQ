@@ -103,7 +103,7 @@ AttachmentFactory::init(
 //
 // Get user action
 //
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
 //
 // Authenticate current user
@@ -140,6 +140,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $authSso = new AuthSso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
+
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {
             $auth = true;

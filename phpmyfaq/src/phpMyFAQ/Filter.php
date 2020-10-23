@@ -27,16 +27,16 @@ class Filter
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int    $type         Filter type
+     * @param int $type Filter type
      * @param string $variableName Variable name
-     * @param int    $filter       Filter
-     * @param mixed  $default      Default value
+     * @param int $filter Filter
+     * @param mixed $default Default value
      *
      * @return mixed
      */
     public static function filterInput($type, $variableName, $filter, $default = null)
     {
-        $return = filter_input($type, $variableName, $filter, $default);
+        $return = filter_input($type, $variableName, $filter);
 
         return (is_null($return) || $return === false) ? $default : $return;
     }
@@ -44,7 +44,7 @@ class Filter
     /**
      * Static wrapper method for filter_input_array.
      *
-     * @param int   $type       Filter type
+     * @param int $type Filter type
      * @param array $definition Definition
      *
      * @return mixed
@@ -58,8 +58,8 @@ class Filter
      * Static wrapper method for filter_var().
      *
      * @param mixed $variable Variable
-     * @param int   $filter   Filter
-     * @param mixed $default  Default value
+     * @param int $filter Filter
+     * @param mixed $default Default value
      *
      * @return mixed
      */
