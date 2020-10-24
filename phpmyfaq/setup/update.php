@@ -141,7 +141,7 @@ if ($step === 1) { ?>
         </div>
       </div>
 
-      <div class="row setup-content" id="step1">
+      <div class="row" id="step1">
         <div class="col">
           <div class="alert alert-danger text-center mt-2" role="alert">
             <strong>

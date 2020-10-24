@@ -124,36 +124,16 @@ $faqSession = new Session($faqConfig);
         </div>
       </div>
 
-      <!--
       <?php if ($faqConfig->get('main.enableUserTracking')): ?>
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
         </div>
         <div class="card-body">
-            <?php
-            $session = new Session($faqConfig);
-            $visits = $session->getLast30DaysVisits();
-            ?>
-          <script src="assets/js/plugins/jquery.sparkline.min.js"></script>
-          <script>
-            $(function() {
-              const visits = [<?= implode(',', $visits) ?>];
-              $('.visits').sparkline(
-                visits, {
-                  type: 'bar',
-                  barColor: '#7797b2',
-                  barWidth: 12,
-                  height: 268,
-                  tooltipSuffix: ' <?= $PMF_LANG['ad_visits_per_day'] ?>',
-                });
-            });
-          </script>
-          <span class="visits">Loading...</span>
+          <canvas id="pmf-chart-visits" width="400" height="400"></canvas>
         </div>
       </div>
       <?php endif; ?>
-      -->
 
       <div class="card shadow mb-4">
         <div class="card-header py-3">

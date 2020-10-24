@@ -219,6 +219,8 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
             switch ($ajax) {
                 // Attachments
                 case 'att':           require 'ajax.attachment.php'; break;
+                // Dashboard
+                case 'dashboard':     require 'ajax.dashboard.php'; break;
                 // Link verification
                 case 'verifyURL':     require 'ajax.verifyurl.php'; break;
                 case 'onDemandURL':   require 'ajax.ondemandurl.php'; break;
