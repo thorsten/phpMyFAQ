@@ -78,35 +78,6 @@ $faqSession = new Session($faqConfig);
   <div class="container-fluid p-2">
     <div class="card-columns">
 
-        <?php if ($faqConfig->get('main.enableUserTracking')): ?>
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
-            </div>
-            <div class="card-body">
-                <?php
-                $session = new Session($faqConfig);
-                $visits = $session->getLast30DaysVisits();
-                ?>
-              <script src="assets/js/plugins/jquery.sparkline.min.js"></script>
-              <script>
-                $(function() {
-                  const visits = [<?= implode(',', $visits) ?>];
-                  $('.visits').sparkline(
-                    visits, {
-                      type: 'bar',
-                      barColor: '#7797b2',
-                      barWidth: 12,
-                      height: 268,
-                      tooltipSuffix: ' <?= $PMF_LANG['ad_visits_per_day'] ?>',
-                    });
-                });
-              </script>
-              <span class="visits">Loading...</span>
-            </div>
-          </div>
-        <?php endif; ?>
-
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
@@ -153,6 +124,37 @@ $faqSession = new Session($faqConfig);
         </div>
       </div>
 
+      <!--
+      <?php if ($faqConfig->get('main.enableUserTracking')): ?>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
+        </div>
+        <div class="card-body">
+            <?php
+            $session = new Session($faqConfig);
+            $visits = $session->getLast30DaysVisits();
+            ?>
+          <script src="assets/js/plugins/jquery.sparkline.min.js"></script>
+          <script>
+            $(function() {
+              const visits = [<?= implode(',', $visits) ?>];
+              $('.visits').sparkline(
+                visits, {
+                  type: 'bar',
+                  barColor: '#7797b2',
+                  barWidth: 12,
+                  height: 268,
+                  tooltipSuffix: ' <?= $PMF_LANG['ad_visits_per_day'] ?>',
+                });
+            });
+          </script>
+          <span class="visits">Loading...</span>
+        </div>
+      </div>
+      <?php endif; ?>
+      -->
+
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
@@ -161,12 +163,12 @@ $faqSession = new Session($faqConfig);
           <ul class="list-unstyled">
               <?php
               $inactiveFaqs = $faq->getInactiveFaqsData();
-              foreach ($inactiveFaqs as $inactiveFaq) {
-                  printf(
-                      '<li><a href="%s">%s</a></li>',
-                      $inactiveFaq['url'],
-                      $inactiveFaq['question']
-                  );
+              if (count($inactiveFaqs) > 0) {
+                  foreach ($inactiveFaqs as $inactiveFaq) {
+                      printf('<li><a href="%s">%s</a></li>', $inactiveFaq['url'], $inactiveFaq['question']);
+                  }
+              } else {
+                  echo '<li>n/a</li>';
               }
               ?>
           </ul>
