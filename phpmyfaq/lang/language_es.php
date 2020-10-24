@@ -156,7 +156,7 @@ $PMF_LANG['err_noTopTen'] = "Aún no hay FAQs populares disponibles.";
 $PMF_LANG['err_nothingFound'] = "No se encontró ninguna entrada.";
 $PMF_LANG['err_SaveEntries'] = "¡Los campos obligatorios son <strong>Nombre</strong>, <strong>e-mail</strong>, <strong>Categoría</strong>, <strong>Pregunta</strong> y <strong>Respuesta</strong>!";
 $PMF_LANG['err_SaveComment'] = "¡Los campos obligatorios son <strong>Nombre</strong>, <strong>e-mail</strong> y <strong>Comentario</strong>!";
-$PMF_LANG['err_VoteTooMuch'] = = "Desafortunadamente, la calificación no pudo ser salvada, porque la IP ya fue utilizada para la calificación.";
+$PMF_LANG['err_VoteTooMuch'] = "Desafortunadamente, la calificación no pudo ser salvada, porque la IP ya fue utilizada para la calificación.";
 $PMF_LANG['err_noVote'] = "¡No se dio ninguna calificación!";
 $PMF_LANG['err_noMailAdress'] = "La dirección de e-mail proporcionada es incorrecta.";
 $PMF_LANG['err_sendMail'] = "¡Los campos obligatorios incluyen <strong>Nombre</strong> y <strong>e-mail</strong>!";
@@ -1198,7 +1198,7 @@ $LANG_CONF['main.enableGzipCompression'] = [0 => "checkbox", 1 => "Activar compr
 // añadido v2.9.0-alpha2 - 2014-08-16 por Thorsten
 $PMF_LANG['ad_tag_delete_success'] = "La etiqueta fue eliminada con éxito";
 $PMF_LANG['ad_tag_delete_error'] = "La etiqueta no fue eliminada porque se produjo un error.";
-$PMF_LANG['seoCenter'] = "SEO"
+$PMF_LANG['seoCenter'] = "SEO";
 $LANG_CONF['seo.metaTagsHome'] = [0 => "select", 1 => "Meta Tags HTML para página principal"];
 $LANG_CONF['seo.metaTagsFaqs'] = [0 => "select", 1 => "Meta Tags HTML para páginas de FAQ"];
 $LANG_CONF['seo.metaTagsCategories'] = [0 => "select", 1 => "Meta Tags HTML para páginas de categorias"];
@@ -1219,14 +1219,14 @@ $LANG_CONF['security.enableRegistration'] = array('checkbox', 'Permitir el regis
 
 // Añadido v2.9.0-alpha3 - 2015-02-08 por Thorsten
 $LANG_CONF['main.customPdfHeader'] = ['area', 'Encabezado personalizado del PDF (HTML permitido)'];
-$LANG_CONF['main.customPdfFooter']] = ['area', 'Pie de página personalizado del PDF (HTML permitido)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'Pie de página personalizado del PDF (HTML permitido)'];
 $LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Permitir descargas a los invitados'];
 $PMF_LANG['ad_msgNoteAboutPasswords'] = "¡Atención! Al rellenar los campos de la contraseña, sobreescribes la contraseña del usuario";
 $PMF_LANG['ad_delete_all_votings'] = "Eliminar todos los votos";
 $PMF_LANG['ad_categ_moderator'] = "Moderadores";
 $PMF_LANG['ad_clear_all_visits'] = "Reiniciar todas las visitas";
 $PMF_LANG['ad_reset_visits_success'] = 'Las visitas fueron reiniciadas con éxito';
-$LANG_CONF['main.enableMarkdownEditor']]] = ['checkbox', 'Activar el editor Markdown'];
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Activar el editor Markdown'];
 
 //// añadido v2.9.0-beta - 2015-09-27 por Thorsten
 $PMF_LANG['faqOverview'] = 'Resumen de FAQ';
@@ -1275,7 +1275,7 @@ $PMF_LANG['ad_view_faq'] = 'Ver FAQ';
 // añadido 3.0.0-alfa - 2018-01-04 por Thorsten
 $LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Habilitar las restricciones de categoría'];
 $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Habilitar recomendación'];
-$PMF_LANG['msgUserRemovalText']] = 'Puedes solicitar la eliminación de tu cuenta y tus datos personales. Se enviará un e-mail al equipo de administración. El equipo eliminará su cuenta, comentarios y preguntas. Como es un proceso manual, puede tardar hasta 24 horas. Después de eso, recibirás una confirmación de eliminación por e-mail.;';
+$PMF_LANG['msgUserRemovalText'] = 'Puedes solicitar la eliminación de tu cuenta y tus datos personales. Se enviará un e-mail al equipo de administración. El equipo eliminará su cuenta, comentarios y preguntas. Como es un proceso manual, puede tardar hasta 24 horas. Después de eso, recibirás una confirmación de eliminación por e-mail.';
 $PMF_LANG['msgUserRemoval'] = "Solicitud de eliminación del usuario";
 $PMF_LANG['ad_menu_RequestRemove'] = "Eliminar usuario";
 $PMF_LANG['msgContactRemove'] = "Solicitud de eliminación del usuario del equipo de administración";
