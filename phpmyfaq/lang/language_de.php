@@ -1282,7 +1282,7 @@ $PMF_LANG['msgPrivacyNote'] = "Datenschutzerklärung";
 // added 3.0.0-alpha2 - 2018-03-27 by Thorsten
 $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatischer Check neuer Versionen'];
 $PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
-$PMF_LANG['ad_user_override_passwd'] = 'Überschreibe Passwort';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'Überschreibe Passwort';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Versionierung für jede FAQ-Änderung'];
 $PMF_LANG['rightsLanguage']['view_faqs'] = 'FAQs lesen';
 $PMF_LANG['rightsLanguage']['view_categories'] = 'Kategorien lesen';

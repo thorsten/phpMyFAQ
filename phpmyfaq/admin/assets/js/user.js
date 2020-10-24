@@ -46,8 +46,12 @@ function updateUser(userId) {
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  /**
+   * Button Password Overwrite
+   * @type {jQuery|HTMLElement}
+   */
   const button = $('#checkAll');
-  const buttonOverridePassword = $('.pmf-user-password-override-action');
+  const buttonOverwritePassword = $('.pmf-user-password-overwrite-action');
 
   button.data('type', 'check');
   button.on('click', (event) => {
@@ -62,14 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  buttonOverridePassword.on('click', (event) => {
+  buttonOverwritePassword.on('click', (event) => {
     event.preventDefault();
 
     // Fetch data
     $.ajax({
       url: 'index.php?action=ajax&ajax=user&ajaxaction=overwrite_password',
       type: 'POST',
-      data: $('#pmf-modal-user-password-override form').serialize(),
+      data: $('#pmf-modal-user-password-overwrite form').serialize(),
       dataType: 'json',
       beforeSend: function () {
         $('#pmf-admin-saving-data-indicator').html(
@@ -77,14 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
         );
       },
       success: function (message) {
-        $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
-        $('#pmf-modal-user-password-override').modal('hide');
+        $('.pmf-admin-overwrite-password').replaceWith('<p>✓ ' + message.success + '</p>');
+        $('#pmf-modal-user-password-overwrite').modal('hide');
         $('#pmf-admin-saving-data-indicator').fadeOut();
       },
     });
     return false;
   });
 
+  /**
+   * User search autocomplete
+   */
   $('.pmf-user-autocomplete').typeahead({
     autoSelect: true,
     delay: 300,
@@ -116,6 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   });
 
+  /**
+   * Modal handling add user
+   * @type {Element | HTMLElement}
+   */
   const modal = document.getElementById('addUserModal');
   const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
   const addUser = document.getElementById('pmf-add-user-action');
@@ -177,6 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
+  /**
+   * Post user data to API
+   * @param url
+   * @param data
+   * @returns {Promise<Response>}
+   */
   async function postUserData(url = '', data = {}) {
     return await fetch(url, {
       method: 'POST',

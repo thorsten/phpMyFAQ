@@ -289,8 +289,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
               '</div>' +
               '<div class="form-group row">' +
               '<div class="offset-lg-4 col-lg-8">' +
-              '<a class="btn btn-danger pmf-admin-override-password" data-toggle="modal" ' +
-              '   href="#pmf-modal-user-password-override"><?= $PMF_LANG['ad_user_override_passwd'] ?></a>' +
+              '<a class="btn btn-danger pmf-admin-overwrite-password" data-toggle="modal" ' +
+              '   href="#pmf-modal-user-password-overwrite"><?= $PMF_LANG['ad_user_overwrite_passwd'] ?></a>' +
               '</div>' +
               '</div>' +
               '<input type="hidden" name="last_modified" value="' + data.last_modified + '">',
@@ -404,7 +404,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         </div>
       </div>
 
-      <div class="modal fade" id="pmf-modal-user-password-override">
+      <div class="modal fade" id="pmf-modal-user-password-overwrite">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -439,8 +439,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
               </form>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary pmf-user-password-override-action">
-                  <?= $PMF_LANG['ad_user_override_passwd'] ?>
+              <button class="btn btn-primary pmf-user-password-overwrite-action">
+                  <?= $PMF_LANG['ad_user_overwrite_passwd'] ?>
               </button>
             </div>
           </div>

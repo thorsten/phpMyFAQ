@@ -1285,7 +1285,7 @@ $PMF_LANG['msgPrivacyNote'] = "Política de Privacidad";
 // añadido 3.0.0-alfa2 - 2018-03-27 por Thorsten
 $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Comprobación automática de nuevas versiones'];
 $PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
-$PMF_LANG['ad_user_override_passwd'] = 'Anular contraseña';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'Anular contraseña';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Versiones para cambio en la FAQ'];
 $PMF_LANG['rightsLanguage']['view_faqs'] = 'Ver FAQs';
 $PMF_LANG['rightsLanguage']['view_categories'] = 'Ver categorías';
