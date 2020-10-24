@@ -82,6 +82,7 @@ if (
                 $userObject->email = $user->getUserData('email');
                 $userData[] = $userObject;
             }
+            $http->setStatus(200);
             $http->sendJsonWithHeaders($userData);
             break;
 

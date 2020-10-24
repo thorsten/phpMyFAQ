@@ -206,4 +206,46 @@ document.addEventListener('DOMContentLoaded', () => {
       body: JSON.stringify(data),
     });
   }
+
+  /**
+   * Export all users
+   * @type {Element | HTMLElement}
+   */
+  const buttonExportAllUsers = document.getElementById('pmf-button-export-users');
+
+  buttonExportAllUsers.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    fetch('index.php?action=ajax&ajax=user&ajaxaction=get_all_user_data', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          const userData = await response.json();
+
+          const replacer = (key, value) => (value === null ? '' : value);
+          const header = Object.keys(userData[0]);
+          let csv = userData.map((row) =>
+            header.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(',')
+          );
+          csv.unshift(header.join(','));
+          csv = csv.join('\r\n');
+
+          let hiddenElement = document.createElement('a');
+          hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+          hiddenElement.target = '_blank';
+          hiddenElement.download = 'phpmyfaq-users-' + new Date().toISOString().substring(0, 10) + '.csv';
+          hiddenElement.click();
+        }
+      })
+      .catch((error) => {
+        console.log('Final Request failure: ', error);
+      });
+  });
 });

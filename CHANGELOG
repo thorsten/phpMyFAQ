@@ -10,6 +10,7 @@ Version 3.1.0-alpha
 - added support for Elasticsearch v6+ (Thorsten)
 - added drag and drop sorting for main categories (Paolo Caparrelli, Thorsten)
 - added possibility to add users without password (Thorsten)
+- added export of all users as CSV (Thorsten)
 - removed REST API v1 (Thorsten)
 - removed RSS support (Thorsten)
 
