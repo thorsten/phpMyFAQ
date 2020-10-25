@@ -35,6 +35,7 @@ Open endpoints require no Authentication.
 - [Popular FAQs](api-docs/faqs/popular.md): `GET /api/v2.0/faqs/popular`
 - [Sticky FAQs](api-docs/faqs/sticky.md): `GET /api/v2.0/faqs/sticky`
 
-### Login APIs
+### Login/Registration related APIs
 
 - [Login](api-docs/login.md): `POST /api/v2.0/login`
+- [Register](api-docs/register.md): `POST /api/v2.0/register`
