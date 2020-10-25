@@ -105,7 +105,7 @@ class UserData
     }
 
     /**
-     * Returns the first result of the given data.
+     * Returns the first result of the given key.
      *
      * @param  string $key
      * @param  string $value
@@ -134,6 +134,29 @@ class UserData
         } else {
             return $this->config->getDb()->fetchObject($res)->$key;
         }
+    }
+
+    /**
+     * Returns the data of the given key.
+     *
+     * @param string $key
+     * @param string $value
+     * @return array
+     */
+    public function fetchAll($key, $value): array
+    {
+        $select = sprintf(
+            "SELECT user_id, last_modified, display_name, email, is_visible FROM %sfaquserdata WHERE %s = '%s'",
+            Database::getTablePrefix(),
+            $key,
+            $this->config->getDb()->escape($value)
+        );
+
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
+            return ['user_id' => -1];
+        }
+        return $this->data = $this->config->getDb()->fetchArray($res);
     }
 
     /**

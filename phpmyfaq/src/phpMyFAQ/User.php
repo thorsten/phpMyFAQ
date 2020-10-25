@@ -922,6 +922,25 @@ class User
     }
 
     /**
+     * Returns true or false for the visibility for the given email
+     * address, if the user is not a registered user, the method
+     * returns false for anonymous users
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function getUserVisibilityByEmail(string $email): bool
+    {
+        if (!$this->userdata instanceof UserData) {
+            $this->userdata = new UserData($this->config);
+        }
+
+        $userData = $this->userdata->fetchAll('email', $email);
+
+        return (bool)$userData['is_visible'];
+    }
+
+    /**
      * Returns the data of the current user.
      *
      * @param string $field Field
