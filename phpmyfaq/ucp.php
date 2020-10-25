@@ -54,7 +54,7 @@ if ($user->isLoggedIn()) {
             'msgEmail' => $PMF_LANG['msgNewContentMail'],
             'email' => $user->getUserData('email'),
             'msgIsVisible' => $PMF_LANG['ad_user_data_is_visible'],
-            'is_visible' => $user->getUserData('is_visible'),
+            'checked' => (int)$user->getUserData('is_visible') === 1 ? 'checked' : '',
             'msgPassword' => $PMF_LANG['ad_auth_passwd'],
             'msgConfirm' => $PMF_LANG['ad_user_confirm'],
             'msgSave' => $PMF_LANG['msgSave'],

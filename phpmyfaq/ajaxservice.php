@@ -618,13 +618,13 @@ switch ($action) {
             $user = new User($faqConfig);
 
             // Create user account (login and password)
-            // Note: password be automatically generated and sent by email as soon if admin switch user to "active"
+            // The password will be automatically generated and sent by email as soon if admin switch user to "active"
             if (!$user->createUser($loginName, null)) {
                 $message = ['error' => $user->error()];
             } else {
                 $user->userdata->set(
                     ['display_name', 'email', 'is_visible'],
-                    [$realname, $email,  $isVisible === 'on' ? 1 : 0]
+                    [$realname, $email, $isVisible === 'on' ? 1 : 0]
                 );
                 // set user status
                 $user->setStatus('blocked');
@@ -636,6 +636,7 @@ switch ($action) {
                 }
 
                 if ($isNowActive) {
+                    // @todo add translation strings
                     $adminMessage = 'This user has been automatically activated, you can still' .
                         ' modify the users permissions or decline membership by visiting the admin section';
                 } else {
@@ -643,7 +644,7 @@ switch ($action) {
                 }
 
                 $text = sprintf(
-                    "New user has been registrated:\n\nName: %s\nLogin name: %s\n\n" .
+                    "New user has been registered:\n\nName: %s\nLogin name: %s\n\n" .
                     '%s the administration interface at %s.',
                     $realname,
                     $loginName,
