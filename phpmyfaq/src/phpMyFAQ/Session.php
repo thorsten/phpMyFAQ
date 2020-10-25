@@ -381,7 +381,7 @@ class Session
      */
     public function getLast30DaysVisits(): array
     {
-        $stats = $visits = [];
+        $stats = $visits = $completeData = [];
 
         $startDate = strtotime('-1 month');
         $endDate = $_SERVER['REQUEST_TIME'];
@@ -406,6 +406,13 @@ class Session
             isset($stats[date('Y-m-d', $visitDate)]) ? $stats[date('Y-m-d', $visitDate)]++ : null;
         }
 
-        return $stats;
+        foreach ($stats as $date => $stat) {
+            $visit = new \stdClass();
+            $visit->date = $date;
+            $visit->number = $stats[$date];
+            $completeData[] = $visit;
+        }
+
+        return $completeData;
     }
 }

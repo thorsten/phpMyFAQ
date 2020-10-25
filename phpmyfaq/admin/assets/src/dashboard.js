@@ -17,7 +17,6 @@ import Chart from 'chart.js';
 
 export const renderVisitorCharts = () => {
   const context = document.getElementById('pmf-chart-visits');
-
   const visitorChart = new Chart(context, {
     type: 'bar',
     data: {
@@ -26,7 +25,8 @@ export const renderVisitorCharts = () => {
         {
           data: [],
           borderWidth: 1,
-          borderColor: 'orange',
+          borderColor: 'black',
+          backgroundColor: '#1cc88a',
           label: 'Visitors',
         },
       ],
@@ -48,10 +48,6 @@ export const renderVisitorCharts = () => {
     },
   });
 
-  // this post id drives the example data
-  let postId = 1;
-
-  // logic to get new data
   const getData = () => {
     fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=user-visits-last-30-days', {
       method: 'GET',
@@ -66,32 +62,18 @@ export const renderVisitorCharts = () => {
         if (response.status === 200) {
           const visits = await response.json();
 
-          console.log(visits);
+          visits.map((visit) => {
+            visitorChart.data.labels.push(visit.date);
+            visitorChart.data.datasets[0].data.push(visit.number);
+          });
+
+          visitorChart.update();
         }
       })
       .catch((error) => {
         console.log('Request failure: ', error);
       });
-
-    $.ajax({
-      url: 'https://jsonplaceholder.typicode.com/posts/' + postId + '/comments',
-      success: (data) => {
-        // process your data to pull out what you plan to use to update the chart
-        // e.g. new label and a new data point
-        console.log(data);
-
-        // add new label and data point to chart's underlying data structures
-        visitorChart.data.labels.push('Post ' + postId++);
-        visitorChart.data.datasets[0].data.push(42);
-
-        // re-render the chart
-        visitorChart.update();
-      },
-    });
   };
 
   getData();
-
-  // get new data every 30 seconds
-  setInterval(getData, 30000);
 };

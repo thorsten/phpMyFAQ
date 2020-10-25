@@ -130,7 +130,7 @@ $faqSession = new Session($faqConfig);
           <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
         </div>
         <div class="card-body">
-          <canvas id="pmf-chart-visits" width="400" height="400"></canvas>
+          <canvas id="pmf-chart-visits" width="400" height="300"></canvas>
         </div>
       </div>
       <?php endif; ?>
