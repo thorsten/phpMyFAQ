@@ -3,7 +3,6 @@
 /**
  * The Template class provides methods and functions for the
  * template parser.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,8 +18,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Template\FileNotFoundException;
 use phpMyFAQ\Template\TemplateHelper;
-use phpseclib\Crypt\Blowfish;
 
 /**
  * Class Template
@@ -64,6 +63,9 @@ class Template
      */
     private $blocksTouched = [];
 
+    /** @var array Array containing the errors */
+    private $errors = [];
+
     /**
      * @var TemplateHelper
      */
@@ -82,10 +84,14 @@ class Template
         self::$tplSetName = $tplSetName;
 
         foreach ($myTemplate as $templateName => $filename) {
-            $this->templates[$templateName] = $this->readTemplateFile(
-                'assets/themes/' . $tplSetName . '/templates/' . $filename,
-                $templateName
-            );
+            try {
+                $this->templates[$templateName] = $this->readTemplateFile(
+                    'assets/themes/' . $tplSetName . '/templates/' . $filename,
+                    $templateName
+                );
+            } catch (FileNotFoundException $e) {
+                $this->errors[] = $e->getMessage();
+            }
         }
     }
 
@@ -93,27 +99,26 @@ class Template
      * This function reads a template file.
      *
      * @param string $filename Filename
-     * @param string $tplName  Name of the template
-     *
+     * @param string $tplName Name of the template
      * @return string
+     * @throws FileNotFoundException
      */
     protected function readTemplateFile(string $filename, string $tplName): string
     {
-        if (file_exists($filename)) {
+        if (file_exists($filename) && is_file($filename)) {
             $tplContent = file_get_contents($filename);
             $this->blocks[$tplName] = $this->readBlocks($tplContent);
 
             return $tplContent;
-        } else {
-            return '<p><span style="color: red;">Error:</span> Cannot open the file ' . $filename . '.</p>';
         }
+
+        throw new FileNotFoundException('Cannot open the file ' . $filename);
     }
 
     /**
      * This function reads the block.
      *
      * @param string $block Block to read
-     *
      * @return array
      */
     private function readBlocks(string $block): array
@@ -188,7 +193,7 @@ class Template
     /**
      * Parses the template.
      *
-     * @param string $templateName    Name of the template
+     * @param string $templateName Name of the template
      * @param array  $templateContent Content of the template
      */
     public function parse(string $templateName, array $templateContent)
@@ -271,7 +276,6 @@ class Template
      * This function checks the content.
      *
      * @param array $content Content to check
-     *
      * @return array
      */
     private function checkContent(array $content): array
@@ -329,7 +333,7 @@ class Template
      * This function processes the block.
      *
      * @param string $templateName Name of the template
-     * @param string $blockName    Block name
+     * @param string $blockName Block name
      * @param array  $blockContent Content of the block
      */
     public function parseBlock(string $templateName, string $blockName, array $blockContent)
@@ -358,9 +362,8 @@ class Template
     /**
      * This function multiplies blocks.
      *
-     * @param string $blockName    Block name
+     * @param string $blockName Block name
      * @param array  $blockContent Content of block
-     *
      * @return string
      */
     private function multiplyBlock(string $blockName, array $blockContent): string
