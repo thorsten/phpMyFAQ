@@ -2,6 +2,7 @@
 
 /**
  * Displays the user management frontend.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,6 +20,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User;
@@ -113,6 +115,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
             $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
+
             // set new password an send email if user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
                 if (!$user->activateUser()) {
@@ -120,8 +123,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
                 }
             }
 
-            if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus) /*||
-                !$user->setSuperAdmin($isSuperAdmin)*/) {
+            // Set super-admin flag
+            $user->setSuperAdmin($isSuperAdmin);
+
+            if (!$user->userdata->set(array_keys($userData), array_values($userData)) ||
+                !$user->setStatus($userStatus)) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             } else {
                 $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
