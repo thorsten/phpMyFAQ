@@ -19,7 +19,6 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
@@ -122,6 +121,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
+
             // set new password an send email if user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
                 if (!$user->activateUser()) {
@@ -129,10 +129,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 }
             }
 
+            // Set super-admin flag
+            $user->setSuperAdmin($isSuperAdmin);
+
             if (!$user->userdata->set(array_keys($userData), array_values($userData)) ||
-                !$user->setStatus($userStatus) /*||
-                !$user->setSuperAdmin($isSuperAdmin)*/
-            ) {
+                !$user->setStatus($userStatus)) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             } else {
                 $message .= sprintf(
