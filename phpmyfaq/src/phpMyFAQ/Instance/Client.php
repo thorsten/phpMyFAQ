@@ -159,10 +159,10 @@ class Client extends Instance
      * Copies a defined template folder to a new client instance, by default
      * the default template located at ./assets/themes/default/ will be copied.
      *
-     * @param string $dest        Destination folder
+     * @param string $dest Destination folder
      * @param string $templateDir Template folder
-     *
      * @return void
+     * @throws Exception
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {

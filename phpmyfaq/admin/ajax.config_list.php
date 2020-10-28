@@ -63,22 +63,59 @@ function renderInputForm($key, $type)
             break;
 
         case 'input':
-            if ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key &&
+            if ('' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key &&
                 isset($_SESSION['access_token'])) {
                 $value = $_SESSION['access_token']['oauth_token'];
-            } elseif ('' == $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key &&
+            } elseif ('' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key &&
                 isset($_SESSION['access_token'])) {
                 $value = $_SESSION['access_token']['oauth_token_secret'];
             } else {
                 $value = str_replace('"', '&quot;', $faqConfig->get($key));
             }
+            echo '<div class="input-group">';
             printf(
-                '<input class="form-control" type="%s" name="edit[%s]" value="%s" step="1" min="0">',
+                '<input class="form-control" type="%s" name="edit[%s]" id="edit[%s]" value="%s" step="1" min="0">',
                 is_numeric($value) ? 'number' : 'text',
+                $key,
                 $key,
                 $value
             );
-            echo "</div>\n";
+            if ('api.apiClientToken' === $key) {
+                echo '<div class="input-group-append">';
+                echo '<button class="btn btn-dark" id="pmf-generate-api-token" type="button">Generate API Client Token</button>';
+                echo '</div>';
+                ?>
+                <script>
+                  const generateUUID = () => {
+                    let date = new Date().getTime();
+
+                    if (window.performance && typeof window.performance.now === 'function') {
+                      date += performance.now();
+                    }
+
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+                      const random = (date + Math.random() * 16) % 16 | 0;
+                      date = Math.floor(date / 16);
+                      return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
+                    });
+                  }
+
+                  const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
+                  const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
+
+                  if (buttonGenerateApiToken) {
+                    if (inputConfigurationApiToken.value !== '') {
+                      buttonGenerateApiToken.disabled = true;
+                    }
+                    buttonGenerateApiToken.addEventListener('click', (event) => {
+                      event.preventDefault();
+                      inputConfigurationApiToken.value = generateUUID();
+                    });
+                  }
+                </script>
+                <?php
+            }
+            echo '</div></div>';
             break;
 
         case 'password':
@@ -100,10 +137,7 @@ function renderInputForm($key, $type)
                     if (count($languages) > 0) {
                         echo LanguageHelper::renderLanguageOptions(
                             str_replace(
-                                array(
-                                    'language_',
-                                    '.php',
-                                ),
+                                [ 'language_', '.php', ],
                                 '',
                                 $faqConfig->get('main.language')
                             ),
@@ -256,8 +290,8 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<div class="form-group row"><label class="col-form-label col-lg-4"></label>';
-            echo '<div class="col-lg-8">';
+            echo '<div class="form-group row"><label class="col-form-label col-lg-3"></label>';
+            echo '<div class="col-lg-9">';
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
                 echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
@@ -268,7 +302,7 @@ foreach ($LANG_CONF as $key => $value) {
             if (!isset($content)) {
                 echo '<br><a target="_blank" href="../services/twitter/redirect.php">';
                 echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
-            } elseif (isset($content)) {
+            } else {
                 echo $content->screen_name . "<br>\n";
                 echo "<img alt=\"Twitter profile\" src='" . $content->profile_image_url_https . "'><br>\n";
                 echo 'Follower: ' . $content->followers_count . "<br>\n";
@@ -279,7 +313,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
 
         printf(
-            '<div class="form-group row"><label class="col-lg-4 col-form-label %s">',
+            '<div class="form-group row"><label class="col-lg-3 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
         );
 
@@ -300,10 +334,12 @@ foreach ($LANG_CONF as $key => $value) {
         }
         ?>
       </label>
-      <div class="col-lg-8">
+      <div class="col-lg-9">
           <?php renderInputForm($key, $value[0]) ?>
       </div>
         <?php
 
     }
 }
+?>
+

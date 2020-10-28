@@ -1336,3 +1336,5 @@ $PMF_LANG['ad_user_data_is_visible'] = 'Benutzerdaten sollen öffentlich sichtba
 $PMF_LANG['ad_user_is_visible'] = 'Sichtbar';
 $PMF_LANG['ad_categ_save_order'] = 'Sortierung speichern';
 $PMF_LANG['ad_add_user_change_password'] = 'Der Nutzer muss nach dem ersten Login sein Passwort ändern.';
+$LANG_CONF['api.enableAccess'] = [0 => 'checkbox', 1 => 'REST API aktiviert'];
+$LANG_CONF['api.apiClientToken'] = [0 => 'input', 1 => 'REST API Client Token'];

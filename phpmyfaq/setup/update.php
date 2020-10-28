@@ -706,6 +706,10 @@ if ($step == 3) {
 
         // Remove RSS support
         $faqConfig->delete('main.enableRssFeeds');
+
+        // Add API related configuration
+        $faqConfig->add('api.enableAccess', true);
+        $faqConfig->add('api.apiClientToken', '');
     }
 
     // Always the last step: Update version number

@@ -17,63 +17,65 @@ import Chart from 'chart.js';
 
 export const renderVisitorCharts = () => {
   const context = document.getElementById('pmf-chart-visits');
-  const visitorChart = new Chart(context, {
-    type: 'bar',
-    data: {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          borderWidth: 1,
-          borderColor: 'black',
-          backgroundColor: '#1cc88a',
-          label: 'Visitors',
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      legend: {
-        display: false,
-      },
-      scales: {
-        yAxes: [
+  if (context) {
+    const visitorChart = new Chart(context, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [
           {
-            ticks: {
-              beginAtZero: true,
-            },
+            data: [],
+            borderWidth: 1,
+            borderColor: 'black',
+            backgroundColor: '#1cc88a',
+            label: 'Visitors',
           },
         ],
       },
-    },
-  });
-
-  const getData = () => {
-    fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=user-visits-last-30-days', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
+      options: {
+        responsive: true,
+        legend: {
+          display: false,
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
       },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    })
-      .then(async (response) => {
-        if (response.status === 200) {
-          const visits = await response.json();
+    });
 
-          visits.map((visit) => {
-            visitorChart.data.labels.push(visit.date);
-            visitorChart.data.datasets[0].data.push(visit.number);
-          });
-
-          visitorChart.update();
-        }
+    const getData = () => {
+      fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=user-visits-last-30-days', {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
       })
-      .catch((error) => {
-        console.log('Request failure: ', error);
-      });
-  };
+        .then(async (response) => {
+          if (response.status === 200) {
+            const visits = await response.json();
 
-  getData();
+            visits.map((visit) => {
+              visitorChart.data.labels.push(visit.date);
+              visitorChart.data.datasets[0].data.push(visit.number);
+            });
+
+            visitorChart.update();
+          }
+        })
+        .catch((error) => {
+          console.log('Request failure: ', error);
+        });
+    };
+
+    getData();
+  }
 };

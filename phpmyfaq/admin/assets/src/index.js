@@ -18,5 +18,8 @@ import { renderVisitorCharts } from './dashboard';
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  //
+  // Dashboard
+  //
   renderVisitorCharts();
 });

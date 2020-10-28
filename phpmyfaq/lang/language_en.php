@@ -1335,3 +1335,5 @@ $PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
 $PMF_LANG['ad_user_is_visible'] = 'Visible';
 $PMF_LANG['ad_categ_save_order'] = 'Save order';
 $PMF_LANG['ad_add_user_change_password'] = 'User must change password after first login';
+$LANG_CONF['api.enableAccess'] = [0 => 'checkbox', 1 => 'REST API enabled'];
+$LANG_CONF['api.apiClientToken'] = [0 => 'input', 1 => 'API Client Token'];

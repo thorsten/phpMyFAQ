@@ -274,42 +274,34 @@ class Installer
         [
             'name' => 'view_categories',
             'description' => 'Right to view categories'
-
         ],
         [
             'name' => 'view_sections',
             'description' => 'Right to view sections'
-
         ],
         [
             'name' => 'view_news',
             'description' => 'Right to view news'
-
         ],
         [
             'name' => 'add_section',
             'description' => 'Right to add sections'
-
         ],
         [
             'name' => 'edit_section',
             'description' => 'Right to edit sections'
-
         ],
         [
             'name' => 'delete_section',
             'description' => 'Right to delete sections'
-
         ],
         [
             'name' => 'administrate_sections',
             'description' => 'Right to administrate sections'
-
         ],
         [
             'name' => 'administrate_groups',
             'description' => 'Right to administrate groups'
-
         ],
     ];
 
@@ -439,7 +431,10 @@ class Installer
         'ldap.ldap_use_multiple_servers' => 'false',
         'ldap.ldap_use_anonymous_login' => 'false',
         'ldap.ldap_use_dynamic_login' => 'false',
-        'ldap.ldap_dynamic_login_attribute' => 'uid'
+        'ldap.ldap_dynamic_login_attribute' => 'uid',
+
+        'api.enableAccess' => 'true',
+        'api.apiClientToken' => '',
     ];
 
     /**
@@ -452,7 +447,7 @@ class Installer
             'main.currentVersion' => System::getVersion(),
             'main.currentApiVersion' => System::getApiVersion(),
             'main.phpMyFAQToken' => md5(uniqid(rand())),
-            'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false')
+            'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
         ];
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);
     }
