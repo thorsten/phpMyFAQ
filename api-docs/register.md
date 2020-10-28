@@ -8,7 +8,7 @@ Used to register a new user.
 
 ```
 Accept-Language: [language code]
-X-PMF-Token: [Token, generated in admin backend]
+X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 ```
 
 **Method** : `POST`
