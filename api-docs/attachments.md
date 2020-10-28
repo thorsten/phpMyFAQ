@@ -4,7 +4,11 @@ This endpoint returns the attached files as URLs of a given FAQ ID and the given
 
 **URL** : `/api/v2.0/attachments/:faqId`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **URL parameters** : `faqId=[int]` where `faqId` is the unique ID of a FAQ
 

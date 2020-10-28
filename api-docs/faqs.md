@@ -4,7 +4,11 @@ This endpoint returns all the FAQs for the given language provided by "Accept-La
 
 **URL** : `/api/v2.0/faqs`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **Method** : `GET`
 

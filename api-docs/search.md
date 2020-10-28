@@ -4,7 +4,11 @@ This endpoint returns the results for the query string search term.
 
 **URL** : `/api/v2.0/search`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **Query parameters** : `q=[string]`
 

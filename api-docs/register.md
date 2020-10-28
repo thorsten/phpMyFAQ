@@ -4,7 +4,12 @@ Used to register a new user.
 
 **URL** : `/api/v2.0/register`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+X-PMF-Token: [Token, generated in admin backend]
+```
 
 **Method** : `POST`
 

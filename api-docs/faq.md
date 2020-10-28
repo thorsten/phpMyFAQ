@@ -4,7 +4,11 @@ This endpoint returns the FAQ for the given FAQ ID and the language provided by 
 
 **URL** : `/api/v2.0/faq/:faqId`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **URL parameters** : `faqId=[int]` where `faqId` is the ID of a FAQ
 

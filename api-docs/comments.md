@@ -4,7 +4,11 @@ This endpoint returns the comments of a given FAQ ID and the given language prov
 
 **URL** : `/api/v2.0/comments/:faqId`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **URL parameters** : `faqId=[int]` where `faqId` is the unique ID of a FAQ
 

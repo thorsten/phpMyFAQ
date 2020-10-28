@@ -4,7 +4,11 @@ Used to login a registered user.
 
 **URL** : `/api/v2.0/login`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **Method** : `POST`
 

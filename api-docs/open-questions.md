@@ -4,7 +4,11 @@ This endpoint returns the open questions for the given language provided by "Acc
 
 **URL** : `/api/v2.0/open-questions`
 
-**HTTP Header** : `Accept-Language: en-US,en`
+**HTTP Header** :
+
+```
+Accept-Language: [language code]
+```
 
 **Method** : `GET`
 
