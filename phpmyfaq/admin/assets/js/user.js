@@ -136,57 +136,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const passwordToggle = document.getElementById('add_user_automatic_password');
   const passwordInputs = document.getElementById('add_user_show_password_inputs');
 
-  passwordToggle.addEventListener('click', () => {
-    passwordInputs.classList.toggle('d-none');
-  });
+  if (passwordToggle) {
+    passwordToggle.addEventListener('click', () => {
+      passwordInputs.classList.toggle('d-none');
+    });
+  }
 
-  addUser.addEventListener('click', (event) => {
-    event.preventDefault();
-    const csrf = document.getElementById('add_user_csrf').value;
-    const userName = document.getElementById('add_user_name').value;
-    const realName = document.getElementById('add_user_realname').value;
-    const email = document.getElementById('add_user_email').value;
-    const password = document.getElementById('add_user_password').value;
-    const passwordConfirm = document.getElementById('add_user_password_confirm').value;
-    const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
+  if (addUser) {
+    addUser.addEventListener('click', (event) => {
+      event.preventDefault();
+      const csrf = document.getElementById('add_user_csrf').value;
+      const userName = document.getElementById('add_user_name').value;
+      const realName = document.getElementById('add_user_realname').value;
+      const email = document.getElementById('add_user_email').value;
+      const password = document.getElementById('add_user_password').value;
+      const passwordConfirm = document.getElementById('add_user_password_confirm').value;
+      const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
 
-    addUserForm.classList.add('was-validated');
+      addUserForm.classList.add('was-validated');
 
-    const userData = {
-      userName,
-      realName,
-      email,
-      password,
-      passwordConfirm,
-      isSuperAdmin,
-    };
+      const userData = {
+        userName,
+        realName,
+        email,
+        password,
+        passwordConfirm,
+        isSuperAdmin,
+      };
 
-    postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
-      .then(async (response) => {
-        if (response.status !== 201) {
-          const errors = await response.json();
-          let errorMessage = '';
+      postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
+        .then(async (response) => {
+          if (response.status !== 201) {
+            const errors = await response.json();
+            let errorMessage = '';
 
-          errors.forEach((error) => {
-            errorMessage += `${error}<br>`;
-          });
+            errors.forEach((error) => {
+              errorMessage += `${error}<br>`;
+            });
 
-          addUserError.classList.remove('d-none');
-          addUserError.innerHTML = errorMessage;
-        } else {
-          const result = await response.json();
+            addUserError.classList.remove('d-none');
+            addUserError.innerHTML = errorMessage;
+          } else {
+            const result = await response.json();
 
-          addUserMessage.innerHTML = `<p class="alert alert-success">${result.data}</p>`;
+            addUserMessage.innerHTML = `<p class="alert alert-success">${result.data}</p>`;
 
-          modal.style.display = 'none';
-          modal.classList.remove('show');
-          modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
-        }
-      })
-      .catch((error) => {
-        console.log('Final Request failure: ', error);
-      });
-  });
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+            modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+          }
+        })
+        .catch((error) => {
+          console.log('Final Request failure: ', error);
+        });
+    });
+  }
 
   /**
    * Post user data to API
