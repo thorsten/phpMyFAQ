@@ -27,6 +27,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
@@ -608,64 +609,14 @@ switch ($action) {
 
     case 'saveregistration':
 
-        $realname = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
-        $loginName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_STRING);
 
-        if (!is_null($loginName) && !is_null($email) && !is_null($realname)) {
-            $message = [];
-            $user = new User($faqConfig);
-
-            // Create user account (login and password)
-            // The password will be automatically generated and sent by email as soon if admin switch user to "active"
-            if (!$user->createUser($loginName, null)) {
-                $message = ['error' => $user->error()];
-            } else {
-                $user->userdata->set(
-                    ['display_name', 'email', 'is_visible'],
-                    [$realname, $email, $isVisible === 'on' ? 1 : 0]
-                );
-                // set user status
-                $user->setStatus('blocked');
-
-                if (!$faqConfig->get('spam.manualActivation')) {
-                    $isNowActive = $user->activateUser();
-                } else {
-                    $isNowActive = false;
-                }
-
-                if ($isNowActive) {
-                    // @todo add translation strings
-                    $adminMessage = 'This user has been automatically activated, you can still' .
-                        ' modify the users permissions or decline membership by visiting the admin section';
-                } else {
-                    $adminMessage = 'To activate this user please use';
-                }
-
-                $text = sprintf(
-                    "New user has been registered:\n\nName: %s\nLogin name: %s\n\n" .
-                    '%s the administration interface at %s.',
-                    $realname,
-                    $loginName,
-                    $adminMessage,
-                    $faqConfig->getDefaultUrl()
-                );
-
-                $mailer = new Mail($faqConfig);
-                $mailer->setReplyTo($email, $realname);
-                $mailer->addTo($faqConfig->get('main.administrationMail'));
-                $mailer->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
-                $mailer->message = $text;
-                $result = $mailer->send();
-                unset($mailer);
-
-                $message = [
-                    'success' => trim($PMF_LANG['successMessage']) .
-                        ' ' .
-                        trim($PMF_LANG['msgRegThankYou']),
-                ];
-            }
+        if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
+            $registration = new RegistrationHelper($faqConfig);
+            $message = $registration->createUser($userName, $fullName, $email, $isVisible);
         } else {
             $message = ['error' => $PMF_LANG['err_sendMail']];
         }

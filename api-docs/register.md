@@ -2,7 +2,7 @@
 
 Used to register a new user.
 
-**URL** : `/api/v2.0/register`
+**URL** : `/api/v2.1/register`
 
 **HTTP Header** :
 
@@ -47,7 +47,8 @@ X-PMF-Token: [Token, generated in admin backend]
 
 ```json
 {
-  "registered": true
+  "registered": true,
+  "success": "[success message]"
 }
 ```
 

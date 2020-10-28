@@ -25,6 +25,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
@@ -48,8 +49,8 @@ require 'src/Bootstrap.php';
 //
 $http = new HttpHelper();
 $http->setContentType('application/json');
+$http->fetchAllHeaders();
 $http->addHeader();
-
 //
 // Set user permissions
 //
@@ -338,7 +339,32 @@ switch ($action) {
         break;
 
     case 'register':
-        $http->setStatus(418);
+        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
+            $http->setStatus(401);
+            $result = [
+                'registered' => false,
+                'error' => 'X_PMF_Token no valid.'
+            ];
+        }
+
+        $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+        $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_SANITIZE_STRING);
+        $isVisible = $isVisible === 'true';
+
+        if (!is_null($userName) && !is_null($fullName) && !is_null($email)) {
+            $registration = new RegistrationHelper($faqConfig);
+            $result = $registration->createUser($userName, $fullName, $email, $isVisible);
+            $http->setStatus(200);
+        } else {
+            $http->setStatus(400);
+            $result = [
+                'registered' => false,
+                'error' => $PMF_LANG['err_sendMail']
+            ];
+        }
+
         break;
 }
 

@@ -19,7 +19,6 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
-use phpMyFAQ\Strings;
 
 /**
  * Class HttpHelper
@@ -28,19 +27,14 @@ use phpMyFAQ\Strings;
  */
 class HttpHelper extends Helper
 {
-    /**
-     * Content type
-     *
-     * @var string
-     */
+    /** @var string Content type */
     private $contentType = '';
 
-    /**
-     * HTTP status code
-     *
-     * @var int
-     */
+    /** @var int HTTP status code */
     private $statusCode = 200;
+
+    /** @var array Array of HTTP header entries */
+    private $headers = [];
 
     /**
      * Setter for content type.
@@ -95,6 +89,19 @@ class HttpHelper extends Helper
     }
 
     /**
+     * Fetch all HTTP request headers.
+     * @return void
+     */
+    public function fetchAllHeaders()
+    {
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) === 'HTTP_') {
+                $this->headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))))] = $value;
+            }
+        }
+    }
+
+    /**
      * Returns the HTTP status code
      *
      * @return int
@@ -102,6 +109,15 @@ class HttpHelper extends Helper
     public function getStatusCode(): int
     {
         return $this->statusCode;
+    }
+
+    /**
+     * Returns the HTTP header value for "X-PMF-Token"
+     * @return string
+     */
+    public function getClientApiToken(): string
+    {
+        return isset($this->headers['x-pmf-token']) ? $this->headers['x-pmf-token'] : '';
     }
 
     /**
