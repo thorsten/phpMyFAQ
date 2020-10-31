@@ -149,7 +149,8 @@ if ($num > 0) {
 
         $rss->writeElement('link', $link);
         $rss->writeElement('guid', $link);
-        $rss->writeElement('pubDate', Date::createRFC822Date($item['date'], true));
+
+        $rss->writeElement('pubDate', $item['date']);
         $rss->endElement();
     }
 }
