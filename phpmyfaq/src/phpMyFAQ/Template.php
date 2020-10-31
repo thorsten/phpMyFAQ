@@ -282,15 +282,14 @@ class Template
         $phpPattern2 = '&lt;?';
         $replace = [$phpPattern1, '', $phpPattern2, '', ''];
 
-        // Hack: Backtick Fix
-        $content = str_replace('`', '&acute;', $content);
-
         foreach ($content as $var => $val) {
             if (is_array($val)) {
                 foreach ($val as $key => $value) {
+                    $content[$var][$key] = str_replace('`', '&acute;', $value);
                     $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
                 }
             } else {
+                $content[$var] = str_replace('`', '&acute;', $content[$var]);
                 $content[$var] = Strings::preg_replace($search, $replace, $val);
             }
         }
