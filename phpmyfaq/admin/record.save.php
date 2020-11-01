@@ -22,6 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Logging;
+use phpMyFAQ\Revision;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Visits;
 
@@ -129,8 +130,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         $tagging = new Tags($faqConfig);
 
         if ('yes' === $revision || $faqConfig->get('records.enableAutoRevisions')) {
-            // Add current version into revision table
-            $faq->addNewRevision($recordId, $recordLang);
+            $faqRevision = new Revision($faqConfig);
+            $faqRevision->create($recordId, $recordLang);
             ++$revisionId;
         }
 

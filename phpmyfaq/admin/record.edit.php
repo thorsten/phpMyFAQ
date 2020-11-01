@@ -27,6 +27,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Question;
+use phpMyFAQ\Revision;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User;
@@ -301,7 +302,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 <!-- Revision -->
                                 <?php
                                 if ($user->perm->checkRight($currentUserId, 'changebtrevs')) {
-                                    $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang'], $faqData['author']);
+                                    $faqRevision = new Revision($faqConfig);
+                                    $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
                                     if (count($revisions)) { ?>
                                         <div class="form-group">
                                             <form id="selectRevision" name="selectRevision" method="post"

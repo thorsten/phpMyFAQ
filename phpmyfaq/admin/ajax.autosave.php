@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Revision;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Visits;
@@ -105,8 +106,9 @@ if ('insertentry' === $do &&
         ];
 
         if ('saveentry' == $do || $recordId) {
-            /* Create a revision anyway, it's autosaving */
-            $faq->addNewRevision($recordId, $recordLang);
+            // Create a revision anyway, it's auto-saving
+            $faqRevision = new Revision($faqConfig);
+            $faqRevision->create($recordId, $recordLang);
             ++$revisionId;
 
             $changelog = new Changelog($faqConfig);
