@@ -288,6 +288,9 @@ switch ($action) {
 
 
     case 'faq':
+        //
+        // GET
+        //
         $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_STRING);
 
         $faq = new Faq($faqConfig);
@@ -309,6 +312,18 @@ switch ($action) {
 
             $result = $service->getPdfApiLink();
         }
+
+        //
+        // POST
+        //
+        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
+            $http->setStatus(401);
+            $result = [
+                'registered' => false,
+                'error' => 'X_PMF_Token no valid.'
+            ];
+        }
+
         break;
 
     case 'login':

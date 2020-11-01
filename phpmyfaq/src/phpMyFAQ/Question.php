@@ -219,7 +219,7 @@ class Question
             return $row->is_visible;
         }
 
-        return null;
+        return '';
     }
 
     /**
