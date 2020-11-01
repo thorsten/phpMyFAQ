@@ -320,9 +320,22 @@ switch ($action) {
             $http->setStatus(401);
             $result = [
                 'registered' => false,
-                'error' => 'X_PMF_Token no valid.'
+                'error' => 'X_PMF_Token not valid.'
             ];
         }
+
+        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+        $categoryId = Filter::filterInput(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
+        $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRING);
+        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+        $isActive = Filter::filterInput(INPUT_POST, 'is-active', FILTER_SANITIZE_STRING);
+        $isSticky = Filter::filterInput(INPUT_POST, 'is-sticky', FILTER_SANITIZE_STRING);
+
+        $isActive = $isActive === 'true';
+        $isSticky = $isSticky === 'true';
 
         break;
 
@@ -358,7 +371,7 @@ switch ($action) {
             $http->setStatus(401);
             $result = [
                 'registered' => false,
-                'error' => 'X_PMF_Token no valid.'
+                'error' => 'X_PMF_Token not valid.'
             ];
         }
 
