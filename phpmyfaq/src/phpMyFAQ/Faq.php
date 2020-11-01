@@ -22,6 +22,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
@@ -920,6 +921,7 @@ class Faq
      *
      * @param array $data      Array of FAQ data
      * @param bool  $newRecord Do not create a new ID if false
+     * @deprecated will be removed in v3.2
      *
      * @return int
      */
@@ -938,7 +940,7 @@ class Faq
             Database::getTablePrefix(),
             $recordId,
             $data['lang'],
-            $this->getSolutionId(),
+            $this->getNextSolutionId(),
             0,
             $data['active'],
             $data['sticky'],
@@ -963,22 +965,58 @@ class Faq
     }
 
     /**
+     * Creates a new FAQ.
+     *
+     * @param FaqEntity $faq
+     * @return int
+     */
+    public function create(FaqEntity $faq): int
+    {
+        if ($faq->getId()) {
+            $faq->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'));
+        }
+
+        // Add new entry
+        $query = sprintf(
+            "INSERT INTO %sfaqdata VALUES
+            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
+            Database::getTablePrefix(),
+            $faq->getId(),
+            $faq->getLanguage(),
+            $this->getNextSolutionId(),
+            0,
+            $faq->isActive(),
+            $faq->isSticky(),
+            $this->config->getDb()->escape($faq->getKeywords()),
+            $this->config->getDb()->escape($faq->getQuestion()),
+            $this->config->getDb()->escape($faq->getAnswer()),
+            $this->config->getDb()->escape($faq->getAuthor()),
+            $faq->getEmail(),
+            $faq->isComment() ? 'y' : 'n',
+            $faq->getUpdatedDate(),
+            $faq->getLinkState(),
+            $faq->getLinksCheckedDate(),
+            $faq->getValidFrom(),
+            $faq->getValidTo(),
+            date('Y-m-d H:i:s'),
+            $faq->getNotes()
+        );
+
+        $this->config->getDb()->query($query);
+
+        return $faq->getId();
+    }
+
+    /**
      * Gets the latest solution id for a FAQ record.
      *
      * @return int
      */
-    public function getSolutionId()
+    public function getNextSolutionId(): int
     {
         $latestId = 0;
 
-        $query = sprintf(
-            '
-            SELECT
-                MAX(solution_id) AS solution_id
-            FROM
-                %sfaqdata',
-            Database::getTablePrefix()
-        );
+        $query = sprintf('SELECT MAX(solution_id) AS solution_id FROM %sfaqdata', Database::getTablePrefix());
 
         $result = $this->config->getDb()->query($query);
 
@@ -1184,7 +1222,7 @@ class Faq
             return $row->solution_id;
         }
 
-        return $this->getSolutionId();
+        return $this->getNextSolutionId();
     }
 
     /**

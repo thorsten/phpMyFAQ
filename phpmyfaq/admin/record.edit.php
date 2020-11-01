@@ -790,7 +790,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 </label>
                                 <input type="number" name="solution_id" id="solution_id" size="5" class="form-control"
                                        readonly
-                                       value="<?= isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId(
+                                       value="<?= isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getNextSolutionId(
                                        ) ?>">
                             </div>
                         </div>

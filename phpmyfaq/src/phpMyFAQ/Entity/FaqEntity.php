@@ -61,7 +61,7 @@ class FaqEntity
     /** @var bool The flag if comments are allowed */
     private $comment;
 
-    /** @var bool Notes about the FAQ, only visible in the admin backend */
+    /** @var string Notes about the FAQ, only visible in the admin backend */
     private $notes;
 
     /** @var string The state if the links: "nolinks", "linkok" or "linkbad" */
@@ -299,18 +299,18 @@ class FaqEntity
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isNotes(): bool
+    public function getNotes(): string
     {
         return $this->notes;
     }
 
     /**
-     * @param bool $notes
+     * @param string $notes
      * @return FaqEntity
      */
-    public function setNotes(bool $notes): FaqEntity
+    public function setNotes(string $notes): FaqEntity
     {
         $this->notes = $notes;
         return $this;

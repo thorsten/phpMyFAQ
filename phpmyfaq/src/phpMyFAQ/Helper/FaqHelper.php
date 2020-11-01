@@ -34,13 +34,6 @@ use phpMyFAQ\Utils;
 class FaqHelper extends Helper
 {
     /**
-     * SSL enabled.
-     *
-     * @var bool
-     */
-    private $ssl = false;
-
-    /**
      * Constructor.
      *
      * @param Configuration $config
@@ -48,16 +41,6 @@ class FaqHelper extends Helper
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * Sets SSL mode.
-     *
-     * @param bool $ssl
-     */
-    public function setSsl($ssl)
-    {
-        $this->ssl = $ssl;
     }
 
     /**
