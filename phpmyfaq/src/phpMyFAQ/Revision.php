@@ -69,14 +69,14 @@ class Revision
 
 
     /**
-     * Gets all revisions from a given record ID.
+     * Gets all revisions from a given FAQ ID and FAQ language
      *
-     * @param int $faqId
-     * @param string $faqLang
+     * @param int    $faqId
+     * @param string $faqLanguage
      * @param string $faqAuthor
      * @return array
      */
-    public function get(int $faqId, string $faqLang, string $faqAuthor): array
+    public function get(int $faqId, string $faqLanguage, string $faqAuthor): array
     {
         $revisionData = [];
 
@@ -91,7 +91,7 @@ class Revision
                 revision_id",
             Database::getTablePrefix(),
             $faqId,
-            $faqLang
+            $faqLanguage
         );
 
         $result = $this->config->getDb()->query($query);
@@ -107,5 +107,23 @@ class Revision
         }
 
         return $revisionData;
+    }
+
+    /**
+     * Deletes all revisions for a given FAQ ID and FAQ language
+     * @param int    $faqId
+     * @param string $faqLanguage
+     * @return mixed
+     */
+    public function delete(int $faqId, string $faqLanguage)
+    {
+        $query = sprintf(
+            "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $faqId,
+            $faqLanguage
+        );
+
+        return $this->config->getDb()->query($query);
     }
 }
