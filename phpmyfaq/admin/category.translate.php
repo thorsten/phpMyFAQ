@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,6 +29,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->getMissingCategories();
+
+    $categoryPermission = new CategoryPermission($faqConfig);
+
     $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $header = sprintf('%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
@@ -43,8 +47,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $showcat = 'no';
     }
 
-    $userPermission = $category->getPermissions('user', [$id]);
-    $groupPermission = $category->getPermissions('group', [$id]);
+    $userPermission = $categoryPermission->get(CategoryPermission::USER, [$id]);
+    $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$id]);
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">

@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
 
@@ -40,6 +41,9 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
+
+    $categoryPermission = new CategoryPermission($faqConfig);
+
     $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
                 <form enctype="multipart/form-data"  action="?action=savecategory" method="post">
@@ -48,8 +52,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 <?php
     if ($parentId > 0) {
-        $userAllowed = $category->getPermissions('user', array($parentId));
-        $groupsAllowed = $category->getPermissions('group', array($parentId));
+        $userAllowed = $categoryPermission->get(CategoryPermission::USER, array($parentId));
+        $groupsAllowed = $categoryPermission->get(CategoryPermission::GROUP, array($parentId));
         ?>
             <input type="hidden" name="restricted_users" value="<?= $userAllowed[0] ?>">
             <?php foreach ($groupsAllowed as $group): ?>

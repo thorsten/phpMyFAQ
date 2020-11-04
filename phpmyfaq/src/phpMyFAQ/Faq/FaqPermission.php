@@ -26,14 +26,14 @@ use phpMyFAQ\Database;
  */
 class FaqPermission
 {
+    /** @var string */
+    public const USER = 'user';
+
+    /** @var string */
+    public const GROUP = 'group';
+
     /** @var Configuration */
     private $config;
-
-    /** @var string */
-    private const USER = 'user';
-
-    /** @var string */
-    private const GROUP = 'group';
 
     /**
      * FaqPermission constructor.

@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
@@ -82,6 +83,7 @@ if ('insertentry' === $do &&
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
+        $categoryPermission = new CategoryPermission($faqConfig);
         $categoryRelation = new CategoryRelation($faqConfig);
 
         if (!isset($categories['rubrik'])) {
@@ -137,13 +139,13 @@ if ('insertentry' === $do &&
 
             $faq->deletePermission('user', $recordId);
             $faq->addPermission('user', $recordId, [$restrictedUsers]);
-            $category->deletePermission('user', $categories['rubrik']);
-            $category->addPermission('user', $categories['rubrik'], [$restrictedUsers]);
+            $categoryPermission->delete(CategoryPermission::USER, $categories['rubrik']);
+            $categoryPermission->add(CategoryPermission::USER, $categories['rubrik'], [$restrictedUsers]);
             if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $faq->deletePermission('group', $recordId);
                 $faq->addPermission('group', $recordId, [$restrictedGroups]);
-                $category->deletePermission('group', $categories['rubrik']);
-                $category->addPermission('group', $categories['rubrik'], [$restrictedGroups]);
+                $categoryPermission->delete(CategoryPermission::GROUP, $categories['rubrik']);
+                $categoryPermission->add(CategoryPermission::GROUP, $categories['rubrik'], [$restrictedGroups]);
             }
         } elseif ('insertentry' == $do) {
             unset($recordData['id']);
@@ -163,11 +165,11 @@ if ('insertentry' === $do &&
                 }
 
                 $faq->addPermission('user', $recordId, [$restrictedUsers]);
-                $category->addPermission('user', $categories['rubrik'], [$restrictedUsers]);
+                $categoryPermission->add(CategoryPermission::USER, $categories['rubrik'], [$restrictedUsers]);
 
                 if ($faqConfig->get('security.permLevel') !== 'basic') {
                     $faq->addPermission('group', $recordId, [$restrictedGroups]);
-                    $category->addPermission('group', $categories['rubrik'], [$restrictedGroups]);
+                    $categoryPermission->add(CategoryPermission::GROUP, $categories['rubrik'], [$restrictedGroups]);
                 }
             }
         }

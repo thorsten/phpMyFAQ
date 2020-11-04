@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryImage;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
@@ -64,6 +65,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         $uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
         $categoryImage = new CategoryImage($faqConfig);
         $categoryImage->setUploadedFile($uploadedFile);
+
+        $categoryPermission = new CategoryPermission($faqConfig);
 
         if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         // Save a new category
@@ -126,8 +129,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $categoryId = $category->addCategory($categoryData, $parentId);
 
             if ($categoryId) {
-                $category->addPermission('user', [$categoryId], $permissions['restricted_user']);
-                $category->addPermission('group', [$categoryId], $permissions['restricted_groups']);
+                $categoryPermission->add(CategoryPermission::USER, [$categoryId], $permissions['restricted_user']);
+                $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], $permissions['restricted_groups']);
 
                 $categoryImage->upload();
 
@@ -144,6 +147,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $category = new Category($faqConfig, [], false);
             $category->setUser($currentAdminUser);
             $category->setGroups($currentAdminGroups);
+
             $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
             $categoryId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
             $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING);
@@ -201,9 +205,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if (!$category->checkLanguage($categoryData['id'], $categoryData['lang'])) {
                 if (
                     $category->addCategory($categoryData, $parentId, $categoryData['id']) &&
-                    $category->addPermission('user', [$categoryData['id']], $permissions['restricted_user']) &&
-                    $category->addPermission(
-                        'group',
+                    $categoryPermission->add(
+                        CategoryPermission::USER,
+                        [$categoryData['id']],
+                        $permissions['restricted_user']
+                    ) &&
+                    $categoryPermission->add(
+                        CategoryPermission::GROUP,
                         [$categoryData['id']],
                         $permissions['restricted_groups']
                     )
@@ -214,11 +222,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
             } else {
                 if ($category->updateCategory($categoryData)) {
-                    $category->deletePermission('user', [$categoryData['id']]);
-                    $category->deletePermission('group', [$categoryData['id']]);
-                    $category->addPermission('user', [$categoryData['id']], $permissions['restricted_user']);
-                    $category->addPermission(
-                        'group',
+                    $categoryPermission->delete(CategoryPermission::USER, [$categoryData['id']]);
+                    $categoryPermission->delete(CategoryPermission::GROUP, [$categoryData['id']]);
+                    $categoryPermission->add(
+                        CategoryPermission::USER,
+                        [$categoryData['id']],
+                        $permissions['restricted_user']
+                    );
+                    $categoryPermission->add(
+                        CategoryPermission::GROUP,
                         [$categoryData['id']],
                         $permissions['restricted_groups']
                     );
@@ -240,7 +252,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
             $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
             $deleteAll = Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
-            $deleteAll = strtolower($deleteAll) == 'yes' ? true : false;
+            $deleteAll = strtolower($deleteAll) === 'yes';
 
             $category = new Category($faqConfig, [], false);
             $category->setUser($currentAdminUser);
@@ -254,8 +266,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if (
                 $category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
                 $categoryRelation->delete($categoryId, $categoryLang, $deleteAll) &&
-                $category->deletePermission('user', [$categoryId]) &&
-                $category->deletePermission('group', [$categoryId]) &&
+                $categoryPermission->delete(CategoryPermission::USER, [$categoryId]) &&
+                $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]) &&
                 $categoryImage->delete()
             ) {
                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
@@ -328,7 +340,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 
             // Has permissions, show lock icon
-            if ($category->hasPermissions($cat['id'])) {
+            if ($categoryPermission->isRestricted($cat['id'])) {
                 $categoryName .= ' <i class="fa fa-lock" aria-hidden="true"></i>';
             }
 

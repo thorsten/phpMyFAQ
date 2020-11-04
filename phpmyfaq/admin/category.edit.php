@@ -15,6 +15,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,8 +32,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 
+    $categoryPermission = new CategoryPermission($faqConfig);
+
     $categoryData = $category->getCategoryData($categoryId);
-    $userPermission = $category->getPermissions('user', array($categoryId));
+    $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
 
     if ($userPermission[0] == -1) {
         $allUsers = true;
@@ -42,7 +45,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $restrictedUsers = true;
     }
 
-    $groupPermission = $category->getPermissions('group', array($categoryId));
+    $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
     if ($groupPermission[0] == -1) {
         $allGroups = true;
         $restrictedGroups = false;

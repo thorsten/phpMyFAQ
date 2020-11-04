@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryOrder;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 
@@ -40,6 +41,8 @@ switch ($ajaxAction) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
+        $categoryPermission = new CategoryPermission($faqConfig);
+
         $ajaxData = Filter::filterInputArray(
             INPUT_GET,
             [
@@ -58,8 +61,8 @@ switch ($ajaxAction) {
 
         $http->sendJsonWithHeaders(
             [
-                'user' => $category->getPermissions('user', $categories),
-                'group' => $category->getPermissions('group', $categories)
+                'user' => $categoryPermission->get(CategoryPermission::USER, $categories),
+                'group' => $categoryPermission->get(CategoryPermission::GROUP, $categories)
             ]
         );
         break;

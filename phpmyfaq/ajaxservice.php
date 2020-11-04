@@ -19,6 +19,7 @@ define('IS_VALID_PHPMYFAQ', null);
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
@@ -419,15 +420,16 @@ switch ($action) {
             $visits->logViews($recordId);
 
             // Set permissions
-            $userPermissions = $category->getPermissions('user', $categories);
+            $categoryPermission = new CategoryPermission($faqConfig);
+            $userPermissions = $categoryPermission->get(CategoryPermission::USER, $categories);
             // Add user permissions
             $faq->addPermission('user', $recordId, $userPermissions);
-            $category->addPermission('user', $categories, $userPermissions);
+            $categoryPermission->add(CategoryPermission::USER, $categories, $userPermissions);
             // Add group permission
             if ($faqConfig->get('security.permLevel') !== 'basic') {
-                $groupPermissions = $category->getPermissions('group', $categories);
+                $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $categories);
                 $faq->addPermission('group', $recordId, $groupPermissions);
-                $category->addPermission('group', $categories, $groupPermissions);
+                $categoryPermission->add(CategoryPermission::GROUP, $categories, $groupPermissions);
             }
 
             // Let the PMF Administrator and the Entity Owner to be informed by email of this new entry

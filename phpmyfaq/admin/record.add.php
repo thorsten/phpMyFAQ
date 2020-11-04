@@ -17,6 +17,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
@@ -121,6 +122,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
+
+        $categoryPermission = new CategoryPermission($faqConfig);
+
         $tagging = new Tags($faqConfig);
 
         $recordData = array(
@@ -164,11 +168,15 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
             // Add user permissions
             $faq->addPermission('user', $recordId, $permissions['restricted_user']);
-            $category->addPermission('user', $categories['rubrik'], $permissions['restricted_user']);
+            $categoryPermission->add(CategoryPermission::USER, $categories['rubrik'], $permissions['restricted_user']);
             // Add group permission
             if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
-                $category->addPermission('group', $categories['rubrik'], $permissions['restricted_groups']);
+                $categoryPermission->add(
+                  CategoryPermission::GROUP,
+                  $categories['rubrik'],
+                  $permissions['restricted_groups']
+                );
             }
 
             // Open question answered
