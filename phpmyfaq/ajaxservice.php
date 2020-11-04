@@ -19,6 +19,7 @@ define('IS_VALID_PHPMYFAQ', null);
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
@@ -401,7 +402,8 @@ switch ($action) {
 
             $recordId = $faq->addRecord($newData, $isNew);
 
-            $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
+            $categoryRelation = new CategoryRelation($faqConfig);
+            $categoryRelation->add($categories, $recordId, $newData['lang']);
 
             $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {

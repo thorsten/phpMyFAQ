@@ -17,6 +17,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
@@ -148,13 +149,14 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             // Create ChangeLog entry
             $changelog = new Changelog($faqConfig);
             $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
-            // Create the visit entry
 
+            // Create the visit entry
             $visits = new Visits($faqConfig);
             $visits->logViews($recordId);
 
-            // Insert the new category relations
-            $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordData['lang']);
+            $categoryRelation = new CategoryRelation($faqConfig);
+            $categoryRelation->add($categories['rubrik'], $recordId, $recordData['lang']);
+
             // Insert the tags
             if ($tags != '') {
                 $tagging->saveTags($recordId, explode(',', trim($tags)));

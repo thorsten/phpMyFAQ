@@ -972,11 +972,10 @@ class Faq
      */
     public function create(FaqEntity $faq): int
     {
-        if ($faq->getId()) {
+        if (is_null($faq->getId())) {
             $faq->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'));
         }
 
-        // Add new entry
         $query = sprintf(
             "INSERT INTO %sfaqdata VALUES
             (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
@@ -985,19 +984,19 @@ class Faq
             $faq->getLanguage(),
             $this->getNextSolutionId(),
             0,
-            $faq->isActive(),
-            $faq->isSticky(),
+            $faq->isActive() ? 'yes' : 'no',
+            $faq->isSticky() ? 1 : 0,
             $this->config->getDb()->escape($faq->getKeywords()),
             $this->config->getDb()->escape($faq->getQuestion()),
             $this->config->getDb()->escape($faq->getAnswer()),
             $this->config->getDb()->escape($faq->getAuthor()),
             $faq->getEmail(),
             $faq->isComment() ? 'y' : 'n',
-            $faq->getUpdatedDate(),
+            $faq->getUpdatedDate()->format('YmdHis'),
             $faq->getLinkState(),
-            $faq->getLinksCheckedDate(),
-            $faq->getValidFrom(),
-            $faq->getValidTo(),
+            $faq->getLinksCheckedDate()->format(DATE_ISO8601),
+            '00000000000000',
+            '99991231235959',
             date('Y-m-d H:i:s'),
             $faq->getNotes()
         );
@@ -1299,67 +1298,6 @@ class Faq
         } else {
             return true;
         }
-    }
-
-    /**
-     * Adds new category relations to a record.
-     *
-     * @param array  $categories Array of categories
-     * @param int    $recordId   Record id
-     * @param string $language   Language
-     *
-     * @return bool
-     */
-    public function addCategoryRelations(array $categories, $recordId, $language)
-    {
-        if (!is_array($categories)) {
-            return false;
-        }
-
-        foreach ($categories as $_category) {
-            $this->config->getDb()->query(
-                sprintf(
-                    "INSERT INTO
-                    %sfaqcategoryrelations
-                VALUES
-                    (%d, '%s', %d, '%s')",
-                    Database::getTablePrefix(),
-                    $_category,
-                    $language,
-                    $recordId,
-                    $language
-                )
-            );
-        }
-
-        return true;
-    }
-
-    /**
-     * Deletes category relations to a record.
-     *
-     * @param int    $recordId   Record id
-     * @param string $recordLang Language
-     *
-     * @return bool
-     */
-    public function deleteCategoryRelations($recordId, $recordLang)
-    {
-        $query = sprintf(
-            "
-            DELETE FROM
-                %sfaqcategoryrelations
-            WHERE
-                record_id = %d
-            AND
-                record_lang = '%s'",
-            Database::getTablePrefix(),
-            $recordId,
-            $recordLang
-        );
-        $this->config->getDb()->query($query);
-
-        return true;
     }
 
     /**
@@ -2399,7 +2337,7 @@ class Faq
      * @param string $mode     'group' or 'user'
      * @param int    $recordId ID of the current record
      * @param array  $ids      Array of group or user IDs
-     *
+     * @deprecated
      * @return bool
      */
     public function addPermission($mode, $recordId, $ids)
@@ -2434,7 +2372,7 @@ class Faq
      *
      * @param string $mode      'group' or 'user'
      * @param int    $record_id ID of the current record
-     *
+     * @deprecated
      * @return bool
      */
     public function deletePermission($mode, $record_id)
@@ -2466,7 +2404,7 @@ class Faq
      *
      * @param string $mode 'group' or 'user'
      * @param int $recordId
-     *
+     * @deprecated
      * @return array
      */
     public function getPermission(string $mode, int $recordId): array

@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -81,6 +82,8 @@ if ('insertentry' === $do &&
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
+        $categoryRelation = new CategoryRelation($faqConfig);
+
         if (!isset($categories['rubrik'])) {
             $categories['rubrik'] = [];
         }
@@ -123,8 +126,8 @@ if ('insertentry' === $do &&
                 $recordId = $faq->addRecord($recordData, false);
             }
 
-            $faq->deleteCategoryRelations($recordId, $recordLang);
-            $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordLang);
+            $categoryRelation->deleteByFaq($recordId, $recordLang);
+            $categoryRelation->add($categories['rubrik'], $recordId, $recordLang);
 
             if ($tags != '') {
                 $tagging->saveTags($recordId, explode(',', $tags));
@@ -153,7 +156,7 @@ if ('insertentry' === $do &&
                 $visits = new Visits($faqConfig);
                 $visits->add($recordId);
 
-                $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordData['lang']);
+                $categoryRelation->add($categories['rubrik'], $recordId, $recordData['lang']);
 
                 if ($tags != '') {
                     $tagging->saveTags($recordId, explode(',', $tags));

@@ -17,6 +17,8 @@
 namespace phpMyFAQ\Entity;
 
 use DateTime;
+use DateTimeInterface;
+use phpDocumentor\Reflection\Types\This;
 
 /**
  * Class FaqEntity
@@ -83,9 +85,9 @@ class FaqEntity
     private $updatedDate;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -339,7 +341,11 @@ class FaqEntity
      */
     public function getLinksCheckedDate(): DateTime
     {
-        return $this->linksCheckedDate;
+        if ($this->linksCheckedDate instanceof DateTime) {
+            return $this->linksCheckedDate;
+        } else {
+            return $this->linksCheckedDate = new DateTime();
+        }
     }
 
     /**
@@ -357,7 +363,11 @@ class FaqEntity
      */
     public function getValidFrom(): DateTime
     {
-        return $this->validFrom;
+        if ($this->validFrom instanceof DateTime) {
+            return $this->validFrom;
+        } else {
+            return $this->validFrom = new DateTime();
+        }
     }
 
     /**
@@ -375,7 +385,11 @@ class FaqEntity
      */
     public function getValidTo(): DateTime
     {
-        return $this->validTo;
+        if ($this->validTo instanceof DateTime) {
+            return $this->validTo;
+        } else {
+            return $this->validTo = new DateTime();
+        }
     }
 
     /**
@@ -393,7 +407,11 @@ class FaqEntity
      */
     public function getCreatedDate(): DateTime
     {
-        return $this->createdDate;
+        if ($this->createdDate instanceof DateTime) {
+            return $this->createdDate;
+        } else {
+            return $this->createdDate = new DateTime();
+        }
     }
 
     /**
@@ -411,7 +429,11 @@ class FaqEntity
      */
     public function getUpdatedDate(): DateTime
     {
-        return $this->updatedDate;
+        if ($this->updatedDate instanceof DateTime) {
+            return $this->updatedDate;
+        } else {
+            return $this->updatedDate = new DateTime();
+        }
     }
 
     /**

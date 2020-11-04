@@ -2,7 +2,6 @@
 
 /**
  * Category relations class.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -96,7 +95,7 @@ class CategoryRelation
     /**
      * Returns the number of records in each category.
      *
-     * @param  bool $categoryRestriction
+     * @param bool $categoryRestriction
      * @return array
      */
     public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false): array
@@ -155,8 +154,8 @@ class CategoryRelation
     /**
      * Returns the categories from a FAQ id and language.
      *
-     * @param  int    $faqId   FAQ id
-     * @param  string $faqLang FAQ language
+     * @param int    $faqId FAQ id
+     * @param string $faqLang FAQ language
      * @return array
      */
     public function getCategories(int $faqId, string $faqLang): array
@@ -190,14 +189,40 @@ class CategoryRelation
     }
 
     /**
-     * Deletes a category relation.
+     * Adds new category relations to a FAQ
      *
-     * @param  int    $categoryId            Category id
-     * @param  string $categoryLang          Category language
-     * @param  bool   $deleteForAllLanguages Delete all languages?
+     * @param array  $categories Array of categories
+     * @param int    $faqId FAQ id
+     * @param string $language Language
      * @return bool
      */
-    public function deleteRelations(int $categoryId, string $categoryLang, bool $deleteForAllLanguages = false): bool
+    public function add(array $categories, $faqId, $language): bool
+    {
+        foreach ($categories as $categoryId) {
+            $this->config->getDb()->query(
+                sprintf(
+                    "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
+                    Database::getTablePrefix(),
+                    $categoryId,
+                    $language,
+                    $faqId,
+                    $language
+                )
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Deletes a category relation for a given category
+     *
+     * @param int    $categoryId Category id
+     * @param string $categoryLang Category language
+     * @param bool   $deleteForAllLanguages Delete all languages?
+     * @return bool
+     */
+    public function delete(int $categoryId, string $categoryLang, bool $deleteForAllLanguages = false): bool
     {
         $query = sprintf(
             'DELETE FROM %sfaqcategoryrelations WHERE category_id = %d',
@@ -206,7 +231,7 @@ class CategoryRelation
         );
 
         if (!$deleteForAllLanguages) {
-            $query .= " AND category_lang = '" . $categoryLang . "'";
+            $query .= sprintf(" AND category_lang = '%s'", $categoryLang);
         }
 
         return $this->config->getDb()->query($query);

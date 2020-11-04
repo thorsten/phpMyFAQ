@@ -253,7 +253,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             if (
                 $category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
-                $categoryRelation->deleteRelations($categoryId, $categoryLang, $deleteAll) &&
+                $categoryRelation->delete($categoryId, $categoryLang, $deleteAll) &&
                 $category->deletePermission('user', [$categoryId]) &&
                 $category->deletePermission('group', [$categoryId]) &&
                 $categoryImage->delete()

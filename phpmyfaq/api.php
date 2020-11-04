@@ -20,8 +20,10 @@ define('IS_VALID_PHPMYFAQ', null);
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -292,25 +294,27 @@ switch ($action) {
         // GET
         //
         $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_STRING);
-
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getRecord($recordId);
-        $result = $faq->faqRecord;
 
-        if (count($result) === 0 || $result['solution_id'] === 42) {
-            $result = new stdClass();
-            $http->setStatus(404);
-        }
+        if ($recordId > 0) {
+            $faq->getRecord($recordId);
+            $result = $faq->faqRecord;
 
-        if ('pdf' === $filter) {
-            $service = new Services($faqConfig);
-            $service->setFaqId($recordId);
-            $service->setLanguage($currentLanguage);
-            $service->setCategoryId($categoryId);
+            if (count($result) === 0 || $result['solution_id'] === 42) {
+                $result = new stdClass();
+                $http->setStatus(404);
+            }
 
-            $result = $service->getPdfApiLink();
+            if ('pdf' === $filter) {
+                $service = new Services($faqConfig);
+                $service->setFaqId($recordId);
+                $service->setLanguage($currentLanguage);
+                $service->setCategoryId($categoryId);
+
+                $result = $service->getPdfApiLink();
+            }
         }
 
         //
@@ -325,7 +329,7 @@ switch ($action) {
         }
 
         $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
-        $categoryId = Filter::filterInput(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
         $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRING);
         $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
@@ -334,8 +338,28 @@ switch ($action) {
         $isActive = Filter::filterInput(INPUT_POST, 'is-active', FILTER_SANITIZE_STRING);
         $isSticky = Filter::filterInput(INPUT_POST, 'is-sticky', FILTER_SANITIZE_STRING);
 
+        $categories = [ $categoryId ];
         $isActive = $isActive === 'true';
         $isSticky = $isSticky === 'true';
+
+        $faqData = new FaqEntity();
+        $faqData
+            ->setLanguage($languageCode)
+            ->setQuestion($question)
+            ->setAnswer($answer)
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setActive($isActive)
+            ->setSticky($isSticky)
+            ->setComment(false)
+            ->setLinkState('')
+            ->setNotes('');
+
+        $faqId = $faq->create($faqData);
+
+        $categoryRelation = new CategoryRelation($faqConfig);
+        $categoryRelation->add($categories, $faqId, $languageCode);
 
         break;
 

@@ -17,6 +17,7 @@
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
@@ -184,10 +185,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             $categories['rubrik'] = [];
         }
 
-        // delete category relations
-        $faq->deleteCategoryRelations($recordId, $recordLang);
-        // save or update the category relations
-        $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordLang);
+        $categoryRelation = new CategoryRelation($faqConfig);
+        $categoryRelation->deleteByFaq($recordId, $recordLang);
+        $categoryRelation->add($categories['rubrik'], $recordId, $recordLang);
 
         // Insert the tags
         if ($tags != '') {
