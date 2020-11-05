@@ -94,6 +94,7 @@ $dirsToCreate = [
     'phpmyfaq/src/libs/react/promise/src',
     'phpmyfaq/src/libs/swiftmailer/swiftmailer/lib',
     'phpmyfaq/src/libs/symfony/deprecation-contracts',
+    'phpmyfaq/src/libs/symfony/polyfill-intl-normalizer',
     'phpmyfaq/src/libs/tcpdf/config',
     'phpmyfaq/src/libs/tcpdf/include',
 ];
@@ -138,6 +139,7 @@ $copyDirs = [
     'vendor/symfony/polyfill-ctype' => 'phpmyfaq/src/libs/symfony/polyfill-ctype',
     'vendor/symfony/polyfill-iconv' => 'phpmyfaq/src/libs/symfony/polyfill-iconv',
     'vendor/symfony/polyfill-intl-idn' => 'phpmyfaq/src/libs/symfony/polyfill-intl-idn',
+    'vendor/symfony/polyfill-intl-normalizer' => 'phpmyfaq/src/libs/symfony/polyfill-intl-normalizer',
     'vendor/symfony/polyfill-mbstring' => 'phpmyfaq/src/libs/symfony/polyfill-mbstring',
     'vendor/symfony/polyfill-php72' => 'phpmyfaq/src/libs/symfony/polyfill-php72',
     'vendor/symfony/yaml' => 'phpmyfaq/src/libs/symfony/yaml',
