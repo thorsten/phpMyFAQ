@@ -25,6 +25,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\HttpHelper;
@@ -307,6 +308,7 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $category = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
+
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
@@ -420,15 +422,15 @@ switch ($action) {
             $visits->logViews($recordId);
 
             // Set permissions
+            $faqPermission = new FaqPermission($faqConfig);
             $categoryPermission = new CategoryPermission($faqConfig);
             $userPermissions = $categoryPermission->get(CategoryPermission::USER, $categories);
-            // Add user permissions
-            $faq->addPermission('user', $recordId, $userPermissions);
+
+            $faqPermission->add(FaqPermission::USER, $recordId, $userPermissions);
             $categoryPermission->add(CategoryPermission::USER, $categories, $userPermissions);
-            // Add group permission
             if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $categories);
-                $faq->addPermission('group', $recordId, $groupPermissions);
+                $faqPermission->add(FaqPermission::GROUP, $recordId, $groupPermissions);
                 $categoryPermission->add(CategoryPermission::GROUP, $categories, $groupPermissions);
             }
 
@@ -545,7 +547,8 @@ switch ($action) {
                 $faqSearch = new Search($faqConfig);
                 $faqSearch->setCategory(new Category($faqConfig));
                 $faqSearch->setCategoryId($ucategory);
-                $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
+                $faqPermission = new FaqPermission($faqConfig);
+                $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
                 $searchResult = [];
                 $mergedResult = [];
 

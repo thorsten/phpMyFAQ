@@ -21,6 +21,7 @@ use phpMyFAQ\Changelog;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -57,6 +58,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     $categoryHelper->setCategory($category);
 
     $faq = new Faq($faqConfig);
+
+    $faqPermission = new FaqPermission($faqConfig);
 
     $questionObject = new Question($faqConfig);
 
@@ -182,7 +185,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     }
 
     // User permissions
-    $userPermission = $faq->getPermission('user', $faqData['id']);
+    $userPermission = $faqPermission->get(FaqPermission::USER, $faqData['id']);
     if (count($userPermission) == 0 || $userPermission[0] == -1) {
         $allUsers = true;
         $restrictedUsers = false;
@@ -193,7 +196,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     }
 
     // Group permissions
-    $groupPermission = $faq->getPermission('group', $faqData['id']);
+    $groupPermission = $faqPermission->get(FaqPermission::GROUP, $faqData['id']);
     if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
         $allGroups = true;
         $restrictedGroups = false;

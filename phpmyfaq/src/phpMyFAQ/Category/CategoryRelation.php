@@ -236,4 +236,23 @@ class CategoryRelation
 
         return $this->config->getDb()->query($query);
     }
+
+    /**
+     * Deletes category relations to a record.
+     *
+     * @param int    $faqId   Record id
+     * @param string $faqLanguage Language
+     * @return bool
+     */
+    public function deleteByFAQ(int $faqId, string $faqLanguage): bool
+    {
+        $query = sprintf(
+            "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
+            Database::getTablePrefix(),
+            $faqId,
+            $faqLanguage
+        );
+
+        return $this->config->getDb()->query($query);
+    }
 }

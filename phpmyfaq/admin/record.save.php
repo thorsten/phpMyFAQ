@@ -19,6 +19,7 @@ use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -85,6 +86,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
 
     // Permissions
+    $faqPermission = new FaqPermission($faqConfig);
     $permissions = [];
     if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
         $permissions += [
@@ -197,12 +199,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         }
 
         // Add user permissions
-        $faq->deletePermission('user', $recordId);
-        $faq->addPermission('user', $recordId, $permissions['restricted_user']);
+        $faqPermission->delete(FaqPermission::USER, $recordId);
+        $faqPermission->add(FaqPermission::USER, $recordId, $permissions['restricted_user']);
         // Add group permission
-        if ($faqConfig->get('security.permLevel') != 'basic') {
-            $faq->deletePermission('group', $recordId);
-            $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
+        if ($faqConfig->get('security.permLevel') !== 'basic') {
+            $faqPermission->delete(FaqPermission::GROUP, $recordId);
+            $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
         }
 
         // If Elasticsearch is enabled, update active or delete inactive FAQ document

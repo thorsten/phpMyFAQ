@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
@@ -72,24 +72,20 @@ class SearchResultSet
      */
     protected $user = null;
 
-    /**
-     * FaqHelper object.
-     *
-     * @var Faq
-     */
-    protected $faq = null;
+    /** @var FaqPermission */
+    private $faqPermission;
 
     /**
      * Constructor.
      *
-     * @param CurrentUser   $user   User object
-     * @param Faq           $faq    FaqHelper object
+     * @param CurrentUser   $user User object
+     * @param FaqPermission $faqPermission
      * @param Configuration $config Configuration object
      */
-    public function __construct(CurrentUser $user, Faq $faq, Configuration $config)
+    public function __construct(CurrentUser $user, FaqPermission $faqPermission, Configuration $config)
     {
         $this->user = $user;
-        $this->faq = $faq;
+        $this->faqPermission = $faqPermission;
         $this->config = $config;
     }
 
@@ -120,7 +116,7 @@ class SearchResultSet
 
             // check permissions for groups
             if ('medium' === $this->config->get('security.permLevel')) {
-                $groupPermissions = $this->faq->getPermission('group', $result->id);
+                $groupPermissions = $this->faqPermission->get(FaqPermission::GROUP, $result->id);
                 if (is_array($groupPermissions)) {
                     foreach ($groupPermissions as $groupPermission) {
                         if (in_array($groupPermission, $currentGroupIds)) {
@@ -131,7 +127,7 @@ class SearchResultSet
             }
             // check permission for user
             if ('basic' === $this->config->get('security.permLevel')) {
-                $userPermission = $this->faq->getPermission('user', $result->id);
+                $userPermission = $this->faqPermission->get(FaqPermission::USER, $result->id);
                 if (in_array(-1, $userPermission) || in_array($this->user->getUserId(), $userPermission)) {
                     $permission = true;
                 } else {

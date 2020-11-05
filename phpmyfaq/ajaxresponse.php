@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
@@ -40,10 +40,7 @@ $ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_
 $categoryId = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
 $language = new Language($faqConfig);
-$languageCode = $language->setLanguage(
-    $faqConfig->get('main.languageDetection'),
-    $faqConfig->get('main.language')
-);
+$languageCode = $language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($language);
 
 require_once 'lang/language_en.php';
@@ -93,9 +90,9 @@ $category->setGroups($currentGroups);
 $category->transform(0);
 $category->buildTree();
 
-$faq = new Faq($faqConfig);
+$faqPermission = new FaqPermission($faqConfig);
 $faqSearch = new Search($faqConfig);
-$faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
+$faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
 //
 // Send headers

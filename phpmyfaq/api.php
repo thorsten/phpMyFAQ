@@ -25,6 +25,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
@@ -144,10 +145,15 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
+
         $user = new CurrentUser($faqConfig);
+
         $search = new Search($faqConfig);
         $search->setCategory(new Category($faqConfig));
-        $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
+
+        $faqPermission = new FaqPermission($faqConfig);
+
+        $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);

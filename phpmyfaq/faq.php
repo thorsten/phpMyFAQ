@@ -22,6 +22,7 @@ use phpMyFAQ\Captcha;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\AttachmentHelper;
@@ -54,13 +55,14 @@ $faqRating = new Rating($faqConfig);
 $faqComment = new Comments($faqConfig);
 $markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
+$faqPermission = new FaqPermission($faqConfig);
 $attachmentHelper = new AttachmentHelper();
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
 }
 
-$faqSearchResult = new SearchResultset($user, $faq, $faqConfig);
+$faqSearchResult = new SearchResultset($user, $faqPermission, $faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {

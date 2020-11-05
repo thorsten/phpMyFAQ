@@ -20,6 +20,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -125,6 +126,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
         $categoryPermission = new CategoryPermission($faqConfig);
 
+        $faqPermission = new FaqPermission($faqConfig);
+
         $tagging = new Tags($faqConfig);
 
         $recordData = array(
@@ -167,11 +170,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             }
 
             // Add user permissions
-            $faq->addPermission('user', $recordId, $permissions['restricted_user']);
+            $faqPermission->add(FaqPermission::USER, $recordId, $permissions['restricted_user']);
             $categoryPermission->add(CategoryPermission::USER, $categories['rubrik'], $permissions['restricted_user']);
             // Add group permission
             if ($faqConfig->get('security.permLevel') !== 'basic') {
-                $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
+                $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
                 $categoryPermission->add(
                   CategoryPermission::GROUP,
                   $categories['rubrik'],

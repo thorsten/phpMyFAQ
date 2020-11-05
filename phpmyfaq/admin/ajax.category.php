@@ -36,13 +36,7 @@ $http->addHeader();
 switch ($ajaxAction) {
 
     case 'getpermissions':
-
-        $category = new Category($faqConfig, [], false);
-        $category->setUser($currentAdminUser);
-        $category->setGroups($currentAdminGroups);
-
         $categoryPermission = new CategoryPermission($faqConfig);
-
         $ajaxData = Filter::filterInputArray(
             INPUT_GET,
             [

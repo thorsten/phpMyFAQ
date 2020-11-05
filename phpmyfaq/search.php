@@ -2,7 +2,6 @@
 
 /**
  * The fulltext search page.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -16,11 +15,11 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Helper\TagsHelper;
-use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
@@ -73,7 +72,8 @@ if (is_null($user)) {
 }
 
 $faqSearch = new Search($faqConfig);
-$faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
+$faqPermission = new FaqPermission($faqConfig);
+$faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 $tagging = new Tags($faqConfig);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
@@ -117,9 +117,11 @@ if (!is_null($inputTag) && '' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, function ($a, $b) {
-            return ($b - $a);
-        }
+        uasort(
+            $relatedTags,
+            function ($a, $b) {
+                return ($b - $a);
+            }
         );
         $numTags = 0;
         $relTags = '';
@@ -171,9 +173,10 @@ try {
     // @todo handle the exception
 }
 
-if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm &&
-    0 < $faqSearchResult->getNumberOfResults() && $faqConfig->get('search.searchForSolutionId')) {
-
+if (is_numeric(
+        $inputSearchTerm
+    ) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 0 < $faqSearchResult->getNumberOfResults(
+    ) && $faqConfig->get('search.searchForSolutionId')) {
     if ($faqConfig->get('main.enableRewriteRules')) {
         $http->redirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     } else {

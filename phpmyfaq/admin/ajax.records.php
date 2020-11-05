@@ -20,6 +20,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
@@ -60,14 +61,12 @@ switch ($ajaxAction) {
         $http->setContentType('application/json');
         $http->addHeader();
 
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentAdminUser);
-        $faq->setGroups($currentAdminGroups);
+        $faqPermission = new FaqPermission($faqConfig);
 
         $http->sendJsonWithHeaders(
             [
-                'user' => $faq->getPermission('user', $faqId),
-                'group' => $faq->getPermission('group', $faqId)
+                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
+                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
             ]
         );
         break;
@@ -109,10 +108,10 @@ switch ($ajaxAction) {
     // search FAQs for suggestions
     case 'search_records':
         if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
-            $faq = new Faq($faqConfig);
+            $faqPermission = new FaqPermission($faqConfig);
             $faqSearch = new Search($faqConfig);
             $faqSearch->setCategory(new Category($faqConfig));
-            $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
+            $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
             $searchResult = '';
             $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 

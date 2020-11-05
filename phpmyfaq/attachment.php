@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
@@ -44,13 +45,16 @@ if (!$user instanceof CurrentUser) {
 }
 
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+$faqPermission = new FaqPermission($faqConfig);
+
 $userPermission = [];
 $groupPermission = [];
 
 try {
     $attachment = AttachmentFactory::create($id);
-    $userPermission = $faq->getPermission('user', $attachment->getRecordId());
-    $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
+    $userPermission = $faqPermission->get(FaqPermission::USER, $attachment->getRecordId());
+    $groupPermission = $faqPermission->get(FaqPermission::GROUP, $attachment->getRecordId());
 } catch (AttachmentException $e) {
     $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
 }
