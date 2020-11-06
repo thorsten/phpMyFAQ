@@ -25,6 +25,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -142,24 +143,18 @@ switch ($action) {
         break;
 
     case 'search':
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-
         $user = new CurrentUser($faqConfig);
-
         $search = new Search($faqConfig);
         $search->setCategory(new Category($faqConfig));
 
         $faqPermission = new FaqPermission($faqConfig);
-
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);
-        $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
         $faqSearchResult->reviewResultSet($searchResults);
         if ($faqSearchResult->getNumberOfResults() > 0) {
+            $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             foreach ($faqSearchResult->getResultSet() as $data) {
                 $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
                 $data->answer = Utils::makeShorterText($data->answer, 12);
@@ -329,7 +324,7 @@ switch ($action) {
         if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
             $http->setStatus(401);
             $result = [
-                'registered' => false,
+                'stored' => false,
                 'error' => 'X_PMF_Token not valid.'
             ];
         }
@@ -364,9 +359,16 @@ switch ($action) {
 
         $faqId = $faq->create($faqData);
 
-        $categoryRelation = new CategoryRelation($faqConfig);
-        $categoryRelation->add($categories, $faqId, $languageCode);
+        $faqMetaData = new FaqMetaData($faqConfig);
+        $faqMetaData
+            ->setFaqId($faqId)
+            ->setFaqLanguage($languageCode)
+            ->setCategories($categories)
+            ->save();
 
+        $result = [
+            'stored' => true
+        ];
         break;
 
     case 'login':

@@ -25,6 +25,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\FaqHelper;
@@ -405,9 +406,6 @@ switch ($action) {
 
             $recordId = $faq->addRecord($newData, $isNew);
 
-            $categoryRelation = new CategoryRelation($faqConfig);
-            $categoryRelation->add($categories, $recordId, $newData['lang']);
-
             $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) {
@@ -417,22 +415,12 @@ switch ($action) {
                 }
             }
 
-            // Activate visits
-            $visits = new Visits($faqConfig);
-            $visits->logViews($recordId);
-
-            // Set permissions
-            $faqPermission = new FaqPermission($faqConfig);
-            $categoryPermission = new CategoryPermission($faqConfig);
-            $userPermissions = $categoryPermission->get(CategoryPermission::USER, $categories);
-
-            $faqPermission->add(FaqPermission::USER, $recordId, $userPermissions);
-            $categoryPermission->add(CategoryPermission::USER, $categories, $userPermissions);
-            if ($faqConfig->get('security.permLevel') !== 'basic') {
-                $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $categories);
-                $faqPermission->add(FaqPermission::GROUP, $recordId, $groupPermissions);
-                $categoryPermission->add(CategoryPermission::GROUP, $categories, $groupPermissions);
-            }
+            $faqMetaData = new FaqMetaData($faqConfig);
+            $faqMetaData
+                ->setFaqId($recordId)
+                ->setFaqLanguage($newData['lang'])
+                ->setCategories($categories)
+                ->save();
 
             // Let the PMF Administrator and the Entity Owner to be informed by email of this new entry
             $send = [];
