@@ -9,7 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v3.1.0-alpha - 2020-11-
 
 - changed PHP requirement to PHP 7.3+ (Thorsten)
-- added support for PHP 8.0
+- added support for PHP 8.0 (Thorsten)
 - added support for Elasticsearch v6+ (Thorsten)
 - added drag and drop sorting for main categories (Paolo Caparrelli, Thorsten)
 - added possibility to add users without password (Thorsten)
@@ -17,13 +17,14 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added ChartJS as new charting library (Thorsten)
 - added REST API v2.1 to register users and add FAQs (Thorsten)
 - added API client tokens for REST API v2.1 (Thorsten)
+- updated to Composer v2 (Thorsten)
 - removed REST API v1 (Thorsten)
 - removed RSS support (Thorsten)
 - removed rewrite support for IIS (Thorsten)
 
 ### phpMyFAQ v3.0.6 - 2020-11-
 
-- added support for PHP 8.0
+- added support for PHP 8.0 (Thorsten)
 
 ### phpMyFAQ v3.0.5 - 2020-10-17
 

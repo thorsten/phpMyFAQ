@@ -30,7 +30,6 @@ Open endpoints require no Authentication.
 - [All FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v2.1/faqs/:categoryId`
 - [All FAQs per Tags](api-docs/faqs/tags.md): `GET /api/v2.1/faqs/tags/:tagId`
 - [FAQ](api-docs/faq.md): `GET /api/v2.1/faq/:faqId`
-- [Add FAQ](api-docs/faq/post.md): `GET /api/v2.1/faq`
 - [FAQ as PDF](api-docs/faq/pdf.md): `GET /api/v2.1/faq/:faqId?filter=pdf`
 - [Latest FAQs](api-docs/faqs/latest.md): `GET /api/v2.1/faqs/latest`
 - [Popular FAQs](api-docs/faqs/popular.md): `GET /api/v2.1/faqs/popular`
@@ -39,4 +38,16 @@ Open endpoints require no Authentication.
 ### Login/Registration related APIs
 
 - [Login](api-docs/login.md): `POST /api/v2.1/login`
+
+## Endpoints that require Authentication
+
+Closed endpoints require a valid API client token to be included in the header of the request. An API client token can
+be acquired from the admin configuration.
+
+### FAQ related APIs
+
+- [Add FAQ](api-docs/faq/post.md): `GET /api/v2.1/faq`
+
+### Login/Registration related APIs
+
 - [Register](api-docs/register.md): `POST /api/v2.1/register`

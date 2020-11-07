@@ -81,7 +81,7 @@ fi
   echo "upload_max_filesize = $PHP_UPLOAD_MAX_FILESIZE"
 } | tee $PHP_INI_DIR/conf.d/php.ini
 
-#=== Set recommanded opcache settings ===
+#=== Set recommended opcache settings ===
 # see https://secure.php.net/manual/en/opcache.installation.php
 {
   echo "opcache.memory_consumption=128"

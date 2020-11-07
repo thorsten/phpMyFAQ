@@ -1,6 +1,6 @@
 version: '3'
 
-# Use this file for development
+# Use this file for development only
 
 services:
   mariadb:
@@ -39,7 +39,7 @@ services:
       - PMF_DISABLE_HTACCESS=""
       - PMF_TIMEZONE="Europe/Berlin"
       - PMF_ENABLE_UPLOADS="On"
-      - PMF_MEMORY_LIMIT="2048M"
+      - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED & E_STRICT" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
     links:
@@ -52,7 +52,7 @@ services:
     depends_on:
       - yarn
   yarn:
-    image: node:10
+    image: node:12
     restart: 'no'
     command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app
