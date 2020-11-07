@@ -437,35 +437,37 @@ class Captcha
             $size = rand(20, $this->height / 2.2);
             $rotation = rand(-23, 23);
             $y = rand($size + 3, $this->height - 5);
-            // $w1 += rand(- $this->width / 90, $this->width / 40 );
             $x = $w1 + $w2 * $p;
             $c1 = []; // fore char color
             $c2 = []; // back char color
+
             do {
                 $c1['r'] = mt_rand(30, 199);
-            } while ($c1['r'] == $this->backgroundColor['r']);
+            } while ($c1['r'] === $this->backgroundColor['r']);
             do {
                 $c1['g'] = mt_rand(30, 199);
-            } while ($c1['g'] == $this->backgroundColor['g']);
+            } while ($c1['g'] === $this->backgroundColor['g']);
             do {
                 $c1['b'] = mt_rand(30, 199);
-            } while ($c1['b'] == $this->backgroundColor['b']);
-            $c1 = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
+            } while ($c1['b'] === $this->backgroundColor['b']);
+            $colorOne = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
+
             do {
-                $c2['r'] = ($c1['r'] < 100 ? $c1['r'] * 2 : mt_rand(30, 199));
-            } while (($c2['r'] == $this->backgroundColor['r']) && ($c2['r'] == $c1['r']));
+                $c2['r'] = ((int)$c1['r'] < 100 ? (int)$c1['r'] * 2 : mt_rand(30, 199));
+            } while (($c2['r'] === $this->backgroundColor['r']) && ($c2['r'] === $c1['r']));
             do {
-                $c2['g'] = ($c1['g'] < 100 ? $c1['g'] * 2 : mt_rand(30, 199));
-            } while (($c2['g'] == $this->backgroundColor['g']) && ($c2['g'] == $c1['g']));
+                $c2['g'] = ((int)$c1['g'] < 100 ? (int)$c1['g'] * 2 : mt_rand(30, 199));
+            } while (($c2['g'] === $this->backgroundColor['g']) && ($c2['g'] === $c1['g']));
             do {
-                $c2['b'] = ($c1['b'] < 100 ? $c1['b'] * 2 : mt_rand(30, 199));
-            } while (($c2['b'] == $this->backgroundColor['b']) && ($c2['b'] == $c1['b']));
-            $c2 = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
+                $c2['b'] = ((int)$c1['b'] < 100 ? (int)$c1['b'] * 2 : mt_rand(30, 199));
+            } while (($c2['b'] === $this->backgroundColor['b']) && ($c2['b'] === $c1['b']));
+            $colorTwo = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
+
             // Add the letter
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
-                imagettftext($this->img, $size, $rotation, $x + 2, $y, $c2, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $c2, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x, $y - 2, $c1, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x + 2, $y, $colorTwo, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $colorTwo, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x, $y - 2, $colorOne, $font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
@@ -473,7 +475,7 @@ class Captcha
                 $y = 12;
                 $s = 30;
                 imagestring($this->img, $size, $x + 1 + ($s * $p), $y + 1, $letter, $c3);
-                imagestring($this->img, $size, $x + ($s * $p), $y, $letter, $c1);
+                imagestring($this->img, $size, $x + ($s * $p), $y, $letter, $colorOne);
             }
         }
 
