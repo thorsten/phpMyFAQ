@@ -552,7 +552,7 @@ $LANG_CONF['records.disableAttachments'] = [0 => "checkbox", 1 => "Anhänge unte
 $LANG_CONF['main.enableUserTracking'] = [0 => "checkbox", 1 => "User-Tracking aktiviert?"];
 $LANG_CONF['main.enableAdminLog'] = [0 => "checkbox", 1 => "Admin-Logging aktiviert?"];
 $LANG_CONF["main.enableCategoryRestrictions"] = [0 => "checkbox", 1 => "Kategoriebeschränkungen aktivieren"];
-$LANG_CONF['security.ipCheck'] = [0 => "checkbox", 1 => "Soll die IP zur Überprüfung im Administrationsbereich herangezogen werden?"];
+$LANG_CONF['security.ipCheck'] = [0 => "checkbox", 1 => "IP zur Überprüfung im Admin-Bereich nutzen"];
 $LANG_CONF['records.numberOfRecordsPerPage'] = [0 => "input", 1 => "Anzahl der FAQs pro Seite"];
 $LANG_CONF['records.numberOfShownNewsEntries'] = [0 => "input", 1 => "Anzahl der angezeigten News"];
 $LANG_CONF['security.bannedIPs'] = [0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)"];
