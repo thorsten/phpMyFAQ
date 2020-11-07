@@ -17,6 +17,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added ChartJS as new charting library (Thorsten)
 - added REST API v2.1 to register users and add FAQs (Thorsten)
 - added API client tokens for REST API v2.1 (Thorsten)
+- added opt-in for displaying user data (Thorsten)
 - updated to Composer v2 (Thorsten)
 - removed REST API v1 (Thorsten)
 - removed RSS support (Thorsten)

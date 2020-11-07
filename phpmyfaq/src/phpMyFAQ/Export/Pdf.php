@@ -26,6 +26,7 @@ use phpMyFAQ\Export;
 use phpMyFAQ\Export\Pdf\Wrapper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Tags;
+use phpMyFAQ\User\CurrentUser;
 
 /**
  * Class Pdf
@@ -186,12 +187,11 @@ class Pdf extends Export
     /**
      * Builds the PDF delivery for the given faq.
      *
-     * @param array  $faqData
-     * @param string $filename
-     *
+     * @param array       $faqData
+     * @param string|null $filename
      * @return string
      */
-    public function generateFile(array $faqData, $filename = null)
+    public function generateFile(array $faqData, string $filename = null)
     {
         global $PMF_LANG;
 
@@ -230,9 +230,18 @@ class Pdf extends Export
         $this->pdf->Ln();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 11);
         $this->pdf->Write(5, $PMF_LANG['ad_entry_solution_id'] . ': #' . $faqData['solution_id']);
-        $this->pdf->SetAuthor($faqData['author']);
+
+        // Check if author name should be visible according to GDPR option
+        $user = new CurrentUser($this->config);
+        if ($user->getUserVisibilityByEmail($faqData['email'])) {
+            $author = $faqData['author'];
+        } else {
+            $author = 'n/a';
+        }
+
+        $this->pdf->SetAuthor($author);
         $this->pdf->Ln();
-        $this->pdf->Write(5, $PMF_LANG['msgAuthor'] . ': ' . $faqData['author']);
+        $this->pdf->Write(5, $PMF_LANG['msgAuthor'] . ': ' . $author);
         $this->pdf->Ln();
         $this->pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'] . $faqData['date']);
 

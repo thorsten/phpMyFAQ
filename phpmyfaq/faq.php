@@ -316,6 +316,13 @@ if (!$category->categoryHasLinkToFaq($recordId, $currentCategory)) {
     $http->setStatus(404);
 }
 
+// Check if author name should be visible according to GDPR option
+if ($user->getUserVisibilityByEmail($faq->faqRecord['email'])) {
+    $author = $faq->faqRecord['author'];
+} else {
+    $author = 'n/a';
+}
+
 $template->parse(
     'mainPageContent',
     [
@@ -325,7 +332,7 @@ $template->parse(
         'question' => $question,
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
-        'faqAuthor' => $faq->faqRecord['author'],
+        'faqAuthor' => $author,
         'editThisEntry' => $editThisEntry,
         'msgPdf' => $PMF_LANG['msgPDF'],
         'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
