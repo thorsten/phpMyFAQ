@@ -391,6 +391,7 @@ class Installer
         'security.useSslOnly' => 'false',
         'security.forcePasswordUpdate' => 'false',
         'security.enableRegistration' => 'true',
+        'security.domainWhiteListForRegistrations' => '',
 
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,

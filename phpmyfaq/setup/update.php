@@ -690,14 +690,14 @@ if ($step == 3) {
     // UPDATES FROM 3.1.0-alpha
     //
     if (version_compare($version, '3.1.0-alpha', '<=')) {
-        // Add isVisible flag for user data
+        // Add is_visible flag for user data
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
         }
 
-        // Add isVisible flag for user data
+        // Add is_visible flag for user data
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
         } else {
@@ -710,6 +710,9 @@ if ($step == 3) {
         // Add API related configuration
         $faqConfig->add('api.enableAccess', true);
         $faqConfig->add('api.apiClientToken', '');
+
+        // Add whitelist for domains
+        $faqConfig->add('security.domainWhiteListForRegistrations', '');
     }
 
     // Always the last step: Update version number
