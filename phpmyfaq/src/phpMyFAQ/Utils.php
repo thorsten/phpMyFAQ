@@ -111,7 +111,7 @@ class Utils
     {
         // Available markers: key and resolving value
         $markers = [
-            '%sitename%' => $config->get('main.titleFAQ'),
+            '%sitename%' => $config->getTitle(),
         ];
 
         // Resolve any known pattern

@@ -65,7 +65,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING)*60;
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-2020 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <?php if (isset($user) && ($refreshTime > 0)) { ?>

@@ -390,7 +390,7 @@ class Wrapper extends \TCPDF
             '(c) %d %s <%s> | %s',
             date('Y'),
             $this->config->get('main.metaPublisher'),
-            $this->config->get('main.administrationMail'),
+            $this->config->getAdminEmail(),
             $date->format(date('Y-m-d H:i'))
         );
 
@@ -455,7 +455,7 @@ class Wrapper extends \TCPDF
 
         // Title
         $this->SetFont($this->currentFont, 'B', 24);
-        $this->MultiCell(0, 0, $this->config->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
+        $this->MultiCell(0, 0, $this->config->getTitle(), 0, 'C', 0, 1, '', '', true, 0);
         $this->Ln();
 
         // TOC

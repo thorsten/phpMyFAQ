@@ -103,9 +103,9 @@ class Pdf extends Export
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
         $this->pdf->SetCreator(
-            $this->config->get('main.titleFAQ') .
+            $this->config->getTitle() .
             ' - powered by phpMyFAQ ' .
-            $this->config->get('main.currentVersion')
+            $this->config->getVersion()
         );
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
@@ -208,9 +208,9 @@ class Pdf extends Export
         // Set any item
         $this->pdf->SetTitle($faqData['title']);
         $this->pdf->SetCreator(
-            $this->config->get('main.titleFAQ') .
+            $this->config->getTitle() .
             ' - powered by phpMyFAQ ' .
-            $this->config->get('main.currentVersion')
+            $this->config->getVersion()
         );
         $this->pdf->AddPage();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);

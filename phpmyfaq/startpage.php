@@ -125,7 +125,7 @@ $template->parseBlock(
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ')),
+        'pageHeader' => Strings::htmlspecialchars($faqConfig->getTitle()),
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
         'writeTopTenHeader' => $PMF_LANG['msgTopTen'],

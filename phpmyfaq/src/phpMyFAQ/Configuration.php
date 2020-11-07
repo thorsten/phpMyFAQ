@@ -157,7 +157,6 @@ class Configuration
 
     /**
      * Returns the default language.
-     *
      * @return string
      */
     public function getDefaultLanguage(): string
@@ -167,12 +166,29 @@ class Configuration
 
     /**
      * Returns the current version
-     *
      * @return string
      */
-    public function getCurrentVersion(): string
+    public function getVersion(): string
     {
         return $this->config['main.currentVersion'];
+    }
+
+    /**
+     * Returns the title of the FAQ installation
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->config['main.titleFAQ'];
+    }
+
+    /**
+     * Returns the email address of the main admin
+     * @return string
+     */
+    public function getAdminEmail(): string
+    {
+        return $this->config['main.administrationMail'];
     }
 
     /**
@@ -208,13 +224,10 @@ class Configuration
             switch ($this->config[$item]) {
                 case 'true':
                     return true;
-                    break;
                 case 'false':
                     return false;
-                    break;
                 default:
                     return $this->config[$item];
-                    break;
             }
         }
 

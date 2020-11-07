@@ -49,7 +49,7 @@ $faqSession = new Session($faqConfig);
   </div>
 </div>
 
-<?php if (version_compare($faqConfig->getCurrentVersion(), System::getVersion(), '<')): ?>
+<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')): ?>
   <section class="row mb-3">
     <div class="col-12 p-2">
       <div class="card border-left-danger shadow h-100 py-2">
@@ -58,7 +58,7 @@ $faqSession = new Session($faqConfig);
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Attention!</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">
-                The phpMyFAQ version number stored in your database (<?= $faqConfig->getCurrentVersion() ?>) is lower
+                The phpMyFAQ version number stored in your database (<?= $faqConfig->getVersion() ?>) is lower
                 than the version number of the installed application (<?= System::getVersion() ?>), please update
                 <a href="../setup/update.php" class="alert-link">your installation here</a> to avoid an unintended
                 behaviour.

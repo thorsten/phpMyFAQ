@@ -71,7 +71,7 @@ class QuestionHelper
         $oUser->getUserById($userId);
 
         $userEmail = $oUser->getUserData('email');
-        $mainAdminEmail = $this->config->get('main.administrationMail');
+        $mainAdminEmail = $this->config->getAdminEmail();
 
         $mailer = new Mail($this->config);
         $mailer->setReplyTo($questionData['email'], $questionData['username']);
@@ -80,7 +80,7 @@ class QuestionHelper
         if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
             $mailer->addCc($userEmail);
         }
-        $mailer->subject = $this->config->get('main.titleFAQ') . ': New Question was added.';
+        $mailer->subject = $this->config->getTitle() . ': New Question was added.';
         $mailer->message = $questionMail;
         $mailer->send();
         unset($mailer);

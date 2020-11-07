@@ -94,7 +94,7 @@ class RegistrationHelper extends Helper
 
             $mailer = new Mail($this->config);
             $mailer->setReplyTo($email, $fullName);
-            $mailer->addTo($this->config->get('main.administrationMail'));
+            $mailer->addTo($this->config->getAdminEmail());
             $mailer->subject = Utils::resolveMarkers($this->translation['emailRegSubject'], $this->config);
             $mailer->message = $text;
             $mailer->send();

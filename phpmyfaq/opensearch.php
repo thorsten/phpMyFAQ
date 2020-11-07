@@ -32,7 +32,7 @@ $xml->startDocument('1.0', 'utf-8');
 $xml->startElement('OpenSearchDescription');
 $xml->writeAttribute('xmlns', 'http://a9.com/-/spec/opensearch/1.1/');
 
-$xml->writeElement('ShortName', $faqConfig->get('main.titleFAQ'));
+$xml->writeElement('ShortName', $faqConfig->getTitle());
 $xml->writeElement('Description', $faqConfig->get('main.metaDescription'));
 $xml->startElement('Url');
 $xml->writeAttribute('type', 'text/html');
@@ -40,7 +40,7 @@ $xml->writeAttribute('template', $searchUrl.'&search={searchTerms}');
 $xml->endElement();
 $xml->writeElement('Language', $PMF_LANG['metaLanguage']);
 $xml->writeElement('OutputEncoding', 'utf-8');
-$xml->writeElement('Contact', $faqConfig->get('main.administrationMail'));
+$xml->writeElement('Contact', $faqConfig->getAdminEmail());
 $xml->startElement('Image');
 $xml->writeAttribute('height', 16);
 $xml->writeAttribute('width', 16);

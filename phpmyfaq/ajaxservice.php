@@ -168,7 +168,7 @@ switch ($action) {
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($mailer)) {
-            $mailer = $faqConfig->get('main.administrationMail');
+            $mailer = $faqConfig->getAdminEmail();
         }
 
         // Check display name and e-mail address for not logged in users
@@ -203,7 +203,7 @@ switch ($action) {
                 ->setDate($_SERVER['REQUEST_TIME']);
 
             if ($oComment->addComment($commentEntity)) {
-                $emailTo = $faqConfig->get('main.administrationMail');
+                $emailTo = $faqConfig->getAdminEmail();
                 $title = '';
                 $urlToContent = '';
                 if ('faq' == $type) {
@@ -257,7 +257,7 @@ switch ($action) {
                 $mailer->addTo($emailTo);
 
                 $send[$emailTo] = 1;
-                $send[$faqConfig->get('main.administrationMail')] = 1;
+                $send[$faqConfig->getAdminEmail()] = 1;
 
                 if ($type === CommentType::FAQ) {
                     // Let the category owner of a FAQ get a copy of the message
@@ -278,7 +278,7 @@ switch ($action) {
                     }
                 }
 
-                $mailer->subject = $faqConfig->get('main.titleFAQ') . ': New comment for "' . $title . '"';
+                $mailer->subject = $faqConfig->getTitle() . ': New comment for "' . $title . '"';
                 $mailer->message = strip_tags($commentMail);
 
                 $result = $mailer->send();
@@ -426,8 +426,8 @@ switch ($action) {
             $send = [];
             $mailer = new Mail($faqConfig);
             $mailer->setReplyTo($email, $author);
-            $mailer->addTo($faqConfig->get('main.administrationMail'));
-            $send[$faqConfig->get('main.administrationMail')] = 1;
+            $mailer->addTo($faqConfig->getAdminEmail());
+            $send[$faqConfig->getAdminEmail()] = 1;
 
             foreach ($categories as $_category) {
                 $userId = $category->getOwner($_category);
@@ -459,13 +459,13 @@ switch ($action) {
                 }
             }
 
-            $mailer->subject = $faqConfig->get('main.titleFAQ') . ': New FAQ was added.';
+            $mailer->subject = $faqConfig->getTitle() . ': New FAQ was added.';
 
             // @todo let the email contains the faq article both as plain text and as HTML
             $mailer->message = html_entity_decode(
                     $PMF_LANG['msgMailCheck']
                 ) . "\n\n" .
-                $faqConfig->get('main.titleFAQ') . ': ' .
+                $faqConfig->getTitle() . ': ' .
                 $faqConfig->getDefaultUrl() . 'admin/?action=editentry&id=' . $recordId . '&lang=' . $faqLanguage;
             $result = $mailer->send();
             unset($mailer);
@@ -503,7 +503,7 @@ switch ($action) {
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $faqConfig->get('main.administrationMail');
+            $email = $faqConfig->getAdminEmail();
         }
 
         // If smart answering is disabled, save question immediately
@@ -675,7 +675,7 @@ switch ($action) {
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $faqConfig->get('main.administrationMail');
+            $email = $faqConfig->getAdminEmail();
         }
 
         if (!is_null($author) && !is_null($email) && !is_null($question) &&
@@ -691,7 +691,7 @@ switch ($action) {
 
             $mailer = new Mail($faqConfig);
             $mailer->setReplyTo($email, $author);
-            $mailer->addTo($faqConfig->get('main.administrationMail'));
+            $mailer->addTo($faqConfig->getAdminEmail());
             $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $faqConfig);
             $mailer->message = $question;
             $result = $mailer->send();
@@ -857,7 +857,7 @@ switch ($action) {
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $faqConfig->get('main.administrationMail');
+            $email = $faqConfig->getAdminEmail();
         }
 
         if (!is_null($author) && !is_null($email) && !is_null($question) &&
@@ -875,8 +875,8 @@ switch ($action) {
 
             $mailer = new Mail($faqConfig);
             $mailer->setReplyTo($email, $author);
-            $mailer->addTo($faqConfig->get('main.administrationMail'));
-            $mailer->subject = $faqConfig->get('main.titleFAQ') . ': Remove User Request';
+            $mailer->addTo($faqConfig->getAdminEmail());
+            $mailer->subject = $faqConfig->getTitle() . ': Remove User Request';
             $mailer->message = $question;
             $result = $mailer->send();
             unset($mailer);

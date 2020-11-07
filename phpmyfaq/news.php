@@ -56,7 +56,7 @@ try {
 }
 
 // Define the header of the page
-$newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
+$newsMainHeader = $faqConfig->getTitle() . $PMF_LANG['msgNews'];
 
 // Get all data from the news record
 $news = $oNews->getNewsEntry($newsId);

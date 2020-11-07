@@ -106,7 +106,7 @@ require PMF_ROOT_DIR . '/config/database.php';
   <div class="container">
 <?php
 
-$version = $faqConfig->get('main.currentVersion');
+$version = $faqConfig->getVersion();
 $installer = new Installer();
 $installer->checkPreUpgrade($DB['type']);
 $installer->checkAvailableDatabaseTables($db);

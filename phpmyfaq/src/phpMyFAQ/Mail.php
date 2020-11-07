@@ -251,8 +251,8 @@ class Mail
         $this->to = [];
 
         // Set phpMyFAQ related data
-        $this->mailer = 'phpMyFAQ/' . $this->config->get('main.currentVersion');
-        $this->setFrom($this->config->get('main.administrationMail'), $this->config->get('main.titleFAQ'));
+        $this->mailer = 'phpMyFAQ/' . $this->config->getVersion();
+        $this->setFrom($this->config->getAdminEmail(), $this->config->getTitle());
     }
 
     /**

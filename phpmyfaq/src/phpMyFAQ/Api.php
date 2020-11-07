@@ -71,7 +71,7 @@ class Api
         $result = json_decode($json);
         if ($result instanceof stdClass) {
             return [
-                'installed' => $this->config->get('main.currentVersion'),
+                'installed' => $this->config->getVersion(),
                 'current' => $result->stable,
                 'next' => $result->development
             ];
@@ -88,7 +88,7 @@ class Api
      */
     public function isVerified(): bool
     {
-        $this->remoteHashes = file_get_contents($this->apiUrl . '/verify/' . $this->config->get('main.currentVersion'));
+        $this->remoteHashes = file_get_contents($this->apiUrl . '/verify/' . $this->config->getVersion());
 
         if (json_decode($this->remoteHashes) instanceof stdClass) {
             if (!is_array(json_decode($this->remoteHashes, true))) {

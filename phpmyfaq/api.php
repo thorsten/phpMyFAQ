@@ -135,7 +135,7 @@ switch ($action) {
     // v2.0
     //
     case 'version':
-        $result = $faqConfig->get('main.currentVersion');
+        $result = $faqConfig->getVersion();
         break;
 
     case 'language':

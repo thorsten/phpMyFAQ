@@ -330,7 +330,7 @@ if (!is_null($id)) {
     $currentPageUrl = $faqLink->toString(true);
 } else {
     $id = '';
-    $title = ' - powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
+    $title = ' - powered by phpMyFAQ ' . $faqConfig->getVersion();
     $keywords = '';
     $metaDescription = str_replace('"', '', $faqConfig->get('main.metaDescription'));
 }
@@ -340,7 +340,7 @@ if (!is_null($id)) {
 //
 $solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 if (!is_null($solutionId)) {
-    $title = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
+    $title = ' -  powered by phpMyFAQ ' . $faqConfig->getVersion();
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
     if (is_array($faqData)) {
@@ -503,17 +503,17 @@ $faqSeo = new Seo($faqConfig);
 
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : $PMF_LANG['msgLoginUser'],
-    'title' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ') . $title),
+    'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
-    'version' => $faqConfig->get('main.currentVersion'),
-    'header' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ'))),
-    'metaTitle' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ') . $title)),
+    'version' => $faqConfig->getVersion(),
+    'header' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->getTitle())),
+    'metaTitle' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->getTitle() . $title)),
     'metaDescription' => Strings::htmlspecialchars($metaDescription),
     'metaKeywords' => Strings::htmlspecialchars($keywords),
     'metaPublisher' => $faqConfig->get('main.metaPublisher'),
     'metaLanguage' => $PMF_LANG['metaLanguage'],
     'metaRobots' => $faqSeo->getMetaRobots($action),
-    'phpmyfaqversion' => $faqConfig->get('main.currentVersion'),
+    'phpmyfaqversion' => $faqConfig->getVersion(),
     'stylesheet' => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
     'currentPageUrl' => $currentPageUrl,
     'action' => $action,
@@ -531,7 +531,7 @@ $tplMainPage = [
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => 'powered with ❤️ and ☕️ by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
-        $faqConfig->get('main.currentVersion'),
+        $faqConfig->getVersion(),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
         $PMF_LANG['msgRegistration'] . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',

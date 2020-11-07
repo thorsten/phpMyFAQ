@@ -60,7 +60,7 @@ $template->parse(
         'defaultLoginName' => ($user instanceof CurrentUser) ? $user->getLogin() : '',
         'msgMessage' => $PMF_LANG['msgMessage'],
         'msgS2FButton' => $PMF_LANG['msgS2FButton'],
-        'version' => $faqConfig->get('main.currentVersion'),
+        'version' => $faqConfig->getVersion(),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', $PMF_LANG['msgCaptcha'], $auth),
     ]
 );

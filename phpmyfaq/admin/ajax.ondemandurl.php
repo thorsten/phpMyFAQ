@@ -59,13 +59,13 @@ if (count(ob_list_handlers()) > 0) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?= $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <title><?= $faqConfig->getTitle(); ?> - powered by phpMyFAQ</title>
     <base href="<?= $faqConfig->getDefaultUrl(); ?>">
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">

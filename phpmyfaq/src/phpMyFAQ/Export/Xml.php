@@ -72,7 +72,7 @@ class Xml extends Export
         $this->category->transform($categoryId);
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
-        $version = $this->config->get('main.currentVersion');
+        $version = $this->config->getVersion();
         $comment = sprintf(
             ' XML output by phpMyFAQ %s | Date: %s ',
             $version,

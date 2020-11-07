@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <footer class="sticky-footer bg-white">
   <div class="container my-auto">
     <div class="copyright text-center my-auto">
-      Proudly powered by <strong>phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?></strong> |
+      Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong> |
       <a href="https://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
       Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
       &copy; 2001-<?= date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>

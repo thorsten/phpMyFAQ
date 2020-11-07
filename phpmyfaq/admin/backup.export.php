@@ -51,7 +51,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
     $tables = $tableNames = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
     $tablePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
     $tableNames = '';
-    $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
+    $majorVersion = substr($faqConfig->getVersion(), 0, 3);
     $dbHelper = new DatabaseHelper($faqConfig);
     $httpHelper = new HttpHelper();
     $httpHelper->addHeader();

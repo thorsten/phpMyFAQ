@@ -56,8 +56,8 @@ class Notification
         $this->pmfStr = $PMF_LANG;
         $this->mail = new Mail($this->config);
         $this->mail->setReplyTo(
-            $this->config->get('main.administrationMail'),
-            $this->config->get('main.titleFAQ')
+            $this->config->getAdminEmail(),
+            $this->config->getTitle()
         );
     }
 
@@ -71,10 +71,10 @@ class Notification
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url)
     {
         $this->mail->addTo($email, $userName);
-        $this->mail->subject = $this->config->get('main.titleFAQ') . ' - ' . $this->pmfStr['msgQuestionAnswered'];
+        $this->mail->subject = $this->config->getTitle() . ' - ' . $this->pmfStr['msgQuestionAnswered'];
         $this->mail->message = sprintf(
             $this->pmfStr['msgMessageQuestionAnswered'],
-            $this->config->get('main.titleFAQ')
+            $this->config->getTitle()
         ) . "\n\r" . $url;
         $this->mail->send();
     }
