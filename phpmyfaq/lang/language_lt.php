@@ -554,30 +554,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "Šrifto spalva: ";
 $PMF_LANG["ad_entry_fontsize"] = "Šrifto dydis: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Kalbos failas");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Įjungti automatinį turinio atpažinimą");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "DUK antraštė");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "DUK versija");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Tinklalapio aprašas");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Raktažodžiai paieškos serveriams");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Leidėjo pavadinimas");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratoriaus el. pašto adresas");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinė informacija");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekstas tinklalapiui „siųsti draugui“");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimalus priedo dydis baitais (maks. %sB)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Rodyti priedų nuorodas po įrašais?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Naudoti sekimą?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Naudoti administravimo žurnalą?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Ar norite, kad būtų tikrinamas IP, kai tikrinami UIN tinklalapyje „admin.php“?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Puslapyje rodomų temų skaičius");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Naujienų straipsnių skaičius");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Drausti šiuos IP adresus");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Bazinis URL saitų tikrinimui (pvz., http://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Išjungti naujų klausimų matomumą?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Leidimų lygis");
+$LANG_CONF['main.language'] = array("select", "Kalbos failas");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Įjungti automatinį turinio atpažinimą");
+$LANG_CONF['main.titleFAQ'] = array("input", "DUK antraštė");
+$LANG_CONF['main.currentVersion'] = array("print", "DUK versija");
+$LANG_CONF["main.metaDescription"] = array("input", "Tinklalapio aprašas");
+$LANG_CONF["main.metaKeywords"] = array("input", "Raktažodžiai paieškos serveriams");
+$LANG_CONF["main.metaPublisher"] = array("input", "Leidėjo pavadinimas");
+$LANG_CONF['main.administrationMail'] = array("input", "Administratoriaus el. pašto adresas");
+$LANG_CONF["main.contactInformations"] = array("area", "Kontaktinė informacija");
+$LANG_CONF["main.send2friendText"] = array("area", "Tekstas tinklalapiui „siųsti draugui“");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "Maksimalus priedo dydis baitais (maks. %sB)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Rodyti priedų nuorodas po įrašais?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "Naudoti sekimą?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "Naudoti administravimo žurnalą?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Ar norite, kad būtų tikrinamas IP, kai tikrinami UIN tinklalapyje „admin.php“?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Puslapyje rodomų temų skaičius");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Naujienų straipsnių skaičius");
+$LANG_CONF['security.bannedIPs'] = array("area", "Drausti šiuos IP adresus");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
+$LANG_CONF["main.referenceURL"] = array("input", "Bazinis URL saitų tikrinimui (pvz., http://www.example.org/faq/)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Išjungti naujų klausimų matomumą?");
+$LANG_CONF['security.permLevel'] = array("select", "Leidimų lygis");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kaip naują pagrindinę grupę";
 $PMF_LANG["ad_categ_paste_error"] = "Šios grupės perkelti neįmanoma.";
@@ -622,9 +622,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Patikslintoji paieška';
 
 // added v1.6.1 - 2006-04-25 by Matteo�and�Thorsten
 $PMF_LANG['spamControlCenter'] = 'Brukalo kontrolės centras';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Spausdinti naudotojų el. laiškus saugiu būdu (numatyta r.: įjungta).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Tikrinti viešų formų turinį pagal draudžiamų žodžių sąrašą (numatyta r.: įjungta).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Naudoti CAPTCHA kodus viešam formų pateikimui (numatyta r.: įjungta).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Spausdinti naudotojų el. laiškus saugiu būdu (numatyta r.: įjungta).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Tikrinti viešų formų turinį pagal draudžiamų žodžių sąrašą (numatyta r.: įjungta).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Naudoti CAPTCHA kodus viešam formų pateikimui (numatyta r.: įjungta).");
 $PMF_LANG['ad_session_expiring'] = 'Jūsų seansas baigs galioti po %d minučių: ar norėtumėte tęsti darbą?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -771,7 +771,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Nėra scenarijų';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Susiję įrašai';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Susijusių įrašų skaičius");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Susijusių įrašų skaičius");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Išversti';
@@ -850,8 +850,8 @@ $PMF_LANG['ad_comment_news'] = 'Komentarai naujienų įrašuose:';
 $PMF_LANG['ad_groups'] = 'Grupės';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Įrašų rikiavimas (pagal savybes)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Įrašų rikiavimas (didėjančiai ar mažėjančiai)');
+$LANG_CONF['records.orderby'] = array('select', 'Įrašų rikiavimas (pagal savybes)');
+$LANG_CONF['records.sortby'] = array('select', 'Įrašų rikiavimas (didėjančiai ar mažėjančiai)');
 $PMF_LANG['ad_conf_order_id'] = 'Identifikatorius (numatytas)';
 $PMF_LANG['ad_conf_order_thema'] = 'Antraštė';
 $PMF_LANG['ad_conf_order_visits'] = 'Lankytojų skaičius';
@@ -863,8 +863,8 @@ $PMF_LANG['mainControlCenter'] = 'Pagrindinė konfigūracija';
 $PMF_LANG['recordsControlCenter'] = 'DUK įrašų konfigūracija';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktyvinti naujus įrašus (numatyta r.: neaktyvinti)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Leisti komentarus naujiems įrašams (numatyta r.: neleisti)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Aktyvinti naujus įrašus (numatyta r.: neaktyvinti)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Leisti komentarus naujiems įrašams (numatyta r.: neleisti)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Įrašai šioje grupėje';
@@ -887,7 +887,7 @@ $PMF_LANG['emailRegSubject'] = '[%sitename%] registracija: naujas naudotojas';
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten
 $PMF_LANG['msgMostPopularSearches'] = 'Populiariausios paieškos yra:';
-$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Įjungti pridėtinį WYSIWYG redaktorių (numatyta r.: įjungti)");
+$LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Įjungti pridėtinį WYSIWYG redaktorių (numatyta r.: įjungti)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
 $PMF_LANG['ad_menu_searchstats'] = 'Paieškos statistika';
@@ -951,7 +951,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Įvyko klaida siunčiant kalbos fai
 $PMF_LANG['msgTransToolPercent'] = 'Procentai';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus saugomi priedai.<br><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Kelias, kur bus saugomi priedai.<br><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";
@@ -962,7 +962,7 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d prisijungę naudotojai";
 $PMF_LANG["plmsgUserOnline"][2] = "%d prisijungusių naudotojų";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Naudojamas šablonų rinkinys");
+$LANG_CONF['main.templateSet'] = array("select", "Naudojamas šablonų rinkinys");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Šalinti';
@@ -1005,16 +1005,16 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "šalinti vertimą";
 $PMF_LANG["rightsLanguage"]['approverec'] = "patvirtinti įrašus";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Failų sistema';
 //$PMF_LANG['att_storage_type'][1] = 'Duomenų bazė';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Atnaujinti';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Jūs turite naujausią phpMyFAQ versiją. Jums nereikia atnaujinti.';
-$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
+$LANG_CONF['security.useSslForLogins'] = array('checkbox', "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
 $PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -1030,8 +1030,8 @@ $PMF_LANG['ad_record_active'] = 'Aktyvus';
 $PMF_LANG['msgAttachmentInvalid'] = 'Priedas yra blogas, informuokite administratorių';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Rodomų paieškos raktažodžių skaičius');
-$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Populiariausių DUK rikiavimas");
+$LANG_CONF['search.numberSearchTerms'] = array('input', 'Rodomų paieškos raktažodžių skaičius');
+$LANG_CONF['records.orderingPopularFaqs'] = array("select", "Populiariausių DUK rikiavimas");
 $PMF_LANG['list_all_users'] = 'Rodyti visus naudotojus';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "rodyti dažniausiai peržiūrėtus įrašus";
@@ -1044,4 +1044,4 @@ $PMF_LANG['msgShowHelp'] = 'Prašome atskirti žodžius kableliu.';
 $PMF_LANG['msgUpdateFaqDate'] = 'atnaujinti';
 $PMF_LANG['msgKeepFaqDate'] = 'palikti'; 
 $PMF_LANG['msgEditFaqDat'] = 'redaguoti';
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'El. pašto adresas yra būtinas laukas (numatyta r.: išjungta)');
+$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'El. pašto adresas yra būtinas laukas (numatyta r.: išjungta)');

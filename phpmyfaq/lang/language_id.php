@@ -542,30 +542,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "Warna huruf: ";
 $PMF_LANG["ad_entry_fontsize"] = "Ukuran huruf: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Berkas-Bahasa");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktifkan negosiasi konten otomatis");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Judul Materi");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Revisi Materi");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Keterangan Halaman");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Kata Kunci untuk Mesin Pencari");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nama Penerbit");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Alamat Email Admin");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informasi Kontak");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Teks untuk halaman send2friend");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Buat Link ke lampiran di bawah entri?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "gunakan Penelusuran?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "gunakan Log Admin?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah topik yang ditampilkan per halaman");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah artikel berita");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL dasar untuk verifikasi link (mis.: http://www.situsanda.com/faq)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval antara verifikasi link AJAX (dalam detik)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Nonaktifkan link untuk membuat Pertanyaan Baru?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Level Hak Akses");
+$LANG_CONF['main.language'] = array("select", "Berkas-Bahasa");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Aktifkan negosiasi konten otomatis");
+$LANG_CONF['main.titleFAQ'] = array("input", "Judul Materi");
+$LANG_CONF['main.currentVersion'] = array("print", "Revisi Materi");
+$LANG_CONF["main.metaDescription"] = array("input", "Keterangan Halaman");
+$LANG_CONF["main.metaKeywords"] = array("input", "Kata Kunci untuk Mesin Pencari");
+$LANG_CONF["main.metaPublisher"] = array("input", "Nama Penerbit");
+$LANG_CONF['main.administrationMail'] = array("input", "Alamat Email Admin");
+$LANG_CONF["main.contactInformations"] = array("area", "Informasi Kontak");
+$LANG_CONF["main.send2friendText"] = array("area", "Teks untuk halaman send2friend");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "ukuran maksimal untuk lampiran dalam Bytes (maks. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Buat Link ke lampiran di bawah entri?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "gunakan Penelusuran?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "gunakan Log Admin?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Apakah anda ingin alamat IP dicek saat memeriksa UIN dalam admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Jumlah topik yang ditampilkan per halaman");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Jumlah artikel berita");
+$LANG_CONF['security.bannedIPs'] = array("area", "Blokir IP ini");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Aktifkan dukungan LDAP? (default: non-aktif)");
+$LANG_CONF["main.referenceURL"] = array("input", "URL dasar untuk verifikasi link (mis.: http://www.situsanda.com/faq)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval antara verifikasi link AJAX (dalam detik)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Nonaktifkan link untuk membuat Pertanyaan Baru?");
+$LANG_CONF['security.permLevel'] = array("select", "Level Hak Akses");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Memidahkan kategori ini tidak dimungkinkan.";
@@ -610,9 +610,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Pencarian lanjutan';
 
 // added v1.6.1 - 2006-04-25 by Matteo?and?Thorsten
 $PMF_LANG['spamControlCenter'] = 'Pusat Kendali Spam';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Tampilkan alamat email dengan cara yang aman (default: aktif).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Periksa form atas kata-kata terlarang (default: aktif).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Gunakan kode captcha pada form publik (default: aktif).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Tampilkan alamat email dengan cara yang aman (default: aktif).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Periksa form atas kata-kata terlarang (default: aktif).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Gunakan kode captcha pada form publik (default: aktif).");
 $PMF_LANG['ad_session_expiring'] = 'Sesi anda akan berakhir dalam %d menit: anda ingin melanjutkan bekerja?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -759,7 +759,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Tidak ada Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Entri terkait';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Jumlah entri terkait");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Jumlah entri terkait");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Terjemahkan';
@@ -838,8 +838,8 @@ $PMF_LANG['ad_comment_news'] = 'Komentar pada berita:';
 $PMF_LANG['ad_groups'] = 'Grup';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Pengurutan data (menurut properti)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Pengurutan data (biasa atau terbalik)');
+$LANG_CONF['records.orderby'] = array('select', 'Pengurutan data (menurut properti)');
+$LANG_CONF['records.sortby'] = array('select', 'Pengurutan data (biasa atau terbalik)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Judul';
 $PMF_LANG['ad_conf_order_visits'] = 'Jumlah pengunjung';
@@ -851,8 +851,8 @@ $PMF_LANG['mainControlCenter'] = 'Konfigurasi utama';
 $PMF_LANG['recordsControlCenter'] = 'Konfigurasi konten materi';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktifkan data baru (default: non-aktif)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Bolehkan komentar atas data baru (default: tidak-boleh)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Aktifkan data baru (default: non-aktif)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Bolehkan komentar atas data baru (default: tidak-boleh)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Data dalam kategori ini';
@@ -875,7 +875,7 @@ $PMF_LANG['emailRegSubject'] = 'Registrasi [%sitename%]: pengguna baru';
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten
 $PMF_LANG['msgMostPopularSearches'] = 'Pencarian yang paling populer adalah:';
-$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Aktifkan editor WYSIWYG yang terbundel (default: aktif)");
+$LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Aktifkan editor WYSIWYG yang terbundel (default: aktif)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
 $PMF_LANG['ad_menu_searchstats'] = 'Statistik Pencarian';
@@ -939,7 +939,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'terjadi kesalahan saat mengirim ber
 $PMF_LANG['msgTransToolPercent'] = 'Persentase';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Lokasi dimana lampiran akan disimpan.<br><small>Lokasi relatif berarti folder dalam web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Lokasi dimana lampiran akan disimpan.<br><small>Lokasi relatif berarti folder dalam web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "berkas yang ingin anda unduh tidak ditemukan dalam server ini";

@@ -521,30 +521,30 @@ $PMF_LANG["err_bannedIP"] = "Таны IP хаяг блоклогдсон бай�
 $PMF_LANG["err_SaveQuestion"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong>email  хаяг</strong>, <strong>таны асуулт</strong> болон, шаардлагатай <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Хамгаалалтын Captcha </a> коод</strong>.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Хэл");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Хэл таних автомат тохиргоог идэвхжүүлэх");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Таны FAQ-ы нэр");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ Хувилбар");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Тодорхойлолт");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Спайдерт зориулсан түхлүүр үгс");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Хэвлэн нийтлэгчийн нэр");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Админы e-mail хаяг");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Холбоо барих мэдээлэл");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Найз хуудас руу илгээх зурвас");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Хавсаргах файлын дээд хэмжээ (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Нэг хуудсанд хэдэн сэдвийн нэр харуулах");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Enable URL rewrite support? (үндсэн: идэвхгүй)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (үндсэн: идэвхгүй)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL for link verification (e.g.: http://www.example.org/faq)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Зөвшөөрлийн түвшин");
+$LANG_CONF['main.language'] = array("select", "Хэл");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Хэл таних автомат тохиргоог идэвхжүүлэх");
+$LANG_CONF['main.titleFAQ'] = array("input", "Таны FAQ-ы нэр");
+$LANG_CONF['main.currentVersion'] = array("print", "phpMyFAQ Хувилбар");
+$LANG_CONF["main.metaDescription"] = array("input", "Тодорхойлолт");
+$LANG_CONF["main.metaKeywords"] = array("input", "Спайдерт зориулсан түхлүүр үгс");
+$LANG_CONF["main.metaPublisher"] = array("input", "Хэвлэн нийтлэгчийн нэр");
+$LANG_CONF['main.administrationMail'] = array("input", "Админы e-mail хаяг");
+$LANG_CONF["main.contactInformations"] = array("area", "Холбоо барих мэдээлэл");
+$LANG_CONF["main.send2friendText"] = array("area", "Найз хуудас руу илгээх зурвас");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "Хавсаргах файлын дээд хэмжээ (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Enable visibilty of attachments");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "Enable user tracking");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "use Adminlog?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Check the IP in administration");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Нэг хуудсанд хэдэн сэдвийн нэр харуулах");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news articles");
+$LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Enable URL rewrite support? (үндсэн: идэвхгүй)");
+$LANG_CONF["security.ldapSupport"] = array("checkbox", "Enable LDAP support? (үндсэн: идэвхгүй)");
+$LANG_CONF["main.referenceURL"] = array("input", "URL for link verification (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
+$LANG_CONF['security.permLevel'] = array("select", "Зөвшөөрлийн түвшин");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "шинэ үндсэн ангиллын хувьд";
 $PMF_LANG["ad_categ_paste_error"] = "Энэ ангилалд шилжих боломжгүй.";
@@ -589,9 +589,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Нарийвчилсан хайлт';
 
 // added v1.6.1 - 2006-04-25 by Matteoï and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Спам хяналтын төв';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Хэрэглэгчийн email хамгаалалттай замд (үндсэн: идэвхтэй).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (үндсэн: идэвхтэй).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Нийтийн формд хамгаалалтын (captcha) коод идэвхжүүлэх (үндсэн: идэвхтэй).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Хэрэглэгчийн email хамгаалалттай замд (үндсэн: идэвхтэй).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Check public form content against banned words (үндсэн: идэвхтэй).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Нийтийн формд хамгаалалтын (captcha) коод идэвхжүүлэх (үндсэн: идэвхтэй).");
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -737,7 +737,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Скриптгүй';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Хамааралтай өгөгдөл';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Хамааралтай өгөгдлийн тоо");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Хамааралтай өгөгдлийн тоо");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Орчуулах';
@@ -817,8 +817,8 @@ $PMF_LANG['msgPDF'] = 'PDF хувилбар';
 $PMF_LANG['ad_groups'] = 'Бүлэг';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Бичлэг эрэмбэлэх (шинж чанараар)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Бичлэг эрэмбэлэх (буурахаар эсвэл өсөхөөр)');
+$LANG_CONF['records.orderby'] = array('select', 'Бичлэг эрэмбэлэх (шинж чанараар)');
+$LANG_CONF['records.sortby'] = array('select', 'Бичлэг эрэмбэлэх (буурахаар эсвэл өсөхөөр)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (үндсэн)';
 $PMF_LANG['ad_conf_order_thema'] = 'Нэр (Гарчиг)';
 $PMF_LANG['ad_conf_order_visits'] = 'Зочдын тоо';
@@ -834,8 +834,8 @@ $PMF_LANG['msgInstantResponse'] = 'Шуурхай хариу арга хэмжэ
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Эхний %d бичлэгийг хайх.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Шинэ бичлэгийг идэвхжүүлэх (үндсэн: идэвхгүй)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Шинэ бичлэгт сэтгэгдэл оруулахыг зөвшөөрөх (үндсэн: зөвшөөрөхгүй)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Шинэ бичлэгийг идэвхжүүлэх (үндсэн: идэвхгүй)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Шинэ бичлэгт сэтгэгдэл оруулахыг зөвшөөрөх (үндсэн: зөвшөөрөхгүй)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Энэ ангилал дахь бичлэгүүд';
@@ -859,7 +859,7 @@ $PMF_LANG['emailRegSubject'] = '[%sitename%] Бүртгэл: шинэ хэрэг
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten
 $PMF_LANG['msgMostPopularSearches'] = 'Түгээмэл хайлт хийгдсэн:';
-$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "WYSIWYG засварлагчийг идэвхжүүлэх (үндсэн: идэвхтэй)");
+$LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "WYSIWYG засварлагчийг идэвхжүүлэх (үндсэн: идэвхтэй)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
 $PMF_LANG['ad_menu_searchstats'] = 'Статистикаас хайх';
@@ -923,7 +923,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Хэлний файл илгээх�
 $PMF_LANG['msgTransToolPercent'] = 'Хувь';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Хавсралтын файл хадгалах зам хадгалагдлаа.<br><small>Файл хадгалах хамааралтай зам нь web root байж болно.</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Хавсралтын файл хадгалах зам хадгалагдлаа.<br><small>Файл хадгалах хамааралтай зам нь web root байж болно.</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Таны татах гэж буй энэ файл сервэрт алга";
@@ -935,7 +935,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d хэрэглэгч онлайн";
 $PMF_LANG["plmsgUserOnline"][1] = "%d хэрэглэгч онлайн";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array(0 => "сонгох", 1 => "Загвар хэрэглэгдэж байна");
+$LANG_CONF['main.templateSet'] = array("сонгох", "Загвар хэрэглэгдэж байна");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Устгах';
@@ -970,16 +970,16 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "орчуулга устгах";
 $PMF_LANG["rightsLanguage"]['approverec'] = "бичлэгийг батлах";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Та phpMyFAQ -н сүүлийн хувилбарыг хэрэглэж байна. Та шинэчлэлт хийх шаардлагагүй.';
-$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over SSL connection? (default: disabled)");
+$LANG_CONF['security.useSslForLogins'] = array('checkbox', "Only allow logins over SSL connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "Хамгаалалттай горимд шилжээд нэвтрэх!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -995,8 +995,8 @@ $PMF_LANG['ad_record_active'] = 'Идэвхжүүлэх';
 $PMF_LANG['msgAttachmentInvalid'] = 'Хавсралт алдаатай байна, дахиж оруулна уу';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Хайлтын жагсаалтын тоо');
-$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Онцлох FAQ's эрэмбэлэх");
+$LANG_CONF['search.numberSearchTerms']   = array('input', 'Хайлтын жагсаалтын тоо');
+$LANG_CONF['records.orderingPopularFaqs'] = array("select", "Онцлох FAQ's эрэмбэлэх");
 $PMF_LANG['list_all_users']            = 'Бүх хэрэглэгчийн жагсаалт';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "Хамгийн их хандалттай өгөгдлийн жагсаалт";
@@ -1009,12 +1009,12 @@ $PMF_LANG['msgShowHelp'] = 'Үгнүүдийг таслалаар тусгаар
 $PMF_LANG['msgUpdateFaqDate'] = 'шинэчлэх';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'засах';
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (үндсэн: идэвхгүй)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (үндсэн: идэвхгүй)');
+$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Mail address as mandatory field (үндсэн: идэвхгүй)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Instant Response on startpage (үндсэн: идэвхгүй)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
-$LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Хамаарлаар эрэмбэлэх');
-$LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Хамаарлын дэмжлэгийг идэвхжүүлэх үү? (үндсэн: идэвхгүй)");
+$LANG_CONF['search.relevance'] = array('select', 'Хамаарлаар эрэмбэлэх');
+$LANG_CONF["search.enableRelevance"] = array("checkbox", "Хамаарлын дэмжлэгийг идэвхжүүлэх үү? (үндсэн: идэвхгүй)");
 $PMF_LANG['searchControlCenter'] = 'Search';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Асуулт - Хариулт - Түлхүүр үгс';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Асуулт - Түлхүүр үгс - Хариулт';
@@ -1026,13 +1026,13 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Түлхүүр үгс - 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Нэвтрэх';
 $PMF_LANG['socialNetworksControlCenter'] = 'Нийгмийн сүлжээний тохиргоо';
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter support (default: deactivated)');
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Consumer Key');
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'Twitter Consumer Secret');
 
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'Twitter Access Token Key');
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', 'Twitter Access Token Secret');
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG["ad_menu_attachments"] = "FAQ Хавсралтууд";
@@ -1070,10 +1070,10 @@ $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will recei
 $PMF_LANG['ad_entry_changelog_history'] = "Өөрчлөлтийн түүх";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');
-$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
-$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Огноо формат (үндсэн: Y-m-d H:i)');
-$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (үндсэн: идэвхгүй)');
+$LANG_CONF['security.ssoSupport'] = array('checkbox', 'Single Sign On Support (default: deactivated)');
+$LANG_CONF['security.ssoLogoutRedirect'] = array('input', 'Single Sign On logout redirect service URL');
+$LANG_CONF['main.dateFormat'] = array('input', 'Огноо формат (үндсэн: Y-m-d H:i)');
+$LANG_CONF['security.enableLoginOnly'] = array('checkbox', 'Complete secured FAQ (үндсэн: идэвхгүй)');
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
 $PMF_LANG['securityControlCenter'] = 'Хамгаалалтын тохиргоо';
@@ -1082,7 +1082,7 @@ $PMF_LANG['ad_search_delfail'] = 'Хайлт хийх журам устгагд�
 
 // added 2.7.1 - 2011-09-30 by Thorsten
 $PMF_LANG['msg_about_faq'] = 'Энэ FAQ -н тухай';
-$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (үндсэн: идэвхгүй)');
+$LANG_CONF['security.useSslOnly'] = array('checkbox', 'FAQ with SSL only (үндсэн: идэвхгүй)');
 $PMF_LANG['msgTableOfContent'] = 'Агуулга';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
@@ -1094,18 +1094,18 @@ $PMF_LANG["ad_verification_okay"] = "Таны phpMyFAQ хувилбар бата
 
 // added v2.8.0-alpha - 2011-09-22 by Anatoliy
 $PMF_LANG['cacheControlCenter'] = 'Cache configuration';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
+$LANG_CONF['cache.varnishEnable'] = array('checkbox', 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
+$LANG_CONF['cache.varnishHost'] = array('input', 'Varnish host');
+$LANG_CONF['cache.varnishPort'] = array('input', 'Varnish port');
+$LANG_CONF['cache.varnishSecret'] = array('input', 'Varnish secret');
+$LANG_CONF['cache.varnishTimeout'] = array('input', 'Varnish timeout');
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'Хайлт хийх - FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
-$LANG_CONF["records.enableCloseQuestion"] = array(0 => "checkbox", 1 => "Нээлттэй асуултад хариулсны дараа хаах уу?");
-$LANG_CONF["records.enableDeleteQuestion"] = array(0 => "checkbox", 1 => "Нээлттэй асуултад хариулсны дараа устгах уу?");
+$LANG_CONF["records.enableCloseQuestion"] = array("checkbox", "Нээлттэй асуултад хариулсны дараа хаах уу?");
+$LANG_CONF["records.enableDeleteQuestion"] = array("checkbox", "Нээлттэй асуултад хариулсны дараа устгах уу?");
 $PMF_LANG["msg2answerFAQ"] = "Хариулагдсан";
 
 // added v2.8.0-alpha - 2012-01-16 by Thorsten
@@ -1116,12 +1116,12 @@ $PMF_LANG["rememberMe"] = 'Намайг сана';
 $PMF_LANG["ad_menu_instances"] = "FAQ Олон сайт";
 
 // added v2.8.0-alpha2 - 2012-07-07 by Anatoliy
-$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'FAQ -н автомат хадгалалтыг идэвхжүүлэх');
-$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for autosaving in seconds, default 180');
+$LANG_CONF['records.autosaveActive'] = array('checkbox', 'FAQ -н автомат хадгалалтыг идэвхжүүлэх');
+$LANG_CONF['records.autosaveSecs'] = array('input', 'Interval for autosaving in seconds, default 180');
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
-$LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "Set FAQ in maintenance mode");
+$LANG_CONF["main.maintenanceMode"] = array("checkbox", "Set FAQ in maintenance mode");
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ засварлагдаж байна";
 $PMF_LANG['msgOnlineMode'] = "FAQ онлайн байна";
@@ -1132,11 +1132,11 @@ $PMF_LANG['msgQuestionAnswered'] = "Асуултад хариулсан";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Таны %s асуулт хариулагдсан. Энд шалгана уу:";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
-$LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Sort FAQs randomly (үндсэн: идэвхгүй)");
-$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor in frontend (default: disabled)");
+$LANG_CONF["records.randomSort"] = array("checkbox", "Sort FAQs randomly (үндсэн: идэвхгүй)");
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array("checkbox", "Enable bundled WYSIWYG editor in frontend (default: disabled)");
 
 // added v2.8.0-beta3 - 2013-01-15 by Thorsten
-$LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar Support (үндсэн: идэвхгүй)");
+$LANG_CONF["main.enableGravatarSupport"] = array("checkbox", "Gravatar Support (үндсэн: идэвхгүй)");
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
 $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stopwords.";

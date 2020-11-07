@@ -549,30 +549,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "फॉण्ट का रंग: ";
 $PMF_LANG["ad_entry_fontsize"] = "फॉण्ट का आकार: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "भाषा");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "विषय का मोलतोल स्वतः ही होने दें");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ का नाम");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ का संस्करण");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "पृष्ठ का वर्णन");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "वेब क्रॉलर के लिए कुंजी शब्द");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "प्रकाशक का नाम");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "प्रबंधक का ईमेल पता");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "संपर्क करने की जानकारी");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "दोस्त को भेजने के लिए वाले पेज के लिए शब्द");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "फाइल जोड़ने के लिए अधिकतम साइज़ (अधिकतम. ".ini_get("upload_max_filesize")."बाइट्स)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "फाइलों को एंट्री के निचे जोडें?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "लेखा जोखा रखें?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "प्रबंधक लॉग का प्रयोग करें?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "admin.php में UINs देखते समय IP भी देखें?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "एक पृष्ठ पर कितने विषय दिखायें");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "समाचार लेखों की संख्या");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "इन IPs को प्रतिबंधित करें");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite को सक्रिय करें? (पूर्वनिर्धारित: असक्रिय)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "कड़ी सत्यापन के लिए आधार URL (e.g.: http://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX कड़ी सत्यापन के मध्य समय अवधि (in seconds)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "नए सवाल न दिखायें?");
-$LANG_CONF['security.permLevel'] = array(0 => "input", 1 => "आज्ञा समतल");
+$LANG_CONF['main.language'] = array("select", "भाषा");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "विषय का मोलतोल स्वतः ही होने दें");
+$LANG_CONF['main.titleFAQ'] = array("input", "FAQ का नाम");
+$LANG_CONF['main.currentVersion'] = array("print", "FAQ का संस्करण");
+$LANG_CONF["main.metaDescription"] = array("input", "पृष्ठ का वर्णन");
+$LANG_CONF["main.metaKeywords"] = array("input", "वेब क्रॉलर के लिए कुंजी शब्द");
+$LANG_CONF["main.metaPublisher"] = array("input", "प्रकाशक का नाम");
+$LANG_CONF['main.administrationMail'] = array("input", "प्रबंधक का ईमेल पता");
+$LANG_CONF["main.contactInformations"] = array("area", "संपर्क करने की जानकारी");
+$LANG_CONF["main.send2friendText"] = array("area", "दोस्त को भेजने के लिए वाले पेज के लिए शब्द");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "फाइल जोड़ने के लिए अधिकतम साइज़ (अधिकतम. ".ini_get("upload_max_filesize")."बाइट्स)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "फाइलों को एंट्री के निचे जोडें?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "लेखा जोखा रखें?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "प्रबंधक लॉग का प्रयोग करें?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "admin.php में UINs देखते समय IP भी देखें?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "एक पृष्ठ पर कितने विषय दिखायें");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "समाचार लेखों की संख्या");
+$LANG_CONF['security.bannedIPs'] = array("area", "इन IPs को प्रतिबंधित करें");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "mod_rewrite को सक्रिय करें? (पूर्वनिर्धारित: असक्रिय)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
+$LANG_CONF["main.referenceURL"] = array("input", "कड़ी सत्यापन के लिए आधार URL (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX कड़ी सत्यापन के मध्य समय अवधि (in seconds)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "नए सवाल न दिखायें?");
+$LANG_CONF['security.permLevel'] = array("input", "आज्ञा समतल");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "नए मुख्य वर्ग के रूप में";
 $PMF_LANG["ad_categ_paste_error"] = "इस वर्ग को यहाँ से हटाना संभव नहीं है.";
@@ -617,9 +617,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'आधुनिक खोज';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'अन्वान्चित क्रिया नियंत्रण केंद्र';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "प्रयोगकर्ताओं का ईमेल पता सुरक्षित तरीके से छापें (पूर्वनिर्धारित: सक्रिय).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "सार्वजनिक लेखों की जांच प्रतिबंधित शब्दों के साथ करें (पूर्वनिर्धारित: सक्रिय).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "सार्वजनिक फॉर्म को जमा करने के लिए Captcha code का प्रयोग करें (पूर्वनिर्धारित: सक्रिय).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "प्रयोगकर्ताओं का ईमेल पता सुरक्षित तरीके से छापें (पूर्वनिर्धारित: सक्रिय).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "सार्वजनिक लेखों की जांच प्रतिबंधित शब्दों के साथ करें (पूर्वनिर्धारित: सक्रिय).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "सार्वजनिक फॉर्म को जमा करने के लिए Captcha code का प्रयोग करें (पूर्वनिर्धारित: सक्रिय).");
 $PMF_LANG['ad_session_expiring'] = 'आपका सत्र %d minutes: में समाप्त हो जाएगा. क्या आप काम आगे जारी रखना चाहते हैं?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -766,7 +766,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'स्क्रिप्ट �
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'सम्बंधित लेख';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "सम्बंधित लेखों की संख्या");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "सम्बंधित लेखों की संख्या");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'अनुवाद करें';
@@ -845,8 +845,8 @@ $PMF_LANG['ad_comment_news'] = 'नए लेखों में टिप्प
 $PMF_LANG['ad_groups'] = 'दल';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'रिकॉर्ड छांटें (according to property)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'रिकॉर्ड छांटें (घटते या बढ़ते क्रम में)');
+$LANG_CONF['records.orderby'] = array('select', 'रिकॉर्ड छांटें (according to property)');
+$LANG_CONF['records.sortby'] = array('select', 'रिकॉर्ड छांटें (घटते या बढ़ते क्रम में)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (पूर्वनिर्धारित)';
 $PMF_LANG['ad_conf_order_thema'] = 'शीर्षक';
 $PMF_LANG['ad_conf_order_visits'] = 'दर्शनार्थियों की संख्या';
@@ -858,8 +858,8 @@ $PMF_LANG['mainControlCenter'] = 'मुख्य सरंचना';
 $PMF_LANG['recordsControlCenter'] = 'FAQ की सरंचना';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "नया लेख सक्रिय करें (पूर्वनिर्धारित: असक्रिय)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "नए लेखों के लिए टिप्पणी करनें दें (पूर्वनिर्धारित: असक्रिय)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "नया लेख सक्रिय करें (पूर्वनिर्धारित: असक्रिय)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "नए लेखों के लिए टिप्पणी करनें दें (पूर्वनिर्धारित: असक्रिय)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'इस वर्ग के लेख';

@@ -550,26 +550,26 @@ $PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: ";
 $PMF_LANG["ad_entry_fontsize"] = "Розмір шрифту: "; 
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias 
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File"); 
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF['main.titleMac F.A.Q.'] = array(0 => "input", 1 => "Title of the Mac F.A.Q.");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Mac F.A.Q. Version");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of the Admin");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contactinformation");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF['main.language'] = array("select", "Language-File");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Enable automatic content negotiation");
+$LANG_CONF['main.titleMac F.A.Q.'] = array("input", "Title of the Mac F.A.Q.");
+$LANG_CONF['main.currentVersion'] = array("print", "Mac F.A.Q. Version");
+$LANG_CONF["main.metaDescription"] = array("input", "Describtion of the Page");
+$LANG_CONF["main.metaKeywords"] = array("input", "Keywords for Spiders");
+$LANG_CONF["main.metaPublisher"] = array("input", "Name of the Publisher");
+$LANG_CONF['main.administrationMail'] = array("input", "Emailadress of the Admin");
+$LANG_CONF["main.contactInformations"] = array("area", "Contactinformation");
+$LANG_CONF["main.send2friendText"] = array("area", "Text for the send2friend page");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "maximum Size for attachments in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Link the attachments below the entries?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "use Tracking?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "use Adminlog?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Number of displayed topics per page");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news articles");
+$LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Activate mod_rewrite support? (default: disabled)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -696,7 +696,7 @@ $PMF_LANG["ad_system_info"] = "Системна інформація";
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Related entries';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Number of related entries");
 
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG["err_inactiveArticle"] = "Цей запис зараз зайнятий редактором і не може бути показана."; 

@@ -542,30 +542,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "Farba písma: ";
 $PMF_LANG["ad_entry_fontsize"] = "Veľkosť písma: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Povoliť automatický obsah jednania");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Názov FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "tlačiť", 1 => "Verzia FAQ");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Popis stránky");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Kľúčové slová pre Spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Meno vydavateľa");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-mailová adresa administrátora");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktné informácie");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text pre odkaz poslať známemu");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Pripojiť prílohu k položkám?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "použiť stopovač?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "použiť Adminlog?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Počet tém na stránku");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Počet článkov");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Zakázať tieto IP");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Overiť URL (e.g.: http://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval medzi AJAX overením (v sekundách)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Vypnúť viditeľnosť nových otázok?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Úroveň povolenia");
+$LANG_CONF['main.language'] = array("select", "Language-File");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Povoliť automatický obsah jednania");
+$LANG_CONF['main.titleFAQ'] = array("input", "Názov FAQ");
+$LANG_CONF['main.currentVersion'] = array("tlačiť", "Verzia FAQ");
+$LANG_CONF["main.metaDescription"] = array("input", "Popis stránky");
+$LANG_CONF["main.metaKeywords"] = array("input", "Kľúčové slová pre Spiders");
+$LANG_CONF["main.metaPublisher"] = array("input", "Meno vydavateľa");
+$LANG_CONF['main.administrationMail'] = array("input", "E-mailová adresa administrátora");
+$LANG_CONF["main.contactInformations"] = array("area", "Kontaktné informácie");
+$LANG_CONF["main.send2friendText"] = array("area", "Text pre odkaz poslať známemu");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "maximumálna veľkosť prílohy v Bytoch (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Pripojiť prílohu k položkám?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "použiť stopovač?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "použiť Adminlog?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Chcete aby bola IP skontrolovaná pri kontrole UINs v admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Počet tém na stránku");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Počet článkov");
+$LANG_CONF['security.bannedIPs'] = array("area", "Zakázať tieto IP");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
+$LANG_CONF["main.referenceURL"] = array("input", "Overiť URL (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval medzi AJAX overením (v sekundách)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Vypnúť viditeľnosť nových otázok?");
+$LANG_CONF['security.permLevel'] = array("select", "Úroveň povolenia");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ako novú hlavnú kategóriu";
 $PMF_LANG["ad_categ_paste_error"] = "Presunúť túto kategóriu nie je možné.";
@@ -610,9 +610,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Rozšírené vyhľadávanie';
 
 // added v1.6.1 - 2006-04-25 by Matteoï¿½andï¿½Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam kontrolné centrum';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Vytlačiť užívateľov e-mail v bezpečnom móde (prednastavené: povoliť).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Skontrolovať obsahovú formu proti zakázaným slovám (prednastavené: povoliť).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Použiť captcha kód pre povolenie verejnej formy podania (prednastavené: povoliť).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Vytlačiť užívateľov e-mail v bezpečnom móde (prednastavené: povoliť).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Skontrolovať obsahovú formu proti zakázaným slovám (prednastavené: povoliť).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Použiť captcha kód pre povolenie verejnej formy podania (prednastavené: povoliť).");
 $PMF_LANG['ad_session_expiring'] = 'Vaše sedenie vyprší o %d minút: chcete pokračovať v práci?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -759,7 +759,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Žiadny script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Súvisiace položky';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Počet súvisiacich položiek");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Počet súvisiacich položiek");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Preložiť';
@@ -838,8 +838,8 @@ $PMF_LANG['ad_comment_news'] = 'Komentáre v záznamoch noviniek:';
 $PMF_LANG['ad_groups'] = 'Skupiny';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Triedenie záznamov (podľa zakladateľa)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Triedenie záznamov (zostupne alebo vzostupne)');
+$LANG_CONF['records.orderby'] = array('select', 'Triedenie záznamov (podľa zakladateľa)');
+$LANG_CONF['records.sortby'] = array('select', 'Triedenie záznamov (zostupne alebo vzostupne)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (prednastavené)';
 $PMF_LANG['ad_conf_order_thema'] = 'Názov';
 $PMF_LANG['ad_conf_order_visits'] = 'Počet návštev';
@@ -851,8 +851,8 @@ $PMF_LANG['mainControlCenter'] = 'Hlavné nastavenia';
 $PMF_LANG['recordsControlCenter'] = 'Nastavenia FAQ záznamov';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivovať nový záznam (prednastavené: deaktivované)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Povoliť komentáre pre nové záznamy (prednastavené: nepovoliť)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Aktivovať nový záznam (prednastavené: deaktivované)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Povoliť komentáre pre nové záznamy (prednastavené: nepovoliť)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Záznamy v tejto kategórii';
@@ -875,7 +875,7 @@ $PMF_LANG['emailRegSubject'] = '[%sitename%] Registrácia: nový užívateľ';
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten
 $PMF_LANG['msgMostPopularSearches'] = 'Najčastejšie vyhľadávania sú:';
-$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Povoliť WYSIWYG editor (prednastavené: povoliť)");
+$LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Povoliť WYSIWYG editor (prednastavené: povoliť)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
 $PMF_LANG['ad_menu_searchstats'] = 'Štatistiky vyhľadávania';
@@ -939,7 +939,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Počas posielania jazykového súbo
 $PMF_LANG['msgTransToolPercent'] = 'Percento';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Cesta k uloženým prílohám.<br><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Cesta k uloženým prílohám.<br><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Súbor, ktorý sa pokúšate stiahnuť nebol na tomto serveri nájdený.";
@@ -951,7 +951,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d užívateľ online";
 $PMF_LANG["plmsgUserOnline"][1] = "%d užívatelia online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Šablóna nastavená na použitie");
+$LANG_CONF['main.templateSet'] = array("select", "Šablóna nastavená na použitie");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Odstrániť';
@@ -986,16 +986,16 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "vymazať preklad";
 $PMF_LANG["rightsLanguage"]['approverec'] = "schváliť záznamy";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
+$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
+//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Máte najnovšiu verziu phpMyFAQ. Teraz nepotrebujete upgrade.';
-$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Povoliť iba prihlásenia cez zabezpečené pripojenie? (prednastavené: nepovoliť)");
+$LANG_CONF['security.useSslForLogins'] = array('checkbox', "Povoliť iba prihlásenia cez zabezpečené pripojenie? (prednastavené: nepovoliť)");
 $PMF_LANG['msgSecureSwitch'] = "Prepnúť na bezpečný mód pre prihlásenie!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -1011,8 +1011,8 @@ $PMF_LANG['ad_record_active'] = 'Aktívny';
 $PMF_LANG['msgAttachmentInvalid'] = 'Príloha je chybná, prosím informujte administrátora';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms'] = array(0 => "input", 1 => 'Počet nájdených položiek');
-$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Triedenie top FAQ");
+$LANG_CONF['search.numberSearchTerms'] = array("input", 'Počet nájdených položiek');
+$LANG_CONF['records.orderingPopularFaqs'] = array("select", "Triedenie top FAQ");
 $PMF_LANG['list_all_users'] = 'Zobraziť všetkých užívateľov';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "zobraziť najnavštevovanejšie položky";
@@ -1025,4 +1025,4 @@ $PMF_LANG['msgShowHelp'] = 'Prosím oddeľte slová čiarkou.';
 $PMF_LANG['msgUpdateFaqDate'] = 'aktualizovať';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechať'; 
 $PMF_LANG['msgEditFaqDat'] = 'upraviť';
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'E-mailová adresa ako povinné pole (prednastavené: deaktivované)');
+$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'E-mailová adresa ako povinné pole (prednastavené: deaktivované)');

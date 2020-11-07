@@ -546,26 +546,26 @@ $PMF_LANG["ad_entry_fontcolor"] = "Lliw'r ffont : ";
 $PMF_LANG["ad_entry_fontsize"] = "Maint y ffont: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => " Iaith-Ffeil");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => " Galluogi trafod cynnwys awtomatig");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => " Teitl y CC");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => " Fersiwn y CC");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => " Disgrifiad or Dudalen");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => " Geiriau allweddol ar gyfer Corynod");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => " Enwr Cyhoeddwr");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => " Cyfeiriad e-bost Gweinyddol");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => " Testun ar gyfer y dudalen anfonatffrind");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltur atodiadau islawr cofnodion?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennur gefnogaeth? (diofyn: analluogi)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
+$LANG_CONF['main.language'] = array("select", " Iaith-Ffeil");
+$LANG_CONF["main.languageDetection"] = array("checkbox", " Galluogi trafod cynnwys awtomatig");
+$LANG_CONF['main.titleFAQ'] = array("input", " Teitl y CC");
+$LANG_CONF['main.currentVersion'] = array("print", " Fersiwn y CC");
+$LANG_CONF["main.metaDescription"] = array("input", " Disgrifiad or Dudalen");
+$LANG_CONF["main.metaKeywords"] = array("input", " Geiriau allweddol ar gyfer Corynod");
+$LANG_CONF["main.metaPublisher"] = array("input", " Enwr Cyhoeddwr");
+$LANG_CONF['main.administrationMail'] = array("input", " Cyfeiriad e-bost Gweinyddol");
+$LANG_CONF["main.contactInformations"] = array("area", " Gwybodaeth gyswllt");
+$LANG_CONF["main.send2friendText"] = array("area", " Testun ar gyfer y dudalen anfonatffrind");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", " Cysylltur atodiadau islawr cofnodion?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", " Defnyddio tracio?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", " defnyddio cofnod gweinyddol?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", " Ydych chi am ir IP gael ei wirio wrth wirio UINs yn admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", " Nifer y pynciau a ddangosir fesul tudalen");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", " Nifer yr erthyglau newyddion");
+$LANG_CONF['security.bannedIPs'] = array("area", " Gwahardd yr Ips hyn");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", " Actifadu mod_ailysgrifennur gefnogaeth? (diofyn: analluogi)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";
 $PMF_LANG["ad_categ_paste_error"] = "Nid yw'n bosibl symud y categori hwn.";
@@ -610,9 +610,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Chwiliad manwl';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Canolfan rheoli sbam';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => " Cynnwys ffurflen gyhoeddus yn erbyn geiriau a waharddwyd (default: enabled).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", " Cynnwys ffurflen gyhoeddus yn erbyn geiriau a waharddwyd (default: enabled).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Bydd eich sesiwn yn dod i ben mewn %d munud: hoffech chi barhau i weithio?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

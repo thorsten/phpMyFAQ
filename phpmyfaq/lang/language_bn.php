@@ -548,30 +548,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
 $PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Version");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Permission level");
+$LANG_CONF['main.language'] = array("select", "Language-File");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Enable automatic content negotiation");
+$LANG_CONF['main.titleFAQ'] = array("input", "Title of the FAQ");
+$LANG_CONF['main.currentVersion'] = array("print", "FAQ Version");
+$LANG_CONF["main.metaDescription"] = array("input", "Describtion of the Page");
+$LANG_CONF["main.metaKeywords"] = array("input", "Keywords for Spiders");
+$LANG_CONF["main.metaPublisher"] = array("input", "Name of the Publisher");
+$LANG_CONF['main.administrationMail'] = array("input", "Email address of the Admin");
+$LANG_CONF["main.contactInformations"] = array("area", "Contact information");
+$LANG_CONF["main.send2friendText"] = array("area", "Text for the send2friend page");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "maximum Size for attachments in Bytes (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Link the attachments below the entries?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "use Tracking?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "use Adminlog?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Number of displayed topics per page");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news articles");
+$LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Activate mod_rewrite support? (default: disabled)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["main.referenceURL"] = array("input", "Base URL for link verification (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
+$LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -616,9 +616,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'খোঁজার উন্নত ব্য�
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Print user email in a safe way (default: enabled).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Check public form content against banned words (default: enabled).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Use a catpcha code to allow public form submission (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -765,7 +765,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'সম্পর্কিত লেখা';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Number of related entries");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Translate';
@@ -844,8 +844,8 @@ $PMF_LANG['ad_comment_news'] = 'Comments in News records:';
 $PMF_LANG['ad_groups'] = 'Groups';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Record sorting (according to property)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');
+$LANG_CONF['records.orderby'] = array('select', 'Record sorting (according to property)');
+$LANG_CONF['records.sortby'] = array('select', 'Record sorting (descending or ascending)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Title';
 $PMF_LANG['ad_conf_order_visits'] = 'Number of visitors';
@@ -857,8 +857,8 @@ $PMF_LANG['mainControlCenter'] = 'Main Control Center';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Activate a new records (default: deactivated)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Allow comments for new records (default: disallowed)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'এই বিভাগের প্রশ্ন';

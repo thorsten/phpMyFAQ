@@ -538,30 +538,30 @@ $PMF_LANG["ad_entry_fontcolor"] = "Màu chữ: ";
 $PMF_LANG["ad_entry_fontsize"] = "Cỡ chữ: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Ngôn ngữ tập tin");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Kích hoạt tự động từ chối nội dung");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Tiêu đề của phần Câu hỏi thường gặp");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Câu hỏi thường gặp Phiên bản ");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Mô tả trang");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Từ khóa cho công cụ tìm kiếm");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Tên của Publisher");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Địa chỉ email của Quản trị viên");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Thông tin liên lạc");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Nội dung của trang send2friend");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximum cỡ tối đa cho tập tin đính kèm (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Hiện đường dẫn đến tài liệu đính kèm ở cuối trang?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "sử dụng Tracking?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "sử dụng Adminlog?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Bạn có muốn kiểm tra IP khi xác nhận UINs trong admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Số lượng nội dung hiện trên mỗi trang");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Số lượng bài mới");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Loại bỏ các IP này");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Kích hoạt hỗ trợ mod_rewrite? (mặc định: không kích hoạt)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Tham chiếu URL để kiểm tra đường dẫn (vd.: http://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Không chọn chức năng cho xem các câu hỏi mới?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Permission level");
+$LANG_CONF['main.language'] = array("select", "Ngôn ngữ tập tin");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Kích hoạt tự động từ chối nội dung");
+$LANG_CONF['main.titleFAQ'] = array("input", "Tiêu đề của phần Câu hỏi thường gặp");
+$LANG_CONF['main.currentVersion'] = array("print", "Câu hỏi thường gặp Phiên bản ");
+$LANG_CONF["main.metaDescription"] = array("input", "Mô tả trang");
+$LANG_CONF["main.metaKeywords"] = array("input", "Từ khóa cho công cụ tìm kiếm");
+$LANG_CONF["main.metaPublisher"] = array("input", "Tên của Publisher");
+$LANG_CONF['main.administrationMail'] = array("input", "Địa chỉ email của Quản trị viên");
+$LANG_CONF["main.contactInformations"] = array("area", "Thông tin liên lạc");
+$LANG_CONF["main.send2friendText"] = array("area", "Nội dung của trang send2friend");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "maximum cỡ tối đa cho tập tin đính kèm (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Hiện đường dẫn đến tài liệu đính kèm ở cuối trang?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "sử dụng Tracking?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "sử dụng Adminlog?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Bạn có muốn kiểm tra IP khi xác nhận UINs trong admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Số lượng nội dung hiện trên mỗi trang");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Số lượng bài mới");
+$LANG_CONF['security.bannedIPs'] = array("area", "Loại bỏ các IP này");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Kích hoạt hỗ trợ mod_rewrite? (mặc định: không kích hoạt)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
+$LANG_CONF["main.referenceURL"] = array("input", "Tham chiếu URL để kiểm tra đường dẫn (vd.: http://www.example.org/faq/)");
+$LANG_CONF["main.urlValidateInterval"] = array("input", "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Không chọn chức năng cho xem các câu hỏi mới?");
+$LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
 $PMF_LANG['ad_categ_new_main_cat'] = 'như mục chính';
 $PMF_LANG["ad_categ_paste_error"] = "Không thể di chuyển mục này.";
@@ -604,9 +604,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Tìm kiếu nâng cao';
 
 // added v1.6.1 - 2006-04-25 by Matteo�and�Thorsten
 $PMF_LANG["spamControlCenter"] = 'Trung tâm kiểm soát Spam';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Xem email của thành viên dưới hình thức an toàn  (mặc định: kích hoạt).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Kiểm tra nội dung các public form để tránh những từ cấm (mặc định: kích hoạt).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Sử dụng mã catpcha để cho phép trình các public form (mặc định: kích hoạt).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Xem email của thành viên dưới hình thức an toàn  (mặc định: kích hoạt).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Kiểm tra nội dung các public form để tránh những từ cấm (mặc định: kích hoạt).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Sử dụng mã catpcha để cho phép trình các public form (mặc định: kích hoạt).");
 
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Quản lý các Session';
@@ -756,7 +756,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Không có Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG["msg_related_articles"] = 'Những nội dung liên quan';
-$LANG_CONF["records.numberOfRelatedArticles"] = array(0 => "input", 1 => "Số lượng nội dung liên quan");
+$LANG_CONF["records.numberOfRelatedArticles"] = array("input", "Số lượng nội dung liên quan");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Dịch';
@@ -840,8 +840,8 @@ $PMF_LANG['ad_comment_news'] = 'Bình luận trong các nội dung mới:';
 $PMF_LANG['ad_groups'] = 'Nhóm';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Liệt kê nội dung theo thứ tự (tùy theo tính chất)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Liệt kê nội dung theo thứ tự (tăng hoặc giảm)');
+$LANG_CONF['records.orderby'] = array('select', 'Liệt kê nội dung theo thứ tự (tùy theo tính chất)');
+$LANG_CONF['records.sortby'] = array('select', 'Liệt kê nội dung theo thứ tự (tăng hoặc giảm)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (mặc định)';
 $PMF_LANG['ad_conf_order_thema'] = 'Tiêu đề';
 $PMF_LANG['ad_conf_order_visits'] = 'Số lượng khách thăm';
@@ -853,8 +853,8 @@ $PMF_LANG['mainControlCenter'] = 'Cấu hình chính';
 $PMF_LANG['recordsControlCenter'] = 'Cấu hình nội dung Câu hỏi thường gặp';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Kích hoạt một nội dung mới (mặc định: không kích hoạt)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Cho phép bình luận nội dung mới (mặc định: không cho phép)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Kích hoạt một nội dung mới (mặc định: không kích hoạt)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Cho phép bình luận nội dung mới (mặc định: không cho phép)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Nội dung trong mục này';

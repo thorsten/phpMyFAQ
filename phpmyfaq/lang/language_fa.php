@@ -444,26 +444,26 @@ $PMF_LANG['err_bannedIP'] = 'آی‌پی شما مسدود شده است.';
 $PMF_LANG['err_SaveQuestion'] = 'کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>پرسش شما</strong> و, اگر درخواست شده باشد <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"درباره کپچا در ویکی‌پدیا بیشتر بخوانید\" target=\"_blank\">Captcha</a> کد</strong> هستند.<br><br><a href=\"javascript:history.back();\">یک صفحه برگرد</a><br><br>';
 $PMF_LANG['ad_entry_fontcolor'] = 'رنگ قلم: ';
 $PMF_LANG['ad_entry_fontsize'] = 'اندازه قلم: ';
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "پرونده زبان");
-$LANG_CONF['main.languageDetection'] = array(0 => "checkbox", 1 => "فعال سازی مذاکره متنی خودکار");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "عنوان پرسش‌های متداول");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "نسخه پرسش‌های متداول");
-$LANG_CONF['main.metaDescription'] = array(0 => "input", 1 => "شرح صفحه");
-$LANG_CONF['main.metaKeywords'] = array(0 => "input", 1 => "لغات کلیدی برای موتورهای جستجو");
-$LANG_CONF['main.metaPublisher'] = array(0 => "input", 1 => "نام ناشر");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "آدرس ایمیل مدیر");
-$LANG_CONF['main.contactInformations'] = array(0 => "area", 1 => "اطلاعات تماس");
-$LANG_CONF['main.send2friendText'] = array(0 => "area", 1 => "متن برای صفحه ارسال به دوست");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "حداکثر حجم برای الصاق‌ها بر حسب بایت (حداکثر %بایت)");
-$LANG_CONF['records.disableAttachments'] = array(0 => "checkbox", 1 => "الصاق‌ها در پایین ورودی پیوند داده شوند؟");
-$LANG_CONF['main.enableUserTracking'] = array(0 => "checkbox", 1 => "ردیابی فعالیت‌های کاربر؟");
-$LANG_CONF['main.enableAdminLog'] = array(0 => "checkbox", 1 => "از لاگ‌های مدیر سیستم استفاده شود؟");
-$LANG_CONF['security.ipCheck'] = array(0 => "checkbox", 1 => "آیا مایلید هنگام بررسی شماره‌های شناسه یکتا در پرونده admin.php، آی‌پی بررسی شود؟");
-$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "تعداد عناوین نمایش داده شده در صفحه");
-$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "تعداد مقالات جدید");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "قدغن کردن این آی‌پی‌ها");
-$LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "پشتیبانی از mod_rewrite فعال شود؟ (پیش‌فرض: غیرفعال)");
-$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "پشتیبانی از LDAP فعال شود؟ (پیش‌فرض: غیرفعال)");
+$LANG_CONF['main.language'] = array("select", "پرونده زبان");
+$LANG_CONF['main.languageDetection'] = array("checkbox", "فعال سازی مذاکره متنی خودکار");
+$LANG_CONF['main.titleFAQ'] = array("input", "عنوان پرسش‌های متداول");
+$LANG_CONF['main.currentVersion'] = array("print", "نسخه پرسش‌های متداول");
+$LANG_CONF['main.metaDescription'] = array("input", "شرح صفحه");
+$LANG_CONF['main.metaKeywords'] = array("input", "لغات کلیدی برای موتورهای جستجو");
+$LANG_CONF['main.metaPublisher'] = array("input", "نام ناشر");
+$LANG_CONF['main.administrationMail'] = array("input", "آدرس ایمیل مدیر");
+$LANG_CONF['main.contactInformations'] = array("area", "اطلاعات تماس");
+$LANG_CONF['main.send2friendText'] = array("area", "متن برای صفحه ارسال به دوست");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "حداکثر حجم برای الصاق‌ها بر حسب بایت (حداکثر %بایت)");
+$LANG_CONF['records.disableAttachments'] = array("checkbox", "الصاق‌ها در پایین ورودی پیوند داده شوند؟");
+$LANG_CONF['main.enableUserTracking'] = array("checkbox", "ردیابی فعالیت‌های کاربر؟");
+$LANG_CONF['main.enableAdminLog'] = array("checkbox", "از لاگ‌های مدیر سیستم استفاده شود؟");
+$LANG_CONF['security.ipCheck'] = array("checkbox", "آیا مایلید هنگام بررسی شماره‌های شناسه یکتا در پرونده admin.php، آی‌پی بررسی شود؟");
+$LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "تعداد عناوین نمایش داده شده در صفحه");
+$LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "تعداد مقالات جدید");
+$LANG_CONF['security.bannedIPs'] = array("area", "قدغن کردن این آی‌پی‌ها");
+$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "پشتیبانی از mod_rewrite فعال شود؟ (پیش‌فرض: غیرفعال)");
+$LANG_CONF['ldap.ldapSupport'] = array("checkbox", "پشتیبانی از LDAP فعال شود؟ (پیش‌فرض: غیرفعال)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'به عنوان موضوع اصلی';
 $PMF_LANG['ad_categ_paste_error'] = 'انتقال این موضوع ممکن نیست.';
 $PMF_LANG['ad_categ_move'] = 'انتقال موضوع';
@@ -501,9 +501,9 @@ $PMF_LANG['msgAllCategories'] = '... تمام موضوعات';
 $PMF_LANG['ad_you_should_update'] = 'phpMyFAQ شما قدیمی شده‌است. باید برنامه را به جدیدترین نسخه در دسترسی به‌روز کنید';
 $PMF_LANG['msgAdvancedSearch'] = 'جستجوی پیشرفته';
 $PMF_LANG['spamControlCenter'] = 'مرکز کنترل هرزنامه';
-$LANG_CONF['spam.enableSafeEmail'] = array(0 => "checkbox", 1 => "چاپ ایمیل کاربر به شیوه امن (پیش‌فرض: فعال).");
-$LANG_CONF['spam.checkBannedWords'] = array(0 => "checkbox", 1 => "بررسی محتوای فرما عمومی برای لغات ممنوعه (پیش‌فرض: فعال).");
-$LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "استفاده از کپچا جهت اعطای مجوز ارسال فرم به عموم (پیش‌فرض: فعال).");
+$LANG_CONF['spam.enableSafeEmail'] = array("checkbox", "چاپ ایمیل کاربر به شیوه امن (پیش‌فرض: فعال).");
+$LANG_CONF['spam.checkBannedWords'] = array("checkbox", "بررسی محتوای فرما عمومی برای لغات ممنوعه (پیش‌فرض: فعال).");
+$LANG_CONF['spam.enableCaptchaCode'] = array("checkbox", "استفاده از کپچا جهت اعطای مجوز ارسال فرم به عموم (پیش‌فرض: فعال).");
 $PMF_LANG['ad_firefoxsearch_plugin_title'] = 'ساخت افزونه جستجوی فایرفاکس';
 $PMF_LANG['ad_msiesearch_plugin_install'] = 'افزونه جستجو اینترنت اكسپلورر را دریافت كنید';
 $PMF_LANG['ad_msiesearch_plugin_title'] = 'ساخت افزونه جستجو برای IE7';
@@ -539,16 +539,16 @@ $PMF_LANG['search.relevance.keywords-content-thema'] = 'كلمه كلیدی- پ�
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'كلمه كلیدی- پرسش - پاسخ';
 $PMF_LANG['msgLoginUser'] = 'ورود';
 $PMF_LANG['socialNetworksControlCenter'] = 'تنظیمات شبكه اجتماعی';
-$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => ' تعداد کلمات کلیدی فهرست شده');
-$LANG_CONF['records.orderingPopularFAQs'] = array(0 => 'select', 1 => 'مرتب‌ کردن پرسش‌های متداول برتر\'s');
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'اجبار در ورود آدرس ایمیل (پیش فرض: غیر فعال)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'پاسخ سریع در صفحه آغازین (پیش‌فرض: غیرفعال)');
-$LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'مرتب کردن بر اساس رابطه');
-$LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'پشتیبانی از رابطه فعال شود؟ (پیش‌فرض: غبرفعال)');
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'پشتیبانی از توییتر (پیش‌فرض: غیرفعال)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'کلید مصرف‌کننده توییتر');
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'رمز مصرف‌کننده توییتر');
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'کلید توکن دسترسی به توییتر');
+$LANG_CONF['search.numberSearchTerms'] = array('input', ' تعداد کلمات کلیدی فهرست شده');
+$LANG_CONF['records.orderingPopularFAQs'] = array('select', 'مرتب‌ کردن پرسش‌های متداول برتر\'s');
+$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'اجبار در ورود آدرس ایمیل (پیش فرض: غیر فعال)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'پاسخ سریع در صفحه آغازین (پیش‌فرض: غیرفعال)');
+$LANG_CONF['search.relevance'] = array('select', 'مرتب کردن بر اساس رابطه');
+$LANG_CONF['search.enableRelevance'] = array('checkbox', 'پشتیبانی از رابطه فعال شود؟ (پیش‌فرض: غبرفعال)');
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'پشتیبانی از توییتر (پیش‌فرض: غیرفعال)');
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'کلید مصرف‌کننده توییتر');
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'رمز مصرف‌کننده توییتر');
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'کلید توکن دسترسی به توییتر');
 $PMF_LANG['ad_menu_attachments'] = 'پیوست های آموزش';
 $PMF_LANG['ad_menu_attachment_admin'] = 'مدیریت ضمیمه';
 $PMF_LANG['msgAttachmentsFilename'] = 'نام فایل';
@@ -576,10 +576,10 @@ $PMF_LANG['msgRegistration'] = 'ثبت نام';
 $PMF_LANG['msgRegistrationCredentials'] = 'برای ثبت نام لطفا نام و كلمه عبور خود را به همراه ایمیل وارد كنید';
 $PMF_LANG['msgRegistrationNote'] = 'بعد از اتمام ثبت نام توسط مدیر سیستم اعتبار سنجی خواهید شد.';
 $PMF_LANG['ad_entry_changelog_history'] = 'تاریخچه تغییرات';
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'رمز توکن دسترسی به توییتر');
-$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'پشتیبانی از SSO (پیش‌فرض: غیرفعال)');
-$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'URL تغییر مسیر خروج از SSO');
-$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'فرمت تاریخ (پیش‌فرض: Y-m-d H:i)');
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', 'رمز توکن دسترسی به توییتر');
+$LANG_CONF['security.ssoSupport'] = array('checkbox', 'پشتیبانی از SSO (پیش‌فرض: غیرفعال)');
+$LANG_CONF['security.ssoLogoutRedirect'] = array('input', 'URL تغییر مسیر خروج از SSO');
+$LANG_CONF['main.dateFormat'] = array('input', 'فرمت تاریخ (پیش‌فرض: Y-m-d H:i)');
 $PMF_LANG['securityControlCenter'] = 'تنظیمات امنیتی';
 $PMF_LANG['ad_search_delsuc'] = 'جستجوی عبارت با موفقیت حذف شد.';
 $PMF_LANG['ad_search_delfail'] = 'واژه جستجو حذف نمی شد.';
@@ -600,18 +600,18 @@ $PMF_LANG['ad_record_inactive'] = 'غیرفعال سازی پرسش‌های م�
 $PMF_LANG['msgMode'] = 'Modus';
 $PMF_LANG['msgMaintenanceMode'] = 'پرسش‌های متداول در حالت نگهداری است';
 $PMF_LANG['msgOnlineMode'] = ' فعال سازی پرسش‌های متداول ';
-$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'پرسش‌های متداول کاملا امن شود(پیش‌فرض: غیرفعال)');
-$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'پرسش‌های متداول فقط با SSL (پیش‌فرض: غیرفعال)');
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'فعال سازی Varnish >=3.0 پشتیبانی<br><small>شما به توسعه PECL برای Varnish نیاز دارید</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'میزبان Varnish');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'درگاه Varnish');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'رمز Varnish');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
-$LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'بستن پرسش پس از پاسخ؟');
-$LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'حذف پرسش پس از پاسخ?');
-$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'فعال سازی ذخیره خودکار');
-$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'دوره زمانی ذخیره خودکار بر حسب ثانیه, پیش فرض ۱۸۰');
-$LANG_CONF['main.maintenanceMode'] = array(0 => 'checkbox', 1 => 'قرار دادن در حالت پشتیبانی');
+$LANG_CONF['security.enableLoginOnly'] = array('checkbox', 'پرسش‌های متداول کاملا امن شود(پیش‌فرض: غیرفعال)');
+$LANG_CONF['security.useSslOnly'] = array('checkbox', 'پرسش‌های متداول فقط با SSL (پیش‌فرض: غیرفعال)');
+$LANG_CONF['cache.varnishEnable'] = array('checkbox', 'فعال سازی Varnish >=3.0 پشتیبانی<br><small>شما به توسعه PECL برای Varnish نیاز دارید</small>');
+$LANG_CONF['cache.varnishHost'] = array('input', 'میزبان Varnish');
+$LANG_CONF['cache.varnishPort'] = array('input', 'درگاه Varnish');
+$LANG_CONF['cache.varnishSecret'] = array('input', 'رمز Varnish');
+$LANG_CONF['cache.varnishTimeout'] = array('input', 'Varnish timeout');
+$LANG_CONF['records.enableCloseQuestion'] = array('checkbox', 'بستن پرسش پس از پاسخ؟');
+$LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', 'حذف پرسش پس از پاسخ?');
+$LANG_CONF['records.autosaveActive'] = array('checkbox', 'فعال سازی ذخیره خودکار');
+$LANG_CONF['records.autosaveSecs'] = array('input', 'دوره زمانی ذخیره خودکار بر حسب ثانیه, پیش فرض ۱۸۰');
+$LANG_CONF['main.maintenanceMode'] = array('checkbox', 'قرار دادن در حالت پشتیبانی');
 $PMF_LANG['msgShowMore'] = 'نمایش بیشتر';
 $PMF_LANG['msgQuestionAnswered'] = 'پرسش پاسخ داده شد';
 $PMF_LANG['msgMessageQuestionAnswered'] = 'پرسش شما در %s پاسخ داده شد.لطفا در اینجا مشاهده کنید:';
@@ -631,6 +631,6 @@ $PMF_LANG['ad_instance_error_cannotdelete'] = 'امكان حذف نمونه وج
 $PMF_LANG['ad_instance_config'] = 'پیكره بندی نمونه';
 $PMF_LANG['msgAboutThisNews'] = 'درباره این خبر';
 $PMF_LANG['msgAccessDenied'] = 'امكان دسترسی موجود نیست';
-$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'مرتب سازی پرسش‌های متداول به صورت تصادفی (پیش‌فرض: غیرفعال)');
-$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => ' فعال سازی ویرایشگر تعبیه شده WYSIWYG در (پیش‌فرض: غیرفعال)');
-$LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => 'پشتیبانی از Gravatar (پیش‌فرض: غیرفعال)');
+$LANG_CONF['records.randomSort'] = array('checkbox', 'مرتب سازی پرسش‌های متداول به صورت تصادفی (پیش‌فرض: غیرفعال)');
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', ' فعال سازی ویرایشگر تعبیه شده WYSIWYG در (پیش‌فرض: غیرفعال)');
+$LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'پشتیبانی از Gravatar (پیش‌فرض: غیرفعال)');

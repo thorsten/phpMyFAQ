@@ -545,26 +545,26 @@ $PMF_LANG["ad_entry_fontcolor"] = "Boja fonta: ";
 $PMF_LANG["ad_entry_fontsize"] = "Veli&#269;ina fonta: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatsko tra&#382;enje odgovora");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Naslov FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Verzija");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Opis Stranice");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Klju&#269;ne re&#269;i za netpauke");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Ime izdava&#269;a");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Admin email adresa");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontakt info");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst za send2friend stranicu");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna veli&#269;ina priloga u bajtovima (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj priloge ispod unosa?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Koristi pra&#263;enje?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Koristi Adminlog?");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
+$LANG_CONF['main.language'] = array("select", "Language-File");
+$LANG_CONF["main.languageDetection"] = array("checkbox", "Automatsko tra&#382;enje odgovora");
+$LANG_CONF['main.titleFAQ'] = array("input", "Naslov FAQ");
+$LANG_CONF['main.currentVersion'] = array("print", "FAQ Verzija");
+$LANG_CONF["main.metaDescription"] = array("input", "Opis Stranice");
+$LANG_CONF["main.metaKeywords"] = array("input", "Klju&#269;ne re&#269;i za netpauke");
+$LANG_CONF["main.metaPublisher"] = array("input", "Ime izdava&#269;a");
+$LANG_CONF['main.administrationMail'] = array("input", "Admin email adresa");
+$LANG_CONF["main.contactInformations"] = array("area", "Kontakt info");
+$LANG_CONF["main.send2friendText"] = array("area", "Tekst za send2friend stranicu");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "maximalna veli&#269;ina priloga u bajtovima (max. %sByte)");
+$LANG_CONF["records.disableAttachments"] = array("checkbox", "Linkuj priloge ispod unosa?");
+$LANG_CONF["main.enableUserTracking"] = array("checkbox", "Koristi pra&#263;enje?");
+$LANG_CONF["main.enableAdminLog"] = array("checkbox", "Koristi Adminlog?");
+$LANG_CONF["security.ipCheck"] = array("checkbox", "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
+$LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Broj prikazanih tema po stranici");
+$LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Broj &#269;lanaka vesti");
+$LANG_CONF['security.bannedIPs'] = array("area", "Banuj ove IP");
+$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
+$LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
 $PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";
@@ -609,9 +609,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Napredna pretraga';
 
 // added v1.6.1 - 2006-04-25 by Matteo&nbsp;and&nbsp;Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam kontrolni centar';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Ispisuj korisni&#269;ke email adrese na siguran na&#269;in (uklju&#269;eno).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Proveri javnu formu za zabranjene re&#269;i (uklju&#269;eno).");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Koristi catpcha slike za kori&scaron;&#263;enje javne forme (uklju&#269;eno).");
+$LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "Ispisuj korisni&#269;ke email adrese na siguran na&#269;in (uklju&#269;eno).");
+$LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Proveri javnu formu za zabranjene re&#269;i (uklju&#269;eno).");
+$LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "Koristi catpcha slike za kori&scaron;&#263;enje javne forme (uklju&#269;eno).");
 $PMF_LANG['ad_session_expiring'] = 'Va&scaron;a sesija &#263;e iste&#263;i za %d minuta: da li &#382;elite da nastavite sa radom?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -758,7 +758,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Nema Skripti';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Srodne teme';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Broj srodnih temi");
+$LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Broj srodnih temi");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Prevedi';
@@ -837,8 +837,8 @@ $PMF_LANG['ad_comment_news'] = 'Komentari u Vestima:';
 $PMF_LANG['ad_groups'] = 'Grupe';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Sortiranje unosa (po atributima)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortiranje unosa (uzlazno ili silazno)');
+$LANG_CONF['records.orderby'] = array('select', 'Sortiranje unosa (po atributima)');
+$LANG_CONF['records.sortby'] = array('select', 'Sortiranje unosa (uzlazno ili silazno)');
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Naslov';
 $PMF_LANG['ad_conf_order_visits'] = 'Broj posetilaca';
@@ -850,8 +850,8 @@ $PMF_LANG['mainControlCenter'] = 'Glavna konfiguracija';
 $PMF_LANG['recordsControlCenter'] = 'FAQ konfiguracija unosa';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Ukljucite nove unose (iskljuceno)");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Dozvolite komentare na nove unose (nedozvoljeno)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", "Ukljucite nove unose (iskljuceno)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Dozvolite komentare na nove unose (nedozvoljeno)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Unosi u ovoj kategoriji';
