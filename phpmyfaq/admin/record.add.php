@@ -43,12 +43,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories = Filter::filterInputArray(
         INPUT_POST,
-        array(
-            'rubrik' => array(
+        [
+            'rubrik' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,
-            ),
-        )
+            ],
+        ]
     );
     $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
@@ -67,40 +67,40 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $solutionId = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
     $revisionId = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
     $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+    $date = Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
     $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
 
     // Permissions
-
     $permissions = [];
     if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
-        $permissions += array(
-            'restricted_user' => array(
+        $permissions += [
+            'restricted_user' => [
                 -1,
-            ),
-        );
+            ],
+        ];
     } else {
-        $permissions += array(
-            'restricted_user' => array(
+        $permissions += [
+            'restricted_user' => [
                 Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
-            ),
-        );
+            ],
+        ];
     }
 
     if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
-        $permissions += array(
-            'restricted_groups' => array(
+        $permissions += [
+            'restricted_groups' => [
                 -1,
-            ),
-        );
+            ],
+        ];
     } else {
         $permissions += Filter::filterInputArray(
             INPUT_POST,
-            array(
-                'restricted_groups' => array(
+            [
+                'restricted_groups' => [
                     'filter' => FILTER_VALIDATE_INT,
                     'flags' => FILTER_REQUIRE_ARRAY,
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -122,7 +122,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         $category->setGroups($currentAdminGroups);
         $tagging = new Tags($faqConfig);
 
-        $recordData = array(
+        $recordData = [
             'lang' => $recordLang,
             'active' => $active,
             'sticky' => (!is_null($sticky) ? 1 : 0),
@@ -132,17 +132,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             'author' => $author,
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
-            'date' => date('YmdHis'),
+            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', $date),
             'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
-        );
+        ];
 
         // Add new record and get that ID
         $recordId = $faq->addRecord($recordData);
-
 
         if ($recordId) {
             // Create ChangeLog entry
@@ -293,6 +292,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         <input type="hidden" name="restricted_users" value="<?= $permissions['restricted_user'] ?>">
         <input type="hidden" name="grouppermission" value="<?= $group_permission ?>">
         <input type="hidden" name="restricted_group" value="<?= $permissions['restricted_groups'] ?>">
+        <input type="hidden" name="date" value="<?= $date ?>">
         <input type="hidden" name="notes" value="<?= $notes ?>">
         <p class="text-center">
           <button class="btn btn-primary" type="submit" name="submit">
