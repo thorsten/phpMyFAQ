@@ -2,7 +2,6 @@
 
 /**
  * The category order class.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -20,6 +19,11 @@ namespace phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 
+/**
+ * Class CategoryOrder
+ *
+ * @package phpMyFAQ\Category
+ */
 class CategoryOrder
 {
     /**
@@ -39,6 +43,7 @@ class CategoryOrder
 
     /**
      * Returns the current position for the given category ID
+     *
      * @param int $categoryId
      * @return false|mixed
      */
@@ -56,6 +61,7 @@ class CategoryOrder
 
     /**
      * Inserts the position for the given category ID
+     *
      * @param int $categoryId
      * @param int $position
      * @return mixed
@@ -74,6 +80,7 @@ class CategoryOrder
 
     /**
      * Updates the position for the given category ID
+     *
      * @param int $categoryId
      * @param int $position
      * @return mixed

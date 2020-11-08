@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Entity entity class.
+ * Category entity class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,7 +15,7 @@
  * @since     2014-08-14
  */
 
-namespace phpMyFAQ\Category;
+namespace phpMyFAQ\Entity;
 
 /**
  * Class CategoryEntity

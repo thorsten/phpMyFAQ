@@ -20,7 +20,7 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Category\CategoryEntity;
+use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
 
 /**

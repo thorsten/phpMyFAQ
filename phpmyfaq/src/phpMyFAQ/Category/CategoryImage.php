@@ -32,7 +32,7 @@ class CategoryImage
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * @var bool

@@ -134,14 +134,14 @@ interface DatabaseDriver
     public function error();
 
     /**
-     * Returns the libary version string.
+     * Returns the library version string.
      *
      * @return string
      */
     public function clientVersion();
 
     /**
-     * Returns the libary version string.
+     * Returns the library version string.
      *
      * @return string
      */
@@ -162,7 +162,7 @@ interface DatabaseDriver
     public function close();
 
     /**
-     * Return SQL expression that yeilds current datetime in the local timezone.
+     * Return SQL expression that yields current datetime in the local timezone.
      * The actual SQL value may be of SQL datetime type (or timestamp or similar)
      * or it may be varchar/text (as is in SQLite3) - so make sure the consumer
      * code doesn't depend on the actual type.
