@@ -242,12 +242,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
               <?php if ($currentUser->perm->checkRight($user->getUserId(), 'add_user')) : ?>
-                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addUserModal">
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addUserModal">
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>
               <?php endif ?>
               <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')) : ?>
-                <a class="btn btn-sm btn-info" href="?action=user&amp;user_action=listallusers">
+                <a class="btn btn-sm btn-secondary" href="?action=user&amp;user_action=listallusers">
                   <i class="fa fa-users" aria-label="true"></i> <?= $PMF_LANG['list_all_users'] ?>
                 </a>
               <?php endif ?>
@@ -315,10 +315,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         <div class="col-lg-4">
           <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                 method="post" role="form" class="form_inline">
-            <div class="card shadow mb-4">
-              <div class="card-header">
+            <div class="card mb-4">
+              <h5 class="card-header py-3">
                 <i aria-hidden="true" class="fa fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
-              </div>
+              </h5>
               <div class="card-body">
                 <div class="input-group">
                   <input type="text" id="user_list_autocomplete" name="user_list_search"
@@ -331,10 +331,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         </div>
 
         <div class="col-lg-4">
-          <div class="card shadow mb-4">
-            <div class="card-header" id="user_data_legend">
+          <div class="card mb-4">
+            <h5 class="card-header py-3" id="user_data_legend">
               <i aria-hidden="true" class="fa fa-user"></i> <?= $PMF_LANG['ad_user_profou'] ?>
-            </div>
+            </h5>
             <form action="?action=user&amp;user_action=update_data" method="post">
               <div class="card-body">
                 <input id="update_user_id" type="hidden" name="user_id" value="0">
@@ -369,18 +369,18 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
             <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
             <input type="hidden" name="user_id" id="rights_user_id" value="0">
 
-            <div class="card shadow mb-4">
-              <div class="card-header" id="user_rights_legend">
+            <div class="card mb-4">
+              <h5 class="card-header py-3" id="user_rights_legend">
                 <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_user_rights'] ?>
-                <span class="float-right">
+              </h5>
+              <div class="card-body">
+                <div class="text-center mb-3">
                   <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                     <?= $PMF_LANG['ad_user_checkall'] ?>
                     /
                     <?= $PMF_LANG['ad_user_uncheckall'] ?>
                   </a>
-                </span>
-              </div>
-              <div class="card-body">
+                </div>
                   <?php foreach ($user->perm->getAllRightsData() as $right) : ?>
                     <div class="form-check">
                       <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
@@ -488,11 +488,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
               <?php if ($currentUser->perm->checkRight($user->getUserId(), 'add_user')) : ?>
-                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addUserModal">
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addUserModal">
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>
               <?php endif ?>
-              <button type="button" class="btn btn-sm btn-info" id="pmf-button-export-users">
+              <button type="button" class="btn btn-sm btn-secondary" id="pmf-button-export-users">
                 <i class="fa fa-download" aria-label="true"></i> Export users as CSV
               </button>
           </div>

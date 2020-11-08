@@ -363,10 +363,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                   <tr>
                     <th colspan="2" style="width: 24px;">
                       <a href="?action=view&category=<?= $cid ?>&orderby=id&sortby=desc">
-                        &uarr;
+                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
                       </a>
                       <a href="?action=view&category=<?= $cid ?>&orderby=id&sortby=asc">
-                        &darr;
+                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
                       </a>
                     </th>
                     <th>
@@ -374,18 +374,18 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                     </th>
                     <th>
                       <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=desc">
-                        &uarr;
+                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
                       </a>
                       <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=asc">
-                        &darr;
+                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
                       </a>
                     </th>
                     <th style="width: 100px;">
                       <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=desc">
-                        &uarr;
+                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
                       </a>
                       <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=asc">
-                        &darr;
+                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
                       </a>
                     </th>
                     <th colspan="2">

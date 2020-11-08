@@ -353,12 +353,12 @@ if ('list' === $groupAction) {
   <div class="row">
 
     <div class="col-lg-4" id="group_list">
-      <div class="card shadow mb-4">
+      <div class="card mb-4">
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
               method="post">
-          <div class="card-header">
+          <h5 class="card-header py-3">
             <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['ad_groups'] ?>
-          </div>
+          </h5>
           <div class="card-body">
             <select name="group_list_select" id="group_list_select" class="form-control"
                     size="<?= $groupSelectSize ?>" tabindex="1">
@@ -374,10 +374,10 @@ if ('list' === $groupAction) {
         </form>
       </div>
 
-      <div id="group_data" class="card shadow mb-4">
-        <div class="card-header">
+      <div id="group_data" class="card mb-4">
+        <h5 class="card-header py-3">
             <?= $PMF_LANG['ad_group_details'] ?>
-        </div>
+        </h5>
         <form action="?action=group&group_action=update_data" method="post">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
           <div class="card-body">
@@ -429,13 +429,13 @@ if ('list' === $groupAction) {
       <form id="group_membership" name="group_membership" method="post"
             action="?action=group&amp;group_action=update_members">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0">
-        <div class="card shadow mb-4">
-          <div class="card-header">
+        <div class="card mb-4">
+          <h5 class="card-header py-3">
             <i aria-hidden="true" class="fa fa-user-circle"></i> <?= $PMF_LANG['ad_group_membership'] ?>
-          </div>
+          </h5>
           <div class="card-body">
             <div class="form-group row">
-              <div class="text-right">
+              <div class="text-center">
                 <span class="select_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectSelectAll('group_user_list')">
@@ -475,7 +475,7 @@ if ('list' === $groupAction) {
 
           <div class="card-body">
             <div class="form-group row">
-              <div class="float-right">
+              <div class="text-center">
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
                        href="javascript:selectSelectAll('group_member_list')">
@@ -511,19 +511,20 @@ if ('list' === $groupAction) {
 
     <div class="col-lg-4" id="groupDetails">
 
-      <div id="groupRights" class="card shadow mb-4">
+      <div id="groupRights" class="card mb-4">
         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
-          <div class="card-header" id="user_rights_legend">
+          <h5 class="card-header py-3" id="user_rights_legend">
             <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
-            <span class="float-right">
+
+          </h5>
+
+          <div class="card-body">
+              <div class="text-center mb-3">
               <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                 <?= $PMF_LANG['ad_user_checkall'] ?> / <?= $PMF_LANG['ad_user_uncheckall'] ?>
               </a>
-            </span>
-          </div>
-
-          <div class="card-body">
+            </div>
               <?php foreach ($user->perm->getAllRightsData() as $right): ?>
                 <div class="form-check">
                   <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"

@@ -309,12 +309,12 @@ if ('list' === $sectionAction) {
   <div class="row">
 
     <div class="col-lg-6" id="section_list">
-      <div class="card shadow mb-4">
+      <div class="card mb-4">
         <form id="section_select" name="section_select" action="?action=section&amp;section_action=delete_confirm"
               method="post">
-          <div class="card-header">
-              <?= $PMF_LANG['ad_sections'] ?>
-          </div>
+          <h5 class="card-header py-3">
+              <i class="fa fa-object-group" aria-hidden="true"></i> <?= $PMF_LANG['ad_sections'] ?>
+          </h5>
           <div class="card-body">
             <select name="section_list_select" id="section_list_select" class="form-control"
                     size="<?= $sectionSelectSize ?>" tabindex="1">
@@ -330,10 +330,10 @@ if ('list' === $sectionAction) {
         </form>
       </div>
 
-      <div id="section_data" class="card shadow mb-4">
-        <div class="card-header">
-            <?= $PMF_LANG['ad_section_details'] ?>
-        </div>
+      <div id="section_data" class="card mb-4">
+        <h5 class="card-header py-3">
+          <i class="fa fa-object-group" aria-hidden="true"></i> <?= $PMF_LANG['ad_section_details'] ?>
+        </h5>
         <form action="?action=section&section_action=update_data" method="post">
           <input id="update_section_id" type="hidden" name="section_id" value="0">
           <div class="card-body">
@@ -372,10 +372,10 @@ if ('list' === $sectionAction) {
       <form id="section_membership" name="section_membership" method="post"
             action="?action=section&amp;section_action=update_members">
         <input id="update_member_section_id" type="hidden" name="section_id" value="0">
-        <div class="card shadow mb-4">
-          <div class="card-header">
-              <?= $PMF_LANG['ad_section_membership'] ?>
-          </div>
+        <div class="card mb-4">
+          <h5 class="card-header py-3">
+            <i class="fa fa-object-group" aria-hidden="true"></i> <?= $PMF_LANG['ad_section_membership'] ?>
+          </h5>
           <div class="card-body">
             <div class="form-group row">
               <div class="text-right">

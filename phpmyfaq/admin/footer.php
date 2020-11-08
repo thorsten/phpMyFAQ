@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <!-- End of Main Content -->
 
 <!-- Footer -->
-<footer class="sticky-footer bg-white">
+<footer class="sticky-footer bg-white mt-3">
   <div class="container my-auto">
     <div class="copyright text-center my-auto">
       Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong> |

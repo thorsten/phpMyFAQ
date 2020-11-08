@@ -78,10 +78,10 @@ $faqSession = new Session($faqConfig);
   <div class="container-fluid p-2">
     <div class="card-columns">
 
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
+      <div class="card mb-4">
+        <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
-        </div>
+        </h5>
         <div class="card-body">
           <div class="list-group-flush">
             <a href="?action=viewsessions" class="list-group-item">
@@ -125,20 +125,20 @@ $faqSession = new Session($faqConfig);
       </div>
 
       <?php if ($faqConfig->get('main.enableUserTracking')): ?>
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
+      <div class="card mb-4">
+        <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
-        </div>
+        </h5>
         <div class="card-body">
           <canvas id="pmf-chart-visits" width="400" height="300"></canvas>
         </div>
       </div>
       <?php endif; ?>
 
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
+      <div class="card mb-4">
+        <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
-        </div>
+        </h5>
         <div class="card-body">
           <ul class="list-unstyled">
               <?php
@@ -156,10 +156,10 @@ $faqSession = new Session($faqConfig);
       </div>
 
         <?php if ($user->perm->checkRight($user->getUserId(), 'editconfig')): ?>
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
+          <div class="card mb-4">
+            <h5 class="card-header py-3">
               <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>
-            </div>
+            </h5>
             <div class="card-body">
                 <?php
                 $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
@@ -195,10 +195,10 @@ $faqSession = new Session($faqConfig);
             </div>
           </div>
 
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
+          <div class="card mb-4">
+            <h5 class="card-header py-3">
               <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
-            </div>
+            </h5>
             <div class="card-body">
                 <?php
                 $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
