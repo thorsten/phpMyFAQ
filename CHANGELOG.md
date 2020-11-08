@@ -1561,46 +1561,46 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - minor bug fixes
 
-### Version 0.95 - 2001-09-11
+### phpMyFAQ v0.95 - 2001-09-11
 
 - cleaned MySQL table names
 - documentation
 - phpMyFAQ is HTML 4.0 valid
 - minor bug fixes
 
-### Version 0.90 - 2001-08-23
+### phpMyFAQ v0.90 - 2001-08-23
 
-- added update function for ### Version 0.80
+- added update function for phpMyFAQ v0.80
 - added question _ answer _ system
 - configurable design of the admin area
 - minor bug fixes
 
-### Version 0.87 - 2001-07-20
+### phpMyFAQ v0.87 - 2001-07-20
 
 - top Ten and newest records can be switched off
 - minor bug fixes
 
-### Version 0.86 - 2001-07-10
+### phpMyFAQ v0.86 - 2001-07-10
 
 - uBB parser fixed
 - minor bug fixes
 
-### Version 0.85 - 2001-07-08
+### phpMyFAQ v0.85 - 2001-07-08
 
 - added backup module (Import and Export)
-- uBB-Code support
+- added UBB-Code support
 - records can be exported to XML
 - minor bug fixes
 
-### Version 0.80a - 2001-06-07
+### phpMyFAQ v0.80a - 2001-06-07
 
 - minor bug fixes
 
-### Version 0.80 - 2001-05-30
+### phpMyFAQ v0.80 - 2001-05-30
 
 - added form for questions
 - added Top 5 of the newest articles
-- added support fo attachments in reocrds in admin area
+- added support for attachments for records in admin area
 - added support for adding records in admin area
 - configuration editable in admin area
 - showing number of users online
@@ -1608,28 +1608,28 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - better support in writing comments
 - bugfix: fixed bad output in comments with HTML
 
-### Version 0.70 - 2001-04-27
+### phpMyFAQ v0.70 - 2001-04-27
 
 - installation script
 - better right management in admin area
 - free designs in configuration possible
 - added support for language files (german, english)
-- bugfix: fixed problem when deleting comments
+- bugfix: fixed a problem when deleting comments
 
-### Version 0.666 - 2001-04-10
+### phpMyFAQ v0.666 - 2001-04-10
 
 - added support for categories
 - added voting system
 - added support for deleting comments
 - minor bug fixes
 
-### Version 0.65 - 2001-03-18
+### phpMyFAQ v0.65 - 2001-03-18
 
 - added support for comments
 - added support for FAQ news
 - better search engine
 
-### Version 0.60 - 2001-02-22
+### phpMyFAQ v0.60 - 2001-02-22
 
 - first released version
 
@@ -1644,4 +1644,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2020 phpMyFAQ Team
+© 2001-2020 phpMyFAQ Team
