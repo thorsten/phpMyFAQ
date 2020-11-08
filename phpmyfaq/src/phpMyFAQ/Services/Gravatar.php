@@ -2,7 +2,6 @@
 
 /**
  * Service class for Gravatar support.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -38,15 +37,13 @@ class Gravatar
      * Returns a image or the URL to the image of a Gravatar based off an email
      * address.
      *
-     * @param string $email  Email address
+     * @param string $email Email address
      * @param array  $params Allows multiple keys with values to give more control
-     *
      * @return string
      */
     public function getImage(string $email, array $params = []): string
     {
         $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
-
         $opts = [];
 
         if (isset($params['default'])) {
@@ -65,7 +62,7 @@ class Gravatar
             $params['class'] = '';
         }
 
-        $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode($opts, '&') : false);
+        $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode('&', $opts) : false);
 
         return sprintf(
             '<img src="%s" class="%s" alt="Gravatar">',
@@ -89,7 +86,6 @@ class Gravatar
      * Returns a MD5 hash of an email address.
      *
      * @param string $email Email address
-     *
      * @return string
      */
     public static function getHash(string $email): string
