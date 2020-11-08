@@ -796,7 +796,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = "Die alten Logdateien wurden erfolgrei
 $PMF_LANG['ad_adminlog_delete_failure'] = "Es wurden keine Logs gelöscht, da ein Fehler aufgetreten ist.";
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = "Suchplugin installieren";
 $PMF_LANG['ad_quicklinks'] = "Quicklinks";
 $PMF_LANG['ad_quick_category'] = "Neue Kategorie hinzufügen";
 $PMF_LANG['ad_quick_record'] = "Neue FAQ hinzufügen";

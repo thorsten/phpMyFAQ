@@ -66,11 +66,11 @@ class Encryption
     /**
      * This method is called statically. The parameter encType specifies the
      * of encryption method for the encryption object. Supported
-     * are 'crypt', 'md5', 'sha' 'bcrypt', and 'none'.
+     * are 'crypt', 'hash', 'bcrypt', and 'none'.
      *
-     * $enc = EncryptionTypes::selectEnc('md5');
+     * $enc = EncryptionTypes::selectEnc('hash');
      *
-     * $enc is an instance of the class Enc_Md5.
+     * $enc is an instance of the class EncryptionTypes\Hash.
      *
      * If the given encryption-type is not supported, selectEnc() will return an
      * object without database access and with an error message. See the

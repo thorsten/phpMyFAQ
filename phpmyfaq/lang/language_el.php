@@ -659,7 +659,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Φίλοι και %d Χρήστες';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Διαγραφή ημερολογιακών αρχείων αρχαιότερα 30 ημερών.';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Παλαιότερα ημερλογιακά αρχεία διαγράφηκαν επιτυχώς.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Δεν διαγράφηκε κανένα ημερολογιακό αρχείο: Υπήρξε σφάλμα κατά την λειτουργία.';
-$PMF_LANG['opensearch_plugin_install'] = 'Προστέθηκε μηχανισμός αναζήτησης';
 $PMF_LANG['ad_quicklinks'] = 'Γρήγοροι δεσμοί';
 $PMF_LANG['ad_quick_category'] = 'Δημιουργία κατηγορίας';
 $PMF_LANG['ad_quick_record'] = 'Δημιουργία νέας καταχώρησης';

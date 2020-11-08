@@ -655,7 +655,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Tetamu dan %d Berdaftar';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Padam serta merta log lama selepas 30 hari';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Log lama telah dipadam.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Tiada log dipadam: berlaku ralat.';
-$PMF_LANG['opensearch_plugin_install'] = 'tambah plugin carian';
 $PMF_LANG['ad_quicklinks'] = 'Link pantas';
 $PMF_LANG['ad_quick_category'] = 'Tambah kategori baru';
 $PMF_LANG['ad_quick_record'] = 'Tambah rekod FAQ baru';

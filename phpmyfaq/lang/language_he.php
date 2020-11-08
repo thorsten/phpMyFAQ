@@ -659,7 +659,6 @@ $PMF_LANG['msgUsersOnline'] = '%d אורחים ו %d רשומים';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'מחק רישומים בני יותר מ 30 יום';
 $PMF_LANG['ad_adminlog_delete_success'] = 'רישומים ישנים נמחקו בהצלחה.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'לא נמחקו רישומים: ארעה תקלה בביצוע הבקשה.';
-$PMF_LANG['opensearch_plugin_install'] = 'הוסף הרחבת חיפוש';
 $PMF_LANG['ad_quicklinks'] = 'קישורים מהירים';
 $PMF_LANG['ad_quick_category'] = 'הוסף קטגוריה חדשה';
 $PMF_LANG['ad_quick_record'] = 'הוסף ערך חדש';

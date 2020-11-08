@@ -2,7 +2,6 @@
 
 /**
  * Manages user authentication.
- *
  * Subclasses of Auth implement authentication functionality with different
  * types. The class AuthLdap for example provides authentication functionality
  * LDAP-database access, AuthDb with database access.
@@ -14,7 +13,6 @@
  * Passwords are usually encrypted before stored in a database. For
  * and security, a password encryption method may be chosen. See documentation
  * EncryptionTypes class for further details.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -84,7 +82,7 @@ class Auth
      * This method instantiates a new EncryptionTypes object by calling the static
      * method.
      *
-     * @param  string $encType encryption type
+     * @param string $encType encryption type
      * @return Encryption
      */
     public function selectEncType($encType): Encryption
@@ -96,7 +94,6 @@ class Auth
     /**
      * The string returned by error() contains messages for all errors that
      * during object processing. Messages are separated by new lines.
-     *
      * Error messages are stored in the public array errors.
      *
      * @return string
@@ -119,16 +116,13 @@ class Auth
 
     /**
      * Returns an authentication object with the specified database access.
-     *
      * This method is called statically. The parameter database specifies the
      * of database access for the authentication object.
-     *
      * If the given database-type is not supported, selectAuth() will return an
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
      * @param string $method Authentication access methods
-     *
      * @return Auth
      */
     public function selectAuth($method): Auth
@@ -157,7 +151,6 @@ class Auth
      * Short description of method read_only.
      *
      * @param bool $readOnly boolean flag
-     *
      * @return bool
      */
     public function setReadOnly(bool $readOnly = null): bool
@@ -176,35 +169,10 @@ class Auth
      * Short description of method encrypt.
      *
      * @param string $str string
-     *
      * @return string
      */
     public function encrypt($str): string
     {
         return $this->encContainer->encrypt($str);
-    }
-
-    /**
-     * Checks encryption type for given string. We need this for the MD5
-     * migration of passwords from old phpMyFAQ installations to new ones
-     * with a salt.
-     *
-     * @param string $encryptedPassword Encrypted password
-     * @param string $clearPassword     Clear Password
-     *
-     * @return     bool
-     * @deprecated
-     */
-    public function checkEncryptedPassword($encryptedPassword, $clearPassword): bool
-    {
-        $encTypes = ['crypt', 'md5', 'sha'];
-
-        foreach ($encTypes as $encType) {
-            if ($encryptedPassword === Encryption::selectEnc($encType, $this->config)->encrypt($clearPassword)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

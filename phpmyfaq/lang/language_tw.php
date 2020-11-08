@@ -784,7 +784,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = "舊的紀錄檔案已刪除成功。 
 $PMF_LANG['ad_adminlog_delete_failure'] = "沒有記錄檔被刪除: 執行時發生錯誤。 No logs deleted: an error occurred performing the request.";
 
 // added 2.0.0 - 2006-11-19 by Thorsten 開發者
-$PMF_LANG['opensearch_plugin_install'] = "新增搜尋插件 add search plugin";
 $PMF_LANG['ad_quicklinks'] = "快速連結 Quicklinks";
 $PMF_LANG['ad_quick_category'] = "新增類別 Add new category";
 $PMF_LANG['ad_quick_record'] = "新增 FAQ 記錄 Add new FAQ record";

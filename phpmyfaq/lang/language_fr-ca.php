@@ -712,7 +712,6 @@ $PMF_LANG['ad_record_sticky'] = 'Épingler cette faq :';
 $PMF_LANG['ad_entry_sticky'] = 'Épingler cette faq ';
 $PMF_LANG['stickyRecordsHeader'] = 'FAQs épinglées';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Chercher dans toutes les langues :';
-$PMF_LANG['opensearch_plugin_install'] = 'Ajouter ce moteur de recherche dans votre navigateur Firefox ou Internet Explorer';
 $PMF_LANG['msgMostPopularSearches'] = 'Les recherches les plus populaires sont :';
 $PMF_LANG['msg_related_articles'] = 'Questions - Réponses connexes ';
 $PMF_LANG['msgAllCatArticles'] = 'Enregistrements dans cette catégorie...';

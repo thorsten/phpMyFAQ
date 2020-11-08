@@ -635,7 +635,6 @@ $PMF_LANG['msgUsersOnline'] = '<br>%d Gasten <br>%d Geregistreerd';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Verwijder logs ouder dan 30 dagen';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Oudere logs succesvol verwijderd.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Geen logs verwijderd: er heeft zich een fout voorgedaan tijdens de verwerking';
-$PMF_LANG['opensearch_plugin_install'] = 'voeg zoek-plugin toe';
 $PMF_LANG['ad_quicklinks'] = 'Quick-links';
 $PMF_LANG['ad_quick_category'] = 'Voeg nieuwe categorie toe';
 $PMF_LANG['ad_quick_record'] = 'Nieuwe vraag toevoegen';

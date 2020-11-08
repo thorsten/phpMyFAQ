@@ -796,7 +796,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Los viejos archivos de registro fuero
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No se eliminaron registros porque se produjo un error.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'Instalar el plugin de búsqueda';
 $PMF_LANG['ad_quicklinks'] = 'Enlaces rápidos';
 $PMF_LANG['ad_quick_category'] = 'Añadir nueva categoría';
 $PMF_LANG['ad_quick_record'] = 'Añadir nueva FAQ';

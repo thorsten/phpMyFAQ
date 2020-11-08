@@ -654,7 +654,6 @@ $PMF_LANG['msgUsersOnline'] = '%d g&aelig;ster og %d registrerede';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
-$PMF_LANG['opensearch_plugin_install'] = 'Tilf&oslash;j s&oslash;geplugin';
 $PMF_LANG['ad_quicklinks'] = 'Kviklinks';
 $PMF_LANG['ad_quick_category'] = 'Tilf&oslash;j ny kategori';
 $PMF_LANG['ad_quick_record'] = 'Tilf&oslash;j nyt FAQ-indl&aelig;g';

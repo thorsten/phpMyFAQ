@@ -804,7 +804,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Các nội dung cũ đã được xó
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Không có nội dung nào được xóa: có lỗi xảy ra trong quá trình thực hiện lệnh.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'thêm plugin tìm kiếm';
 $PMF_LANG['ad_quicklinks'] = 'Quicklinks';
 $PMF_LANG['ad_quick_category'] = 'Thêm mục mới';
 $PMF_LANG['ad_quick_record'] = 'Thêm nội dung Câu hỏi thường gặp mới';

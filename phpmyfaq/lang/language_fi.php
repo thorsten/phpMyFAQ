@@ -666,7 +666,6 @@ $PMF_LANG['msgUsersOnline'] = '%d vierailijaa ja %d rekisteröitynyttä';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Poista yli 30 päivää vanhat lokit';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Vanhemmat lokit poistettu.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Virhe lokien poistossa, lokeja ei poistettu.';
-$PMF_LANG['opensearch_plugin_install'] = 'lisää haku -plugin';
 $PMF_LANG['ad_quicklinks'] = 'Pikalinkit';
 $PMF_LANG['ad_quick_category'] = 'Lisää uusi kategoria';
 $PMF_LANG['ad_quick_record'] = 'Lisää uusi kysymys';

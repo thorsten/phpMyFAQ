@@ -782,7 +782,6 @@ $PMF_LANG['msgUsersOnline'] = '%d ضيوف و %d اعضاء مسجلين';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
-$PMF_LANG['opensearch_plugin_install'] = 'add search plugin';
 $PMF_LANG['ad_quicklinks'] = 'Quicklinks';
 $PMF_LANG['ad_quick_category'] = 'اضف تصنيف جديد';
 $PMF_LANG['ad_quick_record'] = 'اضف مدخل جديد';

@@ -644,7 +644,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Convidado(s) e %d Registado(s)';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Apagar imediatamente os <em>logs</em> com mais de 30 dias';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Os <em>logs</em> antigos foram <strong>apagados</strong>.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Não foi apagado nenhum <em>log</em>: ocorreu um erro durante o pedido de execução da instrução.';
-$PMF_LANG['opensearch_plugin_install'] = 'adicionar o <em>plug-in</em> de pesquisa nestas FAQ ao seu <em>browser</em>';
 $PMF_LANG['ad_quicklinks'] = 'Ligações rápidas';
 $PMF_LANG['ad_quick_category'] = 'Adicionar uma nova categoria';
 $PMF_LANG['ad_quick_record'] = 'Adicionar uma nova FAQ';

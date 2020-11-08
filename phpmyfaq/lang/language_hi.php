@@ -809,7 +809,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'पुराने लॉग सफ�
 $PMF_LANG['ad_adminlog_delete_failure'] = 'कोई भी लॉग नहीं मिटाया गया.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'खोज प्लगइन जोडें';
 $PMF_LANG['ad_quicklinks'] = 'झटपट कड़ियाँ';
 $PMF_LANG['ad_quick_category'] = 'नया वर्ग जोडें';
 $PMF_LANG['ad_quick_record'] = 'नया FAQ जोडें';

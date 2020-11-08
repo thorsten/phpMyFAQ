@@ -884,7 +884,6 @@ $PMF_LANG['msgUsersOnline'] = '%d vendég és %d tag';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30 napnál régebbi logok törlése';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Logok törölve';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
-$PMF_LANG['opensearch_plugin_install'] = 'add search plugin';
 $PMF_LANG['ad_quicklinks'] = 'Quicklinks';
 $PMF_LANG['ad_quick_category'] = 'Új kategória';
 $PMF_LANG['ad_quick_record'] = 'Új bejegyzés';

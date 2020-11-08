@@ -632,7 +632,6 @@ $PMF_LANG['msgUsersOnline'] = '%d 游客  %d 注册用户';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '立即删除超过三十天的日志';
 $PMF_LANG['ad_adminlog_delete_success'] = '旧日志已经成功删除。';
 $PMF_LANG['ad_adminlog_delete_failure'] = '日志未删除: 有个错误在执行请求时发生。';
-$PMF_LANG['opensearch_plugin_install'] = '添加搜索插件';
 $PMF_LANG['ad_quicklinks'] = '快速链接';
 $PMF_LANG['ad_quick_category'] = '添加分类';
 $PMF_LANG['ad_quick_record'] = '添加问答';

@@ -656,7 +656,6 @@ $PMF_LANG['msgUsersOnline'] = '%d 人のゲストと %d 人の登録者です';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30日より古いログをすぐに削除する';
 $PMF_LANG['ad_adminlog_delete_success'] = 'より古いログの削除に成功しました。';
 $PMF_LANG['ad_adminlog_delete_failure'] = '削除したログはありません: 要求の実行時にエラーが発生しました。';
-$PMF_LANG['opensearch_plugin_install'] = '検索プラグインの追加';
 $PMF_LANG['ad_quicklinks'] = 'クイックリンク';
 $PMF_LANG['ad_quick_category'] = '新規カテゴリーの追加';
 $PMF_LANG['ad_quick_record'] = 'FAQ の追加';

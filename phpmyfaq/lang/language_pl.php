@@ -488,7 +488,6 @@ $PMF_LANG['msgCaptcha'] = 'Wpisz znaki, które widzisz na obrazku';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Przeszukaj we wszystkich językach:';
 $PMF_LANG['msgSelectCategories'] = 'Szukaj w...';
 $PMF_LANG['msgAllCategories'] = '- wszystkie kategorie -';
-$PMF_LANG['opensearch_plugin_install'] = 'Dodaj plugin do przeglądarki';
 $PMF_LANG['msgMostPopularSearches'] = 'Najczęściej wyszukiwane:';
 $LANG_CONF['records.attachmentsPath'] = array("input", "Ścieżka dla zapisu załączników.<br><small>Ścieżka względna, czyli folder po obcięciu web root.</small>");
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Użyj wbudowanego edytora WYSIWYG (domyślnie włączony)");

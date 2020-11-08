@@ -800,7 +800,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Stariji logovi obrisani.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Pojavila se greka.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'Dodaj ovu pretragu u Firefox';
 $PMF_LANG['ad_quicklinks'] = 'BrziLinkovi';
 $PMF_LANG['ad_quick_category'] = 'Dodaj novu kategoriju';
 $PMF_LANG['ad_quick_record'] = 'Dodaj novi FAQ unos';

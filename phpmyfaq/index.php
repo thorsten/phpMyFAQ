@@ -590,7 +590,6 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'allCategories' => '<a class="nav-link" href="./showcat.html">' . $PMF_LANG['msgShowAllCategories'] . '</a>',
         'faqOverview' => '<a href="./overview.html">' . $PMF_LANG['faqOverview'] . '</a>',
         'showSitemap' => '<a href="./sitemap/A/' . $faqLangCode . '.html">' . $PMF_LANG['msgSitemap'] . '</a>',
-        'opensearch' => './opensearch.xml',
         'msgUserRemoval' => '<a href="./request-removal.html">' . $PMF_LANG['msgUserRemoval'] . '</a>'
     ];
 } else {
@@ -605,7 +604,6 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . $PMF_LANG['faqOverview'] . '</a>',
         'backToHome' => '<a href="index.php?' . $sids . '">' . $PMF_LANG['msgHome'] . '</a>',
         'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' . $PMF_LANG['msgSitemap'] . '</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig) . 'opensearch.php',
         'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . $PMF_LANG['msgUserRemoval'] . '</a>',
     ];
 }

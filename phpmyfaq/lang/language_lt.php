@@ -814,7 +814,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Senesni žurnalo įrašai sėkmingai 
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Žurnalo įrašai nepašalinti: įvyko klaida vykdant užklausą.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'pridėti paieškos papildinį';
 $PMF_LANG['ad_quicklinks'] = 'Spartieji saitai';
 $PMF_LANG['ad_quick_category'] = 'Pridėti naują grupę';
 $PMF_LANG['ad_quick_record'] = 'Pridėti naują DUK įrašą';

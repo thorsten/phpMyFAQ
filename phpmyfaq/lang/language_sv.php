@@ -651,7 +651,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Gäster och %d Registrerade';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Radera loggar äldre än 30 dagar direkt';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Äldre loggar raderade.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Inga loggar raderade: ett fel uppstod under operationen.';
-$PMF_LANG['opensearch_plugin_install'] = 'lägg till sökmodul';
 $PMF_LANG['ad_quicklinks'] = 'Snabblänkar';
 $PMF_LANG['ad_quick_category'] = 'Lägg till ny kategori';
 $PMF_LANG['ad_quick_record'] = 'Lägg till ny FAQ-post';

@@ -802,7 +802,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'tambahkan plugin pencarian';
 $PMF_LANG['ad_quicklinks'] = 'Quicklink';
 $PMF_LANG['ad_quick_category'] = 'Tambah kategori baru';
 $PMF_LANG['ad_quick_record'] = 'Tambah materi baru';

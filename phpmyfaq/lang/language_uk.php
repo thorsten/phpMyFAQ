@@ -626,8 +626,7 @@ $PMF_LANG["ad_entry_tags"] = "Tags";
 $PMF_LANG["msg_tags"] = "Tags"; 
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG["opensearch_plugin_install"] = "Відмінити"; 
-$PMF_LANG["ad_quicklinks"] = "Quicklinks"; 
+$PMF_LANG["ad_quicklinks"] = "Quicklinks";
 $PMF_LANG["ad_qd_quick_category"] = "Додати нову категорію"; 
 $PMF_LANG["ad_quick_record"] = "Додати новий запис в FAQ"; 
 $PMF_LANG["ad_quick_user"] = "Додати нового користувача"; 

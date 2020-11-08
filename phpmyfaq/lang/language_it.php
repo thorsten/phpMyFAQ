@@ -658,7 +658,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Ospiti e %d Registrati';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati più vecchi di 30 giorni';
 $PMF_LANG['ad_adminlog_delete_success'] = 'I dati sono stati cancellati.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si è verificato un errore.';
-$PMF_LANG['opensearch_plugin_install'] = 'Aggiungi il plugin di ricerca';
 $PMF_LANG['ad_quicklinks'] = 'Links veloci';
 $PMF_LANG['ad_quick_category'] = 'Aggiungi una nuova categoria';
 $PMF_LANG['ad_quick_record'] = 'Aggiungi una nuova FAQ';

@@ -802,7 +802,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Staré prihlásenia úspešne vymazan
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Vyskytla sa chyba. Prihlásenia nevymazané.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'pridať vyhľadávací plugin';
 $PMF_LANG['ad_quicklinks'] = 'Quicklinks';
 $PMF_LANG['ad_quick_category'] = 'Pridať novú kategóriu';
 $PMF_LANG['ad_quick_record'] = 'Pridať nový FAQ záznam';

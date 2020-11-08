@@ -106,9 +106,7 @@ define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
  *
  * - hash (default)
  * - bcrypt
- * - sha1 (not recommended)
  * - crypt (not recommended)
- * - md5 (not recommended default before phpMyFAQ 2.8)
  *
  * WARNING: DO NOT CHANGE THIS VALUE AFTER YOUR INITIAL INSTALLATION!
  * OTHERWISE ALL YOUR REGISTERED USERS HAVE TO REQUEST A NEW PASSWORD.

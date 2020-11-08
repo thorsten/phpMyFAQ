@@ -2,7 +2,6 @@
 
 /**
  * Manages user authentication with databases.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -53,9 +52,9 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * Adds a new user account to the faquserlogin table. Returns true on
      * success, otherwise false. Error messages are added to the array errors.
      *
-     * @param  string $login
-     * @param  string $pass
-     * @param  string $domain
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
      * @return bool
      */
     public function add($login, $pass, $domain = ''): bool
@@ -67,12 +66,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         }
 
         $add = sprintf(
-            "
-            INSERT INTO
-                %sfaquserlogin
-            (login, pass, domain)
-                VALUES
-            ('%s', '%s', '%s')",
+            "INSERT INTO %sfaquserlogin (login, pass, domain) VALUES ('%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->db->escape($login),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
@@ -100,21 +94,14 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * Checks the number of entries of given login name.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
-     *
+     * @param string     $login Loginname
+     * @param array|null $optionalData Optional data
      * @return int
      */
     public function checkLogin($login, array $optionalData = null): int
     {
         $check = sprintf(
-            "
-            SELECT
-                login
-            FROM
-                %sfaquserlogin
-            WHERE
-                login = '%s'",
+            "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->db->escape($login)
         );
@@ -133,23 +120,16 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * Deletes the user account specified by login.
-     *
      * Returns true on success, otherwise false.
-     *
      * Error messages are added to the array errors.
      *
      * @param string $login Loginname
-     *
      * @return bool
      */
     public function delete($login): bool
     {
         $delete = sprintf(
-            "
-            DELETE FROM
-                %sfaquserlogin
-            WHERE
-                login = '%s'",
+            " DELETE FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->db->escape($login)
         );
@@ -173,27 +153,19 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * checks the password for the given user account.
-     *
      * Returns true if the given password for the user account specified by
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login        Loginname
-     * @param string $password     Password
-     * @param array  $optionalData Optional data
-     *
+     * @param string     $login Loginname
+     * @param string     $password Password
+     * @param array|null $optionalData Optional data
      * @return bool
      */
     public function checkPassword($login, $password, array $optionalData = null): bool
     {
         $check = sprintf(
-            "
-            SELECT
-                login, pass
-            FROM
-                %sfaquserlogin
-            WHERE
-                login = '%s'",
+            "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->db->escape($login)
         );
@@ -221,19 +193,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->db->fetchArray($check)) {
-            // Check password against old one
-            if ($this->config->get('security.forcePasswordUpdate')) {
-                if (
-                    $this->checkEncryptedPassword($user['pass'], $password)
-                    && $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']
-                ) {
-                    return $this->changePassword($login, $password);
-                }
-            }
-
             if ($user['pass'] === $this->encContainer->setSalt($user['login'])->encrypt($password)) {
                 return true;
-                break;
             }
         }
         $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
@@ -243,14 +204,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * Changes the password for the account specified by login.
-     *
      * Returns true on success, otherwise false.
-     *
      * Error messages are added to the array errors.
      *
      * @param string $login Loginname
-     * @param string $pass  Password
-     *
+     * @param string $pass Password
      * @return bool
      */
     public function changePassword($login, $pass): bool

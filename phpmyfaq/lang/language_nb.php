@@ -633,7 +633,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Gjester og %d Registrerte';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Slett logger umiddelbart om de er over 30 dager';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Eldre logger er nå slettet';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Ingen logger slettet: en feil oppsto under forespørselen.';
-$PMF_LANG['opensearch_plugin_install'] = 'Legg til søketillegg';
 $PMF_LANG['ad_quicklinks'] = 'Hurtiglinker';
 $PMF_LANG['ad_quick_category'] = 'Legg til ny kategori';
 $PMF_LANG['ad_quick_record'] = 'Legg til ny FAQ-oppføring';

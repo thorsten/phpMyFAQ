@@ -714,7 +714,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Vizitatori si %d Inregistrati';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Sterge imediat jurnalele mai vechi de 30 de zile';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Jurnalele vechi sterse cu succes.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Nici un jurnal sters: a aparut o eroare in timpul cererii.';
-$PMF_LANG['opensearch_plugin_install'] = 'adauga plugin de cautare';
 $PMF_LANG['ad_quicklinks'] = 'Linkuri rapide';
 $PMF_LANG['ad_quick_category'] = 'Adauga categorie noua';
 $PMF_LANG['ad_quick_record'] = 'Adauga intrebare(FAQ) noua ';

@@ -671,7 +671,6 @@ $PMF_LANG['msgUsersOnline'] = '%d hostů a %d registrovaných';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Trvale smazat logy starší 30 dnů';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Starší logy úspěšně smazány.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Žádné logy nebyli smazány: vyskytla se chyba během zpracování.';
-$PMF_LANG['opensearch_plugin_install'] = 'přidat vyhledávací plugin';
 $PMF_LANG['ad_quicklinks'] = 'Rychlé odkazy';
 $PMF_LANG['ad_quick_category'] = 'Přidat novou podkategorii';
 $PMF_LANG['ad_quick_record'] = 'Přidat nový záznam';

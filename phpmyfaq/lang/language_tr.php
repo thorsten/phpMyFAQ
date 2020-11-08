@@ -798,7 +798,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = "Eski günlük kayıtları başarıyla
 $PMF_LANG['ad_adminlog_delete_failure'] = "Günlük kayıtları silinirken bir hata oluştu.";
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = "arama modülü ekle";
 $PMF_LANG['ad_quicklinks'] = "Hızlı linkller";
 $PMF_LANG['ad_quick_category'] = "Yeni kategori ekle";
 $PMF_LANG['ad_quick_record'] = "Yeni soru girdisi ekle";

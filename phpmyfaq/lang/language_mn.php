@@ -780,7 +780,6 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Хуучин логууд устга�
 $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'Хайлтын плагин нэмэх';
 $PMF_LANG['ad_quicklinks'] = 'Шуурхай холбоосууд';
 $PMF_LANG['ad_quick_category'] = 'Шинэ ангилал нэмэх';
 $PMF_LANG['ad_quick_record'] = 'Шинэ FAQ бичлэг нэмэх';

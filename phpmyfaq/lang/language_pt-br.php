@@ -643,7 +643,6 @@ $PMF_LANG['msgUsersOnline'] = '%d Convidados e %d Registrados';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Apagar os registros após 30 dias';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Registros antigos excluídos com sucesso.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Não há registros excluídos: ocorreu um erro ao executar a operação.';
-$PMF_LANG['opensearch_plugin_install'] = 'Adicionar plugin de pesquisa';
 $PMF_LANG['ad_quicklinks'] = 'Links rápidos';
 $PMF_LANG['ad_quick_category'] = 'Adicionar nova categoria';
 $PMF_LANG['ad_quick_record'] = 'Adicionar nova FAQ';

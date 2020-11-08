@@ -3,7 +3,6 @@
 /**
  * Manages user authentication with Apache's SSO authentication, e.g. mod_sspi
  * or mod_auth_kerb.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -32,8 +31,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      * Always returns true because of SSO.
      *
      * @param string $login Loginname
-     * @param string $pass  Password
-     *
+     * @param string $pass Password
      * @return bool
      */
     public function changePassword($login, $pass): bool
@@ -45,7 +43,6 @@ class AuthSso extends Auth implements AuthDriverInterface
      * Always returns true because of SSO.
      *
      * @param string $login Loginname
-     *
      * @return bool
      */
     public function delete($login): bool
@@ -56,10 +53,9 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Checks if the username of the remote user is equal to the login name.
      *
-     * @param string $login        Loginname
-     * @param string $pass         Password
-     * @param array  $optionalData Optional data
-     *
+     * @param string     $login Loginname
+     * @param string     $pass Password
+     * @param array|null $optionalData Optional data
      * @return bool
      */
     public function checkPassword($login, $pass, array $optionalData = null): bool
@@ -92,9 +88,9 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Always returns true because of SSO.
      *
-     * @param  string $login
-     * @param  string $pass
-     * @param  string $domain
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
      * @return bool
      * @throws
      */
@@ -129,9 +125,8 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Returns 1, if $_SERVER['REMOTE_USER'] is set.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
-     *
+     * @param string     $login Loginname
+     * @param array|null $optionalData Optional data
      * @return int
      */
     public function checkLogin($login, array $optionalData = null): int
