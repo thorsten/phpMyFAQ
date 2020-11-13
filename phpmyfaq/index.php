@@ -680,7 +680,6 @@ if (DEBUG) {
         'index',
         'debugMode',
         [
-            'debugExceptions' => implode('<br>', $pmfExceptions),
             'debugQueries' => $faqConfig->getDb()->log(),
         ]
     );

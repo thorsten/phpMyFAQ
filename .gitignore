@@ -25,6 +25,7 @@ phpmyfaq/config/elasticsearch.php
 phpmyfaq/config/elasticsearch.php.bak
 phpmyfaq/config/index.html
 phpmyfaq/data/*
+phpmyfaq/logs/*
 phpmyfaq/images/*
 phpmyfaq/attachments/*
 
