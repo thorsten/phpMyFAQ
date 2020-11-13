@@ -5,11 +5,11 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 
 ## Supported Versions
 
-| Version     | Supported          |
-| ----------- | ------------------ |
-| 3.1.x-alpha | :white_check_mark: |
-| 3.0.x       | :white_check_mark: |
-| < 2.9       | :x:                |
+| Version    | Supported          |
+| ---------- | ------------------ |
+| 3.1.x-beta | :white_check_mark: |
+| 3.0.x      | :white_check_mark: |
+| < 2.9      | :x:                |
 
 ## Reporting a Vulnerability
 
