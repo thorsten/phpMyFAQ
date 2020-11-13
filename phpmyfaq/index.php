@@ -220,10 +220,10 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sessionId = null;
 $sidGet = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 // Note: do not track internal calls
 $internal = false;
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -249,10 +249,10 @@ if (!$internal) {
 //
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
-    if (isset($sessionId)) {
-        $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId);
+    if ($faqSession->getCurrentSessionId() > 0) {
+        $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sessionId, $faqLangCode);
+            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie)) {
@@ -261,7 +261,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
             }
         }
     }
-} elseif (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId,
+} elseif (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId(),
     $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
     $sids = sprintf('lang=%s&amp;', $faqLangCode);
 }
@@ -286,15 +286,15 @@ $searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED)
 // Create a new FAQ object
 //
 $faq = new Faq($faqConfig);
-$faq->setUser($currentUser);
-$faq->setGroups($currentGroups);
+$faq->setUser($currentUser)
+    ->setGroups($currentGroups);
 
 //
 // Create a new Category object
 //
 $category = new Category($faqConfig, $currentGroups, true);
-$category->setUser($currentUser);
-$category->setGroups($currentGroups);
+$category->setUser($currentUser)
+    ->setGroups($currentGroups);
 
 //
 // Create a new Tags object
@@ -415,7 +415,7 @@ if (!isset($allowedVariables[$action])) {
 if ($action !== 'main') {
     $includeTemplate = $action . '.html';
     $includePhp = $action . '.php';
-    $renderUri = '?sid=' . $sessionId;
+    $renderUri = '?sid=' . $faqSession->getCurrentSessionId();
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
@@ -425,7 +425,7 @@ if ($action !== 'main') {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
     }
-    $renderUri = '?sid=' . $sessionId;
+    $renderUri = '?sid=' . $faqSession->getCurrentSessionId();
 }
 
 //

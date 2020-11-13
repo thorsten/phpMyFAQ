@@ -146,23 +146,25 @@ class Category
 
     /**
      * @param array $groups
+     * @return Category
      */
-    public function setGroups(array $groups)
+    public function setGroups(array $groups): Category
     {
         if (0 === count($groups)) {
             $groups = [-1];
         }
         $this->groups = $groups;
+        return $this;
     }
 
     /**
-     * Sets language.
-     *
      * @param string $language
+     * @return Category
      */
-    public function setLanguage($language)
+    public function setLanguage($language): Category
     {
         $this->language = $language;
+        return $this;
     }
 
     /**
@@ -281,10 +283,12 @@ class Category
 
     /**
      * @param int $userId
+     * @return Category
      */
-    public function setUser($userId = -1)
+    public function setUser($userId = -1): Category
     {
         $this->user = $userId;
+        return $this;
     }
 
     /**

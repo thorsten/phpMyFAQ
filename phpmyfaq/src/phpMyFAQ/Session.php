@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\User\CurrentUser;
+
 /**
  * Class Session
  *
@@ -30,10 +32,35 @@ class Session
     /** @var string Name of the session cookie */
     public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $config;
+
+    /** @var int */
+    private $currentSessionId;
+
+    /** @var CurrentUser*/
+    private $currentUser;
+
+    /** @var string[] List of bots we don't track */
+    private $botIgnoreList = [
+        'nustcrape',
+        'webpost',
+        'GoogleBot',
+        'msnbot',
+        'crawler',
+        'scooter',
+        'bravobrian',
+        'archiver',
+        'w3c',
+        'control',
+        'wget',
+        'bot',
+        'spider',
+        'Yahoo! Slurp',
+        'htdig',
+        'gsa-crawler',
+        'AirControl Agent v1.0'
+    ];
 
     /**
      * Constructor.
@@ -43,6 +70,37 @@ class Session
     public function __construct(Configuration $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * Returns the current session ID.
+     * @return int
+     */
+    public function getCurrentSessionId(): int
+    {
+        return $this->currentSessionId;
+    }
+
+    /**
+     * Sets the current session ID.
+     * @param int $currentSessionId
+     * @return Session
+     */
+    public function setCurrentSessionId(int $currentSessionId): Session
+    {
+        $this->currentSessionId = $currentSessionId;
+        return $this;
+    }
+
+    /**
+     * Sets current User object
+     * @param CurrentUser $currentUser
+     * @return Session
+     */
+    public function setCurrentUser(CurrentUser $currentUser): Session
+    {
+        $this->currentUser = $currentUser;
+        return $this;
     }
 
     /**
@@ -161,8 +219,6 @@ class Session
      */
     public function checkSessionId(int $sessionIdToCheck, string $ip)
     {
-        global $sessionId, $user;
-
         $query = sprintf(
             "SELECT sid FROM %sfaqsessions WHERE sid = %d AND ip = '%s' AND time > %d",
             Database::getTablePrefix(),
@@ -176,13 +232,13 @@ class Session
             $this->userTracking('old_session', $sessionIdToCheck);
         } else {
             // Update global session id
-            $sessionId = $sessionIdToCheck;
+            $this->setCurrentSessionId($sessionIdToCheck);
             // Update db tracking
             $query = sprintf(
                 "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
                 Database::getTablePrefix(),
                 $_SERVER['REQUEST_TIME'],
-                ($user ? $user->getUserId() : '-1'),
+                $this->currentUser->getUserId(),
                 $sessionIdToCheck,
                 $ip
             );
@@ -200,23 +256,21 @@ class Session
      */
     public function userTracking(string $action, $data = null)
     {
-        global $sessionId, $user, $botIgnoreList;
-
         if ($this->config->get('main.enableUserTracking')) {
             $bots = 0;
             $banned = false;
             $agent = $_SERVER['HTTP_USER_AGENT'];
-            $sessionId = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $this->currentSessionId = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
             $cookieId = Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 
             if (!is_null($cookieId)) {
-                $sessionId = $cookieId;
+                $this->setCurrentSessionId($cookieId);
             }
             if ($action == 'old_session') {
-                $sessionId = null;
+                $this->setCurrentSessionId(null);
             }
 
-            foreach ($botIgnoreList as $bot) {
+            foreach ($this->botIgnoreList as $bot) {
                 if ((bool)Strings::strstr($agent, $bot)) {
                     ++$bots;
                 }
@@ -239,25 +293,29 @@ class Session
             }
 
             if (0 === $bots && false === $banned) {
-                if (!isset($sessionId)) {
-                    $sessionId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqsessions', 'sid');
+                if (!isset($this->currentSessionId)) {
+                    $this->currentSessionId = $this->config->getDb()->nextId(
+                        Database::getTablePrefix() . 'faqsessions',
+                        'sid'
+                    );
                     // Sanity check: force the session cookie to contains the current $sid
-                    if (!is_null($cookieId) && (!$cookieId != $sessionId)) {
-                        self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sessionId);
+                    if (!is_null($cookieId) && (!$cookieId != $this->getCurrentSessionId())) {
+                        self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $this->getCurrentSessionId());
                     }
 
                     $query = sprintf(
                         "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
                         Database::getTablePrefix(),
-                        $sessionId,
-                        ($user ? $user->getUserId() : -1),
+                        $this->getCurrentSessionId(),
+                        $this->currentUser->getUserId(),
                         $remoteAddress,
                         $_SERVER['REQUEST_TIME']
                     );
+
                     $this->config->getDb()->query($query);
                 }
 
-                $data = $sessionId . ';' .
+                $data = $this->getCurrentSessionId() . ';' .
                     str_replace(';', ',', $action) . ';' .
                     $data . ';' .
                     $remoteAddress . ';' .
@@ -265,6 +323,7 @@ class Session
                     str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' .
                     str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
                     $_SERVER['REQUEST_TIME'] . ";\n";
+
                 $file = PMF_ROOT_DIR . '/data/tracking' . date('dmY');
 
                 if (!is_file($file)) {
@@ -285,12 +344,12 @@ class Session
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
      * @param string $name Cookie name
-     * @param string|null $sessionId Session ID
+     * @param int|null $sessionId Session ID
      * @param int $timeout Cookie timeout
      *
      * @return bool
      */
-    public function setCookie(string $name, $sessionId = '', int $timeout = PMF_SESSION_EXPIRED_TIME): bool
+    public function setCookie(string $name, $sessionId, int $timeout = PMF_SESSION_EXPIRED_TIME): bool
     {
         $protocol = 'http';
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {

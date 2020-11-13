@@ -136,30 +136,6 @@ define('PMF_ENCRYPTION_TYPE', 'hash');
  */
 $denyUploadExts = [];
 
-/*
- * Bots ignore list
- *
- * @var array
- */
-$botIgnoreList = [
-    'nustcrape',
-    'webpost',
-    'GoogleBot',
-    'msnbot',
-    'crawler',
-    'scooter',
-    'bravobrian',
-    'archiver',
-    'w3c',
-    'control',
-    'wget',
-    'bot',
-    'spider',
-    'Yahoo! Slurp',
-    'htdig',
-    'gsa-crawler',
-];
-
 /****************************************************************************
  *                  DO NOT CHANGE ANYTHING BELOW THIS LINE!                 *
  ****************************************************************************/

@@ -132,18 +132,22 @@ class Faq
 
     /**
      * @param int $userId
+     * @return Faq
      */
-    public function setUser($userId = -1)
+    public function setUser($userId = -1): Faq
     {
         $this->user = $userId;
+        return $this;
     }
 
     /**
      * @param array $groups
+     * @return Faq
      */
-    public function setGroups(array $groups)
+    public function setGroups(array $groups): Faq
     {
         $this->groups = $groups;
+        return $this;
     }
 
     /**
@@ -698,9 +702,9 @@ class Faq
     /**
      * Returns an array with all data from a FAQ record.
      *
-     * @param int  $faqId         FAQ ID
-     * @param int  $faqRevisionId Revision ID
-     * @param bool $isAdmin       Must be true if it is called by an admin/author context
+     * @param int      $faqId FAQ ID
+     * @param int|null $faqRevisionId Revision ID
+     * @param bool     $isAdmin Must be true if it is called by an admin/author context
      */
     public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false)
     {
@@ -781,9 +785,8 @@ class Faq
      *
      * @param int    $faqId
      * @param string $faqLanguage
-     * @param int    $faqRevisionId
+     * @param null   $faqRevisionId
      * @param bool   $isAdmin
-     *
      * @return mixed
      */
     public function getRecordResult($faqId, $faqLanguage, $faqRevisionId = null, $isAdmin = false)
@@ -1709,8 +1712,7 @@ class Faq
      * Returns the number of activated and not expired records, optionally
      * not limited to the current language.
      *
-     * @param string $language Language
-     *
+     * @param null $language Language
      * @return int
      */
     public function getNumberOfRecords($language = null)
@@ -1753,7 +1755,7 @@ class Faq
      */
     public function getTopTen($type = 'visits')
     {
-        if ('visits' == $type) {
+        if ('visits' === $type) {
             $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->config->getLanguage()->getLanguage());
         } else {
             $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, $this->config->getLanguage()->getLanguage());
@@ -1787,12 +1789,11 @@ class Faq
     }
 
     /**
-     * This function generates the Top Ten data with the mosted viewed records.
+     * This function generates the Top Ten data with the most viewed records.
      *
-     * @param int    $count      Number of records
-     * @param int    $categoryId Entity ID
-     * @param string $language   Language
-     *
+     * @param int  $count Number of records
+     * @param int  $categoryId Entity ID
+     * @param null $language Language
      * @return array
      */
     public function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
@@ -1801,7 +1802,7 @@ class Faq
 
         $now = date('YmdHis');
         $query =
-            '            SELECT
+            'SELECT
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS question,
