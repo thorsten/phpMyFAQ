@@ -2,7 +2,6 @@
 
 /**
  * The Installer class installs phpMyFAQ. Classy.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -520,7 +519,6 @@ class Installer
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
      *
      * @param string $databaseType
-     *
      * @return void
      */
     public function checkPreUpgrade(string $databaseType)
@@ -549,8 +547,8 @@ class Installer
             }
             if (!$databaseFound) {
                 echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.<br>' .
-                    'We found ' . ucfirst($database) . '<br>' .
-                    'Please use the change the database type in <code>config/database.php</code>.</p>';
+                    'We found ' . ucfirst($database) .
+                    '<br>' . 'Please use the change the database type in <code>config/database.php</code>.</p>';
                 System::renderFooter();
             }
         }
@@ -561,7 +559,7 @@ class Installer
      */
     public function checkFilesystemPermissions()
     {
-        $instanceSetup = new setUp();
+        $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
         $dirs = ['/attachments', '/config', '/data', '/images'];
@@ -593,10 +591,6 @@ class Installer
      */
     public function checkNoncriticalSettings()
     {
-        if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-            echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ ' .
-                ' tries to write in some directories.</p>';
-        }
         if (!extension_loaded('gd')) {
             echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please ' .
                 'enable GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
@@ -640,6 +634,7 @@ class Installer
 
     /**
      * Starts the installation.
+     *
      * @param array|null $setup
      * @throws Exception
      */
@@ -676,7 +671,7 @@ class Installer
         }
 
         $dbSetup['dbPort'] = Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
-        if (is_null($dbSetup['dbPort']) && ! System::isSqlite($dbSetup['dbType'])) {
+        if (is_null($dbSetup['dbPort']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
             System::renderFooter(true);
         }
@@ -827,9 +822,7 @@ class Installer
 
             // check LDAP connection
             $esHosts = array_values($esHosts['elasticsearch_server']);
-            $esClient = ClientBuilder::create()
-                ->setHosts($esHosts)
-                ->build();
+            $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
 
             if (!$esClient) {
                 echo '<p class="alert alert-danger"><strong>Elasticsearch Error:</strong> No connection.</p>';
@@ -1028,9 +1021,7 @@ class Installer
 
             $configuration->setElasticsearchConfig($PMF_ES);
 
-            $esClient = ClientBuilder::create()
-                ->setHosts($PMF_ES['hosts'])
-                ->build();
+            $esClient = ClientBuilder::create()->setHosts($PMF_ES['hosts'])->build();
 
             $configuration->setElasticsearch($esClient);
 

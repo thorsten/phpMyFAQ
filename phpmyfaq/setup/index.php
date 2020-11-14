@@ -58,7 +58,6 @@ $loader->register();
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>phpMyFAQ <?= System::getVersion() ?> Setup</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
@@ -337,7 +336,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-sm-3 col-form-label"for="elasticsearch_index">Index name:</label>
+                  <label class="col-sm-3 col-form-label" for="elasticsearch_index">Index name:</label>
                   <div class="col-sm-9">
                     <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
                     <small class="form-text text-muted">Please enter your Elasticsearch index name.</small>
