@@ -2,7 +2,6 @@
 
 /**
  * Main update script.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -39,7 +38,7 @@ $step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
 $query = [];
 
-if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     header('Location: index.php');
     exit();
 }
@@ -47,20 +46,20 @@ if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
 require PMF_ROOT_DIR . '/config/database.php';
 
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
-  <meta name="viewport" content="width=device-width;">
-  <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
-  <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
-  <link rel="stylesheet" href="../assets/dist/styles.css">
-  <script src="../assets/dist/vendors.js"></script>
-  <script src="../assets/dist/phpmyfaq.js"></script>
-  <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
-</head>
+  <!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
+    <meta name="viewport" content="width=device-width;">
+    <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
+    <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
+    <link rel="stylesheet" href="../assets/dist/styles.css">
+    <script src="../assets/dist/vendors.js"></script>
+    <script src="../assets/dist/phpmyfaq.js"></script>
+    <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
+  </head>
 <body>
 
   <header>
@@ -103,7 +102,7 @@ require PMF_ROOT_DIR . '/config/database.php';
     </div>
   </div>
 
-  <div class="container">
+  <div class="container mb-3">
 <?php
 
 $version = $faqConfig->getVersion();
@@ -114,100 +113,97 @@ $installer->checkAvailableDatabaseTables($db);
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) { ?>
 
-    <form action="update.php?step=2" method="post">
-      <input name="version" type="hidden" value="<?= $version ?>">
-      <div class="row">
-        <div class="col">
-          <ul class="nav nav-pills nav-fill">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">
-                <h4 class="list-group-item-heading">Step 1 of 3</h4>
-                <p class="list-group-item-text">Update information</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <h4 class="list-group-item-heading">Step 2 of 3</h4>
-                <p class="list-group-item-text">File backups</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <h4 class="list-group-item-heading">Step 3 of 3</h4>
-                <p class="list-group-item-text">Database updates</p>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+  <form action="update.php?step=2" method="post">
+    <input name="version" type="hidden" value="<?= $version ?>">
 
-      <div class="row" id="step1">
-        <div class="col">
-          <div class="alert alert-danger text-center mt-2" role="alert">
-            <strong>
-              <i aria-hidden="true" class="fa fa-info-circle"></i>
-              Please create a full backup of your database, your templates,
-              attachments and uploaded images before running this update.
-            </strong>
-          </div>
+    <div class="pmf-setup-stepwizard">
+      <div class="pmf-setup-stepwizard-row setup-panel">
+        <div class="pmf-setup-stepwizard-step">
+          <a href="#step-1" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">1</a>
+          <p>Update information</p>
+        </div>
+        <div class="pmf-setup-stepwizard-step">
+          <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+             disabled="disabled">
+            2
+          </a>
+          <p>File backups</p>
+        </div>
+        <div class="pmf-setup-stepwizard-step">
+          <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+             disabled="disabled">
+            3
+          </a>
+          <p>Database updates</p>
         </div>
       </div>
+    </div>
 
-      <div class="row">
-        <div class="col">
-          <p>This update script will work <strong>only</strong> for the following versions:</p>
-          <ul>
-            <li>phpMyFAQ 2.9.x</li>
-            <li>phpMyFAQ 3.0.x</li>
-          </ul>
-        </div>
-        <div class="col">
-          <p>This update script <strong>will not</strong> work for the following versions:</p>
-          <ul>
-            <li>phpMyFAQ 0.x</li>
-            <li>phpMyFAQ 1.x</li>
-            <li>phpMyFAQ 2.0.x</li>
-            <li>phpMyFAQ 2.5.x</li>
-            <li>phpMyFAQ 2.6.x</li>
-            <li>phpMyFAQ 2.7.x</li>
-            <li>phpMyFAQ 2.8.x</li>
-          </ul>
+    <div class="row" id="step1">
+      <div class="col">
+        <div class="alert alert-danger text-center mt-2" role="alert">
+          <strong>
+            <i aria-hidden="true" class="fa fa-info-circle"></i>
+            Please create a full backup of your database, your templates,
+            attachments and uploaded images before running this update.
+          </strong>
         </div>
       </div>
+    </div>
 
-      <div class="row">
-        <div class="col">
-            <?php
-                // We only support updates from 2.9+
-            if (version_compare($version, '2.9.0', '>')) {
-                printf(
-                    '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
-                    $version,
-                    '<i aria-hidden="true" class="fa fa-check"></i>'
-                );
-            } else {
-                printf(
-                    '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
-                    $version
-                );
-                echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
-            }
-            if ('hash' !== PMF_ENCRYPTION_TYPE) {
-                printf(
-                    '<div class="alert alert-info text-center" role="alert">Your passwords are currently encoded with a %s() method.</div>',
-                    PMF_ENCRYPTION_TYPE
-                );
-            }
-            ?>
-          <p class="text-center">
-            <button class="btn btn-primary btn-lg" type="submit">
-              Go to step 2 of 3
-            </button>
-          </p>
-        </div>
+    <div class="row">
+      <div class="col">
+        <p>This update script will work <strong>only</strong> for the following versions:</p>
+        <ul>
+          <li>phpMyFAQ 2.9.x</li>
+          <li>phpMyFAQ 3.0.x</li>
+        </ul>
       </div>
-    </form>
-<?php
+      <div class="col">
+        <p>This update script <strong>will not</strong> work for the following versions:</p>
+        <ul>
+          <li>phpMyFAQ 0.x</li>
+          <li>phpMyFAQ 1.x</li>
+          <li>phpMyFAQ 2.0.x</li>
+          <li>phpMyFAQ 2.5.x</li>
+          <li>phpMyFAQ 2.6.x</li>
+          <li>phpMyFAQ 2.7.x</li>
+          <li>phpMyFAQ 2.8.x</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+          <?php
+          // We only support updates from 2.9+
+          if (version_compare($version, '2.9.0', '>')) {
+              printf(
+                  '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
+                  $version,
+                  '<i aria-hidden="true" class="fa fa-check"></i>'
+              );
+          } else {
+              printf(
+                  '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
+                  $version
+              );
+              echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
+          }
+          if ('hash' !== PMF_ENCRYPTION_TYPE) {
+              printf(
+                  '<div class="alert alert-info text-center" role="alert">Your passwords are currently encoded with a %s() method.</div>',
+                  PMF_ENCRYPTION_TYPE
+              );
+          }
+          ?>
+        <p>
+            <button class="btn btn-primary btn-next btn-lg pull-right" type="submit">Go to step 2 of 3</button>
+        </p>
+      </div>
+    </div>
+  </form>
+    <?php
     System::renderFooter();
 }
 
@@ -219,8 +215,7 @@ if ($step == 2) {
     // Backup of config/database.php
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php ' .
-                    'could not be written. Please correct this!</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php ' . 'could not be written. Please correct this!</p>';
         } else {
             $checkDatabaseSetupFile = true;
             $updateMessages[] = 'A backup of your database configuration file has been made.';
@@ -230,8 +225,7 @@ if ($step == 2) {
     // Backup of config/ldap.php if exists
     if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/ldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/ldap.bak.php ' .
-                'could not be written. Please correct this!</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/ldap.bak.php ' . 'could not be written. Please correct this!</p>';
         } else {
             $checkLdapSetupFile = true;
             $updateMessages[] = 'A backup of your LDAP configuration file has been made.';
@@ -243,8 +237,7 @@ if ($step == 2) {
     // Backup of config/elasticsearch.php if exists
     if (file_exists(PMF_ROOT_DIR . '/config/elasticsearch.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/elasticsearch.php', PMF_ROOT_DIR . '/config/elasticsearch.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' .
-                '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' . '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
         } else {
             $checkElasticsearchSetupFile = true;
             $updateMessages[] = 'A backup of your Elasticsearch configuration file has been made.';
@@ -256,47 +249,48 @@ if ($step == 2) {
     // is everything is okay?
     if ($checkDatabaseSetupFile && $checkLdapSetupFile && $checkElasticsearchSetupFile) {
         ?>
-        <form action="update.php?step=3" method="post">
+      <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?= $version ?>">
-        <div class="row form-group row">
-            <div class="col">
-              <ul class="nav nav-pills nav-fill">
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <h4 class="list-group-item-heading">Step 1 of 3</h4>
-                    <p class="list-group-item-text">Update information</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link active" href="#">
-                    <h4 class="list-group-item-heading">Step 2 of 3</h4>
-                    <p class="list-group-item-text">File backups</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <h4 class="list-group-item-heading">Step 3 of 3</h4>
-                    <p class="list-group-item-text">Database updates</p>
-                  </a>
-                </li>
-              </ul>
+
+        <div class="pmf-setup-stepwizard">
+          <div class="pmf-setup-stepwizard-row setup-panel">
+            <div class="pmf-setup-stepwizard-step">
+              <a href="#step-1" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+                 disabled="disabled">1</a>
+              <p>Update information</p>
             </div>
-        </div>
-        <div class="row setup-content" id="step2">
-            <div class="col">
-                <?php foreach ($updateMessages as $updateMessage) {
-                    printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
-                } ?>
-                <p>Your phpMyFAQ configuration will be updated after the next step.</p>
-                <p style="text-align: center;">
-                    <button class="btn btn-primary btn-lg" type="submit">
-                        Go to step 3 of 3
-                    </button>
-                </p>
+            <div class="pmf-setup-stepwizard-step">
+              <a href="#step-2" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">
+                2
+              </a>
+              <p>File backups</p>
             </div>
+            <div class="pmf-setup-stepwizard-step">
+              <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+                 disabled="disabled">
+                3
+              </a>
+              <p>Database updates</p>
+            </div>
+          </div>
         </div>
-        </form>
-<?php
+
+        <div class="row" id="step2">
+          <div class="col text-center mt-5">
+              <?php
+              foreach ($updateMessages as $updateMessage) {
+                  printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
+              } ?>
+            <p class="mb-5">Your phpMyFAQ configuration will be updated after the next step.</p>
+            <p>
+              <button class="btn btn-primary btn-next btn-lg pull-right" type="submit">
+                Go to step 3 of 3
+              </button>
+            </p>
+          </div>
+        </div>
+      </form>
+        <?php
         System::renderFooter();
     } else {
         echo '<p class="alert alert-danger"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
@@ -306,35 +300,34 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
-    ?>
+?>
 
-        <div class="row form-group row">
-            <div class="col">
-              <ul class="nav nav-pills nav-fill">
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <h4 class="list-group-item-heading">Step 1 of 3</h4>
-                    <p class="list-group-item-text">Update information</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <h4 class="list-group-item-heading">Step 2 of 3</h4>
-                    <p class="list-group-item-text">File backups</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link active" href="#">
-                    <h4 class="list-group-item-heading">Step 3 of 3</h4>
-                    <p class="list-group-item-text">Database updates</p>
-                  </a>
-                </li>
-              </ul>
-            </div>
-        </div>
-        <div class="row setup-content" id="step2">
-            <div class="col">
-<?php
+  <div class="pmf-setup-stepwizard">
+    <div class="pmf-setup-stepwizard-row setup-panel">
+      <div class="pmf-setup-stepwizard-step">
+        <a href="#step-1" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+           disabled="disabled">1</a>
+        <p>Update information</p>
+      </div>
+      <div class="pmf-setup-stepwizard-step">
+        <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle">
+          2
+        </a>
+        <p>File backups</p>
+      </div>
+      <div class="pmf-setup-stepwizard-step">
+        <a href="#step-3" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle"
+           disabled="disabled">
+          3
+        </a>
+        <p>Database updates</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row " id="step2">
+    <div class="col">
+    <?php
     $images = [];
     $prefix = Database::getTablePrefix();
     $faqConfig->getAll();
@@ -368,11 +361,11 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
         } elseif ('pgsql' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success SMALLINT NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD success SMALLINT NULL DEFAULT 1';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success INTEGER NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD success INTEGER NULL DEFAULT 1';
         }
     }
 
@@ -395,9 +388,9 @@ if ($step == 3) {
         $faqConfig->delete('search.useAjaxSearchOnStartpage');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD active INT NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD active INT NULL DEFAULT 1';
         }
     }
 
@@ -413,13 +406,13 @@ if ($step == 3) {
         $faqConfig->add('records.numberMaxStoredRevisions', '10');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL DEFAULT \'\'';
-            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL DEFAULT \'\'';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD lang VARCHAR(5) NOT NULL DEFAULT \'\'';
-            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD group_id INT NULL DEFAULT -1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions ADD lang VARCHAR(5) NOT NULL DEFAULT \'\'';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD group_id INT NULL DEFAULT -1';
         }
-        $query[] = 'UPDATE '.$prefix."faqquestions SET lang = '".$faqConfig->getDefaultLanguage()."'";
+        $query[] = 'UPDATE ' . $prefix . "faqquestions SET lang = '" . $faqConfig->getDefaultLanguage() . "'";
     }
 
     //
@@ -428,18 +421,18 @@ if ($step == 3) {
     if (version_compare($version, '2.9.0-alpha4', '<')) {
         switch ($DB['type']) {
             case 'pgsql':
-                $query[] = 'ALTER TABLE '.$prefix.'faqdata RENAME COLUMN datum TO updated';
-                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions RENAME COLUMN datum TO updated';
-                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata RENAME COLUMN datum TO updated';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions RENAME COLUMN datum TO updated';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
                 break;
             case 'mssql':
             case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '".$prefix."faqdata.datum', 'updated', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '".$prefix."faqdata_revisions.datum', 'updated', 'COLUMN'";
-                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
-            break;
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revisions.datum', 'updated', 'COLUMN'";
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
+                break;
             case 'mysqli':
                 $query[] = 'ALTER TABLE ' . $prefix . 'faqdata CHANGE datum updated VARCHAR(15) NOT NULL';
                 $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions CHANGE datum updated VARCHAR(15) NOT NULL';
@@ -598,33 +591,33 @@ if ($step == 3) {
         $faqConfig->add('records.enableAutoRevisions', 'false');
         // Add superadmin flag
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INTEGER DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD is_superadmin INTEGER DEFAULT 0';
         }
-        $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
+        $query[] = 'UPDATE ' . $prefix . 'faquser SET is_superadmin = 1 WHERE user_id = 1';
 
         // Add domain flag
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
         }
 
         // Update section flag for faqright table
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faqright ADD for_sections INTEGER DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD for_sections INTEGER DEFAULT 0';
         }
 
         // Add new tables
-        $query[] = 'CREATE TABLE '.$prefix.'faqcategory_news (category_id INTEGER NOT NULL, news_id INTEGER NOT NULL, PRIMARY KEY (category_id, news_id))';
-        $query[] = 'CREATE TABLE '.$prefix.'faqsections (id INTEGER NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY (id))';
-        $query[] = 'CREATE TABLE '.$prefix.'faqsection_category (section_id INTEGER NOT NULL, category_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, category_id))';
-        $query[] = 'CREATE TABLE '.$prefix.'faqsection_group (section_id INTEGER NOT NULL, group_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, group_id))';
-        $query[] = 'CREATE TABLE '.$prefix.'faqsection_news (section_id INTEGER NOT NULL, news_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, news_id))';
-        $query[] = 'CREATE TABLE '.$prefix.'faqmeta (id INT NOT NULL, lang VARCHAR(5) DEFAULT NULL, page_id VARCHAR(48) DEFAULT NULL, type VARCHAR(48) DEFAULT NULL, content TEXT NULL, PRIMARY KEY (id))';
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_news (category_id INTEGER NOT NULL, news_id INTEGER NOT NULL, PRIMARY KEY (category_id, news_id))';
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqsections (id INTEGER NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY (id))';
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_category (section_id INTEGER NOT NULL, category_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, category_id))';
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_group (section_id INTEGER NOT NULL, group_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, group_id))';
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_news (section_id INTEGER NOT NULL, news_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, news_id))';
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqmeta (id INT NOT NULL, lang VARCHAR(5) DEFAULT NULL, page_id VARCHAR(48) DEFAULT NULL, type VARCHAR(48) DEFAULT NULL, content TEXT NULL, PRIMARY KEY (id))';
 
         // Add new rights
         $perm->addRight(['name' => 'view_faqs', 'description' => 'Right to view FAQs']);
@@ -653,9 +646,9 @@ if ($step == 3) {
 
         // Add login attempts flag
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD login_attempts INTEGER DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD login_attempts INTEGER DEFAULT 0';
         }
     }
 
@@ -666,10 +659,10 @@ if ($step == 3) {
         // Fix category table
         switch ($DB['type']) {
             case 'mysqli':
-                $query[] = 'ALTER TABLE '.$prefix.'faqcategories MODIFY parent_id INTEGER';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories MODIFY parent_id INTEGER';
                 break;
             case 'pgsql':
-                $query[] = 'ALTER TABLE '.$prefix.'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
                 break;
         }
 
@@ -682,7 +675,7 @@ if ($step == 3) {
     // UPDATES FROM 3.0.0-RC
     //
     if (version_compare($version, '3.0.0-RC', '<=')) {
-        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'main.customPdfFooter'
+        $query[] = 'UPDATE ' . $prefix . "faqconfig SET config_name = 'main.customPdfFooter'
             WHERE config_name = 'main.customPdfHFooter'";
     }
 
@@ -694,14 +687,14 @@ if ($step == 3) {
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD is_visible INTEGER DEFAULT 0';
         }
 
         // Add is_visible flag for user data
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD is_visible INTEGER DEFAULT 0';
         }
 
         // Remove RSS support
@@ -742,8 +735,7 @@ if ($step == 3) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ once again ' .
-                        'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ once again ' . 'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 System::renderFooter();
@@ -759,11 +751,9 @@ if ($step == 3) {
     if ($faqConfig->set('main.maintenanceMode', 'false')) {
         echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> Deactivating maintenance mode ...</p>";
     }
-
-    echo "</p>\n";
-    echo '<p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>';
-    echo '<h3>Back to your updated <a href="../index.php">phpMyFAQ installation</a> and have fun! :-)</h3>';
-
+?>
+  <p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>
+<?php
     // Remove backup files
     foreach (glob(PMF_ROOT_DIR . '/config/*.bak.php') as $filename) {
         if (!unlink($filename)) {
@@ -777,6 +767,12 @@ if ($step == 3) {
     } else {
         echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
     }
-
+?>
+  <p>
+    <a href="../index.php" class="btn btn-primary btn-next btn-lg pull-right" type="button">
+      Go to your updated phpMyFAQ installation
+    </a>
+  </p>
+<?php
     System::renderFooter();
 }
