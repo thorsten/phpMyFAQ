@@ -640,9 +640,8 @@ class Installer
 
     /**
      * Starts the installation.
-     *
-     * @param array $setup
-     * @throws
+     * @param array|null $setup
+     * @throws Exception
      */
     public function startInstall(array $setup = null)
     {
