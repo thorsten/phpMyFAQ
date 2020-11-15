@@ -82,6 +82,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         if (!is_null($editData)) {
             $faqConfig->update($newConfigValues);
         }
+
+        $faqConfig->getAll();
+
     }
     ?>
   <form id="config_list" name="config_list" method="post"
