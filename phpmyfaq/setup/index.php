@@ -478,6 +478,5 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
          </div>
        </div>
     <?php
-    $installer->cleanUpFiles();
     System::renderFooter();
 }
