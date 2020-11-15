@@ -266,8 +266,8 @@ class Session
             if (!is_null($cookieId)) {
                 $this->setCurrentSessionId($cookieId);
             }
-            if ($action == 'old_session') {
-                $this->setCurrentSessionId(null);
+            if ($action === 'old_session') {
+                $this->setCurrentSessionId(0);
             }
 
             foreach ($this->botIgnoreList as $bot) {

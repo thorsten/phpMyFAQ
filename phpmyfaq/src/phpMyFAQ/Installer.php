@@ -649,7 +649,11 @@ class Installer
         }
 
         // Check database entries
-        $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING, $setup['dbType']);
+        if (!isset($setup['dbType'])) {
+            $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
+        } else {
+            $dbSetup['dbType'] = $setup['dbType'];
+        }
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
             if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
@@ -756,8 +760,8 @@ class Installer
             }
 
             // LDAP User and LDAP password are optional
-            $ldapSetup['ldapUser'] = Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING, '');
-            $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
+            $ldapSetup['ldapUser'] = Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING);
+            $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING);
 
             // set LDAP Config to prevent DB query
             foreach ($this->mainConfig as $configKey => $configValue) {
@@ -833,37 +837,44 @@ class Installer
         }
 
         // check loginname
-        $loginname = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING, $setup['loginname']);
-        if (is_null($loginname)) {
+        if (!isset($setup['loginname'])) {
+            $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+        } else {
+            $loginName = $setup['loginname'];
+        }
+        if (is_null($loginName)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a loginname for your account.</p>';
             System::renderFooter(true);
         }
 
         // check user entries
-        $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING, $setup['password']);
+        if (!isset($setup['password'])) {
+            $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        } else {
+            $password = $setup['password'];
+        }
         if (is_null($password)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your ' .
                 'account.</p>';
             System::renderFooter(true);
         }
 
-        $password_retyped = Filter::filterInput(
-            INPUT_POST,
-            'password_retyped',
-            FILTER_SANITIZE_STRING,
-            $setup['password_retyped']
-        );
-        if (is_null($password_retyped)) {
+        if (!isset($setup['password_retyped'])) {
+            $passwordRetyped = Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
+        } else {
+            $passwordRetyped = $setup['password_retyped'];
+        }
+        if (is_null($passwordRetyped)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a retyped password.</p>';
             System::renderFooter(true);
         }
 
-        if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
+        if (strlen($password) <= 5 || strlen($passwordRetyped) <= 5) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
                 'short. Please set your password and your retyped password with a minimum of 6 characters.</p>';
             System::renderFooter(true);
         }
-        if ($password != $password_retyped) {
+        if ($password != $passwordRetyped) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not ' .
                 'equal. Please check your password and your retyped password.</p>';
             System::renderFooter(true);
@@ -979,7 +990,7 @@ class Installer
 
         // add admin account and rights
         $admin = new User($configuration);
-        if (!$admin->createUser($loginname, $password, null, 1)) {
+        if (!$admin->createUser($loginName, $password, null, 1)) {
             printf(
                 '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>' .
                 "Couldn't create the admin user: %s</p>\n",

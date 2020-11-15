@@ -91,8 +91,9 @@ $(document).ready(function () {
       $item = $(this);
 
     if (!$item.hasClass('disabled')) {
-      navListItems.removeClass('btn-primary').addClass('btn-default');
-      $item.addClass('btn-primary');
+      navListItems.removeClass('btn-primary').addClass('btn-secondary');
+      $item.removeClass('btn-secondary').addClass('btn-primary');
+      $item.removeClass('disabled');
       allWells.hide();
       $target.show();
       $target.find('input:eq(0)').focus();

@@ -24,6 +24,7 @@
  */
 
 use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Exception;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -41,6 +42,12 @@ set_time_limit(0);
 
 if (!defined('DEBUG')) {
     define('DEBUG', true);
+}
+
+if (DEBUG) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL | E_STRICT);
 }
 
 session_name('phpmyfaq-setup');
@@ -450,16 +457,26 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
     <?php
     System::renderFooter();
 } else {
-    $installer->startInstall();
+    try{
+      $installer->startInstall();
+    } catch (Exception $e) {
+      echo $e->getMessage();
+    }
     ?>
-        <p class="alert alert-success">
-          Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
-        </p>
+      <div class="row" id="done">
+        <div class="col-12">
+          <h3 class="mb-3"> Step 2: Admin user setup</h3>
 
-        <p>
-          You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
-          <a href="../admin/index.php">admin section</a>.
-         </p>
+          <p class="alert alert-success">
+            Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
+          </p>
+
+          <p>
+            You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+            <a href="../admin/index.php">admin section</a>.
+           </p>
+         </div>
+       </div>
     <?php
     $installer->cleanUpFiles();
     System::renderFooter();
