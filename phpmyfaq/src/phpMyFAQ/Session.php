@@ -59,7 +59,7 @@ class Session
         'Yahoo! Slurp',
         'htdig',
         'gsa-crawler',
-        'aircontrol'
+        'AirControl'
     ];
 
     /**
