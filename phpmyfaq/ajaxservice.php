@@ -604,13 +604,19 @@ switch ($action) {
 
     case 'saveregistration':
 
+        $registration = new RegistrationHelper($faqConfig);
+
         $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
         $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_STRING);
 
+        if (!$registration->isDomainWhitelisted($email)) {
+            $message = ['error' => 'The domain is not whitelisted.'];
+            break;
+        }
+        
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
-            $registration = new RegistrationHelper($faqConfig);
             $message = $registration->createUser($userName, $fullName, $email, $isVisible);
         } else {
             $message = ['error' => $PMF_LANG['err_sendMail']];
