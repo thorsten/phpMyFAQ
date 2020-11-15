@@ -302,18 +302,16 @@ class Template
     }
 
     /**
-     * This function renders the whole parsed templates and returns it.
-     *
-     * @return string
+     * This function renders the whole parsed templates and outputs it.
      */
-    public function render(): string
+    public function render()
     {
         $output = '';
         foreach ($this->outputs as $val) {
             $output .= str_replace("\n\n", "\n", $val);
         }
 
-        return $output;
+        echo $output;
     }
 
     /**

@@ -727,7 +727,8 @@ $http->startCompression();
 if ($http->getStatusCode() === 404 || $action === '404') {
     $template = new Template(
         [
-            'index' => '404.page.html'
+            'index' => '404.html',
+            'mainPageContent' => ''
         ],
         new TemplateHelper($faqConfig),
         $faqConfig->get('main.templateSet')
@@ -735,6 +736,6 @@ if ($http->getStatusCode() === 404 || $action === '404') {
     $template->parse('index', array_merge($tplMainPage, $tplNavigation));
 }
 
-echo $template->render();
+$template->render();
 
 $faqConfig->getDb()->close();
