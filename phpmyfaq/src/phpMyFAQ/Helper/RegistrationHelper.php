@@ -20,6 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\Utils;
 
@@ -106,5 +107,32 @@ class RegistrationHelper extends Helper
                     trim($this->translation['msgRegThankYou']),
             ];
         }
+    }
+
+    /**
+     * Returns true, if hostname of the given email address is whitelisted,
+     * otherwise false.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function isDomainWhitelisted(string $email): bool
+    {
+        $whitelistedDomains = $this->config->get('security.domainWhiteListForRegistrations');
+
+        if (Strings::strlen($whitelistedDomains) === 0) {
+            return true;
+        }
+
+        $whitelistedDomainList = explode(',', $whitelistedDomains);
+        $hostnameToCheck = trim(substr(strstr($email, '@'), 1));
+
+        foreach ($whitelistedDomainList as $hostname) {
+            if ($hostnameToCheck === trim($hostname)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

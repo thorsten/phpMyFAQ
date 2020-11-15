@@ -132,7 +132,7 @@ if (!is_null($user) && $user instanceof CurrentUser) {
 //
 switch ($action) {
     //
-    // v2.0
+    // v2.1
     //
     case 'version':
         $result = $faqConfig->getVersion();
@@ -243,7 +243,7 @@ switch ($action) {
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        // api/v2.0/faqs/:categoryId
+        // api/v2.1/faqs/:categoryId
         if (!is_null($categoryId)) {
             try {
                 $result = $faq->getAllRecordPerCategory($categoryId);
@@ -252,7 +252,7 @@ switch ($action) {
             }
         }
 
-        // api/v2.0/faqs/tags/:tagId
+        // api/v2.1/faqs/tags/:tagId
         if (!is_null($tagId)) {
             $tags = new Tags($faqConfig);
             $recordIds = $tags->getFaqsByTagId($tagId);
@@ -263,22 +263,22 @@ switch ($action) {
             }
         }
 
-        // api/v2.0/faqs/popular
+        // api/v2.1/faqs/popular
         if ('popular' === $filter) {
             $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
         }
 
-        // api/v2.0/faqs/latest
+        // api/v2.1/faqs/latest
         if ('latest' === $filter) {
             $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
         }
 
-        // api/v2.0/faqs/sticky
+        // api/v2.1/faqs/sticky
         if ('sticky' === $filter) {
             $result = array_values($faq->getStickyRecordsData());
         }
 
-        // api/v2.0/faqs
+        // api/v2.1/faqs
         if (is_null($categoryId) && is_null($tagId) && is_null($filter)) {
             $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
             $result = $faq->faqRecords;
@@ -405,7 +405,10 @@ switch ($action) {
                 'registered' => false,
                 'error' => 'X_PMF_Token not valid.'
             ];
+            break;
         }
+
+        $registration = new RegistrationHelper($faqConfig);
 
         $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
         $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_SANITIZE_STRING);
@@ -413,8 +416,16 @@ switch ($action) {
         $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_SANITIZE_STRING);
         $isVisible = $isVisible === 'true';
 
+        if (!$registration->isDomainWhitelisted($email)) {
+            $http->setStatus(400);
+            $result = [
+                'registered' => false,
+                'error' => 'The domain is not whitelisted.'
+            ];
+            break;
+        }
+
         if (!is_null($userName) && !is_null($fullName) && !is_null($email)) {
-            $registration = new RegistrationHelper($faqConfig);
             $result = $registration->createUser($userName, $fullName, $email, $isVisible);
             $http->setStatus(200);
         } else {
