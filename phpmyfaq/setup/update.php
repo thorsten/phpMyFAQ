@@ -689,13 +689,6 @@ if ($step == 3) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD is_visible INTEGER DEFAULT 0';
         }
 
-        // Add is_visible flag for user data
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD is_visible INTEGER DEFAULT 0';
-        }
-
         // Remove RSS support
         $faqConfig->delete('main.enableRssFeeds');
 
