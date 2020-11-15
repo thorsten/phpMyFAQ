@@ -88,20 +88,19 @@ require PMF_ROOT_DIR . '/config/database.php';
 
 <main role="main">
   <section id="content">
-
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-4 text-center mt-5">
-        phpMyFAQ <?= System::getVersion() ?> Update
-      </h1>
-      <p class="text-center">
-        Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.0">documentation</a>
-        carefully before updating your phpMyFAQ installation?
-      </p>
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-4 text-center mt-5">
+          phpMyFAQ <?= System::getVersion() ?> Update
+        </h1>
+        <p class="text-center">
+          Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.0">documentation</a>
+          carefully before updating your phpMyFAQ installation?
+        </p>
+      </div>
     </div>
-  </div>
 
-  <div class="container mb-3">
+    <div class="container mb-3">
 <?php
 
 $version = $faqConfig->getVersion();
@@ -112,96 +111,112 @@ $installer->checkAvailableDatabaseTables($db);
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) { ?>
 
-  <form action="update.php?step=2" method="post">
-    <input name="version" type="hidden" value="<?= $version ?>">
+      <form action="update.php?step=2" method="post">
+        <input name="version" type="hidden" value="<?= $version ?>">
 
-    <div class="pmf-setup-stepwizard">
-      <div class="pmf-setup-stepwizard-row setup-panel">
-        <div class="pmf-setup-stepwizard-step">
-          <a href="#step-1" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">1</a>
-          <p>Update information</p>
+        <div class="pmf-setup-stepwizard">
+          <div class="pmf-setup-stepwizard-row setup-panel">
+            <div class="pmf-setup-stepwizard-step">
+              <a href="#step-1" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">1</a>
+              <p>Update information</p>
+            </div>
+            <div class="pmf-setup-stepwizard-step">
+              <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+                 disabled="disabled">
+                2
+              </a>
+              <p>File backups</p>
+            </div>
+            <div class="pmf-setup-stepwizard-step">
+              <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
+                 disabled="disabled">
+                3
+              </a>
+              <p>Database updates</p>
+            </div>
+          </div>
         </div>
-        <div class="pmf-setup-stepwizard-step">
-          <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-             disabled="disabled">
-            2
-          </a>
-          <p>File backups</p>
-        </div>
-        <div class="pmf-setup-stepwizard-step">
-          <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-             disabled="disabled">
-            3
-          </a>
-          <p>Database updates</p>
-        </div>
-      </div>
-    </div>
 
-    <div class="row" id="step1">
-      <div class="col">
-        <div class="alert alert-danger text-center mt-2" role="alert">
-          <strong>
-            <i aria-hidden="true" class="fa fa-info-circle"></i>
-            Please create a full backup of your database, your templates,
-            attachments and uploaded images before running this update.
-          </strong>
+        <div class="row" id="step1">
+          <div class="col">
+            <div class="alert alert-info text-center mt-2" role="alert">
+              <strong>
+                <i aria-hidden="true" class="fa fa-info-circle"></i>
+                Please create a full backup of your database, your templates,
+                attachments and uploaded images before running this update.
+              </strong>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-        <p>This update script will work <strong>only</strong> for the following versions:</p>
-        <ul>
-          <li>phpMyFAQ 2.9.x</li>
-          <li>phpMyFAQ 3.0.x</li>
-        </ul>
-      </div>
-      <div class="col">
-        <p>This update script <strong>will not</strong> work for the following versions:</p>
-        <ul>
-          <li>phpMyFAQ 0.x</li>
-          <li>phpMyFAQ 1.x</li>
-          <li>phpMyFAQ 2.0.x</li>
-          <li>phpMyFAQ 2.5.x</li>
-          <li>phpMyFAQ 2.6.x</li>
-          <li>phpMyFAQ 2.7.x</li>
-          <li>phpMyFAQ 2.8.x</li>
-        </ul>
-      </div>
-    </div>
+        <div class="row">
+          <div class="col">
+            <p>This update script will work <strong>only</strong> for the following versions:</p>
+            <ul>
+              <li>phpMyFAQ 2.9.x</li>
+              <li>phpMyFAQ 3.0.x</li>
+            </ul>
+          </div>
+          <div class="col">
+            <p>This update script <strong>will not</strong> work for the following versions:</p>
+            <ul>
+              <li>phpMyFAQ 0.x</li>
+              <li>phpMyFAQ 1.x</li>
+              <li>phpMyFAQ 2.0.x</li>
+              <li>phpMyFAQ 2.5.x</li>
+              <li>phpMyFAQ 2.6.x</li>
+              <li>phpMyFAQ 2.7.x</li>
+              <li>phpMyFAQ 2.8.x</li>
+            </ul>
+          </div>
+        </div>
 
-    <div class="row">
-      <div class="col">
-          <?php
-          // We only support updates from 2.9+
-          if (version_compare($version, '2.9.0', '>')) {
-              printf(
-                  '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
-                  $version,
-                  '<i aria-hidden="true" class="fa fa-check"></i>'
-              );
-          } else {
-              printf(
-                  '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
-                  $version
-              );
-              echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
-          }
-          if ('hash' !== PMF_ENCRYPTION_TYPE) {
-              printf(
-                  '<div class="alert alert-info text-center" role="alert">Your passwords are currently encoded with a %s() method.</div>',
-                  PMF_ENCRYPTION_TYPE
-              );
-          }
-          ?>
-        <p>
-            <button class="btn btn-primary btn-next btn-lg pull-right" type="submit">Go to step 2 of 3</button>
-        </p>
-      </div>
-    </div>
-  </form>
+        <div class="row">
+          <div class="col">
+              <?php
+
+              //
+              // We only support updates from 2.9+
+              //
+              if (version_compare($version, '2.9.0', '>')) {
+                  printf(
+                      '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
+                      $version,
+                      '<i aria-hidden="true" class="fa fa-check"></i>'
+                  );
+              } else {
+                  printf(
+                      '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
+                      $version
+                  );
+                  echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
+              }
+
+              if ('hash' !== PMF_ENCRYPTION_TYPE) {
+                  printf(
+                      '<div class="alert alert-info text-center" role="alert">Your passwords are currently encoded with a %s() method.</div>',
+                      PMF_ENCRYPTION_TYPE
+                  );
+              }
+
+              //
+              // Updates only possible if maintenance mode is enabled
+              //
+              if (!$faqConfig->get('main.maintenanceMode')) {
+                  echo '<div class="alert alert-danger text-center" role="alert">Please enable the maintenance mode ' .
+                      'in the <a href="../admin">admin section</a> before running the update script.</div>';
+                  $updateDisabled = 'disabled';
+              } else {
+                  $updateDisabled = '';
+              }
+              ?>
+            <p>
+                <button class="btn btn-primary btn-next btn-lg pull-right <?= $updateDisabled ?>" type="submit"
+                    <?= $updateDisabled ?>>Go to step 2 of 3</button>
+            </p>
+          </div>
+        </div>
+      </form>
     <?php
     System::renderFooter();
 }
