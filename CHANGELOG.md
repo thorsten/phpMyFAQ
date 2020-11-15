@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.0-alpha.2 - 2020-12-
+### phpMyFAQ v3.1.0-alpha.2 - 2020-11-15
 
 - changed PHP requirement to PHP 7.3+ (Thorsten)
 - added support for PHP 8.0 (Thorsten)
@@ -19,6 +19,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added API client tokens for REST API v2.1 (Thorsten)
 - added opt-in for displaying user data (Thorsten)
 - updated to Composer v2 (Thorsten)
+- improved install and update scripts (Thorsten)
 - removed REST API v1 (Thorsten)
 - removed RSS support (Thorsten)
 - removed rewrite support for IIS (Thorsten)
