@@ -722,10 +722,12 @@ if ($step == 3) {
 
     // Perform the queries for optimizing the database
     if (isset($query)) {
+        echo '<div class="mt-5 mb-5">';
+        echo '<h6>Update Progress:</h6>';
         echo '<div class="text-center">';
         foreach ($query as $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
-            printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
+            printf('<span title="%s">█</span>', $executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
                     'once again or send us a <a href="https://github.com/thorsten/phpMyFAQ/issues" target="_blank">' .
@@ -736,6 +738,7 @@ if ($step == 3) {
             }
             usleep(10000);
         }
+        echo '</div>';
         echo '</div>';
     }
 
