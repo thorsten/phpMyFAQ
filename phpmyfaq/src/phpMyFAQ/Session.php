@@ -74,9 +74,9 @@ class Session
 
     /**
      * Returns the current session ID.
-     * @return int
+     * @return int|null
      */
-    public function getCurrentSessionId(): int
+    public function getCurrentSessionId()
     {
         return $this->currentSessionId;
     }
