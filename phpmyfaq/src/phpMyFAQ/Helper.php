@@ -83,10 +83,12 @@ abstract class Helper
      * Entity Setter.
      *
      * @param Category $Category Entity object
+     * @return Helper
      */
-    public function setCategory(Category $Category)
+    public function setCategory(Category $Category): Helper
     {
         $this->Category = $Category;
+        return $this;
     }
 
     /**
@@ -102,53 +104,61 @@ abstract class Helper
     /**
      * Tagging Setter.
      *
-     * @param Tags $Tags PMF_Tags object
+     * @param Tags $Tags
+     * @return Helper
      */
-    public function setTags(Tags $Tags)
+    public function setTags(Tags $Tags): Helper
     {
         $this->Tags = $Tags;
+        return $this;
     }
 
     /**
      * Template Setter.
      *
      * @param Template $Template Template object
-     *
-     * @var Template
+     * @return Helper
      */
-    public function setTemplate(Template $Template)
+    public function setTemplate(Template $Template): Helper
     {
         $this->Template = $Template;
+        return $this;
     }
 
     /**
      * Plurals setter.
      *
      * @param Plurals $plurals Language_Plurals object
+     * @return Helper
      */
-    public function setPlurals(Plurals $plurals)
+    public function setPlurals(Plurals $plurals): Helper
     {
         $this->plurals = $plurals;
+        return $this;
     }
 
     /**
      * Session ID setter.
      *
      * @param int $sid Session id
+     * @return Helper
      */
-    public function setSessionId($sid)
+    public function setSessionId($sid): Helper
     {
         $this->sessionId = $sid;
+        return $this;
     }
 
     /**
      * Sets configuration.
      *
      * @param Configuration $config
+     * @return Helper
      */
-    public function setConfiguration(Configuration $config)
+    public function setConfiguration(Configuration $config): Helper
     {
         $this->config = $config;
+        return $this;
     }
 
     /**

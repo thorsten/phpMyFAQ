@@ -19,8 +19,6 @@ define('IS_VALID_PHPMYFAQ', null);
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
-use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
@@ -28,6 +26,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\QuestionHelper;
@@ -38,6 +37,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Network;
 use phpMyFAQ\News;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
@@ -48,7 +48,6 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
-use phpMyFAQ\Visits;
 
 //
 // Bootstrapping
@@ -422,53 +421,16 @@ switch ($action) {
                 ->setCategories($categories)
                 ->save();
 
-            // Let the PMF Administrator and the Entity Owner to be informed by email of this new entry
-            $send = [];
-            $mailer = new Mail($faqConfig);
-            $mailer->setReplyTo($email, $author);
-            $mailer->addTo($faqConfig->getAdminEmail());
-            $send[$faqConfig->getAdminEmail()] = 1;
+            // Let the admin and the category owners to be informed by email of this new entry
+            $categoryHelper = new CategoryHelper();
+            $categoryHelper
+                ->setCategory($category)
+                ->setConfiguration($faqConfig);
 
-            foreach ($categories as $_category) {
-                $userId = $category->getOwner($_category);
-                $groupId = $category->getModeratorGroupId($_category);
+            $moderators = $categoryHelper->getModerators($categories);
 
-                // @todo Move this code to Entityhp
-                $oUser = new User($faqConfig);
-                $oUser->getUserById($userId);
-                $catOwnerEmail = $oUser->getUserData('email');
-
-                // Avoid to send multiple emails to the same owner
-                if (!empty($catOwnerEmail) && !isset($send[$catOwnerEmail])) {
-                    $mailer->addCc($catOwnerEmail);
-                    $send[$catOwnerEmail] = 1;
-                }
-
-                if ($groupId > 0) {
-                    $moderators = $oUser->perm->getGroupMembers($groupId);
-                    foreach ($moderators as $moderator) {
-                        $oUser->getUserById($moderator);
-                        $moderatorEmail = $oUser->getUserData('email');
-
-                        // Avoid to send multiple emails to the same moderator
-                        if (!empty($moderatorEmail) && !isset($send[$moderatorEmail])) {
-                            $mailer->addCc($moderatorEmail);
-                            $send[$moderatorEmail] = 1;
-                        }
-                    }
-                }
-            }
-
-            $mailer->subject = $faqConfig->getTitle() . ': New FAQ was added.';
-
-            // @todo let the email contains the faq article both as plain text and as HTML
-            $mailer->message = html_entity_decode(
-                    $PMF_LANG['msgMailCheck']
-                ) . "\n\n" .
-                $faqConfig->getTitle() . ': ' .
-                $faqConfig->getDefaultUrl() . 'admin/?action=editentry&id=' . $recordId . '&lang=' . $faqLanguage;
-            $result = $mailer->send();
-            unset($mailer);
+            $notification = new Notification($faqConfig);
+            $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
 
             $message = [
                 'success' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks']),

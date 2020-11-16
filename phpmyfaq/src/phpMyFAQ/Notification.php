@@ -2,7 +2,6 @@
 
 /**
  * The notification class for phpMyFAQ.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,24 +23,14 @@ namespace phpMyFAQ;
  */
 class Notification
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $config;
 
-    /**
-     * Mail object.
-     *
-     * @var Mail
-     */
+    /** @var Mail */
     private $mail;
 
-    /**
-     * Language strings.
-     *
-     * @var string
-     */
-    private $pmfStr;
+    /** @var array */
+    private $translation;
 
     /**
      * Constructor.
@@ -53,7 +42,7 @@ class Notification
         global $PMF_LANG;
 
         $this->config = $config;
-        $this->pmfStr = $PMF_LANG;
+        $this->translation = $PMF_LANG;
         $this->mail = new Mail($this->config);
         $this->mail->setReplyTo(
             $this->config->getAdminEmail(),
@@ -62,20 +51,41 @@ class Notification
     }
 
     /**
-     * Sends a notification to user who added a question.
+     * Sends a mail to user who added a question.
      *
-     * @param string $email    Email address of the user
+     * @param string $email Email address of the user
      * @param string $userName Name of the user
-     * @param string $url      URL of answered FAQ
+     * @param string $url URL of answered FAQ
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url)
     {
         $this->mail->addTo($email, $userName);
-        $this->mail->subject = $this->config->getTitle() . ' - ' . $this->pmfStr['msgQuestionAnswered'];
+        $this->mail->subject = $this->config->getTitle() . ' - ' . $this->translation['msgQuestionAnswered'];
         $this->mail->message = sprintf(
-            $this->pmfStr['msgMessageQuestionAnswered'],
+            $this->translation['msgMessageQuestionAnswered'],
             $this->config->getTitle()
         ) . "\n\r" . $url;
+        $this->mail->send();
+    }
+
+    /**
+     * Sends mails to FAQ admin and other given users about a newly added FAQ.
+     *
+     * @param array  $emails
+     * @param int    $faqId
+     * @param string $faqLanguage
+     */
+    public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage)
+    {
+        $this->mail->addTo($this->config->getAdminEmail());
+        foreach ($emails as $email) {
+            $this->mail->addCc($email);
+        }
+        $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
+        $this->mail->message = html_entity_decode(
+            $this->translation['msgMailCheck']
+        ) . "\n\n" . $this->config->getTitle() . ': ' . $this->config->getDefaultUrl(
+        ) . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
         $this->mail->send();
     }
 }

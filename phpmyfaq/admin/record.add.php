@@ -22,6 +22,7 @@ use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
@@ -112,6 +113,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     }
 
     if (!is_null($question) && !is_null($categories['rubrik'])) {
+
         // new entry
         $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'admin-save-new-faq');
@@ -129,6 +131,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         $faqPermission = new FaqPermission($faqConfig);
 
         $tagging = new Tags($faqConfig);
+
+        $notification = new Notification($faqConfig);
 
         $recordData = [
             'lang' => $recordLang,
@@ -204,9 +208,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                 $notifyEmail = Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
                 $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_SANITIZE_STRING);
 
-                $notification = new Notification($faqConfig);
                 $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
             }
+
+            // Let the admin and the category owners to be informed by email of this new entry
+            $categoryHelper = new CategoryHelper();
+            $categoryHelper
+                ->setCategory($category)
+                ->setConfiguration($faqConfig);
+            $moderators = $categoryHelper->getModerators($categories);
+            $notification->sendNewFaqAdded($moderators, $recordId, $recordLang);
 
             // Call Link Verification
             LinkVerifierHelper::linkOndemandJavascript($recordId, $recordData['lang']);

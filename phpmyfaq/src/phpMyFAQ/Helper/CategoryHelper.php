@@ -19,6 +19,7 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
+use phpMyFAQ\User;
 
 /**
  * Class CategoryHelper
@@ -368,5 +369,46 @@ class CategoryHelper extends Helper
         }
 
         return $decks;
+    }
+
+    /**
+     * Returns an array with all moderators for the given categories.
+     *
+     * @param array $categories
+     * @return array
+     */
+    public function getModerators(array $categories): array
+    {
+        $recipients = [];
+
+        $user = new User($this->config);
+
+        foreach ($categories as $_category) {
+            $userId = $this->Category->getOwner($_category);
+            $groupId = $this->Category->getModeratorGroupId($_category);
+
+            $user->getUserById($userId);
+            $catOwnerEmail = $user->getUserData('email');
+
+            // Avoid to send multiple emails to the same owner
+            if (!empty($catOwnerEmail) && !isset($send[$catOwnerEmail])) {
+                $recipients[] = $catOwnerEmail;
+            }
+
+            if ($groupId > 0) {
+                $moderators = $user->perm->getGroupMembers($groupId);
+                foreach ($moderators as $moderator) {
+                    $user->getUserById($moderator);
+                    $moderatorEmail = $user->getUserData('email');
+
+                    // Avoid to send multiple emails to the same moderator
+                    if (!empty($moderatorEmail) && !isset($send[$moderatorEmail])) {
+                        $recipients[] = $moderatorEmail;
+                    }
+                }
+            }
+        }
+
+        return array_unique($recipients);
     }
 }
