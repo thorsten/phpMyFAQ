@@ -615,7 +615,7 @@ switch ($action) {
             $message = ['error' => 'The domain is not whitelisted.'];
             break;
         }
-        
+
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
             $message = $registration->createUser($userName, $fullName, $email, $isVisible);
         } else {
