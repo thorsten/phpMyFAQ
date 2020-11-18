@@ -17,8 +17,6 @@ namespace phpMyFAQ;
  * @since     2009-08-21
  */
 
-
-
 /**
  * Class Attachment
  *

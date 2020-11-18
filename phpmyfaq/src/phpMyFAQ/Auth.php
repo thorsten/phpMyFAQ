@@ -166,13 +166,11 @@ class Auth
     }
 
     /**
-     * Short description of method encrypt.
-     *
-     * @param string $str string
+     * @param string $string string
      * @return string
      */
-    public function encrypt($str): string
+    public function encrypt(string $string): string
     {
-        return $this->encContainer->encrypt($str);
+        return $this->encContainer->encrypt($string);
     }
 }

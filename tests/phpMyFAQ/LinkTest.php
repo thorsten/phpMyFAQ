@@ -8,7 +8,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   PMF_Tests
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -33,9 +32,6 @@ class LinkTest extends TestCase
     /** @var Configuration */
     private $Configuration;
 
-    /**
-     * Prepares the environment before running a test.
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,18 +45,12 @@ class LinkTest extends TestCase
         $this->Configuration->config['security.useSslOnly'] = 'true';
     }
 
-    /**
-     * Cleans up the environment after running a test.
-     */
     protected function tearDown(): void
     {
         $this->link = null;
         parent::tearDown();
     }
 
-    /**
-     * Tests isHomeIndex()
-     */
     public function testisHomeIndex()
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
@@ -74,9 +64,6 @@ class LinkTest extends TestCase
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
-    /**
-     * Tests isInternalReference()
-     */
     public function testisInternalReference()
     {
         $class = new ReflectionClass('phpMyFAQ\Link');

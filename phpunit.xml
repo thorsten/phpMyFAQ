@@ -12,7 +12,7 @@
 
     <testsuites>
         <testsuite name="phpMyFAQ Test Suite">
-            <directory>./tests/PMFTest</directory>
+            <directory>./tests/phpMyFAQ</directory>
         </testsuite>
     </testsuites>
 </phpunit>

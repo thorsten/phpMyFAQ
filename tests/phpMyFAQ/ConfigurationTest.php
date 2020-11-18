@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test suite for PMF_Configuration
  *
@@ -37,7 +38,7 @@ class ConfigurationTest extends TestCase
         Strings::init('en');
 
         $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->Configuration = new Configuration($dbHandle);
     }
 

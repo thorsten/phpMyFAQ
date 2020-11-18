@@ -49,11 +49,10 @@ define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
 require PMF_LANGUAGE_DIR . '/language_en.php';
 
 //
-// Setting up PSR-0 autoloader
+// Setting up autoloader
 //
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
-$loader->add('PMFTest_', PMF_TEST_DIR . '/PMFTest');
 $loader->register();
 
 //
