@@ -19,7 +19,7 @@ use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Init;
 
 //
@@ -119,8 +119,8 @@ require PMF_SRC_DIR . '/libs/parsedown/ParsedownExtra.php';
 //
 // Set the error handler and the exception handler
 //
-set_error_handler('\phpMyFAQ\Error::errorHandler');
-set_exception_handler('\phpMyFAQ\Error::exceptionHandler');
+set_error_handler('\phpMyFAQ\Core\Error::errorHandler');
+set_exception_handler('\phpMyFAQ\Core\Error::exceptionHandler');
 
 //
 // Create a database connection

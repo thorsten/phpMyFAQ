@@ -6,7 +6,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   PMF_Tests
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -23,47 +22,38 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class ResultsetTest
  */
-class ResultsetTest extends TestCase
+class SearchResultSetTest extends TestCase
 {
-    private $resultset;
+    /** @var SearchResultSet */
+    private $SearchResultSet;
 
-    private $configuration;
-
-    private $dbHandle;
-
-    public function testSetAndGetNumberOfResults()
-    {
-        $this->resultset->setNumberOfResults(array(1, 2));
-        $this->assertEquals($this->resultset->getNumberOfResults(), 2);
-        $this->resultset->setNumberOfResults(array());
-        $this->assertEquals($this->resultset->getNumberOfResults(), 0);
-    }
-
-    /**
-     * Prepares the environment before running a test.
-     */
     protected function setUp(): void
     {
         parent::setUp();
 
         Strings::init('en');
 
-        $this->dbHandle = new Sqlite3();
-        $this->configuration = new Configuration($this->dbHandle);
+        $dbHandle = new Sqlite3();
+        $configuration = new Configuration($dbHandle);
 
         $userMock = $this->getMockBuilder('phpMyFAQ\User\CurrentUser')->disableOriginalConstructor()->getMock();
         $faqPermissionMock = $this->getMockBuilder('phpMyFAQ\Faq\FaqPermission')->disableOriginalConstructor()->getMock(
         );
 
-        $this->resultset = new SearchResultSet($userMock, $faqPermissionMock, $this->configuration);
+        $this->SearchResultSet = new SearchResultSet($userMock, $faqPermissionMock, $configuration);
     }
 
-    /**
-     * Cleans up the environment after running a test.
-     */
     protected function tearDown(): void
     {
-        $this->resultset = null;
+        $this->SearchResultSet = null;
         parent::tearDown();
+    }
+
+    public function testSetAndGetNumberOfResults()
+    {
+        $this->SearchResultSet->setNumberOfResults(array(1, 2));
+        $this->assertEquals($this->SearchResultSet->getNumberOfResults(), 2);
+        $this->SearchResultSet->setNumberOfResults(array());
+        $this->assertEquals($this->SearchResultSet->getNumberOfResults(), 0);
     }
 }

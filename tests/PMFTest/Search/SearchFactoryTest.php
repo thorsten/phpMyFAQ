@@ -7,7 +7,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   PMF_Tests
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -26,8 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SearchFactoryTest extends TestCase
 {
+    /** @var Configuration */
     private $configuration;
-    private $dbHandle;
 
     /**
      * Prepares the environment before running a test.
@@ -38,8 +37,8 @@ class SearchFactoryTest extends TestCase
 
         Strings::init('en');
 
-        $this->dbHandle = new Sqlite3();
-        $this->configuration = new Configuration($this->dbHandle);
+        $dbHandle = new Sqlite3();
+        $this->configuration = new Configuration($dbHandle);
     }
 
     /**

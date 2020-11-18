@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Instance\Database\Driver;
 
 /**

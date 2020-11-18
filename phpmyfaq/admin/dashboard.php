@@ -17,7 +17,7 @@
 
 use phpMyFAQ\Api;
 use phpMyFAQ\Database;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\System;

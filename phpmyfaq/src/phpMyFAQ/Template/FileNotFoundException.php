@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Template;
 
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 
 /**
  * Class FileNotFoundException

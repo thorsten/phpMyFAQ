@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Database;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Utils;
 use SQLite3Result;
 

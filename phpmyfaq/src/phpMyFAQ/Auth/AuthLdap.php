@@ -20,7 +20,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\User;
 

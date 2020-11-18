@@ -2,7 +2,6 @@
 
 /**
  * The category image test class.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -15,33 +14,23 @@
  * @since 2016-09-08
  */
 
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Category\CategoryImage;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
-
-
 /**
- * Test category images.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2016 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2016-09-08
+ * Class ImageTest
  */
 class ImageTest extends TestCase
 {
-
-    /** @var PMF_Category_Image */
+    /** @var CategoryImage */
     private $instance;
 
     protected function setUp(): void
     {
-        $dbHandle  = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $pmfConfig = new Configuration($dbHandle);
         $pmfConfig->set('records.maxAttachmentSize', 1234567890);
         $this->instance = new CategoryImage($pmfConfig);
@@ -77,7 +66,7 @@ class ImageTest extends TestCase
         ];
 
         $this->instance->setUploadedFile($uploadedFile);
-        
+
         $this->assertEquals('category-1-de.png', $this->instance->getFileName($categoryId, $categoryName));
     }
 }

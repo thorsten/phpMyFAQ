@@ -2,14 +2,11 @@
 /**
  * Test suite for PMF_Configuration
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   PMF_Tests
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -23,20 +20,12 @@ use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Configuration_AllTests
- *
- * @package phpMyFAQ
- * @package   PMF_Tests
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-12-30
+ * Class ConfigurationTest
  */
 class ConfigurationTest extends TestCase
 {
-    private $pmfConfig;
-    private $dbHandle;
+    /** @var Configuration */
+    private $Configuration;
 
     /**
      * Prepares the environment before running a test.
@@ -47,9 +36,9 @@ class ConfigurationTest extends TestCase
 
         Strings::init('en');
 
-        $this->dbHandle  = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
-        $this->pmfConfig = new Configuration($this->dbHandle);
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
+        $this->Configuration = new Configuration($dbHandle);
     }
 
     /**
@@ -57,7 +46,7 @@ class ConfigurationTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->pmfConfig = null;
+        $this->Configuration = null;
         parent::tearDown();
     }
 
@@ -71,7 +60,7 @@ class ConfigurationTest extends TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        $this->pmfConfig->set('ldap.ldap_use_multiple_servers', 'false');
+        $this->Configuration->set('ldap.ldap_use_multiple_servers', 'false');
 
         $expected = [
             0 => [
@@ -83,9 +72,9 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $this->pmfConfig->setLdapConfig($PMF_LDAP);
+        $this->Configuration->setLdapConfig($PMF_LDAP);
 
-        $this->assertEquals($expected, $this->pmfConfig->getLdapServer());
+        $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 
     public function testSetLdapConfigWithMultipleServers()
@@ -98,7 +87,7 @@ class ConfigurationTest extends TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        $this->pmfConfig->set('ldap.ldap_use_multiple_servers', 'true');
+        $this->Configuration->set('ldap.ldap_use_multiple_servers', 'true');
 
         // Second server
         $PMF_LDAP[1]["ldap_server"] = '::1';
@@ -124,9 +113,9 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $this->pmfConfig->setLdapConfig($PMF_LDAP);
+        $this->Configuration->setLdapConfig($PMF_LDAP);
 
-        $this->assertEquals($expected, $this->pmfConfig->getLdapServer());
+        $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 
     public function testSetLdapConfigWithMultipleServersButDisabled()
@@ -139,7 +128,7 @@ class ConfigurationTest extends TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        $this->pmfConfig->set('ldap.ldap_use_multiple_servers', 'false');
+        $this->Configuration->set('ldap.ldap_use_multiple_servers', 'false');
         // Second server
         $PMF_LDAP[1]["ldap_server"] = '::1';
         $PMF_LDAP[1]["ldap_port"] = '389';
@@ -157,8 +146,8 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $this->pmfConfig->setLdapConfig($PMF_LDAP);
+        $this->Configuration->setLdapConfig($PMF_LDAP);
 
-        $this->assertEquals($expected, $this->pmfConfig->getLdapServer());
+        $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 }

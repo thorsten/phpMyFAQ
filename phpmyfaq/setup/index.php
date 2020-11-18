@@ -24,7 +24,7 @@
  */
 
 use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;

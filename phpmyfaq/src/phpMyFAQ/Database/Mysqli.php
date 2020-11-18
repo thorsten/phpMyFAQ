@@ -20,7 +20,7 @@ namespace phpMyFAQ\Database;
 
 use mysqli_result;
 use phpMyFAQ\Database;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Utils;
 
 /**

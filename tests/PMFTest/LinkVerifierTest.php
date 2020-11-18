@@ -2,14 +2,11 @@
 /**
  * Test case for Linkverifier
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   PMF_Tests
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -27,14 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkVerifierTest extends TestCase
 {
-    /** @var \phpMyFAQ\Database\Sqlite3  */
-    private $dbHandle;
-
     /** @var  LinkVerifier */
     private $linkVerifier;
-
-    /** @var  Configuration */
-    private $config;
 
     /**
      * Prepares the environment before running a test.
@@ -49,11 +40,11 @@ class LinkVerifierTest extends TestCase
         $config->config_name = 'foo';
         $config->config_value = '';
 
-        $this->dbHandle = $this->getMockBuilder('phpMyFAQ\Database\Sqlite3')->disableOriginalConstructor()->getMock();
-        $this->dbHandle->method('fetchAll')->willReturn([$config]);
+        $dbHandle = $this->getMockBuilder('phpMyFAQ\Database\Sqlite3')->disableOriginalConstructor()->getMock();
+        $dbHandle->method('fetchAll')->willReturn([$config]);
 
-        $this->config       = new Configuration($this->dbHandle);
-        $this->linkVerifier = new LinkVerifier($this->config);
+        $config1 = new Configuration($dbHandle);
+        $this->linkVerifier = new LinkVerifier($config1);
     }
 
     /**

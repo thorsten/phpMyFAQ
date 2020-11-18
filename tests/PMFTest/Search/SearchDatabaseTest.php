@@ -7,9 +7,8 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   PMF_Tests
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2020 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2010-06-06
@@ -26,27 +25,20 @@ use PHPUnit\Framework\TestCase;
  */
 class SearchDatabaseTest extends TestCase
 {
+    /** @var SearchDatabase */
     private $searchDatabase;
-    private $configuration;
-    private $dbHandle;
 
-    /**
-     * Prepares the environment before running a test.
-     */
     protected function setUp(): void
     {
         parent::setUp();
 
         Strings::init('en');
 
-        $this->dbHandle = new Sqlite3();
-        $this->configuration = new Configuration($this->dbHandle);
-        $this->searchDatabase = new SearchDatabase($this->configuration);
+        $dbHandle = new Sqlite3();
+        $configuration = new Configuration($dbHandle);
+        $this->searchDatabase = new SearchDatabase($configuration);
     }
 
-    /**
-     * Cleans up the environment after running a test.
-     */
     protected function tearDown(): void
     {
         $this->searchDatabase = null;

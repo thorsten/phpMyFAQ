@@ -1,15 +1,13 @@
 <?php
+
 /**
  * Bootstrap phpMyFAQ PHPUnit testing environment
- *
- * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   Configuration
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -37,7 +35,7 @@ define('DEBUG', true);
 
 $_SERVER['HTTP_HOST'] = 'https://localhost/';
 
-require PMF_CONFIG_DIR.'/constants.php';
+require PMF_CONFIG_DIR . '/constants.php';
 
 //
 // The include directory
@@ -55,19 +53,19 @@ require PMF_LANGUAGE_DIR . '/language_en.php';
 //
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
-$loader->add('PMFTest_', PMF_TEST_DIR.'/PMFTest');
+$loader->add('PMFTest_', PMF_TEST_DIR . '/PMFTest');
 $loader->register();
 
 //
 // Delete possible SQLite file first
 //
-@unlink(PMF_TEST_DIR.'/test.db');
+@unlink(PMF_TEST_DIR . '/test.db');
 
 //
 // Create database credentials for SQLite
 //
 $setup = [
-    'dbServer' => PMF_TEST_DIR.'/test.db',
+    'dbServer' => PMF_TEST_DIR . '/test.db',
     'dbType' => 'sqlite3',
     'loginname' => 'admin',
     'password' => 'password',
@@ -78,4 +76,4 @@ $setup = [
 $installer = new Installer();
 $installer->startInstall($setup);
 
-require PMF_TEST_DIR.'/config/database.php';
+require PMF_TEST_DIR . '/config/database.php';

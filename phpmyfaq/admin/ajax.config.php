@@ -86,7 +86,7 @@ switch ($ajaxAction) {
 
             try {
                 $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
-            } catch (\phpMyFAQ\Exception $e) {
+            } catch (\phpMyFAQ\Core\Exception $e) {
             }
 
             $dbSetup = [

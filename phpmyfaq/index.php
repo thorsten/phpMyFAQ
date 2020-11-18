@@ -25,7 +25,7 @@ use phpMyFAQ\Auth\AuthLdap as AuthLdap;
 use phpMyFAQ\Auth\AuthSso as AuthSso;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;

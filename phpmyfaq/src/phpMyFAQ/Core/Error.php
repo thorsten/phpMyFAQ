@@ -15,7 +15,7 @@
  * @since     2020-11-13
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Core;
 
 use ErrorException;
 

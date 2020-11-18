@@ -15,7 +15,7 @@
  * @since     2009-12-28
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Core;
 
 /**
  * Class Exception

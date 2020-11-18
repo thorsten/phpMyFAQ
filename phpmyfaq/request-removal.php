@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Captcha;
-use phpMyFAQ\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\User\CurrentUser;
 
