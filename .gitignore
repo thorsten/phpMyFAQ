@@ -76,3 +76,4 @@ backup/*
 
 # PHPUnit
 .phpunit.result.cache
+tests/test.db
