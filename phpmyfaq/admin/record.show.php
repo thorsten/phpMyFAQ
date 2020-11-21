@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shows the list of records ordered by categories.
  *
@@ -62,7 +63,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
     $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
     if ($linkVerifier->isReady()) {
-?>
+        ?>
     <script>
         function getImageElement(id, lang) {
             return $('#imgurl_' + lang + '_' + id);
@@ -137,8 +138,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
         }
     </script>
-<?php
-
+        <?php
     }
 
     $faq = new Faq($faqConfig);
@@ -152,13 +152,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     if (!is_null($linkState)) {
-        $cond[Database::getTablePrefix().'faqdata.links_state'] = 'linkbad';
+        $cond[Database::getTablePrefix() . 'faqdata.links_state'] = 'linkbad';
         $linkState = ' checked ';
         $internalSearch .= '&linkstate=linkbad';
     }
     if (!is_null($searchCat)) {
-        $internalSearch .= '&searchcat='.$searchCat;
-        $cond[Database::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
+        $internalSearch .= '&searchcat=' . $searchCat;
+        $cond[Database::getTablePrefix() . 'faqcategoryrelations.category_id'] = array_merge(
             [$searchCat],
             $category->getChildNodes($searchCat)
         );
@@ -183,7 +183,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     ?>
     <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
         <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-<?php
+    <?php
     $comment = new Comments($faqConfig);
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numCommentsByCat = [];
@@ -205,8 +205,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     if (is_null($searchTerm)) {
         if ($faqConfig->get('main.enableCategoryRestrictions')) {
             $Language = new Language($faqConfig);
-            $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-            $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);  
+            $language = $Language->setLanguage(
+                $faqConfig->get('main.languageDetection'),
+                $faqConfig->get('main.language')
+            );
+            $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);
         } else {
             $faq->getAllRecords($orderBy, null, $sortBy);
         }
@@ -218,41 +221,42 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
         }
     } else {
-        $fdTable = Database::getTablePrefix().'faqdata';
-        $fcrTable = Database::getTablePrefix().'faqcategoryrelations';
+        $fdTable = Database::getTablePrefix() . 'faqdata';
+        $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
         $search = SearchFactory::create($faqConfig, ['database' => Database::getType()]);
 
-        $search->setTable($fdTable)
+        $search
+            ->setTable($fdTable)
             ->setResultColumns(
                 [
-                    $fdTable.'.id AS id',
-                    $fdTable.'.lang AS lang',
-                    $fdTable.'.solution_id AS solution_id',
-                    $fcrTable.'.category_id AS category_id',
-                    $fdTable.'.sticky AS sticky',
-                    $fdTable.'.active AS active',
-                    $fdTable.'.thema AS thema',
-                    $fdTable.'.content AS content',
-                    $fdTable.'.updated AS updated',
+                    $fdTable . '.id AS id',
+                    $fdTable . '.lang AS lang',
+                    $fdTable . '.solution_id AS solution_id',
+                    $fcrTable . '.category_id AS category_id',
+                    $fdTable . '.sticky AS sticky',
+                    $fdTable . '.active AS active',
+                    $fdTable . '.thema AS thema',
+                    $fdTable . '.content AS content',
+                    $fdTable . '.updated AS updated',
                 ]
             )
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(
                 [
-                    $fdTable.'.id = '.$fcrTable.'.record_id',
-                    $fdTable.'.lang = '.$fcrTable.'.record_lang',
+                    $fdTable . '.id = ' . $fcrTable . '.record_id',
+                    $fdTable . '.lang = ' . $fcrTable . '.record_lang',
                 ]
             );
 
         if (is_numeric($searchTerm)) {
-            $search->setMatchingColumns([$fdTable.'.solution_id']);
+            $search->setMatchingColumns([$fdTable . '.solution_id']);
         } else {
-            $search->setMatchingColumns([$fdTable.'.thema', $fdTable.'.content', $fdTable.'.keywords']);
+            $search->setMatchingColumns([$fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords']);
         }
 
         $result = $search->search($searchTerm);
         $laction = 'view';
-        $internalSearch = '&search='.$searchTerm;
+        $internalSearch = '&search=' . $searchTerm;
         $wasSearch = true;
         $idsFound = [];
         $faqsFound = [];
@@ -307,7 +311,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         }
 
         foreach ($faq->faqRecords as $record) {
-
             $catInfo = '';
             $cid = $record['category_id'];
 
@@ -330,7 +333,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             }
 
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
-                $catInfo .= sprintf('<span class="badge badge-info">%d %s</span>',
+                $catInfo .= sprintf(
+                    '<span class="badge badge-info">%d %s</span>',
                     $numCommentsByCat[$cid],
                     $PMF_LANG['ad_start_comments']
                 );
@@ -351,7 +355,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
                    aria-expanded="true" aria-controls="collapseOne">
                   <i class="icon fa fa-chevron-circle-right "></i>
-                    <?= $category->getPath($cid) ?>
+                <?= $category->getPath($cid) ?>
                 </a>
               </h5>
             </div>
@@ -396,23 +400,23 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                       <label>
                         <input type="checkbox" id="sticky_category_block_<?= $cid ?>"
                                onclick="saveStatusForCategory(<?= $cid ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>')"/>
-                          <?= $PMF_LANG['ad_record_sticky'] ?>
+                      <?= $PMF_LANG['ad_record_sticky'] ?>
                       </label>
                     </th>
                     <th style="width: 120px;">
-                        <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
+                    <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
                                    onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>')"
                                 <?= $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked' : '' ?>>
                               <?= $PMF_LANG['ad_record_active'] ?>
                           </label>
-                        <?php } else { ?>
+                    <?php } else { ?>
                           <span class="fa-stack">
                               <i class="fa fa-check fa-stack-1x"></i>
                               <i class="fa fa-ban fa-stack-2x text-danger"></i>
                             </span>
-                        <?php } ?>
+                    <?php } ?>
                     </th>
                     <th colspan="2">
                       &nbsp;
@@ -420,44 +424,44 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                   </tr>
                   </thead>
                   <tbody>
-<?php
+                <?php
             }
             ?>
-                    <tr id="record_<?= $record['id'].'_'.$record['lang'] ?>">
+                    <tr id="record_<?= $record['id'] . '_' . $record['lang'] ?>">
                       <td style="width: 24px; text-align: right;">
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>">
-                            <?= $record['id'] ?>
+                        <?= $record['id'] ?>
                         </a>
                       </td>
                       <td style="width: 16px;">
-                          <?= $record['lang'] ?>
+                      <?= $record['lang'] ?>
                       </td>
                       <td style="width: 24px;">
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>"
                            title="<?= $PMF_LANG['ad_user_edit'] ?> '<?= str_replace('"', '´', $record['title']) ?>'">
-                            <?= $record['solution_id'] ?>
+                        <?= $record['solution_id'] ?>
                         </a>
                       </td>
                       <td>
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>"
                            title="<?= $PMF_LANG['ad_user_edit'] ?> '<?= str_replace('"', '´', $record['title']) ?>'">
-                            <?= $record['title'] ?>
+                        <?= $record['title'] ?>
                         </a>
-<?php
-        if (isset($numCommentsByFaq[$record['id']])) {
-            printf(
-                '<br><a class="badge badge-primary" href="?action=comments#record_id_%d">%d %s</a>',
-                $record['id'],
-                $numCommentsByFaq[$record['id']],
-                $PMF_LANG['ad_start_comments']
+            <?php
+            if (isset($numCommentsByFaq[$record['id']])) {
+                printf(
+                    '<br><a class="badge badge-primary" href="?action=comments#record_id_%d">%d %s</a>',
+                    $record['id'],
+                    $numCommentsByFaq[$record['id']],
+                    $PMF_LANG['ad_start_comments']
                 );
-        }
+            }
             ?></td>
                       <td>
-                          <?= $date->format($record['updated']) ?>
+                      <?= $date->format($record['updated']) ?>
                       </td>
                       <td style="width: 96px;">
-                          <?= $linkVerifier->getEntryStateHTML($record['id'], $record['lang']) ?>
+                      <?= $linkVerifier->getEntryStateHTML($record['id'], $record['lang']) ?>
                       </td>
                       <td>
                         <div class="dropdown">
@@ -468,32 +472,32 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                                title="<?= $PMF_LANG['msgTransToolAddNewTranslation'] ?>"></i>
                           </a>
                           <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
-                              <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
+                          <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
                           </div>
                         </div>
                       </td>
                       <td style="width: 56px;">
                         <label>
                           <input type="checkbox" lang="<?= $record['lang'] ?>"
-                                 onclick="saveStatus(<?= $cid.', ['.$record['id'].']' ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>');"
-                                 id="sticky_record_<?= $cid.'_'.$record['id'] ?>"
-                              <?= $record['sticky'] ? 'checked' : '    ' ?>>
+                                 onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>');"
+                                 id="sticky_record_<?= $cid . '_' . $record['id'] ?>"
+                          <?= $record['sticky'] ? 'checked' : '    ' ?>>
                         </label>
                       </td>
                       <td>
-                          <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
+                      <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
                             <label>
                               <input type="checkbox" lang="<?= $record['lang'] ?>" class="active-records-category-<?= $cid ?>"
-                                     onclick="saveStatus(<?= $cid.', ['.$record['id'].']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
-                                     id="active_record_<?= $cid.'_'.$record['id'] ?>"
+                                     onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
+                                     id="active_record_<?= $cid . '_' . $record['id'] ?>"
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                             </label>
-                          <?php } else { ?>
+                      <?php } else { ?>
                             <span class="fa-stack">
                               <i class="fa fa-check fa-stack-1x"></i>
                               <i class="fa fa-ban fa-stack-2x text-danger"></i>
                             </span>
-                          <?php } ?>
+                      <?php } ?>
                       </td>
                       <td style="width: 16px;">
                         <a class="btn btn-info"
@@ -510,12 +514,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                         </a>
                       </td>
                     </tr>
-<?php
+            <?php
             $old = $cid;
 
             $faqIds[$cid][] = $record['id'];
             ?>
-<?php
+            <?php
         }
         ?>
                   </tbody>
@@ -544,7 +548,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             if ('' === $categoryId) {
                 $categoryId = 0;
             }
-            echo '                id_map['.$categoryId.'] = ['.implode(',', $recordIds)."];\n";
+            echo '                id_map[' . $categoryId . '] = [' . implode(',', $recordIds) . "];\n";
         }
         ?>
       for (let i = 0; i < id_map[id].length; i++) {
@@ -619,7 +623,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
      */
     function deleteRecord(record_id, record_lang, csrf_token)
     {
-        if (confirm('<?= addslashes($PMF_LANG['ad_entry_del_1'].' '.$PMF_LANG['ad_entry_del_3']);
+        if (confirm('<?= addslashes($PMF_LANG['ad_entry_del_1'] . ' ' . $PMF_LANG['ad_entry_del_3']);
         ?>')) {
             $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
             $.ajax({
@@ -629,14 +633,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                 success: function() {
                     $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
                     $('#pmf-admin-saving-data-indicator').html('<?= $PMF_LANG['ad_entry_delsuc'];
-        ?>');
+                    ?>');
                 }
             });
         }
     }
     </script>
-<?php
-
+        <?php
     } else {
         echo $PMF_LANG['err_nothingFound'];
     }

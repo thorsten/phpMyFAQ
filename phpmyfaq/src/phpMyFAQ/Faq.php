@@ -21,6 +21,7 @@
 
 namespace phpMyFAQ;
 
+use Exception;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Helper\FaqHelper;
@@ -158,9 +159,9 @@ class Faq
      * @param string $sortBy     Sort by
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getAllRecordPerCategory(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): array
+    public function getAllRecordsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): array
     {
         global $sids;
 
@@ -257,7 +258,7 @@ class Faq
                 $oLink = new Link($url, $this->config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;
 
-                $faqData[] = array(
+                $faqData[] = [
                     'record_id' => $row->id,
                     'record_lang' => $row->lang,
                     'category_id' => $row->category_id,
@@ -267,7 +268,7 @@ class Faq
                     'record_updated' => $row->updated,
                     'visits' => $visits,
                     'record_created' => $row->created,
-                );
+                ];
             }
         } else {
             return $faqData;
@@ -830,7 +831,7 @@ class Faq
      *
      * @param  array $faqIds
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRecordsByIds(array $faqIds): array
     {
@@ -2004,7 +2005,7 @@ class Faq
      * This function generates the list with the latest published records.
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getLatest()
     {
@@ -2438,7 +2439,7 @@ class Faq
      *
      * @todo   needs to be moved to a QuestionHelper class
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function renderOpenQuestions(): string
     {
