@@ -390,8 +390,7 @@ class Category
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
             if ('' === $row['image']) {
-                $image = 'data:image/png;base64,' .
-                    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=';
+                $image = '';
             } else {
                 $image = 'images/' . $row['image'];
             }
