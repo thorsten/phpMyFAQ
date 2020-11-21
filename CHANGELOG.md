@@ -27,6 +27,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed password hashing with MD5 and SHA-1 (Thorsten)
 - removed OpenSearch support (Thorsten)
 
+### phpMyFAQ v3.0.6 - 2020-11-
+
+- added support for PHP 8.0
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.0.5 - 2020-10-17
 
 - minor improvements (Thorsten)

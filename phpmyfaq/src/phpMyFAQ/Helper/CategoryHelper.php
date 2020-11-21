@@ -343,12 +343,12 @@ class CategoryHelper extends Helper
         $decks = '';
         $key = 1;
         foreach ($categories as $category) {
-            $decks .=
-                '<div class="card mb-4">' .
-                '<a href="' . $category['url'] . '">' .
-                '<img class="card-img-top img-fluid" width="200" src="' . $category['image'] . '" alt="' .
-                $category['name'] . '" />' .
-                '</a>' .
+            $decks .= '<div class="card mb-4"><a href="' . $category['url'] . '">';
+            if ('' !== $category['image']) {
+                $decks .= '<img class="card-img-top embed-responsive-item" width="200" alt="' .
+                $category['name'] . '" src="' . $category['image'] . '" />';
+            }
+            $decks .= '</a>' .
                 '<div class="card-body">' .
                 '<h4 class="card-title text-center">' .
                 '<a href="' . $category['url'] . '">' . $category['name'] . '</a>' .
