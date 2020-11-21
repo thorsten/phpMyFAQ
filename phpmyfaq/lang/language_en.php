@@ -1337,3 +1337,4 @@ $PMF_LANG['ad_add_user_change_password'] = 'User must change password after firs
 $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API enabled'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Allowed hosts for registrations'];
+$LANG_CONF['main.loginWithEmailAddress'] = ['input', 'Login with email address'];

@@ -715,13 +715,25 @@ if ($step == 3) {
         $faqConfig->add('security.domainWhiteListForRegistrations', '');
     }
 
+    //
+    // UPDATES FROM 3.1.0-beta
+    //
+    if (version_compare($version, '3.1.0-beta', '<=')) {
+        // Add "login with email address" configuration
+        $faqConfig->add('main.loginWithEmailAddress', false);
+    }
+
+    //
     // Always the last step: Update version number
+    //
     if (version_compare($version, System::getVersion(), '<')) {
         $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);
         $faqConfig->update(['main.currentVersion' => System::getVersion()]);
     }
 
-    // optimize tables if possible
+    //
+    // Optimize tables if possible
+    //
     switch ($DB['type']) {
         case 'mysqli':
             // Get all table names
