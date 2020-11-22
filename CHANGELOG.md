@@ -19,6 +19,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added API client tokens for REST API v2.1 (Thorsten)
 - added opt-in for displaying user data (Thorsten)
 - added mail notifications for new FAQs in admin section (Thorsten)
+- added possibility to login via email address (Thorsten)
 - updated to Composer v2 (Thorsten)
 - improved install and update scripts (Thorsten)
 - removed REST API v1 (Thorsten)

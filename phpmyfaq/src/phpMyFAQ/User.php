@@ -2,11 +2,9 @@
 
 /**
  * Creates a new user object.
- *
  * A user are recognized by the session-id using getUserBySessionId(), by his
  * using getUserById() or by his nickname (login) using getUserByLogin(). New
  * are created using createNewUser().
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -56,14 +54,14 @@ class User
     public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen loginname is too short.';
     public const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
     public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
-    'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+        'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
     public const ERROR_USER_NO_PERM = 'No permission container specified.';
     public const ERROR_USER_NO_USERID = 'No user-ID found. ';
     public const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
     public const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
     public const ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
     public const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are ' .
-    'temporarily blocked. Please try again later.';
+        'temporarily blocked. Please try again later.';
 
     public const STATUS_USER_PROTECTED = 'User account is protected. ';
     public const STATUS_USER_BLOCKED = 'User account is blocked. ';
@@ -180,8 +178,8 @@ class User
         $this->authContainer = [];
         $auth = new Auth($this->config);
         /**
- * @var AuthDatabase|AuthHttp|AuthLdap|AuthSso
-*/
+         * @var AuthDatabase|AuthHttp|AuthLdap|AuthSso
+         */
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
@@ -207,7 +205,6 @@ class User
      * adds a permission object to the user.
      *
      * @param Permission $perm Permission object
-     *
      * @return bool
      */
     public function addPerm(Permission $perm)
@@ -225,7 +222,6 @@ class User
      * returns true if perm is a valid permission object.
      *
      * @param Permission $perm Permission object
-     *
      * @return bool
      */
     private function checkPerm($perm)
@@ -242,7 +238,6 @@ class User
      * Returns a specific entry from the auth data source array.
      *
      * @param string $key
-     *
      * @return string|null
      */
     public function getAuthSource($key)
@@ -257,7 +252,6 @@ class User
      * Returns a specific entry from the auth data array.
      *
      * @param string $key
-     *
      * @return string|null
      */
     public function getAuthData($key)
@@ -273,7 +267,6 @@ class User
      *
      * @param Auth   $auth Driver object
      * @param string $name Auth name
-     *
      * @return bool
      */
     public function addAuth(Auth $auth, $name)
@@ -291,7 +284,6 @@ class User
      * Returns true if auth is a valid authentication object.
      *
      * @param Auth $auth Auth object
-     *
      * @return bool
      */
     protected function checkAuth(Auth $auth)
@@ -312,7 +304,6 @@ class User
      * specified cookie information.
      *
      * @param string $cookie
-     *
      * @return bool
      */
     public function getUserByCookie($cookie)
@@ -377,7 +368,6 @@ class User
      * Checks if display name is already used. Returns true, if already in use.
      *
      * @param string $name
-     *
      * @return bool
      */
     public function checkDisplayName($name)
@@ -397,7 +387,6 @@ class User
      * Checks if email address is already used. Returns true, if already in use.
      *
      * @param string $name
-     *
      * @return bool
      */
     public function checkMailAddress($name)
@@ -417,7 +406,6 @@ class User
      * search users by login.
      *
      * @param string $search Login name
-     *
      * @return array
      */
     public function searchUsers($search)
@@ -456,7 +444,6 @@ class User
      * @param string $pass
      * @param string $domain
      * @param int    $userId
-     *
      * @return bool
      */
     public function createUser(string $login, string $pass = '', string $domain = '', int $userId = 0): bool
@@ -544,7 +531,6 @@ class User
 
     /**
      * returns true if login is a valid login string.
-     *
      * $this->loginMinLength defines the minimum length the
      * login string. If login has more characters than allowed,
      * false is returned.
@@ -552,7 +538,6 @@ class User
      * If login matches this false is returned.
      *
      * @param string $login Login name
-     *
      * @return bool
      */
     public function isValidLogin($login)
@@ -572,9 +557,8 @@ class User
      * loads basic user information from the database selecting the user with
      * specified login.
      *
-     * @param string $login      Login name
+     * @param string $login Login name
      * @param bool   $raiseError Raise error?
-     *
      * @return bool
      */
     public function getUserByLogin($login, $raiseError = true)
@@ -620,7 +604,6 @@ class User
      *
      * @param int  $minimumLength
      * @param bool $allowUnderscore
-     *
      * @return string
      */
     public function createPassword($minimumLength = 8, $allowUnderscore = true)
@@ -693,7 +676,7 @@ class User
 
         if (
             isset($this->allowedStatus[$this->status]) &&
-            $this->allowedStatus[$this->status] == self::STATUS_USER_PROTECTED
+            $this->allowedStatus[$this->status] === self::STATUS_USER_PROTECTED
         ) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . self::STATUS_USER_PROTECTED;
 
@@ -753,10 +736,8 @@ class User
 
     /**
      * Returns a string with error messages.
-     *
      * The string returned by error() contains messages for all errors that
      * during object processing. Messages are separated by new lines.
-     *
      * Error messages are stored in the public array errors.
      *
      * @return string
@@ -785,9 +766,8 @@ class User
     /**
      * Get all users in <option> tags.
      *
-     * @param int  $id                Selected user ID
+     * @param int  $id Selected user ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     *
      * @return string
      */
     public function getAllUserOptions($id = 1, $allowBlockedUsers = false)
@@ -815,9 +795,8 @@ class User
      * Returns an array with the user-IDs of all users found in
      * the database. By default, the Anonymous User will not be returned.
      *
-     * @param bool $withoutAnonymous  Without anonymous?
+     * @param bool $withoutAnonymous Without anonymous?
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     *
      * @return array
      */
     public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true)
@@ -856,12 +835,11 @@ class User
      * Loads basic user information from the database selecting the user with
      * specified user-ID.
      *
-     * @param int  $userId            User ID
+     * @param int  $userId User ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     *
      * @return bool
      */
-    public function getUserById($userId, $allowBlockedUsers = false)
+    public function getUserById($userId, $allowBlockedUsers = false): bool
     {
         $select = sprintf(
             '
@@ -922,29 +900,9 @@ class User
     }
 
     /**
-     * Returns true or false for the visibility for the given email
-     * address, if the user is not a registered user, the method
-     * returns false for anonymous users
-     *
-     * @param string $email
-     * @return bool
-     */
-    public function getUserVisibilityByEmail(string $email): bool
-    {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
-        }
-
-        $userData = $this->userdata->fetchAll('email', $email);
-
-        return (bool)$userData['is_visible'];
-    }
-
-    /**
      * Returns the data of the current user.
      *
      * @param string $field Field
-     *
      * @return array|string|int
      */
     public function getUserData($field = '*')
@@ -960,7 +918,6 @@ class User
      * Adds user data.
      *
      * @param array $data Array with user data
-     *
      * @return bool
      */
     public function setUserData(array $data)
@@ -984,6 +941,42 @@ class User
     }
 
     /**
+     * Returns the user ID from the given email address
+     *
+     * @param string $email
+     * @return int
+     */
+    public function getUserIdByEmail(string $email): int
+    {
+        if (!$this->userdata instanceof UserData) {
+            $this->userdata = new UserData($this->config);
+        }
+
+        $userData = $this->userdata->fetchAll('email', $email);
+
+        return (int)$userData['user_id'];
+    }
+
+    /**
+     * Returns true or false for the visibility for the given email
+     * address, if the user is not a registered user, the method
+     * returns false for anonymous users
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function getUserVisibilityByEmail(string $email): bool
+    {
+        if (!$this->userdata instanceof UserData) {
+            $this->userdata = new UserData($this->config);
+        }
+
+        $userData = $this->userdata->fetchAll('email', $email);
+
+        return (bool)$userData['is_visible'];
+    }
+
+    /**
      * sets the minimum login string length.
      *
      * @param int $loginMinLength Minimum length of login name
@@ -997,7 +990,6 @@ class User
 
     /**
      * Returns true on success.
-     *
      * This will change a users status to active, and send an email with a new password.
      *
      * @return bool
@@ -1043,7 +1035,7 @@ class User
     /**
      * Sets the user's status and updates the database entry.
      *
-     * @param  string $status Status
+     * @param string $status Status
      * @return bool
      */
     public function setStatus($status)
@@ -1085,7 +1077,6 @@ class User
      * password is generated using the createPassword() method.
      *
      * @param string $pass Password
-     *
      * @return bool
      */
     public function changePassword($pass = '')
@@ -1119,8 +1110,8 @@ class User
     /**
      * Sends mail to the current user.
      *
-     * @param  string $subject
-     * @param  string $message
+     * @param string $subject
+     * @param string $message
      * @return bool
      */
     public function mailUser($subject, $message)

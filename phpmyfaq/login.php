@@ -2,7 +2,6 @@
 
 /**
  * This is the page there a user can login.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -35,7 +34,9 @@ try {
 $template->parse(
     'mainPageContent',
     [
-        'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
+        'registerUser' => $faqConfig->get(
+            'security.enableRegistration'
+        ) ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
         'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
         'loginHeader' => $PMF_LANG['msgLoginUser'],
         'loginMessage' => $loginMessage,

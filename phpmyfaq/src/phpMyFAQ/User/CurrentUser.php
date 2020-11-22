@@ -147,6 +147,12 @@ class CurrentUser extends User
         $optData = [];
         $loginError = $passwordError = $count = 0;
 
+        if ($this->config->get('main.loginWithEmailAddress')) {
+            $userId = $this->getUserIdByEmail($login);
+            $this->getUserById($userId);
+            $login = $this->getLogin();
+        }
+
         // First check for brute force attack
         $this->getUserByLogin($login);
         if ($this->isFailedLastLoginAttempt()) {
