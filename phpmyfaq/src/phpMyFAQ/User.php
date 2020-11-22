@@ -457,9 +457,9 @@ class User
      * @param string $domain
      * @param int    $userId
      *
-     * @return boolean
+     * @return bool
      */
-    public function createUser($login, $pass = '', $domain = '', $userId = 0)
+    public function createUser(string $login, string $pass = '', string $domain = '', int $userId = 0): bool
     {
         foreach ($this->authContainer as $auth) {
             if (!$this->checkAuth($auth)) {
@@ -516,7 +516,7 @@ class User
         }
 
         // create authentication entry
-        if ($pass == '') {
+        if ($pass === '') {
             $pass = $this->createPassword();
         }
         $success = false;

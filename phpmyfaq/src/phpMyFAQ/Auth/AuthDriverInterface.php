@@ -34,28 +34,28 @@ interface AuthDriverInterface
      * @param string $domain
      * @return mixed
      */
-    public function add($login, $pass, $domain = '');
+    public function add(string $login, string $pass, string $domain = '');
 
     /**
      * Changes the password for the account specified by login.
      * Returns true on success, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param string $pass Password
      * @return bool
      */
-    public function changePassword($login, $pass);
+    public function changePassword(string $login, string $pass): bool;
 
     /**
      * Deletes the user account specified by login.
      * Returns true on success, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @return bool
      */
-    public function delete($login);
+    public function delete(string $login): bool;
 
     /**
      * Checks the password for the given user account.
@@ -65,19 +65,19 @@ interface AuthDriverInterface
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param string $pass Password
      * @param array  $optionalData Optional data
      * @return bool
      */
-    public function checkPassword($login, $pass, array $optionalData = []);
+    public function checkPassword(string $login, string $pass, array $optionalData = []): bool;
 
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param array  $optionalData Optional data
      * @return int
      */
-    public function checkLogin($login, array $optionalData = []);
+    public function checkLogin(string $login, array $optionalData = []): int;
 }

@@ -49,7 +49,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Adds a new user account to the faquserlogin table. Returns true on
+     * Adds a new user account to the "faquserlogin" table. Returns true on
      * success, otherwise false. Error messages are added to the array errors.
      *
      * @param string $login
@@ -57,7 +57,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * @param string $domain
      * @return bool
      */
-    public function add($login, $pass, $domain = ''): bool
+    public function add(string $login, string $pass, string $domain = ''): bool
     {
         if ($this->checkLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
@@ -94,11 +94,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * Checks the number of entries of given login name.
      *
-     * @param string     $login Loginname
+     * @param string     $login Login name
      * @param array|null $optionalData Optional data
      * @return int
      */
-    public function checkLogin($login, array $optionalData = null): int
+    public function checkLogin(string $login, array $optionalData = null): int
     {
         $check = sprintf(
             "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
@@ -123,13 +123,13 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * Returns true on success, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @return bool
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         $delete = sprintf(
-            " DELETE FROM %sfaquserlogin WHERE login = '%s'",
+            "DELETE FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->db->escape($login)
         );
@@ -157,12 +157,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string     $login Loginname
+     * @param string     $login Login name
      * @param string     $password Password
      * @param array|null $optionalData Optional data
      * @return bool
      */
-    public function checkPassword($login, $password, array $optionalData = null): bool
+    public function checkPassword(string $login, string $password, array $optionalData = null): bool
     {
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
@@ -207,20 +207,14 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * Returns true on success, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param string $pass Password
      * @return bool
      */
-    public function changePassword($login, $pass): bool
+    public function changePassword(string $login, string $pass): bool
     {
         $change = sprintf(
-            "
-            UPDATE
-                %sfaquserlogin
-            SET
-                pass = '%s'
-            WHERE
-                login = '%s'",
+            "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
