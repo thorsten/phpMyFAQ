@@ -43,21 +43,21 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 // get language (default: english)
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
-require PMF_ROOT_DIR.'/lang/language_en.php';
+require PMF_ROOT_DIR . '/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
 if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     // Overwrite English strings with the ones we have in the current language
-    if (!file_exists(PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php')) {
+    if (!file_exists(PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php')) {
         $faqLangCode = 'en';
     }
-    require PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php';
+    require PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
 }
@@ -146,7 +146,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
         } catch (Exception $e) {
-            $error = $e->getMessage().'<br>';
+            $error = $e->getMessage() . '<br>';
         }
     }
     if ($faqConfig->get('security.ssoSupport')) {
@@ -158,13 +158,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
-            $error = $error.$PMF_LANG['ad_auth_fail'];
+            $error = $error . $PMF_LANG['ad_auth_fail'];
         }
     } else {
         // error
         $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nErrors: '.implode(', ', $user->errors));
-        $error = $error.$PMF_LANG['ad_auth_fail'];
+        $logging->logAdmin($user, 'Loginerror\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
+        $error = $error . $PMF_LANG['ad_auth_fail'];
     }
 } else {
     // Try to authenticate with cookie information
@@ -218,40 +218,82 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
         if ('ajax' === $action) {
             switch ($ajax) {
                 // Attachments
-                case 'att':           require 'ajax.attachment.php'; break;
+                case 'att':
+                    require 'ajax.attachment.php';
+                    break;
                 // Dashboard
-                case 'dashboard':     require 'ajax.dashboard.php'; break;
+                case 'dashboard':
+                    require 'ajax.dashboard.php';
+                    break;
                 // Link verification
-                case 'verifyURL':     require 'ajax.verifyurl.php'; break;
-                case 'onDemandURL':   require 'ajax.ondemandurl.php'; break;
+                case 'verifyURL':
+                    require 'ajax.verifyurl.php';
+                    break;
+                case 'onDemandURL':
+                    require 'ajax.ondemandurl.php';
+                    break;
                 // Categories
-                case 'categories':    require 'ajax.category.php'; break;
+                case 'categories':
+                    require 'ajax.category.php';
+                    break;
                 // Configuration management
-                case 'config_list':   require 'ajax.config_list.php'; break;
-                case 'config':        require 'ajax.config.php'; break;
-                case 'elasticsearch': require 'ajax.elasticsearch.php'; break;
+                case 'config_list':
+                    require 'ajax.config_list.php';
+                    break;
+                case 'config':
+                    require 'ajax.config.php';
+                    break;
+                case 'elasticsearch':
+                    require 'ajax.elasticsearch.php';
+                    break;
                 // Tags management
-                case 'tags':          require 'ajax.tags.php'; break;
+                case 'tags':
+                    require 'ajax.tags.php';
+                    break;
                 // Comments
-                case 'comment':       require 'ajax.comment.php'; break;
+                case 'comment':
+                    require 'ajax.comment.php';
+                    break;
                 // Records
-                case 'records':       require 'ajax.records.php'; break;
-                case 'recordSave':    require 'record.save.php'; break;
-                case 'recordAdd':     require 'record.add.php'; break;
-                case 'autosave':      require 'ajax.autosave.php'; break;
-                case 'markdown':      require 'ajax.markdown.php'; break;
+                case 'records':
+                    require 'ajax.records.php';
+                    break;
+                case 'recordSave':
+                    require 'record.save.php';
+                    break;
+                case 'recordAdd':
+                    require 'record.add.php';
+                    break;
+                case 'autosave':
+                    require 'ajax.autosave.php';
+                    break;
+                case 'markdown':
+                    require 'ajax.markdown.php';
+                    break;
                 // Search
-                case 'search':        require 'ajax.search.php'; break;
+                case 'search':
+                    require 'ajax.search.php';
+                    break;
                 // Users
-                case 'user':          require 'ajax.user.php'; break;
+                case 'user':
+                    require 'ajax.user.php';
+                    break;
                 // Groups
-                case 'group':         require 'ajax.group.php'; break;
+                case 'group':
+                    require 'ajax.group.php';
+                    break;
                 // Sections
-                case 'section':       require 'ajax.section.php'; break;
+                case 'section':
+                    require 'ajax.section.php';
+                    break;
                 // Interface translation
-                case 'trans':         require 'ajax.trans.php'; break;
+                case 'trans':
+                    require 'ajax.trans.php';
+                    break;
                 // Image upload
-                case 'image':         require 'ajax.image.php'; break;
+                case 'image':
+                    require 'ajax.image.php';
+                    break;
             }
             exit();
         }
@@ -281,33 +323,62 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
         // the various sections of the admin area
         switch ($action) {
             // functions for user administration
-            case 'user':              require 'user.php'; break;
-            case 'group':             require 'group.php'; break;
-            case 'section':           require 'section.php'; break;
+            case 'user':
+                require 'user.php';
+                break;
+            case 'group':
+                require 'group.php';
+                break;
+            case 'section':
+                require 'section.php';
+                break;
             // functions for content administration
+            case 'faqs-overview':
+                require 'faqs.overview.php';
+                break;
             case 'viewinactive':
             case 'viewactive':
-            case 'view':              require 'record.show.php'; break;
-            case 'searchfaqs':        require 'record.search.php'; break;
+            case 'view':
+                require 'record.show.php';
+                break;
+            case 'searchfaqs':
+                require 'record.search.php';
+                break;
             case 'takequestion':
             case 'editentry':
             case 'copyentry':
-            case 'editpreview':       require 'record.edit.php'; break;
-            case 'insertentry':       require 'record.add.php'; break;
-            case 'saveentry':         require 'record.save.php'; break;
-            case 'delatt':            require 'record.delatt.php'; break;
-            case 'question':          require 'record.questions.php'; break;
-            case 'comments':          require 'record.comments.php'; break;
+            case 'editpreview':
+                require 'record.edit.php';
+                break;
+            case 'insertentry':
+                require 'record.add.php';
+                break;
+            case 'saveentry':
+                require 'record.save.php';
+                break;
+            case 'delatt':
+                require 'record.delatt.php';
+                break;
+            case 'question':
+                require 'record.questions.php';
+                break;
+            case 'comments':
+                require 'record.comments.php';
+                break;
             // functions for tags
             case 'tags':
-            case 'delete-tag':        require 'tags.php'; break;
+            case 'delete-tag':
+                require 'tags.php';
+                break;
             // news administration
             case 'news':
             case 'add-news':
             case 'edit-news':
             case 'save-news':
             case 'update-news':
-            case 'delete-news':       require 'news.php'; break;
+            case 'delete-news':
+                require 'news.php';
+                break;
             // category administration
             case 'content':
             case 'category':
@@ -316,57 +387,123 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'checkIfCategoryExists':
             case 'removecategory':
             case 'changecategory':
-            case 'pastecategory':     require 'category.main.php'; break;
-            case 'addcategory':       require 'category.add.php'; break;
-            case 'editcategory':      require 'category.edit.php'; break;
-            case 'translatecategory': require 'category.translate.php'; break;
-            case 'deletecategory':    require 'category.delete.php'; break;
-            case 'cutcategory':       require 'category.cut.php'; break;
-            case 'movecategory':      require 'category.move.php'; break;
-            case 'showcategory':      require 'category.showstructure.php'; break;
+            case 'pastecategory':
+                require 'category.main.php';
+                break;
+            case 'addcategory':
+                require 'category.add.php';
+                break;
+            case 'editcategory':
+                require 'category.edit.php';
+                break;
+            case 'translatecategory':
+                require 'category.translate.php';
+                break;
+            case 'deletecategory':
+                require 'category.delete.php';
+                break;
+            case 'cutcategory':
+                require 'category.cut.php';
+                break;
+            case 'movecategory':
+                require 'category.move.php';
+                break;
+            case 'showcategory':
+                require 'category.showstructure.php';
+                break;
             // glossary
             case 'glossary':
             case 'saveglossary':
             case 'updateglossary':
-            case 'deleteglossary':    require 'glossary.main.php'; break;
-            case 'addglossary':       require 'glossary.add.php'; break;
-            case 'editglossary':      require 'glossary.edit.php'; break;
+            case 'deleteglossary':
+                require 'glossary.main.php';
+                break;
+            case 'addglossary':
+                require 'glossary.add.php';
+                break;
+            case 'editglossary':
+                require 'glossary.edit.php';
+                break;
             // functions for password administration
-            case 'passwd':            require 'pwd.change.php'; break;
+            case 'passwd':
+                require 'pwd.change.php';
+                break;
             // functions for session administration
             case 'adminlog':
-            case 'deleteadminlog':    require 'stat.adminlog.php'; break;
+            case 'deleteadminlog':
+                require 'stat.adminlog.php';
+                break;
             case 'viewsessions':
-            case 'clear-visits':      require 'stat.main.php'; break;
-            case 'sessionbrowse':     require 'stat.browser.php'; break;
-            case 'viewsession':       require 'stat.show.php'; break;
+            case 'clear-visits':
+                require 'stat.main.php';
+                break;
+            case 'sessionbrowse':
+                require 'stat.browser.php';
+                break;
+            case 'viewsession':
+                require 'stat.show.php';
+                break;
             case 'clear-statistics':
-            case 'statistics':        require 'stat.ratings.php'; break;
+            case 'statistics':
+                require 'stat.ratings.php';
+                break;
             case 'truncatesearchterms':
-            case 'searchstats':       require 'stat.search.php'; break;
+            case 'searchstats':
+                require 'stat.search.php';
+                break;
             // Reports
-            case 'reports':           require 'report.main.php'; break;
-            case 'reportview':        require 'report.view.php'; break;
+            case 'reports':
+                require 'report.main.php';
+                break;
+            case 'reportview':
+                require 'report.view.php';
+                break;
             // Config administration
-            case 'config':            require 'configuration.php'; break;
-            case 'system':            require 'system.php'; break;
+            case 'config':
+                require 'configuration.php';
+                break;
+            case 'system':
+                require 'system.php';
+                break;
             case 'updateinstance':
-            case 'instances':         require 'instances.php'; break;
-            case 'editinstance':      require 'instances.edit.php'; break;
-            case 'stopwordsconfig':   require 'stopwords.php'; break;
-            case 'elasticsearch':     require 'elasticsearch.php'; break;
+            case 'instances':
+                require 'instances.php';
+                break;
+            case 'editinstance':
+                require 'instances.edit.php';
+                break;
+            case 'stopwordsconfig':
+                require 'stopwords.php';
+                break;
+            case 'elasticsearch':
+                require 'elasticsearch.php';
+                break;
             case 'meta':
-            case 'meta.update'; require 'meta.php'; break;
-            case 'meta.edit':         require 'meta.edit.php'; break;
+            case 'meta.update';
+                require 'meta.php';
+                break;
+            case 'meta.edit':
+                require 'meta.edit.php';
+                break;
             // functions for backup administration
-            case 'backup':            require 'backup.main.php'; break;
-            case 'restore':           require 'backup.import.php'; break;
+            case 'backup':
+                require 'backup.main.php';
+                break;
+            case 'restore':
+                require 'backup.import.php';
+                break;
             // functions for FAQ export
-            case 'export':            require 'export.main.php'; break;
-            // attachment administration 
-            case 'attachments':       require 'attachments.php'; break;
+            case 'export':
+                require 'export.main.php';
+                break;
+            // attachment administration
+            case 'attachments':
+                require 'attachments.php';
+                break;
 
-            default:                  echo 'Dave, this conversation can serve no purpose anymore. Goodbye.'; break;
+            default:
+                echo 'Dave, this conversation can serve no purpose anymore. Goodbye.';
+                break;
         }
     } else {
         require 'dashboard.php';

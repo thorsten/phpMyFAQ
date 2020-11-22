@@ -39,9 +39,9 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 if ('insertentry' === $do &&
-    ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(),
-            'add_faq')) ||
-    'saveentry' === $do && $user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+    ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(),
+                                                                                              'add_faq')) ||
+    'saveentry' === $do && $user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     $user = CurrentUser::getFromCookie($faqConfig);
     if (!$user instanceof CurrentUser) {
         $user = CurrentUser::getFromSession($faqConfig);

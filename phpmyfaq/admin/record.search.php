@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(), 'delete_faq')) {
+if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
     $searchCategory = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
     $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 

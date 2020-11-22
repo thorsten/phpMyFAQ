@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $faqSystem = new System();
 
     $esConfig = $faqConfig->getElasticsearchConfig();

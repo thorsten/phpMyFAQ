@@ -31,7 +31,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     $csrfCheck = true;
 }
 
-if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnews')) { ?>
+if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) { ?>
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -166,7 +166,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
 <?php
-} elseif ('news' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
+} elseif ('news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
 ?>
          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -230,7 +230,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 <?php
 
-} elseif ('edit-news' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
+} elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
     ?>
@@ -403,7 +403,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
 <?php
 
     }
-} elseif ('save-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnews')) {
+} elseif ('save-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -455,7 +455,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 <?php
 
-} elseif ('update-news' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
+} elseif ('update-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -508,7 +508,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 <?php
 
-} elseif ('delete-news' == $action && $user->perm->checkRight($user->getUserId(), 'delnews')) {
+} elseif ('delete-news' == $action && $user->perm->hasPermission($user->getUserId(), 'delnews')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">

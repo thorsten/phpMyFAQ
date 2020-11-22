@@ -51,12 +51,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $csrfCheckDelete = true;
       }
 
-      if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
-          $user->perm->checkRight($user->getUserId(), 'editglossary') ||
-          $user->perm->checkRight($user->getUserId(), 'delglossary')) {
+      if ($user->perm->hasPermission($user->getUserId(), 'addglossary') ||
+          $user->perm->hasPermission($user->getUserId(), 'editglossary') ||
+          $user->perm->hasPermission($user->getUserId(), 'delglossary')) {
           $glossary = new Glossary($faqConfig);
 
-          if ('saveglossary' == $action && $user->perm->checkRight($user->getUserId(), 'addglossary') && $csrfCheck) {
+          if ('saveglossary' == $action && $user->perm->hasPermission($user->getUserId(), 'addglossary') && $csrfCheck) {
               $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
               $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
               if ($glossary->addGlossaryItem($item, $definition)) {
@@ -70,8 +70,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               }
           }
 
-          if ('updateglossary' == $action && $user->perm->checkRight($user->getUserId(),
-                  'editglossary') && $csrfCheck) {
+          if ('updateglossary' == $action && $user->perm->hasPermission($user->getUserId(),
+                                                                        'editglossary') && $csrfCheck) {
               $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
               $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
               $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -86,8 +86,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               }
           }
 
-          if ('deleteglossary' == $action && $user->perm->checkRight($user->getUserId(),
-                  'editglossary') && $csrfCheckDelete) {
+          if ('deleteglossary' == $action && $user->perm->hasPermission($user->getUserId(),
+                                                                        'editglossary') && $csrfCheckDelete) {
               $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
               if ($glossary->deleteGlossaryItem($id)) {
                   echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';

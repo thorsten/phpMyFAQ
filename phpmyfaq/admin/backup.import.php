@@ -39,7 +39,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     </header>
 <?php
 
-if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
+if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
     if (isset($_FILES['userfile']) && 0 === $_FILES['userfile']['error']) {
         $ok = 1;
         $fileInfo = new finfo(FILEINFO_MIME_ENCODING);

@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <div class="row">
   <div class="col-lg-12">
-      <?php if ($user->perm->checkRight($user->getUserId(), 'addglossary')) { ?>
+      <?php if ($user->perm->hasPermission($user->getUserId(), 'addglossary')) { ?>
         <form action="?action=saveglossary" method="post" accept-charset="utf-8">
           <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 

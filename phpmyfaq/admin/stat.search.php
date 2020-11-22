@@ -43,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
           <div class="col-lg-12">
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $perPage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);

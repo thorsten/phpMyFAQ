@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
+      if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
           $category = new Category($faqConfig, [], false);
           $question = new Question($faqConfig);
           $category->setUser($currentAdminUser);

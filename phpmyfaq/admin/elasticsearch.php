@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
 
     $esSearch = new Elasticsearch($faqConfig);
     $esInstance = new ElasticsearchInstance($faqConfig);

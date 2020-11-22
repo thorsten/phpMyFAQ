@@ -40,8 +40,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $currentUserId = $user->getUserId();
 
-if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
-     $user->perm->checkRight($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')) {
+if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
+     $user->perm->hasPermission($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')) {
     $category = new Category($faqConfig, [], false);
 
     if ($faqConfig->get('main.enableCategoryRestrictions')) {
@@ -304,7 +304,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                             <div class="tab-pane active" id="tab-question-answer">
                                 <!-- Revision -->
                                 <?php
-                                if ($user->perm->checkRight($currentUserId, 'changebtrevs')) {
+                                if ($user->perm->hasPermission($currentUserId, 'changebtrevs')) {
                                     $faqRevision = new Revision($faqConfig);
                                     $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
                                     if (count($revisions)) { ?>
@@ -429,7 +429,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 </div>
 
                                 <!-- Attachments -->
-                                <?php if ($user->perm->checkRight($currentUserId, 'addattachment')): ?>
+                                <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')): ?>
                                     <div class="form-group row">
                                         <label class="col-lg-2 col-form-label">
                                             <?= $PMF_LANG['ad_menu_attachments'] ?>:
@@ -447,7 +447,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                                         $att->buildUrl(),
                                                         $att->getFilename()
                                                     );
-                                                    if ($user->perm->checkRight($currentUserId, 'delattachment')) {
+                                                    if ($user->perm->hasPermission($currentUserId, 'delattachment')) {
                                                         printf(
                                                             '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
                                                             $faqData['id'],
@@ -709,7 +709,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                             </h5>
                             <div class="form-group">
                                 <!-- active or not -->
-                                <?php if ($user->perm->checkRight($currentUserId, 'approverec')):
+                                <?php if ($user->perm->hasPermission($currentUserId, 'approverec')):
                                     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
                                         $suf = ' checked';
                                         $sul = null;
@@ -889,8 +889,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
       }
     </script>
     <?php
-} elseif ($user->perm->checkRight($currentUserId, 'edit_faq') !== 1 && !Database::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') !== 1 && !Database::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['err_NotAuth'];
-} elseif ($user->perm->checkRight($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['no_cats'];
 }

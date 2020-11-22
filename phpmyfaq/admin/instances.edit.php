@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </div>
   </header>
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     $instanceId = Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 
     $instance = new Instance($faqConfig);

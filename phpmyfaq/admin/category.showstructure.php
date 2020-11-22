@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           </h1>
         </div>
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

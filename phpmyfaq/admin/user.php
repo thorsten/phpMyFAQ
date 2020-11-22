@@ -31,8 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->checkRight($user->getUserId(),
-        'delete_user') || $user->perm->checkRight($user->getUserId(), 'add_user')) {
+if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->hasPermission($user->getUserId(),
+                                                                                              'delete_user') || $user->perm->hasPermission($user->getUserId(), 'add_user')) {
     ?>
   <script src="assets/js/user.js"></script>
     <?php
@@ -65,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
     }
 
     // update user rights
-    if ($userAction == 'update_rights' && $user->perm->checkRight($user->getUserId(), 'edit_user')) {
+    if ($userAction == 'update_rights' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -96,7 +96,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
     }
 
     // update user data
-    if ($userAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edit_user')) {
+    if ($userAction == 'update_data' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -138,7 +138,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
     }
 
     // delete user confirmation
-    if ($userAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'delete_user')) {
+    if ($userAction == 'delete_confirm' && $user->perm->hasPermission($user->getUserId(), 'delete_user')) {
         $message = '';
         $user = new CurrentUser($faqConfig);
 
@@ -185,7 +185,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
     }
 
     // delete user
-    if ($userAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'delete_user')) {
+    if ($userAction == 'delete' && $user->perm->hasPermission($user->getUserId(), 'delete_user')) {
         $message = '';
         $user = new User($faqConfig);
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -241,12 +241,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'add_user')) : ?>
+              <?php if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
                 <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addUserModal">
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>
               <?php endif ?>
-              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')) : ?>
+              <?php if ($currentUser->perm->hasPermission($user->getUserId(), 'edit_user')) : ?>
                 <a class="btn btn-sm btn-secondary" href="?action=user&amp;user_action=listallusers">
                   <i class="fa fa-users" aria-label="true"></i> <?= $PMF_LANG['list_all_users'] ?>
                 </a>
@@ -456,7 +456,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
     }
 
     // show list of all users
-    if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edit_user')) {
+    if ($userAction == 'listallusers' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
         $allUsers = $user->getAllUsers(false);
         $numUsers = count($allUsers);
         $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
@@ -487,7 +487,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->che
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'add_user')) : ?>
+              <?php if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
                 <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addUserModal">
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>

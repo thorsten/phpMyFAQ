@@ -73,7 +73,7 @@ switch ($ajaxAction) {
 
     // save active FAQs
     case 'save_active_records':
-        if ($user->perm->checkRight($user->getUserId(), 'approverec')) {
+        if ($user->perm->hasPermission($user->getUserId(), 'approverec')) {
             if (!empty($items)) {
                 $faq = new Faq($faqConfig);
 
@@ -90,7 +90,7 @@ switch ($ajaxAction) {
 
     // save sticky FAQs
     case 'save_sticky_records':
-        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             if (!empty($items)) {
                 $faq = new Faq($faqConfig);
 
@@ -107,7 +107,7 @@ switch ($ajaxAction) {
 
     // search FAQs for suggestions
     case 'search_records':
-        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             $faqPermission = new FaqPermission($faqConfig);
             $faqSearch = new Search($faqConfig);
             $faqSearch->setCategory(new Category($faqConfig));
@@ -132,7 +132,7 @@ switch ($ajaxAction) {
 
     // delete FAQs
     case 'delete_record':
-        if ($user->perm->checkRight($user->getUserId(), 'delete_faq')) {
+        if ($user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
             $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
             $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 
@@ -152,7 +152,7 @@ switch ($ajaxAction) {
 
     // delete open questions
     case 'delete_question':
-        if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
+        if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
             $checks = [
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,

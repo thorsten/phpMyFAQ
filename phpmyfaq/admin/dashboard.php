@@ -155,7 +155,7 @@ $faqSession = new Session($faqConfig);
         </div>
       </div>
 
-        <?php if ($user->perm->checkRight($user->getUserId(), 'editconfig')): ?>
+        <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')): ?>
           <div class="card mb-4">
             <h5 class="card-header py-3">
               <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>

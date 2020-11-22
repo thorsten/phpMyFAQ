@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
     $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);

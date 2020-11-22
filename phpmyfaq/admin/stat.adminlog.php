@@ -34,7 +34,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     $deleteLog = true;
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
+if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
     $date = new Date($faqConfig);
     $perpage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -139,7 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
 
 <?php
 
-} elseif ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
+} elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
     if ($logging->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     } else {

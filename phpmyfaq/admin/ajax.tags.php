@@ -49,7 +49,7 @@ switch ($ajaxAction) {
             $tags = $oTag->getAllTags();
         }
 
-        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             $i = 0;
             $tagNames = [];
             foreach ($tags as $tagName) {

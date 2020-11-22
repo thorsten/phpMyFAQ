@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $currentUserId = $user->getUserId();
 
-if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
     $category = new Category($faqConfig, [], false);

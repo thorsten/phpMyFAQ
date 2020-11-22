@@ -31,9 +31,9 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
-    $user->perm->checkRight($user->getUserId(), 'edit_section') ||
-    $user->perm->checkRight($user->getUserId(), 'del_section')) {
+if ($user->perm->hasPermission($user->getUserId(), 'add_section') ||
+    $user->perm->hasPermission($user->getUserId(), 'edit_section') ||
+    $user->perm->hasPermission($user->getUserId(), 'del_section')) {
 
     $sectionList = ($user->perm instanceof LargePermission) ? $user->perm->getAllSections() : [];
 

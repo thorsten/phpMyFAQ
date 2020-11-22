@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $perpage = 50;
     $day = Filter::filterInput(INPUT_POST, 'day', FILTER_VALIDATE_INT);
     $firstHour = mktime(0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));

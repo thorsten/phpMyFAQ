@@ -80,6 +80,14 @@ $secLevelEntries['content'] = $adminHelper->addMenuEntry(
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_entry_add', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit', $action);
+if (DEBUG) {
+    $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+        'edit_faq+delete_faq',
+        'faqs-overview',
+        'ad_menu_entry_edit',
+        $action
+    );
+}
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'searchfaqs',

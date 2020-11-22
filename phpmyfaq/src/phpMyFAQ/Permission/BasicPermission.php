@@ -143,7 +143,7 @@ class BasicPermission extends Permission
      *
      * @return bool
      */
-    public function checkRight(int $userId, $right): bool
+    public function hasPermission(int $userId, $right): bool
     {
         $user = new CurrentUser($this->config);
         $user->getUserById($userId);

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'export')) {
+if ($user->perm->hasPermission($user->getUserId(), 'export')) {
     $categoryId = Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
     $downwards = Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
     $inlineDisposition = Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);

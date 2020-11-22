@@ -80,7 +80,7 @@ if (strlen($news['link']) > 0) {
 
 // Show link to edit the news?
 $editThisEntry = '';
-if ($user->perm->checkRight($user->getUserId(), 'editnews')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
         '<a href="./admin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
         $newsId,

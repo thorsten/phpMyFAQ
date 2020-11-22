@@ -620,7 +620,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
-    if ($user->perm->checkRight($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
+    if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',
             $PMF_LANG['adminSection']

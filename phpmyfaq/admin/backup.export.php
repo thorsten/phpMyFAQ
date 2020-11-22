@@ -47,7 +47,7 @@ if ($user) {
     unset($user);
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'backup')) {
+if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
     $tables = $tableNames = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
     $tablePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
     $tableNames = '';

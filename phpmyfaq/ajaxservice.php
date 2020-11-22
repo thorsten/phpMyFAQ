@@ -141,7 +141,7 @@ switch ($action) {
     case 'savecomment':
 
         if (!$faqConfig->get('records.allowCommentsForGuests') &&
-            !$user->perm->checkRight($user->getUserId(), 'addcomment')) {
+            !$user->perm->hasPermission($user->getUserId(), 'addcomment')) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
             break;
         }
@@ -300,7 +300,7 @@ switch ($action) {
     case 'savefaq':
 
         if (!$faqConfig->get('records.allowNewFaqsForGuests') &&
-            !$user->perm->checkRight($user->getUserId(), 'addfaq')) {
+            !$user->perm->hasPermission($user->getUserId(), 'addfaq')) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
             break;
         }
@@ -449,7 +449,7 @@ switch ($action) {
     case 'savequestion':
 
         if (!$faqConfig->get('records.allowQuestionsForGuests') &&
-            !$user->perm->checkRight($user->getUserId(), 'addquestion')) {
+            !$user->perm->hasPermission($user->getUserId(), 'addquestion')) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
             break;
         }

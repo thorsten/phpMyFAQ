@@ -23,9 +23,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (!$user->perm->checkRight($user->getUserId(), 'edit_section') &&
-    !$user->perm->checkRight($user->getUserId(), 'delete_section') &&
-    !$user->perm->checkRight($user->getUserId(), 'add_section')) {
+if (!$user->perm->hasPermission($user->getUserId(), 'edit_section') &&
+    !$user->perm->hasPermission($user->getUserId(), 'delete_section') &&
+    !$user->perm->hasPermission($user->getUserId(), 'add_section')) {
     exit();
 }
 
@@ -62,7 +62,7 @@ if (!in_array($sectionAction, $sectionActionList)) {
 }
 
 // update section members
-if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
+if ($sectionAction == 'update_members' && $user->perm->hasPermission($user->getUserId(), 'edit_section')) {
     $message = '';
     $sectionAction = $defaultSectionAction;
     $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
@@ -87,7 +87,7 @@ if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUser
 }
 
 // update section data
-if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
+if ($sectionAction == 'update_data' && $user->perm->hasPermission($user->getUserId(), 'edit_section')) {
     $message = '';
     $sectionAction = $defaultSectionAction;
     $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
@@ -117,7 +117,7 @@ if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(
 }
 
 // delete section confirmation
-if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'delete_section')) {
+if ($sectionAction == 'delete_confirm' && $user->perm->hasPermission($user->getUserId(), 'delete_section')) {
     $message = '';
     $user = new CurrentUser($faqConfig);
     $perm = $user->perm;
@@ -159,7 +159,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
     }
 }
 
-if ($sectionAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'delete_section')) {
+if ($sectionAction == 'delete' && $user->perm->hasPermission($user->getUserId(), 'delete_section')) {
     $message = '';
     $user = new User($faqConfig);
     $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
@@ -184,7 +184,7 @@ if ($sectionAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'd
     }
 }
 
-if ($sectionAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'add_section')) {
+if ($sectionAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 'add_section')) {
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
@@ -232,7 +232,7 @@ if (!isset($message)) {
 }
 
 // show new section form
-if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_section')) {
+if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add_section')) {
     $user = new CurrentUser($faqConfig);
     ?>
 

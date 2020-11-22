@@ -45,7 +45,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(), 'delete_faq')) {
+if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -404,7 +404,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                       </label>
                     </th>
                     <th style="width: 120px;">
-                    <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
+                    <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
                                    onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>')"
@@ -485,7 +485,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                         </label>
                       </td>
                       <td>
-                      <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
+                      <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                             <label>
                               <input type="checkbox" lang="<?= $record['lang'] ?>" class="active-records-category-<?= $cid ?>"
                                      onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"

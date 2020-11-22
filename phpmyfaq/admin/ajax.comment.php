@@ -29,7 +29,7 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ('delete' === $ajaxAction && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
+if ('delete' === $ajaxAction && $user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     $comment = new Comments($faqConfig);
     $checkFaqs = [
         'filter' => FILTER_VALIDATE_INT,

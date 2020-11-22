@@ -30,7 +30,7 @@ printf(
     $PMF_LANG['ad_entry_aor']
 );
 
-if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
+if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
     $recordId = Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
     $recordLang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

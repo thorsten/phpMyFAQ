@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 echo '<div id="returnMessage"></div>';
 
-if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
+if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     $comment = new Comments($faqConfig);
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

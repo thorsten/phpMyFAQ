@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
+      if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
           $session = new Session($faqConfig);
           $date = new Date($faqConfig);
           $visits = new Visits($faqConfig);

@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </h1>
   </div>
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
+if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
 
     // If we have to save a new password, do that first
     $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   </div>
 
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $sortedLanguageCodes = $languageCodes;
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);

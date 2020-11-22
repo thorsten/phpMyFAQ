@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <?php
 
-if (!$user->perm->checkRight($user->getUserId(), 'editconfig')) {
+if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     echo $PMF_LANG['err_NotAuth'];
 }
 

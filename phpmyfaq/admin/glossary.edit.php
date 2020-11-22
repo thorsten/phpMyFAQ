@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
+      if ($user->perm->hasPermission($user->getUserId(), 'editglossary')) {
           $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
           $glossary = new Glossary($faqConfig);
           $glossaryItem = $glossary->getGlossaryItem($id);

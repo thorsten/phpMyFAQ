@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $parent_id = Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
     $category = new Category($faqConfig, [], false);
