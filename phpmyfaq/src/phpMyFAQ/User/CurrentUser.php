@@ -459,7 +459,7 @@ class CurrentUser extends User
         }
 
         if ($deleteCookie) {
-            $this->session->setCookie(Session::PMF_COOKIE_NAME_REMEMBERME);
+            $this->session->setCookie(Session::PMF_COOKIE_NAME_REMEMBERME, null);
         }
 
         session_destroy();
