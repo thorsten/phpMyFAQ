@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\User;
 
 /**
@@ -28,15 +29,17 @@ use phpMyFAQ\User;
 class AuthHttp extends Auth implements AuthDriverInterface
 {
     /**
-     * Adds a new user account to the authentication table.
-     * Returns true on success, otherwise false.
-     *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
-     * @return bool
+     * @inheritDoc
      */
-    public function add($login, $pass, $domain = ''): bool
+    public function __construct(Configuration $config)
+    {
+        parent::__construct($config);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function create(string $login, string $pass, string $domain = ''): bool
     {
         $user = new User($this->config);
         $result = $user->createUser($login, null);
@@ -48,24 +51,15 @@ class AuthHttp extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Changes the password for the account specified by login.
-     * Returns true as it's not possible via HTTP Auth.
-     *
-     * @param string $login Loginname
-     * @param string $pass Password
-     * @return bool
+     * @inheritDoc
      */
-    public function changePassword($login, $pass): bool
+    public function update(string $login, string $pass): bool
     {
         return true;
     }
 
     /**
-     * Deletes the user account specified by login.
-     * Returns true as it's not possible via HTTP Auth.
-     *
-     * @param string $login Loginname
-     * @return bool
+     * @inheritDoc
      */
     public function delete($login): bool
     {
@@ -73,39 +67,21 @@ class AuthHttp extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Checks the password for the given user account.
-     * Returns true if the given password for the user account specified by
-     * is correct, otherwise false.
-     * Error messages are added to the array errors.
-     * This function is only called when local authentication has failed, so
-     * we are about to create user account.
-     *
-     * @param string     $login Loginname
-     * @param string     $pass Password
-     * @param array|null $optionalData Optional data
-     * @return bool
+     * @inheritDoc
      */
-    public function checkPassword($login, $pass, array $optionalData = null): bool
+    public function checkCredentials($login, $pass, array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
         } else {
-            if ($_SERVER['PHP_AUTH_USER'] == $login && $_SERVER['PHP_AUTH_PW'] == $pass) {
-                return true;
-            } else {
-                return false;
-            }
+            return ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $pass);
         }
     }
 
     /**
-     * Returns 1 or 0 for true or false.
-     *
-     * @param string     $login Loginname
-     * @param array|null $optionalData Optional data
-     * @return int
+     * @inheritDoc
      */
-    public function checkLogin($login, array $optionalData = null): int
+    public function isValidLogin($login, array $optionalData = null): int
     {
         return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
     }

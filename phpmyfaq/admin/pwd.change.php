@@ -54,7 +54,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
         $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
-        if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
+        if (($authSource->checkCredentials($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {
                 printf(
                     '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',

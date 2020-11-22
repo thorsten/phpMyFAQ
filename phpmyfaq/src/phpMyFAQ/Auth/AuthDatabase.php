@@ -29,17 +29,11 @@ use phpMyFAQ\User;
  */
 class AuthDatabase extends Auth implements AuthDriverInterface
 {
-    /**
-     * Database connection.
-     *
-     * @var AuthDriverInterface
-     */
-    private $db = null;
+    /** @var AuthDriverInterface */
+    private $db;
 
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
+     * @inheritDoc
      */
     public function __construct(Configuration $config)
     {
@@ -49,17 +43,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Adds a new user account to the "faquserlogin" table. Returns true on
-     * success, otherwise false. Error messages are added to the array errors.
-     *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
-     * @return bool
+     * @inheritDoc
      */
-    public function add(string $login, string $pass, string $domain = ''): bool
+    public function create(string $login, string $pass, string $domain = ''): bool
     {
-        if ($this->checkLogin($login) > 0) {
+        if ($this->isValidLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
 
             return false;
@@ -92,39 +80,36 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Checks the number of entries of given login name.
-     *
-     * @param string     $login Login name
-     * @param array|null $optionalData Optional data
-     * @return int
+     * @inheritDoc
      */
-    public function checkLogin(string $login, array $optionalData = null): int
+    public function update(string $login, string $pass): bool
     {
-        $check = sprintf(
-            "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
+        $change = sprintf(
+            "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
         );
 
-        $check = $this->db->query($check);
+        $change = $this->db->query($change);
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = $error;
+            $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
 
-            return 0;
+            return false;
+        }
+        if (!$change) {
+            $this->errors[] = User::ERROR_USER_CHANGE;
+
+            return false;
         }
 
-        return $this->db->numRows($check);
+        return true;
     }
 
     /**
-     * Deletes the user account specified by login.
-     * Returns true on success, otherwise false.
-     * Error messages are added to the array errors.
-     *
-     * @param string $login Login name
-     * @return bool
+     * @inheritDoc
      */
     public function delete(string $login): bool
     {
@@ -152,17 +137,9 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     }
 
     /**
-     * checks the password for the given user account.
-     * Returns true if the given password for the user account specified by
-     * is correct, otherwise false.
-     * Error messages are added to the array errors.
-     *
-     * @param string     $login Login name
-     * @param string     $password Password
-     * @param array|null $optionalData Optional data
-     * @return bool
+     * @inheritDoc
      */
-    public function checkPassword(string $login, string $password, array $optionalData = null): bool
+    public function checkCredentials(string $login, string $password, array $optionalData = null): bool
     {
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
@@ -203,37 +180,25 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Changes the password for the account specified by login.
-     * Returns true on success, otherwise false.
-     * Error messages are added to the array errors.
-     *
-     * @param string $login Login name
-     * @param string $pass Password
-     * @return bool
+     * @inheritDoc
      */
-    public function changePassword(string $login, string $pass): bool
+    public function isValidLogin(string $login, array $optionalData = null): int
     {
-        $change = sprintf(
-            "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
+        $check = sprintf(
+            "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
         );
 
-        $change = $this->db->query($change);
+        $check = $this->db->query($check);
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
+            $this->errors[] = $error;
 
-            return false;
-        }
-        if (!$change) {
-            $this->errors[] = User::ERROR_USER_CHANGE;
-
-            return false;
+            return 0;
         }
 
-        return true;
+        return $this->db->numRows($check);
     }
 }

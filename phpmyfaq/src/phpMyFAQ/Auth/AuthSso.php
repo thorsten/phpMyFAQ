@@ -18,6 +18,8 @@
 namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
 
 /**
@@ -28,37 +30,59 @@ use phpMyFAQ\User;
 class AuthSso extends Auth implements AuthDriverInterface
 {
     /**
-     * Always returns true because of SSO.
-     *
-     * @param string $login Loginname
-     * @param string $pass Password
-     * @return bool
+     * @inheritDoc
      */
-    public function changePassword($login, $pass): bool
+    public function __construct(Configuration $config)
+    {
+        parent::__construct($config);
+    }
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
+    public function create(string $login, string $pass, string $domain = ''): bool
+    {
+        if ($this->config->get('ldap.ldapSupport')) {
+            // LDAP/AD + SSO
+            $authLdap = new AuthLdap($this->config);
+            return $authLdap->create($login, null, $domain);
+        } else {
+            // SSO without LDAP/AD
+            $user = new User($this->config);
+            $result = $user->createUser($login, null, $domain);
+
+            if ($result) {
+                $user->setStatus('active');
+            }
+
+            // Set user information
+            $user->setUserData([ 'display_name' => $login ]);
+
+            return $result;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(string $login, string $pass): bool
     {
         return true;
     }
 
     /**
-     * Always returns true because of SSO.
-     *
-     * @param string $login Loginname
-     * @return bool
+     * @inheritDoc
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         return true;
     }
 
     /**
-     * Checks if the username of the remote user is equal to the login name.
-     *
-     * @param string     $login Loginname
-     * @param string     $pass Password
-     * @param array|null $optionalData Optional data
-     * @return bool
+     * @inheritDoc
      */
-    public function checkPassword($login, $pass, array $optionalData = null): bool
+    public function checkCredentials(string $login, string $pass, array $optionalData = null): bool
     {
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
@@ -76,7 +100,7 @@ class AuthSso extends Auth implements AuthDriverInterface
                 }
             }
             if ($user === $login) {
-                $this->add($login, $pass);
+                $this->create($login, $pass);
 
                 return true;
             } else {
@@ -86,50 +110,9 @@ class AuthSso extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Always returns true because of SSO.
-     *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
-     * @return bool
-     * @throws
+     * @inheritDoc
      */
-    public function add($login, $pass, $domain = ''): bool
-    {
-        if ($this->config->get('ldap.ldapSupport')) {
-            // LDAP/AD + SSO
-            $authLdap = new AuthLdap($this->config);
-            $result = $authLdap->add($login, null, $domain);
-
-            return $result;
-        } else {
-            // SSO without LDAP/AD
-            $user = new User($this->config);
-            $result = $user->createUser($login, null, $domain);
-
-            if ($result) {
-                $user->setStatus('active');
-            }
-
-            // Set user information
-            $user->setUserData(
-                array(
-                    'display_name' => $login,
-                )
-            );
-
-            return $result;
-        }
-    }
-
-    /**
-     * Returns 1, if $_SERVER['REMOTE_USER'] is set.
-     *
-     * @param string     $login Loginname
-     * @param array|null $optionalData Optional data
-     * @return int
-     */
-    public function checkLogin($login, array $optionalData = null): int
+    public function isValidLogin(string $login, array $optionalData = null): int
     {
         return isset($_SERVER['REMOTE_USER']) ? 1 : 0;
     }

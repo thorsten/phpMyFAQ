@@ -764,7 +764,7 @@ switch ($action) {
                 if ($auth->setReadOnly()) {
                     continue;
                 }
-                if (!$auth->changePassword($user->getLogin(), $password)) {
+                if (!$auth->update($user->getLogin(), $password)) {
                     $message = ['error' => $auth->error()];
                     $success = false;
                 } else {

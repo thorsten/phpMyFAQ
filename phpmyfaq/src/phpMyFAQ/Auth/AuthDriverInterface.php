@@ -34,7 +34,7 @@ interface AuthDriverInterface
      * @param string $domain
      * @return mixed
      */
-    public function add(string $login, string $pass, string $domain = '');
+    public function create(string $login, string $pass, string $domain = '');
 
     /**
      * Changes the password for the account specified by login.
@@ -45,7 +45,7 @@ interface AuthDriverInterface
      * @param string $pass Password
      * @return bool
      */
-    public function changePassword(string $login, string $pass): bool;
+    public function update(string $login, string $pass): bool;
 
     /**
      * Deletes the user account specified by login.
@@ -70,7 +70,7 @@ interface AuthDriverInterface
      * @param array  $optionalData Optional data
      * @return bool
      */
-    public function checkPassword(string $login, string $pass, array $optionalData = []): bool;
+    public function checkCredentials(string $login, string $pass, array $optionalData = []): bool;
 
     /**
      * Does nothing. A function required to be a valid auth.
@@ -79,5 +79,5 @@ interface AuthDriverInterface
      * @param array  $optionalData Optional data
      * @return int
      */
-    public function checkLogin(string $login, array $optionalData = []): int;
+    public function isValidLogin(string $login, array $optionalData = []): int;
 }

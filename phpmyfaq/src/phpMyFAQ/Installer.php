@@ -18,6 +18,7 @@ namespace phpMyFAQ;
 
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;

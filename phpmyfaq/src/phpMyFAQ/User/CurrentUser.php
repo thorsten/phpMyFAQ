@@ -202,13 +202,13 @@ class CurrentUser extends User
             }
 
             // $login does not exist, so continue
-            if (!$auth->checkLogin($login, $optData)) {
+            if (!$auth->isValidLogin($login, $optData)) {
                 ++$loginError;
                 continue;
             }
 
             // $login exists, but $pass is incorrect, so stop!
-            if (!$auth->checkPassword($login, $password, $optData)) {
+            if (!$auth->checkCredentials($login, $password, $optData)) {
                 ++$passwordError;
                 // Don't stop, as other auth method could work:
                 continue;

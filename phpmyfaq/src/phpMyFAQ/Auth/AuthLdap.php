@@ -31,38 +31,20 @@ use phpMyFAQ\User;
  */
 class AuthLdap extends Auth implements AuthDriverInterface
 {
-    /**
-     * LDAP connection handle.
-     *
-     * @var AuthLdap
-     */
+    /** @var AuthLdap */
     private $ldap = null;
 
-    /**
-     * LDAP server(s).
-     *
-     * @var array
-     */
-    private $ldapServer = [];
+    /** @var array Array of LDAP servers */
+    private $ldapServer;
 
-    /**
-     * Internal key of the active LDAP server where user was found.
-     *
-     * @var int
-     */
+    /** @var int Active LDAP server */
     private $activeServer = 0;
 
-    /**
-     * Multiple LDAP servers.
-     *
-     * @var bool
-     */
-    private $multipleServers = false;
+    /** @var bool */
+    private $multipleServers;
 
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
+     * @inheritDoc
      * @throws Exception
      */
     public function __construct(Configuration $config)
@@ -92,22 +74,48 @@ class AuthLdap extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Does nothing. A function required to be a valid auth.
-     *
-     * @param string $login Loginname
-     * @param string $password Password
-     * @return bool
+     * @inheritDoc
      */
-    public function changePassword($login, $password): bool
+    public function create($login, $password, $domain = ''): bool
+    {
+        $user = new User($this->config);
+        $result = $user->createUser($login, null, $domain);
+
+        $this->ldap->connect(
+            $this->ldapServer[$this->activeServer]['ldap_server'],
+            $this->ldapServer[$this->activeServer]['ldap_port'],
+            $this->ldapServer[$this->activeServer]['ldap_base'],
+            $this->ldapServer[$this->activeServer]['ldap_user'],
+            $this->ldapServer[$this->activeServer]['ldap_password']
+        );
+
+        if ($this->ldap->error) {
+            $this->errors[] = $this->ldap->error;
+        }
+
+        $user->setStatus('active');
+
+        // Set user information from LDAP
+        $user->setUserData(
+            array(
+                'display_name' => $this->ldap->getCompleteName($login),
+                'email' => $this->ldap->getMail($login),
+            )
+        );
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update($login, $password): bool
     {
         return true;
     }
 
     /**
-     * Does nothing. A function required to be a valid auth.
-     *
-     * @param string $login Loginname
-     * @return bool
+     * @inheritDoc
      */
     public function delete($login): bool
     {
@@ -115,19 +123,9 @@ class AuthLdap extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Checks the password for the given user account.
-     * Returns true if the given password for the user account specified by
-     * is correct, otherwise false.
-     * Error messages are added to the array errors.
-     * This function is only called when local authentication has failed, so
-     * we are about to create user account.
-     *
-     * @param string     $login Loginname
-     * @param string     $password Password
-     * @param array|null $optionalData Optional data
-     * @return bool
+     * @inheritDoc
      */
-    public function checkPassword($login, $password, array $optionalData = null): bool
+    public function checkCredentials($login, $password, array $optionalData = null): bool
     {
         if ('' === trim($password)) {
             $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
@@ -191,58 +189,15 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->errors[] = $this->ldap->error;
             return false;
         } else {
-            $this->add($login, htmlspecialchars_decode($password));
+            $this->create($login, htmlspecialchars_decode($password));
             return true;
         }
     }
 
     /**
-     * Adds a new user account to the authentication table.
-     * Returns true on success, otherwise false.
-     *
-     * @param string $login
-     * @param string $password
-     * @param string $domain
-     * @return bool
+     * @inheritDoc
      */
-    public function add($login, $password, $domain = ''): bool
-    {
-        $user = new User($this->config);
-        $result = $user->createUser($login, null, $domain);
-
-        $this->ldap->connect(
-            $this->ldapServer[$this->activeServer]['ldap_server'],
-            $this->ldapServer[$this->activeServer]['ldap_port'],
-            $this->ldapServer[$this->activeServer]['ldap_base'],
-            $this->ldapServer[$this->activeServer]['ldap_user'],
-            $this->ldapServer[$this->activeServer]['ldap_password']
-        );
-
-        if ($this->ldap->error) {
-            $this->errors[] = $this->ldap->error;
-        }
-
-        $user->setStatus('active');
-
-        // Set user information from LDAP
-        $user->setUserData(
-            array(
-                'display_name' => $this->ldap->getCompleteName($login),
-                'email' => $this->ldap->getMail($login),
-            )
-        );
-
-        return $result;
-    }
-
-    /**
-     * Returns number of characters of name, 0 will be returned if it fails.
-     *
-     * @param string     $login Loginname
-     * @param array|null $optionalData Optional data
-     * @return int
-     */
-    public function checkLogin($login, array $optionalData = null): int
+    public function isValidLogin($login, array $optionalData = null): int
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {

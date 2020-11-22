@@ -288,11 +288,10 @@ class User
      */
     protected function checkAuth(Auth $auth)
     {
-        $methods = ['checkPassword'];
+        $methods = ['checkCredentials'];
         foreach ($methods as $method) {
             if (!method_exists($auth, $method)) {
                 return false;
-                break;
             }
         }
 
@@ -454,6 +453,8 @@ class User
             }
         }
 
+        echo 'foo';
+
         // is $login valid?
         $login = (string)$login;
         if (!$this->isValidLogin($login)) {
@@ -512,7 +513,7 @@ class User
             if ($auth->setReadOnly()) {
                 continue;
             }
-            if (!$auth->add($login, $pass, $domain)) {
+            if (!$auth->create($login, $pass, $domain)) {
                 $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
             } else {
                 $success = true;
@@ -745,6 +746,7 @@ class User
     public function error()
     {
         $message = '';
+
         foreach ($this->errors as $error) {
             $message .= $error . "<br>\n";
         }
@@ -1097,7 +1099,7 @@ class User
             if ($auth->setReadOnly()) {
                 continue;
             }
-            if (!$auth->changePassword($login, $pass)) {
+            if (!$auth->update($login, $pass)) {
                 continue;
             } else {
                 $success = true;
