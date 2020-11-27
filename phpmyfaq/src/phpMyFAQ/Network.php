@@ -156,4 +156,15 @@ class Network
 
         return true;
     }
+
+    /**
+     * Anonymize an IPv4 or IPv6 address.
+     *
+     * @param string $ipAddress
+     * @return string
+     */
+    public function anonymizeIp(string $ipAddress): string
+    {
+        return preg_replace(['/\.\d*$/','/[\da-f]*:[\da-f]*$/'], ['.xxx','xxxx:xxxx'], $ipAddress);
+    }
 }

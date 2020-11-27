@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -285,8 +286,12 @@ class Session
             if (in_array($remoteAddress, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $remoteAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
             }
+
             // clean up as well
             $remoteAddress = preg_replace('([^0-9a-z:\.]+)i', '', $remoteAddress);
+
+            // Anonymize IP address
+            $remoteAddress = $network->anonymizeIp($remoteAddress);
 
             if (!$network->checkIp($remoteAddress)) {
                 $banned = true;
