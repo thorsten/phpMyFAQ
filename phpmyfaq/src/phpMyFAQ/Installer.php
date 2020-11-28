@@ -494,7 +494,7 @@ class Installer
             System::renderFooter();
         }
 
-        if (!$this->system->checkphpMyFAQInstallation()) {
+        if (!$this->system->checkInstallation()) {
             echo '<p class="alert alert-danger">The setup script found the file <code>config/database.php</code>. It ' .
                 'looks like you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update' .
                 ' script</a>.</p>';
@@ -895,7 +895,7 @@ class Installer
         if (!$instanceSetup->createDatabaseFile($dbSetup)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/database.php.' .
                 '</p>';
-            $this->system->cleanInstallation();
+            $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
 
@@ -904,7 +904,7 @@ class Installer
             if (!$instanceSetup->createLdapFile($ldapSetup, '')) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.' .
                     '</p>';
-                $this->system->cleanInstallation();
+                $this->system->cleanFailedInstallationFiles();
                 System::renderFooter(true);
             }
         }
@@ -914,7 +914,7 @@ class Installer
             if (!$instanceSetup->createElasticsearchFile($esSetup, '')) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ' .
                     './config/elasticsearch.php.</p>';
-                $this->system->cleanInstallation();
+                $this->system->cleanFailedInstallationFiles();
                 System::renderFooter(true);
             }
         }
@@ -925,14 +925,14 @@ class Installer
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            $this->system->cleanInstallation();
+            $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
 
         $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], $DB['port']);
         if (!$db) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
-            $this->system->cleanInstallation();
+            $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
         try {
@@ -940,7 +940,7 @@ class Installer
             $databaseInstaller->createTables($dbSetup['dbPrefix']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            $this->system->cleanInstallation();
+            $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
 
@@ -964,7 +964,7 @@ class Installer
                 printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 $this->system->dropTables($uninst);
-                $this->system->cleanInstallation();
+                $this->system->cleanFailedInstallationFiles();
                 System::renderFooter(true);
             }
             usleep(1000);
@@ -997,7 +997,7 @@ class Installer
                 "Couldn't create the admin user: %s</p>\n",
                 $admin->error()
             );
-            $this->system->cleanInstallation();
+            $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
         $admin->setStatus('protected');

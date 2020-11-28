@@ -2,7 +2,6 @@
 
 /**
  * Class for checking system requirements.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,6 +18,7 @@ namespace phpMyFAQ;
 
 use DateTime;
 use DirectoryIterator;
+use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -103,28 +103,14 @@ class System
     private $database = null;
 
     /**
-     * Sets the database handler.
-     *
-     * @param  DatabaseDriver $database
-     * @return $this
-     */
-    public function setDatabase(DatabaseDriver $database)
-    {
-        $this->database = $database;
-
-        return $this;
-    }
-
-    /**
      * Returns the current version of phpMyFAQ for installation and
      * version in the database.
-     *
      * Releases will be numbered with the follow format:
      * <major>.<minor>.<patch>[-<prerelease>]
      *
      * @return string
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         if (null !== self::VERSION_PRE_RELEASE) {
             return sprintf(
@@ -145,11 +131,67 @@ class System
     }
 
     /**
+     * Returns the current API version of phpMyFAQ for installation and
+     * version in the database.
+     *
+     * @return string
+     */
+    public static function getApiVersion(): string
+    {
+        return self::VERSION_API;
+    }
+
+    /**
+     * Returns true or false on SQLite3.
+     *
+     * @static
+     * @param string $dbType
+     * @return bool
+     */
+    public static function isSqlite(string $dbType): bool
+    {
+        return 'sqlite3' === $dbType;
+    }
+
+    /**
+     * Print out the HTML5 Footer.
+     *
+     * @param bool $onePageBack
+     */
+    public static function renderFooter(bool $onePageBack = false)
+    {
+        if (true === $onePageBack) {
+            printf(
+                '<p><a href="./index.php">%s</a></p>',
+                'Back to the Setup page'
+            );
+        }
+        printf(
+            '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
+            '</body></html>',
+            COPYRIGHT
+        );
+        exit(-1);
+    }
+
+    /**
+     * Sets the database handler.
+     *
+     * @param DatabaseDriver $database
+     * @return System
+     */
+    public function setDatabase(DatabaseDriver $database): System
+    {
+        $this->database = $database;
+        return $this;
+    }
+
+    /**
      * Returns all available templates as array.
      *
      * @return array
      */
-    public function getAvailableTemplates()
+    public function getAvailableTemplates(): array
     {
         $templates = [];
 
@@ -164,39 +206,17 @@ class System
     }
 
     /**
-     * Returns the current API version of phpMyFAQ for installation and
-     * version in the database.
-     *
-     * @return string
-     */
-    public static function getApiVersion()
-    {
-        return self::VERSION_API;
-    }
-
-    /**
-     * Returns the supported databases.
-     *
-     * @return array
-     */
-    public function getSupportedDatabases()
-    {
-        return $this->supportedDatabases;
-    }
-
-    /**
      * Returns the locally supported databases.
      *
-     * @param bool $html
-     *
+     * @param bool $returnAsHtml
      * @return array
      */
-    public function getSupportedSafeDatabases($html = false)
+    public function getSupportedSafeDatabases(bool $returnAsHtml = false): array
     {
         $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
             if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
-                if ($html) {
+                if ($returnAsHtml) {
                     $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
                 } else {
                     $retVal[$extension] = $database;
@@ -208,13 +228,22 @@ class System
     }
 
     /**
+     * Returns the supported databases.
+     *
+     * @return array
+     */
+    public function getSupportedDatabases(): array
+    {
+        return $this->supportedDatabases;
+    }
+
+    /**
      * Checks if the system URI is running with http or https.
      *
      * @param Configuration $faqConfig
-     *
      * @return string
      */
-    public function getSystemUri(Configuration $faqConfig)
+    public function getSystemUri(Configuration $faqConfig): string
     {
         $mainUrl = $faqConfig->getDefaultUrl();
 
@@ -237,7 +266,7 @@ class System
      *
      * @return bool
      */
-    public function checkDatabase()
+    public function checkDatabase(): bool
     {
         foreach ($this->supportedDatabases as $extension => $database) {
             if (extension_loaded($extension)) {
@@ -253,7 +282,7 @@ class System
      *
      * @return bool
      */
-    public function checkRequiredExtensions()
+    public function checkRequiredExtensions(): bool
     {
         foreach ($this->requiredExtensions as $extension) {
             if (!extension_loaded($extension)) {
@@ -270,18 +299,13 @@ class System
 
     /**
      * Checks for an installed phpMyFAQ version.
-     *
      * config/database.php -> phpMyFAQ 2.6 and later
      *
      * @return bool
      */
-    public function checkphpMyFAQInstallation()
+    public function checkInstallation(): bool
     {
-        if (is_file(PMF_ROOT_DIR . '/config/database.php')) {
-            return false;
-        } else {
-            return true;
-        }
+        return !is_file(PMF_ROOT_DIR . '/config/database.php');
     }
 
     /**
@@ -289,33 +313,20 @@ class System
      *
      * @return array
      */
-    public function getMissingExtensions()
+    public function getMissingExtensions(): array
     {
         return $this->missingExtensions;
     }
 
     /**
-     * Returns true or false on SQLite3.
-     *
-     * @static
-     * @param string $dbType
-     * @return bool
-     */
-    public static function isSqlite(string $dbType): bool
-    {
-        return 'sqlite3' === $dbType;
-    }
-
-    /**
      * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes.
      *
-     * @throws \Exception
      * @return string
+     * @throws Exception
      */
-    public function createHashes()
+    public function createHashes(): string
     {
         $created = new DateTime();
-
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(PMF_ROOT_DIR),
             RecursiveIteratorIterator::SELF_FIRST
@@ -335,8 +346,10 @@ class System
         try {
             foreach ($files as $file) {
                 if (
-                    'php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION)
-                    && !preg_match('#/tests/#', $file->getPath())
+                    'php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) && !preg_match(
+                        '#/tests/#',
+                        $file->getPath()
+                    )
                 ) {
                     $current = str_replace(PMF_ROOT_DIR, '', $file->getPathname());
 
@@ -370,7 +383,7 @@ class System
     /**
      * Removes the database.php and the ldap.php if an installation failed.
      */
-    public function cleanInstallation()
+    public function cleanFailedInstallationFiles()
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
@@ -380,26 +393,5 @@ class System
         if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
             unlink(PMF_ROOT_DIR . '/config/ldap.php');
         }
-    }
-
-    /**
-     * Print out the HTML5 Footer.
-     *
-     * @param bool $onePageBack
-     */
-    public static function renderFooter($onePageBack = false)
-    {
-        if (true === $onePageBack) {
-            printf(
-                '<p><a href="index.php">%s</a></p>',
-                'Back to the Setup page'
-            );
-        }
-        printf(
-            '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
-            '</body></html>',
-            COPYRIGHT
-        );
-        exit(-1);
     }
 }
