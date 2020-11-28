@@ -28,7 +28,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed password hashing with MD5 and SHA-1 (Thorsten)
 - removed OpenSearch support (Thorsten)
 
-### phpMyFAQ v3.0.6 - 2020-11-
+### phpMyFAQ v3.0.6 - 2020-11-27
 
 - added support for PHP 8.0
 - fixed minor bugs (Thorsten)
@@ -625,7 +625,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved restore functionality (Thorsten)
 - updated Dutch translation (Hans)
 - updated German translation (Thorsten)
-- fixed issue with sending mails to category administrators (Gustavo Solt)
+- Fixed issue with sending mails to category administrators (Gustavo Solt)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v2.6.13 - 2010-12-15
