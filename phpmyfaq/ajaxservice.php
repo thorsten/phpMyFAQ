@@ -477,9 +477,9 @@ switch ($action) {
                 Strings::htmlspecialchars($question)
             )) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
-                $visibility = 'N';
-            } else {
                 $visibility = 'Y';
+            } else {
+                $visibility = 'N';
             }
 
             $questionData = [
