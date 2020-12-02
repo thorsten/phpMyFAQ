@@ -96,7 +96,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                       </a>
                     </td>
                     <td>
-                        <?php if ($faqConfig->get('records.enableCloseQuestion') && $openQuestion['answer_id']) { ?>
+                        <?php if ($faqConfig->get('records.enableCloseQuestion') && $openQuestion->getAnswerId()) { ?>
                         <a href="?action=editentry&amp;id=<?= $openQuestion->getAnswerId() ?>&amp;lang=<?= $faqLangCode ?>"
                            class="btn btn-success">
                             <?= $PMF_LANG['msg2answerFAQ'] ?>
