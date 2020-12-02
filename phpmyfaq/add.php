@@ -29,8 +29,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Check user permissions
-if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests'))) {
+if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
     header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
+    exit;
+}
+
+// Check permission to add new faqs
+if (-1 !== $user->getUserId() && !$user->perm->checkRight($user->getUserId(), 'addfaq')) {
+    header('Location:' . $faqSystem->getSystemUri($faqConfig));
+    exit;
 }
 
 $captcha = new Captcha($faqConfig);
