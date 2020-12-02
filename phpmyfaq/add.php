@@ -31,6 +31,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests'))) {
     header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
+    exit;
+}
+
+// Check permission to add new faqs
+if (!$user->perm->checkRight($user->getUserId(), 'add_faq')) {
+    header('Location:' . $faqSystem->getSystemUri($faqConfig));
+    exit;
 }
 
 $captcha = new Captcha($faqConfig);
