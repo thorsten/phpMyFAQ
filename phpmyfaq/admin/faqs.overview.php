@@ -2,6 +2,7 @@
 
 /**
  * Shows the Ajax powered list of records ordered by categories.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -15,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -42,26 +44,102 @@ if (
     $category->transform(0);
     $category->buildTree();
 
+    $categoryRelation = new CategoryRelation($faqConfig);
+    $categoryRelation->setGroups($currentAdminGroups);
+
+    $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory(
+        $faqConfig->get('main.enableCategoryRestrictions')
+    );
+
+    var_dump($numRecordsByCat);
+
     foreach ($category->getCategoryTree() as $categoryId => $cat) {
-?>
+        ?>
         <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
-            <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-              <div class="card card-default">
-                <div class="card-header" role="tab" id="category-heading-<?= $cat['id'] ?>">
-                  <span class="float-right"><?= $cat['name'] ?></span>
-                  <h5>
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?= $cat['id'] ?>"
-                       aria-expanded="true" aria-controls="collapseOne">
-                      <i class="icon fa fa-chevron-circle-right "></i>
-                        <?= $category->getPath($cat['id']) ?>
-                    </a>
-                  </h5>
-                </div>
+          <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card card-default">
+              <div class="card-header" role="tab" id="category-heading-<?= $cat['id'] ?>">
+                <span class="float-right"><?= $cat['name'] ?></span>
+                <h5>
+                  <i class="icon fa fa-chevron-circle-right "></i>
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?= $cat['id'] ?>"
+                     aria-expanded="true" aria-controls="collapseOne">
+                    <?= $category->getPath($cat['id']) ?>
+                  </a>
+                </h5>
               </div>
 
+              <div id="category-<?= $cat['id'] ?>" class="card-collapse collapse" role="tabcard"
+                   aria-labelledby="category-heading-<?= $cat['id'] ?>">
+                <div class="card-body">
+                  <table class="table table-hover table-sm">
+                    <thead class="thead-light">
+                    <tr>
+                      <th colspan="2" style="width: 24px;">
+                        <a href="?action=view&category=<?= $cat['id'] ?>&orderby=id&sortby=desc">
+                          <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                        </a>
+                        <a href="?action=view&category=<?= $cat['id'] ?>&orderby=id&sortby=asc">
+                          <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                        </a>
+                      </th>
+                      <th>
+                        #
+                      </th>
+                      <th>
+                        <a href="?action=view&category=<?= $cat['id'] ?>&orderby=title&sortby=desc">
+                          <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                        </a>
+                        <a href="?action=view&category=<?= $cat['id'] ?>&orderby=title&sortby=asc">
+                          <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                        </a>
+                      </th>
+                      <th style="width: 100px;">
+                        <a href="?action=view&category=<?= $cat['id'] ?>&orderby=date&sortby=desc">
+                          <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                        </a>
+                        <a href="?action=view&category=<?= $cat['id'] ?>&orderby=date&sortby=asc">
+                          <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                        </a>
+                      </th>
+                      <th colspan="2">
+                        &nbsp;
+                      </th>
+
+                      <th style="width: 120px;">
+                        <label>
+                          <input type="checkbox" id="sticky_category_block_<?= $cat['id'] ?>">
+                            <?= $PMF_LANG['ad_record_sticky'] ?>
+                        </label>
+                      </th>
+                      <th style="width: 120px;">
+                          <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
+                            <label>
+                              <input type="checkbox" id="active_category_block_<?= $cat['id'] ?>">
+                                <?= $PMF_LANG['ad_record_active'] ?>
+                            </label>
+                          <?php } else { ?>
+                            <span class="fa-stack">
+                              <i class="fa fa-check fa-stack-1x"></i>
+                              <i class="fa fa-ban fa-stack-2x text-danger"></i>
+                            </span>
+                          <?php } ?>
+                      </th>
+                      <th colspan="2">
+                        &nbsp;
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
+          </div>
         </form>
-<?php
+        <?php
     }
 } else {
     echo $PMF_LANG['err_NotAuth'];

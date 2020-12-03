@@ -96,7 +96,7 @@ class CategoryRelation
      * Returns the number of records in each category.
      *
      * @param bool $categoryRestriction
-     * @return array
+     * @return int[]
      */
     public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false): array
     {
@@ -144,7 +144,7 @@ class CategoryRelation
 
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
-                $numRecordsByCat[$row->category_id] = $row->number;
+                $numRecordsByCat[$row->category_id] = (int)$row->number;
             }
         }
 
