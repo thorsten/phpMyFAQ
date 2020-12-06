@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.7 -
+- added TOC plugin for TinyMCE (Thorsten)
 - removed support for deprecated data-vocabulary.org schema (Thorsten)
 
 Version 3.0.6 - 2020-11-27
