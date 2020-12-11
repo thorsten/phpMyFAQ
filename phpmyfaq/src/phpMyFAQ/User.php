@@ -975,7 +975,7 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return (bool)$userData['is_visible'];
+        return isset($userData['is_visible']) ? (bool)$userData['is_visible'] : true;
     }
 
     /**
