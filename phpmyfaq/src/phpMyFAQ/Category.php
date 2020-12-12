@@ -959,12 +959,12 @@ class Category
      *
      * @param int $id Entity ID
      * @param string $separator Path separator
-     * @param bool $renderAsMicroData Renders breadcrumbs as HTML5 microdata
+     * @param bool $renderAsHtml Renders breadcrumbs as HTML
      * @param string $useCssClass Use CSS class "breadcrumb"
      *
      * @return string
      */
-    public function getPath($id, $separator = ' / ', $renderAsMicroData = false, $useCssClass = 'breadcrumb')
+    public function getPath($id, $separator = ' / ', $renderAsHtml = false, $useCssClass = 'breadcrumb')
     {
         global $sids;
 
@@ -972,55 +972,54 @@ class Category
 
         $num = count($ids);
 
-        $temp = $catid = $desc = $breadcrumb = [];
+        $tempName = $categoryId = $description = $breadcrumb = [];
 
         for ($i = 0; $i < $num; ++$i) {
             $t = $this->getLineCategory($ids[$i]);
             if (array_key_exists($t, $this->treeTab)) {
-                $temp[] = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
-                $catid[] = $this->treeTab[$this->getLineCategory($ids[$i])]['id'];
-                $desc[] = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
+                $tempName[] = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
+                $categoryId[] = $this->treeTab[$this->getLineCategory($ids[$i])]['id'];
+                $description[] = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
             }
         }
         if (isset($this->treeTab[$this->getLineCategory($id)]['name'])) {
-            $temp[] = $this->treeTab[$this->getLineCategory($id)]['name'];
-            $catid[] = $this->treeTab[$this->getLineCategory($id)]['id'];
-            $desc[] = $this->treeTab[$this->getLineCategory($id)]['description'];
+            $tempName[] = $this->treeTab[$this->getLineCategory($id)]['name'];
+            $categoryId[] = $this->treeTab[$this->getLineCategory($id)]['id'];
+            $description[] = $this->treeTab[$this->getLineCategory($id)]['description'];
         }
 
         // @todo Maybe this should be done somewhere else ...
-        if ($renderAsMicroData) {
-            foreach ($temp as $k => $category) {
+        if ($renderAsHtml) {
+            foreach ($tempName as $key => $category) {
                 $url = sprintf(
                     '%s?%saction=show&amp;cat=%d',
                     $this->config->getDefaultUrl(),
                     $sids,
-                    $catid[$k]
+                    $categoryId[$key]
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->text = sprintf('<span itemprop="title">%s</span>', $category);
+                $oLink->text = sprintf('<span>%s</span>', $category);
                 $oLink->itemTitle = $category;
-                $oLink->tooltip = $desc[$k];
-                $oLink->setItemProperty('url');
-                if (0 == $k) {
+                $oLink->tooltip = $description[$key];
+                if (0 === $key) {
                     $oLink->setRelation('index');
                 }
 
                 $breadcrumb[] = sprintf(
-                    '<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb">%s</li>',
+                    '<li>%s</li>',
                     $oLink->toHtmlAnchor()
                 );
             }
 
-            $temp = $breadcrumb;
+            $tempName = $breadcrumb;
 
             return sprintf(
                 '<ul class="%s">%s</ul>',
                 $useCssClass,
-                implode('', $temp)
+                implode('', $tempName)
             );
         } else {
-            return implode($separator, $temp);
+            return implode($separator, $tempName);
         }
     }
 

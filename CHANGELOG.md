@@ -28,6 +28,13 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed password hashing with MD5 and SHA-1 (Thorsten)
 - removed OpenSearch support (Thorsten)
 
+### phpMyFAQ v3.0.7 - 2020-12-
+
+- added TOC plugin for TinyMCE (Thorsten)
+- removed support for deprecated data-vocabulary.org schema (Thorsten)
+- removed Travis CI build (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.0.6 - 2020-11-27
 
 - added support for PHP 8.0

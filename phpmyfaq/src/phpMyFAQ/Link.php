@@ -146,47 +146,37 @@ class Link
      * @var string
      */
     public $itemTitle = '';
+
     /**
      * id selector.
      *
      * @var string
      */
     public $id = '';
-    /**
-     * Item property for HTML5 microdata.
-     *
-     * @var string
-     */
-    protected $itemprop = '';
+
     /**
      * rel property.
      *
      * @var string
      */
+
     protected $rel = '';
+
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * Constructor.
      *
-     * @param string        $url    URL
+     * @param string $url URL
      * @param Configuration $config
      */
     public function __construct($url, Configuration $config)
     {
         $this->url = $url;
         $this->config = $config;
-    }
-
-    /**
-     * @param string $itemprop Item property
-     */
-    public function setItemProperty($itemprop)
-    {
-        $this->itemprop = $itemprop;
     }
 
     /**
@@ -205,7 +195,7 @@ class Link
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
      *           being requested, as obtained from the original URI given by the user or referring resource
      *
-     * @param  string $path
+     * @param null $path
      * @return string
      */
     public function getSystemUri($path = null): string
@@ -219,9 +209,47 @@ class Link
     }
 
     /**
+     * Returns the system scheme, http or https.
+     *
+     * @return string
+     */
+    public function getSystemScheme(): string
+    {
+        if ($this->config->get('security.useSslOnly')) {
+            return 'https://';
+        }
+
+        if (!self::isIISServer()) {
+            // Apache, nginx, lighttpd
+            if (isset($_SERVER['HTTPS']) && 'on' === strtolower($_SERVER['HTTPS'])) {
+                return 'https://';
+            } else {
+                return 'http://';
+            }
+        } else {
+            // IIS Server
+            if ('on' === strtolower($_SERVER['HTTPS'])) {
+                return 'https://';
+            } else {
+                return 'http://';
+            }
+        }
+    }
+
+    /**
+     * Checks if webserver is an IIS Server.
+     *
+     * @return bool
+     */
+    public static function isIISServer()
+    {
+        return (isset($_SERVER['ALL_HTTP']) || isset($_SERVER['COMPUTERNAME']) || isset($_SERVER['APP_POOL_ID']));
+    }
+
+    /**
      * Returns the relative URI.
      *
-     * @param  string $path
+     * @param string|null $path
      * @return string
      */
     public static function getSystemRelativeUri(string $path = null): string
@@ -263,9 +291,6 @@ class Link
                 $htmlAnchor .= sprintf(' target="%s"', $this->target);
             }
         }
-        if (!empty($this->itemprop)) {
-            $htmlAnchor .= sprintf(' itemprop="%s"', $this->itemprop);
-        }
         if (!empty($this->rel)) {
             $htmlAnchor .= sprintf(' rel="%s"', $this->rel);
         }
@@ -289,7 +314,7 @@ class Link
      * the passed (system) uri according to the rewrite rules written
      * in .htaccess
      *
-     * @param  bool $removeSessionFromUrl Remove session from URL
+     * @param bool $removeSessionFromUrl Remove session from URL
      * @return string
      */
     public function toString(bool $removeSessionFromUrl = false): string
@@ -310,22 +335,22 @@ class Link
 
                         case self::LINK_GET_ACTION_FAQ:
                             $url .= self::LINK_CONTENT .
-                            $getParams[self::LINK_GET_CATEGORY] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_ID] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_ARTLANG] .
-                            self::LINK_SLASH .
-                            $this->getSEOItemTitle() .
-                            self::LINK_HTML_EXTENSION;
+                                $getParams[self::LINK_GET_CATEGORY] .
+                                self::LINK_HTML_SLASH .
+                                $getParams[self::LINK_GET_ID] .
+                                self::LINK_HTML_SLASH .
+                                $getParams[self::LINK_GET_ARTLANG] .
+                                self::LINK_SLASH .
+                                $this->getSEOItemTitle() .
+                                self::LINK_HTML_EXTENSION;
                             if (isset($getParams[self::LINK_GET_HIGHLIGHT])) {
                                 $url .= self::LINK_SEARCHPART_SEPARATOR .
-                                self::LINK_GET_HIGHLIGHT . '=' .
-                                $getParams[self::LINK_GET_HIGHLIGHT];
+                                    self::LINK_GET_HIGHLIGHT . '=' .
+                                    $getParams[self::LINK_GET_HIGHLIGHT];
                             }
                             if (isset($getParams[self::LINK_FRAGMENT_SEPARATOR])) {
                                 $url .= self::LINK_FRAGMENT_SEPARATOR .
-                                $getParams[self::LINK_FRAGMENT_SEPARATOR];
+                                    $getParams[self::LINK_FRAGMENT_SEPARATOR];
                             }
                             break;
 
@@ -363,37 +388,37 @@ class Link
                                     $url .= self::LINK_HTML_SLASH . $getParams[self::LINK_GET_PAGE];
                                 }
                                 $url .= self::LINK_SLASH .
-                                $this->getSEOItemTitle() .
-                                self::LINK_HTML_EXTENSION;
+                                    $this->getSEOItemTitle() .
+                                    self::LINK_HTML_EXTENSION;
                             } elseif (isset($getParams[self::LINK_GET_ACTION_SEARCH])) {
                                 $url .= self::LINK_HTML_SEARCH;
                                 $url .= self::LINK_SEARCHPART_SEPARATOR .
-                                self::LINK_GET_ACTION_SEARCH . '=' .
-                                $getParams[self::LINK_GET_ACTION_SEARCH];
+                                    self::LINK_GET_ACTION_SEARCH . '=' .
+                                    $getParams[self::LINK_GET_ACTION_SEARCH];
                                 if (isset($getParams[self::LINK_GET_PAGE])) {
                                     $url .= self::LINK_AMPERSAND . self::LINK_GET_PAGE . '=' .
-                                    $getParams[self::LINK_GET_PAGE];
+                                        $getParams[self::LINK_GET_PAGE];
                                 }
                             }
                             if (isset($getParams[self::LINK_GET_LANGS])) {
                                 $url .= self::LINK_AMPERSAND .
-                                self::LINK_GET_LANGS . '=' .
-                                $getParams[self::LINK_GET_LANGS];
+                                    self::LINK_GET_LANGS . '=' .
+                                    $getParams[self::LINK_GET_LANGS];
                             }
                             break;
 
                         case self::LINK_GET_ACTION_SITEMAP:
                             if (isset($getParams[self::LINK_GET_LETTER])) {
                                 $url .= self::LINK_SITEMAP .
-                                $getParams[self::LINK_GET_LETTER] .
-                                self::LINK_HTML_SLASH .
-                                $getParams[self::LINK_GET_LANG] .
-                                self::LINK_HTML_EXTENSION;
+                                    $getParams[self::LINK_GET_LETTER] .
+                                    self::LINK_HTML_SLASH .
+                                    $getParams[self::LINK_GET_LANG] .
+                                    self::LINK_HTML_EXTENSION;
                             } else {
                                 $url .= self::LINK_SITEMAP . 'A' .
-                                self::LINK_HTML_SLASH .
-                                $getParams[self::LINK_GET_LANG] .
-                                self::LINK_HTML_EXTENSION;
+                                    self::LINK_HTML_SLASH .
+                                    $getParams[self::LINK_GET_LANG] .
+                                    self::LINK_HTML_EXTENSION;
                             }
                             break;
 
@@ -401,30 +426,30 @@ class Link
                             if (
                                 !isset($getParams[self::LINK_GET_CATEGORY])
                                 || (isset($getParams[self::LINK_GET_CATEGORY])
-                                && (0 == $getParams[self::LINK_GET_CATEGORY]))
+                                    && (0 == $getParams[self::LINK_GET_CATEGORY]))
                             ) {
                                 $url .= self::LINK_HTML_SHOWCAT;
                             } else {
                                 $url .= self::LINK_CATEGORY .
-                                $getParams[self::LINK_GET_CATEGORY];
+                                    $getParams[self::LINK_GET_CATEGORY];
                                 if (isset($getParams[self::LINK_GET_PAGE])) {
                                     $url .= self::LINK_HTML_SLASH .
-                                    $getParams[self::LINK_GET_PAGE];
+                                        $getParams[self::LINK_GET_PAGE];
                                 }
                                 $url .= self::LINK_HTML_SLASH .
-                                $this->getSEOItemTitle() .
-                                self::LINK_HTML_EXTENSION;
+                                    $this->getSEOItemTitle() .
+                                    self::LINK_HTML_EXTENSION;
                             }
                             break;
 
                         case self::LINK_GET_ACTION_NEWS:
                             $url .= self::LINK_NEWS .
-                            $getParams[self::LINK_GET_NEWS_ID] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_NEWS_LANG] .
-                            self::LINK_SLASH .
-                            $this->getSEOItemTitle() .
-                            self::LINK_HTML_EXTENSION;
+                                $getParams[self::LINK_GET_NEWS_ID] .
+                                self::LINK_HTML_SLASH .
+                                $getParams[self::LINK_GET_NEWS_LANG] .
+                                self::LINK_SLASH .
+                                $this->getSEOItemTitle() .
+                                self::LINK_HTML_EXTENSION;
                             break;
                     }
 
@@ -506,6 +531,21 @@ class Link
     }
 
     /**
+     * Checks if URL is a relative system link.
+     *
+     * @return bool
+     */
+    private function isRelativeSystemLink()
+    {
+        $slashIdx = strpos($this->url, self::LINK_SLASH);
+        if (false === $slashIdx) {
+            return false;
+        }
+
+        return ($slashIdx == 0);
+    }
+
+    /**
      * Returns the default scheme.
      *
      * @return string
@@ -518,58 +558,6 @@ class Link
         }
 
         return $scheme;
-    }
-
-    /**
-     * Returns the system scheme, http or https.
-     *
-     * @return string
-     */
-    public function getSystemScheme(): string
-    {
-        if ($this->config->get('security.useSslOnly')) {
-            return 'https://';
-        }
-
-        if (!self::isIISServer()) {
-            // Apache, nginx, lighttpd
-            if (isset($_SERVER['HTTPS']) && 'on' === strtolower($_SERVER['HTTPS'])) {
-                return 'https://';
-            } else {
-                return 'http://';
-            }
-        } else {
-            // IIS Server
-            if ('on' === strtolower($_SERVER['HTTPS'])) {
-                return 'https://';
-            } else {
-                return 'http://';
-            }
-        }
-    }
-
-    /**
-     * Checks if webserver is an IIS Server.
-     *
-     * @return bool
-     */
-    public static function isIISServer()
-    {
-        return (isset($_SERVER['ALL_HTTP']) || isset($_SERVER['COMPUTERNAME']) || isset($_SERVER['APP_POOL_ID']));
-    }
-
-    /**
-     * Checks if the the current URL is the main index.php file.
-     *
-     * @return bool
-     */
-    protected function isHomeIndex()
-    {
-        if (!$this->isSystemLink()) {
-            return false;
-        }
-
-        return !(false === strpos($this->url, self::LINK_INDEX_HOME));
     }
 
     /**
@@ -589,18 +577,17 @@ class Link
     }
 
     /**
-     * Checks if URL is a relative system link.
+     * Checks if the the current URL is the main index.php file.
      *
      * @return bool
      */
-    private function isRelativeSystemLink()
+    protected function isHomeIndex()
     {
-        $slashIdx = strpos($this->url, self::LINK_SLASH);
-        if (false === $slashIdx) {
+        if (!$this->isSystemLink()) {
             return false;
         }
 
-        return ($slashIdx == 0);
+        return !(false === strpos($this->url, self::LINK_INDEX_HOME));
     }
 
     /**
@@ -746,8 +733,8 @@ class Link
     /**
      * Appends the session id.
      *
-     * @param  string $url  URL
-     * @param  int    $sids Session Id
+     * @param string $url URL
+     * @param int $sids Session Id
      * @return string
      */
     private function appendSids(string $url, int $sids): string

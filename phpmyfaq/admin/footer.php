@@ -114,7 +114,7 @@ if (isset($auth)) {
               entities: '10',
               entity_encoding: 'raw',
               toolbar1: 'newdocument | undo redo | bold italic underline subscript superscript strikethrough | styleselect | formatselect | fontselect | fontsizeselect | outdent indent | alignleft aligncenter alignright alignjustify | removeformat',
-              toolbar2: 'insertfile | cut copy paste pastetext codesample | bullist numlist | link unlink anchor image media | charmap | insertdatetime | table | forecolor backcolor emoticons | searchreplace | spellchecker | hr | pagebreak | code | phpmyfaq print | preview | custFontSize | fullscreen',
+              toolbar2: 'insertfile | cut copy paste pastetext codesample | bullist numlist | link unlink anchor image media | charmap | insertdatetime | table | forecolor backcolor emoticons | searchreplace | spellchecker | hr | pagebreak | code | phpmyfaq print | preview | custFontSize | toc | fullscreen',
               height: '<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>',
               image_advtab: true,
               image_class_list: [
