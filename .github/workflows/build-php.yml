@@ -4,12 +4,11 @@ on: [push]
 
 jobs:
   run:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest]
         php-versions: ['7.2', '7.3', '7.4']
-    name: phpMyFAQ ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: phpMyFAQ ${{ matrix.php-versions }} Test on Ubuntu (latest)
 
     steps:
       - name: Checkout
