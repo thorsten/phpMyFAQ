@@ -1,4 +1,4 @@
-name: PHP Tests
+name: Lint and Test
 
 on: [push]
 
@@ -14,6 +14,9 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run linter
+        run: composer run-script lint
 
       - name: Run test suite
         run: composer run-script test
