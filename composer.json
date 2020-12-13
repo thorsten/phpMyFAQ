@@ -57,6 +57,9 @@
     "squizlabs/php_codesniffer": "*"
   },
   "config": {
+    "platform": {
+      "php": "7.3.0"
+    },
     "secure-http": true
   },
   "minimum-stability": "stable",
