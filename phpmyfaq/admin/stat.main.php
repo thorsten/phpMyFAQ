@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main statistics page.
  *
@@ -42,70 +43,70 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
-          $session = new Session($faqConfig);
-          $date = new Date($faqConfig);
-          $visits = new Visits($faqConfig);
-          $statdelete = Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
-          $month = Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
-          $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-          $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+        if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
+            $session = new Session($faqConfig);
+            $date = new Date($faqConfig);
+            $visits = new Visits($faqConfig);
+            $statdelete = Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
+            $month = Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
+            $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+            $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-          if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
-              $statdelete = null;
-          }
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
+                $statdelete = null;
+            }
 
-          if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromGet) {
-              $clearVisits = false;
-          } else {
-              $clearVisits = true;
-          }
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromGet) {
+                $clearVisits = false;
+            } else {
+                $clearVisits = true;
+            }
 
-          // Delete sessions and session files
-          if (!is_null($statdelete) && !is_null($month)) {
-              $dir = opendir(PMF_ROOT_DIR . '/data');
-              $first = 9999999999999999999999999;
-              $last = 0;
-              while ($trackingFile = readdir($dir)) {
-                  // The filename format is: trackingDDMMYYYY
-                  // e.g.: tracking02042006
-                  if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
-                      $candidateFirst = Date::getTrackingFileDate($trackingFile);
-                      $candidateLast = Date::getTrackingFileDate($trackingFile, true);
-                      if (($candidateLast > 0) && ($candidateLast > $last)) {
-                          $last = $candidateLast;
-                      }
-                      if (($candidateFirst > 0) && ($candidateFirst < $first)) {
-                          $first = $candidateFirst;
-                      }
-                      unlink(PMF_ROOT_DIR . '/data/' . $trackingFile);
-                  }
-              }
-              closedir($dir);
-              $session->deleteSessions($first, $last);
+            // Delete sessions and session files
+            if (!is_null($statdelete) && !is_null($month)) {
+                $dir = opendir(PMF_ROOT_DIR . '/data');
+                $first = 9999999999999999999999999;
+                $last = 0;
+                while ($trackingFile = readdir($dir)) {
+                    // The filename format is: trackingDDMMYYYY
+                    // e.g.: tracking02042006
+                    if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
+                        $candidateFirst = Date::getTrackingFileDate($trackingFile);
+                        $candidateLast = Date::getTrackingFileDate($trackingFile, true);
+                        if (($candidateLast > 0) && ($candidateLast > $last)) {
+                            $last = $candidateLast;
+                        }
+                        if (($candidateFirst > 0) && ($candidateFirst < $first)) {
+                            $first = $candidateFirst;
+                        }
+                        unlink(PMF_ROOT_DIR . '/data/' . $trackingFile);
+                    }
+                }
+                closedir($dir);
+                $session->deleteSessions($first, $last);
 
-              printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
-          }
+                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+            }
 
-          // Reset all visits and sessions
-          if ('clear-visits' === $action && $clearVisits) {
-              // Clear visits
-              $visits->resetAll();
+            // Reset all visits and sessions
+            if ('clear-visits' === $action && $clearVisits) {
+                // Clear visits
+                $visits->resetAll();
 
-              // Delete logifles
-              $files = glob(PMF_ROOT_DIR . '/data/*');
-              foreach ($files as $file) {
-                  if (is_file($file)) {
-                      unlink($file);
-                  }
-              }
+                // Delete logifles
+                $files = glob(PMF_ROOT_DIR . '/data/*');
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
+                }
 
-              // Delete sessions
-              $session->deleteAllSessions();
+                // Delete sessions
+                $session->deleteAllSessions();
 
-              printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_reset_visits_success']);
-          }
-          ?>
+                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_reset_visits_success']);
+            }
+            ?>
 
         <table class="table table-striped">
           <tr>
@@ -199,20 +200,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                   <label for="day" class="d-none"><?= $PMF_LANG['ad_stat_browse'] ?></label>
                   <select name="day" id="day" class="form-control">
                       <?php
-                      foreach ($trackingDates as $trackingDate) {
-                          printf('<option value="%d"', $trackingDate);
-                          if (date('Y-m-d', $trackingDate) == strftime('%Y-%m-%d', $_SERVER['REQUEST_TIME'])) {
-                              echo ' selected="selected"';
-                          }
-                          echo '>';
-                          echo $date->format(date('Y-m-d H:i', $trackingDate));
-                          echo "</option>\n";
-                      }
-                      ?>
+                        foreach ($trackingDates as $trackingDate) {
+                            printf('<option value="%d"', $trackingDate);
+                            if (date('Y-m-d', $trackingDate) == strftime('%Y-%m-%d', $_SERVER['REQUEST_TIME'])) {
+                                echo ' selected="selected"';
+                            }
+                            echo '>';
+                            echo $date->format(date('Y-m-d H:i', $trackingDate));
+                            echo "</option>\n";
+                        }
+                        ?>
                   </select>
                 </div>
                 <button class="btn btn-primary" type="submit" name="statbrowse">
-                    <?= $PMF_LANG['ad_stat_ok'] ?>
+                      <?= $PMF_LANG['ad_stat_ok'] ?>
                 </button>
               </form>
             </td>
@@ -227,37 +228,37 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="form-group mr-2">
               <label class="col-form-label" for="month"><?= $PMF_LANG['ad_stat_choose'] ?>:</label>
               <select name="month" id="month" class="form-control">
-                  <?php
-                  $oldValue = mktime(0, 0, 0, 1, 1, 1970);
-                  $isFirstDate = true;
-                  foreach ($trackingDates as $trackingDate) {
-                      if (date('Y-m', $oldValue) != date('Y-m', $trackingDate)) {
-                          // The filename format is: trackingDDMMYYYY
-                          // e.g.: tracking02042006
-                          printf('<option value="%s"', date('mY', $trackingDate));
-                          // Select the oldest month
-                          if ($isFirstDate) {
-                              echo ' selected="selected"';
-                              $isFirstDate = false;
-                          }
-                          echo '>';
-                          echo date('Y-m', $trackingDate);
-                          echo "</option>\n";
-                          $oldValue = $trackingDate;
-                      }
-                  }
-                  ?>
+                    <?php
+                    $oldValue = mktime(0, 0, 0, 1, 1, 1970);
+                    $isFirstDate = true;
+                    foreach ($trackingDates as $trackingDate) {
+                        if (date('Y-m', $oldValue) != date('Y-m', $trackingDate)) {
+                            // The filename format is: trackingDDMMYYYY
+                            // e.g.: tracking02042006
+                            printf('<option value="%s"', date('mY', $trackingDate));
+                            // Select the oldest month
+                            if ($isFirstDate) {
+                                echo ' selected="selected"';
+                                $isFirstDate = false;
+                            }
+                            echo '>';
+                            echo date('Y-m', $trackingDate);
+                            echo "</option>\n";
+                            $oldValue = $trackingDate;
+                        }
+                    }
+                    ?>
               </select>
             </div>
             <button class="btn btn-primary" type="submit" name="statdelete">
-                <?= $PMF_LANG['ad_stat_delete'] ?>
+                  <?= $PMF_LANG['ad_stat_delete'] ?>
             </button>
           </fieldset>
         </form>
-          <?php
-      } else {
-          print $PMF_LANG['err_NotAuth'];
-      }
-      ?>
+            <?php
+        } else {
+            print $PMF_LANG['err_NotAuth'];
+        }
+        ?>
   </div>
 </div>

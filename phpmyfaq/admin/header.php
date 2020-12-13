@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Header of the admin area.
  *
@@ -253,7 +254,7 @@ switch ($action) {
   <script src="assets/js/sidebar.js"></script>
   <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
 
-    <?php if ($editorAutoSave): ?>
+    <?php if ($editorAutoSave) : ?>
       <script src="assets/js/autosave.js" async></script>
     <?php endif; ?>
 
@@ -280,8 +281,10 @@ switch ($action) {
       <hr class="sidebar-divider my-0">
     </li>
 
-      <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
-              ))): ?>
+      <?php if (
+        isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
+        ))
+) : ?>
         <li class="nav-item active">
           <a class="nav-link" href="index.php">
             <i class="fa fa-tachometer"></i>
@@ -427,9 +430,11 @@ switch ($action) {
             </div>
           </li>
 
-            <?php if (isset($auth) && (count(
-                        $user->perm->getAllUserRights($user->getUserId())
-                    ) > 0 || $user->isSuperAdmin())): ?>
+            <?php if (
+            isset($auth) && (count(
+                $user->perm->getAllUserRights($user->getUserId())
+            ) > 0 || $user->isSuperAdmin())
+) : ?>
               <li class="nav-item">
                 <div class="navbar-text text-gray-600 small">
                   <i class="fa fa-clock-o fa-fw"></i> <?= $PMF_LANG['ad_session_expiration']; ?>:

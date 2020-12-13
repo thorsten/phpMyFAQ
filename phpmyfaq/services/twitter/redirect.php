@@ -34,8 +34,10 @@ $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerSecret')
 );
 
-$requestToken = $connection->oauth('oauth/request_token',
-    ['oauth_callback' => $faqConfig->getDefaultUrl() . 'services/twitter/callback.php']);
+$requestToken = $connection->oauth(
+    'oauth/request_token',
+    ['oauth_callback' => $faqConfig->getDefaultUrl() . 'services/twitter/callback.php']
+);
 
 $_SESSION['oauth_token'] = $requestToken['oauth_token'];
 $_SESSION['oauth_token_secret'] = $requestToken['oauth_token_secret'];

@@ -3,8 +3,6 @@
 /**
  * Russian language file
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -16,6 +14,7 @@
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-06-24
+ * @codingStandardsIgnoreFile
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';
@@ -27,10 +26,10 @@ $PMF_LANG['msgCategory'] = 'Разделы';
 $PMF_LANG['msgShowAllCategories'] = 'Разделы';
 $PMF_LANG['msgSearch'] = 'Поиск';
 $PMF_LANG['msgAddContent'] = 'ответ';
-$PMF_LANG['msgQuestion'] = 'вопрос'; 
+$PMF_LANG['msgQuestion'] = 'вопрос';
 $PMF_LANG['msgOpenQuestions'] = 'Открытые вопросы';
 $PMF_LANG['msgHelp'] = 'Помощь';
-$PMF_LANG['msgContact'] = 'Адм'; 
+$PMF_LANG['msgContact'] = 'Адм';
 $PMF_LANG['msgHome'] = 'Содержание';
 $PMF_LANG['msgNews'] = ' Новости';
 $PMF_LANG['msgUserOnline'] = ' - активных пользователей';

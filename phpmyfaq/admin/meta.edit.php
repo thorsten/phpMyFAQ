@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The meta data administration frontend.
  *

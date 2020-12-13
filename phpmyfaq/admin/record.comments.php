@@ -76,10 +76,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                         <?= $faqComment->getUsername() ?>
                     </a> |
                     <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
-                    <a href="<?php printf('../?action=faq&cat=%d&id=%d&artlang=%s',
+                    <a href="<?php printf(
+                        '../?action=faq&cat=%d&id=%d&artlang=%s',
                         $faqComment->getCategoryId(),
                         $faqComment->getRecordId(),
-                        $faqLangCode) ?>">
+                        $faqLangCode
+                             ) ?>">
                         <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
                     </a>
                 </span><br/>
@@ -98,7 +100,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
         </div>
       </form>
         <?php
-
     } else {
         echo '<p><strong>n/a</strong></p>';
     }
@@ -136,7 +137,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                 </td>
               </tr>
                 <?php
-
             }
             ?>
         </table>
@@ -147,7 +147,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
         </div>
       </form>
         <?php
-
     } else {
         echo '<p><strong>n/a</strong></p>';
     }

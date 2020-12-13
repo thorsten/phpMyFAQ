@@ -1,4 +1,5 @@
 <?php
+
 /**
  * An error page that is displayed if the user has no admin permissions.
  *
@@ -14,6 +15,7 @@
  * @link https://www.phpmyfaq.de
  * @since 2013-02-05
  */
+
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">

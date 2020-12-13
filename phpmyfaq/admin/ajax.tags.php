@@ -35,7 +35,6 @@ $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRIN
 $oTag = new Tags($faqConfig);
 
 switch ($ajaxAction) {
-
     case 'list':
         $autoCompleteValue = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 
@@ -66,7 +65,6 @@ switch ($ajaxAction) {
         break;
 
     case 'update':
-
         $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $tag = Filter::filterInput(INPUT_POST, 'tag', FILTER_SANITIZE_STRING);
         $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);

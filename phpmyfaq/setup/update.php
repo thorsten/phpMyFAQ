@@ -110,7 +110,6 @@ $installer->checkAvailableDatabaseTables($db);
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) { ?>
-
       <form action="update.php?step=2" method="post">
         <input name="version" type="hidden" value="<?= $version ?>">
 
@@ -175,41 +174,34 @@ if ($step === 1) { ?>
           <div class="col">
               <?php
 
-              //
-              // We only support updates from 2.9+
-              //
-              if (version_compare($version, '2.9.0', '>')) {
-                  printf(
-                      '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
-                      $version,
-                      '<i aria-hidden="true" class="fa fa-check"></i>'
-                  );
-              } else {
-                  printf(
-                      '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
-                      $version
-                  );
-                  echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
-              }
+                //
+                // We only support updates from 2.9+
+                //
+                if (version_compare($version, '2.9.0', '>')) {
+                    printf(
+                        '<div class="alert alert-success text-center" role="alert">Your current version: %s %s</div>',
+                        $version,
+                        '<i aria-hidden="true" class="fa fa-check"></i>'
+                    );
+                } else {
+                    printf(
+                        '<div class="alert alert-danger text-center" role="alert">Your current version: %s</div>',
+                        $version
+                    );
+                    echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
+                }
 
-              if ('hash' !== PMF_ENCRYPTION_TYPE) {
-                  printf(
-                      '<div class="alert alert-info text-center" role="alert">Your passwords are currently encoded with a %s() method.</div>',
-                      PMF_ENCRYPTION_TYPE
-                  );
-              }
-
-              //
-              // Updates only possible if maintenance mode is enabled
-              //
-              if (!$faqConfig->get('main.maintenanceMode')) {
-                  echo '<div class="alert alert-danger text-center" role="alert">Please enable the maintenance mode ' .
+                //
+                // Updates only possible if maintenance mode is enabled
+                //
+                if (!$faqConfig->get('main.maintenanceMode')) {
+                    echo '<div class="alert alert-danger text-center" role="alert">Please enable the maintenance mode ' .
                       'in the <a href="../admin">admin section</a> before running the update script.</div>';
-                  $updateDisabled = 'disabled';
-              } else {
-                  $updateDisabled = '';
-              }
-              ?>
+                    $updateDisabled = 'disabled';
+                } else {
+                    $updateDisabled = '';
+                }
+                ?>
             <p>
                 <button class="btn btn-primary btn-next btn-lg pull-right <?= $updateDisabled ?>" type="submit"
                     <?= $updateDisabled ?>>Go to step 2 of 3</button>
@@ -229,7 +221,8 @@ if ($step == 2) {
     // Backup of config/database.php
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php ' . 'could not be written. Please correct this!</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php ' .
+                'could not be written. Please correct this!</p>';
         } else {
             $checkDatabaseSetupFile = true;
             $updateMessages[] = 'A backup of your database configuration file has been made.';
@@ -239,7 +232,8 @@ if ($step == 2) {
     // Backup of config/ldap.php if exists
     if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/ldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/ldap.bak.php ' . 'could not be written. Please correct this!</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/ldap.bak.php ' .
+                'could not be written. Please correct this!</p>';
         } else {
             $checkLdapSetupFile = true;
             $updateMessages[] = 'A backup of your LDAP configuration file has been made.';
@@ -251,7 +245,8 @@ if ($step == 2) {
     // Backup of config/elasticsearch.php if exists
     if (file_exists(PMF_ROOT_DIR . '/config/elasticsearch.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/elasticsearch.php', PMF_ROOT_DIR . '/config/elasticsearch.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' . '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' .
+                '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
         } else {
             $checkElasticsearchSetupFile = true;
             $updateMessages[] = 'A backup of your Elasticsearch configuration file has been made.';
@@ -292,9 +287,9 @@ if ($step == 2) {
         <div class="row" id="step2">
           <div class="col text-center mt-5">
               <?php
-              foreach ($updateMessages as $updateMessage) {
-                  printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
-              } ?>
+                foreach ($updateMessages as $updateMessage) {
+                    printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
+                } ?>
             <p class="mb-5">Your phpMyFAQ configuration will be updated after the next step.</p>
             <p>
               <button class="btn btn-primary btn-next btn-lg pull-right" type="submit">
@@ -314,7 +309,7 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
-?>
+    ?>
 
   <div class="pmf-setup-stepwizard">
     <div class="pmf-setup-stepwizard-row setup-panel">
@@ -775,9 +770,9 @@ if ($step == 3) {
     if ($faqConfig->set('main.maintenanceMode', 'false')) {
         echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> Deactivating maintenance mode ...</p>";
     }
-?>
+    ?>
   <p class="alert alert-success">The database was updated successfully. Thank you very much for updating.</p>
-<?php
+    <?php
     //
     // Remove backup files
     //
@@ -786,12 +781,12 @@ if ($step == 3) {
             printf("<p class=\"alert alert-info\">Please remove the backup file %s manually.</p>\n", $filename);
         }
     }
-?>
+    ?>
   <p>
     <a href="../index.php" class="btn btn-primary btn-next btn-lg pull-right" type="button">
       Go to your updated phpMyFAQ installation
     </a>
   </p>
-<?php
+    <?php
     System::renderFooter();
 }

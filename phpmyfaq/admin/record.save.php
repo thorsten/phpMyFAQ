@@ -38,7 +38,6 @@ $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
-
     // Get submit action
     $submit = Filter::filterInputArray(
         INPUT_POST,
@@ -65,8 +64,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     );
     $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-    $active = 'yes' == Filter::filterInput(INPUT_POST, 'active',
-        FILTER_SANITIZE_STRING) && $user->perm->hasPermission($user->getUserId(), 'approverec') ? 'yes' : 'no';
+    $active = 'yes' == Filter::filterInput(
+        INPUT_POST,
+        'active',
+        FILTER_SANITIZE_STRING
+    ) && $user->perm->hasPermission($user->getUserId(), 'approverec') ? 'yes' : 'no';
     $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
     if ($faqConfig->get('main.enableMarkdownEditor')) {
         $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
@@ -233,7 +235,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             }
         }
 
-        // All the other translations        
+        // All the other translations
         $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
         ?>
       <script>
@@ -244,7 +246,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         })();
       </script>
         <?php
-
     }
 } else {
     echo $PMF_LANG['err_NotAuth'];

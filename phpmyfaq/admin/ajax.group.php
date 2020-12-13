@@ -30,11 +30,12 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ($user->perm->hasPermission($user->getUserId(), 'add_user') ||
+if (
+    $user->perm->hasPermission($user->getUserId(), 'add_user') ||
     $user->perm->hasPermission($user->getUserId(), 'edit_user') ||
     $user->perm->hasPermission($user->getUserId(), 'delete_user') ||
-    $user->perm->hasPermission($user->getUserId(), 'editgroup')) {
-
+    $user->perm->hasPermission($user->getUserId(), 'editgroup')
+) {
     // pass the user id of the current user so it'll check which group he belongs to
     $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user) : [];
     $userList = $user->getAllUsers(true, false);

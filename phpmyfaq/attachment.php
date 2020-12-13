@@ -99,8 +99,10 @@ if (isset($auth)) {
     }
 }
 
-if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
-        (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))) {
+if (
+    $attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
+        (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))
+) {
     $attachment->rawOut();
     exit(0);
 } else {

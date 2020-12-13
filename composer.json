@@ -62,8 +62,8 @@
   "minimum-stability": "stable",
   "scripts": {
     "test": "vendor/bin/phpunit",
-    "lint": "vendor/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
-    "lint-fix": "vendor/bin/phpcbf  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
+    "lint": "vendor/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
+    "lint-fix": "vendor/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
     "post-install-cmd": [
       "scripts/reorgVendoredDeps.php"
     ],

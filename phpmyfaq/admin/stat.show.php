@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Show the session.
  *
@@ -55,10 +56,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             ?>
           <tr>
             <td><?= date('Y-m-d H:i:s', $data[7]);
-                ?></td>
+            ?></td>
             <td><?= $data[1];
-                ?> (<?= $data[2];
-                ?>)
+            ?> (<?= $data[2];
+?>)
             </td>
           </tr>
             <?php
@@ -66,7 +67,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                 ?>
               <tr>
                 <td><?= $PMF_LANG['ad_sess_referer'];
-                    ?></td>
+                ?></td>
                 <td>
                     <?= Strings::htmlentities(str_replace('?', '? ', $data[5]));
                     ?>
@@ -74,16 +75,16 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
               </tr>
               <tr>
                 <td><?= $PMF_LANG['ad_sess_browser'];
-                    ?></td>
+                ?></td>
                 <td><?= Strings::htmlentities($data[6]);
-                    ?></td>
+                ?></td>
               </tr>
               <tr>
                 <td><?= $PMF_LANG['ad_sess_ip'];
-                    ?>:
+                ?>:
                 </td>
                 <td><?= Strings::htmlentities($data[3]);
-                    ?></td>
+                ?></td>
               </tr>
                 <?php
             }

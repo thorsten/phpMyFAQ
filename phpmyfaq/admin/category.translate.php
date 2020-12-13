@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Translates a category.
  *
@@ -33,10 +34,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $categoryPermission = new CategoryPermission($faqConfig);
 
     $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-    $header = sprintf('%s %s: <em>%s</em>',
+    $header = sprintf(
+        '%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
         $PMF_LANG['ad_categ_trans_2'],
-        $category->categoryName[$id]['name']);
+        $category->categoryName[$id]['name']
+    );
 
     $selectedLanguage = Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $faqLangCode);
     if ($selectedLanguage !== $faqLangCode) {
@@ -63,9 +66,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               <input type="hidden" name="parent_id" value="<?= $category->categoryName[$id]['parent_id'] ?>">
               <input type="hidden" name="showcat" value="<?= $showcat ?>">
               <input type="hidden" name="active" value="<?= $category->categoryName[$id]['active'] ?>">
-                <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
+                <?php if ($faqConfig->get('security.permLevel') !== 'basic') : ?>
                   <input type="hidden" name="restricted_groups[]" value="<?= $groupPermission[0] ?>">
-                <?php else: ?>
+                <?php else : ?>
                   <input type="hidden" name="restricted_groups[]" value="-1">
                 <?php endif; ?>
               <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
@@ -127,8 +130,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </form>
           </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

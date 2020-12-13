@@ -58,19 +58,23 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
     $httpHelper->addAdditionalHeader('Content-Type: application/octet-stream');
 
     switch ($action) {
-        case 'backup_content' :
+        case 'backup_content':
             foreach ($tables as $table) {
-                if ((Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
-                        ) . 'faqsessions' == trim($table))) {
+                if (
+                    (Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
+                    ) . 'faqsessions' == trim($table))
+                ) {
                     continue;
                 }
                 $tableNames .= $table . ' ';
             }
             break;
-        case 'backup_logs' :
+        case 'backup_logs':
             foreach ($tables as $table) {
-                if ((Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
-                        ) . 'faqsessions' == trim($table))) {
+                if (
+                    (Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
+                    ) . 'faqsessions' == trim($table))
+                ) {
                     $tableNames .= $table . ' ';
                 }
             }
@@ -84,7 +88,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
     $text[] = '-- Otherwise this backup will be broken.';
 
     switch ($action) {
-        case 'backup_content' :
+        case 'backup_content':
             $header = sprintf(
                 'Content-Disposition: attachment; filename=%s',
                 urlencode(
@@ -103,7 +107,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
                 }
             }
             break;
-        case 'backup_logs' :
+        case 'backup_logs':
             $header = sprintf(
                 'Content-Disposition: attachment; filename=%s',
                 urlencode(

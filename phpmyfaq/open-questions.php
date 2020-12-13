@@ -38,6 +38,4 @@ try {
         ]
     );
 } catch (Exception $e) {
-
 }
-

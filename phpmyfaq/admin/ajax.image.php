@@ -37,9 +37,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     $csrfOkay = false;
 }
 switch ($ajaxAction) {
-
     case 'upload':
-
         $uploadDir = '../images/';
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
         $timestamp = time();

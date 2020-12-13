@@ -22,13 +22,12 @@ use phpMyFAQ\Filter;
 //
 // Prepend and start the PHP session
 //
-define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require dirname(dirname(__DIR__)) . '/src/Bootstrap.php';
 
 $requestToken = [];
 $requestToken['oauth_token'] = $_SESSION['oauth_token'];
@@ -64,6 +63,5 @@ if (200 === $connection->getLastHttpCode()) {
 
     header('Location: ./index.php');
 } else {
-
     header('Location: ./clearsessions.php');
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Administration frontend for Tags.
  *

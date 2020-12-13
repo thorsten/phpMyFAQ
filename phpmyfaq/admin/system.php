@@ -63,7 +63,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             'Database Client Version' => $faqConfig->getDb()->clientVersion(),
             'Elasticsearch Version' => $esInformation
         ];
-        foreach ($systemInformation as $name => $info): ?>
+        foreach ($systemInformation as $name => $info) : ?>
           <tr>
             <td style="width: 20%"><strong><?= $name ?></strong></td>
             <td><?= $info ?></td>
@@ -75,7 +75,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     </div>
   </div>
     <?php
-
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

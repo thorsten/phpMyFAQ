@@ -15,6 +15,7 @@
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-07-28
+ * @codingStandardsIgnoreFile
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';

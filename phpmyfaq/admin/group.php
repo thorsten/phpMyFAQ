@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Displays the group management frontend.
  *
@@ -24,9 +25,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (!$user->perm->hasPermission($user->getUserId(), 'editgroup') &&
+if (
+    !$user->perm->hasPermission($user->getUserId(), 'editgroup') &&
     !$user->perm->hasPermission($user->getUserId(), 'delgroup') &&
-    !$user->perm->hasPermission($user->getUserId(), 'addgroup')) {
+    !$user->perm->hasPermission($user->getUserId(), 'addgroup')
+) {
     exit();
 }
 
@@ -398,7 +401,7 @@ if ('list' === $groupAction) {
                 <textarea id="update_group_description" name="description" class="form-control"
                           rows="<?= $descriptionRows ?>"
                           tabindex="2"><?php
-                    echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
+                            echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -407,7 +410,7 @@ if ('list' === $groupAction) {
                   <label>
                     <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
                            tabindex="3"<?php
-                    echo((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
+                            echo((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
                       <?= $PMF_LANG['ad_group_autoJoin'] ?>
                   </label>
                 </div>
@@ -525,19 +528,19 @@ if ('list' === $groupAction) {
                 <?= $PMF_LANG['ad_user_checkall'] ?> / <?= $PMF_LANG['ad_user_uncheckall'] ?>
               </a>
             </div>
-              <?php foreach ($user->perm->getAllRightsData() as $right): ?>
+              <?php foreach ($user->perm->getAllRightsData() as $right) : ?>
                 <div class="form-check">
                   <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"
                          name="group_rights[]" value="<?= $right['right_id'] ?>"
                          class="form-check-input permission">
                   <label class="form-check-label" for="group_right_<?= $right['right_id'] ?>">
                       <?php
-                      if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                          echo $PMF_LANG['rightsLanguage'][$right['name']];
-                      } else {
-                          echo $right['description'];
-                      }
-                      ?>
+                        if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+                            echo $PMF_LANG['rightsLanguage'][$right['name']];
+                        } else {
+                            echo $right['description'];
+                        }
+                        ?>
                   </label>
                 </div>
               <?php endforeach; ?>

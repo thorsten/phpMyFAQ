@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main administration file for the news.
  *
@@ -15,7 +16,12 @@
  * @since 2003-02-23
  */
 
-use phpMyFAQ\Comments;use phpMyFAQ\Date;use phpMyFAQ\Entity\CommentType;use phpMyFAQ\Filter;use phpMyFAQ\Helper\LanguageHelper;use phpMyFAQ\News;
+use phpMyFAQ\Comments;
+use phpMyFAQ\Date;
+use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\News;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,7 +38,6 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) { ?>
-
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-pencil"></i>
@@ -165,9 +170,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
             </div>
         </div>
 
-<?php
+    <?php
 } elseif ('news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
-?>
+    ?>
          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-pencil"></i>
@@ -195,7 +200,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     </tr>
                 </thead>
                 <tbody>
-<?php
+    <?php
     $newsHeader = $news->getNewsHeader();
     $date = new Date($faqConfig);
     if (count($newsHeader)) {
@@ -215,21 +220,20 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                             </a>
                         </td>
                     </tr>
-<?php
+            <?php
         }
     } else {
         printf(
-                '<tr><td colspan="3">%s</td></tr>',
-                $PMF_LANG['ad_news_nodata']
-            );
+            '<tr><td colspan="3">%s</td></tr>',
+            $PMF_LANG['ad_news_nodata']
+        );
     }
     ?>
                 </tbody>
                 </table>
             </div>
         </div>
-<?php
-
+    <?php
 } elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
@@ -259,9 +263,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <div class="col-9">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                             <textarea id="news" name="news" class="form-control" rows="5"><?php
-                                if (isset($newsData['content'])) {
-                                    echo htmlspecialchars($newsData['content'], ENT_QUOTES);
-                                } ?></textarea>
+                            if (isset($newsData['content'])) {
+                                echo htmlspecialchars($newsData['content'], ENT_QUOTES);
+                            } ?></textarea>
                         </div>
                     </div>
 
@@ -286,7 +290,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <div class="col-9">
                             <label>
                                 <input type="checkbox" name="active" id="active" value="y"
-                                    <?php if (isset($newsData['active']) && $newsData['active']) { echo ' checked'; } ?>
+                                    <?php if (isset($newsData['active']) && $newsData['active']) {
+                                        echo ' checked';
+                                    } ?>
                                 <?= $PMF_LANG['ad_gen_yes'] ?>
                             </label>
                         </div>
@@ -298,7 +304,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <div class="col-9">
                             <label>
                                 <input type="checkbox" name="comment" id="comment" value="y"
-                                <?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { echo ' checked'; } ?>>
+                                <?php if (isset($newsData['allowComments']) && $newsData['allowComments']) {
+                                    echo ' checked';
+                                } ?>>
                                 <?= $PMF_LANG['ad_gen_yes'] ?>
                             </label>
                         </div>
@@ -324,15 +332,21 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <div class="col-9">
                         <label>
                                 <input type="radio" name="target" value="blank"
-                                <?php if ('blank' == $newsData['target']) { echo ' checked'; } ?>>
+                                <?php if ('blank' == $newsData['target']) {
+                                    echo ' checked';
+                                } ?>>
                                 <?= $PMF_LANG['ad_news_link_window'] ?>
                                 <br>
                                 <input type="radio" name="target" value="self"
-                                <?php if ('self' == $newsData['target']) { echo ' checked'; } ?>>
+                                <?php if ('self' == $newsData['target']) {
+                                    echo ' checked';
+                                } ?>>
                                 <?= $PMF_LANG['ad_news_link_faq'] ?>
                                 <br>
                                 <input type="radio" name="target" value="parent"
-                                <?php if ('parent' == $newsData['target']) { echo ' checked'; } ?>>
+                                <?php if ('parent' == $newsData['target']) {
+                                    echo ' checked';
+                                } ?>>
                                 <?= $PMF_LANG['ad_news_link_parent'] ?>
                             </label>
                         </div>
@@ -344,10 +358,10 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <?= LanguageHelper::renderSelectLanguage($newsData['lang'], false, [], 'langTo') ?>
                         </div>
                     </div>
-<?php
+    <?php
     $dateStart = ($newsData['dateStart'] != '00000000000000' ? Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
     $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
-?>
+    ?>
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
                         <div class="col-9">
@@ -375,15 +389,14 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                       </div>
                     </div>
                 </form>
-<?php
+    <?php
     $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $oComment = new Comments($faqConfig);
     $comments = $oComment->getCommentsData($newsId, CommentType::NEWS);
     if (count($comments) > 0) {
         ?>
                 <div class="form-group row"><strong><?= $PMF_LANG['ad_entry_comment'] ?></strong></div>
-<?php
-
+        <?php
     }
     foreach ($comments as $item) {
         ?>
@@ -393,15 +406,14 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <?= $item['user'] ?>
                     </a>:<br>
                     <?= $item['content'] ?><br>
-                    <?= $PMF_LANG['newsCommentDate'].Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
+                    <?= $PMF_LANG['newsCommentDate'] . Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
                     <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= CommentType::NEWS ?>">
                         <i aria-hidden="true" class="fa fa-trash"></i>
                     </a>
                 </div>
             </div>
         </div>
-<?php
-
+        <?php
     }
 } elseif ('save-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) {
     ?>
@@ -414,7 +426,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
             <div class="col-12">
-<?php
+    <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -436,8 +448,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         'authorEmail' => $email,
         'active' => (is_null($active)) ? 'n' : 'y',
         'comment' => (is_null($comment)) ? 'n' : 'y',
-        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart).'000000',
-        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959',
+        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link' => $link,
         'linkTitle' => $linkTitle,
         'date' => date('YmdHis'),
@@ -453,8 +465,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
             </div>
         </div>
-<?php
-
+    <?php
 } elseif ('update-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -466,7 +477,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
             <div class="col-12">
-<?php
+    <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -488,8 +499,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         'authorEmail' => $email,
         'active' => (is_null($active)) ? 'n' : 'y',
         'comment' => (is_null($comment)) ? 'n' : 'y',
-        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart).'000000',
-        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959',
+        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link' => $link,
         'linkTitle' => $linkTitle,
         'date' => date('YmdHis'),
@@ -506,8 +517,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
             </div>
         </div>
-<?php
-
+    <?php
 } elseif ('delete-news' == $action && $user->perm->hasPermission($user->getUserId(), 'delnews')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -519,14 +529,14 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
             <div class="col-12">
-<?php
+    <?php
     $precheck = Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
     $deleteId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     if ('no' == $precheck) {
         ?>
     <div class="form-group row"><?= $PMF_LANG['ad_news_del'];
-        ?></div>
+    ?></div>
     <div class="text-center">
     <form action="?action=delete-news" method="post" accept-charset="utf-8">
     <input type="hidden" name="id" value="<?= $deleteId ?>">
@@ -534,17 +544,16 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <input type="hidden" name="really" value="yes">
         <button class="btn btn-warning" type="submit" name="submit">
             <?= $PMF_LANG['ad_news_yesdelete'];
-        ?>
+            ?>
         </button>
         <a class="btn btn-inverse" onclick="history.back();">
             <?= $PMF_LANG['ad_news_nodelete'];
-        ?>
+            ?>
         </a>
     </form>
     </div>
     
-<?php
-
+        <?php
     } else {
         if ($csrfCheck) {
             $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);

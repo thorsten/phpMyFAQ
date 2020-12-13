@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The FAQ record editor.
  *
@@ -40,8 +41,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $currentUserId = $user->getUserId();
 
-if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
-     $user->perm->hasPermission($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')) {
+if (
+    ($user->perm->hasPermission($currentUserId, 'edit_faq') ||
+     $user->perm->hasPermission($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')
+) {
     $category = new Category($faqConfig, [], false);
 
     if ($faqConfig->get('main.enableCategoryRestrictions')) {
@@ -319,8 +322,8 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                                     <?php foreach ($revisions as $revisionId => $revisionData) { ?>
                                                         <option value="<?= $revisionData['revision_id'] ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) {
                                                             echo 'selected';
-                                                        }
-                                                        ?>>
+                                                                       }
+                                                                        ?>>
                                                             <?php printf(
                                                                 '%s 1.%d: %s - %s',
                                                                 $PMF_LANG['ad_entry_revision'],
@@ -337,9 +340,11 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                             </form>
                                         </div>
                                     <?php }
-                                    if (isset($selectedRevisionId) &&
+                                    if (
+                                        isset($selectedRevisionId) &&
                                         isset($faqData['revision_id']) &&
-                                        $selectedRevisionId !== $faqData['revision_id']) {
+                                        $selectedRevisionId !== $faqData['revision_id']
+                                    ) {
                                         $faq->language = $faqData['lang'];
                                         $faq->getRecord($faqData['id'], $selectedRevisionId, true);
                                         $faqData = $faq->faqRecord;
@@ -365,7 +370,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                 </div>
 
                                 <!-- Answer -->
-                                <?php if ($faqConfig->get('main.enableWysiwygEditor')): ?>
+                                <?php if ($faqConfig->get('main.enableWysiwygEditor')) : ?>
                                     <div class="form-group row">
                                         <div class="col-lg-12">
                                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
@@ -375,7 +380,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                         </div>
                                     </div>
                                 <?php endif; ?>
-                                <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
+                                <?php if ($faqConfig->get('main.enableMarkdownEditor')) : ?>
                                     <div class="form-group row">
                                       <div class="col-lg-12">
                                         <ul class="nav nav-tabs markdown-tabs mb-2">
@@ -429,7 +434,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                 </div>
 
                                 <!-- Attachments -->
-                                <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')): ?>
+                                <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')) : ?>
                                     <div class="form-group row">
                                         <label class="col-lg-2 col-form-label">
                                             <?= $PMF_LANG['ad_menu_attachments'] ?>:
@@ -523,7 +528,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
 
                             <div class="tab-pane" id="tab-permissions">
                                 <!-- Permissions -->
-                                <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
+                                <?php if ($faqConfig->get('security.permLevel') !== 'basic') : ?>
                                     <fieldset class="form-group">
                                         <div class="row">
                                             <legend class="col-lg-2 col-form-label pt-0">
@@ -554,7 +559,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                             </div>
                                         </div>
                                     </fieldset>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <input type="hidden" name="grouppermission" value="all">
                                 <?php endif; ?>
 
@@ -661,7 +666,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                 <div id="accordion" role="tablist">
                     <div class="card mb-4">
                         <div class="card-header text-center" role="tab" id="pmf-heading-date">
-                            <?php if ($selectedRevisionId === $faqData['revision_id']): ?>
+                            <?php if ($selectedRevisionId === $faqData['revision_id']) : ?>
                                 <button class="btn btn-lg btn-info" type="reset">
                                     <?= $PMF_LANG['ad_gen_reset'] ?>
                                 </button>
@@ -709,7 +714,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                             </h5>
                             <div class="form-group">
                                 <!-- active or not -->
-                                <?php if ($user->perm->hasPermission($currentUserId, 'approverec')):
+                                <?php if ($user->perm->hasPermission($currentUserId, 'approverec')) :
                                     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
                                         $suf = ' checked';
                                         $sul = null;
@@ -739,7 +744,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                         <label class="form-check-label"
                                                for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
                                     </div>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <div class="form-check">
                                         <input type="radio" id="inactive" name="active" value="no"
                                                class="form-check-input" checked>
@@ -749,7 +754,7 @@ if (($user->perm->hasPermission($currentUserId, 'edit_faq') ||
                                 <?php endif; ?>
                             </div>
 
-                            <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')): ?>
+                            <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')) : ?>
                               <h5 class="mb-0">
                                   <?= $PMF_LANG['ad_entry_new_revision'] ?>
                               </h5>

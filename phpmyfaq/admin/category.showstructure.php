@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Builds a table of all categories in all languages.
  *
@@ -70,20 +71,20 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 <?php
                 // get languages in use for all categories
                 $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');
-    foreach ($all_languages as $lang) {
-        $all_lang[$lang] = $languageCodes[strtoupper($lang)];
-    }
-    asort($all_lang);
-    foreach ($all_lang as $lang => $language) {
-        if ($language != $currentLanguage) {
-            printf('<th>'.$language."</th>\n", $language);
-        }
-    }
-    ?>
+                foreach ($all_languages as $lang) {
+                    $all_lang[$lang] = $languageCodes[strtoupper($lang)];
+                }
+                asort($all_lang);
+                foreach ($all_lang as $lang => $language) {
+                    if ($language != $currentLanguage) {
+                        printf('<th>' . $language . "</th>\n", $language);
+                    }
+                }
+                ?>
             </tr>
         </thead>
         <tbody>
-<?php
+    <?php
     foreach ($category->getCategoryTree() as $cat) {
         print "<tr>\n";
 
@@ -92,7 +93,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
         // category translated in this language?
-        ($cat['lang'] == $faqLangCode) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
+        ($cat['lang'] == $faqLangCode) ? $catname = $cat['name'] : $catname = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
 
         // show category name in actual language
         print '<td>';
@@ -107,9 +108,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 $PMF_LANG['ad_categ_translate']
             );
         }
-        printf('&nbsp;%s<strong>%s</strong>',
+        printf(
+            '&nbsp;%s<strong>%s</strong>',
             $indent,
-            $catname);
+            $catname
+        );
         print "</td>\n";
 
         // get languages in use for categories
@@ -122,7 +125,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
 
             if (array_key_exists($language, $id_languages)) {
                 $spokenLanguage = Strings::preg_replace('/\(.*\)/', '', $id_languages[$language]);
-                printf('<td title="%s: %s">',
+                printf(
+                    '<td title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
@@ -132,11 +136,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                     $spokenLanguage
                 );
             } else {
-                printf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
+                printf(
+                    '<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
                     $currentLink,
                     $cat['id'],
                     $lang,
-                    $PMF_LANG['ad_categ_translate']);
+                    $PMF_LANG['ad_categ_translate']
+                );
                 printf(
                     '<span title="%s" class="badge badge-inverse"><i aria-hidden="true" class="fa fa-share fa fa-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
@@ -149,7 +155,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     ?>
         </tbody>
         </table>
-<?php
+    <?php
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_overview']);
 } else {
     print $PMF_LANG['err_NotAuth'];

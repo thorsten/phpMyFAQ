@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Image browser backend for TinyMCE v4
  *
@@ -20,15 +21,15 @@ use phpMyFAQ\User\CurrentUser;
 define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
-require_once PMF_ROOT_DIR.'/lang/language_en.php';
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
 if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
-    require_once PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php';
+    require_once PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
 }
@@ -65,20 +66,20 @@ if ($user) {
 <?php
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
 
-if (!is_dir(PMF_ROOT_DIR.'/images')) {
-    echo '<p class="alert alert-danger">'.sprintf($PMF_LANG['ad_dir_missing'], '/images').'</p>';
+if (!is_dir(PMF_ROOT_DIR . '/images')) {
+    echo '<p class="alert alert-danger">' . sprintf($PMF_LANG['ad_dir_missing'], '/images') . '</p>';
 } else {
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(PMF_ROOT_DIR.'/images/'));
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
     foreach ($files as $file) {
         if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
             continue;
         }
-        $path = str_replace(dirname(__DIR__).'/', '', $file->getPath());
+        $path = str_replace(dirname(__DIR__) . '/', '', $file->getPath());
         printf(
             '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
-            $faqConfig->getDefaultUrl().$path.'/'.$file->getFilename(),
-            $faqConfig->getDefaultUrl().$path.'/'.$file->getFilename(),
-            $faqConfig->getDefaultUrl().$path.'/'.$file->getFilename()
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename()
         );
     }
 }

@@ -26,7 +26,6 @@ use phpMyFAQ\Init;
 // Debug mode:
 // - false debug mode disabled
 // - true  debug mode enabled
-//
 define('DEBUG', true);
 if (DEBUG) {
     ini_set('display_errors', 1);
@@ -172,7 +171,6 @@ if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.p
 // Connect to Elasticsearch if enabled
 //
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
-
     require PMF_CONFIG_DIR . '/elasticsearch.php';
     require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
 

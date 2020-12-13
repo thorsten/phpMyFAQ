@@ -25,10 +25,12 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
-if ($faqConfig->get('socialnetworks.twitterConsumerKey') === '' ||
-    $faqConfig->get('socialnetworks.twitterConsumerSecret') === '') {
+if (
+    $faqConfig->get('socialnetworks.twitterConsumerKey') === '' ||
+    $faqConfig->get('socialnetworks.twitterConsumerSecret') === ''
+) {
     print 'Get a consumer key and secret from <a href="https://twitter.com/apps">twitter.com</a>.';
     exit;
 }

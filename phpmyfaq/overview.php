@@ -40,4 +40,3 @@ $template->parse(
         'overview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
     ]
 );
-

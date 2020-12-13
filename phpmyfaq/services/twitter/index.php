@@ -27,11 +27,13 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
-if (empty($_SESSION['access_token']) ||
+if (
+    empty($_SESSION['access_token']) ||
     empty($_SESSION['access_token']['oauth_token']) ||
-    empty($_SESSION['access_token']['oauth_token_secret'])) {
+    empty($_SESSION['access_token']['oauth_token_secret'])
+) {
     header('Location: ./clearsessions.php');
 }
 

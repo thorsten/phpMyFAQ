@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main configuration frontend.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -84,7 +85,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         }
 
         $faqConfig->getAll();
-
     }
     ?>
   <form id="config_list" name="config_list" method="post"

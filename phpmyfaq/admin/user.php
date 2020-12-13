@@ -31,8 +31,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->hasPermission($user->getUserId(),
-                                                                                              'delete_user') || $user->perm->hasPermission($user->getUserId(), 'add_user')) {
+if (
+    $user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->hasPermission(
+        $user->getUserId(),
+        'delete_user'
+    ) || $user->perm->hasPermission($user->getUserId(), 'add_user')
+) {
     ?>
   <script src="assets/js/user.js"></script>
     <?php
@@ -88,8 +92,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
                 $perm->grantUserRight($userId, $rightId);
             }
             $idUser = $user->getUserById($userId, true);
-            $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                $PMF_LANG['ad_msg_savedsuc_1'], $user->getLogin(), $PMF_LANG['ad_msg_savedsuc_2']);
+            $message .= sprintf(
+                '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+                $PMF_LANG['ad_msg_savedsuc_1'],
+                $user->getLogin(),
+                $PMF_LANG['ad_msg_savedsuc_2']
+            );
             $message .= '<script>updateUser(' . $userId . ');</script>';
             $user = new CurrentUser($faqConfig);
         }
@@ -126,12 +134,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
             // Set super-admin flag
             $user->setSuperAdmin($isSuperAdmin);
 
-            if (!$user->userdata->set(array_keys($userData), array_values($userData)) ||
-                !$user->setStatus($userStatus)) {
+            if (
+                !$user->userdata->set(array_keys($userData), array_values($userData)) ||
+                !$user->setStatus($userStatus)
+            ) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
             } else {
-                $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                    $PMF_LANG['ad_msg_savedsuc_1'], $user->getLogin(), $PMF_LANG['ad_msg_savedsuc_2']);
+                $message .= sprintf(
+                    '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+                    $PMF_LANG['ad_msg_savedsuc_1'],
+                    $user->getLogin(),
+                    $PMF_LANG['ad_msg_savedsuc_2']
+                );
                 $message .= '<script>updateUser(' . $userId . ');</script>';
             }
         }
@@ -150,8 +164,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
             $user->getUserById($userId, true);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>',
-                    $PMF_LANG['ad_user_error_protectedAccount']);
+                $message .= sprintf(
+                    '<p class="alert alert-danger">%s</p>',
+                    $PMF_LANG['ad_user_error_protectedAccount']
+                );
                 $userAction = $defaultUserAction;
             } else {
                 ?>
@@ -388,12 +404,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
                              class="form-check-input permission">
                       <label class="form-check-label">
                           <?php
-                          if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                              echo $PMF_LANG['rightsLanguage'][$right['name']];
-                          } else {
-                              echo $right['description'];
-                          }
-                          ?>
+                            if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+                                echo $PMF_LANG['rightsLanguage'][$right['name']];
+                            } else {
+                                echo $right['description'];
+                            }
+                            ?>
                       </label>
                     </div>
                   <?php endforeach; ?>
@@ -465,8 +481,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
         $lastPage = $page * $perPage;
         $firstPage = $lastPage - $perPage;
 
-        $baseUrl = sprintf('%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d', $faqConfig->getDefaultUrl(),
-            $page);
+        $baseUrl = sprintf(
+            '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
+            $faqConfig->getDefaultUrl(),
+            $page
+        );
 
         // Pagination options
         $options = [
@@ -521,7 +540,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
             </tr>
             </tfoot>
           <?php endif;
-          ?>
+            ?>
         <tbody>
         <?php
         $counter = $displayedCounter = 0;
@@ -541,18 +560,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->
           <tr class="row_user_id_<?= $user->getUserId() ?>">
             <td><?= $user->getUserId() ?></td>
             <td class="text-center"><i class="fa <?php
-                switch ($user->getStatus()) {
-                    case 'active':
-                        echo 'fa-check-circle-o';
-                        break;
-                    case 'blocked':
-                        echo 'fa-ban';
-                        break;
-                    case 'protected':
-                        echo 'fa-lock';
-                        break;
-                }
-                ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
+            switch ($user->getStatus()) {
+                case 'active':
+                    echo 'fa-check-circle-o';
+                    break;
+                case 'blocked':
+                    echo 'fa-ban';
+                    break;
+                case 'protected':
+                    echo 'fa-lock';
+                    break;
+            }
+            ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
             <td class="text-center">
               <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
             </td>

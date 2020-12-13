@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The login form.
  *
@@ -18,8 +19,8 @@
 if (isset($error) && 0 < strlen($error)) {
     $message = sprintf(
         '<p class="alert alert-danger alert-dismissible fade show mt-3">%s%s</p>',
-        '<button type="button" class="close" data-dismiss="alert">'.
-        '<span aria-hidden="true">&times;</span>'.
+        '<button type="button" class="close" data-dismiss="alert">' .
+        '<span aria-hidden="true">&times;</span>' .
         '</button>',
         $error
     );
@@ -29,14 +30,14 @@ if (isset($error) && 0 < strlen($error)) {
 if ($action == 'logout') {
     $message = sprintf(
         '<p class="alert alert-success alert-dismissible fade show mt-3">%s%s</p>',
-        '<button type="button" class="close" data-dismiss="alert">'.
-        '<span aria-hidden="true">&times;</span>'.
+        '<button type="button" class="close" data-dismiss="alert">' .
+        '<span aria-hidden="true">&times;</span>' .
         '</button>',
         $PMF_LANG['ad_logout']
     );
 }
 if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
-?>
+    ?>
 
 <div class="container py-5">
   <div class="row">
@@ -96,12 +97,12 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
   </div>
 </div>
 
-<?php
-
+    <?php
 } else {
     printf(
         '<p><a href="https://%s%s">%s</a></p>',
         $_SERVER['HTTP_HOST'],
         $_SERVER['REQUEST_URI'],
-        $PMF_LANG['msgSecureSwitch']);
+        $PMF_LANG['msgSecureSwitch']
+    );
 }

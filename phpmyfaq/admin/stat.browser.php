@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Sessionbrowser.
  *
- * 
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -38,7 +39,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day) ?>
+                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_sess_session'] . ' ' . date('Y-m-d', $day) ?>
                 </h2>
             </div>
         </header>
@@ -54,19 +55,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                     </tr>
                 </thead>
                 <tbody>
-<?php foreach ($sessiondata as $sid => $data) { ?>
+    <?php foreach ($sessiondata as $sid => $data) { ?>
                     <tr>
                         <td><?= $data['ip'] ?></td>
                         <td><?= $date->format(date('Y-m-d H:i', $data['time'])) ?></td>
                         <td><a href="?action=viewsession&amp;id=<?= $sid ?>"><?= $sid ?></a></td>
                     </tr>
-<?php } ?>
+    <?php } ?>
                 </tbody>
                 </table>
             </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

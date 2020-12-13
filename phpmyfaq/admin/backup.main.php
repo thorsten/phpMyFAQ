@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Frontend for Backup and Restore.
  *
@@ -75,7 +76,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
   </div>
 
     <?php
-
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

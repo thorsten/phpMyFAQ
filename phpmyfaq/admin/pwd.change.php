@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Form to change password of the current user.
  *
@@ -31,7 +32,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   </div>
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
-
     // If we have to save a new password, do that first
     $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
@@ -43,7 +43,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     }
 
     if (!is_null($save) && $csrfCheck) {
-
         // Define the (Local/Current) Authentication Source
         $auth = new Auth($faqConfig);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
@@ -116,7 +115,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     </div>
   </div>
     <?php
-
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

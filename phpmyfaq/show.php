@@ -100,7 +100,6 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'categoryLevelUp' => $up
         ]
     );
-
 } else {
     try {
         $faqSession->userTracking('show_all_categories', 0);

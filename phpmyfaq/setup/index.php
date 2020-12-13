@@ -159,8 +159,8 @@ $installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
 // not yet POSTed
 if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST['sql_db'])) {
-  $installer->checkNoncriticalSettings()
-?>
+    $installer->checkNoncriticalSettings()
+    ?>
 
       <form action="index.php" method="post" id="phpmyfaq-setup-form" class="needs-validation" novalidate>
 
@@ -365,26 +365,26 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <div class="col-sm-9">
                   <select name="language" id="language" class="form-control">
                   <?php
-                  if ($dir = opendir(PMF_ROOT_DIR . '/lang')) {
-                      $options = [];
-                      while ($dat = readdir($dir)) {
-                          $option = '';
-                          if (substr($dat, -4) === '.php') {
-                              $option .= sprintf('<option value="%s"', $dat);
-                              if ($dat == 'language_en.php') {
-                                  $option .= ' selected="selected"';
-                              }
-                              $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
-                              $option  .= sprintf('>%s</option>', $language);
-                              $options[$language] = $option;
-                          }
-                      }
-                      ksort($options);
-                      echo implode("\n", $options);
-                  } else {
-                      echo '<option>english</option>';
-                  }
-                  ?>
+                    if ($dir = opendir(PMF_ROOT_DIR . '/lang')) {
+                        $options = [];
+                        while ($dat = readdir($dir)) {
+                            $option = '';
+                            if (substr($dat, -4) === '.php') {
+                                $option .= sprintf('<option value="%s"', $dat);
+                                if ($dat == 'language_en.php') {
+                                    $option .= ' selected="selected"';
+                                }
+                                $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
+                                $option  .= sprintf('>%s</option>', $language);
+                                $options[$language] = $option;
+                            }
+                        }
+                        ksort($options);
+                        echo implode("\n", $options);
+                    } else {
+                        echo '<option>english</option>';
+                    }
+                    ?>
                   </select>
                   <small class="form-text text-muted">Please select your default language.</small>
                 </div>
@@ -457,10 +457,10 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
     <?php
     System::renderFooter();
 } else {
-    try{
-      $installer->startInstall();
+    try {
+        $installer->startInstall();
     } catch (Exception $e) {
-      echo $e->getMessage();
+        echo $e->getMessage();
     }
     ?>
       <div class="row" id="done">

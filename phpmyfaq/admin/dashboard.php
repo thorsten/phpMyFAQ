@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The start page with some information about the FAQ.
  *
@@ -39,9 +40,9 @@ $faqSession = new Session($faqConfig);
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
       <a href="?action=config">
-          <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+          <?php if ($faqConfig->get('main.maintenanceMode')) : ?>
             <button class="btn btn-sm btn-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
-          <?php else: ?>
+          <?php else : ?>
             <button class="btn btn-sm btn-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
           <?php endif; ?>
       </a>
@@ -49,7 +50,7 @@ $faqSession = new Session($faqConfig);
   </div>
 </div>
 
-<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')): ?>
+<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) : ?>
   <section class="row mb-3">
     <div class="col-12 p-2">
       <div class="card border-left-danger shadow h-100 py-2">
@@ -124,7 +125,7 @@ $faqSession = new Session($faqConfig);
         </div>
       </div>
 
-      <?php if ($faqConfig->get('main.enableUserTracking')): ?>
+      <?php if ($faqConfig->get('main.enableUserTracking')) : ?>
       <div class="card mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
@@ -142,20 +143,20 @@ $faqSession = new Session($faqConfig);
         <div class="card-body">
           <ul class="list-unstyled">
               <?php
-              $inactiveFaqs = $faq->getInactiveFaqsData();
-              if (count($inactiveFaqs) > 0) {
-                  foreach ($inactiveFaqs as $inactiveFaq) {
-                      printf('<li><a href="%s">%s</a></li>', $inactiveFaq['url'], $inactiveFaq['question']);
-                  }
-              } else {
-                  echo '<li>n/a</li>';
-              }
-              ?>
+                $inactiveFaqs = $faq->getInactiveFaqsData();
+                if (count($inactiveFaqs) > 0) {
+                    foreach ($inactiveFaqs as $inactiveFaq) {
+                        printf('<li><a href="%s">%s</a></li>', $inactiveFaq['url'], $inactiveFaq['question']);
+                    }
+                } else {
+                    echo '<li>n/a</li>';
+                }
+                ?>
           </ul>
         </div>
       </div>
 
-        <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')): ?>
+        <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) : ?>
           <div class="card mb-4">
             <h5 class="card-header py-3">
               <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>

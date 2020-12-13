@@ -29,7 +29,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
-use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\HttpHelper as HelperHttp;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
@@ -37,7 +36,6 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Seo;
-use phpMyFAQ\Services;
 use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -261,8 +259,13 @@ if ($faqConfig->get('main.enableUserTracking')) {
             }
         }
     }
-} elseif (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId(),
-    $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+} elseif (
+    !$faqSession->setCookie(
+        Session::PMF_COOKIE_NAME_SESSIONID,
+        $faqSession->getCurrentSessionId(),
+        $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME
+    )
+) {
     $sids = sprintf('lang=%s&amp;', $faqLangCode);
 }
 
@@ -581,9 +584,11 @@ if ('main' == $action || 'show' == $action) {
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = [
         'msgSearch' => '<a class="nav-link" href="./search.html">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
-        'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' . $PMF_LANG['msgAddContent'] . '</a>',
+        'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' .
+            $PMF_LANG['msgAddContent'] . '</a>',
         'msgQuestion' => '<a class="nav-link" href="./ask.html">' . $PMF_LANG['msgQuestion'] . '</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="./open-questions.html">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="./open-questions.html">' . $PMF_LANG['msgOpenQuestions'] .
+            '</a>',
         'msgContact' => '<a href="./contact.html">' . $PMF_LANG['msgContact'] . '</a>',
         'msgGlossary' => '<a href="./glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
         'backToHome' => '<a href="./index.html">' . $PMF_LANG['msgHome'] . '</a>',
@@ -594,17 +599,24 @@ if ($faqConfig->get('main.enableRewriteRules')) {
     ];
 } else {
     $tplNavigation = [
-        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
-        'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' . $PMF_LANG['msgAddContent'] . '</a>',
-        'msgQuestion' => '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' . $PMF_LANG['msgQuestion'] . '</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
+        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' .
+            $PMF_LANG['msgAdvancedSearch'] . '</a>',
+        'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
+            $PMF_LANG['msgAddContent'] . '</a>',
+        'msgQuestion' => '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
+            $PMF_LANG['msgQuestion'] . '</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' .
+            $PMF_LANG['msgOpenQuestions'] . '</a>',
         'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . $PMF_LANG['msgContact'] . '</a>',
         'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
-        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' . $PMF_LANG['msgShowAllCategories'] . '</a>',
+        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' .
+            $PMF_LANG['msgShowAllCategories'] . '</a>',
         'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . $PMF_LANG['faqOverview'] . '</a>',
         'backToHome' => '<a href="index.php?' . $sids . '">' . $PMF_LANG['msgHome'] . '</a>',
-        'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' . $PMF_LANG['msgSitemap'] . '</a>',
-        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . $PMF_LANG['msgUserRemoval'] . '</a>',
+        'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' .
+            $PMF_LANG['msgSitemap'] . '</a>',
+        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . $PMF_LANG['msgUserRemoval'] .
+            '</a>',
     ];
 }
 
@@ -632,7 +644,8 @@ if (isset($auth)) {
     if ($faqConfig->get('ldap.ldapSupport')) {
         $userControlDropdown = '';
     } else {
-        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] . '</a>';
+        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] .
+            '</a>';
     }
 
     $template->parseBlock(
@@ -642,7 +655,8 @@ if (isset($auth)) {
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'msgUserControlDropDown' => $userControlDropdown,
-            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' . $PMF_LANG['ad_menu_RequestRemove'] . '</a>',
+            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
+                $PMF_LANG['ad_menu_RequestRemove'] . '</a>',
             'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>',
             'activeUserControl' => ('ucp' == $action) ? 'active' : ''
         ]
@@ -657,7 +671,11 @@ if (isset($auth)) {
         'index',
         'notLoggedIn',
         [
-            'msgRegisterUser' => $faqConfig->get('security.enableRegistration') ? '<a class="dropdown-item" href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>' : '',
+            'msgRegisterUser' => $faqConfig->get('security.enableRegistration')
+                ?
+                '<a class="dropdown-item" href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>'
+                :
+                '',
             'msgLoginUser' => sprintf($msgLoginUser, $PMF_LANG['msgLoginUser']),
             'activeRegister' => ('register' == $action) ? 'active' : '',
             'activeLogin' => ('login' == $action) ? 'active' : '',

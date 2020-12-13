@@ -1,4 +1,5 @@
 <?php
+
 /**
  * AJAX: onDemandURL.
  *
@@ -84,7 +85,7 @@ if (!(isset($id) && isset($artlang))) {
     Error: Entry ID and Language needs to be specified.
 </body>
 </html>
-<?php
+    <?php
     exit();
 }
 
@@ -96,7 +97,7 @@ if (!isset($faq->faqRecord['content'])) {
     Error: No entry for #<?= $id ?>(<?= $artlang ?>) available.
 </body>
 </html>
-<?php
+    <?php
     exit();
 }
 

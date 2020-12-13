@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The page with the ratings of the votings.
  *
@@ -51,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             </div>
         </header>
 
-<?php
+    <?php
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
@@ -73,18 +74,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             <div class="col-lg-12">
                 <table class="table table-striped">
                     <tbody>
-<?php
+    <?php
     foreach ($ratingdata as $data) {
         if ($data['category_id'] != $oldcategory) {
             ?>
                     <tr>
                         <th colspan="6" style="text-align: left;">
                             <h4><?= $category->categoryName[$data['category_id']]['name'];
-            ?></h4>
+                            ?></h4>
                         </th>
                     </tr>
-<?php
-
+            <?php
         }
 
         $question = Strings::htmlspecialchars(trim($data['question']));
@@ -97,41 +97,41 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         ?>
                     <tr>
                         <td><?= $data['id'];
-        ?></td>
+                        ?></td>
                         <td><?= $data['lang'];
-        ?></td>
+                        ?></td>
                         <td>
                             <a href="<?= $url ?>" title="<?= $question;
-        ?>">
+                            ?>">
                                 <?= Utils::makeShorterText($question, 14);
-        ?>
+                                ?>
                             </a>
                         </td>
                         <td><?= $data['usr'];
-        ?></td>
+                        ?></td>
                         <td>
                             <?php
-                            if (round($data['num']*20) > 75) {
+                            if (round($data['num'] * 20) > 75) {
                                 $progressBar = 'success';
-                            } elseif (round($data['num']*20) < 25) {
+                            } elseif (round($data['num'] * 20) < 25) {
                                 $progressBar = 'danger';
                             } else {
                                 $progressBar = 'info';
                             }
-        ?>
-                            <meter value="<?= round($data['num']*20);
-        ?>" max="100" min="0" low="25" optimum="75"></meter>
+                            ?>
+                            <meter value="<?= round($data['num'] * 20);
+                            ?>" max="100" min="0" low="25" optimum="75"></meter>
                         </td>
-                        <td><?= round($data['num']*20);
-        ?>%</td>
+                        <td><?= round($data['num'] * 20);
+                        ?>%</td>
                     </tr>
-<?php
+        <?php
         $oldcategory = $data['category_id'];
     }
     ?>
                     </tbody>
-<?php if ($numratings > 0) {
-    ?>
+    <?php if ($numratings > 0) {
+        ?>
                     <tfoot>
                         <tr>
                             <td colspan="6">
@@ -148,22 +148,21 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                             </td>
                         </tr>
                     </tfoot>
-<?php 
-} else {
-    ?>
+        <?php
+    } else {
+        ?>
                     <tfoot>
                         <tr>
                             <td colspan="6"><?= $PMF_LANG['ad_rs_no'] ?></td>
                         </tr>
                     </tfoot>
-<?php 
-}
+        <?php
+    }
     ?>
                 </table>
             </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

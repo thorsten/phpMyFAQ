@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Delete open questions.
  *
@@ -34,28 +35,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
-          $category = new Category($faqConfig, [], false);
-          $question = new Question($faqConfig);
-          $category->setUser($currentAdminUser);
-          $category->setGroups($currentAdminGroups);
-          $date = new Date($faqConfig);
-          $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
+            $category = new Category($faqConfig, [], false);
+            $question = new Question($faqConfig);
+            $category->setUser($currentAdminUser);
+            $category->setGroups($currentAdminGroups);
+            $date = new Date($faqConfig);
+            $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
-          if ($toggle == 'toggle') {
-              $isVisible = $question->getVisibility($questionId);
-              if (!is_null($isVisible)) {
-                  $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
-              }
-          }
+            $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+            if ($toggle == 'toggle') {
+                $isVisible = $question->getVisibility($questionId);
+                if (!is_null($isVisible)) {
+                    $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
+                }
+            }
 
-          echo '<div id="returnMessage"></div>';
+            echo '<div id="returnMessage"></div>';
 
-          $openQuestions = $question->getAllOpenQuestions();
+            $openQuestions = $question->getAllOpenQuestions();
 
-          if (count($openQuestions) > 0) {
-              ?>
+            if (count($openQuestions) > 0) {
+                ?>
             <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
               <table class="table table-striped">
@@ -108,7 +109,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         <?php } ?>
                     </td>
                   </tr>
-                    <?php } ?>
+                <?php } ?>
                 </tbody>
               </table>
 
@@ -120,14 +121,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             </form>
             <script src="assets/js/record.js"></script>
-              <?php
-
-          } else {
-              echo $PMF_LANG['msgNoQuestionsAvailable'];
-          }
-      } else {
-          echo $PMF_LANG['err_NotAuth'];
-      }
-      ?>
+                <?php
+            } else {
+                echo $PMF_LANG['msgNoQuestionsAvailable'];
+            }
+        } else {
+            echo $PMF_LANG['err_NotAuth'];
+        }
+        ?>
   </div>
 </div>

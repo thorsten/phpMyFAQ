@@ -110,9 +110,11 @@ $answer = $oGlossary->insertItemsIntoContent($answer);
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true, '');
 
 $highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
-if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen(
+if (
+    !is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen(
         $highlight
-    ) > 3) {
+    ) > 3
+) {
     $highlight = str_replace("'", '´', $highlight);
     $highlight = str_replace(['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'], '', $highlight);
     $highlight = preg_quote($highlight, '/');
@@ -201,8 +203,10 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 $numComments = $faqComment->getNumberOfComments();
 
 // Does the user have the right to add a comment?
-if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
-    ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired) {
+if (
+    (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
+    ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired
+) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(
@@ -247,8 +251,10 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
     );
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'addtranslation') &&
-    !empty($availableLanguages) && count($availableLanguages) > 1) {
+if (
+    $user->perm->hasPermission($user->getUserId(), 'addtranslation') &&
+    !empty($availableLanguages) && count($availableLanguages) > 1
+) {
     $template->parseBlock(
         'mainPageContent',
         'addTranslation',

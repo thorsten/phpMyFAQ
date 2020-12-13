@@ -1,8 +1,9 @@
 <?php
+
 /**
  * View a generated report.
  *
- * 
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -52,7 +53,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-<?php
+    <?php
     ($useCategory) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_category']) : '';
     ($useSubcategory) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sub_category']) : '';
     ($useTranslation) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_translations']) : '';
@@ -69,7 +70,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                         </tr>
                     </thead>
                     <tbody>
-<?php
+    <?php
 
     $report = new Report($faqConfig);
 
@@ -114,7 +115,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             printf('<td>%s</td>', $data['faq_last_author']);
         }
         if ($useUrl) {
-            $url = sprintf('<a href="../index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s">Link</a>',
+            $url = sprintf(
+                '<a href="../index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s">Link</a>',
                 $data['category_id'],
                 $data['faq_id'],
                 $data['faq_language']
@@ -148,8 +150,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                         </button>
                     </div>
                 </form>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * JSON, XML, HTML5 and PDF export - main page.
  *

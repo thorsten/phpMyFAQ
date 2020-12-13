@@ -14,17 +14,18 @@
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-12-10
+ * @codingStandardsIgnoreFile
  */
 
 /**
  * Set the string below according to your users (main) timezone.
  * For your convenience find below the list of the available timezones:.
  *
- * http://www.php.net/manual/en/timezones.php   
+ * http://www.php.net/manual/en/timezones.php
  *
  * Note: a wrong timezone setting could affect on-line users tracking as well as
  *       any filter criterion built using a date.
- * Note: timezone is a global setting i.e. no per-user setting. 
+ * Note: timezone is a global setting i.e. no per-user setting.
  *
  * @var string
  */

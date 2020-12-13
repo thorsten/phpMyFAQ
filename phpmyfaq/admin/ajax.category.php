@@ -34,7 +34,6 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 switch ($ajaxAction) {
-
     case 'getpermissions':
         $categoryPermission = new CategoryPermission($faqConfig);
         $ajaxData = Filter::filterInputArray(
@@ -62,7 +61,6 @@ switch ($ajaxAction) {
         break;
 
     case 'update-order':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             $http->setStatus(401);
@@ -82,7 +80,8 @@ switch ($ajaxAction) {
             ],
         ]);
 
-        function filterElement($element){
+        function filterElement($element)
+        {
             ucfirst($element);
             return $element !== '';
         }

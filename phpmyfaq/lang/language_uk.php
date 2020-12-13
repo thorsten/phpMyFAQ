@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Ukranian language file
- *
- *
+ * Ukrainian language file
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,6 +14,7 @@
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2008-02-03
+ * @codingStandardsIgnoreFile
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
@@ -452,60 +451,60 @@ $PMF_LANG["ad_ques_take"] = "Подивитися";
 $PMF_LANG["no_cats"] = "Категорії не знайдені.";
 
 // Added v1.1 - 17.01.2002 - Bastian
-$PMF_LANG["ad_log_lger"] = "Невірний пароль або логін."; 
-$PMF_LANG["ad_log_sess"] = "Сесія прострочена."; 
-$PMF_LANG["ad_log_edit"] = "Форма \"Редактрование профайла\"- користувача: "; 
-$PMF_LANG["ad_log_crea"] = "Форма \"Новая запись\"."; 
-$PMF_LANG["ad_log_crsa"] = "Доданий новий запис."; 
-$PMF_LANG["ad_log_ussa"] = "Змінений профайл користувача: "; 
-$PMF_LANG["ad_log_usde"] = "Видалений користувач: "; 
-$PMF_LANG["ad_log_beed"] = "Форма - Зміна профайла користувача: "; 
-$PMF_LANG["ad_log_bede"] = "Видалений запис: "; 
+$PMF_LANG["ad_log_lger"] = "Невірний пароль або логін.";
+$PMF_LANG["ad_log_sess"] = "Сесія прострочена.";
+$PMF_LANG["ad_log_edit"] = "Форма \"Редактрование профайла\"- користувача: ";
+$PMF_LANG["ad_log_crea"] = "Форма \"Новая запись\".";
+$PMF_LANG["ad_log_crsa"] = "Доданий новий запис.";
+$PMF_LANG["ad_log_ussa"] = "Змінений профайл користувача: ";
+$PMF_LANG["ad_log_usde"] = "Видалений користувач: ";
+$PMF_LANG["ad_log_beed"] = "Форма - Зміна профайла користувача: ";
+$PMF_LANG["ad_log_bede"] = "Видалений запис: ";
 
-$PMF_LANG["ad_start_visits"] = "Відвідин"; 
-$PMF_LANG["ad_start_articles"] = "Записів"; 
-$PMF_LANG["ad_start_comments"] = "Коментарів"; 
+$PMF_LANG["ad_start_visits"] = "Відвідин";
+$PMF_LANG["ad_start_articles"] = "Записів";
+$PMF_LANG["ad_start_comments"] = "Коментарів";
 
 
-    // Added v1.1 - 30.01.2002 - Bastian 
- 
-$PMF_LANG["ad_categ_paste"] = "вставити"; 
-$PMF_LANG["ad_categ_cut"] = "cut"; 
-$PMF_LANG["ad_categ_copy"] = "copy"; 
-$PMF_LANG["ad_categ_process"] = "Processing categories..."; 
+    // Added v1.1 - 30.01.2002 - Bastian
 
-// Added v1.1.4 - 07.05.2002 - Thorsten 
+$PMF_LANG["ad_categ_paste"] = "вставити";
+$PMF_LANG["ad_categ_cut"] = "cut";
+$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["ad_categ_process"] = "Processing categories...";
 
-$PMF_LANG["err_NotAuth"] = "Ви не авторизовані."; 
+// Added v1.1.4 - 07.05.2002 - Thorsten
 
-// Added v1.2.3 - 29.11.2002 - Thorsten 
+$PMF_LANG["err_NotAuth"] = "Ви не авторизовані.";
 
-$PMF_LANG["msgPreviusPage"] = "попередня"; 
-$PMF_LANG["msgNextPage"] = "наступна"; 
-$PMF_LANG["msgPageDoublePoint"] = "Сторінки: "; 
-$PMF_LANG["msgMainCategory"] = "Основна категорія"; 
+// Added v1.2.3 - 29.11.2002 - Thorsten
 
-// Added v1.2.4 - 30.01.2003 - Thorsten 
+$PMF_LANG["msgPreviusPage"] = "попередня";
+$PMF_LANG["msgNextPage"] = "наступна";
+$PMF_LANG["msgPageDoublePoint"] = "Сторінки: ";
+$PMF_LANG["msgMainCategory"] = "Основна категорія";
 
-$PMF_LANG["ad_passwdsuc"] = "Пароль змінений."; 
+// Added v1.2.4 - 30.01.2003 - Thorsten
 
-// Added v1.3.0 - 04.03.2003 - Thorsten 
+$PMF_LANG["ad_passwdsuc"] = "Пароль змінений.";
 
-$PMF_LANG["msgPDF"] = "Скомпілювати PDF файл"; 
-$PMF_LANG["ad_xml_head"] = "Архівація у формат XML"; 
-$PMF_LANG["ad_xml_hint"] = "Збереження всіх записів бази даних у форматі XML."; 
-$PMF_LANG["ad_xml_gen"] = "створити XML файл"; 
-$PMF_LANG["ad_entry_locale"] = "Мова"; 
+// Added v1.3.0 - 04.03.2003 - Thorsten
+
+$PMF_LANG["msgPDF"] = "Скомпілювати PDF файл";
+$PMF_LANG["ad_xml_head"] = "Архівація у формат XML";
+$PMF_LANG["ad_xml_hint"] = "Збереження всіх записів бази даних у форматі XML.";
+$PMF_LANG["ad_xml_gen"] = "створити XML файл";
+$PMF_LANG["ad_entry_locale"] = "Мова";
 $PMF_LANG["msgLanguageSubmit"] = "змінити мову";
 
-// Added v1.3.1 - 29.04.2003 - Thorsten 
+// Added v1.3.1 - 29.04.2003 - Thorsten
 
-$PMF_LANG["ad_entry_preview"] = "Передперегляд"; 
-$PMF_LANG["ad_attach_1"] = "Невірно вказана директорія для прикріплених файлів в панелі управління."; 
-$PMF_LANG["ad_attach_2"] = "Невірно вказано посилання для прикріплених файлів в панелі управління."; 
-$PMF_LANG["ad_attach_3"] = "Файл attachment.php не можна відкрити без прав на це, виконаєте вхід в систему."; 
+$PMF_LANG["ad_entry_preview"] = "Передперегляд";
+$PMF_LANG["ad_attach_1"] = "Невірно вказана директорія для прикріплених файлів в панелі управління.";
+$PMF_LANG["ad_attach_2"] = "Невірно вказано посилання для прикріплених файлів в панелі управління.";
+$PMF_LANG["ad_attach_3"] = "Файл attachment.php не можна відкрити без прав на це, виконаєте вхід в систему.";
 $PMF_LANG["ad_attach_4"] = "Файл повинен бути не більше %s байт.";
-$PMF_LANG["ad_menu_export"] = "Експорт даних"; 
+$PMF_LANG["ad_menu_export"] = "Експорт даних";
 $PMF_LANG["ad_export_file"] = "Помилка запису файлу.";
 $PMF_LANG["ad_export_pdf"] = "Експорт всіх записів в PDF формат";
 
@@ -535,21 +534,21 @@ $PMF_LANG["rightsLanguage"]['delquestion'] = "Видалення відкрит�
 $PMF_LANG["msgAttachedFiles"] = "Прикріплені файли";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
-$PMF_LANG["ad_user_action"] = "Дія"; 
+$PMF_LANG["ad_user_action"] = "Дія";
 $PMF_LANG["ad_entry_email"] = "email адреса";
-$PMF_LANG["ad_entry_allowComments"] = "Дозвіл коментувати"; 
-$PMF_LANG["msgWriteNoComment"] = "Коментарі заборонені"; 
+$PMF_LANG["ad_entry_allowComments"] = "Дозвіл коментувати";
+$PMF_LANG["msgWriteNoComment"] = "Коментарі заборонені";
 $PMF_LANG["ad_user_realname"] = "Справжнє ім'я";
-$PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл"; 
-$PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: "; 
+$PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл";
+$PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: ";
 $PMF_LANG["err_bannedIP"] = "Доступ до системи з вашого IP адреси заборонений.";
 $PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br><br><a href=\"javascript:history.back();\">Вернутсья назад</a><br><br>\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
-$PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: "; 
-$PMF_LANG["ad_entry_fontsize"] = "Розмір шрифту: "; 
+$PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: ";
+$PMF_LANG["ad_entry_fontsize"] = "Розмір шрифту: ";
 
-// added v1.4.0 - 2003-12-04 by Thorsten / Mathias 
+// added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Language-File");
 $LANG_CONF["main.languageDetection"] = array("checkbox", "Enable automatic content negotiation");
 $LANG_CONF['main.titleMac F.A.Q.'] = array("input", "Title of the Mac F.A.Q.");
@@ -589,55 +588,55 @@ $PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyMac F.A.Q. version number by we
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 
-// зміни Дениса - нашвидку і не уважно... 
+// зміни Дениса - нашвидку і не уважно...
 
-// added v1.5.0 - 2005-07-31 by Thorsten 
+// added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = "Select category language";
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = "Карта сайту"; 
+$PMF_LANG['msgSitemap'] = "Карта сайту";
 
 // added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG["newsShowArchive"] = "Архів новин."; 
-$PMF_LANG["newsShowCurrent"] = "Поточні новини."; 
+$PMF_LANG["newsShowArchive"] = "Архів новин.";
+$PMF_LANG["newsShowCurrent"] = "Поточні новини.";
 
 // added v1.6.0 - 2006-02-02 by Thorsten
-$PMF_LANG["ad_entry_solution_id"] = "Unique solution ID"; 
-$PMF_LANG["ad_entry_faq_record"] = "Хапісь FAQ"; 
-$PMF_LANG["ad_entry_new_revision"] = "Нова ревізія?"; 
-$PMF_LANG["ad_entry_record_administration"] = "Record administration"; 
-$PMF_LANG["ad_entry_changelog"] = "Changelog"; 
-$PMF_LANG["ad_entry_revision"] = "Ревізія"; 
-$PMF_LANG["ad_changerev"] = "Вибрати ревізію"; 
-$PMF_LANG["msgCaptcha"] = "Введіть Великими Літерами знаки, які видно на картинці"; 
-$PMF_LANG["msgSelectCategories"] = "Шукати в(у)..."; 
-$PMF_LANG["msgAllCategories"] = "... всіх категоріях"; 
-$PMF_LANG["ad_you_should_update"] = "Your phpMyFAQ installation is outdated. You should update to the latest available version."; 
-$PMF_LANG["msgAdvancedSearch"] = "Докладний пошук"; 
+$PMF_LANG["ad_entry_solution_id"] = "Unique solution ID";
+$PMF_LANG["ad_entry_faq_record"] = "Хапісь FAQ";
+$PMF_LANG["ad_entry_new_revision"] = "Нова ревізія?";
+$PMF_LANG["ad_entry_record_administration"] = "Record administration";
+$PMF_LANG["ad_entry_changelog"] = "Changelog";
+$PMF_LANG["ad_entry_revision"] = "Ревізія";
+$PMF_LANG["ad_changerev"] = "Вибрати ревізію";
+$PMF_LANG["msgCaptcha"] = "Введіть Великими Літерами знаки, які видно на картинці";
+$PMF_LANG["msgSelectCategories"] = "Шукати в(у)...";
+$PMF_LANG["msgAllCategories"] = "... всіх категоріях";
+$PMF_LANG["ad_you_should_update"] = "Your phpMyFAQ installation is outdated. You should update to the latest available version.";
+$PMF_LANG["msgAdvancedSearch"] = "Докладний пошук";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Entity owner"; 
-$PMF_LANG["adminSection"] = "Administration"; 
-$PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed"; 
-$PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed"; 
-$PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed"; 
+$PMF_LANG["ad_categ_owner"] = "Entity owner";
+$PMF_LANG["adminSection"] = "Administration";
+$PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed";
+$PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed";
+$PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed";
 $PMF_LANG["msgSearchOnAllLanguages"] = "Шукати у всіх мовах";
-$PMF_LANG["ad_entry_tags"] = "Tags"; 
-$PMF_LANG["msg_tags"] = "Tags"; 
+$PMF_LANG["ad_entry_tags"] = "Tags";
+$PMF_LANG["msg_tags"] = "Tags";
 
 // added 2.0.0 - 2006-11-19 by Thorsten
 $PMF_LANG["ad_quicklinks"] = "Quicklinks";
-$PMF_LANG["ad_qd_quick_category"] = "Додати нову категорію"; 
-$PMF_LANG["ad_quick_record"] = "Додати новий запис в FAQ"; 
-$PMF_LANG["ad_quick_user"] = "Додати нового користувача"; 
-$PMF_LANG["ad_quick_group"] = "Додати нову групу"; 
+$PMF_LANG["ad_qd_quick_category"] = "Додати нову категорію";
+$PMF_LANG["ad_quick_record"] = "Додати новий запис в FAQ";
+$PMF_LANG["ad_quick_user"] = "Додати нового користувача";
+$PMF_LANG["ad_quick_group"] = "Додати нову групу";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG["msgUsersOnline"] = ":: %d гостей і %d зареєстрованих"; 
-$PMF_LANG["ad_adminlog_del_older_30d"] = "Delete immediately logs older than 30 days"; 
-$PMF_LANG["ad_adminlog_delete_success"] = "Older logs successfully deleted."; 
-$PMF_LANG["ad_adminlog_delete_failure"] = "No logs deleted: an error occurred performing the request."; 
-$PMF_LANG["newsArchive"] = ". Архів новин"; 
+$PMF_LANG["msgUsersOnline"] = ":: %d гостей і %d зареєстрованих";
+$PMF_LANG["ad_adminlog_del_older_30d"] = "Delete immediately logs older than 30 days";
+$PMF_LANG["ad_adminlog_delete_success"] = "Older logs successfully deleted.";
+$PMF_LANG["ad_adminlog_delete_failure"] = "No logs deleted: an error occurred performing the request.";
+$PMF_LANG["newsArchive"] = ". Архів новин";
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
@@ -677,29 +676,29 @@ $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Власник категорії"; 
-$PMF_LANG["adminSection"] = "Адміністрування"; 
-$PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed"; 
-$PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed"; 
-$PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed"; 
+$PMF_LANG["ad_categ_owner"] = "Власник категорії";
+$PMF_LANG["adminSection"] = "Адміністрування";
+$PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed";
+$PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed";
+$PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed";
 $PMF_LANG["msgSearchOnAllLanguages"] = "Шукати по всіх мовах";
-$PMF_LANG["ad_entry_tags"] = "Теги"; 
-$PMF_LANG["msg_tags"] = "Теги"; 
+$PMF_LANG["ad_entry_tags"] = "Теги";
+$PMF_LANG["msg_tags"] = "Теги";
 
 // added v2.0.0 - 2007-04-04 by Thorsten
-$PMF_LANG["msgAllCatArticles"] = "Записів в цій категорії"; 
+$PMF_LANG["msgAllCatArticles"] = "Записів в цій категорії";
 $PMF_LANG['msgTagSearch'] = 'Записей по тэгам';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
-$PMF_LANG["ad_system_info"] = "Системна інформація"; 
+$PMF_LANG["ad_system_info"] = "Системна інформація";
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Related entries';
 $LANG_CONF['records.numberOfRelatedArticles'] = array("input", "Number of related entries");
 
 // added v1.5.2 - 2005-09-23 by Lars
-$PMF_LANG["err_inactiveArticle"] = "Цей запис зараз зайнятий редактором і не може бути показана."; 
-$PMF_LANG["msgArticleCategories"] = "Цей запис в Категоріях"; 
+$PMF_LANG["err_inactiveArticle"] = "Цей запис зараз зайнятий редактором і не може бути показана.";
+$PMF_LANG["msgArticleCategories"] = "Цей запис в Категоріях";
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'News data';
@@ -712,8 +711,8 @@ $PMF_LANG['ad_news_from'] = 'From:';
 $PMF_LANG['ad_news_to'] = 'To:';
 $PMF_LANG['ad_news_insertfail'] = 'An error occurred inserting the news item into the database.';
 $PMF_LANG['ad_news_updatefail'] = 'An error occurred updating the news item into the database.';
-$PMF_LANG["newsShowCurrent"] = "Поточні новини."; 
-$PMF_LANG["newsShowArchive"] = "Архів новин."; 
-$PMF_LANG["newsArchive"] = "- архів новин"; 
-$PMF_LANG["newsWriteComment"] = "можете залишити коментар"; 
+$PMF_LANG["newsShowCurrent"] = "Поточні новини.";
+$PMF_LANG["newsShowArchive"] = "Архів новин.";
+$PMF_LANG["newsArchive"] = "- архів новин";
+$PMF_LANG["newsWriteComment"] = "можете залишити коментар";
 $PMF_LANG["newsCommentDate"] = "Added at: ";

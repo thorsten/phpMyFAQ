@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Footer of the admin area.
  *
@@ -66,8 +67,10 @@ if (isset($auth)) {
   <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;"></iframe>
     <?php
-    if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
-            ('add-news' == $action) || ('edit-news' == $action) || ('copyentry' == $action))) {
+    if (
+        isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
+            ('add-news' == $action) || ('edit-news' == $action) || ('copyentry' == $action))
+    ) {
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
             ?>
           <script>
@@ -243,12 +246,12 @@ if (isset($auth)) {
               input.setAttribute('id', 'temporarySaveButton');
               $('#answer')[0].parentNode.appendChild(input);
               // Submit the form by an ajax request
-                <?php if (isset($faqData['id']) && $faqData['id'] === 0): ?>
+                <?php if (isset($faqData['id']) && $faqData['id'] === 0) : ?>
               let data = {
                 action: 'ajax',
                 ajax: 'recordAdd',
               };
-                <?php else: ?>
+                <?php else : ?>
               let data = {
                 action: 'ajax',
                 ajax: 'recordSave',

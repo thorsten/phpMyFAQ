@@ -33,9 +33,7 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 switch ($ajaxAction) {
-
     case 'delete_searchterm':
-
         if ($search->deleteSearchTerm($searchTerm)) {
             $http->sendWithHeaders(true);
         } else {

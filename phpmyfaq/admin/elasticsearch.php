@@ -27,7 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
-
     $esSearch = new Elasticsearch($faqConfig);
     $esInstance = new ElasticsearchInstance($faqConfig);
 
@@ -82,10 +81,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->
                 <dd><?= $esInformation['indices']['phpmyfaq']['total']['store']['size_in_bytes'] ?> Bytes</dd>
 
             </dl>
-            <?php
+                <?php
             } else {
                 $error = json_decode($esInformation);
-            ?>
+                ?>
             <p class="alert alert-warning">
                 Elasticsearch: <?= ucfirst($error->error->reason) ?>
             </p>

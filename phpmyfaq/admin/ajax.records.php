@@ -53,7 +53,6 @@ if (!isset($items[0][2])) {
 }
 
 switch ($ajaxAction) {
-
     // Get permissions
     case 'permissions':
         $faqId = Filter::filterInput(INPUT_GET, 'faq-id', FILTER_VALIDATE_INT);

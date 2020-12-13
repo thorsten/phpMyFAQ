@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main stop words configuration frontend.
  *
@@ -210,7 +211,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                 stopword: element.val(),
                 stopwords_lang: info.lang,
                 csrf: '<?= $user->getCsrfTokenFromSession();
-                    ?>',
+                ?>',
               },
             );
           } else {

@@ -115,16 +115,20 @@ if ($user instanceof CurrentUser) {
 $captcha = new Captcha($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
-if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
-    !$captcha->checkCaptchaCode($code)) {
+if (
+'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
+    !$captcha->checkCaptchaCode($code)
+) {
     $message = ['error' => $PMF_LANG['msgCaptcha']];
 }
 
 //
 // Check if logged in if FAQ is completely secured
 //
-if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&
-    'changepassword' !== $action && 'saveregistration' !== $action) {
+if (
+    false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&
+    'changepassword' !== $action && 'saveregistration' !== $action
+) {
     $message = ['error' => $PMF_LANG['ad_msg_noauth']];
 }
 
@@ -139,9 +143,10 @@ switch ($action) {
     // Comments
     //
     case 'savecomment':
-
-        if (!$faqConfig->get('records.allowCommentsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), 'addcomment')) {
+        if (
+            !$faqConfig->get('records.allowCommentsForGuests') &&
+            !$user->perm->hasPermission($user->getUserId(), 'addcomment')
+        ) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
             break;
         }
@@ -174,18 +179,20 @@ switch ($action) {
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
-                $message = ['error' => '-'.$PMF_LANG['err_SaveComment']];
+                $message = ['error' => '-' . $PMF_LANG['err_SaveComment']];
                 break;
             }
         }
 
-        if (!is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
+        if (
+            !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
                 $comment
             ) && !$faq->commentDisabled(
                 $id,
                 $languageCode,
                 $type
-            )) {
+            )
+        ) {
             try {
                 $faqSession->userTracking('save_comment', $id);
             } catch (Exception $e) {
@@ -298,9 +305,10 @@ switch ($action) {
         break;
 
     case 'savefaq':
-
-        if (!$faqConfig->get('records.allowNewFaqsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), 'addfaq')) {
+        if (
+            !$faqConfig->get('records.allowNewFaqsForGuests') &&
+            !$user->perm->hasPermission($user->getUserId(), 'addfaq')
+        ) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
             break;
         }
@@ -340,10 +348,13 @@ switch ($action) {
             $answer = $translatedAnswer;
         }
 
-        if (!is_null($author) && !is_null($email) && !is_null($question) && $stopWords->checkBannedWord(strip_tags($question)) &&
+        if (
+            !is_null($author) && !is_null($email) && !is_null($question) &&
+            $stopWords->checkBannedWord(strip_tags($question)) &&
             !is_null($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
-                    Language::isASupportedLanguage($faqLanguage)))) {
+                    Language::isASupportedLanguage($faqLanguage)))
+        ) {
             $isNew = true;
             if (!is_null($faqId)) {
                 $isNew = false;
@@ -447,9 +458,10 @@ switch ($action) {
     // Add question
     //
     case 'savequestion':
-
-        if (!$faqConfig->get('records.allowQuestionsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), 'addquestion')) {
+        if (
+            !$faqConfig->get('records.allowQuestionsForGuests') &&
+            !$user->perm->hasPermission($user->getUserId(), 'addquestion')
+        ) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
             break;
         }
@@ -473,9 +485,11 @@ switch ($action) {
             $save = true;
         }
 
-        if (!is_null($author) && !is_null($email) && !is_null($question) && $stopWords->checkBannedWord(
+        if (
+            !is_null($author) && !is_null($email) && !is_null($question) && $stopWords->checkBannedWord(
                 Strings::htmlspecialchars($question)
-            )) {
+            )
+        ) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
                 $visibility = 'Y';
             } else {
@@ -490,7 +504,7 @@ switch ($action) {
                 'is_visible' => $visibility
             ];
 
-            if (false === (boolean)$save) {
+            if (false === (bool)$save) {
                 $cleanQuestion = $stopWords->clean($question);
 
                 $user = new CurrentUser($faqConfig);
@@ -565,7 +579,6 @@ switch ($action) {
         break;
 
     case 'saveregistration':
-
         $registration = new RegistrationHelper($faqConfig);
 
         $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
@@ -586,7 +599,6 @@ switch ($action) {
         break;
 
     case 'savevoting':
-
         $faq = new Faq($faqConfig);
         $rating = new Rating($faqConfig);
         $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
@@ -636,7 +648,6 @@ switch ($action) {
 
     // Send user generated mails
     case 'sendcontact':
-
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
@@ -646,8 +657,10 @@ switch ($action) {
             $email = $faqConfig->getAdminEmail();
         }
 
-        if (!is_null($author) && !is_null($email) && !is_null($question) &&
-            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
+        if (
+            !is_null($author) && !is_null($email) && !is_null($question) &&
+            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
+        ) {
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
                 $PMF_LANG['msgNewContentName'],
@@ -678,7 +691,6 @@ switch ($action) {
 
     // Send mails to friends
     case 'sendtofriends':
-
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
@@ -693,8 +705,10 @@ switch ($action) {
             ]
         );
 
-        if (!is_null($author) && !is_null($email) && is_array($mailto) && !empty($mailto['mailto'][0]) &&
-            $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))) {
+        if (
+            !is_null($author) && !is_null($email) && is_array($mailto) && !empty($mailto['mailto'][0]) &&
+            $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))
+        ) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
@@ -727,7 +741,6 @@ switch ($action) {
     // Save user data from UCP
     //
     case 'saveuserdata':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
             $message = ['error' => $PMF_LANG['ad_msg_noauth']];
             break;
@@ -784,7 +797,6 @@ switch ($action) {
     // Change password
     //
     case 'changepassword':
-
         $username = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
@@ -817,7 +829,6 @@ switch ($action) {
     // Request removal of user
     //
     case 'request-removal':
-
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -828,8 +839,10 @@ switch ($action) {
             $email = $faqConfig->getAdminEmail();
         }
 
-        if (!is_null($author) && !is_null($email) && !is_null($question) &&
-            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
+        if (
+            !is_null($author) && !is_null($email) && !is_null($question) &&
+            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
+        ) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
                 $PMF_LANG['ad_user_loginname'],

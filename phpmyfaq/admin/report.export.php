@@ -100,7 +100,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         }
         if ($useUrl) {
             $text[$i][] = $report->convertEncoding(
-                sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                sprintf(
+                    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $faqConfig->getDefaultUrl(),
                     $data['category_id'],
                     $data['faq_id'],

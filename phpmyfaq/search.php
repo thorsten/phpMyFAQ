@@ -173,10 +173,12 @@ try {
     // @todo handle the exception
 }
 
-if (is_numeric(
+if (
+    is_numeric(
         $inputSearchTerm
     ) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 0 < $faqSearchResult->getNumberOfResults(
-    ) && $faqConfig->get('search.searchForSolutionId')) {
+    ) && $faqConfig->get('search.searchForSolutionId')
+) {
     if ($faqConfig->get('main.enableRewriteRules')) {
         $http->redirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     } else {

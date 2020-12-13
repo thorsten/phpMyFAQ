@@ -71,11 +71,13 @@ $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
 
 // Add information link if existing
 if (strlen($news['link']) > 0) {
-    $newsContent .= sprintf('</p><p>%s<a href="%s" target="%s">%s</a>',
+    $newsContent .= sprintf(
+        '</p><p>%s<a href="%s" target="%s">%s</a>',
         $PMF_LANG['msgInfo'],
         $news['link'],
         $news['target'],
-        $news['linkTitle']);
+        $news['linkTitle']
+    );
 }
 
 // Show link to edit the news?
@@ -84,15 +86,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
         '<a href="./admin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
         $newsId,
-        $PMF_LANG['ad_menu_news_edit']);
+        $PMF_LANG['ad_menu_news_edit']
+    );
 }
 
 // Is the news item expired?
 $expired = (date('YmdHis') > $news['dateEnd']);
 
 // Does the user have the right to add a comment?
-if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
-    (!$news['active']) || (!$news['allowComments']) || $expired) {
+if (
+    (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
+    (!$news['active']) || (!$news['allowComments']) || $expired
+) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf('<a href="#" class="show-comment-form">%s</a>', $PMF_LANG['newsWriteComment']);
@@ -101,7 +106,8 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
 // date of news entry
 if ($news['active'] && (!$expired)) {
     $date = new Date($faqConfig);
-    $newsDate = sprintf('%s<span id="newsLastUpd">%s</span>',
+    $newsDate = sprintf(
+        '%s<span id="newsLastUpd">%s</span>',
         $PMF_LANG['msgLastUpdateArticle'],
         $date->format($news['date'])
     );

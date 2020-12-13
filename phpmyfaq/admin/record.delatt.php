@@ -3,7 +3,7 @@
 /**
  * Deletes an attachment.
  *
- * 
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -42,8 +42,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
     } else {
         printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_att_delfail']);
     }
-    printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
-        $recordId, $recordLang, $PMF_LANG['ad_entry_back']);
+    printf(
+        '<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
+        $recordId,
+        $recordLang,
+        $PMF_LANG['ad_entry_back']
+    );
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

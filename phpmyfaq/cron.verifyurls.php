@@ -84,8 +84,10 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     $_records = $faq->faqRecords;
     $tot = count($_records);
     $end = microtime(true);
-    $output .= ' #' . $tot . ', done in ' . round($end - $start,
-            4) . ' sec.' . ($isRequestedByWebLocalhost ? '' : "\n");
+    $output .= ' #' . $tot . ', done in ' . round(
+        $end - $start,
+        4
+    ) . ' sec.' . ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
         echo '<pre>';
@@ -97,9 +99,13 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     foreach ($_records as $_r) {
         ++$i;
         $output = '';
-        $output .= sprintf('%0' . strlen((string)$tot) . 'd',
-                $i) . '/' . $tot . '. Checking ' . $_r['solution_id'] . ' (' . Utils::makeShorterText(strip_tags($_r['title']),
-                8) . '):';
+        $output .= sprintf(
+            '%0' . strlen((string)$tot) . 'd',
+            $i
+        ) . '/' . $tot . '. Checking ' . $_r['solution_id'] . ' (' . Utils::makeShorterText(
+            strip_tags($_r['title']),
+            8
+        ) . '):';
         $start = microtime(true);
         if ($oLnk->getEntryState($_r['id'], $_r['lang'], true) === true) {
             $output .= $oLnk->verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);

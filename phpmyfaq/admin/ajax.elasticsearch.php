@@ -36,7 +36,6 @@ $http->addHeader();
 $result = [];
 
 switch ($ajaxAction) {
-
     case 'create':
         if ($esInstance->createIndex()) {
             $result = ['success' => $PMF_LANG['ad_es_create_index_success']];

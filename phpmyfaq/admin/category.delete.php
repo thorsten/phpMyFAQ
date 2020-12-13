@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Deletes a category.
  *
@@ -78,8 +79,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcateg')) {
                 </form>
             </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

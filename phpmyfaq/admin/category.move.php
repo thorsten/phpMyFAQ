@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Select a category to move.
  *
@@ -35,7 +36,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->getCategories($parent_id, false);
     $category->buildTree($parent_id);
 
-    $header = sprintf('%s: <em>%s</em>',
+    $header = sprintf(
+        '%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
         $category->categories[$id]['name']
     );
@@ -79,8 +81,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 </form>
             </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

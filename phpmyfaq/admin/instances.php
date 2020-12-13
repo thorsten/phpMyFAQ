@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main multi-site instances frontend.
  *
@@ -29,8 +30,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="col-lg-12">
       <h2 class="page-header">
         <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
-          <?php if ($user->perm->hasPermission($user->getUserId(), 'addinstances') &&
-              is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
+          <?php if (
+            $user->perm->hasPermission($user->getUserId(), 'addinstances') &&
+              is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
+) : ?>
             <div class="float-right">
               <a class="btn btn-sm btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
                 <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
@@ -94,7 +97,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     </thead>
     <tbody>
     <?php
-    foreach ($instance->getAllInstances() as $site):
+    foreach ($instance->getAllInstances() as $site) :
         $currentInstance = new Instance($faqConfig);
         $currentInstance->getInstanceById($site->id);
         $currentInstance->setId($site->id);
@@ -110,7 +113,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
           </a>
         </td>
         <td>
-            <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
+            <?php if ($currentInstance->getConfig('isMaster') !== true) : ?>
               <a href="javascript:;" id="delete-instance-<?= $site->id ?>"
                  class="btn btn-danger pmf-instance-delete"
                  data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">

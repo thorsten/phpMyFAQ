@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Displays a form to add a glossary item.
  *
@@ -65,6 +66,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
       <?php } else {
           echo $PMF_LANG['err_NotAuth'];
       }
-      ?>
+        ?>
   </div>
 </div>

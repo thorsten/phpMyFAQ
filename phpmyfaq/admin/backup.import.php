@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The import function to import the phpMyFAQ backups.
  *
@@ -51,11 +52,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
         $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
         $backupData = fgets($handle, 65536);
         $versionFound = Strings::substr($backupData, 0, 9);
-        $versionExpected = '-- pmf'.substr($faqConfig->getVersion(), 0, 3);
+        $versionExpected = '-- pmf' . substr($faqConfig->getVersion(), 0, 3);
         $queries = [];
 
         if ($versionFound !== $versionExpected) {
-            printf('%s (Version check failure: "%s" found, "%s" expected)',
+            printf(
+                '%s (Version check failure: "%s" found, "%s" expected)',
                 $PMF_LANG['ad_csv_no'],
                 $versionFound,
                 $versionExpected
@@ -97,7 +99,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
                 $kg = $faqConfig->getDb()->query($queries[$i]);
                 if (!$kg) {
                     printf(
-                    '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
+                        '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
                         Strings::htmlspecialchars($queries[$i], ENT_QUOTES, 'utf-8'),
                         $faqConfig->getDb()->error(),
                         "\n"
@@ -126,7 +128,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
                 $errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
                 break;
             case 2:
-                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the '.
+                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' .
                                 'HTML form.';
                 break;
             case 3:

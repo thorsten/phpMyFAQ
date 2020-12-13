@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Adds a new (sub-)category, a new sub-category inherits the permissions from
  * its parent category.
@@ -50,17 +51,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     <input type="hidden" id="lang" name="lang" value="<?= $faqLangCode ?>">
                     <input type="hidden" name="parent_id" value="<?= $parentId ?>">
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-<?php
+    <?php
     if ($parentId > 0) {
         $userAllowed = $categoryPermission->get(CategoryPermission::USER, array($parentId));
         $groupsAllowed = $categoryPermission->get(CategoryPermission::GROUP, array($parentId));
         ?>
             <input type="hidden" name="restricted_users" value="<?= $userAllowed[0] ?>">
-            <?php foreach ($groupsAllowed as $group): ?>
+            <?php foreach ($groupsAllowed as $group) : ?>
             <input type="hidden" name="restricted_groups[]" value="<?= $group ?>">
             <?php endforeach;
-        ?>
-<?php
+            ?>
+        <?php
         printf(
             '<div class="form-group row"><label class="col-lg-2 col-form-label">%s:</label>',
             $PMF_LANG['msgMainCategory']
@@ -199,8 +200,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                 bsCustomFileInput.init()
               });
             </script>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

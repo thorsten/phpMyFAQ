@@ -40,7 +40,6 @@ try {
 
     switch ($ajaxAction) {
         case 'delete':
-
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 echo $PMF_LANG['err_NotAuth'];
                 exit(1);
@@ -54,7 +53,6 @@ try {
             break;
 
         case 'upload':
-
             if (!isset($_FILES['filesToUpload'])) {
                 $http->setStatus(400);
                 return;

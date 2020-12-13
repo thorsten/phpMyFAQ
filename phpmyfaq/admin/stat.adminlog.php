@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Overview of actions in the admin section.
  *
@@ -41,7 +42,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
     if (is_null($pages)) {
-        $pages = round(($logging->getNumberOfEntries() + ($perpage/3))/$perpage, 0);
+        $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
     }
 
     $start = ($page - 1) * $perpage;
@@ -93,7 +94,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
         </tr>
     </tfoot>
     <tbody>
-<?php
+    <?php
     $counter = $displayedCounter = 0;
 
     foreach ($loggingData as $loggingId => $loggingValue) {
@@ -130,15 +131,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
             ?></small>
             </td>
         </tr>
-<?php
-
+        <?php
     }
     ?>
     </tbody>
     </table>
 
-<?php
-
+    <?php
 } elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
     if ($logging->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);

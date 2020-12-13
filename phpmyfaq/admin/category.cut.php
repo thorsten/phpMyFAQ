@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cuts out a category.
  *
@@ -47,7 +48,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_paste2'] ?></label>
                         <div class="col-lg-4">
                             <select name="after" class="form-control">
-<?php
+    <?php
     foreach ($category->getCategoryTree() as $cat) {
         $indent = '';
         for ($j = 0; $j < $cat['indent']; ++$j) {
@@ -75,8 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 </form>
             </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

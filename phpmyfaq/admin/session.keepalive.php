@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -33,15 +34,15 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
-require PMF_ROOT_DIR.'/lang/language_en.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/lang/language_en.php';
 
 //
 // Get language (default: english)
 //
 $language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 if (!is_null($language) && Language::isASupportedLanguage($language)) {
-    require PMF_ROOT_DIR.'/lang/language_'.$language.'.php';
+    require PMF_ROOT_DIR . '/lang/language_' . $language . '.php';
 }
 
 //
@@ -53,7 +54,7 @@ $user = CurrentUser::getFromCookie($faqConfig);
 if (!$user instanceof CurrentUser) {
     $user = CurrentUser::getFromSession($faqConfig);
 }
-$refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING)*60;
+$refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>
 <html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js">
@@ -106,7 +107,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING)*60;
           );
         };
       </script>
-      <?php } ?>
+    <?php } ?>
 </head>
 <body>
 

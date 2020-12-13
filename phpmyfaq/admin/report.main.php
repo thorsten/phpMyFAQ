@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The reporting page.
  *
@@ -16,6 +17,7 @@
  * @link https://www.phpmyfaq.de
  * @since 2011-01-12
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
@@ -97,8 +99,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
 
             </div>
         </div>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

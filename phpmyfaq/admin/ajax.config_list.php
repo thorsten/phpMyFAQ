@@ -52,7 +52,6 @@ function renderInputForm($key, $type)
     global $PMF_LANG, $faqConfig;
 
     switch ($type) {
-
         case 'area':
             printf(
                 '<textarea name="edit[%s]" rows="4" class="form-control">%s</textarea>',
@@ -63,11 +62,15 @@ function renderInputForm($key, $type)
             break;
 
         case 'input':
-            if ('' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key &&
-                isset($_SESSION['access_token'])) {
+            if (
+                '' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key &&
+                isset($_SESSION['access_token'])
+            ) {
                 $value = $_SESSION['access_token']['oauth_token'];
-            } elseif ('' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key &&
-                isset($_SESSION['access_token'])) {
+            } elseif (
+                '' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key &&
+                isset($_SESSION['access_token'])
+            ) {
                 $value = $_SESSION['access_token']['oauth_token_secret'];
             } else {
                 $value = str_replace('"', '&quot;', $faqConfig->get($key));
@@ -131,7 +134,6 @@ function renderInputForm($key, $type)
             printf('<select name="edit[%s]" class="form-control">', $key);
 
             switch ($key) {
-
                 case 'main.language':
                     $languages = LanguageHelper::getAvailableLanguages();
                     if (count($languages) > 0) {
@@ -175,7 +177,8 @@ function renderInputForm($key, $type)
                     $templates = $faqSystem->getAvailableTemplates();
 
                     foreach ($templates as $template => $selected) {
-                        printf('<option%s>%s</option>',
+                        printf(
+                            '<option%s>%s</option>',
                             ($selected === true ? ' selected' : ''),
                             $template
                         );
@@ -292,8 +295,10 @@ foreach ($LANG_CONF as $key => $value) {
         if ('socialnetworks.twitterConsumerKey' == $key) {
             echo '<div class="form-group row"><label class="col-form-label col-lg-3"></label>';
             echo '<div class="col-lg-9">';
-            if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
-                '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
+            if (
+                '' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
+                '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')
+            ) {
                 echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
                 echo "<br>\n";
                 echo 'Your Callback URL is: ' . $faqConfig->getDefaultUrl() . 'services/twitter/callback.php';
@@ -338,7 +343,6 @@ foreach ($LANG_CONF as $key => $value) {
           <?php renderInputForm($key, $value[0]) ?>
       </div>
         <?php
-
     }
 }
 ?>

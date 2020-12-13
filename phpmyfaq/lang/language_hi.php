@@ -3,8 +3,6 @@
 /**
  * The Hindi language file
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -15,6 +13,7 @@
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2009-07-01
+ * @codingStandardsIgnoreFile
  */
 
 $PMF_LANG["metaCharset"] = "utf-8";
@@ -469,7 +468,7 @@ $PMF_LANG["ad_start_visits"] = "दर्शन";
 $PMF_LANG["ad_start_articles"] = "लेख";
 $PMF_LANG["ad_start_comments"] = "टिका-टिप्पणी";
 
-$PMF_LANG["ad_user_chpw"] = "आप केवल मौजूदा प्रयोगकर्ता का संकेतक शब्द बदल सकते हैं \"".$PMF_LANG["ad_menu_passwd"]."\".";
+$PMF_LANG["ad_user_chpw"] = "आप केवल मौजूदा प्रयोगकर्ता का संकेतक शब्द बदल सकते हैं \"" . $PMF_LANG["ad_menu_passwd"] . "\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "चिपकाएँ (paste)";
@@ -559,7 +558,7 @@ $LANG_CONF["main.metaPublisher"] = array("input", "प्रकाशक का 
 $LANG_CONF['main.administrationMail'] = array("input", "प्रबंधक का ईमेल पता");
 $LANG_CONF["main.contactInformations"] = array("area", "संपर्क करने की जानकारी");
 $LANG_CONF["main.send2friendText"] = array("area", "दोस्त को भेजने के लिए वाले पेज के लिए शब्द");
-$LANG_CONF['records.maxAttachmentSize'] = array("input", "फाइल जोड़ने के लिए अधिकतम साइज़ (अधिकतम. ".ini_get("upload_max_filesize")."बाइट्स)");
+$LANG_CONF['records.maxAttachmentSize'] = array("input", "फाइल जोड़ने के लिए अधिकतम साइज़ (अधिकतम. " . ini_get("upload_max_filesize") . "बाइट्स)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "फाइलों को एंट्री के निचे जोडें?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "लेखा जोखा रखें?");
 $LANG_CONF["main.enableAdminLog"] = array("checkbox", "प्रबंधक लॉग का प्रयोग करें?");

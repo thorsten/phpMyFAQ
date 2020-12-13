@@ -32,7 +32,6 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 switch ($ajaxAction) {
-
     case 'user-visits-last-30-days':
         if ($faqConfig->get('main.enableUserTracking')) {
             $session = new Session($faqConfig);
@@ -40,5 +39,4 @@ switch ($ajaxAction) {
             $http->sendJsonWithHeaders($session->getLast30DaysVisits());
         }
         break;
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -40,7 +41,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'add_faq')) {
-
     // FAQ data
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
@@ -113,7 +113,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     }
 
     if (!is_null($question) && !is_null($categories['rubrik'])) {
-
         // new entry
         $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'admin-save-new-faq');
@@ -179,9 +178,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
                 $categoryPermission->add(
-                  CategoryPermission::GROUP,
-                  $categories['rubrik'],
-                  $permissions['restricted_groups']
+                    CategoryPermission::GROUP,
+                    $categories['rubrik'],
+                    $permissions['restricted_groups']
                 );
             }
 
@@ -240,7 +239,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             // Callback to Twitter if enabled
             if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
-
                 $connection = new TwitterOAuth(
                     $faqConfig->get('socialnetworks.twitterConsumerKey'),
                     $faqConfig->get('socialnetworks.twitterConsumerSecret'),
@@ -270,7 +268,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             (() => {
               setTimeout(() => {
                 window.location = "index.php?action=editentry&id=<?= $recordId;
-                    ?>&lang=<?= $recordData['lang'] ?>";
+                ?>&lang=<?= $recordData['lang'] ?>";
               }, 5000);
             })();
           </script>
@@ -287,7 +285,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             $PMF_LANG['ad_entry_aor']
         );
         printf(
-            '<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_entryins_fail']
+            '<p class="alert alert-danger">%s</p>',
+            $PMF_LANG['ad_entryins_fail']
         );
         ?>
       <form action="?action=editpreview" method="post">
@@ -299,12 +298,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         <input type="hidden" name="author" value="<?= $author ?>">
         <input type="hidden" name="email" value="<?= $email ?>">
           <?php
-          if (is_array($categories['rubrik'])) {
-              foreach ($categories['rubrik'] as $key => $_categories) {
-                  echo '    <input type="hidden" name="rubrik[' . $key . ']" value="' . $_categories . '" />';
-              }
-          }
-          ?>
+            if (is_array($categories['rubrik'])) {
+                foreach ($categories['rubrik'] as $key => $_categories) {
+                    echo '    <input type="hidden" name="rubrik[' . $key . ']" value="' . $_categories . '" />';
+                }
+            }
+            ?>
         <input type="hidden" name="solution_id" value="<?= $solutionId ?>">
         <input type="hidden" name="revision" value="<?= $revisionId ?>">
         <input type="hidden" name="active" value="<?= $active ?>">

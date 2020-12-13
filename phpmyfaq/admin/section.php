@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Displays the section management frontend.
  *
@@ -23,9 +24,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (!$user->perm->hasPermission($user->getUserId(), 'edit_section') &&
+if (
+    !$user->perm->hasPermission($user->getUserId(), 'edit_section') &&
     !$user->perm->hasPermission($user->getUserId(), 'delete_section') &&
-    !$user->perm->hasPermission($user->getUserId(), 'add_section')) {
+    !$user->perm->hasPermission($user->getUserId(), 'add_section')
+) {
     exit();
 }
 
@@ -79,10 +82,12 @@ if ($sectionAction == 'update_members' && $user->perm->hasPermission($user->getU
         foreach ($sectionMembers as $memberId) {
             $perm->addGroupToSection((int) $memberId, $sectionId);
         }
-        $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+        $message .= sprintf(
+            '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
             $PMF_LANG['ad_msg_savedsuc_1'],
             $perm->getSectionName($sectionId),
-            $PMF_LANG['ad_msg_savedsuc_2']);
+            $PMF_LANG['ad_msg_savedsuc_2']
+        );
     }
 }
 
@@ -103,15 +108,17 @@ if ($sectionAction == 'update_data' && $user->perm->hasPermission($user->getUser
         $perm = $user->perm;
         if (!$perm->changeSection($sectionId, $sectionData)) {
             $message .= sprintf(
-            '<p class="alert alert-danger">%s<br>%s</p>',
-            $PMF_LANG['ad_msg_mysqlerr'],
-            $db->error()
+                '<p class="alert alert-danger">%s<br>%s</p>',
+                $PMF_LANG['ad_msg_mysqlerr'],
+                $db->error()
             );
         } else {
-            $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+            $message .= sprintf(
+                '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 $PMF_LANG['ad_msg_savedsuc_1'],
                 $perm->getSectionName($sectionId),
-                $PMF_LANG['ad_msg_savedsuc_2']);
+                $PMF_LANG['ad_msg_savedsuc_2']
+            );
         }
     }
 }
@@ -154,8 +161,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->hasPermission($user->getU
               </form>
           </div>
       </div>
-<?php
-
+        <?php
     }
 }
 
@@ -221,7 +227,7 @@ if ($sectionAction == 'addsave' && $user->perm->hasPermission($user->getUserId()
         $sectionAction = 'add';
         $message = '<p class="alert alert-danger">';
         foreach ($messages as $err) {
-            $message .= $err.'<br>';
+            $message .= $err . '<br>';
         }
         $message .= '</p>';
     }
@@ -279,8 +285,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
               </form>
           </div>
       </div>
-<?php
-
+    <?php
 } // end if ($sectionAction == 'add')
 
 // show list of sections
@@ -451,6 +456,5 @@ if ('list' === $sectionAction) {
       </form>
     </div>
   </div>
-<?php
-
+    <?php
 }

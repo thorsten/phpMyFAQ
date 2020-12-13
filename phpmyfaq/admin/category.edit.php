@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Edits a category.
  *
@@ -54,7 +55,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         $restrictedGroups = true;
     }
 
-    $header = $PMF_LANG['ad_categ_edit_1'].' "'.$categoryData->getName().'" '.$PMF_LANG['ad_categ_edit_2'];
+    $header = $PMF_LANG['ad_categ_edit_1'] . ' "' . $categoryData->getName() . '" ' . $PMF_LANG['ad_categ_edit_2'];
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -151,7 +152,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               </div>
             </div>
               <?php if ($faqConfig->get('security.permLevel') != 'basic') { ?>
-
                 <div class="form-group row">
                   <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>:</label>
                   <div class="col-lg-4">
@@ -230,7 +230,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             });
           });
         </script>
-<?php
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

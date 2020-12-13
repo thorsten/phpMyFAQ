@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The meta data administration frontend.
  *
@@ -54,11 +55,9 @@ $meta = new Meta($faqConfig);
 
 // Update meta data
 if ('meta.update' === $action && is_integer($metaId)) {
-
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         echo $PMF_LANG['err_NotAuth'];
     } else {
-
         $entity = new MetaEntity();
         $entity
             ->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_SANITIZE_STRING))
@@ -80,7 +79,6 @@ if ('meta.update' === $action && is_integer($metaId)) {
             );
         }
     }
-
 }
 
 $metaData = $meta->getAll();
@@ -95,7 +93,7 @@ $metaData = $meta->getAll();
   </tr>
   </thead>
   <tbody>
-  <?php foreach ($metaData as $data): ?>
+  <?php foreach ($metaData as $data) : ?>
     <tr id="row-meta-<?= $data->getId() ?>">
       <td><?= $data->getId() ?></td>
       <td><?= $data->getPageId() ?></td>

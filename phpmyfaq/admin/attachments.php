@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ajax interface for attachments.
  *
@@ -61,7 +62,7 @@ $pagination = new Pagination(
       </tr>
       </thead>
       <tbody>
-      <?php foreach ($crumbs as $item): ?>
+      <?php foreach ($crumbs as $item) : ?>
         <tr class="att_<?= $item->id ?>" title="<?= $item->thema ?>">
           <td><?= $item->id ?></td>
           <td><?= $item->filename ?></td>

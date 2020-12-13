@@ -64,7 +64,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         </div>
                     </div>
 
-                    <?php if ($linkVerifier->isReady() === true): ?>
+                    <?php if ($linkVerifier->isReady() === true) : ?>
                     <div class="form-group row">
                         <div class="offset-lg-2 col-lg-4 checkbox">
                             <label>
@@ -93,8 +93,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         </div>
                     </div>
                 </form>
-<?php
-
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

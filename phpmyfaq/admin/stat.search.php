@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Frontend for search log statistics.
  *
@@ -62,10 +63,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
     if (is_null($pages)) {
-        $pages = round((count($searchesList) + ($perPage / 3))/$perPage, 0);
+        $pages = round((count($searchesList) + ($perPage / 3)) / $perPage, 0);
     }
 
-    $start = ($page - 1)*$perPage;
+    $start = ($page - 1) * $perPage;
     $end = $start + $perPage;
 
     $baseUrl = sprintf(
@@ -82,7 +83,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         'pageParamName' => 'page',
     ];
     $pagination = new Pagination($faqConfig, $options);
-?>
+    ?>
           <div id="ajaxresponse"></div>
           <table class="table table-striped">
             <thead>
@@ -100,7 +101,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             </tr>
             </tfoot>
             <tbody>
-<?php
+    <?php
     $counter = $displayedCounter = 0;
     $self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
 
@@ -116,7 +117,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         }
         ++$displayedCounter;
 
-        $num = round(($searchItem['number']*100/$searchesCount), 2);
+        $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
         ?>
               <tr class="row_search_id_<?= $searchItem['id'] ?>">
                   <td><?= Strings::htmlspecialchars($searchItem['searchterm']) ?></td>
@@ -131,9 +132,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                       </a>
                   </td>
               </tr>
-<?php
+        <?php
     }
-?>
+    ?>
             </tbody>
           </table>
           <script>
@@ -148,18 +149,22 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                 $.getJSON("index.php?action=ajax&ajax=search&ajaxaction=delete_searchterm&searchterm=" + searchterm,
                   (response) => {
                     if (response === 1) {
-                      $('#ajaxresponse').html('<?php printf('<p class="alert alert-success">%s</p>',
-                            $PMF_LANG['ad_search_delsuc']) ?>');
+                      $('#ajaxresponse').html('<?php printf(
+                          '<p class="alert alert-success">%s</p>',
+                          $PMF_LANG['ad_search_delsuc']
+                                               ) ?>');
                       $('.row_search_id_' + searchId).fadeOut('slow');
                     } else {
-                      $('#ajaxresponse').html('<?php printf('<p class="alert alert-danger">%s</p>',
-                            $PMF_LANG['ad_search_delfail']) ?>');
+                      $('#ajaxresponse').html('<?php printf(
+                          '<p class="alert alert-danger">%s</p>',
+                          $PMF_LANG['ad_search_delfail']
+                                               ) ?>');
                     }
                   });
               }
             }
           </script>
-<?php
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

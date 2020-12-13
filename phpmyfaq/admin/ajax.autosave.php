@@ -38,10 +38,14 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ('insertentry' === $do &&
-    ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(),
-                                                                                              'add_faq')) ||
-    'saveentry' === $do && $user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+if (
+'insertentry' === $do &&
+    ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission(
+        $user->getUserId(),
+        'add_faq'
+    )) ||
+    'saveentry' === $do && $user->perm->hasPermission($user->getUserId(), 'edit_faq')
+) {
     $user = CurrentUser::getFromCookie($faqConfig);
     if (!$user instanceof CurrentUser) {
         $user = CurrentUser::getFromSession($faqConfig);
@@ -55,8 +59,7 @@ if ('insertentry' === $do &&
             'filter' => FILTER_VALIDATE_INT,
             'flags' => FILTER_REQUIRE_ARRAY,
         ]
-    ]
-    );
+    ]);
     $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -72,11 +75,17 @@ if ('insertentry' === $do &&
     $changed = '';
 
     $user_permission = Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-    $restrictedUsers = ('all' == $user_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restrictedUsers',
-                                                                              FILTER_VALIDATE_INT);
+    $restrictedUsers = ('all' == $user_permission) ? -1 : Filter::filterInput(
+        INPUT_POST,
+        'restrictedUsers',
+        FILTER_VALIDATE_INT
+    );
     $group_permission = Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-    $restrictedGroups = ('all' == $group_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restrictedGroups',
-                                                                                FILTER_VALIDATE_INT);
+    $restrictedGroups = ('all' == $group_permission) ? -1 : Filter::filterInput(
+        INPUT_POST,
+        'restrictedGroups',
+        FILTER_VALIDATE_INT
+    );
 
     if (!is_null($question) && !is_null($categories)) {
         $tagging = new Tags($faqConfig);
