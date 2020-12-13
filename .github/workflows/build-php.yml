@@ -1,14 +1,17 @@
 name: phpMyFAQ Build
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
   run:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        operating-system: ['ubuntu-latest']
         php-versions: ['7.3', '7.4', '8.0']
-    name: phpMyFAQ ${{ matrix.php-versions }} Test on Ubuntu (latest)
+    name: phpMyFAQ ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
 
     steps:
       - name: Checkout
@@ -31,10 +34,6 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
-
-      - if: php-version == '8.0'
-        name: Set Composer config to PHP 7.4.99 if we use PHP 8.0
-        run: composer config platform.php 7.4.99
 
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
