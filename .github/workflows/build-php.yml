@@ -32,6 +32,11 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Set Composer config to PHP 7.4.99 if we use PHP 8.0
+        run: composer config platform.php 7.4.99
+        with:
+          php-version: '8.0'
+
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
