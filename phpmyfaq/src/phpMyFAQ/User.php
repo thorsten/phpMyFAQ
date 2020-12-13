@@ -619,28 +619,23 @@ class User
         $skipped = false;
 
         while (strlen($newPassword) < $minimumLength) {
-            if (Utils::createRandomNumber(0, 1)) {
-                $caseFunc = 'strtoupper';
-            } else {
-                $caseFunc = 'strtolower';
-            }
+            $caseFunc = random_int(0, 1) ? 'strtoupper' : 'strtolower';
 
-            switch (Utils::createRandomNumber(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
+            switch (random_int(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
                 case 0:
                 case 1:
-                    $nextChar = $caseFunc($consonants[rand(0, 18)]);
+                    $nextChar = $caseFunc($consonants[random_int(0, 18)]);
                     break;
                 case 2:
                 case 3:
-                    $nextChar = $caseFunc($vowels[rand(0, 3)]);
+                    $nextChar = $caseFunc($vowels[random_int(0, 3)]);
                     break;
                 case 4:
-                    $nextChar = (string)rand(2, 9);
+                    $nextChar = (string)random_int(2, 9);
                     break;
                 case 5:
                     $newPassword .= '_';
                     continue 2;
-                    break;
             }
 
             $skipped = false;

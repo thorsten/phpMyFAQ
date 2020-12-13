@@ -237,9 +237,9 @@ class Captcha
     private function createBackground()
     {
         $this->img = imagecreate($this->width, $this->height);
-        $this->backgroundColor['r'] = rand(220, 255);
-        $this->backgroundColor['g'] = rand(220, 255);
-        $this->backgroundColor['b'] = rand(220, 255);
+        $this->backgroundColor['r'] = random_int(220, 255);
+        $this->backgroundColor['g'] = random_int(220, 255);
+        $this->backgroundColor['b'] = random_int(220, 255);
 
         $colorAllocate = imagecolorallocate(
             $this->img,
@@ -260,29 +260,29 @@ class Captcha
      */
     private function drawLines()
     {
-        $color1 = rand(150, 185);
-        $color2 = rand(185, 225);
+        $color1 = random_int(150, 185);
+        $color2 = random_int(185, 225);
         $nextLine = 4;
         $w1 = 0;
         $w2 = 0;
 
-        for ($x = 0; $x < $this->width; $x += (int)$nextLine) {
+        for ($x = 0; $x < $this->width; $x += $nextLine) {
             if ($x < $this->width) {
-                imageline($this->img, $x + $w1, 0, $x + $w2, $this->height - 1, rand($color1, $color2));
+                imageline($this->img, $x + $w1, 0, $x + $w2, $this->height - 1, random_int($color1, $color2));
             }
             if ($x < $this->height) {
-                imageline($this->img, 0, $x - $w2, $this->width - 1, $x - $w1, rand($color1, $color2));
+                imageline($this->img, 0, $x - $w2, $this->width - 1, $x - $w1, random_int($color1, $color2));
             }
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
-                $nextLine += rand(-5, 7);
+                $nextLine += random_int(-5, 7);
                 if ($nextLine < 1) {
                     $nextLine = 2;
                 }
             } else {
-                $nextLine += rand(1, 7);
+                $nextLine += random_int(1, 7);
             }
-            $w1 += rand(-4, 4);
-            $w2 += rand(-4, 4);
+            $w1 += random_int(-4, 4);
+            $w2 += random_int(-4, 4);
         }
 
         return $this->img;
@@ -318,8 +318,7 @@ class Captcha
 
         // Create the captcha code
         for ($i = 1; $i <= $capLength; ++$i) {
-            $j = floor(rand(0, 34));
-            $this->code .= $this->letters[(int)$j];
+            $this->code .= $this->letters[random_int(0, 34)];
         }
         if (!$this->saveCaptcha()) {
             return $this->generateCaptchaCode($capLength);
@@ -432,34 +431,34 @@ class Captcha
         for ($p = 0; $p < $len; ++$p) {
             $letter = $this->code[$p];
             if (count($this->fonts) > 0) {
-                $font = $this->fonts[rand(0, count($this->fonts) - 1)];
+                $font = $this->fonts[random_int(0, count($this->fonts) - 1)];
             }
-            $size = rand(20, $this->height / 2.2);
-            $rotation = rand(-23, 23);
-            $y = rand($size + 3, $this->height - 5);
+            $size = random_int(20, $this->height / 2.2);
+            $rotation = random_int(-23, 23);
+            $y = random_int($size + 3, $this->height - 5);
             $x = $w1 + $w2 * $p;
             $c1 = []; // fore char color
             $c2 = []; // back char color
 
             do {
-                $c1['r'] = mt_rand(30, 199);
+                $c1['r'] = random_int(30, 199);
             } while ($c1['r'] === $this->backgroundColor['r']);
             do {
-                $c1['g'] = mt_rand(30, 199);
+                $c1['g'] = random_int(30, 199);
             } while ($c1['g'] === $this->backgroundColor['g']);
             do {
-                $c1['b'] = mt_rand(30, 199);
+                $c1['b'] = random_int(30, 199);
             } while ($c1['b'] === $this->backgroundColor['b']);
             $colorOne = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
 
             do {
-                $c2['r'] = ((int)$c1['r'] < 100 ? (int)$c1['r'] * 2 : mt_rand(30, 199));
+                $c2['r'] = ((int)$c1['r'] < 100 ? (int)$c1['r'] * 2 : random_int(30, 199));
             } while (($c2['r'] === $this->backgroundColor['r']) && ($c2['r'] === $c1['r']));
             do {
-                $c2['g'] = ((int)$c1['g'] < 100 ? (int)$c1['g'] * 2 : mt_rand(30, 199));
+                $c2['g'] = ((int)$c1['g'] < 100 ? (int)$c1['g'] * 2 : random_int(30, 199));
             } while (($c2['g'] === $this->backgroundColor['g']) && ($c2['g'] === $c1['g']));
             do {
-                $c2['b'] = ((int)$c1['b'] < 100 ? (int)$c1['b'] * 2 : mt_rand(30, 199));
+                $c2['b'] = ((int)$c1['b'] < 100 ? (int)$c1['b'] * 2 : random_int(30, 199));
             } while (($c2['b'] === $this->backgroundColor['b']) && ($c2['b'] === $c1['b']));
             $colorTwo = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
 

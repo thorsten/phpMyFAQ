@@ -447,7 +447,7 @@ class Installer
         $dynMainConfig = [
             'main.currentVersion' => System::getVersion(),
             'main.currentApiVersion' => System::getApiVersion(),
-            'main.phpMyFAQToken' => md5(uniqid(rand())),
+            'main.phpMyFAQToken' => bin2hex(random_bytes(16)),
             'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
         ];
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);
