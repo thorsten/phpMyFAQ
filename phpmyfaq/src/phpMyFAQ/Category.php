@@ -1327,7 +1327,7 @@ class Category
      */
     public function swapCategories($category_id_1, $category_id_2)
     {
-        $temp_cat = rand(200000, 400000);
+        $temp_cat = random_int(200000, 400000);
 
         $tables = [
             ['faqcategories' => 'id'],
