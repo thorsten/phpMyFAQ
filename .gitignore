@@ -30,23 +30,7 @@ phpmyfaq/images/*
 phpmyfaq/attachments/*
 
 # Third party PHP libraries
-phpmyfaq/src/libs/abraham
-phpmyfaq/src/libs/composer
-phpmyfaq/src/libs/elasticsearch
-phpmyfaq/src/libs/ezimuel
-phpmyfaq/src/libs/monolog
-phpmyfaq/src/libs/myclabs
-phpmyfaq/src/libs/parsedown
-phpmyfaq/src/libs/phpseclib
-phpmyfaq/src/libs/phpunit
-phpmyfaq/src/libs/psr
-phpmyfaq/src/libs/react
-phpmyfaq/src/libs/swiftmailer
-phpmyfaq/src/libs/symfony
-phpmyfaq/src/libs/tcpdf/config
-phpmyfaq/src/libs/tcpdf/include
-phpmyfaq/src/libs/tcpdf/*.php
-phpmyfaq/src/libs/autoload.php
+phpmyfaq/src/libs
 
 # Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css

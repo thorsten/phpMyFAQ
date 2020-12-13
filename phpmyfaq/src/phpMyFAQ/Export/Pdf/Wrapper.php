@@ -33,7 +33,7 @@ define('K_PATH_URL', '');
  * path to TCPDF
  *
  */
-define('K_PATH_MAIN', PMF_SRC_DIR . '/libs/tcpdf/');
+define('K_PATH_MAIN', PMF_SRC_DIR . '/libs/tecnickcom/tcpdf/');
 
 /*
  * path for PDF fonts

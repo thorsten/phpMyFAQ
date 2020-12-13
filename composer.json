@@ -60,18 +60,13 @@
     "platform": {
       "php": "7.3.0"
     },
-    "secure-http": true
+    "secure-http": true,
+    "vendor-dir": "phpmyfaq/src/libs"
   },
   "minimum-stability": "stable",
   "scripts": {
-    "test": "vendor/bin/phpunit",
-    "lint": "vendor/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
-    "lint-fix": "vendor/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
-    "post-install-cmd": [
-      "scripts/reorgVendoredDeps.php"
-    ],
-    "post-update-cmd": [
-      "scripts/reorgVendoredDeps.php"
-    ]
+    "test": "phpmyfaq/src/libs/bin/phpunit",
+    "lint": "phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
+    "lint-fix": "phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ"
   }
 }

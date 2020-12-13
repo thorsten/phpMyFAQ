@@ -59,6 +59,13 @@ ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
 //
+// Setting up autoloader
+//
+/** @var ClassLoader $loader */
+$loader = require __DIR__ . '/libs/autoload.php';
+$loader->addPsr4('phpMyFAQ\\', __DIR__ . '/phpMyFAQ');
+
+//
 // The root directory
 //
 if (!defined('PMF_ROOT_DIR')) {
@@ -101,19 +108,6 @@ define('PMF_SRC_DIR', __DIR__);
  * The directory where the translations reside
  */
 define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
-
-//
-// Setting up autoloader
-//
-require PMF_SRC_DIR . '/libs/autoload.php';
-
-$loader = new ClassLoader();
-$loader->add('phpMyFAQ', PMF_SRC_DIR);
-$loader->addPsr4('Abraham\\TwitterOAuth\\', PMF_SRC_DIR . '/libs/abraham/twitteroauth/src');
-$loader->register();
-
-require PMF_SRC_DIR . '/libs/parsedown/Parsedown.php';
-require PMF_SRC_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 //
 // Set the error handler and the exception handler
@@ -173,14 +167,6 @@ if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.p
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
     require PMF_CONFIG_DIR . '/elasticsearch.php';
     require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
-
-    $psr4Loader = new ClassLoader();
-    $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR . '/libs/elasticsearch/src/Elasticsearch');
-    $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR . '/libs/guzzlehttp/ringphp/src');
-    $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR . '/libs/monolog/src/Monolog');
-    $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR . '/libs/psr/log/Psr');
-    $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
-    $psr4Loader->register();
 
     $esClient = ClientBuilder::create()
         ->setHosts($PMF_ES['hosts'])

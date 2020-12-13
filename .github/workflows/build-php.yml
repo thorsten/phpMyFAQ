@@ -39,7 +39,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Lint with PHPCS
-        run: vendor/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
+        run: phpmyfaq/src/libs/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
 
       - name: Test with PHPUnit
-        run: vendor/bin/phpunit --coverage-text
+        run: phpmyfaq/src/libs/bin/phpunit --coverage-text
