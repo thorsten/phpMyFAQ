@@ -280,7 +280,7 @@ class Mysqli extends Database implements Driver
             name VARCHAR(255) NOT NULL,
             description VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
-            
+
         'faqsection_category' => 'CREATE TABLE %sfaqsection_category (
             section_id INT(11) NOT NULL,
             category_id INT(11) NOT NULL DEFAULT -1,
