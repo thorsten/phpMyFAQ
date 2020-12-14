@@ -19,10 +19,12 @@
 
 namespace phpMyFAQ\Export\Pdf;
 
+use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
+use TCPDF;
 
 // phpcs:disable
 define('K_TCPDF_EXTERNAL_CONFIG', true);
@@ -37,9 +39,8 @@ define('K_PATH_MAIN', PMF_SRC_DIR . '/libs/tcpdf/');
 
 /*
  * path for PDF fonts
- * use K_PATH_MAIN.'fonts/old/' for old non-UTF8 fonts
  */
-define('K_PATH_FONTS', K_PATH_MAIN . 'fonts/');
+define('K_PATH_FONTS', PMF_SRC_DIR . '/fonts/');
 
 /*
  * cache directory for temporary files (full path)
@@ -194,7 +195,7 @@ require K_PATH_MAIN . '/tcpdf.php';
  *
  * @package phpMyFAQ\Export\Pdf
  */
-class Wrapper extends \TCPDF
+class Wrapper extends TCPDF
 {
     /**
      * With or without bookmarks.
@@ -245,7 +246,7 @@ class Wrapper extends \TCPDF
      *
      * @var array
      */
-    private $fontFiles = array(
+    private $fontFiles = [
         'zh' => 'arialunicid0',
         'tw' => 'arialunicid0',
         'ja' => 'arialunicid0',
@@ -256,7 +257,7 @@ class Wrapper extends \TCPDF
         'he' => 'arialunicid0',
         'tr' => 'dejavusans',
         'default' => 'dejavusans',
-    );
+    ];
 
     /**
      * Current font.
@@ -375,7 +376,7 @@ class Wrapper extends \TCPDF
 
     /**
      * The footer of the PDF file.
-     * @throws \Exception
+     * @throws Exception
      */
     public function Footer(): void // phpcs:ignore
     {
@@ -492,41 +493,40 @@ class Wrapper extends \TCPDF
     /**
      * Extends the TCPDF::Image() method to handle base64 encoded images.
      *
-     * @param string $file      Name of the file containing the image or a '@' character followed by the image data
+     * @param string $file Name of the file containing the image or a '@' character followed by the image data
      *                          string. To link an image without embedding it on the document, set an asterisk
      *                          character before the URL (i.e.: '*http://www.example.com/image.jpg').
-     * @param string $x         Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param string $y         Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param int    $w         Width of the image in the page. If not specified or equal to zero, it is automatically
+     * @param string $x Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param string $y Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param int    $w Width of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param int    $h         Height of the image in the page. If not specified or equal to zero, it is automatically
+     * @param int    $h Height of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param string $type      Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
+     * @param string $type Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
      *                          and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If
      *                          not specified, the type is inferred from the file extension.
-     * @param string $link      URL or identifier returned by AddLink().
-     * @param string $align     Indicates the alignment of the pointer next to image insertion relative to image height.
-     * @param bool   $resize    If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
+     * @param string $link URL or identifier returned by AddLink().
+     * @param string $align Indicates the alignment of the pointer next to image insertion relative to image height.
+     * @param bool   $resize If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
      *                          if false do not resize; if 2 force resize in all cases (upscaling and downscaling).
-     * @param int    $dpi       dot-per-inch resolution used on resize
-     * @param string $palign    Allows to center or align the image on the current line.
-     * @param bool   $ismask    true if this image is a mask, false otherwise
-     * @param mixed  $imgmask   Image object returned by this function or false
-     * @param int    $border    Indicates if borders must be drawn around the cell.
-     * @param mixed  $fitbox    If not false scale image dimensions proportionally to fit within the ($w, $h) box.
+     * @param int    $dpi dot-per-inch resolution used on resize
+     * @param string $palign Allows to center or align the image on the current line.
+     * @param bool   $ismask true if this image is a mask, false otherwise
+     * @param mixed  $imgmask Image object returned by this function or false
+     * @param int    $border Indicates if borders must be drawn around the cell.
+     * @param mixed  $fitbox If not false scale image dimensions proportionally to fit within the ($w, $h) box.
      *                          $fitbox can be true or a 2 characters string indicating the image alignment inside
      *                          the box. The first character indicate the horizontal alignment (L = left, C =
      *                          center, R = right) the second character indicate the vertical algnment (T = top, M
      *                          = middle, B = bottom).
-     * @param bool   $hidden    If true do not display the image.
+     * @param bool   $hidden If true do not display the image.
      * @param bool   $fitonpage If true the image is resized to not exceed page dimensions.
-     * @param bool   $alt       If true the image will be added as alternative and not directly printed (the ID of the
+     * @param bool   $alt If true the image will be added as alternative and not directly printed (the ID of the
      *                          image will be returned).
-     * @param array  $altimgs   Array of alternate images IDs. Each alternative image must be an array with two values:
+     * @param array  $altimgs Array of alternate images IDs. Each alternative image must be an array with two values:
      *                          an integer representing the image ID (the value returned by the Image method) and a
      *                          boolean value to indicate if the image is the default for printing.
-     *
-     * @return string
+     * @return void
      */
     public function Image(// phpcs:ignore
         $file,
