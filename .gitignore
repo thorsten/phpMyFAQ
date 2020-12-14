@@ -56,13 +56,11 @@ phpmyfaq/admin/assets/js/editor/plugins/
 phpmyfaq/admin/assets/js/editor/skins/
 phpmyfaq/admin/assets/js/editor/themes/
 phpmyfaq/assets/dist
-phpmyfaq/assets/fonts
 phpmyfaq/assets/js/libs
 phpmyfaq/assets/js/vendors.js
 phpmyfaq/assets/svg/*.svg
 phpmyfaq/assets/themes/default/css/*.css
 phpmyfaq/assets/themes/default/css/*.map
-phpmyfaq/assets/fonts/*
 phpmyfaq/assets/themes/default/js/*
 
 # Composer related stuff
@@ -77,3 +75,4 @@ backup/*
 # PHPUnit
 .phpunit.result.cache
 tests/test.db
+tests/config/database.php

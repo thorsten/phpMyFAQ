@@ -156,7 +156,7 @@ class Captcha
      */
     private function getFonts(): array
     {
-        return glob(PMF_SRC_DIR . '/fonts/*.ttf');
+        return glob(PMF_ROOT_DIR . '/assets/fonts/*.ttf');
     }
 
     /**
