@@ -35,10 +35,7 @@ phpmyfaq/src/libs
 # Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css
 phpmyfaq/admin/assets/fonts
-phpmyfaq/admin/assets/js/editor/tinymce.min.js
-phpmyfaq/admin/assets/js/editor/plugins/
-phpmyfaq/admin/assets/js/editor/skins/
-phpmyfaq/admin/assets/js/editor/themes/
+phpmyfaq/admin/assets/js/editor/*
 phpmyfaq/assets/dist
 phpmyfaq/assets/js/libs
 phpmyfaq/assets/js/vendors.js
