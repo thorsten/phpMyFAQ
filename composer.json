@@ -30,7 +30,7 @@
   ],
   "require": {
     "php": ">=7.3.0",
-    "phpseclib/phpseclib": "~2.0",
+    "phpseclib/phpseclib": "~3.0",
     "swiftmailer/swiftmailer": "~6.2",
     "erusev/parsedown": "~1.0",
     "erusev/parsedown-extra": "~0.8.1",
