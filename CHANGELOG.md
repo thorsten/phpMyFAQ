@@ -1,4 +1,4 @@
-# phpMyFAQ 3.1.0-alpha.2
+# phpMyFAQ 3.1.0-beta
 
 **Codename "Poseidon"**
 
@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.0-alpha.2 - 2020-11-15
+### phpMyFAQ v3.1.0-beta - 2020-12-
 
 - changed PHP requirement to PHP 7.3+ (Thorsten)
 - added support for PHP 8.0 (Thorsten)
@@ -20,13 +20,14 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added opt-in for displaying user data (Thorsten)
 - added mail notifications for new FAQs in admin section (Thorsten)
 - added possibility to login via email address (Thorsten)
-- updated to Composer v2 (Thorsten)
+- updated to Composer v2 and improved build (Alexander M. Turek, Thorsten)
 - improved install and update scripts (Thorsten)
 - removed REST API v1 (Thorsten)
 - removed RSS support (Thorsten)
 - removed rewrite support for IIS (Thorsten)
 - removed password hashing with MD5 and SHA-1 (Thorsten)
 - removed OpenSearch support (Thorsten)
+- fixed minor bugs (Nico Schmitz-Laux, Thorsten)
 
 ### phpMyFAQ v3.0.7 - 2020-12-
 
