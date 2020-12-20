@@ -125,7 +125,7 @@ if (!is_null($inputTag) && '' !== $inputTag) {
         $relTags = '';
 
         foreach ($relatedTags as $tagId => $relevance) {
-            $relTags .= $tagHelper->renderRelatedTag($tagId, $tagging->getTagNameById($tagId), $relevance);
+            $relTags .= $tagHelper->renderRelatedTag((int)$tagId, $tagging->getTagNameById($tagId), $relevance);
             if ($numTags++ > 20) {
                 break;
             }
