@@ -791,16 +791,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "fe62c85e0203503231d489af95d0ac053b7d3575"
+                "reference": "094bcbdd97e04fe4032b7962434d76f588e15f66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/fe62c85e0203503231d489af95d0ac053b7d3575",
-                "reference": "fe62c85e0203503231d489af95d0ac053b7d3575",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/094bcbdd97e04fe4032b7962434d76f588e15f66",
+                "reference": "094bcbdd97e04fe4032b7962434d76f588e15f66",
                 "shasum": ""
             },
             "require": {
@@ -894,7 +894,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-17T06:10:28+00:00"
+            "time": "2020-12-19T07:52:34+00:00"
         },
         {
             "name": "psr/log",
