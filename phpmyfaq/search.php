@@ -2,16 +2,17 @@
 
 /**
  * The fulltext search page.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2020 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-16
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 use phpMyFAQ\Category;
@@ -117,17 +118,12 @@ if (!is_null($inputTag) && '' !== $inputTag) {
             }
         }
 
-        uasort(
-            $relatedTags,
-            function ($a, $b) {
-                return ($b - $a);
-            }
-        );
+        uasort($relatedTags, function ($a, $b) { return ($b - $a); });
         $numTags = 0;
         $relTags = '';
 
         foreach ($relatedTags as $tagId => $relevance) {
-            $relTags .= $tagHelper->renderRelatedTag($tagId, $tagging->getTagNameById($tagId), $relevance);
+            $relTags .= $tagHelper->renderRelatedTag((int)$tagId, $tagging->getTagNameById($tagId), $relevance);
             if ($numTags++ > 20) {
                 break;
             }

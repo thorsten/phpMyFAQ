@@ -2,6 +2,7 @@
 
 /**
  * The main Tags class.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -137,12 +138,7 @@ class Tags
                     // Create the new tag
                     $newTagId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqtags', 'tagging_id');
                     $query = sprintf(
-                        "
-                        INSERT INTO
-                            %sfaqtags
-                        (tagging_id, tagging_name)
-                            VALUES
-                        (%d, '%s')",
+                        "INSERT INTO %sfaqtags (tagging_id, tagging_name) VALUES (%d, '%s')",
                         Database::getTablePrefix(),
                         $newTagId,
                         $tagName
@@ -151,12 +147,7 @@ class Tags
 
                     // Add the tag reference for the faq record
                     $query = sprintf(
-                        '
-                        INSERT INTO
-                            %sfaqdata_tags
-                        (record_id, tagging_id)
-                            VALUES
-                        (%d, %d)',
+                        'INSERT INTO %sfaqdata_tags (record_id, tagging_id) VALUES (%d, %d)',
                         Database::getTablePrefix(),
                         $recordId,
                         $newTagId
@@ -165,12 +156,7 @@ class Tags
                 } else {
                     // Add the tag reference for the faq record
                     $query = sprintf(
-                        '
-                        INSERT INTO
-                            %sfaqdata_tags
-                        (record_id, tagging_id)
-                            VALUES
-                        (%d, %d)',
+                        'INSERT INTO %sfaqdata_tags (record_id, tagging_id) VALUES (%d, %d)',
                         Database::getTablePrefix(),
                         $recordId,
                         array_search(
@@ -189,7 +175,7 @@ class Tags
     /**
      * Returns all tags.
      *
-     * @param string $search Move the returned result set to be the result of a start-with search
+     * @param string|null $search Move the returned result set to be the result of a start-with search
      * @param int $limit Limit the returned result set
      * @param bool $showInactive Show inactive tags
      * @return array
@@ -266,11 +252,7 @@ class Tags
     public function deleteTagsFromRecordId(int $recordId): bool
     {
         $query = sprintf(
-            '
-            DELETE FROM
-                %sfaqdata_tags
-            WHERE
-                record_id = %d',
+            'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
             Database::getTablePrefix(),
             $recordId
         );
@@ -289,13 +271,7 @@ class Tags
     public function updateTag(EntityTags $entity): bool
     {
         $query = sprintf(
-            "
-            UPDATE
-                %sfaqtags
-            SET
-                tagging_name = '%s'
-            WHERE
-                tagging_id = %d",
+            "UPDATE %sfaqtags SET tagging_name = '%s' WHERE tagging_id = %d",
             Database::getTablePrefix(),
             $entity->getName(),
             $entity->getId()
@@ -312,37 +288,21 @@ class Tags
      */
     public function deleteTag(int $tagId): bool
     {
-        try {
-            $query = sprintf(
-                '
-                DELETE FROM
-                    %sfaqtags
-                WHERE
-                    tagging_id = %d',
-                Database::getTablePrefix(),
-                $tagId
-            );
+        $query = sprintf(
+            'DELETE FROM %sfaqtags WHERE tagging_id = %d',
+            Database::getTablePrefix(),
+            $tagId
+        );
 
-            $this->config->getDb()->query($query);
-        } catch (Exception $e) {
-            // @todo Handle exception!
-        }
+        $this->config->getDb()->query($query);
 
-        try {
-            $query = sprintf(
-                '
-                DELETE FROM
-                    %sfaqdata_tags
-                WHERE
-                    tagging_id = %d',
-                Database::getTablePrefix(),
-                $tagId
-            );
+        $query = sprintf(
+            'DELETE FROM %sfaqdata_tags WHERE tagging_id = %d',
+            Database::getTablePrefix(),
+            $tagId
+        );
 
-            $this->config->getDb()->query($query);
-        } catch (Exception $e) {
-            // @todo Handle exception!
-        }
+        $this->config->getDb()->query($query);
 
         return true;
     }
@@ -585,13 +545,7 @@ class Tags
     public function getTagNameById(int $tagId): string
     {
         $query = sprintf(
-            '
-            SELECT
-                tagging_name
-            FROM
-                %sfaqtags
-            WHERE
-                tagging_id = %d',
+            'SELECT tagging_name FROM %sfaqtags WHERE tagging_id = %d',
             Database::getTablePrefix(),
             $tagId
         );

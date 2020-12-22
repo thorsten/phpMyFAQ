@@ -535,7 +535,7 @@ class Faq
 
         $records = implode(', ', $recordIds);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $taggingId = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_DEFAULT);
+        $taggingId = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
         $output = '';
 
         $now = date('YmdHis');
