@@ -52,7 +52,7 @@ services:
     depends_on:
       - yarn
   yarn:
-    image: node:10
+    image: node:12
     restart: 'no'
     command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app
