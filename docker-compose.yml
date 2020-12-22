@@ -4,7 +4,7 @@ version: '3'
 
 services:
   mariadb:
-    image: mariadb:10.2.14
+    image: mariadb:latest
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=iop
@@ -16,8 +16,9 @@ services:
       - '3306:3306'
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
+
   postgres:
-    image: postgres:10.1
+    image: postgres:latest
     restart: always
     environment:
       - POSTGRES_DB=phpmyfaq
@@ -27,6 +28,7 @@ services:
       - 5432:5432
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
+
   phpmyfaq:
     build: .
     restart: always
@@ -51,6 +53,7 @@ services:
       - ./phpmyfaq:/var/www/html
     depends_on:
       - yarn
+
   yarn:
     image: node:12
     restart: 'no'
@@ -62,6 +65,7 @@ services:
       - .:/app
     depends_on:
       - composer
+
   composer:
     image: composer:latest
     restart: 'no'
@@ -70,6 +74,7 @@ services:
     tty: true
     volumes:
       - .:/app
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: always
@@ -80,6 +85,7 @@ services:
       - '8000:80'
     volumes:
       - ./volumes/sessions:/sessions
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
     container_name: elasticsearch
