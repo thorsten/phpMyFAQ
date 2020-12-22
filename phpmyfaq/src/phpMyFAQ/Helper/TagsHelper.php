@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Filter;
 use phpMyFAQ\Helper;
 
 /**
@@ -94,7 +95,9 @@ class TagsHelper extends Helper
      */
     public function setTaggingIds(array $taggingIds)
     {
-        $this->taggingIds = $taggingIds;
+        $this->taggingIds = array_filter($taggingIds, function ($tagId) {
+            return Filter::filterVar($tagId, FILTER_VALIDATE_INT);
+        });
     }
 
 
