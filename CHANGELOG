@@ -1,11 +1,12 @@
-phpMyFAQ 3.0.6
+phpMyFAQ 3.0.7
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.7 - 2020-12-
+Version 3.0.7 - 2020-12-23
+- fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - added TOC plugin for TinyMCE (Thorsten)
 - removed support for deprecated data-vocabulary.org schema (Thorsten)
 - removed Travis CI build (Thorsten)
