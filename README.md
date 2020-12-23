@@ -145,7 +145,7 @@ For more information on SemVer, please visit http://semver.org/.
 
 ## Bug tracker
 
-Have a bug or a feature request? [Please open a new issue](https://github.com/thorsten/phpMyFAQ/issues).
+Found a bug, or do you have a feature request? [Please open a new issue](https://github.com/thorsten/phpMyFAQ/issues).
 Before opening any issue, please search for existing issues.
 
 ## Contributing
@@ -158,11 +158,11 @@ You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/doc
 
 ## REST API v2
 
-The REST API v2 documentation is located [here in this repository](API.md) and also on
+The REST API v2 documentation is located [here in this repository](API.md) and on
 [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
 ## License
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
-Copyright (c) 2001-2020 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001-2020 Thorsten Rinne and the phpMyFAQ Team
