@@ -65,8 +65,8 @@
   },
   "minimum-stability": "stable",
   "scripts": {
-    "test": "phpmyfaq/src/libs/bin/phpunit",
-    "lint": "phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
-    "lint-fix": "phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ"
+    "test": "./phpmyfaq/src/libs/bin/phpunit",
+    "lint": "./phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
+    "lint-fix": "./phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ"
   }
 }

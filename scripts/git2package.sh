@@ -53,9 +53,12 @@ mkdir -p $cwd/build/package/${PMF_PACKAGE_FOLDER}/
 cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 
 # add dependencies
-composer install --no-dev
+composer install --no-dev --prefer-dist
 yarn install
 yarn build
+
+# Remove fonts from TCPDF
+rm -rf $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/tecnickcom/tcpdf/fonts
 
 # create md5 hashes for file verification
 php scripts/createHashes.php > $cwd/hashes-${PMF_VERSION}.json
