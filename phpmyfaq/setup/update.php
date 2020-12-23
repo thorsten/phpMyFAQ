@@ -78,7 +78,7 @@ require PMF_ROOT_DIR . '/config/database.php';
               <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/support">Support</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
+              <a class="nav-link" target="_blank" href="https://forum.phpmyfaq.de/">Forums</a>
             </li>
           </ul>
         </div>
