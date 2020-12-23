@@ -1,4 +1,4 @@
-# phpMyFAQ 3.1.0-beta
+# phpMyFAQ 3.1.0-alpha.3
 
 **Codename "Poseidon"**
 
@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.0-beta - 2020-12-
+### phpMyFAQ v3.1.0-alpha.3 - 2020-12-23
 
 - changed PHP requirement to PHP 7.3+ (Thorsten)
 - added support for PHP 8.0 (Thorsten)
@@ -29,8 +29,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed OpenSearch support (Thorsten)
 - fixed minor bugs (Nico Schmitz-Laux, Thorsten)
 
-### phpMyFAQ v3.0.7 - 2020-12-
+### phpMyFAQ v3.0.7 - 2020-12-23
 
+- fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - added TOC plugin for TinyMCE (Thorsten)
 - removed support for deprecated data-vocabulary.org schema (Thorsten)
 - removed Travis CI build (Thorsten)

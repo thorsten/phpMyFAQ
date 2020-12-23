@@ -711,9 +711,9 @@ if ($step == 3) {
     }
 
     //
-    // UPDATES FROM 3.1.0-beta
+    // UPDATES FROM 3.1.0-alpha.3
     //
-    if (version_compare($version, '3.1.0-beta', '<=')) {
+    if (version_compare($version, '3.1.0-alpha.3', '<=')) {
         // Add "login with email address" configuration
         $faqConfig->add('main.loginWithEmailAddress', false);
     }
