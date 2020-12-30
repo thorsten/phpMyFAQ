@@ -453,8 +453,6 @@ class User
             }
         }
 
-        echo 'foo';
-
         // is $login valid?
         $login = (string)$login;
         if (!$this->isValidLogin($login)) {
