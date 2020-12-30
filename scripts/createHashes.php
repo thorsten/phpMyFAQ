@@ -8,18 +8,22 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2020 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-11
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-04-11
  */
 
 define('PMF_ROOT_DIR', dirname(__DIR__).'/phpmyfaq');
 
-require PMF_ROOT_DIR.'/src/phpMyFAQ/System.php';
+require PMF_ROOT_DIR . '/src/phpMyFAQ/System.php';
 
 $system = new phpMyFAQ\System();
 
-echo $system->createHashes();
+try {
+    echo $system->createHashes();
+} catch (Exception $exception) {
+    echo 'Something went wrong: ' . $exception->getMessage();
+}
