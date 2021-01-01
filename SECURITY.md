@@ -5,11 +5,12 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 
 ## Supported Versions
 
-| Version    | Supported          |
-| ---------- | ------------------ |
-| 3.1.x-beta | :white_check_mark: |
-| 3.0.x      | :white_check_mark: |
-| < 2.9      | :x:                |
+| Version | Supported | Active development |
+| ------- | --------- | ------------------ |
+| 3.1.x   | ✓         | 2020 -             |
+| 3.0.x   | ✓         | 2020 -             |
+| 2.9.x   | ✗         | 2016 - 2019        |
+| < 2.9   | ✗         | 2001 - 2015        |
 
 ## Reporting a Vulnerability
 
@@ -20,3 +21,5 @@ and work to address any issues that arise as quickly as possible.
 
 Please act in good faith towards our users’ privacy and data during your disclosure. We won’t take legal action against
 you or administrative action against your account if you act accordingly: White hat researchers are always appreciated.
+
+Copyright © 2001 - 2021 Thorsten Rinne and the phpMyFAQ Team
