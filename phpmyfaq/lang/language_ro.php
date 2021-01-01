@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author Karoly SIMO <skaroly@bestdomain.ro>
- * @copyright 2004-2020 phpMyFAQ Team
+ * @copyright 2004-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-11-09

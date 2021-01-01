@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Timo Wolf <amna.wolf@gmail.com>
- * @copyright 2018-2020 phpMyFAQ Team
+ * @copyright 2018-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-09-21
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const getSectionList = () => {
     clearSectionList();
-    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_all_sections', data => {
+    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_all_sections', (data) => {
       $.each(data, (i, val) => {
         $('#section_list_select').append('<option value="' + val.section_id + '">' + val.name + '</option>');
       });
@@ -32,25 +32,25 @@ document.addEventListener('DOMContentLoaded', () => {
     processSectionList();
   };
 
-  const getSectionData = section_id => {
-    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_section_data&section_id=' + section_id, data => {
+  const getSectionData = (section_id) => {
+    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_section_data&section_id=' + section_id, (data) => {
       $('#update_section_id').val(data.id);
       $('#update_section_name').val(data.name);
       $('#update_section_description').val(data.description);
     });
   };
 
-  const clearSectionList = function() {
+  const clearSectionList = function () {
     $('#section_list_select').empty();
   };
 
-  const clearSectionData = function() {
+  const clearSectionData = function () {
     $('#update_section_id').empty();
     $('#update_section_name').empty();
     $('#update_section_description').empty();
   };
 
-  const sectionSelect = function(event) {
+  const sectionSelect = function (event) {
     event = event ? event : window.event ? window.event : null;
     if (event) {
       const select = event.target ? event.target : event.srcElement ? event.srcElement : null;
@@ -71,14 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const getGroupList = () => {
     clearGroupList();
-    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups', data => {
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups', (data) => {
       $.each(data, (i, val) => {
         $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
       });
     });
   };
 
-  const clearGroupList = function() {
+  const clearGroupList = function () {
     $('#group_list_select').empty();
   };
 
@@ -97,11 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // get selected groups from list
     const selectedGroups = $('#group_list_select option:selected');
     if (selectedGroups.length > 0) {
-      selectedGroups.each(function() {
+      selectedGroups.each(function () {
         const members = $('#section_member_list option');
         const group = $(this);
         let isMember = false;
-        members.each(member => {
+        members.each((member) => {
           isMember = group.val() === members[member].value;
         });
         if (isMember === false) {
@@ -117,21 +117,23 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#section_member_list').empty();
   };
 
-  const getSectionMemberList = function(section_id) {
+  const getSectionMemberList = function (section_id) {
     if (0 === section_id) {
       clearSectionMemberList();
       return;
     }
-    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_all_members&section_id=' + section_id, function(data) {
+    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_all_members&section_id=' + section_id, function (
+      data
+    ) {
       $('#section_member_list').empty();
-      $.each(data, function(i, val) {
+      $.each(data, function (i, val) {
         $('#section_member_list').append('<option value="' + val.group_id + '" selected>' + val.name + '</option>');
       });
       $('#update_member_section_id').val(section_id);
     });
   };
 
-  const removeSectionMembers = function() {
+  const removeSectionMembers = function () {
     // make sure that a section is selected
     const selectedMemberList = $('#section_member_list option:selected');
     if (selectedMemberList.length === 0) {
@@ -140,12 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // remove selected members from list
-    selectedMemberList.each(function() {
+    selectedMemberList.each(function () {
       $('#section_member_list option:selected').remove();
     });
   };
 
-  const processSectionList = function() {
+  const processSectionList = function () {
     clearSectionData();
     clearSectionList();
     clearSectionMemberList();
@@ -154,15 +156,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   getSectionList();
 
-  $('#section_list_select').on('change', function(event) {
+  $('#section_list_select').on('change', function (event) {
     sectionSelect(event);
   });
 
-  $('.pmf-add-section-member').on('click', function() {
+  $('.pmf-add-section-member').on('click', function () {
     addSectionMembers();
   });
 
-  $('.pmf-remove-section-member').on('click', function() {
+  $('.pmf-remove-section-member').on('click', function () {
     removeSectionMembers();
   });
 });

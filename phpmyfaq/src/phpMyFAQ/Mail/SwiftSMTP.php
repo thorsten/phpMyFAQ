@@ -7,7 +7,7 @@
  *
  * @package   phpMyFAQ
  * @author    Christopher Andrews <http://arduino.land>
- * @copyright 2009-2020 Christopher Andrews, phpMyFAQ Team
+ * @copyright 2009-2021 Christopher Andrews, phpMyFAQ Team
  * @license   http://opensource.org/licenses/MIT MIT Public License
  * @link      https://www.phpmyfaq.de
  * @since     2014-10-10

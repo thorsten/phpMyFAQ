@@ -12,7 +12,7 @@
  * @since     2009-08-21
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @copyright 2009-2020 phpMyFAQ Team
+ * @copyright 2009-2021 phpMyFAQ Team
  */
 
 namespace phpMyFAQ\Attachment;

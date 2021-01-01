@@ -1660,4 +1660,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-© 2001-2020 phpMyFAQ Team
+© 2001-2021 phpMyFAQ Team

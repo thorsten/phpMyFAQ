@@ -11,7 +11,7 @@
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author Minoru TODA <todam@netjapan.co.jp>
  * @author Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2020 phpMyFAQ Team
+ * @copyright 2003-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-11-13
@@ -65,10 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = $('#loader');
     const formNameId = $('#' + formName + 's');
 
-    loader
-      .show()
-      .fadeIn(400)
-      .html('<img src="assets/img/ajax-loader.gif">Saving ...');
+    loader.show().fadeIn(400).html('<img src="assets/img/ajax-loader.gif">Saving ...');
 
     $.ajax({
       type: 'post',
@@ -76,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data: formValues.serialize(),
       dataType: 'json',
       cache: false,
-      success: function(json) {
+      success: function (json) {
         if (json.success === undefined) {
           formNameId.html(
             '<p class="alert alert-danger">' +
@@ -121,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data: 'type=' + type + '&id=' + id + '&vote=' + value + '&lang=' + lang,
       dataType: 'json',
       cache: false,
-      success: function(json) {
+      success: function (json) {
         if (json.success === undefined) {
           votings.append(
             '<p class="alert alert-danger">' +
@@ -137,9 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
               json.success +
               '</p>'
           );
-          $('#rating')
-            .empty()
-            .append(json.rating);
+          $('#rating').empty().append(json.rating);
           votings.fadeIn('slow');
           loader.hide();
         }
@@ -169,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data: formValues.serialize(),
       dataType: 'json',
       cache: false,
-      success: function(json) {
+      success: function (json) {
         if (json.result === undefined && json.success === undefined) {
           $('#qerror').html(
             '<p class="alert alert-danger">' +
@@ -206,11 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   };
 
-  $('#captcha-button').on('click', function() {
+  $('#captcha-button').on('click', function () {
     const action = $(this).data('action');
     $.ajax({
       url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
-      success: function() {
+      success: function () {
         const captcha = $('#captcha');
         $('#captchaImage').attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
         captcha.val('');

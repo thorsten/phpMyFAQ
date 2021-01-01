@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2020 phpMyFAQ Team
+ * @copyright 2015-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2015-12-26
@@ -16,13 +16,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  $('button.pmf-elasticsearch').on('click', function() {
+  $('button.pmf-elasticsearch').on('click', function () {
     const action = $(this).data('action');
     $.ajax({
       url: 'index.php?action=ajax&ajax=elasticsearch&ajaxaction=' + action,
       type: 'POST',
       dataType: 'json',
-    }).done(message => {
+    }).done((message) => {
       const result = $('.result'),
         indicator = $('#pmf-admin-saving-data-indicator');
 

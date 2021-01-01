@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013-2020 phpMyFAQ Team
+ * @copyright 2013-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2013-11-17
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let tabLoaded = false;
 
-  $('a[data-toggle="tab"]').on('shown.bs.tab', event => {
+  $('a[data-toggle="tab"]').on('shown.bs.tab', (event) => {
     event.preventDefault();
 
     const target = $(event.target).attr('href');
@@ -30,10 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ajax: 'config_list',
         conf: target.substr(1),
       },
-      data => {
-        $(target)
-          .empty()
-          .append(data);
+      (data) => {
+        $(target).empty().append(data);
       }
     );
 
@@ -48,10 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ajax: 'config_list',
         conf: 'main',
       },
-      data => {
-        $('#main')
-          .empty()
-          .append(data);
+      (data) => {
+        $('#main').empty().append(data);
       }
     );
   }

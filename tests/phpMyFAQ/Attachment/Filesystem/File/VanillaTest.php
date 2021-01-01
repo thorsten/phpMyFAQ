@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2020 phpMyFAQ Team
+ * @copyright 2012-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link https://www.phpmyfaq.de
  * @since 2012-12-31

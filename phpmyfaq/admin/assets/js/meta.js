@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018-2020 phpMyFAQ Team
+ * @copyright 2018-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-08-10
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   // Add meta entry
-  $('.pmf-meta-add').on('click', event => {
+  $('.pmf-meta-add').on('click', (event) => {
     event.preventDefault();
     const csrf = $('#csrf').val();
     const pageId = $('#page_id').val();
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         type: type,
         content: content,
       },
-      data => {
+      (data) => {
         if (typeof data.added === 'undefined') {
           $('.table').after('<div class="alert alert-danger">Could not add meta data</div>');
         } else {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Delete meta data
-  $('.pmf-meta-delete').on('click', event => {
+  $('.pmf-meta-delete').on('click', (event) => {
     event.preventDefault();
     const targetId = event.target.id.split('-');
     const id = targetId[2];
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
       $.get(
         'index.php',
         { action: 'ajax', ajax: 'config', ajaxaction: 'delete_meta', meta_id: id, csrf: csrf },
-        function(data) {
+        function (data) {
           if (typeof data.deleted === 'undefined') {
             $('.table').after('<div class="alert alert-danger">Could not add meta data</div>');
           } else {
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  $('#codeModal').on('show.bs.modal', function(event) {
+  $('#codeModal').on('show.bs.modal', function (event) {
     const button = $(event.relatedTarget);
     const codeSnippet = button.data('code-snippet');
     const modal = $(this);

@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014-2020 phpMyFAQ Team
+ * @copyright 2014-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2014-08-16
@@ -16,7 +16,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  $('.btn-edit').on('click', function() {
+  $('.btn-edit').on('click', function () {
     const id = $(this).data('btn-id');
     const span = $('span[data-tag-id="' + id + '"]');
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  $('.tag-form').bind('submit', function(event) {
+  $('.tag-form').bind('submit', function (event) {
     event.preventDefault();
 
     const input = $('input[data-tag-id]:focus');
@@ -41,12 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       data: 'id=' + id + '&tag=' + tag + '&csrf=' + csrf,
       dataType: 'json',
-      beforeSend: function() {
+      beforeSend: function () {
         $('#pmf-admin-saving-data-indicator').html(
           '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>'
         );
       },
-      success: function(message) {
+      success: function (message) {
         input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
         $('span[data-tag-id="' + id + '"]');
         $('#pmf-admin-saving-data-indicator').html(message);

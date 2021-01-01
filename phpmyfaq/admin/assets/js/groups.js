@@ -7,7 +7,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2016-2020 phpMyFAQ Team
+ * @copyright 2016-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2016-01-05
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const getGroupList = () => {
     clearGroupList();
-    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups', data => {
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups', (data) => {
       $.each(data, (i, val) => {
         $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
       });
@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     processGroupList();
   };
 
-  const getGroupData = group_id => {
-    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=' + group_id, data => {
+  const getGroupData = (group_id) => {
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=' + group_id, (data) => {
       $('#update_group_id').val(data.group_id);
       $('#update_group_name').val(data.name);
       $('#update_group_description').val(data.description);
@@ -45,11 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  const clearGroupList = function() {
+  const clearGroupList = function () {
     $('#group_list_select').empty();
   };
 
-  const clearGroupData = function() {
+  const clearGroupData = function () {
     const updateGroupAutoJoin = $('update_group_auto_join');
     $('#update_group_id').empty();
     $('#update_group_name').empty();
@@ -59,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const getGroupRights = function(group_id) {
-    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=' + group_id, function(data) {
-      $.each(data, function(i, val) {
+  const getGroupRights = function (group_id) {
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=' + group_id, function (data) {
+      $.each(data, function (i, val) {
         $('#group_right_' + val).prop('checked', true);
       });
       $('#rights_group_id').val(group_id);
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#groupRights input[type=checkbox]').prop('checked', false);
   };
 
-  const groupSelect = function(event) {
+  const groupSelect = function (event) {
     event = event ? event : window.event ? window.event : null;
     if (event) {
       const select = event.target ? event.target : event.srcElement ? event.srcElement : null;
@@ -93,14 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
    * User related functions
    *
    */
-  const clearUserList = function() {
+  const clearUserList = function () {
     $('#group_user_list option').empty();
   };
 
-  const getUserList = function() {
-    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_users', function(data) {
+  const getUserList = function () {
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_users', function (data) {
       $('#group_user_list').empty();
-      $.each(data, function(i, val) {
+      $.each(data, function (i, val) {
         $('#group_user_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
       });
     });
@@ -121,11 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // get selected users from list
     const selectedUsers = $('#group_user_list option:selected');
     if (selectedUsers.length > 0) {
-      selectedUsers.each(function() {
+      selectedUsers.each(function () {
         const members = $('#group_member_list option');
         const user = $(this);
         let isMember = false;
-        members.each(member => {
+        members.each((member) => {
           isMember = user.val() === members[member].value;
         });
         if (isMember === false) {
@@ -141,21 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#group_member_list').empty();
   };
 
-  const getMemberList = function(group_id) {
+  const getMemberList = function (group_id) {
     if (0 === group_id) {
       clearMemberList();
       return;
     }
-    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=' + group_id, function(data) {
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=' + group_id, function (data) {
       $('#group_member_list').empty();
-      $.each(data, function(i, val) {
+      $.each(data, function (i, val) {
         $('#group_member_list').append('<option value="' + val.user_id + '" selected>' + val.login + '</option>');
       });
       $('#update_member_group_id').val(group_id);
     });
   };
 
-  const removeGroupMembers = function() {
+  const removeGroupMembers = function () {
     // make sure that a group is selected
     var selected_user_list = $('#group_member_list option:selected');
     if (selected_user_list.length === 0) {
@@ -164,12 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // remove selected members from list
-    selected_user_list.each(function() {
+    selected_user_list.each(function () {
       $('#group_member_list option:selected').remove();
     });
   };
 
-  const processGroupList = function() {
+  const processGroupList = function () {
     clearGroupData();
     clearGroupRights();
     clearUserList();
@@ -179,15 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   getGroupList();
 
-  $('#group_list_select').on('change', function(event) {
+  $('#group_list_select').on('change', function (event) {
     groupSelect(event);
   });
 
-  $('.pmf-add-member').on('click', function() {
+  $('.pmf-add-member').on('click', function () {
     addGroupMembers();
   });
 
-  $('.pmf-remove-member').on('click', function() {
+  $('.pmf-remove-member').on('click', function () {
     removeGroupMembers();
   });
 });

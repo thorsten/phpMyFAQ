@@ -8,7 +8,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014-2020 phpMyFAQ Team
+ * @copyright 2014-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2014-03-22
@@ -17,7 +17,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  $(window).bind('load resize', function() {
+  $(window).bind('load resize', function () {
     if ($(this).width() < 768) {
       $('div.sidebar-collapse').addClass('collapse');
     } else {
