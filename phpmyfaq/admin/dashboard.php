@@ -52,7 +52,7 @@ $faqSession = new Session($faqConfig);
 <?php if (version_compare($faqConfig->getCurrentVersion(), System::getVersion(), '<')): ?>
   <section class="row mb-3">
     <div class="col-12 p-2">
-      <div class="card border-left-danger shadow h-100 py-2">
+      <div class="card border-left-danger h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
@@ -79,7 +79,7 @@ $faqSession = new Session($faqConfig);
     <div class="card-columns">
 
         <?php if ($faqConfig->get('main.enableUserTracking')): ?>
-          <div class="card shadow mb-4">
+          <div class="card mb-4">
             <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
             </div>
@@ -107,7 +107,7 @@ $faqSession = new Session($faqConfig);
           </div>
         <?php endif; ?>
 
-      <div class="card shadow mb-4">
+      <div class="card mb-4">
         <div class="card-header py-3">
           <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
         </div>
@@ -153,7 +153,7 @@ $faqSession = new Session($faqConfig);
         </div>
       </div>
 
-      <div class="card shadow mb-4">
+      <div class="card mb-4">
         <div class="card-header py-3">
           <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
         </div>
@@ -174,7 +174,7 @@ $faqSession = new Session($faqConfig);
       </div>
 
         <?php if ($user->perm->checkRight($user->getUserId(), 'editconfig')): ?>
-          <div class="card shadow mb-4">
+          <div class="card mb-4">
             <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>
             </div>
@@ -213,7 +213,7 @@ $faqSession = new Session($faqConfig);
             </div>
           </div>
 
-          <div class="card shadow mb-4">
+          <div class="card mb-4">
             <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
             </div>

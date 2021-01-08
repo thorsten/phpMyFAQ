@@ -29,7 +29,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
   </div>
 
   <div class="card-deck">
-    <div class="card shadow mb-4">
+    <div class="card mb-4">
       <div class="card-header py-3">
           <?= $PMF_LANG['ad_csv_head'] ?>
       </div>
@@ -47,7 +47,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         </p>
       </div>
     </div>
-    <div class="card shadow mb-4">
+    <div class="card mb-4">
       <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>"
             enctype="multipart/form-data">
         <div class="card-header py-3">

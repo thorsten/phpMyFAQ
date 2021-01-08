@@ -410,7 +410,7 @@ switch ($action) {
               <i class="fa fa-language fa-fw"></i>
             </a>
             <!-- Dropdown - Messages -->
-            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+            <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in"
                  aria-labelledby="searchDropdown">
               <form class="form-inline mr-auto w-100 navbar-search"
                     action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
@@ -450,7 +450,7 @@ switch ($action) {
                     ?>
                 </a>
                 <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="userDropdown">
                   <a class="dropdown-item" href="index.php?action=passwd">
                     <i class="fa fa-key-modern mr-2 text-gray-400"></i>
                       <?= $PMF_LANG['ad_menu_passwd'] ?>
