@@ -172,7 +172,7 @@ if (isset($auth)) {
               },
 
               // phpMyFAQ CSS
-              content_css: '../assets/dist/styles.css?<?= time(); ?>',
+              content_css: '<?php $faqConfig->getDefaultUrl() ?>/assets/dist/styles.css?<?= time(); ?>',
 
               // Replace values for the template plugin
               template_replace_values: {

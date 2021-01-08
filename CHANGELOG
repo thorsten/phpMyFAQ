@@ -5,6 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+Version 3.0.8 - 2021-01
+- fixed minor bugs (Thorsten)
+
 Version 3.0.7 - 2020-12-23
 - fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - added TOC plugin for TinyMCE (Thorsten)
