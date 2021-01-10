@@ -160,11 +160,14 @@ if (isset($auth)) {
               paste_data_images: true,
               visualblocks_default_state: true,
               end_container_on_empty_block: true,
-              extended_valid_elements: 'code[class],video[*],audio[*],source[*],iframe[*]',
+              extended_valid_elements: 'code[class],video[*],audio[*],source[*]',
               removeformat: [
                 { selector: '*', attributes: ['style'], split: false, expand: false, deep: true },
               ],
               importcss_append: true,
+
+              // Security, see https://www.tiny.cloud/docs/release-notes/release-notes56/#securityfixes
+              invalid_elements: 'iframe,object,embed',
 
               // Save function
               save_onsavecallback: () => {
@@ -172,7 +175,7 @@ if (isset($auth)) {
               },
 
               // phpMyFAQ CSS
-              content_css: '../assets/dist/styles.css?<?= time(); ?>',
+              content_css: '<?php $faqConfig->getDefaultUrl() ?>/assets/dist/styles.css?<?= time(); ?>',
 
               // Replace values for the template plugin
               template_replace_values: {
