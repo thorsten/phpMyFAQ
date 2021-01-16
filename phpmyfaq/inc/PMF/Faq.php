@@ -503,7 +503,7 @@ class PMF_Faq
 
         $records = implode(', ', $recordIds);
         $page = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $taggingId = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_DEFAULT);
+        $taggingId = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
         $output = '';
 
         $now = date('YmdHis');

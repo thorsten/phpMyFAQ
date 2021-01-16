@@ -48,7 +48,7 @@ class PMF_Helper_Tags extends PMF_Helper
     {
         $tagList = '';
         foreach ($tags as $tagId => $tagName) {
-            $tagList .= $this->renderSearchTag($tagId, $tagName, $tags);
+            $tagList .= $this->renderSearchTag((int) $tagId, $tagName);
         }
 
         return $tagList;
@@ -64,7 +64,7 @@ class PMF_Helper_Tags extends PMF_Helper
      */
     public function renderSearchTag($tagId, $tagName)
     {
-        $taggingIds = str_replace($tagId, '', $this->getTaggingIds());
+        $taggingIds = str_replace((int) $tagId, '', $this->getTaggingIds());
         $taggingIds = str_replace(' ', '', $taggingIds);
         $taggingIds = str_replace(',,', ',', $taggingIds);
         $taggingIds = trim(implode(',', $taggingIds), ',');
@@ -95,7 +95,7 @@ class PMF_Helper_Tags extends PMF_Helper
     {
         return sprintf(
             '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge">%d</span></a></li>',
-            implode(',', $this->getTaggingIds()).','.$tagId,
+            implode(',', $this->getTaggingIds()) . ',' . (int) $tagId,
             '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
             $tagName,
             $relevance
@@ -107,7 +107,9 @@ class PMF_Helper_Tags extends PMF_Helper
      */
     public function setTaggingIds($taggingIds)
     {
-        $this->taggingIds = $taggingIds;
+        $this->taggingIds = array_filter($taggingIds, function ($tagId) {
+            return PMF_Filter::filterVar($tagId, FILTER_VALIDATE_INT);
+        });
     }
 
     /**
