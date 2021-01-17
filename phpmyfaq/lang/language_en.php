@@ -169,9 +169,9 @@ $PMF_LANG["help_search"] = "<strong>Search for records:</strong><br>With an entr
 $PMF_LANG["ad"] = "Administration";
 $PMF_LANG["ad_menu_user_administration"] = "Users";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
-$PMF_LANG["ad_menu_entry_edit"] = "Edit existing FAQs";
-$PMF_LANG["ad_menu_categ_add"] = "Add category";
-$PMF_LANG["ad_menu_categ_edit"] = "Edit category";
+$PMF_LANG["ad_menu_entry_edit"] = "Edit FAQs";
+$PMF_LANG["ad_menu_categ_add"] = "Add new category";
+$PMF_LANG["ad_menu_categ_edit"] = "Categories";
 $PMF_LANG["ad_menu_news_add"] = "Add news";
 $PMF_LANG["ad_menu_news_edit"] = "FAQ News";
 $PMF_LANG["ad_menu_open"] = "Open questions";
@@ -436,7 +436,7 @@ $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
-$PMF_LANG["ad_kateg_add"] = "Add top-level category";
+$PMF_LANG["ad_kateg_add"] = "Add new top-level category";
 $PMF_LANG["ad_kateg_rename"] = "Edit";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "User";
