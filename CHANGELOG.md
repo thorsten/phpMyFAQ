@@ -21,6 +21,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added opt-in for displaying user data (Thorsten)
 - added mail notifications for new FAQs in admin section (Thorsten)
 - added possibility to login via email address (Thorsten)
+- updated to Bootstrap v4.6 (Thorsten)
 - updated to Composer v2 and improved build (Alexander M. Turek, Thorsten)
 - improved install and update scripts (Thorsten)
 - removed REST API v1 (Thorsten)
