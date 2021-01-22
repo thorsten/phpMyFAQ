@@ -1329,4 +1329,7 @@ $PMF_LANG['ad_record_permissions'] = 'Permissions';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
 
 // added v3.0.5 - 2020-10-03 by Thorsten
-$PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';
+$PMF_LANG['ad_menu_faq_meta'] = 'FAQ meta data';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note'];
