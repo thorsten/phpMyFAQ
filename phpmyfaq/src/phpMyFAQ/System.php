@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2020 phpMyFAQ Team
+ * @copyright 2010-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-13
@@ -44,7 +44,7 @@ class System
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 7;
+    private const VERSION_PATCH_LEVEL = 8;
 
     /**
      * Pre-release version.
@@ -108,7 +108,7 @@ class System
      * @param  DatabaseDriver $database
      * @return $this
      */
-    public function setDatabase(DatabaseDriver $database)
+    public function setDatabase(DatabaseDriver $database): System
     {
         $this->database = $database;
 
@@ -124,7 +124,7 @@ class System
      *
      * @return string
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         if (null !== self::VERSION_PRE_RELEASE) {
             return sprintf(
@@ -149,7 +149,7 @@ class System
      *
      * @return array
      */
-    public function getAvailableTemplates()
+    public function getAvailableTemplates(): array
     {
         $templates = [];
 
@@ -169,7 +169,7 @@ class System
      *
      * @return string
      */
-    public static function getApiVersion()
+    public static function getApiVersion(): string
     {
         return self::VERSION_API;
     }
@@ -179,7 +179,7 @@ class System
      *
      * @return array
      */
-    public function getSupportedDatabases()
+    public function getSupportedDatabases(): array
     {
         return $this->supportedDatabases;
     }
@@ -191,7 +191,7 @@ class System
      *
      * @return array
      */
-    public function getSupportedSafeDatabases($html = false)
+    public function getSupportedSafeDatabases($html = false): array
     {
         $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
@@ -214,7 +214,7 @@ class System
      *
      * @return string
      */
-    public function getSystemUri(Configuration $faqConfig)
+    public function getSystemUri(Configuration $faqConfig): string
     {
         $mainUrl = $faqConfig->getDefaultUrl();
 
@@ -237,7 +237,7 @@ class System
      *
      * @return bool
      */
-    public function checkDatabase()
+    public function checkDatabase(): bool
     {
         foreach ($this->supportedDatabases as $extension => $database) {
             if (extension_loaded($extension)) {
@@ -253,7 +253,7 @@ class System
      *
      * @return bool
      */
-    public function checkRequiredExtensions()
+    public function checkRequiredExtensions(): bool
     {
         foreach ($this->requiredExtensions as $extension) {
             if (!extension_loaded($extension)) {
@@ -275,7 +275,7 @@ class System
      *
      * @return bool
      */
-    public function checkphpMyFAQInstallation()
+    public function checkphpMyFAQInstallation(): bool
     {
         if (is_file(PMF_ROOT_DIR . '/config/database.php')) {
             return false;
@@ -289,7 +289,7 @@ class System
      *
      * @return array
      */
-    public function getMissingExtensions()
+    public function getMissingExtensions(): array
     {
         return $this->missingExtensions;
     }
@@ -312,7 +312,7 @@ class System
      * @throws \Exception
      * @return string
      */
-    public function createHashes()
+    public function createHashes(): string
     {
         $created = new DateTime();
 
