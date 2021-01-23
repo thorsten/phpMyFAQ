@@ -53,3 +53,9 @@ export const cookie = (name) => `; ${document.cookie}`.split(`; ${name}=`).pop()
  * @returns {string}
  */
 export const getSelectedText = () => window.getSelection().toString();
+
+/**
+ * Check if the current tab is in view / focus
+ * @returns {boolean}
+ */
+export const isBrowserTabInView = () => document.hidden;

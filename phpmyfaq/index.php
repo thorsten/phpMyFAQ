@@ -591,6 +591,11 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             '</a>',
         'msgContact' => '<a href="./contact.html">' . $PMF_LANG['msgContact'] . '</a>',
         'msgGlossary' => '<a href="./glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
+        'privacyLink' => sprintf(
+            '<a target="_blank" href="%s">%s</a>',
+            $faqConfig->get('main.privacyURL'),
+            $PMF_LANG['msgPrivacyNote']
+        ),
         'backToHome' => '<a href="./index.html">' . $PMF_LANG['msgHome'] . '</a>',
         'allCategories' => '<a class="nav-link" href="./showcat.html">' . $PMF_LANG['msgShowAllCategories'] . '</a>',
         'faqOverview' => '<a href="./overview.html">' . $PMF_LANG['faqOverview'] . '</a>',
@@ -609,6 +614,11 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             $PMF_LANG['msgOpenQuestions'] . '</a>',
         'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . $PMF_LANG['msgContact'] . '</a>',
         'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
+        'privacyLink' => sprintf(
+            '<a target="_blank" href="%s">%s</a>',
+            $faqConfig->get('main.privacyURL'),
+            $PMF_LANG['msgPrivacyNote']
+        ),
         'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' .
             $PMF_LANG['msgShowAllCategories'] . '</a>',
         'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . $PMF_LANG['faqOverview'] . '</a>',
