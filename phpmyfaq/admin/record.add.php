@@ -215,7 +215,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             $categoryHelper
                 ->setCategory($category)
                 ->setConfiguration($faqConfig);
-            $moderators = $categoryHelper->getModerators($categories);
+            $moderators = $categoryHelper->getModerators($categories['rubrik']);
             $notification->sendNewFaqAdded($moderators, $recordId, $recordLang);
 
             // Call Link Verification
