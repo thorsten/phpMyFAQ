@@ -27,24 +27,17 @@ use phpMyFAQ\Configuration;
  */
 class Elasticsearch
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     protected $config;
 
-    /**
-     * @var Client
-     */
+    /** @var Client */
     protected $client;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $esConfig;
 
     /**
      * Elasticsearch mapping
-     *
      * @var array
      */
     private $mappings = [
@@ -97,7 +90,7 @@ class Elasticsearch
      *
      * @return bool
      */
-    public function createIndex()
+    public function createIndex(): bool
     {
         $this->client->indices()->create($this->getParams());
         return $this->putMapping();
@@ -108,7 +101,7 @@ class Elasticsearch
      *
      * @return array
      */
-    private function getParams()
+    private function getParams(): array
     {
         global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
 
@@ -150,9 +143,9 @@ class Elasticsearch
     /**
      * Puts phpMyFAQ Elasticsearch mapping into index.
      *
-     * @return boolean
+     * @return bool
      */
-    public function putMapping()
+    public function putMapping(): bool
     {
         $response = $this->getMapping();
 
@@ -178,7 +171,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function getMapping()
+    public function getMapping(): array
     {
         return $this->client->indices()->getMapping();
     }
@@ -188,7 +181,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function dropIndex()
+    public function dropIndex(): array
     {
         return $this->client->indices()->delete(['index' => $this->esConfig['index']]);
     }
@@ -200,7 +193,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function index(array $faq)
+    public function index(array $faq): array
     {
         $params = [
             'index' => $this->esConfig['index'],
@@ -226,7 +219,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function bulkIndex(array $faqs)
+    public function bulkIndex(array $faqs): array
     {
         $params = ['body' => []];
         $responses = [];
@@ -277,7 +270,7 @@ class Elasticsearch
      * @param  array $faq
      * @return array
      */
-    public function update(array $faq)
+    public function update(array $faq): array
     {
         $params = [
             'index' => $this->esConfig['index'],
@@ -304,7 +297,7 @@ class Elasticsearch
      * @param int $solutionId
      * @return array
      */
-    public function delete($solutionId)
+    public function delete(int $solutionId): array
     {
         $params = [
             'index' => $this->esConfig['index'],
