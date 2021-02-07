@@ -261,7 +261,11 @@ class Elasticsearch
             $responses = $this->client->bulk($params);
         }
 
-        return $responses;
+        if (isset($responses) && count($responses)) {
+            return ['success' => $responses];
+        }
+
+        return ['error'];
     }
 
     /**

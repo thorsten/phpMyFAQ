@@ -51,7 +51,10 @@ switch ($ajaxAction) {
     case 'import':
         $faq = new Faq($faqConfig);
         $faq->getAllRecords();
-        $result = $esInstance->bulkIndex($faq->faqRecords);
+        $bulkIndexResult = $esInstance->bulkIndex($faq->faqRecords);
+        if ($bulkIndexResult['success']) {
+            $result = ['success' => $PMF_LANG['ad_es_create_import_success']];
+        }
         break;
 }
 
