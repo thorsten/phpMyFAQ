@@ -55,7 +55,7 @@ services:
       - yarn
 
   yarn:
-    image: node:12
+    image: node:14
     restart: 'no'
     command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app
@@ -87,11 +87,12 @@ services:
       - ./volumes/sessions:/sessions
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.7
-    container_name: elasticsearch-v6
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: elasticsearch-v7
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
+      - discovery.type=single-node
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
       - xpack.security.enabled=false
@@ -99,7 +100,11 @@ services:
       memlock:
         soft: -1
         hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
     volumes:
       - ./volumes/esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+      - 9300:9300
