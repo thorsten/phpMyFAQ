@@ -35,7 +35,7 @@ class CategoryHelper extends Helper
      *
      * @return string
      */
-    public function renderNavigation($activeCategory = 0)
+    public function renderNavigation($activeCategory = 0): string
     {
         global $sids, $PMF_LANG;
 
@@ -159,7 +159,7 @@ class CategoryHelper extends Helper
      *
      * @return string
      */
-    public function renderCategoryDropDown()
+    public function renderCategoryDropDown(): string
     {
         global $sids, $PMF_LANG;
 
@@ -265,7 +265,7 @@ class CategoryHelper extends Helper
      *
      * @return string
      */
-    public function renderMainCategories()
+    public function renderMainCategories(): string
     {
         $categories = '';
         foreach ($this->Category->categories as $cat) {
@@ -288,7 +288,7 @@ class CategoryHelper extends Helper
      *
      * @return string
      */
-    public function renderOptions($categoryId)
+    public function renderOptions($categoryId): string
     {
         $categories = '';
 

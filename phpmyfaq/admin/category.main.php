@@ -251,7 +251,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             }
 
-        // Deletes an existing category
+            // Deletes an existing category
             if ($user->perm->hasPermission($user->getUserId(), 'delcateg') && $action == 'removecategory') {
                 $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
                 $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
@@ -280,26 +280,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
             }
 
-        // Moves a category
-            if ($action == 'changecategory') {
-                $category = new Category($faqConfig, [], false);
-                $category->setUser($currentAdminUser);
-                $category->setGroups($currentAdminGroups);
-                $categoryId_1 = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-                $categoryId_2 = Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
-
-                if ($category->swapCategories($categoryId_1, $categoryId_2)) {
-                    printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
-                } else {
-                    printf(
-                        '<p class="alert alert-danger">%s<br>%s</p>',
-                        $PMF_LANG['ad_categ_paste_error'],
-                        $faqConfig->getDb()->error()
-                    );
-                }
-            }
-
-        // Pastes a category
+            // Pastes a category
             if ($action == 'pastecategory') {
                 $category = new Category($faqConfig, [], false);
                 $category->setUser($currentAdminUser);
@@ -317,10 +298,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
             }
 
-        // Lists all categories
+            // Lists all categories
             $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $faqLangCode);
 
-        // If we changed the category tree, unset the object
+            // If we changed the category tree, unset the object
             if (isset($category)) {
                 unset($category);
             }
@@ -440,16 +421,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         $cat['id'],
                         $PMF_LANG['ad_categ_cut']
                     );
-
-                    if ($category->numParent($cat['parent_id']) > 1) {
-                        // move category (if current language) AND more than 1 category at the same level)
-                        printf(
-                            '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i aria-hidden="true" class="fa fa-copy" title="%s"></i></a> ',
-                            $cat['id'],
-                            $cat['parent_id'],
-                            $PMF_LANG['ad_categ_move']
-                        );
-                    }
                 }
                 echo '</span>';
                 echo '</div>';

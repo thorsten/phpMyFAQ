@@ -719,6 +719,28 @@ if ($step == 3) {
     }
 
     //
+    // UPDATES FROM 3.1.0-beta
+    //
+    if (version_compare($version, '3.1.0-beta', '<=')) {
+        switch ($DB['type']) {
+            case 'mysqli':
+                $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_order (
+                    category_id int(11) NOT NULL,
+                    position int(11) NOT NULL,
+                    PRIMARY KEY (category_id))';
+                break;
+            case 'pgsql':
+            case 'sqlite3':
+            case 'sqlsrv':
+                $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_order (
+                    category_id INTEGER NOT NULL,
+                    position INTEGER NOT NULL,
+                    PRIMARY KEY (category_id))';
+                break;
+        }
+    }
+
+    //
     // Always the last step: Update version number
     //
     if (version_compare($version, System::getVersion(), '<')) {

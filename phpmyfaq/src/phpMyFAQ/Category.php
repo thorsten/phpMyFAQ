@@ -1318,102 +1318,6 @@ class Category
     }
 
     /**
-     * Swaps two categories.
-     *
-     * @param int $category_id_1 First category
-     * @param int $category_id_2 Second category
-     *
-     * @return bool
-     */
-    public function swapCategories($category_id_1, $category_id_2)
-    {
-        $temp_cat = random_int(200000, 400000);
-
-        $tables = [
-            ['faqcategories' => 'id'],
-            ['faqcategories' => 'parent_id'],
-            ['faqcategoryrelations' => 'category_id'],
-            ['faqcategory_group' => 'category_id'],
-            ['faqcategory_user' => 'category_id'],
-        ];
-
-        $result = true;
-        foreach ($tables as $pair) {
-            foreach ($pair as $_table => $_field) {
-                $result = $result && $this->config->getDb()->query(
-                    sprintf(
-                        'UPDATE %s SET %s = %d WHERE %s = %d',
-                        Database::getTablePrefix() . $_table,
-                        $_field,
-                        $temp_cat,
-                        $_field,
-                        $category_id_2
-                    )
-                );
-                $result = $result && $this->config->getDb()->query(
-                    sprintf(
-                        'UPDATE %s SET %s = %d WHERE %s = %d',
-                        Database::getTablePrefix() . $_table,
-                        $_field,
-                        $category_id_2,
-                        $_field,
-                        $category_id_1
-                    )
-                );
-                $result = $result && $this->config->getDb()->query(
-                    sprintf(
-                        'UPDATE %s SET %s = %d WHERE %s = %d',
-                        Database::getTablePrefix() . $_table,
-                        $_field,
-                        $category_id_1,
-                        $_field,
-                        $temp_cat
-                    )
-                );
-            }
-        }
-
-        $tables2 = array(array('faqquestions' => 'category_id'));
-
-        foreach ($tables2 as $pair) {
-            foreach ($pair as $_table => $_field) {
-                $result = $result && $this->config->getDb()->query(
-                    sprintf(
-                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                        Database::getTablePrefix() . $_table,
-                        $_field,
-                        $temp_cat,
-                        $_field,
-                        $category_id_2
-                    )
-                );
-                $result = $result && $this->config->getDb()->query(
-                    sprintf(
-                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                        Database::getTablePrefix() . $_table,
-                        $_field,
-                        $category_id_2,
-                        $_field,
-                        $category_id_1
-                    )
-                );
-                $result = $result && $this->config->getDb()->query(
-                    sprintf(
-                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                        Database::getTablePrefix() . $_table,
-                        $_field,
-                        $category_id_1,
-                        $_field,
-                        $temp_cat
-                    )
-                );
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Updates the parent category.
      *
      * @param int $category_id Entity id
@@ -1421,7 +1325,7 @@ class Category
      *
      * @return bool
      */
-    public function updateParentCategory($category_id, $parent_id)
+    public function updateParentCategory($category_id, $parent_id): bool
     {
         if ((!is_numeric($category_id) || !is_numeric($parent_id)) && $category_id != $parent_id) {
             return false;
