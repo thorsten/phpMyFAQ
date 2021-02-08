@@ -38,7 +38,6 @@ function getUserRights(userId) {
  */
 function updateUser(userId) {
   'use strict';
-
   getUserData(userId);
   getUserRights(userId);
 }

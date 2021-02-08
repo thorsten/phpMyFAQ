@@ -37,6 +37,8 @@ if (
         'delete_user'
     ) || $user->perm->hasPermission($user->getUserId(), 'add_user')
 ) {
+
+    $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
     ?>
   <script src="assets/js/user.js"></script>
     <?php
@@ -765,9 +767,9 @@ if (
   </script>
 
     <?php
-    if (isset($_GET['user_id'])) {
-        $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
-        echo '        <script>updateUser(' . $userId . ');</script>';
+
+    if (isset($userId)) {
+        echo '<script>updateUser(' . $userId . ')</script>';
     }
 } else {
     echo $PMF_LANG['err_NotAuth'];
