@@ -18,7 +18,6 @@
 
 namespace phpMyFAQ\Database;
 
-use \mysqli as MySQLCore;
 use mysqli_result;
 use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
@@ -67,10 +66,10 @@ class Mysqli implements DatabaseDriver
     {
         if (substr($host, 0, 1) === '/') {
             // Connect to MySQL via socket
-            $this->conn = new MySQLCore(null, $user, $password, null, $port, $host);
+            $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
         } else {
             // Connect to MySQL via network
-            $this->conn = new MySQLCore($host, $user, $password, null, $port);
+            $this->conn = new \mysqli($host, $user, $password, null, $port);
         }
 
         if ($this->conn->connect_error) {

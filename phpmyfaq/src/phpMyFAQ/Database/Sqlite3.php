@@ -20,7 +20,6 @@ namespace phpMyFAQ\Database;
 use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Utils;
-use \Sqlite3 as SQLiteCore;
 use SQLite3Result;
 
 /**
@@ -70,7 +69,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function connect(string $host, string $user, string $password, $database = '', $port = null): ?bool
     {
-        $this->conn = new SQLiteCore($host);
+        $this->conn = new \Sqlite3($host);
 
         if (!$this->conn) {
             Database::errorPage($this->conn->lastErrorMsg());
@@ -344,7 +343,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        $version = SQLiteCore::version();
+        $version = \Sqlite3::version();
 
         return $version['versionString'];
     }
