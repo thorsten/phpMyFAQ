@@ -53,14 +53,14 @@ class Pgsql implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host     Database hostname
-     * @param string $user     Database username
+     * @param string $host Database hostname
+     * @param string $user Database username
      * @param string $password Password
      * @param string $database Database name
      * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $database = '', $port = 5432)
+    public function connect(string $host, string $user, string $password, $database = '', $port = 5432): ?bool
     {
         $connectionString = sprintf(
             'host=%s port=%d dbname=%s user=%s password=%s',
@@ -85,12 +85,12 @@ class Pgsql implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mixed $result
      */
-    public function query($query, $offset = 0, $rowcount = 0)
+    public function query(string $query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -114,7 +114,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string
      */
-    public function error()
+    public function error(): string
     {
         return pg_last_error($this->conn);
     }
@@ -126,7 +126,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string
      */
-    public function escape($string)
+    public function escape($string): string
     {
         return pg_escape_string($this->conn, $string);
     }
@@ -139,7 +139,7 @@ class Pgsql implements DatabaseDriver
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result)
+    public function fetchAll($result): array
     {
         $ret = [];
         if (false === $result) {
@@ -172,7 +172,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return int
      */
-    public function numRows($result)
+    public function numRows($result): int
     {
         return pg_num_rows($result);
     }
@@ -182,7 +182,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string
      */
-    public function log()
+    public function log(): string
     {
         return $this->sqllog;
     }
@@ -194,7 +194,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = '')
+    public function getTableStatus($prefix = ''): array
     {
         $select = 'SELECT relname FROM pg_stat_user_tables ORDER BY relname;';
         $arr = [];
@@ -214,7 +214,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result)
+    public function fetchArray($result): array
     {
         return pg_fetch_array($result, null, PGSQL_ASSOC);
     }
@@ -226,7 +226,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string
      */
-    private function getOne($query)
+    private function getOne($query): string
     {
         $row = pg_fetch_row($this->query($query));
 
@@ -241,7 +241,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return int
      */
-    public function nextId($table, $id)
+    public function nextId($table, $id): int
     {
         return (int) $this->getOne("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
     }
@@ -251,7 +251,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string
      */
-    public function clientVersion()
+    public function clientVersion(): string
     {
         $pg_version = pg_version($this->conn);
         if (isset($pg_version['client'])) {
@@ -266,7 +266,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string
      */
-    public function serverVersion()
+    public function serverVersion(): string
     {
         $pg_version = pg_version($this->conn);
         if (isset($pg_version['server_version'])) {
@@ -285,7 +285,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = '')
+    public function getTableNames($prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',
@@ -336,7 +336,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return bool
      */
-    public function close()
+    public function close(): bool
     {
         return pg_close($this->conn);
     }
@@ -344,7 +344,7 @@ class Pgsql implements DatabaseDriver
     /**
      * @return string
      */
-    public function now()
+    public function now(): string
     {
         return 'CURRENT_TIMESTAMP';
     }

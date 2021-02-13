@@ -58,15 +58,15 @@ class Sqlsrv implements DatabaseDriver
      *
      * This function connects to a MySQL database
      *
-     * @param string $host     A string specifying the name of the server to which a connection is being established
-     * @param string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $host A string specifying the name of the server to which a connection is being established
+     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
      * @param string $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
      * @param int|null $port
      * @return bool true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $database = '', $port = 1433)
+    public function connect(string $host, string $user, string $password, $database = '', $port = 1433): ?bool
     {
         $this->setConnectionOptions($user, $password, $database);
 
@@ -82,16 +82,16 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Sets the connection options.
      *
-     * @param string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param string $passwd   Specifies the password associated with the User ID to be used when connecting with
+     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
      */
-    private function setConnectionOptions($user, $passwd, $database)
+    private function setConnectionOptions(string $user, string $password, string $database)
     {
         $this->connectionOptions = [
             'UID' => $user,
-            'PWD' => $passwd,
+            'PWD' => $password,
             'Database' => $database,
             'CharacterSet' => 'UTF-8',
         ];
@@ -104,7 +104,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return string
      */
-    public function escape($string)
+    public function escape($string): string
     {
         return str_replace("'", "''", $string);
     }
@@ -116,7 +116,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result)
+    public function fetchArray($result): array
     {
         return sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
     }
@@ -129,7 +129,7 @@ class Sqlsrv implements DatabaseDriver
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result)
+    public function fetchAll($result): array
     {
         $ret = [];
         if (false === $result) {
@@ -146,9 +146,9 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Returns the error string.
      *
-     * @return mixed
+     * @return string
      */
-    public function error()
+    public function error(): string
     {
         $errors = sqlsrv_errors();
 
@@ -176,7 +176,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return int
      */
-    public function numRows($result)
+    public function numRows($result): int
     {
         return sqlsrv_num_rows($result);
     }
@@ -184,9 +184,9 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Logs the queries.
      *
-     * @return int
+     * @return string
      */
-    public function log()
+    public function log(): string
     {
         return $this->sqllog;
     }
@@ -198,7 +198,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = '')
+    public function getTableStatus($prefix = ''): array
     {
         $tables = [];
         $query = "
@@ -225,12 +225,12 @@ class Sqlsrv implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mixed $result
      */
-    public function query($query, $offset = 0, $rowcount = 0)
+    public function query(string $query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -259,7 +259,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return int
      */
-    public function nextID($table, $id)
+    public function nextID($table, $id): int
     {
         $select = sprintf(
             '
@@ -278,11 +278,11 @@ class Sqlsrv implements DatabaseDriver
     }
 
     /**
-     * Returns the libary version string.
+     * Returns the library version string.
      *
      * @return string
      */
-    public function clientVersion()
+    public function clientVersion(): string
     {
         $client_info = sqlsrv_client_info($this->conn);
 
@@ -290,11 +290,11 @@ class Sqlsrv implements DatabaseDriver
     }
 
     /**
-     * Returns the libary version string.
+     * Returns the library version string.
      *
      * @return string
      */
-    public function serverVersion()
+    public function serverVersion(): string
     {
         $server_info = sqlsrv_server_info($this->conn);
 
@@ -310,7 +310,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableNames($prefix = '')
+    public function getTableNames($prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',
@@ -367,7 +367,7 @@ class Sqlsrv implements DatabaseDriver
     /**
      * @return string
      */
-    public function now()
+    public function now(): string
     {
         return 'GETDATE()';
     }

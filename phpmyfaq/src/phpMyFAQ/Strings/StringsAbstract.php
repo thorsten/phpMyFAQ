@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 /**
  * Abstract parent for the string wrapper classes.
  *

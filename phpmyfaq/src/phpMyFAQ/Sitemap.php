@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use ParsedownExtra;
 use phpMyFAQ\Database\Sqlite3;
 
 /**
@@ -306,7 +307,7 @@ class Sitemap
 
         $result = $this->config->getDb()->query($query);
         $oldId = 0;
-        $parsedown = new \ParsedownExtra();
+        $parsedown = new ParsedownExtra();
         while ($row = $this->config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = Strings::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');

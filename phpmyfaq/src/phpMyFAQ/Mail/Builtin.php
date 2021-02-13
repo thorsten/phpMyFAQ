@@ -29,12 +29,12 @@ class Builtin implements MailUserAgentInterface
      *
      * @param string $recipients Recipients of the e-mail as a comma-separated list
      *                           of RFC 2822 compliant items
-     * @param array  $headers    Headers of the e-mail
-     * @param string $body       Body of the e-mail
+     * @param array $headers Headers of the e-mail
+     * @param string $body Body of the e-mail
      *
      * @return bool True if successful, false otherwise.
      */
-    public function send($recipients, array $headers, $body)
+    public function send(string $recipients, array $headers, string $body): bool
     {
         // Get the subject of the e-mail, RFC 2047 compliant
         $subject = $headers['Subject'];
@@ -44,7 +44,7 @@ class Builtin implements MailUserAgentInterface
         $sender = '';
         if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
             $sender = str_replace(
-                array('<', '>'),
+                ['<', '>'],
                 '',
                 $headers['Return-Path']
             );

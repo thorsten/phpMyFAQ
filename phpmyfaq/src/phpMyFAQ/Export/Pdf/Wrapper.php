@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library.
  *
@@ -24,7 +24,6 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 
-// phpcs:disable
 define('K_TCPDF_EXTERNAL_CONFIG', true);
 
 define('K_PATH_URL', '');

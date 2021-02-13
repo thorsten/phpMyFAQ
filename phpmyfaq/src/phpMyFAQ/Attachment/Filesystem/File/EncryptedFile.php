@@ -20,10 +20,6 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 use phpMyFAQ\Attachment\File;
 use phpseclib\Crypt\AES;
 
-// phpcs:disable
-require PMF_ROOT_DIR . '/src/libs/phpseclib/Crypt/AES.php';
-// phpcs:enable
-
 /**
  * Class Encrypted
  *
@@ -59,7 +55,8 @@ class EncryptedFile extends File
     }
 
     /**
-     * @inheritdoc
+     * @param $chunk
+     * @return false|int
      */
     public function putChunk($chunk)
     {
@@ -69,8 +66,9 @@ class EncryptedFile extends File
     }
 
     /**
-     * @inheritdoc
-     * @throws     FileException
+     * @param $target
+     * @return bool
+     * @throws FileException
      */
     public function copyTo($target): bool
     {

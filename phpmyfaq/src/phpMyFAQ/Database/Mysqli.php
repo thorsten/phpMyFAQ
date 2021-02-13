@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ\Database;
 
+use \mysqli as MySQLCore;
 use mysqli_result;
 use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
@@ -62,14 +63,14 @@ class Mysqli implements DatabaseDriver
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
-    public function connect($host, $user, $password, $database = '', $port = 3306)
+    public function connect(string $host, string $user, string $password, $database = '', $port = 3306): ?bool
     {
         if (substr($host, 0, 1) === '/') {
             // Connect to MySQL via socket
-            $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
+            $this->conn = new MySQLCore(null, $user, $password, null, $port, $host);
         } else {
             // Connect to MySQL via network
-            $this->conn = new \mysqli($host, $user, $password, null, $port);
+            $this->conn = new MySQLCore($host, $user, $password, null, $port);
         }
 
         if ($this->conn->connect_error) {
@@ -96,7 +97,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string
      */
-    public function error()
+    public function error(): string
     {
         return $this->conn->error;
     }
@@ -108,7 +109,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string
      */
-    public function escape($string)
+    public function escape($string): string
     {
         return $this->conn->real_escape_string($string);
     }
@@ -122,7 +123,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result)
+    public function fetchArray($result): ?array
     {
         return $result->fetch_assoc();
     }
@@ -135,7 +136,7 @@ class Mysqli implements DatabaseDriver
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result)
+    public function fetchAll($result): array
     {
         $ret = [];
         if (false === $result) {
@@ -175,7 +176,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return int
      */
-    public function numRows($result)
+    public function numRows($result): int
     {
         if ($result instanceof mysqli_result) {
             return $result->num_rows;
@@ -189,7 +190,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string
      */
-    public function log()
+    public function log(): string
     {
         return $this->sqllog;
     }
@@ -201,7 +202,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = '')
+    public function getTableStatus($prefix = ''): array
     {
         $status = [];
         foreach ($this->getTableNames($prefix) as $table) {
@@ -220,7 +221,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = '')
+    public function getTableNames($prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',
@@ -273,7 +274,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string
      */
-    private function getOne($query)
+    private function getOne($query): string
     {
         $row = $this->conn->query($query)->fetch_row();
 
@@ -289,7 +290,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return int
      */
-    public function nextId($table, $id)
+    public function nextId($table, $id): int
     {
         $select = sprintf(
             '
@@ -316,19 +317,19 @@ class Mysqli implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowCount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mysqli_result $result
      */
-    public function query($query, $offset = 0, $rowCount = 0)
+    public function query(string $query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
         }
 
-        if (0 < $rowCount) {
-            $query .= sprintf(' LIMIT %d,%d', $offset, $rowCount);
+        if (0 < $rowcount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
         }
 
         $result = $this->conn->query($query);
@@ -345,7 +346,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string
      */
-    public function clientVersion()
+    public function clientVersion(): string
     {
         return $this->conn->get_client_info();
     }
@@ -355,7 +356,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string
      */
-    public function serverVersion()
+    public function serverVersion(): string
     {
         return $this->conn->server_info;
     }
@@ -383,7 +384,7 @@ class Mysqli implements DatabaseDriver
     /**
      * @return string
      */
-    public function now()
+    public function now(): string
     {
         return 'NOW()';
     }

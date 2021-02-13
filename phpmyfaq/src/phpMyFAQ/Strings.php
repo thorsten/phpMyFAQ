@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 /**
  * The main string wrapper class.
  *
@@ -80,7 +80,7 @@ class Strings
      *
      * @return int
      */
-    public static function strlen($str)
+    public static function strlen(string $str): int
     {
         return self::$instance->strlen($str);
     }
@@ -103,12 +103,12 @@ class Strings
      * Get position of the first occurrence of a string.
      *
      * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param int    $offset   Offset
+     * @param string $needle Needle
+     * @param int $offset Offset
      *
      * @return int
      */
-    public static function strpos($haystack, $needle, $offset = 0)
+    public static function strpos(string $haystack, string $needle, $offset = 0): int
     {
         return self::$instance->strpos($haystack, $needle, $offset);
     }
@@ -246,7 +246,7 @@ class Strings
      *
      * @return array|string
      */
-    public static function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0) // phpcs:ignore
+    public static function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
     {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -262,7 +262,7 @@ class Strings
      *
      * @return array|string|null
      */
-    public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0) // phpcs:ignore
+    public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
     {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

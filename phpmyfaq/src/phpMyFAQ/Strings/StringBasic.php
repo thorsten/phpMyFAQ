@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 /**
  * The string wrapper class using single byte string functions.
  *
