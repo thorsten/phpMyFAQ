@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.0-beta - 2021-
+### phpMyFAQ v3.1.0-beta - 2021-02
 
 - fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - changed PHP requirement to PHP 7.3+ (Thorsten)
@@ -30,6 +30,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed password hashing with MD5 and SHA-1 (Thorsten)
 - removed OpenSearch support (Thorsten)
 - fixed minor bugs (Nico Schmitz-Laux, Thorsten)
+
+### phpMyFAQ v3.0.8 - 2021-02
+
+- updated to Bootstrap v4.6 (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.0.7 - 2020-12-23
 
