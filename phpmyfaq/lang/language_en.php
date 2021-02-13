@@ -1237,6 +1237,7 @@ $PMF_LANG['ad_es_create_index'] = 'Create Index';
 $PMF_LANG['ad_es_drop_index'] = 'Drop Index';
 $PMF_LANG['ad_es_bulk_index'] = 'Full import';
 $PMF_LANG['ad_es_create_index_success'] = 'Index successfully created.';
+$PMF_LANG['ad_es_create_import_success'] = 'Import was successful.';
 $PMF_LANG['ad_es_drop_index_success'] = 'Index successfully dropped.';
 $PMF_LANG['ad_export_generate_json'] = 'Create JSON file';
 $PMF_LANG['ad_image_name_search'] = 'Search for image name';

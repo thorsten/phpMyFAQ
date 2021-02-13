@@ -97,7 +97,7 @@ class Elasticsearch
      *
      * @return bool
      */
-    public function createIndex()
+    public function createIndex(): bool
     {
         $this->client->indices()->create($this->getParams());
         return $this->putMapping();
@@ -108,7 +108,7 @@ class Elasticsearch
      *
      * @return array
      */
-    private function getParams()
+    private function getParams(): array
     {
         global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
 
@@ -152,7 +152,7 @@ class Elasticsearch
      *
      * @return boolean
      */
-    public function putMapping()
+    public function putMapping(): bool
     {
         $response = $this->getMapping();
 
@@ -178,7 +178,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function getMapping()
+    public function getMapping(): array
     {
         return $this->client->indices()->getMapping();
     }
@@ -188,7 +188,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function dropIndex()
+    public function dropIndex(): array
     {
         return $this->client->indices()->delete(['index' => $this->esConfig['index']]);
     }
@@ -200,7 +200,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function index(array $faq)
+    public function index(array $faq): array
     {
         $params = [
             'index' => $this->esConfig['index'],
@@ -226,7 +226,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function bulkIndex(array $faqs)
+    public function bulkIndex(array $faqs): array
     {
         $params = ['body' => []];
         $responses = [];
@@ -268,7 +268,11 @@ class Elasticsearch
             $responses = $this->client->bulk($params);
         }
 
-        return $responses;
+        if (isset($responses) && count($responses)) {
+            return ['success' => $responses];
+        }
+
+        return ['error'];
     }
 
     /**
