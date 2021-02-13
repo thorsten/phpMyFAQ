@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use Exception;
+use ParsedownExtra;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
@@ -143,15 +144,15 @@ class FaqHelper extends Helper
     /**
      * Renders a preview of the answer.
      *
-     * @param  string  $answer
-     * @param  integer $numWords
+     * @param string  $answer
+     * @param int $numWords
      * @return string
      * @throws Exception
      */
-    public function renderAnswerPreview($answer, $numWords): string
+    public function renderAnswerPreview(string $answer, int $numWords): string
     {
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $parseDown = new \ParsedownExtra();
+            $parseDown = new ParsedownExtra();
             return Utils::chopString(strip_tags($parseDown->text($answer)), $numWords);
         } else {
             return Utils::chopString(strip_tags($answer), $numWords);

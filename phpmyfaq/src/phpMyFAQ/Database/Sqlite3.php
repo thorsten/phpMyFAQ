@@ -61,13 +61,13 @@ class Sqlite3 implements DatabaseDriver
      * Connects to the database.
      *
      * @param string $host
-     * @param string
-     * @param string
-     * @param string
+     * @param string $user
+     * @param string $password
+     * @param string $database
      * @param int|null $port
      * @return null|bool
      */
-    public function connect($host, $user = '', $passwd = '', $db = '', $port = null)
+    public function connect(string $host, string $user, string $password, $database = '', $port = null): ?bool
     {
         $this->conn = new \Sqlite3($host);
 
@@ -86,7 +86,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string
      */
-    public function escape($string)
+    public function escape($string): string
     {
         return \SQLite3::escapeString($string);
     }
@@ -98,7 +98,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return object or NULL if there are no more results
      */
-    public function fetchObject($result)
+    public function fetchObject($result): ?object
     {
         $result->fetchedByPMF = true;
         $return = $result->fetchArray(SQLITE3_ASSOC);
@@ -115,7 +115,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result)
+    public function fetchArray($result): array
     {
         $result->fetchedByPMF = true;
 
@@ -140,7 +140,7 @@ class Sqlite3 implements DatabaseDriver
      * @return array of stdClass
      * @throws Exception
      */
-    public function fetchAll($result)
+    public function fetchAll($result): array
     {
         $ret = [];
         if (false === $result) {
@@ -160,7 +160,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string
      */
-    public function error()
+    public function error(): string
     {
         if (0 === $this->conn->lastErrorCode()) {
             return '';
@@ -174,7 +174,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string
      */
-    public function log()
+    public function log(): string
     {
         return $this->sqllog;
     }
@@ -186,7 +186,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = '')
+    public function getTableStatus($prefix = ''): array
     {
         $arr = [];
 
@@ -203,12 +203,12 @@ class Sqlite3 implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mixed $result
      */
-    public function query($query, $offset = 0, $rowcount = 0)
+    public function query(string $query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -234,7 +234,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchAssoc($result)
+    public function fetchAssoc($result): array
     {
         $result->fetchedByPMF = true;
 
@@ -269,7 +269,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = '')
+    public function getTableNames($prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',
@@ -323,7 +323,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return int
      */
-    public function nextId($table, $id)
+    public function nextId($table, $id): int
     {
         $result = (int)$this->conn->querySingle(
             sprintf(
@@ -341,7 +341,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string
      */
-    public function serverVersion()
+    public function serverVersion(): string
     {
         return $this->clientVersion();
     }
@@ -351,9 +351,9 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string
      */
-    public function clientVersion()
+    public function clientVersion(): string
     {
-        $version = $this->conn->version();
+        $version = \Sqlite3::version();
 
         return $version['versionString'];
     }
@@ -363,7 +363,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return bool
      */
-    public function close()
+    public function close(): bool
     {
         return $this->conn->close();
     }
@@ -371,7 +371,7 @@ class Sqlite3 implements DatabaseDriver
     /**
      * @return string
      */
-    public function now()
+    public function now(): string
     {
         return "DATETIME('now', 'localtime')";
     }

@@ -120,7 +120,7 @@ switch ($ajaxAction) {
                 $faqSearchResult->reviewResultSet($searchResult);
 
                 $searchHelper = new SearchHelper($faqConfig);
-                $searchHelper->setSearchterm($searchString);
+                $searchHelper->setSearchTerm($searchString);
 
                 echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
             }

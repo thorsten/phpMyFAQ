@@ -346,8 +346,6 @@ class Mail
                 '<strong>Mail Class</strong>: ' . $address . ' is not a valid e-mail address!',
                 E_USER_ERROR
             );
-
-            return false;
         }
 
         // Don't allow duplicated addresses
@@ -362,7 +360,7 @@ class Mail
 
         if (!empty($name)) {
             // Remove CR and LF characters to prevent header injection
-            $name = str_replace(array("\n", "\r"), '', $name);
+            $name = str_replace(["\n", "\r"], '', $name);
 
             if (function_exists('mb_encode_mimeheader')) {
                 // Encode any special characters in the displayed name
@@ -391,22 +389,18 @@ class Mail
      *
      * @return bool True if the given address is a valid e-mail address, false otherwise.
      */
-    public static function validateEmail($address)
+    public static function validateEmail(string $address): bool
     {
         if (empty($address)) {
             return false;
         }
 
-        if (Strings::strpos($address, '\0') !== false) {
-            return false;
-        }
-
-        $unsafe = array("\r", "\n");
+        $unsafe = ["\r", "\n"];
         if ($address !== str_replace($unsafe, '', $address)) {
             return false;
         }
 
-        if (false === filter_var($address, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 

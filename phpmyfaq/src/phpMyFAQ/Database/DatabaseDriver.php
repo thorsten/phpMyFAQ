@@ -31,22 +31,22 @@ interface DatabaseDriver
      * @param string $host Hostname
      * @param string $user Username
      * @param string $password Password
-     * @param string $db Database name
+     * @param string $database Database name
      * @param int|null $port
-     * @return bool
+     * @return null|bool true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $db = '', $port = null);
+    public function connect(string $host, string $user, string $password, $database = '', $port = null): ?bool;
 
     /**
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mixed $result
      */
-    public function query($query, $offset = 0, $rowcount = 0);
+    public function query(string $query, $offset = 0, $rowcount = 0);
 
     /**
      * Escapes a string for use in a query.
@@ -55,7 +55,7 @@ interface DatabaseDriver
      *
      * @return string
      */
-    public function escape($string);
+    public function escape($string): string;
 
     /**
      * Fetch a result row as an object.
@@ -73,7 +73,7 @@ interface DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result);
+    public function fetchArray($result): ?array;
 
     /**
      * Fetch a result row.
@@ -85,11 +85,11 @@ interface DatabaseDriver
     /**
      * Fetches a complete result as an object.
      *
-     * @param resource $result Resultset
+     * @param mixed $result Resultset
      *
      * @return array
      */
-    public function fetchAll($result);
+    public function fetchAll($result): ?array;
 
     /**
      * Number of rows in a result.
@@ -98,14 +98,14 @@ interface DatabaseDriver
      *
      * @return int
      */
-    public function numRows($result);
+    public function numRows($result): int;
 
     /**
      * Logs the queries.
      *
-     * @return int
+     * @return string
      */
-    public function log();
+    public function log(): string;
 
     /**
      * This function returns the table status.
@@ -114,38 +114,38 @@ interface DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = '');
+    public function getTableStatus($prefix = ''): array;
 
     /**
      * Returns the next ID of a table.
      *
-     * @param string      the name of the table
+     * @param string The name of the table
      * @param string      the name of the ID column
      *
      * @return int
      */
-    public function nextId($table, $id);
+    public function nextId($table, $id): int;
 
     /**
      * Returns the error string.
      *
      * @return string
      */
-    public function error();
+    public function error(): string;
 
     /**
      * Returns the library version string.
      *
      * @return string
      */
-    public function clientVersion();
+    public function clientVersion(): string;
 
     /**
      * Returns the library version string.
      *
      * @return string
      */
-    public function serverVersion();
+    public function serverVersion(): string;
 
     /**
      * Returns an array with all table names.
@@ -154,7 +154,7 @@ interface DatabaseDriver
      *
      * @return array
      */
-    public function getTableNames($prefix = '');
+    public function getTableNames($prefix = ''): array;
 
     /**
      * Closes the connection to the database.

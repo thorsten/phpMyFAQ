@@ -111,7 +111,7 @@ if (!is_null($searchString)) {
     $faqSearchResult->reviewResultSet($searchResult);
 
     $faqSearchHelper = new SearchHelper($faqConfig);
-    $faqSearchHelper->setSearchterm($searchString);
+    $faqSearchHelper->setSearchTerm($searchString);
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);
 

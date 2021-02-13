@@ -21,12 +21,12 @@ use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
-use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
+use stdClass;
 
 /**
  * Class SearchHelper
@@ -36,14 +36,7 @@ use phpMyFAQ\Utils;
 class SearchHelper extends Helper
 {
     /**
-     * Language.
-     *
-     * @var Language
-     */
-    private $language = null;
-
-    /**
-     * PMF_Pagination object.
+     * Pagination object.
      *
      * @var Pagination
      */
@@ -54,7 +47,7 @@ class SearchHelper extends Helper
      *
      * @var string
      */
-    private $searchterm = '';
+    private $searchTerm = '';
 
     /**
      * Constructor.
@@ -68,16 +61,6 @@ class SearchHelper extends Helper
     }
 
     /**
-     * Language setter.
-     *
-     * @param Language $language Language
-     */
-    public function setLanguage(Language $language)
-    {
-        $this->language = $language;
-    }
-
-    /**
      * PMF_Pagination setter.
      *
      * @param Pagination $pagination Pagination
@@ -88,19 +71,19 @@ class SearchHelper extends Helper
     }
 
     /**
-     * Searchterm setter.
+     * Search term setter.
      *
-     * @param string $searchterm Searchterm
+     * @param string $searchTerm Search term
      */
-    public function setSearchterm(string $searchterm)
+    public function setSearchTerm(string $searchTerm)
     {
-        $this->searchterm = $searchterm;
+        $this->searchTerm = $searchTerm;
     }
 
     /**
      * Renders the results for Typehead.
      *
-     * @param SearchResultSet $resultSet Resultset object
+     * @param SearchResultSet $resultSet Result set object
      *
      * @return string
      */
@@ -125,13 +108,13 @@ class SearchHelper extends Helper
                     $result->category_id,
                     $result->id,
                     $result->lang,
-                    urlencode($this->searchterm)
+                    urlencode($this->searchTerm)
                 );
 
                 $question = html_entity_decode($result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
                 $link = new Link($currentUrl, $this->config);
                 $link->itemTitle = $result->question;
-                $faq = new \stdClass();
+                $faq = new stdClass();
                 $faq->categoryName = $this->Category->getPath($result->category_id);
                 $faq->faqQuestion = Utils::chopString($question, 15);
                 $faq->faqLink = $link->toString();
@@ -249,7 +232,7 @@ class SearchHelper extends Helper
                 $searchTerm = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
                     '',
-                    $this->searchterm
+                    $this->searchTerm
                 );
                 $searchTerm = preg_quote($searchTerm, '/');
                 $searchItems = explode(' ', $searchTerm);

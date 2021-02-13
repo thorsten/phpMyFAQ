@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -44,10 +44,10 @@ class SwiftSMTP implements MailUserAgentInterface
      * @param string $server
      * @param string $user
      * @param string $pass
-     * @param int    $port
-     * @param null   $security
+     * @param int $port
+     * @param null $security
      */
-    public function setAuthConfig($server, $user, $pass, $port = 25, $security = null)
+    public function setAuthConfig(string $server, string $user, string $pass, $port = 25, $security = null)
     {
         unset($this->mailer);
 
@@ -62,21 +62,21 @@ class SwiftSMTP implements MailUserAgentInterface
      * Send the message using SMTP with authorisation.
      *
      * @param string $recipients
-     * @param array  $headers
+     * @param array $headers
      * @param string $body
      *
      * @return bool True if successful, false otherwise.
      */
-    public function send($recipients, array $headers, $body)
+    public function send(string $recipients, array $headers, string $body): bool
     {
         $sender = '';
         if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
-            $sender = str_replace(array('<', '>'), '', $headers['Return-Path']);
+            $sender = str_replace(['<', '>'], '', $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
 
         $message = Swift_Message::newInstance($headers['Subject'])
-            ->setFrom(array(empty($sender) ? $this->user : $sender))
+            ->setFrom([empty($sender) ? $this->user : $sender])
             ->setTo($recipients)
             ->setBody($body);
 

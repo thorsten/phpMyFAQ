@@ -1331,6 +1331,9 @@ $PMF_LANG['loginPageMessage'] = 'Log in to ';
 // added v3.0.5 - 2020-10-03 by Thorsten
 $PMF_LANG['ad_menu_faq_meta'] = 'FAQ metadata';
 
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note'];
+
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
 $PMF_LANG['ad_user_is_visible'] = 'Visible';

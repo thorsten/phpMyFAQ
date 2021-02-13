@@ -81,7 +81,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->
                 <dd><?= $esInformation['indices']['phpmyfaq']['total']['store']['size_in_bytes'] ?> Bytes</dd>
 
             </dl>
-                <?php
+            <?php
             } else {
                 $error = json_decode($esInformation);
                 ?>

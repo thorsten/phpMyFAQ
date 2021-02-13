@@ -224,7 +224,7 @@ $categoryHelper->setCategory($category);
 
 $searchHelper = new SearchHelper($faqConfig);
 if (!is_null($inputSearchTerm)) {
-    $searchHelper->setSearchterm($inputSearchTerm);
+    $searchHelper->setSearchTerm($inputSearchTerm);
 }
 $searchHelper->setCategory($category);
 $searchHelper->setPagination($faqPagination);
