@@ -103,6 +103,13 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    user: elasticsearch
+    command:
+      [
+        'sh',
+        '-c',
+        './bin/elasticsearch-plugin list | grep -q analysis-icu || ./bin/elasticsearch-plugin install analysis-icu && ./bin/elasticsearch',
+      ]
     volumes:
       - ./volumes/esdata:/usr/share/elasticsearch/data
     ports:
