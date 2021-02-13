@@ -18,7 +18,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, curl, fileinfo, filter, gd, json, zip, xml
+          extensions: mbstring, curl, fileinfo, filter, gd, json, zip, xml, sqlite3
           coverage: xdebug
 
       - name: Get composer cache directory
