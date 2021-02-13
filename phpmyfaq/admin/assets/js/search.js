@@ -34,6 +34,28 @@ document.addEventListener('DOMContentLoaded', () => {
         result.append('<p class="alert alert-success">✓ ' + message.success + '</p>');
       }
       indicator.fadeOut();
+
+      window.setTimeout(() => elasticsearchStats(), 1000);
     });
   });
+
+  const elasticsearchStats = () => {
+    const div = document.getElementById('pmf-elasticsearch-stats');
+    div.innerHTML = '';
+    fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=stats`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((stats) => {
+        const count = stats?.indices?.phpmyfaq?.total?.docs?.count;
+        const sizeInBytes = stats?.indices?.phpmyfaq?.total?.store?.size_in_bytes;
+        let html = '<dl class="row">';
+        html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count}</dd>`;
+        html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${sizeInBytes}</dd>`;
+        html += '</dl>';
+        div.innerHTML = html;
+      });
+  };
+
+  window.setTimeout(() => elasticsearchStats(), 1000);
 });

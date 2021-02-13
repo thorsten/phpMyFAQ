@@ -15,6 +15,7 @@
  * @since 2015-12-26
  */
 
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -54,6 +55,14 @@ switch ($ajaxAction) {
         $bulkIndexResult = $esInstance->bulkIndex($faq->faqRecords);
         if ($bulkIndexResult['success']) {
             $result = ['success' => $PMF_LANG['ad_es_create_import_success']];
+        }
+        break;
+
+    case 'stats':
+        try {
+            $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
+        } catch (Missing404Exception $e) {
+            $result = $e->getMessage();
         }
         break;
 }
