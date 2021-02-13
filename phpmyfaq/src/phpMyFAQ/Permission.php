@@ -73,7 +73,7 @@ class Permission
      * @param  Configuration $config
      * @return Permission
      */
-    public static function selectPerm(string $permLevel, Configuration $config)
+    public static function selectPerm(string $permLevel, Configuration $config): Permission
     {
         if (isset($permLevel)) {
             $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';

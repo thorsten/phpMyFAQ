@@ -27,6 +27,7 @@ use phpMyFAQ\Auth\AuthHttp;
 use phpMyFAQ\Auth\AuthLdap;
 use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
 
@@ -70,9 +71,9 @@ class User
     /**
      * Permission container.
      *
-     * @var BasicPermission|MediumPermission
+     * @var BasicPermission|MediumPermission|LargePermission
      */
-    public $perm = null;
+    public $perm;
 
     /**
      * User-data storage container.

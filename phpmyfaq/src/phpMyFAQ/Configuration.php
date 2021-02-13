@@ -62,12 +62,11 @@ class Configuration
      * Returns all sorting possibilities for FAQ records.
      *
      * @param string $current
-     *
      * @return string
      */
-    public static function sortingOptions($current): string
+    public static function sortingOptions(string $current): string
     {
-        global $LANG;
+        global $PMF_LANG;
 
         $options = ['id', 'thema', 'visits', 'updated', 'author'];
         $output = '';
@@ -77,7 +76,7 @@ class Configuration
                 '<option value="%s" %s>%s</option>',
                 $value,
                 ($value == $current) ? 'selected' : '',
-                $LANG['ad_conf_order_' . $value]
+                $PMF_LANG['ad_conf_order_' . $value]
             );
         }
 
@@ -89,10 +88,9 @@ class Configuration
      *
      * @param string $key
      * @param mixed  $value
-     *
      * @return bool
      */
-    public function set($key, $value)
+    public function set(string $key, $value): bool
     {
         $query = sprintf(
             "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
@@ -102,7 +100,7 @@ class Configuration
             $this->getDb()->escape(trim($key))
         );
 
-        return $this->getDb()->query($query);
+        return (bool) $this->getDb()->query($query);
     }
 
     /**
@@ -211,10 +209,9 @@ class Configuration
      * Returns a configuration item.
      *
      * @param string $item Configuration item
-     *
      * @return mixed
      */
-    public function get($item)
+    public function get(string $item)
     {
         if (!isset($this->config[$item])) {
             $this->getAll();
@@ -260,26 +257,6 @@ class Configuration
         foreach ($config as $items) {
             $this->config[$items->config_name] = $items->config_value;
         }
-    }
-
-    /**
-     * Sets the Ldap object.
-     *
-     * @param Ldap $ldap
-     */
-    public function setLdap(Ldap $ldap)
-    {
-        $this->config['core.ldap'] = $ldap;
-    }
-
-    /**
-     * Returns the Ldap object.
-     *
-     * @return Ldap
-     */
-    public function getLdap(): Ldap
-    {
-        return $this->config['core.ldap'];
     }
 
     /**
@@ -416,10 +393,9 @@ class Configuration
      *
      * @param string $name
      * @param mixed  $value
-     *
      * @return bool|object
      */
-    public function add($name, $value)
+    public function add(string $name, $value)
     {
         $insert = sprintf(
             "INSERT INTO
@@ -439,10 +415,9 @@ class Configuration
      * Deletes a configuration item for the database.
      *
      * @param string $name
-     *
      * @return bool
      */
-    public function delete($name): bool
+    public function delete(string $name): bool
     {
         $delete = sprintf(
             "DELETE FROM
