@@ -259,11 +259,11 @@ class Language
     /**
      * True if the language is supported by the current phpMyFAQ installation.
      *
-     * @param string $langCode Language code
+     * @param string|null $langCode Language code
      *
      * @return bool
      */
-    public static function isASupportedLanguage(string $langCode): bool
+    public static function isASupportedLanguage(?string $langCode): bool
     {
         global $languageCodes;
 
