@@ -100,7 +100,7 @@ class Filter
      *
      * @return string
      */
-    public static function removeAttributes($html = '')
+    public static function removeAttributes($html = ''): string
     {
         $keep = [
             'href',
@@ -120,6 +120,9 @@ class Filter
             'height',
             'controls'
         ];
+
+        // remove broken stuff
+        $html = str_replace('&#13;', '', $html);
 
         preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);
 
