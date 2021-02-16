@@ -56,14 +56,6 @@ class Language
     }
 
     /**
-     * @return string
-     */
-    public function getAcceptLanguage(): string
-    {
-        return $this->acceptLanguage;
-    }
-
-    /**
      * True if the language is supported by the bundled TinyMCE editor.
      *
      * TinyMCE Language is supported if there is a language file present in
@@ -73,11 +65,11 @@ class Language
      * http://tinymce.moxiecode.com/download_i18n.php
      * and extracted to ROOT/admin/editor
      *
-     * @param string|null $langCode Language code
+     * @param string $langCode Language code
      *
      * @return bool
      */
-    public static function isASupportedTinyMCELanguage($langCode): bool
+    public static function isASupportedTinyMCELanguage(string $langCode): bool
     {
         return file_exists(
             PMF_ROOT_DIR . '/admin/assets/js/editor/langs/' . $langCode . '.js'
@@ -165,7 +157,6 @@ class Language
         if (isset($_SESSION['lang']) && self::isASupportedLanguage($_SESSION['lang'])) {
             $detectedLang['session'] = trim($_SESSION['lang']);
         }
-
         // Get the language from the config
         if (isset($configLanguage)) {
             $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
@@ -177,6 +168,7 @@ class Language
         if ((true === $configDetection) && self::isASupportedLanguage($this->acceptLanguage)) {
             $detectedLang['detection'] = strtolower($this->acceptLanguage);
         }
+
         // Select the language
         if (isset($detectedLang['post'])) {
             self::$language = $detectedLang['post'];
@@ -199,7 +191,7 @@ class Language
             $detectedLang = null;
             unset($detectedLang);
         } else {
-            self::$language = 'en'; // just a fallback
+            self::$language = 'en'; // just a last fallback
         }
 
         return $_SESSION['lang'] = self::$language;
@@ -243,10 +235,22 @@ class Language
                 }
                 arsort($languages, SORT_NUMERIC);
             }
+
             foreach ($languages as $lang => $val) {
                 if (self::isASupportedLanguage(strtoupper($lang))) {
                     $this->acceptLanguage = $lang;
                     break;
+                }
+            }
+
+            // If the browser e.g. sends "en-us", we want to get "en" only.
+            if ('' === $this->acceptLanguage) {
+                foreach ($languages as $lang => $val) {
+                    $lang = substr($lang, 0, 2);
+                    if (self::isASupportedLanguage(strtoupper($lang))) {
+                        $this->acceptLanguage = $lang;
+                        break;
+                    }
                 }
             }
         }
@@ -255,11 +259,11 @@ class Language
     /**
      * True if the language is supported by the current phpMyFAQ installation.
      *
-     * @param string|null $langCode Language code
+     * @param string $langCode Language code
      *
      * @return bool
      */
-    public static function isASupportedLanguage($langCode): bool
+    public static function isASupportedLanguage(string $langCode): bool
     {
         global $languageCodes;
 
