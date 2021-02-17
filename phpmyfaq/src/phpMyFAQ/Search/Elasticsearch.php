@@ -103,7 +103,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             return [];
         }
 
-        if (0 !== $result['hits']['total']) {
+        if (0 !== $result['hits']['total']['value']) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
@@ -186,7 +186,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             return [];
         }
 
-        if (0 !== $result['hits']['total']) {
+        if (0 !== $result['hits']['total']['value']) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
