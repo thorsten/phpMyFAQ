@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.8 - 2021-01
+Version 3.0.8 - 2021-02-24
 - updated to Bootstrap v4.6 (Thorsten)
 - fixed minor bugs (Thorsten)
 
