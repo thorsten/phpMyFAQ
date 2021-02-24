@@ -19,6 +19,8 @@
 
 namespace phpMyFAQ;
 
+use Exception;
+
 /**
  * Class Captcha
  *
@@ -199,7 +201,7 @@ class Captcha
     public function renderCaptchaImage(string $action): string
     {
         return sprintf(
-            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s" >',
+            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s">',
             $_SERVER['SCRIPT_NAME'],
             $this->sids,
             $action,
@@ -212,6 +214,8 @@ class Captcha
 
     /**
      * Draw the Captcha.
+     *
+     * @throws Exception
      */
     public function drawCaptchaImage()
     {
@@ -233,13 +237,14 @@ class Captcha
      * Create the background.
      *
      * @return resource
+     * @throws Exception
      */
     private function createBackground()
     {
         $this->img = imagecreate($this->width, $this->height);
-        $this->backgroundColor['r'] = random_int(220, 255);
-        $this->backgroundColor['g'] = random_int(220, 255);
-        $this->backgroundColor['b'] = random_int(220, 255);
+        $this->backgroundColor['r'] = random_int(222, 255);
+        $this->backgroundColor['g'] = random_int(222, 255);
+        $this->backgroundColor['b'] = random_int(222, 255);
 
         $colorAllocate = imagecolorallocate(
             $this->img,
@@ -257,6 +262,7 @@ class Captcha
      * Draw random lines.
      *
      * @return resource
+     * @throws Exception
      */
     private function drawLines()
     {
@@ -290,7 +296,6 @@ class Captcha
 
     /**
      * Generate a Captcha Code.
-     *
      * Start garbage collector for removing old (==unresolved) captcha codes
      * Note that we would like to avoid performing any garbaging of old records
      * because these data could be used as a database for collecting ip addresses,
@@ -309,8 +314,9 @@ class Captcha
      *   ORDER BY times DESC
      * to find out *bots and human attempts
      *
-     * @param  int $capLength Length of captcha code
+     * @param int $capLength Length of captcha code
      * @return string
+     * @throws Exception
      */
     private function generateCaptchaCode(int $capLength): string
     {
@@ -421,52 +427,52 @@ class Captcha
      * Draw the Text.
      *
      * @return resource
+     * @throws Exception
      */
     private function drawText()
     {
-        $len = Strings::strlen($this->code);
+        $codeLength = Strings::strlen($this->code);
+        $numFonts = count($this->fonts);
         $w1 = 15;
-        $w2 = $this->width / ($len + 1);
+        $w2 = $this->width / ($codeLength + 1);
 
-        for ($p = 0; $p < $len; ++$p) {
+        for ($p = 0; $p < $codeLength; ++$p) {
             $letter = $this->code[$p];
-            if (count($this->fonts) > 0) {
-                $font = $this->fonts[random_int(0, count($this->fonts) - 1)];
-            }
-            $size = random_int(20, $this->height / 2.2);
+            $size = random_int(18, $this->height - 5);
             $rotation = random_int(-23, 23);
-            $y = random_int($size + 3, $this->height - 5);
+            $y = random_int($size, $this->height + 5);
             $x = $w1 + $w2 * $p;
-            $c1 = []; // fore char color
-            $c2 = []; // back char color
+            $foreColor = [];
+            $backColor = [];
 
             do {
-                $c1['r'] = random_int(30, 199);
-            } while ($c1['r'] === $this->backgroundColor['r']);
+                $foreColor['r'] = random_int(30, 199);
+            } while ($foreColor['r'] === $this->backgroundColor['r']);
             do {
-                $c1['g'] = random_int(30, 199);
-            } while ($c1['g'] === $this->backgroundColor['g']);
+                $foreColor['g'] = random_int(30, 199);
+            } while ($foreColor['g'] === $this->backgroundColor['g']);
             do {
-                $c1['b'] = random_int(30, 199);
-            } while ($c1['b'] === $this->backgroundColor['b']);
-            $colorOne = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
+                $foreColor['b'] = random_int(30, 199);
+            } while ($foreColor['b'] === $this->backgroundColor['b']);
+            $colorOne = imagecolorallocate($this->img, $foreColor['r'], $foreColor['g'], $foreColor['b']);
 
             do {
-                $c2['r'] = ((int)$c1['r'] < 100 ? (int)$c1['r'] * 2 : random_int(30, 199));
-            } while (($c2['r'] === $this->backgroundColor['r']) && ($c2['r'] === $c1['r']));
+                $backColor['r'] = ((int)$foreColor['r'] < 100 ? (int)$foreColor['r'] * 2 : random_int(30, 99));
+            } while (($backColor['r'] === $this->backgroundColor['r']) && ($backColor['r'] === $foreColor['r']));
             do {
-                $c2['g'] = ((int)$c1['g'] < 100 ? (int)$c1['g'] * 2 : random_int(30, 199));
-            } while (($c2['g'] === $this->backgroundColor['g']) && ($c2['g'] === $c1['g']));
+                $backColor['g'] = ((int)$foreColor['g'] < 100 ? (int)$foreColor['g'] * 2 : random_int(30, 199));
+            } while (($backColor['g'] === $this->backgroundColor['g']) && ($backColor['g'] === $foreColor['g']));
             do {
-                $c2['b'] = ((int)$c1['b'] < 100 ? (int)$c1['b'] * 2 : random_int(30, 199));
-            } while (($c2['b'] === $this->backgroundColor['b']) && ($c2['b'] === $c1['b']));
-            $colorTwo = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
+                $backColor['b'] = ((int)$foreColor['b'] < 100 ? (int)$foreColor['b'] * 2 : random_int(90, 199));
+            } while (($backColor['b'] === $this->backgroundColor['b']) && ($backColor['b'] === $foreColor['b']));
+            $colorTwo = imagecolorallocate($this->img, $backColor['r'], $backColor['g'], $backColor['b']);
 
             // Add the letter
-            if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
-                imagettftext($this->img, $size, $rotation, $x + 2, $y, $colorTwo, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $colorTwo, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x, $y - 2, $colorOne, $font, $letter);
+            if (function_exists('imagettftext') && ($numFonts > 0)) {
+                $font = $this->fonts[random_int(0, $numFonts - 1)];
+                imagettftext($this->img, $size, $rotation, $x + 2, $y, $colorOne, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $colorOne, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x, $y - 2, $colorTwo, $font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
@@ -486,10 +492,9 @@ class Captcha
      * if the captcha code spam protection has been activated from the general PMF configuration.
      *
      * @param string $code Captcha Code
-     *
      * @return bool
      */
-    public function checkCaptchaCode($code)
+    public function checkCaptchaCode(string $code): bool
     {
         if ($this->isUserIsLoggedIn()) {
             return true;
@@ -505,13 +510,12 @@ class Captcha
      * Validate the Captcha.
      *
      * @param string $captchaCode Captcha code
-     *
      * @return bool
      */
-    public function validateCaptchaCode($captchaCode)
+    public function validateCaptchaCode(string $captchaCode): bool
     {
         // Sanity check
-        if (0 == Strings::strlen($captchaCode)) {
+        if (0 === Strings::strlen($captchaCode)) {
             return false;
         }
 

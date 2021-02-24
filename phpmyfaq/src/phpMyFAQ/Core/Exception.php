@@ -28,7 +28,7 @@ class Exception extends \Exception
      * Converts Exception to a string.
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             "Exception %s with message %s in %s: %s\nStack trace:\n%s",

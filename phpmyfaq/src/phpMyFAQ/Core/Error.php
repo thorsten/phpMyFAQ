@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Core;
 
 use ErrorException;
+use Exception;
 
 /**
  * Class Error
@@ -46,7 +47,8 @@ class Error
 
     /**
      * Exception handler.
-     * @param \Exception $exception
+     *
+     * @param $exception
      */
     public static function exceptionHandler($exception)
     {
@@ -62,19 +64,18 @@ class Error
             echo "<p>Message: '" . $exception->getMessage() . "'</p>";
             echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
             echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
-        } else {
-            if (ini_get('log_errors')) {
-                error_log(
-                    sprintf(
-                        "phpMyFAQ %s: %s in %s on line %d\nStack trace:\n%s",
-                        get_class($exception),
-                        $exception->getMessage(),
-                        $exception->getFile(),
-                        $exception->getLine(),
-                        $exception->getTraceAsString()
-                    )
-                );
-            }
+        }
+        if (ini_get('log_errors')) {
+            error_log(
+                sprintf(
+                    "phpMyFAQ %s: %s in %s on line %d\nStack trace:\n%s",
+                    get_class($exception),
+                    $exception->getMessage(),
+                    $exception->getFile(),
+                    $exception->getLine(),
+                    $exception->getTraceAsString()
+                )
+            );
         }
     }
 }
