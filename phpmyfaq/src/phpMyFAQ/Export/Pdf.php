@@ -88,7 +88,7 @@ class Pdf extends Export
      *
      * @return string
      */
-    public function generate($categoryId = 0, $downwards = true, $language = '')
+    public function generate($categoryId = 0, $downwards = true, $language = ''): string
     {
         global $PMF_LANG;
 
@@ -108,73 +108,52 @@ class Pdf extends Export
             $this->config->getVersion()
         );
 
-        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
-        $categories = $this->category->getCategoryTree();
+        $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
 
-        $categoryGroup = '';
-        $this->pdf->AddPage();
-        foreach ($categories as $catKey => $category) {
-            if (0 === $catKey || $this->category->categoryName[$category['id']]['name'] !== $categoryGroup) {
-                $this->pdf->Bookmark(
-                    html_entity_decode(
-                        $this->category->categoryName[$category['id']]['name'],
-                        ENT_QUOTES,
-                        'utf-8'
-                    ),
-                    $this->category->categoryName[$category['id']]['level'],
-                    0
-                );
-                $this->pdf->setCategory($category['id']);
-                $categoryGroup = $this->category->categoryName[$category['id']]['name'];
+        foreach ($faqData as $faq) {
+            $this->pdf->AddPage();
+            $this->pdf->Bookmark(
+                html_entity_decode(
+                    $faq['topic'],
+                    ENT_QUOTES,
+                    'utf-8'
+                ),
+                $this->category->categoryName[$faq['category_id']]['level'] + 1,
+                0
+            );
+
+            if ($this->tags instanceof Tags) {
+                $tags = $this->tags->getAllTagsById($faq['id']);
             }
 
-            foreach ($faqdata as $faq) {
-                if ($faq['category_id'] === $category['id']) {
-                    $this->pdf->AddPage();
-                    $this->pdf->Bookmark(
-                        html_entity_decode(
-                            $faq['topic'],
-                            ENT_QUOTES,
-                            'utf-8'
-                        ),
-                        $this->category->categoryName[$category['id']]['level'] + 1,
-                        0
-                    );
+            $this->pdf->WriteHTML('<h2 style="text-align: center;">' . $faq['topic'] . '</h2>', true);
+            $this->pdf->Ln(10);
 
-                    if ($this->tags instanceof Tags) {
-                        $tags = $this->tags->getAllTagsById($faq['id']);
-                    }
+            $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
 
-                    $this->pdf->WriteHTML('<h2 style="text-align: center;">' . $faq['topic'] . '</h2>', true);
-                    $this->pdf->Ln(10);
-
-                    $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
-
-                    if ($this->config->get('main.enableMarkdownEditor')) {
-                        $this->pdf->WriteHTML(trim($this->parsedown->text($faq['content'])));
-                    } else {
-                        $this->pdf->WriteHTML(trim($faq['content']));
-                    }
-
-                    $this->pdf->Ln(10);
-
-                    if (!empty($faq['keywords'])) {
-                        $this->pdf->Ln();
-                        $this->pdf->Write(5, $PMF_LANG['msgNewContentKeywords'] . ' ' . $faq['keywords']);
-                    }
-                    if (isset($tags) && 0 !== count($tags)) {
-                        $this->pdf->Ln();
-                        $this->pdf->Write(5, $PMF_LANG['ad_entry_tags'] . ': ' . implode(', ', $tags));
-                    }
-
-                    $this->pdf->Ln();
-                    $this->pdf->Ln();
-                    $this->pdf->Write(
-                        5,
-                        $PMF_LANG['msgLastUpdateArticle'] . Date::createIsoDate($faq['lastmodified'])
-                    );
-                }
+            if ($this->config->get('main.enableMarkdownEditor')) {
+                $this->pdf->WriteHTML(trim($this->parsedown->text($faq['content'])));
+            } else {
+                $this->pdf->WriteHTML(trim($faq['content']));
             }
+
+            $this->pdf->Ln(10);
+
+            if (!empty($faq['keywords'])) {
+                $this->pdf->Ln();
+                $this->pdf->Write(5, $PMF_LANG['msgNewContentKeywords'] . ' ' . $faq['keywords']);
+            }
+            if (isset($tags) && 0 !== count($tags)) {
+                $this->pdf->Ln();
+                $this->pdf->Write(5, $PMF_LANG['ad_entry_tags'] . ': ' . implode(', ', $tags));
+            }
+
+            $this->pdf->Ln();
+            $this->pdf->Ln();
+            $this->pdf->Write(
+                5,
+                $PMF_LANG['msgLastUpdateArticle'] . Date::createIsoDate($faq['lastmodified'])
+            );
         }
 
         // remove default header/footer
@@ -191,7 +170,7 @@ class Pdf extends Export
      * @param string|null $filename
      * @return string
      */
-    public function generateFile(array $faqData, string $filename = null)
+    public function generateFile(array $faqData, string $filename = null): string
     {
         global $PMF_LANG;
 
