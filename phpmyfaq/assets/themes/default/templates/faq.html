@@ -31,7 +31,7 @@
         </div>
         <div class="pmf-social-links">
           <i aria-hidden="true" class="fa fa-file-pdf-o"></i>
-          <a target="_blank" href="{{ linkToPdf }}" rel="nofollow" title="{{ msgPdf }}">
+          <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}">
             {{ msgPdf }}
           </a>
         </div>
@@ -200,7 +200,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     'use strict';
-    $('div.pmf-stars > div.pmf-star-rating > span').on('click', event => {
+    $('div.pmf-stars > div.pmf-star-rating > span').on('click', (event) => {
       const numStars = $(event.target).data('stars');
       saveVoting('faq', '{{ id }}', numStars, '{{ lang }}');
     });
