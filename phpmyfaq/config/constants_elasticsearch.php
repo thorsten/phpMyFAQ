@@ -3,8 +3,6 @@
 /**
  * Constants for Elasticsearch support in phpMyFAQ
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -27,6 +25,15 @@ define('PMF_ELASTICSEARCH_NUMBER_SHARDS', 2);
  * Number of replicas
  */
 define('PMF_ELASTICSEARCH_NUMBER_REPLICAS', 0);
+
+/**
+ * Elasticsearch Tokenizer:
+ *
+ * - default: standard
+ *
+ * - also possible, if the ICU Analyzer plugin is installed: icu_tokenizer
+ */
+define('PMF_ELASTICSEARCH_TOKENIZER', 'standard');
 
 /**
  * Array of stemmer token filters with the preferred values by Elasticsearch
