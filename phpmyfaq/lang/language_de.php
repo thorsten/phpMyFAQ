@@ -652,7 +652,8 @@ $PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Diese Ressource ist nicht auf dem
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = "Das Protokoll %s wird nicht für die automatische Linküberprüfung unterstützt.";
 $PMF_LANG['msgNewQuestionVisible'] = "Dazu muss der Administrator allerdings diese erst freigeben.";
 $PMF_LANG['msgQuestionsWaiting'] = "Wartend auf die Freigabe durch den Administrator";
-$PMF_LANG['ad_entry_visibility'] = "sichtbar";
+$PMF_LANG['ad_entry_visibility'] = "veröffentlicht";
+$PMF_LANG['ad_entry_not_visibility'] = "nicht veröffentlicht";
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Bitte geben Sie ein Passwort ein. ";

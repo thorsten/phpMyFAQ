@@ -732,8 +732,9 @@ if (
                                             <?php if (isset($suf)) {
                                                 echo $suf;
                                             } ?>>
-                                        <label class="form-check-label"
-                                               for="active"><?= $PMF_LANG['ad_entry_visibility'] ?></label>
+                                        <label class="form-check-label" for="active">
+                                            <?= $PMF_LANG['ad_entry_visibility'] ?>
+                                        </label>
                                     </div>
                                     <div class="form-check">
                                         <input type="radio" id="inactive" name="active" value="no"
@@ -741,15 +742,17 @@ if (
                                             <?php if (isset($sul)) {
                                                 echo $sul;
                                             } ?>>
-                                        <label class="form-check-label"
-                                               for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
+                                        <label class="form-check-label" for="inactive">
+                                          <?= $PMF_LANG['ad_entry_not_visibility'] ?>
+                                        </label>
                                     </div>
                                 <?php else : ?>
                                     <div class="form-check">
                                         <input type="radio" id="inactive" name="active" value="no"
                                                class="form-check-input" checked>
-                                        <label class="form-check-label"
-                                               for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
+                                        <label class="form-check-label" for="inactive">
+                                            <?= $PMF_LANG['ad_entry_not_visibility'] ?>
+                                        </label>
                                     </div>
                                 <?php endif; ?>
                             </div>

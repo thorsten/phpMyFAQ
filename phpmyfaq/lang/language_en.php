@@ -652,7 +652,8 @@ $PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at 
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
 $PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
-$PMF_LANG['ad_entry_visibility'] = 'Publish?';
+$PMF_LANG['ad_entry_visibility'] = 'published';
+$PMF_LANG['ad_entry_not_visibility'] = "not published";
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
