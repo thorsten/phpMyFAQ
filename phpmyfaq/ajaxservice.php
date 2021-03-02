@@ -116,7 +116,7 @@ $captcha = new Captcha($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
-'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
+'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action && !is_null($code) &&
     !$captcha->checkCaptchaCode($code)
 ) {
     $message = ['error' => $PMF_LANG['msgCaptcha']];
@@ -658,8 +658,8 @@ switch ($action) {
         }
 
         if (
-            !is_null($author) && !is_null($email) && !is_null($question) &&
-            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
+            !is_null($author) && !is_null($email) && !is_null($question) && !empty($question) &&
+            $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
         ) {
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
@@ -675,15 +675,11 @@ switch ($action) {
             $mailer->addTo($faqConfig->getAdminEmail());
             $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $faqConfig);
             $mailer->message = $question;
-            $result = $mailer->send();
+            $mailer->send();
 
             unset($mailer);
 
-            if ($result) {
-                $message = ['success' => $PMF_LANG['msgMailContact']];
-            } else {
-                $message = ['error' => $PMF_LANG['err_sendMail']];
-            }
+            $message = ['success' => $PMF_LANG['msgMailContact']];
         } else {
             $message = ['error' => $PMF_LANG['err_sendMail']];
         }
