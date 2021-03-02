@@ -19,7 +19,7 @@
  * But in LargePermission, they do make a significant difference if passed, thus
  * for up- and downwards-compatibility.
  *
- * Perhaps the most important method is $perm->checkRight(right_name). This
+ * Perhaps the most important method is $perm->hasPermission(right_name). This
  * checks whether the user having the user_id set with $perm->setPerm()
  *
  * The permission object is added to a user using the user's addPerm() method.
