@@ -80,9 +80,14 @@ switch ($ajaxAction) {
             ],
         ]);
 
-        function filterElement($element)
+        /**
+         * Callback function for array_filter()
+         * @param $element
+         * @return bool
+         */
+        function filterElement($element): bool
         {
-            ucfirst($element);
+            $element = ucfirst($element);
             return $element !== '';
         }
 
@@ -91,12 +96,12 @@ switch ($ajaxAction) {
         $order = 1;
         foreach ($sortedData as $key => $position) {
             $id = explode('-', $position);
-            $currentPosition = $categoryOrder->getPositionById($id[1]);
+            $currentPosition = $categoryOrder->getPositionById((int) $id[1]);
 
             if (!$currentPosition) {
-                $categoryOrder->setPositionById($id[1], $order);
+                $categoryOrder->setPositionById((int) $id[1], (int) $order);
             } else {
-                $categoryOrder->updatePositionById($id[1], $order);
+                $categoryOrder->updatePositionById((int) $id[1], (int) $order);
             }
             $order++;
         }

@@ -26,9 +26,7 @@ use phpMyFAQ\Database;
  */
 class CategoryOrder
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $config;
 
     /**
@@ -45,7 +43,7 @@ class CategoryOrder
      * Returns the current position for the given category ID
      *
      * @param int $categoryId
-     * @return false|mixed
+     * @return mixed
      */
     public function getPositionById(int $categoryId)
     {

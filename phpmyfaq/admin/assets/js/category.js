@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       url: `index.php?action=ajax&ajax=categories&ajaxaction=update-order&csrf=${csrf}`,
       data: { data },
-      success: (response) => {
+      success: () => {
         location.reload();
       },
-      error: () => {
-        location.reload();
+      error: (response) => {
+        console.error(response);
       },
     });
   });
