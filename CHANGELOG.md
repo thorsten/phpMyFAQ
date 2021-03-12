@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.0-beta - 2021-02
+### phpMyFAQ v3.1.0-beta - 2021-02-12
 
 - fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - changed PHP requirement to PHP 7.3+ (Thorsten)
