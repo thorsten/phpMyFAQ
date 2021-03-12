@@ -36,7 +36,7 @@ class Html5 extends Export
      *
      * @var XMLWriter
      */
-    private $xml = null;
+    private $xml;
 
     /**
      * Constructor.
@@ -74,7 +74,7 @@ class Html5 extends Export
         // Initialize categories
         $this->category->transform($categoryId);
 
-        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
+        $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = $this->config->getVersion();
         $comment = sprintf(
             ' HTML5 output by phpMyFAQ %s | Date: %s ',
@@ -97,9 +97,9 @@ class Html5 extends Export
         $this->xml->startElement('body');
         $this->xml->writeAttribute('dir', $PMF_LANG['dir']);
 
-        if (count($faqdata)) {
+        if (count($faqData)) {
             $lastCategory = 0;
-            foreach ($faqdata as $data) {
+            foreach ($faqData as $data) {
                 if ($data['category_id'] != $lastCategory) {
                     $this->xml->writeElement('h1', $this->category->getPath($data['category_id'], ' >> '));
                 }

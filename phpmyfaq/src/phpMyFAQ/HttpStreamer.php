@@ -9,7 +9,6 @@
  * Currently it supports only 4 content (mime) types:
  * - PDF: application/pdf
  * - HTML5: text/html
- * - XML: text/xml
  * - CSV: text/csv
  * - Generic file: application/octet-stream
  *
@@ -26,6 +25,8 @@
  */
 
 namespace phpMyFAQ;
+
+use phpMyFAQ\Core\Exception;
 
 /**
  * Class HttpStreamer
@@ -100,10 +101,10 @@ class HttpStreamer
     /**
      * Constructor.
      *
-     * @param string $type    Type
+     * @param string $type Type
      * @param string $content Content
      */
-    public function __construct($type, $content)
+    public function __construct(string $type, string $content)
     {
         $this->type = $type;
         $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
@@ -115,8 +116,9 @@ class HttpStreamer
      * Sends data.
      *
      * @param string $disposition Disposition
+     * @throws Exception
      */
-    public function send($disposition)
+    public function send(string $disposition)
     {
         if (isset($disposition)) {
             $this->disposition = $disposition;
@@ -124,11 +126,11 @@ class HttpStreamer
 
         // Sanity checks
         if (headers_sent()) {
-            die('<b>PMF_HttpStreamer Class</b> error: unable to send my headers: someone already sent other headers!');
+            throw new Exception('Error: unable to send my headers: someone already sent other headers!');
         }
         if (self::EXPORT_BUFFER_ENABLE) {
             if (ob_get_contents()) {
-                die('<b>PMF_HttpStreamer Class</b> error: unable to send my data: someone already sent other data!');
+                throw new Exception('Error: unable to send my data: someone already sent other data!');
             }
         }
 
@@ -162,11 +164,6 @@ class HttpStreamer
                 $filename = 'phpmyfaq.html';
                 $description = 'phpMyFaq HTML5 export file';
                 $mimeType = 'text/html';
-                break;
-            case 'xml':
-                $filename = 'phpmyfaq.xml';
-                $description = 'phpMyFaq XML export file';
-                $mimeType = 'text/xml';
                 break;
             case 'csv':
                 $filename = 'phpmyfaq.csv';

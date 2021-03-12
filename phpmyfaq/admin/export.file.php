@@ -1,7 +1,7 @@
 <?php
 
 /**
- * JSON, XML, HTML5 and PDF export - streamer page.
+ * JSON, HTML5 and PDF export - streamer page.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->hasPermission($user->getUserId(), 'export')) {
     $categoryId = Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
     $downwards = Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
-    $inlineDisposition = Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
+    $inlineDisposition = Filter::filterInput(INPUT_POST, 'disposition', FILTER_SANITIZE_STRING);
     $type = Filter::filterInput(INPUT_POST, 'export-type', FILTER_SANITIZE_STRING, 'none');
 
     $faq = new Faq($faqConfig);
@@ -41,18 +41,19 @@ if ($user->perm->hasPermission($user->getUserId(), 'export')) {
 
     try {
         $export = Export::create($faq, $category, $faqConfig, $type);
+        $content = $export->generate($categoryId, $downwards, $faqConfig->getLanguage()->getLanguage());
+
+        // Stream the file content
+        $httpStreamer = new HttpStreamer($type, $content);
+        if ('inline' === $inlineDisposition) {
+            $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_INLINE);
+        } else {
+            $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
+        }
     } catch (Exception $e) {
         // handle exception
     }
-    $content = $export->generate($categoryId, $downwards, $faqConfig->getLanguage()->getLanguage());
 
-    // Stream the file content
-    $httpStreamer = new HttpStreamer($type, $content);
-    if ('inline' === $inlineDisposition) {
-        $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_INLINE);
-    } else {
-        $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
-    }
 } else {
     echo $PMF_LANG['err_noArticles'];
 }

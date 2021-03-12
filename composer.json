@@ -45,7 +45,8 @@
     "ext-gd": "*",
     "ext-json": "*",
     "ext-xml": "*",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "ext-xmlwriter": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",

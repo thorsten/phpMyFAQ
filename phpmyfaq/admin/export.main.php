@@ -1,7 +1,7 @@
 <?php
 
 /**
- * JSON, XML, HTML5 and PDF export - main page.
+ * JSON, HTML5 and PDF export - main page.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -47,7 +47,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryHelper->setCategory($category);
                 ?>
                 <form  action="?action=exportfile" method="post" accept-charset="utf-8">
-                <h4><?= $PMF_LANG['ad_export_which_cat'] ?></h4>
+                <h5><?= $PMF_LANG['ad_export_which_cat'] ?></h5>
                 <div class="form-group row">
                     <label class="col-lg-2 col-form-label" for="catid">
                         <?= $PMF_LANG['ad_entry_category'] ?>
@@ -72,7 +72,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <?php
             }
             ?>
-            <h4><?= $PMF_LANG['ad_export_type'] ?></h4>
+            <h5><?= $PMF_LANG['ad_export_type'] ?></h5>
             <div class="form-group row">
                 <div class="offset-lg-2 col-lg-8 radio">
                     <p><?= $PMF_LANG['ad_export_type_choose'] ?></p>
@@ -87,11 +87,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     </label>
                     <br>
                     <label>
-                        <input type="radio" name="export-type" value="xml" id="xml">
-                        <?= $PMF_LANG['ad_xml_gen'] ?>
-                    </label>
-                    <br>
-                    <label>
                         <input type="radio" name="export-type" value="html5" id="xhtml">
                         HTML5
                     </label>
@@ -102,13 +97,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <div class="offset-lg-2 col-lg-4 radio">
                     <p><?= $PMF_LANG['ad_export_download_view'] ?></p>
                     <label>
-                        <input type="radio" name="dispos" value="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
+                        <input type="radio" name="disposition" value="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
                                id="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked>
                         <?= $PMF_LANG['ad_export_download'] ?>
                     </label>
                     <br>
                     <label>
-                        <input type="radio" name="dispos" value="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
+                        <input type="radio" name="disposition" value="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
                                id="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
                         <?= $PMF_LANG['ad_export_view'] ?>
                     </label>

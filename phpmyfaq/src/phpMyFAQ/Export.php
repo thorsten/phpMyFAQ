@@ -18,10 +18,10 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
-use phpMyFAQ\Export\Xml;
 
 /**
  * Class Export
@@ -42,12 +42,11 @@ class Export
     /**
      * Factory.
      *
-     * @param  Faq           $faq      FaqHelper object
-     * @param  Category      $category Entity object
-     * @param  Configuration $config   Configuration object
-     * @param  string        $mode     Export
+     * @param Faq           $faq FaqHelper object
+     * @param Category      $category Entity object
+     * @param Configuration $config Configuration object
+     * @param string        $mode Export
      * @return mixed
-     * @throws Exception
      * @throws \Exception
      */
     public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf')
@@ -55,16 +54,10 @@ class Export
         switch ($mode) {
             case 'json':
                 return new Json($faq, $category, $config);
-                break;
             case 'pdf':
                 return new Pdf($faq, $category, $config);
-                break;
-            case 'xml':
-                return new Xml($faq, $category, $config);
-                break;
             case 'html5':
                 return new Html5($faq, $category, $config);
-                break;
             default:
                 throw new Exception('Export not implemented!');
         }

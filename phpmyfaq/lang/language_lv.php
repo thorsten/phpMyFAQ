@@ -40,7 +40,6 @@ $PMF_LANG["msgContact"] = "Kontaktinfo";
 $PMF_LANG["msgHome"] = "Uz s&acirc;kumu";
 $PMF_LANG["msgNews"] = "BUJ-Jaunumi";
 $PMF_LANG["msgUserOnline"] = " apmekl&ccedil;t&acirc;ji";
-$PMF_LANG["msgXMLExport"] = "XML-datne";
 $PMF_LANG["msgBack2Home"] = "Atgriezties";
 
 // Contentpages
@@ -62,7 +61,6 @@ $PMF_LANG["msgLastUpdateArticle"] = "Atjaunots: ";
 $PMF_LANG["msgAuthor"] = "Autors: ";
 $PMF_LANG["msgPrinterFriendly"] = "Drukas versija";
 $PMF_LANG["msgPrintArticle"] = "Izdruk&acirc;t lapu";
-$PMF_LANG["msgMakeXMLExport"] = "XML versija";
 $PMF_LANG["msgAverageVote"] = "Vid&ccedil;jais reitings";
 $PMF_LANG["msgVoteUsability"] = "Nov&ccedil;rt&ccedil; &eth;o ierakstu";
 $PMF_LANG["msgVoteFrom"] = "no";
@@ -78,7 +76,6 @@ $PMF_LANG["msgCommentBy"] = "Koment&ccedil; ";
 $PMF_LANG["msgCommentHeader"] = "Ieraksta koment&acirc;rs";
 $PMF_LANG["msgYourComment"] = "Tavs koment&acirc;rs";
 $PMF_LANG["msgCommentThanks"] = "Paldies par koment&acirc;ru!";
-$PMF_LANG["msgSeeXMLFile"] = "atv&ccedil;rt XML-datni";
 $PMF_LANG["msgSend2Friend"] = "Nos&ucirc;t&icirc;t draugam";
 $PMF_LANG["msgS2FName"] = "Tavs v&acirc;rds";
 $PMF_LANG["msgS2FEMail"] = "Tava e-pasta adrese";
@@ -487,9 +484,6 @@ $PMF_LANG["ad_passwdsuc"] = "Parole nomain&icirc;ta.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "PDF versija";
-$PMF_LANG["ad_xml_head"] = "XML-rezerves kopija";
-$PMF_LANG["ad_xml_hint"] = "Saglab&acirc;t visus sist&ccedil;mas ierakstus vien&acirc; XML fail&acirc;.";
-$PMF_LANG["ad_xml_gen"] = "izveidot XML failu";
 $PMF_LANG["ad_entry_locale"] = "Valoda";
 $PMF_LANG["msgLanguageSubmit"] = "main&icirc;t valodu";
 

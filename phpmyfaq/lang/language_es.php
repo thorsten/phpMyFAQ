@@ -52,7 +52,6 @@ $PMF_LANG['msgContact'] = 'Contacto';
 $PMF_LANG['msgHome'] = 'Inicio';
 $PMF_LANG['msgNews'] = 'Noticias';
 $PMF_LANG['msgUserOnline'] = ' Usuarios en línea';
-$PMF_LANG['msgXMLExport'] = "Exportación XML";
 $PMF_LANG['msgBack2Home'] = 'Volver a la página principal';
 
 // Páginas de contenido
@@ -71,7 +70,6 @@ $PMF_LANG['msgLastUpdateArticle'] = 'Última modificación: ';
 $PMF_LANG['msgAuthor'] = 'Autor: ';
 $PMF_LANG['msgPrinterFriendly'] = 'Versión para imprimir';
 $PMF_LANG['msgPrintArticle'] = 'Imprimir este registro';
-$PMF_LANG['msgMakeXMLExport'] = 'Exportar como Archivo-XML';
 $PMF_LANG['msgAverageVote'] = 'Valoración media:';
 $PMF_LANG['msgVoteUsability'] = 'Valora esta FAQ';
 $PMF_LANG['msgVoteFrom'] = 'de';
@@ -87,7 +85,6 @@ $PMF_LANG['msgCommentBy'] = 'Comentario de ';
 $PMF_LANG['msgCommentHeader'] = 'Comenta esta FAQ';
 $PMF_LANG['msgYourComment'] = 'Comentario';
 $PMF_LANG['msgCommentThanks'] = '¡Muchas gracias por tu comentario!';
-$PMF_LANG['msgSeeXMLFile'] = 'Abrir Archivo XML';
 $PMF_LANG['msgSend2Friend'] = 'Enviar FAQ a un amigo';
 $PMF_LANG['msgS2FName'] = 'Tu nombre:';
 $PMF_LANG['msgS2FEMail'] = 'Tu e-mail';
@@ -493,7 +490,6 @@ $PMF_LANG['msgMainCategory'] = 'Categoría Principal';
 $PMF_LANG['ad_passwdsuc'] = '¡Contraseña cambiada con éxito!';
 
 // Añadido v1.3.0 - 04.03.2003 - Thorsten
-$PMF_LANG['ad_xml_gen'] = 'Exportar como archivo XML';
 $PMF_LANG['ad_entry_locale'] = 'Idioma';
 $PMF_LANG['msgLanguageSubmit'] = 'Cambiar idioma';
 

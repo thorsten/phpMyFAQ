@@ -35,7 +35,6 @@ $PMF_LANG["msgContact"] = "Адміністрація";
 $PMF_LANG["msgHome"] = "Зміст";
 $PMF_LANG["msgNews"] = "Новини розділу";
 $PMF_LANG["msgUserOnline"] = " - активних користувачів";
-$PMF_LANG["msgXMLExport"] = "XML-файл";
 $PMF_LANG["msgBack2Home"] = "повернутися назад";
 
 // Contentpages
@@ -54,7 +53,6 @@ $PMF_LANG["msgLastUpdateArticle"] = "Останні оновлення: ";
 $PMF_LANG["msgAuthor"] = "Опублікував: ";
 $PMF_LANG["msgPrinterFriendly"] = "Версія для друку";
 $PMF_LANG["msgPrintArticle"] = "Відправити на друк";
-$PMF_LANG["msgMakeXMLExport"] = "Експорт в XML файл";
 $PMF_LANG["msgAverageVote"] = "Рейтинг відповіді";
 $PMF_LANG["msgVoteUsability"] = "Будь ласка оціните цю відповідь";
 $PMF_LANG["msgVoteFrom"] = "з";
@@ -70,7 +68,6 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "можете залишити коментар";
 $PMF_LANG["msgYourComment"] = "Ваші коментарі";
 $PMF_LANG["msgCommentThanks"] = "Спасибі за коментар!";
-$PMF_LANG["msgSeeXMLFile"] = "відкрити XML файл";
 $PMF_LANG["msgSend2Friend"] = "Відправити другу";
 $PMF_LANG["msgS2FName"] = "Ваше ім'я";
 $PMF_LANG["msgS2FEMail"] = "Адрес e-mail";
@@ -485,20 +482,14 @@ $PMF_LANG["msgPageDoublePoint"] = "Сторінки: ";
 $PMF_LANG["msgMainCategory"] = "Основна категорія";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
-
 $PMF_LANG["ad_passwdsuc"] = "Пароль змінений.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
-
 $PMF_LANG["msgPDF"] = "Скомпілювати PDF файл";
-$PMF_LANG["ad_xml_head"] = "Архівація у формат XML";
-$PMF_LANG["ad_xml_hint"] = "Збереження всіх записів бази даних у форматі XML.";
-$PMF_LANG["ad_xml_gen"] = "створити XML файл";
 $PMF_LANG["ad_entry_locale"] = "Мова";
 $PMF_LANG["msgLanguageSubmit"] = "змінити мову";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
-
 $PMF_LANG["ad_entry_preview"] = "Передперегляд";
 $PMF_LANG["ad_attach_1"] = "Невірно вказана директорія для прикріплених файлів в панелі управління.";
 $PMF_LANG["ad_attach_2"] = "Невірно вказано посилання для прикріплених файлів в панелі управління.";
