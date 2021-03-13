@@ -61,8 +61,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
         case 'backup_content':
             foreach ($tables as $table) {
                 if (
-                    (Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
-                    ) . 'faqsessions' == trim($table))
+                    (Database::getTablePrefix() . 'faqadminlog' === trim($table)) || (Database::getTablePrefix(
+                    ) . 'faqsessions' === trim($table))
                 ) {
                     continue;
                 }
@@ -72,8 +72,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
         case 'backup_logs':
             foreach ($tables as $table) {
                 if (
-                    (Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
-                    ) . 'faqsessions' == trim($table))
+                    (Database::getTablePrefix() . 'faqadminlog' === trim($table)) || (Database::getTablePrefix(
+                    ) . 'faqsessions' === trim($table))
                 ) {
                     $tableNames .= $table . ' ';
                 }

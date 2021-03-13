@@ -169,5 +169,5 @@ interface DatabaseDriver
      *
      * @return string String that you can pass to SQL as in: SELECT <result of phpMyFAQ\Db_Driver_instance->now()>
      */
-    public function now();
+    public function now(): string;
 }
