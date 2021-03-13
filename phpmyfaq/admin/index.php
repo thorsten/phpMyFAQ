@@ -438,7 +438,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
                 require 'stat.browser.php';
                 break;
             case 'viewsession':
-                require 'stat.show.php';
+                require 'statistics.show.php';
                 break;
             case 'clear-statistics':
             case 'statistics':

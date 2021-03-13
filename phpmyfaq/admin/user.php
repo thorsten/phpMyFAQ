@@ -20,7 +20,6 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Mail;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User;
@@ -100,7 +99,7 @@ if (
                 $user->getLogin(),
                 $PMF_LANG['ad_msg_savedsuc_2']
             );
-            $message .= '<script>updateUser(' . $userId . ');</script>';
+            $message .= '<script>updateUser(' . $userId . ')</script>';
             $user = new CurrentUser($faqConfig);
         }
     }
@@ -119,7 +118,7 @@ if (
             $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
             $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
             $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_SANITIZE_STRING);
-            $isSuperAdmin = $isSuperAdmin === 'on' ? true : false;
+            $isSuperAdmin = $isSuperAdmin === 'on';
 
             $user = new User($faqConfig);
             $user->getUserById($userId, true);
@@ -177,7 +176,7 @@ if (
               <div
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">
-                  <i aria-hidden="" class="fa fa-user"></i>
+                  <i aria-hidden="true" class="fa fa-user"></i>
                     <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
                 </h1>
               </div>
@@ -404,7 +403,7 @@ if (
                       <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
                              name="user_rights[]" value="<?= $right['right_id'] ?>"
                              class="form-check-input permission">
-                      <label class="form-check-label">
+                      <label class="form-check-label" for="user_right_<?= $right['right_id'] ?>">
                           <?php
                             if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
                                 echo $PMF_LANG['rightsLanguage'][$right['name']];

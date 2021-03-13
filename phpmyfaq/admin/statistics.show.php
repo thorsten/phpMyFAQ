@@ -26,18 +26,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+?>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="fa fa-tasks"></i>
+        <?php printf('%s #%d', $PMF_LANG['ad_sess_session'], $sessionId); ?>
+    </h1>
+  </div>
+
+<?php
 if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
-    $sid = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
-    printf(
-        '<header><h2 class="page-header"><i aria-hidden="true" class="fa fa-tasks"></i> %s "<span style="color: Red;">%d</span>"</h2></header>',
-        $PMF_LANG['ad_sess_session'],
-        $sid
-    );
-
     $session = new Session($faqConfig);
-    $time = $session->getTimeFromSessionId($sid);
-
+    $time = $session->getTimeFromSessionId($sessionId);
     $trackingData = explode("\n", file_get_contents(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $time)));
     ?>
   <table class="table table-striped">
@@ -51,43 +54,28 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $num = 0;
     foreach ($trackingData as $line) {
         $data = explode(';', $line);
-        if ($data[0] == $sid) {
+        if ($data[0] == $sessionId) {
             ++$num;
             ?>
           <tr>
-            <td><?= date('Y-m-d H:i:s', $data[7]);
-            ?></td>
-            <td><?= $data[1];
-            ?> (<?= $data[2];
-?>)
-            </td>
+            <td><?= date('Y-m-d H:i:s', $data[7]) ?></td>
+            <td><?= $data[1] ?> (<?= $data[2] ?>)</td>
           </tr>
-            <?php
-            if ($num == 1) {
-                ?>
+            <?php if ($num == 1) { ?>
               <tr>
-                <td><?= $PMF_LANG['ad_sess_referer'];
-                ?></td>
-                <td>
-                    <?= Strings::htmlentities(str_replace('?', '? ', $data[5]));
-                    ?>
+                <td><?= $PMF_LANG['ad_sess_referer'] ?>:</td>
+                <td><?= Strings::htmlentities(str_replace('?', '? ', $data[5])) ?>
                 </td>
               </tr>
               <tr>
-                <td><?= $PMF_LANG['ad_sess_browser'];
-                ?></td>
-                <td><?= Strings::htmlentities($data[6]);
-                ?></td>
+                <td><?= $PMF_LANG['ad_sess_browser'] ?>:</td>
+                <td><?= Strings::htmlentities($data[6]) ?></td>
               </tr>
               <tr>
-                <td><?= $PMF_LANG['ad_sess_ip'];
-                ?>:
-                </td>
-                <td><?= Strings::htmlentities($data[3]);
-                ?></td>
+                <td><?= $PMF_LANG['ad_sess_ip'] ?>:</td>
+                <td><?= Strings::htmlentities($data[3]) ?></td>
               </tr>
-                <?php
-            }
+            <?php }
         }
     }
     ?>

@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             $tags = new Tags($faqConfig);
 
-            if ('delete-tag' == $action) {
+            if ('delete-tag' === $action) {
                 $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
                 if ($tags->deleteTag($tagId)) {
                     echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
