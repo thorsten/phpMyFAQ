@@ -184,12 +184,14 @@ if (isset($auth)) {
               },
 
               // File browser
+              // @deprecated have to be rewritten for TinyMCE v5 in phpMyFAQ v3.2
+              file_browser_callback_types: 'image media',
               file_browser_callback: function(fieldName, url, type, win) {
-                let fileBrowser = 'image.browser.php';
-                fileBrowser += (fileBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
+                let mediaBrowser = 'media.browser.php';
+                mediaBrowser += (mediaBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
                 tinymce.activeEditor.windowManager.open({
-                  title: 'Select an image',
-                  url: fileBrowser,
+                  title: 'Select media file',
+                  url: mediaBrowser,
                   width: 640,
                   height: 480,
                 }, {

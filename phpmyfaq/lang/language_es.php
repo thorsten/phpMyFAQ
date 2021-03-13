@@ -1239,7 +1239,7 @@ $PMF_LANG['ad_es_bulk_index'] = 'Importación completa';
 $PMF_LANG['ad_es_create_index_success'] = 'El índice de búsqueda de Elasticsearch fue creado con éxito.';
 $PMF_LANG['ad_es_drop_index_success'] = 'El índice de búsqueda de Elasticsearch ha sido eliminado con éxito.';
 $PMF_LANG['ad_export_generate_json'] = 'Exportar como archivo JSON';
-$PMF_LANG['ad_image_name_search'] = 'Buscar nombres de imágenes';
+$PMF_LANG['ad_media_name_search'] = 'Buscar el nombre del medio';
 
 // añadido v2.9.0-RC - 2016-02-19 por Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Notas privadas';

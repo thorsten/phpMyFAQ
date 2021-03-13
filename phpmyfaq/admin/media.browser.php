@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Image browser backend for TinyMCE v4
+ * Media browser backend for TinyMCE v4
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -52,19 +52,18 @@ if ($user) {
     body { padding: 10px; }
 </style>
 
-<form action="" class="form-inline" method="post">
-    <div class="input-group">
-        <label class="sr-only" for="filter">
-            <?= $PMF_LANG['ad_image_name_search'] ?>
-        </label>
-        <input type="text" class="form-control" id="filter" value=""
-               placeholder="<?= $PMF_LANG['ad_image_name_search'] ?>">
-        <span class="input-group-addon"><i aria-hidden="true" class="fa fa-search"></i></span>
+<form action="" method="post">
+  <div class="input-group">
+    <label class="sr-only" for="filter"><?= $PMF_LANG['ad_media_name_search'] ?></label>
+    <input type="text" class="form-control" id="filter" value="" placeholder="<?= $PMF_LANG['ad_media_name_search'] ?>">
+    <div class="input-group-append">
+      <span class="input-group-text"><i aria-hidden="true" class="fa fa-search"></i></span>
     </div>
+  </div>
 </form>
 
 <?php
-$allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
+$allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', 'wmv', 'avi', 'webm'];
 
 if (!is_dir(PMF_ROOT_DIR . '/images')) {
     echo '<p class="alert alert-danger">' . sprintf($PMF_LANG['ad_dir_missing'], '/images') . '</p>';

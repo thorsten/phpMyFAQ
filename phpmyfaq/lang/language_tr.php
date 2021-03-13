@@ -1216,7 +1216,7 @@ $PMF_LANG['ad_es_bulk_index'] = "Tam içe aktarma";
 $PMF_LANG['ad_es_create_index_success'] = "Index başarıyla oluşturuldu.";
 $PMF_LANG['ad_es_drop_index_success'] = "Index başarıyla kaldırıldı.";
 $PMF_LANG['ad_export_generate_json'] = "JSON dosyası oluştur";
-$PMF_LANG['ad_image_name_search'] = "Görsel adıyla ara";
+$PMF_LANG['ad_media_name_search'] = "Görsel adıyla ara";
 
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = "Özel Not";

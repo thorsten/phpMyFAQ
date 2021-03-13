@@ -956,6 +956,6 @@ $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Gebruik bijgevoegde
 $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Activeer slim antwoorden voor gebruikersvragen (standaard: geactiveerd)');
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Activeer Elasticsearch support (standaard: gedeactiveerd)');
 $PMF_LANG['ad_export_generate_json'] = 'Maak JSON bestand aan';
-$PMF_LANG['ad_image_name_search'] = 'Zoek naam van afbeelding';
+$PMF_LANG['ad_media_name_search'] = 'Zoeken op medianaam';
 $PMF_LANG['ad_admin_notes'] = 'Persoonlijke notities';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (alleen zichtbaar voor auteurs)';
