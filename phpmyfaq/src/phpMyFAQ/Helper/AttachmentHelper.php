@@ -39,8 +39,9 @@ class AttachmentHelper
 
     /**
      * Returns a HTML list of attached files.
+     *
      * @param array $attachmentList
-     * @return File[]
+     * @return string
      */
     public function renderAttachmentList(array $attachmentList): string
     {
@@ -71,7 +72,6 @@ class AttachmentHelper
         switch ($mimeType) {
             case 'application/zip':
                 return 'file-archive-o';
-                break;
             case 'audio/basic':
             case 'audio/midi':
             case 'audio/mpeg':
@@ -82,15 +82,12 @@ class AttachmentHelper
             case 'audio/x-realaudio':
             case 'audio/x-wav':
                 return 'file-audio-o';
-                break;
             case 'application/xhtml+xml':
             case 'text/xml':
                 return 'file-code-o';
-                break;
             case 'application/vnd.ms-excel':
             case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                 return 'file-excel-o';
-                break;
             case 'image/bmp':
             case 'image/gif':
             case 'image/ief':
@@ -109,30 +106,24 @@ class AttachmentHelper
             case 'image/x-xpixmap':
             case 'image/x-xwindowdump':
                 return 'file-image-o';
-                break;
             case 'application/vnd.ms-powerpoint':
             case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
                 return 'file-powerpoint-o';
-                break;
             case 'application/pdf':
                 return 'file-pdf-o';
-                break;
             case 'text/plain':
             case 'text/richtext':
             case 'text/rtf':
                 return 'file-text-o';
-                break;
             case 'application/msword':
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                 return 'file-word-o';
-                break;
             case 'video/mpeg':
             case 'video/quicktime':
             case 'video/vnd.mpegurl':
             case 'video/x-msvideo':
             case 'video/x-sgi-movie':
                 return 'file-video-o';
-                break;
         }
 
         return 'file-o';

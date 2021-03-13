@@ -41,13 +41,13 @@ class HttpHelper extends Helper
      *
      * @param string $contentType Content type
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType)
     {
         $this->contentType = $contentType;
     }
 
     /**
-     * Returns the Header.
+     * Sets some Header.
      */
     public function addHeader()
     {

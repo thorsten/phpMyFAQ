@@ -106,11 +106,11 @@ class FaqHelper extends Helper
     /**
      * Renders a select box with all translations of a FAQ.
      *
-     * @param  Faq $faq
-     * @param  int $categoryId
+     * @param Faq $faq
+     * @param int $categoryId
      * @return string
      */
-    public function renderChangeLanguageSelector(Faq $faq, $categoryId): string
+    public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {
         global $languageCodes;
 

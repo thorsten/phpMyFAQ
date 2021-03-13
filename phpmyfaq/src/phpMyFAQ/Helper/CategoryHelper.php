@@ -113,32 +113,32 @@ class CategoryHelper extends Helper
                         true,
                         $isActive
                     );
-                } else {
-                    if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
-                        $name = ($this->Category->treeTab[$y]['parent_id'] === 0)
-                            ?
-                            $name
-                            :
-                            $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
-                        $output .= $this->Category->addCategoryLink(
-                            $sids,
-                            $categoryId,
-                            $name,
-                            $description,
-                            false,
-                            $isActive
-                        );
-                    } else {
-                        $output .= $this->Category->addCategoryLink(
-                            $sids,
-                            $categoryId,
-                            $name,
-                            $description,
-                            false,
-                            $isActive
-                        );
-                    }
                 }
+                if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
+                    $name = ($this->Category->treeTab[$y]['parent_id'] === 0)
+                        ?
+                        $name
+                        :
+                        $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
+                    $output .= $this->Category->addCategoryLink(
+                        $sids,
+                        $categoryId,
+                        $name,
+                        $description,
+                        false,
+                        $isActive
+                    );
+                } else {
+                    $output .= $this->Category->addCategoryLink(
+                        $sids,
+                        $categoryId,
+                        $name,
+                        $description,
+                        false,
+                        $isActive
+                    );
+                }
+
                 $open = $level;
             }
             if ($open > 0) {
