@@ -24,13 +24,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
-
 ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_structure'] ?>
-          </h1>
-        </div>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="fa fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_structure'] ?>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a class="btn btn-sm btn-success" href="?action=addcategory">
+          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
+        </a>
+      </div>
+    </div>
+  </div>
+
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category = new Category($faqConfig, [], false);
@@ -40,18 +48,19 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $currentLanguage = $languageCodes[strtoupper($faqLangCode)];
     $all_languages = [];
     $all_lang = [];
-    $showcat = Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
+    $showCategory = Filter::filterInput(INPUT_POST, 'showCategory', FILTER_SANITIZE_STRING);
 
     // translate an existing category
-    if (!is_null($showcat) && $showcat == 'yes') {
+    if (!is_null($showCategory) && $showCategory == 'yes') {
         $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryData = array(
+        $categoryData = [
             'id' => Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
             'lang' => Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
             'parent_id' => $parentId,
             'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),);
+            'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT)
+        ];
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($categoryData, $parentId, $categoryData['id'])) {
@@ -64,8 +73,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->getMissingCategories();
     $category->buildTree();
     ?>
-        <table class="table table-striped">
-        <thead>
+        <table class="table table-light table-striped">
+        <thead class="thead-dark">
             <tr>
                 <th><?= $currentLanguage ?></th>
                 <?php
@@ -77,7 +86,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 asort($all_lang);
                 foreach ($all_lang as $lang => $language) {
                     if ($language != $currentLanguage) {
-                        printf('<th>' . $language . "</th>\n", $language);
+                        printf('<th class="text-center">' . $language . "</th>\n", $language);
                     }
                 }
                 ?>
@@ -100,7 +109,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         if ($cat['lang'] != $faqLangCode) {
             // translate category
             printf(
-                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
+                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-globe"></span></a></a>',
                 $currentLink,
                 $cat['id'],
                 $faqLangCode,
@@ -126,25 +135,25 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             if (array_key_exists($language, $id_languages)) {
                 $spokenLanguage = Strings::preg_replace('/\(.*\)/', '', $id_languages[$language]);
                 printf(
-                    '<td title="%s: %s">',
+                    '<td class="text-center" title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="badge badge-success"><i aria-hidden="true" class="fa fa-check fa fa-white"></i></span></td>',
+                    '<span title="%s: %s" class="badge badge-success"><i aria-hidden="true" class="fa fa-check"></i></span></td>',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
             } else {
                 printf(
-                    '<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
+                    '<td class="text-center"><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
                     $currentLink,
                     $cat['id'],
                     $lang,
                     $PMF_LANG['ad_categ_translate']
                 );
                 printf(
-                    '<span title="%s" class="badge badge-inverse"><i aria-hidden="true" class="fa fa-share fa fa-white"></i></span></a>',
+                    '<span title="%s" class="badge badge-primary"><i aria-hidden="true" class="fa fa-globe fa-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
             }

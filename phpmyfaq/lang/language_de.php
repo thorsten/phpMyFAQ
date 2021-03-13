@@ -769,7 +769,7 @@ $PMF_LANG['ad_categ_translated'] = "Die Kategorie ist übersetzt.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
 $PMF_LANG['ad_categ_show'] = "Übersicht";
-$PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien mitsamt ihre Sprachen";
+$PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien und der Übersetzungen";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = "Benutzerrechte";
