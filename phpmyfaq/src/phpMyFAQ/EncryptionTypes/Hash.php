@@ -29,11 +29,11 @@ class Hash extends Encryption
     /**
      * encrypts the string str and returns the result.
      *
-     * @param  string $str String
+     * @param string $string String
      * @return string
      */
-    public function encrypt($str): string
+    public function encrypt(string $string): string
     {
-        return hash('sha256', $str . $this->salt);
+        return hash('sha256', $string . $this->salt);
     }
 }

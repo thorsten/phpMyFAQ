@@ -106,13 +106,13 @@ class Encryption
     /**
      * Encrypts the string str and returns the result.
      *
-     * @param string $str String
+     * @param string $string String
      *
      * @return string
      */
-    public function encrypt(string $str): string
+    public function encrypt(string $string): string
     {
-        return $str;
+        return $string;
     }
 
     /**

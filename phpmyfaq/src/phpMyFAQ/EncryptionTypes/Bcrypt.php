@@ -30,10 +30,9 @@ class Bcrypt extends Encryption
      * Encrypts the passwords and returns the result.
      *
      * @param string $password String
-     *
      * @return string
      */
-    public function encrypt($password): string
+    public function encrypt(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);
     }

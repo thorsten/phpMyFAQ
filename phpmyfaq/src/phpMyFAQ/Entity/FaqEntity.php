@@ -17,8 +17,6 @@
 namespace phpMyFAQ\Entity;
 
 use DateTime;
-use DateTimeInterface;
-use phpDocumentor\Reflection\Types\This;
 
 /**
  * Class FaqEntity
@@ -87,7 +85,7 @@ class FaqEntity
     /**
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

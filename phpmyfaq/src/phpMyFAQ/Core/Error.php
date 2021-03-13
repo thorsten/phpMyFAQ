@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Core;
 
 use ErrorException;
-use Exception;
 
 /**
  * Class Error

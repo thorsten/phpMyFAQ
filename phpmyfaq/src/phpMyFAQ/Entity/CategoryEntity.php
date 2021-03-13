@@ -77,7 +77,7 @@ class CategoryEntity
     /**
      * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -87,7 +87,7 @@ class CategoryEntity
      *
      * @return CategoryEntity
      */
-    public function setActive($active)
+    public function setActive($active): CategoryEntity
     {
         $this->active = $active;
 
@@ -97,17 +97,16 @@ class CategoryEntity
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
     /**
      * @param string $description
-     *
      * @return CategoryEntity
      */
-    public function setDescription($description)
+    public function setDescription(string $description): CategoryEntity
     {
         $this->description = $description;
 
@@ -117,7 +116,7 @@ class CategoryEntity
     /**
      * @return int
      */
-    public function getGroupId()
+    public function getGroupId(): int
     {
         return $this->groupId;
     }
@@ -127,7 +126,7 @@ class CategoryEntity
      *
      * @return CategoryEntity
      */
-    public function setGroupId($groupId)
+    public function setGroupId($groupId): CategoryEntity
     {
         $this->groupId = $groupId;
 
@@ -137,7 +136,7 @@ class CategoryEntity
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return (int)$this->id;
     }
@@ -147,7 +146,7 @@ class CategoryEntity
      *
      * @return CategoryEntity
      */
-    public function setId($id)
+    public function setId($id): CategoryEntity
     {
         $this->id = $id;
 
@@ -157,17 +156,16 @@ class CategoryEntity
     /**
      * @return string
      */
-    public function getLang()
+    public function getLang(): string
     {
         return $this->lang;
     }
 
     /**
      * @param string $lang
-     *
      * @return CategoryEntity
      */
-    public function setLang($lang)
+    public function setLang(string $lang): CategoryEntity
     {
         $this->lang = $lang;
 
@@ -177,17 +175,16 @@ class CategoryEntity
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
-     *
      * @return CategoryEntity
      */
-    public function setName($name)
+    public function setName(string $name): CategoryEntity
     {
         $this->name = $name;
 
@@ -197,7 +194,7 @@ class CategoryEntity
     /**
      * @return int
      */
-    public function getParentId()
+    public function getParentId(): int
     {
         return (int)$this->parentId;
     }
@@ -207,7 +204,7 @@ class CategoryEntity
      *
      * @return CategoryEntity
      */
-    public function setParentId($parentId)
+    public function setParentId($parentId): CategoryEntity
     {
         $this->parentId = $parentId;
 
@@ -215,19 +212,18 @@ class CategoryEntity
     }
 
     /**
-     * @return integer
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return (int)$this->userId;
     }
 
     /**
-     * @param string $userId
-     *
+     * @param int $userId
      * @return CategoryEntity
      */
-    public function setUserId($userId)
+    public function setUserId($userId): CategoryEntity
     {
         $this->userId = $userId;
 
@@ -237,17 +233,16 @@ class CategoryEntity
     /**
      * @return string|null
      */
-    public function getImage()
+    public function getImage(): ?string
     {
         return $this->image;
     }
 
     /**
      * @param string $image
-     *
      * @return CategoryEntity
      */
-    public function setImage($image)
+    public function setImage(string $image): CategoryEntity
     {
         $this->image = $image;
 
@@ -257,16 +252,16 @@ class CategoryEntity
     /**
      * @return bool
      */
-    public function getShowHome()
+    public function getShowHome(): bool
     {
         return $this->showHome;
     }
 
     /**
-     *
+     * @param bool $showHome
      * @return CategoryEntity
      */
-    public function setShowHome($showHome)
+    public function setShowHome($showHome): CategoryEntity
     {
         $this->showHome = $showHome;
 
