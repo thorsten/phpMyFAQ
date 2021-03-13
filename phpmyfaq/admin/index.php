@@ -264,9 +264,6 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                 case 'recordAdd':
                     require 'record.add.php';
                     break;
-                case 'autosave':
-                    require 'ajax.autosave.php';
-                    break;
                 case 'markdown':
                     require 'ajax.markdown.php';
                     break;

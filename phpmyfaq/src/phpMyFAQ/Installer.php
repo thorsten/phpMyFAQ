@@ -363,8 +363,6 @@ class Installer
         'records.defaultAttachmentEncKey' => '',
         'records.enableCloseQuestion' => 'false',
         'records.enableDeleteQuestion' => 'false',
-        'records.autosaveActive' => 'false',
-        'records.autosaveSecs' => '180',
         'records.randomSort' => 'false',
         'records.allowCommentsForGuests' => 'true',
         'records.allowQuestionsForGuests' => 'true',

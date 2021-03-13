@@ -106,7 +106,7 @@ if (isset($auth)) {
                 'Wingdings=wingdings,zapf dingbats',
               plugins: [
                 'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker fullpage toc',
-                'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking codesample autosave',
+                'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking codesample',
                 'save table contextmenu directionality emoticons template paste textcolor imagetools colorpicker textpattern help phpmyfaq',
               ],
               relative_urls: false,

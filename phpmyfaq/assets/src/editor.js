@@ -28,7 +28,7 @@ $(document).ready(function () {
         'advlist anchor autolink lists link image imagetools charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code codesample fullscreen colorpicker help',
         'insertdatetime media nonbreaking save table contextmenu directionality textpattern',
-        'emoticons template paste textcolor autosave toc',
+        'emoticons template paste textcolor toc',
       ],
       relative_urls: false,
       convert_urls: false,

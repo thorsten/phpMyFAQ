@@ -1113,10 +1113,6 @@ $PMF_LANG['headerUserControlPanel'] = 'Panel de Control de Usuario';
 $PMF_LANG['rememberMe'] = 'Recordarme';
 $PMF_LANG['ad_menu_instances'] = 'FAQ Multi-sites';
 
-// added v2.8.0-alpha2 - 2012-07-07 by Anatoliy
-$LANG_CONF['records.autosaveActive'] = array('checkbox', 'Activar auto-guardado automático de FAQ');
-$LANG_CONF['records.autosaveSecs'] = array('input', 'Intervalo de auto-guardado en segundos, por defecto 180');
-
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactivas';
 $LANG_CONF['main.maintenanceMode'] = ['checkbox', 'FAQ en modo de mantenimiento'];

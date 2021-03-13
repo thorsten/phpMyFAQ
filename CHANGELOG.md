@@ -30,6 +30,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed password hashing with MD5 and SHA-1 (Thorsten)
 - removed OpenSearch support (Thorsten)
 - removed XML export (Thorsten)
+- removed auto-save for FAQs during editing (Thorsten)
 - fixed minor bugs (Nico Schmitz-Laux, Thorsten)
 
 ### phpMyFAQ v3.0.8 - 2021-02-24

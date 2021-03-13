@@ -1103,10 +1103,6 @@ $PMF_LANG["headerUserControlPanel"] = "使用者控制台";
 $PMF_LANG["rememberMe"] = "記住我";
 $PMF_LANG["ad_menu_instances"] = "多個 FAQ 站台 (Multi-sites)";
 
-// added v2.8.0-alpha2 - 2012-07-07 by Anatoliy 開發者
-$LANG_CONF['records.autosaveActive'] = array("checkbox", "啟用 FAQ 自動儲存功能 Activate FAQ autosaving");
-$LANG_CONF['records.autosaveSecs'] = array("input", "自動儲存時間間隔秒數，預設 180<br>Interval for autosaving in seconds, default 180");
-
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten 開發者
 $PMF_LANG['ad_record_inactive'] = "FAQS 目前沒有作用 (FAQs inactive)";
 $LANG_CONF["main.maintenanceMode"] = array("checkbox", "設定 FAQ 為維護模式 Set FAQ in maintenance mode");

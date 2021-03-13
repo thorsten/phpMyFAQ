@@ -932,7 +932,5 @@ $LANG_CONF['cache.varnishSecret'] = array('input', 'Varnish secret');
 $LANG_CONF['cache.varnishTimeout'] = array('input', 'Varnish timeout');
 $LANG_CONF['records.enableCloseQuestion'] = array('checkbox', 'Fermer les questions ouvertes après une réponse ?');
 $LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', 'Supprimer les questions ouvertes après une réponse ?');
-$LANG_CONF['records.autosaveActive'] = array('checkbox', 'Activer la sauvegarde automatique de la FAQ');
-$LANG_CONF['records.autosaveSecs'] = array('input', 'Intervalle de sauvegarde automatique en secondes, défaut 180');
 $LANG_CONF['main.maintenanceMode'] = array('checkbox', 'Placer la FAQ en mode de maintenance');
 $PMF_LANG['msgSeeFAQinFrontend'] = 'Voir cette FAQ sur le Frontend';

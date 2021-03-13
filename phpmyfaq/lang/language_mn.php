@@ -1140,10 +1140,6 @@ $PMF_LANG["headerUserControlPanel"] = 'Хэрэглэгчийн хяналтын
 $PMF_LANG["rememberMe"] = 'Намайг сана';
 $PMF_LANG["ad_menu_instances"] = "FAQ Олон сайт";
 
-// added v2.8.0-alpha2 - 2012-07-07 by Anatoliy
-$LANG_CONF['records.autosaveActive'] = array('checkbox', 'FAQ -н автомат хадгалалтыг идэвхжүүлэх');
-$LANG_CONF['records.autosaveSecs'] = array('input', 'Interval for autosaving in seconds, default 180');
-
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
 $LANG_CONF["main.maintenanceMode"] = array("checkbox", "Set FAQ in maintenance mode");

@@ -739,6 +739,14 @@ if ($step == 3) {
                 break;
         }
     }
+    
+    //
+    // UPDATES FROM 3.1.0-RC
+    //
+    if (version_compare($version, '3.1.0-RC', '<=')) {
+        $faqConfig->delete('records.autosaveActive');
+        $faqConfig->delete('records.autosaveSecs');
+    }
 
     //
     // Always the last step: Update version number
