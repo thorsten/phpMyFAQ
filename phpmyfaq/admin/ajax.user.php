@@ -172,7 +172,7 @@ if (
                     $message = $PMF_LANG['ad_user_error_delete'];
                 } else {
                     $category = new Category($faqConfig, [], false);
-                    $category->moveOwnership($userId, 1);
+                    $category->moveOwnership((int) $userId, 1);
 
                     // Remove the user from groups
                     if ('basic' !== $faqConfig->get('security.permLevel')) {

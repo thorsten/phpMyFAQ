@@ -42,7 +42,7 @@ if (
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
-    $category->buildTree();
+    $category->buildCategoryTree();
 
     $categoryRelation = new CategoryRelation($faqConfig);
     $categoryRelation->setGroups($currentAdminGroups);

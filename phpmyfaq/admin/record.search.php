@@ -48,7 +48,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
-    $category->buildTree();
+    $category->buildCategoryTree();
 
     $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
     ?>

@@ -227,7 +227,7 @@ if (
                 $oCat = new Category($faqConfig, [], false);
                 $oCat->setUser($currentAdminUser);
                 $oCat->setGroups($currentAdminGroups);
-                $oCat->moveOwnership($userId, 1);
+                $oCat->moveOwnership((int) $userId, 1);
 
                 // Remove the user from groups
                 if ('basic' !== $faqConfig->get('security.permLevel')) {

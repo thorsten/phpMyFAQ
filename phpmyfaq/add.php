@@ -69,7 +69,7 @@ if (!is_null($selectedQuestion)) {
     }
 }
 
-$category->buildTree();
+$category->buildCategoryTree();
 
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);

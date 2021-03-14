@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $category = new Category($faqConfig, array(), false);
                 $category->setUser($currentAdminUser);
                 $category->setGroups($currentAdminGroups);
-                $category->buildTree();
+                $category->buildCategoryTree();
 
                 $categoryHelper = new CategoryHelper();
                 $categoryHelper->setCategory($category);

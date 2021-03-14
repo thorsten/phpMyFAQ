@@ -183,7 +183,7 @@ if (
     exit();
 }
 
-$category->buildTree();
+$category->buildCategoryTree();
 
 $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('search.numberSearchTerms'));
 

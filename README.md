@@ -33,7 +33,7 @@ and open http://www.example.org/phpmyfaq/setup/index.php in your preferred brows
 #### Dockerfile
 
 The Dockerfile provided in this repo only build an environment to run any release it's for development purpose. It does
-not contain any code as the phpmyfaq folder is meant to be mount as the `/var/www/html` folder in the container.
+not contain any code as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in the container.
 
 To build a production release please use the [docker-hub](https://github.com/phpMyFAQ/docker-hub) repository or use
 images provided on [docker.io](https://hub.docker.com/r/phpmyfaq/phpmyfaq/).

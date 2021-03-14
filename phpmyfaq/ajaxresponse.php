@@ -88,7 +88,7 @@ $category = new Category($faqConfig, $currentGroups);
 $category->setUser($currentUser);
 $category->setGroups($currentGroups);
 $category->transform(0);
-$category->buildTree();
+$category->buildCategoryTree();
 
 $faqPermission = new FaqPermission($faqConfig);
 $faqSearch = new Search($faqConfig);

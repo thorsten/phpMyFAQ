@@ -1,18 +1,21 @@
 <?php
 
 /**
- * Manages user authentication.
- * Subclasses of Auth implement authentication functionality with different
- * types. The class AuthLdap for example provides authentication functionality
- * LDAP-database access, AuthDb with database access.
- * Authentication functionality includes creation of a new login-and-password
- * deletion of an existing login-and-password combination and validation of
- * given by a user. These functions are provided by the database-specific
- * see documentation of the database-specific authentication classes AuthMysql,
- * or AuthLdap for further details.
+ * Manages the user authentication in phpMyFAQ
+ *
+ * Subclasses of Auth implement authentication functionality with
+ * different types. The class AuthLdap for example provides
+ * authentication functionality LDAP-database access, AuthDatabase
+ * with database access. Authentication functionality includes
+ * creation of a new login-and-password, deletion of an existing
+ * login-and-password combination and validation of given by a user.
+ * These functions are provided by the database-specific see
+ * documentation of the database-specific authentication classes
+ * AuthDatabase, or AuthLdap for further details.
  * Passwords are usually encrypted before stored in a database. For
- * and security, a password encryption method may be chosen. See documentation
- * EncryptionTypes class for further details.
+ * and security, a password encryption method may be chosen. See
+ * documentation of Encryption class for further details.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -85,7 +88,7 @@ class Auth
      * @param string $encType encryption type
      * @return Encryption
      */
-    public function selectEncType($encType): Encryption
+    public function selectEncType(string $encType): Encryption
     {
         $this->encContainer = Encryption::selectEnc($encType, $this->config);
         return $this->encContainer;
@@ -125,7 +128,7 @@ class Auth
      * @param string $method Authentication access methods
      * @return Auth
      */
-    public function selectAuth($method): Auth
+    public function selectAuth(string $method): Auth
     {
         // verify selected database
         $method = ucfirst(strtolower($method));
@@ -148,8 +151,6 @@ class Auth
     }
 
     /**
-     * Short description of method read_only.
-     *
      * @param bool $readOnly boolean flag
      * @return bool
      */

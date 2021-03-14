@@ -45,7 +45,7 @@ try {
     // @todo handle the exception
 }
 
-$category->buildTree();
+$category->buildCategoryTree();
 
 $categoryId = Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT, 0);
 

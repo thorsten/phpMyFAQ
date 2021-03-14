@@ -161,7 +161,7 @@ class Category
      * @param string $language
      * @return Category
      */
-    public function setLanguage($language): Category
+    public function setLanguage(string $language): Category
     {
         $this->language = $language;
         return $this;
@@ -338,7 +338,7 @@ class Category
      *
      * @return array
      */
-    public function getAllCategories()
+    public function getAllCategories(): array
     {
         $categories = [];
         $query = sprintf(
@@ -377,7 +377,7 @@ class Category
      *
      * @return array
      */
-    public function getHomeCategories()
+    public function getHomeCategories(): array
     {
         $categories = [];
         $query = sprintf(
@@ -422,7 +422,7 @@ class Category
      *
      * @return array
      */
-    public function getAllCategoryIds()
+    public function getAllCategoryIds(): array
     {
         $categories = [];
 
@@ -454,7 +454,7 @@ class Category
      * @param int $parentId Parent id
      * @param int $indent Indention
      */
-    public function buildTree(int $parentId = 0, int $indent = 0)
+    public function buildCategoryTree(int $parentId = 0, int $indent = 0)
     {
         $tt = [];
         $x = 0;
@@ -474,7 +474,7 @@ class Category
                     }
                     $tmp['indent'] = $indent;
                     $this->catTree[] = $tmp;
-                    $this->buildTree($tmp['id'], $indent + 1);
+                    $this->buildCategoryTree($tmp['id'], $indent + 1);
                 }
             }
         }
@@ -603,7 +603,7 @@ class Category
      *
      * @return array
      */
-    public function getChildNodes($id)
+    public function getChildNodes($id): array
     {
         $children = [];
 
@@ -621,10 +621,9 @@ class Category
      * Try to expand from the parent_id to the node $id
      *
      * @param int $id
-     *
      * @return void
      */
-    public function expandTo($id)
+    public function expandTo(int $id)
     {
         $this->collapseAll();
         $ascendants = $this->getNodes($id);
@@ -659,10 +658,9 @@ class Category
      * Get the line number where to find the node $id in the category tree.
      *
      * @param int $id Entity id
-     *
      * @return int
      */
-    private function getLineCategory($id)
+    private function getLineCategory(int $id): int
     {
         $num = count($this->treeTab);
         for ($i = 0; $i < $num; ++$i) {
@@ -673,21 +671,21 @@ class Category
     }
 
     /**
-     * expand the node $id.
+     * Expand the node $id.
      *
      * @param int $id Entity id
      */
-    public function expand($id)
+    public function expand(int $id)
     {
         $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
     }
 
     /**
-     * print the static tree with the number of records.
+     * Renders the static tree with the number of records.
      *
      * @return string
      */
-    public function viewTree()
+    public function renderCategoryTree(): string
     {
         global $sids, $plr;
 
@@ -821,7 +819,7 @@ class Category
      *
      * @return int
      */
-    public function height()
+    public function height(): int
     {
         return count($this->treeTab);
     }
@@ -831,10 +829,9 @@ class Category
      * collapse/expand node.
      *
      * @param int $line Current line
-     *
      * @return int
      */
-    public function getNextLineTree($line)
+    public function getNextLineTree(int $line): int
     {
         if ($this->treeTab[$line]['symbol'] !== 'plus') {
             return $line + 1;
@@ -853,11 +850,10 @@ class Category
      * Returns the four parts of a line to display: category name, the ID of
      * the root node, the description and if the category is active
      *
-     * @param integer $node
-     *
+     * @param int $node
      * @return array
      */
-    public function getLineDisplay($node)
+    public function getLineDisplay(int $node): array
     {
         return [
             $this->symbols[$this->treeTab[$node]['symbol']],
@@ -873,22 +869,21 @@ class Category
      * Creates a category link.
      *
      * @param string $sids Session id
-     * @param int $categoryId Parent category
+     * @param int    $categoryId Parent category
      * @param string $categoryName Entity name
      * @param string $description Description
-     * @param bool $hasChildren Child categories available
-     * @param bool $isActive Sets a link active via CSS
-     *
+     * @param bool   $hasChildren Child categories available
+     * @param bool   $isActive Sets a link active via CSS
      * @return string
      */
     public function addCategoryLink(
-        $sids,
+        string $sids,
         $categoryId,
-        $categoryName,
-        $description,
+        string $categoryName,
+        string $description,
         $hasChildren = false,
         $isActive = false
-    ) {
+    ): string {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
             $this->config->getDefaultUrl(),
@@ -924,7 +919,7 @@ class Category
      *
      * @return CategoryEntity
      */
-    public function getCategoryData($categoryId)
+    public function getCategoryData($categoryId): CategoryEntity
     {
         $entity = new CategoryEntity();
 
@@ -964,7 +959,7 @@ class Category
      *
      * @return string
      */
-    public function getPath($id, $separator = ' / ', $renderAsHtml = false, $useCssClass = 'breadcrumb')
+    public function getPath($id, $separator = ' / ', $renderAsHtml = false, $useCssClass = 'breadcrumb'): string
     {
         global $sids;
 
@@ -1030,7 +1025,7 @@ class Category
      *
      * @return int
      */
-    public function getCategoryIdFromFaq($faqId)
+    public function getCategoryIdFromFaq($faqId): int
     {
         $cats = $this->getCategoryIdsFromFaq($faqId);
         if (isset($cats[0])) {
@@ -1048,7 +1043,7 @@ class Category
      *
      * @return array
      */
-    public function getCategoryIdsFromFaq($faqId)
+    public function getCategoryIdsFromFaq($faqId): array
     {
         $categories = $this->getCategoriesFromFaq($faqId);
         $result = [];
@@ -1069,7 +1064,7 @@ class Category
      *
      * @return array
      */
-    public function getCategoriesFromFaq($faqId)
+    public function getCategoriesFromFaq($faqId): array
     {
         $query = sprintf(
             "
@@ -1116,7 +1111,7 @@ class Category
      * @param  $categoryId
      * @return bool
      */
-    public function categoryHasLinkToFaq($faqId, $categoryId)
+    public function categoryHasLinkToFaq($faqId, $categoryId): bool
     {
         $categories = $this->getCategoriesFromFaq($faqId);
         foreach ($categories as $category) {
@@ -1142,10 +1137,9 @@ class Category
      * Returns the moderator group ID of the given category.
      *
      * @param int $categoryId
-     *
      * @return int
      */
-    public function getModeratorGroupId($categoryId)
+    public function getModeratorGroupId(int $categoryId): int
     {
         return $this->moderators[$categoryId];
     }
@@ -1159,7 +1153,7 @@ class Category
      *
      * @return int
      */
-    public function addCategory(array $categoryData, $parentId = 0, $id = null)
+    public function addCategory(array $categoryData, $parentId = 0, $id = null): ?int
     {
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
@@ -1197,16 +1191,10 @@ class Category
      *
      * @return int
      */
-    public function checkIfCategoryExists(array $categoryData)
+    public function checkIfCategoryExists(array $categoryData): int
     {
         $query = sprintf(
-            "
-            SELECT name from
-                %sfaqcategories
-            WHERE
-                name = '%s'
-            AND
-                lang = '%s'",
+            "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s'",
             Database::getTablePrefix(),
             $categoryData['name'],
             $categoryData['lang']
@@ -1223,7 +1211,7 @@ class Category
      *
      * @return bool
      */
-    public function updateCategory(array $categoryData)
+    public function updateCategory(array $categoryData): bool
     {
         $query = sprintf(
             "
@@ -1261,23 +1249,12 @@ class Category
      *
      * @param int $from Old user id
      * @param int $to New user id
-     *
      * @return bool
      */
-    public function moveOwnership($from, $to)
+    public function moveOwnership(int $from, int $to): bool
     {
-        if (!is_numeric($from) || !is_numeric($to)) {
-            return false;
-        }
-
         $query = sprintf(
-            '
-            UPDATE
-                %sfaqcategories
-            SET
-                user_id = %d
-            WHERE
-                user_id = %d',
+            'UPDATE %sfaqcategories SET user_id = %d WHERE user_id = %d',
             Database::getTablePrefix(),
             $to,
             $from
@@ -1290,26 +1267,17 @@ class Category
     /**
      * Checks if a language is already defined for a category id.
      *
-     * @param int $category_id Entity id
-     * @param string $category_lang Entity language
-     *
+     * @param int    $categoryId Entity id
+     * @param string $categoryLanguage Entity language
      * @return bool
      */
-    public function checkLanguage($category_id, $category_lang)
+    public function checkLanguage(int $categoryId, string $categoryLanguage): bool
     {
         $query = sprintf(
-            "
-            SELECT
-                lang
-            FROM
-                %sfaqcategories
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
+            "SELECT lang FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $category_id,
-            $category_lang
+            $categoryId,
+            $categoryLanguage
         );
 
         $result = $this->config->getDb()->query($query);
@@ -1320,28 +1288,21 @@ class Category
     /**
      * Updates the parent category.
      *
-     * @param int $category_id Entity id
-     * @param int $parent_id Parent category id
-     *
+     * @param int $categoryId Entity id
+     * @param int $parentId Parent category id
      * @return bool
      */
-    public function updateParentCategory($category_id, $parent_id): bool
+    public function updateParentCategory(int $categoryId, int $parentId): bool
     {
-        if ((!is_numeric($category_id) || !is_numeric($parent_id)) && $category_id != $parent_id) {
+        if ($categoryId !== $parentId) {
             return false;
         }
 
         $query = sprintf(
-            '
-            UPDATE
-                %sfaqcategories
-            SET
-                parent_id = %d
-            WHERE
-                id = %d',
+            'UPDATE %sfaqcategories SET parent_id = %d WHERE id = %d',
             Database::getTablePrefix(),
-            $parent_id,
-            $category_id
+            $parentId,
+            $categoryId
         );
         $this->config->getDb()->query($query);
 
@@ -1351,25 +1312,20 @@ class Category
     /**
      * Deletes a category.
      *
-     * @param int $category_id Entity id
-     * @param string $category_lang Categiry language
-     * @param bool $delete_all Delete all languages?
-     *
+     * @param int    $categoryId Entity id
+     * @param string $categoryLang Category language
+     * @param bool   $deleteAll Delete all languages?
      * @return bool
      */
-    public function deleteCategory($category_id, $category_lang, $delete_all = false)
+    public function deleteCategory($categoryId, string $categoryLang, $deleteAll = false): bool
     {
         $query = sprintf(
-            '
-            DELETE FROM
-                %sfaqcategories
-            WHERE
-                id = %d',
+            'DELETE FROM %sfaqcategories WHERE id = %d',
             Database::getTablePrefix(),
-            $category_id
+            $categoryId
         );
-        if (!$delete_all) {
-            $query .= " AND lang = '" . $category_lang . "'";
+        if (!$deleteAll) {
+            $query .= " AND lang = '" . $categoryLang . "'";
         }
         $this->config->getDb()->query($query);
 

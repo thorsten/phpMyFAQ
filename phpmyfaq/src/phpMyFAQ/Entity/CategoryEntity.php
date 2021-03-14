@@ -239,10 +239,10 @@ class CategoryEntity
     }
 
     /**
-     * @param string $image
+     * @param string|null $image
      * @return CategoryEntity
      */
-    public function setImage(string $image): CategoryEntity
+    public function setImage(?string $image): CategoryEntity
     {
         $this->image = $image;
 
@@ -254,14 +254,14 @@ class CategoryEntity
      */
     public function getShowHome(): bool
     {
-        return $this->showHome;
+        return (bool) $this->showHome;
     }
 
     /**
      * @param bool $showHome
      * @return CategoryEntity
      */
-    public function setShowHome($showHome): CategoryEntity
+    public function setShowHome(?bool $showHome): CategoryEntity
     {
         $this->showHome = $showHome;
 

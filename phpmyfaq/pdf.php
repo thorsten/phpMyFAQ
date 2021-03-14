@@ -108,7 +108,7 @@ try {
 $http = new HttpHelper();
 
 if (true === $getAll) {
-    $category->buildTree();
+    $category->buildCategoryTree();
 }
 $tags = new Tags($faqConfig);
 

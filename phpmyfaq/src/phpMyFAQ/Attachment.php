@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Attachment handler class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Attachment

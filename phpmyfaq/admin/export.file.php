@@ -37,7 +37,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'export')) {
     $faq = new Faq($faqConfig);
     $tags = new Tags($faqConfig);
     $category = new Category($faqConfig, [], false);
-    $category->buildTree($categoryId);
+    $category->buildCategoryTree($categoryId);
 
     try {
         $export = Export::create($faq, $category, $faqConfig, $type);

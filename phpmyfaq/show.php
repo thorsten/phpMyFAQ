@@ -50,11 +50,11 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $subCategory->setUser($currentUser);
         $subCategory->transform($selectedCategoryId);
         if (empty($records)) {
-            $records = $subCategory->viewTree();
+            $records = $subCategory->renderCategoryTree();
         }
         if (count($category->getChildNodes($selectedCategoryId))) {
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
-            $subCategoryContent = $subCategory->viewTree();
+            $subCategoryContent = $subCategory->renderCategoryTree();
             $template->parseBlock(
                 'mainPageContent',
                 'subCategories',
@@ -113,7 +113,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'categoryHeader' => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
             'categoryFaqsHeader' => '',
-            'categoryContent' => $category->viewTree(),
+            'categoryContent' => $category->renderCategoryTree(),
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => '',
         ]

@@ -50,7 +50,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
-    $category->buildTree();
+    $category->buildCategoryTree();
 
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);

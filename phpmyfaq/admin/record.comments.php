@@ -45,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     $faq = new Faq($faqConfig);
     $date = new Date($faqConfig);
 
-    $category->buildTree();
+    $category->buildCategoryTree();
     $faqComments = $comment->getAllComments(CommentType::FAQ);
 
     printf("<header><h3>%s</h3></header>\n", $PMF_LANG['ad_comment_faqs']);

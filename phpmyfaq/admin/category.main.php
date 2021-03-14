@@ -287,7 +287,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $category->setGroups($currentAdminGroups);
                 $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
                 $parentId = Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
-                if ($category->updateParentCategory($categoryId, $parentId)) {
+                if ($category->updateParentCategory((int) $categoryId, (int) $parentId)) {
                     printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
                 } else {
                     printf(
@@ -310,7 +310,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $category->setUser($currentAdminUser);
             $category->setGroups($currentAdminGroups);
             $category->getMissingCategories();
-            $category->buildTree();
+            $category->buildCategoryTree();
 
             $open = $lastCatId = $openDiv = 0;
 

@@ -27,7 +27,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $category->buildTree();
+    $category->buildCategoryTree();
 
     $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $parent_id = $category->categoryName[$id]['parent_id'];
