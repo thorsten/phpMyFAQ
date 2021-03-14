@@ -45,6 +45,7 @@ class CaptchaTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'AwesomeBrowser';
         $_SERVER['REMOTE_ADDR'] = '::1';
         $_SERVER['REQUEST_TIME'] = 1;
+        $_SERVER['SCRIPT_NAME'] = 'test-me.php';
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
@@ -66,7 +67,7 @@ class CaptchaTest extends TestCase
      */
     public function testRenderCaptchaImage()
     {
-        $expected = '<img id="captchaImage" src="./phpmyfaq/src/libs/bin/phpunit?action=foobar&amp;gen=img&amp;ck=1" ' .
+        $expected = '<img id="captchaImage" src="test-me.php?action=foobar&amp;gen=img&amp;ck=1" ' .
             'height="40" width="165" alt="Chuck Norris has counted to infinity. Twice.">';
         $this->assertEquals($expected, $this->captcha->renderCaptchaImage('foobar'));
     }
