@@ -50,7 +50,6 @@
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",
-    "phpunit/dbunit": "1.3.*",
     "doctrine/instantiator": "1.*",
     "symfony/yaml": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",

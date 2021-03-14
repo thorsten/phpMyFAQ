@@ -8,7 +8,8 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    bootstrap="tests/bootstrap.php">
+    bootstrap="tests/bootstrap.php"
+    testdox="true">
 
     <testsuites>
         <testsuite name="phpMyFAQ Test Suite">

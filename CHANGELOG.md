@@ -31,6 +31,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed OpenSearch support (Thorsten)
 - removed XML export (Thorsten)
 - removed auto-save for FAQs during editing (Thorsten)
+- removed obsolete DbUnit tests (Thorsten)
 - fixed minor bugs (Nico Schmitz-Laux, Thorsten)
 
 ### phpMyFAQ v3.0.8 - 2021-02-24

@@ -5,6 +5,9 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @testdox A Network has
+ */
 class NetworkTest extends TestCase
 {
     /** @var Network */
@@ -21,6 +24,7 @@ class NetworkTest extends TestCase
 
     /**
      * @dataProvider ipAddressDataProvider
+     * @testdox IP addresses, which are anonymize
      * @param $ipAddress
      * @param $anonymizeAddress
      */
@@ -30,7 +34,6 @@ class NetworkTest extends TestCase
     }
 
     /**
-     * Dataprovider
      * @return string[]
      */
     public function ipAddressDataProvider(): array
