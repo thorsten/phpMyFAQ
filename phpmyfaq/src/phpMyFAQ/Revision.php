@@ -44,7 +44,7 @@ class Revision
      * @param string $faqLanguage
      * @return bool
      */
-    public function create(int $faqId, string $faqLanguage)
+    public function create(int $faqId, string $faqLanguage): bool
     {
         $query = sprintf(
             "

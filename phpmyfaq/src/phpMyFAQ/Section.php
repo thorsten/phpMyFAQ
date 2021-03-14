@@ -24,11 +24,7 @@ namespace phpMyFAQ;
  */
 class Section
 {
-    /**
-     * Configuration object.
-     *
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $config;
 
     /**
@@ -44,12 +40,11 @@ class Section
     /**
      * Adds a new section entry.
      *
-     * @param string $name        Name of the section
+     * @param string $name Name of the section
      * @param string $description Description of the category
-     *
      * @return int
      */
-    public function addSection($name, $description)
+    public function addSection(string $name, string $description): int
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqsections', 'id');
 
@@ -73,16 +68,13 @@ class Section
     /**
      * Gets one section by id.
      *
-     * @param  int $sectionId
+     * @param int $sectionId
      * @return array
      */
-    public function getSection($sectionId)
+    public function getSection(int $sectionId): array
     {
         $query = sprintf(
-            "
-            SELECT * 
-            FROM %sfaqsections
-            WHERE id = %d",
+            "SELECT * FROM %sfaqsections WHERE id = %d",
             Database::getTablePrefix(),
             $sectionId
         );
@@ -101,7 +93,7 @@ class Section
      *
      * @return array
      */
-    public function getAllSections()
+    public function getAllSections(): array
     {
         $query = sprintf('SELECT id, name, description FROM %sfaqsections', Database::getTablePrefix());
         $res = $this->config->getDb()->query($query);
@@ -116,23 +108,15 @@ class Section
     /**
      * updates a section entry.
      *
-     * @param int    $id          Id of the section to edit
-     * @param string $name        Name of the section
+     * @param int    $id Id of the section to edit
+     * @param string $name Name of the section
      * @param string $description Description of the category
-     *
      * @return bool
      */
-    public function updateSection($id, $name, $description)
+    public function updateSection(int $id, string $name, string $description): bool
     {
         $update = sprintf(
-            "
-            UPDATE
-                %sfaqsections
-            (name, description)
-                VALUES
-            ('%s', '%s')
-            WHERE id = %d
-            ",
+            "UPDATE %sfaqsections (name, description) VALUES ('%s', '%s') WHERE id = %d",
             Database::getTablePrefix(),
             $name,
             $description,
@@ -151,10 +135,9 @@ class Section
      * deletes a section entry.
      *
      * @param int $id Id of the section to edit
-     *
      * @return bool
      */
-    public function deleteSection($id)
+    public function deleteSection($id): bool
     {
         $delete = sprintf(
             "
@@ -252,9 +235,8 @@ class Section
     /**
      * adds a section - category relation
      *
-     * @param int $sectionId  Id of the section
+     * @param int $sectionId Id of the section
      * @param int $categoryId Id of the category
-     *
      * @return bool
      */
     public function addSectionCategory($sectionId, $categoryId)
@@ -283,9 +265,8 @@ class Section
     /**
      * removes a section - category relation
      *
-     * @param int $sectionId  Id of the section
+     * @param int $sectionId Id of the section
      * @param int $categoryId Id of the category
-     *
      * @return bool
      */
     public function removeSectionCategory($sectionId, $categoryId)
@@ -314,8 +295,7 @@ class Section
      * adds a section - user relation
      *
      * @param int $sectionId Id of the section
-     * @param int $userId    Id of the user
-     *
+     * @param int $userId Id of the user
      * @return bool
      */
     public function addSectionuser($sectionId, $userId)
@@ -345,8 +325,7 @@ class Section
      * removes a section - user relation
      *
      * @param int $sectionId Id of the section
-     * @param int $userId    Id of the user
-     *
+     * @param int $userId Id of the user
      * @return bool
      */
     public function removeSectionUser($sectionId, $userId)
@@ -375,8 +354,7 @@ class Section
      * adds a section - group relation
      *
      * @param int $sectionId Id of the section
-     * @param int $groupId   Id of the group
-     *
+     * @param int $groupId Id of the group
      * @return bool
      */
     public function addSectionGroup($sectionId, $groupId)
@@ -406,8 +384,7 @@ class Section
      * removes a section - group relation
      *
      * @param int $sectionId Id of the section
-     * @param int $groupId   Id of the group
-     *
+     * @param int $groupId Id of the group
      * @return bool
      */
     public function removeSectionGroup($sectionId, $groupId)
@@ -436,8 +413,7 @@ class Section
      * adds a section - news relation
      *
      * @param int $sectionId Id of the section
-     * @param int $newsId    Id of the news
-     *
+     * @param int $newsId Id of the news
      * @return bool
      */
     public function addSectionNews($sectionId, $newsId)
@@ -467,8 +443,7 @@ class Section
      * removes a section - news relation
      *
      * @param int $sectionId Id of the section
-     * @param int $newsId    Id of the news
-     *
+     * @param int $newsId Id of the news
      * @return bool
      */
     public function removeSectionNews($sectionId, $newsId)

@@ -510,7 +510,7 @@ switch ($action) {
                 $user = new CurrentUser($faqConfig);
                 $faqSearch = new Search($faqConfig);
                 $faqSearch->setCategory(new Category($faqConfig));
-                $faqSearch->setCategoryId($ucategory);
+                $faqSearch->setCategoryId((int) $ucategory);
                 $faqPermission = new FaqPermission($faqConfig);
                 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
                 $searchResult = [];

@@ -146,7 +146,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     }
 
     $faqSearch->setCategory($category);
-    $faqSearch->setCategoryId($inputCategory);
+    $faqSearch->setCategoryId((int) $inputCategory);
 
     $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
 

@@ -20,6 +20,7 @@
 namespace phpMyFAQ;
 
 use DateTime;
+use Exception;
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\SearchFactory;
 
@@ -30,31 +31,17 @@ use phpMyFAQ\Search\SearchFactory;
  */
 class Search
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $config;
 
-    /**
-     * Entity ID.
-     *
-     * @var int
-     */
+    /** @var int */
     private $categoryId = null;
 
-    /**
-     * Entity object.
-     *
-     * @var Category
-     */
+    /** @var Category */
     private $category = null;
 
-    /**
-     * Search table.
-     *
-     * @var string
-     */
-    private $table = null;
+    /** @var string */
+    private $table;
 
     /**
      * Constructor.
@@ -72,9 +59,9 @@ class Search
      *
      * @param int $categoryId Entity ID
      */
-    public function setCategoryId($categoryId)
+    public function setCategoryId(int $categoryId)
     {
-        $this->categoryId = (int)$categoryId;
+        $this->categoryId = $categoryId;
     }
 
     /**
@@ -82,7 +69,7 @@ class Search
      *
      * @return int
      */
-    public function getCategoryId()
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
@@ -90,11 +77,11 @@ class Search
     /**
      * The search function to handle the different search engines.
      *
-     * @param string $searchTerm   Text/Number (solution id)
+     * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
      * @return array
      */
-    public function search($searchTerm, $allLanguages = true)
+    public function search(string $searchTerm, $allLanguages = true): array
     {
         if (is_numeric($searchTerm)) {
             return $this->searchDatabase($searchTerm, $allLanguages);
@@ -112,7 +99,7 @@ class Search
      * @param string $searchTerm Text to auto complete
      * @return array
      */
-    public function autoComplete($searchTerm)
+    public function autoComplete(string $searchTerm): array
     {
         if ($this->config->get('search.enableElasticsearch')) {
             $esSearch = new Elasticsearch($this->config);
@@ -130,11 +117,11 @@ class Search
     /**
      * The search function for the database powered full text search.
      *
-     * @param string $searchTerm   Text/Number (solution id)
+     * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
      * @return array
      */
-    public function searchDatabase($searchTerm, $allLanguages = true)
+    public function searchDatabase(string $searchTerm, $allLanguages = true): array
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
@@ -198,13 +185,11 @@ class Search
     /**
      * The search function for the Elasticsearch powered full text search.
      *
-     * @param  string $searchTerm   Text/Number (solution id)
-     * @param  bool   $allLanguages true to search over all languages
-     * @throws
-     *
+     * @param string $searchTerm Text/Number (solution id)
+     * @param bool   $allLanguages true to search over all languages
      * @return array
      */
-    public function searchElasticsearch($searchTerm, $allLanguages = true)
+    public function searchElasticsearch(string $searchTerm, $allLanguages = true): array
     {
         $esSearch = new Elasticsearch($this->config);
 
@@ -229,9 +214,9 @@ class Search
      * Logging of search terms for improvements.
      *
      * @param string $searchTerm Search term
-     * @throws \Exception
+     * @throws Exception
      */
-    public function logSearchTerm($searchTerm)
+    public function logSearchTerm(string $searchTerm)
     {
         if (Strings::strlen($searchTerm) === 0) {
             return;
@@ -239,12 +224,7 @@ class Search
 
         $date = new DateTime();
         $query = sprintf(
-            "
-            INSERT INTO
-                %s
-            (id, lang, searchterm, searchdate)
-                VALUES
-            (%d, '%s', '%s', '%s')",
+            "INSERT INTO %s (id, lang, searchterm, searchdate) VALUES (%d, '%s', '%s', '%s')",
             $this->table,
             $this->config->getDb()->nextId($this->table, 'id'),
             $this->config->getLanguage()->getLanguage(),
@@ -259,7 +239,6 @@ class Search
      * Deletes a search term.
      *
      * @param string $searchTerm
-     *
      * @return bool
      */
     public function deleteSearchTerm(string $searchTerm): bool

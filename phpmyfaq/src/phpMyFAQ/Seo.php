@@ -49,19 +49,15 @@ class Seo
         switch ($action) {
             case 'main':
                 return $this->config->get('seo.metaTagsHome');
-                break;
 
             case 'faq':
                 return $this->config->get('seo.metaTagsFaqs');
-                break;
 
             case 'show':
                 return $this->config->get('seo.metaTagsCategories');
-                break;
 
             default:
                 return $this->config->get('seo.metaTagsPages');
-                break;
         }
     }
 }
