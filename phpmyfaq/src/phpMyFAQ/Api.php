@@ -68,7 +68,7 @@ class Api
      */
     public function getVersions(): array
     {
-        $json = file_get_contents($this->apiUrl . '/versions');
+        $json = $this->fetchData($this->apiUrl . '/versions');
         $result = json_decode($json);
         if ($result instanceof stdClass) {
             return [
@@ -89,7 +89,7 @@ class Api
      */
     public function isVerified(): bool
     {
-        $this->remoteHashes = file_get_contents($this->apiUrl . '/verify/' . $this->config->getVersion());
+        $this->remoteHashes = $this->fetchData($this->apiUrl . '/verify/' . $this->config->getVersion());
 
         if (json_decode($this->remoteHashes) instanceof stdClass) {
             if (!is_array(json_decode($this->remoteHashes, true))) {
@@ -112,5 +112,14 @@ class Api
             json_decode($this->system->createHashes(), true),
             json_decode($this->remoteHashes, true)
         );
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    private function fetchData(string $url): string
+    {
+        return file_get_contents($url);
     }
 }
