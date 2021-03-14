@@ -34,11 +34,11 @@ class LinkVerifierTest extends TestCase
     {
         parent::setUp();
 
-        Strings::init('en');
+        Strings::init();
 
         $config = new stdClass();
-        $config->config_name = 'foo';
-        $config->config_value = '';
+        $config->config_name = 'main.referenceURL';
+        $config->config_value = 'http://localhost';
 
         $dbHandle = $this->getMockBuilder('phpMyFAQ\Database\Sqlite3')->disableOriginalConstructor()->getMock();
         $dbHandle->method('fetchAll')->willReturn([$config]);
