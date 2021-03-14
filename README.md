@@ -8,17 +8,17 @@
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP
 7.3+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
-WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user
+WYSIWYG editor and a media manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
 supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
 backup and restore system, a dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection
-systems, OpenLDAP and Microsoft Active Directory support, and an easy to use installation and update script.
+systems, OpenLDAP and Microsoft Active Directory support, and an easy-to-use installation and update script.
 
 ## Requirements
 
 phpMyFAQ is only supported on PHP 7.3 and up, you need a database as well. Supported databases are MySQL, MariaDB,
 Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as main search
-engine, you need Elasticsearch 5.x or later as well. Check our detailed requirements on
+engine, you need Elasticsearch 5.x or later. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
 
 ## Installation
@@ -104,11 +104,12 @@ The vm.max_map_count setting must be set via docker-machine:
     $ docker-machine ssh
     $ sudo sysctl -w vm.max_map_count=262144
 
-### phpMyFAQ installation from Github
+### phpMyFAQ local installation from Github
+
+To run phpMyFAQ locally you need at least a running web server with PHP support and a database.
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
-    $ git checkout 3.0
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ curl -o- -L https://yarnpkg.com/install.sh | bash
@@ -119,7 +120,7 @@ Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ## Testing
 
-To run our unit tests via PHPUnit v8.x, just execute this command on your CLI
+To run our unit tests via PHPUnit v9.x, just execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
