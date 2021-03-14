@@ -56,10 +56,9 @@ abstract class StringsAbstract
      * Check if the string is a unicode string.
      *
      * @param string $str String
-     *
      * @return bool
      */
-    public static function isUTF8($str)
+    public static function isUTF8(string $str): bool
     {
         if (function_exists('mb_detect_encoding')) {
             return mb_detect_encoding($str, self::DEFAULT_ENCODING, true);
@@ -83,7 +82,7 @@ abstract class StringsAbstract
      *
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->encoding;
     }
@@ -93,7 +92,7 @@ abstract class StringsAbstract
      *
      * @param string $encoding
      */
-    public function setEncoding($encoding)
+    public function setEncoding(string $encoding)
     {
         $this->encoding = $encoding;
     }

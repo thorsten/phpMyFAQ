@@ -18,6 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\UserHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -34,6 +35,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->setGroups($currentAdminGroups);
 
     $categoryPermission = new CategoryPermission($faqConfig);
+
+    $userHelper = new UserHelper($user);
 
     $categoryData = $category->getCategoryData($categoryId);
     $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
@@ -147,7 +150,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               </label>
               <div class="col-lg-4">
                 <select id="user_id" name="user_id" class="form-control">
-                    <?= $user->getAllUserOptions($categoryData->getUserId()) ?>
+                    <?= $userHelper->getAllUserOptions($categoryData->getUserId()) ?>
                 </select>
               </div>
             </div>
@@ -200,7 +203,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                     <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                 </div>
                 <select name="restricted_users" class="form-control">
-                    <?= $user->getAllUserOptions($userPermission[0]) ?>
+                    <?= $userHelper->getAllUserOptions($userPermission[0]) ?>
                 </select>
               </div>
             </div>

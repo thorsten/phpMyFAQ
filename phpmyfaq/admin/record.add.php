@@ -161,7 +161,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             // Create the visit entry
             $visits = new Visits($faqConfig);
-            $visits->logViews($recordId);
+            $visits->logViews((int)$recordId);
 
             $categoryRelation = new CategoryRelation($faqConfig);
             $categoryRelation->add($categories['rubrik'], $recordId, $recordData['lang']);

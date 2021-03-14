@@ -90,7 +90,7 @@ try {
 }
 
 $faqVisits = new Visits($faqConfig);
-$faqVisits->logViews($recordId);
+$faqVisits->logViews((int) $recordId);
 
 $question = $faq->getRecordTitle($recordId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {

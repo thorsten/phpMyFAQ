@@ -21,6 +21,7 @@
 
 namespace phpMyFAQ;
 
+use Exception;
 use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Auth\AuthHttp;
@@ -174,13 +175,11 @@ class User
             return;
         }
 
-        // authentication objects
-        // always make a 'local' $auth object (see: $authData)
+        // Always create a 'local' authentication object (see: $authData)
         $this->authContainer = [];
         $auth = new Auth($this->config);
-        /**
-         * @var AuthDatabase|AuthHttp|AuthLdap|AuthSso
-         */
+
+        /** @var AuthDriverInterface */
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
@@ -208,7 +207,7 @@ class User
      * @param Permission $perm Permission object
      * @return bool
      */
-    public function addPerm(Permission $perm)
+    public function addPerm(Permission $perm): bool
     {
         if ($this->checkPerm($perm)) {
             $this->perm = $perm;
@@ -225,7 +224,7 @@ class User
      * @param Permission $perm Permission object
      * @return bool
      */
-    private function checkPerm($perm)
+    private function checkPerm(Permission $perm): bool
     {
         if ($perm instanceof Permission) {
             return true;
@@ -241,7 +240,7 @@ class User
      * @param string $key
      * @return string|null
      */
-    public function getAuthSource($key)
+    public function getAuthSource(string $key): ?string
     {
         if (isset($this->authData['authSource'][$key])) {
             return $this->authData['authSource'][$key];
@@ -255,7 +254,7 @@ class User
      * @param string $key
      * @return string|null
      */
-    public function getAuthData($key)
+    public function getAuthData(string $key): ?string
     {
         if (isset($this->authData[$key])) {
             return $this->authData[$key];
@@ -270,7 +269,7 @@ class User
      * @param string $name Auth name
      * @return bool
      */
-    public function addAuth(Auth $auth, $name)
+    public function addAuth(Auth $auth, string $name): bool
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;
@@ -287,7 +286,7 @@ class User
      * @param Auth $auth Auth object
      * @return bool
      */
-    protected function checkAuth(Auth $auth)
+    protected function checkAuth(Auth $auth): bool
     {
         $methods = ['checkCredentials'];
         foreach ($methods as $method) {
@@ -306,7 +305,7 @@ class User
      * @param string $cookie
      * @return bool
      */
-    public function getUserByCookie($cookie)
+    public function getUserByCookie(string $cookie): bool
     {
         $select = sprintf(
             "
@@ -353,7 +352,7 @@ class User
      *
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         if (isset($this->userId) && is_int($this->userId)) {
             return (int)$this->userId;
@@ -370,7 +369,7 @@ class User
      * @param string $name
      * @return bool
      */
-    public function checkDisplayName($name)
+    public function checkDisplayName(string $name): bool
     {
         if (!$this->userdata instanceof UserData) {
             $this->userdata = new UserData($this->config);
@@ -389,7 +388,7 @@ class User
      * @param string $name
      * @return bool
      */
-    public function checkMailAddress($name)
+    public function checkMailAddress(string $name): bool
     {
         if (!$this->userdata instanceof UserData) {
             $this->userdata = new UserData($this->config);
@@ -408,7 +407,7 @@ class User
      * @param string $search Login name
      * @return array
      */
-    public function searchUsers($search)
+    public function searchUsers(string $search): array
     {
         $select = sprintf(
             "
@@ -478,12 +477,7 @@ class User
 
         // create user entry
         $insert = sprintf(
-            "
-            INSERT INTO
-                %sfaquser
-            (user_id, login, session_timestamp, member_since)
-                VALUES
-            (%d, '%s', %d, '%s')",
+            "INSERT INTO %sfaquser (user_id, login, session_timestamp, member_since) VALUES (%d, '%s', %d, '%s')",
             Database::getTablePrefix(),
             $this->getUserId(),
             $this->config->getDb()->escape($login),
@@ -540,7 +534,7 @@ class User
      * @param string $login Login name
      * @return bool
      */
-    public function isValidLogin($login)
+    public function isValidLogin(string $login): bool
     {
         $login = (string)$login;
 
@@ -561,7 +555,7 @@ class User
      * @param bool   $raiseError Raise error?
      * @return bool
      */
-    public function getUserByLogin($login, $raiseError = true)
+    public function getUserByLogin(string $login, $raiseError = true): bool
     {
         $select = sprintf(
             "
@@ -605,8 +599,9 @@ class User
      * @param int  $minimumLength
      * @param bool $allowUnderscore
      * @return string
+     * @throws Exception
      */
-    public function createPassword($minimumLength = 8, $allowUnderscore = true)
+    public function createPassword($minimumLength = 8, $allowUnderscore = true): string
     {
         // To make passwords harder to get wrong, a few letters & numbers have been omitted.
         // This will ensure safety with browsers using fonts with confusable letters.
@@ -655,7 +650,7 @@ class User
      *
      * @return bool
      */
-    public function deleteUser()
+    public function deleteUser(): bool
     {
         if (!isset($this->userId) || $this->userId == 0) {
             $this->errors[] = self::ERROR_USER_NO_USERID;
@@ -681,11 +676,7 @@ class User
         $this->perm->refuseAllUserRights($this->userId);
 
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaquser
-            WHERE
-                user_id = %d',
+            'DELETE FROM %sfaquser WHERE user_id = %d',
             Database::getTablePrefix(),
             $this->userId
         );
@@ -737,7 +728,7 @@ class User
      *
      * @return string
      */
-    public function error()
+    public function error(): string
     {
         $message = '';
 
@@ -754,37 +745,9 @@ class User
      *
      * @return AuthDriverInterface[]
      */
-    public function getAuthContainer()
+    public function getAuthContainer(): array
     {
         return $this->authContainer;
-    }
-
-    /**
-     * Get all users in <option> tags.
-     *
-     * @param int  $id Selected user ID
-     * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     * @return string
-     */
-    public function getAllUserOptions($id = 1, $allowBlockedUsers = false)
-    {
-        $options = '';
-        $allUsers = $this->getAllUsers(true, $allowBlockedUsers);
-
-        foreach ($allUsers as $userId) {
-            if (-1 !== $userId) {
-                $this->getUserById($userId);
-                $options .= sprintf(
-                    '<option value="%d" %s>%s (%s)</option>',
-                    $userId,
-                    (($userId === $id) ? 'selected' : ''),
-                    $this->getUserData('display_name'),
-                    $this->getLogin()
-                );
-            }
-        }
-
-        return $options;
     }
 
     /**
@@ -795,7 +758,7 @@ class User
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      * @return array
      */
-    public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true)
+    public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true): array
     {
         $select = sprintf(
             '
@@ -916,7 +879,7 @@ class User
      * @param array $data Array with user data
      * @return bool
      */
-    public function setUserData(array $data)
+    public function setUserData(array $data): bool
     {
         if (!($this->userdata instanceof UserData)) {
             $this->userdata = new UserData($this->config);
@@ -931,7 +894,7 @@ class User
      *
      * @return string
      */
-    public function getLogin()
+    public function getLogin(): string
     {
         return $this->login;
     }
@@ -973,24 +936,13 @@ class User
     }
 
     /**
-     * sets the minimum login string length.
-     *
-     * @param int $loginMinLength Minimum length of login name
-     */
-    public function setLoginMinLength($loginMinLength)
-    {
-        if (is_int($loginMinLength)) {
-            $this->loginMinLength = $loginMinLength;
-        }
-    }
-
-    /**
      * Returns true on success.
      * This will change a users status to active, and send an email with a new password.
      *
      * @return bool
+     * @throws Exception
      */
-    public function activateUser()
+    public function activateUser(): bool
     {
         if ($this->getStatus() == 'blocked') {
             // Generate and change user password.
@@ -1034,7 +986,7 @@ class User
      * @param string $status Status
      * @return bool
      */
-    public function setStatus($status)
+    public function setStatus(string $status): bool
     {
         // is status allowed?
         $status = strtolower($status);
@@ -1074,8 +1026,9 @@ class User
      *
      * @param string $pass Password
      * @return bool
+     * @throws Exception
      */
-    public function changePassword($pass = '')
+    public function changePassword($pass = ''): bool
     {
         foreach ($this->authContainer as $auth) {
             if (!$this->checkAuth($auth)) {
@@ -1110,7 +1063,7 @@ class User
      * @param string $message
      * @return bool
      */
-    public function mailUser($subject, $message)
+    public function mailUser(string $subject, string $message): bool
     {
         $mail = new Mail($this->config);
         $mail->addTo($this->getUserData('email'));
@@ -1127,7 +1080,7 @@ class User
      *
      * @return bool
      */
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->isSuperAdmin;
     }
@@ -1138,7 +1091,7 @@ class User
      * @param  $isSuperAdmin
      * @return bool
      */
-    public function setSuperAdmin($isSuperAdmin)
+    public function setSuperAdmin($isSuperAdmin): bool
     {
         $this->isSuperAdmin = $isSuperAdmin;
         $update = sprintf(

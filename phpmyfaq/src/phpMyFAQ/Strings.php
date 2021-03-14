@@ -1,5 +1,6 @@
 <?php
 // phpcs:ignoreFile
+
 /**
  * The main string wrapper class.
  *
@@ -8,7 +9,6 @@
  * you guarantees your code is upwards compatible with UTF-8 improvements. All
  * the string methods behaviour is identical to that of the same named
  * single byte string functions.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -77,7 +77,6 @@ class Strings
      * Get string character count.
      *
      * @param string $str String
-     *
      * @return int
      */
     public static function strlen(string $str): int
@@ -89,12 +88,11 @@ class Strings
      * Get a part of string.
      *
      * @param string $string String
-     * @param int    $start  Start
+     * @param int    $start Start
      * @param int    $length Length
-     *
      * @return string
      */
-    public static function substr($string, $start, $length = 0)
+    public static function substr(string $string, $start, $length = 0): string
     {
         return self::$instance->substr($string, $start, $length);
     }
@@ -104,8 +102,7 @@ class Strings
      *
      * @param string $haystack Haystack
      * @param string $needle Needle
-     * @param int $offset Offset
-     *
+     * @param int    $offset Offset
      * @return int
      */
     public static function strpos(string $haystack, string $needle, $offset = 0): int
@@ -117,10 +114,9 @@ class Strings
      * Make a string lower case.
      *
      * @param string $str String
-     *
      * @return string
      */
-    public static function strtolower($str)
+    public static function strtolower(string $str): string
     {
         return self::$instance->strtolower($str);
     }
@@ -129,10 +125,9 @@ class Strings
      * Make a string upper case.
      *
      * @param string $str String
-     *
      * @return string
      */
-    public static function strtoupper($str)
+    public static function strtoupper(string $str): string
     {
         return self::$instance->strtoupper($str);
     }
@@ -141,12 +136,11 @@ class Strings
      * Get occurrence of a string within another.
      *
      * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param bool   $part     Part
-     *
+     * @param string $needle Needle
+     * @param bool   $part Part
      * @return string|false
      */
-    public static function strstr($haystack, $needle, $part = false)
+    public static function strstr(string $haystack, string $needle, $part = false)
     {
         return self::$instance->strstr($haystack, $needle, $part);
     }
@@ -156,7 +150,7 @@ class Strings
      *
      * @param string $encoding
      */
-    public static function setEncoding($encoding)
+    public static function setEncoding(string $encoding)
     {
         self::$instance->setEncoding($encoding);
     }
@@ -166,10 +160,9 @@ class Strings
      *
      * @param string $haystack
      * @param string $needle
-     *
      * @return int
      */
-    public static function substr_count($haystack, $needle) // phpcs:ignore
+    public static function substr_count(string $haystack, string $needle): int // phpcs:ignore
     {
         return self::$instance->substr_count($haystack, $needle);
     }
@@ -180,10 +173,9 @@ class Strings
      * @param string $haystack
      * @param string $needle
      * @param int    $offset
-     *
      * @return int
      */
-    public static function strrpos($haystack, $needle, $offset = 0)
+    public static function strrpos(string $haystack, string $needle, $offset = 0): int
     {
         return self::$instance->strrpos($haystack, $needle, $offset);
     }
@@ -193,13 +185,18 @@ class Strings
      *
      * @param string $pattern
      * @param string $subject
-     * @param array  &$matches
+     * @param null   $matches
      * @param int    $flags
      * @param int    $offset
-     *
      * @return int
      */
-    public static function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0) // phpcs:ignore
+    public static function preg_match(
+        string $pattern,
+        string $subject,
+        &$matches = null,
+        $flags = 0,
+        $offset = 0
+    ): int // phpcs:ignore
     {
         return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
@@ -209,13 +206,18 @@ class Strings
      *
      * @param string $pattern
      * @param string $subject
-     * @param array  &$matches
+     * @param null   $matches
      * @param int    $flags
      * @param int    $offset
-     *
      * @return int
      */
-    public static function preg_match_all($pattern, $subject, &$matches = null, $flags = 0, $offset = 0) // phpcs:ignore
+    public static function preg_match_all(
+        string $pattern,
+        string $subject,
+        &$matches = null,
+        $flags = 0,
+        $offset = 0
+    ): int // phpcs:ignore
     {
         return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
@@ -227,10 +229,9 @@ class Strings
      * @param string $subject
      * @param int    $limit
      * @param int    $flags
-     *
      * @return array
      */
-    public static function preg_split($pattern, $subject, $limit = -1, $flags = 0) // phpcs:ignore
+    public static function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array // phpcs:ignore
     {
         return self::$instance->preg_split($pattern, $subject, $limit, $flags);
     }
@@ -238,28 +239,31 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string       $pattern
-     * @param callable     $callback
-     * @param string|array $subject
-     * @param int          $limit
+     * @param string        $pattern
+     * @param callable      $callback
+     * @param string|array  $subject
+     * @param int           $limit
      * @param int          &$count
-     *
      * @return array|string
      */
-    public static function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
-    {
+    public static function preg_replace_callback(
+        string $pattern,
+        callable $callback,
+        $subject,
+        $limit = -1,
+        &$count = 0
+    ) {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 
     /**
      * Search and replace by a regexp.
      *
-     * @param string|array $pattern
-     * @param string|array $replacement
-     * @param string|array $subject
-     * @param int          $limit
+     * @param string|array  $pattern
+     * @param string|array  $replacement
+     * @param string|array  $subject
+     * @param int           $limit
      * @param int          &$count
-     *
      * @return array|string|null
      */
     public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
@@ -268,29 +272,20 @@ class Strings
     }
 
     /**
-     * Check if the string is a unicode string.
-     *
-     * @param string $str String
-     *
-     * @return string|boolean
-     */
-    public static function isUTF8($str)
-    {
-        return StringBasic::isUTF8($str);
-    }
-
-    /**
      * Convert special chars to html entities.
      *
-     * @param string $string       The input string.
-     * @param int    $quoteStyle   Quote style
-     * @param string $charset      Character set, UTF-8 by default
+     * @param string $string The input string.
+     * @param int    $quoteStyle Quote style
+     * @param string $charset Character set, UTF-8 by default
      * @param bool   $doubleEncode If set to false, no encoding of existing entities
-     *
      * @return string
      */
-    public static function htmlspecialchars($string, $quoteStyle = ENT_HTML5, $charset = 'utf-8', $doubleEncode = false)
-    {
+    public static function htmlspecialchars(
+        string $string,
+        $quoteStyle = ENT_HTML5,
+        $charset = 'utf-8',
+        $doubleEncode = false
+    ): string {
         return htmlspecialchars(
             $string,
             $quoteStyle,
@@ -302,14 +297,18 @@ class Strings
     /**
      * Convert all applicable characters to HTML entities.
      *
-     * @param string $string       The input string.
-     * @param int    $quoteStyle   Quote style
-     * @param string $charset      Character set, UTF-8 by default
+     * @param string $string The input string.
+     * @param int    $quoteStyle Quote style
+     * @param string $charset Character set, UTF-8 by default
      * @param bool   $doubleEncode If set to false, no encoding of existing entities
-     *
      * @return string
      */
-    public static function htmlentities($string, $quoteStyle = ENT_HTML5, $charset = 'utf-8', $doubleEncode = true)
+    public static function htmlentities(
+        string $string,
+        $quoteStyle = ENT_HTML5,
+        $charset = 'utf-8',
+        $doubleEncode = true
+    ): string
     {
         return htmlentities(
             $string,

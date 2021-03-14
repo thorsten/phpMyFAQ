@@ -26,6 +26,7 @@ use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Question;
@@ -67,6 +68,8 @@ if (
     $questionObject = new Question($faqConfig);
 
     $changelog = new Changelog($faqConfig);
+
+    $userHelper = new UserHelper($user);
 
     $selectedCategory = '';
     $categories = [];
@@ -583,7 +586,7 @@ if (
                                                     <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                                                 </label>
                                                 <select name="restricted_users" class="form-control">
-                                                    <?= $user->getAllUserOptions($userPermission[0], false) ?>
+                                                    <?= $userHelper->getAllUserOptions($userPermission[0], false) ?>
                                                 </select>
                                             </div>
                                         </div>

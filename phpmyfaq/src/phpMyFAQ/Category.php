@@ -658,13 +658,13 @@ class Category
      * Get the line number where to find the node $id in the category tree.
      *
      * @param int $id Entity id
-     * @return int
+     * @return mixed
      */
-    private function getLineCategory(int $id): int
+    private function getLineCategory(int $id)
     {
         $num = count($this->treeTab);
         for ($i = 0; $i < $num; ++$i) {
-            if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
+            if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] === $id) {
                 return $i;
             }
         }

@@ -44,19 +44,11 @@ class Visits
      *
      * @param int $id FAQ record ID
      */
-    public function logViews($id)
+    public function logViews(int $id)
     {
         $nVisits = 0;
         $query = sprintf(
-            "
-            SELECT
-                visits
-            FROM
-                %sfaqvisits
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
+            "SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage()
@@ -75,7 +67,7 @@ class Visits
     }
 
     /**
-     * Adds a new entry in the table faqvisits.
+     * Adds a new entry in the table "faqvisits".
      *
      * @param int $id Record ID
      *
@@ -84,11 +76,7 @@ class Visits
     public function add(int $id): bool
     {
         $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqvisits
-            VALUES
-                (%d, '%s', %d, %d)",
+            "INSERT INTO %sfaqvisits VALUES (%d, '%s', %d, %d)",
             Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage(),
@@ -100,7 +88,7 @@ class Visits
     }
 
     /**
-     * Updates an entry in the table faqvisits.
+     * Updates an entry in the table "faqvisits".
      *
      * @param int $id FAQ record ID
      *
@@ -109,14 +97,7 @@ class Visits
     private function update(int $id): bool
     {
         $query = sprintf(
-            "
-            UPDATE
-                %sfaqvisits
-            SET
-                visits = visits+1,
-                last_visit = %d
-            WHERE
-                id = %d AND lang = '%s'",
+            "UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
             $id,
@@ -127,7 +108,7 @@ class Visits
     }
 
     /**
-     * Get all the entries from the table faqvisits.
+     * Get all the entries from the table "faqvisits".
      *
      * @return array
      */
@@ -136,13 +117,7 @@ class Visits
         $data = [];
 
         $query = sprintf(
-            '
-            SELECT
-                *
-             FROM
-                %sfaqvisits
-             ORDER BY
-                visits DESC',
+            'SELECT * FROM %sfaqvisits ORDER BY visits DESC',
             Database::getTablePrefix()
         );
         $result = $this->config->getDb()->query($query);

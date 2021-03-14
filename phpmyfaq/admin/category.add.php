@@ -19,6 +19,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -52,6 +53,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
     $category->setGroups($currentAdminGroups);
 
     $categoryPermission = new CategoryPermission($faqConfig);
+
+    $userHelper = new UserHelper($user);
 
     $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
@@ -135,7 +138,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     </label>
                     <div class="col-lg-4">
                       <select name="user_id" id="user_id" class="form-control">
-                          <?= $user->getAllUserOptions() ?>
+                          <?= $userHelper->getAllUserOptions() ?>
                       </select>
                     </div>
                   </div>
@@ -188,7 +191,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                               <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                           </label>
                           <select name="restricted_users" class="form-control">
-                              <?= $user->getAllUserOptions(1) ?>
+                              <?= $userHelper->getAllUserOptions(1) ?>
                           </select>
                         </div>
                       </div>

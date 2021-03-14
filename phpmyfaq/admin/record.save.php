@@ -169,7 +169,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // Create the visit entry
         $visits = new Visits($faqConfig);
-        $visits->logViews($recordId);
+        $visits->logViews((int)$recordId);
 
         // save or update the FAQ record
         if ($faq->hasTranslation($recordId, $recordLang)) {

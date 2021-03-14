@@ -19,6 +19,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\UserHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,6 +33,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->getMissingCategories();
 
     $categoryPermission = new CategoryPermission($faqConfig);
+
+    $userHelper = new UserHelper($user);
 
     $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $header = sprintf(
@@ -101,7 +104,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_owner'] ?>:</label>
                 <div class="col-lg-4">
                   <select name="user_id" class="form-control">
-                      <?= $user->getAllUserOptions($category->categoryName[$id]['user_id']) ?>
+                      <?= $userHelper->getAllUserOptions($category->categoryName[$id]['user_id']) ?>
                   </select>
                 </div>
               </div>

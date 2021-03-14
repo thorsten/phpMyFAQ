@@ -37,10 +37,9 @@ class Utils
      * Check if a given string could be a language.
      *
      * @param string $lang Language
-     *
-     * @return integer
+     * @return bool
      */
-    public static function isLanguage($lang)
+    public static function isLanguage(string $lang): bool
     {
         return preg_match('/^[a-zA-Z\-]+$/', $lang);
     }
@@ -49,51 +48,47 @@ class Utils
      * Checks if a date is a phpMyFAQ valid date.
      *
      * @param int $date Date
-     *
-     * @return boolean
+     * @return bool
      */
-    public static function isLikeOnPMFDate($date)
+    public static function isLikeOnPMFDate(int $date): bool
     {
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
-        $testdate = $date;
+        $dateToTest = $date;
         // Suppress first occurrences of '%'
-        if (substr($testdate, 0, 1) == '%') {
-            $testdate = substr($testdate, 1);
+        if (substr($dateToTest, 0, 1) == '%') {
+            $dateToTest = substr($dateToTest, 1);
         }
         // Suppress last occurrences of '%'
-        if (substr($testdate, -1, 1) == '%') {
-            $testdate = substr($testdate, 0, strlen($testdate) - 1);
+        if (substr($dateToTest, -1, 1) == '%') {
+            $dateToTest = substr($dateToTest, 0, strlen($dateToTest) - 1);
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss
-        return is_int($testdate);
+        return is_int($dateToTest);
     }
 
     /**
      * Shortens a string for a given number of words.
      *
-     * @param string $str  String
-     * @param int    $char Characters
-     *
+     * @param string $string String
+     * @param int    $characters Characters
      * @return string
-     *
-     * @todo This function doesn't work with Chinese, Japanese and Korean
+     * @todo This function doesn't work with Chinese, Japanese, Korean and Thai
      *       because they don't have spaces as word delimiters
      */
-    public static function makeShorterText($str, $char)
+    public static function makeShorterText(string $string, int $characters): string
     {
-
-        $str = Strings::preg_replace('/\s+/u', ' ', $str);
-        $arrStr = explode(' ', $str);
+        $string = Strings::preg_replace('/\s+/u', ' ', $string);
+        $arrStr = explode(' ', $string);
         $shortStr = '';
         $num = count($arrStr);
 
-        if ($num > $char) {
-            for ($j = 0; $j < $char; ++$j) {
+        if ($num > $characters) {
+            for ($j = 0; $j < $characters; ++$j) {
                 $shortStr .= $arrStr[$j] . ' ';
             }
             $shortStr .= '...';
         } else {
-            $shortStr = $str;
+            $shortStr = $string;
         }
 
         return $shortStr;
@@ -102,12 +97,11 @@ class Utils
     /**
      * Resolves the PMF markers like e.g. %sitename%.
      *
-     * @param string        $text   Text contains PMF markers
+     * @param string        $text Text contains PMF markers
      * @param Configuration $config
-     *
      * @return string
      */
-    public static function resolveMarkers($text, Configuration $config)
+    public static function resolveMarkers(string $text, Configuration $config): string
     {
         // Available markers: key and resolving value
         $markers = [
@@ -126,11 +120,10 @@ class Utils
      * This method chops a string.
      *
      * @param string $string String to chop
-     * @param int    $words  Number of words
-     *
+     * @param int    $words Number of words
      * @return string
      */
-    public static function chopString($string, $words)
+    public static function chopString(string $string, int $words): string
     {
         $str = '';
         $pieces = explode(' ', $string);
@@ -148,12 +141,11 @@ class Utils
     /**
      * Adds a highlighted word to a string.
      *
-     * @param string $string    String
+     * @param string $string String
      * @param string $highlight Given word for highlighting
-     *
      * @return string
      */
-    public static function setHighlightedString($string, $highlight)
+    public static function setHighlightedString(string $string, string $highlight): string
     {
         $attributes = [
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
@@ -191,7 +183,7 @@ class Utils
      *
      * @return string
      */
-    public static function highlightNoLinks(array $matches)
+    public static function highlightNoLinks(array $matches): string
     {
         $prefix = isset($matches[3]) ? $matches[3] : '';
         $item = isset($matches[4]) ? $matches[4] : '';
@@ -215,7 +207,7 @@ class Utils
      *
      * @return bool
      */
-    public static function isForbiddenElement($string)
+    public static function isForbiddenElement($string): bool
     {
         $forbiddenElements = [
             'img', 'picture', 'mark'
@@ -234,10 +226,9 @@ class Utils
      * debug_backtrace() wrapper function.
      *
      * @param string $string
-     *
      * @return string
      */
-    public static function debug($string)
+    public static function debug(string $string): string
     {
         // sometimes Zend Optimizer causes segfaults with debug_backtrace()
         if (extension_loaded('Zend Optimizer')) {
@@ -260,10 +251,9 @@ class Utils
      * Parses a given string and convert all the URLs into links.
      *
      * @param string $string
-     *
      * @return string
      */
-    public static function parseUrl($string)
+    public static function parseUrl(string $string): string
     {
         $protocols = array('http://', 'https://', 'ftp://');
 
@@ -285,7 +275,7 @@ class Utils
      * @param array  $array
      * @param string $key
      */
-    public static function moveToTop(&$array, $key)
+    public static function moveToTop(array &$array, string $key)
     {
         $temp = [$key => $array[$key]];
         unset($array[$key]);
