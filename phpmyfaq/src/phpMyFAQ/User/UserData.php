@@ -40,7 +40,7 @@ class UserData
     /**
      * associative array containing user data.
      *
-     * @var array
+     * @var string[]
      */
     private $data = [];
 
@@ -65,8 +65,7 @@ class UserData
      * Returns the field $field of the user data. If $field is an
      * array, an associative array will be returned.
      *
-     * @param string $field Field(s)
-     *
+     * @param mixed $field Field(s)
      * @return mixed
      */
     public function get($field)
@@ -141,7 +140,7 @@ class UserData
      *
      * @param string $key
      * @param string $value
-     * @return array
+     * @return array<string, int>
      */
     public function fetchAll($key, $value): array
     {

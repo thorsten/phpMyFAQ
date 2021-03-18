@@ -54,7 +54,8 @@
     "symfony/yaml": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",
     "phpunit/php-token-stream": "*",
-    "squizlabs/php_codesniffer": "*"
+    "squizlabs/php_codesniffer": "*",
+    "phpstan/phpstan": "^0.12.81"
   },
   "config": {
     "platform": {
@@ -65,6 +66,7 @@
   },
   "minimum-stability": "stable",
   "scripts": {
+    "check": "./phpmyfaq/src/libs/bin/phpstan analyse -c phpstan.neon",
     "test": "./phpmyfaq/src/libs/bin/phpunit",
     "lint": "./phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
     "lint-fix": "./phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ"

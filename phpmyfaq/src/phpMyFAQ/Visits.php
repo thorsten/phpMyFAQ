@@ -43,6 +43,7 @@ class Visits
      * Counting the views of a FAQ record.
      *
      * @param int $id FAQ record ID
+     * @return void
      */
     public function logViews(int $id)
     {
@@ -110,7 +111,7 @@ class Visits
     /**
      * Get all the entries from the table "faqvisits".
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     public function getAllData(): array
     {

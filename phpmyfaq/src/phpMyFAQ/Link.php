@@ -195,7 +195,7 @@ class Link
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
      *           being requested, as obtained from the original URI given by the user or referring resource
      *
-     * @param null $path
+     * @param string|null $path
      * @return string
      */
     public function getSystemUri($path = null): string

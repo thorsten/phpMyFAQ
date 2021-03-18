@@ -1,0 +1,6 @@
+parameters:
+	bootstrapFiles:
+		- phpmyfaq/src/libs/autoload.php
+	level: 6
+	paths:
+		- phpmyfaq/src/phpMyFAQ
