@@ -67,7 +67,7 @@ interface AuthDriverInterface
      *
      * @param string $login Login name
      * @param string $pass Password
-     * @param array  $optionalData Optional data
+     * @param array<string>  $optionalData Optional data
      * @return bool
      */
     public function checkCredentials(string $login, string $pass, array $optionalData = []): bool;
@@ -76,7 +76,7 @@ interface AuthDriverInterface
      * Does nothing. A function required to be a valid auth.
      *
      * @param string $login Login name
-     * @param array  $optionalData Optional data
+     * @param array<string>  $optionalData Optional data
      * @return int
      */
     public function isValidLogin(string $login, array $optionalData = []): int;

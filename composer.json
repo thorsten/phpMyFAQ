@@ -62,7 +62,8 @@
       "php": "7.3.0"
     },
     "secure-http": true,
-    "vendor-dir": "phpmyfaq/src/libs"
+    "vendor-dir": "phpmyfaq/src/libs",
+    "bin-dir": "phpmyfaq/src/libs/bin"
   },
   "minimum-stability": "stable",
   "scripts": {

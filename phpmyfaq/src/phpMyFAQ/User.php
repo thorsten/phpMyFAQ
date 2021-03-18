@@ -22,11 +22,7 @@
 namespace phpMyFAQ;
 
 use Exception;
-use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\AuthDriverInterface;
-use phpMyFAQ\Auth\AuthHttp;
-use phpMyFAQ\Auth\AuthLdap;
-use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
@@ -82,28 +78,32 @@ class User
      * @var UserData
      */
     public $userdata = null;
+
     /**
      * Public array that contains error messages.
      *
-     * @var array
+     * @var array<string>
      */
     public $errors = [];
+
     /**
      * authentication container.
      *
      * @var AuthDriverInterface[]
      */
     protected $authContainer = [];
+
     /**
      * Configuration.
      *
      * @var Configuration
      */
     protected $config = null;
+
     /**
      * Default Authentication properties.
      *
-     * @var array
+     * @var array<string, array<string, string>|string|false>
      */
     private $authData = [
         'authSource' => [
@@ -113,18 +113,21 @@ class User
         'encType' => PMF_ENCRYPTION_TYPE,
         'readOnly' => false,
     ];
+
     /**
      * login string.
      *
      * @var string
      */
     private $login = '';
+
     /**
      * minimum length of login string (default: 2).
      *
      * @var int
      */
     private $loginMinLength = 2;
+
     /**
      * regular expression to find invalid login strings
      * (default: /^[a-z0-9][\w\.\-@]+/i ).
@@ -132,28 +135,32 @@ class User
      * @var string
      */
     private $validUsername = '/^[a-z0-9][\w\.\-@]+/i';
+
     /**
      * user ID.
      *
      * @var int
      */
     private $userId = -1;
+
     /**
      * Status of user.
      *
      * @var string
      */
     private $status = '';
+
     /**
      * IS the user a super admin?
      *
      * @var bool
      */
     private $isSuperAdmin = false;
+
     /**
      * array of allowed values for status.
      *
-     * @var array
+     * @var array<string>
      */
     private $allowedStatus = [
         'active' => self::STATUS_USER_ACTIVE,
@@ -265,11 +272,11 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param Auth   $auth Driver object
-     * @param string $name Auth name
+     * @param AuthDriverInterface $auth Driver object
+     * @param string              $name Auth name
      * @return bool
      */
-    public function addAuth(Auth $auth, string $name): bool
+    public function addAuth(AuthDriverInterface $auth, string $name): bool
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;
@@ -283,10 +290,10 @@ class User
     /**
      * Returns true if auth is a valid authentication object.
      *
-     * @param Auth $auth Auth object
+     * @param AuthDriverInterface $auth Auth object
      * @return bool
      */
-    protected function checkAuth(Auth $auth): bool
+    protected function checkAuth(AuthDriverInterface $auth): bool
     {
         $methods = ['checkCredentials'];
         foreach ($methods as $method) {

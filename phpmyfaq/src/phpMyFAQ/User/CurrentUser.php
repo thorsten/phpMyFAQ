@@ -82,9 +82,9 @@ class CurrentUser extends User
     /**
      * LDAP configuration if available.
      *
-     * @var array
+     * @var array<string>
      */
-    private $ldapConfig = [];
+    private $ldapConfig;
 
     /**
      * Remember me activated or deactivated.
@@ -92,15 +92,6 @@ class CurrentUser extends User
      * @var bool
      */
     private $rememberMe = false;
-
-    /**
-     * Login successful or auth failure:
-     * 1 -> success
-     * 0 -> failure.
-     *
-     * @var int
-     */
-    private $loginState = 1;
 
     /**
      * Number of failed login attempts
@@ -112,7 +103,7 @@ class CurrentUser extends User
     /**
      * Lockout time in seconds
      *
-     * @var integer
+     * @var int
      */
     private $lockoutTime = 600;
 
@@ -327,7 +318,7 @@ class CurrentUser extends User
      * in the user table. The array has the following keys:
      * session_id, session_timestamp and ip.
      *
-     * @return array
+     * @return array<string>
      */
     public function getSessionInfo(): array
     {
@@ -574,9 +565,9 @@ class CurrentUser extends User
      * Sets the number of minutes when the current user stored in
      * the session gets invalid.
      *
-     * @param float $timeout Timeout
+     * @param int $timeout Timeout
      */
-    public function setSessionTimeout($timeout)
+    public function setSessionTimeout(int $timeout): void
     {
         $this->sessionTimeout = abs($timeout);
     }
@@ -586,9 +577,9 @@ class CurrentUser extends User
      * updated. By setting the session-ID timeout to zero, the
      * session-ID will be updated on each click.
      *
-     * @param float $timeout Timeout
+     * @param int $timeout Timeout
      */
-    public function setSessionIdTimeout($timeout)
+    public function setSessionIdTimeout(int $timeout): void
     {
         $this->sessionIdTimeout = abs($timeout);
     }
@@ -596,7 +587,7 @@ class CurrentUser extends User
     /**
      * Enables the remember me decision.
      */
-    public function enableRememberMe()
+    public function enableRememberMe(): void
     {
         $this->rememberMe = true;
     }
@@ -605,10 +596,9 @@ class CurrentUser extends User
      * Saves remember me token in the database.
      *
      * @param string $rememberMe
-     *
      * @return bool
      */
-    protected function setRememberMe($rememberMe)
+    protected function setRememberMe(string $rememberMe): bool
     {
         $update = sprintf(
             "
@@ -635,7 +625,7 @@ class CurrentUser extends User
      */
     protected function setSuccess($success)
     {
-        $this->loginState = (int)$success;
+        $loginState = (int)$success;
         $this->loginAttempts = 0;
 
         $update = sprintf(
@@ -648,7 +638,7 @@ class CurrentUser extends User
             WHERE
                 user_id = %d',
             Database::getTablePrefix(),
-            $this->loginState,
+            $loginState,
             $this->loginAttempts,
             $this->getUserId()
         );
@@ -732,7 +722,7 @@ class CurrentUser extends User
      *
      * @return string
      */
-    public function getCsrfTokenFromSession()
+    public function getCsrfTokenFromSession(): string
     {
         return $_SESSION['phpmyfaq_csrf_token'];
     }
@@ -740,7 +730,7 @@ class CurrentUser extends User
     /**
      * Save CSRF token to session.
      */
-    public function saveCrsfTokenToSession()
+    public function saveCrsfTokenToSession(): void
     {
         if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
             $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
@@ -750,7 +740,7 @@ class CurrentUser extends User
     /**
      * Deletes CSRF token from session.
      */
-    protected function deleteCsrfTokenFromSession()
+    protected function deleteCsrfTokenFromSession(): void
     {
         unset($_SESSION['phpmyfaq_csrf_token']);
     }
@@ -760,7 +750,7 @@ class CurrentUser extends User
      *
      * @return string
      */
-    private function createCsrfToken()
+    private function createCsrfToken(): string
     {
         return sha1(microtime() . $this->getLogin());
     }
