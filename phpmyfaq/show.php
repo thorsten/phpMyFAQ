@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Link;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,6 +31,8 @@ $subCategoryContent = '';
 if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCategoryId])) {
     $http->setStatus(404);
 }
+
+$categoryHelper = new CategoryHelper();
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {
@@ -49,12 +52,15 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $subCategory = new Category($faqConfig, $currentGroups, true);
         $subCategory->setUser($currentUser);
         $subCategory->transform($selectedCategoryId);
+        $categoryHelper
+            ->setConfiguration($faqConfig)
+            ->setCategory($subCategory);
         if (empty($records)) {
-            $records = $subCategory->renderCategoryTree();
+            $records = $categoryHelper->renderCategoryTree();
         }
         if (count($category->getChildNodes($selectedCategoryId))) {
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
-            $subCategoryContent = $subCategory->renderCategoryTree();
+            $subCategoryContent = $categoryHelper->renderCategoryTree();
             $template->parseBlock(
                 'mainPageContent',
                 'subCategories',
@@ -107,13 +113,17 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         // @todo handle the exception
     }
 
+    $categoryHelper
+        ->setConfiguration($faqConfig)
+        ->setCategory($category);
+
     $template->parse(
         'mainPageContent',
         [
             'categoryHeader' => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
             'categoryFaqsHeader' => '',
-            'categoryContent' => $category->renderCategoryTree(),
+            'categoryContent' => $categoryHelper->renderCategoryTree(),
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => '',
         ]

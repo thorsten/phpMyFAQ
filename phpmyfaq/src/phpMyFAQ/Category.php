@@ -658,7 +658,7 @@ class Category
      * Get the line number where to find the node $id in the category tree.
      *
      * @param int $id Entity id
-     * @return mixed
+     * @return int
      */
     private function getLineCategory(int $id)
     {
@@ -678,125 +678,6 @@ class Category
     public function expand(int $id)
     {
         $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
-    }
-
-    /**
-     * Renders the static tree with the number of records.
-     *
-     * @return string
-     */
-    public function renderCategoryTree(): string
-    {
-        global $sids, $plr;
-
-        $number = [];
-
-        $query = sprintf(
-            '
-            SELECT
-                fcr.category_id AS category_id,
-                count(fcr.category_id) AS number
-            FROM
-                %sfaqcategoryrelations fcr,
-                %sfaqdata fd
-            WHERE
-                fcr.record_id = fd.id
-            AND
-                fcr.record_lang = fd.lang',
-            Database::getTablePrefix(),
-            Database::getTablePrefix()
-        );
-
-        if (strlen($this->language) > 0) {
-            $query .= sprintf(
-                " AND fd.lang = '%s'",
-                $this->language
-            );
-        }
-
-        $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id";
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
-                $number[$row->category_id] = $row->number;
-            }
-        }
-        $output = '<ul class="pmf-category-overview">';
-        $open = 0;
-        $this->expandAll();
-
-        for ($y = 0; $y < $this->height(); $y = $this->getNextLineTree($y)) {
-            list($hasChild, $categoryName, $parent, $description) = $this->getLineDisplay($y);
-            $level = $this->treeTab[$y]['level'];
-            $levelDiff = $open - $level;
-            if (!isset($number[$parent])) {
-                $number[$parent] = 0;
-            }
-
-            if ($this->config->get('records.hideEmptyCategories') && 0 === $number[$parent] && '-' === $hasChild) {
-                continue;
-            }
-
-            if ($levelDiff > 1) {
-                $output .= '</li>';
-                for ($i = $levelDiff; $i > 1; --$i) {
-                    $output .= '</ul></li>';
-                }
-            }
-
-            if ($level < $open) {
-                if (($level - $open) == -1) {
-                    $output .= '</li>';
-                }
-                $output .= '</ul></li>';
-            } elseif ($level == $open && $y != 0) {
-                $output .= '</li>';
-            }
-
-            if ($level > $open) {
-                $output .= sprintf(
-                    '<ul><li data-category-id="%d" data-category-level="%d">',
-                    $parent,
-                    $level
-                );
-            } else {
-                $output .= sprintf(
-                    '<li data-category-id="%d" data-category-level="%d">',
-                    $parent,
-                    $level
-                );
-            }
-
-            if (0 === $number[$parent] && 0 === $level) {
-                $numFaqs = '';
-            } else {
-                $numFaqs = ' <span class="badge badge-primary badge-pill">' .
-                    $plr->getMsg('plmsgEntries', $number[$parent]) .
-                    '</span>';
-            }
-
-            $url = sprintf(
-                '%s?%saction=show&amp;cat=%d',
-                $this->config->getDefaultUrl(),
-                $sids,
-                $parent
-            );
-            $oLink = new Link($url, $this->config);
-            $oLink->itemTitle = $categoryName;
-            $oLink->text = $categoryName;
-            $oLink->tooltip = $description;
-
-            $output .= $oLink->toHtmlAnchor() . $numFaqs;
-            $open = $level;
-        }
-
-        if (isset($level) && $level > 0) {
-            $output .= str_repeat('</li></ul>', $level);
-        }
-
-        $output .= '</li></ul>';
-
-        return $output;
     }
 
     /**
