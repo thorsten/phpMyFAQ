@@ -31,12 +31,12 @@ class TemplateHelper
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * @var Meta
      */
-    private $meta = null;
+    private $meta;
 
     /**
      * Constructor.
@@ -52,10 +52,10 @@ class TemplateHelper
     /**
      * Renders all {{ var | meta }} filters.
      *
-     * @param  $key
+     * @param string $key
      * @return string
      */
-    public function renderMetaFilter($key)
+    public function renderMetaFilter(string $key): string
     {
         $metaData = $this->meta->getByPageId($key);
 
