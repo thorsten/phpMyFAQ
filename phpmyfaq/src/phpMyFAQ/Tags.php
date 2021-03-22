@@ -34,7 +34,7 @@ class Tags
     private $config;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private $recordsByTagName = [];
 
@@ -75,7 +75,7 @@ class Tags
      * Returns all tags for a FAQ record.
      *
      * @param int $recordId Record ID
-     * @return array
+     * @return array<int, string>
      */
     public function getAllTagsById(int $recordId): array
     {
@@ -113,7 +113,7 @@ class Tags
      * Saves all tags from a FAQ record.
      *
      * @param int $recordId Record ID
-     * @param array $tags Array of tags
+     * @param array<int, string> $tags Array of tags
      * @return bool
      */
     public function saveTags(int $recordId, array $tags): bool
@@ -178,7 +178,7 @@ class Tags
      * @param string|null $search Move the returned result set to be the result of a start-with search
      * @param int $limit Limit the returned result set
      * @param bool $showInactive Show inactive tags
-     * @return array
+     * @return array<int, string>
      */
     public function getAllTags(
         string $search = null,
@@ -310,8 +310,8 @@ class Tags
     /**
      * Returns the FAQ record IDs where all tags are included.
      *
-     * @param array $arrayOfTags Array of Tags
-     * @return array
+     * @param array<int, int> $arrayOfTags Array of Tags
+     * @return array<int, int>
      */
     public function getFaqsByIntersectionTags(array $arrayOfTags): array
     {
@@ -355,7 +355,7 @@ class Tags
      *
      * @return string
      */
-    public function renderTagCloud()
+    public function renderTagCloud(): string
     {
         $tags = [];
 
@@ -372,22 +372,12 @@ class Tags
                 $tags[$tagName]['count'] = $totFaqByTag;
             }
         }
-        $min = 0;
-        $max = 0;
-        foreach ($tags as $tag) {
-            if ($min > $tag['count']) {
-                $min = $tag['count'];
-            }
-            if ($max < $tag['count']) {
-                $max = $tag['count'];
-            }
-        }
 
         $html = '';
         $i = 0;
         foreach ($tags as $tag) {
             ++$i;
-            $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES, 'utf-8');
+            $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES);
             $url = sprintf('%s?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $tag['id']);
             $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $tag['name'];
@@ -405,7 +395,7 @@ class Tags
      * Returns all FAQ record IDs where all tags are included.
      *
      * @param string $tagName The name of the tag
-     * @return array
+     * @return array<int, string>
      */
     public function getFaqsByTagName(string $tagName): array
     {
@@ -446,7 +436,7 @@ class Tags
      * Returns all FAQ record IDs where all tags are included.
      *
      * @param int $tagId Tagging ID
-     * @return array
+     * @return array<int>
      */
     public function getFaqsByTagId(int $tagId): array
     {
@@ -499,9 +489,9 @@ class Tags
 
     /**
      * @param int $limit Specify the maximum amount of records to return
-     * @return array $tagId => $tagFrequency
+     * @return array<int, int>
      */
-    public function getPopularTags($limit = 0)
+    public function getPopularTags($limit = 0): array
     {
         $tags = [];
 
@@ -562,7 +552,7 @@ class Tags
      * Returns the popular Tags as an array
      *
      * @param int $limit
-     * @return array
+     * @return array<int, array<string, int|string>>
      */
     public function getPopularTagsAsArray(int $limit = 0): array
     {

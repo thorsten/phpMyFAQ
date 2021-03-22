@@ -65,7 +65,7 @@ class System
     /**
      * Array of required PHP extensions.
      *
-     * @var array
+     * @var array<string>
      */
     private $requiredExtensions = [
         'curl',
@@ -80,14 +80,14 @@ class System
     /**
      * Array of missing PHP extensions.
      *
-     * @var array
+     * @var array<string>
      */
     private $missingExtensions = [];
 
     /**
      * Supported databases for phpMyFAQ.
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
     private $supportedDatabases = [
         'mysqli' => [self::VERSION_MINIMUM_PHP, 'MySQL / Percona Server / MariaDB'],
@@ -159,7 +159,7 @@ class System
      *
      * @param bool $onePageBack
      */
-    public static function renderFooter(bool $onePageBack = false)
+    public static function renderFooter(bool $onePageBack = false): void
     {
         if (true === $onePageBack) {
             printf(
@@ -170,7 +170,7 @@ class System
         printf(
             '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
             '</body></html>',
-            COPYRIGHT
+            '&copy; 2001-2021 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
         );
         exit(-1);
     }
@@ -190,7 +190,7 @@ class System
     /**
      * Returns all available templates as array.
      *
-     * @return array
+     * @return array<string, bool>
      */
     public function getAvailableTemplates(): array
     {
@@ -210,7 +210,7 @@ class System
      * Returns the locally supported databases.
      *
      * @param bool $returnAsHtml
-     * @return array
+     * @return array<string, string>
      */
     public function getSupportedSafeDatabases(bool $returnAsHtml = false): array
     {
@@ -231,7 +231,7 @@ class System
     /**
      * Returns the supported databases.
      *
-     * @return array
+     * @return array<string, array<int, string>>
      */
     public function getSupportedDatabases(): array
     {
@@ -312,7 +312,7 @@ class System
     /**
      * Returns all missing extensions.
      *
-     * @return array
+     * @return array<string>
      */
     public function getMissingExtensions(): array
     {
@@ -370,9 +370,9 @@ class System
     /**
      * Drops all given tables
      *
-     * @param array $queries
+     * @param array<string> $queries
      */
-    public function dropTables(array $queries)
+    public function dropTables(array $queries): void
     {
         if ($this->database instanceof DatabaseDriver) {
             foreach ($queries as $query) {
@@ -384,7 +384,7 @@ class System
     /**
      * Removes the database.php and the ldap.php if an installation failed.
      */
-    public function cleanFailedInstallationFiles()
+    public function cleanFailedInstallationFiles(): void
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {

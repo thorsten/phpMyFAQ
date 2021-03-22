@@ -29,7 +29,6 @@ use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2020 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_SRC_DIR', PMF_ROOT_DIR . '/src');
 define('IS_VALID_PHPMYFAQ', null);

@@ -22,7 +22,11 @@
 namespace phpMyFAQ;
 
 use Exception;
+use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Auth\AuthHttp;
+use phpMyFAQ\Auth\AuthLdap;
+use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
@@ -89,7 +93,7 @@ class User
     /**
      * authentication container.
      *
-     * @var AuthDriverInterface[]
+     * @var array<AuthDatabase|AuthHttp|AuthLdap|AuthSso>
      */
     protected $authContainer = [];
 
@@ -186,7 +190,7 @@ class User
         $this->authContainer = [];
         $auth = new Auth($this->config);
 
-        /** @var AuthDriverInterface */
+        /** @var AuthDatabase|AuthHttp|AuthLdap|AuthSso */
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
@@ -259,9 +263,9 @@ class User
      * Returns a specific entry from the auth data array.
      *
      * @param string $key
-     * @return string|null
+     * @return string|bool|null
      */
-    public function getAuthData(string $key): ?string
+    public function getAuthData(string $key)
     {
         if (isset($this->authData[$key])) {
             return $this->authData[$key];
@@ -1095,10 +1099,10 @@ class User
     /**
      * Sets the users "is_superadmin" flag and updates the database entry.
      *
-     * @param  $isSuperAdmin
+     * @param bool $isSuperAdmin
      * @return bool
      */
-    public function setSuperAdmin($isSuperAdmin): bool
+    public function setSuperAdmin(bool $isSuperAdmin): bool
     {
         $this->isSuperAdmin = $isSuperAdmin;
         $update = sprintf(

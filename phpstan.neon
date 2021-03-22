@@ -1,6 +1,7 @@
 parameters:
 	bootstrapFiles:
 		- phpmyfaq/config/constants.php
+		- phpmyfaq/src/constants.php
 	level: 6
 	paths:
 		- phpmyfaq/src/phpMyFAQ

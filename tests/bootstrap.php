@@ -30,7 +30,6 @@ define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/config');
 define('PMF_TEST_DIR', __DIR__);
 define('IS_VALID_PHPMYFAQ', true);
-define('COPYRIGHT', 'Hello, World.');
 define('DEBUG', true);
 
 $_SERVER['HTTP_HOST'] = 'https://localhost/';

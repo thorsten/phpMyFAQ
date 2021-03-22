@@ -59,18 +59,16 @@ ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
 //
+// Include constants
+//
+require 'constants.php';
+
+//
 // Setting up autoloader
 //
 /** @var ClassLoader $loader */
 $loader = require __DIR__ . '/libs/autoload.php';
 $loader->addPsr4('phpMyFAQ\\', __DIR__ . '/phpMyFAQ');
-
-//
-// The root directory
-//
-if (!defined('PMF_ROOT_DIR')) {
-    define('PMF_ROOT_DIR', dirname(__DIR__));
-}
 
 //
 // Check if multisite/multisite.php exist for Multisite support
