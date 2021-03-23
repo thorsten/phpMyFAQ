@@ -226,7 +226,11 @@ class Pgsql implements DatabaseDriver
      */
     public function fetchArray($result): array
     {
-        return pg_fetch_array($result, null, PGSQL_ASSOC);
+        $result = pg_fetch_array($result, null, PGSQL_ASSOC);
+        if ($result) {
+            return $result;
+        }
+        return [];
     }
 
     /**
