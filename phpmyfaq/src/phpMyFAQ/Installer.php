@@ -646,8 +646,8 @@ class Installer
     /**
      * Starts the installation.
      *
-     * @param array $setup
-     * @throws
+     * @param array|null $setup
+     * @throws Exception
      */
     public function startInstall(array $setup = null)
     {
@@ -660,7 +660,11 @@ class Installer
         }
 
         // Check database entries
-        $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING, $setup['dbType']);
+        if (!isset($setup['dbType'])) {
+            $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
+        } else {
+            $dbSetup['dbType'] = $setup['dbType'];
+        }
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
             if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
@@ -846,14 +850,22 @@ class Installer
         }
 
         // check loginname
-        $loginname = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING, $setup['loginname']);
-        if (is_null($loginname)) {
+        if (!isset($setup['loginname'])) {
+            $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+        } else {
+            $loginName = $setup['loginname'];
+        }
+        if (is_null($loginName)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a loginname for your account.</p>';
             System::renderFooter(true);
         }
 
         // check user entries
-        $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING, $setup['password']);
+        if (!isset($setup['password'])) {
+            $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        } else {
+            $password = $setup['password'];
+        }
         if (is_null($password)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your ' .
                 'account.</p>';
@@ -992,7 +1004,7 @@ class Installer
 
         // add admin account and rights
         $admin = new User($configuration);
-        if (!$admin->createUser($loginname, $password, null, 1)) {
+        if (!$admin->createUser($loginName, $password, null, 1)) {
             printf(
                 '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>' .
                 "Couldn't create the admin user: %s</p>\n",
