@@ -340,6 +340,8 @@ switch ($action) {
             ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
                     Language::isASupportedLanguage($faqLanguage)))) {
             $isNew = true;
+            $newLanguage = '';
+
             if (!is_null($faqId)) {
                 $isNew = false;
                 try {
@@ -361,7 +363,7 @@ switch ($action) {
                 $newLanguage = $faqLanguage;
             }
 
-            if (Strings::substr($contentLink, 7) != '') {
+            if (!is_null($contentLink) && Strings::substr($contentLink, 7) !== '') {
                 $answer = sprintf(
                     '%s<br><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
                     $answer,
