@@ -61,13 +61,13 @@ class SwiftSMTP implements MailUserAgentInterface
     /**
      * Send the message using SMTP with authorisation.
      *
-     * @param string $recipients
+     * @param string|array $recipients
      * @param array $headers
      * @param string $body
      *
      * @return bool True if successful, false otherwise.
      */
-    public function send(string $recipients, array $headers, string $body): bool
+    public function send($recipients, array $headers, string $body): bool
     {
         $sender = '';
         if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
