@@ -1246,7 +1246,7 @@ $PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';
 $PMF_LANG['ad_quick_entry'] = 'Add new FAQ in this category';
 
 // added 2.10.0-alpha - 2016-08-08 by Thorsten
-$LANG_CONF['ldap.ldap_mapping.nae'] = ['input', 'LDAP mapping for name, "cn" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP mapping for name, "cn" when using an ADS'];
 $LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP mapping for username, "samAccountName" when using an ADS'];
 $LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP mapping for email, "mail" when using an ADS'];
 $LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP mapping for "member of" when using LDAP groups'];
