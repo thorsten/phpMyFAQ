@@ -78,12 +78,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         }
 
         function onDemandVerifyURL(id, lang, target) {
-            var target = getSpanElement(id, lang),
-                widthPx  = 780,
-                heigthPx = 450,
+            const widthPx = 780,
+                heightPx = 450,
                 leftPx   = (screen.width  - widthPx) / 2,
-                topPx    = (screen.height - heigthPx) / 2,
-                pmfWindow = window.open('index.php?action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
+                topPx    = (screen.height - heightPx) / 2,
+                pmfWindow = window.open('index.php?action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heightPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
                 pmfWindow.focus();
 
             verifyEntryURL(id, lang);
@@ -160,7 +159,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         $internalSearch .= '&searchcat=' . $searchCat;
         $cond[Database::getTablePrefix() . 'faqcategoryrelations.category_id'] = array_merge(
             [$searchCat],
-            $category->getChildNodes($searchCat)
+            $category->getChildNodes((int) $searchCat)
         );
     }
 

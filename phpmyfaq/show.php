@@ -48,7 +48,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $faqConfig->get('records.sortby')
     );
 
-    if (empty($records) || $category->getChildNodes($selectedCategoryId)) {
+    if (empty($records) || $category->getChildNodes((int) $selectedCategoryId)) {
         $subCategory = new Category($faqConfig, $currentGroups, true);
         $subCategory->setUser($currentUser);
         $subCategory->transform($selectedCategoryId);
@@ -58,7 +58,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         if (empty($records)) {
             $records = $categoryHelper->renderCategoryTree();
         }
-        if (count($category->getChildNodes($selectedCategoryId))) {
+        if (count($category->getChildNodes((int) $selectedCategoryId))) {
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
             $subCategoryContent = $categoryHelper->renderCategoryTree();
             $template->parseBlock(

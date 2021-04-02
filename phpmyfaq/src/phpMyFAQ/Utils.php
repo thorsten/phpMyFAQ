@@ -47,10 +47,10 @@ class Utils
     /**
      * Checks if a date is a phpMyFAQ valid date.
      *
-     * @param int $date Date
+     * @param string $date Date
      * @return bool
      */
-    public static function isLikeOnPMFDate(int $date): bool
+    public static function isLikeOnPMFDate(string $date): bool
     {
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $dateToTest = $date;
@@ -63,7 +63,7 @@ class Utils
             $dateToTest = substr($dateToTest, 0, strlen($dateToTest) - 1);
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss
-        return is_int($dateToTest);
+        return is_numeric($dateToTest);
     }
 
     /**
@@ -179,7 +179,7 @@ class Utils
     /**
      * Callback function for filtering HTML from URLs and images.
      *
-     * @param array $matches Array of matches from regex pattern
+     * @param array<int, string> $matches Array of matches from regex pattern
      *
      * @return string
      */
@@ -203,11 +203,11 @@ class Utils
     /**
      * Tries to detect if a string could be a HTML element
      *
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
-    public static function isForbiddenElement($string): bool
+    public static function isForbiddenElement(string $string): bool
     {
         $forbiddenElements = [
             'img', 'picture', 'mark'
@@ -272,10 +272,10 @@ class Utils
     /**
      * Moves given key of an array to the top
      *
-     * @param array  $array
+     * @param array<int> $array
      * @param string $key
      */
-    public static function moveToTop(array &$array, string $key)
+    public static function moveToTop(array &$array, string $key): void
     {
         $temp = [$key => $array[$key]];
         unset($array[$key]);

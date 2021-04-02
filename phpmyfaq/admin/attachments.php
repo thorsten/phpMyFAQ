@@ -98,7 +98,8 @@ $pagination = new Pagination(
    * Ajax call for deleting attachments
    *
    * @param attachmentId Attachment id
-   * @apram csrf CSRF token
+   * @param csrf
+   * @param csrf CSRF token
    */
   function deleteAttachment(attachmentId, csrf) {
     if (confirm('<?= $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {

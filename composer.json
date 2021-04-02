@@ -67,7 +67,7 @@
   },
   "minimum-stability": "stable",
   "scripts": {
-    "check": "./phpmyfaq/src/libs/bin/phpstan analyse -c phpstan.neon",
+    "check": "./phpmyfaq/src/libs/bin/phpstan analyse -c phpstan.neon --memory-limit 1G",
     "test": "./phpmyfaq/src/libs/bin/phpunit",
     "lint": "./phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
     "lint-fix": "./phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ"

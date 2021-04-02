@@ -33,14 +33,14 @@ class Category
     /**
      * The categories as an array.
      *
-     * @var array
+     * @var array<int>
      */
     public $categories = [];
 
     /**
      * The category names as an array.
      *
-     * @var array
+     * @var array<string>
      */
     public $categoryName = [];
 
@@ -76,7 +76,7 @@ class Category
     private $user = -1;
 
     /**
-     * Groupd.
+     * Groups.
      *
      * @var array
      */
@@ -98,14 +98,14 @@ class Category
     /**
      * Entity owners
      *
-     * @var array
+     * @var array<int, int>>
      */
     private $owner = [];
 
     /**
      * Entity moderators
      *
-     * @var array
+     * @var array<int, int>>
      */
     private $moderators = [];
 
@@ -375,7 +375,7 @@ class Category
     /**
      * Gets all categories and write them in an array.
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     public function getHomeCategories(): array
     {
@@ -600,10 +600,9 @@ class Category
      * list in a array of the $id of the child.
      *
      * @param int $id Entity id
-     *
-     * @return array
+     * @return array<int>
      */
-    public function getChildNodes($id): array
+    public function getChildNodes(int $id): array
     {
         $children = [];
 
@@ -660,7 +659,7 @@ class Category
      * @param int $id Entity id
      * @return int
      */
-    private function getLineCategory(int $id)
+    private function getLineCategory(int $id): int
     {
         $num = count($this->treeTab);
         for ($i = 0; $i < $num; ++$i) {
@@ -668,6 +667,8 @@ class Category
                 return $i;
             }
         }
+
+        return 0;
     }
 
     /**
@@ -675,7 +676,7 @@ class Category
      *
      * @param int $id Entity id
      */
-    public function expand(int $id)
+    public function expand(int $id): void
     {
         $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
     }
