@@ -20,6 +20,7 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\User;
 
 /**
@@ -29,7 +30,7 @@ use phpMyFAQ\User;
  */
 class AuthDatabase extends Auth implements AuthDriverInterface
 {
-    /** @var AuthDriverInterface */
+    /** @var DatabaseDriver */
     private $db;
 
     /**

@@ -93,7 +93,7 @@ class User
     /**
      * authentication container.
      *
-     * @var array<AuthDatabase|AuthHttp|AuthLdap|AuthSso>
+     * @var array<string, Auth>
      */
     protected $authContainer = [];
 
@@ -294,10 +294,10 @@ class User
     /**
      * Returns true if auth is a valid authentication object.
      *
-     * @param AuthDriverInterface $auth Auth object
+     * @param Auth $auth Auth object
      * @return bool
      */
-    protected function checkAuth(AuthDriverInterface $auth): bool
+    protected function checkAuth(Auth $auth): bool
     {
         $methods = ['checkCredentials'];
         foreach ($methods as $method) {
@@ -416,7 +416,7 @@ class User
      * search users by login.
      *
      * @param string $search Login name
-     * @return array
+     * @return array<int, array>
      */
     public function searchUsers(string $search): array
     {
@@ -455,6 +455,7 @@ class User
      * @param string $domain
      * @param int    $userId
      * @return bool
+     * @throws Core\Exception
      */
     public function createUser(string $login, string $pass = '', string $domain = '', int $userId = 0): bool
     {
@@ -767,7 +768,7 @@ class User
      *
      * @param bool $withoutAnonymous Without anonymous?
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     * @return array
+     * @return array<int>
      */
     public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true): array
     {
@@ -873,7 +874,7 @@ class User
      * Returns the data of the current user.
      *
      * @param string $field Field
-     * @return array|string|int
+     * @return array<string>|string|int
      */
     public function getUserData($field = '*')
     {
@@ -887,7 +888,7 @@ class User
     /**
      * Adds user data.
      *
-     * @param array $data Array with user data
+     * @param array<string> $data Array with user data
      * @return bool
      */
     public function setUserData(array $data): bool
@@ -982,13 +983,13 @@ class User
      *
      * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         if (isset($this->status) && strlen($this->status) > 0) {
             return $this->status;
         }
 
-        return false;
+        return '';
     }
 
     /**

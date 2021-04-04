@@ -46,7 +46,7 @@ class Auth
     /**
      * public array that contains error messages.
      *
-     * @var array
+     * @var array<string>
      */
     public $errors = [];
 
