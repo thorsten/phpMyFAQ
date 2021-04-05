@@ -155,10 +155,10 @@ class Pagination
      * Constructor.
      *
      * We read in the current page from the baseUrl, so if it contains
-     * no pageParamName, first page is asumed
+     * no pageParamName, first page is assumed
      *
      * @param Configuration $config
-     * @param array $options initialization options,
+     * @param array<string|int|bool> $options initialization options,
      *                               possible options: -
      *                               baseUrl (default "") -
      *                               total - perPage -
@@ -240,7 +240,7 @@ class Pagination
      *
      * @return int
      */
-    protected function getCurrentPageFromUrl($url)
+    protected function getCurrentPageFromUrl($url): int
     {
         $page = 1;
 
@@ -259,7 +259,7 @@ class Pagination
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $content = [];
         $pages = ceil($this->total / $this->perPage);
@@ -353,13 +353,12 @@ class Pagination
     /**
      * Render a link.
      *
-     * @param string $tpl link template
-     * @param string $url url value for template container
-     * @param string $linkText text value for template container
-     *
+     * @param string           $tpl link template
+     * @param string           $url url value for template container
+     * @param string|int|float $linkText text value for template container
      * @return string
      */
-    protected function renderLink($tpl, $url, $linkText)
+    protected function renderLink(string $tpl, string $url, $linkText): string
     {
         $search = [self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT];
         $replace = [$url, $linkText];
@@ -371,10 +370,9 @@ class Pagination
      * Render the whole pagination layout.
      *
      * @param string $content layout contents
-     *
      * @return string
      */
-    protected function renderLayout($content)
+    protected function renderLayout(string $content): string
     {
         return str_replace(self::TPL_VAR_LAYOUT_CONTENT, $content, $this->layoutTpl);
     }

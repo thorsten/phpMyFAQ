@@ -25,16 +25,14 @@ namespace phpMyFAQ\Mail;
 class Builtin implements MailUserAgentInterface
 {
     /**
-     * Send the message using an e-mail through the PHP built-in mail() function.
+     * Send the message using an email through the PHP built-in mail() function.
      *
-     * @param string $recipients Recipients of the e-mail as a comma-separated list
-     *                           of RFC 2822 compliant items
-     * @param array $headers Headers of the e-mail
+     * @param string $recipients Recipients of the e-mail as a comma-separated list of RFC 2822 compliant items
+     * @param array<string> $headers Headers of the e-mail
      * @param string $body Body of the e-mail
-     *
-     * @return bool True if successful, false otherwise.
+     * @return int
      */
-    public function send(string $recipients, array $headers, string $body): bool
+    public function send(string $recipients, array $headers, string $body): int
     {
         // Get the subject of the e-mail, RFC 2047 compliant
         $subject = $headers['Subject'];
@@ -51,17 +49,17 @@ class Builtin implements MailUserAgentInterface
             unset($headers['Return-Path']);
         }
 
-        // Prepare the headers for the e-mail
+        // Prepare the headers for the email
         $mailHeaders = '';
         foreach ($headers as $key => $value) {
             $mailHeaders .= $key . ': ' . $value . PHP_EOL;
         }
 
-        // Send the e-mail
+        // Send the email
         if (empty($sender)) {
-            return mail($recipients, $subject, $body, $mailHeaders);
+            return (int)mail($recipients, $subject, $body, $mailHeaders);
         } else {
-            return mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
+            return (int)mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
         }
     }
 }

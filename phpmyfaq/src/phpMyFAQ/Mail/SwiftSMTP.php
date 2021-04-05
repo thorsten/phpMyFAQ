@@ -47,10 +47,12 @@ class SwiftSMTP implements MailUserAgentInterface
     {
         unset($this->mailer);
 
+        // @phpstan-ignore-next-line
         $this->mailer = Swift_Mailer::newInstance(
-            Swift_SmtpTransport::newInstance($server, $port, $security)->setUsername($this->user = $user)->setPassword(
-                $pass
-            )
+            // @phpstan-ignore-next-line
+            Swift_SmtpTransport::newInstance($server, $port, $security)
+                ->setUsername($this->user = $user)
+                ->setPassword($pass)
         );
     }
 
@@ -58,11 +60,11 @@ class SwiftSMTP implements MailUserAgentInterface
      * Send the message using SMTP with authorisation.
      *
      * @param string|string[] $recipients
-     * @param string[] $headers
-     * @param string $body
-     * @return bool True if successful, false otherwise.
+     * @param string[]        $headers
+     * @param string          $body
+     * @return int The number of successful recipients. Can be 0 which indicates failure
      */
-    public function send($recipients, array $headers, string $body): bool
+    public function send($recipients, array $headers, string $body): int
     {
         $sender = '';
         if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
@@ -70,6 +72,7 @@ class SwiftSMTP implements MailUserAgentInterface
             unset($headers['Return-Path']);
         }
 
+        // @phpstan-ignore-next-line
         $message = Swift_Message::newInstance($headers['Subject'])->setFrom(
             [empty($sender) ? $this->user : $sender]
         )->setTo($recipients)->setBody($body);

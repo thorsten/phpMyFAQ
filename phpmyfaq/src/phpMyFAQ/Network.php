@@ -51,7 +51,7 @@ class Network
      *
      * @return bool true, if not banned
      */
-    public function checkIp(string $ip)
+    public function checkIp(string $ip): bool
     {
         $bannedIps = explode(' ', $this->config->get('security.bannedIPs'));
 
@@ -89,7 +89,7 @@ class Network
      *
      * @return bool true if IP matched
      */
-    public function checkForAddrMatchIpv4($ip, $network)
+    public function checkForAddrMatchIpv4($ip, $network): bool
     {
         // See also ip2long PHP online manual: Kenneth Shaw
         // coded a network matching function called net_match.
@@ -108,7 +108,7 @@ class Network
             // $network seems to be a real network address
             $x = ip2long($ip_arr[1]);
             // Evaluate the netmask: <Network Mask> or <CIDR>
-            $mask = (long2ip($x) == $ip_arr[1] ? $x : 0xffffffff << (32 - $ip_arr[1]));
+            $mask = (long2ip($x) == $ip_arr[1] ? $x : 0xffffffff << (32 - $ip_arr[1])); // @phpstan-ignore-line
             $matched = (($ip_long & $mask) == ($network_long & $mask));
         }
 
@@ -118,14 +118,12 @@ class Network
     /**
      * Checks for an address match (IPv6 or Network).
      *
-     * @param string $ip      IPv6 Address
+     * @param string $ip IPv6 Address
      * @param string $network Network Address or IPv6 Address
-     *
-     * @throws InvalidArgumentException
-     *
      * @return bool true if IP matched
+     * @throws InvalidArgumentException
      */
-    public function checkForAddrMatchIpv6($ip, $network)
+    public function checkForAddrMatchIpv6(string $ip, string $network): bool
     {
         if (false === strpos($network, '/')) {
             throw new InvalidArgumentException('Not a valid IPv6 subnet.');

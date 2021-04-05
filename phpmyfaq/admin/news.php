@@ -508,7 +508,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ];
 
     $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    if ($news->updateNewsEntry($newsId, $newsData)) {
+    if ($news->updateNewsEntry((int) $newsId, $newsData)) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
         printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_updatefail']);
@@ -557,7 +557,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     } else {
         if ($csrfCheck) {
             $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-            $news->deleteNews($deleteId);
+            $news->deleteNews((int)$deleteId);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_delsuc']);
             printf('<div class="form-group row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
         }

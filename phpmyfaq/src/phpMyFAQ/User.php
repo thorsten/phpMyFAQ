@@ -1053,9 +1053,10 @@ class User
      *
      * @param string $subject
      * @param string $message
-     * @return bool
+     * @return int
+     * @throws Core\Exception
      */
-    public function mailUser(string $subject, string $message): bool
+    public function mailUser(string $subject, string $message): int
     {
         $mail = new Mail($this->config);
         $mail->addTo($this->getUserData('email'));

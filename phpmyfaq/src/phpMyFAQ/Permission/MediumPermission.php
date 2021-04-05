@@ -31,7 +31,7 @@ class MediumPermission extends BasicPermission
     /**
      * Default data for new groups.
      *
-     * @var array
+     * @var array<string, string|bool>
      */
     public $defaultGroupData = [
         'name' => 'DEFAULT_GROUP',
@@ -55,7 +55,7 @@ class MediumPermission extends BasicPermission
      *
      * @param int $groupId Group ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getGroupRights(int $groupId): array
     {
@@ -225,7 +225,7 @@ class MediumPermission extends BasicPermission
      * new group. The associative array $groupData contains the
      * data for the new group.
      *
-     * @param array $groupData Array of group data
+     * @param array<string> $groupData Array of group data
      *
      * @return int
      */
@@ -297,9 +297,9 @@ class MediumPermission extends BasicPermission
      * by the default values in $this->defaultGroupData.
      * Returns the corrected $groupData associative array.
      *
-     * @param array $groupData Array of group data
+     * @param array<string> $groupData Array of group data
      *
-     * @return array
+     * @return array<string|int>
      */
     public function checkGroupData(array $groupData): array
     {
@@ -320,8 +320,8 @@ class MediumPermission extends BasicPermission
     /**
      * Changes the group data of the given group.
      *
-     * @param int   $groupId   Group ID
-     * @param array $groupData Array of group data
+     * @param int $groupId Group ID
+     * @param array<string> $groupData Array of group data
      *
      * @return bool
      */
@@ -426,7 +426,7 @@ class MediumPermission extends BasicPermission
      *
      * @param int $groupId Group ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getGroupMembers(int $groupId): array
     {
@@ -467,7 +467,7 @@ class MediumPermission extends BasicPermission
      *
      * @param int $userId User ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getUserGroups(int $userId): array
     {
@@ -505,7 +505,7 @@ class MediumPermission extends BasicPermission
     /**
      * Get all groups in <option> tags.
      *
-     * @param array $groups Selected groups
+     * @param array<int> $groups Selected groups
      * @param CurrentUser $user
      * @return string
      * @todo   Move into the Helper class
@@ -534,7 +534,7 @@ class MediumPermission extends BasicPermission
      * database if no user is passed.
      *
      * @param CurrentUser $user
-     * @return array
+     * @return array<int>
      */
     public function getAllGroups(CurrentUser $user): array
     {
@@ -611,7 +611,7 @@ class MediumPermission extends BasicPermission
      *
      * @param int $userId User ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getAllUserRights(int $userId): array
     {
@@ -630,7 +630,7 @@ class MediumPermission extends BasicPermission
      *
      * @param int $userId User ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getUserGroupRights(int $userId): array
     {
@@ -764,7 +764,7 @@ class MediumPermission extends BasicPermission
      *
      * @param int $groupId Group ID
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getGroupData(int $groupId): array
     {

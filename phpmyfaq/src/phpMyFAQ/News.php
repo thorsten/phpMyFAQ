@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use Exception;
+
 /**
  * Class News
  *
@@ -32,14 +34,14 @@ class News
     /**
      * Language strings.
      *
-     * @var string
+     * @var array<string>
      */
     private $pmfLang;
 
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -55,9 +57,9 @@ class News
      * @param bool $showArchive Show archived news
      * @param bool $active Show active news
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getNews($showArchive = false, $active = true)
+    public function getNews($showArchive = false, $active = true): string
     {
         $output = '';
         $news = $this->getLatestData($showArchive, $active);
@@ -80,7 +82,6 @@ class News
                 '<h6><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
                 $item['id'],
                 $oLink->toString(),
-                $item['header'],
                 $item['header']
             );
 
@@ -108,9 +109,9 @@ class News
      * @param bool $showArchive Show archived news
      * @param bool $active Show active news
      * @param bool $forceConfLimit Force to limit in configuration
-     * @return array
+     * @return array<int, array<mixed>>
      */
-    public function getLatestData($showArchive = false, $active = true, $forceConfLimit = false)
+    public function getLatestData($showArchive = false, $active = true, $forceConfLimit = false): array
     {
         $news = [];
         $counter = 0;
@@ -185,9 +186,9 @@ class News
     /**
      * Fetches all news headers.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getNewsHeader()
+    public function getNewsHeader(): array
     {
         $headers = [];
         $now = date('YmdHis');
@@ -226,9 +227,9 @@ class News
      *
      * @param int  $id ID of news
      * @param bool $admin Is admin
-     * @return array
+     * @return array<mixed>
      */
-    public function getNewsEntry($id, $admin = false)
+    public function getNewsEntry($id, $admin = false): array
     {
         $news = [];
 
@@ -284,10 +285,10 @@ class News
     /**
      * Adds a new news entry.
      *
-     * @param array $data Array with news data
+     * @param array<mixed> $data Array with news data
      * @return bool
      */
-    public function addNewsEntry($data)
+    public function addNewsEntry(array $data): bool
     {
         $query = sprintf(
             "
@@ -324,11 +325,11 @@ class News
     /**
      * Updates a new news entry identified by its ID.
      *
-     * @param int   $id News ID
-     * @param array $data Array with news data
+     * @param int          $id News ID
+     * @param array<mixed> $data Array with news data
      * @return bool
      */
-    public function updateNewsEntry($id, array $data)
+    public function updateNewsEntry(int $id, array $data): bool
     {
         $query = sprintf(
             "
@@ -381,7 +382,7 @@ class News
      * @return bool
      * @todo   check if there are comments attached to the deleted news
      */
-    public function deleteNews($id)
+    public function deleteNews($id): bool
     {
         $query = sprintf("DELETE FROM
                 %sfaqnews

@@ -33,7 +33,7 @@ class LargePermission extends MediumPermission
     /**
      * Default data for new sections.
      *
-     * @var array
+     * @var array<string>
      */
     public $defaultSectionData = [
         'name' => 'DEFAULT_SECTION',
@@ -137,7 +137,7 @@ class LargePermission extends MediumPermission
      * new section. The associative array $sectionData contains the
      * data for the new section.
      *
-     * @param array $sectionData Array of section data
+     * @param array<string> $sectionData Array of section data
      *
      * @return int
      */
@@ -207,8 +207,8 @@ class LargePermission extends MediumPermission
      * by the default values in $this->defaultSectionData.
      * Returns the corrected $sectionData associative array.
      *
-     * @param  array $sectionData
-     * @return array
+     * @param array<string> $sectionData
+     * @return array<string>
      */
     public function checkSectionData(array $sectionData): array
     {
@@ -225,8 +225,8 @@ class LargePermission extends MediumPermission
     /**
      * Changes the section data of the given section.
      *
-     * @param  int   $sectionId
-     * @param  array $sectionData
+     * @param  int $sectionId
+     * @param  array<string> $sectionData
      * @return bool
      */
     public function changeSection(int $sectionId, array $sectionData): bool
@@ -328,7 +328,7 @@ class LargePermission extends MediumPermission
      * of the section $sectionId.
      *
      * @param  int $sectionId
-     * @return array
+     * @return array<int>
      */
     public function getSectionGroups(int $sectionId): array
     {
@@ -453,7 +453,7 @@ class LargePermission extends MediumPermission
      * $sectionId.
      *
      * @param  int $sectionId
-     * @return array
+     * @return array<string>
      */
     public function getSectionData(int $sectionId): array
     {
@@ -483,7 +483,7 @@ class LargePermission extends MediumPermission
      * database if no user ID is passed.
      *
      * @param  int $userId
-     * @return array
+     * @return array<int>
      */
     public function getAllSections(int $userId = -1): array
     {
@@ -510,7 +510,7 @@ class LargePermission extends MediumPermission
      * the user $userId is a member.
      *
      * @param  int $userId
-     * @return array
+     * @return array<int>
      */
     public function getUserSections(int $userId): array
     {
@@ -554,7 +554,7 @@ class LargePermission extends MediumPermission
      * owns because of a section membership are taken into account.
      *
      * @param  int $userId
-     * @return array
+     * @return array<int>
      */
     public function getAllUserRights(int $userId): array
     {
@@ -573,7 +573,7 @@ class LargePermission extends MediumPermission
      * $userId owns because of a section membership.
      *
      * @param  int $userId
-     * @return array
+     * @return array<int>
      */
     public function getUserSectionRights(int $userId): array
     {
@@ -707,7 +707,7 @@ class LargePermission extends MediumPermission
      * of the section $sectionId.
      *
      * @param  int $sectionId
-     * @return array
+     * @return array<int>
      */
     public function getSectionCategories(int $sectionId): array
     {
@@ -829,7 +829,7 @@ class LargePermission extends MediumPermission
      * of the section $sectionId.
      *
      * @param  int $sectionId
-     * @return array
+     * @return array<int>
      */
     public function getSectionNews(int $sectionId): array
     {

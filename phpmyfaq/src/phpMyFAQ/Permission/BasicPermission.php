@@ -32,7 +32,7 @@ class BasicPermission extends Permission
     /**
      * Default right data stored when a new right is created.
      *
-     * @var array
+     * @var array<string, string|bool>
      */
     public $defaultRightData = [
         'name' => 'DEFAULT_RIGHT',
@@ -94,9 +94,8 @@ class BasicPermission extends Permission
      * database for the specified right. The keys of the returned
      * array are the field names.
      *
-     * @param int
-     *
-     * @return array
+     * @param int $rightId
+     * @return array<string, bool>
      */
     public function getRightData(int $rightId): array
     {
@@ -241,7 +240,7 @@ class BasicPermission extends Permission
      *
      * @param int $userId User ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getAllUserRights(int $userId): array
     {
@@ -255,7 +254,7 @@ class BasicPermission extends Permission
      *
      * @param int $userId User ID
      *
-     * @return array
+     * @return array<int>
      */
     public function getUserRights(int $userId): array
     {
@@ -292,8 +291,7 @@ class BasicPermission extends Permission
      * new right. The associative array right_data contains the right
      * data stored in the rights table.
      *
-     * @param array $rightData Array if rights
-     *
+     * @param array<string> $rightData Array if rights
      * @return int
      */
     public function addRight(array $rightData): int
@@ -334,9 +332,9 @@ class BasicPermission extends Permission
      * by the default values in $this->default_right_data.
      * Returns the corrected $right_data associative array.
      *
-     * @param array $rightData Array of rights
+     * @param array<string> $rightData Array of rights
      *
-     * @return array
+     * @return array<string, int>
      */
     public function checkRightData(array $rightData): array
     {
@@ -406,7 +404,7 @@ class BasicPermission extends Permission
      *
      * @param string $order Ordering
      *
-     * @return array
+     * @return array<int, array>
      */
     public function getAllRightsData(string $order = 'ASC'): array
     {

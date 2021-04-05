@@ -233,7 +233,7 @@ switch ($ajaxAction) {
         $meta = new Meta($faqConfig);
         $metaId = Filter::filterInput(INPUT_GET, 'meta_id', FILTER_SANITIZE_STRING);
 
-        if ($meta->delete($metaId)) {
+        if ($meta->delete((int)$metaId)) {
             $payload = ['deleted' => $metaId];
         } else {
             $payload = ['error' => $metaId];

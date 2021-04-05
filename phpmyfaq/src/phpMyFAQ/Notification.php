@@ -29,13 +29,13 @@ class Notification
     /** @var Mail */
     private $mail;
 
-    /** @var array */
+    /** @var array<string> */
     private $translation;
 
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -57,7 +57,7 @@ class Notification
      * @param string $userName Name of the user
      * @param string $url URL of answered FAQ
      */
-    public function sendOpenQuestionAnswered(string $email, string $userName, string $url)
+    public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
         $this->mail->addTo($email, $userName);
         $this->mail->subject = $this->config->getTitle() . ' - ' . $this->translation['msgQuestionAnswered'];
@@ -71,11 +71,11 @@ class Notification
     /**
      * Sends mails to FAQ admin and other given users about a newly added FAQ.
      *
-     * @param array  $emails
-     * @param int    $faqId
+     * @param array<string> $emails
+     * @param int $faqId
      * @param string $faqLanguage
      */
-    public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage)
+    public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage): void
     {
         $this->mail->addTo($this->config->getAdminEmail());
         foreach ($emails as $email) {

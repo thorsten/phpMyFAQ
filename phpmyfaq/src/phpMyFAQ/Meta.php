@@ -47,7 +47,7 @@ class Meta
      * @param  MetaEntity $data
      * @return int
      */
-    public function add(MetaEntity $data)
+    public function add(MetaEntity $data): int
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
 
@@ -72,10 +72,10 @@ class Meta
     }
 
     /**
-     * @param  $metaId
+     * @param int $metaId
      * @return MetaEntity
      */
-    public function getById($metaId)
+    public function getById(int $metaId): MetaEntity
     {
         $entity = new MetaEntity();
         $query = sprintf(
@@ -101,10 +101,10 @@ class Meta
     }
 
     /**
-     * @param  $pageId
+     * @param string $pageId
      * @return MetaEntity
      */
-    public function getByPageId($pageId)
+    public function getByPageId(string $pageId): MetaEntity
     {
         $entity = new MetaEntity();
         $query = sprintf(
@@ -132,7 +132,7 @@ class Meta
     /**
      * @return MetaEntity[]
      */
-    public function getAll()
+    public function getAll(): array
     {
         $metaData = [];
         $query = sprintf(
@@ -160,11 +160,11 @@ class Meta
     }
 
     /**
-     * @param  $metaId
-     * @param  MetaEntity $data
+     * @param int        $metaId
+     * @param MetaEntity $data
      * @return bool
      */
-    public function update($metaId, MetaEntity $data)
+    public function update(int $metaId, MetaEntity $data): bool
     {
         $query = sprintf(
             "UPDATE %sfaqmeta SET page_id = '%s', type = '%s', content = '%s' WHERE id = %d AND lang = '%s'",
@@ -180,10 +180,10 @@ class Meta
     }
 
     /**
-     * @param  $id
+     * @param int $id
      * @return bool
      */
-    public function delete($id)
+    public function delete($id): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqmeta WHERE lang = '%s' AND id = %d",

@@ -46,7 +46,7 @@ if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
 $meta = new Meta($faqConfig);
 $metaId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$metaData = $meta->getById($metaId);
+$metaData = $meta->getById((int)$metaId);
 ?>
 
 <form action="?action=meta.update" method="post" accept-charset="utf-8">
