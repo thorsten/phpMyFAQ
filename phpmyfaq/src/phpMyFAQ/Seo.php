@@ -33,7 +33,7 @@ class Seo
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

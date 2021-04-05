@@ -19,6 +19,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User\CurrentUser;
+use stdClass;
 
 /**
  * Class Session
@@ -66,7 +67,7 @@ class Session
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -77,7 +78,7 @@ class Session
      * Returns the current session ID.
      * @return int|null
      */
-    public function getCurrentSessionId()
+    public function getCurrentSessionId(): ?int
     {
         return $this->currentSessionId;
     }
@@ -111,7 +112,7 @@ class Session
      *
      * @return int
      */
-    public function getTimeFromSessionId(int $sessionId)
+    public function getTimeFromSessionId(int $sessionId): int
     {
         $timestamp = 0;
 
@@ -133,7 +134,7 @@ class Session
      * @param int $firstHour First hour
      * @param int $lastHour Last hour
      *
-     * @return array
+     * @return array<int, string[]>
      */
     public function getSessionsByDate(int $firstHour, int $lastHour): array
     {
@@ -216,9 +217,9 @@ class Session
      *
      * @param int $sessionIdToCheck Session ID
      * @param string $ip IP
-     * @throws
+     * @throws Exception
      */
-    public function checkSessionId(int $sessionIdToCheck, string $ip)
+    public function checkSessionId(int $sessionIdToCheck, string $ip): void
     {
         $query = sprintf(
             "SELECT sid FROM %sfaqsessions WHERE sid = %d AND ip = '%s' AND time > %d",
@@ -251,11 +252,11 @@ class Session
      * Tracks the user and log what he did.
      *
      * @param string $action Action string
-     * @param string|null $data
+     * @param string|int|null $data
      *
      * @throws Exception
      */
-    public function userTracking(string $action, $data = null)
+    public function userTracking(string $action, $data = null): void
     {
         if ($this->config->get('main.enableUserTracking')) {
             $bots = 0;
@@ -394,7 +395,7 @@ class Session
      * @param int $activityTimeWindow Optionally set the time window size in sec.
      *                                Default: 300sec, 5 minutes
      *
-     * @return array
+     * @return array<int>
      */
     public function getUsersOnline(int $activityTimeWindow = 300): array
     {
@@ -440,7 +441,7 @@ class Session
     /**
      * Calculates the number of visits per day the last 30 days.
      *
-     * @returns array
+     * @return array<int, stdClass>
      */
     public function getLast30DaysVisits(): array
     {
@@ -470,7 +471,7 @@ class Session
         }
 
         foreach ($stats as $date => $stat) {
-            $visit = new \stdClass();
+            $visit = new stdClass();
             $visit->date = $date;
             $visit->number = $stats[$date];
             $completeData[] = $visit;

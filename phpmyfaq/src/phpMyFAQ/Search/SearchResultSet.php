@@ -39,7 +39,7 @@ class SearchResultSet
      * "Raw" search result set without permission checks and with possible
      * duplicates.
      *
-     * @var array
+     * @var string[]
      */
     protected $rawResultSet = [];
 
@@ -47,7 +47,7 @@ class SearchResultSet
      * "Reviewed" search result set with checked permissions and without
      * duplicates.
      *
-     * @var array
+     * @var string[]
      */
     protected $reviewedResultSet = [];
 
@@ -158,9 +158,9 @@ class SearchResultSet
     /**
      * Sets the "raw" search results.
      *
-     * @param array $resultSet Array with search results
+     * @param string[] $resultSet Array with search results
      */
-    public function setResultSet(array $resultSet)
+    public function setResultSet(array $resultSet): void
     {
         $this->rawResultSet = $resultSet;
     }
@@ -170,7 +170,7 @@ class SearchResultSet
      *
      * @return float
      */
-    public function getScore(stdClass $object)
+    public function getScore(stdClass $object): float
     {
         $score = 0;
 
@@ -192,7 +192,7 @@ class SearchResultSet
     /**
      * Returns the "reviewed" search results.
      *
-     * @return array
+     * @return string[]
      */
     public function getResultSet(): array
     {
@@ -212,9 +212,9 @@ class SearchResultSet
     /**
      * Sets the number of search results.
      *
-     * @param array
+     * @param string[] $resultSet
      */
-    public function setNumberOfResults(array $resultSet)
+    public function setNumberOfResults(array $resultSet): void
     {
         $this->numberOfResults = count($resultSet);
     }

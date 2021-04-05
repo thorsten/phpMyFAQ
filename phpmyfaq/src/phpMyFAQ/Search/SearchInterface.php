@@ -27,7 +27,7 @@ interface SearchInterface
     /**
      * Prepares the search and executes it.
      *
-     * @param  string $searchTerm Search term
+     * @param string $searchTerm Search term
      * @throws Exception
      */
     public function search(string $searchTerm);

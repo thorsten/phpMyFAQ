@@ -38,7 +38,7 @@ class Gravatar
      * address.
      *
      * @param string $email Email address
-     * @param array  $params Allows multiple keys with values to give more control
+     * @param string[] $params Allows multiple keys with values to give more control
      * @return string
      */
     public function getImage(string $email, array $params = []): string
@@ -55,7 +55,7 @@ class Gravatar
         if (isset($params['rating'])) {
             $opts[] = 'rating=' . $params['rating'];
         }
-        if (isset($params['force_default']) && $params['force_default'] === true) {
+        if (isset($params['force_default']) && $params['force_default']) {
             $opts[] = 'forcedefault=y';
         }
         if (!isset($params['class'])) {

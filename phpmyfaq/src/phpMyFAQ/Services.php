@@ -72,7 +72,7 @@ class Services
      *
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         $url = sprintf(
             '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
@@ -91,7 +91,7 @@ class Services
     /**
      * @return int
      */
-    public function getCategoryId()
+    public function getCategoryId(): int
     {
         return $this->categoryId;
     }
@@ -99,7 +99,7 @@ class Services
     /**
      * @param int $categoryId
      */
-    public function setCategoryId($categoryId)
+    public function setCategoryId($categoryId): void
     {
         $this->categoryId = $categoryId;
     }
@@ -107,7 +107,7 @@ class Services
     /**
      * @return int
      */
-    public function getFaqId()
+    public function getFaqId(): int
     {
         return $this->faqId;
     }
@@ -115,7 +115,7 @@ class Services
     /**
      * @param int $faqId
      */
-    public function setFaqId($faqId)
+    public function setFaqId($faqId): void
     {
         $this->faqId = $faqId;
     }
@@ -123,7 +123,7 @@ class Services
     /**
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
@@ -131,7 +131,7 @@ class Services
     /**
      * @param string $language
      */
-    public function setLanguage($language)
+    public function setLanguage($language): void
     {
         $this->language = $language;
     }
@@ -141,7 +141,7 @@ class Services
      *
      * @return string
      */
-    public function getShareOnTwitterLink()
+    public function getShareOnTwitterLink(): string
     {
         $url = sprintf(
             '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
@@ -164,7 +164,7 @@ class Services
     /**
      * @return string
      */
-    public function getQuestion()
+    public function getQuestion(): string
     {
         return urlencode(trim($this->question));
     }
@@ -172,7 +172,7 @@ class Services
     /**
      * @param string $question
      */
-    public function setQuestion($question)
+    public function setQuestion(string $question): void
     {
         $this->question = $question;
     }
@@ -182,7 +182,7 @@ class Services
      *
      * @return string
      */
-    public function getSuggestLink()
+    public function getSuggestLink(): string
     {
         return sprintf(
             '%s?action=send2friend&cat=%d&id=%d&artlang=%s',
@@ -198,7 +198,7 @@ class Services
      *
      * @return string
      */
-    public function getPdfLink()
+    public function getPdfLink(): string
     {
         return sprintf(
             '%spdf.php?cat=%d&id=%d&artlang=%s',
@@ -214,7 +214,7 @@ class Services
      *
      * @return string
      */
-    public function getPdfApiLink()
+    public function getPdfApiLink(): string
     {
         return sprintf(
             '%spdf.php?cat=%d&id=%d&artlang=%s',

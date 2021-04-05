@@ -69,7 +69,7 @@ class Section
      * Gets one section by id.
      *
      * @param int $sectionId
-     * @return array
+     * @return string[]
      */
     public function getSection(int $sectionId): array
     {
@@ -91,7 +91,7 @@ class Section
     /**
      * Get all sections.
      *
-     * @return array
+     * @return string[]
      */
     public function getAllSections(): array
     {

@@ -49,7 +49,7 @@ class Twitter
      * @param string $tags     String of tags
      * @param string $link     URL to FAQ
      */
-    public function addPost(string $question, string $tags, string $link)
+    public function addPost(string $question, string $tags, string $link): void
     {
         $hashtags = '';
 
