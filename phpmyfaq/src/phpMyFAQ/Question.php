@@ -43,7 +43,7 @@ class Question
     /**
      * Adds a new question.
      *
-     * @param  array $questionData
+     * @param string[] $questionData
      * @return bool
      */
     public function addQuestion(array $questionData): bool
@@ -94,8 +94,8 @@ class Question
     /**
      * Returns a new question.
      *
-     * @param  int $questionId
-     * @return array
+     * @param int $questionId
+     * @return array<string, int|string>
      */
     public function getQuestion(int $questionId): array
     {

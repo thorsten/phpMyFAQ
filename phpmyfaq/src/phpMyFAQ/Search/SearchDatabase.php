@@ -19,6 +19,7 @@ namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;
+use stdClass;
 
 /**
  * Class SearchDatabase
@@ -44,28 +45,28 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Columns for the result set.
      *
-     * @var array
+     * @var string[]
      */
     protected $resultColumns = [];
 
     /**
      * Columns for the joined table.
      *
-     * @var array
+     * @var string[]
      */
     protected $joinedColumns = [];
 
     /**
      * Matching columns for the search.
      *
-     * @var array
+     * @var string[]
      */
     protected $matchingColumns = [];
 
     /**
      * Conditions columns with their values.
      *
-     * @var array
+     * @var array<string, array<int>|string>
      */
     protected $conditions = [];
 
@@ -89,8 +90,8 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Prepares the search and executes it.
      *
-     * @param  string $searchTerm Search term
-     * @throws
+     * @param string $searchTerm Search term
+     * @return mixed
      */
     public function search(string $searchTerm)
     {
@@ -111,6 +112,8 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         );
 
         $this->resultSet = $this->config->getDb()->query($query);
+
+        return $this->resultSet;
     }
 
     /**
@@ -118,7 +121,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getResultColumns()
+    public function getResultColumns(): string
     {
         $resultColumns = '';
 
@@ -136,11 +139,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Sets the part of the SQL query with the columns for the result set.
      *
-     * @param array $columns Array of columns
+     * @param string[] $columns Array of columns
      *
      * @return SearchDatabase
      */
-    public function setResultColumns(array $columns)
+    public function setResultColumns(array $columns): SearchDatabase
     {
         $this->resultColumns = $columns;
 
@@ -152,7 +155,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
         return $this->table;
     }
@@ -164,7 +167,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return SearchDatabase
      */
-    public function setTable($table)
+    public function setTable($table): SearchDatabase
     {
         $this->table = $table;
 
@@ -176,7 +179,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getJoinedTable()
+    public function getJoinedTable(): string
     {
         if (empty($this->joinedTable)) {
             return '';
@@ -192,7 +195,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return SearchDatabase
      */
-    public function setJoinedTable($joinedTable = '')
+    public function setJoinedTable($joinedTable = ''): SearchDatabase
     {
         $this->joinedTable = $joinedTable;
 
@@ -204,7 +207,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getJoinedColumns()
+    public function getJoinedColumns(): string
     {
         $joinedColumns = '';
 
@@ -218,11 +221,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Sets the part of the SQL query with the columns for the join.
      *
-     * @param array $joinedColumns Array of columns
+     * @param string[] $joinedColumns Array of columns
      *
      * @return SearchDatabase
      */
-    public function setJoinedColumns(array $joinedColumns)
+    public function setJoinedColumns(array $joinedColumns): SearchDatabase
     {
         $this->joinedColumns = $joinedColumns;
 
@@ -234,7 +237,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getMatchingColumns()
+    public function getMatchingColumns(): string
     {
         return implode(', ', $this->matchingColumns);
     }
@@ -242,11 +245,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Sets the part of the SQL query with the matching columns.
      *
-     * @param array $matchingColumns Array of columns
+     * @param string[] $matchingColumns Array of columns
      *
      * @return SearchDatabase
      */
-    public function setMatchingColumns(array $matchingColumns)
+    public function setMatchingColumns(array $matchingColumns): SearchDatabase
     {
         $this->matchingColumns = $matchingColumns;
 
@@ -258,7 +261,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getConditions()
+    public function getConditions(): string
     {
         $conditions = '';
 
@@ -278,11 +281,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Sets the part of the SQL query with the conditions.
      *
-     * @param array $conditions Array of columns
+     * @param array<string, array<int>|string> $conditions Array of columns
      *
      * @return SearchDatabase
      */
-    public function setConditions(array $conditions)
+    public function setConditions(array $conditions): SearchDatabase
     {
         $this->conditions = $conditions;
 
@@ -296,7 +299,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return string
      */
-    public function getMatchClause($searchTerm = '')
+    public function getMatchClause($searchTerm = ''): string
     {
         $keys = Strings::preg_split("/\s+/", $searchTerm);
         $numKeys = count($keys);
@@ -329,7 +332,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Disables relevance support if we don't need it even if the database
      * supports it.
      */
-    public function disableRelevance()
+    public function disableRelevance(): void
     {
         $this->relevanceSupport = false;
     }

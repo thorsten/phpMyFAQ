@@ -300,7 +300,7 @@ $template->parse(
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],
         'renderSearchResults' => $searchResult,
         'writeSendAdress' => '?' . $sids . 'action=search',
-        'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
+        'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
         'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
         'checkedAllLanguages' => $allLanguages ? ' checked' : '',
         'selectCategories' => $PMF_LANG['msgSelectCategories'],

@@ -35,7 +35,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     private $client;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $esConfig;
 
@@ -45,7 +45,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     private $language = '';
 
     /**
-     * @var array
+     * @var int[]
      */
     private $categoryIds = [];
 
@@ -66,8 +66,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
-     *
-     * @return array
+     * @return stdClass[]
      */
     public function search(string $searchTerm): array
     {
@@ -126,7 +125,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     /**
      * Returns the current category ID
      *
-     * @return array
+     * @return int[]
      */
     public function getCategoryIds(): array
     {
@@ -136,9 +135,9 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     /**
      * Sets the current category ID
      *
-     * @param array $categoryIds
+     * @param int[] $categoryIds
      */
-    public function setCategoryIds(array $categoryIds)
+    public function setCategoryIds(array $categoryIds): void
     {
         $this->categoryIds = $categoryIds;
     }
@@ -148,7 +147,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      *
      * @param string $searchTerm Search term for autocompletion
      *
-     * @return array
+     * @return stdClass[]
      */
     public function autoComplete(string $searchTerm): array
     {
@@ -221,7 +220,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      *
      * @param string $language
      */
-    public function setLanguage(string $language)
+    public function setLanguage(string $language): void
     {
         $this->language = $language;
     }

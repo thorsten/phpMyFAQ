@@ -17,8 +17,10 @@
 
 namespace phpMyFAQ\Search\Database;
 
+use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
+use stdClass;
 
 /**
  * Class Pgsql
@@ -42,8 +44,8 @@ class Pgsql extends SearchDatabase
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search term
-     * @return resource
-     * @throws
+     * @throws Exception
+     * @return mixed
      */
     public function search(string $searchTerm)
     {

@@ -19,7 +19,9 @@ namespace phpMyFAQ\Search\Database;
 
 use mysqli_result;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Search\Exception;
 use phpMyFAQ\Search\SearchDatabase;
+use stdClass;
 
 /**
  * Class Mysqli
@@ -43,10 +45,10 @@ class Mysqli extends SearchDatabase
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search term
-     * @throws
-     * @return mysqli_result
+     * @throws \Exception
+     * @return mixed
      */
-    public function search(string $searchTerm): mysqli_result
+    public function search(string $searchTerm)
     {
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);

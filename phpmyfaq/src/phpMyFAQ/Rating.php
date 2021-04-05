@@ -61,7 +61,7 @@ class Rating
     /**
      * Returns all ratings of FAQ records.
      *
-     * @return array
+     * @return array<array<mixed>>
      */
     public function getAllRatings(): array
     {
@@ -261,7 +261,7 @@ class Rating
     /**
      * Adds a new voting record.
      *
-     * @param array $votingData
+     * @param int[] $votingData
      *
      * @return bool
      */
@@ -287,7 +287,7 @@ class Rating
     /**
      * Updates an existing voting record.
      *
-     * @param array $votingData
+     * @param int[] $votingData
      *
      * @return bool
      */

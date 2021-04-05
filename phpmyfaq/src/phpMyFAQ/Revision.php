@@ -74,7 +74,7 @@ class Revision
      * @param int    $faqId
      * @param string $faqLanguage
      * @param string $faqAuthor
-     * @return array
+     * @return array<string[]>
      */
     public function get(int $faqId, string $faqLanguage, string $faqAuthor): array
     {

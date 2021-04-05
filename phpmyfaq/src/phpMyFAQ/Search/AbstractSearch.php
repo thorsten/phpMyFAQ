@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Search;
 
+use stdClass;
 use phpMyFAQ\Configuration;
 
 /**
@@ -26,17 +27,15 @@ use phpMyFAQ\Configuration;
  */
 abstract class AbstractSearch
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     protected $config = null;
 
     /**
      * ResultSet
      *
-     * @var resource
+     * @var stdClass[]
      */
-    protected $resultSet = false;
+    protected $resultSet;
 
     /**
      * AbstractSearch constructor.

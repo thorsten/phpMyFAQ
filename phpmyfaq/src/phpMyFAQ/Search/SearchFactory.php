@@ -34,9 +34,7 @@ class SearchFactory
      * Factory for generating search instances.
      *
      * @param Configuration $config
-     * @param array         $searchHandler Array with information about search
-     *                                     handlers, e.g. array('database' =>
-     *                                     'mysqli')
+     * @param string[] $searchHandler Array with search handlers, e.g. array('database' => 'mysqli')
      *
      * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
      */

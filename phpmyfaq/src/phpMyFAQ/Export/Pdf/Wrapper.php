@@ -1,5 +1,5 @@
 <?php
-// phpcs:ignoreFile
+
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library.
  *
@@ -185,9 +185,6 @@ define('K_TITLE_MAGNIFICATION', 1.3);
  * reduction factor for small font
  */
 define('K_SMALL_RATIO', 2 / 3);
-
-require K_PATH_MAIN . '/tcpdf.php';
-// phpcs:enable
 
 /**
  * Class Wrapper

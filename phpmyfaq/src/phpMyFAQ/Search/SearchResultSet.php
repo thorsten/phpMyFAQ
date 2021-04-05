@@ -39,7 +39,7 @@ class SearchResultSet
      * "Raw" search result set without permission checks and with possible
      * duplicates.
      *
-     * @var string[]
+     * @var stdClass[]
      */
     protected $rawResultSet = [];
 
@@ -47,7 +47,7 @@ class SearchResultSet
      * "Reviewed" search result set with checked permissions and without
      * duplicates.
      *
-     * @var string[]
+     * @var stdClass[]
      */
     protected $reviewedResultSet = [];
 
@@ -92,15 +92,16 @@ class SearchResultSet
     /**
      * Check on user and group permissions and on duplicate FAQs.
      *
-     * @param array $resultSet Array with search results
+     * @param stdClass[] $resultSet Array with search results
      */
-    public function reviewResultSet(array $resultSet)
+    public function reviewResultSet(array $resultSet): void
     {
         $this->setResultSet($resultSet);
 
         $duplicateResults = [];
 
         if ('basic' !== $this->config->get('security.permLevel')) {
+            // @phpstan-ignore-next-line
             $currentGroupIds = $this->user->perm->getUserGroups($this->user->getUserId());
         } else {
             $currentGroupIds = [-1];
@@ -158,7 +159,7 @@ class SearchResultSet
     /**
      * Sets the "raw" search results.
      *
-     * @param string[] $resultSet Array with search results
+     * @param stdClass[] $resultSet Array with search results
      */
     public function setResultSet(array $resultSet): void
     {
@@ -192,7 +193,7 @@ class SearchResultSet
     /**
      * Returns the "reviewed" search results.
      *
-     * @return string[]
+     * @return stdClass[]
      */
     public function getResultSet(): array
     {
@@ -212,7 +213,7 @@ class SearchResultSet
     /**
      * Sets the number of search results.
      *
-     * @param string[] $resultSet
+     * @param stdClass[] $resultSet
      */
     public function setNumberOfResults(array $resultSet): void
     {

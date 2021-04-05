@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ;
 
+use Exception;
 use phpMyFAQ\Search\SearchFactory;
 
 /**
@@ -46,10 +47,10 @@ class Relation
      *
      * @param string $question FAQ title
      * @param string $keywords FAQ keywords
-     *
-     * @return array
+     * @return mixed[]
+     * @throws Exception
      */
-    public function getAllRelatedByQuestion($question, $keywords)
+    public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
         $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
         $search = SearchFactory::create(

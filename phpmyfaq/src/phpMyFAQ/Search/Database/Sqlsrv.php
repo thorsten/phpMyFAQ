@@ -18,7 +18,9 @@
 namespace phpMyFAQ\Search\Database;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Search\SearchDatabase;
+use stdClass;
 
 /**
  * Class Sqlsrv
@@ -41,8 +43,8 @@ class Sqlsrv extends SearchDatabase
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search term
-     * @throws
-     * @return resource
+     * @throws \Exception
+     * @return mixed
      */
     public function search(string $searchTerm)
     {

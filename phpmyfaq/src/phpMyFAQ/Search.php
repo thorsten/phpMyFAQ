@@ -23,6 +23,7 @@ use DateTime;
 use Exception;
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\SearchFactory;
+use stdClass;
 
 /**
  * Class Search
@@ -59,7 +60,7 @@ class Search
      *
      * @param int $categoryId Entity ID
      */
-    public function setCategoryId(int $categoryId)
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
@@ -79,7 +80,8 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     * @return array
+     * @throws Exception
+     * @return mixed[]
      */
     public function search(string $searchTerm, $allLanguages = true): array
     {
@@ -97,7 +99,8 @@ class Search
      * The auto complete function to handle the different search engines.
      *
      * @param string $searchTerm Text to auto complete
-     * @return array
+     * @throws Exception
+     * @return mixed[]
      */
     public function autoComplete(string $searchTerm): array
     {
@@ -119,7 +122,8 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     * @return array
+     * @throws Exception
+     * @return mixed[]
      */
     public function searchDatabase(string $searchTerm, $allLanguages = true): array
     {
@@ -134,7 +138,7 @@ class Search
                 $selectedCategory = [
                     $fcrTable . '.category_id' => array_merge((array)$this->getCategoryId(), $children),
                 ];
-            } else {
+            } else { // @phpstan-ignore-line
                 $selectedCategory = [
                     $fcrTable . '.category_id' => $this->getCategoryId(),
                 ];
@@ -187,7 +191,7 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     * @return array
+     * @return stdClass[]
      */
     public function searchElasticsearch(string $searchTerm, $allLanguages = true): array
     {
@@ -216,7 +220,7 @@ class Search
      * @param string $searchTerm Search term
      * @throws Exception
      */
-    public function logSearchTerm(string $searchTerm)
+    public function logSearchTerm(string $searchTerm): void
     {
         if (Strings::strlen($searchTerm) === 0) {
             return;
@@ -274,7 +278,7 @@ class Search
      * @param int  $numResults Number of Results, default: 7
      * @param bool $withLang   Should the language be included in the result?
      *
-     * @return array
+     * @return array<string[]>
      */
     public function getMostPopularSearches(int $numResults = 7, bool $withLang = false): array
     {
@@ -334,7 +338,7 @@ class Search
      *
      * @param Category $category
      */
-    public function setCategory(Category $category)
+    public function setCategory(Category $category): void
     {
         $this->category = $category;
     }

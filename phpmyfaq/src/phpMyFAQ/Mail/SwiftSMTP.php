@@ -1,5 +1,5 @@
 <?php
-// phpcs:ignoreFile
+
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -14,10 +14,6 @@
  */
 
 namespace phpMyFAQ\Mail;
-
-// phpcs:disable
-require __DIR__ . '/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
-// phpcs:enable
 
 use Swift_Mailer;
 use Swift_Message;
@@ -44,27 +40,26 @@ class SwiftSMTP implements MailUserAgentInterface
      * @param string $server
      * @param string $user
      * @param string $pass
-     * @param int $port
-     * @param null $security
+     * @param int    $port
+     * @param null   $security
      */
-    public function setAuthConfig(string $server, string $user, string $pass, $port = 25, $security = null)
+    public function setAuthConfig(string $server, string $user, string $pass, $port = 25, $security = null): void
     {
         unset($this->mailer);
 
         $this->mailer = Swift_Mailer::newInstance(
-            Swift_SmtpTransport::newInstance($server, $port, $security)
-                ->setUsername($this->user = $user)
-                ->setPassword($pass)
+            Swift_SmtpTransport::newInstance($server, $port, $security)->setUsername($this->user = $user)->setPassword(
+                $pass
+            )
         );
     }
 
     /**
      * Send the message using SMTP with authorisation.
      *
-     * @param string|array $recipients
-     * @param array $headers
+     * @param string|string[] $recipients
+     * @param string[] $headers
      * @param string $body
-     *
      * @return bool True if successful, false otherwise.
      */
     public function send($recipients, array $headers, string $body): bool
@@ -75,10 +70,9 @@ class SwiftSMTP implements MailUserAgentInterface
             unset($headers['Return-Path']);
         }
 
-        $message = Swift_Message::newInstance($headers['Subject'])
-            ->setFrom([empty($sender) ? $this->user : $sender])
-            ->setTo($recipients)
-            ->setBody($body);
+        $message = Swift_Message::newInstance($headers['Subject'])->setFrom(
+            [empty($sender) ? $this->user : $sender]
+        )->setTo($recipients)->setBody($body);
 
         // Prepare the headers for the e-mail
         unset($headers['Subject']);

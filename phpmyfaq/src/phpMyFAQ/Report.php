@@ -33,7 +33,7 @@ class Report
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -43,7 +43,7 @@ class Report
     /**
      * Generates a huge array for the report.
      *
-     * @return array
+     * @return array<int, array<mixed>>
      */
     public function getReportingData(): array
     {

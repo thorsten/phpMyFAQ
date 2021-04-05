@@ -15,7 +15,6 @@
  * @since 2012-03-07
  */
 
-use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
@@ -66,9 +65,7 @@ require 'constants.php';
 //
 // Setting up autoloader
 //
-/** @var ClassLoader $loader */
-$loader = require __DIR__ . '/libs/autoload.php';
-$loader->addPsr4('phpMyFAQ\\', __DIR__ . '/phpMyFAQ');
+require 'autoload.php';
 
 //
 // Check if multisite/multisite.php exist for Multisite support

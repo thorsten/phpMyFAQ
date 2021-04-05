@@ -19,8 +19,10 @@
 
 namespace phpMyFAQ\Search\Database;
 
+use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
+use stdClass;
 
 /**
  * Class Sqlite3
@@ -43,8 +45,8 @@ class Sqlite3 extends SearchDatabase
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search ter
-     * @throws
-     * @return resource
+     * @throws Exception
+     * @return mixed
      */
     public function search(string $searchTerm)
     {
