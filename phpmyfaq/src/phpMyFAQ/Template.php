@@ -38,43 +38,41 @@ class Template
     /**
      * The template array.
      *
-     * @var array
+     * @var array<string, string>
      */
     public $templates = [];
 
     /**
      * The output array.
      *
-     * @var array
+     * @var array<string, string|null>
      */
     private $outputs = [];
 
     /**
      * The blocks array.
      *
-     * @var array
+     * @var array<string, array<string>>
      */
     private $blocks = [];
 
     /**
      * array containing the touched blocks.
      *
-     * @var array
+     * @var array<string>
      */
     private $blocksTouched = [];
 
-    /** @var array Array containing the errors */
+    /** @var array<string> Array containing the errors */
     private $errors = [];
 
-    /**
-     * @var TemplateHelper
-     */
+    /** @var TemplateHelper */
     private $tplHelper;
 
     /**
      * Combine all template files into the main templates array
      *
-     * @param array          $myTemplate Templates
+     * @param array<string, string> $myTemplate Templates
      * @param TemplateHelper $tplHelper
      * @param string         $tplSetName Active template name
      */
@@ -119,7 +117,7 @@ class Template
      * This function reads the block.
      *
      * @param string $block Block to read
-     * @return array
+     * @return array<string, string>
      */
     private function readBlocks(string $block): array
     {
@@ -173,7 +171,7 @@ class Template
      *
      * @param string $tplSetName
      */
-    public static function setTplSetName(string $tplSetName)
+    public static function setTplSetName(string $tplSetName): void
     {
         self::$tplSetName = $tplSetName;
     }
@@ -184,7 +182,7 @@ class Template
      * @param string $from Name of the template to include
      * @param string $into Name of the new template
      */
-    public function merge(string $from, string $into)
+    public function merge(string $from, string $into): void
     {
         $this->outputs[$into] = str_replace('{{ ' . $from . ' }}', $this->outputs[$from], $this->outputs[$into]);
         $this->outputs[$from] = null;
@@ -194,9 +192,9 @@ class Template
      * Parses the template.
      *
      * @param string $templateName Name of the template
-     * @param array  $templateContent Content of the template
+     * @param array<int, array<string>>  $templateContent Content of the template
      */
-    public function parse(string $templateName, array $templateContent)
+    public function parse(string $templateName, array $templateContent): void
     {
         $tmp = $this->templates[$templateName];
         $rawBlocks = $this->readBlocks($tmp);
@@ -220,6 +218,7 @@ class Template
         // process unblocked content
         if (isset($this->blocks[$templateName]['unblocked'])) {
             $templateContent = $this->checkContent($templateContent);
+            // @phpstan-ignore-next-line
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
                 $varName = trim(Strings::preg_replace('/[\{\{\}\}]/', '', $tplVar));
                 if (isset($templateContent[$varName])) {
@@ -250,8 +249,8 @@ class Template
     }
 
     /**
-     * @param  $template
-     * @return array
+     * @param string $template
+     * @return array<int, array<string, string>>
      */
     private function readFilters(string $template): array
     {
@@ -275,8 +274,8 @@ class Template
     /**
      * This function checks the content.
      *
-     * @param array $content Content to check
-     * @return array
+     * @param array<int, string|array<string>> $content Content to check
+     * @return array<int, string|array<string>>
      */
     private function checkContent(array $content): array
     {
@@ -304,7 +303,7 @@ class Template
     /**
      * This function renders the whole parsed templates and outputs it.
      */
-    public function render()
+    public function render(): void
     {
         $output = '';
         foreach ($this->outputs as $val) {
@@ -320,7 +319,7 @@ class Template
      * @param string $from Name of the template to add
      * @param string $into Name of the new template
      */
-    public function add(string $from, string $into)
+    public function add(string $from, string $into): void
     {
         $this->outputs[$into] .= $this->outputs[$from];
         $this->outputs[$from] = null;
@@ -331,9 +330,9 @@ class Template
      *
      * @param string $templateName Name of the template
      * @param string $blockName Block name
-     * @param array  $blockContent Content of the block
+     * @param array<int, array<string>>  $blockContent Content of the block
      */
-    public function parseBlock(string $templateName, string $blockName, array $blockContent)
+    public function parseBlock(string $templateName, string $blockName, array $blockContent): void
     {
         if (isset($this->blocks[$templateName][$blockName])) {
             $block = $this->blocks[$templateName][$blockName];
@@ -360,7 +359,7 @@ class Template
      * This function multiplies blocks.
      *
      * @param string $blockName Block name
-     * @param array  $blockContent Content of block
+     * @param array<int, array<string>>  $blockContent Content of block
      * @return string
      */
     private function multiplyBlock(string $blockName, array $blockContent): string

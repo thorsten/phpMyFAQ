@@ -49,7 +49,7 @@ class Mbstring extends StringsAbstract
      */
     public static function getInstance($language = 'en'): Mbstring
     {
-        if (!self::$instance) {
+        if (!(self::$instance instanceof Mbstring)) {
             self::$instance = new self();
             self::$instance->encoding = self::DEFAULT_ENCODING;
             self::$instance->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
@@ -172,7 +172,7 @@ class Mbstring extends StringsAbstract
      *
      * @param string $pattern
      * @param string $subject
-     * @param array  &$matches
+     * @param string[][] $matches
      * @param int $flags
      * @param int $offset
      *
@@ -191,9 +191,9 @@ class Mbstring extends StringsAbstract
      * @param int $limit
      * @param int $flags
      *
-     * @return array
+     * @return string[]|array|false
      */
-    public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array
+    public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0)
     {
         return preg_split(self::appendU($pattern), $subject, $limit, $flags);
     }
@@ -201,15 +201,15 @@ class Mbstring extends StringsAbstract
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string|array $pattern
+     * @param string|string[] $pattern
      * @param callable $callback
-     * @param string|array $subject
+     * @param string|string[] $subject
      * @param int $limit
-     * @param int          &$count
+     * @param int $count
      *
-     * @return array|string
+     * @return string|string[]
      */
-    public function preg_replace_callback($pattern, callable $callback, $subject, $limit = -1, &$count = 0)
+    public function preg_replace_callback($pattern, callable $callback, $subject, int $limit = -1, int &$count = 0)
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
@@ -225,15 +225,15 @@ class Mbstring extends StringsAbstract
     /**
      * Search and replace by a regexp.
      *
-     * @param string|array $pattern
-     * @param string|array $replacement
-     * @param string|array $subject
-     * @param int          $limit
-     * @param int          &$count
+     * @param string|string[] $pattern
+     * @param string|string[] $replacement
+     * @param string|string[] $subject
+     * @param int $limit
+     * @param int $count
      *
-     * @return array|string|null
+     * @return string|string[]|null
      */
-    public function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
+    public function preg_replace($pattern, $replacement, $subject, int $limit = -1, int &$count = 0)
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {

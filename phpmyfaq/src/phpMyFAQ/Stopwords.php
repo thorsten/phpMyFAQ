@@ -31,7 +31,7 @@ class Stopwords
     private $config;
 
     /**
-     * @var Language
+     * @var string
      */
     private $language;
 
@@ -40,7 +40,7 @@ class Stopwords
      *
      * @var string
      */
-    private $table_name;
+    private $tableName;
 
     /**
      * Constructor.
@@ -50,13 +50,13 @@ class Stopwords
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->table_name = Database::getTablePrefix() . 'faqstopwords';
+        $this->tableName = Database::getTablePrefix() . 'faqstopwords';
     }
 
     /**
-     * @return Language
+     * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
@@ -64,25 +64,25 @@ class Stopwords
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
-        return $this->table_name;
+        return $this->tableName;
     }
 
     /**
-     * @param Language $language
+     * @param string $language
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): void
     {
         $this->language = $language;
     }
 
     /**
-     * @param string $table_name
+     * @param string $tableName
      */
-    public function setTableName($table_name)
+    public function setTableName(string $tableName): void
     {
-        $this->table_name = $table_name;
+        $this->tableName = $tableName;
     }
 
     /**
@@ -90,16 +90,15 @@ class Stopwords
      * If the given word already exists, false is returned.
      *
      * @param string $word
-     *
      * @return bool
      */
-    public function add($word)
+    public function add(string $word): bool
     {
         if (!$this->match($word)) {
             $sql = sprintf(
                 "INSERT INTO %s VALUES(%d, '%s', '%s')",
-                $this->table_name,
-                $this->config->getDb()->nextId($this->table_name, 'id'),
+                $this->tableName,
+                $this->config->getDb()->nextId($this->tableName, 'id'),
                 $this->language,
                 $word
             );
@@ -114,16 +113,16 @@ class Stopwords
     /**
      * Update a word in the stop words dictionary.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $word
      * @return bool
      */
-    public function update($id, $word): bool
+    public function update(int $id, string $word): bool
     {
         $sql = "UPDATE %s SET stopword = '%s' WHERE id = %d AND lang = '%s'";
         $sql = sprintf(
             $sql,
-            $this->table_name,
+            $this->tableName,
             $word,
             $id,
             $this->language
@@ -138,11 +137,11 @@ class Stopwords
      * @param int $id
      * @return bool
      */
-    public function remove($id): bool
+    public function remove(int $id): bool
     {
         $sql = sprintf(
             "DELETE FROM %s WHERE id = %d AND lang = '%s'",
-            $this->table_name,
+            $this->tableName,
             $id,
             $this->language
         );
@@ -154,14 +153,13 @@ class Stopwords
      * Match a word against the stop words dictionary.
      *
      * @param string $word
-     *
      * @return bool
      */
-    public function match($word)
+    public function match(string $word): bool
     {
         $sql = sprintf(
             "SELECT id FROM %s WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
-            $this->table_name,
+            $this->tableName,
             $word,
             $this->language
         );
@@ -177,40 +175,39 @@ class Stopwords
      * @param string $lang      Language to retrieve stop words by
      * @param bool   $wordsOnly
      *
-     * @return array
+     * @return string[]
      */
-    public function getByLang($lang = null, $wordsOnly = false)
+    public function getByLang($lang = null, $wordsOnly = false): array
     {
         $lang = is_null($lang) ? $this->config->getLanguage()->getLanguage() : $lang;
         $sql = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM %s WHERE lang = '%s'",
-            $this->table_name,
+            $this->tableName,
             $lang
         );
 
         $result = $this->config->getDb()->query($sql);
 
-        $retval = [];
+        $stopWords = [];
 
         if ($wordsOnly) {
             while (($row = $this->config->getDb()->fetchObject($result)) == true) {
-                $retval[] = $row->stopword;
+                $stopWords[] = $row->stopword;
             }
         } else {
             return $this->config->getDb()->fetchAll($result);
         }
 
-        return $retval;
+        return $stopWords;
     }
 
     /**
      * Filter some text cutting out all non words and stop words.
      *
      * @param string $input text to filter
-     *
-     * @return array
+     * @return string[]
      */
-    public function clean($input)
+    public function clean(string $input): array
     {
         $words = explode(' ', $input);
         $stop_words = $this->getByLang(null, true);
@@ -228,16 +225,16 @@ class Stopwords
 
         return $retval;
     }
+
     /**
      * This function checks the content against a bad word list if the banned
      * word spam protection has been activated from the general phpMyFAQ
      * configuration.
      *
      * @param string $content
-     *
      * @return bool
      */
-    public function checkBannedWord($content)
+    public function checkBannedWord(string $content): bool
     {
         // Sanity checks
         $content = Strings::strtolower(trim($content));
@@ -269,9 +266,9 @@ class Stopwords
     /**
      * This function returns the banned words dictionary as an array.
      *
-     * @return array
+     * @return string[]
      */
-    private function getBannedWords()
+    private function getBannedWords(): array
     {
         $bannedTrimmedWords = [];
         $bannedWordsFile = PMF_SRC_DIR . '/blockedwords.txt';

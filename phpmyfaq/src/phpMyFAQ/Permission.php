@@ -41,6 +41,10 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\LargePermission;
+use phpMyFAQ\Permission\MediumPermission;
+
 /**
  * Class Permission
  *
@@ -71,15 +75,13 @@ class Permission
      *
      * @param  string $permLevel
      * @param  Configuration $config
-     * @return Permission
+     * @return Permission|BasicPermission|MediumPermission|LargePermission
      */
-    public static function selectPerm(string $permLevel, Configuration $config): Permission
+    public static function selectPerm(string $permLevel, Configuration $config)
     {
-        if (isset($permLevel)) {
-            $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';
-            if (class_exists($permClass)) {
-                return new $permClass($config);
-            }
+        $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';
+        if (class_exists($permClass)) {
+            return new $permClass($config);
         }
 
         return new self($config);

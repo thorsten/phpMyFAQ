@@ -36,9 +36,9 @@ class Strings
     /**
      * Instance.
      *
-     * @var Strings
+     * @var Mbstring|StringBasic|null
      */
-    private static $instance;
+    private static $instance = null;
 
     /**
      * Constructor.
@@ -52,7 +52,7 @@ class Strings
      *
      * @param string $language Language
      */
-    public static function init(string $language = 'en')
+    public static function init(string $language = 'en'): void
     {
         if (!self::$instance) {
             if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
@@ -88,11 +88,11 @@ class Strings
      * Get a part of string.
      *
      * @param string $string String
-     * @param int    $start Start
-     * @param int    $length Length
+     * @param int $start Start
+     * @param int|null $length Length
      * @return string
      */
-    public static function substr(string $string, $start, $length = 0): string
+    public static function substr(string $string, int $start, $length = 0): string
     {
         return self::$instance->substr($string, $start, $length);
     }
@@ -150,7 +150,7 @@ class Strings
      *
      * @param string $encoding
      */
-    public static function setEncoding(string $encoding)
+    public static function setEncoding(string $encoding): void
     {
         self::$instance->setEncoding($encoding);
     }
@@ -229,9 +229,9 @@ class Strings
      * @param string $subject
      * @param int    $limit
      * @param int    $flags
-     * @return array
+     * @return string[]|array|false
      */
-    public static function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array // phpcs:ignore
+    public static function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0) // phpcs:ignore
     {
         return self::$instance->preg_split($pattern, $subject, $limit, $flags);
     }
@@ -239,12 +239,12 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string        $pattern
-     * @param callable      $callback
-     * @param string|array  $subject
-     * @param int           $limit
-     * @param int          &$count
-     * @return array|string
+     * @param string $pattern
+     * @param callable $callback
+     * @param string|string[] $subject
+     * @param int $limit
+     * @param int $count
+     * @return string|string[]
      */
     public static function preg_replace_callback(
         string $pattern,
@@ -259,12 +259,12 @@ class Strings
     /**
      * Search and replace by a regexp.
      *
-     * @param string|array  $pattern
-     * @param string|array  $replacement
-     * @param string|array  $subject
-     * @param int           $limit
-     * @param int          &$count
-     * @return array|string|null
+     * @param string|string[] $pattern
+     * @param string|string[] $replacement
+     * @param string|string[] $subject
+     * @param int $limit
+     * @param int $count
+     * @return string|string[]|null
      */
     public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
     {

@@ -93,7 +93,7 @@ class User
     /**
      * authentication container.
      *
-     * @var array<string, Auth>
+     * @var array<string, AuthDatabase|AuthHttp|AuthLdap|AuthSso>
      */
     protected $authContainer = [];
 
@@ -182,6 +182,7 @@ class User
         $this->config = $config;
 
         $perm = Permission::selectPerm($this->config->get('security.permLevel'), $this->config);
+        /** @phpstan-ignore-next-line */
         if (!$this->addPerm($perm)) {
             return;
         }
@@ -200,49 +201,28 @@ class User
         }
 
         // additionally, set given $auth objects
-        if (count($this->authContainer) > 0) {
-            foreach ($auth as $name => $authObject) {
-                if (!$authObject instanceof Auth || !$this->addAuth($authObject, $name)) {
-                    break;
-                }
+        /** @phpstan-ignore-next-line */
+        foreach ($this->authContainer as $name => $authObject) {
+            if (!$this->addAuth($authObject, $name)) {
+                break;
             }
         }
+
 
         // user data object
         $this->userdata = new UserData($this->config);
     }
 
     /**
-     * adds a permission object to the user.
+     * Adds a permission object to the user.
      *
-     * @param Permission $perm Permission object
+     * @param BasicPermission|MediumPermission|LargePermission $perm Permission object
      * @return bool
      */
-    public function addPerm(Permission $perm): bool
+    public function addPerm($perm): bool
     {
-        if ($this->checkPerm($perm)) {
-            $this->perm = $perm;
-            return true;
-        }
-
-        $this->perm = null;
-        return false;
-    }
-
-    /**
-     * returns true if perm is a valid permission object.
-     *
-     * @param Permission $perm Permission object
-     * @return bool
-     */
-    private function checkPerm(Permission $perm): bool
-    {
-        if ($perm instanceof Permission) {
-            return true;
-        }
-        $this->errors[] = self::ERROR_USER_NO_PERM;
-
-        return false;
+        $this->perm = $perm;
+        return true;
     }
 
     /**
@@ -276,11 +256,11 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param AuthDriverInterface $auth Driver object
+     * @param AuthDatabase|AuthHttp|AuthLdap|AuthSso $auth Driver object
      * @param string              $name Auth name
      * @return bool
      */
-    public function addAuth(AuthDriverInterface $auth, string $name): bool
+    public function addAuth($auth, string $name): bool
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;

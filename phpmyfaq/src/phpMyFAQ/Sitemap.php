@@ -42,7 +42,7 @@ class Sitemap
     /**
      * Groups.
      *
-     * @var array
+     * @var int[]
      */
     private $groups = [];
 
@@ -70,15 +70,15 @@ class Sitemap
     /**
      * @param int $userId
      */
-    public function setUser(int $userId = -1)
+    public function setUser(int $userId = -1): void
     {
         $this->user = $userId;
     }
 
     /**
-     * @param array $groups
+     * @param int[] $groups
      */
-    public function setGroups(array $groups)
+    public function setGroups(array $groups): void
     {
         $this->groups = $groups;
     }

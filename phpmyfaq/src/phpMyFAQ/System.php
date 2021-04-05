@@ -121,7 +121,7 @@ class System
                 self::VERSION_PATCH_LEVEL,
                 self::VERSION_PRE_RELEASE
             );
-        } else {
+        } else { // @phpstan-ignore-line
             return sprintf(
                 '%d.%d.%d',
                 self::VERSION_MAJOR,

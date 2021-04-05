@@ -92,7 +92,7 @@ abstract class StringsAbstract
      *
      * @param string $encoding
      */
-    public function setEncoding(string $encoding)
+    public function setEncoding(string $encoding): void
     {
         $this->encoding = $encoding;
     }

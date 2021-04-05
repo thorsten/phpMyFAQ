@@ -179,7 +179,7 @@ switch ($ajaxAction) {
     case 'delete_stop_word':
         if (null != $stopwordId && Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
-            $stopwords->remove($stopwordId);
+            $stopwords->remove((int)$stopwordId);
         }
         break;
 
@@ -193,7 +193,7 @@ switch ($ajaxAction) {
             $stopwords->setLanguage($stopwordsLang);
 
             if (null !== $stopwordId && -1 < $stopwordId) {
-                echo $stopwords->update($stopwordId, $stopword);
+                echo $stopwords->update((int)$stopwordId, $stopword);
             } elseif (!$stopwords->match($stopword)) {
                 echo $stopwords->add($stopword);
             }

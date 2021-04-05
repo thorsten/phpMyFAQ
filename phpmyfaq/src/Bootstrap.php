@@ -98,11 +98,6 @@ require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';
 
 /*
- * The /src directory
- */
-define('PMF_SRC_DIR', __DIR__);
-
-/*
  * The directory where the translations reside
  */
 define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
