@@ -505,7 +505,7 @@ class Installer
      *
      * @return bool
      */
-    public function checkMinimumPhpVersion()
+    public function checkMinimumPhpVersion(): bool
     {
         if (version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP, '<')) {
             return false;
@@ -556,7 +556,7 @@ class Installer
     /**
      * Checks if the file permissions are okay.
      */
-    public function checkFilesystemPermissions()
+    public function checkFilesystemPermissions(): void
     {
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
@@ -615,12 +615,11 @@ class Installer
      * Checks if phpMyFAQ database tables are available
      *
      * @param DatabaseDriver $database
-     * @throws
      */
     public function checkAvailableDatabaseTables(DatabaseDriver $database)
     {
         $query = sprintf(
-            'SELECT 1 FROM %s%s LIMIT 1',
+            'SELECT * FROM %s%s',
             Database::getTablePrefix(),
             'faqconfig'
         );
