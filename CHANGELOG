@@ -1,9 +1,12 @@
-phpMyFAQ 3.0.8
+phpMyFAQ 3.0.9
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 3.0.9 - 2021-04-17
+- fixed minor bugs (Thorsten)
 
 Version 3.0.8 - 2021-02-24
 - updated to Bootstrap v4.6 (Thorsten)
@@ -1454,4 +1457,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2020 phpMyFAQ Team
+(c) 2001-2021 phpMyFAQ Team
