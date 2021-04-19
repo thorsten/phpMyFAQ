@@ -55,6 +55,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             $tagData = $tags->getAllTags();
 
+            if (count($tagData)) {
+              printf('<p class="alert alert-warning" role="alert">%s</p>', $PMF_LANG['ad_news_nodata']);
+            }
+
             echo '<table class="table table-hover">';
             echo '<tbody>';
 
@@ -62,7 +66,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 echo '<tr>';
                 echo '<td><span data-tag-id="' . $key . '">' . Strings::htmlspecialchars($tag) . '</span></td>';
                 printf(
-                    '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fa fa-edit"></i></a></td>',
+                    '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s">' .
+                    '<i aria-hidden="true" class="fa fa-edit"></i></a></td>',
                     $key,
                     $PMF_LANG['ad_user_edit']
                 );
