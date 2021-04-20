@@ -379,7 +379,7 @@ if ('list' === $groupAction) {
 
       <div id="group_data" class="card mb-4">
         <h5 class="card-header py-3">
-            <?= $PMF_LANG['ad_group_details'] ?>
+          <i class="fa fa-info-circle" aria-hidden="true"></i> <?= $PMF_LANG['ad_group_details'] ?>
         </h5>
         <form action="?action=group&group_action=update_data" method="post">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
