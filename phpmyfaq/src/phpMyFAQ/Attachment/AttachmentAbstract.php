@@ -44,7 +44,7 @@ abstract class AttachmentAbstract
     /**
      * Errors.
      *
-     * @var array
+     * @var string[]
      */
     protected $error = [];
 
@@ -122,7 +122,7 @@ abstract class AttachmentAbstract
     /**
      * Constructor.
      *
-     * @param int $id attachment id
+     * @param mixed $id attachment id
      */
     public function __construct($id = null)
     {
@@ -141,7 +141,7 @@ abstract class AttachmentAbstract
      */
     protected function getMeta(): bool
     {
-        $retval = false;
+        $hasMeta = false;
 
         $sql = sprintf(
             '
@@ -171,11 +171,11 @@ abstract class AttachmentAbstract
                 $this->encrypted = $assoc['encrypted'];
                 $this->mimeType = $assoc['mime_type'];
 
-                $retval = true;
+                $hasMeta = true;
             }
         }
 
-        return $retval;
+        return $hasMeta;
     }
 
     /**
@@ -185,7 +185,7 @@ abstract class AttachmentAbstract
      *
      * @return string
      */
-    public function buildUrl($forHTML = true)
+    public function buildUrl($forHTML = true): string
     {
         $amp = true === $forHTML ? '&amp;' : '&';
 
@@ -198,7 +198,7 @@ abstract class AttachmentAbstract
      * @param string $key     encryption key
      * @param bool   $default if the key is default system wide
      */
-    public function setKey($key, $default = true)
+    public function setKey(string $key, $default = true): void
     {
         $this->key = $key;
         $this->encrypted = null !== $key;
@@ -215,7 +215,7 @@ abstract class AttachmentAbstract
      *
      * @param string $lang record language
      */
-    public function setRecordLang($lang)
+    public function setRecordLang(string $lang): void
     {
         $this->recordLang = $lang;
     }
@@ -235,7 +235,7 @@ abstract class AttachmentAbstract
      *
      * @param int $id
      */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -255,7 +255,7 @@ abstract class AttachmentAbstract
      *
      * @param int $id record id
      */
-    public function setRecordId($id)
+    public function setRecordId(int $id): void
     {
         $this->recordId = $id;
     }
@@ -269,10 +269,10 @@ abstract class AttachmentAbstract
      */
     public function saveMeta(): int
     {
-        $faqattTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
+        $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
         if (null == $this->id) {
-            $this->id = $this->db->nextId($faqattTableName, 'id');
+            $this->id = $this->db->nextId($attachmentTableName, 'id');
 
             $sql = sprintf(
                 "
@@ -282,7 +282,7 @@ abstract class AttachmentAbstract
                 password_hash, filename, filesize, encrypted, mime_type)
                     VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')",
-                $faqattTableName,
+                $attachmentTableName,
                 $this->id,
                 $this->recordId,
                 $this->recordLang,
@@ -323,7 +323,7 @@ abstract class AttachmentAbstract
     /**
      * Update several meta things after it was saved.
      */
-    protected function postUpdateMeta()
+    protected function postUpdateMeta(): void
     {
         $sql = sprintf(
             "
@@ -368,7 +368,7 @@ abstract class AttachmentAbstract
      * @return string|null
      * @throws AttachmentException
      */
-    protected function mkVirtualHash()
+    protected function mkVirtualHash(): ?string
     {
         if ($this->encrypted) {
             if (
@@ -420,7 +420,7 @@ abstract class AttachmentAbstract
     /**
      * Remove meta data from the db.
      */
-    protected function deleteMeta()
+    protected function deleteMeta(): void
     {
         $sql = sprintf(
             'DELETE FROM %sfaqattachment WHERE id = %d',

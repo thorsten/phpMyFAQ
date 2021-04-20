@@ -32,8 +32,8 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Build file path under which the attachment, file is accessible in filesystem
      *
-     * @throws
      * @return string
+     * @throws AttachmentException
      */
     protected function buildFilePath(): string
     {
@@ -55,10 +55,9 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * Create subdirectories to save file to.
      *
      * @param string $filepath filepath to create subdirectories for
-     *
      * @return bool success
      */
-    public function createSubDirs($filepath): bool
+    public function createSubDirs(string $filepath): bool
     {
         clearstatcache();
         $attDir = dirname($filepath);
@@ -70,6 +69,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * Check whether the file storage is ok.
      *
      * @return bool
+     * @throws AttachmentException
      */
     public function isStorageOk(): bool
     {
@@ -88,12 +88,11 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * filepath given will be processed and moved to appropriate
      * location.
      *
-     * @todo rollback if something went wrong
-     *
-     * @param  string $filePath full path to the attachment file
-     * @param  string $filename filename to force
-     * @throws
+     * @param string $filePath full path to the attachment file
+     * @param string $filename filename to force
      * @return bool
+     * @throws FileException|AttachmentException
+     * @todo rollback if something went wrong
      */
     public function save($filePath, $filename = null): bool
     {
@@ -165,9 +164,10 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Output current file to stdout.
      *
-     * @param  bool   $headers     if headers must be sent
-     * @param  string $disposition disposition type (ignored if $headers false)
+     * @param bool   $headers if headers must be sent
+     * @param string $disposition disposition type (ignored if $headers false)
      * @return void
+     * @throws AttachmentException
      */
     public function rawOut($headers = true, $disposition = 'attachment'): void
     {
@@ -189,9 +189,9 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Factory method to initialise the corresponding file object.
      *
-     * @param  string $mode File mode for file open
+     * @param string $mode File mode for file open
      * @return VanillaFile|EncryptedFile
-     * @throws
+     * @throws AttachmentException
      */
     private function getFile($mode = FilesystemFile::MODE_READ)
     {

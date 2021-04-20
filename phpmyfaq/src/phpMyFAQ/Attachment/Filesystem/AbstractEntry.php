@@ -57,7 +57,7 @@ abstract class AbstractEntry
      *
      * @return bool
      */
-    abstract public function copyTo($entry);
+    abstract public function copyTo($entry): bool;
 
     /**
      * Delete this file.

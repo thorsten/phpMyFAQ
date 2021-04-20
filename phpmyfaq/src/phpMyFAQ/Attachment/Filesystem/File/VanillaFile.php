@@ -32,7 +32,7 @@ class VanillaFile extends AbstractFile
      *
      * @var int
      */
-    private const CHUNKSIZE = 512;
+    private const CHUNK_SIZE = 512;
 
     /**
      * @inheritdoc
@@ -45,18 +45,18 @@ class VanillaFile extends AbstractFile
     /**
      * @inheritdoc
      */
-    public function copyTo($target): bool
+    public function copyTo($entry): bool
     {
-        $doSimple = is_string($target) || $target instanceof self;
+        $doSimple = is_string($entry) || $entry instanceof self;
 
         if ($doSimple) {
             // If the target is a string or vanilla object, just move
             // it the simplest way we can.
-            $success = $this->copyToSimple((string)$target);
+            $success = $this->copyToSimple((string)$entry);
         } else {
-            $target->setMode(self::MODE_WRITE);
+            $entry->setMode(self::MODE_WRITE);
             while (!$this->eof()) {
-                $target->putChunk($this->getChunk());
+                $entry->putChunk($this->getChunk());
             }
 
             $success = true;
@@ -70,6 +70,6 @@ class VanillaFile extends AbstractFile
      */
     public function getChunk(): string
     {
-        return fread($this->handle, self::CHUNKSIZE);
+        return fread($this->handle, self::CHUNK_SIZE);
     }
 }

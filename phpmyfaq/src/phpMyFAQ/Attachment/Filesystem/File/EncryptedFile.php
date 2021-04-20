@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use phpMyFAQ\Attachment\File;
-use phpseclib\Crypt\AES;
+use phpseclib3\Crypt\AES;
 
 /**
  * Class Encrypted
@@ -41,24 +41,27 @@ class EncryptedFile extends File
      */
     protected $aes;
 
+    /** @var resource */
+    private $handle;
+
     /**
      * @param string $filepath
      * @param string $mode
      * @param string $key
      */
-    public function __construct($filepath, $mode, $key)
+    public function __construct($filepath, string $mode, string $key)
     {
-        $this->aes = new AES();
+        $this->aes = new AES($mode);
         $this->aes->setKey($key);
 
-        parent::__construct($filepath, $mode);
+        parent::__construct($filepath);
     }
 
     /**
-     * @param $chunk
-     * @return false|int
+     * @param string $chunk
+     * @return int|false
      */
-    public function putChunk($chunk)
+    public function putChunk(string $chunk)
     {
         $content = $this->aes->encrypt($chunk) . self::CHUNKDELIMITER;
 
@@ -66,11 +69,11 @@ class EncryptedFile extends File
     }
 
     /**
-     * @param $target
+     * @param string $target
      * @return bool
      * @throws FileException
      */
-    public function copyTo($target): bool
+    public function copyTo(string $target): bool
     {
         $retval = false;
 
