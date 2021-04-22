@@ -113,9 +113,9 @@ if (true === $getAll) {
 $tags = new Tags($faqConfig);
 
 $headers = [
-    'Pragma: public',
+    'Pragma: no-cache',
     'Expires: 0',
-    'Cache-Control: must-revalidate, post-check=0, pre-check=0',
+    'Cache-Control: no-store',
 ];
 
 if (true === $getAll && $user->perm->hasPermission($user->getUserId(), 'export')) {

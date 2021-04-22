@@ -33,7 +33,7 @@ class HttpHelper extends Helper
     /** @var int HTTP status code */
     private $statusCode = 200;
 
-    /** @var array Array of HTTP header entries */
+    /** @var string[] Array of HTTP header entries */
     private $headers = [];
 
     /**
@@ -41,7 +41,7 @@ class HttpHelper extends Helper
      *
      * @param string $contentType Content type
      */
-    public function setContentType(string $contentType)
+    public function setContentType(string $contentType): void
     {
         $this->contentType = $contentType;
     }
@@ -49,12 +49,11 @@ class HttpHelper extends Helper
     /**
      * Sets some Header.
      */
-    public function addHeader()
+    public function addHeader(): void
     {
         header('Expires: Thu, 07 Apr 1977 14:47:00 GMT');
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-        header('Cache-Control: no-store, no-cache, must-revalidate');
-        header('Cache-Control: post-check=0, pre-check=0', false);
+        header('Cache-Control: no-store');
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
@@ -65,7 +64,7 @@ class HttpHelper extends Helper
      *
      * @param string $header
      */
-    public function addAdditionalHeader(string $header)
+    public function addAdditionalHeader(string $header): void
     {
         header($header);
     }
@@ -73,7 +72,7 @@ class HttpHelper extends Helper
     /**
      *
      */
-    public function startCompression()
+    public function startCompression(): void
     {
         if (false === $this->config->get('main.enableGzipCompression') || !DEBUG) {
             ob_start('ob_gzhandler');
@@ -83,16 +82,15 @@ class HttpHelper extends Helper
     /**
      *  Sends the CORS header.
      */
-    public function sendCorsHeader()
+    public function sendCorsHeader(): void
     {
         header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
     }
 
     /**
      * Fetch all HTTP request headers.
-     * @return void
      */
-    public function fetchAllHeaders()
+    public function fetchAllHeaders(): void
     {
         foreach ($_SERVER as $name => $value) {
             if (substr($name, 0, 5) === 'HTTP_') {
@@ -117,7 +115,7 @@ class HttpHelper extends Helper
      */
     public function getClientApiToken(): string
     {
-        return isset($this->headers['x-pmf-token']) ? $this->headers['x-pmf-token'] : '';
+        return $this->headers['x-pmf-token'] ?? '';
     }
 
     /**
@@ -125,7 +123,7 @@ class HttpHelper extends Helper
      *
      * @param string $url
      */
-    public function redirect(string $url)
+    public function redirect(string $url): void
     {
         // Before a redirection we must force the PHP session update
         // for preventing data loss
@@ -139,7 +137,7 @@ class HttpHelper extends Helper
      *
      * @param int $code HTTP status code
      */
-    public function setStatus(int $code)
+    public function setStatus(int $code): void
     {
         $this->statusCode = $code;
         http_response_code($code);
@@ -150,10 +148,8 @@ class HttpHelper extends Helper
      *
      * @param mixed        $payload What to send
      * @param string|array $headers Which headers to send
-     *
-     * @return void
      */
-    public function sendJsonWithHeaders($payload, $headers = '')
+    public function sendJsonWithHeaders($payload, $headers = ''): void
     {
         $this->sendWithHeaders($payload, $headers, true);
     }
@@ -164,10 +160,8 @@ class HttpHelper extends Helper
      * @param mixed        $payload What to send
      * @param string|array $headers Which headers to send
      * @param bool         $isJson  Send as JSON?
-     *
-     * @return void
      */
-    public function sendWithHeaders($payload, $headers = '', $isJson = false)
+    public function sendWithHeaders($payload, $headers = '', $isJson = false): void
     {
         $validHeaders = [];
         if (is_string($headers) && strlen($headers) > 0) {
