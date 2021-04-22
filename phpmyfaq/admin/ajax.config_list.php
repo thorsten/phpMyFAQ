@@ -123,7 +123,7 @@ function renderInputForm($key, $type)
 
         case 'password':
             printf(
-                '<input class="form-control" type="password" name="edit[%s]" value="%s">',
+                '<input class="form-control" type="password" autocomplete="off" name="edit[%s]" value="%s">',
                 $key,
                 $faqConfig->get($key)
             );

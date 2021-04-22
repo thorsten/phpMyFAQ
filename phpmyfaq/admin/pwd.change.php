@@ -82,7 +82,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
               <?= $PMF_LANG['ad_passwd_old'] ?>
           </label>
           <div class="col-lg-3">
-            <input type="password" name="opass" id="opass" class="form-control" required>
+            <input type="password" autocomplete="off" name="opass" id="opass" class="form-control" required>
           </div>
         </div>
 
@@ -91,7 +91,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
               <?= $PMF_LANG['ad_passwd_new'] ?>
           </label>
           <div class="col-lg-3">
-            <input type="password" name="npass" id="npass" class="form-control" required>
+            <input type="password" autocomplete="off" name="npass" id="npass" class="form-control" required>
           </div>
         </div>
 
@@ -100,7 +100,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
               <?= $PMF_LANG['ad_passwd_con'] ?>
           </label>
           <div class="col-lg-3">
-            <input type="password" name="bpass" id="bpass" class="form-control" required>
+            <input type="password" autocomplete="off" name="bpass" id="bpass" class="form-control" required>
           </div>
         </div>
 

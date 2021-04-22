@@ -60,7 +60,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                 </div>
                 <div class="form-group">
                   <label for="faqpassword"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
-                  <input type="password" class="form-control form-control-lg rounded-0" id="faqpassword"
+                  <input type="password" autocomplete="off" class="form-control form-control-lg rounded-0" id="faqpassword"
                          name="faqpassword" required>
                 </div>
                 <div class="form-group">

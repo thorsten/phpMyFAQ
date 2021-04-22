@@ -191,7 +191,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                   <?= $PMF_LANG['ad_instance_password'] ?>:
               </label>
               <div class="col-lg-8">
-                <input class="form-control" type="password" name="password" id="password" required>
+                <input class="form-control" type="password" autocomplete="off" name="password" id="password" required>
               </div>
             </div>
           </form>

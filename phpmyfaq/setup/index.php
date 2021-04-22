@@ -206,7 +206,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
                 <div class="col-sm-9">
-                    <input name="sql_password" type="password" id="sql_password" class="form-control" required>
+                    <input name="sql_password" type="password" autocomplete="off" id="sql_password" class="form-control" required>
                     <small class="form-text text-muted">Please enter your database password.</small>
                 </div>
               </div>
@@ -284,7 +284,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="ldap_password">Password:</label>
                 <div class="col-sm-9">
-                    <input name="ldap_password" type="password" id="ldap_password" class="form-control">
+                    <input name="ldap_password" type="password" autocomplete="off" id="ldap_password" class="form-control">
                     <small class="form-text text-muted">Please enter your LDAP password.</small>
                 </div>
               </div>
@@ -426,14 +426,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
-                <input type="password" name="password" id="password" class="form-control" required>
+                <input type="password" autocomplete="off" name="password" id="password" class="form-control" required>
                 <small class="form-text text-muted">Please enter your password.</small>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
               <div class="col-sm-9">
-                <input type="password" name="password_retyped" id="password_retype" class="form-control"
+                <input type="password" autocomplete="off" name="password_retyped" id="password_retype" class="form-control"
                        required>
                 <small class="form-text text-muted">Please retype your password.</small>
               </div>
