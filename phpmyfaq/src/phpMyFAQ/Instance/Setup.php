@@ -117,7 +117,7 @@ class Setup
      */
     public function createDatabaseFile(array $data, $folder = '/config')
     {
-        $ret = file_put_contents(
+        return file_put_contents(
             $this->rootDir . $folder . '/database.php',
             "<?php\n" .
             "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
@@ -129,8 +129,6 @@ class Setup
             "\$DB['type'] = '" . $data['dbType'] . "';",
             LOCK_EX
         );
-
-        return $ret;
     }
 
     /**
@@ -142,7 +140,7 @@ class Setup
      */
     public function createLdapFile(array $data, string $folder = '/config')
     {
-        $ret = file_put_contents(
+        return file_put_contents(
             $this->rootDir . $folder . '/config/ldap.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = '" . $data['ldapServer'] . "';\n" .
@@ -152,8 +150,6 @@ class Setup
             "\$PMF_LDAP['ldap_base'] = '" . $data['ldapBase'] . "';",
             LOCK_EX
         );
-
-        return $ret;
     }
 
     /**
@@ -165,7 +161,7 @@ class Setup
      */
     public function createElasticsearchFile(array $data, string $folder = '/config')
     {
-        $ret = file_put_contents(
+        return file_put_contents(
             $this->rootDir . $folder . '/config/elasticsearch.php',
             "<?php\n" .
             "\$PMF_ES['hosts'] = ['" . implode("'], ['", $data['hosts']) . "'];\n" .
@@ -173,7 +169,5 @@ class Setup
             "\$PMF_ES['type'] = 'faqs';",
             LOCK_EX
         );
-
-        return $ret;
     }
 }

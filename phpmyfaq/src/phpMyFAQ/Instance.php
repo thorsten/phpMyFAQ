@@ -170,7 +170,7 @@ class Instance
      *
      * @return bool
      */
-    public function removeInstance(int $id)
+    public function removeInstance(int $id): bool
     {
         $deletes = [
             sprintf(
@@ -203,7 +203,7 @@ class Instance
      *
      * @return bool
      */
-    public function addConfig(string $name, string $value)
+    public function addConfig(string $name, string $value): bool
     {
         $insert = sprintf(
             "INSERT INTO
@@ -235,13 +235,10 @@ class Instance
         switch ($this->instanceConfig[$name]) {
             case 'true':
                 return true;
-                break;
             case 'false':
                 return false;
-                break;
             default:
                 return $this->instanceConfig[$name];
-                break;
         }
     }
 

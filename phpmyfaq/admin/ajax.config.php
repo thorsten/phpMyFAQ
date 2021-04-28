@@ -96,6 +96,7 @@ switch ($ajaxAction) {
                 'dbDatabaseName' => $DB['db'],
                 'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
                 'dbType' => $DB['type'],
+                'dbPort' => $DB['port']
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
