@@ -678,7 +678,6 @@ class Installer
             System::renderFooter(true);
         }
 
-
         $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING, '');
         if (is_null($dbSetup['dbUser']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";

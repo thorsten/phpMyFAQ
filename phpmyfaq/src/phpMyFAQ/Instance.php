@@ -170,7 +170,7 @@ class Instance
      *
      * @return bool
      */
-    public function removeInstance(int $id)
+    public function removeInstance(int $id): bool
     {
         $deletes = [
             sprintf(
@@ -201,7 +201,7 @@ class Instance
      * @param string $name
      * @param string $value
      *
-     * @return bool
+     * @return mixed
      */
     public function addConfig(string $name, string $value)
     {
@@ -235,13 +235,10 @@ class Instance
         switch ($this->instanceConfig[$name]) {
             case 'true':
                 return true;
-                break;
             case 'false':
                 return false;
-                break;
             default:
                 return $this->instanceConfig[$name];
-                break;
         }
     }
 

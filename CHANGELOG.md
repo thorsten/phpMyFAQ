@@ -35,6 +35,10 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed obsolete DbUnit tests (Thorsten)
 - fixed minor bugs (Nico Schmitz-Laux, Thorsten)
 
+### phpMyFAQ v3.0.9 - 2021-04-17
+
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.0.8 - 2021-02-24
 
 - updated to Bootstrap v4.6 (Thorsten)
