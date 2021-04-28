@@ -68,7 +68,7 @@ class Client extends Instance
      *
      * @return bool
      */
-    public function createClientFolder($hostname)
+    public function createClientFolder(string $hostname): bool
     {
         $clientDir = PMF_ROOT_DIR . '/multisite/';
 
@@ -86,10 +86,10 @@ class Client extends Instance
     /**
      * Creates all tables with the given table prefix from the master tables.
      *
-     * @param  string $prefix SQL table prefix
+     * @param string $prefix SQL table prefix
      * @return void
      */
-    public function createClientTables($prefix)
+    public function createClientTables(string $prefix)
     {
         try {
             // First, create the client tables
@@ -142,16 +142,16 @@ class Client extends Instance
     /**
      * Copies the config/constants.php file to a new client instance.
      *
-     * @param  string $dest Destination file
-     * @throws
+     * @param string $destination Destination file
      * @return bool
+     * @throws
      * @throws Exception
      */
-    public function copyConstantsFile($dest)
+    public function copyConstantsFile(string $destination): bool
     {
         return $this->fileSystem->copy(
             $this->fileSystem->getRootPath() . '/config/constants.php',
-            $dest
+            $destination
         );
     }
 
@@ -159,15 +159,16 @@ class Client extends Instance
      * Copies a defined template folder to a new client instance, by default
      * the default template located at ./assets/themes/default/ will be copied.
      *
-     * @param string $dest        Destination folder
+     * @param string $destination Destination folder
      * @param string $templateDir Template folder
      *
      * @return void
+     * @throws Exception
      */
-    public function copyTemplateFolder($dest, $templateDir = 'default')
+    public function copyTemplateFolder(string $destination, $templateDir = 'default')
     {
         $sourceTpl = $this->fileSystem->getRootPath() . '/assets/themes/' . $templateDir;
-        $destTpl = $dest . '/assets/themes/';
+        $destTpl = $destination . '/assets/themes/';
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }
@@ -177,7 +178,7 @@ class Client extends Instance
      *
      * @param string $clientUrl
      */
-    public function setClientUrl($clientUrl)
+    public function setClientUrl(string $clientUrl)
     {
         $this->clientUrl = $clientUrl;
     }
