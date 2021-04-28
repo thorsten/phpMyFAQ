@@ -145,7 +145,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
               <div class="col-lg-8">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <div class="input-group-text">http://</div>
+                    <div class="input-group-text">https://</div>
                   </div>
                   <input class="form-control" type="text" name="url" id="url" required>
                   <div class="input-group-append">

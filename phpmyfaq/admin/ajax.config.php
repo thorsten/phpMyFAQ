@@ -65,7 +65,7 @@ switch ($ajaxAction) {
         }
 
         $data = [
-            'url' => 'http://' . $url . '.' . $_SERVER['SERVER_NAME'],
+            'url' => 'https://' . $url . '.' . $_SERVER['SERVER_NAME'],
             'instance' => $instance,
             'comment' => $comment,
         ];
@@ -101,7 +101,7 @@ switch ($ajaxAction) {
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->setClientUrl('http://' . $hostname);
+            $faqInstanceClient->setClientUrl('https://' . $hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
             Database::setTablePrefix($dbSetup['dbPrefix']);

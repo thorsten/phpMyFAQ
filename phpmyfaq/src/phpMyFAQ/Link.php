@@ -552,7 +552,7 @@ class Link
      */
     protected function getDefaultScheme(): string
     {
-        $scheme = 'http://';
+        $scheme = 'https://';
         if ($this->isSystemLink()) {
             $scheme = $this->getSystemScheme();
         }
