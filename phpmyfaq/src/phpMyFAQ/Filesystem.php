@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
+
 /**
  * Class Filesystem
  *
@@ -35,7 +37,7 @@ class Filesystem
     private $path;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $folders = [];
 
@@ -56,23 +58,23 @@ class Filesystem
     /**
      * @return string
      */
-    public function getRootPath()
+    public function getRootPath(): string
     {
         return $this->rootPath;
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    public function getFolders()
+    public function getFolders(): array
     {
         return $this->folders;
     }
 
     /**
-     * @param array $folders
+     * @param string[] $folders
      */
-    public function setFolders(array $folders)
+    public function setFolders(array $folders): void
     {
         $this->folders = $folders;
     }
@@ -80,7 +82,7 @@ class Filesystem
     /**
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -88,7 +90,7 @@ class Filesystem
     /**
      * @param string $path
      */
-    public function setPath($path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
@@ -105,41 +107,41 @@ class Filesystem
     {
         if (is_dir($source)) {
             $directoryHandle = opendir($source);
-        }
+            $directoryName = substr($source, strrpos($source, '/') + 1);
 
-        $directoryName = substr($source, strrpos($source, '/') + 1);
+            $this->createDirectory($dest . '/' . $directoryName, 0750, true);
 
-        $this->mkdir($dest . '/' . $directoryName, 0750, true);
-
-        while ($file = readdir($directoryHandle)) {
-            if ('.' != $file && '..' != $file) {
-                if (!is_dir($source . '/' . $file)) {
-                    $this->copy(
-                        $source . '/' . $file,
-                        $dest . '/' . $directoryName . '/' . $file
-                    );
-                } else {
-                    $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
+            while ($file = readdir($directoryHandle)) {
+                if ('.' != $file && '..' != $file) {
+                    if (!is_dir($source . '/' . $file)) {
+                        $this->copy(
+                            $source . '/' . $file,
+                            $dest . '/' . $directoryName . '/' . $file
+                        );
+                    } else {
+                        $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
+                    }
                 }
             }
+
+            closedir($directoryHandle);
+
+            return true;
         }
 
-        closedir($directoryHandle);
-
-        return true;
+        return false;
     }
 
     /**
-     * Makes directory.
+     * Creates directory.
      *
      * @param string $pathname  The directory path
      * @param int    $mode      The mode is 0777 by default
      * @param bool   $recursive Allows the creation of nested directories
      *                          specified in the pathname.
-     *
      * @return bool
      */
-    public function mkdir($pathname, $mode = 0777, $recursive = false)
+    public function createDirectory(string $pathname, $mode = 0777, $recursive = false): bool
     {
         if (is_dir($pathname)) {
             return true; // Directory already exists
@@ -153,11 +155,10 @@ class Filesystem
      *
      * @param string $source
      * @param string $dest
-     *
      * @return bool
      * @throws Exception
      */
-    public function copy($source, $dest)
+    public function copy(string $source, string $dest): bool
     {
         if (!is_readable($source)) {
             throw new Exception($source . ' is not readable.');

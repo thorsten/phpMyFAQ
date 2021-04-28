@@ -41,7 +41,7 @@ class Instance
     /**
      * Instance configuration.
      *
-     * @var array
+     * @var string[]
      */
     protected $instanceConfig = [];
 
@@ -58,7 +58,7 @@ class Instance
     /**
      * Adds a new instance.
      *
-     * @param array $data
+     * @param string[] $data
      *
      * @return int $id
      */
@@ -99,7 +99,7 @@ class Instance
      *
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = (int)$id;
     }
@@ -107,7 +107,7 @@ class Instance
     /**
      * Returns all instances.
      *
-     * @return array
+     * @return string[]
      */
     public function getAllInstances(): array
     {
@@ -133,7 +133,7 @@ class Instance
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
             Database::getTablePrefix(),
-            (int)$id
+            $id
         );
 
         $result = $this->config->getDb()->query($select);
@@ -145,7 +145,7 @@ class Instance
      * Updates the instance data.
      *
      * @param int   $id
-     * @param array $data
+     * @param string[] $data
      *
      * @return bool
      */
@@ -223,8 +223,7 @@ class Instance
      * Returns the configuration value.
      *
      * @param string $name
-     *
-     * @return mixed
+     * @return bool|string
      */
     public function getConfig(string $name)
     {
@@ -247,7 +246,7 @@ class Instance
      *
      * @param int $id
      *
-     * @return array
+     * @return string[]
      */
     public function getInstanceConfig(int $id): array
     {

@@ -56,7 +56,7 @@ class Client extends Instance
     /**
      * @param Instance $instance
      */
-    public function createClient(Instance $instance)
+    public function createClient(Instance $instance): void
     {
         $instance->addConfig('isMaster', 'false');
     }
@@ -80,7 +80,7 @@ class Client extends Instance
             return false;
         }
 
-        return $this->fileSystem->mkdir($clientDir . $hostname);
+        return $this->fileSystem->createDirectory($clientDir . $hostname);
     }
 
     /**
@@ -134,7 +134,7 @@ class Client extends Instance
      *
      * @param Filesystem $fileSystem
      */
-    public function setFileSystem(Filesystem $fileSystem)
+    public function setFileSystem(Filesystem $fileSystem): void
     {
         $this->fileSystem = $fileSystem;
     }
@@ -144,7 +144,6 @@ class Client extends Instance
      *
      * @param string $destination Destination file
      * @return bool
-     * @throws
      * @throws Exception
      */
     public function copyConstantsFile(string $destination): bool
