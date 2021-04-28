@@ -201,9 +201,9 @@ class Instance
      * @param string $name
      * @param string $value
      *
-     * @return bool
+     * @return mixed
      */
-    public function addConfig(string $name, string $value): bool
+    public function addConfig(string $name, string $value)
     {
         $insert = sprintf(
             "INSERT INTO
