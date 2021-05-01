@@ -176,12 +176,12 @@ class Instance
             sprintf(
                 'DELETE FROM %sfaqinstances WHERE id = %d',
                 Database::getTablePrefix(),
-                (int)$id
+                $id
             ),
             sprintf(
                 'DELETE FROM %sfaqinstances_config WHERE instance_id = %d',
                 Database::getTablePrefix(),
-                (int)$id
+                $id
             ),
         ];
 

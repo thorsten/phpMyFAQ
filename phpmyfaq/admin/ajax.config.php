@@ -108,7 +108,7 @@ switch ($ajaxAction) {
 
             // add admin account and rights
             $instanceAdmin = new User($faqConfig);
-            $instanceAdmin->createUser($admin, $password, null, 1);
+            $instanceAdmin->createUser($admin, $password, '', 1);
             $instanceAdmin->setStatus('protected');
             $instanceAdminData = [
                 'display_name' => '',
@@ -141,23 +141,15 @@ switch ($ajaxAction) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
-        if (null !== $instanceId) {
-            $faqInstance = new Instance($faqConfig);
-            if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
-                $http->setStatus(200);
-                $payload = ['deleted' => $instanceId];
-            } else {
-                $http->setStatus(400);
-                $payload = ['error' => $instanceId];
-            }
-            $http->sendJsonWithHeaders($payload);
-        }
-        break;
 
-    case 'edit_instance':
         if (null !== $instanceId) {
-            $faqInstance = new Instance($faqConfig);
-            if ($faqInstance->removeInstance($instanceId)) {
+            $client = new Client($faqConfig);
+            $clientData = $client->getInstanceById($instanceId);
+            if (
+                1 !== $instanceId &&
+                $client->deleteClientFolder($clientData->url) &&
+                $client->removeInstance($instanceId)
+            ) {
                 $http->setStatus(200);
                 $payload = ['deleted' => $instanceId];
             } else {

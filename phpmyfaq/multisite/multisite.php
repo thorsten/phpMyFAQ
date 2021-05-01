@@ -17,7 +17,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   Multisite
  * @author Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2012-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -29,6 +28,7 @@ $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
     $protocol = 'https';
 }
+
 $parsed = parse_url($protocol . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME']);
 if (isset($parsed['host']) && strlen($parsed['host']) > 0 && is_dir(__DIR__ . '/' . $parsed['host'])) {
     define('PMF_MULTI_INSTANCE_CONFIG_DIR', __DIR__ . '/' . $parsed['host']);

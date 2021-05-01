@@ -151,6 +151,51 @@ class Filesystem
     }
 
     /**
+     * Moves given directory.
+     *
+     * @param string $sourcePath
+     * @param string $destinationPath
+     *
+     * @return bool
+     */
+    public function moveDirectory(string $sourcePath, string $destinationPath): bool
+    {
+        if (is_dir($destinationPath)) {
+            return false;
+        }
+
+        return rename($sourcePath, $destinationPath);
+    }
+
+    /**
+     * Deletes given directory.
+     *
+     * @param string $pathname
+     * @return bool
+     */
+    public function deleteDirectory(string $pathname): bool
+    {
+        if (!is_dir($pathname)) {
+            return false;
+        }
+
+        $directory = opendir($pathname);
+        while (false !== ( $file = readdir($directory))) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                $full = $pathname . '/' . $file;
+                if (is_dir($full)) {
+                    $this->deleteDirectory($full);
+                } else {
+                    unlink($full);
+                }
+            }
+        }
+        closedir($directory);
+
+        return rmdir($pathname);
+    }
+
+    /**
      * Copies the source file to the destination.
      *
      * @param string $source

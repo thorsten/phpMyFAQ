@@ -15,6 +15,7 @@
  * @since 2012-03-16
  */
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
@@ -62,15 +63,32 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
         $system = new System();
-        $clientInstance = new Client($faqConfig);
+        $originalClient = new Client($faqConfig);
+        $updatedClient = new Client($faqConfig);
+        $moveInstance = false;
 
-        // Collect data for database
-        $data = [];
-        $data['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
-        $data['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
-        $data['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        // Collect updated data for database
+        $updatedData = [];
+        $updatedData['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
+        $updatedData['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
+        $updatedData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
 
-        if ($clientInstance->updateInstance($instanceId, $data)) {
+        // Original data
+        $originalData = $originalClient->getInstanceById($instanceId);
+
+        if ($originalData->url !== $updatedData['url']) {
+            $moveInstance = true;
+        }
+
+        if ($updatedClient->updateInstance($instanceId, $updatedData)) {
+            if ($moveInstance) {
+                try {
+                    $updatedClient->moveClientFolder($originalData->url, $updatedData['url']);
+                    $updatedClient->deleteClientFolder($originalData->url);
+                } catch (Exception $e) {
+                    // handle exception
+                }
+            }
             printf(
                 '<p class="alert alert-success">%s%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',

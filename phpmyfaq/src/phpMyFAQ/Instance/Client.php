@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
+use phpMyFAQ\Strings;
 
 /**
  * Class Client
@@ -31,16 +32,13 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
  */
 class Client extends Instance
 {
-    /**
-     * @var Filesystem
-     */
+    /** @var Filesystem */
     private $fileSystem;
 
-    /**
-     * URL of the client.
-     *
-     * @var string
-     */
+    /** @var string */
+    private $clientFolder;
+
+    /** @var string */
     private $clientUrl;
 
     /**
@@ -51,6 +49,28 @@ class Client extends Instance
     public function __construct(Configuration $config)
     {
         parent::__construct($config);
+
+        $this->clientFolder = PMF_ROOT_DIR . '/multisite/';
+    }
+
+    /**
+     * Sets client URL.
+     *
+     * @param string $clientUrl
+     */
+    public function setClientUrl(string $clientUrl): void
+    {
+        $this->clientUrl = $clientUrl;
+    }
+
+    /**
+     * Sets the Filesystem.
+     *
+     * @param Filesystem $fileSystem
+     */
+    public function setFileSystem(Filesystem $fileSystem): void
+    {
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -65,22 +85,15 @@ class Client extends Instance
      * Adds a new folder named by the given hostname in /path/to/faq/multisite/.
      *
      * @param string $hostname Hostname of the client instance
-     *
      * @return bool
      */
     public function createClientFolder(string $hostname): bool
     {
-        $clientDir = PMF_ROOT_DIR . '/multisite/';
-
-        if (!$this->fileSystem instanceof Filesystem) {
-            $this->fileSystem = new Filesystem();
-        }
-
-        if (!is_writeable($clientDir)) {
+        if (!$this->isMultiSiteWriteable()) {
             return false;
         }
 
-        return $this->fileSystem->createDirectory($clientDir . $hostname);
+        return $this->fileSystem->createDirectory($this->clientFolder . $hostname);
     }
 
     /**
@@ -130,16 +143,6 @@ class Client extends Instance
     }
 
     /**
-     * Sets the Filesystem.
-     *
-     * @param Filesystem $fileSystem
-     */
-    public function setFileSystem(Filesystem $fileSystem): void
-    {
-        $this->fileSystem = $fileSystem;
-    }
-
-    /**
      * Copies the config/constants.php file to a new client instance.
      *
      * @param string $destination Destination file
@@ -172,12 +175,58 @@ class Client extends Instance
     }
 
     /**
-     * Sets client URL.
+     * Moves the entire folder to the new destination
      *
-     * @param string $clientUrl
+     * @param string $sourceUrl
+     * @param string $destinationUrl
+     * @return bool
      */
-    public function setClientUrl(string $clientUrl)
+    public function moveClientFolder(string $sourceUrl, string $destinationUrl): bool
     {
-        $this->clientUrl = $clientUrl;
+        if (!$this->isMultiSiteWriteable()) {
+            return false;
+        }
+
+        $sourcePath = str_replace('https://', '', $sourceUrl);
+        $destinationPath = str_replace('https://', '', $destinationUrl);
+
+        return $this->fileSystem->moveDirectory(
+            $this->clientFolder . $sourcePath,
+            $this->clientFolder . $destinationPath
+        );
+    }
+
+    /**
+     * Deletes the given client folder
+     *
+     * @param string $sourceUrl
+     * @return bool
+     */
+    public function deleteClientFolder(string $sourceUrl): bool
+    {
+        if (!$this->isMultiSiteWriteable()) {
+            return false;
+        }
+
+        $sourcePath = str_replace('https://', '', $sourceUrl);
+        return $this->fileSystem->deleteDirectory($this->clientFolder . $sourcePath);
+    }
+
+    /**
+     * Checks if the multisite/ folder is writeable
+     *
+     * @return bool
+     */
+    private function isMultiSiteWriteable(): bool
+    {
+        if (!$this->fileSystem instanceof Filesystem) {
+            $this->fileSystem = new Filesystem();
+        }
+
+        if (!is_writeable($this->clientFolder)) {
+            return false;
+        }
+
+        return true;
     }
 }

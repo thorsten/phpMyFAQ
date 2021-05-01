@@ -33,7 +33,7 @@ class ClientTest extends TestCase
     {
         parent::setUp();
 
-        Strings::init('en');
+        Strings::init();
 
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
@@ -50,7 +50,6 @@ class ClientTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->Client = null;
         @unlink(PMF_TEST_DIR . '/constants.test.php');
 
         if (is_dir(PMF_TEST_DIR . '/assets/themes/default/')) {
