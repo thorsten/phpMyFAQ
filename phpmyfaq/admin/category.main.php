@@ -265,11 +265,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryImage = new CategoryImage($faqConfig);
                 $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
 
-                /**
-                 * $categoryPermission->delete(CategoryPermission::USER, [$categoryId]) &&
-                $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]) &&
-                $categoryImage->delete()
-                 */
+                if (count($category->getCategoryLanguagesTranslated($categoryId)) === 1) {
+                    $categoryPermission->delete(CategoryPermission::USER, [$categoryId]);
+                    $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]);
+                    $categoryImage->delete();
+                }
 
                 if (
                     $category->deleteCategory($categoryId, $categoryLang) &&
