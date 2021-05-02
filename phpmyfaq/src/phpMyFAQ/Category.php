@@ -1194,38 +1194,33 @@ class Category
     /**
      * Deletes a category.
      *
-     * @param int    $categoryId Entity id
-     * @param string $categoryLang Category language
-     * @param bool   $deleteAll Delete all languages?
+     * @param int $categoryId
+     * @param string $categoryLang
      * @return bool
      */
-    public function deleteCategory($categoryId, string $categoryLang, $deleteAll = false): bool
+    public function deleteCategory(int $categoryId, string $categoryLang): bool
     {
         $query = sprintf(
-            'DELETE FROM %sfaqcategories WHERE id = %d',
+            "DELETE FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $categoryId
+            $categoryId,
+            $categoryLang
         );
-        if (!$deleteAll) {
-            $query .= " AND lang = '" . $categoryLang . "'";
-        }
-        $this->config->getDb()->query($query);
 
-        return true;
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**
      * Create array with translated categories.
      *
-     * @param int $category_id
-     *
-     * @return array
+     * @param int $categoryId
+     * @return string[]
      */
-    public function getCategoryLanguagesTranslated($category_id)
+    public function getCategoryLanguagesTranslated(int $categoryId): array
     {
         global $languageCodes;
 
-        $existcatlang = $this->config->getLanguage()->languageAvailable($category_id, 'faqcategories');
+        $existcatlang = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
         $translated = [];
 
         foreach ($existcatlang as $language) {
@@ -1240,7 +1235,7 @@ class Category
                AND
                    lang = '%s'",
                 Database::getTablePrefix(),
-                $category_id,
+                $categoryId,
                 $language
             );
             $result = $this->config->getDb()->query($query);

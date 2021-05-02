@@ -32,7 +32,7 @@ class LanguageHelper
      *
      * @param  string $default
      * @param  bool   $submitOnChange
-     * @param  array  $excludedLanguages
+     * @param  string[]  $excludedLanguages
      * @param  string $id
      * @return string
      */
@@ -69,7 +69,7 @@ class LanguageHelper
     /**
      * This function returns the available languages.
      *
-     * @return array
+     * @return string[]
      */
     public static function getAvailableLanguages(): array
     {

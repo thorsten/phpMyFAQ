@@ -285,7 +285,7 @@ class CategoryHelper extends Helper
     /**
      * Get all categories in <option> tags.
      *
-     * @param array|int $categoryId CategoryHelper ID or array of category IDs
+     * @param int[]|int $categoryId CategoryHelper ID or array of category IDs
      *
      * @return string
      */
@@ -495,8 +495,8 @@ class CategoryHelper extends Helper
     /**
      * Returns an array with all moderators for the given categories.
      *
-     * @param array $categories
-     * @return array
+     * @param int[] $categories
+     * @return string[]
      */
     public function getModerators(array $categories): array
     {
@@ -531,5 +531,24 @@ class CategoryHelper extends Helper
         }
 
         return array_unique($recipients);
+    }
+
+    /**
+     * Renders the <option> tags for the available translations for a given category.
+     *
+     * @param int $categoryId
+     * @return string
+     */
+    public function renderAvailableTranslationsOptions(int $categoryId): string
+    {
+        $options = '';
+        $availableTranslations = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
+        $availableLanguages = LanguageHelper::getAvailableLanguages();
+
+        foreach ($availableTranslations as $language) {
+            $options .= sprintf('<option value="%s">%s</option>', $language, $availableLanguages[$language]);
+        }
+
+        return $options;
     }
 }

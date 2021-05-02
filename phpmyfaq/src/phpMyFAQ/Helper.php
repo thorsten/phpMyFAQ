@@ -70,7 +70,7 @@ abstract class Helper
     /**
      * Array with all translations.
      *
-     * @var array
+     * @var string[]
      */
     protected $translation = [];
 
@@ -140,7 +140,7 @@ abstract class Helper
     /**
      * Session ID setter.
      *
-     * @param int $sid Session id
+     * @param int|string $sid Session id
      * @return Helper
      */
     public function setSessionId($sid): Helper
@@ -164,7 +164,7 @@ abstract class Helper
     /**
      * Loads all translation strings.
      *
-     * @return array
+     * @return string[]
      */
     public function getTranslations(): array
     {

@@ -122,7 +122,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                 if ($category->checkIfCategoryExists($categoryData) > 0) {
-                    printf('<p class="alert alert-danger">%s</p>', 'La categoria esiste');
+                    printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_categ_existing']);
                     exit();
                 }
 
@@ -255,8 +255,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if ($user->perm->hasPermission($user->getUserId(), 'delcateg') && $action == 'removecategory') {
                 $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
                 $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-                $deleteAll = Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
-                $deleteAll = strtolower($deleteAll) === 'yes';
 
                 $category = new Category($faqConfig, [], false);
                 $category->setUser($currentAdminUser);
@@ -267,12 +265,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryImage = new CategoryImage($faqConfig);
                 $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
 
+                /**
+                 * $categoryPermission->delete(CategoryPermission::USER, [$categoryId]) &&
+                $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]) &&
+                $categoryImage->delete()
+                 */
+
                 if (
-                    $category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
-                    $categoryRelation->delete($categoryId, $categoryLang, $deleteAll) &&
-                    $categoryPermission->delete(CategoryPermission::USER, [$categoryId]) &&
-                    $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]) &&
-                    $categoryImage->delete()
+                    $category->deleteCategory($categoryId, $categoryLang) &&
+                    $categoryRelation->delete($categoryId, $categoryLang)
                 ) {
                     printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
                 } else {
