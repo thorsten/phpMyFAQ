@@ -155,14 +155,14 @@ class Sqlsrv implements DatabaseDriver
         if (null !== $errors) {
             return $errors[0]['SQLSTATE'] . ': ' . $errors[0]['message'];
         }
+
+        return '';
     }
 
     /**
      * Fetch a result row as an object.
      *
-     * @param resource $result Resultset
-     *
-     * @return resource
+     * @param resource $result Results
      */
     public function fetchObject($result)
     {
