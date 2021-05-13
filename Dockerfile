@@ -43,11 +43,11 @@ RUN set -x \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
 
-#=== Install mysqli php dependencie ===
+#=== Install mysqli php dependencies ===
 RUN set -x \
- && docker-php-ext-install pdo pdo_mysql  mysqli
+ && docker-php-ext-install pdo pdo_mysql mysqli
 
-#=== Install pgsql dependencie ===
+#=== Install pgsql dependencies ===
 RUN set -ex \
  && buildDeps="libpq-dev" \
  && apt-get update && apt-get install -y $buildDeps \
