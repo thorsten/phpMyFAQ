@@ -29,77 +29,77 @@
  *
  * @var string
  */
-define('DATETIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
+const DATETIME_TIMEZONE_DEFAULT = 'Europe/Berlin';
 
 /**
  * Sets the current session save path if needed, by default not used
  *
  * @var string
  */
-define('PMF_SESSION_SAVE_PATH', '');
+const PMF_SESSION_SAVE_PATH = '';
 
 /**
  * Timeout for the admin section, in minutes
  *
  * @var int
  */
-define('PMF_AUTH_TIMEOUT', 300);
+const PMF_AUTH_TIMEOUT = 300;
 
 /**
  * Timeout for the warning about session timeout for the admin section, in minutes
  *
  * @var int
  */
-define('PMF_AUTH_TIMEOUT_WARNING', 5);
+const PMF_AUTH_TIMEOUT_WARNING = 5;
 
 /**
  * Start value for the solution IDs
  *
  * @var int
  */
-define('PMF_SOLUTION_ID_START_VALUE', 1000);
+const PMF_SOLUTION_ID_START_VALUE = 1000;
 
 /**
  * Incremental value for the solution IDs
  *
  * @var int
  */
-define('PMF_SOLUTION_ID_INCREMENT_VALUE', 1);
+const PMF_SOLUTION_ID_INCREMENT_VALUE = 1;
 
 /**
  * Number of records for the Top 10
  *
  * @var int
  */
-define('PMF_NUMBER_RECORDS_TOPTEN', 10);
+const PMF_NUMBER_RECORDS_TOPTEN = 10;
 
 /**
  * Number of records for the latest entries
  *
  * @var int
  */
-define('PMF_NUMBER_RECORDS_LATEST', 5);
+const PMF_NUMBER_RECORDS_LATEST = 5;
 
 /**
  * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
  *
  * @var bool
  */
-define('PMF_SITEMAP_GOOGLE_USE_SEO', true);
+const PMF_SITEMAP_GOOGLE_USE_SEO = true;
 
 /**
  * This is the flag with which the Tags Cloud list is limited to
  *
  * @var int
  */
-define('PMF_TAGS_CLOUD_RESULT_SET_SIZE', 50);
+const PMF_TAGS_CLOUD_RESULT_SET_SIZE = 50;
 
 /**
  * This is the flag with which the auto complete list is limited to
  *
  * @var int
  */
-define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
+const PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE = 20;
 
 /**
  * This is the flag for choosing the encryption type for passwords. Currently
@@ -114,7 +114,7 @@ define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
  *
  * @var string
  */
-define('PMF_ENCRYPTION_TYPE', 'hash');
+const PMF_ENCRYPTION_TYPE = 'hash';
 
 /**
  * List of denied extensions when uploading a file.
@@ -333,11 +333,11 @@ $languageCodes = [
 //
 
 // HTTP GET parameters
-define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
+const PMF_GET_KEY_NAME_SESSIONID = 'sid';
 // Misc parameters
-define('PMF_LANGUAGE_EXPIRED_TIME', 3600); // 30 minutes
-define('PMF_SESSION_EXPIRED_TIME', 3600); // 30 minutes
-define('PMF_REMEMBERME_EXPIRED_TIME', 1209600); // 2 weeks
+const PMF_LANGUAGE_EXPIRED_TIME = 3600; // 30 minutes
+const PMF_SESSION_EXPIRED_TIME = 3600; // 30 minutes
+const PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
 
 //
 // Set the default timezone used by all date/time functions

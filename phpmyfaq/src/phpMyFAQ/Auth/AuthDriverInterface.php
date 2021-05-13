@@ -30,11 +30,11 @@ interface AuthDriverInterface
      * otherwise false.
      *
      * @param string $login
-     * @param string $pass
+     * @param string $password
      * @param string $domain
      * @return mixed
      */
-    public function create(string $login, string $pass, string $domain = '');
+    public function create(string $login, string $password, string $domain = '');
 
     /**
      * Changes the password for the account specified by login.
@@ -42,10 +42,10 @@ interface AuthDriverInterface
      * Error messages are added to the array errors.
      *
      * @param string $login Login name
-     * @param string $pass Password
+     * @param string $password Password
      * @return bool
      */
-    public function update(string $login, string $pass): bool;
+    public function update(string $login, string $password): bool;
 
     /**
      * Deletes the user account specified by login.
@@ -66,11 +66,11 @@ interface AuthDriverInterface
      * we are about to create user account.
      *
      * @param string $login Login name
-     * @param string $pass Password
+     * @param string $password Password
      * @param array<string>  $optionalData Optional data
      * @return bool
      */
-    public function checkCredentials(string $login, string $pass, array $optionalData = []): bool;
+    public function checkCredentials(string $login, string $password, array $optionalData = []): bool;
 
     /**
      * Does nothing. A function required to be a valid auth.

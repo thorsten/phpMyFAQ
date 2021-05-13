@@ -46,7 +46,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function create(string $login, string $pass, string $domain = ''): bool
+    public function create(string $login, string $password, string $domain = ''): bool
     {
         if ($this->isValidLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
@@ -58,7 +58,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             "INSERT INTO %sfaquserlogin (login, pass, domain) VALUES ('%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->db->escape($login),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($password)),
             $this->db->escape($domain)
         );
 
@@ -83,12 +83,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update(string $login, string $pass): bool
+    public function update(string $login, string $password): bool
     {
         $change = sprintf(
             "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($password)),
             $this->db->escape($login)
         );
 

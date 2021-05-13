@@ -41,7 +41,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, string $pass, string $domain = ''): bool
+    public function create(string $login, string $password, string $domain = ''): bool
     {
         if ($this->config->get('ldap.ldapSupport')) {
             // LDAP/AD + SSO
@@ -82,7 +82,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function checkCredentials(string $login, string $pass, array $optionalData = null): bool
+    public function checkCredentials(string $login, string $password, array $optionalData = null): bool
     {
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
@@ -100,7 +100,7 @@ class AuthSso extends Auth implements AuthDriverInterface
                 }
             }
             if ($user === $login) {
-                $this->create($login, $pass);
+                $this->create($login, $password);
 
                 return true;
             } else {

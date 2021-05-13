@@ -1,0 +1,26 @@
+<?php
+//
+// DO NOT USE
+//
+
+// Main Active Directory server
+$PMF_LDAP['ad_server'] = '';
+$PMF_LDAP['ad_port'] = 389;
+$PMF_LDAP['ad_user'] = '';
+$PMF_LDAP['ad_password'] = '';
+$PMF_LDAP['ad_base'] = '';
+
+// More Active Directory servers
+// You can as much as you like, please activate it in the admin configuration panel
+// Start with 1
+$PMF_LDAP[1]['ad_server'] = '';
+$PMF_LDAP[1]['ad_port'] = '';
+$PMF_LDAP[1]['ad_user'] = '';
+$PMF_LDAP[1]['ad_password'] = '';
+$PMF_LDAP[1]['ad_base'] = '';
+
+$PMF_LDAP[2]['ad_server'] = '';
+$PMF_LDAP[2]['ad_port'] = '';
+$PMF_LDAP[2]['ad_user'] = '';
+$PMF_LDAP[2]['ad_password'] = '';
+$PMF_LDAP[2]['ad_base'] = '';

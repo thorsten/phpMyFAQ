@@ -38,11 +38,12 @@ class AuthHttp extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws \phpMyFAQ\Core\Exception
      */
-    public function create(string $login, string $pass, string $domain = ''): bool
+    public function create(string $login, string $password, string $domain = ''): bool
     {
         $user = new User($this->config);
-        $result = $user->createUser($login, null);
+        $result = $user->createUser($login);
 
         $user->setStatus('active');
         $user->setUserData(['display_name' => $login]);
@@ -53,7 +54,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update(string $login, string $pass): bool
+    public function update(string $login, string $password): bool
     {
         return true;
     }
@@ -69,12 +70,12 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function checkCredentials($login, $pass, array $optionalData = null): bool
+    public function checkCredentials($login, $password, array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
         } else {
-            return ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $pass);
+            return ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $password);
         }
     }
 
