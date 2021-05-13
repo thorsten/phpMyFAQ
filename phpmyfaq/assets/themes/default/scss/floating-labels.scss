@@ -28,7 +28,7 @@ body {
 .form-label-group > input,
 .form-label-group > label {
   height: 3.125rem;
-  padding: .75rem;
+  padding: 0.75rem;
 }
 
 .form-label-group > label {
@@ -43,8 +43,8 @@ body {
   pointer-events: none;
   cursor: text; /* Match the input under the label */
   border: 1px solid transparent;
-  border-radius: .25rem;
-  transition: all .1s ease-in-out;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
 }
 
 .form-label-group input::-webkit-input-placeholder {
@@ -69,12 +69,12 @@ body {
 
 .form-label-group input:not(:placeholder-shown) {
   padding-top: 1.25rem;
-  padding-bottom: .25rem;
+  padding-bottom: 0.25rem;
 }
 
 .form-label-group input:not(:placeholder-shown) ~ label {
-  padding-top: .25rem;
-  padding-bottom: .25rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   font-size: 12px;
   color: #777;
 }

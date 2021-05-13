@@ -27,8 +27,8 @@ $green: #1cc88a !default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
 
-$primary: #2F414A !default;
-$secondary: #F47B53 !default;
+$primary: #2f414a !default;
+$secondary: #f47b53 !default;
 $success: $green !default;
 $danger: #f2460d !default;
 $info: #7ebcfa !default;
@@ -46,14 +46,15 @@ $yiq-contrasted-threshold: 195 !default;
 // Typography
 $body-color: $gray-600 !default;
 
-$font-family-sans-serif: Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", 'Noto Color Emoji' !default;
+$font-family-sans-serif: Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol', 'Noto Color Emoji' !default;
 
 $font-weight-light: 300 !default;
 $headings-font-weight: 400 !default;
 
 // Shadows
-$box-shadow-sm: 0 0.125rem 0.25rem 0 rgba($gray-900, .2) !default;
-$box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, .15) !default;
+$box-shadow-sm: 0 0.125rem 0.25rem 0 rgba($gray-900, 0.2) !default;
+$box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, 0.15) !default;
 
 // Borders Radius
 $border-radius: 0.35rem !default;
@@ -73,7 +74,7 @@ $spacer: 1rem;
 $grid-gutter-width: $spacer * 1.5;
 
 // Transitions
-$transition-collapse: height .15s ease !default;
+$transition-collapse: height 0.15s ease !default;
 
 // Dropdowns
 $dropdown-font-size: 0.85rem;

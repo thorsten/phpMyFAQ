@@ -2,9 +2,7 @@
   <article class="pmf-faq">
     <header>
       <div class="float-right d-print-none" id="solution_id">
-        <a class="badge badge-info" href="{{ solutionIdLink }}">
-          ID #{{ solutionId }}
-        </a>
+        <a class="badge badge-info" href="{{ solutionIdLink }}"> ID #{{ solutionId }} </a>
       </div>
       <h2>{{ question }}</h2>
       <div class="pmf-faq-meta clearfix">
@@ -26,32 +24,20 @@
           <span class="data"><a class="show-comment-form" href="#">{{ numberOfComments }}</a></span>
         </div>
         [/enableComments]
-        <div class="pmf-faq-edit">
-          {{ editThisEntry }}
-        </div>
+        <div class="pmf-faq-edit">{{ editThisEntry }}</div>
         <div class="pmf-social-links">
           <i aria-hidden="true" class="fa fa-file-pdf-o"></i>
-          <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}">
-            {{ msgPdf }}
-          </a>
+          <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}"> {{ msgPdf }} </a>
         </div>
-        <div class="pmf-social-links">
-          {{ sendToFriend }}
-        </div>
-        <div class="pmf-social-links">
-          {{ shareOnTwitter }}
-        </div>
+        <div class="pmf-social-links">{{ sendToFriend }}</div>
+        <div class="pmf-social-links">{{ shareOnTwitter }}</div>
       </div>
     </header>
     <div class="pmf-faq-body">
       {{ answer }} [tagsAvailable] {{ renderTags }} [/tagsAvailable] [privateNotes]
       <div class="pmf-private-notes">
-        <h4>
-          {{ notesHeader }}
-        </h4>
-        <p>
-          {{ notes }}
-        </p>
+        <h4>{{ notesHeader }}</h4>
+        <p>{{ notes }}</p>
       </div>
       [/privateNotes] [relatedFaqs]
       <aside id="accordionFaqs" class="accordion related-faqs d-print-none mt-3 mb-3">
@@ -117,15 +103,11 @@
       </form>
       <div id="votings"></div>
     </div>
-    <div class="tab-pane d-print-none" id="switchAvailableLanguage">
-      {{ switchLanguage }}
-    </div>
+    <div class="tab-pane d-print-none" id="switchAvailableLanguage">{{ switchLanguage }}</div>
     <div class="tab-pane d-print-none" id="addTranslation">
       <form action="{{ translationUrl }}" method="post" class="form-inline" accept-charset="utf-8">
         {{ languageSelection }}
-        <button class="btn btn-primary" type="submit" name="submit">
-          {{ msgTranslateSubmit }}
-        </button>
+        <button class="btn btn-primary" type="submit" name="submit">{{ msgTranslateSubmit }}</button>
       </form>
     </div>
   </div>
@@ -185,16 +167,12 @@
       {{ captchaFieldset }}
 
       <div class="text-right">
-        <button class="btn btn-primary" id="submitcomment" type="submit">
-          {{ msgNewContentSubmit }}
-        </button>
+        <button class="btn btn-primary" id="submitcomment" type="submit">{{ msgNewContentSubmit }}</button>
       </div>
     </form>
   </aside>
 
-  <div class="d-print-none" id="comments">
-    {{ renderComments }}
-  </div>
+  <div class="d-print-none" id="comments">{{ renderComments }}</div>
 </section>
 
 <script>

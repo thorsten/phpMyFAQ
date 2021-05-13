@@ -54,14 +54,10 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
           <ul class="navbar-nav mr-md-12">
-            <li class="nav-item {{ activeAllCategories }}">
-              {{ allCategories }}
-            </li>
+            <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
             <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
             <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
-            <li class="nav-item {{ activeOpenQuestions }}">
-              {{ msgOpenQuestions }}
-            </li>
+            <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -75,9 +71,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdown">
                 [notLoggedIn]
-                <div>
-                  {{ msgRegisterUser }} {{ msgLoginUser }}
-                </div>
+                <div>{{ msgRegisterUser }} {{ msgLoginUser }}</div>
                 [/notLoggedIn] [userloggedIn]
                 <div>
                   {{ msgUserControlDropDown }} {{ msgUserControl }} {{ msgLogoutUser }}
@@ -132,21 +126,11 @@
         <div class="row">
           <div class="col-8 mb-4">
             <ul class="pmf-footer-menu">
-              <li class="foot-menu-item">
-                {{ faqOverview }}
-              </li>
-              <li class="foot-menu-item">
-                {{ showSitemap }}
-              </li>
-              <li class="foot-menu-item">
-                {{ msgGlossary }}
-              </li>
-              <li class="foot-menu-item">
-                {{ msgContact }}
-              </li>
-              <li class="foot-menu-item">
-                {{ privacyLink }}
-              </li>
+              <li class="foot-menu-item">{{ faqOverview }}</li>
+              <li class="foot-menu-item">{{ showSitemap }}</li>
+              <li class="foot-menu-item">{{ msgGlossary }}</li>
+              <li class="foot-menu-item">{{ msgContact }}</li>
+              <li class="foot-menu-item">{{ privacyLink }}</li>
             </ul>
           </div>
           <div class="col-4 mb-4">

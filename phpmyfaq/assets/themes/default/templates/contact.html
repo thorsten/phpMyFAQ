@@ -1,13 +1,9 @@
 <section class="col-12">
-  <h1>
-    {{ pageHeader }}
-  </h1>
+  <h1>{{ pageHeader }}</h1>
   <p>{{ msgContactOwnText }}</p>
   <p>
     {{ msgContactPrivacyNote }}
-    <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank" rel="noopener">
-      {{ msgPrivacyNote }}
-    </a>
+    <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank" rel="noopener"> {{ msgPrivacyNote }} </a>
   </p>
   <p><strong>{{ msgContactEMail }}</strong></p>
 
@@ -42,9 +38,7 @@
 
     <div class="form-group row">
       <div class="col-sm-12 text-right">
-        <button class="btn btn-primary btn-lg" type="submit" id="submitcontact">
-          {{ msgS2FButton }}
-        </button>
+        <button class="btn btn-primary btn-lg" type="submit" id="submitcontact">{{ msgS2FButton }}</button>
       </div>
     </div>
   </form>

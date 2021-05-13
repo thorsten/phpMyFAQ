@@ -53,9 +53,7 @@
     {{ captchaFieldset }}
 
     <div class="form-actions">
-      <button class="btn btn-primary" type="submit" id="submitfaq">
-        {{ msgNewTranslationSubmit }}
-      </button>
+      <button class="btn btn-primary" type="submit" id="submitfaq">{{ msgNewTranslationSubmit }}</button>
     </div>
   </form>
 
@@ -64,14 +62,14 @@
 </section>
 
 <script>
-  $(function() {
+  $(function () {
     {
-      $('#submitfaq').click(function() {
+      $('#submitfaq').click(function () {
         {
           saveFormValues('savefaq', 'faq');
         }
       });
-      $('form#formValues').submit(function() {
+      $('form#formValues').submit(function () {
         {
           return false;
         }

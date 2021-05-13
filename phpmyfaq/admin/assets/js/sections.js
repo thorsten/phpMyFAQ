@@ -122,15 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
       clearSectionMemberList();
       return;
     }
-    $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_all_members&section_id=' + section_id, function (
-      data
-    ) {
-      $('#section_member_list').empty();
-      $.each(data, function (i, val) {
-        $('#section_member_list').append('<option value="' + val.group_id + '" selected>' + val.name + '</option>');
-      });
-      $('#update_member_section_id').val(section_id);
-    });
+    $.getJSON(
+      'index.php?action=ajax&ajax=section&ajaxaction=get_all_members&section_id=' + section_id,
+      function (data) {
+        $('#section_member_list').empty();
+        $.each(data, function (i, val) {
+          $('#section_member_list').append('<option value="' + val.group_id + '" selected>' + val.name + '</option>');
+        });
+        $('#update_member_section_id').val(section_id);
+      }
+    );
   };
 
   const removeSectionMembers = function () {

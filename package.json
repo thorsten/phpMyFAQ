@@ -15,7 +15,9 @@
   "homepage": "https://www.phpmyfaq.de/",
   "scripts": {
     "build": "webpack",
-    "build:watch": "webpack --watch"
+    "build:watch": "webpack --watch",
+    "lint": "prettier --check .",
+    "lint:fix": "prettier --write ."
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
@@ -40,12 +42,12 @@
     "babel-preset-es2015": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
-    "css-loader": "^3.4.0",
+    "css-loader": "3.6.0",
     "file-loader": "^6.0.0",
     "husky": "^4.0.2",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.0",
-    "prettier": "2.0.2",
+    "prettier": "2.3.0",
     "pretty-quick": "^2.0.1",
     "sass-loader": "^8.0.0",
     "sigmund": "^1.0.1",

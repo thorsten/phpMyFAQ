@@ -67,23 +67,19 @@
       {{ captchaFieldset }}
 
       <div class="text-right">
-        <button class="btn btn-primary" id="submitcomment" type="submit">
-          {{ msgNewContentSubmit }}
-        </button>
+        <button class="btn btn-primary" id="submitcomment" type="submit">{{ msgNewContentSubmit }}</button>
       </div>
     </form>
   </div>
   <!-- /Comment Form -->
 
   <div id="loader"></div>
-  <div class="d-print-none" id="comments">
-    {{ renderComments }}
-  </div>
+  <div class="d-print-none" id="comments">{{ renderComments }}</div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       $('abbr[rel="tooltip"]').tooltip();
-      $('.show-comment-form').on('click', event => {
+      $('.show-comment-form').on('click', (event) => {
         event.preventDefault();
         $('#commentForm').removeClass('d-none');
       });
