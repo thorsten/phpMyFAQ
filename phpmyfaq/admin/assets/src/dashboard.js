@@ -13,11 +13,14 @@
  * @since 2020-04-22
  */
 
-import Chart from 'chart.js';
+import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title } from 'chart.js';
 
 export const renderVisitorCharts = () => {
   const context = document.getElementById('pmf-chart-visits');
+
   if (context) {
+    Chart.register(BarController, BarElement, LinearScale, Title, CategoryScale);
+
     const visitorChart = new Chart(context, {
       type: 'bar',
       data: {
@@ -34,17 +37,21 @@ export const renderVisitorCharts = () => {
       },
       options: {
         responsive: true,
-        legend: {
-          display: false,
-        },
         scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
+          x: {
+            title: {
+              display: false,
             },
-          ],
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Visitors',
+            },
+            ticks: {
+              beginAtZero: true,
+            },
+          },
         },
       },
     });
