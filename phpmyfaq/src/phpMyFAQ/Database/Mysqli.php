@@ -144,7 +144,7 @@ class Mysqli implements DatabaseDriver
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result): array
+    public function fetchAll($result): ?array
     {
         $ret = [];
         if (false === $result) {
