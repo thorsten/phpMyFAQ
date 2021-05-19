@@ -115,7 +115,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result): array
+    public function fetchArray($result): ?array
     {
         $result->fetchedByPMF = true;
 
@@ -130,7 +130,7 @@ class Sqlite3 implements DatabaseDriver
      * @return array of stdClass
      * @throws Exception
      */
-    public function fetchAll($result): array
+    public function fetchAll($result): ?array
     {
         $ret = [];
         if (false === $result) {
