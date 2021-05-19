@@ -116,7 +116,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result): array
+    public function fetchArray($result): ?array
     {
         return sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
     }
@@ -139,7 +139,7 @@ class Sqlsrv implements DatabaseDriver
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result): array
+    public function fetchAll($result): ?array
     {
         $ret = [];
         if (false === $result) {
@@ -165,14 +165,14 @@ class Sqlsrv implements DatabaseDriver
         if (null !== $errors) {
             return $errors[0]['SQLSTATE'] . ': ' . $errors[0]['message'];
         }
+
+        return '';
     }
 
     /**
      * Fetch a result row as an object.
      *
-     * @param resource $result Resultset
-     *
-     * @return resource
+     * @param resource $result Results
      */
     public function fetchObject($result)
     {
@@ -269,7 +269,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return int
      */
-    public function nextID($table, $id): int
+    public function nextId($table, $id): int
     {
         $select = sprintf(
             '
