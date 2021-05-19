@@ -33,12 +33,12 @@ class Elasticsearch
     /** @var Client */
     protected $client;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $esConfig;
 
     /**
      * Elasticsearch mapping
-     * @var array
+     * @var array<string, mixed>
      */
     private $mappings = [
         'faqs' => [
@@ -99,12 +99,10 @@ class Elasticsearch
     /**
      * Returns the basic phpMyFAQ index structure as raw array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     private function getParams(): array
     {
-        global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
-
         return [
             'index' => $this->esConfig['index'],
             'body' => [
@@ -120,7 +118,7 @@ class Elasticsearch
                             ],
                             'Language_stemmer' => [
                                 'type' => 'stemmer',
-                                'name' => $PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->config->getDefaultLanguage()]
+                                'name' => PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->config->getDefaultLanguage()]
                             ]
                         ],
                         'analyzer' => [
@@ -169,7 +167,7 @@ class Elasticsearch
     /**
      * Returns the current mapping.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getMapping(): array
     {
@@ -179,7 +177,7 @@ class Elasticsearch
     /**
      * Deletes the Elasticsearch index.
      *
-     * @return array
+     * @return string[]
      */
     public function dropIndex(): array
     {
@@ -189,9 +187,8 @@ class Elasticsearch
     /**
      * Indexing of a FAQ
      *
-     * @param array $faq
-     *
-     * @return array
+     * @param string[] $faq
+     * @return string[]
      */
     public function index(array $faq): array
     {
@@ -215,9 +212,8 @@ class Elasticsearch
     /**
      * Bulk indexing of all FAQs
      *
-     * @param array $faqs
-     *
-     * @return array
+     * @param array<string, mixed> $faqs
+     * @return array<string, mixed>
      */
     public function bulkIndex(array $faqs): array
     {
@@ -265,14 +261,14 @@ class Elasticsearch
             return ['success' => $responses];
         }
 
-        return ['error'];
+        return ['error' => ''];
     }
 
     /**
      * Updates a FAQ document
      *
-     * @param  array $faq
-     * @return array
+     * @param string[] $faq
+     * @return string[]
      */
     public function update(array $faq): array
     {
@@ -299,7 +295,7 @@ class Elasticsearch
      * Deletes a FAQ document
      *
      * @param int $solutionId
-     * @return array
+     * @return string[]
      */
     public function delete(int $solutionId): array
     {

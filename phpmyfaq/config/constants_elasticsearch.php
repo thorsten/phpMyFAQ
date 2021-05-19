@@ -19,12 +19,12 @@
 /**
  * Number of shards
  */
-define('PMF_ELASTICSEARCH_NUMBER_SHARDS', 2);
+const PMF_ELASTICSEARCH_NUMBER_SHARDS = 2;
 
 /**
  * Number of replicas
  */
-define('PMF_ELASTICSEARCH_NUMBER_REPLICAS', 0);
+const PMF_ELASTICSEARCH_NUMBER_REPLICAS = 0;
 
 /**
  * Elasticsearch Tokenizer:
@@ -33,14 +33,14 @@ define('PMF_ELASTICSEARCH_NUMBER_REPLICAS', 0);
  *
  * - also possible, if the ICU Analyzer plugin is installed: icu_tokenizer
  */
-define('PMF_ELASTICSEARCH_TOKENIZER', 'standard');
+const PMF_ELASTICSEARCH_TOKENIZER = 'standard';
 
 /**
  * Array of stemmer token filters with the preferred values by Elasticsearch
  *
  * @var array
  */
-$PMF_ELASTICSEARCH_STEMMING_LANGUAGE = [
+const PMF_ELASTICSEARCH_STEMMING_LANGUAGE = [
     'ar' => 'arabic',
     'bn' => 'english', // NOT SUPPORTED BY ELASTICSEARCH
     'bs' => 'english', // NOT SUPPORTED BY ELASTICSEARCH
