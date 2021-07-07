@@ -8,7 +8,7 @@
  *
  * @package phpMyFAQ
  * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2010-2020 phpMyFAQ Team
+ * @copyright 2010-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2010-12-13
@@ -60,7 +60,7 @@ $pagination = new Pagination(
         <th colspan="3"><?= $PMF_LANG['msgAttachmentsMimeType'] ?></th>
       </tr>
       </thead>
-      <tbody>
+      <tbody id="attachment-table">
       <?php foreach ($crumbs as $item): ?>
         <tr class="att_<?= $item->id ?>" title="<?= $item->thema ?>">
           <td><?= $item->id ?></td>
@@ -69,10 +69,10 @@ $pagination = new Pagination(
           <td><?= $item->filesize ?></td>
           <td><?= $item->mime_type ?></td>
           <td>
-            <a href="deleteAttachment(<?= $item->id ?>, '<?= $user->getCsrfTokenFromSession() ?>'); void(0);"
-               class="btn btn-danger" title="<?= $PMF_LANG['ad_gen_delete'] ?>">
+            <button class="btn btn-danger btn-delete-attachment" title="<?= $PMF_LANG['ad_gen_delete'] ?>"
+                    data-attachment-id="<?= $item->id ?>" data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
               <i aria-hidden="true" class="fa fa-trash"></i>
-            </a>
+            </button>
           </td>
           <td>
             <a title="<?= $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
@@ -93,24 +93,28 @@ $pagination = new Pagination(
 </div>
 
 <script>
-  /**
-   * Ajax call for deleting attachments
-   *
-   * @param attachmentId Attachment id
-   * @apram csrf CSRF token
-   */
-  function deleteAttachment(attachmentId, csrf) {
-    if (confirm('<?= $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-      $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
-      $.ajax({
-        type: "GET",
-        url: "index.php?action=ajax&ajax=att&ajaxaction=delete",
-        data: {attId: attachmentId, csrf: csrf},
-        success: function (msg) {
-          $('.att_' + attachmentId).fadeOut('slow');
-          $('#pmf-admin-saving-data-indicator').html('<p class="alert alert-success">' + msg + '</p>');
-        }
-      });
-    }
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const attachmentTable = document.getElementById('attachment-table');
+
+    attachmentTable.addEventListener('click', (event) => {
+      event.preventDefault();
+      const isButton = event.target.nodeName === 'BUTTON';
+
+      if (isButton) {
+        const attachmentId = event.target.getAttribute('data-attachment-id');
+        const csrf = event.target.getAttribute('data-csrf');
+
+        $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
+        $.ajax({
+          type: 'GET',
+          url: 'index.php?action=ajax&ajax=att&ajaxaction=delete',
+          data: { attId: attachmentId, csrf: csrf },
+          success: function (msg) {
+            $('.att_' + attachmentId).fadeOut('slow');
+            $('#pmf-admin-saving-data-indicator').html('<p class="alert alert-success">' + msg + '</p>');
+          }
+        });
+      }
+    });
+  });
 </script>
