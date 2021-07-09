@@ -182,7 +182,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
             savingIndicator.fadeOut('slow');
             returnMessage.html('<p class="alert alert-success"><?= $PMF_LANG['ad_entry_commentdelsuc'] ?></p>');
           } else {
-            returnMessage.html('<p class="alert alert-danger"><?= $PMF_LANG['ad_entry_commentdelfail'] ?></p>');
+            returnMessage.html('<p class="alert alert-danger"><?= addslashes($PMF_LANG['ad_entry_commentdelfail']) ?></p>');
           }
         }
       });
