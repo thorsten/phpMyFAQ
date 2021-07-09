@@ -47,10 +47,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $session = new Session($faqConfig);
             $date = new Date($faqConfig);
             $visits = new Visits($faqConfig);
-            $statdelete = Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
-            $month = Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
-            $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-            $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+            $statdelete = Filter::filterInput(INPUT_POST, 'statdelete', FILTER_UNSAFE_RAW);
+            $month = Filter::filterInput(INPUT_POST, 'month', FILTER_UNSAFE_RAW);
+            $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+            $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
                 $statdelete = null;

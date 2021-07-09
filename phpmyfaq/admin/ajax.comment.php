@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_UNSAFE_RAW);
 $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();

@@ -24,8 +24,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$searchTerm = Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$searchTerm = Filter::filterInput(INPUT_GET, 'searchterm', FILTER_UNSAFE_RAW);
 
 $search = new Search($faqConfig);
 $http = new HttpHelper();

@@ -31,7 +31,7 @@ printf(
 
 if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
     $recordId = Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
-    $recordLang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+    $recordLang = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     try {

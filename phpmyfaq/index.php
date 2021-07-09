@@ -69,7 +69,7 @@ $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'),
 require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING);
+$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
 if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
@@ -101,7 +101,7 @@ AttachmentFactory::init(
 //
 // Get user action
 //
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 
 //
 // Authenticate current user
@@ -109,10 +109,10 @@ $action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $auth = $error = null;
 $loginVisibility = 'hidden';
 
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-$faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
-$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_UNSAFE_RAW);
+$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -272,9 +272,9 @@ if ($faqConfig->get('main.enableUserTracking')) {
 //
 // Found a article language?
 //
-$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_UNSAFE_RAW);
 if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
     if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
         $lang = $faqLangCode;
     }

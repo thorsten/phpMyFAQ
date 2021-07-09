@@ -52,7 +52,7 @@ $groupActionList = [
 
 // what shall we do?
 // actions defined by url: group_action=
-$groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_SANITIZE_STRING, $defaultGroupAction);
+$groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_UNSAFE_RAW, $defaultGroupAction);
 
 // actions defined by submit button
 if (isset($_POST['group_action_deleteConfirm'])) {
@@ -130,7 +130,7 @@ if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
         foreach ($dataFields as $field) {
-            $groupData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
+            $groupData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_UNSAFE_RAW, '');
         }
         $user = new User($faqConfig);
         $perm = $user->perm;
@@ -198,7 +198,7 @@ if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), '
     $user = new User($faqConfig);
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false;
     }
@@ -222,11 +222,11 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
-    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
-    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
-    $groupAutoJoin = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
+    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_UNSAFE_RAW, '');
+    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_UNSAFE_RAW, '');
+    $groupAutoJoin = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_UNSAFE_RAW, '');
     $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false;

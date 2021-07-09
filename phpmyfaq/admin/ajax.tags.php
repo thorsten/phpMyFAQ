@@ -30,7 +30,7 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 
 $oTag = new Tags($faqConfig);
 
@@ -66,8 +66,8 @@ switch ($ajaxAction) {
 
     case 'update':
         $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $tag = Filter::filterInput(INPUT_POST, 'tag', FILTER_SANITIZE_STRING);
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $tag = Filter::filterInput(INPUT_POST, 'tag', FILTER_UNSAFE_RAW);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->setStatus(400);

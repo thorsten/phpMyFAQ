@@ -27,12 +27,12 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 $upload = Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
 $uploadedFile = isset($_FILES['upload']) ? $_FILES['upload'] : '';
 
 $csrfOkay = true;
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfOkay = false;
 }

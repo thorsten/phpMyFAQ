@@ -47,7 +47,7 @@ if ($linkVerifier->isReady() === false) {
 }
 
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+$artlang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
 $lookup = Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
 
 if (count(ob_list_handlers()) > 0) {

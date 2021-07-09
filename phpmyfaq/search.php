@@ -40,14 +40,14 @@ try {
 }
 
 // Get possible user input
-$inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
+$inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_UNSAFE_RAW);
 $inputCategory = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_SANITIZE_STRING);
+$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
+$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW);
 $inputTag = str_replace(' ', '', $inputTag);
 $inputTag = str_replace(',,', ',', $inputTag);
 
-$searchTerm = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+$searchTerm = Filter::filterInput(INPUT_POST, 'search', FILTER_UNSAFE_RAW);
 $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)

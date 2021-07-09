@@ -60,14 +60,14 @@ $http->addHeader();
 //
 $auth = false;
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
+$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW, 'en');
 $categoryId = Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 $tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
-$faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
+$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 //
 // Get language (default: english)
@@ -238,7 +238,7 @@ switch ($action) {
 
 
     case 'faqs':
-        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_STRING);
+        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_UNSAFE_RAW);
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
@@ -294,7 +294,7 @@ switch ($action) {
         //
         // GET
         //
-        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_STRING);
+        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_UNSAFE_RAW);
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
@@ -329,15 +329,15 @@ switch ($action) {
             ];
         }
 
-        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW);
         $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-        $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRING);
-        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
-        $isActive = Filter::filterInput(INPUT_POST, 'is-active', FILTER_SANITIZE_STRING);
-        $isSticky = Filter::filterInput(INPUT_POST, 'is-sticky', FILTER_SANITIZE_STRING);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+        $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
+        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
+        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
+        $isActive = Filter::filterInput(INPUT_POST, 'is-active', FILTER_UNSAFE_RAW);
+        $isSticky = Filter::filterInput(INPUT_POST, 'is-sticky', FILTER_UNSAFE_RAW);
 
         $categories = [ $categoryId ];
         $isActive = $isActive === 'true';
@@ -410,10 +410,10 @@ switch ($action) {
 
         $registration = new RegistrationHelper($faqConfig);
 
-        $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-        $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_SANITIZE_STRING);
+        $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
+        $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_SANITIZE_STRING);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_UNSAFE_RAW);
         $isVisible = $isVisible === 'true';
 
         if (!$registration->isDomainWhitelisted($email)) {

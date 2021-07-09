@@ -146,7 +146,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $date = new Date($faqConfig);
 
     $internalSearch = '';
-    $linkState = Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
+    $linkState = Filter::filterInput(INPUT_POST, 'linkstate', FILTER_UNSAFE_RAW);
     $searchCat = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
     $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
@@ -164,8 +164,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     }
 
     $selectedCategory = Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT, 0);
-    $orderBy = Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
-    $sortBy = Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
+    $orderBy = Filter::filterInput(INPUT_GET, 'orderby', FILTER_UNSAFE_RAW, 1);
+    $sortBy = Filter::filterInput(INPUT_GET, 'sortby', FILTER_UNSAFE_RAW);
     if (1 !== $orderBy) {
         switch ($orderBy) {
             case 'id':

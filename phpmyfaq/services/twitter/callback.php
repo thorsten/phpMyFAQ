@@ -33,8 +33,8 @@ $requestToken = [];
 $requestToken['oauth_token'] = $_SESSION['oauth_token'];
 $requestToken['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
 
-$oAuthToken = Filter::filterInput(INPUT_GET, 'oauth_token', FILTER_SANITIZE_STRING);
-$oAuthVerifier = Filter::filterInput(INPUT_GET, 'oauth_verifier', FILTER_SANITIZE_STRING);
+$oAuthToken = Filter::filterInput(INPUT_GET, 'oauth_token', FILTER_UNSAFE_RAW);
+$oAuthVerifier = Filter::filterInput(INPUT_GET, 'oauth_verifier', FILTER_UNSAFE_RAW);
 
 if (isset($_REQUEST['denied'])) {
     exit('Permission was denied. Please start over.');

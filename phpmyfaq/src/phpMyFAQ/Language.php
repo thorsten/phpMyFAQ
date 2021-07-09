@@ -139,17 +139,17 @@ class Language
         self::getUserAgentLanguage();
 
         // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
-        $detectedLang['post'] = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+        $detectedLang['post'] = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW);
         if (!is_null($detectedLang['post']) && !self::isASupportedLanguage($detectedLang['post'])) {
             $detectedLang['post'] = null;
         }
         // Get the user language
-        $detectedLang['get'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $detectedLang['get'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
         if (!is_null($detectedLang['get']) && !self::isASupportedLanguage($detectedLang['get'])) {
             $detectedLang['get'] = null;
         }
         // Get the faq record language
-        $detectedLang['artget'] = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        $detectedLang['artget'] = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
         if (!is_null($detectedLang['artget']) && !self::isASupportedLanguage($detectedLang['artget'])) {
             $detectedLang['artget'] = null;
         }

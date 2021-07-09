@@ -50,9 +50,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     );
 
     // FAQ data
-    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-    $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
+    $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
     $categories = Filter::filterInputArray(
         INPUT_POST,
         [
@@ -62,35 +62,35 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             ],
         ]
     );
-    $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-    $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+    $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
+    $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_UNSAFE_RAW);
     $active = 'yes' == Filter::filterInput(
         INPUT_POST,
         'active',
-        FILTER_SANITIZE_STRING
+        FILTER_UNSAFE_RAW
     ) && $user->perm->hasPermission($user->getUserId(), 'approverec') ? 'yes' : 'no';
-    $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
+    $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_UNSAFE_RAW);
     if ($faqConfig->get('main.enableMarkdownEditor')) {
         $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
     } else {
         $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     }
-    $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-    $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+    $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
+    $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
     $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
     $solutionId = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-    $revision = Filter::filterInput(INPUT_POST, 'revision', FILTER_SANITIZE_STRING);
+    $revision = Filter::filterInput(INPUT_POST, 'revision', FILTER_UNSAFE_RAW);
     $revisionId = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
-    $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
-    $date = Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
-    $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
+    $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_UNSAFE_RAW);
+    $date = Filter::filterInput(INPUT_POST, 'date', FILTER_UNSAFE_RAW);
+    $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_UNSAFE_RAW);
 
     // Permissions
     $faqPermission = new FaqPermission($faqConfig);
     $permissions = [];
-    if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
+    if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_UNSAFE_RAW)) {
         $permissions += [
             'restricted_user' => [
                 -1,
@@ -104,7 +104,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         ];
     }
 
-    if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
+    if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_UNSAFE_RAW)) {
         $permissions += [
             'restricted_groups' => [
                 -1,
@@ -236,7 +236,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         }
 
         // All the other translations
-        $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+        $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_UNSAFE_RAW);
         ?>
       <script>
         (() => {

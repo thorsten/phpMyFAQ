@@ -69,9 +69,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
 
         // Collect updated data for database
         $updatedData = [];
-        $updatedData['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
-        $updatedData['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
-        $updatedData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $updatedData['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_UNSAFE_RAW);
+        $updatedData['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_UNSAFE_RAW);
+        $updatedData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
 
         // Original data
         $originalData = $originalClient->getInstanceById($instanceId);

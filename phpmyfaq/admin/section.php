@@ -49,7 +49,7 @@ $sectionActionList = [
 
 // what shall we do?
 // actions defined by url: section_action=
-$sectionAction = Filter::filterInput(INPUT_GET, 'section_action', FILTER_SANITIZE_STRING, $defaultSectionAction);
+$sectionAction = Filter::filterInput(INPUT_GET, 'section_action', FILTER_UNSAFE_RAW, $defaultSectionAction);
 
 // update section members
 if ($sectionAction == 'update_members' && $user->perm->hasPermission($user->getUserId(), 'edit_section')) {
@@ -89,7 +89,7 @@ if ($sectionAction == 'update_data' && $user->perm->hasPermission($user->getUser
         $sectionData = [];
         $dataFields = ['name', 'description'];
         foreach ($dataFields as $field) {
-            $sectionData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
+            $sectionData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_UNSAFE_RAW, '');
         }
         $user = new User($faqConfig);
         $perm = $user->perm;
@@ -156,7 +156,7 @@ if ($sectionAction == 'delete' && $user->perm->hasPermission($user->getUserId(),
     $user = new User($faqConfig);
     $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
     $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false;
     }
@@ -180,10 +180,10 @@ if ($sectionAction == 'addsave' && $user->perm->hasPermission($user->getUserId()
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
-    $sectionName = Filter::filterInput(INPUT_POST, 'section_name', FILTER_SANITIZE_STRING, '');
-    $sectionDescription = Filter::filterInput(INPUT_POST, 'section_description', FILTER_SANITIZE_STRING, '');
+    $sectionName = Filter::filterInput(INPUT_POST, 'section_name', FILTER_UNSAFE_RAW, '');
+    $sectionDescription = Filter::filterInput(INPUT_POST, 'section_description', FILTER_UNSAFE_RAW, '');
     $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false;

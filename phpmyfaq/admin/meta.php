@@ -25,8 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $defaultMetaAction = 'list';
-$metaAction = Filter::filterInput(INPUT_GET, 'meta_action', FILTER_SANITIZE_STRING, $defaultMetaAction);
-$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$metaAction = Filter::filterInput(INPUT_GET, 'meta_action', FILTER_UNSAFE_RAW, $defaultMetaAction);
+$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 ?>
 
@@ -60,8 +60,8 @@ if ('meta.update' === $action && is_integer($metaId)) {
     } else {
         $entity = new MetaEntity();
         $entity
-            ->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_SANITIZE_STRING))
-            ->setType(Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING))
+            ->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_UNSAFE_RAW))
+            ->setType(Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW))
             ->setContent(Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
 
         if ($meta->update($metaId, $entity)) {

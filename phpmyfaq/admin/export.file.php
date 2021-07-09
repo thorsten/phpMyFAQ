@@ -31,8 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->hasPermission($user->getUserId(), 'export')) {
     $categoryId = Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
     $downwards = Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
-    $inlineDisposition = Filter::filterInput(INPUT_POST, 'disposition', FILTER_SANITIZE_STRING);
-    $type = Filter::filterInput(INPUT_POST, 'export-type', FILTER_SANITIZE_STRING, 'none');
+    $inlineDisposition = Filter::filterInput(INPUT_POST, 'disposition', FILTER_UNSAFE_RAW);
+    $type = Filter::filterInput(INPUT_POST, 'export-type', FILTER_UNSAFE_RAW, 'none');
 
     $faq = new Faq($faqConfig);
     $tags = new Tags($faqConfig);

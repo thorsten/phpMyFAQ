@@ -33,12 +33,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 $instanceId = Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
 $stopwordId = Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword = Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
-$stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$stopword = Filter::filterInput(INPUT_GET, 'stopword', FILTER_UNSAFE_RAW);
+$stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $http = new HttpHelper();
 $stopwords = new Stopwords($faqConfig);
@@ -51,12 +51,12 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        $url = Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
-        $instance = Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
-        $comment = Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
+        $url = Filter::filterInput(INPUT_GET, 'url', FILTER_UNSAFE_RAW);
+        $instance = Filter::filterInput(INPUT_GET, 'instance', FILTER_UNSAFE_RAW);
+        $comment = Filter::filterInput(INPUT_GET, 'comment', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
-        $admin = Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
-        $password = Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
+        $admin = Filter::filterInput(INPUT_GET, 'admin', FILTER_UNSAFE_RAW);
+        $password = Filter::filterInput(INPUT_GET, 'password', FILTER_UNSAFE_RAW);
 
         if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
             $http->setStatus(400);
@@ -203,8 +203,8 @@ switch ($ajaxAction) {
         $entity = new MetaEntity();
 
         $entity
-            ->setPageId(Filter::filterInput(INPUT_GET, 'page_id', FILTER_SANITIZE_STRING))
-            ->setType(Filter::filterInput(INPUT_GET, 'type', FILTER_SANITIZE_STRING))
+            ->setPageId(Filter::filterInput(INPUT_GET, 'page_id', FILTER_UNSAFE_RAW))
+            ->setType(Filter::filterInput(INPUT_GET, 'type', FILTER_UNSAFE_RAW))
             ->setContent(Filter::filterInput(INPUT_GET, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
 
         $metaId = $meta->add($entity);
@@ -224,7 +224,7 @@ switch ($ajaxAction) {
         }
 
         $meta = new Meta($faqConfig);
-        $metaId = Filter::filterInput(INPUT_GET, 'meta_id', FILTER_SANITIZE_STRING);
+        $metaId = Filter::filterInput(INPUT_GET, 'meta_id', FILTER_UNSAFE_RAW);
 
         if ($meta->delete((int)$metaId)) {
             $payload = ['deleted' => $metaId];

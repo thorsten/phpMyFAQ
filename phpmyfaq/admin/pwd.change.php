@@ -33,8 +33,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     // If we have to save a new password, do that first
-    $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $save = Filter::filterInput(INPUT_POST, 'save', FILTER_UNSAFE_RAW);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfCheck = false;
@@ -49,9 +49,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
-        $oldPassword = Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
-        $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-        $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+        $oldPassword = Filter::filterInput(INPUT_POST, 'opass', FILTER_UNSAFE_RAW);
+        $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
+        $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
 
         if (($authSource->checkCredentials($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {

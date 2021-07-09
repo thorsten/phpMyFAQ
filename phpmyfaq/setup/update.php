@@ -34,7 +34,7 @@ set_time_limit(0);
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 $step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
-$version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+$version = Filter::filterInput(INPUT_POST, 'version', FILTER_UNSAFE_RAW);
 $query = [];
 
 if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {

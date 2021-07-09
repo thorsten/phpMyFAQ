@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$answer = Filter::filterInput(INPUT_POST, 'text', FILTER_SANITIZE_STRING);
+$answer = Filter::filterInput(INPUT_POST, 'text', FILTER_UNSAFE_RAW);
 $http = new HttpHelper();
 $http->addHeader();
 

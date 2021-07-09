@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 $sectionId = Filter::filterInput(INPUT_GET, 'section_id', FILTER_VALIDATE_INT);
 
 $http = new HttpHelper();

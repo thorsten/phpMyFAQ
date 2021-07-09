@@ -39,8 +39,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-        $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-        $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+        $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+        $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
             $csrfCheck = false;
         } else {

@@ -43,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $date = new Date($faqConfig);
             $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-            $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+            $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_UNSAFE_RAW);
             if ($toggle == 'toggle') {
                 $isVisible = $question->getVisibility($questionId);
                 if (!is_null($isVisible)) {

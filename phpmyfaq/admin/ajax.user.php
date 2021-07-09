@@ -28,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
-$userSearch = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$userSearch = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 // Send headers
 $http = new HttpHelper();
@@ -115,11 +115,11 @@ if (
 
             $postData = json_decode(file_get_contents('php://input'), true);
 
-            $userName = Filter::filterVar($postData['userName'], FILTER_SANITIZE_STRING);
-            $userRealName = Filter::filterVar($postData['realName'], FILTER_SANITIZE_STRING);
+            $userName = Filter::filterVar($postData['userName'], FILTER_UNSAFE_RAW);
+            $userRealName = Filter::filterVar($postData['realName'], FILTER_UNSAFE_RAW);
             $userEmail = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
-            $userPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_STRING);
-            $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_SANITIZE_STRING);
+            $userPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
+            $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_UNSAFE_RAW);
             $userIsSuperAdmin = Filter::filterVar($postData['isSuperAdmin'], FILTER_VALIDATE_BOOLEAN);
 
             $newUser = new User($faqConfig);
@@ -194,9 +194,9 @@ if (
             }
 
             $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
+            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
 
             $user->getUserById($userId, true);
             $auth = new Auth($faqConfig);

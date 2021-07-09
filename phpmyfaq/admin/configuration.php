@@ -25,8 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
-    $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_UNSAFE_RAW, 'listConfig');
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
     $currentToken = $user->getCsrfTokenFromSession();
 
     // Save the configuration

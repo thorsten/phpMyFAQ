@@ -109,15 +109,15 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 //
 // Get user action
 //
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 if (is_null($action)) {
-    $action = Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+    $action = Filter::filterInput(INPUT_POST, 'action', FILTER_UNSAFE_RAW);
 }
 
 //
 // Get possible redirect action
 //
-$redirectAction = Filter::filterInput(INPUT_POST, 'redirect-action', FILTER_SANITIZE_STRING);
+$redirectAction = Filter::filterInput(INPUT_POST, 'redirect-action', FILTER_UNSAFE_RAW);
 if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) {
     $action = $redirectAction;
 }
@@ -125,9 +125,9 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
 // authenticate current user
 $auth = null;
 $error = '';
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -207,9 +207,9 @@ if (isset($user) && is_object($user)) {
 
 //
 // Get action from _GET and _POST first
-$ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+$ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_UNSAFE_RAW);
 if (is_null($ajax)) {
-    $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
+    $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_UNSAFE_RAW);
 }
 
 // if performing AJAX operation, needs to branch before header.php

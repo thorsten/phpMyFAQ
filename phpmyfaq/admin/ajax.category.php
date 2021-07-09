@@ -26,8 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $http = new HttpHelper();
 $http->setContentType('application/json');
@@ -40,7 +40,7 @@ switch ($ajaxAction) {
             INPUT_GET,
             [
                 'categories' => [
-                    'filter' => FILTER_SANITIZE_STRING,
+                    'filter' => FILTER_UNSAFE_RAW,
                     'flags' => FILTER_REQUIRE_SCALAR,
                 ],
             ]
@@ -75,7 +75,7 @@ switch ($ajaxAction) {
 
         $rawData = Filter::filterInputArray(INPUT_POST, [
             'data' => [
-                'filter' => FILTER_SANITIZE_STRING,
+                'filter' => FILTER_UNSAFE_RAW,
                 'flags' => FILTER_REQUIRE_ARRAY,
             ],
         ]);

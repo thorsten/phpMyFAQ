@@ -110,7 +110,7 @@ if (
             $queryString = 'insertentry';
         }
 
-        $faqData['lang'] = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
         $selectedCategory = Filter::filterInputArray(
             INPUT_POST,
             [
@@ -125,25 +125,25 @@ if (
                 $categories[] = ['category_id' => $cats, 'category_lang' => $faqData['lang']];
             }
         }
-        $faqData['active'] = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-        $faqData['keywords'] = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-        $faqData['title'] = Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
+        $faqData['active'] = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
+        $faqData['keywords'] = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
+        $faqData['title'] = Filter::filterInput(INPUT_POST, 'thema', FILTER_UNSAFE_RAW);
         $faqData['content'] = Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['author'] = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+        $faqData['author'] = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
         $faqData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $faqData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $faqData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
         $faqData['solution_id'] = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
         $faqData['revision_id'] = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
         $faqData['sticky'] = Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
-        $faqData['tags'] = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-        $faqData['changed'] = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
-        $faqData['dateStart'] = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-        $faqData['dateEnd'] = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+        $faqData['tags'] = Filter::filterInput(INPUT_POST, 'tags', FILTER_UNSAFE_RAW);
+        $faqData['changed'] = Filter::filterInput(INPUT_POST, 'changed', FILTER_UNSAFE_RAW);
+        $faqData['dateStart'] = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
+        $faqData['dateEnd'] = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
         $faqData['content'] = html_entity_decode($faqData['content']);
     } elseif ('editentry' === $action) {
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-        $translateTo = Filter::filterInput(INPUT_GET, 'translateTo', FILTER_SANITIZE_STRING);
+        $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
+        $translateTo = Filter::filterInput(INPUT_GET, 'translateTo', FILTER_UNSAFE_RAW);
         $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 
         if (!is_null($translateTo)) {
@@ -168,7 +168,7 @@ if (
         }
     } elseif ('copyentry' === $action) {
         $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['lang'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
         $categories = $categoryRelation->getCategories($faqData['id'], $faqData['lang']);
 
         $faq->getRecord($faqData['id'], null, true);

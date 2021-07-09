@@ -33,7 +33,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 
 $auth = false;
 $user = CurrentUser::getFromCookie($faqConfig);

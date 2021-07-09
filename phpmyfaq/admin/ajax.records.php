@@ -35,9 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$csrfTokenPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-$csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$csrfTokenPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+$csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
@@ -133,7 +133,7 @@ switch ($ajaxAction) {
     case 'delete_record':
         if ($user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
             $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-            $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+            $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_UNSAFE_RAW);
 
             $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);

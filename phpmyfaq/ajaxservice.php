@@ -54,10 +54,10 @@ use phpMyFAQ\Utils;
 //
 require 'src/Bootstrap.php';
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$ajaxLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-$code = Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
-$currentToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
+$ajaxLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
+$code = Filter::filterInput(INPUT_POST, 'captcha', FILTER_UNSAFE_RAW);
+$currentToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
 $Language = new Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
@@ -154,12 +154,12 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $oComment = new Comments($faqConfig);
         $category = new Category($faqConfig);
-        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW);
         $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsId = Filter::filterInput(INPUT_POST, 'newsId', FILTER_VALIDATE_INT);
-        $username = Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
+        $username = Filter::filterInput(INPUT_POST, 'user', FILTER_UNSAFE_RAW);
         $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
-        $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_STRING);
+        $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_UNSAFE_RAW);
 
         switch ($type) {
             case 'news':
@@ -317,10 +317,10 @@ switch ($action) {
         $category = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
 
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
+        $faqLanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_UNSAFE_RAW);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -329,8 +329,8 @@ switch ($action) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
             $answer = nl2br($answer);
         }
-        $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
-        $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_SANITIZE_STRING);
+        $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_UNSAFE_RAW);
+        $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_UNSAFE_RAW);
         $contentLink = Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
         $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
         $categories = Filter::filterInputArray(
@@ -471,7 +471,7 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
         $categories = $cat->getAllCategories();
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
@@ -583,10 +583,10 @@ switch ($action) {
     case 'saveregistration':
         $registration = new RegistrationHelper($faqConfig);
 
-        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_UNSAFE_RAW);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_STRING);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW);
 
         if (!$registration->isDomainWhitelisted($email)) {
             $message = ['error' => 'The domain is not whitelisted.'];
@@ -603,7 +603,7 @@ switch ($action) {
     case 'savevoting':
         $faq = new Faq($faqConfig);
         $rating = new Rating($faqConfig);
-        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
+        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW, 'faq');
         $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $vote = Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
         $userIp = Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
@@ -650,7 +650,7 @@ switch ($action) {
 
     // Send user generated mails
     case 'sendcontact':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 
@@ -689,7 +689,7 @@ switch ($action) {
 
     // Send mails to friends
     case 'sendtofriends':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
         $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
@@ -745,11 +745,11 @@ switch ($action) {
         }
 
         $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_STRING);
-        $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-        $confirm = Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW);
+        $password = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
+        $confirm = Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_UNSAFE_RAW);
 
         $user = CurrentUser::getFromSession($faqConfig);
 
@@ -795,7 +795,7 @@ switch ($action) {
     // Change password
     //
     case 'changepassword':
-        $username = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+        $username = Filter::filterInput(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
         if (!is_null($username) && !is_null($email)) {
@@ -827,8 +827,8 @@ switch ($action) {
     // Request removal of user
     //
     case 'request-removal':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+        $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 

@@ -36,7 +36,7 @@ define('IS_VALID_PHPMYFAQ', null);
 require 'src/Bootstrap.php';
 
 $searchString = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-$ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
+$ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_UNSAFE_RAW, 'en');
 $categoryId = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
 $language = new Language($faqConfig);
