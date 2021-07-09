@@ -3,8 +3,6 @@
 /**
  * Deletes an attachment.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -17,6 +15,7 @@
  * @since 2003-02-24
  */
 
+use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Attachment\AttachmentFactory;
 
@@ -35,13 +34,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
     $recordLang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    $att = AttachmentFactory::create($id);
-
-    if ($att && $att->delete()) {
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);
-    } else {
+    try {
+        $att = AttachmentFactory::create($id);
+        if ($att && $att->delete()) {
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);
+        }
+    } catch (AttachmentException $e) {
         printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_att_delfail']);
     }
+
     printf(
         '<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
         $recordId,
