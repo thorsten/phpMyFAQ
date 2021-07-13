@@ -50,7 +50,7 @@ class AuthSso extends Auth implements AuthDriverInterface
         } else {
             // SSO without LDAP/AD
             $user = new User($this->config);
-            $result = $user->createUser($login, null, $domain);
+            $result = $user->createUser($login, '', $domain);
 
             if ($result) {
                 $user->setStatus('active');

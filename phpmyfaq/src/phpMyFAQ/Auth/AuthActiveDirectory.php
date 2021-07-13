@@ -78,7 +78,7 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
     public function create($login, $password, $domain = ''): bool
     {
         $user = new User($this->config);
-        $result = $user->createUser($login, null, $domain);
+        $result = $user->createUser($login, '', $domain);
 
         $this->ldap->connect(
             $this->activeDirectoryServers[$this->activeServer]['ad_server'],

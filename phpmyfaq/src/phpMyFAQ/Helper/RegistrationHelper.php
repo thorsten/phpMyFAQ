@@ -59,7 +59,7 @@ class RegistrationHelper extends Helper
     {
         $user = new User($this->config);
 
-        if (!$user->createUser($userName, null)) {
+        if (!$user->createUser($userName, '')) {
             return [
                 'registered' => false,
                 'error' => $user->error()
