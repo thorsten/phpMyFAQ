@@ -150,7 +150,7 @@ switch ($action) {
         $faqPermission = new FaqPermission($faqConfig);
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
-        $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
         $searchResults = $search->search($searchString, false);
         $faqSearchResult->reviewResultSet($searchResults);
         if ($faqSearchResult->getNumberOfResults() > 0) {

@@ -36,7 +36,7 @@ $oTag = new Tags($faqConfig);
 
 switch ($ajaxAction) {
     case 'list':
-        $autoCompleteValue = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        $autoCompleteValue = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
 
         if (!is_null($autoCompleteValue)) {
             if (strpos($autoCompleteValue, ',')) {

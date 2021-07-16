@@ -148,7 +148,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $internalSearch = '';
     $linkState = Filter::filterInput(INPUT_POST, 'linkstate', FILTER_UNSAFE_RAW);
     $searchCat = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_UNSAFE_RAW);
 
     if (!is_null($linkState)) {
         $cond[Database::getTablePrefix() . 'faqdata.links_state'] = 'linkbad';

@@ -35,7 +35,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'src/Bootstrap.php';
 
-$searchString = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$searchString = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
 $ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_UNSAFE_RAW, 'en');
 $categoryId = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 

@@ -429,16 +429,16 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_UNSAFE_RAW);
     $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
+    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
     $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
-    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
+    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 
     $newsData = array(
         'lang' => $newsLang,
@@ -480,16 +480,16 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_UNSAFE_RAW);
     $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
+    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
     $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
-    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
+    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 
     $newsData = [
         'lang' => $newsLang,

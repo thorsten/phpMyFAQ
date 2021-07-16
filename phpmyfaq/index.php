@@ -283,7 +283,7 @@ if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
 //
 // Found a search string?
 //
-$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
 
 //
 // Create a new FAQ object
@@ -378,7 +378,7 @@ if (!is_null($tag_id)) {
 //
 // Handle the SiteMap
 //
-$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
+$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_UNSAFE_RAW);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $title = ' - ' . $letter . '...';
     $keywords = $letter;

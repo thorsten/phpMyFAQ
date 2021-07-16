@@ -635,10 +635,10 @@ class Link
             $parsed = parse_url($this->url);
 
             if (isset($parsed['query'])) {
-                $query['main'] = filter_var($parsed['query'], FILTER_SANITIZE_STRIPPED);
+                $query['main'] = filter_var($parsed['query'], FILTER_UNSAFE_RAW);
             }
             if (isset($parsed['fragment'])) {
-                $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_STRIPPED);
+                $query['fragment'] = filter_var($parsed['fragment'], FILTER_UNSAFE_RAW);
             }
         }
 

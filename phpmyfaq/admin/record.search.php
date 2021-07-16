@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
     $searchCategory = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_UNSAFE_RAW);
 
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

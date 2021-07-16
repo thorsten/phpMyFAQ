@@ -112,7 +112,7 @@ switch ($ajaxAction) {
             $faqSearch->setCategory(new Category($faqConfig));
             $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
             $searchResult = '';
-            $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+            $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_UNSAFE_RAW);
 
             if (!is_null($searchString)) {
                 $searchResult = $faqSearch->search($searchString, false);

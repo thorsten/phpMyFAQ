@@ -31,7 +31,7 @@ try {
     // @todo handle the exception
 }
 
-$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
+$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_UNSAFE_RAW);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $currentLetter = strtoupper(Strings::substr($letter, 0, 1));
 } else {

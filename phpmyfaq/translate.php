@@ -34,7 +34,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$translationLanguage = Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $faqLangCode);
+$translationLanguage = Filter::filterInput(INPUT_POST, 'translation', FILTER_UNSAFE_RAW, $faqLangCode);
 
 if (!Language::isASupportedLanguage($translationLanguage)) {
     $translationLanguage = $faqLangCode;
@@ -54,7 +54,7 @@ try {
 
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$srclang = Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
+$srclang = Filter::filterInput(INPUT_GET, 'srclang', FILTER_UNSAFE_RAW);
 
 if (!is_null($id) && !is_null($srclang) && Language::isASupportedLanguage($srclang)) {
     $oFaq = new Faq($faqConfig);

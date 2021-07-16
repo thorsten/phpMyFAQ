@@ -321,18 +321,18 @@ switch ($action) {
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_UNSAFE_RAW);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = html_entity_decode($answer);
         } else {
-            $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
+            $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
             $answer = nl2br($answer);
         }
         $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_UNSAFE_RAW);
         $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_UNSAFE_RAW);
         $contentLink = Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
-        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
+        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
         $categories = Filter::filterInputArray(
             INPUT_POST,
             [
@@ -474,7 +474,7 @@ switch ($action) {
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
         $save = Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
 
         // If e-mail address is set to optional
@@ -652,7 +652,7 @@ switch ($action) {
     case 'sendcontact':
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
@@ -692,7 +692,7 @@ switch ($action) {
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-        $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
+        $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_UNSAFE_RAW);
         $mailto = Filter::filterInputArray(
             INPUT_POST,
             [
@@ -830,7 +830,7 @@ switch ($action) {
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
