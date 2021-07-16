@@ -34,7 +34,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
-use phpMyFAQ\Search\SearchResultSet as SearchResultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -62,7 +62,7 @@ if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
 }
 
-$faqSearchResult = new SearchResultset($user, $faqPermission, $faqConfig);
+$faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
@@ -81,7 +81,10 @@ if (0 === (int)$solutionId) {
 } else {
     $faq->getRecordBySolutionId($solutionId);
 }
-$recordId = $faq->faqRecord['id'];
+
+if (isset($faq->faqRecord['id'])) {
+    $recordId = $faq->faqRecord['id'];
+}
 
 try {
     $faqSession->userTracking('article_view', $recordId);
