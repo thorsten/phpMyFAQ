@@ -15,7 +15,7 @@
  * @since 2010-09-15
  */
 
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Category;

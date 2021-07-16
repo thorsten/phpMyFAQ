@@ -31,18 +31,13 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 
-define('PMF_SITEMAP_GOOGLE_MAX_URL_LENGTH', 2048);
-define('PMF_SITEMAP_GOOGLE_MAX_URLS', 50000);
-define('PMF_SITEMAP_GOOGLE_MAX_FILE_LENGTH', 10485760); // 10MB
+const PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
+const PMF_SITEMAP_GOOGLE_GET_GZIP = 'gz';
+const PMF_SITEMAP_GOOGLE_FILENAME = 'sitemap.xml';
+const PMF_SITEMAP_GOOGLE_FILENAME_GZ = 'sitemap.xml.gz';
 
-define('PMF_SITEMAP_GOOGLE_GET_GZIP', 'gz');
-define('PMF_SITEMAP_GOOGLE_GET_INDEX', 'idx');
-define('PMF_SITEMAP_GOOGLE_FILENAME', 'sitemap.xml');
-define('PMF_SITEMAP_GOOGLE_FILENAME_GZ', 'sitemap.xml.gz');
-define('PMF_SITEMAP_GOOGLE_INDEX_FILENAME', 'sitemap_index.xml');
-
-define('PMF_ROOT_DIR', __DIR__);
-define('IS_VALID_PHPMYFAQ', null);
+const PMF_ROOT_DIR = __DIR__;
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Bootstrapping
@@ -52,7 +47,7 @@ require __DIR__ . '/src/Bootstrap.php';
 //
 // Initializing static string wrapper
 //
-Strings::init('en');
+Strings::init();
 
 if (false === $faqConfig->get('seo.enableXMLSitemap')) {
     exit();
@@ -74,13 +69,10 @@ function buildSiteMapNode($location, $lastModified = null)
             $lastModified = str_replace($arrayFind[0], $arrayFind[1] . ':' . $arrayFind[2], $lastModified);
         }
     }
-    $node =
-        '<url>'
-        . '<loc>' . Strings::htmlspecialchars($location) . '</loc>'
-        . '<lastmod>' . $lastModified . '</lastmod>'
-        . '</url>';
-
-    return $node;
+    return '<url>'
+    . '<loc>' . Strings::htmlspecialchars($location) . '</loc>'
+    . '<lastmod>' . $lastModified . '</lastmod>'
+    . '</url>';
 }
 
 //

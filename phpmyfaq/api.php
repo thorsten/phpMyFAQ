@@ -15,7 +15,7 @@
  * @since 2009-09-03
  */
 
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;

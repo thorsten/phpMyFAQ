@@ -28,7 +28,7 @@ use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Prepend and start the PHP session
