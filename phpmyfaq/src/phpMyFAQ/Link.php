@@ -99,6 +99,42 @@ class Link
     private const LINK_HTML_SHOWCAT = 'showcat.html';
 
     /**
+     * @var int[] List of allowed action parameters
+     */
+    public static $allowedActionParameters = [
+        'add' => 1,
+        'faq' => 1,
+        'artikel' => 1,
+        'ask' => 1,
+        'attachment' => 1,
+        'contact' => 1,
+        'glossary' => 1,
+        'help' => 1,
+        'login' => 1,
+        'mailsend2friend' => 1,
+        'news' => 1,
+        'open-questions' => 1,
+        'overview' => 1,
+        'password' => 1,
+        'register' => 1,
+        'request-removal' => 1,
+        'save' => 1,
+        'savecomment' => 1,
+        'savequestion' => 1,
+        'savevoting' => 1,
+        'search' => 1,
+        'send2friend' => 1,
+        'sendmail' => 1,
+        'show' => 1,
+        'sitemap' => 1,
+        'thankyou' => 1,
+        'translate' => 1,
+        'ucp' => 1,
+        'writecomment' => 1,
+        '404' => 1
+    ];
+
+    /**
      * URL.
      *
      * @var string
@@ -173,7 +209,7 @@ class Link
      * @param string $url URL
      * @param Configuration $config
      */
-    public function __construct($url, Configuration $config)
+    public function __construct(string $url, Configuration $config)
     {
         $this->url = $url;
         $this->config = $config;
@@ -182,7 +218,7 @@ class Link
     /**
      * @param string $rel rel property
      */
-    public function setRelation($rel)
+    public function setRelation(string $rel)
     {
         $this->rel = $rel;
     }
@@ -241,7 +277,7 @@ class Link
      *
      * @return bool
      */
-    public static function isIISServer()
+    public static function isIISServer(): bool
     {
         return (isset($_SERVER['ALL_HTTP']) || isset($_SERVER['COMPUTERNAME']) || isset($_SERVER['APP_POOL_ID']));
     }
@@ -272,15 +308,19 @@ class Link
         $url = $this->toString();
         // Prepare HTML anchor element
         $htmlAnchor = '<a';
+
         if (!empty($this->class)) {
             $htmlAnchor .= sprintf(' class="%s"', $this->class);
         }
+
         if (!empty($this->id)) {
             $htmlAnchor .= ' id="' . $this->id . '"';
         }
+
         if (!empty($this->tooltip)) {
             $htmlAnchor .= sprintf(' title="%s"', addslashes($this->tooltip));
         }
+
         if (!empty($this->name)) {
             $htmlAnchor .= sprintf(' name="%s"', $this->name);
         } else {
@@ -506,7 +546,7 @@ class Link
      *
      * @return bool
      */
-    private function hasScheme()
+    private function hasScheme(): bool
     {
         $parsed = parse_url($this->url);
 
@@ -518,7 +558,7 @@ class Link
      *
      * @return bool
      */
-    protected function isInternalReference()
+    protected function isInternalReference(): bool
     {
         if ($this->isRelativeSystemLink()) {
             return true;
@@ -535,7 +575,7 @@ class Link
      *
      * @return bool
      */
-    private function isRelativeSystemLink()
+    private function isRelativeSystemLink(): bool
     {
         $slashIdx = strpos($this->url, self::LINK_SLASH);
         if (false === $slashIdx) {
@@ -565,7 +605,7 @@ class Link
      *
      * @return bool
      */
-    protected function isSystemLink()
+    protected function isSystemLink(): bool
     {
         // a. Is the url relative, starting with '/'?
         // b. Is the url related to the current running PMF system?
@@ -581,7 +621,7 @@ class Link
      *
      * @return bool
      */
-    protected function isHomeIndex()
+    protected function isHomeIndex(): bool
     {
         if (!$this->isSystemLink()) {
             return false;
@@ -652,7 +692,7 @@ class Link
      *
      * @return string
      */
-    public function getSEOItemTitle($title = '')
+    public function getSEOItemTitle($title = ''): string
     {
         if ('' === $title) {
             $title = $this->itemTitle;
@@ -664,19 +704,19 @@ class Link
         // Use '_' for some other characters for:
         // 1. avoiding regexp match break;
         // 2. improving the reading.
-        $itemTitle = str_replace(array('-', "'", '/', '&#39'), '_', $itemTitle);
+        $itemTitle = str_replace(['-', "'", '/', '&#39'], '_', $itemTitle);
         // 1. Remove any CR LF sequence
         // 2. Use a '-' for the words separation
         $itemTitle = Strings::preg_replace('/\s/m', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(
-            array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>', '%'),
+            ['+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>', '%'],
             '',
             $itemTitle
         );
         // Hack: move some chars to "similar" but plain ASCII chars
         $itemTitle = str_replace(
-            array(
+            [
                 'à',
                 'è',
                 'é',
@@ -698,8 +738,8 @@ class Link
                 'ų',
                 'ū',
                 'ž',
-            ),
-            array(
+            ],
+            [
                 'a',
                 'e',
                 'e',
@@ -721,13 +761,12 @@ class Link
                 'u',
                 'u',
                 'z',
-            ),
+            ],
             $itemTitle
         );
-        // Clean up
-        $itemTitle = Strings::preg_replace('/-[\-]+/m', '-', $itemTitle);
 
-        return $itemTitle;
+        // Clean up
+        return Strings::preg_replace('/-[\-]+/m', '-', $itemTitle);
     }
 
     /**
@@ -755,6 +794,20 @@ class Link
      */
     public function getCurrentUrl(): string
     {
-        return $this->config->getDefaultUrl() . Strings::htmlspecialchars(substr($_SERVER['REQUEST_URI'], 1));
+        $defaultUrl = $this->config->getDefaultUrl();
+        $url = Filter::filterVar($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+        $parsedUrl = parse_url($url);
+
+        if (isset($parsedUrl['query'])) {
+            parse_str($parsedUrl['query'], $parameters);
+
+            if (!isset(self::$allowedActionParameters[$parameters['action']])) {
+                return $defaultUrl;
+            }
+
+            return $defaultUrl . Strings::htmlspecialchars(substr($url, 1));
+        }
+
+        return $defaultUrl;
     }
 }

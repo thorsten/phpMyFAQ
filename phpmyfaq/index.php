@@ -405,7 +405,7 @@ if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$
 //
 // Found an action request?
 //
-if (!isset($allowedVariables[$action])) {
+if (!isset(Link::$allowedActionParameters[$action])) {
     $action = 'main';
 }
 

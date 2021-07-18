@@ -184,6 +184,7 @@ $botIgnoreList = [
  * Allowed 'action' variables for GET. DO NOT CHANGE!
  *
  * @var array
+ * @deprecated will be removed in v3.1
  */
 $allowedVariables = [
     'add' => 1,
