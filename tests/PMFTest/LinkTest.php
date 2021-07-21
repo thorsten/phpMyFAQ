@@ -34,9 +34,6 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkTest extends TestCase
 {
-    /** @var Sqlite3 */
-    private $dbHandle;
-
     /** @var Link */
     private $link;
 
@@ -50,12 +47,12 @@ class LinkTest extends TestCase
     {
         parent::setUp();
 
-        Strings::init('en');
+        Strings::init();
 
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
-        $this->dbHandle = new Sqlite3();
-        $this->config = new Configuration($this->dbHandle);
+        $dbHandle = new Sqlite3();
+        $this->config = new Configuration($dbHandle);
         $this->config->config['security.useSslOnly'] = 'true';
     }
 
@@ -78,10 +75,10 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, array()));
+        $this->assertFalse($method->invokeArgs($this->link, []));
 
         $this->link = new Link('https://faq.example.org/my-test-faq/index.php', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, array()));
+        $this->assertTrue($method->invokeArgs($this->link, []));
     }
 
     /**
@@ -94,13 +91,13 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, array()));
+        $this->assertFalse($method->invokeArgs($this->link, []));
 
         $this->link = new Link('https://faq.example.org/my-test-faq/index.php#foobar', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, array()));
+        $this->assertFalse($method->invokeArgs($this->link, []));
 
         $this->link = new Link('#foobar', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, array()));
+        $this->assertTrue($method->invokeArgs($this->link, []));
     }
 
     /**
@@ -113,7 +110,7 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, array()));
+        $this->assertTrue($method->invokeArgs($this->link, []));
     }
 
     /**
@@ -126,10 +123,10 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, array()));
+        $this->assertTrue($method->invokeArgs($this->link, []));
 
         $this->link = new Link('faq.example.org/my-test-faq/', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, array()));
+        $this->assertFalse($method->invokeArgs($this->link, []));
     }
 
     /**
@@ -169,14 +166,14 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
-        $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, []));
 
         $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction',
             $this->config);
-        $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, []));
 
         $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar&action=noaction', $this->config);
-        $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, []));
     }
 
     /**
@@ -189,10 +186,10 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
-        $this->assertEquals(array('main' => 'foo=bar'), $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('main' => 'foo=bar'), $method->invokeArgs($this->link, []));
 
         $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar#baz', $this->config);
-        $this->assertEquals(array('main' => 'foo=bar', 'fragment' => 'baz'), $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('main' => 'foo=bar', 'fragment' => 'baz'), $method->invokeArgs($this->link, []));
     }
 
     /**

@@ -27,14 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkVerifierTest extends TestCase
 {
-    /** @var \phpMyFAQ\Database\Sqlite3  */
-    private $dbHandle;
-
     /** @var  LinkVerifier */
     private $linkVerifier;
-
-    /** @var  Configuration */
-    private $config;
 
     /**
      * Prepares the environment before running a test.
@@ -43,17 +37,17 @@ class LinkVerifierTest extends TestCase
     {
         parent::setUp();
 
-        Strings::init('en');
+        Strings::init();
 
         $config = new stdClass();
         $config->config_name = 'foo';
         $config->config_value = '';
 
-        $this->dbHandle = $this->getMockBuilder('phpMyFAQ\Database\Sqlite3')->disableOriginalConstructor()->getMock();
-        $this->dbHandle->method('fetchAll')->willReturn([$config]);
+        $dbHandle = $this->getMockBuilder('phpMyFAQ\Database\Sqlite3')->disableOriginalConstructor()->getMock();
+        $dbHandle->method('fetchAll')->willReturn([$config]);
 
-        $this->config       = new Configuration($this->dbHandle);
-        $this->linkVerifier = new LinkVerifier($this->config);
+        $config1 = new Configuration($dbHandle);
+        $this->linkVerifier = new LinkVerifier($config1);
     }
 
     /**
