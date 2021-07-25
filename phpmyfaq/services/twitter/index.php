@@ -17,6 +17,7 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Abraham\TwitterOAuth\TwitterOAuthException;
 
 //
 // Prepend and start the PHP session
@@ -45,6 +46,11 @@ $connection = new TwitterOAuth(
     $accessToken['oauth_token'],
     $accessToken['oauth_token_secret']
 );
+try {
+    $connection->setApiVersion('2');
+} catch (TwitterOAuthException $e) {
+    // Handle exception
+}
 
 $content = $connection->get('account/verify_credentials');
 

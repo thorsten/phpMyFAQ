@@ -24,6 +24,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added possibility to login via email address (Thorsten)
 - updated to Bootstrap v4.6 (Thorsten)
 - updated to Composer v2 and improved build (Alexander M. Turek, Thorsten)
+- updated to Twitter API v2 (Thorsten)
 - improved install and update scripts (Thorsten)
 - removed REST API v1 (Thorsten)
 - removed RSS support (Thorsten)
