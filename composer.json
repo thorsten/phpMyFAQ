@@ -37,7 +37,7 @@
     "tecnickcom/tcpdf": "~6.0",
     "elasticsearch/elasticsearch": "7.13.*",
     "monolog/monolog": "^2.2",
-    "abraham/twitteroauth": "^2.0.1",
+    "abraham/twitteroauth": "^3.1.0",
     "myclabs/deep-copy": "~1.0",
     "ext-curl": "*",
     "ext-fileinfo": "*",
