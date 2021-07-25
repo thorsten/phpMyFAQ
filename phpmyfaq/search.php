@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -38,6 +39,10 @@ try {
 } catch (Exception $e) {
     // @todo handle the exception
 }
+
+$faq = new Faq($faqConfig);
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
 
 // Get possible user input
 $inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_UNSAFE_RAW);
@@ -118,7 +123,9 @@ if (!is_null($inputTag) && '' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, function ($a, $b) { return ($b - $a); });
+        uasort($relatedTags, function ($a, $b) {
+            return ($b - $a);
+        });
         $numTags = 0;
         $relTags = '';
 
@@ -149,6 +156,13 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     $faqSearch->setCategoryId((int) $inputCategory);
 
     $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
+
+    foreach ($searchResults as $faqKey => $faqValue) {
+        $checkedFaq = $faq->getRecordResult($faqValue->id, $faqValue->lang);
+        if (0 === $checkedFaq->num_rows) {
+            unset($searchResults[$faqKey]);
+        }
+    }
 
     $faqSearchResult->reviewResultSet($searchResults);
 
