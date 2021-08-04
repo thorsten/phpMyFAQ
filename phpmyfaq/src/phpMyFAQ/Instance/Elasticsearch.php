@@ -41,34 +41,25 @@ class Elasticsearch
      * @var array<string, mixed>
      */
     private $mappings = [
-        'faqs' => [
-            '_source' => [
-                'enabled' => true
+        '_source' => [
+            'enabled' => true
+        ],
+        'properties' => [
+            'question' => [
+                'analyzer' => 'autocomplete',
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
-            'properties' => [
-                'id' => [
-                    'type' => 'integer'
-                ],
-                'question' => [
-                    'type' => 'text',
-                    'analyzer' => 'autocomplete',
-                    'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
-                ],
-                'answer' => [
-                    'type' => 'text',
-                    'analyzer' => 'autocomplete',
-                    'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
-                ],
-                'keywords' => [
-                    'type' => 'text',
-                    'analyzer' => 'autocomplete',
-                    'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
-                ],
-                'categories' => [
-                    'type' => 'text',
-                    'analyzer' => 'autocomplete',
-                    'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
-                ]
+            'answer' => [
+                'analyzer' => 'autocomplete',
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
+            ],
+            'keywords' => [
+                'analyzer' => 'autocomplete',
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
+            ],
+            'categories' => [
+                'analyzer' => 'autocomplete',
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ]
         ]
     ];
@@ -150,7 +141,6 @@ class Elasticsearch
         if (0 === count($response[$this->esConfig['index']]['mappings'])) {
             $params = [
                 'index' => $this->esConfig['index'],
-                'type' => $this->esConfig['type'],
                 'body' => $this->mappings
             ];
 
@@ -194,7 +184,6 @@ class Elasticsearch
     {
         $params = [
             'index' => $this->esConfig['index'],
-            'type' => $this->esConfig['type'],
             'id' => $faq['solution_id'],
             'body' => [
                 'id' => $faq['id'],
@@ -229,7 +218,6 @@ class Elasticsearch
             $params['body'][] = [
                 'index' => [
                     '_index' => $this->esConfig['index'],
-                    '_type' => $this->esConfig['type'],
                     '_id' => $faq['solution_id'],
                 ]
             ];
@@ -274,7 +262,6 @@ class Elasticsearch
     {
         $params = [
             'index' => $this->esConfig['index'],
-            'type' => $this->esConfig['type'],
             'id' => $faq['solution_id'],
             'body' => [
                 'doc' => [
@@ -301,7 +288,6 @@ class Elasticsearch
     {
         $params = [
             'index' => $this->esConfig['index'],
-            'type' => $this->esConfig['type'],
             'id' => $solutionId
         ];
 

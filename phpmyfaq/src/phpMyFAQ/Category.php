@@ -760,9 +760,9 @@ class Category
      */
     public function addCategoryLink(
         string $sids,
-        $categoryId,
+        int $categoryId,
         string $categoryName,
-        string $description,
+        $description = '',
         $hasChildren = false,
         $isActive = false
     ): string {

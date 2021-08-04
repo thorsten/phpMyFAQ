@@ -72,7 +72,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     {
         $searchParams = [
             'index' => $this->esConfig['index'],
-            'type' => $this->esConfig['type'],
             'size' => 100,
             'body' => [
                 'query' => [
@@ -153,7 +152,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     {
         $searchParams = [
             'index' => $this->esConfig['index'],
-            'type' => $this->esConfig['type'],
             'size' => 100,
             'body' => [
                 'query' => [
