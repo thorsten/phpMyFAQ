@@ -44,9 +44,9 @@ class Mysqli extends SearchDatabase
      *
      * @param  string $searchTerm Search term
      * @throws
-     * @return mysqli_result
+     * @return bool|mysqli_result
      */
-    public function search(string $searchTerm): mysqli_result
+    public function search(string $searchTerm)
     {
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
@@ -116,9 +116,11 @@ class Mysqli extends SearchDatabase
 
                 $this->resultSet = $this->config->getDb()->query($query);
             }
+
+            return $this->resultSet;
         }
 
-        return $this->resultSet;
+        return false;
     }
 
     /**
