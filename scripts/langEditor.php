@@ -16,7 +16,20 @@
  * @link      https://www.phpmyfaq.de
  * @since     2021-08-11
  */
-	
+
+//checking for sintax errors to prevent crashes when exporting the file to the application
+if ($_POST && key_exists("sintaxCheck", $_POST) && $_POST["sintaxCheck"] == 1 && key_exists("output", $_POST)) {
+	echo "check!!";
+	$lines = explode("\n", $_POST["output"]);
+	foreach ($lines as $line) {
+		if (strlen(trim($line)) > 0) {
+			echo "<<<<" . $line . ">>>>";
+			eval($line);
+		}
+	}
+	echo "{sintaxCheckPassed}";
+	exit;
+}
 ?>
 
 <style>
@@ -55,11 +68,26 @@
 		height: 500px;
 		display: block;
 		margin-top: 10px;
+		background-color: #EEE;
+		color: #666;
 	}
 	
 	.warning {
 		color: red;
 		margin: 10px 0px;
+	}
+	
+	.copy_from_source {
+		text-decoration: none;
+		background-color: #DDD;
+		color: #000;
+		padding: 0px 3px;
+		border: 1px solid #666;
+		font-size: 16px;
+	}
+	
+	#sintax_check_message {
+		margin-top: 10px;
 	}
 </style>
 
@@ -86,8 +114,8 @@ function renderTargetTableLine($index, &$pmfLangSource, &$pmfLangTarget, &$langC
 	} else {
 		echo '<em><strong>String not found in source file</strong></em>';
 	}
-	echo '
-			</td>
+	echo '</td>
+			<td class="nowrap"><a class="copy_from_source" title="Copy from source" href="#" onclick="copyFromSource(this); return false;">&raquo;</td>
 			<td style="width: 50%">
 				<textarea style="width: 100%;" class="target ' . $class . '">' . htmlspecialchars($targetEntry) . '</textarea>
 			</td>
@@ -106,6 +134,7 @@ function renderSourceTableLine($index, &$pmfLangSource, &$pmfLangTarget, &$langC
 		<tr class="' . $class . '">
 			<td class="nowrap key">' . $index . '</td>
 			<td style="width: 50%;" class="source">' . htmlspecialchars($sourceEntry) . '</td>
+			<td class="nowrap"><a class="copy_from_source" title="Copy from source" href="#" onclick="copyFromSource(this); return false;">&raquo;</td>
 			<td style="width: 50%">
 				<textarea style="width: 100%;" class="target ' . $class . '"></textarea>
 			</td>
@@ -127,7 +156,10 @@ if ($_POST) {
 				$indexSource[] = trim(substr($lineSource, 0, strpos($lineSource, '=')));
 			}
 			if (strpos($lineSource, '$LANG_CONF') === 0) {
+				//checking for sintax errors on the original file, just to be sure
+				echo '<div id="sintax_error">Sintax error on <strong>source</strong> file: <pre>'. $lineSource. '</pre></div>';
 				eval(str_replace('$LANG_CONF', '$langConfSource', $lineSource));
+				echo '<script> document.getElementById("sintax_error").remove(); </script>';
 				$indexSource[] = trim(substr($lineSource, 0, strpos($lineSource, '=')));
 				$lineSource = str_replace('$LANG_CONF', '$langConfSource', $lineSource);
 				$idx = trim(substr($lineSource, 0, strpos($lineSource, '=')));
@@ -141,7 +173,9 @@ if ($_POST) {
 				$indexTarget[] = trim(substr($lineTarget, 0, strpos($lineTarget, '=')));
 			}
 			if (strpos($lineTarget, '$LANG_CONF') === 0) {
+				echo '<div id="sintax_error">Sintax error on <strong>target</strong> file: <pre>'. $lineTarget . '</pre></div>';
 				eval(str_replace('$LANG_CONF', '$langConfTarget', $lineTarget));
+				echo '<script> document.getElementById("sintax_error").remove(); </script>';
 				$indexTarget[] = trim(substr($lineTarget, 0, strpos($lineTarget, '=')));
 				$lineTarget = str_replace('$LANG_CONF', '$langConfTarget', $lineTarget);
 				$idx = trim(substr($lineTarget, 0, strpos($lineTarget, '=')));
@@ -159,6 +193,7 @@ if ($_POST) {
 				<tr>
 					<th>Key</th>
 					<th>Source string</th>
+					<th></th>
 					<th>Target string</th>
 				</tr>
 			</thead>
@@ -169,10 +204,10 @@ if ($_POST) {
 					}
 					echo '
 						<tr>
-							<td colspan="3">&nbsp;</td>
+							<td colspan="4">&nbsp;</td>
 						</tr>
 						<tr>
-							<th colspan="3">Strings not found on target file</td>
+							<th colspan="4">Strings not found on target file</td>
 						</tr>
 					';
 					foreach ($indexSource as $index) {
@@ -184,9 +219,14 @@ if ($_POST) {
 		<br /><br />
 		
 		<button id="generate">Generate target file content</button>
-		<textarea id="output" placeholder="The content of your translated file will appear here"></textarea>
+		<div id="sintax_check_message"></div>
+		<textarea readonly="readonly" id="output" placeholder="The content of your translated file will appear here"></textarea>
 		
 		<script>
+			function copyFromSource(btn) {
+				btn.parentElement.nextElementSibling.querySelector(".target").value = btn.parentElement.previousElementSibling.innerHTML;
+			}
+		
 			var ready = (callback) => {
 				if (document.readyState != "loading") {
 					callback();
@@ -199,6 +239,8 @@ if ($_POST) {
 				document.querySelector("#generate").addEventListener("click", (e) => { 
 					var textarea = document.querySelector("#output");
 					var output = '';
+					var sintaxCheckMessage = document.querySelector("#sintax_check_message");
+					sintaxCheckMessage.innerHTML = "";
 					document.querySelectorAll(".target").forEach(target => {
 						var value = target.value.replaceAll("\n", "").trim();
 						if (value.length === 0) {
@@ -212,6 +254,26 @@ if ($_POST) {
 						output += key + " = " + value + ";\n";
 					})
 					textarea.value = output;
+
+					//sending an ajax request with the output to check for possible sintax errors and typos
+					var xhttp = new XMLHttpRequest();
+					xhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							if (this.responseText.substr(this.responseText.length - 19, 19) === "{sintaxCheckPassed}") {
+								sintaxCheckMessage.style.color = "green";
+								sintaxCheckMessage.innerHTML = 'No sintax errors found! You are good to go.';
+							} else {
+								var lastLineErrorBegin = this.responseText.lastIndexOf("<<<<");
+								var lastLineErrorEnd = this.responseText.lastIndexOf(">>>>");
+								var line = this.responseText.substr(lastLineErrorBegin + 4, lastLineErrorEnd - lastLineErrorBegin - 4);
+								sintaxCheckMessage.style.color = "red";
+								sintaxCheckMessage.innerHTML = 'Sintax error on the following line: <pre>' + line + '</pre>';
+							}
+						}
+					};
+					xhttp.open("POST", "langEditor.php", true);
+					xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					xhttp.send("sintaxCheck=1&output=" + document.getElementById("output").value);
 				});
 			});
 		</script>
