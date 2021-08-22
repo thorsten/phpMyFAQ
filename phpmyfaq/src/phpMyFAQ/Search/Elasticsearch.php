@@ -32,12 +32,12 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     /**
      * @var Client
      */
-    private $client = null;
+    private $client;
 
     /**
      * @var array
      */
-    private $esConfig = [];
+    private $esConfig;
 
     /**
      * @var string
@@ -69,8 +69,9 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      *
      * @return array
      */
-    public function search(string $searchTerm)
+    public function search(string $searchTerm): array
     {
+        $this->resultSet = [];
         $searchParams = [
             'index' => $this->esConfig['index'],
             'type' => $this->esConfig['type'],
@@ -100,10 +101,10 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         try {
             $result = $this->client->search($searchParams);
         } catch (NoNodesAvailableException $e) {
-            return [];
+            $this->resultSet = [];
         }
 
-        if (0 !== $result['hits']['total']['value']) {
+        if (0 !== $result['hits']['total']['value'] || 0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
@@ -186,7 +187,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             return [];
         }
 
-        if (0 !== $result['hits']['total']['value']) {
+        if (0 !== $result['hits']['total']['value'] || 0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
