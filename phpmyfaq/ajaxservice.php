@@ -157,7 +157,7 @@ switch ($action) {
         $type = Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW);
         $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsId = Filter::filterInput(INPUT_POST, 'newsId', FILTER_VALIDATE_INT);
-        $username = Filter::filterInput(INPUT_POST, 'user', FILTER_UNSAFE_RAW);
+        $username = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
         $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_UNSAFE_RAW);
 
@@ -586,7 +586,7 @@ switch ($action) {
         $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_UNSAFE_RAW);
         $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW) ?? false;
 
         if (!$registration->isDomainWhitelisted($email)) {
             $message = ['error' => 'The domain is not whitelisted.'];
