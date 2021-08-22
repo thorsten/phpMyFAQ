@@ -51,7 +51,6 @@ $PMF_LANG['msgContact'] = "Kontakt";
 $PMF_LANG['msgHome'] = "Startseite";
 $PMF_LANG['msgNews'] = "News";
 $PMF_LANG['msgUserOnline'] = " Besucher online";
-$PMF_LANG['msgXMLExport'] = "XML-Export";
 $PMF_LANG['msgBack2Home'] = "Zurück zur Startseite";
 
 // Contentpages
@@ -700,7 +699,6 @@ $PMF_LANG['ad_export_download_view'] = "Herunterladen oder Inline ansehen?";
 $PMF_LANG['ad_export_download'] = "Herunterladen";
 $PMF_LANG['ad_export_view'] = "Inline ansehen";
 $PMF_LANG['ad_export_gen_xhtml'] = "Als XHTML-Datei exportieren";
-$PMF_LANG['ad_export_gen_docbook'] = "Erstelle eine DocBook XML Datei";
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = "Nachricht";
@@ -1060,7 +1058,7 @@ $PMF_LANG['ad_stat_report_language'] = "Sprache";
 $PMF_LANG['ad_stat_report_id'] = "ID";
 $PMF_LANG['ad_stat_report_sticky'] = "Wichtige FAQ";
 $PMF_LANG['ad_stat_report_title'] = "Frage";
-$PMF_LANG['ad_stat_report_creadtion_date'] = "Datum";
+$PMF_LANG['ad_stat_report_creation_date'] = "Datum";
 $PMF_LANG['ad_stat_report_owner'] = "Autor";
 $PMF_LANG['ad_stat_report_last_modified_person'] = "Letzter Autor";
 $PMF_LANG['ad_stat_report_url'] = "URL";
