@@ -446,7 +446,6 @@ class User
         }
 
         // is $login valid?
-        $login = (string)$login;
         if (!$this->isValidLogin($login)) {
             $this->errors[] = self::ERROR_USER_LOGINNAME_TOO_SHORT;
 
