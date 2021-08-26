@@ -12,7 +12,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
- * @copyright 2004-2020 phpMyFAQ Team
+ * @copyright 2004-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2004-12-16
@@ -28,7 +28,7 @@ namespace phpMyFAQ;
 class Ldap
 {
     /**
-     * Errorlog.
+     * Error.
      *
      * @var string
      */
@@ -44,15 +44,15 @@ class Ldap
     /**
      * @var array
      */
-    private $ldapConfig = [];
+    private $ldapConfig;
 
     /**
      * @var array
      */
-    private $config = [];
+    private $config;
 
     /**
-     * The connection handle.
+     * An LDAP link identifier, returned by ldap_connect()
      *
      * @return resource
      */
@@ -80,17 +80,22 @@ class Ldap
      * Connects to given LDAP server with given credentials.
      *
      * @param string $ldapServer
-     * @param int    $ldapPort
+     * @param int $ldapPort
      * @param string $ldapBase
      * @param string $ldapUser
      * @param string $ldapPassword
      *
      * @return bool
      */
-    public function connect($ldapServer, $ldapPort, $ldapBase, $ldapUser = '', $ldapPassword = '')
-    {
+    public function connect(
+        string $ldapServer,
+        int $ldapPort,
+        string $ldapBase,
+        $ldapUser = '',
+        $ldapPassword = ''
+    ): bool {
         // Sanity checks
-        if ('' === $ldapServer || '' === $ldapPort || '' === $ldapBase) {
+        if ('' === $ldapServer || '' === $ldapBase) {
             return false;
         }
 
@@ -156,7 +161,7 @@ class Ldap
      *
      * @return bool
      */
-    public function bind($rdn = '', $password = '')
+    public function bind($rdn = '', $password = ''): bool
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
@@ -178,7 +183,7 @@ class Ldap
      *
      * @return string
      */
-    public function getMail($username)
+    public function getMail(string $username)
     {
         return $this->getLdapData($username, 'mail');
     }
@@ -187,11 +192,11 @@ class Ldap
      * Returns specific data from LDAP.
      *
      * @param string $username Username
-     * @param string $data     MapKey
+     * @param string $data MapKey
      *
      * @return string|false
      */
-    private function getLdapData($username, $data)
+    private function getLdapData(string $username, string $data)
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
@@ -201,7 +206,7 @@ class Ldap
 
         if (!array_key_exists($data, $this->ldapConfig['ldap_mapping'])) {
             $this->error = sprintf(
-                'The requested datafield "%s" does not exist in LDAP mapping configuration.',
+                'The requested data field "%s" does not exist in LDAP mapping configuration.',
                 $data
             );
 
@@ -222,10 +227,11 @@ class Ldap
             );
         }
 
-        $fields = array($this->ldapConfig['ldap_mapping'][$data]);
-        $sr = ldap_search($this->ds, $this->base, $filter, $fields);
+        $fields = [$this->ldapConfig['ldap_mapping'][$data]];
 
-        if (false === $sr) {
+        $searchResult = ldap_search([$this->ds], $this->base, $filter, $fields);
+
+        if (!$searchResult) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to search for "%s" (Error: %s)',
@@ -236,9 +242,7 @@ class Ldap
             return false;
         }
 
-        $entryId = ldap_first_entry($this->ds, $sr);
-
-        if (false === $entryId) {
+        if (!isset($searchResult[0])) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Cannot get the value(s). Error: %s',
@@ -248,9 +252,9 @@ class Ldap
             return false;
         }
 
-        $values = ldap_get_values($this->ds, $entryId, $fields[0]);
+        $values = ldap_get_entries($this->ds, $searchResult[0]);
 
-        return $values[0];
+        return $values[0][$this->ldapConfig['ldap_mapping'][$data]][0];
     }
 
     /**
@@ -260,11 +264,11 @@ class Ldap
      *
      * @return string
      */
-    public function quote($string)
+    public function quote(string $string): string
     {
         return str_replace(
-            array('\\', ' ', '*', '(', ')'),
-            array('\\5c', '\\20', '\\2a', '\\28', '\\29'),
+            ['\\', ' ', '*', '(', ')'],
+            ['\\5c', '\\20', '\\2a', '\\28', '\\29'],
             $string
         );
     }
@@ -276,7 +280,7 @@ class Ldap
      *
      * @return string
      */
-    public function getDn($username)
+    public function getDn(string $username)
     {
         return $this->getLdapDn($username);
     }
@@ -288,7 +292,7 @@ class Ldap
      *
      * @return string
      */
-    private function getLdapDn($username)
+    private function getLdapDn(string $username)
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
@@ -301,7 +305,7 @@ class Ldap
             $this->config->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
-        $sr = ldap_search($this->ds, $this->base, $filter);
+        $sr = ldap_search([$this->ds], $this->base, $filter);
 
         if (false === $sr) {
             $this->errno = ldap_errno($this->ds);
@@ -336,7 +340,7 @@ class Ldap
      *
      * @return string
      */
-    public function getCompleteName($username)
+    public function getCompleteName(string $username)
     {
         return $this->getLdapData($username, 'name');
     }
@@ -348,7 +352,7 @@ class Ldap
      *
      * @return string
      */
-    public function error($ds = null)
+    public function error($ds = null): string
     {
         if ($ds === null) {
             $ds = $this->ds;
