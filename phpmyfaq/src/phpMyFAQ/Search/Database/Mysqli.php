@@ -118,9 +118,11 @@ class Mysqli extends SearchDatabase
 
                 $this->resultSet = $this->config->getDb()->query($query);
             }
+
+            return $this->resultSet;
         }
 
-        return $this->resultSet;
+        return false;
     }
 
     /**

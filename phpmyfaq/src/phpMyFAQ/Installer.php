@@ -971,7 +971,7 @@ class Installer
             }
         }
 
-        $link = new Link(null, $configuration);
+        $link = new Link('', $configuration);
 
         // add main configuration, add personal settings
         $this->mainConfig['main.metaPublisher'] = $realname;

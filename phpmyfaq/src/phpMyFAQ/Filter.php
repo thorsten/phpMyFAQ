@@ -63,7 +63,7 @@ class Filter
      *
      * @return mixed
      */
-    public static function filterVar($variable, $filter, $default = null)
+    public static function filterVar($variable, int $filter, $default = null)
     {
         $return = filter_var($variable, $filter, $default);
 
@@ -75,7 +75,7 @@ class Filter
      *
      * @return string
      */
-    public static function getFilteredQueryString()
+    public static function getFilteredQueryString(): string
     {
         $urlData = [];
         $cleanUrlData = [];

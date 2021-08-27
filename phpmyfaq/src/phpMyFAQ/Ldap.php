@@ -52,7 +52,7 @@ class Ldap
     private $config;
 
     /**
-     * The connection handle.
+     * An LDAP link identifier, returned by ldap_connect()
      *
      * @var resource
      */
@@ -80,7 +80,7 @@ class Ldap
      * Connects to given LDAP server with given credentials.
      *
      * @param string $ldapServer
-     * @param int    $ldapPort
+     * @param int $ldapPort
      * @param string $ldapBase
      * @param string $ldapUser
      * @param string $ldapPassword
@@ -225,9 +225,10 @@ class Ldap
         }
 
         $fields = [$this->ldapConfig['ldap_mapping'][$data]];
-        $sr = ldap_search($this->ds, $this->base, $filter, $fields);
 
-        if (!$sr) {
+        $searchResult = ldap_search([$this->ds], $this->base, $filter, $fields);
+
+        if (!$searchResult) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to search for "%s" (Error: %s)',
@@ -238,9 +239,8 @@ class Ldap
             return false;
         }
 
-        $entryId = ldap_first_entry($this->ds, $sr);
 
-        if (!$entryId) {
+        if (!isset($searchResult[0])) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Cannot get the value(s). Error: %s',
@@ -250,9 +250,9 @@ class Ldap
             return false;
         }
 
-        $values = ldap_get_values($this->ds, $entryId, $fields[0]);
+        $values = ldap_get_entries($this->ds, $searchResult[0]);
 
-        return $values[0];
+        return $values[0][$this->ldapConfig['ldap_mapping'][$data]][0];
     }
 
     /**
@@ -264,8 +264,8 @@ class Ldap
     public function quote(string $string): string
     {
         return str_replace(
-            array('\\', ' ', '*', '(', ')'),
-            array('\\5c', '\\20', '\\2a', '\\28', '\\29'),
+            ['\\', ' ', '*', '(', ')'],
+            ['\\5c', '\\20', '\\2a', '\\28', '\\29'],
             $string
         );
     }
@@ -300,7 +300,7 @@ class Ldap
             $this->config->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
-        $sr = ldap_search($this->ds, $this->base, $filter);
+        $sr = ldap_search([$this->ds], $this->base, $filter);
 
         if (false === $sr) {
             $this->errno = ldap_errno($this->ds);

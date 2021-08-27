@@ -183,7 +183,7 @@ class CurrentUser extends User
         }
 
         // authenticate user by login and password
-        foreach ($this->authContainer as $name => $auth) {
+        foreach ($this->authContainer as $authSource => $auth) {
             ++$count;
 
             // $auth is an invalid Auth object, so continue
@@ -233,7 +233,7 @@ class CurrentUser extends User
                 WHERE
                     user_id = %d",
                 Database::getTablePrefix(),
-                $this->config->getDb()->escape($name),
+                $this->config->getDb()->escape($authSource),
                 $this->getUserId()
             );
             $result = $this->config->getDb()->query($update);
@@ -497,7 +497,7 @@ class CurrentUser extends User
         }
         // session-id not found in user table
         $session_info = $user->getSessionInfo();
-        $session_id = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
+        $session_id = ($session_info['session_id'] ?? '');
         if ($session_id == '' || $session_id != session_id()) {
             return null;
         }
@@ -535,7 +535,7 @@ class CurrentUser extends User
      *
      * @return null|CurrentUser
      */
-    public static function getFromCookie(Configuration $config)
+    public static function getFromCookie(Configuration $config): ?CurrentUser
     {
         if (!isset($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME])) {
             return null;
@@ -570,18 +570,6 @@ class CurrentUser extends User
     public function setSessionTimeout(int $timeout): void
     {
         $this->sessionTimeout = abs($timeout);
-    }
-
-    /**
-     * Sets the number of minutes when the session-ID needs to be
-     * updated. By setting the session-ID timeout to zero, the
-     * session-ID will be updated on each click.
-     *
-     * @param int $timeout Timeout
-     */
-    public function setSessionIdTimeout(int $timeout): void
-    {
-        $this->sessionIdTimeout = abs($timeout);
     }
 
     /**
@@ -623,7 +611,7 @@ class CurrentUser extends User
      *
      * @return bool
      */
-    protected function setSuccess($success)
+    protected function setSuccess(bool $success): bool
     {
         $loginState = (int)$success;
         $this->loginAttempts = 0;
@@ -681,7 +669,7 @@ class CurrentUser extends User
      *
      * @return bool
      */
-    protected function isFailedLastLoginAttempt()
+    protected function isFailedLastLoginAttempt(): bool
     {
         $select = sprintf(
             "
