@@ -11,7 +11,7 @@
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2020 phpMyFAQ Team
+ * @copyright 2009-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-03-01
@@ -96,12 +96,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param string $login    Loginname
-     * @param string $password Password
+     * @param string $login    Login name
+     * @param string $pass Password
      *
      * @return bool
      */
-    public function changePassword($login, $password): bool
+    public function changePassword(string $login, string $pass): bool
     {
         return true;
     }
@@ -109,11 +109,11 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      *
      * @return bool
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         return true;
     }
@@ -128,13 +128,13 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login        Loginname
-     * @param string $password     Password
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param string $password Password
+     * @param array|null $optionalData Optional data
      *
      * @return bool
      */
-    public function checkPassword($login, $password, array $optionalData = null): bool
+    public function checkPassword(string $login, string $password, array $optionalData = null): bool
     {
         if ('' === trim($password)) {
             $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
@@ -207,12 +207,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * Adds a new user account to the authentication table.
      * Returns true on success, otherwise false.
      *
-     * @param  string $login
-     * @param  string $password
-     * @param  string $domain
+     * @param string $login
+     * @param string $password
+     * @param string $domain
      * @return bool
      */
-    public function add($login, $password, $domain = ''): bool
+    public function add(string $login, string $password, $domain = ''): bool
     {
         $user = new User($this->config);
         $result = $user->createUser($login, null, $domain);
@@ -233,10 +233,10 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Set user information from LDAP
         $user->setUserData(
-            array(
+            [
                 'display_name' => $this->ldap->getCompleteName($login),
                 'email' => $this->ldap->getMail($login),
-            )
+            ]
         );
 
         return $result;
@@ -245,12 +245,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * Returns number of characters of name, 0 will be returned if it fails.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param array|null $optionalData Optional data
      *
      * @return int
      */
-    public function checkLogin($login, array $optionalData = null): int
+    public function checkLogin(string $login, array $optionalData = null): int
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {

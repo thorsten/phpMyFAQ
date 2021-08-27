@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2020 phpMyFAQ Team
+ * @copyright 2009-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-03-01
@@ -32,12 +32,12 @@ class AuthHttp extends Auth implements AuthDriverInterface
      * Adds a new user account to the authentication table.
      * Returns true on success, otherwise false.
      *
-     * @param  string $login
-     * @param  string $pass
-     * @param  string $domain
+     * @param string $login
+     * @param string $password
+     * @param string $domain
      * @return bool
      */
-    public function add($login, $pass, $domain = ''): bool
+    public function add(string $login, string $password, $domain = ''): bool
     {
         $user = new User($this->config);
         $result = $user->createUser($login, null);
@@ -52,12 +52,12 @@ class AuthHttp extends Auth implements AuthDriverInterface
      * Changes the password for the account specified by login.
      * Returns true as it's not possible via HTTP Auth.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param string $pass  Password
      *
      * @return bool
      */
-    public function changePassword($login, $pass): bool
+    public function changePassword(string $login, string $pass): bool
     {
         return true;
     }
@@ -66,11 +66,11 @@ class AuthHttp extends Auth implements AuthDriverInterface
      * Deletes the user account specified by login.
      * Returns true as it's not possible via HTTP Auth.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      *
      * @return bool
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         return true;
     }
@@ -85,34 +85,33 @@ class AuthHttp extends Auth implements AuthDriverInterface
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login        Loginname
-     * @param string $pass         Password
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param string $password Password
+     * @param array|null $optionalData Optional data
      *
      * @return bool
      */
-    public function checkPassword($login, $pass, array $optionalData = null): bool
+    public function checkPassword(string $login, string $password, array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
+        }
+        if ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $password) {
+            return true;
         } else {
-            if ($_SERVER['PHP_AUTH_USER'] == $login && $_SERVER['PHP_AUTH_PW'] == $pass) {
-                return true;
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 
     /**
      * Returns 1 or 0 for true or false.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param array|null $optionalData Optional data
      *
      * @return int
      */
-    public function checkLogin($login, array $optionalData = null): int
+    public function checkLogin(string $login, array $optionalData = null): int
     {
         return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
     }

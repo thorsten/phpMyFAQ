@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2020 phpMyFAQ Team
+ * @copyright 2005-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-30
@@ -35,7 +35,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      *
      * @var AuthDriverInterface
      */
-    private $db = null;
+    private $db;
 
     /**
      * Constructor.
@@ -50,15 +50,15 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Adds a new user account to the faquserlogin table. Returns true on
+     * Adds a new user account to the "faquserlogin" table. Returns true on
      * success, otherwise false. Error messages are added to the array errors.
      *
-     * @param  string $login
-     * @param  string $pass
+     * @param string $login
+     * @param string $password
      * @param  string $domain
      * @return bool
      */
-    public function add($login, $pass, $domain = ''): bool
+    public function add(string $login, string $password, $domain = ''): bool
     {
         if ($this->checkLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
@@ -75,7 +75,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             ('%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->db->escape($login),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($password)),
             $this->db->escape($domain)
         );
 
@@ -100,12 +100,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * Checks the number of entries of given login name.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param array|null $optionalData Optional data
      *
      * @return int
      */
-    public function checkLogin($login, array $optionalData = null): int
+    public function checkLogin(string $login, array $optionalData = null): int
     {
         $check = sprintf(
             "
@@ -138,11 +138,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      *
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      *
      * @return bool
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         $delete = sprintf(
             "
@@ -178,13 +178,13 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login        Loginname
-     * @param string $password     Password
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param string $password Password
+     * @param array|null $optionalData Optional data
      *
      * @return bool
      */
-    public function checkPassword($login, $password, array $optionalData = null): bool
+    public function checkPassword(string $login, string $password, array $optionalData = null): bool
     {
         $check = sprintf(
             "
@@ -248,12 +248,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      *
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param string $pass  Password
      *
      * @return bool
      */
-    public function changePassword($login, $pass): bool
+    public function changePassword(string $login, string $pass): bool
     {
         $change = sprintf(
             "

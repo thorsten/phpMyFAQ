@@ -10,7 +10,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2020 phpMyFAQ Team
+ * @copyright 2011-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2011-06-22
@@ -31,12 +31,12 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Always returns true because of SSO.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      * @param string $pass  Password
      *
      * @return bool
      */
-    public function changePassword($login, $pass): bool
+    public function changePassword(string $login, string $pass): bool
     {
         return true;
     }
@@ -44,11 +44,11 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Always returns true because of SSO.
      *
-     * @param string $login Loginname
+     * @param string $login Login name
      *
      * @return bool
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         return true;
     }
@@ -56,13 +56,13 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Checks if the username of the remote user is equal to the login name.
      *
-     * @param string $login        Loginname
-     * @param string $pass         Password
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param string $password Password
+     * @param array|null $optionalData Optional data
      *
      * @return bool
      */
-    public function checkPassword($login, $pass, array $optionalData = null): bool
+    public function checkPassword(string $login, string $password, array $optionalData = null): bool
     {
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
@@ -80,7 +80,7 @@ class AuthSso extends Auth implements AuthDriverInterface
                 }
             }
             if ($user === $login) {
-                $this->add($login, $pass);
+                $this->add($login, $password);
 
                 return true;
             } else {
@@ -92,20 +92,18 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Always returns true because of SSO.
      *
-     * @param  string $login
-     * @param  string $pass
+     * @param string $login
+     * @param string $password
      * @param  string $domain
      * @return bool
      * @throws
      */
-    public function add($login, $pass, $domain = ''): bool
+    public function add(string $login, string $password, $domain = ''): bool
     {
         if ($this->config->get('ldap.ldapSupport')) {
             // LDAP/AD + SSO
             $authLdap = new AuthLdap($this->config);
-            $result = $authLdap->add($login, null, $domain);
-
-            return $result;
+            return $authLdap->add($login, null, $domain);
         } else {
             // SSO without LDAP/AD
             $user = new User($this->config);
@@ -116,11 +114,7 @@ class AuthSso extends Auth implements AuthDriverInterface
             }
 
             // Set user information
-            $user->setUserData(
-                array(
-                    'display_name' => $login,
-                )
-            );
+            $user->setUserData(['display_name' => $login]);
 
             return $result;
         }
@@ -129,12 +123,12 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Returns 1, if $_SERVER['REMOTE_USER'] is set.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Login name
+     * @param array|null $optionalData Optional data
      *
      * @return int
      */
-    public function checkLogin($login, array $optionalData = null): int
+    public function checkLogin(string $login, array $optionalData = null): int
     {
         return isset($_SERVER['REMOTE_USER']) ? 1 : 0;
     }
