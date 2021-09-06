@@ -53,7 +53,7 @@ class Configuration
      *
      * @param DatabaseDriver $database
      */
-    public function setDb(DatabaseDriver $database)
+    public function setDb(DatabaseDriver $database): void
     {
         $this->config['core.database'] = $database;
     }
@@ -118,7 +118,7 @@ class Configuration
      *
      * @param Instance $instance
      */
-    public function setInstance(Instance $instance)
+    public function setInstance(Instance $instance): void
     {
         $this->config['core.instance'] = $instance;
     }
@@ -138,7 +138,7 @@ class Configuration
      *
      * @param Language $language
      */
-    public function setLanguage(Language $language)
+    public function setLanguage(Language $language): void
     {
         $this->config['core.language'] = $language;
     }
@@ -234,9 +234,8 @@ class Configuration
     /**
      * Fetches all configuration items into an array.
      */
-    public function getAll()
+    public function getAll(): void
     {
-        $config = [];
         $query = sprintf(
             '
             SELECT
@@ -248,12 +247,7 @@ class Configuration
         );
 
         $result = $this->getDb()->query($query);
-        try {
-            $config = $this->getDb()->fetchAll($result);
-        } catch (Exception $e) {
-            // @todo Added proper handling of exception
-            echo $e->getMessage();
-        }
+        $config = $this->getDb()->fetchAll($result);
         foreach ($config as $items) {
             $this->config[$items->config_name] = $items->config_value;
         }
@@ -262,9 +256,9 @@ class Configuration
     /**
      * Sets the LDAP configuration.
      *
-     * @param array $ldapConfig
+     * @param string[] $ldapConfig
      */
-    public function setLdapConfig(array $ldapConfig)
+    public function setLdapConfig(array $ldapConfig): void
     {
         // Always add main LDAP server
         $this->config['core.ldapServer'][0] = [
@@ -303,7 +297,7 @@ class Configuration
     /**
      * Returns the LDAP mapping configuration.
      *
-     * @return array
+     * @return string[]
      */
     public function getLdapMapping(): array
     {
@@ -318,7 +312,7 @@ class Configuration
     /**
      * Returns the LDAP options configuration.
      *
-     * @return array
+     * @return string[]
      */
     public function getLdapOptions(): array
     {
@@ -331,21 +325,21 @@ class Configuration
     /**
      * Returns the LDAP configuration.
      *
-     * @return array
+     * @return string[]
      */
     public function getLdapConfig(): array
     {
-        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
+        return $this->config['core.ldapConfig'] ?? [];
     }
 
     /**
      * Returns the LDAP server(s).
      *
-     * @return array
+     * @return string[]
      */
     public function getLdapServer(): array
     {
-        return isset($this->config['core.ldapServer']) ? $this->config['core.ldapServer'] : [];
+        return $this->config['core.ldapServer'] ?? [];
     }
 
     /**
@@ -353,7 +347,7 @@ class Configuration
      *
      * @param Client $esClient
      */
-    public function setElasticsearch(Client $esClient)
+    public function setElasticsearch(Client $esClient): void
     {
         $this->config['core.elasticsearch'] = $esClient;
     }
@@ -371,9 +365,9 @@ class Configuration
     /**
      * Sets the Elasticsearch configuration.
      *
-     * @param array $data
+     * @param string[] $data
      */
-    public function setElasticsearchConfig(array $data)
+    public function setElasticsearchConfig(array $data): void
     {
         $this->config['core.elasticsearchConfig'] = $data;
     }
@@ -381,11 +375,11 @@ class Configuration
     /**
      * Returns the Elasticsearch configuration.
      *
-     * @return array
+     * @return string[]
      */
     public function getElasticsearchConfig(): array
     {
-        return isset($this->config['core.elasticsearchConfig']) ? $this->config['core.elasticsearchConfig'] : [];
+        return $this->config['core.elasticsearchConfig'] ?? [];
     }
 
     /**
@@ -435,7 +429,7 @@ class Configuration
     /**
      * Updates all configuration items.
      *
-     * @param array $newConfigs Array with new configuration values
+     * @param string[] $newConfigs Array with new configuration values
      *
      * @return bool
      */
@@ -451,36 +445,32 @@ class Configuration
             'core.elasticsearchConfig' // $ES
         ];
 
-        if (is_array($newConfigs)) {
-            foreach ($newConfigs as $name => $value) {
-                if (
-                    $name != 'main.phpMyFAQToken'
-                    && !in_array($name, $runtimeConfigs)
-                ) {
-                    $update = sprintf(
-                        "
-                        UPDATE
-                            %s%s
-                        SET
-                            config_value = '%s'
-                        WHERE
-                            config_name = '%s'",
-                        Database::getTablePrefix(),
-                        $this->tableName,
-                        $this->getDb()->escape(trim($value)),
-                        $name
-                    );
+        foreach ($newConfigs as $name => $value) {
+            if (
+                $name != 'main.phpMyFAQToken'
+                && !in_array($name, $runtimeConfigs)
+            ) {
+                $update = sprintf(
+                    "
+                    UPDATE
+                        %s%s
+                    SET
+                        config_value = '%s'
+                    WHERE
+                        config_name = '%s'",
+                    Database::getTablePrefix(),
+                    $this->tableName,
+                    $this->getDb()->escape(trim($value)),
+                    $name
+                );
 
-                    $this->getDb()->query($update);
-                    if (isset($this->config[$name])) {
-                        unset($this->config[$name]);
-                    }
+                $this->getDb()->query($update);
+                if (isset($this->config[$name])) {
+                    unset($this->config[$name]);
                 }
             }
-
-            return true;
         }
 
-        return false;
+        return true;
     }
 }
