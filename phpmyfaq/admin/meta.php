@@ -110,7 +110,7 @@ $metaData = $meta->getAll();
           <i aria-hidden="true" class="fa fa-trash"></i>
         </a>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#codeModal"
-                data-code-snippet="<?= $data->getPageId() ?>">
+                data-code-snippet="<?= $data->getContent() ?>">
           <i aria-hidden="true" class="fa fa-code"></i>
         </button>
       </td>
@@ -161,7 +161,7 @@ $metaData = $meta->getAll();
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary  pmf-meta-add"><?= $PMF_LANG['msgSave'] ?></button>
+        <button type="button" class="btn btn-primary pmf-meta-add"><?= $PMF_LANG['msgSave'] ?></button>
       </div>
     </div>
   </div>

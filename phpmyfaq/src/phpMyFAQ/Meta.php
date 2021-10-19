@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018-2020 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2018-08-09
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2018-2021 phpMyFAQ Team
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link  https://www.phpmyfaq.de
+ * @since 2018-08-09
  */
 
 namespace phpMyFAQ;
@@ -44,26 +44,21 @@ class Meta
     }
 
     /**
-     * @param  MetaEntity $data
+     * @param MetaEntity $data
      * @return int
      */
-    public function add(MetaEntity $data)
+    public function add(MetaEntity $data): int
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
 
         $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqmeta
-            (id, lang, page_id, type, content)
-                VALUES
-            (%d, '%s', '%s', '%s', '%s')",
+            "INSERT INTO %sfaqmeta (id, lang, page_id, type, content) VALUES (%d, '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage(),
-            $data->getPageId(),
-            $data->getType(),
-            $data->getContent()
+            $this->config->getDb()->escape($data->getPageId()),
+            $this->config->getDb()->escape($data->getType()),
+            $this->config->getDb()->escape($data->getContent())
         );
 
         $this->config->getDb()->query($query);
@@ -72,10 +67,10 @@ class Meta
     }
 
     /**
-     * @param  $metaId
+     * @param int $metaId
      * @return MetaEntity
      */
-    public function getById($metaId)
+    public function getById(int $metaId): MetaEntity
     {
         $entity = new MetaEntity();
         $query = sprintf(
@@ -101,10 +96,10 @@ class Meta
     }
 
     /**
-     * @param  $pageId
+     * @param string $pageId
      * @return MetaEntity
      */
-    public function getByPageId($pageId)
+    public function getByPageId(string $pageId): MetaEntity
     {
         $entity = new MetaEntity();
         $query = sprintf(
@@ -132,7 +127,7 @@ class Meta
     /**
      * @return MetaEntity[]
      */
-    public function getAll()
+    public function getAll(): array
     {
         $metaData = [];
         $query = sprintf(
@@ -160,18 +155,18 @@ class Meta
     }
 
     /**
-     * @param  $metaId
-     * @param  MetaEntity $data
+     * @param int $metaId
+     * @param MetaEntity $data
      * @return bool
      */
-    public function update($metaId, MetaEntity $data)
+    public function update(int $metaId, MetaEntity $data): bool
     {
         $query = sprintf(
             "UPDATE %sfaqmeta SET page_id = '%s', type = '%s', content = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $data->getPageId(),
-            $data->getType(),
-            $data->getContent(),
+            $this->config->getDb()->escape($data->getPageId()),
+            $this->config->getDb()->escape($data->getType()),
+            $this->config->getDb()->escape($data->getContent()),
             $metaId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -180,10 +175,10 @@ class Meta
     }
 
     /**
-     * @param  $id
+     * @param int $id
      * @return bool
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqmeta WHERE lang = '%s' AND id = %d",
