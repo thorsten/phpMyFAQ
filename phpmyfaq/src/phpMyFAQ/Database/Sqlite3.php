@@ -119,7 +119,9 @@ class Sqlite3 implements DatabaseDriver
     {
         $result->fetchedByPMF = true;
 
-        return $result->fetchArray();
+        $fetchedData = $result->fetchArray();
+
+        return is_array($fetchedData) ? $fetchedData : [];
     }
 
     /**
