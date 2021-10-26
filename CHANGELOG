@@ -1,9 +1,12 @@
-phpMyFAQ 3.0.9
+phpMyFAQ 3.0.10
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 3.0.10 - 2021-
+- fixed many minor bugs (Thorsten)
 
 Version 3.0.9 - 2021-04-17
 - fixed minor bugs (Thorsten)
