@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2012-2020 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-04-12
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @copyright 2012-2021 phpMyFAQ Team
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-04-12
  */
 
 namespace phpMyFAQ\Database;
@@ -31,7 +31,7 @@ class DatabaseHelper
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * Constructor.
@@ -56,14 +56,12 @@ class DatabaseHelper
      *
      * @return string
      */
-    public static function alignTablePrefix($query, $oldValue, $newValue)
+    public static function alignTablePrefix(string $query, string $oldValue, string $newValue): string
     {
         // Align DELETE FROM <prefix.tablename>
         $query = self::alignTablePrefixByPattern($query, 'DELETE FROM', $oldValue, $newValue);
         // Align INSERT INTO <prefix.tablename>
-        $query = self::alignTablePrefixByPattern($query, 'INSERT INTO', $oldValue, $newValue);
-
-        return $query;
+        return self::alignTablePrefixByPattern($query, 'INSERT INTO', $oldValue, $newValue);
     }
 
     /**
@@ -80,8 +78,12 @@ class DatabaseHelper
      *
      * @return string
      */
-    private static function alignTablePrefixByPattern($query, $startPattern, $oldValue, $newValue)
-    {
+    private static function alignTablePrefixByPattern(
+        string $query,
+        string $startPattern,
+        string $oldValue,
+        string $newValue
+    ): string {
         $return = $query;
         $matches = [];
 
@@ -104,10 +106,10 @@ class DatabaseHelper
      *
      * @return array
      */
-    public function buildInsertQueries($query, $table)
+    public function buildInsertQueries(string $query, string $table): array
     {
         if (!$result = $this->config->getDb()->query($query)) {
-            [];
+            return [];
         }
         $ret = [];
 
@@ -118,17 +120,17 @@ class DatabaseHelper
             $p2 = [];
             foreach ($row as $key => $val) {
                 $p1[] = $key;
-                if ('rights' != $key && is_numeric($val)) {
+                if ('rights' !== $key && is_numeric($val)) {
                     $p2[] = $val;
+                }
+                if (is_null($val)) {
+                    $p2[] = 'NULL';
                 } else {
-                    if (is_null($val)) {
-                        $p2[] = 'NULL';
-                    } else {
-                        $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
-                    }
+                    $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
                 }
             }
-            $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' . implode(',', $p2) . ');';
+            $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' .
+                preg_replace("/\r|\n/", "", implode(',', $p2)) . ');';
         }
 
         return $ret;
