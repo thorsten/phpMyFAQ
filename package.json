@@ -30,7 +30,7 @@
     "handlebars": "^4.0.12",
     "highlight.js": "^10.4.1",
     "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "popper.js": "^1.14.6",
     "tinymce": "^4.9.11"
   },
