@@ -164,9 +164,9 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
-## REST API v2
+## REST API v2.1
 
-The REST API v2 documentation is located [here in this repository](API.md) and on
+The REST API v2.1 documentation is located [here in this repository](API.md) and on
 [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
 ## License
