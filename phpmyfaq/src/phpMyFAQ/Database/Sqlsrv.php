@@ -118,7 +118,9 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchArray($result): ?array
     {
-        return sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+        $fetchedData = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+
+        return is_array($fetchedData) ? $fetchedData : [];
     }
 
     /**
