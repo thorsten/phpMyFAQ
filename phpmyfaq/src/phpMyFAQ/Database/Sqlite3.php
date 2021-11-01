@@ -67,14 +67,14 @@ class Sqlite3 implements DatabaseDriver
      * @param int|null $port
      * @return null|bool
      */
-    public function connect(string $host, string $user, string $password, $database = '', $port = null): ?bool
-    {
+    public function connect(
+        string $host,
+        string $user,
+        string $password,
+        string $database = '',
+        int $port = null
+    ): ?bool {
         $this->conn = new \Sqlite3($host);
-
-        if (!$this->conn) {
-            Database::errorPage($this->conn->lastErrorMsg());
-            die();
-        }
 
         return true;
     }
@@ -178,7 +178,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = ''): array
+    public function getTableStatus(string $prefix = ''): array
     {
         $arr = [];
 
@@ -200,7 +200,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return mixed $result
      */
-    public function query(string $query, $offset = 0, $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -263,7 +263,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = ''): array
+    public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',

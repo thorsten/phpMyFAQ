@@ -8,12 +8,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    David Soria Parra <dsoria@gmx.net>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author David Soria Parra <dsoria@gmx.net>
  * @copyright 2005-2020 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
  */
 
 namespace phpMyFAQ\Database;
@@ -62,8 +62,13 @@ class Mysqli implements DatabaseDriver
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
-    public function connect(string $host, string $user, string $password, $database = '', $port = 3306): ?bool
-    {
+    public function connect(
+        string $host,
+        string $user,
+        string $password,
+        string $database = '',
+        int $port = null
+    ): ?bool {
         if (substr($host, 0, 1) === '/') {
             // Connect to MySQL via socket
             $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
@@ -201,7 +206,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = ''): array
+    public function getTableStatus(string $prefix = ''): array
     {
         $status = [];
         foreach ($this->getTableNames($prefix) as $table) {
@@ -220,7 +225,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = ''): array
+    public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',
@@ -321,7 +326,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return mysqli_result $result
      */
-    public function query(string $query, $offset = 0, $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);

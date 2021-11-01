@@ -66,8 +66,13 @@ class Sqlsrv implements DatabaseDriver
      * @param int|null $port
      * @return bool true, if connected, otherwise false
      */
-    public function connect(string $host, string $user, string $password, $database = '', $port = 1433): ?bool
-    {
+    public function connect(
+        string $host,
+        string $user,
+        string $password,
+        string $database = '',
+        int $port = null
+    ): ?bool {
         $this->setConnectionOptions($user, $password, $database);
 
         $this->conn = sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
@@ -200,7 +205,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = ''): array
+    public function getTableStatus(string $prefix = ''): array
     {
         $tables = [];
         $query = "
@@ -232,7 +237,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return mixed $result
      */
-    public function query(string $query, $offset = 0, $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -312,7 +317,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableNames($prefix = ''): array
+    public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',

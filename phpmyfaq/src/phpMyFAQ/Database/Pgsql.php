@@ -8,12 +8,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Tom Rochester <tom.rochester@gmail.com>
  * @copyright 2003-2020 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
  */
 
 namespace phpMyFAQ\Database;
@@ -57,11 +57,16 @@ class Pgsql implements DatabaseDriver
      * @param string $user Database username
      * @param string $password Password
      * @param string $database Database name
-     * @param int|null $port
+     * @param int $port
      * @return null|bool true, if connected, otherwise false
      */
-    public function connect(string $host, string $user, string $password, $database = '', $port = 5432): ?bool
-    {
+    public function connect(
+        string $host,
+        string $user,
+        string $password,
+        string $database = '',
+        int $port = null
+    ): ?bool {
         $connectionString = sprintf(
             'host=%s port=%d dbname=%s user=%s password=%s',
             $host,
@@ -90,7 +95,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return mixed $result
      */
-    public function query(string $query, $offset = 0, $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -194,7 +199,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = ''): array
+    public function getTableStatus(string $prefix = ''): array
     {
         $select = 'SELECT relname FROM pg_stat_user_tables ORDER BY relname;';
         $arr = [];
@@ -289,7 +294,7 @@ class Pgsql implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = ''): array
+    public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',

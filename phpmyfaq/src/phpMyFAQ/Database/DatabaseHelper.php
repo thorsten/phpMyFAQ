@@ -47,7 +47,7 @@ class DatabaseHelper
      * Align the prefix of the table name used in the PMF backup file,
      * from the (old) value of the system upon which the backup was performed
      * to the (new) prefix of the system upon which the backup will be restored
-     * This alignment will be performed upon all of the SQL query "patterns"
+     * This alignment will be performed upon all the SQL query "patterns"
      * provided within the PMF backup file.
      *
      * @param string $query
@@ -99,7 +99,7 @@ class DatabaseHelper
     }
 
     /**
-     * This function builds the the queries for the backup.
+     * This function builds the queries for the backup.
      *
      * @param string $query
      * @param string $table
@@ -130,7 +130,7 @@ class DatabaseHelper
                 }
             }
             $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' .
-                preg_replace("/\r|\n/", "", implode(',', $p2)) . ');';
+                preg_replace("/\r|\n/", '', implode(',', $p2)) . ');';
         }
 
         return $ret;
