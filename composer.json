@@ -55,7 +55,7 @@
     "phpdocumentor/reflection-docblock": "5.*",
     "phpunit/php-token-stream": "*",
     "squizlabs/php_codesniffer": "*",
-    "phpstan/phpstan": "^0.12.81"
+    "phpstan/phpstan": "^1.0.0"
   },
   "config": {
     "platform": {
