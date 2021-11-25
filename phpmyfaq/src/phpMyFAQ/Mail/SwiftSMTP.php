@@ -47,7 +47,7 @@ class SwiftSMTP implements MailUserAgentInterface
      * @param int $port
      * @param null $security
      */
-    public function setAuthConfig(string $server, string $user, string $pass, $port = 25, $security = null)
+    public function setAuthConfig(string $server, string $user, string $pass, int $port = 25, $security = null)
     {
         unset($this->mailer);
 
@@ -80,11 +80,18 @@ class SwiftSMTP implements MailUserAgentInterface
             ->setTo($recipients)
             ->setBody($body);
 
-        // Prepare the headers for the e-mail
+        // Prepare the headers for the email
         unset($headers['Subject']);
-        $headers = $message->getHeaders();
-        foreach ($headers as $key => $value) {
-            $headers->addTextHeader($key, $value);
+        $mailHeaders = $message->getHeaders();
+
+        if (isset($headers['CC'])){
+            $mailHeaders->addTextHeader('Cc', $headers['Cc']);
+        }
+        if (isset($headers['Bcc'])){
+            $mailHeaders->addTextHeader('Bcc', $headers['Bcc']);
+        }
+        if (isset($headers['Reply-To'])){
+            $mailHeaders->addTextHeader('Reply-To', $headers['Reply-To']);
         }
 
         // Send mail and return result.

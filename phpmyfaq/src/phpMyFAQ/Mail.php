@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2020 phpMyFAQ Team
+ * @copyright 2009-2021 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-11
@@ -262,7 +262,7 @@ class Mail
      *
      * @return string The boundary value.
      */
-    public static function createBoundary()
+    public static function createBoundary(): string
     {
         return '-----' . md5(microtime());
     }
@@ -274,7 +274,7 @@ class Mail
      *
      * @return string The server name.
      */
-    public static function getServerName()
+    public static function getServerName(): string
     {
         $hostname = 'localhost.localdomain';
         if (isset($_SERVER['HTTP_HOST'])) {
@@ -290,11 +290,11 @@ class Mail
      * Set the "From" address.
      *
      * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
+     * @param string|null $name    Username (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    public function setFrom($address, $name = null)
+    public function setFrom(string $address, string $name = null): bool
     {
         return $this->setEmailTo($this->from, 'From', $address, $name);
     }
@@ -302,14 +302,14 @@ class Mail
     /**
      * Set just one e-mail address into an array.
      *
-     * @param array  $target      Target array.
+     * @param array $target      Target array.
      * @param string $targetAlias Alias Target alias.
      * @param string $address     User e-mail address.
-     * @param string $name        User name (optional).
+     * @param string|null $name        Username (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    private function setEmailTo(&$target, $targetAlias, $address, $name = null)
+    private function setEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
     {
         // Check for the permitted number of items into the $target array
         if (count($target) > 2) {
@@ -319,8 +319,6 @@ class Mail
                 "has been already added as '$targetAlias'!",
                 E_USER_ERROR
             );
-
-            return false;
         }
 
         return $this->addEmailTo($target, $targetAlias, $address, $name);
@@ -329,16 +327,16 @@ class Mail
     /**
      * Add an e-mail address to an array.
      *
-     * @param array  $target      Target array.
+     * @param array $target      Target array.
      * @param string $targetAlias Alias Target alias.
      * @param string $address     User e-mail address.
-     * @param string $name        User name (optional).
+     * @param string|null $name        Username (optional).
      *
      * @return bool True if successful, false otherwise.
      *
      * @todo Enhance error handling using exceptions
      */
-    private function addEmailTo(&$target, $targetAlias, $address, $name = null)
+    private function addEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
     {
         // Sanity check
         if (!self::validateEmail($address)) {
@@ -411,7 +409,7 @@ class Mail
      * Add an attachment.
      *
      * @param string $path        File path.
-     * @param string $name        File name. Defaults to the basename.
+     * @param string|null $name        File name. Defaults to the basename.
      * @param string $mimetype    File MIME type. Defaults to 'application/octet-stream'.
      * @param string $disposition Attachment disposition. Defaults to 'attachment'.
      * @param string $cid         Content ID, required when disposition is 'inline'. Defaults to ''.
@@ -419,12 +417,12 @@ class Mail
      * @return bool True if successful, false otherwise.
      */
     public function addAttachment(
-        $path,
-        $name = null,
-        $mimetype = 'application/octet-stream',
-        $disposition = 'attachment',
-        $cid = ''
-    ) {
+        string $path,
+        string $name = null,
+        string $mimetype = 'application/octet-stream',
+        string $disposition = 'attachment',
+        string $cid = ''
+    ): bool {
         if (!file_exists($path)) {
             // File not found
             return false;
@@ -436,13 +434,13 @@ class Mail
                 $name = basename($path);
             }
 
-            $this->attachments[] = array(
+            $this->attachments[] = [
                 'cid' => $cid,
                 'disposition' => $disposition,
                 'mimetype' => $mimetype,
                 'name' => $name,
                 'path' => $path,
-            );
+            ];
 
             return true;
         }
@@ -452,11 +450,11 @@ class Mail
      * Add a recipient as <BCC>.
      *
      * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
+     * @param string|null $name    Username (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    public function addBcc($address, $name = null)
+    public function addBcc(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->bcc, 'Bcc', $address, $name);
     }
@@ -465,49 +463,36 @@ class Mail
      * Add a recipient as <CC>.
      *
      * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
+     * @param string|null $name    Username (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    public function addCc($address, $name = null)
+    public function addCc(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->cc, 'Cc', $address, $name);
-    }
-
-    /**
-     * Add an address to send a notification to.
-     *
-     * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
-     *
-     * @return bool True if successful, false otherwise.
-     */
-    public function addNotificationTo($address, $name = null)
-    {
-        return $this->addEmailTo($this->notifyTo, 'Disposition-Notification-To', $address, $name);
     }
 
     /**
      * Add a recipient as <TO>.
      *
      * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
+     * @param string|null $name    Username (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    public function addTo($address, $name = null)
+    public function addTo(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->to, 'To', $address, $name);
     }
 
     /**
-     * Send the e-mail according with the current settings.
+     * Send the e-mail according to the current settings.
      *
      * @return bool True if successful, false otherwise.
      *
      * @todo Enhance error handling using exceptions
      */
-    public function send()
+    public function send(): bool
     {
         // Sanity check
         if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
@@ -515,8 +500,6 @@ class Mail
                 '<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!',
                 E_USER_ERROR
             );
-
-            return false;
         }
 
         // Has any alternative message been provided?
@@ -691,7 +674,7 @@ class Mail
     }
 
     /**
-     * Returns the date according with RFC 2822.
+     * Returns the date according to RFC 2822.
      *
      * @static
      *
@@ -699,11 +682,9 @@ class Mail
      *
      * @return string The RFC 2822 date if successful, false otherwise.
      */
-    public static function getDate($date)
+    public static function getDate(string $date): string
     {
-        $rfc2822Date = date('r', $date);
-
-        return $rfc2822Date;
+        return date('r', $date);
     }
 
     /**
@@ -713,7 +694,7 @@ class Mail
      *
      * @return int Unix timestamp.
      */
-    public static function getTime()
+    public static function getTime(): int
     {
         if (isset($_SERVER['REQUEST_TIME'])) {
             return $_SERVER['REQUEST_TIME'];
@@ -742,10 +723,10 @@ class Mail
         if (
             in_array(
                 $this->contentType,
-                array(
+                [
                 'multipart/mixed',
                 'multipart/related',
-                )
+                ]
             )
         ) {
             $lines[] = '--' . $mainBoundary;
@@ -780,10 +761,10 @@ class Mail
         if (
             in_array(
                 $this->contentType,
-                array(
+                [
                 'multipart/mixed',
                 'multipart/related',
-                )
+                ]
             )
         ) {
             // Back to the main boundary
@@ -816,16 +797,16 @@ class Mail
      * Wraps the lines contained into the given message.
      *
      * @param string $message Message.
-     * @param int    $width   Column width. Defaults to 72.
-     * @param bool   $cut     Cutting a word is allowed. Defaults to false.
+     * @param int $width Column width. Defaults to 72.
+     * @param bool $cut Cutting a word is allowed. Defaults to false.
      *
      * @return string The given message, wrapped as requested.
      */
-    public function wrapLines($message, $width = 72, $cut = false)
+    public function wrapLines(string $message, int $width = 72, bool $cut = false): string
     {
         $message = $this->fixEOL($message);
 
-        if (Strings::strpos(strtolower($this->charset), 'utf') !== false) {
+        if (Strings::strpos(strtolower($this->charset), 'utf') != false) {
             // PHP wordwrap() is not safe with multibyte UTF chars
             return $message;
         } else {
@@ -842,7 +823,7 @@ class Mail
 
     /**
      * Returns the given text being sure that any CR or LF has been fixed
-     * according with RFC 2822 EOL setting.
+     * according to RFC 2822 EOL setting.
      *
      * @param string $text Text with a mixed usage of CR, LF, CRLF.
      *
@@ -850,32 +831,30 @@ class Mail
      *
      * @see eol
      */
-    public function fixEOL($text)
+    public function fixEOL(string $text): string
     {
         // Assure that anything among CRLF, CR will be replaced with just LF
         $text = str_replace(
-            array(
+            [
                 "\r\n", // CRLF
                 "\r", // CR
                 "\n", // LF
-            ),
+            ],
             "\n", // LF
             $text
         );
         // Set any LF to the RFC 2822 EOL
-        $text = str_replace("\n", $this->eol, $text);
-
-        return $text;
+        return str_replace("\n", $this->eol, $text);
     }
 
     /**
      * Get the instance of the class implementing the MUA for the given type.
      *
      * @static
-     * @param  string $mua Type of the MUA.
+     * @param string $mua Type of the MUA.
      * @return Builtin|SwiftSMTP
      */
-    public static function getMUA($mua)
+    public static function getMUA(string $mua)
     {
         $className = ucfirst(
             str_replace(
@@ -892,13 +871,13 @@ class Mail
     /**
      * Set an HTML message providing also a plain text alternative message,
      * if not already set using the $messageAlt property.
-     * Besides it is possible to put resources as inline attachments.
+     * Besides, it is possible to put resources as inline attachments.
      *
      * @param string $message  HTML message.
-     * @param bool   $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
-     * @param bool   $inline   Add images as inline attachments. Defaults to false.
+     * @param bool $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
+     * @param bool $inline   Add images as inline attachments. Defaults to false.
      */
-    public function setHTMLMessage($message, $sanitize = false, $inline = false)
+    public function setHTMLMessage(string $message, bool $sanitize, bool $inline)
     {
         // No Javascript at all
         // 1/2. <script blahblahblah>blahblahblah</tag>
@@ -945,50 +924,26 @@ class Mail
      * Set the "Reply-to" address.
      *
      * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
+     * @param string|null $name Username (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    public function setReplyTo($address, $name = null)
+    public function setReplyTo(string $address, string $name = null): bool
     {
         return $this->setEmailTo($this->replyTo, 'Reply-To', $address, $name);
-    }
-
-    /**
-     * Set the "Return-Path" address.
-     *
-     * @param string $address User e-mail address.
-     *
-     * @return bool True if successful, false otherwise.
-     */
-    public function setReturnPath($address)
-    {
-        return $this->setEmailTo($this->returnPath, 'Return-Path', $address);
     }
 
     /**
      * Set the "Sender" address.
      *
      * @param string $address User e-mail address.
-     * @param string $name    User name (optional).
+     * @param string|null $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
-    public function setSender($address, $name = null)
+    public function setSender(string $address, string $name = null): bool
     {
         return $this->setEmailTo($this->sender, 'Sender', $address, $name);
-    }
-
-    /**
-     * Remove any previous "From" address.
-     *
-     * @return bool True if successful, false otherwise.
-     */
-    public function unsetFrom()
-    {
-        $this->from = [];
-
-        return true;
     }
 
     /**
@@ -997,15 +952,15 @@ class Mail
      * from "user@example.org" to "user_AT_example_DOT_org". Otherwise
      * it will return the plain email address.
      *
-     * @param  string $email E-mail address
+     * @param string $email E-mail address
      * @static
      *
      * @return string
      */
-    public function safeEmail($email)
+    public function safeEmail(string $email): string
     {
         if ($this->config->get('spam.enableSafeEmail')) {
-            return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
+            return str_replace(['@', '.'], ['_AT_', '_DOT_'], $email);
         } else {
             return $email;
         }
