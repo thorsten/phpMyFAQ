@@ -26,5 +26,4 @@ use phpMyFAQ\Core\Exception;
  */
 class FileNotFoundException extends Exception
 {
-
 }

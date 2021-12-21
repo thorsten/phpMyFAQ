@@ -24,5 +24,4 @@ namespace phpMyFAQ\Attachment;
  */
 class AttachmentException extends \Exception
 {
-
 }

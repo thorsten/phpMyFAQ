@@ -24,5 +24,4 @@ namespace phpMyFAQ\Search;
  */
 class Exception extends \Exception
 {
-
 }
