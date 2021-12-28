@@ -41,9 +41,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $category->setGroups($currentAdminGroups);
           $date = new Date($faqConfig);
           $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+
+          if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+              $csrfChecked = false;
+          } else {
+              $csrfChecked = true;
+          }
 
           $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
-          if ($toggle == 'toggle') {
+          if ($csrfChecked && $toggle === 'toggle') {
               $isVisible = $question->getVisibility($questionId);
               if (!is_null($isVisible)) {
                   $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
@@ -90,7 +97,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         <?= $openQuestion->getQuestion() ?>
                     </td>
                     <td>
-                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle"
+                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= $user->getCsrfTokenFromSession() ?>"
                          class="btn btn-info">
                           <?= ('Y' === $openQuestion->isVisible()) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
                       </a>
