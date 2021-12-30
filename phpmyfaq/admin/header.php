@@ -8,7 +8,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2020 phpMyFAQ Team
+ * @copyright 2003-2021 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-02-26
@@ -439,7 +439,7 @@ switch ($action) {
                   </span>
                     <?php
                     if ($faqConfig->get('main.enableGravatarSupport')) {
-                        $avatar = new Gravatar($faqConfig);
+                        $avatar = new Gravatar();
                         echo $avatar->getImage(
                             $user->getUserData('email'),
                             ['size' => 24, 'class' => 'img-profile rounded-circle']
@@ -456,7 +456,7 @@ switch ($action) {
                       <?= $PMF_LANG['ad_menu_passwd'] ?>
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="index.php?action=logout">
+                  <a class="dropdown-item" href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
                     <i class="fa fa-sign-out mr-2 text-gray-400"></i>
                       <?= $PMF_LANG['admin_mainmenu_logout']; ?>
                   </a>
