@@ -26,5 +26,4 @@ use phpMyFAQ\Attachment\AttachmentException as AttachmentException;
  */
 class FileException extends AttachmentException
 {
-
 }
