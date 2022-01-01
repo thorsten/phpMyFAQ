@@ -10,7 +10,7 @@
  * @package phpMyFAQ
  * @author Oleg P. Suvolokin
  * @author Denis A. Barybin
- * @copyright 2008-2021 phpMyFAQ Team
+ * @copyright 2008-2022 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2008-02-03

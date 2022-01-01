@@ -10,7 +10,7 @@
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2006-2021 phpMyFAQ Team
+ * @copyright 2006-2022 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2006-09-10

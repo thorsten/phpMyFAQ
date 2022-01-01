@@ -10,3 +10,5 @@ main package of phpMyFAQ. However, there are a few rules and limitations when do
 These basic rules makes it possible for us to earn a living of the phpMyFAQ project, but it also ensures that the code
 remains Open Source and under the MPL 2.0 license. All contributions will be added to the changelog and on the phpMyFAQ
 website.
+
+Copyright © 2001 - 2022 Thorsten Rinne and the phpMyFAQ Team

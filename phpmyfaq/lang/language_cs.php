@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author Jaroslav Síka <jsika@vexcor.cz>
- * @copyright 2004-2021 phpMyFAQ Team
+ * @copyright 2004-2022 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-04-07

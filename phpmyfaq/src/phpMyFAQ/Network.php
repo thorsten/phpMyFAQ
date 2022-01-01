@@ -12,7 +12,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Kenneth Shaw <ken@expitrans.com>
  * @author    David Soria Parra <dsp@php.net>
- * @copyright 2011-2021 phpMyFAQ Team
+ * @copyright 2011-2022 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04

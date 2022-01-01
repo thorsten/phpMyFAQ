@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @copyright 2010-2021 phpMyFAQ Team
+ * @copyright 2010-2022 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2010-12-20
