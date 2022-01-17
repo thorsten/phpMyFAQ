@@ -38,3 +38,5 @@ Open endpoints require no Authentication.
 ### Login APIs
 
 - [Login](api-docs/login.md): `POST /api/v2.0/login`
+
+Copyright © 2001-2022 Thorsten Rinne and the phpMyFAQ Team

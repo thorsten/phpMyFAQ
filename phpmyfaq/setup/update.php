@@ -22,7 +22,7 @@ use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2021 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
+define('COPYRIGHT', '&copy; 2001-2022 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 

@@ -169,4 +169,4 @@ The REST API v2 documentation is located [here in this repository](API.md) and o
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
-Copyright © 2001-2021 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001-2022 Thorsten Rinne and the phpMyFAQ Team
