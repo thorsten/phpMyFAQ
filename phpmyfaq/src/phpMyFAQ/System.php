@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2021 phpMyFAQ Team
+ * @copyright 2010-2022 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-13
@@ -44,7 +44,7 @@ class System
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 10;
+    private const VERSION_PATCH_LEVEL = 11;
 
     /**
      * Pre-release version.
