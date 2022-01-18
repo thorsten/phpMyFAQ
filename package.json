@@ -18,7 +18,7 @@
     "build:watch": "webpack --watch"
   },
   "dependencies": {
-    "bootstrap": "^4.2.1",
+    "bootstrap": "4.6.1",
     "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.8.0",
     "bs-custom-file-input": "^1.3.1",
@@ -32,9 +32,9 @@
     "tinymce": "^4.9.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.7",
+    "@babel/core": "^7.16.7",
     "autoprefixer": "^9.7.3",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.2.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
