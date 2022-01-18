@@ -5,6 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+Version 3.0.11 - 2022-01-18
+- fixed enabled debug mode
+
 Version 3.0.10 - 2022-01-17
 - fixed multiple XSS and CSRF vulnerabilities (0x7zed, M0rphling, justinp09010, Dennis Yassine, Thorsten)
 - fixed many minor bugs (Thorsten)
