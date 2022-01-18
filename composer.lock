@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "898cf259e2a362d9e7f2d70c1dcdf35b",
+    "content-hash": "d5050c7a2e09a23ff6ae5311692e0255",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -444,9 +444,6 @@
             "require": {
                 "php": "^7.1 || ^8.0"
             },
-            "replace": {
-                "myclabs/deep-copy": "self.version"
-            },
             "require-dev": {
                 "doctrine/collections": "^1.0",
                 "doctrine/common": "^2.6",
@@ -755,16 +752,16 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.4.3",
+            "version": "6.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "3cfc830d70b3783ecfc198fc28c183287bcb1dce"
+                "reference": "42cd0f9786af7e5db4fcedaa66f717b0d0032320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/3cfc830d70b3783ecfc198fc28c183287bcb1dce",
-                "reference": "3cfc830d70b3783ecfc198fc28c183287bcb1dce",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/42cd0f9786af7e5db4fcedaa66f717b0d0032320",
+                "reference": "42cd0f9786af7e5db4fcedaa66f717b0d0032320",
                 "shasum": ""
             },
             "require": {
@@ -815,7 +812,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.3"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.4"
             },
             "funding": [
                 {
@@ -823,7 +820,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-12-28T12:31:24+00:00"
+            "time": "2021-12-31T08:39:24+00:00"
         }
     ],
     "packages-dev": [
@@ -2478,20 +2475,23 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.23.0",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "46cd95797e9df938fdd2b03693b5fca5e64b01ce"
+                "reference": "30885182c981ab175d4d034db0f6f469898070ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/46cd95797e9df938fdd2b03693b5fca5e64b01ce",
-                "reference": "46cd95797e9df938fdd2b03693b5fca5e64b01ce",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/30885182c981ab175d4d034db0f6f469898070ab",
+                "reference": "30885182c981ab175d4d034db0f6f469898070ab",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
+            },
+            "provide": {
+                "ext-ctype": "*"
             },
             "suggest": {
                 "ext-ctype": "For best performance"
@@ -2537,7 +2537,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.23.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -2553,7 +2553,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-19T12:13:01+00:00"
+            "time": "2021-10-20T20:35:02+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -2754,5 +2754,5 @@
     "platform-overrides": {
         "php": "7.2.0"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
