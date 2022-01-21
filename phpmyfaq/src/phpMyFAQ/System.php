@@ -60,7 +60,7 @@ class System
     /**
      * Minimum required PHP version.
      */
-    public const VERSION_MINIMUM_PHP = '7.3.0';
+    public const VERSION_MINIMUM_PHP = '7.4.0';
 
     /**
      * Array of required PHP extensions.

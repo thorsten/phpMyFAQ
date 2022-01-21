@@ -27,8 +27,8 @@ define('COPYRIGHT', '&copy; 2001-2022 <a target="_blank" href="//www.phpmyfaq.de
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '7.3.0') < 0) {
-    die('Sorry, but you need PHP 7.3.0 or later!');
+if (version_compare(PHP_VERSION, '7.4.0') < 0) {
+    die('Sorry, but you need PHP 7.4.0 or later!');
 }
 
 set_time_limit(0);

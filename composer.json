@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "php": ">=7.3.0",
+    "php": ">=7.4.0",
     "phpseclib/phpseclib": "~3.0",
     "swiftmailer/swiftmailer": "~6.2",
     "erusev/parsedown": "~1.0",
@@ -45,7 +45,7 @@
   },
   "config": {
     "platform": {
-      "php": "7.3.0"
+      "php": "7.4.0"
     },
     "secure-http": true,
     "vendor-dir": "phpmyfaq/src/libs",

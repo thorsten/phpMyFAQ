@@ -9,8 +9,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v3.1.0-RC - 2022-01-21
 
 - fixed XSS vulnerability (Curtis Robinson, Thorsten)
-- changed PHP requirement to PHP 7.3+ (Thorsten)
-- added support for PHP 8.0 (Thorsten)
+- changed PHP requirement to PHP 7.4+ (Thorsten)
+- added support for PHP 8.0 and PHP 8.1 (Thorsten)
 - added experimental support for PHP 8.1 (Thorsten)
 - added support for Elasticsearch v6+ (Thorsten)
 - added drag'n'drop sorting for main categories (Paolo Caparrelli, Thorsten)
