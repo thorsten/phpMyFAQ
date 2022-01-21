@@ -54,11 +54,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
-    if ($faqConfig->get('main.enableMarkdownEditor')) {
-        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
-    } else {
-        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-    }
+    $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
     $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
     $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

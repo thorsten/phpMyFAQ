@@ -213,9 +213,9 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     $faqData['email'] = (isset($faqData['email']) ? Strings::htmlspecialchars($faqData['email']) : $user->getUserData(
         'email'
     ));
-    $faqData['isoDate'] = (isset($faqData['date']) ? $faqData['date'] : date('Y-m-d H:i'));
+    $faqData['isoDate'] = ($faqData['date'] ?? date('Y-m-d H:i'));
     $faqData['date'] = (isset($faqData['date']) ? $date->format($faqData['date']) : $date->format(date('Y-m-d H:i')));
-    $faqData['changed'] = (isset($faqData['changed']) ? $faqData['changed'] : '');
+    $faqData['changed'] = ($faqData['changed'] ?? '');
 
     if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
         $faqData['comment'] = ' checked';
