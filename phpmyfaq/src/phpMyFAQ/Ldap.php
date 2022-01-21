@@ -90,8 +90,8 @@ class Ldap
         string $ldapServer,
         int $ldapPort,
         string $ldapBase,
-        $ldapUser = '',
-        $ldapPassword = ''
+        string $ldapUser = '',
+        string $ldapPassword = ''
     ): bool {
         // Sanity checks
         if ('' === $ldapServer || '' === $ldapBase) {
@@ -160,7 +160,7 @@ class Ldap
      *
      * @return bool
      */
-    public function bind($rdn = '', $password = ''): bool
+    public function bind(string $rdn = '', string $password = ''): bool
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
@@ -226,7 +226,7 @@ class Ldap
 
         $fields = [$this->ldapConfig['ldap_mapping'][$data]];
 
-        $searchResult = ldap_search([$this->ds], $this->base, $filter, $fields);
+        $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$searchResult) {
             $this->errno = ldap_errno($this->ds);
@@ -239,8 +239,9 @@ class Ldap
             return false;
         }
 
+        $entryId = ldap_first_entry($this->ds, $searchResult);
 
-        if (!isset($searchResult[0])) {
+        if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Cannot get the value(s). Error: %s',
@@ -250,9 +251,9 @@ class Ldap
             return false;
         }
 
-        $values = ldap_get_entries($this->ds, $searchResult[0]);
+        $values = ldap_get_values($this->ds, $entryId, $fields[0]);
 
-        return $values[0][$this->ldapConfig['ldap_mapping'][$data]][0];
+        return $values[0];
     }
 
     /**
@@ -300,7 +301,7 @@ class Ldap
             $this->config->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
-        $sr = ldap_search([$this->ds], $this->base, $filter);
+        $sr = ldap_search($this->ds, $this->base, $filter);
 
         if (false === $sr) {
             $this->errno = ldap_errno($this->ds);
