@@ -4,6 +4,11 @@
   width: 100%;
 }
 
+// Faq listing
+span#viewsPerRecord {
+  display: block;
+}
+
 // FAQ meta data
 .pmf-faq-meta {
   background-color: $gray-600;

@@ -2,6 +2,7 @@
 
 /**
  * The Installer class installs phpMyFAQ. Classy.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -673,8 +674,13 @@ class Installer
             System::renderFooter(true);
         }
 
-        $dbSetup['dbPort'] = Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
-        if (is_null($dbSetup['dbPort']) && !System::isSqlite($dbSetup['dbType'])) {
+        // Check database port
+        if (!isset($setup['dbType'])) {
+            $dbSetup['dbPort'] = Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
+        } else {
+            $dbSetup['dbPort'] = $setup['dbPort'];
+        }
+        if (is_null($dbSetup['dbPort']) && ! System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
             System::renderFooter(true);
         }
@@ -691,7 +697,12 @@ class Installer
             $dbSetup['dbPassword'] = '';
         }
 
-        $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_UNSAFE_RAW);
+        // Check database name
+        if (!isset($setup['dbType'])) {
+            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
+        } else {
+            $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
+        }
         if (is_null($dbSetup['dbDatabaseName']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database name.</p>\n";
             System::renderFooter(true);
@@ -926,7 +937,7 @@ class Installer
             System::renderFooter(true);
         }
 
-        $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], $DB['port']);
+        $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], (int)$DB['port']);
         if (!$db) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             $this->system->cleanFailedInstallationFiles();

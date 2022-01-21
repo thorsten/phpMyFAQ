@@ -53,3 +53,5 @@ be acquired from the admin configuration.
 - [Register](api-docs/register.md): `POST /api/v2.1/register`
 
 © 2001-2022 phpMyFAQ Team
+
+Copyright © 2001-2022 Thorsten Rinne and the phpMyFAQ Team

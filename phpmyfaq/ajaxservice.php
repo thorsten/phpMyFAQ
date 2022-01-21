@@ -123,7 +123,7 @@ if (
 }
 
 //
-// Check if logged in if FAQ is completely secured
+// Check if the user is logged in when FAQ is completely secured
 //
 if (
     false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&

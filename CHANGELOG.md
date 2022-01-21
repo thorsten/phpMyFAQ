@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.0-beta - 2021-02-12
+### phpMyFAQ v3.1.0-RC - 2022-01-21
 
 - fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - changed PHP requirement to PHP 7.3+ (Thorsten)
@@ -35,6 +35,16 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed auto-save for FAQs during editing (Thorsten)
 - removed obsolete DbUnit tests (Thorsten)
 - fixed minor bugs (Nico Schmitz-Laux, Thorsten)
+
+### phpMyFAQ v3.0.11 - 2022-01-18
+
+- fixed enabled debug mode (Thorsten)
+- updated bundled dependencies (Thorsten)
+
+### phpMyFAQ v3.0.10 - 2022-01-17
+
+- fixed multiple XSS and CSRF vulnerabilities (0x7zed, M0rphling, justinp09010, Dennis Yassine, Thorsten)
+- fixed many minor bugs (Thorsten)
 
 ### phpMyFAQ v3.0.9 - 2021-04-17
 
@@ -1675,4 +1685,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-© 2001-2022 phpMyFAQ Team
+Copyright © 2001-2022 Thorsten Rinne and the phpMyFAQ Team

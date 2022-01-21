@@ -62,8 +62,13 @@ class Mysqli implements DatabaseDriver
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
-    public function connect(string $host, string $user, string $password, $database = '', $port = 3306): ?bool
-    {
+    public function connect(
+        string $host,
+        string $user,
+        string $password,
+        string $database = '',
+        int $port = null
+    ): ?bool {
         if (substr($host, 0, 1) === '/') {
             // Connect to MySQL via socket
             $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
@@ -210,7 +215,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = ''): array
+    public function getTableStatus(string $prefix = ''): array
     {
         $status = [];
         foreach ($this->getTableNames($prefix) as $table) {
@@ -229,7 +234,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return string[]
      */
-    public function getTableNames($prefix = ''): array
+    public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
             $prefix . 'faqadminlog',
@@ -332,7 +337,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return mysqli_result $result
      */
-    public function query(string $query, $offset = 0, $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);

@@ -38,7 +38,7 @@ define('PMF_ROOT_DIR', dirname(__DIR__));
 //
 // Define the named constant used as a check by any included PHP file
 //
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Bootstrapping
@@ -63,7 +63,7 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
 }
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 Strings::init($faqLangCode);
 
@@ -112,6 +112,16 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 if (is_null($action)) {
     $action = Filter::filterInput(INPUT_POST, 'action', FILTER_UNSAFE_RAW);
+}
+
+//
+// Get CSRF Token
+//
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    $csrfChecked = false;
+} else {
+    $csrfChecked = true;
 }
 
 //
@@ -181,7 +191,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 }
 
 // logout
-if ($action == 'logout' && $auth) {
+if ($csrfChecked && $action === 'logout' && $auth) {
     $user->deleteFromSession(true);
     $auth = null;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
@@ -198,10 +208,10 @@ if (isset($user) && is_object($user)) {
     if ($user->perm instanceof MediumPermission) {
         $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
     } else {
-        $currentAdminGroups = array(-1);
+        $currentAdminGroups = [-1];
     }
     if (0 === count($currentAdminGroups)) {
-        $currentAdminGroups = array(-1);
+        $currentAdminGroups = [-1];
     }
 }
 

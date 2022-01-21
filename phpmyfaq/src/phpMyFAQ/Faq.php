@@ -463,10 +463,10 @@ class Faq
                 }
 
                 $renderedItems[$row->id] = sprintf(
-                    '<li%s>%s<span id="viewsPerRecord"><br><small>(%s)</small></span></li>',
+                    '<li%s>%s<span id="viewsPerRecord"><small>(%s)</small></span></li>',
                     ($row->sticky == 1) ? ' class="sticky-faqs"' : '',
                     $oLink->toHtmlAnchor(),
-                    $this->plurals->GetMsg('plmsgViews', $visits)
+                    $this->plurals->getMsg('plmsgViews', $visits)
                 );
             }
 

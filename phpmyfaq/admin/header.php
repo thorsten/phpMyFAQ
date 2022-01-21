@@ -445,7 +445,7 @@ switch ($action) {
                   </span>
                     <?php
                     if ($faqConfig->get('main.enableGravatarSupport')) {
-                        $avatar = new Gravatar($faqConfig);
+                        $avatar = new Gravatar();
                         echo $avatar->getImage(
                             $user->getUserData('email'),
                             ['size' => 24, 'class' => 'img-profile rounded-circle']
@@ -462,7 +462,7 @@ switch ($action) {
                       <?= $PMF_LANG['ad_menu_passwd'] ?>
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="index.php?action=logout">
+                  <a class="dropdown-item" href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
                     <i class="fa fa-sign-out mr-2 text-gray-400"></i>
                       <?= $PMF_LANG['admin_mainmenu_logout']; ?>
                   </a>

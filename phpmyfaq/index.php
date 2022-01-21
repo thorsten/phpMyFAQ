@@ -281,6 +281,13 @@ if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
 }
 
 //
+// Sanitize language string
+//
+if (!Language::isASupportedLanguage($lang)) {
+    $lang = $faqConfig->getDefaultLanguage();
+}
+
+//
 // Found a search string?
 //
 $searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);

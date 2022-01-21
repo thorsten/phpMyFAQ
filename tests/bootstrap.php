@@ -65,6 +65,8 @@ $loader->register();
 $setup = [
     'dbServer' => PMF_TEST_DIR . '/test.db',
     'dbType' => 'sqlite3',
+    'dbPort' => null,
+    'dbDatabaseName' => '',
     'loginname' => 'admin',
     'password' => 'password',
     'password_retyped' => 'password',
@@ -72,6 +74,10 @@ $setup = [
 ];
 
 $installer = new Installer();
-$installer->startInstall($setup);
+try {
+    $installer->startInstall($setup);
+} catch (\phpMyFAQ\Exception $e) {
+    echo $e->getMessage();
+}
 
 require PMF_TEST_DIR . '/config/database.php';

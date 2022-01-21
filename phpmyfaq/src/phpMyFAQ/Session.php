@@ -368,7 +368,7 @@ class Session
                 $_SERVER['REQUEST_TIME'] + $timeout,
                 dirname($_SERVER['SCRIPT_NAME']) . '; samesite=strict',
                 parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
-                'https' === $protocol,
+                'https' === $protocol, // only secure running via HTTPS
                 true
             );
         } else {
@@ -380,7 +380,7 @@ class Session
                     'path' => dirname($_SERVER['SCRIPT_NAME']),
                     'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
                     'samesite' => 'strict',
-                    'secure' => 'https' === $protocol,
+                    'secure' => 'https' === $protocol, // only secure running via HTTPS
                     'httponly' => true,
                 ]
             );

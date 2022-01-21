@@ -17,7 +17,6 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
@@ -34,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <a class="btn btn-sm     btn-danger" href="?action=truncatesearchterms">
+              <a class="btn btn-sm btn-danger" href="?action=truncatesearchterms&csrf=<?= $user->getCsrfTokenFromSession() ?>">
                 <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_searchterm_del'] ?>
               </a>
             </div>
@@ -48,15 +47,24 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $perPage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $csrfChecked = false;
+    } else {
+        $csrfChecked = true;
+    }
 
     $search = new Search($faqConfig);
 
-    if ('truncatesearchterms' === $action) {
+    if ($csrfChecked && 'truncatesearchterms' === $action) {
         if ($search->deleteAllSearchTerms()) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_searchterm_del_suc']);
         } else {
             printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_searchterm_del_err']);
         }
+    } else {
+        printf('<p class="alert alert-warning">%s</p>', $PMF_LANG['ad_searchterm_del_err']);
     }
 
     $searchesCount = $search->getSearchesCount();

@@ -631,7 +631,7 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        return $this->config->getDb()->query($update);
+        return (bool) $this->config->getDb()->query($update);
     }
 
     /**

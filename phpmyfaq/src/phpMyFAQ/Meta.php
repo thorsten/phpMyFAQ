@@ -44,7 +44,7 @@ class Meta
     }
 
     /**
-     * @param  MetaEntity $data
+     * @param MetaEntity $data
      * @return int
      */
     public function add(MetaEntity $data): int
@@ -52,18 +52,13 @@ class Meta
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
 
         $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqmeta
-            (id, lang, page_id, type, content)
-                VALUES
-            (%d, '%s', '%s', '%s', '%s')",
+            "INSERT INTO %sfaqmeta (id, lang, page_id, type, content) VALUES (%d, '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage(),
-            $data->getPageId(),
-            $data->getType(),
-            $data->getContent()
+            $this->config->getDb()->escape($data->getPageId()),
+            $this->config->getDb()->escape($data->getType()),
+            $this->config->getDb()->escape($data->getContent())
         );
 
         $this->config->getDb()->query($query);
@@ -160,7 +155,7 @@ class Meta
     }
 
     /**
-     * @param int        $metaId
+     * @param int $metaId
      * @param MetaEntity $data
      * @return bool
      */
@@ -169,9 +164,9 @@ class Meta
         $query = sprintf(
             "UPDATE %sfaqmeta SET page_id = '%s', type = '%s', content = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $data->getPageId(),
-            $data->getType(),
-            $data->getContent(),
+            $this->config->getDb()->escape($data->getPageId()),
+            $this->config->getDb()->escape($data->getType()),
+            $this->config->getDb()->escape($data->getContent()),
             $metaId,
             $this->config->getLanguage()->getLanguage()
         );

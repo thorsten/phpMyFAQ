@@ -48,13 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
               data.added +
               '</td>' +
               '<td>' +
-              pageId +
+              escape(pageId) +
               '</td>' +
               '<td>' +
               type +
               '</td>' +
               '<td>' +
-              content +
+              escape(content) +
               '</td>' +
               '<td>' +
               '<a href="?action=meta.edit&id=' +
@@ -62,12 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
               '" class="btn btn-success">' +
               '<i aria-hidden="true" class="fa fa-pencil"></i>' +
               '</a>' +
-              ' <a href="javascript:;" id="delete-meta-' +
+              ' <a href="#" id="delete-meta-' +
               data.added +
               '" class="btn btn-danger pmf-meta-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
               ' <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#codeModal"' +
               ' data-code-snippet="' +
-              pageId +
+              escape(pageId) +
               '">' +
               '<i aria-hidden="true" class="fa fa-code"></i>' +
               '</button>' +
@@ -107,6 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = $(event.relatedTarget);
     const codeSnippet = button.data('code-snippet');
     const modal = $(this);
+    console.log(codeSnippet);
     modal.find('.modal-body textarea').val('{{ ' + codeSnippet + ' | meta }}');
   });
+
+  const escape = (text) => {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;',
+    };
+
+    return text.replace(/[&<>"']/g, (mapped) => {
+      return map[mapped];
+    });
+  };
 });

@@ -35,7 +35,13 @@ interface DatabaseDriver
      * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      */
-    public function connect(string $host, string $user, string $password, $database = '', $port = null): ?bool;
+    public function connect(
+        string $host,
+        string $user,
+        string $password,
+        string $database = '',
+        int $port = null
+    ): ?bool;
 
     /**
      * This function sends a query to the database.
@@ -46,7 +52,7 @@ interface DatabaseDriver
      *
      * @return mixed $result
      */
-    public function query(string $query, $offset = 0, $rowcount = 0);
+    public function query(string $query, int $offset = 0, int $rowcount = 0);
 
     /**
      * Escapes a string for use in a query.
@@ -114,7 +120,7 @@ interface DatabaseDriver
      *
      * @return array
      */
-    public function getTableStatus($prefix = ''): array;
+    public function getTableStatus(string $prefix = ''): array;
 
     /**
      * Returns the next ID of a table.
@@ -154,7 +160,7 @@ interface DatabaseDriver
      *
      * @return array
      */
-    public function getTableNames($prefix = ''): array;
+    public function getTableNames(string $prefix = ''): array;
 
     /**
      * Closes the connection to the database.
@@ -167,7 +173,7 @@ interface DatabaseDriver
      * or it may be varchar/text (as is in SQLite3) - so make sure the consumer
      * code doesn't depend on the actual type.
      *
-     * @return string String that you can pass to SQL as in: SELECT <result of phpMyFAQ\Db_Driver_instance->now()>
+     * @return string String that you can pass to SQL as in: SELECT <result of phpMyFAQ\DatabaseDriver->now()>
      */
     public function now(): string;
 }

@@ -35,21 +35,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-        if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
-            $category = new Category($faqConfig, [], false);
-            $question = new Question($faqConfig);
-            $category->setUser($currentAdminUser);
-            $category->setGroups($currentAdminGroups);
-            $date = new Date($faqConfig);
-            $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+      if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
+          $category = new Category($faqConfig, [], false);
+          $question = new Question($faqConfig);
+          $category->setUser($currentAdminUser);
+          $category->setGroups($currentAdminGroups);
+          $date = new Date($faqConfig);
+          $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-            $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_UNSAFE_RAW);
-            if ($toggle == 'toggle') {
-                $isVisible = $question->getVisibility($questionId);
-                if (!is_null($isVisible)) {
-                    $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
-                }
-            }
+          if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+              $csrfChecked = false;
+          } else {
+              $csrfChecked = true;
+          }
+
+          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+          if ($csrfChecked && $toggle === 'toggle') {
+              $isVisible = $question->getVisibility($questionId);
+              if (!is_null($isVisible)) {
+                  $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
+              }
+          }
 
             echo '<div id="returnMessage"></div>';
 
@@ -91,7 +98,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         <?= $openQuestion->getQuestion() ?>
                     </td>
                     <td>
-                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle"
+                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= $user->getCsrfTokenFromSession() ?>"
                          class="btn btn-info">
                           <?= ('Y' === $openQuestion->isVisible()) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
                       </a>

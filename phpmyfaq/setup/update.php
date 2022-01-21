@@ -2,6 +2,7 @@
 
 /**
  * Main update script.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -22,6 +23,7 @@ use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
 
+define('COPYRIGHT', '&copy; 2001-2022 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -151,7 +153,7 @@ if ($step === 1) { ?>
           <div class="col">
             <p>This update script will work <strong>only</strong> for the following versions:</p>
             <ul>
-              <li>phpMyFAQ 2.9.x</li>
+              <li>phpMyFAQ 2.9.x (out of support since end of 2020)</li>
               <li>phpMyFAQ 3.0.x</li>
             </ul>
           </div>
@@ -738,7 +740,7 @@ if ($step == 3) {
                 break;
         }
     }
-    
+
     //
     // UPDATES FROM 3.1.0-RC
     //
