@@ -44,7 +44,7 @@ class System
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 11;
+    private const VERSION_PATCH_LEVEL = 12;
 
     /**
      * Pre-release version.
@@ -191,7 +191,7 @@ class System
      *
      * @return array
      */
-    public function getSupportedSafeDatabases($html = false): array
+    public function getSupportedSafeDatabases(bool $html = false): array
     {
         $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
@@ -358,7 +358,7 @@ class System
      *
      * @param array $queries
      */
-    public function dropTables(array $queries)
+    public function dropTables(array $queries): void
     {
         if ($this->database instanceof DatabaseDriver) {
             foreach ($queries as $query) {
@@ -370,7 +370,7 @@ class System
     /**
      * Removes the database.php and the ldap.php if an installation failed.
      */
-    public function cleanInstallation()
+    public function cleanInstallation(): void
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
@@ -387,7 +387,7 @@ class System
      *
      * @param bool $onePageBack
      */
-    public static function renderFooter($onePageBack = false)
+    public static function renderFooter(bool $onePageBack = false): void
     {
         if (true === $onePageBack) {
             printf(
