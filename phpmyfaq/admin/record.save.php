@@ -70,11 +70,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         FILTER_UNSAFE_RAW
     ) && $user->perm->hasPermission($user->getUserId(), 'approverec') ? 'yes' : 'no';
     $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_UNSAFE_RAW);
-    if ($faqConfig->get('main.enableMarkdownEditor')) {
-        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
-    } else {
-        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-    }
+    $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
     $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

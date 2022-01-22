@@ -58,11 +58,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_UNSAFE_RAW);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_UNSAFE_RAW);
-    if ($faqConfig->get('main.enableMarkdownEditor')) {
-        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
-    } else {
-        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-    }
+    $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
     $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -268,7 +264,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             (() => {
               setTimeout(() => {
                 window.location = "index.php?action=editentry&id=<?= $recordId;
-                ?>&lang=<?= $recordData['lang'] ?>";
+                    ?>&lang=<?= $recordData['lang'] ?>";
               }, 5000);
             })();
           </script>
