@@ -8,7 +8,7 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 | Version | Supported | Active development |
 | ------- | --------- | ------------------ |
 | 3.1.x   | ✓         | 2020 -             |
-| 3.0.x   | ✓         | 2020 -             |
+| 3.0.x   | ✓         | 2020 - 2022        |
 | 2.9.x   | ✗         | 2016 - 2019        |
 | < 2.9   | ✗         | 2001 - 2015        |
 
