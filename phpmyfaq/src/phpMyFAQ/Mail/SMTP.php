@@ -46,7 +46,7 @@ class SMTP implements MailUserAgentInterface
      */
     public function setAuthConfig(string $server, string $user, string $password, int $port = 25): void
     {
-        $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, $password, $server, $port );
+        $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, $password, $server, $port);
 
         $this->mailer = new Mailer(Transport::fromDsn($dsn));
     }
