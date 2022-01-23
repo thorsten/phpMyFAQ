@@ -10,6 +10,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - changed PHP requirement to PHP 8.0+ (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
+- updated to Bootstrap v5.1 (Thorsten)
+- updated to TinyMCE v5.10 (Thorsten)
 
 ### phpMyFAQ v3.1.0-RC - 2022-01-22
 

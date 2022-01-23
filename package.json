@@ -1,6 +1,6 @@
 {
   "name": "@thorsten/phpmyfaq",
-  "version": "3.1.0-RC",
+  "version": "3.2.0-dev",
   "description": "phpMyFAQ",
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
@@ -20,7 +20,7 @@
     "lint:fix": "prettier --write ."
   },
   "dependencies": {
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.1.3",
     "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.9.0",
     "bs-custom-file-input": "^1.3.4",
@@ -31,8 +31,8 @@
     "highlight.js": "^10.4.1",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.13.0",
-    "popper.js": "^1.14.6",
-    "tinymce": "^4.9.11"
+    "@popperjs/core": "^2.10.2",
+    "tinymce": "^5.10.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
