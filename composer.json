@@ -39,7 +39,6 @@
     "doctrine/instantiator": "1.*",
     "symfony/yaml": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",
-    "phpunit/php-token-stream": "*",
     "squizlabs/php_codesniffer": "*",
     "phpstan/phpstan": "^1.0.0"
   },
