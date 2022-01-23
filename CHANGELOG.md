@@ -1,10 +1,14 @@
-# phpMyFAQ 3.1.0-beta
+# phpMyFAQ 3.2.0-dev
 
-**Codename "Poseidon"**
+**Codename "Pontus"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.2.0-dev - 2022-XX-XX
+
+- changed PHP requirement to PHP 8.0+ (Thorsten)
 
 ### phpMyFAQ v3.1.0-RC - 2022-01-22
 

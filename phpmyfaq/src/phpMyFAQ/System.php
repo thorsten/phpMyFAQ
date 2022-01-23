@@ -20,6 +20,7 @@ namespace phpMyFAQ;
 use DateTime;
 use DirectoryIterator;
 use Exception;
+use JetBrains\PhpStorm\NoReturn;
 use phpMyFAQ\Database\DatabaseDriver;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -40,7 +41,7 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 1;
+    private const VERSION_MINOR = 2;
 
     /**
      * Patch level.
@@ -50,7 +51,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'RC';
+    private const VERSION_PRE_RELEASE = 'dev';
 
     /**
      * API version.
@@ -60,14 +61,14 @@ class System
     /**
      * Minimum required PHP version.
      */
-    public const VERSION_MINIMUM_PHP = '7.4.0';
+    public const VERSION_MINIMUM_PHP = '8.0.0';
 
     /**
      * Array of required PHP extensions.
      *
      * @var array<string>
      */
-    private $requiredExtensions = [
+    private array $requiredExtensions = [
         'curl',
         'fileinfo',
         'filter',
@@ -82,14 +83,14 @@ class System
      *
      * @var array<string>
      */
-    private $missingExtensions = [];
+    private array $missingExtensions = [];
 
     /**
      * Supported databases for phpMyFAQ.
      *
      * @var array<string, array<int, string>>
      */
-    private $supportedDatabases = [
+    private array $supportedDatabases = [
         'mysqli' => [self::VERSION_MINIMUM_PHP, 'MySQL / Percona Server / MariaDB'],
         'pgsql' => [self::VERSION_MINIMUM_PHP, 'PostgreSQL'],
         'sqlite3' => [self::VERSION_MINIMUM_PHP, 'SQLite 3'],
@@ -99,9 +100,9 @@ class System
     /**
      * Database handle.
      *
-     * @var DatabaseDriver
+     * @var ?DatabaseDriver
      */
-    private $database = null;
+    private ?DatabaseDriver $database = null;
 
     /**
      * Returns the current version of phpMyFAQ for installation and
@@ -159,7 +160,7 @@ class System
      *
      * @param bool $onePageBack
      */
-    public static function renderFooter(bool $onePageBack = false): void
+    #[NoReturn] public static function renderFooter(bool $onePageBack = false): void
     {
         if (true === $onePageBack) {
             printf(
@@ -249,12 +250,12 @@ class System
         $mainUrl = $faqConfig->getDefaultUrl();
 
         if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
-            if (false === strpos($mainUrl, 'https')) {
+            if (!str_contains($mainUrl, 'https')) {
                 $mainUrl = str_replace('http://', 'https://', $mainUrl);
             }
         }
 
-        if ('/' !== substr($mainUrl, -1)) {
+        if (!str_ends_with($mainUrl, '/')) {
             $mainUrl .= '/';
         }
 
