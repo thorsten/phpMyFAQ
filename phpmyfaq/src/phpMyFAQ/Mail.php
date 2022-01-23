@@ -20,7 +20,8 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
-use phpMyFAQ\Mail\SwiftSMTP;
+use phpMyFAQ\Mail\SMTP;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class Mail
@@ -35,56 +36,56 @@ class Mail
      *
      * @var string
      */
-    public $agent;
+    public string $agent;
 
     /**
      * Attached filed.
      *
      * @var mixed
      */
-    public $attachments;
+    public mixed $attachments;
 
     /**
      * Body of the e-mail.
      *
      * @var string
      */
-    public $body = '';
+    public string $body = '';
 
     /**
      * Boundary.
      *
      * @var string
      */
-    public $boundary = '----------';
+    public string $boundary = '----------';
 
     /**
      * Charset.
      *
      * @var string
      */
-    public $charset = 'utf-8';
+    public string $charset = 'utf-8';
 
     /**
      * Content disposition.
      *
      * @var string
      */
-    public $contentDisposition = 'inline';
+    public string $contentDisposition = 'inline';
 
     /**
      * Content type.
      *
      * @var string
      */
-    public $contentType = 'text/plain';
+    public string $contentType = 'text/plain';
 
     /**
      * Content transfer encoding.
      *
      * @var string
      */
-    public $contentTransferEncoding = '8bit';
+    public string $contentTransferEncoding = '8bit';
 
     /**
      * The one and only valid End Of Line sequence as per RFC 2822:
@@ -92,42 +93,42 @@ class Mail
      *
      * @var string
      */
-    public $eol = "\r\n";
+    public string $eol = "\r\n";
 
     /**
      * Array of headers of the e-mail
      *
      * @var array<string|int>
      */
-    public $headers;
+    public array $headers;
 
     /**
      * Message of the e-mail: HTML text allowed.
      *
      * @var string
      */
-    public $message;
+    public string $message;
 
     /**
      * Alternate message of the e-mail: only plain text allowed.
      *
      * @var string
      */
-    public $messageAlt;
+    public string $messageAlt;
 
     /**
      * Message-ID of the e-mail.
      *
      * @var string
      */
-    public $messageId;
+    public string $messageId;
 
     /**
      * Priorities: 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
      *
      * @var array<string>
      */
-    public $priorities = [
+    public array $priorities = [
         1 => 'Highest',
         2 => 'High',
         3 => 'Normal',
@@ -142,82 +143,82 @@ class Mail
      *
      * @see priorities
      */
-    public $priority;
+    public int $priority;
 
     /**
      * Subject of the e-mail.
      *
      * @var string
      */
-    public $subject;
+    public string $subject;
 
     /**
      * Recipients of the e-mail as <BCC>.
      *
      * @var mixed
      */
-    private $bcc;
+    private mixed $bcc;
 
     /**
      * Recipients of the e-mail as <CC>.
      *
      * @var mixed
      */
-    private $cc;
+    private mixed $cc;
 
     /**
      * Recipients of the e-mail as <From>.
      *
      * @var mixed
      */
-    private $from;
+    private mixed $from;
 
     /**
      * Mailer string.
      *
      * @var string
      */
-    private $mailer;
+    private string $mailer;
 
     /**
      * Recipient of the optional notification.
      *
      * @var mixed
      */
-    private $notifyTo;
+    private mixed $notifyTo;
 
     /**
      * Recipient of the e-mail as <Reply-To>.
      *
      * @var mixed
      */
-    private $replyTo;
+    private mixed $replyTo;
 
     /**
      * Recipient of the e-mail as <Return-Path>.
      *
      * @var mixed
      */
-    private $returnPath;
+    private mixed $returnPath;
 
     /**
      * Recipient of the e-mail as <Sender>.
      *
      * @var mixed
      */
-    private $sender;
+    private mixed $sender;
 
     /**
      * Recipients of the e-mail as <TO:>.
      *
      * @var mixed
      */
-    private $to;
+    private mixed $to;
 
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /*
      * Default constructor.
@@ -229,7 +230,7 @@ class Mail
     public function __construct(Configuration $config)
     {
         // Set default value for public properties
-        $this->agent = $config->get('mail.remoteSMTP') ? 'SwiftSMTP' : 'built-in';
+        $this->agent = $config->get('mail.remoteSMTP') ? 'SMTP' : 'built-in';
         $this->attachments = [];
         $this->boundary = self::createBoundary();
         $this->headers = [];
@@ -293,11 +294,11 @@ class Mail
      * Set the "From" address.
      *
      * @param string      $address User e-mail address.
-     * @param string|null $name User name (optional).
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function setFrom(string $address, $name = null): bool
+    public function setFrom(string $address, string $name = null): bool
     {
         return $this->setEmailTo($this->from, 'From', $address, $name);
     }
@@ -308,11 +309,11 @@ class Mail
      * @param array<string> $target Target array.
      * @param string        $targetAlias Alias Target alias.
      * @param string        $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string|null   $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    private function setEmailTo(array &$target, string $targetAlias, string $address, $name = null): bool
+    private function setEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
     {
         // Check for the permitted number of items into the $target array
         if (count($target) > 2) {
@@ -331,13 +332,13 @@ class Mail
      * Add an e-mail address to an array.
      *
      * @param array<string> $target Target array.
-     * @param string $targetAlias Alias Target alias.
-     * @param string $address User e-mail address.
-     * @param string|null $name User name (optional).
-     * @throws Exception
+     * @param string        $targetAlias Alias Target alias.
+     * @param string        $address User e-mail address.
+     * @param string|null   $name Username (optional).
      * @return bool True if successful, false otherwise.
+     *@throws Exception
      */
-    private function addEmailTo(array &$target, string $targetAlias, string $address, $name = null): bool
+    private function addEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
     {
         // Sanity check
         if (!self::validateEmail($address)) {
@@ -403,19 +404,19 @@ class Mail
     /**
      * Add an attachment.
      *
-     * @param string $path File path.
-     * @param string|null   $name File name. Defaults to the basename.
-     * @param string $mimetype File MIME type. Defaults to 'application/octet-stream'.
-     * @param string $disposition Attachment disposition. Defaults to 'attachment'.
-     * @param string $cid Content ID, required when disposition is 'inline'. Defaults to ''.
+     * @param string      $path File path.
+     * @param string|null $name File name. Defaults to the basename.
+     * @param string      $mimetype File MIME type. Defaults to 'application/octet-stream'.
+     * @param string      $disposition Attachment disposition. Defaults to 'attachment'.
+     * @param string      $cid Content ID, required when disposition is 'inline'. Defaults to ''.
      * @return bool True if successful, false otherwise.
      */
     public function addAttachment(
         string $path,
-        $name = null,
-        $mimetype = 'application/octet-stream',
-        $disposition = 'attachment',
-        $cid = ''
+        string $name = null,
+        string $mimetype = 'application/octet-stream',
+        string $disposition = 'attachment',
+        string $cid = ''
     ): bool {
         if (!file_exists($path)) {
             // File not found
@@ -443,12 +444,12 @@ class Mail
     /**
      * Add a recipient as <BCC>.
      *
-     * @param string $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string      $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addBcc(string $address, $name = null): bool
+    public function addBcc(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->bcc, 'Bcc', $address, $name);
     }
@@ -456,12 +457,12 @@ class Mail
     /**
      * Add a recipient as <CC>.
      *
-     * @param string $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string      $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addCc(string $address, $name = null): bool
+    public function addCc(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->cc, 'Cc', $address, $name);
     }
@@ -469,12 +470,12 @@ class Mail
     /**
      * Add an address to send a notification to.
      *
-     * @param string $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string      $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addNotificationTo(string $address, $name = null): bool
+    public function addNotificationTo(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->notifyTo, 'Disposition-Notification-To', $address, $name);
     }
@@ -482,21 +483,21 @@ class Mail
     /**
      * Add a recipient as <TO>.
      *
-     * @param string $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string      $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addTo(string $address, $name = null): bool
+    public function addTo(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->to, 'To', $address, $name);
     }
 
     /**
-     * Send the email according with the current settings.
+     * Send the email according to the current settings.
      *
      * @return int
-     * @throws Exception
+     * @throws Exception|TransportExceptionInterface
      */
     public function send(): int
     {
@@ -557,23 +558,15 @@ class Mail
                 $this->config->get('mail.remoteSMTPServer'),
                 $this->config->get('mail.remoteSMTPUsername'),
                 $this->config->get('mail.remoteSMTPPassword'),
-                $this->config->get('mail.remoteSMTPPort'),
-                $this->config->get('mail.remoteSMTPEncryption')
+                $this->config->get('mail.remoteSMTPPort')
             );
         }
 
-        switch ($this->agent) {
-            case 'SwiftSMTP':
-                $sent = $mua->send($this->to, $this->headers, $this->body);
-                break;
-            case 'built-in':
-                $sent = $mua->send($recipients, $this->headers, $this->body);
-                break;
-            default:
-                throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!');
-        }
-
-        return $sent;
+        return match ($this->agent) {
+            'SMTP' => $mua->send($this->to, $this->headers, $this->body),
+            'built-in' => $mua->send($recipients, $this->headers, $this->body),
+            default => throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!'),
+        };
     }
 
     /**
@@ -585,7 +578,7 @@ class Mail
         $this->headers = [];
 
         // Check if the message consists of just a "plain" single item
-        if (false === strpos($this->contentType, 'multipart')) {
+        if (!str_contains($this->contentType, 'multipart')) {
             // Content-Disposition: inline
             $this->headers['Content-Disposition'] = $this->contentDisposition;
             // Content-Type
@@ -676,7 +669,7 @@ class Mail
     }
 
     /**
-     * Returns the date according with RFC 2822.
+     * Returns the date according to RFC 2822.
      *
      * @static
      *
@@ -717,7 +710,7 @@ class Mail
         $this->body = '';
 
         // Add lines
-        if (strpos($this->contentType, 'multipart') !== false) {
+        if (str_contains($this->contentType, 'multipart')) {
             $lines[] = 'This is a multi-part message in MIME format.';
             $lines[] = '';
         }
@@ -737,7 +730,7 @@ class Mail
             $lines[] = '';
         }
 
-        if (strpos($this->contentType, 'multipart') !== false) {
+        if (str_contains($this->contentType, 'multipart')) {
             // At least we have messageAlt and message
             if (!empty($this->messageAlt)) {
                 // 1/2. messageAlt, supposed as plain text
@@ -803,7 +796,7 @@ class Mail
      * @param bool   $cut Cutting a word is allowed. Defaults to false.
      * @return string The given message, wrapped as requested.
      */
-    public function wrapLines(string $message, $width = 72, $cut = false): string
+    public function wrapLines(string $message, int $width = 72, bool $cut = false): string
     {
         $message = $this->fixEOL($message);
 
@@ -819,7 +812,7 @@ class Mail
 
     /**
      * Returns the given text being sure that any CR or LF has been fixed
-     * according with RFC 2822 EOL setting.
+     * according to RFC 2822 EOL setting.
      *
      * @param string $text Text with a mixed usage of CR, LF, CRLF.
      * @return string The fixed text.
@@ -848,9 +841,9 @@ class Mail
      *
      * @static
      * @param string $mua Type of the MUA.
-     * @return Builtin|SwiftSMTP
+     * @return Builtin|SMTP
      */
-    public static function getMUA(string $mua)
+    public static function getMUA(string $mua): Builtin|SMTP
     {
         $className = ucfirst(
             str_replace(
@@ -867,13 +860,13 @@ class Mail
     /**
      * Set an HTML message providing also a plain text alternative message,
      * if not already set using the $messageAlt property.
-     * Besides it is possible to put resources as inline attachments.
+     * Besides, it is possible to put resources as inline attachments.
      *
      * @param string $message HTML message.
      * @param bool   $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
      * @param bool   $inline Add images as inline attachments. Defaults to false.
      */
-    public function setHTMLMessage(string $message, $sanitize = false, $inline = false): void
+    public function setHTMLMessage(string $message, bool $sanitize = false, bool $inline = false): void
     {
         // No Javascript at all
         // 1/2. <script blahblahblah>blahblahblah</tag>
@@ -945,7 +938,7 @@ class Mail
      * Set the "Sender" address.
      *
      * @param string $address User e-mail address.
-     * @param null   $name User name (optional).
+     * @param null   $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
@@ -969,7 +962,7 @@ class Mail
     /**
      * If the email spam protection has been activated from the general
      * phpMyFAQ configuration this method converts an email address e.g.
-     * from "user@example.org" to "user_AT_example_DOT_org". Otherwise
+     * from "user@example.org" to "user_AT_example_DOT_org". Otherwise,
      * it will return the plain email address.
      *
      * @param string $email E-mail address
