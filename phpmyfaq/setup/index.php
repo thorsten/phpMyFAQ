@@ -2,10 +2,8 @@
 
 /**
  * The main phpMyFAQ Setup.
- *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -23,15 +21,11 @@
  * @since 2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Installer;
-use phpMyFAQ\Strings;
-use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;use phpMyFAQ\Core\Exception;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
 
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('PMF_SRC_DIR', PMF_ROOT_DIR . '/src');
-define('IS_VALID_PHPMYFAQ', null);
+define('PMF_ROOT_DIR', dirname(__FILE__, 2));
+const PMF_SRC_DIR = PMF_ROOT_DIR . '/src';
+const IS_VALID_PHPMYFAQ = null;
 
 if (version_compare(PHP_VERSION, '8.0.0') < 0) {
     die('Sorry, but you need PHP 8.0.0 or later!');
@@ -73,49 +67,48 @@ $loader->register();
   <script src="../assets/dist/phpmyfaq.js"></script>
   <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
-<body class="d-flex flex-column" >
+<body>
 
   <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
+    <div class="px-3 py-2 bg-light">
       <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSetup"
-                aria-controls="navbarSetup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSetup">
-          <ul class="navbar-nav mr-auto">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a>
+              <a href="https://www.phpmyfaq.de/documentation" class="nav-link" target="_blank">Documentation</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/support">Support</a>
+              <a href="https://www.phpmyfaq.de/support" class="nav-link" target="_blank">Support</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="https://forum.phpmyfaq.de/">Forums</a>
+              <a href="https://forum.phpmyfaq.de/" class="nav-link" target="_blank">Forums</a>
             </li>
           </ul>
         </div>
       </div>
-    </nav>
+    </div>
   </header>
 
 <main role="main">
-  <section id="content">
+    <section id="content">
 
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-4 text-center mt-5">
-          phpMyFAQ <?= System::getVersion() ?>
-        </h1>
-        <p class="text-center">
-          Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.1">documentation</a>
-          carefully before starting the phpMyFAQ setup?
-          </p>
-      </div>
-    </div>
+        <div class="bg-dark text-secondary px-4 py-5 text-center">
+            <div class="py-5">
+                <h1 class="display-5 fw-bold text-white">phpMyFAQ <?= System::getVersion() ?></h1>
+                <div class="col-lg-6 mx-auto">
+                    <p class="fs-5 mb-4">
+                        Did you already read our
+                        <a target="_blank" href="https://www.phpmyfaq.de/docs/3.2">documentation</a>
+                        carefully before starting the phpMyFAQ setup?
+                    </p>
+                </div>
+            </div>
+        </div>
 
-    <div class="container mb-3">
+
+
+
+    <div class="container mt-4 mb-3">
 
       <div class="pmf-setup-stepwizard">
         <div class="pmf-setup-stepwizard-row setup-panel">

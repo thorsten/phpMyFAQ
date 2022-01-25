@@ -62,30 +62,27 @@ require PMF_ROOT_DIR . '/config/database.php';
   </head>
 <body>
 
-  <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
-      <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSetup"
-                aria-controls="navbarSetup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSetup">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/support">Support</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" target="_blank" href="https://forum.phpmyfaq.de/">Forums</a>
-            </li>
-          </ul>
+    <header>
+        <div class="px-3 py-2 bg-light">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                        <li class="nav-item">
+                            <a href="https://www.phpmyfaq.de/documentation" class="nav-link" target="_blank">
+                                Documentation
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://www.phpmyfaq.de/support" class="nav-link" target="_blank">Support</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://forum.phpmyfaq.de/" class="nav-link" target="_blank">Forums</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-    </nav>
-  </header>
+    </header>
 
 <main role="main">
   <section id="content">
@@ -153,8 +150,8 @@ if ($step === 1) { ?>
           <div class="col">
             <p>This update script will work <strong>only</strong> for the following versions:</p>
             <ul>
-              <li>phpMyFAQ 2.9.x (out of support since end of 2020)</li>
               <li>phpMyFAQ 3.0.x</li>
+              <li>phpMyFAQ 3.1.x</li>
             </ul>
           </div>
           <div class="col">
@@ -167,6 +164,7 @@ if ($step === 1) { ?>
               <li>phpMyFAQ 2.6.x</li>
               <li>phpMyFAQ 2.7.x</li>
               <li>phpMyFAQ 2.8.x</li>
+              <li>phpMyFAQ 2.9.x</li>
             </ul>
           </div>
         </div>
@@ -342,203 +340,7 @@ if ($step == 3) {
     $prefix = Database::getTablePrefix();
     $faqConfig->getAll();
     $perm = new BasicPermission($faqConfig);
-
-    //
-    // Enable maintenance mode
-    //
-    if ($faqConfig->set('main.maintenanceMode', 'true')) {
-        echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> Activating maintenance mode ...</p>";
-    }
-
-    //
-    // UPDATES FROM 2.9.0-alpha
-    //
-    if (version_compare($version, '2.9.0-alpha', '<')) {
-        $faqConfig->delete('cache.varnishEnable');
-        $faqConfig->delete('cache.varnishHost');
-        $faqConfig->delete('cache.varnishPort');
-        $faqConfig->delete('cache.varnishSecret');
-        $faqConfig->delete('cache.varnishTimeout');
-
-        $faqConfig->add('search.enableHighlighting', 'true');
-        $faqConfig->add('main.enableRssFeeds', 'true');
-        $faqConfig->add('records.allowCommentsForGuests', 'true');
-        $faqConfig->add('records.allowQuestionsForGuests', 'true');
-        $faqConfig->add('records.allowNewFaqsForGuests', 'true');
-        $faqConfig->add('records.hideEmptyCategories', 'false');
-        $faqConfig->add('search.searchForSolutionId', 'true');
-        $faqConfig->add('socialnetworks.disableAll', 'false');
-        $faqConfig->add('main.enableGzipCompression', 'true');
-
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
-        } elseif ('pgsql' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD success SMALLINT NULL DEFAULT 1';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD success INTEGER NULL DEFAULT 1';
-        }
-    }
-
-    //
-    // UPDATES FROM 2.9.0-alpha2
-    //
-    if (version_compare($version, '2.9.0-alpha2', '<')) {
-        $faqConfig->add('seo.metaTagsHome', 'index, follow');
-        $faqConfig->add('seo.metaTagsFaqs', 'index, follow');
-        $faqConfig->add('seo.metaTagsCategories', 'index, follow');
-        $faqConfig->add('seo.metaTagsPages', 'index, follow');
-        $faqConfig->add('seo.metaTagsAdmin', 'noindex, nofollow');
-        $faqConfig->add('main.enableLinkVerification', 'true');
-        $faqConfig->add('spam.manualActivation', 'true');
-        $faqConfig->add('mail.remoteSMTP', 'false');
-        $faqConfig->add('mail.remoteSMTPServer', '');
-        $faqConfig->add('mail.remoteSMTPUsername', '');
-        $faqConfig->add('mail.remoteSMTPPassword', '');
-        $faqConfig->add('security.enableRegistration', 'true');
-        $faqConfig->delete('search.useAjaxSearchOnStartpage');
-
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD active INT NULL DEFAULT 1';
-        }
-    }
-
-    //
-    // UPDATES FROM 2.9.0-alpha3
-    //
-    if (version_compare($version, '2.9.0-alpha3', '<')) {
-        $faqConfig->add('main.customPdfHeader', '');
-        $faqConfig->add('main.customPdfFooter', '');
-        $faqConfig->add('records.allowDownloadsForGuests', 'false');
-        $faqConfig->add('main.enableMarkdownEditor', 'false');
-        $faqConfig->add('main.enableSmartAnswering', 'true');
-        $faqConfig->add('records.numberMaxStoredRevisions', '10');
-
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL DEFAULT \'\'';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions ADD lang VARCHAR(5) NOT NULL DEFAULT \'\'';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD group_id INT NULL DEFAULT -1';
-        }
-        $query[] = 'UPDATE ' . $prefix . "faqquestions SET lang = '" . $faqConfig->getDefaultLanguage() . "'";
-    }
-
-    //
-    // UPDATES FROM 2.9.0-alpha4
-    //
-    if (version_compare($version, '2.9.0-alpha4', '<')) {
-        switch ($DB['type']) {
-            case 'pgsql':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata RENAME COLUMN datum TO updated';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions RENAME COLUMN datum TO updated';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-                break;
-            case 'mssql':
-            case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata.datum', 'updated', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revisions.datum', 'updated', 'COLUMN'";
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
-                break;
-            case 'mysqli':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata CHANGE datum updated VARCHAR(15) NOT NULL';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions CHANGE datum updated VARCHAR(15) NOT NULL';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-                break;
-        }
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'CREATE TABLE ' . $prefix . "faqdata_temp (
-                id INTEGER NOT NULL,
-                lang VARCHAR(5) NOT NULL,
-                solution_id INTEGER NOT NULL,
-                revision_id INTEGER NOT NULL DEFAULT 0,
-                active char(3) NOT NULL,
-                sticky INTEGER NOT NULL,
-                keywords text DEFAULT NULL,
-                thema text NOT NULL,
-                content text DEFAULT NULL,
-                author VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL,
-                comment char(1) default 'y',
-                updated VARCHAR(15) NOT NULL,
-                links_state VARCHAR(7) DEFAULT NULL,
-                links_check_date INTEGER DEFAULT 0 NOT NULL,
-                date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
-                date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
-                PRIMARY KEY (id, lang))";
-            $query[] = 'INSERT INTO ' . $prefix . 'faqdata_temp
-                SELECT
-                    id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
-                    comment, datum, links_state, links_check_date, date_start, date_end
-                FROM ' . $prefix . 'faqdata';
-            $query[] = 'DROP TABLE ' . $prefix . 'faqdata';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_temp RENAME TO ' . $prefix . 'faqdata';
-
-            $query[] = 'CREATE TABLE ' . $prefix . "faqdata_revision_temp (
-                id INTEGER NOT NULL,
-                lang VARCHAR(5) NOT NULL,
-                solution_id INTEGER NOT NULL,
-                revision_id INTEGER NOT NULL DEFAULT 0,
-                active char(3) NOT NULL,
-                sticky INTEGER NOT NULL,
-                keywords text DEFAULT NULL,
-                thema text NOT NULL,
-                content text DEFAULT NULL,
-                author VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL,
-                comment char(1) default 'y',
-                updated VARCHAR(15) NOT NULL,
-                links_state VARCHAR(7) DEFAULT NULL,
-                links_check_date INTEGER DEFAULT 0 NOT NULL,
-                date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
-                date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
-                PRIMARY KEY (id, lang, solution_id, revision_id))";
-            $query[] = 'INSERT INTO ' . $prefix . 'faqdata_revision_temp
-                SELECT
-                    id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
-                    comment, datum, links_state, links_check_date, date_start, date_end
-                FROM ' . $prefix . 'faqdata_revisions';
-            $query[] = 'DROP TABLE ' . $prefix . 'faqdata_revisions';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revision_temp RENAME TO ' . $prefix . 'faqdata_revisions';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-        }
-    }
-
-    //
-    // UPDATES FROM 2.9.0-beta
-    //
-    if (version_compare($version, '2.9.0-beta2', '<')) {
-        $faqConfig->add('search.enableElasticsearch', 'false');
-    }
-
-    //
-    // UPDATES FROM 2.9.0-RC
-    //
-    if (version_compare($version, '2.9.0-RC', '<')) {
-        if ($DB['type'] === 'mssql' || $DB['type'] === 'sqlsrv') {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD notes VARCHAR(MAX) DEFAULT NULL';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD notes VARCHAR(MAX) DEFAULT NULL';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD notes text DEFAULT NULL';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD notes text DEFAULT NULL';
-        }
-    }
-
-    //
-    // UPDATES FROM 2.9.6
-    //
-    if (version_compare($version, '2.9.6', '<')) {
-        if ($DB['type'] === 'mysqli') {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD FULLTEXT(keywords,thema,content);';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions CHANGE COLUMN lang lang VARCHAR(5) AFTER id';
-        }
-    }
-
+    
     //
     // UPDATES FROM 2.10.0-alpha
     //
