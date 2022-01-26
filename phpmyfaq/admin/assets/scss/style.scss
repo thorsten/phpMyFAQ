@@ -1,35 +1,37 @@
 /**
- * phpMyFAQ 3.0 default layout for admin
+ * phpMyFAQ 3.2 default layout for admin
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-01-17
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-01-17
  */
 
-// Import variables
+// Import Variables
 @import 'variables.scss';
 
 // Import Bootstrap
-@import '~bootstrap';
+@import '~bootstrap/scss/bootstrap.scss';
 
-// Import global styles
+// Import Custom SCSS
 @import 'global.scss';
-@import 'utilities.scss';
 
-// Custom Components
-@import 'dropdowns.scss';
-@import 'navs.scss';
-@import 'buttons.scss';
-@import 'cards.scss';
-@import 'error.scss';
-@import 'footer.scss';
+// Layout
+@import 'layout/authentication.scss';
+@import 'layout/dashboard-default.scss';
+@import 'layout/error.scss';
+
+// Navigation
+@import 'navigation/nav.scss';
+@import 'navigation/topnav.scss';
+@import 'navigation/sidenav/sidenav.scss';
+@import 'navigation/sidenav/sidenav-dark.scss';
 
 // Fork Awesome
 $fa-font-path: '~fork-awesome/fonts';

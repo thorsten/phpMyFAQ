@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -340,7 +340,7 @@ if ($step == 3) {
     $prefix = Database::getTablePrefix();
     $faqConfig->getAll();
     $perm = new BasicPermission($faqConfig);
-    
+
     //
     // UPDATES FROM 2.10.0-alpha
     //

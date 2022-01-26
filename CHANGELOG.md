@@ -1691,7 +1691,7 @@ All versions before 0.60 were internal developer versions.
 
 This Source Code Form is subject to the terms of the Mozilla Public License,
 v. 2.0. If a copy of the MPL was not distributed with this file, You can
-obtain one at http://mozilla.org/MPL/2.0/.
+obtain one at https://mozilla.org/MPL/2.0/.
 
 Software distributed under the License is distributed on an "AS IS"
 basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the

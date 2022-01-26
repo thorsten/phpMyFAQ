@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -14,14 +14,14 @@
  * @since 2014-03-22
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  'use strict';
-
-  $(window).bind('load resize', function () {
-    if ($(this).width() < 768) {
-      $('div.sidebar-collapse').addClass('collapse');
-    } else {
-      $('div.sidebar-collapse').removeClass('collapse');
-    }
-  });
+window.addEventListener('DOMContentLoaded', () => {
+  // Toggle the side navigation
+  const sidebarToggle = document.body.querySelector('#sidebarToggle');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.body.classList.toggle('sb-sidenav-toggled');
+      localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+    });
+  }
 });

@@ -6,21 +6,21 @@
     <title>{{ title }}</title>
     <base href="{{ baseHref }}" />
 
-    <meta name="description" content="{{ metaDescription }}" />
-    <meta name="keywords" content="{{ metaKeywords }}" />
-    <meta name="author" content="{{ metaPublisher }}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}" />
-    <meta name="robots" content="{{ metaRobots }}" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="apple-itunes-app" content="app-id=977896957" />
+    <meta content="{{ metaDescription }}" name="description" />
+    <meta content="{{ metaKeywords }}" name="keywords" />
+    <meta content="{{ metaPublisher }}" name="author" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="phpMyFAQ {{ phpmyfaqversion }}" name="application-name" />
+    <meta content="{{ metaRobots }}" name="robots" />
+    <meta content="7 days" name="revisit-after" />
+    <meta content="app-id=977896957" name="apple-itunes-app" />
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ baseHref }}assets/dist/styles.css" />
+    <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" />
 
-    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" />
-    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
-    <link rel="canonical" href="{{ currentPageUrl }}" />
+    <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" rel="shortcut icon" />
+    <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link href="{{ currentPageUrl }}" rel="canonical" />
 
     <script>
       if (self === top) {
@@ -38,17 +38,17 @@
   <body class="flex-column" dir="{{ dir }}">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-          <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ" />
+        <a class="navbar-brand" href="{{ faqHome }}" id="phpmyfaq-logo" title="{{ header }}">
+          <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
         </a>
         <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#pmf-navbar-toggle"
           aria-controls="pmf-navbar-toggle"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          class="navbar-toggler"
+          data-target="#pmf-navbar-toggle"
+          data-toggle="collapse"
+          type="button"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -60,16 +60,16 @@
             <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
             <li class="nav-item dropdown">
               <a
+                aria-expanded="false"
+                aria-haspopup="true"
                 class="nav-link dropdown-toggle"
+                data-toggle="dropdown"
                 href="#"
                 id="dropdown"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
               >
                 {{ msgLoginUser }}
               </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown">
+              <div aria-labelledby="dropdown" class="dropdown-menu">
                 [notLoggedIn]
                 <div>{{ msgRegisterUser }} {{ msgLoginUser }}</div>
                 [/notLoggedIn] [userloggedIn]
@@ -94,14 +94,14 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-md-auto">
-              <form role="search" id="search" action="{{ writeSendAdress }}" method="post">
+              <form action="{{ writeSendAdress }}" id="search" method="post" role="search">
                 <input
-                  type="text"
-                  class="typeahead pmf-search-field"
-                  placeholder="{{ searchBox }} ..."
-                  name="search"
                   autocomplete="off"
+                  class="typeahead pmf-search-field"
                   data-provide="typeahead"
+                  name="search"
+                  placeholder="{{ searchBox }} ..."
+                  type="text"
                   value="{{ searchTerm }}"
                 />
                 <button type="submit"><i class="fa fa-search"></i></button>
@@ -123,7 +123,7 @@
     [/breadcrumb]
 
     <!-- MAIN CONTENT -->
-    <section id="wrapper" class="mt-3">
+    <section class="mt-3" id="wrapper">
       <div class="container">
         <div class="row">{{ mainPageContent }} {{ sidebar }}</div>
       </div>
@@ -142,9 +142,9 @@
             </ul>
           </div>
           <div class="col-4 mb-4">
-            <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
+            <form accept-charset="utf-8" action="{{ renderUri }}" class="pmf-footer-language" method="post">
               {{ switchLanguages }}
-              <input type="hidden" name="action" value="" />
+              <input name="action" type="hidden" value="" />
             </form>
           </div>
         </div>
@@ -168,9 +168,9 @@
     <script src="{{ baseHref }}assets/dist/phpmyfaq.js"></script>
     <script src="{{ baseHref }}assets/dist/frontend.js"></script>
     <script>
-      $('.topten').tooltip();
-      $('.latest-entries').tooltip();
-      $('.sticky-faqs').tooltip();
+      // $('.topten').tooltip();
+      // $('.latest-entries').tooltip();
+      // $('.sticky-faqs').tooltip();
     </script>
     <script>
       window.addEventListener('load', () => {
