@@ -1,0 +1,70 @@
+/**
+ * phpMyFAQ 3.2 default admin category layout
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2022 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2022-01-25
+ */
+
+.category-header {
+  cursor: pointer;
+}
+
+.list-group.list-group-root {
+  padding: 0;
+  overflow: hidden;
+
+  &.list-group {
+    margin-bottom: 0;
+  }
+
+  &.list-group-item {
+    border-radius: 0;
+    border-width: 1px 0 0 0;
+    border-right: none !important;
+    cursor: pointer;
+  }
+
+  & > .list-group-item:first-child {
+    border-top-width: 0;
+  }
+
+  & > .list-group {
+    & > .list-group-item {
+      padding-left: 30px;
+    }
+
+    & > .list-group {
+      & > .list-group-item {
+        padding-left: 45px;
+      }
+    }
+  }
+}
+
+.list-group-item {
+  cursor: move;
+
+  &.fas {
+    margin-right: 5px;
+  }
+}
+
+.list-group-item-action[data-toggle='collapse'] {
+  cursor: pointer;
+}
+
+.collapse {
+  display: none;
+
+  &.show {
+    display: block;
+  }
+}

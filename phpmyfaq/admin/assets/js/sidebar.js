@@ -20,8 +20,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (sidebarToggle) {
     sidebarToggle.addEventListener('click', (event) => {
       event.preventDefault();
-      document.body.classList.toggle('sb-sidenav-toggled');
-      localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+      document.body.classList.toggle('pmf-admin-sidenav-toggled');
+      localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('pmf-admin-sidenav-toggled'));
     });
   }
 });

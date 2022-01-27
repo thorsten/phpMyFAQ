@@ -52,7 +52,7 @@ $faqSession = new Session($faqConfig);
 
 <?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) : ?>
   <section class="row mb-3">
-    <div class="col-12 p-2">
+    <div class="col-xl-3 col-md-6 p-2">
       <div class="card border-left-danger shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">

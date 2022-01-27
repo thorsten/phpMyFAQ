@@ -32,7 +32,7 @@ class AdministrationHelper
      *
      * @var array
      */
-    private $permission = [];
+    private array $permission = [];
 
     /**
      * Adds a menu entry according to user permissions.
@@ -66,7 +66,7 @@ class AdministrationHelper
         }
 
         $output = sprintf(
-            '<a class="collapse-item" href="?%s">%s</a>%s',
+            '<a class="nav-link" href="?%s">%s</a>%s',
             $action,
             $renderedCaption,
             "\n"
@@ -95,7 +95,7 @@ class AdministrationHelper
      */
     private function evaluatePermission(string $restrictions): bool
     {
-        if (false !== strpos($restrictions, '+')) {
+        if (str_contains($restrictions, '+')) {
             $hasPermission = false;
             foreach (explode('+', $restrictions) as $restriction) {
                 $hasPermission = $hasPermission || $this->evaluatePermission($restriction);
@@ -103,7 +103,7 @@ class AdministrationHelper
                     break;
                 }
             }
-        } elseif (false !== strpos($restrictions, '*')) {
+        } elseif (str_contains($restrictions, '*')) {
             $hasPermission = true;
             foreach (explode('*', $restrictions) as $restriction) {
                 if (!isset($this->permission[$restriction]) || !$this->permission[$restriction]) {

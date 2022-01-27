@@ -24,45 +24,34 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
+            </div>
+        </main>
 
-</div>
-<!-- /.container-fluid -->
-
-</div>
-<!-- End of Main Content -->
-
-<!-- Footer -->
-<footer class="sticky-footer bg-white mt-3">
-  <div class="container my-auto">
-    <div class="copyright text-center my-auto">
-      Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong> |
-      <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">phpMyFAQ documentation</a> |
-      Follow us on <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">Twitter</a> |
-      Like us on <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ"> Facebook</a> |
-      &copy; 2001-<?= date('Y') ?> <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong></div>
+                    <div>
+                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">phpMyFAQ documentation</a>
+                        &middot;
+                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">phpMyFAQ on Twitter</a>
+                        &middot;
+                        <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">phpMyFAQ on Facebook</a>
+                        &middot;
+                        &copy; 2001-<?= date('Y') ?> <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
-  </div>
-    <?php
-    if (DEBUG) {
-        printf('<hr><div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
-    }
-    ?>
-</footer>
-<!-- End of Footer -->
-
 </div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
 
 
 <?php
+if (DEBUG) {
+    printf('<hr><div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
+}
+
 if (isset($auth)) {
     ?>
   <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"

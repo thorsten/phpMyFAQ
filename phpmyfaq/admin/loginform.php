@@ -2,7 +2,6 @@
 
 /**
  * The login form.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -18,10 +17,9 @@
 
 if (isset($error) && 0 < strlen($error)) {
     $message = sprintf(
-        '<p class="alert alert-danger alert-dismissible fade show mt-3">%s%s</p>',
-        '<button type="button" class="close" data-dismiss="alert">' .
-        '<span aria-hidden="true">&times;</span>' .
-        '</button>',
+        '<div class="alert alert-danger alert-dismissible fade show" role="alert">%s' .
+        '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
+        '</div>',
         $error
     );
 } else {
@@ -29,73 +27,72 @@ if (isset($error) && 0 < strlen($error)) {
 }
 if ($action == 'logout') {
     $message = sprintf(
-        '<p class="alert alert-success alert-dismissible fade show mt-3">%s%s</p>',
-        '<button type="button" class="close" data-dismiss="alert">' .
-        '<span aria-hidden="true">&times;</span>' .
-        '</button>',
+        '<div class="alert alert-success alert-dismissible fade show" role="alert">%s' .
+        '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
+        '</div>',
         $PMF_LANG['ad_logout']
     );
 }
-if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
+if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get(
+        'security.useSslForLogins'
+    )) {
     ?>
 
-<div class="container py-5">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="row">
-        <div class="col-lg-6 mx-auto">
-          <div class="card rounded-0" id="login-form">
-            <div class="card-header">
-              <h3 class="mb-0">phpMyFAQ Login</h3>
-                <?= $message ?>
-            </div>
-            <div class="card-body">
-              <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
-                    accept-charset="utf-8" role="form" class="pmf-form-login">
-                <input type="hidden" name="redirect-action" value="<?= $action ?>">
-                <div class="form-group">
-                  <label for="faqusername"><?= $PMF_LANG['ad_auth_user'] ?></label>
-                  <input type="text" class="form-control form-control-lg rounded-0" name="faqusername" id="faqusername"
-                         required>
+    <div id="pmf-admin-login">
+        <div id="pmf-admin-login-content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header">
+                                    <h3 class="text-center font-weight-light my-4">phpMyFAQ Login</h3>
+                                    <?= $message ?>
+                                </div>
+                                <div class="card-body">
+                                    <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php"
+                                          method="post"
+                                          accept-charset="utf-8" role="form">
+                                        <input type="hidden" name="redirect-action" value="<?= $action ?>">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="faqusername" name='faqusername' type="text"
+                                                   placeholder="<?= $PMF_LANG['ad_auth_user'] ?>" />
+                                            <label for="faqusername"><?= $PMF_LANG['ad_auth_user'] ?></label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="faqpassword" name='faqpassword'
+                                                   type="password" placeholder="<?= $PMF_LANG['ad_auth_passwd'] ?>" />
+                                            <label for="faqpassword"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" id="faqrememberme" type="checkbox"
+                                                   value="rememberMe" />
+                                            <label class="form-check-label"
+                                                   for="faqrememberme"><?= $PMF_LANG['rememberMe'] ?></label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                            <a class="small"
+                                               href="../?action=password"><?= $PMF_LANG['lostPassword'] ?></a>
+                                            <button type="submit"
+                                                    class="btn btn-primary"><?= $PMF_LANG['msgLoginUser'] ?></button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <?php
+                                if ($faqConfig->get('security.enableRegistration')) { ?>
+                                    <div class="card-footer text-center py-3">
+                                        <div class="small"><a
+                                                href="../?action=register"><?= $PMF_LANG['msgRegistration'] ?></a></div>
+                                    </div>
+                                <?php
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="faqpassword"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
-                  <input type="password" autocomplete="off" class="form-control form-control-lg rounded-0" id="faqpassword"
-                         name="faqpassword" required>
-                </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe"
-                           class="form-check-input">
-                    <label class="form-check-label" for="faqrememberme">
-                        <?= $PMF_LANG['rememberMe'] ?>
-                    </label>
-                  </div>
-                </div>
-                  <div class="form-group">
-                  <p>
-                      <?php if ($faqConfig->get('security.enableRegistration')) { ?>
-                        <a href="../?action=register">
-                            <?= $PMF_LANG['msgRegistration'] ?>
-                        </a>
-                      <?php } ?>
-                      <br>
-                    <a href="../?action=password">
-                        <?= $PMF_LANG['lostPassword'] ?>
-                    </a>
-                  </p>
-                </div>
-                <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
-                    <?= $PMF_LANG['msgLoginUser'] ?>
-                </button>
-              </form>
-            </div>
-          </div>
+            </main>
         </div>
-      </div>
     </div>
-  </div>
-</div>
 
     <?php
 } else {
