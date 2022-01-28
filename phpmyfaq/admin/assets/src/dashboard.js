@@ -5,15 +5,21 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne
  * @copyright 2020-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2020-04-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2020-04-22
  */
 
 import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title } from 'chart.js';
+import Masonry from 'masonry-layout';
+
+window.onload = () => {
+  const masonryElement = document.querySelector('.masonry-grid');
+  new Masonry(masonryElement, { columnWidth: 0 });
+};
 
 export const renderVisitorCharts = () => {
   const context = document.getElementById('pmf-chart-visits');

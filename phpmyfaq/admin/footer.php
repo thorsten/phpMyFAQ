@@ -32,11 +32,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <div class="d-flex align-items-center justify-content-between small">
                     <div class="text-muted">Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong></div>
                     <div>
-                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">phpMyFAQ documentation</a>
+                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">Documentation</a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">phpMyFAQ on Twitter</a>
+                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">Twitter</a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">phpMyFAQ on Facebook</a>
+                        <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">Facebook</a>
                         &middot;
                         &copy; 2001-<?= date('Y') ?> <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
                     </div>
