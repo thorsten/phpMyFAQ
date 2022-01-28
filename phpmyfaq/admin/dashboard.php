@@ -223,7 +223,7 @@ $faqSession = new Session($faqConfig);
                                         continue;
                                     }
                                     printf(
-                                        '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
+                                        '<li><span class="pmf-popover" data-toggle="popover" data-bs-container="body" title="SHA-1" data-bs-content="%s">%s</span></li>',
                                         $hash,
                                         $file
                                     );
@@ -248,9 +248,6 @@ $faqSession = new Session($faqConfig);
                     <?php
                 }
                 ?>
-              <script>$(function() {
-                  $('span[class="pmf-popover"]').popover();
-                });</script>
             </div>
           </div>
     </div>

@@ -57,9 +57,8 @@ if (isset($auth)) {
   <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;"></iframe>
     <?php
-    if (
-        isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
-            ('add-news' == $action) || ('edit-news' == $action) || ('copyentry' == $action))
+    if ((('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
+        ('add-news' == $action) || ('edit-news' == $action) || ('copyentry' == $action))
     ) {
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
             ?>
