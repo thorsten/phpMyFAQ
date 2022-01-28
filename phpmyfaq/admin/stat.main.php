@@ -196,7 +196,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <td><?= $PMF_LANG['ad_stat_browse'] ?>:</td>
             <td class="col-lg-2">
               <form action="?action=sessionbrowse" method="post" accept-charset="utf-8" class="form-inline">
-                <div class="form-group mr-2">
+                <div class="mr-2">
                   <label for="day" class="d-none"><?= $PMF_LANG['ad_stat_browse'] ?></label>
                   <select name="day" id="day" class="form-control">
                       <?php
@@ -225,7 +225,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
             <legend><?= $PMF_LANG['ad_stat_management'] ?></legend>
 
-            <div class="form-group mr-2">
+            <div class="mr-2">
               <label class="col-form-label" for="month"><?= $PMF_LANG['ad_stat_choose'] ?>:</label>
               <select name="month" id="month" class="form-control">
                     <?php

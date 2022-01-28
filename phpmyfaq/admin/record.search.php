@@ -55,7 +55,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
                 <form action="?action=view" method="post"  accept-charset="utf-8">
 
-                    <div class="form-group row">
+                    <div class="row">
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['msgSearchWord'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
@@ -65,7 +65,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     </div>
 
                     <?php if ($linkVerifier->isReady() === true) : ?>
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="offset-lg-2 col-lg-4 checkbox">
                             <label>
                                 <input type="checkbox" name="linkstate" value="linkbad">
@@ -75,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     </div>
                     <?php endif; ?>
 
-                    <div class="form-group row">
+                    <div class="row">
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['msgCategory'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
@@ -85,7 +85,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?= $PMF_LANG['msgSearch'] ?>

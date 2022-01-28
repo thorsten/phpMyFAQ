@@ -22,7 +22,10 @@ import Masonry from 'masonry-layout';
 
 window.onload = () => {
   const masonryElement = document.querySelector('.masonry-grid');
-  new Masonry(masonryElement, { columnWidth: 0 });
+
+  if (masonryElement) {
+    new Masonry(masonryElement, { columnWidth: 0 });
+  }
 };
 
 export const renderVisitorCharts = () => {

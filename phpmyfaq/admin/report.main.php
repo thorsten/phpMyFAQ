@@ -38,7 +38,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             <form action="?action=reportview" method="post" accept-charset="utf-8">
                 <h4><?= $PMF_LANG['ad_stat_report_fields'] ?></h4>
 
-                <div class="form-group row">
+                <div class="row">
                     <label class="checkbox" for="report_category">
                         <input type="checkbox" name="report_category" id="report_category" checked value="1">
                         <?= $PMF_LANG['ad_stat_report_category'] ?>
@@ -89,7 +89,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                     </label>
                 </div>
 
-                <div class="form-group row">
+                <div class="row">
                     <button class="btn btn-primary" type="submit">
                         <?= $PMF_LANG['ad_stat_report_make_report'] ?>
                     </button>

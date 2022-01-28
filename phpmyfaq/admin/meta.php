@@ -37,7 +37,7 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addMetaModal">
+      <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addMetaModal">
         <i aria-hidden="true" class="fa fa-plus"></i>
           <?= $PMF_LANG['ad_meta_add'] ?>
       </button>
@@ -107,7 +107,7 @@ $metaData = $meta->getAll();
            data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
           <i aria-hidden="true" class="fa fa-trash"></i>
         </a>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#codeModal"
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#codeModal"
                 data-code-snippet="<?= $data->getContent() ?>">
           <i aria-hidden="true" class="fa fa-code"></i>
         </button>
@@ -132,24 +132,24 @@ $metaData = $meta->getAll();
         <form action="#" method="post" accept-charset="utf-8">
           <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-          <div class="form-group row">
+          <div class="row">
             <label for="page_id" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_page_id'] ?></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="page_id" required>
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="row">
             <label for="type" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_type'] ?></label>
             <div class="col-sm-10">
-              <select class="form-control" id="type" required>
+              <select class="form-select" id="type" required>
                 <option value="text">Text</option>
                 <option value="html">HTML</option>
               </select>
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="row">
             <label for="meta-content" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_content'] ?></label>
             <div class="col-sm-10">
               <textarea class="form-control" id="meta-content" rows="5" required></textarea>

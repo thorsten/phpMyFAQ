@@ -293,7 +293,7 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<div class="form-group row"><label class="col-form-label col-lg-3"></label>';
+            echo '<div class="row"><label class="col-form-label col-lg-3"></label>';
             echo '<div class="col-lg-9">';
             if (
                 '' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
@@ -318,7 +318,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
 
         printf(
-            '<div class="form-group row"><label class="col-lg-3 col-form-label %s">',
+            '<div class="row"><label class="col-lg-3 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
         );
 

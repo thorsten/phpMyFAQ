@@ -77,7 +77,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
       <form action="?action=passwd" method="post" accept-charset="utf-8">
         <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
         <input type="hidden" name="save" value="newpassword">
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="opass">
               <?= $PMF_LANG['ad_passwd_old'] ?>
           </label>
@@ -86,7 +86,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="npass">
               <?= $PMF_LANG['ad_passwd_new'] ?>
           </label>
@@ -95,7 +95,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="bpass">
               <?= $PMF_LANG['ad_passwd_con'] ?>
           </label>
@@ -104,7 +104,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <div class="offset-lg-2 col-lg-3">
             <button class="btn btn-primary" type="submit">
                 <?= $PMF_LANG['ad_passwd_change'] ?>

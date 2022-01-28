@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </div>
   </div>
 
-  <div class="row">
+  <div class="row mb-2">
     <div class="col-lg-12">
 <?php
 
@@ -74,7 +74,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
             ?>
         <?php
         printf(
-            '<div class="form-group row"><label class="col-lg-2 col-form-label">%s:</label>',
+            '<div class="row mb-2"><label class="col-lg-2 col-form-label">%s:</label>',
             $PMF_LANG['msgMainCategory']
         );
         printf(
@@ -84,23 +84,23 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
         );
     }
     ?>
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <label class="col-lg-2 col-form-label" for="name"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
                     <div class="col-lg-4">
                       <input type="text" id="name" name="name" class="form-control" required>
                     </div>
                   </div>
 
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <label class="col-lg-2 col-form-label" for="description"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
                     <div class="col-lg-4">
                       <textarea id="description" name="description" rows="3" class="form-control"></textarea>
                     </div>
                   </div>
 
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <div class="offset-lg-2 col-lg-4">
-                      <div class="checkbox">
+                      <div class="form-check">
                         <label>
                           <input type="checkbox" name="active" value="1" checked>
                             <?= $PMF_LANG['ad_user_active'] ?>
@@ -109,9 +109,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     </div>
                   </div>
 
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <div class="offset-lg-2 col-lg-4">
-                      <div class="checkbox">
+                      <div class="form-check">
                         <label>
                           <input type="checkbox" name="show_home" value="1" checked>
                             <?= $PMF_LANG['ad_user_show_home'] ?>
@@ -120,7 +120,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     </div>
                   </div>
 
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
                         <?= $PMF_LANG['ad_category_image'] ?>:
                     </label>
@@ -132,7 +132,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     </div>
                   </div>
 
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <label class="col-lg-2 col-form-label" for="user_id">
                         <?= $PMF_LANG['ad_categ_owner'] ?>:
                     </label>
@@ -143,7 +143,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     </div>
                   </div>
                     <?php if ($faqConfig->get('security.permLevel') !== 'basic') { ?>
-                      <div class="form-group row">
+                      <div class="row mb-2">
                         <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>
                           :</label>
                         <div class="col-lg-4">
@@ -158,7 +158,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     <?php
                     if ($parentId === 0) {
                         if ($faqConfig->get('security.permLevel') !== 'basic') { ?>
-                          <div class="form-group row">
+                          <div class="row mb-2">
                             <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_entry_grouppermission'] ?></label>
                             <div class="col-lg-4">
                               <label class="radio">
@@ -178,7 +178,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                         <?php } else { ?>
                           <input type="hidden" name="grouppermission" value="all">
                         <?php } ?>
-                      <div class="form-group row">
+                      <div class="row mb-2">
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_entry_userpermission'] ?></label>
                         <div class="col-lg-4">
                           <label class="radio">
@@ -196,7 +196,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                         </div>
                       </div>
                     <?php } ?>
-                  <div class="form-group row">
+                  <div class="row mb-2">
                     <div class="offset-lg-2 col-lg-4">
                       <button class="btn btn-primary" type="submit" name="submit">
                           <?= $PMF_LANG['ad_categ_add'] ?>

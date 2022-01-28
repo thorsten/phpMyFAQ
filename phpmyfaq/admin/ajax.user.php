@@ -142,7 +142,7 @@ if (
                 } else {
                     $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
                     $newUser->setStatus('active');
-                    $newUser->setSuperAdmin($userIsSuperAdmin);
+                    $newUser->setSuperAdmin((bool)$userIsSuperAdmin);
                     $mailHelper = new MailHelper($faqConfig);
                     $mailHelper->sendMailToNewUser($newUser, $userPassword);
                     $successMessage = [ 'data' => $PMF_LANG['ad_adus_suc'] ];

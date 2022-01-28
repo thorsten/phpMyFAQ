@@ -66,7 +66,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
           </h1>
         </div>
 
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-lg-12">
           <form enctype="multipart/form-data" action="?action=updatecategory" method="post">
             <input type="hidden" name="id" value="<?= $categoryId ?>">
@@ -76,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             <input type="hidden" name="existing_image" value="<?= $categoryData->getImage() ?>"
                    id="pmf-category-existing-image">
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-2 col-form-label">
                   <?= $PMF_LANG['ad_categ_titel'] ?>:
               </label>
@@ -86,8 +86,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               </div>
             </div>
 
-            <div class="form-group row">
-              <label class="col-lg-2 col-form-label">
+            <div class="row mb-2">
+              <label class="col-lg-2 col-form-label" for='description'>
                   <?= $PMF_LANG['ad_categ_desc'] ?>:
               </label>
               <div class="col-lg-4">
@@ -96,32 +96,29 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <div class="offset-lg-2 col-lg-4">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="active" value="1"
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="active" id='active' value="1"
                         <?= (1 === (int)$categoryData->getActive() ? 'checked' : '') ?>>
-                      <?= $PMF_LANG['ad_user_active'] ?>
-                  </label>
+
+                    <label class='form-check-label' for='active'><?= $PMF_LANG['ad_user_active'] ?></label>
                 </div>
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <div class="offset-lg-2 col-lg-4">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="show_home" value="1"
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="show_home" id='show_home' value="1"
                         <?= (1 === (int)$categoryData->getShowHome() ? 'checked' : '') ?>>
-                      <?= $PMF_LANG['ad_user_show_home'] ?>
-                  </label>
+                    <label class="form-check-label" for="show_home"><?= $PMF_LANG['ad_user_show_home'] ?></label>
                 </div>
               </div>
             </div>
 
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
                   <?= $PMF_LANG['ad_category_image'] ?>
               </label>
@@ -144,27 +141,27 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </div>
 
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-2 col-form-label" for="user_id">
                   <?= $PMF_LANG['ad_categ_owner'] ?>
               </label>
               <div class="col-lg-4">
-                <select id="user_id" name="user_id" class="form-control">
+                <select id="user_id" name="user_id" class="form-select">
                     <?= $userHelper->getAllUserOptions($categoryData->getUserId()) ?>
                 </select>
               </div>
             </div>
               <?php if ($faqConfig->get('security.permLevel') != 'basic') { ?>
-                <div class="form-group row">
+                <div class="row mb-2">
                   <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>:</label>
                   <div class="col-lg-4">
-                    <select name="group_id" id="group_id" class="form-control">
+                    <select name="group_id" id="group_id" class="form-select">
                         <?= $user->perm->getAllGroupsOptions([$categoryData->getGroupId()], $user) ?>
                     </select>
                   </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="row mb-2">
                   <label class="col-lg-2 col-form-label" for="grouppermission">
                       <?= $PMF_LANG['ad_entry_grouppermission'] ?>
                   </label>
@@ -179,7 +176,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                           <?php echo($restrictedGroups ? 'checked' : '') ?>>
                         <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
                     </label>
-                    <select name="restricted_groups[]" size="3" class="form-control" multiple>
+                    <select name="restricted_groups[]" size="3" class="form-select" multiple>
                         <?= $user->perm->getAllGroupsOptions($groupPermission, $user) ?>
                     </select>
                   </div>
@@ -187,7 +184,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               <?php } else { ?>
                 <input type="hidden" name="grouppermission" value="all">
               <?php } ?>
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-2 col-form-label">
                   <?= $PMF_LANG['ad_entry_userpermission'] ?>
               </label>
@@ -202,14 +199,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                       <?= ($restrictedUsers ? 'checked' : '') ?>>
                     <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                 </div>
-                <select name="restricted_users" class="form-control">
+                <select name="restricted_users" class="form-select">
                     <?= $userHelper->getAllUserOptions($userPermission[0]) ?>
                 </select>
               </div>
             </div>
 
-            <div class="form-group row">
-              <div class="offset-lg-2 col-lg-4">
+            <div class="row mb-2">
+              <div class="offset-lg-2 col-lg-4 text-end">
                 <button class="btn btn-primary" type="submit" name="submit">
                     <?= $PMF_LANG['ad_categ_updatecateg'] ?>
                 </button>

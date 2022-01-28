@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ' <a href="#" id="delete-meta-' +
               data.added +
               '" class="btn btn-danger pmf-meta-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
-              ' <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#codeModal"' +
+              ' <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#codeModal"' +
               ' data-code-snippet="' +
               escape(pageId) +
               '">' +

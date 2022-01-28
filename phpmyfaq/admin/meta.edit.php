@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addMetaModal">
+            <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addMetaModal">
                 <?= $PMF_LANG['ad_meta_add'] ?>
             </button>
         </div>
@@ -53,31 +53,31 @@ $metaData = $meta->getById((int)$metaId);
   <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
   <input type="hidden" name="meta_id" value="<?= $metaData->getId() ?>">
 
-  <div class="form-group row">
+  <div class="row">
     <label for="page_id" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_page_id'] ?></label>
     <div class="col-sm-10">
       <input type="text" class="form-control" name="page_id" value="<?= $metaData->getPageId() ?>" required>
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="row">
     <label for="type" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_type'] ?></label>
     <div class="col-sm-10">
-      <select class="form-control" name="type" required>
+      <select class="form-select" name="type" required>
         <option value="text" <?= $metaData->getType() === 'text' ? 'selected' : '' ?>>Text</option>
         <option value="html" <?= $metaData->getType() === 'html' ? 'selected' : '' ?>>HTML</option>
       </select>
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="row">
     <label for="content" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_content'] ?></label>
     <div class="col-sm-10">
       <textarea class="form-control" name="content" rows="5" required><?= $metaData->getContent() ?></textarea>
     </div>
   </div>
 
-  <div class="form-group row">
+  <div class="row">
     <div class="col-sm-12 text-right">
       <a class="btn btn-primary" href="?action=meta">
         <?= $PMF_LANG['msgCancel'] ?>

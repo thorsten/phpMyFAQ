@@ -160,7 +160,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
           <div class="col-12">
             <h3 class="mb-3"> Step 1: Database setup</h3>
 
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
               <div class="col-sm-9">
                   <select name="sql_type" id="sql_type" class="form-control">
@@ -171,7 +171,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
 
             <div id="dbdatafull" style="display: block;">
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
                 <div class="col-sm-9">
                   <input type="text" name="sql_server" id="sql_server" class="form-control"
@@ -181,7 +181,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
                 <div class="col-sm-9">
                   <input type="number" name="sql_port" id="sql_port" class="form-control"
@@ -189,21 +189,21 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   <small class="form-text text-muted">Please enter the port your database server.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
                 <div class="col-sm-9">
                     <input type="text" name="sql_user" id="sql_user" class="form-control" required>
                     <small class="form-text text-muted">Please enter your database user.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
                 <div class="col-sm-9">
                     <input name="sql_password" type="password" autocomplete="off" id="sql_password" class="form-control" required>
                     <small class="form-text text-muted">Please enter your database password.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_db">Database:</label>
                 <div class="col-sm-9">
                   <input type="text" name="sql_db" id="sql_db" class="form-control" required>
@@ -213,7 +213,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
 
             <div id="dbsqlite" style="display: none;">
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_sqlitefile">SQLite database file:</label>
                 <div class="col-sm-9">
                   <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
@@ -225,7 +225,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
               <div class="col-sm-9">
                 <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
@@ -252,7 +252,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </label>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="ldap_server">Host:</label>
                 <div class="col-sm-9">
                     <input type="text" name="ldap_server" id="ldap_server" class="form-control"
@@ -260,28 +260,28 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <small class="form-text text-muted">Please enter the host of your LDAP server.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="ldap_port">Port:</label>
                 <div class="col-sm-9">
                     <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
                     <small class="form-text text-muted">Please enter the port of your LDAP server.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="ldap_user">User DN:</label>
                 <div class="col-sm-9">
                     <input type="text" name="ldap_user" id="ldap_user" class="form-control">
                     <small class="form-text text-muted">Please enter your specified RDN username.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="ldap_password">Password:</label>
                 <div class="col-sm-9">
                     <input name="ldap_password" type="password" autocomplete="off" id="ldap_password" class="form-control">
                     <small class="form-text text-muted">Please enter your LDAP password.</small>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="ldap_base">Base DN:</label>
                 <div class="col-sm-9">
                 <input type="text" name="ldap_base" id="ldap_base" class="form-control">
@@ -314,7 +314,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </label>
                 </div>
                 </div>
-                <div class="form-group row">
+                <div class="row">
                   <label class="col-sm-3 col-form-label" for="elasticsearch_server">Server(s):</label>
                   <div class="col-sm-9">
                     <div class="input-group" id="elasticsearch_server-wrapper">
@@ -334,7 +334,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </small>
                   </div>
                 </div>
-                <div class="form-group row">
+                <div class="row">
                   <label class="col-sm-3 col-form-label" for="elasticsearch_index">Index name:</label>
                   <div class="col-sm-9">
                     <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
@@ -352,7 +352,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
           <div class="col-12">
             <h3 class="mb-3"> Step 2: Admin user setup</h3>
 
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-sm-3 col-form-label" for="language">Default language:</label>
                 <div class="col-sm-9">
                   <select name="language" id="language" class="form-control">
@@ -382,7 +382,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
               <div class="col-sm-9">
                 <select id="permLevel" name="permLevel" class="form-control">
@@ -395,35 +395,35 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </small>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="realname">Your name:</label>
               <div class="col-sm-9">
                 <input type="text" name="realname" id="realname" class="form-control" required>
                 <small class="form-text text-muted">Please enter your real name.</small>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
               <div class="col-sm-9">
                 <input type="email" name="email" id="email" class="form-control" required>
                 <small class="form-text text-muted">Please enter your email adress.</small>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="loginname">Your login name:</label>
               <div class="col-sm-9">
                 <input type="text" name="loginname" id="loginname" class="form-control" required>
                 <small class="form-text text-muted">Please enter your login name.</small>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password" id="password" class="form-control" required>
                 <small class="form-text text-muted">Please enter your password.</small>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password_retyped" id="password_retype" class="form-control"

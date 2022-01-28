@@ -144,7 +144,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                     <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?= $useLastModified ?>">
                     <input type="hidden" name="report_url" id="report_url" value="<?= $useUrl ?>"></td>
                     <input type="hidden" name="report_visits" id="report_visits" value="<?= $useVisits ?>"></td>
-                    <div class="form-group row">
+                    <div class="row">
                         <button class="btn btn-primary" type="submit">
                             <?= $PMF_LANG['ad_stat_report_make_csv'] ?>
                         </button>

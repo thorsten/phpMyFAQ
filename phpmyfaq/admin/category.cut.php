@@ -44,7 +44,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 <form  action="?action=pastecategory" method="post" accept-charset="utf-8">
                     <input type="hidden" name="cat" value="<?= $id ?>">
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-                    <div class="form-group row">
+                    <div class="row">
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_paste2'] ?></label>
                         <div class="col-lg-4">
                             <select name="after" class="form-control">
@@ -66,7 +66,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?= $PMF_LANG['ad_categ_updatecateg'] ?>

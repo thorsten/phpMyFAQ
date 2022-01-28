@@ -36,14 +36,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <form action="?action=saveglossary" method="post" accept-charset="utf-8">
           <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-          <div class="form-group row">
+          <div class="row">
             <label class="col-lg-2 col-form-label" for="item"><?= $PMF_LANG['ad_glossary_item'] ?>:</label>
             <div class="col-lg-4">
               <input class="form-control" type="text" name="item" id="item" required>
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="row">
             <label class="col-lg-2 col-form-label" for="definition">
                 <?= $PMF_LANG['ad_glossary_definition'] ?>:
             </label>
@@ -52,7 +52,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="row">
             <div class="offset-lg-2 col-lg-4">
               <a class="btn btn-info" href="?action=glossary">
                   <?= $PMF_LANG['ad_entry_back'] ?>

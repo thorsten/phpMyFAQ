@@ -49,7 +49,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcateg')) {
         <input type="hidden" name="cat" value="<?= $id ?>">
         <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="categoryName">
               <?= $PMF_LANG['ad_categ_titel'] ?>:
           </label>
@@ -59,7 +59,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcateg')) {
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label">
               <?= $PMF_LANG['ad_entry_locale'] ?>:
           </label>
@@ -70,7 +70,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcateg')) {
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <div class="offset-lg-2 col-lg-4">
             <a class="btn btn-success" href="?action=category">
                 <?= $PMF_LANG['msgCancel'] ?>

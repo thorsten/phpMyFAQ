@@ -20,18 +20,18 @@ body {
   margin: auto;
 }
 
-.form-label-group {
+.col-form-label-group {
   position: relative;
   margin-bottom: 1rem;
 }
 
-.form-label-group > input,
-.form-label-group > label {
+.col-form-label-group > input,
+.col-form-label-group > label {
   height: 3.125rem;
   padding: 0.75rem;
 }
 
-.form-label-group > label {
+.col-form-label-group > label {
   position: absolute;
   top: 0;
   left: 0;
@@ -47,32 +47,32 @@ body {
   transition: all 0.1s ease-in-out;
 }
 
-.form-label-group input::-webkit-input-placeholder {
+.col-form-label-group input::-webkit-input-placeholder {
   color: transparent;
 }
 
-.form-label-group input:-ms-input-placeholder {
+.col-form-label-group input:-ms-input-placeholder {
   color: transparent;
 }
 
-.form-label-group input::-ms-input-placeholder {
+.col-form-label-group input::-ms-input-placeholder {
   color: transparent;
 }
 
-.form-label-group input::-moz-placeholder {
+.col-form-label-group input::-moz-placeholder {
   color: transparent;
 }
 
-.form-label-group input::placeholder {
+.col-form-label-group input::placeholder {
   color: transparent;
 }
 
-.form-label-group input:not(:placeholder-shown) {
+.col-form-label-group input:not(:placeholder-shown) {
   padding-top: 1.25rem;
   padding-bottom: 0.25rem;
 }
 
-.form-label-group input:not(:placeholder-shown) ~ label {
+.col-form-label-group input:not(:placeholder-shown) ~ label {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   font-size: 12px;
@@ -82,10 +82,10 @@ body {
 /* Fallback for Edge
 -------------------------------------------------- */
 @supports (-ms-ime-align: auto) {
-  .form-label-group > label {
+  .col-form-label-group > label {
     display: none;
   }
-  .form-label-group input::-ms-input-placeholder {
+  .col-form-label-group input::-ms-input-placeholder {
     color: #777;
   }
 }
@@ -93,10 +93,10 @@ body {
 /* Fallback for IE
 -------------------------------------------------- */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .form-label-group > label {
+  .col-form-label-group > label {
     display: none;
   }
-  .form-label-group input:-ms-input-placeholder {
+  .col-form-label-group input:-ms-input-placeholder {
     color: #777;
   }
 }

@@ -374,7 +374,7 @@ if (
 
                                 <!-- Answer -->
                                 <?php if ($faqConfig->get('main.enableWysiwygEditor')) : ?>
-                                    <div class="form-group row">
+                                    <div class="row">
                                         <div class="col-lg-12">
                                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                                             <textarea id="answer" name="answer" class="form-control" rows="7"
@@ -384,7 +384,7 @@ if (
                                     </div>
                                 <?php endif; ?>
                                 <?php if ($faqConfig->get('main.enableMarkdownEditor')) : ?>
-                                    <div class="form-group row">
+                                    <div class="row">
                                       <div class="col-lg-12">
                                         <ul class="nav nav-tabs markdown-tabs mb-2">
                                           <li class="nav-item">
@@ -396,7 +396,7 @@ if (
                                         </ul>
                                         <div class="tab-content">
                                           <div class="tab-pane active" id="text">
-                                            <div class="form-group row">
+                                            <div class="row">
                                               <div class="col-lg-12">
                                                 <textarea id="answer-markdown" name="answer" class="form-control"
                                                           rows="7" placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"
@@ -414,7 +414,7 @@ if (
                             </div>
                             <div class="tab-pane" id="tab-meta-data">
                                 <!-- Categories -->
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="phpmyfaq-categories">
                                         <?= $PMF_LANG['ad_entry_category'] ?>
                                     </label>
@@ -427,7 +427,7 @@ if (
                                 </div>
 
                                 <!-- Language -->
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="lang">
                                         <?= $PMF_LANG['ad_entry_locale'] ?>:
                                     </label>
@@ -438,7 +438,7 @@ if (
 
                                 <!-- Attachments -->
                                 <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')) : ?>
-                                    <div class="form-group row">
+                                    <div class="row">
                                         <label class="col-lg-2 col-form-label">
                                             <?= $PMF_LANG['ad_menu_attachments'] ?>:
                                         </label>
@@ -469,7 +469,7 @@ if (
                                             </ul>
                                             <?php
                                             printf(
-                                                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attachmentModal">%s</button>',
+                                                '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attachmentModal">%s</button>',
                                                 $PMF_LANG['ad_att_add']
                                             );
                                             ?>
@@ -478,7 +478,7 @@ if (
                                 <?php endif; ?>
 
                                 <!-- Tags -->
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="tags">
                                         <?= $PMF_LANG['ad_entry_tags'] ?>:
                                     </label>
@@ -493,7 +493,7 @@ if (
                                 </div>
 
                                 <!-- Keywords -->
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="keywords">
                                         <?= $PMF_LANG['ad_entry_keywords'] ?>:
                                     </label>
@@ -507,7 +507,7 @@ if (
                                 </div>
 
                                 <!-- Author -->
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="author">
                                         <?= $PMF_LANG['ad_entry_author'] ?>
                                     </label>
@@ -518,7 +518,7 @@ if (
                                 </div>
 
                                 <!-- E-Mail -->
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="email">
                                         <?= $PMF_LANG['ad_entry_email'] ?>
                                     </label>
@@ -599,7 +599,7 @@ if (
                                 <h6 class="card-title sr-only">
                                     <?= $PMF_LANG['ad_entry_changelog'] ?>
                                 </h6>
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="changelog-date">
                                         <?= $PMF_LANG['ad_entry_date'] ?>
                                     </label>
@@ -608,7 +608,7 @@ if (
                                                value="<?= $faqData['date'] ?>">
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="row">
                                     <label class="col-lg-2 col-form-label" for="changed">
                                         <?= $PMF_LANG['ad_entry_changed'] ?>
                                     </label>
@@ -623,7 +623,7 @@ if (
                                         <?php printf($PMF_LANG['ad_admin_notes_hint'], $PMF_LANG['ad_admin_notes']) ?>
                                     </label>
                                 </h6>
-                                <div class="form-group row">
+                                <div class="row">
                                     <div class="col-lg-10 offset-lg-2">
                                         <textarea id="notes" name="notes" class="form-control" rows="3"
                                         ><?= isset($faqData['notes']) ? $faqData['notes'] : '' ?></textarea>
@@ -707,7 +707,7 @@ if (
                                         <?= $PMF_LANG['msgEditFaqDat'] ?>
                                     </label>
                                 </div>
-                                <div id="recordDateInputContainer" class="form-group invisible">
+                                <div id="recordDateInputContainer" class="invisible">
                                     <input type="datetime-local" name="date" id="date" class="form-control"
                                            placeholder="<?= $faqData['date'] ?>">
                                 </div>
@@ -862,7 +862,7 @@ if (
                 </div>
               </div>
 
-              <div class="form-group pmf-attachment-upload-files invisible">
+              <div class="pmf-attachment-upload-files invisible">
                   <?= $PMF_LANG['msgAttachmentsFilesize'] ?>:
                 <output id="filesize"></output>
               </div>

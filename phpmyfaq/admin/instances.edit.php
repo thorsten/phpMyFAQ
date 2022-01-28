@@ -40,27 +40,27 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     ?>
   <form action="?action=updateinstance" method="post" accept-charset="utf-8">
     <input type="hidden" name="instance_id" value="<?= $instanceData->id ?>"/>
-    <div class="form-group row">
+    <div class="row">
       <label for="url" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_url'] ?>:</label>
       <div class="col-lg-8">
         <input type="url" name="url" id="url" class="form-control" value="<?= $instanceData->url ?>" required>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="row">
       <label for="instance" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_path'] ?>:</label>
       <div class="col-lg-8">
         <input type="text" name="instance" id="instance" class="form-control" required
                value="<?= $instanceData->instance ?>">
       </div>
     </div>
-    <div class="form-group row">
+    <div class="row">
       <label for="comment" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_name'] ?>:</label>
       <div class="col-lg-8">
         <input type="text" name="comment" id="comment" class="form-control" required
                value="<?= $instanceData->comment ?>">
       </div>
     </div>
-    <div class="form-group row">
+    <div class="row">
       <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_config'] ?>:</label>
       <div class="col-lg-8">
         <p class="form-control-static">
@@ -72,7 +72,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         </p>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="row">
       <div class="offset-lg-2 col-lg-4">
         <button class="btn btn-primary" type="submit">
             <?= $PMF_LANG['ad_instance_button'] ?>

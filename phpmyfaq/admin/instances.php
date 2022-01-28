@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
 ) : ?>
             <div class="float-right">
-              <a class="btn btn-sm btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
+              <a class="btn btn-sm btn-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
                 <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
               </a>
             </div>
@@ -156,7 +156,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         <div class="modal-body">
           <form action="#" method="post" accept-charset="utf-8">
             <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-            <div class="form-group row">
+            <div class="row">
               <label class="col-form-label col-lg-4" for="url">
                   <?= $PMF_LANG['ad_instance_url'] ?>:
               </label>
@@ -172,7 +172,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                 </div>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-form-label col-lg-4" for="instance">
                   <?= $PMF_LANG['ad_instance_path'] ?>:
               </label>
@@ -180,7 +180,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                 <input class="form-control" type="text" name="instance" id="instance" required>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-form-label col-lg-4" for="comment">
                   <?= $PMF_LANG['ad_instance_name'] ?>:
               </label>
@@ -188,7 +188,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                 <input class="form-control" type="text" name="comment" id="comment" required>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-form-label col-lg-4" for="email">
                   <?= $PMF_LANG['ad_instance_email'] ?>:
               </label>
@@ -196,7 +196,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                 <input class="form-control" type="email" name="email" id="email" required>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-form-label col-lg-4" for="admin">
                   <?= $PMF_LANG['ad_instance_admin'] ?>:
               </label>
@@ -204,7 +204,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                 <input class="form-control" type="text" name="admin" id="admin" required>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-form-label col-lg-4" for="password">
                   <?= $PMF_LANG['ad_instance_password'] ?>:
               </label>

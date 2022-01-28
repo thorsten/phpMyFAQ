@@ -48,7 +48,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 ?>
                 <form  action="?action=exportfile" method="post" accept-charset="utf-8">
                 <h5><?= $PMF_LANG['ad_export_which_cat'] ?></h5>
-                <div class="form-group row">
+                <div class="row">
                     <label class="col-lg-2 col-form-label" for="catid">
                         <?= $PMF_LANG['ad_entry_category'] ?>
                     </label>
@@ -59,9 +59,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         </select>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row">
                     <div class="offset-lg-2 col-lg-4">
-                        <div class="checkbox">
+                        <div class="form-check">
                             <label for="downwards">
                                 <input type="checkbox" name="downwards" id="downwards" value="1" checked>
                                 <?= $PMF_LANG['ad_export_cat_downwards'] ?>
@@ -73,7 +73,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
             ?>
             <h5><?= $PMF_LANG['ad_export_type'] ?></h5>
-            <div class="form-group row">
+            <div class="row">
                 <div class="offset-lg-2 col-lg-8 radio">
                     <p><?= $PMF_LANG['ad_export_type_choose'] ?></p>
                     <label>
@@ -93,7 +93,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
                 <div class="offset-lg-2 col-lg-4 radio">
                     <p><?= $PMF_LANG['ad_export_download_view'] ?></p>
                     <label>
@@ -110,7 +110,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
                 <div class="offset-lg-2 col-lg-4">
                     <button class="btn btn-primary" type="submit" name="submitExport">
                         <?= $PMF_LANG['ad_menu_export']; ?>
