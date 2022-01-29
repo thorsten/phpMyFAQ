@@ -518,7 +518,7 @@ if (
 
       <div id="pmf-user-message"><?= $message ?></div>
 
-      <table class="table table-striped">
+      <table class="table table-striped align-middle">
         <thead class="thead-dark">
         <tr>
           <th><?= $PMF_LANG['ad_entry_id'] ?></th>
@@ -584,14 +584,14 @@ if (
               </a>
             </td>
             <td>
-              <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>" class="btn btn-info">
+              <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>" class="btn btn-sm btn-info">
                 <i class="fa fa-pencil"></i> <?= $PMF_LANG['ad_user_edit'] ?>
               </a>
             </td>
             <td>
                 <?php if ($user->getStatus() === 'blocked') : ?>
                   <a onclick="activateUser(this); return false;"
-                     href="#" class="btn btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
+                     href="#" class="btn btn-sm btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
                      data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                      data-user-id="<?= $user->getUserData('user_id') ?>">
                       <?= $PMF_LANG['ad_news_set_active'] ?>
@@ -601,7 +601,7 @@ if (
             </td>
             <td>
                 <?php if ($user->getStatus() !== 'protected') : ?>
-                  <a href="#" onclick="deleteUser(this); return false;" class="btn btn-danger"
+                  <a href="#" onclick="deleteUser(this); return false;" class="btn btn-sm btn-danger"
                      data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                      data-user-id="<?= $user->getUserData('user_id') ?>">
                     <i class="fa fa-trash"></i> <?= $PMF_LANG['ad_user_delete'] ?>

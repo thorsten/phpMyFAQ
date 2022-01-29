@@ -59,7 +59,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               printf('<p class="alert alert-warning" role="alert">%s</p>', $PMF_LANG['ad_news_nodata']);
             }
 
-            echo '<table class="table table-hover">';
+            echo '<table class="table table-hover align-middle">';
             echo '<tbody>';
 
             foreach ($tagData as $key => $tag) {

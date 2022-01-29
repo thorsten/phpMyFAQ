@@ -113,7 +113,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             $glossaryItems = $glossary->getAllGlossaryItems();
 
-            echo '<table class="table table-striped">';
+            echo '<table class="table table-striped align-middle">';
             printf(
                 '<thead><tr><th>%s</th><th>%s</th><th style="width: 16px">&nbsp;</th></tr></thead>',
                 $PMF_LANG['ad_glossary_item'],

@@ -284,22 +284,22 @@ if (
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tab-question-answer" role="tab">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
                                     <i class="fa fa-pencil-square-o"></i> <?= $PMF_LANG['ad_record_faq'] ?>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tab-meta-data" role="tab">
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
                                     <i class="fa fa-database"></i> <?= $PMF_LANG['ad_menu_faq_meta'] ?>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tab-permissions" role="tab">
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
                                     <i class="fa fa-unlock-alt"></i> <?= $PMF_LANG['ad_record_permissions'] ?>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tab-notes-changelog" role="tab">
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-notes-changelog" role="tab">
                                     <i class="fa fa-sticky-note-o"></i> <?= $PMF_LANG['ad_admin_notes'] . ' / ' . $PMF_LANG['ad_entry_changelog'] ?>
                                 </a>
                             </li>
@@ -388,10 +388,10 @@ if (
                                       <div class="col-lg-12">
                                         <ul class="nav nav-tabs markdown-tabs mb-2">
                                           <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#text">Text</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#text">Text</a>
                                           </li>
                                           <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
                                           </li>
                                         </ul>
                                         <div class="tab-content">

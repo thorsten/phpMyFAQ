@@ -472,11 +472,11 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'system':
                 require 'system.php';
                 break;
-            case 'updateinstance':
+            case 'update-instance':
             case 'instances':
                 require 'instances.php';
                 break;
-            case 'editinstance':
+            case 'edit-instance':
                 require 'instances.edit.php';
                 break;
             case 'stopwordsconfig':
@@ -520,7 +520,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
     require 'noperm.php';
 // User is NOT authenticated
 } else {
-    require 'loginform.php';
+    require 'login.php';
 }
 
 require 'footer.php';

@@ -43,7 +43,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $time = $session->getTimeFromSessionId($sessionId);
     $trackingData = explode("\n", file_get_contents(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $time)));
     ?>
-  <table class="table table-striped">
+  <table class="table table-striped align-middle">
     <tfoot>
     <tr>
       <td colspan="2"><a href="?action=viewsessions"><?= $PMF_LANG['ad_sess_back'] ?></a></td>

@@ -25,7 +25,7 @@ if (isset($error) && 0 < strlen($error)) {
 } else {
     $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
 }
-if ($action == 'logout') {
+if ($action === 'logout') {
     $message = sprintf(
         '<div class="alert alert-success alert-dismissible fade show" role="alert">%s' .
         '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .

@@ -23,13 +23,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-  <header class="row">
-    <div class="col-lg-12">
-      <h2 class="page-header">
-        <i aria-hidden="true" class="fa fa-wrench"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
-      </h2>
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i>
+            <?= $PMF_LANG['ad_menu_instances']; ?>
+        </h1>
     </div>
-  </header>
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     $instanceId = Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
@@ -38,48 +38,49 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     $instanceData = $instance->getInstanceById($instanceId);
 
     ?>
-  <form action="?action=updateinstance" method="post" accept-charset="utf-8">
+  <form action="?action=update-instance" method="post" accept-charset="utf-8">
     <input type="hidden" name="instance_id" value="<?= $instanceData->id ?>"/>
-    <div class="row">
+    <div class="row mb-2">
       <label for="url" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_url'] ?>:</label>
       <div class="col-lg-8">
         <input type="url" name="url" id="url" class="form-control" value="<?= $instanceData->url ?>" required>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-2">
       <label for="instance" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_path'] ?>:</label>
       <div class="col-lg-8">
         <input type="text" name="instance" id="instance" class="form-control" required
                value="<?= $instanceData->instance ?>">
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-2">
       <label for="comment" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_name'] ?>:</label>
       <div class="col-lg-8">
         <input type="text" name="comment" id="comment" class="form-control" required
                value="<?= $instanceData->comment ?>">
       </div>
     </div>
-    <div class="row">
-      <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_config'] ?>:</label>
+    <div class="row mb-2">
+      <label class="col-lg-2 col-form-label" for="config"><?= $PMF_LANG['ad_instance_config'] ?>:</label>
       <div class="col-lg-8">
-        <p class="form-control-static">
             <?php
             foreach ($instance->getInstanceConfig($instanceData->id) as $key => $config) {
-                echo '<span class="uneditable-input">' . $key . ': ' . $config . '</span><br/>';
+                printf(
+                    '<input type="text" readonly class="form-control-plaintext" id="config" value="%s">',
+                    $key . ': ' . $config
+                );
             }
             ?>
-        </p>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-2">
       <div class="offset-lg-2 col-lg-4">
+          <a class="btn btn-secondary" href="?action=instances">
+              <?= $PMF_LANG['ad_entry_back'] ?>
+          </a>
         <button class="btn btn-primary" type="submit">
             <?= $PMF_LANG['ad_instance_button'] ?>
         </button>
-        <a class="btn btn-info" href="?action=instances">
-            <?= $PMF_LANG['ad_entry_back'] ?>
-        </a>
       </div>
     </div>
   </form>

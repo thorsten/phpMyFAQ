@@ -50,7 +50,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     $useUrl = Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
     $useVisits = Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
     ?>
-                <table class="table table-striped">
+                <table class="table table-striped align-middle">
                     <thead>
                         <tr>
     <?php

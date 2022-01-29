@@ -54,7 +54,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
       <form id="faqCommentSelection" name="faqCommentSelection" method="post" accept-charset="utf-8">
         <input type="hidden" name="ajax" value="comment"/>
         <input type="hidden" name="ajaxaction" value="delete"/>
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
             <?php
             $lastCommentId = 0;
             foreach ($faqComments as $faqComment) {
@@ -112,7 +112,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
       <form id="newsCommentSelection" name="newsCommentSelection" method="post" accept-charset="utf-8">
         <input type="hidden" name="ajax" value="comment"/>
         <input type="hidden" name="ajaxaction" value="delete"/>
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
             <?php
             foreach ($newsComments as $newsComment) { ?>
               <tr id="comments_<?= $newsComment->getId() ?>">

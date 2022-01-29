@@ -46,7 +46,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped">
+                <table class="table table-striped align-middle">
                 <thead>
                     <tr>
                         <th><?= $PMF_LANG['ad_sess_ip'] ?></th>

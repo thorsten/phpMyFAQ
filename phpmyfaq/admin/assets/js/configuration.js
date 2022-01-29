@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let tabLoaded = false;
 
-  $('a[data-toggle="tab"]').on('shown.bs.tab', (event) => {
+  $('a[data-bs-toggle="tab"]').on('shown.bs.tab', (event) => {
     event.preventDefault();
 
     const target = $(event.target).attr('href');

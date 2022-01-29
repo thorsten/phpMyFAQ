@@ -93,7 +93,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $pagination = new Pagination($faqConfig, $options);
     ?>
           <div id="ajaxresponse"></div>
-          <table class="table table-striped">
+          <table class="table table-striped align-middle">
             <thead>
             <tr>
               <th><?= $PMF_LANG['ad_searchstats_search_term'] ?></th>

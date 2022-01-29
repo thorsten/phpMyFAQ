@@ -331,12 +331,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                    // Category is shown on start page
-                if ((int)$cat['show_home'] === 1) {
+                if (isset($cat['show_home']) && (int)$cat['show_home'] === 1) {
                     $categoryName .= ' <i class="fa fa-star" aria-hidden="true"></i>';
                 }
 
                 // Category is inactive
-                if ((int)$cat['active'] === 0) {
+                if (isset($cat['active']) && (int)$cat['active'] === 0) {
                     $categoryName .= ' <i class="fa fa-eye-slash" aria-hidden="true"></i>';
                 }
 

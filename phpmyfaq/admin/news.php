@@ -191,7 +191,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
             <div class="col-12">
-                <table class="table table-hover">
+                <table class="table table-hover align-middle">
                 <thead class="thead-dark">
                     <tr>
                         <th><?= $PMF_LANG['ad_news_headline'] ?></th>

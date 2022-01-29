@@ -323,7 +323,7 @@ class LinkVerifier
 
         $failreasons = $inforeasons = [];
         $output = '    <h3>' . $PMF_LANG['ad_linkcheck_checkResult'] . "</h3>\n";
-        $output .= '    <table class="table">' . "\n";
+        $output .= '    <table class="table align-middle">' . "\n";
         foreach ($result as $type => $_value) {
             $output .= '        <tr><td><strong>' . Strings::htmlspecialchars($type) . "</strong></td></tr>\n";
             foreach ($_value as $value) {

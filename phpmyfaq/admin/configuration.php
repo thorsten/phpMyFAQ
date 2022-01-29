@@ -114,61 +114,61 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="nav-item">
-            <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="nav-link active">
+            <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
               <i aria-hidden="true" class="fa fa-home"></i>
                 <?= $PMF_LANG['mainControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#records" aria-controls="records" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-th-list"></i>
                 <?= $PMF_LANG['recordsControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#search" aria-controls="search" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-search"></i>
                 <?= $PMF_LANG['searchControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#security" aria-controls="security" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-warning"></i>
                 <?= $PMF_LANG['securityControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#spam" aria-controls="spam" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-thumbs-down"></i>
                 <?= $PMF_LANG['spamControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-search"></i>
                 <?= $PMF_LANG['seoCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#social" aria-controls="social" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-retweet"></i>
                 <?= $PMF_LANG['socialNetworksControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-inbox"></i>
                 <?= $PMF_LANG['mailControlCenter'] ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#ldap" aria-controls="ldap" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-sitemap"></i>
                 <?= 'LDAP' ?>
             </a>
           </li>
           <li role="presentation" class="nav-item">
-            <a href="#api" aria-controls="ldap" role="tab" data-toggle="tab" class="nav-link">
+            <a href="#api" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
               <i aria-hidden="true" class="fa fa-gears"></i>
                 <?= 'API' ?>
             </a>

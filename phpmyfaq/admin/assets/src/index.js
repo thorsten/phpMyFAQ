@@ -19,7 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   //
+  // Configuration
+  //
+
+  //
   // Dashboard
   //
   renderVisitorCharts();
+
+  //
+  // User
+  //
 });

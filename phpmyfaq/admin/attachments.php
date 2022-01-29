@@ -51,7 +51,7 @@ $pagination = new Pagination(
 
 <div class="row">
   <div class="col-lg-12">
-    <table class="table table-striped">
+    <table class="table table-striped align-middle">
       <thead>
       <tr>
         <th>#</th>

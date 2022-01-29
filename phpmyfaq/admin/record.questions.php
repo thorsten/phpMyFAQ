@@ -66,7 +66,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 ?>
             <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-              <table class="table table-striped">
+              <table class="table table-striped align-middle">
                 <thead>
                 <tr>
                   <th></th>

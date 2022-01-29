@@ -72,7 +72,7 @@ if (
               <div id="category-<?= $cat['id'] ?>" class="card-collapse collapse" role="tabcard"
                    aria-labelledby="category-heading-<?= $cat['id'] ?>">
                 <div class="card-body">
-                  <table class="table table-hover table-sm">
+                  <table class="table table-hover table-sm align-middle">
                     <thead class="thead-light">
                     <tr>
                       <th colspan="2" style="width: 24px;">

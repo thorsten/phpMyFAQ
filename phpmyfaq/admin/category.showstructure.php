@@ -73,7 +73,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->getMissingCategories();
     $category->buildCategoryTree();
     ?>
-        <table class="table table-light table-striped">
+        <table class="table table-light table-striped align-middle">
         <thead class="thead-dark">
             <tr>
                 <th><?= $currentLanguage ?></th>

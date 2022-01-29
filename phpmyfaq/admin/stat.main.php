@@ -108,7 +108,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
             ?>
 
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
           <tr>
             <td><?= $PMF_LANG['ad_stat_days'] ?>:</td>
             <td>

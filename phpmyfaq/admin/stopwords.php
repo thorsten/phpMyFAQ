@@ -97,7 +97,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             return '';
           }
 
-          let html = '<table class="table table-hover">';
+          let html = '<table class="table table-hover align-middle">';
           let elem_id;
           for (let i = 0; i < data.length; i++) {
 

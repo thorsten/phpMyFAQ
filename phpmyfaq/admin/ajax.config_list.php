@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Thomas Zeithaml <tom@annatom.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-12-26
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-12-26
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -44,10 +44,10 @@ if (!empty($_SESSION['access_token'])) {
 $configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_UNSAFE_RAW, 'main');
 
 /**
- * @param mixed $key
+ * @param mixed  $key
  * @param string $type
  */
-function renderInputForm($key, $type)
+function renderInputForm(mixed $key, string $type)
 {
     global $PMF_LANG, $faqConfig;
 
@@ -131,7 +131,7 @@ function renderInputForm($key, $type)
             break;
 
         case 'select':
-            printf('<select name="edit[%s]" class="form-control">', $key);
+            printf('<select name="edit[%s]" class="form-select">', $key);
 
             switch ($key) {
                 case 'main.language':
@@ -293,7 +293,7 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<div class="row"><label class="col-form-label col-lg-3"></label>';
+            echo '<div class="row mb-2"><label class="col-form-label col-lg-3"></label>';
             echo '<div class="col-lg-9">';
             if (
                 '' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
@@ -318,7 +318,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
 
         printf(
-            '<div class="row"><label class="col-lg-3 col-form-label %s">',
+            '<div class="row mb-2"><label class="col-lg-3 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
         );
 

@@ -79,7 +79,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
         </div>
     </header>
 
-    <table class="table table-striped">
+    <table class="table table-striped align-middle">
     <thead>
         <tr>
             <th><?= $PMF_LANG['ad_categ_id'] ?></th>

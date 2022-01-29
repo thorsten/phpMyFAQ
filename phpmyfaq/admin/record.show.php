@@ -361,7 +361,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             <div id="category-<?= $cid ?>" class="card-collapse collapse" role="tabcard"
                  aria-labelledby="category-heading-<?= $cid ?>">
               <div class="card-body">
-                <table class="table table-hover table-sm">
+                <table class="table table-hover table-sm align-middle">
                   <thead class="thead-light">
                   <tr>
                     <th colspan="2" style="width: 24px;">
