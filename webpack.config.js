@@ -1,6 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ConcatPlugin = require('webpack-concat-plugin');
+const ConcatPlugin = require('@mcler/webpack-concat-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -14,38 +14,39 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyPlugin([
-      {
-        from: 'node_modules/tinymce/tinymce.min.js',
-        to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/tinymce.min.js'),
-      },
-      {
-        from: 'node_modules/tinymce/icons/',
-        to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/icons/'),
-      },
-      {
-        from: 'node_modules/tinymce/plugins/',
-        to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/plugins/'),
-      },
-      {
-        from: 'node_modules/tinymce/skins/',
-        to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/skins/'),
-      },
-      {
-        from: 'node_modules/tinymce/themes/',
-        to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/themes/'),
-      },
-      {
-        from: 'node_modules/highlight.js/lib/highlight.js',
-        to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
-      },
-      {
-        from: 'node_modules/highlight.js/styles/default.css',
-        to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
-      },
-    ]),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'node_modules/tinymce/tinymce.min.js',
+          to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/tinymce.min.js'),
+        },
+        {
+          from: 'node_modules/tinymce/icons/',
+          to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/icons/'),
+        },
+        {
+          from: 'node_modules/tinymce/plugins/',
+          to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/plugins/'),
+        },
+        {
+          from: 'node_modules/tinymce/skins/',
+          to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/skins/'),
+        },
+        {
+          from: 'node_modules/tinymce/themes/',
+          to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/themes/'),
+        },
+        {
+          from: 'node_modules/highlight.js/lib/index.js',
+          to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
+        },
+        {
+          from: 'node_modules/highlight.js/styles/default.css',
+          to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
+        },
+      ],
+    }),
     new ConcatPlugin({
-      uglify: true,
       fileName: 'phpmyfaq.js',
       filesToConcat: [
         path.resolve(__dirname, 'phpmyfaq/assets/src/add.js'),
@@ -60,18 +61,15 @@ module.exports = {
       ],
     }),
     /**
-     * Concat TinyMCE plugin and uglify it
+     * Concat phpMyFAQ TinyMCE plugin and uglify it
      */
     new ConcatPlugin({
-      uglify: true,
-      outputPath: '../../../',
-      fileName: 'phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js',
+      fileName: '../../../phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js',
       filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js')],
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
-      filesToConcat: [],
+      filename: "[name].css",
+      chunkFilename: "[id].css",
     }),
   ],
   output: {
@@ -89,7 +87,6 @@ module.exports = {
               publicPath: (resourcePath, context) => {
                 return path.relative(path.dirname(resourcePath), context) + '/assets/dist/';
               },
-              outputPath: 'css/',
             },
           },
           'css-loader',
@@ -97,17 +94,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/',
-              publicPath: './fonts/',
-            },
-          },
-        ],
+        test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
+        type: 'asset/resource',
       },
     ],
   },

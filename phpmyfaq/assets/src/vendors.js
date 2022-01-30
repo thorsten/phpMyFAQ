@@ -19,13 +19,12 @@ window.$ = $;
 
 import 'bootstrap';
 
-require('bootstrap');
 require('bootstrap-3-typeahead');
 require('bootstrap-datepicker');
 window.bsCustomFileInput = require('bs-custom-file-input');
 
 require('cookieconsent');
-require('handlebars');
+//require('handlebars');
 
 require('jquery-ui');
 require('jquery-ui/ui/widgets/sortable');
