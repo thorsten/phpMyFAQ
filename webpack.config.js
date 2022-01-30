@@ -20,6 +20,10 @@ module.exports = {
         to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/tinymce.min.js'),
       },
       {
+        from: 'node_modules/tinymce/icons/',
+        to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/icons/'),
+      },
+      {
         from: 'node_modules/tinymce/plugins/',
         to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/plugins/'),
       },

@@ -65,16 +65,16 @@ if (isset($auth)) {
           <script>
 
             // Bootstrap tooltips
-            $().tooltip({ placement: 'bottom' });
+            // $().tooltip({ placement: 'bottom' });
 
             // TinyMCE
-            tinyMCE.init({
+            tinymce.init({
               // General options
               mode: 'exact',
               language: '<?=(Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en') ?>',
               selector: 'textarea#<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
               menubar: false,
-              theme: 'modern',
+              theme: 'silver',
               fontsize_formats: '6pt 8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 36pt 48pt',
               font_formats:
                 'Arial=arial,helvetica,sans-serif;' +
@@ -93,10 +93,15 @@ if (isset($auth)) {
                 'Webdings=webdings;' +
                 'Wingdings=wingdings,zapf dingbats',
               plugins: [
-                'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker fullpage toc',
+                'advlist autolink link image lists charmap print preview hr anchor pagebreak fullpage toc',
                 'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking codesample',
-                'save table contextmenu directionality emoticons template paste textcolor imagetools colorpicker textpattern help phpmyfaq',
+                'save table directionality emoticons template paste imagetools textpattern help phpmyfaq',
               ],
+              mobile: {
+                theme: 'silver',
+                toolbar_mode: 'floating',
+                toolbar1: "link unlink image | table bullist numlist",
+              },
               relative_urls: false,
               convert_urls: false,
               document_base_url: '<?= $faqConfig->getDefaultUrl() ?>',
@@ -105,8 +110,7 @@ if (isset($auth)) {
               paste_remove_spans: true,
               entities: '10',
               entity_encoding: 'raw',
-              toolbar1: 'newdocument | undo redo | bold italic underline subscript superscript strikethrough | styleselect | formatselect | fontselect | fontsizeselect | outdent indent | alignleft aligncenter alignright alignjustify | removeformat',
-              toolbar2: 'insertfile | cut copy paste pastetext codesample | bullist numlist | link unlink anchor image media | charmap | insertdatetime | table | forecolor backcolor emoticons | searchreplace | spellchecker | hr | pagebreak | code | phpmyfaq print | preview | custFontSize | toc | fullscreen',
+              toolbar1: 'newdocument | undo redo | bold italic underline subscript superscript strikethrough | styleselect | formatselect | fontselect | fontsizeselect | outdent indent | alignleft aligncenter alignright alignjustify | removeformat | insertfile | cut copy paste pastetext codesample | bullist numlist | link unlink anchor image media | charmap | insertdatetime | table | forecolor backcolor emoticons | searchreplace | spellchecker | hr | pagebreak | code | phpmyfaq print | preview | custFontSize | toc | fullscreen',
               height: '<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>',
               image_advtab: true,
               image_class_list: [
@@ -155,9 +159,6 @@ if (isset($auth)) {
               ],
               importcss_append: true,
 
-              // Security, see https://www.tiny.cloud/docs/release-notes/release-notes56/#securityfixes
-              invalid_elements: 'iframe,object,embed',
-
               // Save function
               save_onsavecallback: () => {
                 phpMyFAQSave();
@@ -173,22 +174,33 @@ if (isset($auth)) {
               },
 
               // File browser
-              // @deprecated have to be rewritten for TinyMCE v5 in phpMyFAQ v3.2
-              file_browser_callback_types: 'image media',
-              file_browser_callback: function(fieldName, url, type, win) {
-                let mediaBrowser = 'media.browser.php';
-                mediaBrowser += (mediaBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
-                tinymce.activeEditor.windowManager.open({
-                  title: 'Select media file',
-                  url: mediaBrowser,
-                  width: 640,
-                  height: 480,
-                }, {
-                  window: win,
-                  input: fieldName,
-                });
+              file_picker_types: 'image media',
+              file_picker_callback: (callback, value, meta) => {
+                  const type = meta.filetype
+                  const w = window,
+                      d = document,
+                      e = d.documentElement,
+                      g = d.getElementsByTagName('body')[0],
+                      x = w.innerWidth || e.clientWidth || g.clientWidth,
+                      y = w.innerHeight || e.clientHeight || g.clientHeight
 
-                return false;
+                  let mediaBrowser = 'media.browser.php';
+                  mediaBrowser += (mediaBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
+
+                  tinymce.activeEditor.windowManager.openUrl({
+                      url: mediaBrowser,
+                      title: 'Select media file',
+                      width: x * 0.8,
+                      height: y * 0.8,
+                      resizable: "yes",
+                      close_previous: "no",
+                      onMessage: function (api, data) {
+                          if (data.mceAction === 'phpMyFAQMediaBrowserAction') {
+                              callback(data.url);
+                              api.close();
+                          }
+                      }
+                  });
               },
 
               // without images_upload_url set, Upload tab won't show up
@@ -232,6 +244,7 @@ if (isset($auth)) {
               csrf: $('#csrf').val(),
             });
 
+            // @todo rewrite this piece of code...
             function phpMyFAQSave() {
               const indicator = $('#pmf-admin-saving-data-indicator'),
                 input = document.createElement('input');

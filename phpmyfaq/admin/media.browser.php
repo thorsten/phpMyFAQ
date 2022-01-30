@@ -2,24 +2,23 @@
 
 /**
  * Media browser backend for TinyMCE v4
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-10-18
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-10-18
  */
 
 use phpMyFAQ\Language;
 use phpMyFAQ\User\CurrentUser;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
@@ -47,19 +46,27 @@ if ($user) {
     unset($user);
 }
 ?>
-<style>
-    @import url('../assets/dist/admin-styles.css');
-    body { padding: 10px; }
-</style>
+<!DOCTYPE html>
+<html lang="<?= $PMF_LANG['metaLanguage']; ?>">
+<head>
+    <meta charset='UTF-8'>
+    <title>phpMyFAQ Media Browser</title>
+    <style>
+        @import url('../assets/dist/admin-styles.css');
+
+        body {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
 
 <form action="" method="post">
-  <div class="input-group">
-    <label class="sr-only" for="filter"><?= $PMF_LANG['ad_media_name_search'] ?></label>
-    <input type="text" class="form-control" id="filter" value="" placeholder="<?= $PMF_LANG['ad_media_name_search'] ?>">
-    <div class="input-group-append">
-      <span class="input-group-text"><i aria-hidden="true" class="fa fa-search"></i></span>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="<?= $PMF_LANG['ad_media_name_search'] ?>" id="filter"
+               value="" aria-label="Recipient's username" aria-describedby="search">
+        <span class="input-group-text" id="search"><i aria-hidden="true" class="fa fa-search"></i></span>
     </div>
-  </div>
 </form>
 
 <?php
@@ -68,7 +75,7 @@ $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', '
 if (!is_dir(PMF_ROOT_DIR . '/images')) {
     echo '<p class="alert alert-danger">' . sprintf($PMF_LANG['ad_dir_missing'], '/images') . '</p>';
 } else {
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
     foreach ($files as $file) {
         if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
             continue;
@@ -88,23 +95,33 @@ if (!is_dir(PMF_ROOT_DIR . '/images')) {
 <script src="../assets/dist/backend.js"></script>
 <script src="assets/js/editor/tinymce.min.js"></script>
 <script>
+    /**
+     * Search for image names
+     * @todo Needs to be refactored: drop jQuery dependency
+     *
+     * @param {string} filter
+     */
     $('#filter').on('keyup', function () {
-      const filter = $(this).val();
-      $('div.mce-file').each(function(){
+        const filter = $(this).val()
+        $('div.mce-file').each(function () {
             if ($(this).text().search(new RegExp(filter, 'i')) < 0) {
-                $(this).fadeOut();
+                $(this).fadeOut()
             } else {
-                $(this).show();
+                $(this).show()
             }
-        });
-    });
+        })
+    })
 
+    /**
+     * @todo Needs to be refactored: drop jQuery dependency
+     */
     $(document).on('click', 'div.mce-file', function () {
-      const args = top.tinymce.activeEditor.windowManager.getParams(),
-        win = (args.window),
-        input = (args.input);
-
-      win.document.getElementById(input).value = $(this).data('src');
-        top.tinymce.activeEditor.windowManager.close();
-    });
+        window.parent.postMessage({
+            mceAction: 'phpMyFAQMediaBrowserAction',
+            url: $(this).data('src'),
+        }, '*')
+    })
 </script>
+
+</body>
+</html>

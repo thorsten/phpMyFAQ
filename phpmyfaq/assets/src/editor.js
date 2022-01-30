@@ -23,7 +23,7 @@ $(document).ready(function () {
       mode: 'exact',
       language: 'en',
       selector: 'textarea#answer',
-      theme: 'modern',
+      theme: 'silver',
       plugins: [
         'advlist anchor autolink lists link image imagetools charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code codesample fullscreen colorpicker help',
