@@ -50,7 +50,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = '';
+    private const VERSION_PRE_RELEASE = null;
 
     /**
      * API version.
