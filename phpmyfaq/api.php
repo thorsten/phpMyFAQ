@@ -437,6 +437,44 @@ switch ($action) {
         }
 
         break;
+
+    case 'question':
+        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
+            $http->setStatus(401);
+            $result = [
+                'stored' => false,
+                'error' => 'X_PMF_Token not valid.'
+            ];
+            break;
+        }
+
+        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW);
+        $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
+
+        if ($faqConfig->get('records.enableVisibilityQuestions')) {
+            $visibility = 'Y';
+        } else {
+            $visibility = 'N';
+        }
+
+        $questionData = [
+            'username' => $author,
+            'email' => $email,
+            'category_id' => $categoryId,
+            'question' => $question,
+            'is_visible' => $visibility
+        ];
+
+        $questionObject = new Question($this->config);
+        $questionObject->addQuestion($questionData);
+
+        $result = [
+            'stored' => true
+        ];
+        break;
 }
 
 //
