@@ -1,4 +1,4 @@
-# phpMyFAQ 3.1.0-beta
+# phpMyFAQ 3.1.0
 
 **Codename "Poseidon"**
 
@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v3.1.0 - 2022-02-12
 
+- Happy 21st Birthday, phpMyFAQ!
 - changed PHP requirement to PHP 7.4+ (Thorsten)
 - added support for PHP 8.0 and PHP 8.1 (Thorsten)
 - added support for Elasticsearch v6+ (Thorsten)
