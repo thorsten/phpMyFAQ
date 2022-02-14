@@ -18,7 +18,7 @@ systems, OpenLDAP and Microsoft Active Directory support, and an easy-to-use ins
 
 phpMyFAQ is only supported on PHP 7.4 and up, you need a database as well. Supported databases are MySQL, MariaDB,
 Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as main search
-engine, you need Elasticsearch 5.x or later. Check our detailed requirements on
+engine, you need Elasticsearch 6.x or later. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
 
 ## Installation
@@ -71,7 +71,7 @@ Then services will be available at following addresses:
 - phpMyFAQ: (http://localhost:8080)
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
-- phpLDAPadmin: (http://localhost:8088/)
+- phpLDAPAdmin: (http://localhost:8088/)
 
 #### Running tests
 
@@ -116,6 +116,7 @@ To run phpMyFAQ locally you need at least a running web server with PHP support 
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
+    $ git checkout 3.1
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ curl -o- -L https://yarnpkg.com/install.sh | bash
