@@ -1,10 +1,15 @@
-# phpMyFAQ 3.1.0
+# phpMyFAQ 3.1.1
 
 **Codename "Poseidon"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.1.1 - 2022-02-14
+
+- fixed enabled debug mode (Thorsten)
+- updated bundled dependencies (Thorsten)
 
 ### phpMyFAQ v3.1.0 - 2022-02-12
 
