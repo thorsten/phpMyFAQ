@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: lists the complete configuration items as text/html.
+ * Private phpMyFAQ Admin API: lists the complete configuration items as text/html.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -102,7 +102,7 @@ function renderInputForm(mixed $key, string $type)
                       return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
                     });
                   }
-                    
+
                   const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
                   const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
 
@@ -305,8 +305,8 @@ foreach ($LANG_CONF as $key => $value) {
             }
 
             if (!isset($content)) {
-                echo '<br><a target="_blank" href="../services/twitter/redirect.php">';
-                echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+                echo '<br><a target="_blank" href="../../services/twitter/redirect.php">';
+                echo '<img src="../../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
             } else {
                 echo $content->screen_name . "<br>\n";
                 echo "<img alt=\"Twitter profile\" src='" . $content->profile_image_url_https . "'><br>\n";

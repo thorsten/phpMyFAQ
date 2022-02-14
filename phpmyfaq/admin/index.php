@@ -233,7 +233,7 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Dashboard
                 case 'dashboard':
-                    require 'ajax.dashboard.php';
+                    require 'api/dashboard.php';
                     break;
                 // Link verification
                 case 'verifyURL':
@@ -247,14 +247,14 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     require 'ajax.category.php';
                     break;
                 // Configuration management
-                case 'config_list':
-                    require 'ajax.config_list.php';
+                case 'configuration-list':
+                    require 'api/configuration-list.php';
                     break;
                 case 'config':
                     require 'ajax.config.php';
                     break;
                 case 'elasticsearch':
-                    require 'ajax.elasticsearch.php';
+                    require 'api/elasticsearch.php';
                     break;
                 // Tags management
                 case 'tags':

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //
   // Configuration
   //
-  const configTabList = [].slice.call(document.querySelectorAll('#config_list a'));
+  const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {

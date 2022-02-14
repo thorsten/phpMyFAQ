@@ -14,7 +14,7 @@
  */
 
 export const fetchConfiguration = (target) => {
-  fetch(`index.php?action=ajax&ajax=config_list&conf=${target.substr(1)}`)
+  fetch(`index.php?action=ajax&ajax=configuration-list&conf=${target.substr(1)}`)
     .then(
       (response) => {
         if (response.ok) {

@@ -52,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
         // Special checks
         if (isset($editData['edit']['main.enableMarkdownEditor'])) {
-            $editData['edit']['main.enableWysiwygEditor'] = false; // Disable WYSIWG editor if Markdown is enabled
+            $editData['edit']['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
         }
 
         foreach ($editData['edit'] as $key => $value) {
@@ -87,7 +87,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         $faqConfig->getAll();
     }
     ?>
-  <form id="config_list" name="config_list" method="post"
+  <form id="configuration-list" name="configuration-list" method="post"
         action="?action=config&amp;config_action=saveConfig">
     <input type="hidden" name="csrf" value="<?= $currentToken ?>">
 
