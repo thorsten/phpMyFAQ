@@ -9,9 +9,11 @@ module.exports = {
     vendors: './phpmyfaq/assets/src/vendors.js',
     frontend: './phpmyfaq/assets/src/frontend.js',
     backend: './phpmyfaq/admin/assets/src/index.js',
+    setup: './phpmyfaq/assets/src/setup.js',
     styles: './phpmyfaq/assets/themes/default/scss/style.scss',
     'admin-styles': './phpmyfaq/admin/assets/scss/style.scss',
   },
+  devtool: 'source-map',
   plugins: [
     new CleanWebpackPlugin(),
     new CopyPlugin({
@@ -53,11 +55,9 @@ module.exports = {
         path.resolve(__dirname, 'phpmyfaq/assets/src/category.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/comments.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/editor.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/faq.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/records.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/typeahead.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/functions.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/setup.js'),
       ],
     }),
     /**
@@ -68,14 +68,18 @@ module.exports = {
       filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js')],
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css",
+      filename: '[name].css',
+      chunkFilename: '[id].css',
     }),
   ],
   output: {
     path: path.resolve(__dirname, 'phpmyfaq/assets/dist'),
   },
   mode: 'production',
+  watchOptions: {
+    aggregateTimeout: 200,
+    poll: 1000,
+  },
   module: {
     rules: [
       {
@@ -97,6 +101,25 @@ module.exports = {
         test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
         type: 'asset/resource',
       },
+      {
+        test: /skin\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /content\.css$/i,
+        use: ['css-loader'],
+      },
     ],
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        tinymceVendor: {
+          test: /[\\/]node_modules[\\/](tinymce)[\\/](.*js|.*skin.css)|[\\/]plugins[\\/]/,
+          name: 'tinymce',
+        },
+      },
+    },
   },
 };

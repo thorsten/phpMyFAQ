@@ -5,127 +5,145 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-24
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-12-24
  */
 
-/*global $: false */
+import { insertAfter } from './utils';
 
-$(document).ready(function () {
+export const selectDatabaseSetup = (event) => {
+  const database = document.getElementById('dbdatafull');
+  const databasePort = document.getElementById('sql_port');
+  const sqlite = document.getElementById('dbsqlite');
+
+  switch (event.target.value) {
+    case 'mysqli':
+      databasePort.value = 3306;
+      sqlite.style.display = 'none';
+      database.style.display = 'block';
+      break;
+    case 'pgsql':
+      databasePort.value = 5432;
+      sqlite.style.display = 'none';
+      database.style.display = 'block';
+      break;
+    case 'sqlsrv':
+      databasePort.value = 1433;
+      sqlite.style.display = 'none';
+      database.style.display = 'block';
+      break;
+    case 'sqlite3':
+      sqlite.style.display = 'block';
+      database.style.display = 'none';
+      break;
+    default:
+      sqlite.style.display = 'none';
+      database.style.display = 'block';
+      break;
+  }
+};
+
+export const addElasticsearchServerInput = () => {
+  const wrapper = document.getElementById('elasticsearch-server-wrapper');
+  const input = document.createElement('input');
+
+  // Set attributes for input
+  input.className = 'form-control';
+  input.className += ' mt-1';
+  input.type = 'text';
+  input.name = 'elasticsearch_server[]';
+  input.placeholder = `127.0.0.1:9200`;
+
+  insertAfter(wrapper, input);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  const setupType = $('#sql_type'),
-    setupTypeOptions = $('#sql_type option'),
-    setupDatabasePort = document.getElementById('sql_port'),
-    $dbSqlite = $('#dbsqlite'),
-    $dbFull = $('#dbdatafull');
-  let lastIpSegment = 2;
-
-  const selectDatabaseSetup = (event) => {
-    switch (event.target.value) {
-      case 'mysqli':
-        setupDatabasePort.value = 3306;
-        $dbSqlite.hide();
-        $dbFull.show();
-        break;
-      case 'pgsql':
-        setupDatabasePort.value = 5432;
-        $dbSqlite.hide();
-        $dbFull.show();
-        break;
-      case 'sqlsrv':
-        setupDatabasePort.value = 1433;
-        $dbSqlite.hide();
-        $dbFull.show();
-        break;
-      case 'sqlite3':
-        $dbSqlite.show();
-        $dbFull.hide();
-        break;
-      default:
-        $dbSqlite.hide();
-        $dbFull.show();
-        break;
-    }
-  };
-
-  const addElasticsearchServerInput = (event) => {
-    const current = $(event.currentTarget);
-    if ('add' === current.attr('data-action')) {
-      const wrapper = document.querySelector('#elasticsearch_server-wrapper');
-      const div = document.createElement('div');
-      div.className = 'input-group';
-      const input = document.createElement('input');
-      input.className = 'form-control';
-      input.className += ' mt-1';
-      input.type = 'text';
-      input.name = 'elasticsearch_server[]';
-      input.placeholder = `127.0.0.${lastIpSegment++}:9200`;
-      div.appendChild(input);
-      wrapper.append(div);
-    }
-    return false;
-  };
-
-  $('#phpmyfaq-setup-form a.pmf-add-elasticsearch-host').on('click', addElasticsearchServerInput);
-  setupType.on('change', selectDatabaseSetup);
-
-  if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {
-    $dbSqlite.show().removeClass('d-none');
-    $dbFull.hide();
+  // Switch between database selection
+  const setupType = document.getElementById('sql_type');
+  if (setupType) {
+    setupType.addEventListener('change', selectDatabaseSetup);
   }
 
-  const navListItems = $('div.setup-panel div a'),
-    allWells = $('.setup-content'),
-    allNextButton = $('.btn-next');
+  // Add more Elasticsearch server inputs
+  const addElasticsearch = document.getElementById('pmf-add-elasticsearch-host');
+  if (addElasticsearch) {
+    addElasticsearch.addEventListener('click', addElasticsearchServerInput);
+  }
 
-  allWells.hide();
+  // Wizard
+  const setupTabs = document.querySelectorAll('.setup-content');
+  const navListItems = document.querySelectorAll('div.setup-panel div a');
+  const nextButtons = document.querySelectorAll('.btn-next');
 
-  navListItems.on('click', function (e) {
-    e.preventDefault();
-    const $target = $($(this).attr('href')),
-      $item = $(this);
-
-    if (!$item.hasClass('disabled')) {
-      navListItems.removeClass('btn-primary').addClass('btn-secondary');
-      $item.removeClass('btn-secondary').addClass('btn-primary');
-      $item.removeClass('disabled');
-      allWells.hide();
-      $target.show();
-      $target.find('input:eq(0)').focus();
-    }
+  setupTabs.forEach((setupContent) => {
+    setupContent.style.display = 'none';
   });
 
-  allNextButton.on('click', function () {
-    let curStep = $(this).closest('.setup-content'),
-      curStepBtn = curStep.attr('id'),
-      nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]')
-        .parent()
-        .next()
-        .children('a'),
-      curInputs = curStep.find(
-        "input[type='text'],input[type='url'],input[type='email'],input[type='number'],input[type='password']"
-      ),
-      isValid = true;
+  navListItems.forEach((navListItem) => {
+    navListItem.addEventListener('click', (event) => {
+      event.preventDefault();
 
-    console.log('Button clicked', curStepBtn);
+      const target = event.target.getAttribute('href');
+      const item = event.target;
+      const setupContent = document.getElementById(target.replace('#', ''));
 
-    $('.form-group.row input').removeClass('is-invalid');
-    for (let i = 0; i < curInputs.length; i++) {
-      console.log(curInputs[i].validity.valid);
-
-      if (!curInputs[i].validity.valid) {
-        isValid = false;
-        $(curInputs[i]).closest('.form-group.row input').addClass('is-invalid');
+      if (item.getAttribute('disabled') === null || item.getAttribute('disabled') === 'disabled') {
+        navListItem.classList.remove('btn-primary');
+        navListItem.classList.add('btn-secondary');
+        item.classList.remove('btn-secondary');
+        item.classList.add('btn-primary');
+        item.setAttribute('disabled', '');
+        setupContent.style.display = 'block';
       }
-    }
-
-    if (isValid) nextStepWizard.removeAttr('disabled').trigger('click');
+    });
   });
 
-  $('div.setup-panel div a.btn-primary').trigger('click');
+  nextButtons.forEach((nextButton) => {
+    nextButton.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      const currentStep = event.target.getAttribute('data-pmf-current-step');
+      const nextStep = event.target.getAttribute('data-pmf-next-step');
+
+      const currentSetupContent = document.getElementById(currentStep);
+      const nextSetupContent = document.getElementById(nextStep);
+
+      const currentInputs = currentSetupContent.querySelectorAll(
+        'input[type="text"],input[type="url"],input[type="email"],input[type="number"],input[type="password"]'
+      );
+      let isValid = true;
+
+      if (currentInputs) {
+        currentInputs.forEach((input) => {
+          input.classList.remove('is-invalid');
+        });
+
+        currentInputs.forEach((input) => {
+          if (!input.validity.valid) {
+            isValid = false;
+            input.classList.add('is-invalid');
+          }
+        });
+      }
+
+      if (isValid && nextStep === 'submit') {
+        event.stopPropagation();
+        document.forms['phpmyfaq-setup-form'].submit();
+      }
+
+      if (isValid && nextStep !== 'submit') {
+        currentSetupContent.style.display = 'none';
+        nextSetupContent.style.display = 'block';
+        document.querySelector(`div.setup-panel div a[href="#${nextStep}"]`).dispatchEvent(new Event('click'));
+      }
+    });
+  });
+
+  document.querySelector('div.setup-panel div a.btn-primary').dispatchEvent(new Event('click'));
 });

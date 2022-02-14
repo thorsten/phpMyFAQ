@@ -2,26 +2,31 @@
 
 /**
  * The main phpMyFAQ Setup.
+ *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Tom Rochester <tom.rochester@gmail.com>
- * @author Johannes Schlüter <johannes@php.net>
- * @author Uwe Pries <uwe.pries@digartis.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author Florian Anderiasch <florian@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @author    Johannes Schlüter <johannes@php.net>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-08-20
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;use phpMyFAQ\Core\Exception;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Installer;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 const PMF_SRC_DIR = PMF_ROOT_DIR . '/src';
@@ -63,8 +68,7 @@ $loader->register();
   <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
   <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
   <link rel="stylesheet" href="../assets/dist/styles.css">
-  <script src="../assets/dist/vendors.js"></script>
-  <script src="../assets/dist/phpmyfaq.js"></script>
+  <script src="../assets/dist/setup.js"></script>
   <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
 <body>
@@ -144,26 +148,27 @@ $loader->register();
 //
 // Initialize static string wrapper
 //
-Strings::init('en');
+Strings::init();
 $system = new System();
 $installer = new Installer();
 $installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
+
 // not yet POSTed
 if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST['sql_db'])) {
     $installer->checkNoncriticalSettings()
     ?>
 
-      <form action="index.php" method="post" id="phpmyfaq-setup-form" class="needs-validation" novalidate>
+      <form action="index.php" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form" class="needs-validation" novalidate>
 
         <div class="row setup-content" id="step-1">
           <div class="col-12">
-            <h3 class="mb-3"> Step 1: Database setup</h3>
+            <h3 class="mb-3"> Step 1/4: Database setup</h3>
 
             <div class="row">
               <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
               <div class="col-sm-9">
-                  <select name="sql_type" id="sql_type" class="form-control">
+                  <select name="sql_type" id="sql_type" class="form-select">
                       <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                   </select>
                   <small class="form-text text-muted">Please select your preferred database type.</small>
@@ -234,14 +239,17 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </small>
               </div>
             </div>
-              <button class="btn btn-primary btn-next btn-lg pull-right" type="button">Next: LDAP setup</button>
+              <button class="btn btn-primary btn-next btn-lg pull-right" type="button"
+                data-pmf-current-step="step-1" data-pmf-next-step="step-2">
+                Next: LDAP setup
+              </button>
             </div>
         </div>
 
 
         <div class="row setup-content" id="step-2">
           <div class="col-12">
-            <h3 class="mb-3"> Step 2: LDAP setup</h3>
+            <h3 class="mb-3"> Step 2/4: LDAP setup</h3>
             <?php if (extension_loaded('ldap')) : ?>
               <div class="form-group">
                 <div class="form-check">
@@ -295,7 +303,10 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               </p>
             <?php endif; ?>
 
-            <button class="btn btn-primary btn-next btn-lg pull-right" type="button">Next: Elasticsearch setup</button>
+            <button class="btn btn-primary btn-next btn-lg pull-right" type="button" data-pmf-current-step="step-2"
+              data-pmf-next-step="step-3">
+              Next: Elasticsearch setup
+            </button>
           </div>
         </div>
 
@@ -303,7 +314,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <div class="row setup-content" id="step-3">
           <div class="col-12">
-            <h3 class="mb-3"> Step 2: Elasticsearch setup</h3>
+            <h3 class="mb-3"> Step 3/4: Elasticsearch setup</h3>
             <?php if (extension_loaded('curl')) : ?>
               <div class="form-group">
                 <div class="form-check">
@@ -314,20 +325,15 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </label>
                 </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                   <label class="col-sm-3 col-form-label" for="elasticsearch_server">Server(s):</label>
                   <div class="col-sm-9">
-                    <div class="input-group" id="elasticsearch_server-wrapper">
+                    <div class="input-group" id="elasticsearch-server-wrapper">
                       <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
                              class="form-control" placeholder="127.0.0.1:9200">
-                      <div class="input-group-append">
-                        <div class="input-group-text">
-                          <a title="Add more Elasticsearch hosts" style="cursor: pointer;" data-action="add"
-                             class="pmf-add-elasticsearch-host">
-                            <i aria-hidden="true" class="fa fa-plus-circle"></i>
-                          </a>
-                        </div>
-                      </div>
+                      <span class="input-group-text" id="pmf-add-elasticsearch-host" style="cursor: pointer;">
+                        Add another Elasticsearch Host
+                      </span>
                     </div>
                     <small class="form-text text-muted">
                       Please enter the host (domain or IP) with port number of your Elasticsearch server.
@@ -342,7 +348,10 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </div>
                 </div>
             <?php endif; ?>
-            <button class="btn btn-primary btn-next btn-lg pull-right" type="button">Next: Admin user setup</button>
+            <button class="btn btn-primary btn-next btn-lg pull-right" type="button" data-pmf-current-step="step-3"
+              data-pmf-next-step="step-4">
+              Next: Admin user setup
+            </button>
           </div>
         </div>
 
@@ -350,7 +359,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <div class="row setup-content" id="step-4">
           <div class="col-12">
-            <h3 class="mb-3"> Step 2: Admin user setup</h3>
+            <h3 class="mb-3"> Step 4/4: Admin user setup</h3>
 
               <div class="row">
                 <label class="col-sm-3 col-form-label" for="language">Default language:</label>
@@ -385,7 +394,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="row">
               <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
               <div class="col-sm-9">
-                <select id="permLevel" name="permLevel" class="form-control">
+                <select id="permLevel" name="permLevel" class="form-control" required>
                   <option value="basic">Basic (no group support)</option>
                   <option value="medium">Medium (with group support)</option>
                   <option value="large">Large (with sections support)</option>
@@ -406,7 +415,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
               <div class="col-sm-9">
                 <input type="email" name="email" id="email" class="form-control" required>
-                <small class="form-text text-muted">Please enter your email adress.</small>
+                <small class="form-text text-muted">Please enter your email address.</small>
               </div>
             </div>
             <div class="row">
@@ -441,14 +450,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               </div>
             </div>
 
-            <button class="btn btn-primary btn-lg pull-right" type="submit" >Click to install phpMyFAQ <?= System::getVersion() ?></button>
+            <button class="btn btn-primary btn-next btn-lg pull-right" type="button" data-pmf-current-step="step-4"
+              data-pmf-next-step="submit">Click to install phpMyFAQ <?= System::getVersion() ?></button>
           </div>
         </div>
 
       </form>
     <?php
-    System::renderFooter();
-} else {
+    } else {
     try {
         $installer->startInstall();
     } catch (Exception $e) {
@@ -470,5 +479,4 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
          </div>
        </div>
     <?php
-    System::renderFooter();
-}
+    }System::renderFooter();

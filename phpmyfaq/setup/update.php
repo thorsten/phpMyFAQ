@@ -23,9 +23,10 @@ use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2022 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('IS_VALID_PHPMYFAQ', null);
+const COPYRIGHT = '&copy; 2001-2022 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
+const IS_VALID_PHPMYFAQ = null;
+
+define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 
 if (version_compare(PHP_VERSION, '8.0.0') < 0) {
     die('Sorry, but you need PHP 8.0.0 or later!');
@@ -159,12 +160,7 @@ if ($step === 1) { ?>
             <ul>
               <li>phpMyFAQ 0.x</li>
               <li>phpMyFAQ 1.x</li>
-              <li>phpMyFAQ 2.0.x</li>
-              <li>phpMyFAQ 2.5.x</li>
-              <li>phpMyFAQ 2.6.x</li>
-              <li>phpMyFAQ 2.7.x</li>
-              <li>phpMyFAQ 2.8.x</li>
-              <li>phpMyFAQ 2.9.x</li>
+              <li>phpMyFAQ 2.x</li>
             </ul>
           </div>
         </div>
@@ -174,9 +170,9 @@ if ($step === 1) { ?>
               <?php
 
                 //
-                // We only support updates from 2.9+
+                // We only support updates from 3.0+
                 //
-                if (version_compare($version, '2.9.0', '>')) {
+                if (version_compare($version, '3.0.0', '>')) {
                     printf(
                         '<div class="alert alert-success text-center" role="alert">Your current version: %s %s</div>',
                         $version,
@@ -187,7 +183,7 @@ if ($step === 1) { ?>
                         '<div class="alert alert-danger text-center" role="alert">Your current version: %s</div>',
                         $version
                     );
-                    echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
+                    echo '<p>Please update to the latest phpMyFAQ 3.0 version first.</p>';
                 }
 
                 //
@@ -340,156 +336,6 @@ if ($step == 3) {
     $prefix = Database::getTablePrefix();
     $faqConfig->getAll();
     $perm = new BasicPermission($faqConfig);
-
-    //
-    // UPDATES FROM 2.10.0-alpha
-    //
-    if (version_compare($version, '2.10.0-alpha', '<')) {
-        $faqConfig->add('ldap.ldap_mapping.name', 'cn');
-        $faqConfig->add('ldap.ldap_mapping.username', 'samAccountName');
-        $faqConfig->add('ldap.ldap_mapping.mail', 'mail');
-        $faqConfig->add('ldap.ldap_mapping.memberOf', '');
-        $faqConfig->add('ldap.ldap_use_domain_prefix', 'true');
-        $faqConfig->add('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION', '3');
-        $faqConfig->add('ldap.ldap_options.LDAP_OPT_REFERRALS', '0');
-        $faqConfig->add('ldap.ldap_use_memberOf', 'false');
-        $faqConfig->add('ldap.ldap_use_sasl', 'false');
-        $faqConfig->add('ldap.ldap_use_multiple_servers', 'false');
-        $faqConfig->add('ldap.ldap_use_anonymous_login', 'false');
-        $faqConfig->add('ldap.ldap_use_dynamic_login', 'false');
-        $faqConfig->add('ldap.ldap_dynamic_login_attribute', 'uid');
-        $faqConfig->add('seo.enableXMLSitemap', 'true');
-        $faqConfig->add('main.enableCategoryRestrictions', 'true');
-        $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);
-
-        $query[] = 'UPDATE ' . $prefix . "faqconfig SET config_name = 'ldap.ldapSupport'
-            WHERE config_name = 'security.ldapSupport'";
-
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN image VARCHAR(255) DEFAULT NULL';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN show_home SMALLINT DEFAULT NULL';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD image VARCHAR(255) DEFAULT NULL';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD show_home INTEGER DEFAULT NULL';
-        }
-    }
-
-    //
-    // UPDATES FROM 3.0.0-alpha
-    //
-    if (version_compare($version, '3.0.0-alpha', '<')) {
-        $query[] = 'DELETE FROM ' . $prefix . 'faqright WHERE right_id = 18';
-        $query[] = 'DELETE FROM ' . $prefix . 'faquser_right WHERE right_id = 18';
-        $query[] = 'DELETE FROM ' . $prefix . 'faqgroup_right WHERE right_id = 18';
-        $query[] = 'INSERT INTO ' . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
-            (18, 'viewadminlink', 'Right to see the link to the admin section', 1, 1)";
-        $query[] = 'INSERT INTO ' . $prefix . 'faquser_right (user_id, right_id) VALUES (1, 18)';
-
-        $faqConfig->add('main.enableSendToFriend', 'true');
-        $faqConfig->add('main.privacyURL', '');
-    }
-
-    //
-    // UPDATES FROM 3.0.0-alpha.2
-    //
-    if (version_compare($version, '3.0.0-alpha.2', '<')) {
-        $faqConfig->add('main.enableAutoUpdateHint', 'true');
-    }
-
-    //
-    // UPDATES FROM 3.0.0-alpha.3
-    //
-    if (version_compare($version, '3.0.0-alpha.3', '<')) {
-        $faqConfig->add('records.enableAutoRevisions', 'false');
-        // Add superadmin flag
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD is_superadmin INTEGER DEFAULT 0';
-        }
-        $query[] = 'UPDATE ' . $prefix . 'faquser SET is_superadmin = 1 WHERE user_id = 1';
-
-        // Add domain flag
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
-        }
-
-        // Update section flag for faqright table
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD for_sections INTEGER DEFAULT 0';
-        }
-
-        // Add new tables
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_news (category_id INTEGER NOT NULL, news_id INTEGER NOT NULL, PRIMARY KEY (category_id, news_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsections (id INTEGER NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY (id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_category (section_id INTEGER NOT NULL, category_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, category_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_group (section_id INTEGER NOT NULL, group_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, group_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_news (section_id INTEGER NOT NULL, news_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, news_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqmeta (id INT NOT NULL, lang VARCHAR(5) DEFAULT NULL, page_id VARCHAR(48) DEFAULT NULL, type VARCHAR(48) DEFAULT NULL, content TEXT NULL, PRIMARY KEY (id))';
-
-        // Add new rights
-        $perm->addRight(['name' => 'view_faqs', 'description' => 'Right to view FAQs']);
-        $perm->addRight(['name' => 'view_categories', 'description' => 'Right to view categories']);
-        $perm->addRight(['name' => 'view_sections', 'description' => 'Right to view sections']);
-        $perm->addRight(['name' => 'view_news', 'description' => 'Right to view news']);
-        $perm->addRight(['name' => 'add_section', 'description' => 'Right to add sections']);
-        $perm->addRight(['name' => 'edit_section', 'description' => 'Right to edit sections']);
-        $perm->addRight(['name' => 'delete_section', 'description' => 'Right to delete sections']);
-        $perm->addRight(['name' => 'administrate_sections', 'description' => 'Right to administrate sections']);
-        $perm->addRight(['name' => 'administrate_groups', 'description' => 'Right to administrate groups']);
-
-        // Rename rights
-        $perm->renameRight('adduser', 'add_user');
-        $perm->renameRight('edituser', 'edit_user');
-        $perm->renameRight('deluser', 'delete_user');
-    }
-
-    //
-    // UPDATES FROM 3.0.0-alpha.4
-    //
-    if (version_compare($version, '3.0.0-alpha.4', '<')) {
-        $perm->renameRight('addbt', 'add_faq');
-        $perm->renameRight('editbt', 'edit_faq');
-        $perm->renameRight('delbt', 'delete_faq');
-
-        // Add login attempts flag
-        if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
-        } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD login_attempts INTEGER DEFAULT 0';
-        }
-    }
-
-    //
-    // UPDATES FROM 3.0.0-beta.3
-    //
-    if (version_compare($version, '3.0.0-beta.3', '<=')) {
-        // Fix category table
-        switch ($DB['type']) {
-            case 'mysqli':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories MODIFY parent_id INTEGER';
-                break;
-            case 'pgsql':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
-                break;
-        }
-
-        $faqConfig->add('mail.remoteSMTPPort', '465');
-        $faqConfig->add('mail.remoteSMTPEncryption', 'ssl');
-        $faqConfig->delete('socialnetworks.enableFacebookSupport');
-    }
-
-    //
-    // UPDATES FROM 3.0.0-RC
-    //
-    if (version_compare($version, '3.0.0-RC', '<=')) {
-        $query[] = 'UPDATE ' . $prefix . "faqconfig SET config_name = 'main.customPdfFooter'
-            WHERE config_name = 'main.customPdfHFooter'";
-    }
 
     //
     // UPDATES FROM 3.1.0-alpha
