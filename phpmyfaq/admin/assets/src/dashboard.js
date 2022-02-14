@@ -16,10 +16,6 @@
 import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title } from 'chart.js';
 import Masonry from 'masonry-layout';
 
-// currently displayed popover
-// import { Popover } from 'bootstrap';
-// new Popover(document.querySelector('.pmf-popover'), { });
-
 window.onload = () => {
   const masonryElement = document.querySelector('.masonry-grid');
 

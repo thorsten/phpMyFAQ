@@ -19,13 +19,17 @@
  * @param {string} userId
  * @return {object}
  */
-const getUserRights = (userId) => {};
+const getUserRights = (userId) => {
+  console.log(userId);
+};
 
 /**
  *
  * @param {string} userId
  */
-const getUserData = (userId) => {};
+const getUserData = (userId) => {
+  console.log(userId);
+};
 
 /**
  *

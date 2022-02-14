@@ -17,6 +17,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   let menuCounter = 0;
   $('.pmf-category-overview')
     .find('li')
@@ -60,4 +63,5 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+  */
 });

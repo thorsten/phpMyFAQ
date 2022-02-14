@@ -148,6 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
    * Checks the content of a question by Ajax
    *
    */
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   window.checkQuestion = function checkQuestion() {
     const formValues = $('#formValues');
     const loader = $('#loader');
@@ -213,4 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     });
   });
+
+  */
 });

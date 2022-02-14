@@ -15,6 +15,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
+
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   $('#submitfaq').on('click', () => {
     if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
       tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
@@ -25,4 +29,5 @@ document.addEventListener('DOMContentLoaded', () => {
   $('form#formValues').submit(() => {
     return false;
   });
+  */
 });

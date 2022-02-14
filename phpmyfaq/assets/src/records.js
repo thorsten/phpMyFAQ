@@ -19,6 +19,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   //
   // Show rating
   //
@@ -50,4 +53,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tooltips
   //
   $('[data-toggle="tooltip"]').tooltip();
+  */
 });

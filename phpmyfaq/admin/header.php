@@ -244,12 +244,9 @@ switch ($action) {
   <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="../assets/dist/admin-styles.css">
+  <link rel="stylesheet" href="../assets/dist/admin.css">
 
-  <script src="../assets/dist/vendors.js"></script>
-  <script src="../assets/dist/phpmyfaq.js"></script>
   <script src="../assets/dist/backend.js"></script>
-  <script src="assets/js/sidebar.js"></script>
   <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">
 </head>

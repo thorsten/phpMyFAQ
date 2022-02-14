@@ -89,7 +89,7 @@ function renderInputForm(mixed $key, string $type)
                 echo '</div>';
                 ?>
                 <script>
-                  const generateUUID = () => {
+                    const generateUUID = () => {
                     let date = new Date().getTime();
 
                     if (window.performance && typeof window.performance.now === 'function') {
@@ -102,7 +102,7 @@ function renderInputForm(mixed $key, string $type)
                       return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
                     });
                   }
-
+                    
                   const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
                   const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
 

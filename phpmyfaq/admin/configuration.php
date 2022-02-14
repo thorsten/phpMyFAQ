@@ -191,8 +191,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     </div>
 
   </form>
-
-  <script src="assets/js/configuration.js"></script>
     <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];

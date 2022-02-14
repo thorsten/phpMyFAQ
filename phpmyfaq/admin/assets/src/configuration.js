@@ -13,6 +13,31 @@
  * @since     2022-01-29
  */
 
+export const fetchConfiguration = (target) => {
+  fetch(`index.php?action=ajax&ajax=config_list&conf=${target.substr(1)}`)
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response.text();
+        }
+        throw new Error('Request failed!');
+      },
+      (networkError) => {
+        console.log(networkError.message);
+      }
+    )
+    .then((html) => {
+      const tabContent = document.querySelector(target);
+      while (tabContent.firstChild) {
+        tabContent.removeChild(tabContent.firstChild);
+      }
+      tabContent.innerHTML = html.toString();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 export const generateUUID = () => {
   let date = new Date().getTime();
 

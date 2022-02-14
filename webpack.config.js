@@ -6,16 +6,63 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
-    vendors: './phpmyfaq/assets/src/vendors.js',
-    frontend: './phpmyfaq/assets/src/frontend.js',
     backend: './phpmyfaq/admin/assets/src/index.js',
+    //frontend: './phpmyfaq/assets/src/frontend.js',
     setup: './phpmyfaq/assets/src/setup.js',
     styles: './phpmyfaq/assets/themes/default/scss/style.scss',
-    'admin-styles': './phpmyfaq/admin/assets/scss/style.scss',
+    admin: './phpmyfaq/admin/assets/scss/style.scss',
+    //vendors: './phpmyfaq/assets/src/vendors.js', // @todo still needed?
   },
   devtool: 'source-map',
+  output: {
+    path: path.resolve(__dirname, 'phpmyfaq/assets/dist'),
+  },
+  mode: 'production',
+  watchOptions: {
+    aggregateTimeout: 200,
+    poll: 1000,
+  },
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+    // Concat phpMyFAQ TinyMCE plugin and uglify it
+    new ConcatPlugin({
+      fileName: '../../../phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js',
+      filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js')],
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          'css-loader',
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /skin\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /content\.css$/i,
+        use: ['css-loader'],
+      },
+    ],
+  },
+  /*
+
+  plugins: [
     new CopyPlugin({
       patterns: [
         {
@@ -51,18 +98,16 @@ module.exports = {
     new ConcatPlugin({
       fileName: 'phpmyfaq.js',
       filesToConcat: [
-        path.resolve(__dirname, 'phpmyfaq/assets/src/add.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/category.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/comments.js'),
+        //path.resolve(__dirname, 'phpmyfaq/assets/src/add.js'),
+        //path.resolve(__dirname, 'phpmyfaq/assets/src/category.js'),
+        //path.resolve(__dirname, 'phpmyfaq/assets/src/comments.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/editor.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/records.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/typeahead.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/functions.js'),
+        //path.resolve(__dirname, 'phpmyfaq/assets/src/records.js'),
+        //path.resolve(__dirname, 'phpmyfaq/assets/src/typeahead.js'),
+        //path.resolve(__dirname, 'phpmyfaq/assets/src/functions.js'),
       ],
     }),
-    /**
-     * Concat phpMyFAQ TinyMCE plugin and uglify it
-     */
+    // Concat phpMyFAQ TinyMCE plugin and uglify it
     new ConcatPlugin({
       fileName: '../../../phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js',
       filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js')],
@@ -72,45 +117,6 @@ module.exports = {
       chunkFilename: '[id].css',
     }),
   ],
-  output: {
-    path: path.resolve(__dirname, 'phpmyfaq/assets/dist'),
-  },
-  mode: 'production',
-  watchOptions: {
-    aggregateTimeout: 200,
-    poll: 1000,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: (resourcePath, context) => {
-                return path.relative(path.dirname(resourcePath), context) + '/assets/dist/';
-              },
-            },
-          },
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /skin\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /content\.css$/i,
-        use: ['css-loader'],
-      },
-    ],
-  },
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -122,4 +128,5 @@ module.exports = {
       },
     },
   },
+   */
 };

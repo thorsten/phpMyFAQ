@@ -13,8 +13,10 @@
  * @since 2019-12-20
  */
 
+import * as bootstrap from 'bootstrap';
 import { renderVisitorCharts } from './dashboard';
-import * as editor from './editor';
+import { sidebarToggle } from './sidebar';
+import { fetchConfiguration, generateUUID } from './configuration';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -22,11 +24,37 @@ document.addEventListener('DOMContentLoaded', () => {
   //
   // Configuration
   //
+  const configTabList = [].slice.call(document.querySelectorAll('#config_list a'));
+  if (configTabList.length) {
+    let tabLoaded = false;
+    configTabList.forEach((element) => {
+      const configTabTrigger = new bootstrap.Tab(element);
+      element.addEventListener('shown.bs.tab', (event) => {
+        event.preventDefault();
+
+        let target = event.target.getAttribute('href');
+
+        fetchConfiguration(target);
+
+        tabLoaded = true;
+        configTabTrigger.show();
+      });
+    });
+
+    if (!tabLoaded) {
+      fetchConfiguration('#main');
+    }
+  }
 
   //
   // Dashboard
   //
   renderVisitorCharts();
+
+  //
+  // Sidebar
+  //
+  sidebarToggle();
 
   //
   // User

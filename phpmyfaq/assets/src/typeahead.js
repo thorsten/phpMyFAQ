@@ -16,6 +16,10 @@
 /*global $: false */
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
+
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   $('.typeahead').typeahead({
     autoSelect: true,
     delay: 300,
@@ -49,4 +53,5 @@ document.addEventListener('DOMContentLoaded', () => {
       return item;
     },
   });
+  */
 });

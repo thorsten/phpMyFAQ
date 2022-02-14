@@ -16,6 +16,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   const showLongComment = (id) => {
     $('.comment-more-' + id).removeClass('d-none');
     $('.comment-dots-' + id).addClass('d-none');
@@ -33,4 +36,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentId = $(this).data('comment-id');
     showLongComment(commentId);
   });
+ */
 });
