@@ -14,6 +14,7 @@
  */
 
 import { renderVisitorCharts } from './dashboard';
+import * as editor from './editor';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -30,4 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
   //
   // User
   //
+
+  //
+  // FAQs
+  //
+  // editor.render();
 });

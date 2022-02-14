@@ -14,6 +14,15 @@
  */
 
 /**
+ *
+ * @param referenceNode
+ * @param newNode
+ */
+export const insertAfter = (referenceNode, newNode) => {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+};
+
+/**
  * Capitalize the first letter of a string
  * @param str
  * @returns {string}

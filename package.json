@@ -15,7 +15,7 @@
   "homepage": "https://www.phpmyfaq.de/",
   "scripts": {
     "build": "webpack",
-    "build:watch": "webpack --watch",
+    "build:watch": "webpack --watch --progress",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
     "prepare": "husky install"

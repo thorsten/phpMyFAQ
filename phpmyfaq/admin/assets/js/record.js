@@ -13,7 +13,9 @@
  * @since 2013-11-17
  */
 
-$(function () {
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
   // Show help for keywords and users
   $('#keywords').on('focus', () => {
     showHelp('keywords');

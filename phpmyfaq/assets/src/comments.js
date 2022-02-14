@@ -13,7 +13,7 @@
  * @since 2016-01-11
  */
 
-$(() => {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   const showLongComment = (id) => {

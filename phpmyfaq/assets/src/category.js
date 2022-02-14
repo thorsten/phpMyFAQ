@@ -5,13 +5,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Hamed Ayari <hamed.ayari@maxdome.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Hamed Ayari <hamed.ayari@maxdome.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2016-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2016-03-25
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2016-03-25
  */
 
 document.addEventListener('DOMContentLoaded', () => {
