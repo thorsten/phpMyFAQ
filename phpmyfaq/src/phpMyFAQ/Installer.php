@@ -878,9 +878,9 @@ class Installer
             System::renderFooter(true);
         }
 
-        if (strlen($password) <= 5 || strlen($passwordRetyped) <= 5) {
+        if (strlen($password) <= 7 || strlen($passwordRetyped) <= 7) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
-                'short. Please set your password and your retyped password with a minimum of 6 characters.</p>';
+                'short. Please set your password and your retyped password with a minimum of 8 characters.</p>';
             System::renderFooter(true);
         }
         if ($password != $passwordRetyped) {
