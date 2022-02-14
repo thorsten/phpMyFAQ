@@ -229,7 +229,7 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
             switch ($ajax) {
                 // Attachments
                 case 'att':
-                    require 'ajax.attachment.php';
+                    require 'api/attachment.php';
                     break;
                 // Dashboard
                 case 'dashboard':

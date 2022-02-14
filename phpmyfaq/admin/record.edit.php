@@ -840,7 +840,7 @@ if (
           </button>
         </div>
         <div class="modal-body">
-          <form action="ajax.attachment.php?action=upload" enctype="multipart/form-data" method="post"
+          <form action="api/attachment.php?action=upload" enctype="multipart/form-data" method="post"
                 id="attachmentForm" novalidate>
             <fieldset>
               <input type="hidden" name="MAX_FILE_SIZE"
