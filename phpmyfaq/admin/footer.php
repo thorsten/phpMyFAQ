@@ -159,11 +159,6 @@ if (isset($auth)) {
               ],
               importcss_append: true,
 
-              // Save function
-              save_onsavecallback: () => {
-                phpMyFAQSave();
-              },
-
               // phpMyFAQ CSS
               content_css: '<?php $faqConfig->getDefaultUrl() ?>/assets/dist/styles.css?<?= time(); ?>',
 
@@ -243,36 +238,6 @@ if (isset($auth)) {
               // Custom params
               csrf: $('#csrf').val(),
             });
-
-            // @todo rewrite this piece of code...
-            function phpMyFAQSave() {
-              const indicator = $('#pmf-admin-saving-data-indicator'),
-                input = document.createElement('input');
-              indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i> Saving ...');
-              input.setAttribute('name', $('button:submit')[0].name);
-              input.setAttribute('id', 'temporarySaveButton');
-              $('#answer')[0].parentNode.appendChild(input);
-              // Submit the form by an ajax request
-                <?php if (isset($faqData['id']) && $faqData['id'] === 0) : ?>
-              let data = {
-                action: 'ajax',
-                ajax: 'recordAdd',
-              };
-                <?php else : ?>
-              let data = {
-                action: 'ajax',
-                ajax: 'recordSave',
-              };
-                <?php endif; ?>
-              $.each($('#faqEditor').serializeArray(), function(i, field) {
-                data[field.name] = field.value;
-              });
-
-              $.post('index.php', data, null);
-              indicator.html('<?= $PMF_LANG['ad_entry_savedsuc'] ?>');
-              $('#temporarySaveButton').remove();
-              indicator.fadeOut(5000);
-            }
           </script>
             <?php
         }

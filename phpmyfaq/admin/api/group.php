@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: handling of Ajax group calls.
+ * Private phpMyFAQ Admin API: handling of Ajax group calls.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -36,7 +36,7 @@ if (
     $user->perm->hasPermission($user->getUserId(), 'delete_user') ||
     $user->perm->hasPermission($user->getUserId(), 'editgroup')
 ) {
-    // pass the user id of the current user so it'll check which group he belongs to
+    // pass the user id of the current user, so it'll check which group he belongs to
     $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user) : [];
     $userList = $user->getAllUsers(true, false);
 
@@ -50,16 +50,19 @@ if (
                 'name' => $data['name'],
             ];
         }
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($groups);
     }
 
     // Return the group data
     if ('get_group_data' == $ajaxAction) {
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($user->perm->getGroupData($groupId));
     }
 
     // Return the group rights
     if ('get_group_rights' == $ajaxAction) {
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($user->perm->getGroupRights($groupId));
     }
 
@@ -73,6 +76,7 @@ if (
                 'login' => $user->getLogin(),
             ];
         }
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($users);
     }
 
@@ -87,6 +91,7 @@ if (
                 'login' => $user->getLogin(),
             ];
         }
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($members);
     }
 }

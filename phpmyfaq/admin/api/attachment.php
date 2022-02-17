@@ -1,18 +1,18 @@
 <?php
 
 /**
- * AJAX: handles an attachment with the given id.
+ * Private phpMyFAQ Admin API: handles an attachment with the given id.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-12-20
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-12-20
  */
 
 use phpMyFAQ\Attachment\AttachmentException;

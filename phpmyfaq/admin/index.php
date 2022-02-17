@@ -244,14 +244,14 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Categories
                 case 'categories':
-                    require 'ajax.category.php';
+                    require 'api/category.php';
                     break;
                 // Configuration management
                 case 'configuration-list':
                     require 'api/configuration-list.php';
                     break;
                 case 'config':
-                    require 'ajax.config.php';
+                    require 'api/configuration.php';
                     break;
                 case 'elasticsearch':
                     require 'api/elasticsearch.php';
@@ -262,17 +262,11 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Comments
                 case 'comment':
-                    require 'ajax.comment.php';
+                    require 'api/comment.php';
                     break;
                 // Records
                 case 'records':
                     require 'ajax.records.php';
-                    break;
-                case 'recordSave':
-                    require 'record.save.php';
-                    break;
-                case 'recordAdd':
-                    require 'record.add.php';
                     break;
                 case 'markdown':
                     require 'ajax.markdown.php';
@@ -287,15 +281,11 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Groups
                 case 'group':
-                    require 'ajax.group.php';
+                    require 'api/group.php';
                     break;
                 // Sections
                 case 'section':
                     require 'ajax.section.php';
-                    break;
-                // Interface translation
-                case 'trans':
-                    require 'ajax.trans.php';
                     break;
                 // Image upload
                 case 'image':

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: handling of Ajax configuration calls.
+ * Private phpMyFAQ Admin API: handling of REST configuration calls.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

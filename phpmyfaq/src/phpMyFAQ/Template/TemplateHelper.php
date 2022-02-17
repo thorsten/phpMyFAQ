@@ -28,15 +28,11 @@ use phpMyFAQ\Meta;
  */
 class TemplateHelper
 {
-    /**
-     * @var Configuration
-     */
-    private $config;
+    /** @var Configuration */
+    private Configuration $config;
 
-    /**
-     * @var Meta
-     */
-    private $meta;
+    /** @var Meta */
+    private Meta $meta;
 
     /**
      * Constructor.
