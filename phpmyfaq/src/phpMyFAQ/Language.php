@@ -12,7 +12,7 @@
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-05-14
  */

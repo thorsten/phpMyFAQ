@@ -12,7 +12,7 @@
  * @author Niran Shay <nirshay1@012.net.il>
  * @author Roy Ronen <royroy15@gmail.com>
  * @copyright 2004-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-08-27
  * @codingStandardsIgnoreFile

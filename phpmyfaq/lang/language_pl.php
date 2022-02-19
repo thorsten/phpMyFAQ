@@ -12,7 +12,7 @@
  * @author Sławomir Małusecki <mori@online-rpg.pl>
  * @author Dariusz Grzesista  <darek@linux.rybnik.pl>
  * @copyright 2004-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-06-24
  * @codingStandardsIgnoreFile

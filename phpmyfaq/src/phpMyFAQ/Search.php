@@ -12,7 +12,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2008-01-26
  */

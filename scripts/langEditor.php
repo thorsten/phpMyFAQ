@@ -21,7 +21,7 @@
  * @package   phpMyFAQ
  * @author    Everton Leite <etcholeite@gmail.com>
  * @copyright 2021-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2021-08-11
  */

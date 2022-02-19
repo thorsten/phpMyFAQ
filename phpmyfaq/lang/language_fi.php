@@ -13,7 +13,7 @@
  * @author Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
  * @author Niklas Lampén <niklas.lampen@eventusmedia.fi>
  * @copyright 2004-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-02-19
  * @codingStandardsIgnoreFile

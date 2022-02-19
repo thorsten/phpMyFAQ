@@ -24,7 +24,7 @@
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-30
  */

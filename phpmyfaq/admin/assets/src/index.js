@@ -16,7 +16,7 @@
 import * as bootstrap from 'bootstrap';
 import { renderVisitorCharts } from './dashboard';
 import { sidebarToggle } from './sidebar';
-import { fetchConfiguration, generateUUID } from './configuration';
+import { fetchConfiguration } from './configuration';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';

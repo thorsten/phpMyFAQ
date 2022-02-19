@@ -14,7 +14,7 @@
  * @author Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-02-12
  */

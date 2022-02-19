@@ -10,7 +10,7 @@
  * @package phpMyFAQ
  * @author Timo Wolf <amna.wolf@gmail.com>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-09-21
  */

@@ -12,7 +12,7 @@
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Charles Boin <c.boin@h-tube.com>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2005-12-15
  */
