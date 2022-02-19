@@ -37,17 +37,3 @@ export const fetchConfiguration = (target) => {
       console.error(error);
     });
 };
-
-export const generateUUID = () => {
-  let date = new Date().getTime();
-
-  if (window.performance && typeof window.performance.now === 'function') {
-    date += performance.now();
-  }
-
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
-    const random = (date + Math.random() * 16) % 16 | 0;
-    date = Math.floor(date / 16);
-    return (char === 'x' ? random : (random & 0x3) | 0x8).toString(16);
-  });
-};

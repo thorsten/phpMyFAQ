@@ -11,7 +11,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-12-26
  */
@@ -83,40 +83,11 @@ function renderInputForm(mixed $key, string $type)
                 $key,
                 $value
             );
+
             if ('api.apiClientToken' === $key) {
                 echo '<div class="input-group-append">';
-                echo '<button class="btn btn-dark" id="pmf-generate-api-token" type="button">Generate API Client Token</button>';
+                echo '<button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">Generate API Client Token</button>';
                 echo '</div>';
-                ?>
-                <script>
-                    const generateUUID = () => {
-                    let date = new Date().getTime();
-
-                    if (window.performance && typeof window.performance.now === 'function') {
-                      date += performance.now();
-                    }
-
-                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
-                      const random = (date + Math.random() * 16) % 16 | 0;
-                      date = Math.floor(date / 16);
-                      return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
-                    });
-                  }
-
-                  const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
-                  const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
-
-                  if (buttonGenerateApiToken) {
-                    if (inputConfigurationApiToken.value !== '') {
-                      buttonGenerateApiToken.disabled = true;
-                    }
-                    buttonGenerateApiToken.addEventListener('click', (event) => {
-                      event.preventDefault();
-                      inputConfigurationApiToken.value = generateUUID();
-                    });
-                  }
-                </script>
-                <?php
             }
             echo '</div></div>';
             break;
