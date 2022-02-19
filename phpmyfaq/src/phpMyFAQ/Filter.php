@@ -20,6 +20,7 @@ namespace phpMyFAQ;
 /**
  * Class Filter
  *
+ * @testdox Filter should
  * @package phpMyFAQ
  */
 class Filter
@@ -27,16 +28,24 @@ class Filter
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int $type Filter type
-     * @param string $variableName Variable name
-     * @param int $filter Filter
-     * @param mixed $default Default value
-     *
+     * @param int        $type Filter type
+     * @param string     $variableName Variable name
+     * @param int        $filter Filter
+     * @param mixed|null $default Default value
      * @return mixed
      */
-    public static function filterInput($type, $variableName, $filter, $default = null)
+    public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
         $return = filter_input($type, $variableName, $filter);
+
+        if ($filter === FILTER_UNSAFE_RAW) {
+            $return = filter_input(
+                $type,
+                $variableName,
+                FILTER_CALLBACK,
+                ['options' => [new Filter(), 'filterSanitizeString']]
+            );
+        }
 
         return (is_null($return) || $return === false) ? $default : $return;
     }
@@ -44,12 +53,11 @@ class Filter
     /**
      * Static wrapper method for filter_input_array.
      *
-     * @param int $type Filter type
+     * @param int   $type Filter type
      * @param array $definition Definition
-     *
-     * @return mixed
+     * @return array|bool|null
      */
-    public static function filterInputArray($type, array $definition)
+    public static function filterInputArray(int $type, array $definition): array|bool|null
     {
         return filter_input_array($type, $definition);
     }
@@ -57,15 +65,22 @@ class Filter
     /**
      * Static wrapper method for filter_var().
      *
-     * @param mixed $variable Variable
-     * @param int $filter Filter
-     * @param mixed $default Default value
-     *
+     * @param mixed      $variable Variable
+     * @param int        $filter Filter
+     * @param mixed|null $default Default value
      * @return mixed
      */
-    public static function filterVar($variable, int $filter, $default = null)
+    public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
-        $return = filter_var($variable, $filter, $default);
+        $return = filter_var($variable, $filter);
+
+        if ($filter === FILTER_UNSAFE_RAW) {
+            $return = filter_var(
+                $variable,
+                FILTER_CALLBACK,
+                ['options' => [new Filter(), 'filterSanitizeString']]
+            );
+        }
 
         return ($return === false) ? $default : $return;
     }
@@ -94,13 +109,24 @@ class Filter
     }
 
     /**
-     * Removes a lot of HTML attributes.
-     *
-     * @param $html
-     *
+     * This method is a polyfill for FILTER_SANITIZE_STRING, deprecated since PHP 8.1.
+     * @param string $string
      * @return string
      */
-    public static function removeAttributes($html = ''): string
+    public function filterSanitizeString(string $string): string
+    {
+        $string = htmlspecialchars($string);
+        $string = preg_replace('/\x00|<[^>]*>?/', '', $string);
+        return str_replace(["'", '"'], ['&#39;', '&#34;'], $string);
+    }
+
+    /**
+     * Removes a lot of HTML attributes.
+     *
+     * @param string $html
+     * @return string
+     */
+    public static function removeAttributes(string $html = ''): string
     {
         $keep = [
             'href',
