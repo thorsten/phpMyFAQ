@@ -1,14 +1,14 @@
 #
-# This image uses a php:8.0-apache base image and do not have any phpMyFAQ code with it.
+# This image uses a php:8.1-apache base image and do not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8.0-apache
+FROM php:8.1-apache
 
-#=== Install gd php dependencie ===
+#=== Install gd PHP dependencie ===
 RUN set -x \
  && buildDeps="libpng-dev libjpeg-dev libfreetype6-dev" \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
@@ -43,7 +43,7 @@ RUN set -x \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
 
-#=== Install mysqli php dependencies ===
+#=== Install mysqli PHP dependencies ===
 RUN set -x \
  && docker-php-ext-install pdo pdo_mysql mysqli
 
@@ -57,6 +57,10 @@ RUN set -ex \
  \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
+
+#=== Install xdebug PHP dependencies ===
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \

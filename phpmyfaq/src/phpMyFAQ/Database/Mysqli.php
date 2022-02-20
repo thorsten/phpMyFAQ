@@ -363,7 +363,7 @@ class Mysqli implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return $this->conn->get_client_info();
+        return mysqli_get_client_info();
     }
 
     /**
