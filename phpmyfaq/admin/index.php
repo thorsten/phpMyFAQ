@@ -237,10 +237,10 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Link verification
                 case 'verifyURL':
-                    require 'ajax.verifyurl.php';
+                    require 'api/verify-url.php';
                     break;
                 case 'onDemandURL':
-                    require 'ajax.ondemandurl.php';
+                    require 'api/ondemand-url.php';
                     break;
                 // Categories
                 case 'categories':
@@ -258,7 +258,7 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Tags management
                 case 'tags':
-                    require 'ajax.tags.php';
+                    require 'api/tags.php';
                     break;
                 // Comments
                 case 'comment':
@@ -266,18 +266,18 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Records
                 case 'records':
-                    require 'ajax.records.php';
+                    require 'api/faqs.php';
                     break;
                 case 'markdown':
-                    require 'ajax.markdown.php';
+                    require 'api/markdown.php';
                     break;
                 // Search
                 case 'search':
-                    require 'ajax.search.php';
+                    require 'api/search.php';
                     break;
                 // Users
                 case 'user':
-                    require 'ajax.user.php';
+                    require 'api/user.php';
                     break;
                 // Groups
                 case 'group':
@@ -285,11 +285,11 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                     break;
                 // Sections
                 case 'section':
-                    require 'ajax.section.php';
+                    require 'api/section.php';
                     break;
                 // Image upload
                 case 'image':
-                    require 'ajax.image.php';
+                    require 'api/image.php';
                     break;
             }
             exit();

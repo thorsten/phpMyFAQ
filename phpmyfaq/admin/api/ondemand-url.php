@@ -75,7 +75,7 @@ if (count(ob_list_handlers()) > 0) {
 
   <script src="../assets/dist/vendors.js"></script>
   <script src="../assets/dist/phpmyfaq.js"></script>
-  <script src="../assets/dist/backend.js"></script>
+  <script src="../../assets/dist/backend.js"></script>
 </head>
 <body dir="<?= $PMF_LANG['dir']; ?>">
 <?php
