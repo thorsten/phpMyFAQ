@@ -910,3 +910,171 @@ $LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', 'Delete open ques
 $LANG_CONF['main.maintenanceMode'] = array('checkbox', 'Set FAQ in maintenance mode');
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'ページ毎に表示するトピック数');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'お知らせの表示数');
+
+// added v.2.9.0-alpha
+$PMF_LANG["msgRelatedTags"] = 'キーワードを追加';
+$PMF_LANG["msgPopularTags"] = '人気の検索';
+$LANG_CONF["search.enableHighlighting"] = ["checkbox", "検索語句をハイライト"];
+$LANG_CONF["records.allowCommentsForGuests"] = ["checkbox", "ゲストユーザからのコメントを許可"];
+$LANG_CONF["records.allowQuestionsForGuests"] = ["checkbox", "ゲストユーザからの質問を許可"];
+$LANG_CONF["records.allowNewFaqsForGuests"] = ["checkbox", "ゲストユーザからのFAQ追加を許可"];
+$PMF_LANG["ad_searchterm_del"] = '保存された検索語句をすべて削除';
+$PMF_LANG["ad_searchterm_del_suc"] = '検索語句をすべて削除しました。';
+$PMF_LANG["ad_searchterm_del_err"] = '検索語句を削除できませんでした。';
+$LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "空のカテゴリーを非表示"];
+$LANG_CONF["search.searchForSolutionId"] = ["checkbox", "ソリューションIDで検索"];
+$LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "SNS連携を無効にする"];
+$LANG_CONF["main.enableGzipCompression"] = ["checkbox", "GZIP圧縮の有効化"];
+
+// added v2.9.0-alpha2
+$PMF_LANG["ad_tag_delete_success"] = "タグは削除されました。";
+$PMF_LANG["ad_tag_delete_error"] = "エラーが発生したためタグを削除できませんでした。";
+$PMF_LANG["seoCenter"] = "SEO";
+$LANG_CONF["seo.metaTagsHome"] = ["select", "トップページのメタタグ"];
+$LANG_CONF["seo.metaTagsFaqs"] = ["select", "FAQページのメタタグ"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "カテゴリーページのメタタグ"];
+$LANG_CONF["seo.metaTagsPages"] = ["select", "静的ページのメタタグ"];
+$LANG_CONF["seo.metaTagsAdmin"] = ["select", "管理ページのメタタグ"];
+$PMF_LANG["msgMatchingQuestions"] = "質問内容に類似した結果一覧";
+$PMF_LANG["msgFinishSubmission"] = "上記一覧に質問内容と一致した結果が無い場合、下記のボタンを押して質問投稿を完了してください。";
+$LANG_CONF["main.enableLinkVerification"] = ["checkbox", "リンク認証の有効化"];
+$LANG_CONF['spam.manualActivation'] = ['checkbox', '新規ユーザを手動で承認(デフォルト: 有効)'];
+
+// added v2.9.0-alpha2
+$PMF_LANG['mailControlCenter'] = 'メール設定';
+$LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'リモートのSMTPサーバーを利用 (デフォルト: 無効)'];
+$LANG_CONF['mail.remoteSMTPServer'] = ['input', 'サーバーアドレス'];
+$LANG_CONF['mail.remoteSMTPUsername'] = ['input', 'ユーザー名'];
+$LANG_CONF['mail.remoteSMTPPassword'] = ['password', 'パスワード'];
+$LANG_CONF['security.enableRegistration'] = ['checkbox', '閲覧者のユーザ登録を有効化'];
+
+// added v2.9.0-alpha3
+$LANG_CONF['main.customPdfHeader'] = ['area', 'カスタムPDFヘッダー (HTML利用可能)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'カスタムPDFフッター (HTML利用可能)'];
+$LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'ゲストユーザーによるダウンロードを許可'];
+$PMF_LANG["ad_msgNoteAboutPasswords"] = "警告: パスワードを入力した場合、ユーザーのパスワードは上書きされます。";
+$PMF_LANG["ad_delete_all_votings"] = "すべての投票を削除";
+$PMF_LANG["ad_categ_moderator"] = "モデレーター";
+$PMF_LANG['ad_clear_all_visits'] = "すべての閲覧履歴をリセット";
+$PMF_LANG['ad_reset_visits_success'] = '閲覧履歴をリセットしました。';
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', '内蔵Markdownエディタの有効化'];
+
+// added v2.9.0-beta
+$PMF_LANG['faqOverview'] = 'FAQ概要';
+$PMF_LANG['ad_dir_missing'] = 'ディレクトリ( %s )がみつかりません。';
+$LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'スマート回答を有効化'];
+
+// added v2.9.0-beta2
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Elasticsearchを有効化'];
+$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch設定';
+$PMF_LANG['ad_es_create_index'] = 'Index作成';
+$PMF_LANG['ad_es_drop_index'] = 'Index削除';
+$PMF_LANG['ad_es_bulk_index'] = '全件インポート';
+$PMF_LANG['ad_es_create_index_success'] = 'Indexを作成しました。';
+$PMF_LANG['ad_es_create_import_success'] = 'インポートに成功しました。';
+$PMF_LANG['ad_es_drop_index_success'] = 'Indexを削除しました。';
+$PMF_LANG['ad_export_generate_json'] = 'JSONファイルの作成';
+$PMF_LANG['ad_media_name_search'] = 'メディア名で検索';
+
+// added v2.9.0-RC
+$PMF_LANG['ad_admin_notes'] = 'プライベートメモ';
+$PMF_LANG['ad_admin_notes_hint'] = '%s (編集者のみ閲覧可)';
+
+// added v2.9.10
+$PMF_LANG['ad_quick_entry'] = 'このカテゴリーにFAQを追加';
+
+// added 2.10.0-alpha
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP mapping for name, "cn" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP mapping for username, "samAccountName" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP mapping for email, "mail" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP mapping for "member of" when using LDAP groups'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP domain prefix, e.g. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP protocol version (default: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP referrals (default: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Enable LDAP group support, e.g. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Enable LDAP SASL support'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Enable multiple LDAP servers support'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Enable anonymous LDAP connections'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Enable LDAP dynamic user binding'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP attribute for dynamic user binding, "uid" when using an ADS'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Enable XML sitemap'];
+$PMF_LANG['ad_category_image'] = 'カテゴリー画像';
+$PMF_LANG["ad_user_show_home"] = "トップページに表示";
+
+// added v.2.10.0-alpha
+$PMF_LANG['ad_view_faq'] = 'FAQを表示';
+
+// added 3.0.0-alpha
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'カテゴリー制限を有効化'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Enable send to friends'];
+$PMF_LANG['msgUserRemovalText'] = 'あなたのアカウント情報の削除を申請できます。あなたのアカウント情報（アカウント、コメント、質問）を削除するように、管理者宛にメールを送信します。手動での削除となるため、対応されるまで24時間ほどかかる場合があります。削除が完了した際は、メールにて完了通知が行われます。';
+$PMF_LANG["msgUserRemoval"] = "ユーザ削除申請";
+$PMF_LANG["ad_menu_RequestRemove"] = "ユーザ削除申請";
+$PMF_LANG["msgContactRemove"] = "管理者からの削除依頼";
+$PMF_LANG["msgContactPrivacyNote"] = "プライバシーノート";
+$PMF_LANG["msgPrivacyNote"] = "プライバシー情報の状態";
+
+// added 3.0.0-alpha2
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', '最新バージョンを自動確認'];
+$PMF_LANG['ad_user_is_superadmin'] = '特権管理者';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'パスワードを上書き';
+$LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'FAQの変更履歴を有効化'];
+$PMF_LANG['rightsLanguage']['view_faqs'] = 'FAQを表示';
+$PMF_LANG['rightsLanguage']['view_categories'] = 'カテゴリーを表示';
+$PMF_LANG['rightsLanguage']['view_sections'] = 'セクションを表示';
+$PMF_LANG['rightsLanguage']['view_news'] = 'ニュースを表示';
+$PMF_LANG['rightsLanguage']['add_section'] = 'セクションを追加';
+$PMF_LANG['rightsLanguage']['edit_section'] = 'セクションを編集';
+$PMF_LANG['rightsLanguage']['delete_section'] = 'セクションを削除';
+$PMF_LANG['rightsLanguage']['administrate_sections'] = 'セクション管理';
+$PMF_LANG['rightsLanguage']['administrate_groups'] = 'グループ管理';
+$PMF_LANG['ad_group_rights'] = 'グループ権限';
+$PMF_LANG['ad_menu_meta'] = 'メタデータのテンプレート';
+$PMF_LANG['ad_meta_add'] = 'メタデータのテンプレートを追加';
+$PMF_LANG['ad_meta_page_id'] = 'ページ種別';
+$PMF_LANG['ad_meta_type'] = 'コンテンツ種別';
+$PMF_LANG['ad_meta_content'] = 'コンテンツ';
+$PMF_LANG['ad_meta_copy_snippet'] = 'テンプレート向けのコードスニペットをコピー';
+
+// added v3.0.0-alpha.3
+$PMF_LANG['ad_menu_section_administration'] = "セクションの管理";
+$PMF_LANG['ad_section_add'] = "セクションの追加";
+$PMF_LANG['ad_section_add_link'] = "セクションを追加する";
+$PMF_LANG['ad_sections'] = 'セクション';
+$PMF_LANG['ad_section_details'] = "セクションの詳細";
+$PMF_LANG['ad_section_name'] = "名称:";
+$PMF_LANG['ad_section_description'] = "説明:";
+$PMF_LANG['ad_section_membership'] = "セクションのメンバー設定";
+$PMF_LANG['ad_section_members'] = "セクションのメンバー一覧";
+$PMF_LANG['ad_section_addMember'] = "追加 >>";
+$PMF_LANG['ad_section_removeMember'] = "<< 削除";
+$PMF_LANG['ad_section_deleteSection'] = "セクションの削除";
+$PMF_LANG['ad_section_deleteQuestion'] = "このセクションを本当に削除しますか？";
+$PMF_LANG['ad_section_error_delete'] = "セクションを削除できません。";
+$PMF_LANG['ad_section_error_noName'] = "セクションの名称を指定して下さい。";
+$PMF_LANG['ad_section_suc'] = "セクションの追加に<strong>成功</strong>しました。";
+$PMF_LANG['ad_section_deleted'] = "セクションを削除しました。";
+$PMF_LANG['rightsLanguage']['viewadminlink'] = '管理リンクを表示';
+
+// added v3.0.0-beta.3
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTPサーバーのポート'];
+$LANG_CONF['mail.remoteSMTPEncryption'] = ['input', 'SMTPサーバーの暗号化'];
+$PMF_LANG['ad_record_faq'] = '質問と回答';
+$PMF_LANG['ad_record_permissions'] = '権限';
+$PMF_LANG['loginPageMessage'] = 'ログイン先: ';
+
+// added v3.0.5
+$PMF_LANG['ad_menu_faq_meta'] = 'FAQメタデータ';
+
+// added v3.0.8
+$LANG_CONF['main.privacyURL'] = ['input', 'プライバシーノートのURL'];
+
+// added v3.1.0-alpha
+$PMF_LANG['ad_user_data_is_visible'] = 'ユーザー名の公開';
+$PMF_LANG['ad_user_is_visible'] = '公開';
+$PMF_LANG['ad_categ_save_order'] = '順序の保存';
+$PMF_LANG['ad_add_user_change_password'] = '初回ログイン時にはパスワード変更が必要です。';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API有効化'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'ユーザー登録の許可ホワイトリスト'];
+$LANG_CONF['main.loginWithEmailAddress'] = ['checkbox', 'メールアドレスによるログインのみ許可'];
