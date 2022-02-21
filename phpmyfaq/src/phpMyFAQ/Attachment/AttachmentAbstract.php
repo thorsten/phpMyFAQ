@@ -196,7 +196,7 @@ abstract class AttachmentAbstract
      * Set encryption key.
      *
      * @param string $key     encryption key
-     * @param bool   $default if the key is default system wide
+     * @param bool   $default if the key is default system-wide
      */
     public function setKey(string $key, $default = true): void
     {
