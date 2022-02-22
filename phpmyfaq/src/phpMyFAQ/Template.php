@@ -33,41 +33,41 @@ class Template
      *
      * @var string
      */
-    private static $tplSetName;
+    private static string $tplSetName;
 
     /**
      * The template array.
      *
      * @var array<string, string>
      */
-    public $templates = [];
+    public array $templates = [];
 
     /**
      * The output array.
      *
      * @var array<string, string|null>
      */
-    private $outputs = [];
+    private array $outputs = [];
 
     /**
      * The blocks array.
      *
      * @var array<string, array<string>>
      */
-    private $blocks = [];
+    private array $blocks = [];
 
     /**
      * array containing the touched blocks.
      *
      * @var array<string>
      */
-    private $blocksTouched = [];
+    private array $blocksTouched = [];
 
     /** @var array<string> Array containing the errors */
-    private $errors = [];
+    private array $errors = [];
 
     /** @var TemplateHelper */
-    private $tplHelper;
+    private TemplateHelper $tplHelper;
 
     /**
      * Combine all template files into the main templates array
@@ -292,8 +292,8 @@ class Template
                     $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
                 }
             } else {
-                $content[$var] = str_replace('`', '&acute;', $content[$var]);
-                $content[$var] = Strings::preg_replace($search, $replace, $val);
+                $content[$var] = str_replace('`', '&acute;', $val === null ? '' : $val);
+                $content[$var] = Strings::preg_replace($search, $replace, $val === null ? '' : $val);
             }
         }
 
@@ -307,7 +307,7 @@ class Template
     {
         $output = '';
         foreach ($this->outputs as $val) {
-            $output .= str_replace("\n\n", "\n", $val);
+            $output .= str_replace("\n\n", "\n", $val === null ? '' : $val);
         }
 
         echo $output;
@@ -353,6 +353,15 @@ class Template
             $block = str_replace('&acute;', '`', $block);
             $this->blocks[$templateName][$blockName] = $block;
         }
+    }
+
+    /**
+     * Returns the errors.
+     * @return string[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     /**
