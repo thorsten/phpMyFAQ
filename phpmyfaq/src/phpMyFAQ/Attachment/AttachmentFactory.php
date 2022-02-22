@@ -73,7 +73,7 @@ class AttachmentFactory
          * If encryption isn't enabled, just ignoring all keys
          */
         if (self::$encryptionEnabled) {
-            $key = null == $key ? self::$defaultKey : $key;
+            $key = null === $key ? self::$defaultKey : $key;
         } else {
             $key = null;
         }

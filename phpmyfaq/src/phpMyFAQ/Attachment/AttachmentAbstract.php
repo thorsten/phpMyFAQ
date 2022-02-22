@@ -37,44 +37,44 @@ abstract class AttachmentAbstract
     /**
      * The key to encrypt with.
      *
-     * @var string
+     * @var ?string
      */
-    protected $key;
+    protected ?string $key;
 
     /**
      * Errors.
      *
      * @var string[]
      */
-    protected $error = [];
+    protected array $error = [];
 
     /**
      * Database instance.
      *
      * @var DatabaseDriver
      */
-    protected $db;
+    protected DatabaseDriver $db;
 
     /**
      * Record ID.
      *
      * @var int
      */
-    protected $recordId;
+    protected int $recordId;
 
     /**
      * Record language.
      *
      * @var string
      */
-    protected $recordLang;
+    protected string $recordLang;
 
     /**
      * Real file md5 hash.
      *
      * @var string
      */
-    protected $realHash;
+    protected string $realHash;
 
     /**
      * Virtual unique md5 hash used for encrypted files.
@@ -82,42 +82,42 @@ abstract class AttachmentAbstract
      *
      * @var string
      */
-    protected $virtualHash;
+    protected string $virtualHash = '';
 
     /**
      * If this is set, the sh1 hashed key we got must equal to it.
      *
      * @var string
      */
-    protected $passwordHash;
+    protected string $passwordHash = '';
 
     /**
      * Filesize in bytes.
      *
      * @var int
      */
-    protected $filesize;
+    protected int $filesize;
 
     /**
      * Filename.
      *
      * @var string
      */
-    protected $filename;
+    protected string $filename;
 
     /**
      * Encrypted.
      *
-     * @var string
+     * @var bool|null
      */
-    protected $encrypted;
+    protected ?bool $encrypted;
 
     /**
      * Attachment file mime type.
      *
      * @var string
      */
-    protected $mimeType;
+    protected string $mimeType = '';
 
     /**
      * Constructor.
@@ -182,10 +182,9 @@ abstract class AttachmentAbstract
      * Build attachment url.
      *
      * @param bool $forHTML either to use ampersands directly
-     *
      * @return string
      */
-    public function buildUrl($forHTML = true): string
+    public function buildUrl(bool $forHTML = true): string
     {
         $amp = true === $forHTML ? '&amp;' : '&';
 
@@ -195,10 +194,10 @@ abstract class AttachmentAbstract
     /**
      * Set encryption key.
      *
-     * @param string $key     encryption key
-     * @param bool   $default if the key is default system-wide
+     * @param string|null $key Encryption key
+     * @param bool        $default if the key is default system-wide
      */
-    public function setKey(string $key, $default = true): void
+    public function setKey(?string $key, bool $default = true): void
     {
         $this->key = $key;
         $this->encrypted = null !== $key;
@@ -418,7 +417,7 @@ abstract class AttachmentAbstract
     }
 
     /**
-     * Remove meta data from the db.
+     * Remove metadata from the database.
      */
     protected function deleteMeta(): void
     {
