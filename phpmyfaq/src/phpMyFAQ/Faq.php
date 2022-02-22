@@ -64,19 +64,19 @@ class Faq
      *
      * @var array
      */
-    public $faqRecord = [];
+    public array $faqRecord = [];
 
     /**
      * All current FAQ records in an array.
      *
      * @var array
      */
-    public $faqRecords = [];
+    public array $faqRecords = [];
 
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Language strings.
@@ -90,28 +90,28 @@ class Faq
      *
      * @var Plurals
      */
-    private $plurals;
+    private Plurals $plurals;
 
     /**
      * Users.
      *
      * @var int
      */
-    private $user = -1;
+    private int $user = -1;
 
     /**
      * Groups.
      *
      * @var array
      */
-    private $groups = [-1];
+    private array $groups = [-1];
 
     /**
      * Flag for Group support.
      *
      * @var bool
      */
-    private $groupSupport = false;
+    private bool $groupSupport = false;
 
     /**
      * Constructor.
@@ -135,14 +135,14 @@ class Faq
      * @param int $userId
      * @return Faq
      */
-    public function setUser($userId = -1): Faq
+    public function setUser(int $userId = -1): Faq
     {
         $this->user = $userId;
         return $this;
     }
 
     /**
-     * @param array $groups
+     * @param int[] $groups
      * @return Faq
      */
     public function setGroups(array $groups): Faq
@@ -1181,9 +1181,11 @@ class Faq
         }
 
         // Delete possible attachments
-        $attId = AttachmentFactory::fetchByRecordId($this->config, $recordId);
-        $attachment = AttachmentFactory::create($attId);
-        $attachment->delete();
+        $attachments = AttachmentFactory::fetchByRecordId($this->config, $recordId);
+        foreach ($attachments as $attachment) {
+            $currentAttachment = AttachmentFactory::create($attachment->getId());
+            $currentAttachment->delete();
+        }
 
         // Delete possible Elasticsearch documents
         if ($this->config->get('search.enableElasticsearch')) {
