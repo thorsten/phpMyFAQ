@@ -32,45 +32,41 @@ class AttachmentFactory
     /**
      * Default encryption key.
      *
-     * @var string
+     * @var string|null
      */
-    private static $defaultKey = null;
+    private static ?string $defaultKey = null;
 
     /**
      * Storage type.
      *
-     * @var int
+     * @var int|null
      */
-    private static $storageType = null;
+    private static ?int $storageType = null;
 
     /**
      * File encryption is enabled.
      *
-     * @var bool
+     * @var bool|null
      */
-    private static $encryptionEnabled = null;
+    private static ?bool $encryptionEnabled = null;
 
     /**
      * Create an attachment exemplar.
      *
-     * @param int    $id  ID
-     * @param string $key Key
-     *
+     * @param int|null    $id  ID
+     * @param string|null $key Key
      * @return File
      * @throws AttachmentException
      */
-    public static function create($id = null, $key = null): File
+    public static function create(int $id = null, string $key = null): File
     {
-        $retval = null;
-
         switch (self::$storageType) {
             case Attachment::STORAGE_TYPE_FILESYSTEM:
-                $retval = new File($id);
+                $return = new File($id);
                 break;
 
             default:
                 throw new AttachmentException('Unknown attachment storage type');
-                break;
         }
 
         /*
@@ -82,9 +78,9 @@ class AttachmentFactory
             $key = null;
         }
 
-        $retval->setKey($key);
+        $return->setKey($key);
 
-        return $retval;
+        return $return;
     }
 
     /**
@@ -133,7 +129,7 @@ class AttachmentFactory
      * @param string $defaultKey        Default key
      * @param bool   $encryptionEnabled Enabled encryption?
      */
-    public static function init($storageType, $defaultKey, $encryptionEnabled)
+    public static function init(int $storageType, string $defaultKey, bool $encryptionEnabled): void
     {
         if (null === self::$storageType) {
             self::$storageType = $storageType;
@@ -152,7 +148,6 @@ class AttachmentFactory
      * Re-arranges the $_FILES array for multiple file uploads.
      *
      * @param $filePost
-     *
      * @return array
      */
     public static function rearrangeUploadedFiles(&$filePost): array

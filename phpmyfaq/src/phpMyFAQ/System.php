@@ -20,7 +20,6 @@ namespace phpMyFAQ;
 use DateTime;
 use DirectoryIterator;
 use Exception;
-use JetBrains\PhpStorm\NoReturn;
 use phpMyFAQ\Database\DatabaseDriver;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -160,7 +159,7 @@ class System
      *
      * @param bool $onePageBack
      */
-    #[NoReturn] public static function renderFooter(bool $onePageBack = false): void
+    public static function renderFooter(bool $onePageBack = false): void
     {
         if (true === $onePageBack) {
             printf(

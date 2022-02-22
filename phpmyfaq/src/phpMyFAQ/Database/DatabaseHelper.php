@@ -103,7 +103,6 @@ class DatabaseHelper
      *
      * @param string $query
      * @param string $table
-     *
      * @return array
      */
     public function buildInsertQueries(string $query, string $table): array
@@ -120,17 +119,17 @@ class DatabaseHelper
             $p2 = [];
             foreach ($row as $key => $val) {
                 $p1[] = $key;
-                if ('rights' !== $key && is_numeric($val)) {
+                if ('rights' != $key && is_numeric($val)) {
                     $p2[] = $val;
-                }
-                if (is_null($val)) {
-                    $p2[] = 'NULL';
                 } else {
-                    $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
+                    if (is_null($val)) {
+                        $p2[] = 'NULL';
+                    } else {
+                        $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
+                    }
                 }
             }
-            $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' .
-                preg_replace("/\r|\n/", '', implode(',', $p2)) . ');';
+            $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' . implode(',', $p2) . ');';
         }
 
         return $ret;

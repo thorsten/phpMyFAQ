@@ -267,7 +267,7 @@ class Language
     {
         global $languageCodes;
 
-        return isset($languageCodes[strtoupper($langCode)]);
+        return !($langCode === null) && isset($languageCodes[strtoupper($langCode)]);
     }
 
     /**

@@ -79,7 +79,8 @@ class News
             }
 
             $output .= sprintf(
-                '<h6><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
+                '<h6%s><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
+                ' class="pmf-news-heading"',
                 $item['id'],
                 $oLink->toString(),
                 $item['header']

@@ -14,12 +14,16 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to TinyMCE v5.10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
-### phpMyFAQ v3.1.0-RC - 2022-01-22
+### phpMyFAQ v3.1.1 - 2022-02-14
 
-- fixed XSS vulnerability (Curtis Robinson, Thorsten)
+- fixed enabled debug mode (Thorsten)
+- updated bundled dependencies (Thorsten)
+
+### phpMyFAQ v3.1.0 - 2022-02-12
+
+- Happy 21st Birthday, phpMyFAQ!
 - changed PHP requirement to PHP 7.4+ (Thorsten)
 - added support for PHP 8.0 and PHP 8.1 (Thorsten)
-- added experimental support for PHP 8.1 (Thorsten)
 - added support for Elasticsearch v6+ (Thorsten)
 - added drag'n'drop sorting for main categories (Paolo Caparrelli, Thorsten)
 - added possibility to add users without a password (Thorsten)
