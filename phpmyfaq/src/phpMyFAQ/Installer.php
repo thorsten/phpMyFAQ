@@ -21,6 +21,7 @@ use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -1024,11 +1025,11 @@ class Installer
         $instanceSetup->createAnonymousUser($configuration);
 
         // Add master instance
-        $instanceData = [
-            'url' => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
-            'instance' => $link->getSystemRelativeUri('setup/index.php'),
-            'comment' => 'phpMyFAQ ' . System::getVersion(),
-        ];
+        $instanceData = new InstanceEntity();
+        $instanceData
+            ->setUrl($link->getSystemUri($_SERVER['SCRIPT_NAME']))
+            ->setInstance($link->getSystemRelativeUri('setup/index.php'))
+            ->setComment('phpMyFAQ ' . System::getVersion());
         $faqInstance = new Instance($configuration);
         $faqInstance->addInstance($instanceData);
 

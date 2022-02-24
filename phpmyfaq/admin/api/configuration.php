@@ -69,7 +69,8 @@ switch ($ajaxAction) {
         }
 
         $data = new InstanceEntity();
-        $data->setUrl('https://' . $url . '.' . $_SERVER['SERVER_NAME'])
+        $data
+            ->setUrl('https://' . $url . '.' . $_SERVER['SERVER_NAME'])
             ->setInstance($instance)
             ->setComment($comment);
 
