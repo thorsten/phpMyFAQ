@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Database;
+use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Entity\MetaEntity as MetaEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -45,18 +46,21 @@ $stopwords = new Stopwords($faqConfig);
 
 switch ($ajaxAction) {
     case 'add_instance':
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
 
-        $url = Filter::filterInput(INPUT_GET, 'url', FILTER_UNSAFE_RAW);
-        $instance = Filter::filterInput(INPUT_GET, 'instance', FILTER_UNSAFE_RAW);
-        $comment = Filter::filterInput(INPUT_GET, 'comment', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
-        $admin = Filter::filterInput(INPUT_GET, 'admin', FILTER_UNSAFE_RAW);
-        $password = Filter::filterInput(INPUT_GET, 'password', FILTER_UNSAFE_RAW);
+        $url = Filter::filterVar($postData->url, FILTER_UNSAFE_RAW);
+        $instance = Filter::filterVar($postData->instance, FILTER_UNSAFE_RAW);
+        $comment = Filter::filterVar($postData->comment, FILTER_UNSAFE_RAW);
+        $email = Filter::filterVar($postData->email, FILTER_VALIDATE_EMAIL);
+        $admin = Filter::filterVar($postData->admin, FILTER_UNSAFE_RAW);
+        $password = Filter::filterVar($postData->password, FILTER_UNSAFE_RAW);
 
         if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
             $http->setStatus(400);
@@ -64,11 +68,10 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        $data = [
-            'url' => 'https://' . $url . '.' . $_SERVER['SERVER_NAME'],
-            'instance' => $instance,
-            'comment' => $comment,
-        ];
+        $data = new InstanceEntity();
+        $data->setUrl('https://' . $url . '.' . $_SERVER['SERVER_NAME'])
+            ->setInstance($instance)
+            ->setComment($comment);
 
         $faqInstance = new Instance($faqConfig);
         $instanceId = $faqInstance->addInstance($data);
@@ -76,7 +79,7 @@ switch ($ajaxAction) {
         $faqInstanceClient = new Client($faqConfig);
         $faqInstanceClient->createClient($faqInstance);
 
-        $urlParts = parse_url($data['url']);
+        $urlParts = parse_url($data->getUrl());
         $hostname = $urlParts['host'];
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
@@ -87,6 +90,9 @@ switch ($ajaxAction) {
             try {
                 $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
             } catch (\phpMyFAQ\Core\Exception $e) {
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+                exit(1);
             }
 
             $dbSetup = [
@@ -127,7 +133,7 @@ switch ($ajaxAction) {
         }
         if (0 !== $instanceId) {
             $http->setStatus(200);
-            $payload = ['added' => $instanceId, 'url' => $data['url']];
+            $payload = ['added' => $instanceId, 'url' => $data->getUrl()];
         } else {
             $http->setStatus(400);
             $payload = ['error' => $instanceId];

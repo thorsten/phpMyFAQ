@@ -5,17 +5,19 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-02-20
  */
 
 namespace phpMyFAQ;
+
+use phpMyFAQ\Entity\InstanceEntity;
 
 /**
  * Class Instance
@@ -29,21 +31,21 @@ class Instance
      *
      * @var Configuration
      */
-    protected $config = null;
+    protected Configuration $config;
 
     /**
      * Instance ID.
      *
      * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * Instance configuration.
      *
      * @var string[]
      */
-    protected $instanceConfig = [];
+    protected array $instanceConfig = [];
 
     /**
      * Constructor.
@@ -58,11 +60,10 @@ class Instance
     /**
      * Adds a new instance.
      *
-     * @param string[] $data
-     *
+     * @param InstanceEntity $data
      * @return int $id
      */
-    public function addInstance(array $data): int
+    public function addInstance(InstanceEntity $data): int
     {
         $this->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
 
@@ -70,9 +71,9 @@ class Instance
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             Database::getTablePrefix(),
             $this->getId(),
-            $data['url'],
-            $data['instance'],
-            $data['comment'],
+            $data->getUrl(),
+            $data->getInstance(),
+            $data->getComment(),
             $this->config->getDb()->now(),
             $this->config->getDb()->now()
         );
@@ -101,7 +102,7 @@ class Instance
      */
     public function setId(int $id): void
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 
     /**
@@ -144,20 +145,19 @@ class Instance
     /**
      * Updates the instance data.
      *
-     * @param int   $id
-     * @param string[] $data
-     *
+     * @param int            $id
+     * @param InstanceEntity $data
      * @return bool
      */
-    public function updateInstance(int $id, array $data): bool
+    public function updateInstance(int $id, InstanceEntity $data): bool
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $data['instance'],
-            $data['comment'],
-            $data['url'],
-            (int)$id
+            $data->getInstance(),
+            $data->getComment(),
+            $data->getUrl(),
+            $id
         );
 
         return $this->config->getDb()->query($update);
@@ -244,11 +244,10 @@ class Instance
     /**
      * Returns the configuration of the given instance ID.
      *
-     * @param int $id
-     *
+     * @param int $instanceId
      * @return string[]
      */
-    public function getInstanceConfig(int $id): array
+    public function getInstanceConfig(int $instanceId): array
     {
         $query = sprintf(
             '
@@ -259,7 +258,7 @@ class Instance
             WHERE
                 instance_id = %d',
             Database::getTablePrefix(),
-            $id
+            $instanceId
         );
 
         $result = $this->config->getDb()->query($query);

@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
 
 /**
@@ -54,15 +55,16 @@ class Setup
      * Creates the anonymous default user.
      *
      * @param Configuration $faqConfig
+     * @throws Exception
      */
-    public function createAnonymousUser(Configuration $faqConfig)
+    public function createAnonymousUser(Configuration $faqConfig): void
     {
         $anonymous = new User($faqConfig);
         $anonymous->createUser('anonymous', '', '', -1);
         $anonymous->setStatus('protected');
         $anonymousData = [
             'display_name' => 'Anonymous User',
-            'email' => null,
+            'email' => '',
         ];
         $anonymous->setUserData($anonymousData);
     }
