@@ -7,15 +7,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-16
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-03-16
  */
 
-use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
@@ -27,14 +27,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-    <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i>
-            <?= $PMF_LANG['ad_menu_instances']; ?>
+            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
         </h1>
-        <?php if (
-            $user->perm->hasPermission($user->getUserId(), 'addinstances') &&
+        <?php if ($user->perm->hasPermission($user->getUserId(), 'addinstances') &&
             is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
         ) : ?>
         <div class="btn-toolbar mb-2 mb-md-0">
@@ -47,7 +44,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <?php endif; ?>
     </div>
 
-  <div class="row mb-2">
+  <div class="row">
   <div class="col-lg-12">
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
@@ -63,51 +60,46 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     }
 
     // Update client instance
-    if ('update-instance' === $action && is_integer($instanceId)) {
+    if ('updateinstance' === $action && is_integer($instanceId)) {
         $system = new System();
         $originalClient = new Client($faqConfig);
         $updatedClient = new Client($faqConfig);
         $moveInstance = false;
 
         // Collect updated data for database
-        $updatedData = [];
-        $updatedData['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_UNSAFE_RAW);
-        $updatedData['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_UNSAFE_RAW);
-        $updatedData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
+        $updatedData = new InstanceEntity();
+        $updatedData->setUrl(Filter::filterInput(INPUT_POST, 'url', FILTER_UNSAFE_RAW));
+        $updatedData->setInstance(Filter::filterInput(INPUT_POST, 'instance', FILTER_UNSAFE_RAW));
+        $updatedData->setComment(Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW));
 
         // Original data
         $originalData = $originalClient->getInstanceById($instanceId);
 
-        if ($originalData->url !== $updatedData['url']) {
+        if ($originalData->url !== $updatedData->getUrl()) {
             $moveInstance = true;
         }
 
         if ($updatedClient->updateInstance($instanceId, $updatedData)) {
             if ($moveInstance) {
-                try {
-                    $updatedClient->moveClientFolder($originalData->url, $updatedData['url']);
-                    $updatedClient->deleteClientFolder($originalData->url);
-                } catch (Exception $e) {
-                    // handle exception
-                }
+                $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
+                $updatedClient->deleteClientFolder($originalData->url);
             }
             printf(
-                '<div class="alert alert-success alert-dismissible fade show" role="alert">%s%s</div>',
-                $PMF_LANG['ad_config_saved'],
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-
+                '<p class="alert alert-success">%s%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                $PMF_LANG['ad_config_saved']
             );
         } else {
             printf(
-                '<div class="alert alert-danger alert-dismissible fade show" role="alert">%s%s<br/>%s</div>',
+                '<p class="alert alert-danger">%s%s<br/>%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
                 $PMF_LANG['ad_entryins_fail'],
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
                 $faqConfig->getDb()->error()
             );
         }
     }
     ?>
-  <table class="table table-striped align-middle">
+  <table class="table">
     <thead>
     <tr>
       <th>#</th>
@@ -129,12 +121,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         <td><?= $site->instance ?></td>
         <td><?= $site->comment ?></td>
         <td>
-          <a href="?action=edit-instance&instance_id=<?= $site->id ?>" class="btn btn-info">
+          <a href="?action=editinstance&instance_id=<?= $site->id ?>" class="btn btn-info">
             <i aria-hidden="true" class="fa fa-pencil"></i>
           </a>
         </td>
         <td>
-            <?php if ($currentInstance->getConfig('isMaster') !== true) : ?>
+            <?php if (!$currentInstance->getConfig('isMaster')) : ?>
               <a href="javascript:;" id="delete-instance-<?= $site->id ?>"
                  class="btn btn-danger pmf-instance-delete"
                  data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
@@ -157,7 +149,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         <div class="modal-body">
           <form action="#" method="post" accept-charset="utf-8">
             <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-            <div class="row mb-2">
+            <div class="form-group row">
               <label class="col-form-label col-lg-4" for="url">
                   <?= $PMF_LANG['ad_instance_url'] ?>:
               </label>
@@ -166,57 +158,57 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                   <div class="input-group-prepend">
                     <div class="input-group-text">https://</div>
                   </div>
-                  <input class="form-control" type="text" name="url" id="url" required>
+                  <input class="form-control mb-2" type="text" name="url" id="url" required>
                   <div class="input-group-append">
                     <div class="input-group-text">.<?= $_SERVER['SERVER_NAME'] ?></div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row mb-2">
+            <div class="form-group row">
               <label class="col-form-label col-lg-4" for="instance">
                   <?= $PMF_LANG['ad_instance_path'] ?>:
               </label>
               <div class="col-lg-8">
-                <input class="form-control" type="text" name="instance" id="instance" required>
+                <input class="form-control mb-2" type="text" name="instance" id="instance" required>
               </div>
             </div>
-            <div class="row mb-2">
+            <div class="form-group row">
               <label class="col-form-label col-lg-4" for="comment">
                   <?= $PMF_LANG['ad_instance_name'] ?>:
               </label>
               <div class="col-lg-8">
-                <input class="form-control" type="text" name="comment" id="comment" required>
+                <input class="form-control mb-2" type="text" name="comment" id="comment" required>
               </div>
             </div>
-            <div class="row mb-2">
+            <div class="form-group row">
               <label class="col-form-label col-lg-4" for="email">
                   <?= $PMF_LANG['ad_instance_email'] ?>:
               </label>
               <div class="col-lg-8">
-                <input class="form-control" type="email" name="email" id="email" required>
+                <input class="form-control mb-2" type="email" name="email" id="email" required>
               </div>
             </div>
-            <div class="row mb-2">
+            <div class="form-group row">
               <label class="col-form-label col-lg-4" for="admin">
                   <?= $PMF_LANG['ad_instance_admin'] ?>:
               </label>
               <div class="col-lg-8">
-                <input class="form-control" type="text" name="admin" id="admin" required>
+                <input class="form-control mb-2" type="text" name="admin" id="admin" required>
               </div>
             </div>
-            <div class="row mb-2">
+            <div class="form-group row">
               <label class="col-form-label col-lg-4" for="password">
                   <?= $PMF_LANG['ad_instance_password'] ?>:
               </label>
               <div class="col-lg-8">
-                <input class="form-control" type="password" autocomplete="off" name="password" id="password" required>
+                <input class="form-control mb-2" type="password" autocomplete="off" name="password" id="password" required>
               </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <p><?= $PMF_LANG['ad_instance_hint'] ?></p>
+          <p class="text-sm-start"><?= $PMF_LANG['ad_instance_hint'] ?></p>
           <button class="btn btn-primary pmf-instance-add">
               <?= $PMF_LANG['ad_instance_button'] ?>
           </button>
@@ -226,6 +218,40 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
   </div>
 
   <script>
+
+    const addInstance = document.querySelector('.pmf-instance-add');
+    addInstance.addEventListener('click', (event) => {
+        event.preventDefault();
+        const csrf = document.querySelector('#csrf').value;
+        const url = document.querySelector('#url').value;
+        const instance = document.querySelector('#instance').value;
+        const comment = document.querySelector('#comment').value;
+        const email = document.querySelector('#email').value;
+        const admin = document.querySelector('#admin').value;
+        const password = document.querySelector('#password').value;
+
+        fetch('index.php?action=ajax&ajax=config&ajaxaction=add_instance', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf: csrf,
+                url: url,
+                instance: instance,
+                comment: comment,
+                email: email,
+                admin: admin,
+                password: password
+            })
+        })
+            .then(res => res.json())
+            .then(res => console.log(res));
+    });
+
+
+    /*
     (function() {
 
       // Add instance
@@ -255,7 +281,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
               '<td>' + instance + '</td>' +
               '<td>' + comment + '</td>' +
               '<td>' +
-              '<a href="?action=edit-instance&instance_id=' + data.added +
+              '<a href="?action=editinstance&instance_id=' + data.added +
               '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
               '</td>' +
               '<td>' +
@@ -267,7 +293,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
           },
           error: (data) => {
             $('.table').after(
-              '<div class="alert alert-danger">Could not add instance.</div>',
+              '<div class="alert alert-danger">Could not add instance</div>',
             );
           }
         });
@@ -300,6 +326,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
       });
 
     })();
+    */
   </script>
 
   </div>
