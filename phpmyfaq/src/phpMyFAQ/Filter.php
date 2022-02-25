@@ -27,14 +27,13 @@ class Filter
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int $type Filter type
+     * @param int    $type Filter type
      * @param string $variableName Variable name
-     * @param int $filter Filter
-     * @param mixed $default Default value
-     *
+     * @param int    $filter Filter
+     * @param mixed  $default Default value
      * @return mixed
      */
-    public static function filterInput($type, $variableName, $filter, $default = null)
+    public static function filterInput(int $type, string $variableName, int $filter, $default = null)
     {
         $return = filter_input($type, $variableName, $filter);
 
@@ -44,12 +43,11 @@ class Filter
     /**
      * Static wrapper method for filter_input_array.
      *
-     * @param int $type Filter type
+     * @param int   $type Filter type
      * @param array $definition Definition
-     *
-     * @return mixed
+     * @return array|false|null
      */
-    public static function filterInputArray($type, array $definition)
+    public static function filterInputArray(int $type, array $definition)
     {
         return filter_input_array($type, $definition);
     }
@@ -65,7 +63,7 @@ class Filter
      */
     public static function filterVar($variable, int $filter, $default = null)
     {
-        $return = filter_var($variable, $filter, $default);
+        $return = filter_var($variable, $filter);
 
         return ($return === false) ? $default : $return;
     }
@@ -96,11 +94,10 @@ class Filter
     /**
      * Removes a lot of HTML attributes.
      *
-     * @param $html
-     *
+     * @param string $html
      * @return string
      */
-    public static function removeAttributes($html = ''): string
+    public static function removeAttributes(string $html = ''): string
     {
         $keep = [
             'href',
