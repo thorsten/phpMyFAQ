@@ -121,17 +121,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         <td><?= $site->instance ?></td>
         <td><?= $site->comment ?></td>
         <td>
-          <a href="?action=editinstance&instance_id=<?= $site->id ?>" class="btn btn-info">
+          <a href="?action=edit-instance&instance_id=<?= $site->id ?>" class="btn btn-info">
             <i aria-hidden="true" class="fa fa-pencil"></i>
           </a>
         </td>
         <td>
             <?php if (!$currentInstance->getConfig('isMaster')) : ?>
-              <a href="javascript:;" id="delete-instance-<?= $site->id ?>"
+              <button data-delete-instance-id="<?= $site->id ?>" type="button"
                  class="btn btn-danger pmf-instance-delete"
                  data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
-                <i aria-hidden="true" class="fa fa-trash"></i>
-              </a>
+                <i aria-hidden="true" class="fa fa-trash" data-delete-instance-id="<?= $site->id ?>"
+                   data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>"></i>
+              </button>
             <?php endif; ?>
         </td>
       </tr>
@@ -147,7 +148,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="#" method="post" accept-charset="utf-8">
+          <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
             <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="url">
@@ -209,126 +210,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         </div>
         <div class="modal-footer">
           <p class="text-sm-start"><?= $PMF_LANG['ad_instance_hint'] ?></p>
-          <button class="btn btn-primary pmf-instance-add">
+          <button class="btn btn-primary pmf-instance-add" type="submit">
               <?= $PMF_LANG['ad_instance_button'] ?>
           </button>
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-
-    const addInstance = document.querySelector('.pmf-instance-add');
-    addInstance.addEventListener('click', (event) => {
-        event.preventDefault();
-        const csrf = document.querySelector('#csrf').value;
-        const url = document.querySelector('#url').value;
-        const instance = document.querySelector('#instance').value;
-        const comment = document.querySelector('#comment').value;
-        const email = document.querySelector('#email').value;
-        const admin = document.querySelector('#admin').value;
-        const password = document.querySelector('#password').value;
-
-        fetch('index.php?action=ajax&ajax=config&ajaxaction=add_instance', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                csrf: csrf,
-                url: url,
-                instance: instance,
-                comment: comment,
-                email: email,
-                admin: admin,
-                password: password
-            })
-        })
-            .then(res => res.json())
-            .then(res => console.log(res));
-    });
-
-
-    /*
-    (function() {
-
-      // Add instance
-      $('.pmf-instance-add').on('click', function(event) {
-        event.preventDefault();
-        const csrf = $('#csrf').val();
-        const url = $('#url').val();
-        const instance = $('#instance').val();
-        const comment = $('#comment').val();
-        const email = $('#email').val();
-        const admin = $('#admin').val();
-        const password = $('#password').val();
-
-        $.ajax({
-          url: 'index.php',
-          type: 'GET',
-          data: {
-            action: 'ajax', ajax: 'config', ajaxaction: 'add_instance', csrf: csrf, url: url,
-            instance: instance, comment: comment, email: email, admin: admin, password: password,
-          },
-          success: (data) => {
-            $('.modal').modal('hide');
-            $('.table tbody').append(
-              '<tr id="row-instance-' + data.added + '">' +
-              '<td>' + data.added + '</td>' +
-              '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
-              '<td>' + instance + '</td>' +
-              '<td>' + comment + '</td>' +
-              '<td>' +
-              '<a href="?action=editinstance&instance_id=' + data.added +
-              '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
-              '</td>' +
-              '<td>' +
-              '<a href="javascript:;" id="delete-instance-' + data.added +
-              '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
-              '</td>' +
-              '</tr>',
-            );
-          },
-          error: (data) => {
-            $('.table').after(
-              '<div class="alert alert-danger">Could not add instance</div>',
-            );
-          }
-        });
-      });
-
-      // Delete instance
-      $('.pmf-instance-delete').click(function(event) {
-        event.preventDefault();
-        const targetId = event.target.id.split('-');
-        const id = targetId[2];
-        const csrf = this.getAttribute('data-csrf-token');
-
-        if (confirm('Are you sure?')) {
-          $.get('index.php',
-            { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id, csrf: csrf },
-            function(data) {
-              if (typeof (data.deleted) === 'undefined') {
-                $('.table').after(
-                  '<div class="alert alert-danger">' +
-                  '<?= $PMF_LANG['ad_instance_error_cannotdelete'] ?> ' + data.error +
-                  '</div>',
-                );
-              } else {
-                $('#row-instance-' + id).fadeOut('slow');
-              }
-            },
-            'json',
-          );
-        }
-      });
-
-    })();
-    */
-  </script>
-
   </div>
   </div>
     <?php

@@ -13,10 +13,11 @@
  * @since 2019-12-20
  */
 
-import * as bootstrap from 'bootstrap';
+import { Tab } from 'bootstrap';
 import { renderVisitorCharts } from './dashboard';
 import { sidebarToggle } from './sidebar';
 import { fetchConfiguration } from './configuration';
+import { handleInstances } from './instance';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -28,14 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {
-      const configTabTrigger = new bootstrap.Tab(element);
+      const configTabTrigger = new Tab(element);
       element.addEventListener('shown.bs.tab', (event) => {
         event.preventDefault();
-
         let target = event.target.getAttribute('href');
-
         fetchConfiguration(target);
-
         tabLoaded = true;
         configTabTrigger.show();
       });
@@ -50,6 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Dashboard
   //
   renderVisitorCharts();
+
+  //
+  // Instance
+  //
+  handleInstances();
 
   //
   // Sidebar

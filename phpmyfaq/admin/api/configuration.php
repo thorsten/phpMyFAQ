@@ -45,7 +45,7 @@ $http = new HttpHelper();
 $stopwords = new Stopwords($faqConfig);
 
 switch ($ajaxAction) {
-    case 'add_instance':
+    case 'add-instance':
         $json = file_get_contents('php://input', true);
         $postData = json_decode($json);
 
@@ -142,12 +142,17 @@ switch ($ajaxAction) {
         $http->sendJsonWithHeaders($payload);
         break;
 
-    case 'delete_instance':
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    case 'delete-instance':
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
+
+        $instanceId = Filter::filterVar($postData->instanceId, FILTER_UNSAFE_RAW);
 
         if (null !== $instanceId) {
             $client = new Client($faqConfig);

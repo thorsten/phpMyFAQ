@@ -36,7 +36,7 @@ class Error
      * @param int    $line
      * @throws ErrorException
      */
-    public static function errorHandler(int $level, string $message, string $filename, int $line)
+    public static function errorHandler(int $level, string $message, string $filename, int $line): void
     {
         if (error_reporting() !== 0) {
             $filename = (DEBUG ? $filename : basename($filename));
@@ -49,7 +49,7 @@ class Error
      *
      * @param $exception
      */
-    public static function exceptionHandler($exception)
+    public static function exceptionHandler($exception): void
     {
         $code = $exception->getCode();
         if ($code !== 404) {

@@ -28,13 +28,13 @@ use phpMyFAQ\Helper;
 class HttpHelper extends Helper
 {
     /** @var string Content type */
-    private $contentType = '';
+    private string $contentType = '';
 
     /** @var int HTTP status code */
-    private $statusCode = 200;
+    private int $statusCode = 200;
 
     /** @var string[] Array of HTTP header entries */
-    private $headers = [];
+    private array $headers = [];
 
     /**
      * Setter for content type.
@@ -93,7 +93,7 @@ class HttpHelper extends Helper
     public function fetchAllHeaders(): void
     {
         foreach ($_SERVER as $name => $value) {
-            if (substr($name, 0, 5) === 'HTTP_') {
+            if (str_starts_with($name, 'HTTP_')) {
                 $this->headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))))] = $value;
             }
         }
@@ -146,10 +146,10 @@ class HttpHelper extends Helper
     /**
      * Sends any kind of data with optional HTTP headers as JSON.
      *
-     * @param mixed        $payload What to send
-     * @param string|array $headers Which headers to send
+     * @param mixed           $payload What to send
+     * @param string[]|string $headers Which headers to send
      */
-    public function sendJsonWithHeaders($payload, $headers = ''): void
+    public function sendJsonWithHeaders(mixed $payload, array|string $headers = ''): void
     {
         $this->sendWithHeaders($payload, $headers, true);
     }
@@ -157,11 +157,11 @@ class HttpHelper extends Helper
     /**
      * Sends any kind of data with optional HTTP headers as text or JSON.
      *
-     * @param mixed        $payload What to send
-     * @param string|array $headers Which headers to send
-     * @param bool         $isJson  Send as JSON?
+     * @param mixed           $payload What to send
+     * @param string|string[] $headers Which headers to send
+     * @param bool            $isJson  Send as JSON?
      */
-    public function sendWithHeaders($payload, $headers = '', $isJson = false): void
+    public function sendWithHeaders(mixed $payload, array|string $headers = '', bool $isJson = false): void
     {
         $validHeaders = [];
         if (is_string($headers) && strlen($headers) > 0) {

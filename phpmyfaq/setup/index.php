@@ -159,7 +159,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
     $installer->checkNoncriticalSettings()
     ?>
 
-      <form action="index.php" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form" class="needs-validation" novalidate>
+      <form action="index.php" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form"
+            class="needs-validation" novalidate>
 
         <div class="row setup-content" id="step-1">
           <div class="col-12">

@@ -1,5 +1,5 @@
 /**
- * One liner utility functions
+ * phpMyFAQ utility functions
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,13 +14,23 @@
  */
 
 /**
- *
+ * Adds a new node after the given reference node.
  * @param referenceNode
  * @param newNode
  */
 export const insertAfter = (referenceNode, newNode) => {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 };
+
+/**
+ * Creates a new element with the given tag name.
+ * @param htmlTag
+ * @param properties
+ * @param children
+ * @returns {*}
+ */
+export const addElement = (htmlTag, properties = {}, children = []) =>
+  children.reduce((e, c) => (e.appendChild(c), e), Object.assign(document.createElement(htmlTag), properties));
 
 /**
  * Capitalize the first letter of a string

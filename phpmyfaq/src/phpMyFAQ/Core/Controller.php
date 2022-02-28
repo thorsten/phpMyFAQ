@@ -27,7 +27,7 @@ namespace phpMyFAQ\Core;
 abstract class Controller
 {
     /** @var array */
-    protected $routeParameters = [];
+    protected array $routeParameters = [];
 
     /**
      * Controller constructor.
