@@ -33,7 +33,7 @@ class Template
      *
      * @var string
      */
-    private static $tplSetName;
+    private static string $tplSetName;
 
     /**
      * The template array.
@@ -64,19 +64,19 @@ class Template
     private $blocksTouched = [];
 
     /** @var array<string> Array containing the errors */
-    private $errors = [];
+    private array $errors = [];
 
     /** @var TemplateHelper */
-    private $tplHelper;
+    private TemplateHelper $tplHelper;
 
     /**
      * Combine all template files into the main templates array
      *
      * @param array<string, string> $myTemplate Templates
-     * @param TemplateHelper $tplHelper
-     * @param string         $tplSetName Active template name
+     * @param TemplateHelper        $tplHelper
+     * @param string                $tplSetName Active template name
      */
-    public function __construct(array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
+    public function __construct(array $myTemplate, TemplateHelper $tplHelper, string $tplSetName = 'default')
     {
         $this->tplHelper = $tplHelper;
         self::$tplSetName = $tplSetName;
@@ -249,6 +249,14 @@ class Template
     }
 
     /**
+     * @return string[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
      * @param string $template
      * @return array<int, array<string, string>>
      */
@@ -269,48 +277,6 @@ class Template
         }
 
         return $tplFilter;
-    }
-
-    /**
-     * This function checks the content.
-     *
-     * @param array<int, string|array<string>> $content Content to check
-     * @return array<int, string|array<string>>
-     */
-    private function checkContent(array $content): array
-    {
-        // Security measure: avoid the injection of php/shell-code
-        $search = ['#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi'];
-        $phpPattern1 = '&lt;?php';
-        $phpPattern2 = '&lt;?';
-        $replace = [$phpPattern1, '', $phpPattern2, '', ''];
-
-        foreach ($content as $var => $val) {
-            if (is_array($val)) {
-                foreach ($val as $key => $value) {
-                    $content[$var][$key] = str_replace('`', '&acute;', $value);
-                    $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
-                }
-            } else {
-                $content[$var] = str_replace('`', '&acute;', $content[$var]);
-                $content[$var] = Strings::preg_replace($search, $replace, $val);
-            }
-        }
-
-        return $content;
-    }
-
-    /**
-     * This function renders the whole parsed templates and outputs it.
-     */
-    public function render(): void
-    {
-        $output = '';
-        foreach ($this->outputs as $val) {
-            $output .= str_replace("\n\n", "\n", $val);
-        }
-
-        echo $output;
     }
 
     /**
@@ -353,6 +319,48 @@ class Template
             $block = str_replace('&acute;', '`', $block);
             $this->blocks[$templateName][$blockName] = $block;
         }
+    }
+
+    /**
+     * This function renders the whole parsed templates and outputs it.
+     */
+    public function render(): void
+    {
+        $output = '';
+        foreach ($this->outputs as $val) {
+            $output .= str_replace("\n\n", "\n", $val);
+        }
+
+        echo $output;
+    }
+
+    /**
+     * This function checks the content.
+     *
+     * @param array<int, string|array<string>> $content Content to check
+     * @return array<int, string|array<string>>
+     */
+    private function checkContent(array $content): array
+    {
+        // Security measure: avoid the injection of php/shell-code
+        $search = ['#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi'];
+        $phpPattern1 = '&lt;?php';
+        $phpPattern2 = '&lt;?';
+        $replace = [$phpPattern1, '', $phpPattern2, '', ''];
+
+        foreach ($content as $var => $val) {
+            if (is_array($val)) {
+                foreach ($val as $key => $value) {
+                    $content[$var][$key] = str_replace('`', '&acute;', $value);
+                    $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
+                }
+            } else {
+                $content[$var] = str_replace('`', '&acute;', $content[$var]);
+                $content[$var] = Strings::preg_replace($search, $replace, $val);
+            }
+        }
+
+        return $content;
     }
 
     /**
