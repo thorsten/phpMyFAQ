@@ -283,7 +283,7 @@ class Pgsql extends Database implements Driver
             PRIMARY KEY (id, lang))',
 
         'faqsections' => 'CREATE TABLE %sfaqsections (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (id))',
