@@ -29,12 +29,12 @@ class SwiftSMTP implements MailUserAgentInterface
     /**
      * @var string
      */
-    private $user;
+    private string $user;
 
     /**
      * @var Swift_Mailer
      */
-    private $mailer;
+    private Swift_Mailer $mailer;
 
     /**
      * @param string $server
@@ -43,17 +43,15 @@ class SwiftSMTP implements MailUserAgentInterface
      * @param int    $port
      * @param null   $security
      */
-    public function setAuthConfig(string $server, string $user, string $pass, int $port = 25, $security = null)
+    public function setAuthConfig(string $server, string $user, string $pass, int $port = 25, $security = null): void
     {
         unset($this->mailer);
 
-        // @phpstan-ignore-next-line
-        $this->mailer = Swift_Mailer::newInstance(
-            // @phpstan-ignore-next-line
-            Swift_SmtpTransport::newInstance($server, $port, $security)
-                ->setUsername($this->user = $user)
-                ->setPassword($pass)
-        );
+        $transport = (new Swift_SmtpTransport($server, $port, $security))
+            ->setUsername($this->user = $user)
+            ->setPassword($pass);
+
+        $this->mailer = new Swift_Mailer($transport);
     }
 
     /**
@@ -72,12 +70,10 @@ class SwiftSMTP implements MailUserAgentInterface
             unset($headers['Return-Path']);
         }
 
-        // @phpstan-ignore-next-line
-        $message = Swift_Message::newInstance($headers['Subject'])->setFrom(
-            [empty($sender) ? $this->user : $sender]
-        )->setTo($recipients)->setBody($body);
+        $message = (new Swift_Message($headers['Subject']))
+            ->setFrom([empty($sender) ? $this->user : $sender])
+            ->setTo($recipients)->setBody($body);
 
-        // Prepare the headers for the email
         unset($headers['Subject']);
         $mailHeaders = $message->getHeaders();
 
