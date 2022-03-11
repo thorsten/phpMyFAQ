@@ -26,6 +26,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
@@ -61,6 +62,11 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
 } else {
     $faqLangCode = 'en';
 }
+
+//
+// Load plurals support for selected language
+//
+$plr = new Plurals($PMF_LANG);
 
 //
 // Initializing static string wrapper

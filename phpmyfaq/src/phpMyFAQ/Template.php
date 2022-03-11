@@ -249,6 +249,14 @@ class Template
     }
 
     /**
+     * @return string[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
      * @param string $template
      * @return array<int, array<string, string>>
      */
@@ -269,35 +277,6 @@ class Template
         }
 
         return $tplFilter;
-    }
-
-    /**
-     * This function checks the content.
-     *
-     * @param array<int, string|array<string>> $content Content to check
-     * @return array<int, string|array<string>>
-     */
-    private function checkContent(array $content): array
-    {
-        // Security measure: avoid the injection of php/shell-code
-        $search = ['#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi'];
-        $phpPattern1 = '&lt;?php';
-        $phpPattern2 = '&lt;?';
-        $replace = [$phpPattern1, '', $phpPattern2, '', ''];
-
-        foreach ($content as $var => $val) {
-            if (is_array($val)) {
-                foreach ($val as $key => $value) {
-                    $content[$var][$key] = str_replace('`', '&acute;', $value);
-                    $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
-                }
-            } else {
-                $content[$var] = str_replace('`', '&acute;', $val === null ? '' : $val);
-                $content[$var] = Strings::preg_replace($search, $replace, $val === null ? '' : $val);
-            }
-        }
-
-        return $content;
     }
 
     /**
@@ -356,12 +335,32 @@ class Template
     }
 
     /**
-     * Returns the errors.
-     * @return string[]
+     * This function checks the content.
+     *
+     * @param array<int, string|array<string>> $content Content to check
+     * @return array
      */
-    public function getErrors(): array
+    private function checkContent(array $content): array
     {
-        return $this->errors;
+        // Security measure: avoid the injection of php/shell-code
+        $search = ['#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi'];
+        $phpPattern1 = '&lt;?php';
+        $phpPattern2 = '&lt;?';
+        $replace = [$phpPattern1, '', $phpPattern2, '', ''];
+
+        foreach ($content as $var => $val) {
+            if (is_array($val)) {
+                foreach ($val as $key => $value) {
+                    $content[$var][$key] = str_replace('`', '&acute;', $value);
+                    $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
+                }
+            } else {
+                $content[$var] = str_replace('`', '&acute;', $val === null ? '' : $val);
+                $content[$var] = Strings::preg_replace($search, $replace, $val === null ? '' : $val);
+            }
+        }
+
+        return $content;
     }
 
     /**
