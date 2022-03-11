@@ -26,7 +26,7 @@ use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Language;
 use phpMyFAQ\Meta;
-use phpMyFAQ\Stopwords;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,7 +42,7 @@ $stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_UNSAFE_
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $http = new HttpHelper();
-$stopwords = new Stopwords($faqConfig);
+$stopWords = new StopWords($faqConfig);
 
 switch ($ajaxAction) {
     case 'add-instance':
@@ -174,33 +174,61 @@ switch ($ajaxAction) {
 
     case 'load_stop_words_by_lang':
         if (Language::isASupportedLanguage($stopwordsLang)) {
-            $stopwordsList = $stopwords->getByLang($stopwordsLang);
+            $stopWordsList = $stopWords->getByLang($stopwordsLang);
 
-            $payload = $stopwordsList;
+            $payload = $stopWordsList;
             $http->sendJsonWithHeaders($payload);
         }
         break;
 
     case 'delete_stop_word':
-        if (null != $stopwordId && Language::isASupportedLanguage($stopwordsLang)) {
-            $stopwords->setLanguage($stopwordsLang);
-            $stopwords->remove((int)$stopwordId);
-        }
-        break;
+        $json = file_get_contents('php://input', true);
+        $deleteData = json_decode($json);
 
-    case 'save_stop_word':
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $stopWordId = Filter::filterVar($deleteData->stopWordId, FILTER_VALIDATE_INT);
+        $stopWordsLang = Filter::filterVar($deleteData->stopWordsLang, FILTER_UNSAFE_RAW);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
+            $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
 
-        if (null != $stopword && Language::isASupportedLanguage($stopwordsLang)) {
-            $stopwords->setLanguage($stopwordsLang);
+        if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
+            $stopWords
+                ->setLanguage($stopWordsLang)
+                ->remove((int)$stopWordId);
+            $http->setStatus(200);
+            $http->sendJsonWithHeaders(['deleted' => $stopWordId ]);
+        }
 
-            if (null !== $stopwordId && -1 < $stopwordId) {
-                echo $stopwords->update((int)$stopwordId, $stopword);
-            } elseif (!$stopwords->match($stopword)) {
-                echo $stopwords->add($stopword);
+        break;
+
+    case 'save_stop_word':
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        $stopWordId = Filter::filterVar($postData->stopWordId, FILTER_VALIDATE_INT);
+        $stopWordsLang = Filter::filterVar($postData->stopWordsLang, FILTER_UNSAFE_RAW);
+        $stopWord = Filter::filterVar($postData->stopWord, FILTER_UNSAFE_RAW);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+            $http->setStatus(400);
+            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            exit(1);
+        }
+
+        if (null != $stopWord && Language::isASupportedLanguage($stopWordsLang)) {
+            $stopWords->setLanguage($stopWordsLang);
+
+            if (null !== $stopWordId && -1 < $stopWordId) {
+                $stopWords->update((int)$stopWordId, $stopWord);
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(['updated' => $stopWordId ]);
+            } elseif (!$stopWords->match($stopWord)) {
+                $stopWordId = $stopWords->add($stopWord);
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(['added' => $stopWordId ]);
             }
         }
         break;

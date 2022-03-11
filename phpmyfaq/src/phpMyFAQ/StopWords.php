@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The main Stopwords class.
+ * The main StopWords class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -19,28 +19,28 @@
 namespace phpMyFAQ;
 
 /**
- * Class Stopwords
+ * Class StopWords
  *
  * @package phpMyFAQ
  */
-class Stopwords
+class StopWords
 {
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * @var string
      */
-    private $language;
+    private string $language;
 
     /**
      * Table name.
      *
      * @var string
      */
-    private $tableName;
+    private string $tableName;
 
     /**
      * Constructor.
@@ -71,10 +71,12 @@ class Stopwords
 
     /**
      * @param string $language
+     * @return StopWords
      */
-    public function setLanguage(string $language): void
+    public function setLanguage(string $language): StopWords
     {
         $this->language = $language;
+        return $this;
     }
 
     /**
@@ -172,12 +174,11 @@ class Stopwords
     /**
      * Retrieve all the stop words by a certain language.
      *
-     * @param string $lang      Language to retrieve stop words by
-     * @param bool   $wordsOnly
-     *
+     * @param string|null $lang      Language to retrieve stop words by
+     * @param bool        $wordsOnly
      * @return string[]
      */
-    public function getByLang($lang = null, $wordsOnly = false): array
+    public function getByLang(string $lang = null, bool $wordsOnly = false): array
     {
         $lang = is_null($lang) ? $this->config->getLanguage()->getLanguage() : $lang;
         $sql = sprintf(
@@ -202,7 +203,7 @@ class Stopwords
     }
 
     /**
-     * Filter some text cutting out all non words and stop words.
+     * Filter some text cutting out all non-words and stop words.
      *
      * @param string $input text to filter
      * @return string[]

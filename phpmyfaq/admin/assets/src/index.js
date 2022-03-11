@@ -18,13 +18,12 @@ import { renderVisitorCharts } from './dashboard';
 import { sidebarToggle } from './sidebar';
 import { fetchConfiguration } from './configuration';
 import { handleInstances } from './instance';
+import { handleStopWords } from './stopwords';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  //
   // Configuration
-  //
   const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
   if (configTabList.length) {
     let tabLoaded = false;
@@ -44,20 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  //
   // Dashboard
-  //
   renderVisitorCharts();
 
-  //
   // Instance
-  //
   handleInstances();
 
-  //
   // Sidebar
-  //
   sidebarToggle();
+
+  // Stop Words
+  handleStopWords();
 
   //
   // User

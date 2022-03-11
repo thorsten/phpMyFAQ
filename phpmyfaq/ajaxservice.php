@@ -43,7 +43,7 @@ use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session;
-use phpMyFAQ\Stopwords;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -90,7 +90,7 @@ $http->setContentType('application/json');
 
 $faqSession = new Session($faqConfig);
 $network = new Network($faqConfig);
-$stopWords = new Stopwords($faqConfig);
+$stopWords = new StopWords($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = ['error' => $PMF_LANG['err_bannedIP']];
