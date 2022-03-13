@@ -27,8 +27,8 @@ use phpMyFAQ\Init;
 // - true  debug mode enabled
 const DEBUG = false;
 if (DEBUG) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
     error_reporting(-1);
 } else {
     error_reporting(0);
@@ -54,8 +54,8 @@ if (!$foundCurrPath) {
 // Tweak some PHP configuration values
 // Warning: be sure the server has enough memory and stack for PHP
 //
-ini_set('pcre.backtrack_limit', 100000000);
-ini_set('pcre.recursion_limit', 100000000);
+ini_set('pcre.backtrack_limit', '100000000');
+ini_set('pcre.recursion_limit', '100000000');
 
 //
 // Include constants
@@ -126,11 +126,11 @@ $faqConfig->getAll();
 //
 // We always need a valid session!
 //
-ini_set('session.use_only_cookies', 1); // Avoid any PHP version to move sessions on URLs
-ini_set('session.auto_start', 0); // Prevent error to use session_start() if it's active in php.ini
-ini_set('session.use_trans_sid', 0);
+ini_set('session.use_only_cookies', '1'); // Avoid any PHP version to move sessions on URLs
+ini_set('session.auto_start', '0'); // Prevent error to use session_start() if it's active in php.ini
+ini_set('session.use_trans_sid', '0');
 ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.cookie_httponly', true);
+ini_set('session.cookie_httponly', 'true');
 ini_set('url_rewriter.tags', '');
 
 //

@@ -6,6 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v3.1.2 - 2022-03-XX
+
+- fixed minor bugs (Thorsten)
+- updated bundled dependencies (Thorsten)
+
 ### phpMyFAQ v3.1.1 - 2022-02-14
 
 - fixed enabled debug mode (Thorsten)
