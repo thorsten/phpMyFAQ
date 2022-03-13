@@ -407,7 +407,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
                                    onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>')"
-                                <?= $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked' : '' ?>>
+                                <?php
+                                if (
+                                    isset($numRecordsByCat[$cid]) && isset($numActiveByCat[$cid]) &&
+                                    $numRecordsByCat[$cid] == $numActiveByCat[$cid]
+                                ) {
+                                    echo 'checked';
+                                }
+                                ?>>
                               <?= $PMF_LANG['ad_record_active'] ?>
                           </label>
                     <?php } else { ?>

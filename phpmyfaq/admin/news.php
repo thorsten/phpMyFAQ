@@ -106,7 +106,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <div class="row">
                         <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-9">
-                            <input class="form-control" type="url" name="link" id="link" placeholder="http://www.example.com/">
+                            <input class="form-control" type="text" name="link" id="link" placeholder="http://www.example.com/">
                         </div>
                     </div>
 
@@ -315,7 +315,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <div class="row">
                         <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-9">
-                            <input type="url" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
+                            <input type="text" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
                         </div>
                     </div>
 
@@ -435,7 +435,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_UNSAFE_RAW);
     $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
@@ -486,7 +486,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_UNSAFE_RAW);
     $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
