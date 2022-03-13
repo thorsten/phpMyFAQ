@@ -1,6 +1,6 @@
 {
   "name": "@thorsten/phpmyfaq",
-  "version": "3.1.1",
+  "version": "3.2.0-dev",
   "description": "phpMyFAQ",
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
@@ -15,51 +15,55 @@
   "homepage": "https://www.phpmyfaq.de/",
   "scripts": {
     "build": "webpack",
-    "build:watch": "webpack --watch",
+    "build:watch": "webpack --watch --progress",
     "lint": "prettier --check .",
-    "lint:fix": "prettier --write ."
+    "lint:fix": "prettier --write .",
+    "prepare": "husky install",
+    "pretty-quick": "pretty-quick"
   },
   "dependencies": {
-    "bootstrap": "^4.6.0",
+    "@popperjs/core": "^2.10.2",
+    "bootstrap": "^5.1.3",
     "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.9.0",
     "bs-custom-file-input": "^1.3.4",
-    "chart.js": "^3.2.1",
+    "chart.js": "3.7.0",
     "cookieconsent": "^3.1.0",
     "fork-awesome": "^1.1.7",
     "handlebars": "^4.0.12",
-    "highlight.js": "^10.4.1",
+    "highlight.js": "^11.4.0",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.13.1",
-    "popper.js": "^1.14.6",
-    "tinymce": "^4.9.11"
+    "masonry-layout": "^4.2.2",
+    "tinymce": "^5.10.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.7",
-    "autoprefixer": "^9.7.3",
+    "@babel/core": "^7.16.12",
+    "@mcler/webpack-concat-plugin": "^4.1.4",
+    "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^5.1.1",
-    "css-loader": "3.6.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.2.3",
+    "css-loader": "^6.5.1",
     "file-loader": "^6.0.0",
-    "husky": "^4.0.2",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.0",
-    "prettier": "2.3.0",
-    "pretty-quick": "^2.0.1",
-    "sass-loader": "^8.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
+    "mini-css-extract-plugin": "^2.5.3",
+    "node-sass": "^7.0.1",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.3",
+    "sass-loader": "^12.4.0",
     "sigmund": "^1.0.1",
-    "style-loader": "^1.1.1",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-concat-plugin": "3.0.0"
+    "style-loader": "^3.3.1",
+    "webpack": "^5.67.0",
+    "webpack-cli": "^4.9.2"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "composer lint && composer validate && composer test && pretty-quick --staged",
-      "pre-push": "composer lint && composer validate && composer test && pretty-quick --staged"
+      "pre-commit": "composer lint && composer validate && composer test && yarn pretty-quick --staged",
+      "pre-push": "composer lint && composer validate && composer test && yarn pretty-quick --staged"
     }
   }
 }

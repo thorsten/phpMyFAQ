@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-11
  */
@@ -55,7 +55,7 @@ class CaptchaHelper extends Helper
         $html = '';
 
         if (true === $this->config->get('spam.enableCaptchaCode') && is_null($auth)) {
-            $html .= '<div class="form-group row">';
+            $html .= '<div class="row">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $legend);
             $html .= '    <div class="col-sm-4">';
             $html .= '        <p class="form-control-static">';

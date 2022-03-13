@@ -5,14 +5,14 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Daniel Shkuri <dan-shk@bezeqint.net>
  * @author Niran Shay <nirshay1@012.net.il>
  * @author Roy Ronen <royroy15@gmail.com>
  * @copyright 2004-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-08-27
  * @codingStandardsIgnoreFile

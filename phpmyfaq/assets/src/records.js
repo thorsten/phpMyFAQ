@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Hamed Ayari <hamed.ayari@maxdome.de>
@@ -19,6 +19,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  console.info('Needs to be rewritten without jQuery.');
+
+  /*
   //
   // Show rating
   //
@@ -50,4 +53,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tooltips
   //
   $('[data-toggle="tooltip"]').tooltip();
+  */
 });

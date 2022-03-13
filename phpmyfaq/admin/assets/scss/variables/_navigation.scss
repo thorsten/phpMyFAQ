@@ -1,0 +1,32 @@
+/**
+ * phpMyFAQ 3.2 default navigation variable
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2022 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2022-01-25
+ */
+
+// Z index variables
+$pmf-admin-zindex-content: 1037 !default;
+$pmf-admin-zindex-sidenav: 1038 !default;
+$pmf-admin-zindex-topnav: 1039 !default;
+
+// Side navigation
+$pmf-admin-sidenav-bg: $gray-900;
+$pmf-admin-sidenav-color: fade-out($white, 0.5);
+$pmf-admin-sidenav-heading-color: fade-out($white, 0.75);
+$pmf-admin-sidenav-link-color: fade-out($white, 0.5);
+$pmf-admin-sidenav-link-active-color: $white;
+$pmf-admin-sidenav-icon-color: fade-out($white, 0.75);
+$pmf-admin-sidenav-footer-bg: $gray-800;
+
+// Color variables for the top navigation
+$pmf-admin-topnav-dark-toggler-color: fade-out($white, 0.5);
+$pmf-admin-topnav-light-toggler-color: $gray-900;

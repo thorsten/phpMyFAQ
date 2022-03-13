@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-02-26
  */
@@ -244,236 +244,174 @@ switch ($action) {
   <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="../assets/dist/admin-styles.css">
+  <link rel="stylesheet" href="../assets/dist/admin.css">
 
-  <script src="../assets/dist/vendors.js"></script>
-  <script src="../assets/dist/phpmyfaq.js"></script>
-  <script src="../assets/dist/backend.js"></script>
-  <script src="assets/js/sidebar.js"></script>
+  <script src="../assets/dist/backend.js?<?= time(); ?>"></script>
   <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
+  <script src="assets/js/configuration.js"></script>
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">
 </head>
 <body dir="<?= $PMF_LANG['dir']; ?>" id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+<!-- phpMyFAQ Admin Top Bar -->
+<nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
 
-  <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) || $user->isSuperAdmin())): ?>
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+        <i class="fa fa-bars"></i>
+    </button>
 
-    <li>
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-4">phpMyFAQ <?= System::getVersion() ?></div>
-      </a>
-    </li>
-
-    <li>
-      <hr class="sidebar-divider my-0">
-    </li>
-
-      <?php if (
-        isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
-        ))
-) : ?>
-        <li class="nav-item active">
-          <a class="nav-link" href="index.php">
-            <i class="fa fa-tachometer"></i>
-            <span>Dashboard</span></a>
-        </li>
-
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
-          <hr class="sidebar-divider">
+            <span class="text-white-50 small">
+            <i class="fa fa-clock-o fa-fw"></i> <?= $PMF_LANG['ad_session_expiration']; ?>:
+            <span id="sessioncounter" class="pl-2">
+                <i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...
+            </span>
+                </span>
         </li>
+    </ul>
+    <?php endif; ?>
 
-        <li class="nav-item">
-          <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>"
-             href="#" data-toggle="collapse" data-target="#collapseUserAdmin" aria-expanded="true"
-             aria-controls="collapseUserAdmin">
-            <i aria-hidden="true" class="fa fa-user"></i>
-            <span><?= $PMF_LANG['admin_mainmenu_users']; ?></span>
-          </a>
-          <div id="collapseUserAdmin" class="collapse <?= ($userPage) ? 'show' : '' ?>" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <?= $secLevelEntries['user']; ?>
-            </div>
-          </div>
-        </li>
+    <!-- Language Switcher -->
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0 navbar-search"
+          action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
+        <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
+    </form>
 
-        <li class="nav-item">
-          <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>"
-             href="#" data-toggle="collapse" data-target="#collapseContentAdmin" aria-expanded="true"
-             aria-controls="collapseContentAdmin">
-            <i aria-hidden="true" class="fa fa-edit"></i>
-            <span><?= $PMF_LANG['admin_mainmenu_content']; ?></span>
-          </a>
-          <div id="collapseContentAdmin" class="collapse <?= ($contentPage) ? 'show' : '' ?>"
-               data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <?= $secLevelEntries['content']; ?>
-            </div>
-          </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>"
-             href="#" data-toggle="collapse" data-target="#collapseStatisticsAdmin" aria-expanded="true"
-             aria-controls="collapseStatisticsAdmin">
-            <i aria-hidden="true" class="fa fa-tasks"></i>
-            <span><?= $PMF_LANG['admin_mainmenu_statistics']; ?></span>
-          </a>
-          <div id="collapseStatisticsAdmin" class="collapse <?= ($statisticsPage) ? 'show' : '' ?>"
-               data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <?= $secLevelEntries['statistics']; ?>
-            </div>
-          </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link  <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-toggle="collapse"
-             data-target="#collapseExportsAdmin" aria-expanded="true"
-             aria-controls="collapseExportsAdmin">
-            <i aria-hidden="true" class="fa fa-file"></i>
-            <span><?= $PMF_LANG['admin_mainmenu_exports']; ?></span>
-          </a>
-          <div id="collapseExportsAdmin" class="collapse <?= ($exportsPage) ? 'show' : '' ?>"
-               data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <?= $secLevelEntries['exports']; ?>
-            </div>
-          </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link  <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-toggle="collapse"
-             data-target="#collapseBackupAdmin" aria-expanded="true"
-             aria-controls="collapseBackupAdmin">
-            <i aria-hidden="true" class="fa fa-download"></i>
-            <span><?= $PMF_LANG['admin_mainmenu_backup']; ?></span>
-          </a>
-          <div id="collapseBackupAdmin" class="collapse <?= ($backupPage) ? 'show' : '' ?>"
-               data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <?= $secLevelEntries['backup']; ?>
-            </div>
-          </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link  <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#" data-toggle="collapse"
-             data-target="#collapseConfigAdmin" aria-expanded="true"
-             aria-controls="collapseConfigAdmin">
-            <i aria-hidden="true" class="fa fa-wrench"></i>
-            <span><?= $PMF_LANG['admin_mainmenu_configuration']; ?></span>
-          </a>
-          <div id="collapseConfigAdmin" class="collapse <?= ($configurationPage) ? 'show' : '' ?>"
-               data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <?= $secLevelEntries['config']; ?>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <hr class="sidebar-divider d-none d-md-block">
-        </li>
-
-        <li>
-          <div class="text-center small" id="pmf-admin-saving-data-indicator"></div>
-        </li>
-
-      <?php endif; ?>
-  </ul>
-  <!-- End of Sidebar -->
-
-  <!-- Content Wrapper -->
-  <div id="content-wrapper" class="d-flex flex-column">
-
-    <!-- Main Content -->
-    <div id="content">
-
-      <!-- Topbar -->
-      <nav class="navbar navbar-expand navbar-dark bg-primary topbar mb-4 static-top">
-
-        <!-- Topbar Language Switcher -->
-        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
-              action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-            <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
-        </form>
-
-        <!-- Topbar Navbar -->
-        <ul class="navbar-nav ml-auto">
-
-          <!-- Nav Item - Mobile Language Switcher -->
-          <li class="nav-item dropdown no-arrow d-sm-none">
-            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-language fa-fw"></i>
-            </a>
-            <!-- Dropdown - Messages -->
-            <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in"
-                 aria-labelledby="searchDropdown">
-              <form class="form-inline mr-auto w-100 navbar-search"
-                    action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-                  <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
-              </form>
-            </div>
-          </li>
-
-            <?php if (
-            isset($auth) && (count(
-                $user->perm->getAllUserRights($user->getUserId())
-            ) > 0 || $user->isSuperAdmin())
-) : ?>
-              <li class="nav-item">
-                <div class="navbar-text text-gray-600 small">
-                  <i class="fa fa-clock-o fa-fw"></i> <?= $PMF_LANG['ad_session_expiration']; ?>:
-                  <span id="sessioncounter" class="pl-2"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
-                </div>
-              </li>
-
-              <div class="topbar-divider d-none d-sm-block"></div>
-
-              <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+    <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) || $user->isSuperAdmin())): ?>
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                       <?= $user->getUserData('display_name'); ?>
-                  </span>
-                    <?php
-                    if ($faqConfig->get('main.enableGravatarSupport')) {
-                        $avatar = new Gravatar();
-                        echo $avatar->getImage(
-                            $user->getUserData('email'),
-                            ['size' => 24, 'class' => 'img-profile rounded-circle']
-                        );
-                    } else {
-                        echo '<i aria-hidden="true" class="fa fa-user"></i>';
-                    }
-                    ?>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="userDropdown">
-                  <a class="dropdown-item" href="index.php?action=passwd">
-                    <i class="fa fa-key-modern mr-2 text-gray-400"></i>
-                      <?= $PMF_LANG['ad_menu_passwd'] ?>
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-                    <i class="fa fa-sign-out mr-2 text-gray-400"></i>
-                      <?= $PMF_LANG['admin_mainmenu_logout']; ?>
-                  </a>
+                </span>
+                <?php
+                if ($faqConfig->get('main.enableGravatarSupport')) {
+                    $avatar = new Gravatar();
+                    echo $avatar->getImage(
+                        $user->getUserData('email'),
+                        ['size' => 24, 'class' => 'img-profile rounded-circle']
+                    );
+                } else {
+                    echo '<i aria-hidden="true" class="fa fa-user"></i>';
+                }
+                ?>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li>
+                    <a class="dropdown-item" href="index.php?action=passwd">
+                        <?= $PMF_LANG['ad_menu_passwd'] ?>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                    <a class="dropdown-item" href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                        <?= $PMF_LANG['admin_mainmenu_logout']; ?>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <?php endif; ?>
+</nav>
+<!-- /phpMyFAQ Admin Top Bar -->
+
+<div id="pmf-admin-layout-sidenav">
+
+    <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) || $user->isSuperAdmin())) : ?>
+    <!-- phpMyFAQ Admin Side Navigation -->
+    <div id="pmf-admin-layout-sidenav_nav">
+        <nav class="pmf-admin-sidenav accordion pmf-admin-sidenav-dark" id="sidenavAccordion">
+            <div class="pmf-admin-sidenav-menu">
+                <div class="nav">
+                    <!-- Dashboard -->
+                    <a class="nav-link" href="index.php">
+                        <div class="pmf-admin-nav-link-icon"><i class="fa fa-tachometer"></i></div>
+                        Dashboard
+                    </a>
+
+                    <!-- User -->
+                    <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-user"></i></div>
+                        <?= $PMF_LANG['admin_mainmenu_users']; ?>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                    </a>
+                    <div class="<?= ($userPage) ? '' : 'collapse' ?>" id="collapseUsers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="pmf-admin-sidenav-menu-nested nav">
+                            <?= $secLevelEntries['user']; ?>
+                        </nav>
+                    </div>
+                    <!-- Content -->
+                    <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-edit"></i></div>
+                        <?= $PMF_LANG['admin_mainmenu_content']; ?>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                    </a>
+                    <div class="<?= ($contentPage) ? '' : 'collapse' ?>" id="collapseContent" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="pmf-admin-sidenav-menu-nested nav">
+                            <?= $secLevelEntries['content']; ?>
+                        </nav>
+                    </div>
+                    <!-- Statistics -->
+                    <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-tasks"></i></div>
+                        <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                    </a>
+                    <div class="<?= ($statisticsPage) ? '' : 'collapse' ?>" id="collapseStatistics" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="pmf-admin-sidenav-menu-nested nav">
+                            <?= $secLevelEntries['statistics']; ?>
+                        </nav>
+                    </div>
+                    <!-- Exports -->
+                    <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
+                        <?= $PMF_LANG['admin_mainmenu_exports']; ?>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                    </a>
+                    <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="pmf-admin-sidenav-menu-nested nav">
+                            <?= $secLevelEntries['exports']; ?>
+                        </nav>
+                    </div>
+                    <!-- BackupAdmin -->
+                    <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
+                        <?= $PMF_LANG['admin_mainmenu_backup']; ?>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                    </a>
+                    <div class="<?= ($backupPage) ? '' : 'collapse' ?>" id="collapseBackupAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="pmf-admin-sidenav-menu-nested nav">
+                            <?= $secLevelEntries['backup']; ?>
+                        </nav>
+                    </div>
+                    <!-- ConfigAdmin -->
+                    <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false" aria-controls="collapseConfigAdmin">
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
+                        <?= $PMF_LANG['admin_mainmenu_configuration']; ?>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                    </a>
+                    <div class="<?= ($configurationPage) ? '' : 'collapse' ?>" id="collapseConfigAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="pmf-admin-sidenav-menu-nested nav">
+                            <?= $secLevelEntries['config']; ?>
+                        </nav>
+                    </div>
+
                 </div>
-              </li>
-            <?php endif; ?>
+            </div>
+            <div class="pmf-admin-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                <?= $user->getUserData('display_name'); ?>
+            </div>
+        </nav>
+    </div>
+    <?php endif; ?>
+    <!-- /phpMyFAQ Admin Side Navigation -->
 
-        </ul>
-
-      </nav>
-      <!-- End of Topbar -->
-
-      <!-- Begin Page Content -->
-      <div class="container-fluid">
+    <!-- phpMyFAQ Admin Main Content -->
+    <div id="pmf-admin-layout-sidenav_content">
+        <main>
+            <div class="container-fluid px-4">

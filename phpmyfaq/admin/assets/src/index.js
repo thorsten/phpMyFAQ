@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne
@@ -13,13 +13,54 @@
  * @since 2019-12-20
  */
 
+import { Tab } from 'bootstrap';
 import { renderVisitorCharts } from './dashboard';
+import { sidebarToggle } from './sidebar';
+import { fetchConfiguration } from './configuration';
+import { handleInstances } from './instance';
+import { handleStopWords } from './stopwords';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  //
+  // Configuration
+  const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
+  if (configTabList.length) {
+    let tabLoaded = false;
+    configTabList.forEach((element) => {
+      const configTabTrigger = new Tab(element);
+      element.addEventListener('shown.bs.tab', (event) => {
+        event.preventDefault();
+        let target = event.target.getAttribute('href');
+        fetchConfiguration(target);
+        tabLoaded = true;
+        configTabTrigger.show();
+      });
+    });
+
+    if (!tabLoaded) {
+      fetchConfiguration('#main');
+    }
+  }
+
   // Dashboard
-  //
   renderVisitorCharts();
+
+  // Instance
+  handleInstances();
+
+  // Sidebar
+  sidebarToggle();
+
+  // Stop Words
+  handleStopWords();
+
+  //
+  // User
+  //
+
+  //
+  // FAQs
+  //
+  // editor.render();
 });

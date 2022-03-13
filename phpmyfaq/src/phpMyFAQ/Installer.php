@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-08-27
  */
@@ -21,6 +21,7 @@ use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -39,14 +40,14 @@ class Installer
      *
      * @var System
      */
-    protected $system;
+    protected System $system;
 
     /**
      * Array with user rights.
      *
      * @var array
      */
-    protected $mainRights = [
+    protected array $mainRights = [
         [
             'name' => 'add_user',
             'description' => 'Right to add user accounts',
@@ -311,7 +312,7 @@ class Installer
      *
      * @var array
      */
-    protected $mainConfig = [
+    protected array $mainConfig = [
         'main.currentVersion' => null,
         'main.currentApiVersion' => null,
         'main.language' => '__PHPMYFAQ_LANGUAGE__',
@@ -327,7 +328,7 @@ class Installer
         'main.metaKeywords' => '',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
         'main.send2friendText' => '',
-        'main.titleFAQ' => 'phpMyFAQ Codename Poseidon',
+        'main.titleFAQ' => 'phpMyFAQ Codename Pontus',
         'main.urlValidateInterval' => '86400',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
@@ -440,6 +441,8 @@ class Installer
 
     /**
      * Constructor.
+     *
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -467,7 +470,7 @@ class Installer
         }
 
         if (!function_exists('date_default_timezone_set')) {
-            echo '<p class="alert alert-danger">Sorry, but setting a default timezone doesn\'t work in your ' .
+            echo '<p class="alert alert-danger">Sorry, but setting a default timezone does not work in your ' .
                 'environment!</p>';
             System::renderFooter();
         }
@@ -640,7 +643,7 @@ class Installer
      */
     public function startInstall(array $setup = null)
     {
-        $query = $uninst = $dbSetup = [];
+        $query = $uninstall = $dbSetup = [];
 
         // Check table prefix
         $dbSetup['dbPrefix'] = Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_UNSAFE_RAW, '');
@@ -735,8 +738,6 @@ class Installer
             );
         } catch (Exception $e) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $e->getMessage());
-        }
-        if (!$db) {
             System::renderFooter(true);
         }
 
@@ -774,7 +775,7 @@ class Installer
 
             // set LDAP Config to prevent DB query
             foreach ($this->mainConfig as $configKey => $configValue) {
-                if (strpos($configKey, 'ldap.') !== false) {
+                if (str_contains($configKey, 'ldap.')) {
                     $configuration->config[$configKey] = $configValue;
                 }
             }
@@ -845,7 +846,7 @@ class Installer
             $esSetup = [];
         }
 
-        // check loginname
+        // check login name
         if (!isset($setup['loginname'])) {
             $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_UNSAFE_RAW);
         } else {
@@ -878,9 +879,9 @@ class Installer
             System::renderFooter(true);
         }
 
-        if (strlen($password) <= 5 || strlen($passwordRetyped) <= 5) {
+        if (strlen($password) <= 7 || strlen($passwordRetyped) <= 7) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
-                'short. Please set your password and your retyped password with a minimum of 6 characters.</p>';
+                'short. Please set your password and your retyped password with a minimum of 8 characters.</p>';
             System::renderFooter(true);
         }
         if ($password != $passwordRetyped) {
@@ -894,7 +895,7 @@ class Installer
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
         $permLevel = Filter::filterInput(INPUT_POST, 'permLevel', FILTER_UNSAFE_RAW, 'basic');
 
-        $rootDir = isset($setup['rootDir']) ? $setup['rootDir'] : PMF_ROOT_DIR;
+        $rootDir = $setup['rootDir'] ?? PMF_ROOT_DIR;
 
         $instanceSetup = new setUp();
         $instanceSetup->setRootDir($rootDir);
@@ -959,7 +960,7 @@ class Installer
 
         // Erase any table before starting creating the required ones
         if (!System::isSqlite($dbSetup['dbType'])) {
-            $this->system->dropTables($uninst);
+            $this->system->dropTables($uninstall);
         }
 
         // Start creating the required tables
@@ -971,7 +972,7 @@ class Installer
                     once again or send us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
-                $this->system->dropTables($uninst);
+                $this->system->dropTables($uninstall);
                 $this->system->cleanFailedInstallationFiles();
                 System::renderFooter(true);
             }
@@ -1024,11 +1025,11 @@ class Installer
         $instanceSetup->createAnonymousUser($configuration);
 
         // Add master instance
-        $instanceData = [
-            'url' => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
-            'instance' => $link->getSystemRelativeUri('setup/index.php'),
-            'comment' => 'phpMyFAQ ' . System::getVersion(),
-        ];
+        $instanceData = new InstanceEntity();
+        $instanceData
+            ->setUrl($link->getSystemUri($_SERVER['SCRIPT_NAME']))
+            ->setInstance($link->getSystemRelativeUri('setup/index.php'))
+            ->setComment('phpMyFAQ ' . System::getVersion());
         $faqInstance = new Instance($configuration);
         $faqInstance->addInstance($instanceData);
 

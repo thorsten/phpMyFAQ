@@ -5,13 +5,13 @@
  * template parser.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-22
  */
@@ -40,28 +40,28 @@ class Template
      *
      * @var array<string, string>
      */
-    public $templates = [];
+    public array $templates = [];
 
     /**
      * The output array.
      *
      * @var array<string, string|null>
      */
-    private $outputs = [];
+    private array $outputs = [];
 
     /**
      * The blocks array.
      *
      * @var array<string, array<string>>
      */
-    private $blocks = [];
+    private array $blocks = [];
 
     /**
      * array containing the touched blocks.
      *
      * @var array<string>
      */
-    private $blocksTouched = [];
+    private array $blocksTouched = [];
 
     /** @var array<string> Array containing the errors */
     private array $errors = [];
@@ -73,10 +73,10 @@ class Template
      * Combine all template files into the main templates array
      *
      * @param array<string, string> $myTemplate Templates
-     * @param TemplateHelper        $tplHelper
-     * @param string                $tplSetName Active template name
+     * @param TemplateHelper $tplHelper
+     * @param string         $tplSetName Active template name
      */
-    public function __construct(array $myTemplate, TemplateHelper $tplHelper, string $tplSetName = 'default')
+    public function __construct(array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
     {
         $this->tplHelper = $tplHelper;
         self::$tplSetName = $tplSetName;
@@ -280,6 +280,19 @@ class Template
     }
 
     /**
+     * This function renders the whole parsed templates and outputs it.
+     */
+    public function render(): void
+    {
+        $output = '';
+        foreach ($this->outputs as $val) {
+            $output .= str_replace("\n\n", "\n", $val === null ? '' : $val);
+        }
+
+        echo $output;
+    }
+
+    /**
      * This function adds two parsed templates.
      *
      * @param string $from Name of the template to add
@@ -322,23 +335,10 @@ class Template
     }
 
     /**
-     * This function renders the whole parsed templates and outputs it.
-     */
-    public function render(): void
-    {
-        $output = '';
-        foreach ($this->outputs as $val) {
-            $output .= str_replace("\n\n", "\n", $val);
-        }
-
-        echo $output;
-    }
-
-    /**
      * This function checks the content.
      *
      * @param array<int, string|array<string>> $content Content to check
-     * @return array<int, string|array<string>>
+     * @return array
      */
     private function checkContent(array $content): array
     {
@@ -355,8 +355,8 @@ class Template
                     $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
                 }
             } else {
-                $content[$var] = str_replace('`', '&acute;', $content[$var]);
-                $content[$var] = Strings::preg_replace($search, $replace, $val);
+                $content[$var] = str_replace('`', '&acute;', $val === null ? '' : $val);
+                $content[$var] = Strings::preg_replace($search, $replace, $val === null ? '' : $val);
             }
         }
 

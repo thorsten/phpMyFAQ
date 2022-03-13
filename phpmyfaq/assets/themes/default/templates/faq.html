@@ -75,13 +75,15 @@
   </article>
 
   <ul id="tab" class="nav nav-tabs d-print-none" role="tablist">
-    <li class="nav-item"><a class="nav-link active" href="#votingForm" data-toggle="tab">{{ msgVoteUsability }}</a></li>
+    <li class="nav-item">
+      <a class="nav-link active" href="#votingForm" data-bs-toggle="tab">{{ msgVoteUsability }}</a>
+    </li>
     [switchLanguage]
     <li class="nav-item">
-      <a class="nav-link" href="#switchAvailableLanguage" data-toggle="tab">{{ msgChangeLanguage }}</a>
+      <a class="nav-link" href="#switchAvailableLanguage" data-bs-toggle="tab">{{ msgChangeLanguage }}</a>
     </li>
     [/switchLanguage] [addTranslation]
-    <li class="nav-item"><a class="nav-link" href="#addTranslation" data-toggle="tab">{{ msgTranslate }}</a></li>
+    <li class="nav-item"><a class="nav-link" href="#addTranslation" data-bs-toggle="tab">{{ msgTranslate }}</a></li>
     [/addTranslation]
   </ul>
 
@@ -127,7 +129,7 @@
       <input type="hidden" name="type" id="type" value="faq" />
 
       <div class="form-row">
-        <div class="form-group col">
+        <div class="col">
           <label class="sr-only" for="user">{{ msgNewContentName }}</label>
           <input
             type="text"
@@ -139,7 +141,7 @@
             value="{{ defaultContentName }}"
           />
         </div>
-        <div class="form-group col">
+        <div class="col">
           <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
           <input
             type="email"
@@ -153,7 +155,7 @@
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group col">
+        <div class="col">
           <textarea
             rows="10"
             name="comment_text"

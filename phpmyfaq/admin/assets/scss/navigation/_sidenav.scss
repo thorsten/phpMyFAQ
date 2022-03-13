@@ -1,0 +1,90 @@
+/**
+ * phpMyFAQ 3.2 default side navigation
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2022 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2022-01-25
+ */
+
+.pmf-admin-sidenav {
+  background-color: $pmf-admin-sidenav-bg;
+  color: $pmf-admin-sidenav-color;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-wrap: nowrap;
+
+  .pmf-admin-sidenav-menu {
+    flex-grow: 1;
+
+    .nav {
+      flex-direction: column;
+      flex-wrap: nowrap;
+
+      .pmf-admin-sidenav-menu-heading {
+        color: $pmf-admin-sidenav-heading-color;
+        padding: 1.75rem 1rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .nav-link {
+        color: $pmf-admin-sidenav-link-color;
+        display: flex;
+        align-items: center;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        position: relative;
+
+        .pmf-admin-nav-link-icon {
+          color: $pmf-admin-sidenav-icon-color;
+          font-size: 0.9rem;
+        }
+
+        .pmf-admin-sidenav-collapse-arrow {
+          color: $pmf-admin-sidenav-icon-color;
+          display: inline-block;
+          margin-left: auto;
+          transition: transform 0.15s ease;
+        }
+
+        &:hover {
+          color: $pmf-admin-sidenav-link-active-color;
+        }
+
+        &.active {
+          color: $pmf-admin-sidenav-link-active-color;
+
+          .pmf-admin-nav-link-icon {
+            color: $pmf-admin-sidenav-link-active-color;
+          }
+        }
+
+        &.collapsed {
+          .pmf-admin-sidenav-collapse-arrow {
+            transform: rotate(-90deg);
+          }
+        }
+      }
+
+      .pmf-admin-sidenav-menu-nested {
+        margin-left: 1.5rem;
+        flex-direction: column;
+      }
+    }
+  }
+
+  .pmf-admin-sidenav-footer {
+    background-color: $pmf-admin-sidenav-footer-bg;
+    padding: 0.75rem;
+    flex-shrink: 0;
+  }
+}

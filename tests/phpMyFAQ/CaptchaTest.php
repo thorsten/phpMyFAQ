@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2021 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2021-03-14
  */
@@ -31,10 +31,10 @@ use PHPUnit\Framework\TestCase;
 class CaptchaTest extends TestCase
 {
     /** @var Captcha */
-    protected $captcha;
+    protected Captcha $captcha;
 
     /** @var Configuration */
-    protected $configuration;
+    protected Configuration $configuration;
 
     protected function setUp(): void
     {
@@ -57,7 +57,7 @@ class CaptchaTest extends TestCase
      * @testdox validate correctly the captcha code
      * @throws Exception
      */
-    public function testValidateCaptchaCode()
+    public function testValidateCaptchaCode(): void
     {
         $this->assertFalse($this->captcha->validateCaptchaCode(''));
     }
@@ -65,7 +65,7 @@ class CaptchaTest extends TestCase
     /**
      * @testdox render a HTML <img> tag with the captcha image correctly
      */
-    public function testRenderCaptchaImage()
+    public function testRenderCaptchaImage(): void
     {
         $expected = '<img id="captchaImage" src="test-me.php?action=foobar&amp;gen=img&amp;ck=1" ' .
             'height="40" width="165" alt="Chuck Norris has counted to infinity. Twice.">';
@@ -75,7 +75,7 @@ class CaptchaTest extends TestCase
     /**
      * @testdox return true if a user is logged in
      */
-    public function testSetUserIsLoggedIn()
+    public function testSetUserIsLoggedIn(): void
     {
         $this->assertFalse($this->captcha->isUserIsLoggedIn());
         $this->captcha->setUserIsLoggedIn(true);
@@ -85,16 +85,16 @@ class CaptchaTest extends TestCase
     /**
      * @testdox should set a session id and return the class
      */
-    public function testSetSessionId()
+    public function testSetSessionId(): void
     {
-        $captcha = $this->captcha->setSessionId(4711);
+        $captcha = $this->captcha->setSessionId('sid=4711');
         $this->assertInstanceOf('phpMyFAQ\Captcha', $captcha);
     }
 
     /**
      * @testdox should return true for validating the captcha code of a logged in user
      */
-    public function testCheckCaptchaCode()
+    public function testCheckCaptchaCode(): void
     {
         $this->captcha->setUserIsLoggedIn(true);
         $this->assertTrue($this->captcha->checkCaptchaCode('123456'));

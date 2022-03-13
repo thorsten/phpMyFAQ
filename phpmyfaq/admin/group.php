@@ -5,14 +5,14 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Charles Boin <c.boin@h-tube.com>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2005-12-15
  */
@@ -287,7 +287,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
       <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
         <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
           <div class="col-lg-3">
             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
@@ -295,7 +295,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label"
                  for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
           <div class="col-lg-3">
@@ -305,10 +305,10 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="group_auto_join"><?= $PMF_LANG['ad_group_autoJoin'] ?></label>
           <div class="col-lg-3">
-            <div class="checkbox">
+            <div class="form-check">
               <label>
                 <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
                        <?= ((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
@@ -317,7 +317,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <div class="offset-lg-2 col-lg-3">
             <button class="btn btn-info" type="reset" name="cancel">
                 <?= $PMF_LANG['ad_gen_cancel'] ?>
@@ -453,7 +453,7 @@ if ('list' === $groupAction) {
         <form action="?action=group&group_action=update_data" method="post">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
           <div class="card-body">
-            <div class="form-group row">
+            <div class="row">
               <label class="col-lg-3 col-form-label" for="update_group_name">
                   <?= $PMF_LANG['ad_group_name'] ?>
               </label>
@@ -462,7 +462,7 @@ if ('list' === $groupAction) {
                        tabindex="1" value="<?= (isset($groupName) ? $groupName : '') ?>">
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-lg-3 col-form-label" for="update_group_description">
                   <?= $PMF_LANG['ad_group_description'] ?>
               </label>
@@ -473,9 +473,9 @@ if ('list' === $groupAction) {
                             echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <div class="col-lg-offset-3 col-lg-9">
-                <div class="checkbox">
+                <div class="form-check">
                   <label>
                     <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
                            tabindex="3"<?php
@@ -506,7 +506,7 @@ if ('list' === $groupAction) {
             <i aria-hidden="true" class="fa fa-user-circle"></i> <?= $PMF_LANG['ad_group_membership'] ?>
           </h5>
           <div class="card-body">
-            <div class="form-group row">
+            <div class="row">
               <div class="text-center">
                 <span class="select_all">
                   <a class="btn btn-primary btn-sm"
@@ -523,14 +523,14 @@ if ('list' === $groupAction) {
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <select id="group_user_list" class="form-control" size="<?= $memberSelectSize ?>"
                       multiple>
                 <option value="0">...user list...</option>
               </select>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <div class="text-center">
                 <input class="btn btn-success pmf-add-member" type="button"
                        value="<?= $PMF_LANG['ad_group_addMember'] ?>">
@@ -546,7 +546,7 @@ if ('list' === $groupAction) {
           </ul>
 
           <div class="card-body">
-            <div class="form-group row">
+            <div class="row">
               <div class="text-center">
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
@@ -563,7 +563,7 @@ if ('list' === $groupAction) {
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <select id="group_member_list" name="group_members[]" class="form-control" multiple
                       size="<?= $memberSelectSize ?>">
                 <option value="0">...member list...</option>

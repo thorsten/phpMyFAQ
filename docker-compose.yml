@@ -26,7 +26,7 @@ services:
       - POSTGRES_USER=phpmyfaq
       - POSTGRES_PASSWORD=phpmyfaq
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
 
@@ -135,8 +135,8 @@ services:
     volumes:
       - ./volumes/esdata:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-      - 9300:9300
+      - '9200:9200'
+      - '9300:9300'
 
   openldap:
     image: osixia/openldap:1.5.0
@@ -185,6 +185,6 @@ services:
       PHPLDAPADMIN_LDAP_HOSTS: "openldap"
       PHPLDAPADMIN_HTTPS: "false"
     ports:
-      - 8088:80
+      - '8088:80'
     depends_on:
       - openldap

@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Lars Tiedemann <php@larstiedemann.de>
@@ -13,7 +13,7 @@
  * @author Sarah Hermann <sayh@gmx.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2005-12-15
  */
@@ -259,7 +259,7 @@ if (
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
               <?php if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addUserModal">
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>
               <?php endif ?>
@@ -290,19 +290,19 @@ if (
             $('#modal_user_id').val(data.user_id);
             // Append input fields
             $('#user_data_table').append(
-              '<div class="form-group row">' +
+              '<div class="row mb-2">' +
               '<label class="col-lg-4 col-form-label"><?= $PMF_LANG['ad_user_realname'] ?></label>' +
               '<div class="col-lg-8">' +
               '<input type="text" name="display_name" value="' + data.display_name + '" class="form-control" required>' +
               '</div>' +
               '</div>' +
-              '<div class="form-group row">' +
+              '<div class="row mb-2">' +
               '<label class="col-lg-4 col-form-label"><?= $PMF_LANG['ad_entry_email'] ?></label>' +
               '<div class="col-lg-8">' +
               '<input type="email" name="email" value="' + data.email + '" class="form-control" required>' +
               '</div>' +
               '</div>' +
-              '<div class="form-group row">' +
+              '<div class="row mb-2">' +
               '<div class="offset-lg-4 col-lg-8">' +
               '<div class="form-check">' +
               '<input class="form-check-input" type="checkbox" id="is_superadmin" name="is_superadmin">' +
@@ -310,9 +310,9 @@ if (
               '</div>' +
               '</div>' +
               '</div>' +
-              '<div class="form-group row">' +
+              '<div class="row mb-2">' +
               '<div class="offset-lg-4 col-lg-8">' +
-              '<a class="btn btn-danger pmf-admin-overwrite-password" data-toggle="modal" ' +
+              '<a class="btn btn-danger pmf-admin-overwrite-password" data-bs-toggle="modal" ' +
               '   href="#pmf-modal-user-password-overwrite"><?= $PMF_LANG['ad_user_overwrite_passwd'] ?></a>' +
               '</div>' +
               '</div>' +
@@ -328,7 +328,7 @@ if (
 
       <div id="user_message"><?= $message ?></div>
 
-      <div class="row">
+      <div class="row mb-2">
         <div class="col-lg-4">
           <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                 method="post" role="form" class="form_inline">
@@ -337,11 +337,11 @@ if (
                 <i aria-hidden="true" class="fa fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
               </h5>
               <div class="card-body">
-                <div class="input-group">
-                  <input type="text" id="user_list_autocomplete" name="user_list_search"
-                         class="form-control pmf-user-autocomplete" autocomplete="off"
-                         placeholder="<?= $PMF_LANG['ad_auth_user'] ?>">
-                </div>
+                  <div class="form-floating">
+                      <input type="text" class="form-control pmf-user-autocomplete" id="user_list_autocomplete"
+                             name="user_list_search" placeholder="<?= $PMF_LANG['ad_auth_user'] ?>" autocomplete="off">
+                      <label for="user_list_autocomplete"><?= $PMF_LANG['ad_auth_user'] ?></label>
+                  </div>
               </div>
             </div>
           </form>
@@ -356,12 +356,12 @@ if (
               <div class="card-body">
                 <input id="update_user_id" type="hidden" name="user_id" value="0">
                 <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession(); ?>">
-                <div class="form-group row">
+                <div class="row mb-2">
                   <label for="user_status_select" class="col-lg-4 col-form-label">
                       <?= $PMF_LANG['ad_user_status'] ?>
                   </label>
                   <div class="col-lg-8">
-                    <select id="user_status_select" class="form-control" name="user_status">
+                    <select id="user_status_select" class="form-select" name="user_status">
                       <option value="active"><?= $PMF_LANG['ad_user_active'] ?></option>
                       <option value="blocked"><?= $PMF_LANG['ad_user_blocked'] ?></option>
                       <option value="protected"><?= $PMF_LANG['ad_user_protected'] ?></option>
@@ -370,16 +370,13 @@ if (
                 </div>
                 <div id="user_data_table"></div>
               </div>
-              <div class="card-footer">
-                <div class="card-button text-right">
-                  <button class="btn btn-success" type="submit">
-                    <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_gen_save'] ?>
-                  </button>
-                </div>
+              <div class="card-footer text-end">
+                  <button class="btn btn-success" type="submit"><?= $PMF_LANG['ad_gen_save'] ?></button>
               </div>
             </form>
           </div>
         </div>
+
         <div class="col-lg-4" id="userRights">
           <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post"
                 accept-charset="utf-8">
@@ -398,7 +395,7 @@ if (
                     <?= $PMF_LANG['ad_user_uncheckall'] ?>
                   </a>
                 </div>
-                  <?php foreach ($user->perm->getAllRightsData() as $right) : ?>
+                  <?php foreach ($user->perm->getAllRightsData() as $right): ?>
                     <div class="form-check">
                       <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
                              name="user_rights[]" value="<?= $right['right_id'] ?>"
@@ -441,7 +438,7 @@ if (
                 <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
                 <input type="hidden" name="user_id" id="modal_user_id" value="<?= $userId ?>">
 
-                <div class="form-group row">
+                <div class="row mb-2">
                   <label class="col-lg-4 col-form-label" for="npass">
                       <?= $PMF_LANG['ad_passwd_new'] ?>
                   </label>
@@ -450,7 +447,7 @@ if (
                   </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="row mb-2">
                   <label class="col-lg-4 col-form-label" for="bpass">
                       <?= $PMF_LANG['ad_passwd_con'] ?>
                   </label>
@@ -508,7 +505,7 @@ if (
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
               <?php if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addUserModal">
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                   <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
                 </button>
               <?php endif ?>
@@ -521,7 +518,7 @@ if (
 
       <div id="pmf-user-message"><?= $message ?></div>
 
-      <table class="table table-striped">
+      <table class="table table-striped align-middle">
         <thead class="thead-dark">
         <tr>
           <th><?= $PMF_LANG['ad_entry_id'] ?></th>
@@ -587,14 +584,14 @@ if (
               </a>
             </td>
             <td>
-              <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>" class="btn btn-info">
+              <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>" class="btn btn-sm btn-info">
                 <i class="fa fa-pencil"></i> <?= $PMF_LANG['ad_user_edit'] ?>
               </a>
             </td>
             <td>
                 <?php if ($user->getStatus() === 'blocked') : ?>
                   <a onclick="activateUser(this); return false;"
-                     href="#" class="btn btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
+                     href="#" class="btn btn-sm btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
                      data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                      data-user-id="<?= $user->getUserData('user_id') ?>">
                       <?= $PMF_LANG['ad_news_set_active'] ?>
@@ -604,7 +601,7 @@ if (
             </td>
             <td>
                 <?php if ($user->getStatus() !== 'protected') : ?>
-                  <a href="#" onclick="deleteUser(this); return false;" class="btn btn-danger"
+                  <a href="#" onclick="deleteUser(this); return false;" class="btn btn-sm btn-danger"
                      data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                      data-user-id="<?= $user->getUserData('user_id') ?>">
                     <i class="fa fa-trash"></i> <?= $PMF_LANG['ad_user_delete'] ?>
@@ -631,9 +628,7 @@ if (
           <h5 class="modal-title" id="addUserModalLabel">
             <i aria-hidden="true" class="fa fa-user-plus"></i> <?= $PMF_LANG['ad_adus_adduser'] ?>
           </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form action="#" method="post" role="form" id="pmf-add-user-form" class="needs-validation" autocomplete="off"
@@ -644,14 +639,14 @@ if (
 
             <div class="alert alert-danger d-none" id="pmf-add-user-error-message"></div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-4 col-form-label" for="add_user_name"><?= $PMF_LANG['ad_adus_name'] ?></label>
               <div class="col-lg-8">
                 <input type="text" name="add_user_name" id="add_user_name" required tabindex="1" class="form-control">
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-4 col-form-label"
                      for="add_user_realname"><?= $PMF_LANG['ad_user_realname'] ?></label>
               <div class="col-lg-8">
@@ -660,14 +655,14 @@ if (
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <label class="col-lg-4 col-form-label" for="add_user_email"><?= $PMF_LANG['ad_entry_email'] ?></label>
               <div class="col-lg-8">
                 <input type="email" name="user_email" id="add_user_email" required tabindex="3" class="form-control">
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <div class="col-lg-4"></div>
               <div class="col-lg-8">
                 <div class="form-check">
@@ -681,7 +676,7 @@ if (
             </div>
 
             <div id="add_user_show_password_inputs">
-              <div class="form-group row">
+              <div class="row mb-2">
                 <label class="col-lg-4 col-form-label"
                        for="add_user_password"><?= $PMF_LANG['ad_adus_password'] ?></label>
                 <div class="col-lg-8">
@@ -690,7 +685,7 @@ if (
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="row mb-2">
                 <label class="col-lg-4 col-form-label"
                        for="add_user_password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
                 <div class="col-lg-8">
@@ -700,7 +695,7 @@ if (
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row mb-2">
               <div class="col-lg-4"></div>
               <div class="col-lg-8">
                 <div class="form-check">
@@ -714,14 +709,10 @@ if (
 
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-              <?= $PMF_LANG['ad_gen_cancel'] ?>
-          </button>
-          <button type="button" class="btn btn-primary" id="pmf-add-user-action">
-              <?= $PMF_LANG['ad_gen_save'] ?>
-          </button>
-        </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $PMF_LANG['ad_gen_cancel'] ?></button>
+              <button type="button" class="btn btn-primary" id="pmf-add-user-action"><?= $PMF_LANG['ad_gen_save'] ?></button>
+          </div>
       </div>
     </div>
   </div>

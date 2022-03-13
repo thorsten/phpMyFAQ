@@ -7,13 +7,13 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Gustavo Solt <gustavo.solt@mayflower.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2011-01-12
  */
@@ -50,7 +50,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     $useUrl = Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
     $useVisits = Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
     ?>
-                <table class="table table-striped">
+                <table class="table table-striped align-middle">
                     <thead>
                         <tr>
     <?php
@@ -144,7 +144,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                     <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?= $useLastModified ?>">
                     <input type="hidden" name="report_url" id="report_url" value="<?= $useUrl ?>"></td>
                     <input type="hidden" name="report_visits" id="report_visits" value="<?= $useVisits ?>"></td>
-                    <div class="form-group row">
+                    <div class="row">
                         <button class="btn btn-primary" type="submit">
                             <?= $PMF_LANG['ad_stat_report_make_csv'] ?>
                         </button>

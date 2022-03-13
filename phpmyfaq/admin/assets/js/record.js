@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -13,7 +13,9 @@
  * @since 2013-11-17
  */
 
-$(function () {
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
   // Show help for keywords and users
   $('#keywords').on('focus', () => {
     showHelp('keywords');

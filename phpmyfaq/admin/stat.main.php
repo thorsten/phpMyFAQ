@@ -5,13 +5,13 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-02-24
  */
@@ -108,7 +108,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
             ?>
 
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
           <tr>
             <td><?= $PMF_LANG['ad_stat_days'] ?>:</td>
             <td>
@@ -196,7 +196,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <td><?= $PMF_LANG['ad_stat_browse'] ?>:</td>
             <td class="col-lg-2">
               <form action="?action=sessionbrowse" method="post" accept-charset="utf-8" class="form-inline">
-                <div class="form-group mr-2">
+                <div class="mr-2">
                   <label for="day" class="d-none"><?= $PMF_LANG['ad_stat_browse'] ?></label>
                   <select name="day" id="day" class="form-control">
                       <?php
@@ -225,7 +225,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
             <legend><?= $PMF_LANG['ad_stat_management'] ?></legend>
 
-            <div class="form-group mr-2">
+            <div class="mr-2">
               <label class="col-form-label" for="month"><?= $PMF_LANG['ad_stat_choose'] ?>:</label>
               <select name="month" id="month" class="form-control">
                     <?php

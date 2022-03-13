@@ -46,12 +46,11 @@ be acquired from the admin configuration.
 
 ### FAQ related APIs
 
-- [Add FAQ](api-docs/faq/post.md): `GET /api/v2.1/faq`
+- [Add FAQ](api-docs/faq/post.md): `POST /api/v2.1/faq`
+- [Add question](api-docs/question/post.md): `POST /api/v2.2/question` (in development for API v2.2)
 
 ### Login/Registration related APIs
 
 - [Register](api-docs/register.md): `POST /api/v2.1/register`
-
-© 2001-2022 phpMyFAQ Team
 
 Copyright © 2001-2022 Thorsten Rinne and the phpMyFAQ Team

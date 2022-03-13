@@ -5,13 +5,13 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2006-09-10
  */
@@ -77,14 +77,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-lg-2 col-form-label" for="name"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
                 <div class="col-lg-4">
                   <input type="text" name="name" class="form-control" id="name">
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-lg-2 col-form-label" for="catlang"><?= $PMF_LANG['ad_categ_lang'] ?>:</label>
                 <div class="col-lg-4">
                   <select name="catlang" id="catlang" class="form-control">
@@ -93,14 +93,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
                 <div class="col-lg-4">
                   <textarea name="description" rows="3" class="form-control"></textarea>
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_owner'] ?>:</label>
                 <div class="col-lg-4">
                   <select name="user_id" class="form-control">
@@ -109,7 +109,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="row">
                 <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_transalready'] ?></label>
                 <div class="col-lg-4">
                   <ul class="list-unstyled">
@@ -122,7 +122,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 </div>
               </div>
 
-              <div class="form-group row">
+              <div class="row">
                 <div class="offset-lg-2 col-lg-4">
                   <button class="btn btn-primary" type="submit" name="submit">
                       <?= $PMF_LANG['ad_categ_translatecateg'] ?>

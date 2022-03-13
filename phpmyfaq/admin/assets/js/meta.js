@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ' <a href="#" id="delete-meta-' +
               data.added +
               '" class="btn btn-danger pmf-meta-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
-              ' <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#codeModal"' +
+              ' <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#codeModal"' +
               ' data-code-snippet="' +
               escape(pageId) +
               '">' +

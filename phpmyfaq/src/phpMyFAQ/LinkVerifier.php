@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
@@ -15,7 +15,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2022 NetJapan, Inc. and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-08-01
  */
@@ -323,7 +323,7 @@ class LinkVerifier
 
         $failreasons = $inforeasons = [];
         $output = '    <h3>' . $PMF_LANG['ad_linkcheck_checkResult'] . "</h3>\n";
-        $output .= '    <table class="table">' . "\n";
+        $output .= '    <table class="table align-middle">' . "\n";
         foreach ($result as $type => $_value) {
             $output .= '        <tr><td><strong>' . Strings::htmlspecialchars($type) . "</strong></td></tr>\n";
             foreach ($_value as $value) {

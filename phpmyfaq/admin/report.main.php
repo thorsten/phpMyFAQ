@@ -7,13 +7,13 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Gustavo Solt <gustavo.solt@mayflower.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2011-01-12
  */
@@ -38,7 +38,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             <form action="?action=reportview" method="post" accept-charset="utf-8">
                 <h4><?= $PMF_LANG['ad_stat_report_fields'] ?></h4>
 
-                <div class="form-group row">
+                <div class="row">
                     <label class="checkbox" for="report_category">
                         <input type="checkbox" name="report_category" id="report_category" checked value="1">
                         <?= $PMF_LANG['ad_stat_report_category'] ?>
@@ -89,7 +89,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                     </label>
                 </div>
 
-                <div class="form-group row">
+                <div class="row">
                     <button class="btn btn-primary" type="submit">
                         <?= $PMF_LANG['ad_stat_report_make_report'] ?>
                     </button>

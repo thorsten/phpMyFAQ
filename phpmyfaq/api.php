@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2009-09-03
  */
@@ -436,6 +436,44 @@ switch ($action) {
             ];
         }
 
+        break;
+
+    case 'question':
+        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
+            $http->setStatus(401);
+            $result = [
+                'stored' => false,
+                'error' => 'X_PMF_Token not valid.'
+            ];
+            break;
+        }
+
+        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW);
+        $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
+
+        if ($faqConfig->get('records.enableVisibilityQuestions')) {
+            $visibility = 'Y';
+        } else {
+            $visibility = 'N';
+        }
+
+        $questionData = [
+            'username' => $author,
+            'email' => $email,
+            'category_id' => $categoryId,
+            'question' => $question,
+            'is_visible' => $visibility
+        ];
+
+        $questionObject = new Question($this->config);
+        $questionObject->addQuestion($questionData);
+
+        $result = [
+            'stored' => true
+        ];
         break;
 }
 

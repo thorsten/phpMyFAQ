@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-03-02
  */
@@ -34,14 +34,14 @@ class Sqlite3 implements DatabaseDriver
      *
      * @var array
      */
-    public $tableNames = [];
+    public array $tableNames = [];
 
     /**
      * The connection object.
      *
      * @var SQLite3
      */
-    private $conn = false;
+    private \Sqlite3|bool $conn = false;
 
     /**
      * The query log string.
@@ -50,12 +50,12 @@ class Sqlite3 implements DatabaseDriver
      *
      * @see query()
      */
-    private $sqllog = '';
+    private string $sqllog = '';
 
     /** @var string */
     private const ERROR_MESSAGE =
         'Do not call numRows() after you\'ve fetched one or more result records, because ' .
-        'phpMyFAQ\Database\Sqlite3::numRows() has to reset the resultset at its end.';
+        'phpMyFAQ\Database\Sqlite3::numRows() has to reset the results at its end.';
 
     /**
      * Connects to the database.
@@ -95,8 +95,7 @@ class Sqlite3 implements DatabaseDriver
      * Fetch a result row as an object.
      *
      * @param mixed $result
-     *
-     * @return object or NULL if there are no more results
+     * @return object|null or NULL if there are no more results
      */
     public function fetchObject($result): ?object
     {
@@ -112,8 +111,7 @@ class Sqlite3 implements DatabaseDriver
      * Fetch a result row as an array.
      *
      * @param SQLite3Result $result
-     *
-     * @return array
+     * @return array|null
      */
     public function fetchArray($result): ?array
     {
@@ -138,8 +136,7 @@ class Sqlite3 implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param resource $result Resultset
-     *
-     * @return array of stdClass
+     * @return array|null of stdClass
      * @throws Exception
      */
     public function fetchAll($result): ?array
@@ -210,7 +207,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return mixed $result
      */
-    public function query(string $query, int $offset = 0, int $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
         if (DEBUG) {
             $this->sqllog .= Utils::debug($query);
@@ -233,10 +230,9 @@ class Sqlite3 implements DatabaseDriver
      * Fetch a result row as an associate array.
      *
      * @param SQLite3Result $result
-     *
      * @return array
      */
-    public function fetchAssoc($result): array
+    public function fetchAssoc(SQLite3Result $result): array
     {
         $result->fetchedByPMF = true;
 
@@ -343,7 +339,7 @@ class Sqlite3 implements DatabaseDriver
     }
 
     /**
-     * Returns the libary version string.
+     * Returns the library version string.
      *
      * @return string
      */
@@ -353,7 +349,7 @@ class Sqlite3 implements DatabaseDriver
     }
 
     /**
-     * Returns the libary version string.
+     * Returns the library version string.
      *
      * @return string
      */

@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne
@@ -13,9 +13,7 @@
  * @since 2017-08-02
  */
 
-/*global document: false, $: false, tinyMCE: false */
-
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
   if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
     tinyMCE.init({
@@ -23,7 +21,7 @@ $(document).ready(function () {
       mode: 'exact',
       language: 'en',
       selector: 'textarea#answer',
-      theme: 'modern',
+      theme: 'silver',
       plugins: [
         'advlist anchor autolink lists link image imagetools charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code codesample fullscreen colorpicker help',

@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-01-28
  */
@@ -20,6 +20,7 @@ namespace phpMyFAQ;
 /**
  * Class Filter
  *
+ * @testdox Filter should
  * @package phpMyFAQ
  */
 class Filter
@@ -27,15 +28,24 @@ class Filter
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int    $type Filter type
-     * @param string $variableName Variable name
-     * @param int    $filter Filter
-     * @param mixed  $default Default value
+     * @param int        $type Filter type
+     * @param string     $variableName Variable name
+     * @param int        $filter Filter
+     * @param mixed|null $default Default value
      * @return mixed
      */
-    public static function filterInput(int $type, string $variableName, int $filter, $default = null)
+    public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
         $return = filter_input($type, $variableName, $filter);
+
+        if ($filter === FILTER_UNSAFE_RAW) {
+            $return = filter_input(
+                $type,
+                $variableName,
+                FILTER_CALLBACK,
+                ['options' => [new Filter(), 'filterSanitizeString']]
+            );
+        }
 
         return (is_null($return) || $return === false) ? $default : $return;
     }
@@ -45,9 +55,9 @@ class Filter
      *
      * @param int   $type Filter type
      * @param array $definition Definition
-     * @return array|false|null
+     * @return array|bool|null
      */
-    public static function filterInputArray(int $type, array $definition)
+    public static function filterInputArray(int $type, array $definition): array|bool|null
     {
         return filter_input_array($type, $definition);
     }
@@ -55,15 +65,22 @@ class Filter
     /**
      * Static wrapper method for filter_var().
      *
-     * @param mixed $variable Variable
-     * @param int $filter Filter
-     * @param mixed $default Default value
-     *
+     * @param mixed      $variable Variable
+     * @param int        $filter Filter
+     * @param mixed|null $default Default value
      * @return mixed
      */
-    public static function filterVar($variable, int $filter, $default = null)
+    public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
         $return = filter_var($variable, $filter);
+
+        if ($filter === FILTER_UNSAFE_RAW) {
+            $return = filter_var(
+                $variable,
+                FILTER_CALLBACK,
+                ['options' => [new Filter(), 'filterSanitizeString']]
+            );
+        }
 
         return ($return === false) ? $default : $return;
     }
@@ -89,6 +106,18 @@ class Filter
         }
 
         return http_build_query($cleanUrlData);
+    }
+
+    /**
+     * This method is a polyfill for FILTER_SANITIZE_STRING, deprecated since PHP 8.1.
+     * @param string $string
+     * @return string
+     */
+    public function filterSanitizeString(string $string): string
+    {
+        $string = htmlspecialchars($string);
+        $string = preg_replace('/\x00|<[^>]*>?/', '', $string);
+        return str_replace(["'", '"'], ['&#39;', '&#34;'], $string);
     }
 
     /**

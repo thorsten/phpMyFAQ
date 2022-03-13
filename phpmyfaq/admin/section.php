@@ -4,13 +4,13 @@
  * Displays the section management frontend.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Timo Wolf <amna.wolf@gmail.com>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-09-20
  */
@@ -241,7 +241,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
       <form name="section_create" action="?action=section&amp;section_action=addsave" method="post">
         <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>
           <div class="col-lg-3">
             <input type="text" name="section_name" id="section_name" autofocus class="form-control"
@@ -249,7 +249,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <label class="col-lg-2 col-form-label"
                  for="section_description"><?= $PMF_LANG['ad_section_description'] ?></label>
           <div class="col-lg-3">
@@ -259,7 +259,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
           </div>
         </div>
 
-        <div class="form-group row">
+        <div class="row">
           <div class="offset-lg-2 col-lg-3">
             <button class="btn btn-info" type="reset" name="cancel">
                 <?= $PMF_LANG['ad_gen_cancel'] ?>
@@ -329,7 +329,7 @@ if ('list' === $sectionAction) {
         <form action="?action=section&section_action=update_data" method="post">
           <input id="update_section_id" type="hidden" name="section_id" value="0">
           <div class="card-body">
-            <div class="form-group row">
+            <div class="row">
               <label class="col-lg-3 col-form-label" for="update_section_name">
                   <?= $PMF_LANG['ad_section_name'] ?>
               </label>
@@ -338,7 +338,7 @@ if ('list' === $sectionAction) {
                        tabindex="1" value="<?= (isset($sectionName) ? $sectionName : '') ?>">
               </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
               <label class="col-lg-3 col-form-label" for="update_section_description">
                   <?= $PMF_LANG['ad_section_description'] ?>
               </label>
@@ -369,7 +369,7 @@ if ('list' === $sectionAction) {
             <i class="fa fa-object-group" aria-hidden="true"></i> <?= $PMF_LANG['ad_section_membership'] ?>
           </h5>
           <div class="card-body">
-            <div class="form-group row">
+            <div class="row">
               <div class="text-right">
                 <span class="select_all">
                   <a class="btn btn-primary btn-sm"
@@ -386,14 +386,14 @@ if ('list' === $sectionAction) {
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <select id="group_list_select" class="form-control" size="<?= $memberSelectSize ?>"
                       multiple>
                 <option value="0">...group list...</option>
               </select>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <div class="text-center">
                 <input class="btn btn-success pmf-add-section-member" type="button"
                        value="<?= $PMF_LANG['ad_section_addMember'] ?>">
@@ -408,7 +408,7 @@ if ('list' === $sectionAction) {
           </ul>
 
           <div class="card-body">
-            <div class="form-group row">
+            <div class="row">
               <div class="float-right">
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
@@ -425,7 +425,7 @@ if ('list' === $sectionAction) {
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <select id="section_member_list" name="section_members[]" class="form-control" multiple
                       size="<?= $memberSelectSize ?>">
                 <option value="0">...member list...</option>

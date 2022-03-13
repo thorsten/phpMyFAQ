@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2003-12-20
  */
@@ -331,12 +331,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                    // Category is shown on start page
-                if ((int)$cat['show_home'] === 1) {
+                if (isset($cat['show_home']) && (int)$cat['show_home'] === 1) {
                     $categoryName .= ' <i class="fa fa-star" aria-hidden="true"></i>';
                 }
 
                 // Category is inactive
-                if ((int)$cat['active'] === 0) {
+                if (isset($cat['active']) && (int)$cat['active'] === 0) {
                     $categoryName .= ' <i class="fa fa-eye-slash" aria-hidden="true"></i>';
                 }
 

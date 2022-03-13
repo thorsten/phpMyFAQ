@@ -1,9 +1,9 @@
 /**
- * TinyMCE v4 plugin to fetch and insert internal links via Ajax call
+ * TinyMCE v5 plugin to fetch and insert internal links via Ajax call
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -15,52 +15,76 @@
 
 /*global tinymce:false, $:false */
 
-tinymce.PluginManager.add('phpmyfaq', function (editor) {
+tinymce.PluginManager.add('phpmyfaq', function (editor, url) {
   'use strict';
 
-  editor.addButton('phpmyfaq', {
-    image: 'images/phpmyfaq.gif',
-    onclick: () => {
-      editor.windowManager.open(
+  const openDialog = function (csrfToken) {
+    return editor.windowManager.open({
+      title: 'phpMyFAQ TinyMCE plugin',
+      body: {
+        type: 'panel',
+        items: [
+          { type: 'input', name: 'search', label: 'Search', id: 'pmf-internal-links' },
+          { type: 'htmlpanel', html: '<div id="pmf-faq-list"></div>' },
+        ],
+      },
+      buttons: [
         {
-          title: 'Internal links',
-          width: 480,
-          height: 320,
-          body: [
-            { type: 'textbox', name: 'search', label: 'Search', id: 'pmf-internal-links' },
-            { type: 'container', name: 'pmf-faq-list', id: 'pmf-faq-list', minHeight: 240 },
-          ],
-          onkeyup: () => {
-            const search = $('#pmf-internal-links').val();
-            const url = location.protocol + '//' + location.host + location.pathname;
-            const args = top.tinymce.activeEditor.windowManager.getParams();
-            const list = $('#pmf-faq-list');
-            if (search.length > 0) {
-              $.ajax({
-                type: 'POST',
-                url: url + 'index.php?action=ajax&ajax=records&ajaxaction=search_records',
-                data: 'search=' + search + '&csrf=' + args.csrf,
-                success: function (searchresults) {
-                  list.empty();
-                  if (searchresults.length > 0) {
-                    list.append(searchresults);
-                  }
-                },
-              });
-            }
-          },
-          onsubmit: () => {
-            const selected = $('input:radio[name=faqURL]:checked');
-            const url = selected.val();
-            const title = selected.parent().text();
-            const anchor = '<a class="pmf-internal-link" href="' + url + '">' + title + '</a>';
-            editor.insertContent(anchor);
-          },
+          type: 'cancel',
+          text: 'Close',
         },
         {
-          csrf: $('#csrf').val(),
+          type: 'submit',
+          text: 'Save',
+          primary: true,
+        },
+      ],
+      onChange: (api) => {
+        const data = api.getData();
+        const url = location.protocol + '//' + location.host + location.pathname;
+        const list = $('#pmf-faq-list');
+
+        if (data.search.length > 0) {
+          $.ajax({
+            type: 'POST',
+            url: url + '?action=ajax&ajax=records&ajaxaction=search_records',
+            data: 'search=' + data.search + '&csrf=' + csrfToken,
+            success: (searchResults) => {
+              list.empty();
+              if (searchResults.length > 0) {
+                list.append(searchResults);
+              }
+            },
+          });
         }
-      );
+      },
+      onSubmit: (api) => {
+        const selected = $('input:radio[name=faqURL]:checked');
+        const url = selected.val();
+        const title = selected.parent().text();
+        const anchor = '<a class="pmf-internal-link" href="' + url + '">' + title + '</a>';
+        editor.insertContent(anchor);
+        api.close();
+      },
+    });
+  };
+
+  // Add button to editor
+  editor.ui.registry.addButton('phpmyfaq', {
+    text: 'phpMyFAQ',
+    //image: 'images/phpmyfaq.gif',
+    onAction: () => {
+      const csrfToken = document.getElementById('csrf').value;
+      openDialog(csrfToken);
     },
   });
+
+  return {
+    getMetadata: function () {
+      return {
+        name: 'phpMyFAQ TinyMCE plugin',
+        url: 'https://www.phpmyfaq.de/documentation',
+      };
+    },
+  };
 });

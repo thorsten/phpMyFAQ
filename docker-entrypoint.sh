@@ -67,7 +67,7 @@ if [ -f "$APACHE_ENVVARS" ]; then
   fi
 fi
 
-#=== Configure php ===
+#=== Configure php.ini ===
 {
   echo "# php settings:"
   echo "register_globals = Off"

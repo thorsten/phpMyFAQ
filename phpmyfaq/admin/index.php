@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -14,7 +14,7 @@
  * @author Minoru TODA <todam@netjapan.co.jp>
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2002-09-16
  */
@@ -123,7 +123,7 @@ if (is_null($action)) {
 //
 // Get CSRF Token
 //
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfChecked = false;
 } else {
@@ -235,77 +235,67 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
             switch ($ajax) {
                 // Attachments
                 case 'att':
-                    require 'ajax.attachment.php';
+                    require 'api/attachment.php';
                     break;
                 // Dashboard
                 case 'dashboard':
-                    require 'ajax.dashboard.php';
+                    require 'api/dashboard.php';
                     break;
                 // Link verification
                 case 'verifyURL':
-                    require 'ajax.verifyurl.php';
+                    require 'api/verify-url.php';
                     break;
                 case 'onDemandURL':
-                    require 'ajax.ondemandurl.php';
+                    require 'api/ondemand-url.php';
                     break;
                 // Categories
                 case 'categories':
-                    require 'ajax.category.php';
+                    require 'api/category.php';
                     break;
                 // Configuration management
-                case 'config_list':
-                    require 'ajax.config_list.php';
+                case 'configuration-list':
+                    require 'api/configuration-list.php';
                     break;
                 case 'config':
-                    require 'ajax.config.php';
+                    require 'api/configuration.php';
                     break;
                 case 'elasticsearch':
-                    require 'ajax.elasticsearch.php';
+                    require 'api/elasticsearch.php';
                     break;
                 // Tags management
                 case 'tags':
-                    require 'ajax.tags.php';
+                    require 'api/tags.php';
                     break;
                 // Comments
                 case 'comment':
-                    require 'ajax.comment.php';
+                    require 'api/comment.php';
                     break;
                 // Records
                 case 'records':
-                    require 'ajax.records.php';
-                    break;
-                case 'recordSave':
-                    require 'record.save.php';
-                    break;
-                case 'recordAdd':
-                    require 'record.add.php';
+                    require 'api/faqs.php';
                     break;
                 case 'markdown':
-                    require 'ajax.markdown.php';
+                    require 'api/markdown.php';
                     break;
                 // Search
                 case 'search':
-                    require 'ajax.search.php';
+                    require 'api/search.php';
                     break;
                 // Users
                 case 'user':
-                    require 'ajax.user.php';
+                    require 'api/user.php';
                     break;
                 // Groups
                 case 'group':
-                    require 'ajax.group.php';
+                    require 'api/group.php';
                     break;
                 // Sections
                 case 'section':
-                    require 'ajax.section.php';
-                    break;
-                // Interface translation
-                case 'trans':
-                    require 'ajax.trans.php';
+                    require 'api/section.php';
                     break;
                 // Image upload
                 case 'image':
-                    require 'ajax.image.php';
+                    require 'api/image.php';
                     break;
             }
             exit();
@@ -478,11 +468,11 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'system':
                 require 'system.php';
                 break;
-            case 'updateinstance':
+            case 'update-instance':
             case 'instances':
                 require 'instances.php';
                 break;
-            case 'editinstance':
+            case 'edit-instance':
                 require 'instances.edit.php';
                 break;
             case 'stopwordsconfig':
@@ -526,7 +516,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
     require 'noperm.php';
 // User is NOT authenticated
 } else {
-    require 'loginform.php';
+    require 'login.php';
 }
 
 require 'footer.php';

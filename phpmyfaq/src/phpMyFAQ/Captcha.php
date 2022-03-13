@@ -5,14 +5,14 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2006-02-04
  */
@@ -20,6 +20,7 @@
 namespace phpMyFAQ;
 
 use Exception;
+use GdImage;
 
 /**
  * Class Captcha
@@ -28,45 +29,26 @@ use Exception;
  */
 class Captcha
 {
-    /**
-     * Length of the captcha code.
-     *
-     * @var int
-     */
-    public $captchaLength = 6;
+    /** @var int */
+    public int $captchaLength = 6;
 
-    /**
-     * @var Configuration
-     */
-    private $config;
+    /** @var Configuration */
+    private Configuration $config;
 
-    /**
-     * The phpMyFAQ session id.
-     *
-     * @var string
-     */
-    private $sids;
+    /** @var string */
+    private string $sessionId;
 
     /** @var bool */
-    private $userIsLoggedIn = false;
+    private bool $userIsLoggedIn = false;
 
-    /**
-     * Array of fonts.
-     * @var array
-     */
-    private $fonts;
+    /** @var string[] */
+    private array $fonts;
 
-    /**
-     * The captcha code.
-     * @var string
-     */
-    private $code = '';
+    /** @var string */
+    private string $code = '';
 
-    /**
-     * Array of characters.
-     * @var array
-     */
-    private $letters = [
+    /** @var string[] */
+    private array $letters = [
         '1',
         '2',
         '3',
@@ -104,38 +86,29 @@ class Captcha
         'Z',
     ];
 
-    /**
-     * Width of the image.
-     * @var int
-     */
-    private $width = 165;
-
-    /**
-     * Height of the image.
-     * @var int
-     */
-    private $height = 40;
-
-    /**
-     * JPEG quality in percents.
-     * @var int
-     */
-    private $quality = 60;
-
-    /** @var array */
-    private $backgroundColor;
-
-    /** @var resource */
-    private $img;
-
-    /** @var string */
-    private $userAgent;
+    /** @var int */
+    private int $width = 165;
 
     /** @var int */
-    private $timestamp;
+    private int $height = 40;
+
+    /** @var int */
+    private int $quality = 60;
+
+    /** @var int[] */
+    private array $backgroundColor;
+
+    /** @var GdImage */
+    private GdImage $img;
 
     /** @var string */
-    private $ip;
+    private mixed $userAgent;
+
+    /** @var int */
+    private mixed $timestamp;
+
+    /** @var string */
+    private mixed $ip;
 
     /**
      * Constructor.
@@ -154,7 +127,7 @@ class Captcha
     /**
      * Get Fonts.
      *
-     * @return array
+     * @return string[]
      */
     private function getFonts(): array
     {
@@ -164,12 +137,12 @@ class Captcha
     /**
      * Setter for session id.
      *
-     * @param string $sid session id
+     * @param string $sessionId
      * @return Captcha
      */
-    public function setSessionId(string $sid): Captcha
+    public function setSessionId(string $sessionId): Captcha
     {
-        $this->sids = $sid;
+        $this->sessionId = $sessionId;
         return $this;
     }
 
@@ -203,7 +176,7 @@ class Captcha
         return sprintf(
             '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s">',
             $_SERVER['SCRIPT_NAME'],
-            $this->sids,
+            isset($this->sessionId) ? $this->sessionId : '',
             $action,
             $_SERVER['REQUEST_TIME'],
             $this->height,
@@ -217,7 +190,7 @@ class Captcha
      *
      * @throws Exception
      */
-    public function drawCaptchaImage()
+    public function drawCaptchaImage(): void
     {
         $this->createBackground();
         $this->drawLines();
@@ -236,10 +209,10 @@ class Captcha
     /**
      * Create the background.
      *
-     * @return resource
+     * @return void
      * @throws Exception
      */
-    private function createBackground()
+    private function createBackground(): void
     {
         $this->img = imagecreate($this->width, $this->height);
         $this->backgroundColor['r'] = random_int(222, 255);
@@ -254,17 +227,15 @@ class Captcha
         );
 
         imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorAllocate);
-
-        return $this->img;
     }
 
     /**
      * Draw random lines.
      *
-     * @return resource
+     * @return void
      * @throws Exception
      */
-    private function drawLines()
+    private function drawLines(): void
     {
         $color1 = random_int(150, 185);
         $color2 = random_int(185, 225);
@@ -290,8 +261,6 @@ class Captcha
             $w1 += random_int(-4, 4);
             $w2 += random_int(-4, 4);
         }
-
-        return $this->img;
     }
 
     /**
@@ -426,10 +395,10 @@ class Captcha
     /**
      * Draw the Text.
      *
-     * @return resource
+     * @return void
      * @throws Exception
      */
-    private function drawText()
+    private function drawText(): void
     {
         $codeLength = Strings::strlen($this->code);
         $numFonts = count($this->fonts);
@@ -470,9 +439,9 @@ class Captcha
             // Add the letter
             if (function_exists('imagettftext') && ($numFonts > 0)) {
                 $font = $this->fonts[random_int(0, $numFonts - 1)];
-                imagettftext($this->img, $size, $rotation, $x + 2, $y, $colorOne, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $colorOne, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x, $y - 2, $colorTwo, $font, $letter);
+                imagettftext($this->img, $size, $rotation, (int)$x + 2, $y, $colorOne, $font, $letter);
+                imagettftext($this->img, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $font, $letter);
+                imagettftext($this->img, $size, $rotation, (int)$x, $y - 2, $colorTwo, $font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
@@ -483,8 +452,6 @@ class Captcha
                 imagestring($this->img, $size, $x + ($s * $p), $y, $letter, $colorOne);
             }
         }
-
-        return $this->img;
     }
 
     /**
@@ -560,9 +527,9 @@ class Captcha
     /**
      * Remove the Captcha.
      *
-     * @param string $captchaCode Captcha code
+     * @param string|null $captchaCode Captcha code
      */
-    private function removeCaptcha($captchaCode = null)
+    private function removeCaptcha(string $captchaCode = null): void
     {
         if ($captchaCode == null) {
             $captchaCode = $this->code;

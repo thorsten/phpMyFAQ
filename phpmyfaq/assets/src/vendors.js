@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne
@@ -17,14 +17,14 @@ import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 
-require('popper.js');
-require('bootstrap');
+import 'bootstrap';
+
 require('bootstrap-3-typeahead');
 require('bootstrap-datepicker');
 window.bsCustomFileInput = require('bs-custom-file-input');
 
 require('cookieconsent');
-require('handlebars');
+//require('handlebars');
 
 require('jquery-ui');
 require('jquery-ui/ui/widgets/sortable');

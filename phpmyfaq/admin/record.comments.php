@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2007-03-04
  */
@@ -54,7 +54,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
       <form id="faqCommentSelection" name="faqCommentSelection" method="post" accept-charset="utf-8">
         <input type="hidden" name="ajax" value="comment"/>
         <input type="hidden" name="ajaxaction" value="delete"/>
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
             <?php
             $lastCommentId = 0;
             foreach ($faqComments as $faqComment) {
@@ -112,7 +112,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
       <form id="newsCommentSelection" name="newsCommentSelection" method="post" accept-charset="utf-8">
         <input type="hidden" name="ajax" value="comment"/>
         <input type="hidden" name="ajaxaction" value="delete"/>
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
             <?php
             foreach ($newsComments as $newsComment) { ?>
               <tr id="comments_<?= $newsComment->getId() ?>">

@@ -5,12 +5,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-13
  */
@@ -40,17 +40,17 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 1;
+    private const VERSION_MINOR = 2;
 
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 1;
+    private const VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = null;
+    private const VERSION_PRE_RELEASE = 'dev';
 
     /**
      * API version.
@@ -60,14 +60,14 @@ class System
     /**
      * Minimum required PHP version.
      */
-    public const VERSION_MINIMUM_PHP = '7.4.0';
+    public const VERSION_MINIMUM_PHP = '8.0.0';
 
     /**
      * Array of required PHP extensions.
      *
      * @var array<string>
      */
-    private $requiredExtensions = [
+    private array $requiredExtensions = [
         'curl',
         'fileinfo',
         'filter',
@@ -82,14 +82,14 @@ class System
      *
      * @var array<string>
      */
-    private $missingExtensions = [];
+    private array $missingExtensions = [];
 
     /**
      * Supported databases for phpMyFAQ.
      *
      * @var array<string, array<int, string>>
      */
-    private $supportedDatabases = [
+    private array $supportedDatabases = [
         'mysqli' => [self::VERSION_MINIMUM_PHP, 'MySQL / Percona Server / MariaDB'],
         'pgsql' => [self::VERSION_MINIMUM_PHP, 'PostgreSQL'],
         'sqlite3' => [self::VERSION_MINIMUM_PHP, 'SQLite 3'],
@@ -99,9 +99,9 @@ class System
     /**
      * Database handle.
      *
-     * @var DatabaseDriver
+     * @var ?DatabaseDriver
      */
-    private $database = null;
+    private ?DatabaseDriver $database = null;
 
     /**
      * Returns the current version of phpMyFAQ for installation and
@@ -249,12 +249,12 @@ class System
         $mainUrl = $faqConfig->getDefaultUrl();
 
         if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
-            if (false === strpos($mainUrl, 'https')) {
+            if (!str_contains($mainUrl, 'https')) {
                 $mainUrl = str_replace('http://', 'https://', $mainUrl);
             }
         }
 
-        if ('/' !== substr($mainUrl, -1)) {
+        if (!str_ends_with($mainUrl, '/')) {
             $mainUrl .= '/';
         }
 

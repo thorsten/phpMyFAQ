@@ -1,0 +1,39 @@
+/**
+ * phpMyFAQ 3.2 default top navigation
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2022 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2022-01-25
+ */
+
+.pmf-admin-topnav {
+  padding-left: 0;
+  height: $pmf-admin-topnav-base-height;
+  z-index: $pmf-admin-zindex-topnav;
+
+  .navbar-brand {
+    width: $pmf-admin-sidenav-base-width;
+    padding-left: $navbar-padding-x;
+    padding-right: $navbar-padding-x;
+    margin: 0;
+  }
+
+  &.navbar-dark {
+    #sidebarToggle {
+      color: $pmf-admin-topnav-dark-toggler-color;
+    }
+  }
+
+  &.navbar-light {
+    #sidebarToggle {
+      color: $pmf-admin-topnav-light-toggler-color;
+    }
+  }
+}

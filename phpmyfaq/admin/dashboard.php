@@ -5,13 +5,13 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Alexander M. Turek <me@derrabus.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2013-02-05
  */
@@ -53,20 +53,17 @@ $faqSession = new Session($faqConfig);
 <?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) : ?>
   <section class="row mb-3">
     <div class="col-12 p-2">
-      <div class="card border-left-danger shadow h-100 py-2">
+      <div class="card bg-danger text-white shadow h-100 py-2">
+        <div class="card-header text-uppercase">Attention!</div>
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Attention!</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">
+              <div class="mb-0 font-weight-bold text-gray-800">
                 The phpMyFAQ version number stored in your database (<?= $faqConfig->getVersion() ?>) is lower
                 than the version number of the installed application (<?= System::getVersion() ?>), please update
-                <a href="../setup/update.php" class="alert-link">your installation here</a> to avoid an unintended
+                <a href="../setup/update.php" class="text-white-50">your installation here</a> to avoid an unintended
                 behaviour.
               </div>
-            </div>
-            <div class="col-auto">
-              <i class="fa fa-exclamation-triangle fa-3x text-danger"></i>
             </div>
           </div>
         </div>
@@ -75,10 +72,8 @@ $faqSession = new Session($faqConfig);
   </section>
 <?php endif; ?>
 
-<section class="row">
-  <div class="container-fluid p-2">
-    <div class="card-columns">
-
+<section class="row masonry-grid">
+    <div class="col-sm-6 col-lg-3 mb-4">
       <div class="card mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
@@ -124,18 +119,23 @@ $faqSession = new Session($faqConfig);
           </div>
         </div>
       </div>
+    </div>
 
       <?php if ($faqConfig->get('main.enableUserTracking')) : ?>
-      <div class="card mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
-        </h5>
-        <div class="card-body">
-          <canvas id="pmf-chart-visits" width="400" height="300"></canvas>
+
+        <div class="col-sm-12 col-lg-6 mb-4">
+          <div class="card mb-4">
+            <h5 class="card-header py-3">
+              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
+            </h5>
+            <div class="card-body">
+              <canvas id="pmf-chart-visits" width="400" height="300"></canvas>
+            </div>
+          </div>
         </div>
-      </div>
       <?php endif; ?>
 
+    <div class="col-sm-6 col-lg-3 mb-4">
       <div class="card mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
@@ -155,8 +155,11 @@ $faqSession = new Session($faqConfig);
           </ul>
         </div>
       </div>
+    </div>
 
         <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) : ?>
+
+    <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
               <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>
@@ -195,7 +198,9 @@ $faqSession = new Session($faqConfig);
                 ?>
             </div>
           </div>
+    </div>
 
+    <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
               <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
@@ -218,7 +223,7 @@ $faqSession = new Session($faqConfig);
                                         continue;
                                     }
                                     printf(
-                                        '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
+                                        '<li><span class="pmf-popover" data-toggle="popover" data-bs-container="body" title="SHA-1" data-bs-content="%s">%s</span></li>',
                                         $hash,
                                         $file
                                     );
@@ -243,12 +248,9 @@ $faqSession = new Session($faqConfig);
                     <?php
                 }
                 ?>
-              <script>$(function() {
-                  $('span[class="pmf-popover"]').popover();
-                });</script>
             </div>
           </div>
-        <?php endif; ?>
     </div>
+        <?php endif; ?>
 </section>
 

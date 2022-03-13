@@ -15,13 +15,12 @@
     }
   ],
   "require": {
-    "php": ">=7.4.0",
+    "php": ">=8.0.0",
     "phpseclib/phpseclib": "~3.0",
-    "swiftmailer/swiftmailer": "~6.2",
     "erusev/parsedown": "~1.0",
     "erusev/parsedown-extra": "~0.8.1",
     "tecnickcom/tcpdf": "~6.0",
-    "elasticsearch/elasticsearch": "7.16.*",
+    "elasticsearch/elasticsearch": "8.0.*",
     "monolog/monolog": "^2.2",
     "abraham/twitteroauth": "^3.1.0",
     "myclabs/deep-copy": "~1.0",
@@ -32,20 +31,20 @@
     "ext-json": "*",
     "ext-xml": "*",
     "ext-zip": "*",
-    "ext-xmlwriter": "*"
+    "ext-xmlwriter": "*",
+    "symfony/mailer": "^5.4"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",
     "doctrine/instantiator": "1.*",
     "symfony/yaml": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",
-    "phpunit/php-token-stream": "*",
     "squizlabs/php_codesniffer": "*",
     "phpstan/phpstan": "^1.0.0"
   },
   "config": {
     "platform": {
-      "php": "7.4.0"
+      "php": "8.0.0"
     },
     "secure-http": true,
     "vendor-dir": "phpmyfaq/src/libs",
