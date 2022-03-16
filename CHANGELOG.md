@@ -1,4 +1,4 @@
-# phpMyFAQ 3.1.1
+# phpMyFAQ 3.1.2
 
 **Codename "Poseidon"**
 
