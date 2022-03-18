@@ -49,51 +49,53 @@ class Category
      *
      * @var array
      */
-    public $image = [];
+    public array $image = [];
+
     /**
      * The tree with the tabs.
      *
      * @var array
      */
-    public $treeTab = [];
+    public array $treeTab = [];
     /**
      * The category tree.
      *
      * @var array
      */
-    private $catTree = [];
+    private array $catTree = [];
 
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * User ID.
      *
      * @var int
      */
-    private $user = -1;
+    private int $user = -1;
 
     /**
      * Groups.
      *
      * @var array
      */
-    private $groups = [-1];
+    private array $groups = [-1];
 
     /**
      * The children nodes.
      *
      * @var array
      */
-    private $children = [];
+    private array $children = [];
+
     /**
      * The current language.
      *
-     * @var string
+     * @var string|null
      */
-    private $language = null;
+    private ?string $language = null;
 
     /**
      * Entity owners
@@ -115,7 +117,7 @@ class Category
      *
      * @var array
      */
-    private $symbols = [
+    private array $symbols = [
         'vertical' => '|',
         'plus' => '+',
         'minus' => '-',
@@ -128,7 +130,7 @@ class Category
      * Constructor.
      *
      * @param Configuration $config Configuration object
-     * @param array $groups Array with group IDs
+     * @param int[] $groups Array with group IDs
      * @param bool $withPerm With or without permission check
      */
     public function __construct(Configuration $config, array $groups = [], bool $withPerm = true)
@@ -145,7 +147,7 @@ class Category
     }
 
     /**
-     * @param array $groups
+     * @param int[] $groups
      * @return Category
      */
     public function setGroups(array $groups): Category
@@ -268,6 +270,7 @@ class Category
     {
         $alreadyListed = [$id];
         $level = 0;
+
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] !== 0)) {
             ++$level;
             $id = (int)$this->categoryName[$id]['parent_id'];
@@ -285,7 +288,7 @@ class Category
      * @param int $userId
      * @return Category
      */
-    public function setUser($userId = -1): Category
+    public function setUser(int $userId = -1): Category
     {
         $this->user = $userId;
         return $this;
@@ -488,7 +491,7 @@ class Category
      */
     public function transform(int $id)
     {
-        $parentId = $level = $showHome = 0;
+        $parentId = $showHome = 0;
         $tree = [];
         $tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
         $num = count($tabs);
@@ -553,7 +556,7 @@ class Category
     /**
      * List in array the root, super-root, ... of the $id.
      *
-     * @param  $id
+     * @param int $id
      * @return array
      */
     private function getNodes(int $id): array
@@ -834,15 +837,18 @@ class Category
     /**
      * Gets the path from root to child as breadcrumbs.
      *
-     * @param int $id Entity ID
+     * @param int    $id Entity ID
      * @param string $separator Path separator
-     * @param bool $renderAsHtml Renders breadcrumbs as HTML
+     * @param bool   $renderAsHtml Renders breadcrumbs as HTML
      * @param string $useCssClass Use CSS class "breadcrumb"
-     *
      * @return string
      */
-    public function getPath($id, $separator = ' / ', $renderAsHtml = false, $useCssClass = 'breadcrumb'): string
-    {
+    public function getPath(
+        int $id,
+        string $separator = ' / ',
+        bool $renderAsHtml = false,
+        string $useCssClass = 'breadcrumb'
+    ): string {
         global $sids;
 
         $ids = $this->getNodes($id);
@@ -904,10 +910,9 @@ class Category
      * Returns the ID of a category that associated with the given article.
      *
      * @param int $faqId FAQ id
-     *
      * @return int
      */
-    public function getCategoryIdFromFaq($faqId): int
+    public function getCategoryIdFromFaq(int $faqId): int
     {
         $cats = $this->getCategoryIdsFromFaq($faqId);
         if (isset($cats[0])) {
@@ -922,10 +927,9 @@ class Category
      * the given article.
      *
      * @param int $faqId Record id
-     *
-     * @return array
+     * @return int[]
      */
-    public function getCategoryIdsFromFaq($faqId): array
+    public function getCategoryIdsFromFaq(int $faqId): array
     {
         $categories = $this->getCategoriesFromFaq($faqId);
         $result = [];
@@ -943,10 +947,9 @@ class Category
      * 'parent_id' and 'description'.
      *
      * @param int $faqId Record id
-     *
      * @return array
      */
-    public function getCategoriesFromFaq($faqId): array
+    public function getCategoriesFromFaq(int $faqId): array
     {
         $query = sprintf(
             "
@@ -989,11 +992,11 @@ class Category
     /**
      * Given FAQ ID and category ID are connected or not.
      *
-     * @param  $faqId
-     * @param  $categoryId
+     * @param int $faqId
+     * @param int $categoryId
      * @return bool
      */
-    public function categoryHasLinkToFaq($faqId, $categoryId): bool
+    public function categoryHasLinkToFaq(int $faqId, int $categoryId): bool
     {
         $categories = $this->getCategoriesFromFaq($faqId);
         foreach ($categories as $category) {
@@ -1030,12 +1033,11 @@ class Category
      * Adds a new category entry.
      *
      * @param array $categoryData Array of category data
-     * @param int $parentId Parent id
-     * @param null $id Entity id
-     *
+     * @param int   $parentId Parent id
+     * @param null  $id Entity id
      * @return int
      */
-    public function addCategory(array $categoryData, $parentId = 0, $id = null): ?int
+    public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
     {
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
@@ -1127,7 +1129,7 @@ class Category
     }
 
     /**
-     * Move the categories ownership for users.
+     * Move the categories' ownership for users.
      *
      * @param int $from Old user id
      * @param int $to New user id
@@ -1164,7 +1166,7 @@ class Category
 
         $result = $this->config->getDb()->query($query);
 
-        return $this->config->getDb()->numRows($result);
+        return $this->config->getDb()->numRows($result) > 0;
     }
 
     /**
@@ -1279,7 +1281,7 @@ class Category
      * Gets all categories which are not translated in actual language
      * to add in this->categories (used in admin section).
      */
-    public function getMissingCategories()
+    public function getMissingCategories(): void
     {
         $query = sprintf(
             '
