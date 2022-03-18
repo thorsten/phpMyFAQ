@@ -643,7 +643,7 @@ class Category
     /**
      * Collapse the complete category tree.
      */
-    public function collapseAll()
+    public function collapseAll(): void
     {
         $numTreeTab = count($this->treeTab);
         for ($i = 0; $i < $numTreeTab; ++$i) {
@@ -668,7 +668,7 @@ class Category
             }
         }
 
-        return 0;
+        return -1;
     }
 
     /**
@@ -707,7 +707,7 @@ class Category
     }
 
     /**
-     * Gets the next line in the array treeTab, depending of the
+     * Gets the next line in the array treeTab, depending on the
      * collapse/expand node.
      *
      * @param int $line Current line
@@ -762,9 +762,9 @@ class Category
         string $sids,
         int $categoryId,
         string $categoryName,
-        $description = '',
-        $hasChildren = false,
-        $isActive = false
+        string $description = '',
+        bool $hasChildren = false,
+        bool $isActive = false
     ): string {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
