@@ -13,8 +13,13 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to Bootstrap v5.1 (Thorsten)
 - updated to TinyMCE v5.10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
-- 
-### phpMyFAQ v3.1.2 - 2022-03-XX
+-
+
+### phpMyFAQ v3.1.3 - 2022-XX-XX
+
+- fixed minor bugs (Thorsten)
+
+### phpMyFAQ v3.1.2 - 2022-03-16
 
 - fixed minor bugs (Thorsten)
 - updated bundled dependencies (Thorsten)

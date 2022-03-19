@@ -157,7 +157,7 @@ switch ($action) {
         $type = Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW);
         $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsId = Filter::filterInput(INPUT_POST, 'newsId', FILTER_VALIDATE_INT);
-        $username = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+        $username = Filter::filterInput(INPUT_POST, 'user', FILTER_UNSAFE_RAW);
         $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
         $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_UNSAFE_RAW);
 
@@ -183,7 +183,7 @@ switch ($action) {
                 break;
             }
         }
-
+        
         if (
             !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
                 $comment
