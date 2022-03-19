@@ -62,7 +62,7 @@ _Running using named volumes:_
 - **openldap**: Open Source LDAP server
 - **phpldapadmin**: a PHP tool to have a look on your LDAP database
 
-_Running apache web server with PHP 8.0 support:_
+_Running apache web server with PHP 8.1 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
