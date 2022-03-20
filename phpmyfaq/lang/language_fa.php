@@ -632,3 +632,5 @@ $PMF_LANG['msgAccessDenied'] = 'امكان دسترسی موجود نیست';
 $LANG_CONF['records.randomSort'] = array('checkbox', 'مرتب سازی پرسش‌های متداول به صورت تصادفی (پیش‌فرض: غیرفعال)');
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', ' فعال سازی ویرایشگر تعبیه شده WYSIWYG در (پیش‌فرض: غیرفعال)');
 $LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'پشتیبانی از Gravatar (پیش‌فرض: غیرفعال)');
+
+return $PMF_LANG;

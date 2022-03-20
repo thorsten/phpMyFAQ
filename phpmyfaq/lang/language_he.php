@@ -792,3 +792,5 @@ $LANG_CONF['main.templateSet'] = array('select', 'Template set to be used');
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'Enable attachment encryption <br><small>Ignored when attachments is disabled</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Only allow logins over SSL connection? (default: disabled)');
+
+return $PMF_LANG;

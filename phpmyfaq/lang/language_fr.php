@@ -925,12 +925,9 @@ $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
 $PMF_LANG['msgMode'] = 'Modus';
 $PMF_LANG['msgMaintenanceMode'] = 'FAQ en maintenance';
 $PMF_LANG['msgOnlineMode'] = 'FAQ en ligne';
-$LANG_CONF['cache.varnishEnable'] = array('checkbox', 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
-$LANG_CONF['cache.varnishHost'] = array('input', 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array('input', 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array('input', 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array('input', 'Varnish timeout');
 $LANG_CONF['records.enableCloseQuestion'] = array('checkbox', 'Fermer les questions ouvertes après une réponse ?');
 $LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', 'Supprimer les questions ouvertes après une réponse ?');
 $LANG_CONF['main.maintenanceMode'] = array('checkbox', 'Placer la FAQ en mode de maintenance');
 $PMF_LANG['msgSeeFAQinFrontend'] = 'Voir cette FAQ sur le Frontend';
+
+return $PMF_LANG;

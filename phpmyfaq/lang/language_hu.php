@@ -907,3 +907,5 @@ $PMF_LANG['rightsLanguage']['changebtrevs'] = 'Revíziók szerkesztése';
 $PMF_LANG['ad_rs'] = 'Osztályzat statisztika';
 $PMF_LANG['ad_menu_user_administration'] = 'Felhasználók';
 $PMF_LANG['ad_user_checkall'] = 'Mindet kiválaszt';
+
+return $PMF_LANG;

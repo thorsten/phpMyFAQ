@@ -597,3 +597,5 @@ $PMF_LANG['msgSitemap'] = 'Gunearen mapa';
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'Artikulu hau aztertzen ari dira eta ezin da une honetan ikusi.';
 $PMF_LANG['msgArticleCategories'] = 'Artikulu honentzat atalak';
+
+return $PMF_LANG;

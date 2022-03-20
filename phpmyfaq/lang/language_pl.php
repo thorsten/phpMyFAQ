@@ -883,3 +883,5 @@ $LANG_CONF['search.relevance'] = array('select', 'Sort by relevance');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Activate relevance support? (default: disabled)');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter support (default: deactivated)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Consumer Key');
+
+return $PMF_LANG;

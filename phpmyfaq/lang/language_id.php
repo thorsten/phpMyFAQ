@@ -942,3 +942,5 @@ $LANG_CONF['records.attachmentsPath'] = array("input", "Lokasi dimana lampiran a
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "berkas yang ingin anda unduh tidak ditemukan dalam server ini";
 $PMF_LANG['ad_sess_noentry'] = "Tidak ada entri";
+
+return $PMF_LANG;

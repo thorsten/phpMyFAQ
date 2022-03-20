@@ -1324,5 +1324,7 @@ $PMF_LANG['ad_record_faq'] = 'Pregunta y Respuesta';
 $PMF_LANG['ad_record_permissions'] = 'Permisos';
 $PMF_LANG['loginPageMessage'] = 'Login para ';
 
-// añadido v3.1.0-alfa - 2020-03-27 por Thorsten
+// añadido v3.1.0-alpha - 2020-03-27 por Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'El nombre de usuario debe ser visible';
+
+return $PMF_LANG;

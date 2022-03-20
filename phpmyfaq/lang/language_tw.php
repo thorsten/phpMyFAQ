@@ -1159,3 +1159,5 @@ $PMF_LANG["msgAboutThisNews"] = "關於此新聞";
 
 // added v.2.8.1 - 2013-06-23 by Thorsten 開發者
 $PMF_LANG["msgAccessDenied"] = "存取拒絕。";
+
+return $PMF_LANG;

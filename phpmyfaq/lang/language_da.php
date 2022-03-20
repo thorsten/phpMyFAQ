@@ -698,3 +698,5 @@ $PMF_LANG['ad_system_info'] = 'Systeminformation';
 $PMF_LANG['msgShowCategory'] = 'Oversigt:';
 $PMF_LANG['msgAskCategory'] = 'Kategori';
 $PMF_LANG['ad_user_checkall'] = 'Vælg alle';
+
+return $PMF_LANG;

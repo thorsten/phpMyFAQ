@@ -865,3 +865,5 @@ $PMF_LANG['msgTagSearch'] = 'टैग किये गए लेख';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ जानकारी';
 $PMF_LANG['ad_online_info'] = 'संस्करण जांचें';
 $PMF_LANG['ad_system_info'] = 'निकाय की जानकारी';
+
+return $PMF_LANG;

@@ -861,3 +861,5 @@ $LANG_CONF['search.relevance'] = array('select', '相关性排序');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', '激活相关性支持? (默认: 不启用)');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', '推特支持 (默认: 不激活)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', '推特客户密钥');
+
+return $PMF_LANG;

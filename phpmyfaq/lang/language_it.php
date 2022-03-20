@@ -913,3 +913,5 @@ $LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter s
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Consumer Key');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'Twitter Consumer Secret');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'Twitter Access Token Key');
+
+return $PMF_LANG;

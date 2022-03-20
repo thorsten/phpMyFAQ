@@ -1340,3 +1340,5 @@ $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API enabled'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Allowed hosts for registrations'];
 $LANG_CONF['main.loginWithEmailAddress'] = ['checkbox', 'Login only with email address'];
+
+return $PMF_LANG;

@@ -885,3 +885,5 @@ $LANG_CONF['main.dateFormat'] = array("input", "Format de date (défaut: Y-m-d H
 $LANG_CONF['security.enableLoginOnly'] = array("checkbox", "FAQ complètement sécurisée (défaut: désactivé)");
 $LANG_CONF['security.useSslOnly'] = array("checkbox", "FAQ avec SSL seulement (défaut: désactivé)");
 $PMF_LANG["msgExportAllFaqs"] = "Générer PDF complet";
+
+return $PMF_LANG;

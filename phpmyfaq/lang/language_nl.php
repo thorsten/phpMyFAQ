@@ -957,3 +957,5 @@ $PMF_LANG['ad_export_generate_json'] = 'Maak JSON bestand aan';
 $PMF_LANG['ad_media_name_search'] = 'Zoeken op medianaam';
 $PMF_LANG['ad_admin_notes'] = 'Persoonlijke notities';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (alleen zichtbaar voor auteurs)';
+
+return $PMF_LANG;

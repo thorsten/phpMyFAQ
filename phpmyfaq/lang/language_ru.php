@@ -958,3 +958,5 @@ $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloa
 $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Enable bundled Markdown editor<br>(default: disabled)');
 $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answering for user questions<br>(default: activated)');
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Enable Elasticsearch support<br>(default: deactivated)');
+
+return $PMF_LANG;

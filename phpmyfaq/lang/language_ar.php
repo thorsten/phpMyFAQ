@@ -852,3 +852,5 @@ $LANG_CONF['records.orderby'] = array('select', 'Record sorting (according to pr
 $LANG_CONF['records.sortby'] = array('select', 'Record sorting (descending or ascending)');
 $LANG_CONF['records.defaultActivation'] = array('checkbox', 'Activate new records (default: deactivated)');
 $LANG_CONF['records.defaultAllowComments'] = array('checkbox', 'Allow comments for new records (default: disallowed)');
+
+return $PMF_LANG;

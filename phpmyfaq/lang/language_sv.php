@@ -827,3 +827,5 @@ $PMF_LANG['msgRegistrationNote'] = 'När en administratör har godkänt din regi
 
 //Experimental - 2019-10-25 Henrik Werkström
 $PMF_LANG['loginPageMessage'] = 'Logga in på ';
+
+return $PMF_LANG;

@@ -32,6 +32,7 @@ use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -61,6 +62,18 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     require PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
+}
+
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
 //

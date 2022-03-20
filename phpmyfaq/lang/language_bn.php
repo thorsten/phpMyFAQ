@@ -864,3 +864,5 @@ $PMF_LANG['msgTagSearch'] = 'ট্যাগ';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
+
+return $PMF_LANG;

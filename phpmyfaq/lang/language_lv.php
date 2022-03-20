@@ -579,3 +579,5 @@ $PMF_LANG['ad_categ_select'] = 'Select category language';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
+
+return $PMF_LANG;

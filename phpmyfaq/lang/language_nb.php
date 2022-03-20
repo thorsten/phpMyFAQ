@@ -911,6 +911,7 @@ $PMF_LANG['msgRegistration'] = "Registrer ny bruker";
 $PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg, angi ditt navn, brukernavn  og gyldig e-postadresse. ';
 $PMF_LANG['msgRegistrationNote'] = 'Du vil få en epost så snart en administrator har godkjent registreringen din.';
 
-
 //Experimental - 2019-10-25 Henrik Werkström
 $PMF_LANG['loginPageMessage'] = 'Logge inn på ';
+
+return $PMF_LANG;

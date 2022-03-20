@@ -860,3 +860,5 @@ $PMF_LANG['msgTagSearch'] = 'Những nội dung được tag';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Kiểm tra phiên bản trực tuyến';
 $PMF_LANG['ad_system_info'] = 'Thông tin Hệ thống';
+
+return $PMF_LANG;

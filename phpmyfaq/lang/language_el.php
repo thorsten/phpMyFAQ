@@ -809,3 +809,5 @@ $PMF_LANG['records.orderingPopularFaqs.voting'] = 'list most voted entries';
 $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array("select", "Sorting of the top faq's");
+
+return $PMF_LANG;

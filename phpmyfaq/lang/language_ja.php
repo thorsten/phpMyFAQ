@@ -1078,3 +1078,5 @@ $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API有効化'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'ユーザー登録の許可ホワイトリスト'];
 $LANG_CONF['main.loginWithEmailAddress'] = ['checkbox', 'メールアドレスによるログインのみ許可'];
+
+return $PMF_LANG;

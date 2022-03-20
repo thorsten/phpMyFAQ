@@ -943,3 +943,5 @@ $PMF_LANG['msgAccessDenied'] = 'Pääsy evätty.';
 $LANG_CONF['records.randomSort'] = array('checkbox', 'Lajittele FAQ:it satunnaisesti (oletus: ei käytössä)');
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', 'Salli WYSIWYG -editori asiakaspuolella (oletus: ei käytössä)');
 $LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'Gravatar -tuki (oletus: ei käytössä)');
+
+return $PMF_LANG;

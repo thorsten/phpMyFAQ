@@ -887,3 +887,5 @@ $LANG_CONF['records.enableDeleteQuestion'] = array("checkbox", "Smazat otevřen�
 $PMF_LANG['msg2answerFAQ'] = 'Zodpovězeno';
 $PMF_LANG['headerUserControlPanel'] = 'Kontrolní panel';
 $PMF_LANG['rightsLanguage']['changebtrevs'] = 'Editovat revize';
+
+return $PMF_LANG;

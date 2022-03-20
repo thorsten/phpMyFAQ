@@ -801,3 +801,5 @@ $PMF_LANG['msgEditFaqDat'] = 'แก้ไข';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'จำนวนของผลการค้นที่จะแสดง');
 $LANG_CONF['records.orderingPopularFaqs'] = array("select", "เรียงลำดับเรื่องของ faq");
 $LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'ช่องอีเมล์เป็นช่องที่จำเป็นต้องกรอก (ค่าเริ่มต้น: ปิด)');
+
+return $PMF_LANG;

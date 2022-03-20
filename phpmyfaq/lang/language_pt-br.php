@@ -1052,3 +1052,5 @@ $LANG_CONF['api.apiClientToken'] = ["input", "Token do client da API"];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ["area", "Hosts permitidos para cadastros"];
 $LANG_CONF['main.loginWithEmailAddress'] = ["checkbox", "Login somente com endereço de email"];
 $PMF_LANG["plmsgUserOnline"][1] = '%d usuários online';
+
+return $PMF_LANG;

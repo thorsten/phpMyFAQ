@@ -892,3 +892,5 @@ $PMF_LANG['msgAccessDenied'] = 'Acesso negado.';
 $PMF_LANG['ad_xml_gen'] = 'Criar exportação XML';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Número de termos de procura');
 $PMF_LANG['msgPDF'] = 'Versão PDF';
+
+return $PMF_LANG;

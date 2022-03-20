@@ -823,3 +823,5 @@ $PMF_LANG['ad_group_members'] = 'Membrii';
 $PMF_LANG['ad_group_addMember'] = ' +';
 $PMF_LANG['ad_group_removeMember'] = ' -';
 $PMF_LANG['ad_export_which_cat'] = 'Limiteaza numarul de intrebari(FAQ) care vor fi exportate  (optional)';
+
+return $PMF_LANG;

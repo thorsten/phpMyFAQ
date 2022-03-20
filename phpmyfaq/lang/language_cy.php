@@ -618,3 +618,5 @@ $PMF_LANG['ad_session_expiring'] = 'Bydd eich sesiwn yn dod i ben mewn %d munud:
 $PMF_LANG['ad_stat_management'] = 'Rheoli sesiynau';
 $PMF_LANG['ad_stat_choose'] = 'Dewiswch y mis';
 $PMF_LANG['ad_stat_delete'] = 'Dilëwch y sesiynau a ddewiswyd ar unwaith';
+
+return $PMF_LANG;

@@ -707,3 +707,5 @@ $PMF_LANG["newsShowArchive"] = "Архів новин.";
 $PMF_LANG["newsArchive"] = "- архів новин";
 $PMF_LANG["newsWriteComment"] = "можете залишити коментар";
 $PMF_LANG["newsCommentDate"] = "Added at: ";
+
+return $PMF_LANG;

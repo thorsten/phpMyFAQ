@@ -858,3 +858,5 @@ $PMF_LANG['msgTagSearch'] = 'Oznaceni unosi';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informacije';
 $PMF_LANG['ad_online_info'] = 'Provera Verzije';
 $PMF_LANG['ad_system_info'] = 'Informacije Sistema';
+
+return $PMF_LANG;

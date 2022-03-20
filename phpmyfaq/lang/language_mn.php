@@ -1185,3 +1185,5 @@ $PMF_LANG["msgAboutThisNews"] = "Энэ мэдээллийн тухай";
 
 // added v.2.8.1 - 2013-06-23 by Thorsten
 $PMF_LANG["msgAccessDenied"] = "Нэвтрэлт цуцлагдлаа.";
+
+return $PMF_LANG;

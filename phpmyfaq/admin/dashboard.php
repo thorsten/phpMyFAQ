@@ -22,6 +22,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -35,15 +36,15 @@ $faqSession = new Session($faqConfig);
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="fa fa-tachometer"></i>
-      <?= $PMF_LANG['admin_mainmenu_home'] ?>
+      <?= Translation::get('admin_mainmenu_home') ?>
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
       <a href="?action=config">
           <?php if ($faqConfig->get('main.maintenanceMode')) : ?>
-            <button class="btn btn-sm btn-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
+            <button class="btn btn-sm btn-danger"><?= Translation::get('msgMaintenanceMode') ?></button>
           <?php else : ?>
-            <button class="btn btn-sm btn-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
+            <button class="btn btn-sm btn-success"><?= Translation::get('msgOnlineMode') ?></button>
           <?php endif; ?>
       </a>
     </div>
@@ -76,42 +77,42 @@ $faqSession = new Session($faqConfig);
     <div class="col-sm-6 col-lg-3 mb-4">
       <div class="card mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
+          <i aria-hidden="true" class="fa fa-info-circle"></i> <?= Translation::get('ad_pmf_info') ?>
         </h5>
         <div class="card-body">
           <div class="list-group-flush">
             <a href="?action=viewsessions" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_start_visits'] ?>
+              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= Translation::get('ad_start_visits') ?>
               <span class="float-right text-muted small">
                 <em><?= $faqSession->getNumberOfSessions() ?></em>
               </span>
             </a>
             <a href="?action=view" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-list-alt"></i> <?= $PMF_LANG['ad_start_articles']; ?>
+              <i aria-hidden="true" class="fa fa-list-alt"></i> <?= Translation::get('ad_start_articles') ?>
               <span class="float-right text-muted small">
                 <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqdata']; ?></em>
               </span>
             </a>
             <a href="?action=comments" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-comments"></i> <?= $PMF_LANG['ad_start_comments']; ?>
+              <i aria-hidden="true" class="fa fa-comments"></i> <?= Translation::get('ad_start_comments') ?>
               <span class="float-right text-muted small">
                 <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqcomments']; ?></em>
               </span>
             </a>
             <a href="?action=question" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-question-circle"></i> <?= $PMF_LANG['msgOpenQuestions']; ?>
+              <i aria-hidden="true" class="fa fa-question-circle"></i> <?= Translation::get('msgOpenQuestions') ?>
               <span class="float-right text-muted small">
                 <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqquestions']; ?></em>
               </span>
             </a>
             <a href="?action=news" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-list-alt"></i> <?= $PMF_LANG['msgNews']; ?>
+              <i aria-hidden="true" class="fa fa-list-alt"></i> <?= Translation::get('msgNews') ?>
               <span class="float-right text-muted small">
                 <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqnews']; ?></em>
               </span>
             </a>
             <a href="?action=user&user_action=listallusers" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
+              <i aria-hidden="true" class="fa fa-users"></i> <?= Translation::get('admin_mainmenu_users') ?>
               <span class="float-right text-muted small">
                 <em><?= $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1; ?></em>
               </span>
@@ -126,7 +127,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-sm-12 col-lg-6 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
-              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
+              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= Translation::get('ad_stat_report_visits') ?>
             </h5>
             <div class="card-body">
               <canvas id="pmf-chart-visits" width="400" height="300"></canvas>
@@ -138,7 +139,7 @@ $faqSession = new Session($faqConfig);
     <div class="col-sm-6 col-lg-3 mb-4">
       <div class="card mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
+          <i aria-hidden="true" class="fa fa-ban"></i> <?= Translation::get('ad_record_inactive') ?>
         </h5>
         <div class="card-body">
           <ul class="list-unstyled">
@@ -162,7 +163,7 @@ $faqSession = new Session($faqConfig);
     <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
-              <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>
+              <i aria-hidden="true" class="fa fa-check"></i> <?= Translation::get('ad_online_info'); ?>
             </h5>
             <div class="card-body">
                 <?php
@@ -174,12 +175,12 @@ $faqSession = new Session($faqConfig);
                         printf(
                             '<p class="alert alert-%s">%s <a href="https://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
                             (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'info',
-                            $PMF_LANG['ad_xmlrpc_latest'],
+                            Translation::get('ad_xmlrpc_latest'),
                             $versions['current']
                         );
                         // Installed phpMyFAQ version is outdated
                         if (-1 == version_compare($versions['installed'], $versions['current'])) {
-                            echo '<br>' . $PMF_LANG['ad_you_should_update'];
+                            echo '<br>' . Translation::get('ad_you_should_update');
                         }
                     } catch (Exception $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
@@ -190,7 +191,7 @@ $faqSession = new Session($faqConfig);
                         accept-charset="utf-8">
                     <input type="hidden" name="param" value="version"/>
                     <button class="btn btn-info" type="submit">
-                        <?= $PMF_LANG['ad_xmlrpc_button'] ?>
+                        <?= Translation::get('ad_xmlrpc_button') ?>
                     </button>
                   </form>
                     <?php
@@ -203,7 +204,7 @@ $faqSession = new Session($faqConfig);
     <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
-              <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
+              <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= Translation::get('ad_online_verification') ?>
             </h5>
             <div class="card-body">
                 <?php
@@ -216,7 +217,7 @@ $faqSession = new Session($faqConfig);
                         } else {
                             $issues = $api->getVerificationIssues();
                             if (1 < count($issues)) {
-                                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_verification_notokay']);
+                                printf('<p class="alert alert-danger">%s</p>', Translation::get('ad_verification_notokay'));
                                 echo '<ul>';
                                 foreach ($issues as $file => $hash) {
                                     if ('created' === $file) {
@@ -230,7 +231,7 @@ $faqSession = new Session($faqConfig);
                                 }
                                 echo '</ul>';
                             } else {
-                                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_verification_okay']);
+                                printf('<p class="alert alert-success">%s</p>', Translation::get('ad_verification_okay'));
                             }
                         }
                     } catch (\Exception $e) {
@@ -242,7 +243,7 @@ $faqSession = new Session($faqConfig);
                         accept-charset="utf-8">
                     <input type="hidden" name="getJson" value="verify"/>
                     <button class="btn btn-info" type="submit">
-                        <?= $PMF_LANG['ad_verification_button'] ?>
+                        <?= Translation::get('ad_verification_button') ?>
                     </button>
                   </form>
                     <?php

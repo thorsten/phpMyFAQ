@@ -1290,3 +1290,5 @@ $PMF_LANG['ad_section_error_noName'] = "Lütfen bir bölüm adı girin.";
 $PMF_LANG['ad_section_suc'] = "Bölüm <strong>başarıyla</strong> eklendi.";
 $PMF_LANG['ad_section_deleted'] = "Bölüm başarıyla silindi.";
 $PMF_LANG['rightsLanguage']['viewadminlink'] = "Yönetici bağlantısını görüntüle";
+
+return $PMF_LANG;
