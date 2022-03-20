@@ -26,12 +26,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-<header>
-    <div class="col-lg-12">
-        <h2 class="page-header"><i aria-hidden="true" class="fa fa-book fa-fw"></i> <?= $PMF_LANG['ad_menu_export'] ?>
-        </h2>
-    </div>
-</header>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-book fa-fw"></i>
+        <?= $PMF_LANG['ad_menu_export'] ?>
+    </h1>
+</div>
 
 <div class="row">
     <div class="col-lg-12">
@@ -53,7 +54,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         <?= $PMF_LANG['ad_entry_category'] ?>
                     </label>
                     <div class="col-lg-4">
-                        <select name="catid" id="catid" class="form-control">
+                        <select name="catid" id="catid" class="form-select">
                             <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
                             <?= $categoryHelper->renderOptions(0) ?>
                         </select>

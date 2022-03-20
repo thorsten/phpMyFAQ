@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 use phpMyFAQ\Database;
@@ -33,11 +33,12 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     $csrfCheck = true;
 }
 ?>
-    <header>
-        <h2 class="page-header">
-            <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_rest'] ?>
-        </h2>
-    </header>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="fa fa-download"></i>
+            <?= $PMF_LANG['ad_csv_rest'] ?>
+        </h1>
+    </div>
 <?php
 
 if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
@@ -46,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
         $fileInfo = new finfo(FILEINFO_MIME_ENCODING);
 
         if ('utf-8' !== $fileInfo->file($_FILES['userfile']['tmp_name'])) {
-            echo 'This file is not UTF-8 encoded.';
+            echo 'This file is not UTF-8 encoded.<br>';
             $ok = 0;
         }
         $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
@@ -123,33 +124,16 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
             );
         }
     } else {
-        switch ($_FILES['userfile']['error']) {
-            case 1:
-                $errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
-                break;
-            case 2:
-                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' .
-                                'HTML form.';
-                break;
-            case 3:
-                $errorMessage = 'The uploaded file was only partially uploaded.';
-                break;
-            case 4:
-                $errorMessage = 'No file was uploaded.';
-                break;
-            case 6:
-                $errorMessage = 'Missing a temporary folder.';
-                break;
-            case 7:
-                $errorMessage = 'Failed to write file to disk.';
-                break;
-            case 8:
-                $errorMessage = 'A PHP extension stopped the file upload.';
-                break;
-            default:
-                $errorMessage = 'Undefined error.';
-                break;
-        }
+        $errorMessage = match ($_FILES['userfile']['error']) {
+            1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+            2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' . 'HTML form.',
+            3 => 'The uploaded file was only partially uploaded.',
+            4 => 'No file was uploaded.',
+            6 => 'Missing a temporary folder.',
+            7 => 'Failed to write file to disk.',
+            8 => 'A PHP extension stopped the file upload.',
+            default => 'Undefined error.',
+        };
         printf('<p class="alert alert-danger">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
     }
 } else {

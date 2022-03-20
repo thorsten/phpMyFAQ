@@ -26,7 +26,7 @@ define('PMF_ROOT_DIR', dirname(__DIR__));
 //
 // Define the named constant used as a check by any included PHP file
 //
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Bootstrapping
