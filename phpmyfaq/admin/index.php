@@ -483,10 +483,10 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
                 break;
             case 'meta':
             case 'meta.update';
-                require 'meta.php';
+                require 'template-metadata.php';
                 break;
             case 'meta.edit':
-                require 'meta.edit.php';
+                require 'template-metadata.edit.php';
                 break;
             // functions for backup administration
             case 'backup':

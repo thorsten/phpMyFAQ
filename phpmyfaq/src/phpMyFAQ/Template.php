@@ -28,39 +28,19 @@ use phpMyFAQ\Template\TemplateHelper;
  */
 class Template
 {
-    /**
-     * Name of active template set.
-     *
-     * @var string
-     */
+    /** @var string Name of active template set. */
     private static string $tplSetName;
 
-    /**
-     * The template array.
-     *
-     * @var array<string, string>
-     */
+    /** @var array<string, string> The templates array. */
     public array $templates = [];
 
-    /**
-     * The output array.
-     *
-     * @var array<string, string|null>
-     */
+    /** @var array<string, string|null> The output array. */
     private array $outputs = [];
 
-    /**
-     * The blocks array.
-     *
-     * @var array<string, array<string>>
-     */
+    /** @var array<string, array<string>> The blocks array. */
     private array $blocks = [];
 
-    /**
-     * array containing the touched blocks.
-     *
-     * @var array<string>
-     */
+    /** @var array<string> Array containing the touched blocks. */
     private array $blocksTouched = [];
 
     /** @var array<string> Array containing the errors */
@@ -73,10 +53,10 @@ class Template
      * Combine all template files into the main templates array
      *
      * @param array<string, string> $myTemplate Templates
-     * @param TemplateHelper $tplHelper
-     * @param string         $tplSetName Active template name
+     * @param TemplateHelper        $tplHelper
+     * @param string                $tplSetName Active template name
      */
-    public function __construct(array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
+    public function __construct(array $myTemplate, TemplateHelper $tplHelper, string $tplSetName = 'default')
     {
         $this->tplHelper = $tplHelper;
         self::$tplSetName = $tplSetName;
@@ -268,7 +248,7 @@ class Template
         if (isset($tmpFilter)) {
             $filterCount = count($tmpFilter[0]);
             for ($i = 0; $i < $filterCount; ++$i) {
-                if (false !== strpos($tmpFilter[0][$i], ' | meta ')) {
+                if (str_contains($tmpFilter[0][$i], ' | meta ')) {
                     $rawFilter = str_replace(['{{', '}}'], '', $tmpFilter[0][$i]);
                     list($identifier, $filter) = explode('|', $rawFilter);
                     $tplFilter[] = [trim($filter) => trim($identifier)];

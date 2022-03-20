@@ -19,7 +19,6 @@
 namespace phpMyFAQ\Template;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Meta;
 
 /**
  * Class TemplateHelper
@@ -31,8 +30,8 @@ class TemplateHelper
     /** @var Configuration */
     private Configuration $config;
 
-    /** @var Meta */
-    private Meta $meta;
+    /** @var TemplateMetaData */
+    private TemplateMetaData $meta;
 
     /**
      * Constructor.
@@ -42,7 +41,7 @@ class TemplateHelper
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->meta = new Meta($this->config);
+        $this->meta = new TemplateMetaData($this->config);
     }
 
     /**

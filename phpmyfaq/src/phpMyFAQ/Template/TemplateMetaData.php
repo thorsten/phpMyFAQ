@@ -15,23 +15,25 @@
  * @since     2018-08-09
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Template;
 
-use phpMyFAQ\Entity\MetaEntity;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
+use phpMyFAQ\Entity\TemplateMetaDataEntity;
 
 /**
  * Class Meta
  *
  * @package phpMyFAQ
  */
-class Meta
+class TemplateMetaData
 {
     /**
      * Configuration object.
      *
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -44,10 +46,10 @@ class Meta
     }
 
     /**
-     * @param MetaEntity $data
+     * @param TemplateMetaDataEntity $data
      * @return int
      */
-    public function add(MetaEntity $data): int
+    public function add(TemplateMetaDataEntity $data): int
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
 
@@ -68,11 +70,11 @@ class Meta
 
     /**
      * @param int $metaId
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function getById(int $metaId): MetaEntity
+    public function getById(int $metaId): TemplateMetaDataEntity
     {
-        $entity = new MetaEntity();
+        $entity = new TemplateMetaDataEntity();
         $query = sprintf(
             "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
@@ -97,11 +99,11 @@ class Meta
 
     /**
      * @param string $pageId
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function getByPageId(string $pageId): MetaEntity
+    public function getByPageId(string $pageId): TemplateMetaDataEntity
     {
-        $entity = new MetaEntity();
+        $entity = new TemplateMetaDataEntity();
         $query = sprintf(
             "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE page_id = '%s' AND lang = '%s'",
             Database::getTablePrefix(),
@@ -125,7 +127,7 @@ class Meta
     }
 
     /**
-     * @return MetaEntity[]
+     * @return TemplateMetaDataEntity[]
      */
     public function getAll(): array
     {
@@ -140,7 +142,7 @@ class Meta
 
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
-                $entity = new MetaEntity();
+                $entity = new TemplateMetaDataEntity();
                 $entity
                     ->setId($row->id)
                     ->setLang($row->lang)
@@ -155,11 +157,11 @@ class Meta
     }
 
     /**
-     * @param int $metaId
-     * @param MetaEntity $data
+     * @param int                    $metaId
+     * @param TemplateMetaDataEntity $data
      * @return bool
      */
-    public function update(int $metaId, MetaEntity $data): bool
+    public function update(int $metaId, TemplateMetaDataEntity $data): bool
     {
         $query = sprintf(
             "UPDATE %sfaqmeta SET page_id = '%s', type = '%s', content = '%s' WHERE id = %d AND lang = '%s'",
@@ -178,7 +180,7 @@ class Meta
      * @param int $id
      * @return bool
      */
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqmeta WHERE lang = '%s' AND id = %d",

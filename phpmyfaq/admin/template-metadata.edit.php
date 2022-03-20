@@ -1,22 +1,22 @@
 <?php
 
 /**
- * The meta data administration frontend.
+ * The template meta data administration frontend.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @category phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @category  phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-08-10
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-08-10
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Meta;
+use phpMyFAQ\Template\TemplateMetaData;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -44,7 +44,7 @@ if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     echo $PMF_LANG['err_NotAuth'];
 }
 
-$meta = new Meta($faqConfig);
+$meta = new TemplateMetaData($faqConfig);
 $metaId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $metaData = $meta->getById((int)$metaId);
 ?>

@@ -18,14 +18,14 @@
 
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
-use phpMyFAQ\Entity\MetaEntity as MetaEntity;
+use phpMyFAQ\Entity\TemplateMetaDataEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Language;
-use phpMyFAQ\Meta;
+use phpMyFAQ\Template\TemplateMetaData;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\User;
 
@@ -233,19 +233,23 @@ switch ($ajaxAction) {
         }
         break;
 
-    case 'add_meta':
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    case 'add-template-metadata':
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+            $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
 
-        $meta = new Meta($faqConfig);
-        $entity = new MetaEntity();
+        $meta = new TemplateMetaData($faqConfig);
+        $entity = new TemplateMetaDataEntity();
 
         $entity
-            ->setPageId(Filter::filterInput(INPUT_GET, 'page_id', FILTER_UNSAFE_RAW))
-            ->setType(Filter::filterInput(INPUT_GET, 'type', FILTER_UNSAFE_RAW))
-            ->setContent(Filter::filterInput(INPUT_GET, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
+            ->setPageId(Filter::filterVar($postData->pageId, FILTER_UNSAFE_RAW))
+            ->setType(Filter::filterVar($postData->type, FILTER_UNSAFE_RAW))
+            ->setContent(Filter::filterVar($postData->content, FILTER_SANITIZE_SPECIAL_CHARS));
 
         $metaId = $meta->add($entity);
 
@@ -254,17 +258,23 @@ switch ($ajaxAction) {
         } else {
             $payload = ['error' => $metaId];
         }
+
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($payload);
         break;
 
-    case 'delete_meta':
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    case 'delete-template-metadata':
+        $json = file_get_contents('php://input', true);
+        $deleteData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
+            $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
 
-        $meta = new Meta($faqConfig);
-        $metaId = Filter::filterInput(INPUT_GET, 'meta_id', FILTER_UNSAFE_RAW);
+        $meta = new TemplateMetaData($faqConfig);
+        $metaId = Filter::filterVar($deleteData->metaId, FILTER_UNSAFE_RAW);
 
         if ($meta->delete((int)$metaId)) {
             $payload = ['deleted' => $metaId];
@@ -272,6 +282,7 @@ switch ($ajaxAction) {
             $payload = ['error' => $metaId];
         }
 
+        $http->setStatus(200);
         $http->sendJsonWithHeaders($payload);
         break;
 }

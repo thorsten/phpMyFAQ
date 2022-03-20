@@ -22,32 +22,32 @@ namespace phpMyFAQ\Entity;
  *
  * @package phpMyFAQ\Entity
  */
-class MetaEntity
+class TemplateMetaDataEntity
 {
     /**
      * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      */
-    private $lang;
+    private string $lang;
 
     /**
      * @var string
      */
-    private $pageId;
+    private string $pageId;
 
     /**
      * @var string
      */
-    private $type;
+    private string $type;
 
     /**
      * @var string
      */
-    private $content;
+    private string $content;
 
     /**
      * @return int
@@ -59,9 +59,9 @@ class MetaEntity
 
     /**
      * @param  int $id
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function setId(int $id): MetaEntity
+    public function setId(int $id): TemplateMetaDataEntity
     {
         $this->id = $id;
         return $this;
@@ -77,9 +77,9 @@ class MetaEntity
 
     /**
      * @param  string $lang
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function setLang(string $lang): MetaEntity
+    public function setLang(string $lang): TemplateMetaDataEntity
     {
         $this->lang = $lang;
         return $this;
@@ -95,9 +95,9 @@ class MetaEntity
 
     /**
      * @param  string $pageId
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function setPageId(string $pageId): MetaEntity
+    public function setPageId(string $pageId): TemplateMetaDataEntity
     {
         $this->pageId = $pageId;
         return $this;
@@ -113,9 +113,9 @@ class MetaEntity
 
     /**
      * @param  string $type
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function setType(string $type): MetaEntity
+    public function setType(string $type): TemplateMetaDataEntity
     {
         $this->type = $type;
         return $this;
@@ -131,9 +131,9 @@ class MetaEntity
 
     /**
      * @param  string $content
-     * @return MetaEntity
+     * @return TemplateMetaDataEntity
      */
-    public function setContent(string $content): MetaEntity
+    public function setContent(string $content): TemplateMetaDataEntity
     {
         $this->content = $content;
         return $this;

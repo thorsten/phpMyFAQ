@@ -13,7 +13,30 @@
  * @since     2022-01-29
  */
 
-export const fetchConfiguration = (target) => {
+import { Tab } from 'bootstrap';
+
+export const handleConfiguration = () => {
+  const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
+  if (configTabList.length) {
+    let tabLoaded = false;
+    configTabList.forEach((element) => {
+      const configTabTrigger = new Tab(element);
+      element.addEventListener('shown.bs.tab', (event) => {
+        event.preventDefault();
+        let target = event.target.getAttribute('href');
+        fetchConfiguration(target);
+        tabLoaded = true;
+        configTabTrigger.show();
+      });
+    });
+
+    if (!tabLoaded) {
+      fetchConfiguration('#main');
+    }
+  }
+};
+
+const fetchConfiguration = (target) => {
   fetch(`index.php?action=ajax&ajax=configuration-list&conf=${target.substr(1)}`)
     .then(
       (response) => {

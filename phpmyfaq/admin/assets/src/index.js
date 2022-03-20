@@ -13,35 +13,18 @@
  * @since 2019-12-20
  */
 
-import { Tab } from 'bootstrap';
 import { renderVisitorCharts } from './dashboard';
 import { sidebarToggle } from './sidebar';
-import { fetchConfiguration } from './configuration';
+import { handleConfiguration } from './configuration';
 import { handleInstances } from './instance';
 import { handleStopWords } from './stopwords';
+import { handleTemplateMetaData } from './template-meta-data';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   // Configuration
-  const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
-  if (configTabList.length) {
-    let tabLoaded = false;
-    configTabList.forEach((element) => {
-      const configTabTrigger = new Tab(element);
-      element.addEventListener('shown.bs.tab', (event) => {
-        event.preventDefault();
-        let target = event.target.getAttribute('href');
-        fetchConfiguration(target);
-        tabLoaded = true;
-        configTabTrigger.show();
-      });
-    });
-
-    if (!tabLoaded) {
-      fetchConfiguration('#main');
-    }
-  }
+  handleConfiguration();
 
   // Dashboard
   renderVisitorCharts();
@@ -54,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Stop Words
   handleStopWords();
+
+  // Template Meta data
+  handleTemplateMetaData();
 
   //
   // User

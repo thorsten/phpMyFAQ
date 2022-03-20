@@ -1,22 +1,23 @@
 <?php
 
 /**
- * The meta data administration frontend.
+ * The template metadata administration frontend.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @category phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @category  phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-08-10
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-08-10
  */
 
-use phpMyFAQ\Entity\MetaEntity;
+use phpMyFAQ\Entity\TemplateMetaDataEntity;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Meta;
+use phpMyFAQ\Template\TemplateMetaData;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -50,14 +51,14 @@ if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     echo $PMF_LANG['err_NotAuth'];
 }
 
-$meta = new Meta($faqConfig);
+$meta = new TemplateMetaData($faqConfig);
 
 // Update meta data
 if ('meta.update' === $action && is_integer($metaId)) {
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         echo $PMF_LANG['err_NotAuth'];
     } else {
-        $entity = new MetaEntity();
+        $entity = new TemplateMetaDataEntity();
         $entity->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_UNSAFE_RAW))->setType(
                 Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW)
             )->setContent(Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
@@ -102,9 +103,10 @@ $metaData = $meta->getAll();
                 <a href="?action=meta.edit&id=<?= $data->getId() ?>" class="btn btn-sm btn-success">
                     <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
-                <a href="#" id="delete-meta-<?= $data->getId() ?>" class="btn btn-sm btn-danger pmf-meta-delete"
-                   data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
-                    <i aria-hidden="true" class="fa fa-trash"></i>
+                <a href="#" data-delete-meta-id="<?= $data->getId() ?>" class="btn btn-sm btn-danger pmf-meta-delete"
+                   data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
+                    <i aria-hidden="true" class="fa fa-trash" data-delete-meta-id="<?= $data->getId() ?>"
+                       data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>"></i>
                 </a>
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#codeModal"
                         data-code-snippet="<?= $data->getContent() ?>">
@@ -127,7 +129,7 @@ $metaData = $meta->getAll();
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post" accept-charset="utf-8">
+                <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
                     <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="row mb-2">
@@ -184,5 +186,3 @@ $metaData = $meta->getAll();
         </div>
     </div>
 </div>
-
-<script src="assets/js/meta.js"></script>
