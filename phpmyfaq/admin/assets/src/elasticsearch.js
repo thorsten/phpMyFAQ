@@ -36,7 +36,10 @@ export const handleElasticsearch = () => {
             const stats = document.getElementById('pmf-elasticsearch-result');
             stats.insertAdjacentElement(
               'afterend',
-              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+              addElement('div', {
+                classList: 'alert alert-success',
+                innerText: response.success,
+              })
             );
 
             setInterval(elasticsearchStats, 5000);
@@ -53,20 +56,22 @@ export const handleElasticsearch = () => {
 
     const elasticsearchStats = () => {
       const div = document.getElementById('pmf-elasticsearch-stats');
-      div.innerHTML = '';
-      fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=stats`)
-        .then((response) => {
-          return response.json();
-        })
-        .then((stats) => {
-          const count = stats?.indices?.phpmyfaq?.total?.docs?.count;
-          const sizeInBytes = stats?.indices?.phpmyfaq?.total?.store?.size_in_bytes;
-          let html = '<dl class="row">';
-          html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count}</dd>`;
-          html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${sizeInBytes}</dd>`;
-          html += '</dl>';
-          div.innerHTML = html;
-        });
+      if (div) {
+        div.innerHTML = '';
+        fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=stats`)
+          .then((response) => {
+            return response.json();
+          })
+          .then((stats) => {
+            const count = stats?.indices?.phpmyfaq?.total?.docs?.count;
+            const sizeInBytes = stats?.indices?.phpmyfaq?.total?.store?.size_in_bytes;
+            let html = '<dl class="row">';
+            html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count}</dd>`;
+            html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${sizeInBytes}</dd>`;
+            html += '</dl>';
+            div.innerHTML = html;
+          });
+      }
     };
 
     elasticsearchStats();
