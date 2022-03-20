@@ -2,16 +2,17 @@
 
 /**
  * phpMyFAQ Elasticsearch information.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-25
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-12-25
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,7 +34,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->
           <i aria-hidden="true" class="fa fa-searchengine"></i> <?= $PMF_LANG['ad_es_create_index'] ?>
         </button>
 
-        <button class="btn btn-sm btn-primary pmf-elasticsearch" data-action="import">
+        <button class="btn btn-sm btn-secondary pmf-elasticsearch" data-action="import">
           <i aria-hidden="true" class="fa fa-search-plus"></i> <?= $PMF_LANG['ad_es_bulk_index'] ?>
         </button>
 
@@ -46,17 +47,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->
 
   <div class="row">
     <div class="col-lg-12">
-      <div class="result"></div>
+      <div id="pmf-elasticsearch-result"></div>
       <h5><?= $PMF_LANG['ad_menu_searchstats'] ?></h5>
-
-
-      <div id="pmf-elasticsearch-stats">
-      </div>
-
+      <div id="pmf-elasticsearch-stats"></div>
     </div>
   </div>
-
-  <script src="assets/js/search.js"></script>
 
     <?php
 } else {

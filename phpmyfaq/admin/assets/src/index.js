@@ -19,6 +19,7 @@ import { handleConfiguration } from './configuration';
 import { handleInstances } from './instance';
 import { handleStopWords } from './stopwords';
 import { handleTemplateMetaData } from './template-meta-data';
+import { handleElasticsearch } from './elasticsearch';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -40,6 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Template Meta data
   handleTemplateMetaData();
+
+  // Elasticsearch configuration
+  handleElasticsearch();
 
   //
   // User

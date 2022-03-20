@@ -1,0 +1,74 @@
+import { addElement } from '../../../assets/src/utils';
+
+/**
+ * Admin Elasticsearch configuration
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne
+ * @copyright 2022 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2022-03-20
+ */
+
+export const handleElasticsearch = () => {
+  const buttons = document.querySelectorAll('button.pmf-elasticsearch');
+
+  if (buttons) {
+    buttons.forEach((element) => {
+      element.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const action = event.target.getAttribute('data-action');
+
+        fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=${action}`)
+          .then(async (response) => {
+            if (response.status === 200) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          })
+          .then((response) => {
+            const stats = document.getElementById('pmf-elasticsearch-result');
+            stats.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            );
+
+            setInterval(elasticsearchStats, 5000);
+          })
+          .catch((error) => {
+            const stats = document.getElementById('pmf-elasticsearch-result');
+            stats.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: error })
+            );
+          });
+      });
+    });
+
+    const elasticsearchStats = () => {
+      const div = document.getElementById('pmf-elasticsearch-stats');
+      div.innerHTML = '';
+      fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=stats`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((stats) => {
+          const count = stats?.indices?.phpmyfaq?.total?.docs?.count;
+          const sizeInBytes = stats?.indices?.phpmyfaq?.total?.store?.size_in_bytes;
+          let html = '<dl class="row">';
+          html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count}</dd>`;
+          html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${sizeInBytes}</dd>`;
+          html += '</dl>';
+          div.innerHTML = html;
+        });
+    };
+
+    elasticsearchStats();
+  }
+};
