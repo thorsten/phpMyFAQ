@@ -35,23 +35,23 @@ class Encryption
     /**
      * Public array that contains error messages.
      *
-     * @var array
+     * @var string[]
      */
-    public $errors = [];
+    public array $errors = [];
 
     /**
      * Configuration.
      *
-     * @var Configuration
+     * @var Configuration|null
      */
-    protected $config = null;
+    protected ?Configuration $config = null;
 
     /**
      * Salt.
      *
      * @var string
      */
-    protected $salt = '';
+    protected string $salt = '';
 
     /**
      * Constructor.
@@ -106,13 +106,13 @@ class Encryption
     /**
      * Encrypts the string str and returns the result.
      *
-     * @param string $string String
+     * @param string $password String
      *
      * @return string
      */
-    public function encrypt(string $string): string
+    public function encrypt(string $password): string
     {
-        return $string;
+        return $password;
     }
 
     /**
