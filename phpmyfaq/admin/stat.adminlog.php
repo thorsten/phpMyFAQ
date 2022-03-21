@@ -15,6 +15,7 @@
  * @since     2003-02-23
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Logging;
@@ -141,9 +142,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
     <?php
 } elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
     if ($logging->delete()) {
-        printf('<p class="alert alert-success">%s</p>', Translation::get('ad_adminlog_delete_success'));
+        echo Alert::success('ad_adminlog_delete_success');
     } else {
-        printf('<p class="alert alert-danger">%s</p>', Translation::get('ad_adminlog_delete_failure'));
+        echo Alert::danger('ad_adminlog_delete_failure');
     }
 } else {
     echo Translation::get('err_NotAuth');

@@ -16,6 +16,7 @@
  * @since     2003-03-30
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
@@ -60,9 +61,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 
     if ($csrfChecked && 'truncatesearchterms' === $action) {
         if ($search->deleteAllSearchTerms()) {
-            printf('<p class="alert alert-success">%s</p>', Translation::get('ad_searchterm_del_suc'));
+            echo Alert::success('ad_searchterm_del_suc');
         } else {
-            printf('<p class="alert alert-danger">%s</p>', Translation::get('ad_searchterm_del_err'));
+            echo Alert::danger('ad_searchterm_del_err');
         }
     }
 

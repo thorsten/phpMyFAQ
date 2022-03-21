@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
@@ -180,7 +181,7 @@ if (
                         $permissions->removeFromAllGroups($userId);
                     }
 
-                    $message = '<p class="alert alert-success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
+                    $message = Alert::success('ad_user_deleted');
                 }
             }
             $http->sendJsonWithHeaders($message);

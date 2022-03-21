@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Attachment\AttachmentFactory;
 
@@ -37,10 +38,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
     try {
         $att = AttachmentFactory::create($id);
         if ($att && $att->delete()) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);
+            echo Alert::success('ad_att_delsuc');
         }
     } catch (AttachmentException $e) {
-        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_att_delfail']);
+        echo Alert::danger('ad_att_delfail');
     }
 
     printf(

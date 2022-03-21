@@ -15,6 +15,7 @@
  * @since     2018-08-10
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Entity\TemplateMetaDataEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TemplateMetaData;
@@ -66,18 +67,9 @@ if ('meta.update' === $action && is_integer($metaId)) {
             ->setContent(Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
 
         if ($meta->update($metaId, $entity)) {
-            printf(
-                '<p class="alert alert-success">%s%s</p>',
-                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                Translation::get('ad_config_saved')
-            );
+            echo Alert::success('ad_config_saved');
         } else {
-            printf(
-                '<p class="alert alert-danger">%s%s<br/>%s</p>',
-                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                Translation::get('ad_entryins_fail'),
-                $faqConfig->getDb()->error()
-            );
+            echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
         }
     }
 }

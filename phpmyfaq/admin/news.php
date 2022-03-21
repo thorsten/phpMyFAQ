@@ -7,21 +7,23 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Comments;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\News;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -38,381 +40,405 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) { ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
-            <?= $PMF_LANG['ad_news_add'] ?>
-          </h1>
-        </div>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="fa fa-pencil"></i>
+    <?= Translation::get('ad_news_add') ?>
+  </h1>
+</div>
 
-        <div class="row">
-            <div class="col-12">
-                <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate>
+<div class="row">
+    <div class="col-12">
+        <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate>
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="newsheader">
-                            <?= $PMF_LANG['ad_news_header'] ?>
-                        </label>
-                        <div class="col-9">
-                            <input class="form-control" type="text" name="newsheader" id="newsheader">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="news"><?= $PMF_LANG['ad_news_text'] ?>:</label>
-                        <div class="col-9">
-                            <textarea name="news" rows="5" class="form-control" id="news"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
-                        <div class="col-9">
-                            <input class="form-control" type="text" name="authorName" id="authorName"
-                                   value="<?= $user->getUserData('display_name') ?>">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
-                        <div class="col-9">
-                            <input class="form-control" type="email" name="authorEmail" id="authorEmail"
-                                   value="<?= $user->getUserData('email') ?>">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="active">
-                            <?= $PMF_LANG['ad_news_set_active'] ?>:
-                        </label>
-                        <div class="col-9 checkbox">
-                            <label>
-                                <input type="checkbox" name="active" id="active" value="y">
-                                <?= $PMF_LANG['ad_gen_yes'] ?>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
-                        <div class="col-9 checkbox">
-                            <label>
-                                <input type="checkbox" name="comment" id="comment" value="y">
-                                <?= $PMF_LANG['ad_gen_yes'] ?>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
-                        <div class="col-9">
-                            <input class="form-control" type="text" name="link" id="link" placeholder="http://www.example.com/">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
-                        <div class="col-9">
-                            <input type="text" name="linkTitle" id="linkTitle" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" ><?= $PMF_LANG['ad_news_link_target'] ?></label>
-                        <div class="col-9 radio">
-                            <label>
-                                <input type="radio" name="target" value="blank">
-                                <?= $PMF_LANG['ad_news_link_window'] ?>
-                                <br>
-                                <input type="radio" name="target" value="self">
-                                <?= $PMF_LANG['ad_news_link_faq'] ?>
-                                <br>
-                                <input type="radio" name="target" value="parent">
-                                <?= $PMF_LANG['ad_news_link_parent'] ?>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
-                        <div class="col-9">
-                            <?= LanguageHelper::renderSelectLanguage($faqLangCode, false, [], 'langTo') ?>
-                        </div>
-                    </div>
-
-                    <legend><?= $PMF_LANG['ad_news_expiration_window'] ?></legend>
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
-                        <div class="col-3">
-                            <input type="date" name="dateStart" id="dateStart" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
-                        <div class="col-3">
-                            <input type="date" name="dateEnd" id="dateEnd" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="btn-group float-right mt-2" role="group">
-                          <a class="btn btn-info" href="?action=news">
-                            <?= $PMF_LANG['ad_entry_back'] ?>
-                          </a>
-                          <button class="btn btn-primary" type="submit">
-                            <?= $PMF_LANG['ad_news_add'] ?>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                </form>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="newsheader">
+                    <?= Translation::get('ad_news_header') ?>
+                </label>
+                <div class="col-9">
+                    <input class="form-control" type="text" name="newsheader" id="newsheader">
+                </div>
             </div>
-        </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="news"><?= Translation::get('ad_news_text') ?>:</label>
+                <div class="col-9">
+                    <textarea name="news" rows="5" class="form-control" id="news"></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="authorName">
+                <?= Translation::get('ad_news_author_name') ?>
+                </label>
+                <div class="col-9">
+                    <input class="form-control" type="text" name="authorName" id="authorName"
+                           value="<?= $user->getUserData('display_name') ?>">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="authorEmail">
+                <?= Translation::get('ad_news_author_email') ?>
+                </label>
+                <div class="col-9">
+                    <input class="form-control" type="email" name="authorEmail" id="authorEmail"
+                           value="<?= $user->getUserData('email') ?>">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="offset-3 col-9">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="y" id="active" name="active">
+                      <label class="form-check-label" for="active">
+                        <?= Translation::get('ad_news_set_active') ?>
+                      </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="y" id="comment" name="comment">
+                        <label class="form-check-label" for="comment">
+                            <?= Translation::get('ad_news_allowComments') ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="link">
+                <?= Translation::get('ad_news_link_url') ?>
+                </label>
+                <div class="col-9">
+                    <input class="form-control" type="text" name="link" id="link"
+                    placeholder="https://www.example.com/">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="linkTitle">
+                <?= Translation::get('ad_news_link_title') ?>
+                </label>
+                <div class="col-9">
+                    <input type="text" name="linkTitle" id="linkTitle" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" ><?= Translation::get('ad_news_link_target') ?></label>
+                <div class="col-9 radio">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="target" id="blank" value="blank">
+                        <label class="form-check-label" for="blank">
+                            <?= Translation::get('ad_news_link_window') ?>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="target" id="self" value="self">
+                        <label class="form-check-label" for="self">
+                            <?= Translation::get('ad_news_link_faq') ?>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="target" id="parent" value="parent">
+                        <label class="form-check-label" for="parent">
+                            <?= Translation::get('ad_news_link_parent') ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="langTo"><?= Translation::get('ad_entry_locale') ?>:</label>
+                <div class="col-9">
+                    <?= LanguageHelper::renderSelectLanguage($faqLangCode, false, [], 'langTo') ?>
+                </div>
+            </div>
+
+            <h6><?= Translation::get('ad_news_expiration_window') ?></h6>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="dateStart"><?= Translation::get('ad_news_from') ?></label>
+                <div class="col-3">
+                    <input type="date" name="dateStart" id="dateStart" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="dateEnd"><?= Translation::get('ad_news_to') ?></label>
+                <div class="col-3">
+                    <input type="date" name="dateEnd" id="dateEnd" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+              <div class="col-12 text-end">
+                  <a class="btn btn-secondary" href="?action=news">
+                    <?= Translation::get('ad_entry_back') ?>
+                  </a>
+                  <button class="btn btn-primary" type="submit">
+                    <?= Translation::get('ad_news_add') ?>
+                  </button>
+              </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 
     <?php
 } elseif ('news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     ?>
-         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
-              <?= $PMF_LANG['msgNews'] ?>
-          </h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-              <a href="?action=add-news">
-                  <button class="btn btn-sm     btn-success">
-                    <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_menu_news_add'] ?>
-                  </button>
-              </a>
-            </div>
-          </div>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-pencil"></i> <?= Translation::get('msgNews') ?>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a href="?action=add-news">
+                <button class="btn btn-sm btn-success">
+                    <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_menu_news_add') ?>
+                </button>
+            </a>
         </div>
+    </div>
+</div>
 
-        <div class="row">
-            <div class="col-12">
-                <table class="table table-hover align-middle">
-                <thead class="thead-dark">
-                    <tr>
-                        <th><?= $PMF_LANG['ad_news_headline'] ?></th>
-                        <th><?= $PMF_LANG['ad_news_date'] ?></th>
-                        <th colspan="2">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
+<div class="row">
+    <div class="col-12">
+        <table class="table table-hover align-middle">
+        <thead class="thead-dark">
+            <tr>
+                <th><?= Translation::get('ad_news_headline') ?></th>
+                <th><?= Translation::get('ad_news_date') ?></th>
+                <th colspan="2">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
     <?php
     $newsHeader = $news->getNewsHeader();
     $date = new Date($faqConfig);
     if (count($newsHeader)) {
         foreach ($newsHeader as $newsItem) {
             ?>
-                    <tr>
-                        <td><?= $newsItem['header'] ?></td>
-                        <td><?= $date->format($newsItem['date']) ?></td>
-                        <td>
-                            <a class="btn btn-primary" href="?action=edit-news&amp;id=<?= $newsItem['id'] ?>">
-                                <span title="<?= $PMF_LANG['ad_news_update'] ?>" class="fa fa-edit"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <a class="btn btn-danger" href="?action=delete-news&amp;id=<?= $newsItem['id'] ?>">
-                                <span title="<?= $PMF_LANG['ad_news_delete'] ?>" class="fa fa-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
+            <tr>
+                <td><?= $newsItem['header'] ?></td>
+                <td><?= $date->format($newsItem['date']) ?></td>
+                <td>
+                    <a class="btn btn-primary" href="?action=edit-news&amp;id=<?= $newsItem['id'] ?>">
+                        <span title="<?= Translation::get('ad_news_update') ?>" class="fa fa-edit"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-danger" href="?action=delete-news&amp;id=<?= $newsItem['id'] ?>">
+                        <span title="<?= Translation::get('ad_news_delete') ?>" class="fa fa-trash"></span>
+                    </a>
+                </td>
+            </tr>
             <?php
         }
     } else {
         printf(
-            '<tr><td colspan="3">%s</td></tr>',
-            $PMF_LANG['ad_news_nodata']
+            '<tr><td colspan="4">%s</td></tr>',
+            Translation::get('ad_news_nodata')
         );
     }
     ?>
-                </tbody>
-                </table>
-            </div>
-        </div>
+        </tbody>
+        </table>
+    </div>
+</div>
     <?php
 } elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
     ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
-            <?= $PMF_LANG['ad_news_edit'] ?>
-          </h1>
-        </div>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="fa fa-pencil"></i>
+    <?= Translation::get('ad_news_edit') ?>
+  </h1>
+</div>
 
-        <div class="row">
-            <div class="col-12">
-                <form  action="?action=update-news" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
+<div class="row">
+    <div class="col-12">
+        <form  action="?action=update-news" method="post" accept-charset="utf-8">
+            <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="newsheader"><?= $PMF_LANG['ad_news_header'] ?></label>
-                        <div class="col-9">
-                            <input type="text" name="newsheader" id="newsheader" class="form-control"
-                                   value="<?= $newsData['header'] ?? '' ?>">
-                        </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="newsheader">
+                <?= Translation::get('ad_news_header') ?>
+                </label>
+                <div class="col-9">
+                    <input type="text" name="newsheader" id="newsheader" class="form-control"
+                           value="<?= $newsData['header'] ?? '' ?>">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="news">
+                <?= Translation::get('ad_news_text') ?>:
+                </label>
+                <div class="col-9">
+                    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                    <textarea id="news" name="news" class="form-control" rows="5"><?php
+                    if (isset($newsData['content'])) {
+                        echo htmlspecialchars($newsData['content'], ENT_QUOTES);
+                    } ?></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="authorName">
+                <?= Translation::get('ad_news_author_name') ?>
+                </label>
+                <div class="col-9">
+                    <input type="text" name="authorName" value="<?= $newsData['authorName'] ?>" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="authorEmail">
+                <?= Translation::get('ad_news_author_email') ?>
+                </label>
+                <div class="col-9">
+                    <input type="email" name="authorEmail" value="<?= $newsData['authorEmail'] ?>" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="offset-3 col-9">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="y" id="active" name="active"
+                         <?php if (isset($newsData['active']) && $newsData['active']) {
+                                echo ' checked';
+                         } ?>>
+                      <label class="form-check-label" for="active">
+                        <?= Translation::get('ad_news_set_active') ?>
+                      </label>
                     </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="news"><?= $PMF_LANG['ad_news_text'] ?>:</label>
-                        <div class="col-9">
-                            <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                            <textarea id="news" name="news" class="form-control" rows="5"><?php
-                            if (isset($newsData['content'])) {
-                                echo htmlspecialchars($newsData['content'], ENT_QUOTES);
-                            } ?></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
-                        <div class="col-9">
-                            <input type="text" name="authorName" value="<?= $newsData['authorName'] ?>" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
-                        <div class="col-9">
-                            <input type="email" name="authorEmail" value="<?= $newsData['authorEmail'] ?>" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="active">
-                            <?= $PMF_LANG['ad_news_set_active'] ?>:
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="y" id="comment" name="comment"
+                        <?php if (isset($newsData['allowComments']) && $newsData['allowComments']) {
+                            echo ' checked';
+                        } ?>>
+                        <label class="form-check-label" for="comment">
+                            <?= Translation::get('ad_news_allowComments') ?>
                         </label>
-                        <div class="col-9">
-                            <label>
-                                <input type="checkbox" name="active" id="active" value="y"
-                                    <?php if (isset($newsData['active']) && $newsData['active']) {
-                                        echo ' checked';
-                                    } ?>
-                                <?= $PMF_LANG['ad_gen_yes'] ?>
-                            </label>
-                        </div>
-
                     </div>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
-                        <div class="col-9">
-                            <label>
-                                <input type="checkbox" name="comment" id="comment" value="y"
-                                <?php if (isset($newsData['allowComments']) && $newsData['allowComments']) {
-                                    echo ' checked';
-                                } ?>>
-                                <?= $PMF_LANG['ad_gen_yes'] ?>
-                            </label>
-                        </div>
-                    </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="link">
+                <?= Translation::get('ad_news_link_url') ?>
+                </label>
+                <div class="col-9">
+                    <input type="text" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
+                </div>
+            </div>
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
-                        <div class="col-9">
-                            <input type="text" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
-                        </div>
-                    </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="linkTitle">
+                <?= Translation::get('ad_news_link_title') ?>
+                </label>
+                <div class="col-9">
+                    <input type="text" id="linkTitle" name="linkTitle" value="<?= $newsData['linkTitle'] ?>"
+                    class="form-control">
+                </div>
+            </div>
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
-                        <div class="col-9">
-                            <input type="text" id="linkTitle" name="linkTitle" value="<?= $newsData['linkTitle'] ?>"
-                            class="form-control">
-                        </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" ><?= Translation::get('ad_news_link_target') ?></label>
+                <div class="col-9 radio">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="target" id="blank" value="blank"
+                        <?php if ('blank' == $newsData['target']) {
+                            echo ' checked';
+                        } ?>>
+                        <label class="form-check-label" for="blank">
+                            <?= Translation::get('ad_news_link_window') ?>
+                        </label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="target" id="self" value="self"
+                        <?php if ('self' == $newsData['target']) {
+                            echo ' checked';
+                        } ?>>
+                        <label class="form-check-label" for="self">
+                            <?= Translation::get('ad_news_link_faq') ?>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="target" id="parent" value="parent"
+                        <?php if ('parent' == $newsData['target']) {
+                            echo ' checked';
+                        } ?>>
+                        <label class="form-check-label" for="parent">
+                            <?= Translation::get('ad_news_link_parent') ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="target"><?= $PMF_LANG['ad_news_link_target'] ?></label>
-                        <div class="col-9">
-                        <label>
-                                <input type="radio" name="target" value="blank"
-                                <?php if ('blank' == $newsData['target']) {
-                                    echo ' checked';
-                                } ?>>
-                                <?= $PMF_LANG['ad_news_link_window'] ?>
-                                <br>
-                                <input type="radio" name="target" value="self"
-                                <?php if ('self' == $newsData['target']) {
-                                    echo ' checked';
-                                } ?>>
-                                <?= $PMF_LANG['ad_news_link_faq'] ?>
-                                <br>
-                                <input type="radio" name="target" value="parent"
-                                <?php if ('parent' == $newsData['target']) {
-                                    echo ' checked';
-                                } ?>>
-                                <?= $PMF_LANG['ad_news_link_parent'] ?>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
-                        <div class="col-9">
-                        <?= LanguageHelper::renderSelectLanguage($newsData['lang'], false, [], 'langTo') ?>
-                        </div>
-                    </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="langTo"><?= Translation::get('ad_entry_locale') ?>:</label>
+                <div class="col-9">
+                <?= LanguageHelper::renderSelectLanguage($newsData['lang'], false, [], 'langTo') ?>
+                </div>
+            </div>
     <?php
     $dateStart = ($newsData['dateStart'] != '00000000000000' ? Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
     $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
     ?>
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
-                        <div class="col-9">
-                            <input type="date" name="dateStart" id="dateStart" class="form-control" value="<?= $dateStart ?>">
-                        </div>
-                    </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="dateStart"><?= Translation::get('ad_news_from') ?></label>
+                <div class="col-9">
+                    <input type="date" name="dateStart" id="dateStart" class="form-control" value="<?= $dateStart ?>">
+                </div>
+            </div>
 
-                    <div class="row">
-                        <label class="col-3 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
-                        <div class="col-9">
-                            <input type="date"  name="dateEnd" id="dateEnd" class="form-control" value="<?= $dateEnd ?>">
-                        </div>
-                    </div>
+            <div class="row mb-2">
+                <label class="col-3 col-form-label" for="dateEnd"><?= Translation::get('ad_news_to') ?></label>
+                <div class="col-9">
+                    <input type="date"  name="dateEnd" id="dateEnd" class="form-control" value="<?= $dateEnd ?>">
+                </div>
+            </div>
 
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="btn-group float-right mt-2" role="group">
-                          <button class="btn btn-primary" type="submit">
-                            <?= $PMF_LANG['ad_news_edit'] ?>
-                          </button>
-                          <a class="btn btn-info" href="?action=news">
-                            <?= $PMF_LANG['ad_entry_back'] ?>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                </form>
+            <div class="row">
+              <div class="col-12 text-end">
+                  <a class="btn btn-secondary" href="?action=news">
+                    <?= Translation::get('ad_entry_back') ?>
+                  </a>
+                  <button class="btn btn-primary" type="submit">
+                    <?= Translation::get('ad_news_edit') ?>
+                  </button>
+              </div>
+            </div>
+        </form>
     <?php
     $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $oComment = new Comments($faqConfig);
     $comments = $oComment->getCommentsData($newsId, CommentType::NEWS);
     if (count($comments) > 0) {
         ?>
-                <div class="row"><strong><?= $PMF_LANG['ad_entry_comment'] ?></strong></div>
+        <div class="row"><strong><?= Translation::get('ad_entry_comment') ?></strong></div>
         <?php
     }
     foreach ($comments as $item) {
         ?>
-                <div class="row">
-                    <?= $PMF_LANG['ad_entry_commentby'] ?>
-                    <a href="mailto:<?= $item['email'] ?>">
-                        <?= $item['user'] ?>
-                    </a>:<br>
-                    <?= $item['content'] ?><br>
-                    <?= $PMF_LANG['newsCommentDate'] . Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
-                    <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= CommentType::NEWS ?>">
-                        <i aria-hidden="true" class="fa fa-trash"></i>
-                    </a>
-                </div>
-            </div>
+        <div class="row">
+            <?= Translation::get('ad_entry_commentby') ?>
+            <a href="mailto:<?= $item['email'] ?>">
+                <?= $item['user'] ?>
+            </a>:<br>
+            <?= $item['content'] ?><br>
+            <?= Translation::get('newsCommentDate') . Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
+            <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= CommentType::NEWS ?>">
+                <i aria-hidden="true" class="fa fa-trash"></i>
+            </a>
         </div>
+    </div>
+</div>
         <?php
     }
 } elseif ('save-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) {
@@ -420,7 +446,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-pencil"></i>
-            <?= $PMF_LANG['ad_news_data'] ?>
+            <?= Translation::get('ad_news_data') ?>
           </h1>
         </div>
 
@@ -457,11 +483,11 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     );
 
     if ($news->addNewsEntry($newsData)) {
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
+        echo Alert::success('ad_news_updatesuc');
     } else {
-        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_insertfail']);
+        echo Alert::danger('ad_news_insertfail', $faqConfig->getDb()->error());
     }
-    printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+    printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', Translation::get('msgNews'));
     ?>
             </div>
         </div>
@@ -471,7 +497,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-pencil"></i>
-            <?= $PMF_LANG['ad_news_data'] ?>
+            <?= Translation::get('ad_news_data') ?>
           </h1>
         </div>
 
@@ -509,11 +535,11 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
     $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry((int) $newsId, $newsData)) {
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
+        echo Alert::success('ad_news_updatesuc');
     } else {
-        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_updatefail']);
+        echo Alert::danger('ad_news_updatefail', $faqConfig->getDb()->error());
     }
-    printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+    printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', Translation::get('msgNews'));
     ?>
             </div>
         </div>
@@ -523,7 +549,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-pencil"></i>
-            <?= $PMF_LANG['ad_news_data'] ?>
+            <?= Translation::get('ad_news_data') ?>
           </h1>
         </div>
 
@@ -535,7 +561,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
     if ('no' == $precheck) {
         ?>
-    <div class="row"><?= $PMF_LANG['ad_news_del'];
+    <div class="row"><?= Translation::get('ad_news_del');
     ?></div>
     <div class="text-center">
     <form action="?action=delete-news" method="post" accept-charset="utf-8">
@@ -543,12 +569,10 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
     <input type="hidden" name="really" value="yes">
         <button class="btn btn-warning" type="submit" name="submit">
-            <?= $PMF_LANG['ad_news_yesdelete'];
-            ?>
+            <?= Translation::get('ad_news_yesdelete') ?>
         </button>
         <a class="btn btn-inverse" onclick="history.back();">
-            <?= $PMF_LANG['ad_news_nodelete'];
-            ?>
+            <?= Translation::get('ad_news_nodelete') ?>
         </a>
     </form>
     </div>
@@ -558,10 +582,10 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         if ($csrfCheck) {
             $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
             $news->deleteNews((int)$deleteId);
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_delsuc']);
-            printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+            echo Alert::success('ad_news_delsuc');
+            printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', Translation::get('msgNews'));
         }
     }
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

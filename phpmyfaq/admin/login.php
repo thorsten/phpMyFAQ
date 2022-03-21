@@ -15,6 +15,8 @@
  * @since 2013-02-05
  */
 
+use phpMyFAQ\Component\Alert;
+
 if (isset($error) && 0 < strlen($error)) {
     $message = sprintf(
         '<div class="alert alert-danger alert-dismissible fade show" role="alert">%s' .
@@ -26,12 +28,7 @@ if (isset($error) && 0 < strlen($error)) {
     $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
 }
 if ($action === 'logout') {
-    $message = sprintf(
-        '<div class="alert alert-success alert-dismissible fade show" role="alert">%s' .
-        '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
-        '</div>',
-        $PMF_LANG['ad_logout']
-    );
+    $message = Alert::success('ad_logout');
 }
 if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get(
         'security.useSslForLogins'

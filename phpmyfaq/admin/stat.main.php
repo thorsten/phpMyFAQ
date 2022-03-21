@@ -87,7 +87,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 closedir($dir);
                 $session->deleteSessions($first, $last);
 
-                printf('<p class="alert alert-success">%s</p>', Translation::get('ad_adminlog_delete_success'));
+                echo Alert::success('ad_adminlog_delete_success');
             }
 
             // Reset all visits and sessions
@@ -106,7 +106,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 // Delete sessions
                 $session->deleteAllSessions();
 
-                printf('<p class="alert alert-success">%s</p>', Translation::get('ad_reset_visits_success'));
+                echo Alert::success('ad_reset_visits_success');
             }
             ?>
 

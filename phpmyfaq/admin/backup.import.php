@@ -15,6 +15,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Filter;
@@ -134,7 +135,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
             8 => 'A PHP extension stopped the file upload.',
             default => 'Undefined error.',
         };
-        printf('<p class="alert alert-danger">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
+        echo Alert::danger('ad_csv_no', $errorMessage);
     }
 } else {
     echo $PMF_LANG['err_NotAuth'];

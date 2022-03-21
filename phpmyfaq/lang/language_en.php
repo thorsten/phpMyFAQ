@@ -336,7 +336,7 @@ $PMF_LANG["ad_adus_password"] = "Password";
 $PMF_LANG["ad_adus_add"] = "Add user";
 $PMF_LANG["ad_adus_suc"] = "User <strong>successfully</strong> added.";
 $PMF_LANG["ad_adus_edit"] = "Edit profile";
-$PMF_LANG["ad_adus_dberr"] = "<strong>database error!</strong>";
+$PMF_LANG["ad_adus_dberr"] = "Database error";
 $PMF_LANG["ad_adus_exerr"] = "Username <strong>already exists</strong>.";
 
 // Sessions

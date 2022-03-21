@@ -15,6 +15,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -44,26 +45,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if ('delete-tag' === $action) {
                 $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
                 if ($tags->deleteTag($tagId)) {
-                    printf(
-                        '<div class="alert alert-success alert-dismissible fade show">%s%s</div>',
-                        Translation::get('ad_tag_delete_success'),
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                    );
+                    echo Alert::success('ad_tag_delete_success');
                 } else {
-                    printf(
-                        '<div class="alert alert-danger alert-dismissible fade show">%s<br>%s%s%s</div>',
-                        Translation::get('ad_tag_delete_error'),
-                        Translation::get('ad_adus_dberr'),
-                        $faqConfig->getDb()->error(),
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-                    );
+                    echo Alert::danger('ad_tag_delete_error', $faqConfig->getDb()->error());
                 }
             }
 
             $tagData = $tags->getAllTags();
 
             if (count($tagData) === 0) {
-                printf('<p class="alert alert-warning" role="alert">%s</p>', Translation::get('ad_news_nodata'));
+                echo Alert::warning('ad_news_nodata');
             }
 
             echo '<table class="table table-hover align-middle">';

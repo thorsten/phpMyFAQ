@@ -19,6 +19,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
@@ -80,14 +81,14 @@ if (
             $csrfOkay = false;
         }
         if (0 === (int)$userId || !$csrfOkay) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= Alert::danger('ad_user_error_noId');
         } else {
             $user = new User($faqConfig);
             $perm = $user->perm;
             // @todo: Add Filter::filterInput[]
             $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : [];
             if (!$perm->refuseAllUserRights($userId)) {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+                $message .= Alert::danger('ad_msg_mysqlerr');
             }
             foreach ($userRights as $rightId) {
                 $perm->grantUserRight($userId, $rightId);
@@ -110,7 +111,7 @@ if (
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= Alert::danger('ad_user_error_noId');
         } else {
             $userData = [];
             $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW, '');
@@ -139,7 +140,7 @@ if (
                 !$user->userdata->set(array_keys($userData), array_values($userData)) ||
                 !$user->setStatus($userStatus)
             ) {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+                $message .= Alert::danger('ad_msg_mysqlerr');
             } else {
                 $message .= sprintf(
                     '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
@@ -159,16 +160,13 @@ if (
 
         $userId = Filter::filterInput(INPUT_GET, 'user_delete_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= Alert::danger('ad_user_error_noId');
             $userAction = $defaultUserAction;
         } else {
             $user->getUserById($userId, true);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message .= sprintf(
-                    '<p class="alert alert-danger">%s</p>',
-                    $PMF_LANG['ad_user_error_protectedAccount']
-                );
+                $message .= Alert::danger('ad_user_error_protectedAccount');
                 $userAction = $defaultUserAction;
             } else {
                 ?>
@@ -215,13 +213,13 @@ if (
         }
         $userAction = $defaultUserAction;
         if (0 === (int)$userId || !$csrfOkay) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= Alert::danger('ad_user_error_noId');
         } else {
             if (!$user->getUserById($userId, true)) {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+                $message .= Alert::danger('ad_user_error_noId');
             }
             if (!$user->deleteUser()) {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_delete']);
+                $message .= Alert::danger('ad_user_error_delete');
             } else {
                 // Move the categories ownership to admin (id == 1)
                 $oCat = new Category($faqConfig, [], false);
@@ -235,7 +233,7 @@ if (
                     $oPerm->removeFromAllGroups($userId);
                 }
 
-                $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_user_deleted']);
+                $message .= Alert::success('ad_user_deleted');
             }
             $userError = $user->error();
             if ($userError != '') {

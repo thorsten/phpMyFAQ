@@ -17,18 +17,19 @@
  * @since 2005-09-15
  */
 
+use phpMyFAQ\Translation;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 ?>
-<header class="row">
-  <div class="col-lg-12">
-    <h2 class="page-header">
-      <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_glossary_add'] ?>
-    </h2>
-  </div>
-</header>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-list-ul"></i> <?= Translation::get('ad_glossary_add') ?>
+    </h1>
+</div>
 
 <div class="row">
   <div class="col-lg-12">
@@ -36,35 +37,35 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <form action="?action=saveglossary" method="post" accept-charset="utf-8">
           <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
-          <div class="row">
-            <label class="col-lg-2 col-form-label" for="item"><?= $PMF_LANG['ad_glossary_item'] ?>:</label>
+          <div class="row mb-2">
+            <label class="col-lg-2 col-form-label" for="item"><?= Translation::get('ad_glossary_item') ?>:</label>
             <div class="col-lg-4">
               <input class="form-control" type="text" name="item" id="item" required>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row mb-2">
             <label class="col-lg-2 col-form-label" for="definition">
-                <?= $PMF_LANG['ad_glossary_definition'] ?>:
+                <?= Translation::get('ad_glossary_definition') ?>:
             </label>
             <div class="col-lg-4">
               <textarea class="form-control" name="definition" id="definition" cols="50" rows="5" required></textarea>
             </div>
           </div>
 
-          <div class="row">
-            <div class="offset-lg-2 col-lg-4">
-              <a class="btn btn-info" href="?action=glossary">
-                  <?= $PMF_LANG['ad_entry_back'] ?>
+          <div class="row mb-2">
+            <div class="offset-lg-2 col-lg-4 text-end">
+              <a class="btn btn-secondary" href="?action=glossary">
+                  <?= Translation::get('ad_entry_back') ?>
               </a>
               <button class="btn btn-primary" type="submit">
-                  <?= $PMF_LANG['ad_glossary_save'] ?>
+                  <?= Translation::get('ad_glossary_save') ?>
               </button>
             </div>
           </div>
         </form>
       <?php } else {
-          echo $PMF_LANG['err_NotAuth'];
+          echo Translation::get('err_NotAuth');
       }
         ?>
   </div>

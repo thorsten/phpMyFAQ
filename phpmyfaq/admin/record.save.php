@@ -19,6 +19,7 @@ use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
@@ -175,13 +176,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         }
 
         if ($recordId) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
+            echo Alert::success('ad_entry_savedsuc');
             LinkVerifierHelper::linkOndemandJavascript($recordId, $recordLang);
         } else {
-            printf(
-                '<p class="alert alert-danger">%s</p>',
-                $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
-            );
+            echo Alert::danger('ad_entry_savedfail', $faqConfig->getDb()->error());
         }
 
         if (!isset($categories['rubrik'])) {

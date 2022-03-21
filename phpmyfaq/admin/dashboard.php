@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Api;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -217,7 +218,7 @@ $faqSession = new Session($faqConfig);
                         } else {
                             $issues = $api->getVerificationIssues();
                             if (1 < count($issues)) {
-                                printf('<p class="alert alert-danger">%s</p>', Translation::get('ad_verification_notokay'));
+                                echo Alert::danger('ad_verification_notokay');
                                 echo '<ul>';
                                 foreach ($issues as $file => $hash) {
                                     if ('created' === $file) {
@@ -231,7 +232,7 @@ $faqSession = new Session($faqConfig);
                                 }
                                 echo '</ul>';
                             } else {
-                                printf('<p class="alert alert-success">%s</p>', Translation::get('ad_verification_okay'));
+                                echo Alert::success('ad_verification_okay');
                             }
                         }
                     } catch (\Exception $e) {

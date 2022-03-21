@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryImage;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 
@@ -122,7 +123,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                 if ($category->checkIfCategoryExists($categoryData) > 0) {
-                    printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_categ_existing']);
+                    echo Alert::danger('ad_categ_existing');
                     exit();
                 }
 
@@ -140,9 +141,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                     // All the other translations
                     $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_UNSAFE_RAW);
-                    printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
+                    echo Alert::success('ad_categ_added');
                 } else {
-                    printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
+                    echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
                 }
             }
 
@@ -220,9 +221,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                             $permissions['restricted_groups']
                         )
                     ) {
-                        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
+                        echo Alert::success('ad_categ_translated');
                     } else {
-                        printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
+                        echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
                     }
                 } else {
                     if ($category->updateCategory($categoryData)) {
@@ -241,9 +242,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                         $categoryImage->upload();
 
-                        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
+                        echo Alert::success('ad_categ_updated');
                     } else {
-                        printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
+                        echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
                     }
                 }
 
@@ -275,9 +276,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     $category->deleteCategory($categoryId, $categoryLang) &&
                     $categoryRelation->delete($categoryId, $categoryLang)
                 ) {
-                    printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
+                    echo Alert::success('ad_categ_deleted');
                 } else {
-                    printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
+                    echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
                 }
             }
 
@@ -289,13 +290,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
                 $parentId = Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
                 if ($category->updateParentCategory((int) $categoryId, (int) $parentId)) {
-                    printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
+                    echo Alert::success('ad_categ_updated');
                 } else {
-                    printf(
-                        '<p class="alert alert-danger">%s<br>%s</p>',
-                        $PMF_LANG['ad_categ_paste_error'],
-                        $faqConfig->getDb()->error()
-                    );
+                    echo Alert::danger('ad_categ_paste_error', $faqConfig->getDb()->error());
                 }
             }
 
@@ -441,7 +438,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </button>
       </form>
       </div>
-      <p class="alert alert-info mt-4"><?= $PMF_LANG['ad_categ_remark'] ?></p>
+        <div class="mt-4">
+        <?= Alert::info('ad_categ_remark') ?>
+        </div>
     </div>
   </div>
   <script src="assets/js/category.js"></script>

@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Auth;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -55,20 +56,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
 
         if (($authSource->checkCredentials($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {
-                printf(
-                    '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
-                    $PMF_LANG['ad_passwd_fail']
-                );
+                echo Alert::danger('ad_passwd_fail');
             }
-            printf(
-                '<p class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
-                $PMF_LANG['ad_passwdsuc']
-            );
+            echo Alert::success('ad_passwdsuc');
         } else {
-            printf(
-                '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
-                $PMF_LANG['ad_passwd_fail']
-            );
+            echo Alert::danger('ad_passwd_fail');
         }
     }
     ?>

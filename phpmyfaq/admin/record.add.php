@@ -21,6 +21,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -258,7 +259,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 }
             }
 
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
+            echo Alert::success('ad_entry_savedsuc');
             ?>
           <script>
             (() => {
@@ -270,20 +271,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
           </script>
             <?php
         } else {
-            printf(
-                '<p class="alert alert-danger">%s</p>',
-                $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
-            );
+            echo Alert::danger('ad_entry_savedfail', $faqConfig->getDb()->error());
         }
     } else {
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
             $PMF_LANG['ad_entry_aor']
         );
-        printf(
-            '<p class="alert alert-danger">%s</p>',
-            $PMF_LANG['ad_entryins_fail']
-        );
+        echo Alert::danger('ad_entryins_fail');
         ?>
       <form action="?action=editpreview" method="post">
         <input type="hidden" name="question" value="<?= Strings::htmlspecialchars($question) ?>">

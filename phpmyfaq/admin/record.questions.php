@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $category->setGroups($currentAdminGroups);
           $date = new Date($faqConfig);
           $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
           if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
               $csrfChecked = false;
@@ -50,7 +50,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               $csrfChecked = true;
           }
 
-          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_UNSAFE_RAW);
           if ($csrfChecked && $toggle === 'toggle') {
               $isVisible = $question->getVisibility($questionId);
               if (!is_null($isVisible)) {

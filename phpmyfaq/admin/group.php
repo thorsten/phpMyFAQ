@@ -17,6 +17,7 @@
  * @since 2005-12-15
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -76,12 +77,12 @@ if ($groupAction == 'update_members' && $user->perm->hasPermission($user->getUse
     $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : [];
 
     if ($groupId == 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->removeAllUsersFromGroup($groupId)) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+            $message .= Alert::danger('ad_msg_mysqlerr');
         }
         foreach ($groupMembers as $memberId) {
             $perm->addToGroup((int)$memberId, $groupId);
@@ -101,13 +102,13 @@ if ($groupAction == 'update_rights' && $user->perm->hasPermission($user->getUser
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         $user = new User($faqConfig);
         $perm = $user->perm;
         $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : [];
         if (!$perm->refuseAllGroupRights($groupId)) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+            $message .= Alert::danger('ad_msg_mysqlerr');
         }
         foreach ($groupRights as $rightId) {
             $perm->grantGroupRight($groupId, (int)$rightId);
@@ -127,7 +128,7 @@ if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
@@ -137,11 +138,7 @@ if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId
         $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
-            $message .= sprintf(
-                '<p class="alert alert-danger">%s<br>%s</p>',
-                $PMF_LANG['ad_msg_mysqlerr'],
-                $db->error()
-            );
+            $message .= Alert::danger('ad_msg_mysqlerr', $faqConfig->getDb()->error());
         } else {
             $message .= sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
@@ -160,7 +157,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
     $perm = $user->perm;
     $groupId = Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
         $groupAction = $defaultGroupAction;
     } else {
         $groupData = $perm->getGroupData($groupId);
@@ -206,12 +203,12 @@ if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), '
     }
     $groupAction = $defaultGroupAction;
     if ($groupId <= 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         if (!$user->perm->deleteGroup($groupId) && !$csrfOkay) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_group_error_delete']);
+            $message .= Alert::danger('ad_group_error_delete');
         } else {
-            $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_deleted']);
+            $message .= Alert::success('ad_group_deleted');
         }
         $userError = $user->error();
         if ($userError != '') {
@@ -253,7 +250,7 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     // no errors, show list
     if (count($messages) == 0) {
         $groupAction = $defaultGroupAction;
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
+        $message = Alert::success('ad_group_suc');
         // display error messages and show form again
     } else {
         $groupAction = 'add';
@@ -373,7 +370,7 @@ if ('import-ldap-groups' === $groupAction && $user->perm->hasPermission($user->g
     // no errors, show list
     if (count($messages) == 0) {
         $groupAction = $defaultGroupAction;
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
+        $message = Alert::success('ad_group_suc');
         // display error messages and show form again
     } else {
         $groupAction = 'import-ldap-groups';

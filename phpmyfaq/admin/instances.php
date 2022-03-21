@@ -15,7 +15,9 @@
  * @since     2012-03-16
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Entity\InstanceEntity;
+use phpMyFAQ\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
@@ -49,16 +51,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   <div class="col-lg-12">
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
+    $fileSystem = new Filesystem(PMF_ROOT_DIR);
     $instance = new Instance($faqConfig);
     $currentClient = new Client($faqConfig);
+    $currentClient->setFileSystem($fileSystem);
     $instanceId = Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
 
     // Check, if /multisite is writeable
     if (!$currentClient->isMultiSiteWriteable()) {
-        printf(
-            '<p class="alert alert-danger">%s</p>',
-            Translation::get('ad_instance_error_notwritable')
-        );
+        echo Alert::danger('ad_instance_error_notwritable');
     }
 
     // Update client instance
@@ -85,18 +86,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                 $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
                 $updatedClient->deleteClientFolder($originalData->url);
             }
-            printf(
-                '<p class="alert alert-success">%s%s</p>',
-                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                Translation::get('ad_config_saved')
-            );
+            echo Alert::success('ad_config_saved');
         } else {
-            printf(
-                '<p class="alert alert-danger">%s%s<br/>%s</p>',
-                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                Translation::get('ad_entryins_fail'),
-                $faqConfig->getDb()->error()
-            );
+            echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
         }
     }
     ?>

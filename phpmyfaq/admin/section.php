@@ -15,6 +15,7 @@
  * @since 2018-09-20
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -59,12 +60,12 @@ if ($sectionAction == 'update_members' && $user->perm->hasPermission($user->getU
     $sectionMembers = isset($_POST['section_members']) ? $_POST['section_members'] : [];
 
     if ($sectionId == 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->removeAllGroupsFromSection($sectionId)) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+            $message .= Alert::danger('ad_msg_mysqlerr');
         }
         foreach ($sectionMembers as $memberId) {
             $perm->addGroupToSection((int)$memberId, $sectionId);
@@ -84,7 +85,7 @@ if ($sectionAction == 'update_data' && $user->perm->hasPermission($user->getUser
     $sectionAction = $defaultSectionAction;
     $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
     if ($sectionId == 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         $sectionData = [];
         $dataFields = ['name', 'description'];
@@ -94,10 +95,7 @@ if ($sectionAction == 'update_data' && $user->perm->hasPermission($user->getUser
         $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->changeSection($sectionId, $sectionData)) {
-            $message .= sprintf(
-                '<p class="alert alert-danger">%s</p>',
-                $PMF_LANG['ad_msg_mysqlerr']
-            );
+            $message .= Alert::danger('ad_msg_mysqlerr');
         } else {
             $message .= sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
@@ -116,7 +114,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->hasPermission($user->getU
     $perm = $user->perm;
     $sectionId = Filter::filterInput(INPUT_POST, 'section_list_select', FILTER_VALIDATE_INT, 0);
     if ($sectionId <= 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
         $sectionAction = $defaultSectionAction;
     } else {
         $sectionData = $perm->getSectionData($sectionId);
@@ -162,12 +160,12 @@ if ($sectionAction == 'delete' && $user->perm->hasPermission($user->getUserId(),
     }
     $sectionAction = $defaultSectionAction;
     if ($sectionId <= 0) {
-        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= Alert::danger('ad_user_error_noId');
     } else {
         if (!$user->perm->deleteSection($sectionId) && !$csrfOkay) {
-            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_section_error_delete']);
+            $message .= Alert::danger('ad_section_error_delete');
         } else {
-            $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_deleted']);
+            $message .= Alert::success('ad_section_deleted');
         }
         $userError = $user->error();
         if ($userError != '') {
@@ -207,7 +205,7 @@ if ($sectionAction == 'addsave' && $user->perm->hasPermission($user->getUserId()
     // no errors, show list
     if (count($messages) == 0) {
         $sectionAction = $defaultSectionAction;
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_suc']);
+        $message = Alert::success('ad_section_suc');
         // display error messages and show form again
     } else {
         $sectionAction = 'add';

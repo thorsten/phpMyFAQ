@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
 
@@ -64,9 +65,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($categoryData, $parentId, $categoryData['id'])) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
+            echo Alert::success('ad_categ_translated');
         } else {
-            printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
+            echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
         }
     }
 
