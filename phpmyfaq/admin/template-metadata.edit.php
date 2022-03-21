@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The template meta data administration frontend.
+ * The template metadata administration frontend.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TemplateMetaData;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -27,12 +28,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-code"></i>
-      <?= $PMF_LANG['ad_menu_meta'] ?>
+      <?= Translation::get('ad_menu_meta') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addMetaModal">
-                <?= $PMF_LANG['ad_meta_add'] ?>
+                <i aria-hidden="true" class="fa fa-plus"></i>
+                <?= Translation::get('ad_meta_add') ?>
             </button>
         </div>
     </div>
@@ -41,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 
 if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
 
 $meta = new TemplateMetaData($faqConfig);
@@ -53,37 +55,37 @@ $metaData = $meta->getById((int)$metaId);
   <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
   <input type="hidden" name="meta_id" value="<?= $metaData->getId() ?>">
 
-  <div class="row">
-    <label for="page_id" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_page_id'] ?></label>
+  <div class="row mb-2">
+    <label for="page_id" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_page_id') ?></label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="page_id" value="<?= $metaData->getPageId() ?>" required>
+      <input type="text" class="form-control" name="page_id" id="page_id" value="<?= $metaData->getPageId() ?>" required>
     </div>
   </div>
 
-  <div class="row">
-    <label for="type" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_type'] ?></label>
+  <div class="row mb-2">
+    <label for="type" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_type') ?></label>
     <div class="col-sm-10">
-      <select class="form-select" name="type" required>
+      <select class="form-select" name="type" id="type" required>
         <option value="text" <?= $metaData->getType() === 'text' ? 'selected' : '' ?>>Text</option>
         <option value="html" <?= $metaData->getType() === 'html' ? 'selected' : '' ?>>HTML</option>
       </select>
     </div>
   </div>
 
-  <div class="row">
-    <label for="content" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_content'] ?></label>
+  <div class="row mb-2">
+    <label for="content" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_content') ?></label>
     <div class="col-sm-10">
-      <textarea class="form-control" name="content" rows="5" required><?= $metaData->getContent() ?></textarea>
+      <textarea class="form-control" name="content" id="content" rows="5" required><?= $metaData->getContent() ?></textarea>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-sm-12 text-right">
-      <a class="btn btn-primary" href="?action=meta">
-        <?= $PMF_LANG['msgCancel'] ?>
+    <div class="col-sm-12 text-end">
+      <a class="btn btn-secondary" href="?action=meta">
+        <?= Translation::get('msgCancel') ?>
       </a>
       <button class="btn btn-primary" type="submit">
-          <?= $PMF_LANG['ad_passwd_change']?>
+          <?= Translation::get('ad_passwd_change') ?>
       </button>
     </div>
   </div>

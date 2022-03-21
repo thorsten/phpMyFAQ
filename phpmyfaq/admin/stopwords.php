@@ -16,6 +16,8 @@
  * @since     2009-04-01
  */
 
+use phpMyFAQ\Translation;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
@@ -25,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-wrench"></i>
-        <?= $PMF_LANG['ad_menu_stopwordsconfig'] ?>
+        <?= Translation::get('ad_menu_stopwordsconfig') ?>
     </h1>
   </div>
 
@@ -41,10 +43,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
           <input type="hidden" name="pmf-stop-words-csrf-token" id="pmf-stop-words-csrf-token"
                  value="<?= $user->getCsrfTokenFromSession() ?>">
       <p>
-        <?= $PMF_LANG['ad_stopwords_desc'] ?>
+        <?= Translation::get('ad_stopwords_desc') ?>
       </p>
       <p>
-        <label for="pmf-stop-words-language-selector"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
+        <label for="pmf-stop-words-language-selector"><?= Translation::get('ad_entry_locale') ?>:</label>
         <select id="pmf-stop-words-language-selector">
           <option value="none">---</option>
             <?php foreach ($sortedLanguageCodes as $key => $value) { ?>
@@ -57,7 +59,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
       <div class="mb-3" id="pmf-stopwords-content"></div>
 
       <button class="btn btn-primary" type="button" id="pmf-stop-words-add-input" disabled>
-          <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_config_stopword_input'] ?>
+          <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_config_stopword_input') ?>
       </button>
 
       </form>
@@ -65,5 +67,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
   </div>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

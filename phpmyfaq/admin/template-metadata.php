@@ -18,6 +18,7 @@
 use phpMyFAQ\Entity\TemplateMetaDataEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TemplateMetaData;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -33,13 +34,13 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
         <i aria-hidden="true" class="fa fa-code"></i>
-        <?= $PMF_LANG['ad_menu_meta'] ?>
+        <?= Translation::get('ad_menu_meta') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addMetaModal">
                 <i aria-hidden="true" class="fa fa-plus"></i>
-                <?= $PMF_LANG['ad_meta_add'] ?>
+                <?= Translation::get('ad_meta_add') ?>
             </button>
         </div>
     </div>
@@ -48,7 +49,7 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 <?php
 
 if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
 
 $meta = new TemplateMetaData($faqConfig);
@@ -56,24 +57,25 @@ $meta = new TemplateMetaData($faqConfig);
 // Update meta data
 if ('meta.update' === $action && is_integer($metaId)) {
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        echo $PMF_LANG['err_NotAuth'];
+        echo Translation::get('err_NotAuth');
     } else {
         $entity = new TemplateMetaDataEntity();
-        $entity->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_UNSAFE_RAW))->setType(
-                Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW)
-            )->setContent(Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
+        $entity
+            ->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_UNSAFE_RAW))
+            ->setType(Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW))
+            ->setContent(Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
 
         if ($meta->update($metaId, $entity)) {
             printf(
                 '<p class="alert alert-success">%s%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                $PMF_LANG['ad_config_saved']
+                Translation::get('ad_config_saved')
             );
         } else {
             printf(
                 '<p class="alert alert-danger">%s%s<br/>%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                $PMF_LANG['ad_entryins_fail'],
+                Translation::get('ad_entryins_fail'),
                 $faqConfig->getDb()->error()
             );
         }
@@ -86,9 +88,9 @@ $metaData = $meta->getAll();
     <thead class="thead-dark">
     <tr>
         <th>#</th>
-        <th><?= $PMF_LANG['ad_meta_page_id'] ?></th>
-        <th><?= $PMF_LANG['ad_meta_type'] ?></th>
-        <th colspan="2"><?= $PMF_LANG['ad_meta_content'] ?></th>
+        <th><?= Translation::get('ad_meta_page_id') ?></th>
+        <th><?= Translation::get('ad_meta_type') ?></th>
+        <th colspan="2"><?= Translation::get('ad_meta_content') ?></th>
     </tr>
     </thead>
     <tbody>
@@ -125,7 +127,7 @@ $metaData = $meta->getAll();
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addMetaModalLabel"><?= $PMF_LANG['ad_meta_add'] ?></h5>
+                <h5 class="modal-title" id="addMetaModalLabel"><?= Translation::get('ad_meta_add') ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -133,14 +135,14 @@ $metaData = $meta->getAll();
                     <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="row mb-2">
-                        <label for="page_id" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_page_id'] ?></label>
+                        <label for="page_id" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_page_id') ?></label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="page_id" required>
                         </div>
                     </div>
 
                     <div class="row mb-2">
-                        <label for="type" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_type'] ?></label>
+                        <label for="type" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_type') ?></label>
                         <div class="col-sm-10">
                             <select class="form-select" id="type" required>
                                 <option value="text">Text</option>
@@ -151,7 +153,7 @@ $metaData = $meta->getAll();
 
                     <div class="row mb-2">
                         <label for="meta-content"
-                               class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_content'] ?></label>
+                               class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_content') ?></label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="meta-content" rows="5" required></textarea>
                         </div>
@@ -160,7 +162,7 @@ $metaData = $meta->getAll();
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary pmf-meta-add"><?= $PMF_LANG['msgSave'] ?></button>
+                <button type="button" class="btn btn-primary pmf-meta-add"><?= Translation::get('msgSave') ?></button>
             </div>
         </div>
     </div>
@@ -171,16 +173,16 @@ $metaData = $meta->getAll();
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="codeModalLabel"><?= $PMF_LANG['ad_meta_copy_snippet'] ?></h5>
+                <h5 class="modal-title" id="codeModalLabel"><?= Translation::get('ad_meta_copy_snippet') ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <label class="sr-only" for="copy-code-snippet"><?= $PMF_LANG['ad_meta_copy_snippet'] ?></label>
+                <label class="sr-only" for="copy-code-snippet"><?= Translation::get('ad_meta_copy_snippet') ?></label>
                 <textarea class="form-control" id="copy-code-snippet"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                    <?= $PMF_LANG['ad_att_close'] ?>
+                    <?= Translation::get('ad_att_close') ?>
                 </button>
             </div>
         </div>

@@ -23,7 +23,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
-use phpMyFAQ\Strings;
 
 /**
  * Class Client
@@ -33,13 +32,13 @@ use phpMyFAQ\Strings;
 class Client extends Instance
 {
     /** @var Filesystem */
-    private $fileSystem;
+    private Filesystem $fileSystem;
 
     /** @var string */
-    private $clientFolder;
+    private string $clientFolder;
 
     /** @var string */
-    private $clientUrl;
+    private string $clientUrl;
 
     /**
      * Constructor.
@@ -166,7 +165,7 @@ class Client extends Instance
      * @return void
      * @throws Exception
      */
-    public function copyTemplateFolder(string $destination, $templateDir = 'default')
+    public function copyTemplateFolder(string $destination, string $templateDir = 'default')
     {
         $sourceTpl = $this->fileSystem->getRootPath() . '/assets/themes/' . $templateDir;
         $destTpl = $destination . '/assets/themes/';
@@ -217,7 +216,7 @@ class Client extends Instance
      *
      * @return bool
      */
-    private function isMultiSiteWriteable(): bool
+    public function isMultiSiteWriteable(): bool
     {
         if (!$this->fileSystem instanceof Filesystem) {
             $this->fileSystem = new Filesystem();

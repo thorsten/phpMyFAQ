@@ -20,6 +20,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -29,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
+            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= Translation::get('ad_menu_instances') ?>
         </h1>
         <?php if ($user->perm->hasPermission($user->getUserId(), 'addinstances') &&
             is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
@@ -37,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
                 <a class="btn btn-sm btn-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
-                    <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
+                    <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_instance_add') ?>
                 </a>
             </div>
         </div>
@@ -49,20 +50,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     $instance = new Instance($faqConfig);
+    $currentClient = new Client($faqConfig);
     $instanceId = Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
 
     // Check, if /multisite is writeable
-    if (!is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')) {
+    if (!$currentClient->isMultiSiteWriteable()) {
         printf(
             '<p class="alert alert-danger">%s</p>',
-            $PMF_LANG['ad_instance_error_notwritable']
+            Translation::get('ad_instance_error_notwritable')
         );
     }
 
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
         $system = new System();
-        $originalClient = new Client($faqConfig);
         $updatedClient = new Client($faqConfig);
         $moveInstance = false;
 
@@ -73,7 +74,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         $updatedData->setComment(Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW));
 
         // Original data
-        $originalData = $originalClient->getInstanceById($instanceId);
+        $originalData = $currentClient->getInstanceById($instanceId);
 
         if ($originalData->url !== $updatedData->getUrl()) {
             $moveInstance = true;
@@ -87,13 +88,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             printf(
                 '<p class="alert alert-success">%s%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                $PMF_LANG['ad_config_saved']
+                Translation::get('ad_config_saved')
             );
         } else {
             printf(
                 '<p class="alert alert-danger">%s%s<br/>%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-                $PMF_LANG['ad_entryins_fail'],
+                Translation::get('ad_entryins_fail'),
                 $faqConfig->getDb()->error()
             );
         }
@@ -103,9 +104,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     <thead>
     <tr>
       <th>#</th>
-      <th><?= $PMF_LANG['ad_instance_url'] ?></th>
-      <th><?= $PMF_LANG['ad_instance_path'] ?></th>
-      <th colspan="3"><?= $PMF_LANG['ad_instance_name'] ?></th>
+      <th><?= Translation::get('ad_instance_url') ?></th>
+      <th><?= Translation::get('ad_instance_path') ?></th>
+      <th colspan="3"><?= Translation::get('ad_instance_name') ?></th>
     </tr>
     </thead>
     <tbody>
@@ -144,7 +145,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4><?= $PMF_LANG['ad_instance_add'] ?></h4>
+          <h4><?= Translation::get('ad_instance_add') ?></h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -152,7 +153,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="url">
-                  <?= $PMF_LANG['ad_instance_url'] ?>:
+                  <?= Translation::get('ad_instance_url') ?>:
               </label>
               <div class="col-lg-8">
                 <div class="input-group">
@@ -168,7 +169,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             </div>
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="instance">
-                  <?= $PMF_LANG['ad_instance_path'] ?>:
+                  <?= Translation::get('ad_instance_path') ?>:
               </label>
               <div class="col-lg-8">
                 <input class="form-control mb-2" type="text" name="instance" id="instance" required>
@@ -176,7 +177,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             </div>
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="comment">
-                  <?= $PMF_LANG['ad_instance_name'] ?>:
+                  <?= Translation::get('ad_instance_name') ?>:
               </label>
               <div class="col-lg-8">
                 <input class="form-control mb-2" type="text" name="comment" id="comment" required>
@@ -184,7 +185,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             </div>
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="email">
-                  <?= $PMF_LANG['ad_instance_email'] ?>:
+                  <?= Translation::get('ad_instance_email') ?>:
               </label>
               <div class="col-lg-8">
                 <input class="form-control mb-2" type="email" name="email" id="email" required>
@@ -192,7 +193,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             </div>
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="admin">
-                  <?= $PMF_LANG['ad_instance_admin'] ?>:
+                  <?= Translation::get('ad_instance_admin') ?>:
               </label>
               <div class="col-lg-8">
                 <input class="form-control mb-2" type="text" name="admin" id="admin" required>
@@ -200,7 +201,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             </div>
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="password">
-                  <?= $PMF_LANG['ad_instance_password'] ?>:
+                  <?= Translation::get('ad_instance_password') ?>:
               </label>
               <div class="col-lg-8">
                 <input class="form-control mb-2" type="password" autocomplete="off" name="password" id="password" required>
@@ -209,9 +210,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
           </form>
         </div>
         <div class="modal-footer">
-          <p class="text-sm-start"><?= $PMF_LANG['ad_instance_hint'] ?></p>
+          <p class="text-sm-start"><?= Translation::get('ad_instance_hint') ?></p>
           <button class="btn btn-primary pmf-instance-add" type="submit">
-              <?= $PMF_LANG['ad_instance_button'] ?>
+              <?= Translation::get('ad_instance_button') ?>
           </button>
         </div>
       </div>
@@ -221,5 +222,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
   </div>
     <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    print Translation::get('err_NotAuth');
 }

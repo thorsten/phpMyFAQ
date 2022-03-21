@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Database;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -39,7 +40,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
             <i aria-hidden="true" class="fa fa-wrench"></i>
-            <?= $PMF_LANG['ad_system_info'] ?>
+            <?= Translation::get('ad_system_info') ?>
         </h1>
     </div>
 
@@ -77,5 +78,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     </div>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

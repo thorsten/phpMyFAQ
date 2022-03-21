@@ -18,6 +18,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\InstanceEntity;
+use stdClass;
 
 /**
  * Class Instance
@@ -108,7 +109,7 @@ class Instance
     /**
      * Returns all instances.
      *
-     * @return string[]
+     * @return stdClass[]
      */
     public function getAllInstances(): array
     {
@@ -203,7 +204,7 @@ class Instance
      *
      * @return mixed
      */
-    public function addConfig(string $name, string $value)
+    public function addConfig(string $name, string $value): mixed
     {
         $insert = sprintf(
             "INSERT INTO
@@ -225,20 +226,17 @@ class Instance
      * @param string $name
      * @return bool|string
      */
-    public function getConfig(string $name)
+    public function getConfig(string $name): bool|string
     {
         if (!isset($this->instanceConfig[$name])) {
             $this->getInstanceConfig($this->getId());
         }
 
-        switch ($this->instanceConfig[$name]) {
-            case 'true':
-                return true;
-            case 'false':
-                return false;
-            default:
-                return $this->instanceConfig[$name];
-        }
+        return match ($this->instanceConfig[$name]) {
+            'true' => true,
+            'false' => false,
+            default => $this->instanceConfig[$name],
+        };
     }
 
     /**
