@@ -1,5 +1,3 @@
-import { addElement } from '../../../assets/src/utils';
-
 /**
  * Admin Elasticsearch configuration
  *
@@ -14,6 +12,8 @@ import { addElement } from '../../../assets/src/utils';
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-20
  */
+
+import { addElement } from '../../../../assets/src/utils';
 
 export const handleElasticsearch = () => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');

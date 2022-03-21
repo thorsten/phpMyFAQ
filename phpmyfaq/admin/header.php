@@ -194,6 +194,7 @@ switch ($action) {
     case 'comments':
     case 'attachments':
     case 'tags':
+    case 'delete-tag':
         $contentPage = true;
         break;
     case 'statistics':

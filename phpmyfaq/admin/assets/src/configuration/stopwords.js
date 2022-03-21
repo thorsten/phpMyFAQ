@@ -12,7 +12,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-02-28
  */
-import { addElement } from '../../../assets/src/utils';
+
+import { addElement } from '../../../../assets/src/utils';
 
 const maxCols = 4;
 
@@ -235,7 +236,7 @@ const saveStopWord = (elementId) => {
       .catch((error) => {
         const table = document.querySelector('.table');
         table.insertAdjacentElement(
-          'afterend',
+          'beforebegin',
           addElement('div', { classList: 'alert alert-danger', innerText: error })
         );
       });
@@ -288,6 +289,9 @@ const deleteStopWord = (elementId) => {
     })
     .catch((error) => {
       const table = document.querySelector('.table');
-      table.insertAdjacentElement('afterend', addElement('div', { classList: 'alert alert-danger', innerText: error }));
+      table.insertAdjacentElement(
+        'beforebegin',
+        addElement('div', { classList: 'alert alert-danger', innerText: error })
+      );
     });
 };

@@ -7,17 +7,18 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -28,13 +29,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="fa fa-tags"></i>
-      <?= $PMF_LANG['ad_entry_tags'] ?>
+      <?= Translation::get('ad_entry_tags') ?>
   </h1>
 </div>
 
 <div class="row">
   <div class="col-lg-12">
-    <form action="" method="post" class="tag-form">
+    <form action="" method="post" id="tag-form">
       <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
         <?php
         if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
@@ -43,20 +44,26 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if ('delete-tag' === $action) {
                 $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
                 if ($tags->deleteTag($tagId)) {
-                    echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
-                    echo $PMF_LANG['ad_tag_delete_success'] . '</p>';
+                    printf(
+                        '<div class="alert alert-success alert-dismissible fade show">%s%s</div>',
+                        Translation::get('ad_tag_delete_success'),
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    );
                 } else {
-                    echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
-                    echo $PMF_LANG['ad_tag_delete_error'];
-                    echo '<br>' . $PMF_LANG['ad_adus_dberr'] . '<br>';
-                    echo $faqConfig->getDb()->error() . '</p>';
+                    printf(
+                        '<div class="alert alert-danger alert-dismissible fade show">%s<br>%s%s%s</div>',
+                        Translation::get('ad_tag_delete_error'),
+                        Translation::get('ad_adus_dberr'),
+                        $faqConfig->getDb()->error(),
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+                    );
                 }
             }
 
             $tagData = $tags->getAllTags();
 
-            if (count($tagData)) {
-              printf('<p class="alert alert-warning" role="alert">%s</p>', $PMF_LANG['ad_news_nodata']);
+            if (count($tagData) === 0) {
+                printf('<p class="alert alert-warning" role="alert">%s</p>', Translation::get('ad_news_nodata'));
             }
 
             echo '<table class="table table-hover align-middle">';
@@ -64,23 +71,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             foreach ($tagData as $key => $tag) {
                 echo '<tr>';
-                echo '<td><span data-tag-id="' . $key . '">' . Strings::htmlspecialchars($tag) . '</span></td>';
+                echo '<td><span id="tag-id-' . $key . '">' . Strings::htmlspecialchars($tag) . '</span></td>';
                 printf(
                     '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s">' .
-                    '<i aria-hidden="true" class="fa fa-edit"></i></a></td>',
-                    $key,
-                    $PMF_LANG['ad_user_edit']
+                    '<i aria-hidden="true" class="fa fa-edit" data-btn-id="%d"></i></a></td>',
+                    (int)$key,
+                    Translation::get('ad_user_edit'),
+                    (int)$key,
                 );
 
                 printf(
                     '<td><a class="btn btn-danger" onclick="return confirm(\'%s\');" href="%s%d">',
-                    $PMF_LANG['ad_user_del_3'],
+                    Translation::get('ad_user_del_3'),
                     '?action=delete-tag&amp;id=',
                     $key
                 );
                 printf(
                     '<span title="%s"><i aria-hidden="true" class="fa fa-trash"></i></span></a></td>',
-                    $PMF_LANG['ad_entry_delete']
+                    Translation::get('ad_entry_delete')
                 );
 
                 echo '<tr>';
@@ -89,10 +97,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             echo '</tbody>';
             echo '</table>';
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         ?>
     </form>
-    <script src="assets/js/tags.js"></script>
   </div>
 </div>

@@ -1,50 +1,52 @@
 /**
- * Admin template meta data configuration
+ * Multi Instance Handling
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2022 phpMyFAQ Team
- * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2022-03-11
+ * @since     2022-02-28
  */
 
 import { Modal } from 'bootstrap';
-import { addElement, escape } from '../../../assets/src/utils';
+import { addElement } from '../../../../assets/src/utils';
 
-export const handleTemplateMetaData = () => {
-  const addMetaDataButton = document.querySelector('.pmf-meta-add');
-  const deleteMetaDataButton = document.querySelectorAll('.pmf-meta-delete');
-  const codeModal = document.querySelector('#codeModal');
+export const handleInstances = () => {
+  const addInstance = document.querySelector('.pmf-instance-add');
+  const deleteInstance = document.querySelectorAll('.pmf-instance-delete');
+  const container = document.getElementById('pmf-modal-add-instance');
 
-  const container = document.getElementById('addMetaModal');
-
-  // Add template metadata
-  if (addMetaDataButton) {
+  if (addInstance) {
     const modal = new Modal(container);
-    addMetaDataButton.addEventListener('click', (event) => {
+    addInstance.addEventListener('click', (event) => {
       event.preventDefault();
+      const csrf = document.querySelector('#csrf').value;
+      const url = document.querySelector('#url').value;
+      const instance = document.querySelector('#instance').value;
+      const comment = document.querySelector('#comment').value;
+      const email = document.querySelector('#email').value;
+      const admin = document.querySelector('#admin').value;
+      const password = document.querySelector('#password').value;
 
-      const csrfToken = document.getElementById('csrf').value;
-      const pageId = document.getElementById('page_id').value;
-      const type = document.getElementById('type').value;
-      const content = document.getElementById('meta-content').value;
-
-      fetch('index.php?action=ajax&ajax=config&ajaxaction=add-template-metadata', {
+      fetch('index.php?action=ajax&ajax=config&ajaxaction=add-instance', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          csrf: csrfToken,
-          pageId: pageId,
-          type: type,
-          content: content,
+          csrf: csrf,
+          url: url,
+          instance: instance,
+          comment: comment,
+          email: email,
+          admin: admin,
+          password: password,
         }),
       })
         .then(async (response) => {
@@ -55,48 +57,45 @@ export const handleTemplateMetaData = () => {
         })
         .then((response) => {
           const table = document.querySelector('.table tbody');
-          const row = addElement('tr', { id: `row-meta-${response.added}` }, [
+          const row = addElement('tr', { id: `row-instance-${response.added}` }, [
             addElement('td', { innerText: response.added }),
-            addElement('td', { innerText: escape(pageId) }),
-            addElement('td', { innerText: escape(type) }),
-            addElement('td', { innerText: content }),
+            addElement('td', {}, [
+              addElement('a', {
+                href: response.url,
+                target: '_blank',
+                innerText: response.url,
+              }),
+            ]),
+            addElement('td', { innerText: instance }),
+            addElement('td', { innerText: comment }),
             addElement('td', {}, [
               addElement(
                 'a',
                 {
-                  href: `?action=meta.edit&id=${response.added}`,
-                  classList: 'btn btn-sm btn-success',
+                  href: `?action=edit-instance&instance_id=${response.added}`,
+                  classList: 'btn btn-info',
                 },
                 [addElement('i', { classList: 'fa fa-pencil', ariaHidden: true })]
               ),
-              addElement(
-                'a',
-                {
-                  href: '#',
-                  id: `delete-meta-${response.added}`,
-                  classList: 'btn btn-sm btn-danger pmf-meta-delete',
-                },
-                [addElement('i', { classList: 'fa fa-trash', ariaHidden: true })]
-              ),
+            ]),
+            addElement('td', {}, [
               addElement(
                 'button',
                 {
-                  classList: 'btn btn-sm btn-primary',
-                  'data-bs-toggle': 'modal',
-                  'data-bs-target': '#codeModal',
-                  'data-code-snippet': escape(pageId),
+                  classList: 'btn btn-danger',
+                  'data-delete-instance-id': `${response.added}`,
                   type: 'button',
                 },
                 [
                   addElement('i', {
                     ariaHidden: true,
-                    classList: 'fa fa-code',
+                    classList: 'fa fa-trash',
+                    'data-delete-instance-id': `${response.added}`,
                   }),
                 ]
               ),
             ]),
           ]);
-
           table.appendChild(row);
           modal.hide();
         })
@@ -108,17 +107,18 @@ export const handleTemplateMetaData = () => {
           );
         });
     });
+  }
 
-    // delete template metadata
-    deleteMetaDataButton.forEach((element) => {
+  if (deleteInstance) {
+    deleteInstance.forEach((element) => {
       element.addEventListener('click', (event) => {
         event.preventDefault();
 
-        const metaId = event.target.getAttribute('data-delete-meta-id');
+        const instanceId = event.target.getAttribute('data-delete-instance-id');
         const csrf = event.target.getAttribute('data-csrf-token');
 
         if (confirm('Are you sure?')) {
-          fetch('index.php?action=ajax&ajax=config&ajaxaction=delete-template-metadata', {
+          fetch('index.php?action=ajax&ajax=config&ajaxaction=delete-instance', {
             method: 'POST',
             headers: {
               Accept: 'application/json, text/plain, */*',
@@ -126,7 +126,7 @@ export const handleTemplateMetaData = () => {
             },
             body: JSON.stringify({
               csrf: csrf,
-              metaId: metaId,
+              instanceId: instanceId,
             }),
           })
             .then(async (response) => {
@@ -136,28 +136,19 @@ export const handleTemplateMetaData = () => {
               throw new Error('Network response was not ok.');
             })
             .then((response) => {
-              const row = document.getElementById(`row-meta-${response.deleted}`);
+              const row = document.getElementById(`row-instance-${response.deleted}`);
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
             })
             .catch((error) => {
               const table = document.querySelector('.table');
               table.insertAdjacentElement(
-                'afterend',
+                'beforebegin',
                 addElement('div', { classList: 'alert alert-danger', innerText: error })
               );
             });
         }
       });
-    });
-
-    // handle code snippet modal
-    codeModal.addEventListener('show.bs.modal', (event) => {
-      const button = event.relatedTarget;
-      const codeSnippet = button.getAttribute('data-code-snippet');
-      const modal = event.target;
-
-      modal.querySelector('.modal-body textarea').value = `{{ ${codeSnippet} | meta }}`;
     });
   }
 };

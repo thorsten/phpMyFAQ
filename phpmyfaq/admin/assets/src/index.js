@@ -15,39 +15,45 @@
 
 import { renderVisitorCharts } from './dashboard';
 import { sidebarToggle } from './sidebar';
-import { handleConfiguration } from './configuration';
-import { handleInstances } from './instance';
-import { handleStopWords } from './stopwords';
-import { handleTemplateMetaData } from './template-meta-data';
-import { handleElasticsearch } from './elasticsearch';
+import {
+  handleConfiguration,
+  handleInstances,
+  handleStopWords,
+  handleTemplateMetaData,
+  handleElasticsearch,
+} from './configuration';
 import { handleStatistics } from './statistics';
+import { handleTags } from './content';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Configuration
-  handleConfiguration();
+  // Sidebar
+  sidebarToggle();
 
   // Dashboard
   renderVisitorCharts();
 
-  // Instance
-  handleInstances();
-
-  // Sidebar
-  sidebarToggle();
-
-  // Stop Words
-  handleStopWords();
-
-  // Template Meta data
-  handleTemplateMetaData();
-
-  // Elasticsearch configuration
-  handleElasticsearch();
+  // Content -> Tags
+  handleTags();
 
   // Statistics
   handleStatistics();
+
+  // Configuration -> FAQ configuration
+  handleConfiguration();
+
+  // Configuration -> Instance
+  handleInstances();
+
+  // Configuration -> Stop Words
+  handleStopWords();
+
+  // Configuration -> Template Meta data
+  handleTemplateMetaData();
+
+  // Configuration -> Elasticsearch configuration
+  handleElasticsearch();
 
   //
   // User

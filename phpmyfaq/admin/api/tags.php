@@ -19,6 +19,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Entity\TagEntity as TagEntity;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -65,25 +66,28 @@ switch ($ajaxAction) {
         break;
 
     case 'update':
-        $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $tag = Filter::filterInput(INPUT_POST, 'tag', FILTER_UNSAFE_RAW);
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(400);
-            $http->sendJsonWithHeaders($PMF_LANG['err_NotAuth']);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
+        $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
+        $newTag = Filter::filterVar($postData->tag, FILTER_UNSAFE_RAW);
+
         $entity = new TagEntity();
         $entity->setId($id);
-        $entity->setName($tag);
+        $entity->setName($newTag);
 
         if ($oTag->updateTag($entity)) {
-            $http->sendJsonWithHeaders($PMF_LANG['ad_entryins_suc']);
+            $http->setStatus(200);
+            $http->sendJsonWithHeaders(['updated' => Translation::get('ad_entryins_suc')]);
         } else {
             $http->setStatus(400);
-            $http->sendJsonWithHeaders($PMF_LANG['ad_entryins_fail']);
+            $http->sendJsonWithHeaders(['error' => Translation::get('ad_entryins_fail')]);
         }
         break;
 }
