@@ -57,16 +57,27 @@ class HttpHelper extends Helper
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
+        header('X-Powered-By: phpMyFAQ');
     }
 
     /**
-     * Adds an additional header.
+     * Adds a header.
      *
      * @param string $header
      */
     public function addAdditionalHeader(string $header): void
     {
         header($header);
+    }
+
+    /**
+     * Adds the STS header.
+     */
+    public function setSecurityHeaders(): void
+    {
+        header('strict-transport-security: max-age=600');
+        header('Content-Security-Policy: default-src \'self\'');
+        header('Referrer-Policy: no-referrer');
     }
 
     /**
