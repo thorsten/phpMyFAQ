@@ -28,7 +28,7 @@ class Report
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -43,7 +43,7 @@ class Report
     /**
      * Generates a huge array for the report.
      *
-     * @return array<int, array<mixed>>
+     * @return array<int, array>
      */
     public function getReportingData(): array
     {
@@ -145,8 +145,6 @@ class Report
         }
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
-        $outputString = str_replace($toBeRemoved, '', $outputString);
-
-        return $outputString;
+        return str_replace($toBeRemoved, '', $outputString);
     }
 }

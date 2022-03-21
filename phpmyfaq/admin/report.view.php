@@ -3,38 +3,38 @@
 /**
  * View a generated report.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Gustavo Solt <gustavo.solt@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2011-01-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2011-01-12
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Report;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports']; ?></h2>
-            </div>
-        </header>
 
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_menu_reports') ?>
+    </h1>
+</div>
 
-        <div class="row">
-            <div class="col-lg-12">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     $useCategory = Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
@@ -50,26 +50,29 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     $useUrl = Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
     $useVisits = Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
     ?>
-                <table class="table table-striped align-middle">
-                    <thead>
-                        <tr>
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
     <?php
-    ($useCategory) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_category']) : '';
-    ($useSubcategory) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sub_category']) : '';
-    ($useTranslation) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_translations']) : '';
-    ($useLanguage) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_language']) : '';
-    ($useId) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_id']) : '';
-    ($useSticky) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sticky']) : '';
-    ($useTitle) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_title']) : '';
-    ($useCreationDate) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_creation_date']) : '';
-    ($useOwner) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_owner']) : '';
-    ($useLastModified) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_last_modified_person']) : '';
-    ($useUrl) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_url']) : '';
-    ($useVisits) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_visits']) : '';
+    ($useCategory) ? printf('<th>%s</th>', Translation::get('ad_stat_report_category')) : '';
+    ($useSubcategory) ? printf('<th>%s</th>', Translation::get('ad_stat_report_sub_category')) : '';
+    ($useTranslation) ? printf('<th>%s</th>', Translation::get('ad_stat_report_translations')) : '';
+    ($useLanguage) ? printf('<th>%s</th>', Translation::get('ad_stat_report_language')) : '';
+    ($useId) ? printf('<th>%s</th>', Translation::get('ad_stat_report_id')) : '';
+    ($useSticky) ? printf('<th style="white-space: nowrap;">%s</th>', Translation::get('ad_stat_report_sticky')) : '';
+    ($useTitle) ? printf('<th>%s</th>', Translation::get('ad_stat_report_title')) : '';
+    ($useCreationDate) ? printf('<th>%s</th>', Translation::get('ad_stat_report_creation_date')) : '';
+    ($useOwner) ? printf('<th>%s</th>', Translation::get('ad_stat_report_owner')) : '';
+    ($useLastModified) ? printf(
+        '<th style="white-space: nowrap;">%s</th>',
+        Translation::get('ad_stat_report_last_modified_person')
+    ) : '';
+    ($useUrl) ? printf('<th>%s</th>', Translation::get('ad_stat_report_url')) : '';
+    ($useVisits) ? printf('<th style="white-space: nowrap;">%s</th>', Translation::get('ad_stat_report_visits')) : '';
     ?>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    </tr>
+                </thead>
+                <tbody>
     <?php
 
     $report = new Report($faqConfig);
@@ -77,8 +80,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     foreach ($report->getReportingData() as $data) {
         echo '<tr>';
         if ($useCategory) {
-            if (0 != $data['category_parent']) {
-                printf('<td>%s</td>', $data['category_parent']);
+            if (0 !== $data['category_parent']) {
+                printf('<td>%s</td>', $data['category_name']);
             } else {
                 printf('<td>%s</td>', $data['category_name']);
             }
@@ -87,7 +90,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             if (0 != $data['category_parent']) {
                 printf('<td>%s</td>', $data['category_name']);
             } else {
-                echo '<td>n/a</td>';
+                echo '<td></td>';
             }
         }
         if ($useTranslation) {
@@ -129,31 +132,34 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         echo '</tr>';
     }
     ?>
-                    </tbody>
-                </table>
-                <form action="?action=reportexport" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="report_category" id="report_category" value="<?= $useCategory ?>"></td>
-                    <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?= $useSubcategory ?>"></td>
-                    <input type="hidden" name="report_translations" id="report_translations" value="<?= $useTranslation ?>"></td>
-                    <input type="hidden" name="report_language" id="report_language" value="<?= $useLanguage ?>"></td>
-                    <input type="hidden" name="report_id" id="report_id" value="<?= $useId ?>"></td>
-                    <input type="hidden" name="report_sticky" id="report_sticky" value="<?= $useSticky ?>"></td>
-                    <input type="hidden" name="report_title" id="report_title" value="<?= $useTitle ?>"></td>
-                    <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?= $useCreationDate ?>"></td>
-                    <input type="hidden" name="report_owner" id="report_owner" value="<?= $useOwner ?>"></td>
-                    <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?= $useLastModified ?>">
-                    <input type="hidden" name="report_url" id="report_url" value="<?= $useUrl ?>"></td>
-                    <input type="hidden" name="report_visits" id="report_visits" value="<?= $useVisits ?>"></td>
-                    <div class="row">
-                        <button class="btn btn-primary" type="submit">
-                            <?= $PMF_LANG['ad_stat_report_make_csv'] ?>
-                        </button>
-                    </div>
-                </form>
+                </tbody>
+            </table>
+            <form action="?action=reportexport" method="post" accept-charset="utf-8">
+                <input type="hidden" name="report_category" id="report_category" value="<?= $useCategory ?>">
+                <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?= $useSubcategory ?>">
+                <input type="hidden" name="report_translations" id="report_translations" value="<?= $useTranslation ?>">
+                <input type="hidden" name="report_language" id="report_language" value="<?= $useLanguage ?>">
+                <input type="hidden" name="report_id" id="report_id" value="<?= $useId ?>">
+                <input type="hidden" name="report_sticky" id="report_sticky" value="<?= $useSticky ?>">
+                <input type="hidden" name="report_title" id="report_title" value="<?= $useTitle ?>">
+                <input type="hidden" name="report_creation_date" id="report_creation_date"
+                       value="<?= $useCreationDate ?>">
+                <input type="hidden" name="report_owner" id="report_owner" value="<?= $useOwner ?>">
+                <input type="hidden" name="report_last_modified_person" id="report_last_modified_person"
+                       value="<?= $useLastModified ?>">
+                <input type="hidden" name="report_url" id="report_url" value="<?= $useUrl ?>">
+                <input type="hidden" name="report_visits" id="report_visits" value="<?= $useVisits ?>">
+                <div class="row">
+                    <button class="btn btn-primary" type="submit">
+                        <?= Translation::get('ad_stat_report_make_csv') ?>
+                    </button>
+                </div>
+            </form>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
 ?>
-            </div>
         </div>
+    </div>
+</div>

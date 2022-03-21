@@ -7,18 +7,20 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Gustavo Solt <gustavo.solt@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2011-01-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2011-01-12
  */
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Report;
 use phpMyFAQ\HttpStreamer;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -41,18 +43,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
 
     $text = [];
     $text[0] = [];
-    ($useCategory) ? $text[0][] = $PMF_LANG['ad_stat_report_category'] : '';
-    ($useSubcategory) ? $text[0][] = $PMF_LANG['ad_stat_report_sub_category'] : '';
-    ($useTranslation) ? $text[0][] = $PMF_LANG['ad_stat_report_translations'] : '';
-    ($useLanguage) ? $text[0][] = $PMF_LANG['ad_stat_report_language'] : '';
-    ($useId) ? $text[0][] = $PMF_LANG['ad_stat_report_id'] : '';
-    ($useSticky) ? $text[0][] = $PMF_LANG['ad_stat_report_sticky'] : '';
-    ($useTitle) ? $text[0][] = $PMF_LANG['ad_stat_report_title'] : '';
-    ($useCreationDate) ? $text[0][] = $PMF_LANG['ad_stat_report_creation_date'] : '';
-    ($useOwner) ? $text[0][] = $PMF_LANG['ad_stat_report_owner'] : '';
-    ($useLastModified) ? $text[0][] = $PMF_LANG['ad_stat_report_last_modified_person'] : '';
-    ($useUrl) ? $text[0][] = $PMF_LANG['ad_stat_report_url'] : '';
-    ($useVisits) ? $text[0][] = $PMF_LANG['ad_stat_report_visits'] : '';
+    ($useCategory) ? $text[0][] = Translation::get('ad_stat_report_category') : '';
+    ($useSubcategory) ? $text[0][] = Translation::get('ad_stat_report_sub_category') : '';
+    ($useTranslation) ? $text[0][] = Translation::get('ad_stat_report_translations') : '';
+    ($useLanguage) ? $text[0][] = Translation::get('ad_stat_report_language') : '';
+    ($useId) ? $text[0][] = Translation::get('ad_stat_report_id') : '';
+    ($useSticky) ? $text[0][] = Translation::get('ad_stat_report_sticky') : '';
+    ($useTitle) ? $text[0][] = Translation::get('ad_stat_report_title') : '';
+    ($useCreationDate) ? $text[0][] = Translation::get('ad_stat_report_creation_date') : '';
+    ($useOwner) ? $text[0][] = Translation::get('ad_stat_report_owner') : '';
+    ($useLastModified) ? $text[0][] = Translation::get('ad_stat_report_last_modified_person') : '';
+    ($useUrl) ? $text[0][] = Translation::get('ad_stat_report_url') : '';
+    ($useVisits) ? $text[0][] = Translation::get('ad_stat_report_visits') : '';
 
     $report = new Report($faqConfig);
 
@@ -121,7 +123,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     }
 
     $oHttpStreamer = new HttpStreamer('csv', $content);
-    $oHttpStreamer->send(HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+    try {
+        $oHttpStreamer->send(HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
 } else {
-    echo $PMF_LANG['err_noArticles'];
+    echo Translation::get('err_noArticles');
 }

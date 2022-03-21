@@ -3,20 +3,20 @@
 /**
  * The reporting page.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Gustavo Solt <gustavo.solt@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Gustavo Solt <gustavo.solt@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2011-01-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2011-01-12
  */
+
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -25,81 +25,117 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                  <i aria-hidden="true" class="fa fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports'] ?>
-                </h2>
-            </div>
-        </header>
 
-        <div class="row">
-            <div class="col-lg-12">
-            <form action="?action=reportview" method="post" accept-charset="utf-8">
-                <h4><?= $PMF_LANG['ad_stat_report_fields'] ?></h4>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_menu_reports') ?>
+    </h1>
+</div>
 
-                <div class="row">
-                    <label class="checkbox" for="report_category">
-                        <input type="checkbox" name="report_category" id="report_category" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_category'] ?>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3">
+        <form action="?action=reportview" method="post" accept-charset="utf-8">
+            <h4><?= Translation::get('ad_stat_report_fields') ?></h4>
+
+            <div class="row mb-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_category" name="report_category"
+                           value="1" checked>
+                    <label class="form-check-label" for="report_category">
+                        <?= Translation::get('ad_stat_report_category') ?>
                     </label>
-                    <label class="checkbox" for="report_sub_category">
-                        <input type="checkbox" name="report_sub_category" id="report_sub_category" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_sub_category'] ?>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_sub_category" name="report_sub_category"
+                           value="1" checked>
+                    <label class="form-check-label" for="report_sub_category">
+                        <?= Translation::get('ad_stat_report_sub_category') ?>
                     </label>
-                    <label class="checkbox" for="report_translations">
-                        <input type="checkbox" name="report_translations" id="report_translations" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_translations'] ?>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_translations"
+                           name="report_translations" value="1" checked>
+                    <label class="form-check-label" for="report_translations">
+                        <?= Translation::get('ad_stat_report_translations') ?>
                     </label>
-                    <label class="checkbox" for="report_translations">
-                        <input type="checkbox" name="report_language" id="report_language" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_language'] ?>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_language" name="report_language"
+                           value="1" checked>
+                    <label class="form-check-label" for="report_language">
+                        <?= Translation::get('ad_stat_report_language') ?>
                     </label>
-                    <label class="checkbox" for="report_id">
-                        <input type="checkbox" name="report_id" id="report_id" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_id'] ?>:
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_id" name="report_id" value="1" checked>
+                    <label class="form-check-label" for="report_id">
+                        <?= Translation::get('ad_stat_report_id') ?>
                     </label>
-                    <label class="checkbox" for="report_sticky">
-                        <input type="checkbox" name="report_sticky" id="report_sticky" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_sticky'] ?>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_sticky" name="report_sticky" value="1"
+                           checked>
+                    <label class="form-check-label" for="report_sticky">
+                        <?= Translation::get('ad_stat_report_sticky') ?>
                     </label>
-                    <label class="checkbox" for="report_title">
-                        <input type="checkbox" name="report_title" id="report_title" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_title'] ?>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_title" name="report_title" value="1"
+                           checked>
+                    <label class="form-check-label" for="report_title">
+                        <?= Translation::get('ad_stat_report_title') ?>
                     </label>
-                    <label class="checkbox" for="report_creation_date">
-                        <input type="checkbox" name="report_creation_date" id="report_creation_date" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_creation_date'] ?>
-                    </label>
-                    <label class="checkbox" for="report_owner">
-                        <input type="checkbox" name="report_owner" id="report_owner" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_owner'] ?>
-                    </label>
-                    <label class="checkbox" for="report_last_modified_person">
-                        <input type="checkbox" name="report_last_modified_person" id="report_last_modified_person" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_last_modified_person'] ?>
-                    </label>
-                    <label class="checkbox" for="report_url">
-                        <input type="checkbox" name="report_url" id="report_url" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_url'] ?>
-                    </label>
-                    <label class="checkbox" for="report_visits">
-                        <input type="checkbox" name="report_visits" id="report_visits" checked value="1">
-                        <?= $PMF_LANG['ad_stat_report_visits'] ?>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_creation_date"
+                           name="report_creation_date" value="1" checked>
+                    <label class="form-check-label" for="report_creation_date">
+                        <?= Translation::get('ad_stat_report_creation_date') ?>
                     </label>
                 </div>
 
-                <div class="row">
-                    <button class="btn btn-primary" type="submit">
-                        <?= $PMF_LANG['ad_stat_report_make_report'] ?>
-                    </button>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_owner" name="report_owner" value="1"
+                           checked>
+                    <label class="form-check-label" for="report_owner">
+                        <?= Translation::get('ad_stat_report_owner') ?>
+                    </label>
                 </div>
-
-            </form>
-
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_last_modified_person"
+                           name="report_last_modified_person" value="1" checked>
+                    <label class="form-check-label" for="report_last_modified_person">
+                        <?= Translation::get('ad_stat_report_last_modified_person') ?>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_url" name="report_url" value="1" checked>
+                    <label class="form-check-label" for="report_url">
+                        <?= Translation::get('ad_stat_report_url') ?>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="report_visits" name="report_visits" value="1"
+                           checked>
+                    <label class="form-check-label" for="report_visits">
+                        <?= Translation::get('ad_stat_report_visits') ?>
+                    </label>
+                </div>
             </div>
+
+            <div class="row">
+                <button class="btn btn-primary" type="submit">
+                    <?= Translation::get('ad_stat_report_make_report') ?>
+                </button>
+            </div>
+
+        </form>
+
         </div>
+    </div>
+</div>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
