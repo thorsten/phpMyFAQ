@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: onDemandURL.
+ * Private phpMyFAQ Admin API: onDemandURL.
  *
  * Usage:
  *   index.php?action=ajax&ajax=onDemandURL&id=<id>&artlang=<lang>[&lookup=1]

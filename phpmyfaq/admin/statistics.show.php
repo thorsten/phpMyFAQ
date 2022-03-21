@@ -3,23 +3,22 @@
 /**
  * Show the session.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -33,7 +32,7 @@ $sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-tasks"></i>
-        <?php printf('%s #%d', $PMF_LANG['ad_sess_session'], $sessionId); ?>
+        <?php printf('%s #%d', Translation::get('ad_sess_session'), $sessionId); ?>
     </h1>
   </div>
 
@@ -46,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
   <table class="table table-striped align-middle">
     <tfoot>
     <tr>
-      <td colspan="2"><a href="?action=viewsessions"><?= $PMF_LANG['ad_sess_back'] ?></a></td>
+      <td colspan="2"><a href="?action=viewsessions"><?= Translation::get('ad_sess_back') ?></a></td>
     </tr>
     </tfoot>
     <tbody>
@@ -58,21 +57,21 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             ++$num;
             ?>
           <tr>
-            <td><?= date('Y-m-d H:i:s', $data[7]) ?></td>
+            <td><?= date('Y-m-d H:i:s', (int)$data[7]) ?></td>
             <td><?= $data[1] ?> (<?= $data[2] ?>)</td>
           </tr>
             <?php if ($num == 1) { ?>
               <tr>
-                <td><?= $PMF_LANG['ad_sess_referer'] ?>:</td>
+                <td><?= Translation::get('ad_sess_referer') ?>:</td>
                 <td><?= Strings::htmlentities(str_replace('?', '? ', $data[5])) ?>
                 </td>
               </tr>
               <tr>
-                <td><?= $PMF_LANG['ad_sess_browser'] ?>:</td>
+                <td><?= Translation::get('ad_sess_browser') ?>:</td>
                 <td><?= Strings::htmlentities($data[6]) ?></td>
               </tr>
               <tr>
-                <td><?= $PMF_LANG['ad_sess_ip'] ?>:</td>
+                <td><?= Translation::get('ad_sess_ip') ?>:</td>
                 <td><?= Strings::htmlentities($data[3]) ?></td>
               </tr>
             <?php }
@@ -83,5 +82,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
   </table>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

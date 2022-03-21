@@ -7,19 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -64,28 +64,29 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
     $pagination = new Pagination($faqConfig, $options);
 
     $loggingData = $logging->getAll();
-    ?>
-    <header class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_menu_adminlog'] ?>
-                <div class="float-right">
-                    <a class="btn btn-danger"
-                       href="?action=deleteadminlog&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-                        <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_adminlog_del_older_30d'] ?>
-                    </a>
-                </div>
-            </h2>
+?>
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_menu_adminlog') ?>
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <a class="btn btn-sm btn-danger"
+                   href="?action=deleteadminlog&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                    <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_adminlog_del_older_30d') ?>
+                </a>
+            </div>
         </div>
-    </header>
+    </div>
 
     <table class="table table-striped align-middle">
     <thead>
         <tr>
-            <th><?= $PMF_LANG['ad_categ_id'] ?></th>
-            <th><?= $PMF_LANG['ad_adminlog_date'] ?></th>
-            <th><?= $PMF_LANG['ad_adminlog_user'] ?></th>
-            <th colspan="2"><?= $PMF_LANG['ad_adminlog_ip'] ?></th>
+            <th><?= Translation::get('ad_categ_id') ?></th>
+            <th><?= Translation::get('ad_adminlog_date') ?></th>
+            <th><?= Translation::get('ad_adminlog_user') ?></th>
+            <th colspan="2"><?= Translation::get('ad_adminlog_ip') ?></th>
         </tr>
     </thead>
     <tfoot>
@@ -118,15 +119,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
             <td><?= $loggingValue['ip'] ?></td>
             <td><small><?php
             $text = $loggingValue['text'];
-            $text = str_replace('Loginerror', $PMF_LANG['ad_log_lger'], $text);
-            $text = str_replace('Session expired', $PMF_LANG['ad_log_sess'], $text);
-            $text = str_replace('Useredit, ', $PMF_LANG['ad_log_edit'], $text);
-            $text = str_replace('admin-save-new-faq', $PMF_LANG['ad_log_crsa'], $text);
-            $text = str_replace('admin-add-faq', $PMF_LANG['ad_log_crea'], $text);
-            $text = str_replace('Usersave, ', $PMF_LANG['ad_log_ussa'], $text);
-            $text = str_replace('Userdel, ', $PMF_LANG['ad_log_usde'], $text);
-            $text = str_replace('admin-edit-faq, ', $PMF_LANG['ad_log_beed'], $text);
-            $text = str_replace('Beitragdel, ', $PMF_LANG['ad_log_bede'], $text);
+            $text = str_replace('Loginerror', Translation::get('ad_log_lger'), $text);
+            $text = str_replace('Session expired', Translation::get('ad_log_sess'), $text);
+            $text = str_replace('Useredit, ', Translation::get('ad_log_edit'), $text);
+            $text = str_replace('admin-save-new-faq', Translation::get('ad_log_crsa'), $text);
+            $text = str_replace('admin-add-faq', Translation::get('ad_log_crea'), $text);
+            $text = str_replace('Usersave, ', Translation::get('ad_log_ussa'), $text);
+            $text = str_replace('Userdel, ', Translation::get('ad_log_usde'), $text);
+            $text = str_replace('admin-edit-faq, ', Translation::get('ad_log_beed'), $text);
+            $text = str_replace('Beitragdel, ', Translation::get('ad_log_bede'), $text);
             echo $text;
             ?></small>
             </td>
@@ -140,10 +141,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
     <?php
 } elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
     if ($logging->delete()) {
-        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+        printf('<p class="alert alert-success">%s</p>', Translation::get('ad_adminlog_delete_success'));
     } else {
-        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
+        printf('<p class="alert alert-danger">%s</p>', Translation::get('ad_adminlog_delete_failure'));
     }
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

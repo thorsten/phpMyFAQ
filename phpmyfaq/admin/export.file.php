@@ -22,6 +22,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -51,9 +52,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'export')) {
             $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
         }
     } catch (Exception $e) {
-        // handle exception
+        echo $e->getMessage();
     }
 
 } else {
-    echo $PMF_LANG['err_noArticles'];
+    echo Translation::get('err_noArticles');
 }

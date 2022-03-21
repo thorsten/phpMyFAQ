@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: handling of Ajax search calls.
+ * Private phpMyFAQ Admin API: handling of Ajax search calls.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,6 +18,7 @@
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Search;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -25,7 +26,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
-$searchTerm = Filter::filterInput(INPUT_GET, 'searchterm', FILTER_UNSAFE_RAW);
 
 $search = new Search($faqConfig);
 $http = new HttpHelper();
@@ -34,11 +34,23 @@ $http->addHeader();
 
 switch ($ajaxAction) {
     case 'delete_searchterm':
-        if ($search->deleteSearchTerm($searchTerm)) {
-            $http->sendWithHeaders(true);
+        $json = file_get_contents('php://input', true);
+        $deleteData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
+            $http->setStatus(400);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            exit(1);
+        }
+
+        $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
+
+        if ($search->deleteSearchTermById($searchId)) {
+            $http->setStatus(200);
+            $http->sendJsonWithHeaders(['deleted' => $searchId]);
         } else {
             $http->setStatus(400);
-            $http->sendWithHeaders(false);
+            $http->sendJsonWithHeaders(['error' => $searchId]);
         }
 
         break;

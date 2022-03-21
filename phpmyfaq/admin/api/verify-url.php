@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: verifyurl.
+ * Private phpMyFAQ Admin API: verifyurl.
  *
  * Usage:
  *   index.php?uin=<uin>&action=ajax&ajax=verifyURL&id=<id>&artlang=<lang>

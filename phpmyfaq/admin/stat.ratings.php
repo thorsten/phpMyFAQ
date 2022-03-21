@@ -1,26 +1,25 @@
 <?php
 
 /**
- * The page with the ratings of the votings.
- *
- *
+ * The page with the ratings.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -36,21 +35,21 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $ratingdata = $ratings->getAllRatings();
     $numratings = count($ratingdata);
     $oldcategory = 0;
-    ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_rs'] ?>
+?>
 
-                    <div class="float-right">
-                        <a class="btn btn-danger" 
-                           href="?action=clear-statistics&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-                            <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_delete_all_votings'] ?>
-                        </a>
-                    </div>
-                </h2>
-            </div>
-        </header>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_rs') ?>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a class="btn btn-sm btn-danger"
+               href="?action=clear-statistics&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_delete_all_votings') ?>
+            </a>
+        </div>
+    </div>
+</div>
 
     <?php
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
@@ -80,8 +79,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             ?>
                     <tr>
                         <th colspan="6" style="text-align: left;">
-                            <h4><?= $category->categoryName[$data['category_id']]['name'];
-                            ?></h4>
+                            <h4><?= $category->categoryName[$data['category_id']]['name'] ?></h4>
                         </th>
                     </tr>
             <?php
@@ -130,39 +128,34 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     }
     ?>
                     </tbody>
-    <?php if ($numratings > 0) {
-        ?>
+    <?php if ($numratings > 0) { ?>
                     <tfoot>
                         <tr>
                             <td colspan="6">
                                 <small>
                                 <span style="color: green; font-weight: bold;">
-                                    <?= $PMF_LANG['ad_rs_green'] ?>
+                                    <?= Translation::get('ad_rs_green') ?>
                                 </span>
-                                <?= $PMF_LANG['ad_rs_ahtf'] ?>,
+                                <?= Translation::get('ad_rs_ahtf') ?>,
                                 <span style="color: red; font-weight: bold;">
-                                    <?= $PMF_LANG['ad_rs_red'] ?>
+                                    <?= Translation::get('ad_rs_red') ?>
                                 </span>
-                                <?= $PMF_LANG['ad_rs_altt'] ?>
+                                <?= Translation::get('ad_rs_altt') ?>
                                 </small>
                             </td>
                         </tr>
                     </tfoot>
-        <?php
-    } else {
-        ?>
+    <?php } else { ?>
                     <tfoot>
                         <tr>
-                            <td colspan="6"><?= $PMF_LANG['ad_rs_no'] ?></td>
+                            <td colspan="6"><?= Translation::get('ad_rs_no') ?></td>
                         </tr>
                     </tfoot>
-        <?php
-    }
-    ?>
+    <?php } ?>
                 </table>
             </div>
         </div>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

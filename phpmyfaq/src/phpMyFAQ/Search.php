@@ -242,19 +242,19 @@ class Search
     /**
      * Deletes a search term.
      *
-     * @param string $searchTerm
+     * @param int $searchTermId
      * @return bool
      */
-    public function deleteSearchTerm(string $searchTerm): bool
+    public function deleteSearchTermById(int $searchTermId): bool
     {
         $query = sprintf(
             "
             DELETE FROM
                 %s
             WHERE
-                searchterm = '%s'",
+                id = '%d'",
             $this->table,
-            $searchTerm
+            $searchTermId
         );
 
         return $this->config->getDb()->query($query);

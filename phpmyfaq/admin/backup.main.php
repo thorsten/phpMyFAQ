@@ -15,6 +15,8 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Translation;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
@@ -25,25 +27,25 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-download"></i>
-        <?= $PMF_LANG['ad_csv_backup'] ?>
+        <?= Translation::get('ad_csv_backup') ?>
     </h1>
   </div>
 
   <div class="card-deck">
     <div class="card mb-4">
       <div class="card-header py-3">
-          <?= $PMF_LANG['ad_csv_head'] ?>
+          <?= Translation::get('ad_csv_head') ?>
       </div>
       <div class="card-body">
-        <p><?= $PMF_LANG['ad_csv_make'] ?></p>
+        <p><?= Translation::get('ad_csv_make') ?></p>
         <p>
           <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-            <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_linkdat'] ?>
+            <i aria-hidden="true" class="fa fa-download"></i> <?= Translation::get('ad_csv_linkdat') ?>
           </a>
         </p>
         <p>
           <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-            <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_linklog'] ?>
+            <i aria-hidden="true" class="fa fa-download"></i> <?= Translation::get('ad_csv_linklog') ?>
           </a>
         </p>
       </div>
@@ -52,12 +54,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
       <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>"
             enctype="multipart/form-data">
         <div class="card-header py-3">
-            <?= $PMF_LANG['ad_csv_head2'] ?>
+            <?= Translation::get('ad_csv_head2') ?>
         </div>
         <div class="card-body">
-          <p><?= $PMF_LANG['ad_csv_restore'] ?></p>
+          <p><?= Translation::get('ad_csv_restore') ?></p>
           <div class="row">
-            <label class="col-lg-4 col-form-label"><?= $PMF_LANG['ad_csv_file'] ?>:</label>
+            <label class="col-lg-4 col-form-label"><?= Translation::get('ad_csv_file') ?>:</label>
             <div class="col-lg-8">
               <input type="file" name="userfile">
             </div>
@@ -65,7 +67,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
           <div class="form-row row">
             <div class="text-right">
               <button class="btn btn-primary" type="submit">
-                <i aria-hidden="true" class="fa fa-upload"></i> <?= $PMF_LANG['ad_csv_ok'] ?>
+                <i aria-hidden="true" class="fa fa-upload"></i> <?= Translation::get('ad_csv_ok') ?>
               </button>
             </div>
           </div>
@@ -77,5 +79,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
 
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

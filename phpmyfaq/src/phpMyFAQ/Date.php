@@ -19,6 +19,7 @@
 namespace phpMyFAQ;
 
 use DateTime;
+use Exception;
 
 /**
  * Class Date
@@ -113,14 +114,18 @@ class Date
     /**
      * Returns date formatted according to user defined format.
      *
-     * @param  string $unformattedDate
-     * @throws \Exception
+     * @param string $unformattedDate
      * @return string
+     * @throws Exception
      */
-    public function format($unformattedDate)
+    public function format(string $unformattedDate): string
     {
-        $date = new DateTime($unformattedDate);
-
-        return $date->format($this->config->get('main.dateFormat'));
+        try {
+            $date = new DateTime($unformattedDate);
+            return $date->format($this->config->get('main.dateFormat'));
+        } catch (Exception $e) {
+            // handle the exception
+            return '';
+        }
     }
 }

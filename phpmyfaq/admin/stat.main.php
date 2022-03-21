@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,19 +27,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-<header class="row">
-  <div class="col-lg-12">
-    <h2 class="page-header">
-      <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_stat_sess'] ?>
-      <div class="float-right">
-        <a class="btn btn-danger"
-           href="?action=clear-visits&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-          <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_clear_all_visits'] ?>
-        </a>
-      </div>
-    </h2>
-  </div>
-</header>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_stat_sess') ?>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a class="btn btn-sm btn-danger"
+               href="?action=clear-visits&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_clear_all_visits') ?>
+            </a>
+        </div>
+    </div>
+</div>
 
 <div class="row">
   <div class="col-lg-12">
@@ -85,7 +87,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 closedir($dir);
                 $session->deleteSessions($first, $last);
 
-                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+                printf('<p class="alert alert-success">%s</p>', Translation::get('ad_adminlog_delete_success'));
             }
 
             // Reset all visits and sessions
@@ -104,13 +106,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 // Delete sessions
                 $session->deleteAllSessions();
 
-                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_reset_visits_success']);
+                printf('<p class="alert alert-success">%s</p>', Translation::get('ad_reset_visits_success'));
             }
             ?>
 
         <table class="table table-striped align-middle">
           <tr>
-            <td><?= $PMF_LANG['ad_stat_days'] ?>:</td>
+            <td><?= Translation::get('ad_stat_days') ?>:</td>
             <td>
                 <?php
                 $danz = 0;
@@ -135,15 +137,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </td>
           </tr>
           <tr>
-            <td><?= $PMF_LANG['ad_stat_vis']; ?>:</td>
+            <td><?= Translation::get('ad_stat_vis'); ?>:</td>
             <td><?= $vanz = $session->getNumberOfSessions() ?></td>
           </tr>
           <tr>
-            <td><?= $PMF_LANG['ad_stat_vpd'] ?>:</td>
+            <td><?= Translation::get('ad_stat_vpd') ?>:</td>
             <td><?= ($danz != 0) ? round(($vanz / $danz), 2) : 0 ?></td>
           </tr>
           <tr>
-            <td><?= $PMF_LANG['ad_stat_fien'] ?>:</td>
+            <td><?= Translation::get('ad_stat_fien') ?>:</td>
             <td>
                 <?php
                 if (is_file(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $first))) {
@@ -154,13 +156,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     fclose($fp);
                     echo $date->format(date('Y-m-d H:i', $qstamp));
                 } else {
-                    echo $PMF_LANG['ad_sess_noentry'];
+                    echo Translation::get('ad_sess_noentry');
                 }
                 ?>
             </td>
           </tr>
           <tr>
-            <td><?= $PMF_LANG['ad_stat_laen'] ?>:</td>
+            <td><?= Translation::get('ad_stat_laen') ?>:</td>
             <td>
                 <?php
                 if (is_file(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $last))) {
@@ -177,7 +179,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                     echo $date->format(date('Y-m-d H:i', $stamp)) . '<br>';
                 } else {
-                    echo $PMF_LANG['ad_sess_noentry'] . '<br>';
+                    echo Translation::get('ad_sess_noentry') . '<br>';
                 }
 
                 $dir = opendir(PMF_ROOT_DIR . '/data');
@@ -193,16 +195,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </td>
           </tr>
           <tr>
-            <td><?= $PMF_LANG['ad_stat_browse'] ?>:</td>
-            <td class="col-lg-2">
-              <form action="?action=sessionbrowse" method="post" accept-charset="utf-8" class="form-inline">
+            <td><?= Translation::get('ad_stat_browse') ?>:</td>
+            <td class="col-lg-10">
+              <form action="?action=sessionbrowse" method="post" accept-charset="utf-8"
+                    class="row row-cols-lg-auto g-3 align-items-center">
                 <div class="mr-2">
-                  <label for="day" class="d-none"><?= $PMF_LANG['ad_stat_browse'] ?></label>
-                  <select name="day" id="day" class="form-control">
+                  <label for="day" class="d-none"><?= Translation::get('ad_stat_browse') ?></label>
+                  <select name="day" id="day" class="form-select">
                       <?php
                         foreach ($trackingDates as $trackingDate) {
                             printf('<option value="%d"', $trackingDate);
-                            if (date('Y-m-d', $trackingDate) == strftime('%Y-%m-%d', $_SERVER['REQUEST_TIME'])) {
+                            if (date('Y-m-d', $trackingDate) == date('Y-m-d', $_SERVER['REQUEST_TIME'])) {
                                 echo ' selected="selected"';
                             }
                             echo '>';
@@ -213,51 +216,56 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                   </select>
                 </div>
                 <button class="btn btn-primary" type="submit" name="statbrowse">
-                      <?= $PMF_LANG['ad_stat_ok'] ?>
+                      <?= Translation::get('ad_stat_ok') ?>
                 </button>
               </form>
             </td>
           </tr>
         </table>
 
-        <form action="?action=viewsessions" method="post" class="form-inline">
-          <fieldset>
-            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-            <legend><?= $PMF_LANG['ad_stat_management'] ?></legend>
 
-            <div class="mr-2">
-              <label class="col-form-label" for="month"><?= $PMF_LANG['ad_stat_choose'] ?>:</label>
-              <select name="month" id="month" class="form-control">
-                    <?php
-                    $oldValue = mktime(0, 0, 0, 1, 1, 1970);
-                    $isFirstDate = true;
-                    foreach ($trackingDates as $trackingDate) {
-                        if (date('Y-m', $oldValue) != date('Y-m', $trackingDate)) {
-                            // The filename format is: trackingDDMMYYYY
-                            // e.g.: tracking02042006
-                            printf('<option value="%s"', date('mY', $trackingDate));
-                            // Select the oldest month
-                            if ($isFirstDate) {
-                                echo ' selected="selected"';
-                                $isFirstDate = false;
+            <h4>
+                <?= Translation::get('ad_stat_management') ?>
+            </h4>
+
+        <form action="?action=viewsessions" method="post"
+              class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+
+                  <label class="form-label" for="month"><?= Translation::get('ad_stat_choose') ?>:</label>
+                  <select name="month" id="month" class="form-select">
+                        <?php
+                        $oldValue = mktime(0, 0, 0, 1, 1, 1970);
+                        $isFirstDate = true;
+                        foreach ($trackingDates as $trackingDate) {
+                            if (date('Y-m', $oldValue) != date('Y-m', $trackingDate)) {
+                                // The filename format is: trackingDDMMYYYY
+                                // e.g.: tracking02042006
+                                printf('<option value="%s"', date('mY', $trackingDate));
+                                // Select the oldest month
+                                if ($isFirstDate) {
+                                    echo ' selected';
+                                    $isFirstDate = false;
+                                }
+                                echo '>';
+                                echo date('Y-m', $trackingDate);
+                                echo "</option>\n";
+                                $oldValue = $trackingDate;
                             }
-                            echo '>';
-                            echo date('Y-m', $trackingDate);
-                            echo "</option>\n";
-                            $oldValue = $trackingDate;
                         }
-                    }
-                    ?>
-              </select>
+                        ?>
+                  </select>
             </div>
-            <button class="btn btn-primary" type="submit" name="statdelete">
-                  <?= $PMF_LANG['ad_stat_delete'] ?>
-            </button>
-          </fieldset>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit" name="statdelete">
+                      <?= Translation::get('ad_stat_delete') ?>
+                </button>
+            </div>
         </form>
             <?php
         } else {
-            print $PMF_LANG['err_NotAuth'];
+            print Translation::get('err_NotAuth');
         }
         ?>
   </div>

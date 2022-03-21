@@ -57,18 +57,24 @@ class Translation
      *
      * @param string $languageKey
      * @return string|null
-     * @throws Exception
      */
     public static function get(string $languageKey): ?string
     {
-        self::$instance->checkInit();
-        self::$instance->checkLanguageLoaded();
+        try {
+            self::$instance->checkInit();
+            self::$instance->checkLanguageLoaded();
 
-        if (!empty(self::$instance->loadedLanguages[self::$instance->currentLanguage][$languageKey])) {
-            return self::$instance->loadedLanguages[self::$instance->currentLanguage][$languageKey];
+            if (!empty(self::$instance->loadedLanguages[self::$instance->currentLanguage][$languageKey])) {
+                return self::$instance->loadedLanguages[self::$instance->currentLanguage][$languageKey];
+            }
+
+            return self::$instance->loadedLanguages[self::$instance->defaultLanguage][$languageKey];
+        } catch (Exception $e) {
+            // handle exception
+            // log to stderr
         }
 
-        return self::$instance->loadedLanguages[self::$instance->defaultLanguage][$languageKey];
+        return null;
     }
 
     /**
