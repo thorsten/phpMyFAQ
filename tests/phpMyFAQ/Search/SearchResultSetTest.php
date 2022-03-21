@@ -1,21 +1,9 @@
 <?php
-/**
- * Test case for PMF_Search_Resultset
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-07-24
- */
+
+namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +37,7 @@ class SearchResultSetTest extends TestCase
         parent::tearDown();
     }
 
-    public function testSetAndGetNumberOfResults()
+    public function testSetAndGetNumberOfResults(): void
     {
         $this->SearchResultSet->setNumberOfResults(array(1, 2));
         $this->assertEquals($this->SearchResultSet->getNumberOfResults(), 2);

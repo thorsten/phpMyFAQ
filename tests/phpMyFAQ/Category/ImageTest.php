@@ -1,20 +1,7 @@
 <?php
 
-/**
- * The category image test class.
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2016 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2016-09-08
- */
+namespace phpMyFAQ\Category;
 
-use phpMyFAQ\Category\CategoryImage;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 class ImageTest extends TestCase
 {
     /** @var CategoryImage */
-    private $instance;
+    private CategoryImage $instance;
 
     protected function setUp(): void
     {
@@ -36,7 +23,7 @@ class ImageTest extends TestCase
         $this->instance = new CategoryImage($pmfConfig);
     }
 
-    public function testNoUploadGetFileName()
+    public function testNoUploadGetFileName(): void
     {
         $categoryId = 1;
         $categoryName = 'de';
@@ -53,7 +40,7 @@ class ImageTest extends TestCase
         $this->assertEquals('', $this->instance->getFileName($categoryId, $categoryName));
     }
 
-    public function testUploadedGetFileName()
+    public function testUploadedGetFileName(): void
     {
         $categoryId = 1;
         $categoryName = 'de';

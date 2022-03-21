@@ -1,23 +1,11 @@
 <?php
-/**
- * Test case for Instance Client class
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-29
- */
+
+namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
-use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ClientTest extends TestCase
 {
     /** @var Client */
-    private $Client;
+    private Client $Client;
 
     protected function setUp(): void
     {
@@ -65,7 +53,7 @@ class ClientTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCopyConstantsFile()
+    public function testCopyConstantsFile(): void
     {
         $return = $this->Client->copyConstantsFile(PMF_TEST_DIR . '/constants.test.php');
 
@@ -73,7 +61,7 @@ class ClientTest extends TestCase
         $this->assertFileExists(PMF_TEST_DIR . '/constants.test.php');
     }
 
-    public function testCopyTemplateFolder()
+    public function testCopyTemplateFolder(): void
     {
         $this->Client->copyTemplateFolder(PMF_TEST_DIR);
 

@@ -1,25 +1,10 @@
 <?php
 
-/**
- * Test case for Link
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-29
- */
+namespace phpMyFAQ;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Link;
-use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Class LinkTest
@@ -27,16 +12,16 @@ use PHPUnit\Framework\TestCase;
 class LinkTest extends TestCase
 {
     /** @var Link */
-    private $link;
+    private Link $link;
 
     /** @var Configuration */
-    private $Configuration;
+    private Configuration $Configuration;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        Strings::init('en');
+        Strings::init();
 
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
@@ -45,13 +30,7 @@ class LinkTest extends TestCase
         $this->Configuration->config['security.useSslOnly'] = 'true';
     }
 
-    protected function tearDown(): void
-    {
-        $this->link = null;
-        parent::tearDown();
-    }
-
-    public function testisHomeIndex()
+    public function testisHomeIndex(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isHomeIndex');
@@ -64,7 +43,7 @@ class LinkTest extends TestCase
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
-    public function testisInternalReference()
+    public function testisInternalReference(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isInternalReference');
@@ -83,7 +62,7 @@ class LinkTest extends TestCase
     /**
      * Tests isSystemLink()
      */
-    public function testIsSystemLink()
+    public function testIsSystemLink(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isSystemLink');
@@ -96,7 +75,7 @@ class LinkTest extends TestCase
     /**
      * tests hasScheme()
      */
-    public function testHasScheme()
+    public function testHasScheme(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('hasScheme');
@@ -112,7 +91,7 @@ class LinkTest extends TestCase
     /**
      * Tests getSEOItemTitle()
      */
-    public function testGetSEOItemTitle()
+    public function testGetSEOItemTitle(): void
     {
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->Configuration);
 
@@ -145,7 +124,7 @@ class LinkTest extends TestCase
     /**
      * Tests getHttpGetParameters()
      */
-    public function testGetHttpGetParameters()
+    public function testGetHttpGetParameters(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getHttpGetParameters');
@@ -167,7 +146,7 @@ class LinkTest extends TestCase
     /**
      * Tests getQuery()
      */
-    public function testgetQuery()
+    public function testgetQuery(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getQuery');
@@ -183,7 +162,7 @@ class LinkTest extends TestCase
     /**
      * Tests getDefaultScheme()
      */
-    public function testGetDefaultScheme()
+    public function testGetDefaultScheme(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getDefaultScheme');
@@ -201,7 +180,7 @@ class LinkTest extends TestCase
     /**
      * Tests getSystemScheme()
      */
-    public function testGetSystemScheme()
+    public function testGetSystemScheme(): void
     {
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->Configuration);
         $this->assertEquals('https://', $this->link->getSystemScheme());
@@ -210,7 +189,7 @@ class LinkTest extends TestCase
     /**
      * Tests getSystemRelativeUri()
      */
-    public function testGetSystemRelativeUri()
+    public function testGetSystemRelativeUri(): void
     {
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->Configuration);
 
@@ -224,7 +203,7 @@ class LinkTest extends TestCase
     /**
      * Tests getSystemUri()
      */
-    public function testGetSystemUri()
+    public function testGetSystemUri(): void
     {
         $this->link = new Link('https://faq.example.org/my-test-faq/', $this->Configuration);
 
@@ -237,7 +216,7 @@ class LinkTest extends TestCase
     /**
      * Tests toHtmlAnchor()
      */
-    public function testToHtmlAnchor()
+    public function testToHtmlAnchor(): void
     {
         $this->Configuration->config['main.enableRewriteRules'] = true;
 
@@ -264,7 +243,7 @@ class LinkTest extends TestCase
     /**
      * Tests appendSids()
      */
-    public function testAppendSids()
+    public function testAppendSids(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('appendSids');
@@ -281,7 +260,7 @@ class LinkTest extends TestCase
      * Tests toString()
      * Rewrite rules enabled.
      */
-    public function testToStringWithEnabledRewriteRules()
+    public function testToStringWithEnabledRewriteRules(): void
     {
         $this->Configuration->config['main.enableRewriteRules'] = true;
 
@@ -312,7 +291,7 @@ class LinkTest extends TestCase
      * Tests toString()
      * Rewrite rules disabled.
      */
-    public function testToStringWithDisabledRewriteRules()
+    public function testToStringWithDisabledRewriteRules(): void
     {
         $this->Configuration->config['main.enableRewriteRules'] = false;
 

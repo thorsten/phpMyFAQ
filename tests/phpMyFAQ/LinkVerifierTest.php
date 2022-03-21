@@ -1,23 +1,10 @@
 <?php
-/**
- * Test case for Linkverifier
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-29
- */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\LinkVerifier;
-use phpMyFAQ\Strings;
+namespace phpMyFAQ;
+
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 /**
  * Class LinkVerifierTest
@@ -25,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 class LinkVerifierTest extends TestCase
 {
     /** @var  LinkVerifier */
-    private $linkVerifier;
+    private LinkVerifier $linkVerifier;
 
     /**
      * Prepares the environment before running a test.
@@ -52,14 +39,13 @@ class LinkVerifierTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->linkVerifier = null;
         parent::tearDown();
     }
 
     /**
      * Tests isReady()
      */
-    public function testIsReady()
+    public function testIsReady(): void
     {
         $this->assertFalse($this->linkVerifier->isReady());
     }
@@ -67,7 +53,7 @@ class LinkVerifierTest extends TestCase
     /**
      * Tests addIgnoreProtocol()
      */
-    public function testAddIgnoreProtocol()
+    public function testAddIgnoreProtocol(): void
     {
         $class  = new ReflectionClass('phpMyFAQ\LinkVerifier');
         $method = $class->getMethod('addIgnoreProtocol');

@@ -1,20 +1,5 @@
 <?php
 
-/**
- * Api Tests
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2021 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2021-03-14
- */
-
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
@@ -30,7 +15,7 @@ class ApiTest extends TestCase
 {
 
     /** @var Configuration */
-    private $configuration;
+    private Configuration $configuration;
 
     protected function setUp(): void
     {
@@ -45,7 +30,7 @@ class ApiTest extends TestCase
     /**
      * @testdox return the available versions
      */
-    public function testGetVersions()
+    public function testGetVersions(): void
     {
         $mockedApi = $this->getMockBuilder('phpMyFAQ\Api')->disableOriginalConstructor()->getMock();
 
@@ -68,7 +53,7 @@ class ApiTest extends TestCase
     /**
      * @testdox return the current verification hashes
      */
-    public function testGetVerificationIssues()
+    public function testGetVerificationIssues(): void
     {
         $mockedApi = $this->getMockBuilder('phpMyFAQ\Api')->disableOriginalConstructor()->getMock();
 
