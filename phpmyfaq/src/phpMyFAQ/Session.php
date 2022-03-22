@@ -349,12 +349,12 @@ class Session
      * Store the Session ID into a persistent cookie expiring
      * 3600 seconds after the page request.
      *
-     * @param string   $name Cookie name
+     * @param string          $name Cookie name
      * @param int|string|null $sessionId Session ID
-     * @param int      $timeout Cookie timeout
+     * @param int             $timeout Cookie timeout
      * @return bool
      */
-    public function setCookie(string $name, $sessionId, int $timeout = 3600): bool
+    public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600): bool
     {
         $protocol = 'http';
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {

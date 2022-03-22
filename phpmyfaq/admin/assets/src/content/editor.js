@@ -33,12 +33,14 @@ import contentCss from 'tinymce/skins/content/default/content.css';
 
 export const render = () => {
   console.log('Rendering TinyMCE ...');
-  tinymce.init({
-    selector: 'textarea#answer',
-    plugins: 'advlist code emoticons link lists table',
-    toolbar: 'bold italic | bullist numlist | link emoticons',
-    skin: false,
-    content_css: false,
-    content_style: contentUiCss.toString() + '\n' + contentCss.toString(),
-  }).then(r => {});
+  tinymce
+    .init({
+      selector: 'textarea#answer',
+      plugins: 'advlist code emoticons link lists table',
+      toolbar: 'bold italic | bullist numlist | link emoticons',
+      skin: false,
+      content_css: false,
+      content_style: contentUiCss.toString() + '\n' + contentCss.toString(),
+    })
+    .then((r) => {});
 };

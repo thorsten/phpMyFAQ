@@ -24,8 +24,9 @@ import {
 } from './configuration';
 import { handleStatistics } from './statistics';
 import { handleTags } from './content';
+import { handleUserList, handleUsers } from './user';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
 
   // Sidebar
@@ -55,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Configuration -> Elasticsearch configuration
   handleElasticsearch();
 
-  //
-  // User
-  //
+  // User -> User Management
+  await handleUsers();
+  handleUserList();
 
   //
   // FAQs

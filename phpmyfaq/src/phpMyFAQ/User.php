@@ -31,6 +31,7 @@ use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('PMF_ENCRYPTION_TYPE')) {
     define('PMF_ENCRYPTION_TYPE', 'md5'); // Fallback to md5()
@@ -74,42 +75,42 @@ class User
      *
      * @var BasicPermission|MediumPermission|LargePermission
      */
-    public $perm;
+    public LargePermission|MediumPermission|BasicPermission $perm;
 
     /**
      * User-data storage container.
      *
-     * @var UserData
+     * @var UserData|null
      */
-    public $userdata = null;
+    public ?UserData $userdata = null;
 
     /**
      * Public array that contains error messages.
      *
      * @var array<string>
      */
-    public $errors = [];
+    public array $errors = [];
 
     /**
      * authentication container.
      *
      * @var array<string, AuthDatabase|AuthHttp|AuthLdap|AuthSso>
      */
-    protected $authContainer = [];
+    protected array $authContainer = [];
 
     /**
      * Configuration.
      *
-     * @var Configuration
+     * @var Configuration|null
      */
-    protected $config = null;
+    protected ?Configuration $config = null;
 
     /**
      * Default Authentication properties.
      *
      * @var array<string, array<string, string>|string|false>
      */
-    private $authData = [
+    private array $authData = [
         'authSource' => [
             'name' => 'database',
             'type' => 'local',
@@ -123,14 +124,14 @@ class User
      *
      * @var string
      */
-    private $login = '';
+    private string $login = '';
 
     /**
      * minimum length of login string (default: 2).
      *
      * @var int
      */
-    private $loginMinLength = 2;
+    private int $loginMinLength = 2;
 
     /**
      * regular expression to find invalid login strings
@@ -138,35 +139,35 @@ class User
      *
      * @var string
      */
-    private $validUsername = '/^[a-z0-9][\w\.\-@]+/i';
+    private string $validUsername = '/^[a-z0-9][\w\.\-@]+/i';
 
     /**
      * user ID.
      *
      * @var int
      */
-    private $userId = -1;
+    private int $userId = -1;
 
     /**
      * Status of user.
      *
      * @var string
      */
-    private $status = '';
+    private string $status = '';
 
     /**
      * IS the user a super admin?
      *
      * @var bool
      */
-    private $isSuperAdmin = false;
+    private bool $isSuperAdmin = false;
 
     /**
      * array of allowed values for status.
      *
      * @var array<string>
      */
-    private $allowedStatus = [
+    private array $allowedStatus = [
         'active' => self::STATUS_USER_ACTIVE,
         'blocked' => self::STATUS_USER_BLOCKED,
         'protected' => self::STATUS_USER_PROTECTED,
@@ -243,9 +244,9 @@ class User
      * Returns a specific entry from the auth data array.
      *
      * @param string $key
-     * @return string|bool|null
+     * @return mixed
      */
-    public function getAuthData(string $key)
+    public function getAuthData(string $key): mixed
     {
         if (isset($this->authData[$key])) {
             return $this->authData[$key];
@@ -527,8 +528,6 @@ class User
      */
     public function isValidLogin(string $login): bool
     {
-        $login = (string)$login;
-
         if (strlen($login) < $this->loginMinLength || !preg_match($this->validUsername, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
 
@@ -592,7 +591,7 @@ class User
      * @return string
      * @throws Exception
      */
-    public function createPassword($minimumLength = 8, $allowUnderscore = true): string
+    public function createPassword(int $minimumLength = 8, bool $allowUnderscore = true): string
     {
         // To make passwords harder to get wrong, a few letters & numbers have been omitted.
         // This will ensure safety with browsers using fonts with confusable letters.
@@ -749,7 +748,7 @@ class User
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      * @return array<int>
      */
-    public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true): array
+    public function getAllUsers(bool $withoutAnonymous = true, bool $allowBlockedUsers = true): array
     {
         $select = sprintf(
             '
@@ -789,7 +788,7 @@ class User
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      * @return bool
      */
-    public function getUserById($userId, $allowBlockedUsers = false): bool
+    public function getUserById(int $userId, bool $allowBlockedUsers = false): bool
     {
         $select = sprintf(
             '
@@ -855,7 +854,7 @@ class User
      * @param string $field Field
      * @return array<string>|string|int
      */
-    public function getUserData($field = '*')
+    public function getUserData(string $field = '*'): array|int|string
     {
         if (!($this->userdata instanceof UserData)) {
             $this->userdata = new UserData($this->config);
@@ -923,15 +922,15 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return isset($userData['is_visible']) ? (bool)$userData['is_visible'] : true;
+        return !isset($userData['is_visible']) || $userData['is_visible'];
     }
 
     /**
      * Returns true on success.
-     * This will change a users status to active, and send an email with a new password.
+     * This will change a users' status to active, and send an email with a new password.
      *
      * @return bool
-     * @throws Exception
+     * @throws Exception|TransportExceptionInterface
      */
     public function activateUser(): bool
     {
@@ -1019,7 +1018,7 @@ class User
      * @return bool
      * @throws Exception
      */
-    public function changePassword($pass = ''): bool
+    public function changePassword(string $pass = ''): bool
     {
         foreach ($this->authContainer as $auth) {
             if (!$this->checkAuth($auth)) {
@@ -1053,7 +1052,7 @@ class User
      * @param string $subject
      * @param string $message
      * @return int
-     * @throws Core\Exception
+     * @throws Core\Exception|TransportExceptionInterface
      */
     public function mailUser(string $subject, string $message): int
     {

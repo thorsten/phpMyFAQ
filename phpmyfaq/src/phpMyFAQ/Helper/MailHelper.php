@@ -18,9 +18,11 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
 use phpMyFAQ\User;
 use phpMyFAQ\Utils;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class MailHelper
@@ -30,10 +32,10 @@ use phpMyFAQ\Utils;
 class MailHelper
 {
     /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     /** @var Mail */
-    private $mail;
+    private Mail $mail;
 
     /**
      * MailHelper constructor.
@@ -47,9 +49,11 @@ class MailHelper
     }
 
     /**
-     * @param User $user
+     * @param User   $user
      * @param string $password
      * @return bool
+     * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function sendMailToNewUser(User $user, string $password): bool
     {
@@ -59,7 +63,7 @@ class MailHelper
             "You have been registered as a new user:" .
             "\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" . 'Check it out here: %s',
             $user->getUserData('display_name'),
-            $user->getUserData('login_name'),
+            $user->getLogin(),
             $password,
             $this->config->getDefaultUrl()
         );
@@ -67,6 +71,7 @@ class MailHelper
         $this->mail->addTo($user->getUserData('email'), $user->getUserData('display_name'));
         $this->mail->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $this->config);
         $this->mail->message = $text;
-        return $this->mail->send();
+
+        return (bool)$this->mail->send();
     }
 }

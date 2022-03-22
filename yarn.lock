@@ -730,6 +730,11 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
+autocompleter@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/autocompleter/-/autocompleter-6.1.2.tgz#35a2c8b496c1ebdd798183e26c529e4b7450fd34"
+  integrity sha512-DfEcgxBJOTJJwxkIRZLv/ggD3g5w/fqzZkdJsOcgk7hjxw36lH/nAfIEXzV7qDE55swnYEe43E/WhZPXmSFfsA==
+
 autoprefixer@^10.4.2:
   version "10.4.2"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.2.tgz#25e1df09a31a9fba5c40b578936b90d35c9d4d3b"
@@ -1277,11 +1282,6 @@ boolbase@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
-
-bootstrap-3-typeahead@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/bootstrap-3-typeahead/-/bootstrap-3-typeahead-4.0.2.tgz#cb1c969044856862096fc8c71cc21b3acbb50412"
-  integrity sha1-yxyWkESFaGIJb8jHHMIbOsu1BBI=
 
 bootstrap-datepicker@^1.9.0:
   version "1.9.0"

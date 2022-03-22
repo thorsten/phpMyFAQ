@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-04
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-04
  */
 
 use phpMyFAQ\Auth;
@@ -22,6 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -50,9 +51,9 @@ if (
         case 'get_user_list':
             $allUsers = [];
             foreach ($user->searchUsers($userSearch) as $singleUser) {
-                $users = new \stdClass();
-                $users->user_id = (int)$singleUser['user_id'];
-                $users->name = $singleUser['login'];
+                $users = new stdClass();
+                $users->label = $singleUser['login'];
+                $users->value = (int)$singleUser['user_id'];
                 $allUsers[] = $users;
             }
             $http->sendJsonWithHeaders($allUsers);
@@ -73,7 +74,7 @@ if (
             $userData = [];
             foreach ($allUsers as $userId) {
                 $user->getUserById($userId, true);
-                $userObject = new \stdClass();
+                $userObject = new stdClass();
                 $userObject->id = $user->getUserId();
                 $userObject->status = $user->getStatus();
                 $userObject->isSuperAdmin = $user->isSuperAdmin();
@@ -93,15 +94,30 @@ if (
             break;
 
         case 'activate_user':
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $json = file_get_contents('php://input', true);
+            $postData = json_decode($json);
+
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrfToken) {
                 $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }
 
+            $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
+
             $user->getUserById($userId, true);
-            $user->activateUser();
-            $http->sendJsonWithHeaders($user->getStatus());
+            try {
+                if ($user->activateUser()) {
+                    $http->setStatus(200);
+                    $http->sendJsonWithHeaders(['success' => $user->getStatus()]);
+                } else {
+                    $http->setStatus(400);
+                    $http->sendJsonWithHeaders(['error' => $user->getStatus()]);
+                }
+            } catch (Exception $e) {
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+            }
             break;
 
         case 'add_user':
@@ -159,11 +175,16 @@ if (
             break;
 
         case 'delete_user':
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $json = file_get_contents('php://input', true);
+            $deleteData = json_decode($json);
+
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrfToken) {
                 $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }
+
+            $userId = Filter::filterVar($deleteData->userId, FILTER_VALIDATE_INT);
 
             $user->getUserById($userId, true);
             if ($user->getStatus() == 'protected' || $userId == 1) {
@@ -184,20 +205,24 @@ if (
                     $message = Alert::success('ad_user_deleted');
                 }
             }
+            $http->setStatus(200);
             $http->sendJsonWithHeaders($message);
             break;
 
         case 'overwrite_password':
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $json = file_get_contents('php://input', true);
+            $postData = json_decode($json);
+
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
                 $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }
 
-            $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
-            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
+            $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
+            $csrfToken = Filter::filterVar($postData->csrf, FILTER_UNSAFE_RAW);
+            $newPassword = Filter::filterVar($postData->newPassword, FILTER_UNSAFE_RAW);
+            $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_UNSAFE_RAW);
 
             $user->getUserById($userId, true);
             $auth = new Auth($faqConfig);
@@ -207,12 +232,13 @@ if (
             if ($newPassword === $retypedPassword) {
                 if (!$user->changePassword($newPassword)) {
                     $http->setStatus(400);
-                    $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
+                    $http->sendJsonWithHeaders(['error' => Translation::get('ad_passwd_fail')]);
                 }
-                $http->sendJsonWithHeaders(['success' => $PMF_LANG['ad_passwdsuc']]);
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(['success' => Translation::get('ad_passwdsuc')]);
             } else {
                 $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
+                $http->sendJsonWithHeaders(['error' => Translation::get('ad_passwd_fail')]);
             }
 
             break;
