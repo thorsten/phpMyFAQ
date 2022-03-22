@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
@@ -130,7 +131,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
               <tr id="row-search-id-<?= $searchItem['id'] ?>">
                   <td><?= Strings::htmlspecialchars($searchItem['searchterm']) ?></td>
                   <td><?= $searchItem['number'] ?></td>
-                  <td><?= $languageCodes[Strings::strtoupper($searchItem['lang'])] ?></td>
+                  <td><?= LanguageCodes::get($searchItem['lang']) ?></td>
                   <td><meter max="100" value="<?= $num ?>"></td>
                   <td><?= $num ?>%</td>
                   <td>

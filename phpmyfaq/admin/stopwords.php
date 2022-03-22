@@ -16,6 +16,7 @@
  * @since     2009-04-01
  */
 
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
-    $sortedLanguageCodes = $languageCodes;
+    $sortedLanguageCodes = LanguageCodes::getAll();
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);
     ?>

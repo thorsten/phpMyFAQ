@@ -19,6 +19,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Language\LanguageCodes;
+
 /**
  * Class Language
  *
@@ -265,9 +267,7 @@ class Language
      */
     public static function isASupportedLanguage(?string $langCode): bool
     {
-        global $languageCodes;
-
-        return !($langCode === null) && isset($languageCodes[strtoupper($langCode)]);
+        return !($langCode === null) && LanguageCodes::get($langCode) !== null;
     }
 
     /**

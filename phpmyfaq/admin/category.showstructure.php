@@ -19,6 +19,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -46,8 +47,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $currentLink = $_SERVER['SCRIPT_NAME'];
-    $currentLanguage = $languageCodes[strtoupper($faqLangCode)];
-    $all_languages = [];
+    $currentLanguage = LanguageCodes::get($faqLangCode);
+    $allLanguages = [];
     $all_lang = [];
     $showCategory = Filter::filterInput(INPUT_POST, 'showCategory', FILTER_UNSAFE_RAW);
 
@@ -80,9 +81,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 <th><?= $currentLanguage ?></th>
                 <?php
                 // get languages in use for all categories
-                $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');
-                foreach ($all_languages as $lang) {
-                    $all_lang[$lang] = $languageCodes[strtoupper($lang)];
+                $allLanguages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');
+                foreach ($allLanguages as $lang) {
+                    $all_lang[$lang] = LanguageCodes::get($lang);
                 }
                 asort($all_lang);
                 foreach ($all_lang as $lang => $language) {
@@ -103,7 +104,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
         // category translated in this language?
-        ($cat['lang'] == $faqLangCode) ? $catname = $cat['name'] : $catname = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+        ($cat['lang'] == $faqLangCode) ? $catname = $cat['name'] : $catname = $cat['name'] . ' (' . LanguageCodes::get($cat['lang']) . ')';
 
         // show category name in actual language
         print '<td>';

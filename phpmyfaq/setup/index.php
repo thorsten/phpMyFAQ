@@ -25,7 +25,7 @@
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Installer;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Language\LanguageCodes;use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
@@ -376,7 +376,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                 if ($dat == 'language_en.php') {
                                     $option .= ' selected="selected"';
                                 }
-                                $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
+                                $language = LanguageCodes::get(substr($dat, 9, -4));
                                 $option  .= sprintf('>%s</option>', $language);
                                 $options[$language] = $option;
                             }

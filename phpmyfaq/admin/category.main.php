@@ -22,6 +22,7 @@ use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\LanguageCodes;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -318,7 +319,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 if ($cat['lang'] == $lang) {
                     $categoryName = $cat['name'];
                 } else {
-                    $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+                    $categoryName = $cat['name'] . ' (' . LanguageCodes::get($cat['lang']) . ')';
                 }
 
 

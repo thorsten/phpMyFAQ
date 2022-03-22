@@ -8,19 +8,21 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-12-20
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-12-20
  */
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,12 +32,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-folder"></i> <?= $PMF_LANG['ad_categ_new'] ?>
+      <i aria-hidden="true" class="fa fa-folder"></i> <?= Translation::get('ad_categ_new') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <a class="btn btn-sm btn-info" href="?action=showcategory">
-          <i aria-hidden="true" class="fa fa-list"></i> <?= $PMF_LANG['ad_categ_show']; ?>
+          <i aria-hidden="true" class="fa fa-list"></i> <?= Translation::get('ad_categ_show'); ?>
         </a>
       </div>
     </div>
@@ -75,24 +77,24 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
         <?php
         printf(
             '<div class="row mb-2"><label class="col-lg-2 col-form-label">%s:</label>',
-            $PMF_LANG['msgMainCategory']
+            Translation::get('msgMainCategory')
         );
         printf(
             '<div class="col-lg-4"><input type="text" readonly class="form-control-plaintext" id="staticEmail" value="%s (%s)"></div></div>',
             $category->categoryName[$parentId]['name'],
-            $languageCodes[Strings::strtoupper($category->categoryName[$parentId]['lang'])]
+            LanguageCodes::get($category->categoryName[$parentId]['lang'])
         );
     }
     ?>
                   <div class="row mb-2">
-                    <label class="col-lg-2 col-form-label" for="name"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
+                    <label class="col-lg-2 col-form-label" for="name"><?= Translation::get('ad_categ_titel') ?>:</label>
                     <div class="col-lg-4">
                       <input type="text" id="name" name="name" class="form-control" required>
                     </div>
                   </div>
 
                   <div class="row mb-2">
-                    <label class="col-lg-2 col-form-label" for="description"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
+                    <label class="col-lg-2 col-form-label" for="description"><?= Translation::get('ad_categ_desc') ?>:</label>
                     <div class="col-lg-4">
                       <textarea id="description" name="description" rows="3" class="form-control"></textarea>
                     </div>
@@ -103,7 +105,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                       <div class="form-check">
                         <label>
                           <input type="checkbox" name="active" value="1" checked>
-                            <?= $PMF_LANG['ad_user_active'] ?>
+                            <?= Translation::get('ad_user_active') ?>
                         </label>
                       </div>
                     </div>
@@ -114,7 +116,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                       <div class="form-check">
                         <label>
                           <input type="checkbox" name="show_home" value="1" checked>
-                            <?= $PMF_LANG['ad_user_show_home'] ?>
+                            <?= Translation::get('ad_user_show_home') ?>
                         </label>
                       </div>
                     </div>
@@ -122,32 +124,30 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
 
                   <div class="row mb-2">
                     <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
-                        <?= $PMF_LANG['ad_category_image'] ?>:
+                        <?= Translation::get('ad_category_image') ?>:
                     </label>
                     <div class="col-lg-4">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="image" id="pmf-category-image-upload">
-                        <label class="custom-file-label" for="pmf-category-image-upload">Choose file</label>
-                      </div>
+                        <label for="pmf-category-image-upload" class="form-label">Choose file</label>
+                        <input class="form-control" type="file" name="image" id="pmf-category-image-upload">
                     </div>
                   </div>
 
                   <div class="row mb-2">
                     <label class="col-lg-2 col-form-label" for="user_id">
-                        <?= $PMF_LANG['ad_categ_owner'] ?>:
+                        <?= Translation::get('ad_categ_owner') ?>:
                     </label>
                     <div class="col-lg-4">
-                      <select name="user_id" id="user_id" class="form-control">
+                      <select name="user_id" id="user_id" class="form-select">
                           <?= $userHelper->getAllUserOptions() ?>
                       </select>
                     </div>
                   </div>
                     <?php if ($faqConfig->get('security.permLevel') !== 'basic') { ?>
                       <div class="row mb-2">
-                        <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>
+                        <label class="col-lg-2 col-form-label" for="group_id"><?= Translation::get('ad_categ_moderator') ?>
                           :</label>
                         <div class="col-lg-4">
-                          <select name="group_id" id="group_id" class="form-control">
+                          <select name="group_id" id="group_id" class="form-select">
                               <?= $user->perm->getAllGroupsOptions([], $user) ?>
                           </select>
                         </div>
@@ -159,18 +159,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     if ($parentId === 0) {
                         if ($faqConfig->get('security.permLevel') !== 'basic') { ?>
                           <div class="row mb-2">
-                            <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_entry_grouppermission'] ?></label>
+                            <label class="col-lg-2 col-form-label"><?= Translation::get('ad_entry_grouppermission') ?></label>
                             <div class="col-lg-4">
                               <label class="radio">
                                 <input type="radio" name="grouppermission" value="all" checked>
-                                  <?= $PMF_LANG['ad_entry_all_groups'] ?>
+                                  <?= Translation::get('ad_entry_all_groups') ?>
                               </label>
                               <br>
                               <label class="radio">
                                 <input type="radio" name="grouppermission" value="restricted">
-                                  <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
+                                  <?= Translation::get('ad_entry_restricted_groups') ?>
                               </label>
-                              <select name="restricted_groups[]" size="3" class="form-control" multiple>
+                              <select name="restricted_groups[]" size="3" class="form-select" multiple>
                                   <?= $user->perm->getAllGroupsOptions([], $user) ?>
                               </select>
                             </div>
@@ -179,16 +179,16 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                           <input type="hidden" name="grouppermission" value="all">
                         <?php } ?>
                       <div class="row mb-2">
-                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_entry_userpermission'] ?></label>
+                        <label class="col-lg-2 col-form-label"><?= Translation::get('ad_entry_userpermission') ?></label>
                         <div class="col-lg-4">
                           <label class="radio">
                             <input type="radio" name="userpermission" value="all" checked>
-                              <?= $PMF_LANG['ad_entry_all_users'] ?>
+                              <?= Translation::get('ad_entry_all_users') ?>
                           </label>
                           <br>
                           <label class="radio">
                             <input type="radio" name="userpermission" value="restricted">
-                              <?= $PMF_LANG['ad_entry_restricted_users'] ?>
+                              <?= Translation::get('ad_entry_restricted_users') ?>
                           </label>
                           <select name="restricted_users" class="form-control">
                               <?= $userHelper->getAllUserOptions(1) ?>
@@ -199,7 +199,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                   <div class="row mb-2">
                     <div class="offset-lg-2 col-lg-4">
                       <button class="btn btn-primary" type="submit" name="submit">
-                          <?= $PMF_LANG['ad_categ_add'] ?>
+                          <?= Translation::get('ad_categ_add') ?>
                       </button>
                     </div>
                   </div>
@@ -213,5 +213,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
             </script>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

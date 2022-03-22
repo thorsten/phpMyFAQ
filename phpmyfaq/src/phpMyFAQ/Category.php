@@ -22,6 +22,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Language\LanguageCodes;
 
 /**
  * Class Category
@@ -1220,8 +1221,6 @@ class Category
      */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
-        global $languageCodes;
-
         $existcatlang = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
         $translated = [];
 
@@ -1242,7 +1241,7 @@ class Category
             );
             $result = $this->config->getDb()->query($query);
             if ($row = $this->config->getDb()->fetchArray($result)) {
-                $translated[$languageCodes[strtoupper($language)]] =
+                $translated[LanguageCodes::get($language)] =
                     $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
             }
         }
@@ -1259,7 +1258,7 @@ class Category
      *
      * @return string
      */
-    public function getCategoryLanguagesToTranslate($category_id, $selected_lang)
+    public function getCategoryLanguagesToTranslate($category_id, $selected_lang): string
     {
         $output = '';
         $existcatlang = $this->config->getLanguage()->languageAvailable($category_id, 'faqcategories');

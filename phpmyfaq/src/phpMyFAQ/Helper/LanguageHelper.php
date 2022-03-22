@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use DirectoryIterator;
+use phpMyFAQ\Language\LanguageCodes;
 
 /**
  * Class LanguageHelper
@@ -42,7 +43,6 @@ class LanguageHelper
         array $excludedLanguages = [],
         string $id = 'language'
     ): string {
-        global $languageCodes;
 
         $onChange = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
         $output = '<select class="form-select" name="' . $id . '" id="' . $id . '"' . $onChange . ">\n";
@@ -59,7 +59,7 @@ class LanguageHelper
                 }
             }
         } else {
-            $output .= "\t<option value=\"en\">" . $languageCodes['EN'] . '</option>';
+            $output .= "\t<option value=\"en\">" . LanguageCodes::get('en') . '</option>';
         }
         $output .= "</select>\n";
 
@@ -73,8 +73,6 @@ class LanguageHelper
      */
     public static function getAvailableLanguages(): array
     {
-        global $languageCodes;
-
         $search = array('language_', '.php');
         $languages = $languageFiles = [];
 
@@ -89,8 +87,9 @@ class LanguageHelper
 
         foreach ($languageFiles as $lang) {
             // Check if the file is related to a (real) language before using it
-            if (array_key_exists($lang, $languageCodes)) {
-                $languages[strtolower($lang)] = $languageCodes[$lang];
+            $isValidLanguage = LanguageCodes::get($lang);
+            if ($isValidLanguage !== null) {
+                $languages[strtolower($lang)] = LanguageCodes::get($lang);
             }
         }
 

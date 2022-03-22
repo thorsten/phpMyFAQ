@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
 use phpMyFAQ\Utils;
 
@@ -112,8 +113,6 @@ class FaqHelper extends Helper
      */
     public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {
-        global $languageCodes;
-
         $html = '';
         $faqUrl = sprintf(
             '?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%%s',
@@ -132,7 +131,7 @@ class FaqHelper extends Helper
             foreach ($availableLanguages as $language) {
                 $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $language));
                 $html .= ($faq->faqRecord['lang'] === $language ? ' selected' : '');
-                $html .= sprintf('>%s</option>', $languageCodes[strtoupper($language)]);
+                $html .= sprintf('>%s</option>', LanguageCodes::get($language));
             }
 
             $html .= '</select></form>';
@@ -209,13 +208,12 @@ class FaqHelper extends Helper
      * Creates a list of links with available languages to edit a FAQ
      * in the admin backend.
      *
-     * @param  $faqId
-     * @param  $faqLang
+     * @param int    $faqId
+     * @param string $faqLang
      * @return string
      */
     public function createFaqTranslationLinkList(int $faqId, string $faqLang): string
     {
-        global $languageCodes;
         $output = '';
 
         $availableLanguages = $this->config->getLanguage()->languageAvailable(0, 'faqcategories');
@@ -226,7 +224,7 @@ class FaqHelper extends Helper
                     $faqId,
                     $languageCode,
                     'Translate to',
-                    $languageCodes[strtoupper($languageCode)]
+                    LanguageCodes::get($languageCode)
                 );
             } else {
                 $output .= '<a class="dropdown-item">n/a</a>';

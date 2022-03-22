@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Report;
 use phpMyFAQ\Translation;
 
@@ -96,8 +97,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         if ($useTranslation) {
             printf('<td>%d</td>', $data['faq_translations']);
         }
-        if ($useLanguage && isset($languageCodes[strtoupper($data['faq_language'])])) {
-            printf('<td>%s</td>', $languageCodes[strtoupper($data['faq_language'])]);
+        if ($useLanguage && LanguageCodes::get($data['faq_language'])) {
+            printf('<td>%s</td>', LanguageCodes::get($data['faq_language']));
         }
         if ($useId) {
             printf('<td>%d</td>', $data['faq_id']);

@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Report;
 use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Translation;
@@ -77,8 +78,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         if ($useTranslation) {
             $text[$i][] = $data['faq_translations'];
         }
-        if ($useLanguage && isset($languageCodes[strtoupper($data['faq_language'])])) {
-            $text[$i][] = $report->convertEncoding($languageCodes[strtoupper($data['faq_language'])]);
+        if ($useLanguage && LanguageCodes::get($data['faq_language'])) {
+            $text[$i][] = $report->convertEncoding(LanguageCodes::get($data['faq_language']));
         }
         if ($useId) {
             $text[$i][] = $data['faq_id'];
