@@ -26,6 +26,7 @@ use phpMyFAQ\Export;
 use phpMyFAQ\Export\Pdf\Wrapper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -38,19 +39,19 @@ class Pdf extends Export
     /**
      * Wrapper object.
      *
-     * @var Wrapper
+     * @var Wrapper|null
      */
-    private $pdf = null;
+    private ?Wrapper $pdf = null;
 
     /**
-     * @var Tags
+     * @var Tags|null
      */
-    private $tags = null;
+    private ?Tags $tags = null;
 
     /**
-     * @var ParsedownExtra
+     * @var ParsedownExtra|null
      */
-    private $parsedown = null;
+    private ?ParsedownExtra $parsedown = null;
 
     /**
      * Constructor.
@@ -85,13 +86,10 @@ class Pdf extends Export
      * @param int    $categoryId CategoryHelper Id
      * @param bool   $downwards  If true, downwards, otherwise upward ordering
      * @param string $language   Language
-     *
      * @return string
      */
-    public function generate($categoryId = 0, $downwards = true, $language = ''): string
+    public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
-        global $PMF_LANG;
-
         // Set PDF options
         $this->pdf->enableBookmarks = true;
         $this->pdf->isFullExport = true;
@@ -141,18 +139,18 @@ class Pdf extends Export
 
             if (!empty($faq['keywords'])) {
                 $this->pdf->Ln();
-                $this->pdf->Write(5, $PMF_LANG['msgNewContentKeywords'] . ' ' . $faq['keywords']);
+                $this->pdf->Write(5, Translation::get('msgNewContentKeywords') . ' ' . $faq['keywords']);
             }
             if (isset($tags) && 0 !== count($tags)) {
                 $this->pdf->Ln();
-                $this->pdf->Write(5, $PMF_LANG['ad_entry_tags'] . ': ' . implode(', ', $tags));
+                $this->pdf->Write(5, Translation::get('ad_entry_tags') . ': ' . implode(', ', $tags));
             }
 
             $this->pdf->Ln();
             $this->pdf->Ln();
             $this->pdf->Write(
                 5,
-                $PMF_LANG['msgLastUpdateArticle'] . Date::createIsoDate($faq['lastmodified'])
+                Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified'])
             );
         }
 
@@ -172,8 +170,6 @@ class Pdf extends Export
      */
     public function generateFile(array $faqData, string $filename = null): string
     {
-        global $PMF_LANG;
-
         // Default filename: FAQ-<id>-<language>.pdf
         if (empty($filename)) {
             $filename = 'FAQ-' . $faqData['id'] . '-' . $faqData['lang'] . '.pdf';
@@ -208,7 +204,7 @@ class Pdf extends Export
         $this->pdf->Ln(10);
         $this->pdf->Ln();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 11);
-        $this->pdf->Write(5, $PMF_LANG['ad_entry_solution_id'] . ': #' . $faqData['solution_id']);
+        $this->pdf->Write(5, Translation::get('ad_entry_solution_id') . ': #' . $faqData['solution_id']);
 
         // Check if author name should be visible according to GDPR option
         $user = new CurrentUser($this->config);
@@ -220,9 +216,9 @@ class Pdf extends Export
 
         $this->pdf->SetAuthor($author);
         $this->pdf->Ln();
-        $this->pdf->Write(5, $PMF_LANG['msgAuthor'] . ': ' . $author);
+        $this->pdf->Write(5, Translation::get('msgAuthor') . ': ' . $author);
         $this->pdf->Ln();
-        $this->pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'] . $faqData['date']);
+        $this->pdf->Write(5, Translation::get('msgLastUpdateArticle') . $faqData['date']);
 
         return $this->pdf->Output($filename);
     }

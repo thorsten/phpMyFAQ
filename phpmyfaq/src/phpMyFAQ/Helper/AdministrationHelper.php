@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
 /**
@@ -41,26 +42,24 @@ class AdministrationHelper
      * @param string $restrictions Restrictions
      * @param string $action       Action parameter
      * @param string $caption      Caption
-     * @param string $active       Active
+     * @param string|null $active  Active
      * @param bool   $checkPerm    Check permission (default: true)
-     *
      * @return string
      */
     public function addMenuEntry(
         string $restrictions = '',
         string $action = '',
         string $caption = '',
-        $active = '',
+        string|null $active = '',
         bool $checkPerm = true
     ): string {
-        global $PMF_LANG;
 
         if ($action != '') {
             $action = 'action=' . $action;
         }
 
-        if (isset($PMF_LANG[$caption])) {
-            $renderedCaption = $PMF_LANG[$caption];
+        if (Translation::get($caption) !== null) {
+            $renderedCaption = Translation::get($caption);
         } else {
             $renderedCaption = 'No string for ' . $caption;
         }
@@ -134,7 +133,7 @@ class AdministrationHelper
         }
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-        if (false !== $allUserRights) {
+        if (false != $allUserRights) {
             foreach ($allRights as $right) {
                 if (in_array($right['right_id'], $allUserRights)) {
                     $this->permission[$right['name']] = true;

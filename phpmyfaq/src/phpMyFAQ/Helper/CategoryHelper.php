@@ -20,6 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Database;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
 /**
@@ -38,7 +39,7 @@ class CategoryHelper extends Helper
      */
     public function renderNavigation($activeCategory = 0): string
     {
-        global $sids, $PMF_LANG;
+        global $sids;
 
         $open = 0;
         $output = '';
@@ -149,7 +150,7 @@ class CategoryHelper extends Helper
 
             return $output;
         } else {
-            $output = '<li><a href="#">' . $PMF_LANG['no_cats'] . '</a></li>';
+            $output = '<li><a href="#">' . Translation::get('no_cats') . '</a></li>';
         }
 
         return $output;
@@ -162,7 +163,7 @@ class CategoryHelper extends Helper
      */
     public function renderCategoryDropDown(): string
     {
-        global $sids, $PMF_LANG;
+        global $sids;
 
         $open = 0;
         $output = '';
@@ -255,7 +256,7 @@ class CategoryHelper extends Helper
 
             return $output;
         } else {
-            $output = '<li><a href="#">' . $PMF_LANG['no_cats'] . '</a></li>';
+            $output = '<li><a href="#">' . Translation::get('no_cats') . '</a></li>';
         }
 
         return $output;

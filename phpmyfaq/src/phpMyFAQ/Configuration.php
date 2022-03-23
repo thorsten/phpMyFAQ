@@ -66,8 +66,6 @@ class Configuration
      */
     public static function sortingOptions(string $current): string
     {
-        global $PMF_LANG;
-
         $options = ['id', 'thema', 'visits', 'updated', 'author'];
         $output = '';
 
@@ -76,7 +74,7 @@ class Configuration
                 '<option value="%s" %s>%s</option>',
                 $value,
                 ($value == $current) ? 'selected' : '',
-                $PMF_LANG['ad_conf_order_' . $value]
+                Translation::get('ad_conf_order_' . $value)
             );
         }
 

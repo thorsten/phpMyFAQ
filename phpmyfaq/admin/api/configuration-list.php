@@ -23,6 +23,7 @@ use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -49,7 +50,7 @@ $configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_UNSAFE_RAW, 'main');
  */
 function renderInputForm(mixed $key, string $type)
 {
-    global $PMF_LANG, $faqConfig;
+    global $faqConfig;
 
     switch ($type) {
         case 'area':
@@ -130,12 +131,12 @@ function renderInputForm(mixed $key, string $type)
                     printf(
                         '<option value="DESC" %s>%s</option>',
                         ('DESC' == $faqConfig->get($key)) ? 'selected' : '',
-                        $PMF_LANG['ad_conf_desc']
+                        Translation::get('ad_conf_desc')
                     );
                     printf(
                         '<option value="ASC" %s>%s</option>',
                         ('ASC' == $faqConfig->get($key)) ? 'selected' : '',
-                        $PMF_LANG['ad_conf_asc']
+                        Translation::get('ad_conf_asc')
                     );
                     break;
 
@@ -157,7 +158,7 @@ function renderInputForm(mixed $key, string $type)
                     break;
 
                 case 'records.attachmentsStorageType':
-                    foreach ($PMF_LANG['att_storage_type'] as $i => $item) {
+                    foreach (Translation::get('att_storage_type') as $i => $item) {
                         $selected = (int)$faqConfig->get($key) === $i ? ' selected' : '';
                         printf('<option value="%d"%s>%s</option>', $i, $selected, $item);
                     }
@@ -167,12 +168,12 @@ function renderInputForm(mixed $key, string $type)
                     printf(
                         '<option value="visits"%s>%s</option>',
                         ('visits' === $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['records.orderingPopularFaqs.visits']
+                        Translation::get('records.orderingPopularFaqs.visits')
                     );
                     printf(
                         '<option value="voting"%s>%s</option>',
                         ('voting' === $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['records.orderingPopularFaqs.voting']
+                        Translation::get('records.orderingPopularFaqs.voting')
                     );
                     break;
 
@@ -180,33 +181,33 @@ function renderInputForm(mixed $key, string $type)
                     printf(
                         '<option value="thema,content,keywords"%s>%s</option>',
                         ('thema,content,keywords' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.thema-content-keywords']
+                        Translation::get('search.relevance.thema-content-keywords')
                     );
                     printf(
                         '<option value="thema,keywords,content"%s>%s</option>',
                         (
                             'thema,keywords,content' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.thema-keywords-content']
+                        Translation::get('search.relevance.thema-keywords-content')
                     );
                     printf(
                         '<option value="content,thema,keywords"%s>%s</option>',
                         ('content,thema,keywords' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.content-thema-keywords']
+                        Translation::get('search.relevance.content-thema-keywords')
                     );
                     printf(
                         '<option value="content,keywords,thema"%s>%s</option>',
                         ('content,keywords,thema' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.content-keywords-thema']
+                        Translation::get('search.relevance.content-keywords-thema')
                     );
                     printf(
                         '<option value="keywords,content,thema"%s>%s</option>',
                         ('keywords,content,thema' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.keywords-content-thema']
+                        Translation::get('search.relevance.keywords-content-thema')
                     );
                     printf(
                         '<option value="keywords,thema,content"%s>%s</option>',
                         ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.keywords-thema-content']
+                        Translation::get('search.relevance.keywords-thema-content')
                     );
                     break;
 
@@ -316,5 +317,3 @@ foreach ($LANG_CONF as $key => $value) {
         <?php
     }
 }
-?>
-

@@ -38,16 +38,16 @@ class SearchHelper extends Helper
     /**
      * Pagination object.
      *
-     * @var Pagination
+     * @var Pagination|null
      */
-    private $pagination = null;
+    private ?Pagination $pagination = null;
 
     /**
      * Search term.
      *
      * @var string
      */
-    private $searchTerm = '';
+    private string $searchTerm = '';
 
     /**
      * Constructor.
@@ -57,7 +57,6 @@ class SearchHelper extends Helper
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->pmfLang = $this->getTranslations();
     }
 
     /**
@@ -65,7 +64,7 @@ class SearchHelper extends Helper
      *
      * @param Pagination $pagination Pagination
      */
-    public function setPagination(Pagination $pagination)
+    public function setPagination(Pagination $pagination): void
     {
         $this->pagination = $pagination;
     }
@@ -75,7 +74,7 @@ class SearchHelper extends Helper
      *
      * @param string $searchTerm Search term
      */
-    public function setSearchTerm(string $searchTerm)
+    public function setSearchTerm(string $searchTerm): void
     {
         $this->searchTerm = $searchTerm;
     }

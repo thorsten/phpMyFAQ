@@ -24,25 +24,20 @@ namespace phpMyFAQ;
 class Notification
 {
     /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     /** @var Mail */
-    private $mail;
-
-    /** @var array<string> */
-    private $translation;
+    private Mail $mail;
 
     /**
      * Constructor.
      *
      * @param Configuration $config
+     * @throws Core\Exception
      */
     public function __construct(Configuration $config)
     {
-        global $PMF_LANG;
-
         $this->config = $config;
-        $this->translation = $PMF_LANG;
         $this->mail = new Mail($this->config);
         $this->mail->setReplyTo(
             $this->config->getAdminEmail(),
@@ -60,9 +55,9 @@ class Notification
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
         $this->mail->addTo($email, $userName);
-        $this->mail->subject = $this->config->getTitle() . ' - ' . $this->translation['msgQuestionAnswered'];
+        $this->mail->subject = $this->config->getTitle() . ' - ' . Translation::get('msgQuestionAnswered');
         $this->mail->message = sprintf(
-            $this->translation['msgMessageQuestionAnswered'],
+            Translation::get('msgMessageQuestionAnswered'),
             $this->config->getTitle()
         ) . "\n\r" . $url;
         $this->mail->send();
@@ -83,7 +78,7 @@ class Notification
         }
         $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
         $this->mail->message = html_entity_decode(
-            $this->translation['msgMailCheck']
+            Translation::get('msgMailCheck')
         ) . "\n\n" . $this->config->getTitle() . ': ' . $this->config->getDefaultUrl(
         ) . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
         $this->mail->send();

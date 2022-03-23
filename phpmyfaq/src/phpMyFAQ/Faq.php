@@ -421,9 +421,9 @@ class Faq
             if ($pages > 1) {
                 $output .= sprintf(
                     '<p><strong>%s %s %s</strong></p>',
-                    $this->translation['msgPage'] . $page,
-                    $this->translation['msgVoteFrom'],
-                    $pages . $this->translation['msgPages']
+                    Translation::get('msgPage') . $page,
+                    Translation::get('msgVoteFrom'),
+                    $pages . Translation::get('msgPages')
                 );
             }
             $output .= '<ul class="phpmyfaq_ul">';
@@ -612,9 +612,9 @@ class Faq
             if ($pages > 1) {
                 $output .= sprintf(
                     '<p><strong>%s %s %s</strong></p>',
-                    $this->translation['msgPage'] . $page,
-                    $this->translation['msgVoteFrom'],
-                    $pages . $this->translation['msgPages']
+                    Translation::get('msgPage') . $page,
+                    Translation::get('msgVoteFrom'),
+                    $pages . Translation::get('msgPages')
                 );
             }
             $output .= '<ul class="phpmyfaq_ul">';
@@ -681,8 +681,8 @@ class Faq
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
                 $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
-                $oLink->text = $this->translation['msgPrevious'];
-                $oLink->tooltip = $this->translation['msgPrevious'];
+                $oLink->text = Translation::get('msgPrevious');
+                $oLink->tooltip = Translation::get('msgPrevious');
                 $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
             }
             $output .= ' ';
@@ -690,8 +690,8 @@ class Faq
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
                 $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
-                $oLink->text = $this->translation['msgNext'];
-                $oLink->tooltip = $this->translation['msgNext'];
+                $oLink->text = Translation::get('msgNext');
+                $oLink->tooltip = Translation::get('msgNext');
                 $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
             }
             $output .= '</strong></p>';
@@ -709,8 +709,6 @@ class Faq
      */
     public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false)
     {
-        global $PMF_LANG;
-
         $currentLanguage = $this->config->getLanguage()->getLanguage();
         $defaultLanguage = $this->config->getDefaultLanguage();
 
@@ -728,10 +726,10 @@ class Faq
 
             if (!$isAdmin) {
                 if (!$active) {
-                    $answer = $this->translation['err_inactiveArticle'];
+                    $answer = Translation::get('err_inactiveArticle');
                 }
                 if ($expired) {
-                    $answer = $this->translation['err_expiredArticle'];
+                    $answer = Translation::get('err_expiredArticle');
                 }
             }
 
@@ -766,7 +764,7 @@ class Faq
                 'sticky' => 0,
                 'keywords' => '',
                 'title' => '',
-                'content' => $PMF_LANG['msgAccessDenied'],
+                'content' => Translation::get('msgAccessDenied'),
                 'author' => '',
                 'email' => '',
                 'comment' => '',
@@ -1345,10 +1343,10 @@ class Faq
             $expired = (date('YmdHis') > $row->date_end);
 
             if (!$active) {
-                $content = $this->translation['err_inactiveArticle'];
+                $content = Translation::get('err_inactiveArticle');
             }
             if ($expired) {
-                $content = $this->translation['err_expiredArticle'];
+                $content = Translation::get('err_expiredArticle');
             }
 
             $this->faqRecord = array(
@@ -1565,10 +1563,10 @@ class Faq
             $expired = (date('YmdHis') > $row->date_end);
 
             if (!$active) {
-                $content = $this->translation['err_inactiveArticle'];
+                $content = Translation::get('err_inactiveArticle');
             }
             if ($expired) {
-                $content = $this->translation['err_expiredArticle'];
+                $content = Translation::get('err_expiredArticle');
             }
 
             $this->faqRecords[] = [
@@ -1627,7 +1625,7 @@ class Faq
                 $question = Strings::htmlspecialchars($row->question);
             }
         } else {
-            $question = $this->translation['no_cats'];
+            $question = Translation::get('no_cats');
         }
 
         return $question;
@@ -1779,13 +1777,13 @@ class Faq
                     $output['voted'][] = sprintf(
                         '%s %s 5 - %s',
                         round($row['avg'], 2),
-                        $this->translation['msgVoteFrom'],
+                        Translation::get('msgVoteFrom'),
                         $this->plurals->GetMsg('plmsgVotes', $row['user'])
                     );
                 }
             }
         } else {
-            $output['error'] = $this->translation['err_noTopTen'];
+            $output['error'] = Translation::get('err_noTopTen');
         }
 
         return $output;
@@ -2023,7 +2021,7 @@ class Faq
                 $output['date'][] = $date->format($row['date']);
             }
         } else {
-            $output['error'] = $this->translation['err_noArticles'];
+            $output['error'] = Translation::get('err_noArticles');
         }
 
         return $output;
@@ -2035,10 +2033,9 @@ class Faq
      *
      * @param int    $count    Number of records
      * @param string $language Language
-     *
      * @return array
      */
-    public function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
+    public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, $language = null): array
     {
         global $sids;
 
@@ -2144,11 +2141,15 @@ class Faq
      * @param bool   $bDownwards
      * @param string $lang
      * @param string $date
-     *
      * @return array
      */
-    public function get($queryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
-    {
+    public function get(
+        string $queryType = FAQ_QUERY_TYPE_DEFAULT,
+        int $nCatid = 0,
+        bool $bDownwards = true,
+        string $lang = '',
+        string $date = ''
+    ): array {
         $faqs = [];
 
         $result = $this->config->getDb()->query($this->getSQLQuery($queryType, $nCatid, $bDownwards, $lang, $date));
@@ -2194,7 +2195,7 @@ class Faq
      *
      * @return string
      */
-    private function getSQLQuery($queryType, $categoryId, $bDownwards, $lang, $date, $faqId = 0)
+    private function getSQLQuery($queryType, $categoryId, $bDownwards, $lang, $date, $faqId = 0): string
     {
         $now = date('YmdHis');
         $query = sprintf(
@@ -2312,13 +2313,12 @@ class Faq
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
-     * @param integer $nCatid
-     * @param $logicOp
-     * @param $oCat
-     *
+     * @param integer       $nCatid
+     * @param string        $logicOp
+     * @param Category|null $oCat
      * @return string
      */
-    private function getCatidWhereSequence($nCatid, $logicOp = 'OR', $oCat = null)
+    private function getCatidWhereSequence(int $nCatid, string $logicOp = 'OR', Category $oCat = null): string
     {
         $sqlWhereFilter = '';
 
@@ -2471,7 +2471,7 @@ class Faq
         if ($numOfInvisibles > 0) {
             $extraout = sprintf(
                 '<tr><td colspan="3"><small>%s %s</small></td></tr>',
-                $this->translation['msgQuestionsWaiting'],
+                Translation::get('msgQuestionsWaiting'),
                 $numOfInvisibles
             );
         } else {
@@ -2519,7 +2519,7 @@ class Faq
                         $sids,
                         $row->category_id,
                         $row->answer_id,
-                        $this->translation['msg2answerFAQ']
+                        Translation::get('msg2answerFAQ')
                     );
                 } else {
                     $output .= sprintf(
@@ -2528,7 +2528,7 @@ class Faq
                         $sids,
                         $row->id,
                         $row->category_id,
-                        $this->translation['msg2answer']
+                        Translation::get('msg2answer')
                     );
                 }
                 $output .= '</tr>';
@@ -2536,7 +2536,7 @@ class Faq
         } else {
             $output = sprintf(
                 '<tr><td colspan="3">%s</td></tr>',
-                $this->translation['msgNoQuestionsAvailable']
+                Translation::get('msgNoQuestionsAvailable')
             );
         }
 
@@ -2613,7 +2613,7 @@ class Faq
                 $output['url'][] = $row['url'];
             }
         } else {
-            $output['error'] = sprintf('<li>%s</li>', $this->translation['err_noTopTen']);
+            $output['error'] = sprintf('<li>%s</li>', Translation::get('err_noTopTen'));
         }
 
         return $output;
@@ -2624,7 +2624,7 @@ class Faq
      *
      * @return array
      */
-    public function getStickyRecordsData()
+    public function getStickyRecordsData(): array
     {
         global $sids;
 

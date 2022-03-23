@@ -29,14 +29,7 @@ class News
     /**
      * @var Configuration
      */
-    private $config;
-
-    /**
-     * Language strings.
-     *
-     * @var array<string>
-     */
-    private $pmfLang;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -45,10 +38,7 @@ class News
      */
     public function __construct(Configuration $config)
     {
-        global $PMF_LANG;
-
         $this->config = $config;
-        $this->pmfLang = $PMF_LANG;
     }
 
     /**
@@ -91,7 +81,7 @@ class News
             if (strlen($item['link']) > 1) {
                 $output .= sprintf(
                     '<br>%s <a href="%s" target="_%s">%s</a>',
-                    $this->pmfLang['msgInfo'],
+                    Translation::get('msgInfo'),
                     $item['link'],
                     $item['target'],
                     $item['linkTitle']
@@ -101,7 +91,7 @@ class News
             $output .= sprintf('<small class="text-muted">%s</small>', $date->format($item['date']));
         }
 
-        return ('' == $output) ? $this->pmfLang['msgNoNews'] : $output;
+        return ('' == $output) ? Translation::get('msgNoNews') : $output;
     }
 
     /**
@@ -254,10 +244,10 @@ class News
 
                 if (!$admin) {
                     if (!$active) {
-                        $content = $this->pmfLang['err_inactiveNews'];
+                        $content = Translation::get('err_inactiveNews');
                     }
                     if ($expired) {
-                        $content = $this->pmfLang['err_expiredNews'];
+                        $content = Translation::get('err_expiredNews');
                     }
                 }
 

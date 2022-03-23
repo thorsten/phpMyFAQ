@@ -30,14 +30,7 @@ class Comments
     /**
      * @var Configuration
      */
-    private $config;
-
-    /**
-     * Language strings.
-     *
-     * @var string
-     */
-    private $pmfStr;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -46,10 +39,7 @@ class Comments
      */
     public function __construct(Configuration $config)
     {
-        global $PMF_LANG;
-
         $this->config = $config;
-        $this->pmfStr = $PMF_LANG;
     }
 
     /**
@@ -163,7 +153,7 @@ class Comments
             if (15 === $numWords) {
                 $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
                     '<a href="#" data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
-                    '">' . $this->pmfStr['msgShowMore'] . '</a>' .
+                    '">' . Translation::get('msgShowMore') . '</a>' .
                     '<span class="comment-more-' . $id . ' d-none">';
             }
             ++$numWords;

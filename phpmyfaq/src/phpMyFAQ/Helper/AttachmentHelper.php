@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Attachment\File;
+use phpMyFAQ\Translation;
 
 /**
  * Class AttachmentHelper
@@ -25,18 +26,6 @@ use phpMyFAQ\Attachment\File;
  */
 class AttachmentHelper
 {
-    /** @var array */
-    private $translation;
-
-    /**
-     * AttachmentHelper constructor.
-     */
-    public function __construct()
-    {
-        global $PMF_LANG;
-        $this->translation = $PMF_LANG;
-    }
-
     /**
      * Returns a HTML list of attached files.
      *
@@ -49,7 +38,7 @@ class AttachmentHelper
             return '';
         }
 
-        $html = sprintf('<p>%s:</p><ul>', $this->translation['msgAttachedFiles']);
+        $html = sprintf('<p>%s:</p><ul>', Translation::get('msgAttachedFiles'));
 
         foreach ($attachmentList as $attachment) {
             $html .= sprintf(

@@ -19,9 +19,12 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Question;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class QuestionHelper
@@ -30,13 +33,11 @@ use phpMyFAQ\User;
 class QuestionHelper
 {
     /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     /** @var Category */
-    private $category;
+    private Category $category;
 
-    /** @var array */
-    private $translation;
 
     /**
      * QuestionHelper constructor.
@@ -45,23 +46,23 @@ class QuestionHelper
      */
     public function __construct(Configuration $config, Category $category)
     {
-        global $PMF_LANG;
         $this->config = $config;
         $this->category = $category;
-        $this->translation = $PMF_LANG;
     }
 
     /**
      * @param array $questionData
-     * @param $categories
+     * @param array $categories
+     * @throws TransportExceptionInterface
+     * @throws Exception
      */
-    public function sendSuccessMail(array $questionData, $categories)
+    public function sendSuccessMail(array $questionData, array $categories): void
     {
         $questionObject = new Question($this->config);
         $questionObject->addQuestion($questionData);
 
         $questionMail = 'User: ' . $questionData['username'] .
-            ', mailto:' . $questionData['email'] . "\n" . $this->translation['msgCategory'] .
+            ', mailto:' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
             ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
             wordwrap($questionData['question'], 72) . "\n\n" .
             $this->config->getDefaultUrl() . 'admin/';

@@ -30,54 +30,47 @@ abstract class Helper
     /**
      * Entity class.
      *
-     * @var Category
+     * @var Category|null
      */
-    protected $Category = null;
+    protected ?Category $Category = null;
 
     /**
      * @var CategoryRelation
      */
-    protected $categoryRelation;
+    protected CategoryRelation $categoryRelation;
 
     /**
      * Tagging class.
      *
-     * @var Tags
+     * @var Tags|null
      */
-    protected $Tags = null;
+    protected ?Tags $Tags = null;
 
     /**
      * Template class.
      *
-     * @var Template
+     * @var Template|null
      */
-    protected $Template = null;
+    protected ?Template $Template = null;
 
     /**
      * Plurals class.
      *
-     * @var Plurals
+     * @var Plurals|null
      */
-    protected $plurals = null;
+    protected ?Plurals $plurals = null;
 
     /**
      * phpMyFAQ's session ID.
      *
-     * @var int
+     * @var int|null
      */
-    protected $sessionId = null;
-
-    /**
-     * Array with all translations.
-     *
-     * @var string[]
-     */
-    protected $translation = [];
+    protected ?int $sessionId = null;
 
     /**
      * @var Configuration
      */
-    protected $config;
+    protected Configuration $config;
 
     /**
      * Entity Setter.
@@ -143,7 +136,7 @@ abstract class Helper
      * @param int|string $sid Session id
      * @return Helper
      */
-    public function setSessionId($sid): Helper
+    public function setSessionId(int|string $sid): Helper
     {
         $this->sessionId = $sid;
         return $this;
@@ -159,17 +152,5 @@ abstract class Helper
     {
         $this->config = $config;
         return $this;
-    }
-
-    /**
-     * Loads all translation strings.
-     *
-     * @return string[]
-     */
-    public function getTranslations(): array
-    {
-        global $PMF_LANG;
-
-        return $this->translation = $PMF_LANG;
     }
 }

@@ -26,6 +26,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 
 /**
@@ -169,8 +170,6 @@ class FaqHelper extends Helper
      */
     public function createOverview(Category $category, Faq $faq, $language = ''): string
     {
-        global $PMF_LANG;
-
         $output = '';
 
         // Initialize categories
@@ -191,9 +190,9 @@ class FaqHelper extends Helper
                 $output .= sprintf('<article>%s</article>', $data['content']);
                 $output .= sprintf(
                     '<p>%s: %s<br>%s',
-                    $PMF_LANG['msgAuthor'],
+                    Translation::get('msgAuthor'),
                     $data['author'],
-                    $PMF_LANG['msgLastUpdateArticle'] . $date->format($data['updated'])
+                    Translation::get('msgLastUpdateArticle') . $date->format($data['updated'])
                 );
                 $output .= '<hr>';
 

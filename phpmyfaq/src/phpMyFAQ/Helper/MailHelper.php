@@ -20,6 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\Utils;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -57,8 +58,6 @@ class MailHelper
      */
     public function sendMailToNewUser(User $user, string $password): bool
     {
-        global $PMF_LANG;
-
         $text = sprintf(
             "You have been registered as a new user:" .
             "\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" . 'Check it out here: %s',
@@ -69,7 +68,7 @@ class MailHelper
         );
 
         $this->mail->addTo($user->getUserData('email'), $user->getUserData('display_name'));
-        $this->mail->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $this->config);
+        $this->mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->config);
         $this->mail->message = $text;
 
         return (bool)$this->mail->send();

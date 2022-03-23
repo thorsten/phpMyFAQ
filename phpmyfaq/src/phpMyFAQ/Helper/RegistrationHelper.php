@@ -18,11 +18,14 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\Utils;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class RegistrationHelper
@@ -39,8 +42,6 @@ class RegistrationHelper extends Helper
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-
-        $this->getTranslations();
     }
 
     /**
@@ -53,7 +54,8 @@ class RegistrationHelper extends Helper
      * @param string $fullName
      * @param string $email
      * @param bool   $isVisible
-     * @return array|string[]
+     * @return array
+     * @throws Exception|TransportExceptionInterface
      */
     public function createUser(string $userName, string $fullName, string $email, bool $isVisible): array
     {
@@ -96,15 +98,15 @@ class RegistrationHelper extends Helper
             $mailer = new Mail($this->config);
             $mailer->setReplyTo($email, $fullName);
             $mailer->addTo($this->config->getAdminEmail());
-            $mailer->subject = Utils::resolveMarkers($this->translation['emailRegSubject'], $this->config);
+            $mailer->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->config);
             $mailer->message = $text;
             $mailer->send();
             unset($mailer);
 
             return [
                 'registered' => true,
-                'success' => trim($this->translation['successMessage']) . ' ' .
-                    trim($this->translation['msgRegThankYou']),
+                'success' => trim(Translation::get('successMessage')) . ' ' .
+                    trim(Translation::get('msgRegThankYou')),
             ];
         }
     }

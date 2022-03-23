@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use TCPDF;
 
 define('K_TCPDF_EXTERNAL_CONFIG', true);
@@ -198,21 +199,21 @@ class Wrapper extends TCPDF
      *
      * @var bool
      */
-    public $enableBookmarks = false;
+    public bool $enableBookmarks = false;
 
     /**
      * Full export from admin backend?
      *
      * @var bool
      */
-    public $isFullExport = false;
+    public bool $isFullExport = false;
 
     /**
      * Categories.
      *
      * @var array
      */
-    public $categories = [];
+    public array $categories = [];
 
     /**
      * The current category.
@@ -224,25 +225,25 @@ class Wrapper extends TCPDF
      *
      * @var array
      */
-    public $faq = [];
+    public array $faq = [];
     /**
      * Configuration.
      *
-     * @var Configuration
+     * @var Configuration|null
      */
-    protected $config = null;
+    protected ?Configuration $config = null;
     /**
      * Question.
      *
      * @var string
      */
-    private $question = '';
+    private string $question = '';
     /**
      * Font files.
      *
      * @var array
      */
-    private $fontFiles = [
+    private array $fontFiles = [
         'zh' => 'arialunicid0',
         'tw' => 'arialunicid0',
         'ja' => 'arialunicid0',
@@ -260,25 +261,23 @@ class Wrapper extends TCPDF
      *
      * @var string
      */
-    private $currentFont = 'dejavusans';
+    private string $currentFont = 'dejavusans';
 
     /**
      * @var string
      */
-    private $customHeader;
+    private string $customHeader;
 
     /**
      * @var string
      */
-    private $customFooter;
+    private string $customFooter;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        global $PMF_LANG;
-
         parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         $this->setFontSubsetting(false);
@@ -287,13 +286,13 @@ class Wrapper extends TCPDF
         $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         // Check on RTL
-        if ('rtl' == $PMF_LANG['dir']) {
+        if ('rtl' == Translation::get('dir')) {
             $this->setRTL(true);
         }
 
         // Set font
-        if (array_key_exists($PMF_LANG['metaLanguage'], $this->fontFiles)) {
-            $this->currentFont = (string)$this->fontFiles[$PMF_LANG['metaLanguage']];
+        if (array_key_exists(Translation::get('metaLanguage'), $this->fontFiles)) {
+            $this->currentFont = (string)$this->fontFiles[Translation::get('metaLanguage')];
         }
     }
 
@@ -312,7 +311,7 @@ class Wrapper extends TCPDF
      *
      * @param string $question Question
      */
-    public function setQuestion($question = '')
+    public function setQuestion(string $question = '')
     {
         $this->question = $question;
     }
@@ -376,8 +375,6 @@ class Wrapper extends TCPDF
      */
     public function Footer(): void // phpcs:ignore
     {
-        global $PMF_LANG;
-
         // Set custom footer
         $this->setCustomFooter();
 
@@ -402,7 +399,7 @@ class Wrapper extends TCPDF
         $this->Cell(
             0,
             10,
-            $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(),
+            Translation::get('ad_gen_page') . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(),
             0,
             0,
             'C'
@@ -446,8 +443,6 @@ class Wrapper extends TCPDF
      */
     public function addFaqToc()
     {
-        global $PMF_LANG;
-
         $this->addTOCPage();
 
         // Title
@@ -457,12 +452,12 @@ class Wrapper extends TCPDF
 
         // TOC
         $this->SetFont($this->currentFont, 'B', 16);
-        $this->MultiCell(0, 0, $PMF_LANG['msgTableOfContent'], 0, 'C', 0, 1, '', '', true, 0);
+        $this->MultiCell(0, 0, Translation::get('msgTableOfContent'), 0, 'C', 0, 1, '', '', true, 0);
         $this->Ln();
         $this->SetFont($this->currentFont, '', 12);
 
         // Render TOC
-        $this->addTOC(1, $this->currentFont, '.', $PMF_LANG['msgTableOfContent'], 'B', array(128, 0, 0));
+        $this->addTOC(1, $this->currentFont, '.', Translation::get('msgTableOfContent'), 'B', array(128, 0, 0));
         $this->endTOCPage();
     }
 
@@ -471,7 +466,7 @@ class Wrapper extends TCPDF
      *
      * @return string
      */
-    public function getCurrentFont()
+    public function getCurrentFont(): string
     {
         return $this->currentFont;
     }

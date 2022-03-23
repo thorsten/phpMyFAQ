@@ -225,10 +225,9 @@ class Init
      * Clean up a filename: if anything goes wrong, an empty string will be returned.
      *
      * @param string $filename Filename
-     *
      * @return string
      */
-    private static function basicFilenameClean($filename)
+    private static function basicFilenameClean(string $filename)
     {
         global $denyUploadExts;
 

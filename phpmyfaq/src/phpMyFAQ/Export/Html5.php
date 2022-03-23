@@ -22,6 +22,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Translation;
 use XMLWriter;
 
 /**
@@ -36,7 +37,7 @@ class Html5 extends Export
      *
      * @var XMLWriter
      */
-    private $xml;
+    private XMLWriter $xml;
 
     /**
      * Constructor.
@@ -69,8 +70,6 @@ class Html5 extends Export
      */
     public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
-        global $PMF_LANG;
-
         // Initialize categories
         $this->category->transform($categoryId);
 
@@ -95,7 +94,7 @@ class Html5 extends Export
         $this->xml->endElement(); // </head>
 
         $this->xml->startElement('body');
-        $this->xml->writeAttribute('dir', $PMF_LANG['dir']);
+        $this->xml->writeAttribute('dir', Translation::get('dir'));
 
         if (count($faqData)) {
             $lastCategory = 0;
@@ -111,10 +110,10 @@ class Html5 extends Export
                 $this->xml->startElement('p');
                 $this->xml->writeCdata(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
                 $this->xml->endElement();
-                $this->xml->writeElement('p', $PMF_LANG['msgAuthor'] . ': ' . $data['author_email']);
+                $this->xml->writeElement('p', Translation::get('msgAuthor') . ': ' . $data['author_email']);
                 $this->xml->writeElement(
                     'p',
-                    $PMF_LANG['msgLastUpdateArticle'] . Date::createIsoDate($data['lastmodified'])
+                    Translation::get('msgLastUpdateArticle') . Date::createIsoDate($data['lastmodified'])
                 );
 
                 $lastCategory = $data['category_id'];

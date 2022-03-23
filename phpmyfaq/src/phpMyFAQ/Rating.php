@@ -28,21 +28,14 @@ class Rating
     /**
      * @var Configuration
      */
-    private $config;
-
-    /**
-     * Language strings.
-     *
-     * @var string
-     */
-    private $pmfLang;
+    private Configuration $config;
 
     /**
      * Plural form support.
      *
      * @var Plurals
      */
-    private $plr;
+    private Plurals $plr;
 
     /**
      * Constructor.
@@ -51,10 +44,9 @@ class Rating
      */
     public function __construct(Configuration $config)
     {
-        global $PMF_LANG, $plr;
+        global $plr;
 
         $this->config = $config;
-        $this->pmfLang = $PMF_LANG;
         $this->plr = $plr;
     }
 
