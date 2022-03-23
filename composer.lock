@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e13f5d7b5fb016361d9c2de3b0b4182",
+    "content-hash": "c9d2ffb472685fd38a26602296503fbb",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -289,16 +289,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v8.0.0",
+            "version": "v8.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "0334e5b287800cf0d8b74c2cbe66a864fc964fc3"
+                "reference": "3cab97a538a74ab8f9c2fba9a941cd71b86eb1b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/0334e5b287800cf0d8b74c2cbe66a864fc964fc3",
-                "reference": "0334e5b287800cf0d8b74c2cbe66a864fc964fc3",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/3cab97a538a74ab8f9c2fba9a941cd71b86eb1b3",
+                "reference": "3cab97a538a74ab8f9c2fba9a941cd71b86eb1b3",
                 "shasum": ""
             },
             "require": {
@@ -346,9 +346,9 @@
             ],
             "support": {
                 "issues": "https://github.com/elastic/elasticsearch-php/issues",
-                "source": "https://github.com/elastic/elasticsearch-php/tree/v8.0.0"
+                "source": "https://github.com/elastic/elasticsearch-php/tree/v8.1.1"
             },
-            "time": "2021-10-21T22:05:38+00:00"
+            "time": "2022-02-02T11:02:11+00:00"
         },
         {
             "name": "erusev/parsedown",
