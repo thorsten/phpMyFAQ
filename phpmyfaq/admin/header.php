@@ -122,7 +122,7 @@ $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('adminlog', 'adminl
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
 
-$secLevelEntries['exports'] = $adminHelper->addMenuEntry('editconfig', 'export', 'ad_menu_export', $action);
+$secLevelEntries['exports'] = $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', $action);
 
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
 
