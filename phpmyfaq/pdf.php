@@ -25,12 +25,13 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Bootstrapping
@@ -38,7 +39,7 @@ define('IS_VALID_PHPMYFAQ', null);
 require 'src/Bootstrap.php';
 
 // get language (default: english)
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
@@ -61,6 +62,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);
+$plr = new Plurals($PMF_LANG);
 
 // authenticate with session information
 $user = CurrentUser::getFromCookie($faqConfig);
