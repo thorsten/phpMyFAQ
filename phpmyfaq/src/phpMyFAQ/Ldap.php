@@ -54,7 +54,7 @@ class Ldap
     /**
      * An LDAP link identifier, returned by ldap_connect()
      *
-     * @var resource
+     * @var resource|false
      */
     private $ds;
 
@@ -162,7 +162,7 @@ class Ldap
      */
     public function bind(string $rdn = '', string $password = ''): bool
     {
-        if (!is_resource($this->ds)) {
+        if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
@@ -195,7 +195,7 @@ class Ldap
      */
     private function getLdapData(string $username, string $data)
     {
-        if (!is_resource($this->ds)) {
+        if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
@@ -290,7 +290,7 @@ class Ldap
      */
     private function getLdapDn(string $username)
     {
-        if (!is_resource($this->ds)) {
+        if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
