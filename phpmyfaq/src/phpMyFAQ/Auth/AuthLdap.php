@@ -32,14 +32,14 @@ use phpMyFAQ\User;
  */
 class AuthLdap extends Auth implements AuthDriverInterface
 {
-    /** @var LdapCore */
-    private $ldap = null;
+    /** @var LdapCore|null */
+    private ?LdapCore $ldap = null;
 
     /** @var string[] Array of LDAP servers */
-    private $ldapServer;
+    private array $ldapServer;
 
     /** @var int Active LDAP server */
-    private $activeServer = 0;
+    private int $activeServer = 0;
 
     /** @var bool */
     private $multipleServers;
@@ -61,17 +61,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         $this->ldap = new LdapCore($this->config);
-        $this->ldap->connect(
-            $this->ldapServer[$this->activeServer]['ldap_server'],
-            $this->ldapServer[$this->activeServer]['ldap_port'],
-            $this->ldapServer[$this->activeServer]['ldap_base'],
-            $this->ldapServer[$this->activeServer]['ldap_user'],
-            $this->ldapServer[$this->activeServer]['ldap_password']
-        );
-
-        if ($this->ldap->error) {
-            $this->errors[] = $this->ldap->error;
-        }
+        $this->connect($this->activeServer);
     }
 
     /**
@@ -83,17 +73,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         $user = new User($this->config);
         $result = $user->createUser($login, '', $domain);
 
-        $this->ldap->connect(
-            $this->ldapServer[$this->activeServer]['ldap_server'],
-            $this->ldapServer[$this->activeServer]['ldap_port'],
-            $this->ldapServer[$this->activeServer]['ldap_base'],
-            $this->ldapServer[$this->activeServer]['ldap_user'],
-            $this->ldapServer[$this->activeServer]['ldap_password']
-        );
-
-        if ($this->ldap->error) {
-            $this->errors[] = $this->ldap->error;
-        }
+        $this->connect($this->activeServer);
 
         $user->setStatus('active');
 
@@ -126,12 +106,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function checkCredentials($login, $password, array $optionalData = null): bool
     {
         if ('' === trim($password)) {
             $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
-
             return false;
         }
 
@@ -139,16 +119,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         if ($this->multipleServers) {
             // Try all LDAP servers
             foreach ($this->ldapServer as $key => $value) {
-                $this->ldap->connect(
-                    $this->ldapServer[$key]['ldap_server'],
-                    $this->ldapServer[$key]['ldap_port'],
-                    $this->ldapServer[$key]['ldap_base'],
-                    $this->ldapServer[$key]['ldap_user'],
-                    $this->ldapServer[$key]['ldap_password']
-                );
-                if ($this->ldap->error) {
-                    $this->errors[] = $this->ldap->error;
-                }
+                $this->connect($key);
 
                 if (false !== $this->ldap->getDn($login)) {
                     $this->activeServer = (int)$key;
@@ -163,16 +134,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
         } else {
-            $this->ldap->connect(
-                $this->ldapServer[$this->activeServer]['ldap_server'],
-                $this->ldapServer[$this->activeServer]['ldap_port'],
-                $this->ldapServer[$this->activeServer]['ldap_base'],
-                $this->ldapServer[$this->activeServer]['ldap_user'],
-                $this->ldapServer[$this->activeServer]['ldap_password']
-            );
-            if ($this->ldap->error) {
-                $this->errors[] = $this->ldap->error;
-            }
+            $this->connect($this->activeServer);
 
             $bindLogin = $this->ldap->getDn($login);
         }
@@ -205,16 +167,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         if ($this->multipleServers) {
             // Try all LDAP servers
             foreach ($this->ldapServer as $key => $value) {
-                $this->ldap->connect(
-                    $this->ldapServer[$key]['ldap_server'],
-                    $this->ldapServer[$key]['ldap_port'],
-                    $this->ldapServer[$key]['ldap_base'],
-                    $this->ldapServer[$key]['ldap_user'],
-                    $this->ldapServer[$key]['ldap_password']
-                );
-                if ($this->ldap->error) {
-                    $this->errors[] = $this->ldap->error;
-                }
+                $this->connect($key);
 
                 if (false !== $this->ldap->getDn($login)) {
                     $this->activeServer = (int)$key;
@@ -223,14 +176,26 @@ class AuthLdap extends Auth implements AuthDriverInterface
             }
         }
 
-        $this->ldap->connect(
-            $this->ldapServer[$this->activeServer]['ldap_server'],
-            $this->ldapServer[$this->activeServer]['ldap_port'],
-            $this->ldapServer[$this->activeServer]['ldap_base'],
-            $this->ldapServer[$this->activeServer]['ldap_user'],
-            $this->ldapServer[$this->activeServer]['ldap_password']
-        );
+        $this->connect($this->activeServer);
 
         return strlen($this->ldap->getCompleteName($login));
+    }
+
+    /**
+     * @param int $activeServer
+     */
+    private function connect(int $activeServer = 0): void
+    {
+        $this->ldap->connect(
+            $this->ldapServer[$activeServer]['ldap_server'],
+            $this->ldapServer[$activeServer]['ldap_port'],
+            $this->ldapServer[$activeServer]['ldap_base'],
+            $this->ldapServer[$activeServer]['ldap_user'],
+            $this->ldapServer[$activeServer]['ldap_password']
+        );
+
+        if ($this->ldap->error) {
+            $this->errors[] = $this->ldap->error;
+        }
     }
 }
