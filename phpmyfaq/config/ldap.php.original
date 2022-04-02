@@ -1,5 +1,5 @@
 <?php
-// Main LDAP server
+// Main LDAP server, format the server as "ldap://127.0.0.1"
 $PMF_LDAP['ldap_server'] = '';
 $PMF_LDAP['ldap_port'] = 389;
 $PMF_LDAP['ldap_user'] = '';
