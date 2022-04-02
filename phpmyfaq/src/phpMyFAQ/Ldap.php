@@ -30,40 +30,40 @@ class Ldap
     /**
      * Error.
      *
-     * @var string
+     * @var string|null
      */
-    public $error = null;
+    public ?string $error = null;
 
     /**
      * LDAP error number.
      *
-     * @var int
+     * @var int|null
      */
-    public $errno = null;
+    public ?int $errno = null;
 
     /**
      * @var array
      */
-    private $ldapConfig;
+    private array $ldapConfig;
 
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * An LDAP link identifier, returned by ldap_connect()
      *
-     * @var resource
+     * @var resource|false
      */
     private $ds;
 
     /**
      * The LDAP base.
      *
-     * @var string
+     * @var string|null
      */
-    private $base = null;
+    private ?string $base = null;
 
     /**
      * Constructor.
@@ -99,7 +99,7 @@ class Ldap
         }
 
         $this->base = $ldapBase;
-        $this->ds = ldap_connect($ldapServer, $ldapPort);
+        $this->ds = ldap_connect($ldapServer . ':' . $ldapPort);
 
         if (!$this->ds) {
             $this->error = sprintf(
@@ -162,7 +162,7 @@ class Ldap
      */
     public function bind(string $rdn = '', string $password = ''): bool
     {
-        if (!is_resource($this->ds)) {
+        if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
@@ -195,7 +195,7 @@ class Ldap
      */
     private function getLdapData(string $username, string $data)
     {
-        if (!is_resource($this->ds)) {
+        if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
@@ -290,7 +290,7 @@ class Ldap
      */
     private function getLdapDn(string $username)
     {
-        if (!is_resource($this->ds)) {
+        if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 
             return false;
