@@ -19,6 +19,7 @@ export const handleCategories = () => {
   console.log('handleCategories');
 
   const listGroupItems = document.querySelectorAll('.list-group-item');
+  const sortableCategories = document.querySelector('.list-group.list-group-root');
 
   listGroupItems.forEach((element) => {
     element.addEventListener('click', (event) => {
@@ -28,5 +29,9 @@ export const handleCategories = () => {
         hasSubCategories.classList.toggle('fa-caret-down');
       }
     });
+  });
+
+  const sortable = Sortable.create(sortableCategories, {
+    animation: 150,
   });
 };

@@ -360,7 +360,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     trim(strip_tags($categoryName)),
                     $cat['id'],
                     $numSubCategories > 0 ? ' pmf-has-subcategories' : '',
-                    $numSubCategories > 0 ? 'data-toggle="collapse"' : ''
+                    $numSubCategories > 0 ? 'data-bs-toggle="collapse"' : ''
                 );
                 printf(
                     '<span>%s %s</span>',
