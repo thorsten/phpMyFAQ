@@ -20,6 +20,7 @@ use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -61,10 +62,13 @@ switch ($ajaxAction) {
         break;
 
     case 'update-order':
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
-            $http->setStatus(401);
-            return;
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+            $http->setStatus(400);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            exit(1);
         }
 
         $category = new Category($faqConfig, [], false);
@@ -73,13 +77,6 @@ switch ($ajaxAction) {
 
         $categoryOrder = new CategoryOrder($faqConfig);
 
-        $rawData = Filter::filterInputArray(INPUT_POST, [
-            'data' => [
-                'filter' => FILTER_UNSAFE_RAW,
-                'flags' => FILTER_REQUIRE_ARRAY,
-            ],
-        ]);
-
         /**
          * Callback function for array_filter()
          * @param $element
@@ -87,27 +84,25 @@ switch ($ajaxAction) {
          */
         function filterElement($element): bool
         {
-            $element = ucfirst($element);
-            return $element !== '';
+            return is_numeric($element) ?? (int)$element;
         }
 
-        $sortedData = array_filter($rawData['data'], 'filterElement');
+        $sortedData = array_filter($postData->order, 'filterElement');
 
         $order = 1;
-        foreach ($sortedData as $key => $position) {
-            $id = explode('-', $position);
-            $currentPosition = $categoryOrder->getPositionById((int) $id[1]);
+        foreach ($sortedData as $categoryId) {
+            $currentPosition = $categoryOrder->getPositionById((int) $categoryId);
 
             if (!$currentPosition) {
-                $categoryOrder->setPositionById((int) $id[1], (int) $order);
+                $categoryOrder->setPositionById((int) $categoryId, $order);
             } else {
-                $categoryOrder->updatePositionById((int) $id[1], (int) $order);
+                $categoryOrder->updatePositionById((int) $categoryId, $order);
             }
             $order++;
         }
 
         $http->sendJsonWithHeaders(
-            []
+            ['success' => Translation::get('ad_categ_save_order')]
         );
 
         break;

@@ -86,6 +86,21 @@ class Filter
     }
 
     /**
+     * Static wrapper method for filter_var_array().
+     * @param array     $array
+     * @param array|int $options
+     * @param bool      $addEmpty
+     * @return bool|array|null
+     */
+    public static function filterArray(
+        array $array,
+        array|int $options = FILTER_DEFAULT,
+        bool $addEmpty = true
+    ): bool|array|null {
+        return filter_var_array($array, $options, $addEmpty);
+    }
+
+    /**
      * Filters a query string.
      *
      * @return string

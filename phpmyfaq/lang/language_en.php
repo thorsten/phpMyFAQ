@@ -1334,7 +1334,7 @@ $LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note'];
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
 $PMF_LANG['ad_user_is_visible'] = 'Visible';
-$PMF_LANG['ad_categ_save_order'] = 'Save order';
+$PMF_LANG['ad_categ_save_order'] = 'The new sorting was successfully saved.';
 $PMF_LANG['ad_add_user_change_password'] = 'User must change password after first login';
 $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API enabled'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];

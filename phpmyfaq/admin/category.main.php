@@ -47,6 +47,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
   <div class="row">
     <div class="col-lg-12">
+      <form method="post">
+        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
         <?php
         //
         // CSRF Check
@@ -349,15 +351,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                 if ($hasParent) {
                     printf(
-                        '<div class="list-group collapse" id="category-id-%d">',
+                        '<div class="list-group collapse pmf-category-not-sortable" id="category-id-%d">',
                         $cat['parent_id']
                     );
                 }
 
                 printf(
-                    '<div href="#category-id-%d" id="%s-%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center %s" %s>',
+                    '<div href="#category-id-%d" id="%s-%d" data-id="%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center %s" %s>',
                     $cat['id'],
                     trim(strip_tags($categoryName)),
+                    $cat['id'],
                     $cat['id'],
                     $numSubCategories > 0 ? ' pmf-has-subcategories' : '',
                     $numSubCategories > 0 ? 'data-bs-toggle="collapse"' : ''
@@ -432,17 +435,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $lastCatId = $cat['id'];
             }
             ?>
-      <div class="d-flex flex-row">
-      <form method="post">
-        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-        <button class="pmf-save-category-order text-white btn btn-primary mt-3 mr-1">
-            <?= $PMF_LANG['ad_categ_save_order'] ?>
-        </button>
-      </form>
-      </div>
         <div class="mt-4">
         <?= Alert::info('ad_categ_remark') ?>
         </div>
+      </form>
     </div>
   </div>
             <?php

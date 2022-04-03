@@ -1333,7 +1333,7 @@ $LANG_CONF['main.privacyURL'] = ['input', 'URL zum Datenschutzhinweis'];
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Benutzerdaten sollen öffentlich sichtbar sein';
 $PMF_LANG['ad_user_is_visible'] = 'Sichtbar';
-$PMF_LANG['ad_categ_save_order'] = 'Sortierung speichern';
+$PMF_LANG['ad_categ_save_order'] = 'Die neue Sortierung wurde erfolgreich gespeichert.';
 $PMF_LANG['ad_add_user_change_password'] = 'Der Nutzer muss nach dem ersten Login sein Passwort ändern.';
 $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API aktiviert'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'REST API Client Token'];
