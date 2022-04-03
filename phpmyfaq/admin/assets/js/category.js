@@ -16,10 +16,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  $('.list-group-item').on('click', function () {
-    $('.fa.pmf-has-subcategories', this).toggleClass('fa-caret-right').toggleClass('fa-caret-down');
-  });
-
   // Sort categories by drag and drop
   $('.list-group.list-group-root').sortable({
     axis: 'y',

@@ -355,10 +355,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                 printf(
-                    '<div href="#category-id-%d" id="%s-%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center" %s>',
+                    '<div href="#category-id-%d" id="%s-%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center %s" %s>',
                     $cat['id'],
                     trim(strip_tags($categoryName)),
                     $cat['id'],
+                    $numSubCategories > 0 ? ' pmf-has-subcategories' : '',
                     $numSubCategories > 0 ? 'data-toggle="collapse"' : ''
                 );
                 printf(
@@ -444,7 +445,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </div>
     </div>
   </div>
-  <script src="assets/js/category.js"></script>
             <?php
         } else {
             echo $PMF_LANG['err_NotAuth'];
