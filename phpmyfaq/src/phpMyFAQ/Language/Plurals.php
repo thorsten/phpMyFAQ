@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ\Language;
 
+use phpMyFAQ\Translation;
+
 /**
  * Class Plurals
  *
@@ -29,39 +31,39 @@ class Plurals
      *
      * @var array
      */
-    private $PMF_TRANSL = [];
+    private array $PMF_TRANSL;
 
     /**
      * The number of plural forms for current language $lang.
      *
      * @var int
      */
-    private $nPlurals;
+    private int $nPlurals;
 
     /**
      * The language code of current language.
      *
      * @var string
      */
-    private $lang;
+    private mixed $lang;
 
     /**
      * True when there is no support for plural forms in current language $lang.
      *
      * @var bool
      */
-    private $useDefaultPluralForm;
+    private bool $useDefaultPluralForm;
 
     /**
      * Constructor.
      *
      * @param array $translation PMF translation array for current language
      */
-    public function __construct($translation)
+    public function __construct(array $translation)
     {
         $this->PMF_TRANSL = $translation;
-        $this->nPlurals = (int)$this->PMF_TRANSL['nplurals'];
-        $this->lang = $this->PMF_TRANSL['metaLanguage'];
+        $this->nPlurals = (int)Translation::get('nplurals');
+        $this->lang = Translation::get('metaLanguage');
 
         if ($this->plural($this->lang, 0) != -1) {
             $this->useDefaultPluralForm = false;
@@ -138,7 +140,7 @@ class Plurals
             case 'sl':
                 return ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || $n % 100 == 4 ? 2 : 3));
             default:
-                //plural expressions can't return negative values, so use -1 to signal unsupported language
+                // plural expressions can't return negative values, so use -1 to signal unsupported language
                 return -1;
         }
     }
@@ -147,14 +149,13 @@ class Plurals
      * Returns a translated string in the correct plural form,
      * produced according to the formatting of the message.
      *
-     * @param string $msgID Message identification
-     * @param int    $n     The number used to determine the plural form
-     *
+     * @param string $translationKey Message identification
+     * @param int    $number     The number used to determine the plural form
      * @return string
      */
-    public function getMsg($msgID, $n)
+    public function getMsg(string $translationKey, int $number): string
     {
-        return sprintf($this->getMsgTemplate($msgID, $n), $n);
+        return sprintf($this->getMsgTemplate($translationKey, $number), $number);
     }
 
     /**
@@ -163,37 +164,29 @@ class Plurals
      *
      * @param string $msgID Message identification
      * @param int    $n     The number used to determine the plural form
-     *
      * @return string
      */
-    public function getMsgTemplate($msgID, $n)
+    public function getMsgTemplate(string $msgID, int $n): string
     {
         $plural = $this->getPlural($n);
-        if (isset($this->PMF_TRANSL[$msgID][$plural])) {
-            return $this->PMF_TRANSL[$msgID][$plural];
-        } else {
-            // translation for current plural form (>2, since we allways have 2 English plural forms)
-            // in current language is missing, so as a last resort return default English plural form
-            return $this->PMF_TRANSL[$msgID][1];
-        }
+        return $this->PMF_TRANSL[$msgID][$plural] ?? $this->PMF_TRANSL[$msgID][1];
     }
 
     /**
      * Determines the correct plural form for integer $n
      * Returned integer is from interval [0, $nPlurals).
      *
-     * @param int $n The number used to determine the plural form
-     *
+     * @param int $number The number used to determine the plural form
      * @return int
      */
-    private function getPlural($n)
+    private function getPlural(int $number): int
     {
         if ($this->useDefaultPluralForm) {
-            // this means we have to fallback to English, so return correct English plural form
-            return $this->plural('en', $n);
+            // this means we have to fall back to English, so return correct English plural form
+            return $this->plural('en', $number);
         }
 
-        $plural = $this->plural($this->lang, $n);
+        $plural = $this->plural($this->lang, $number);
         if ($plural > $this->nPlurals - 1) {
             // incorrectly defined plural function or wrong $nPlurals
             return $this->nPlurals - 1;
