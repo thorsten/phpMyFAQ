@@ -42,6 +42,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template;
 use phpMyFAQ\Template\TemplateHelper;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 
@@ -79,6 +80,18 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode) && is_nu
     require_once 'lang/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
+}
+
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
 //Load plurals support for selected language
