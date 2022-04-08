@@ -49,8 +49,10 @@ $inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_UNSAFE_RAW);
 $inputCategory = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 $inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
 $inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW);
-$inputTag = str_replace(' ', '', $inputTag);
-$inputTag = str_replace(',,', ',', $inputTag);
+if (!is_null($inputTag)) {
+    $inputTag = str_replace(' ', '', $inputTag);
+    $inputTag = str_replace(',,', ',', $inputTag);
+}
 
 $searchTerm = Filter::filterInput(INPUT_POST, 'search', FILTER_UNSAFE_RAW);
 $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
@@ -172,6 +174,8 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     } catch (Exception $e) {
         // @todo handle exception
     }
+} else {
+    $inputSearchTerm = '';
 }
 
 // Change a little bit the $searchCategory value;

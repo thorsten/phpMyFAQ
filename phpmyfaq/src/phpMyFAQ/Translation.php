@@ -40,9 +40,7 @@ class Translation
     /** @var Translation|null */
     private static ?Translation $instance = null;
 
-    /**
-     * @return Translation
-     */
+    /** @return Translation */
     public static function create(): Translation
     {
         if (self::$instance === null) {

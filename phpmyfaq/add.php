@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-16
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 use phpMyFAQ\Captcha;
@@ -21,6 +21,7 @@ use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -90,25 +91,25 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => $PMF_LANG['msgNewContentHeader'],
+        'pageHeader' => Translation::get('msgNewContentHeader'),
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
-        'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
-        'msgNewContentAddon' => $PMF_LANG['msgNewContentAddon'],
+        'msgNewContentHeader' => Translation::get('msgNewContentHeader'),
+        'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
         'lang' => $Language->getLanguage(),
         'openQuestionID' => $selectedQuestion,
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-        'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
+        'msgNewContentName' => Translation::get('msgNewContentName'),
+        'msgNewContentMail' => Translation::get('msgNewContentMail'),
+        'msgNewContentCategory' => Translation::get('msgNewContentCategory'),
         'renderCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
-        'msgNewContentTheme' => $PMF_LANG['msgNewContentTheme'],
+        'msgNewContentTheme' => Translation::get('msgNewContentTheme'),
         'readonly' => $readonly,
         'printQuestion' => $question,
-        'msgNewContentArticle' => $PMF_LANG['msgNewContentArticle'],
-        'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
-        'msgNewContentLink' => $PMF_LANG['msgNewContentLink'],
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha'], $auth),
-        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+        'msgNewContentArticle' => Translation::get('msgNewContentArticle'),
+        'msgNewContentKeywords' => Translation::get('msgNewContentKeywords'),
+        'msgNewContentLink' => Translation::get('msgNewContentLink'),
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', Translation::get('msgCaptcha'), $auth),
+        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     ]
 );

@@ -852,9 +852,9 @@ class User
      * Returns the data of the current user.
      *
      * @param string $field Field
-     * @return array<string>|string|int
+     * @return array<string>|string|int|null
      */
-    public function getUserData(string $field = '*'): array|int|string
+    public function getUserData(string $field = '*'): array|int|string|null
     {
         if (!($this->userdata instanceof UserData)) {
             $this->userdata = new UserData($this->config);

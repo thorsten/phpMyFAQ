@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-08-27
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-27
  */
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -59,7 +60,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             $records = $categoryHelper->renderCategoryTree();
         }
         if (count($category->getChildNodes((int) $selectedCategoryId))) {
-            $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
+            $categoryFaqsHeader = Translation::get('msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree();
             $template->parseBlock(
                 'mainPageContent',
@@ -81,7 +82,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         );
         $oLink = new Link($url, $faqConfig);
         $oLink->itemTitle = $category->categoryName[$categoryData->getParentId()]['name'];
-        $oLink->text = $PMF_LANG['msgCategoryUp'];
+        $oLink->text = Translation::get('msgCategoryUp');
         $up = $oLink->toHtmlAnchor();
     }
 
@@ -98,9 +99,9 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $template->parse(
         'mainPageContent',
         [
-            'categoryHeader' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName(),
+            'categoryHeader' => Translation::get('msgEntriesIn') . $categoryData->getName(),
             'categoryDescription' => $categoryData->getDescription(),
-            'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
+            'categoryFaqsHeader' => Translation::get('msgEntries'),
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => $up
@@ -120,7 +121,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $template->parse(
         'mainPageContent',
         [
-            'categoryHeader' => $PMF_LANG['msgFullCategories'],
+            'categoryHeader' => Translation::get('msgFullCategories'),
             'categoryDescription' => '',
             'categoryFaqsHeader' => '',
             'categoryContent' => $categoryHelper->renderCategoryTree(),
