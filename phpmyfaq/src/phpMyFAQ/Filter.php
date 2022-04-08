@@ -169,11 +169,40 @@ class Filter
 
         foreach ($attributes[0] as $attribute) {
             $attributeName = stristr($attribute, '=', true);
-            if (!in_array($attributeName, $keep)) {
+            if (self::isAttribute($attributeName) && !in_array($attributeName, $keep)) {
                 $html = str_replace(' ' . $attribute, '', $html);
             }
         }
 
         return $html;
+    }
+
+    /**
+     * @param string $attribute
+     * @return bool
+     */
+    private static function isAttribute(string $attribute): bool
+    {
+        $globalAttributes = [
+            'autocomplete', 'autofocus', 'disabled', 'list', 'name', 'readonly', 'required', 'tabindex', 'type',
+            'value', 'accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'id',
+            'lang', 'style', 'tabindex', 'title', 'inputmode', 'is', 'itemid', 'itemprop', 'itemref', 'itemscope',
+            'itemtype', 'lang', 'slot', 'spellcheck', 'translate', 'autofocus', 'disabled', 'form', 'multiple', 'name',
+            'required', 'size', 'autocapitalize', 'autocomplete', 'autofocus', 'cols', 'disabled', 'form', 'maxlength',
+            'minlength', 'name', 'placeholder', 'readonly', 'required', 'rows', 'spellcheck', 'wrap', 'onmouseenter',
+            'onmouseleave', 'onafterprint', 'onbeforeprint', 'onbeforeunload', 'onhashchange', 'onmessage', 'onoffline',
+            'ononline', 'onpopstate', 'onpagehide', 'onpageshow', 'onresize', 'onunload', 'ondevicemotion', 'preload',
+            'ondeviceorientation', 'onabort', 'onblur', 'oncanplay', 'oncanplaythrough', 'onchange', 'onclick',
+            'oncontextmenu', 'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover',
+            'ondragstart', 'ondrop', 'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus', 'oninput',
+            'oninvalid', 'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata',
+            'onloadstart', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup','controls',
+            'onmozfullscreenchange', 'onmozfullscreenerror', 'onpause', 'onplay', 'onplaying', 'onprogress',
+            'onratechange', 'onreset', 'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
+            'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting', 'oncopy', 'oncut', 'onpaste',
+            'onbeforescriptexecute', 'onafterscriptexecute'
+        ];
+
+        return in_array($attribute, $globalAttributes);
     }
 }

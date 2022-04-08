@@ -15,8 +15,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Japanese translation (Advanced Bear)
 -
 
-### phpMyFAQ v3.1.3 - 2022-XX-XX
+### phpMyFAQ v3.1.3 - 2022-04-XX
 
+- fixed login via LDAP or ActiveDirectory (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.2 - 2022-03-16
