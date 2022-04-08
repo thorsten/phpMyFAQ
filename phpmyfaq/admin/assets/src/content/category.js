@@ -17,8 +17,6 @@ import Sortable from 'sortablejs';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleCategories = () => {
-  console.log('handleCategories');
-
   const listGroupItems = document.querySelectorAll('.list-group-item');
   const sortableCategories = document.querySelector('.list-group.list-group-root');
 
@@ -32,61 +30,63 @@ export const handleCategories = () => {
     });
   });
 
-  const sortable = Sortable.create(sortableCategories, {
-    animation: 150,
-    dataIdAttr: 'data-id',
-    filter: '.pmf-category-not-sortable',
-    group: 'pmf-category-order',
-    store: {
-      /**
-       * Get the order of elements. Called once during initialization.
-       * @param   {Sortable}  sortable
-       * @returns {Array}
-       */
-      get: (sortable) => {
-        const order = localStorage.getItem(sortable.options.group.name);
-        return order ? order.split('|') : [];
-      },
+  if (sortableCategories) {
+    const sortable = Sortable.create(sortableCategories, {
+      animation: 150,
+      dataIdAttr: 'data-id',
+      filter: '.pmf-category-not-sortable',
+      group: 'pmf-category-order',
+      store: {
+        /**
+         * Get the order of elements. Called once during initialization.
+         * @param   {Sortable}  sortable
+         * @returns {Array}
+         */
+        get: (sortable) => {
+          const order = localStorage.getItem(sortable.options.group.name);
+          return order ? order.split('|') : [];
+        },
 
-      /**
-       * Save the order of elements. Called onEnd (when the item is dropped).
-       * @param {Sortable}  sortable
-       */
-      set: (sortable) => {
-        const order = sortable.toArray();
-        const csrf = document.querySelector('input[name=csrf]').value;
-        localStorage.setItem(sortable.options.group.name, order.join('|'));
+        /**
+         * Save the order of elements. Called onEnd (when the item is dropped).
+         * @param {Sortable}  sortable
+         */
+        set: (sortable) => {
+          const order = sortable.toArray();
+          const csrf = document.querySelector('input[name=csrf]').value;
+          localStorage.setItem(sortable.options.group.name, order.join('|'));
 
-        fetch('index.php?action=ajax&ajax=categories&ajaxaction=update-order', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            csrf: csrf,
-            order: order,
-          }),
-        })
-          .then(async (response) => {
-            if (response.status === 200) {
-              return response.json();
-            }
-            throw new Error('Network response was not ok.');
+          fetch('index.php?action=ajax&ajax=categories&ajaxaction=update-order', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json, text/plain, */*',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              csrf: csrf,
+              order: order,
+            }),
           })
-          .then((response) => {
-            sortableCategories.insertAdjacentElement(
-              'beforebegin',
-              addElement('div', { classList: 'alert alert-success', innerText: response.success })
-            );
-          })
-          .catch((error) => {
-            sortableCategories.insertAdjacentElement(
-              'beforebegin',
-              addElement('div', { classList: 'alert alert-danger', innerText: error })
-            );
-          });
+            .then(async (response) => {
+              if (response.status === 200) {
+                return response.json();
+              }
+              throw new Error('Network response was not ok.');
+            })
+            .then((response) => {
+              sortableCategories.insertAdjacentElement(
+                'beforebegin',
+                addElement('div', { classList: 'alert alert-success', innerText: response.success })
+              );
+            })
+            .catch((error) => {
+              sortableCategories.insertAdjacentElement(
+                'beforebegin',
+                addElement('div', { classList: 'alert alert-danger', innerText: error })
+              );
+            });
+        },
       },
-    },
-  });
+    });
+  }
 };
