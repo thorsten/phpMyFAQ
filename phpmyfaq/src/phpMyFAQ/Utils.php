@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2022 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link  https://www.phpmyfaq.de
- * @since 2005-11-01
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-11-01
  */
 
 namespace phpMyFAQ;
@@ -185,9 +185,9 @@ class Utils
      */
     public static function highlightNoLinks(array $matches): string
     {
-        $prefix = isset($matches[3]) ? $matches[3] : '';
-        $item = isset($matches[4]) ? $matches[4] : '';
-        $postfix = isset($matches[5]) ? $matches[5] : '';
+        $prefix = $matches[3] ?? '';
+        $item = $matches[4] ?? '';
+        $postfix = $matches[5] ?? '';
 
         if (!empty($item) && !self::isForbiddenElement($item)) {
             return sprintf(
@@ -260,13 +260,11 @@ class Utils
         $string = str_replace($protocols, '', $string);
         $string = str_replace('www.', 'http://www.', $string);
         $string = preg_replace('|http://([a-zA-Z0-9-\./]+)|', '<a href="http://$1">$1</a>', $string);
-        $string = preg_replace(
+        return preg_replace(
             '/(([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6})/',
             '<a href="mailto:$1">$1</a>',
             $string
         );
-
-        return $string;
     }
 
     /**
