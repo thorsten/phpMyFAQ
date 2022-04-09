@@ -31,5 +31,5 @@ interface Driver
      *
      * @return bool
      */
-    public function createTables(string $prefix = '');
+    public function createTables(string $prefix = ''): bool;
 }

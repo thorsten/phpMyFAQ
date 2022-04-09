@@ -30,7 +30,7 @@ class Mysqli extends Database implements Driver
     /**
      * @var array
      */
-    private $createTableStatements = [
+    private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INT(11) NOT NULL,
             time INT(11) NOT NULL,
@@ -52,7 +52,7 @@ class Mysqli extends Database implements Driver
             mime_type VARCHAR(255) NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
-        'faqattachment file' => 'CREATE TABLE %sfaqattachment_file (
+        'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
             contents BLOB NOT NULL,
             PRIMARY KEY (virtual_hash)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',

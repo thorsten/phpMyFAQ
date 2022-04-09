@@ -54,7 +54,7 @@ class Pgsql extends Database implements Driver
             mime_type VARCHAR(255) NULL,
             PRIMARY KEY (id))',
 
-        'faqattachment file' => 'CREATE TABLE %sfaqattachment_file (
+        'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
             contents BYTEA,
             PRIMARY KEY (virtual_hash))',

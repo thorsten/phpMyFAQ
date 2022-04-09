@@ -30,7 +30,7 @@ class Sqlite3 extends Database implements Driver
     /**
      * @var array
      */
-    private $createTableStatements = [
+    private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,
             time INTEGER NOT NULL,
@@ -52,7 +52,7 @@ class Sqlite3 extends Database implements Driver
             mime_type VARCHAR(255) NULL,
             PRIMARY KEY (id))',
 
-        'faqattachment file' => 'CREATE TABLE %sfaqattachment_file (
+        'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
             contents TEXT NOT NULL,
             PRIMARY KEY (virtual_hash))',
@@ -395,7 +395,7 @@ class Sqlite3 extends Database implements Driver
      *
      * @return bool
      */
-    public function createTables(string $prefix = '')
+    public function createTables(string $prefix = ''): bool
     {
         foreach ($this->createTableStatements as $stmt) {
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));

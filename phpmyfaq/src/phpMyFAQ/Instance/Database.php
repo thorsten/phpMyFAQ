@@ -31,9 +31,9 @@ class Database
     /**
      * Instance.
      *
-     * @var Driver
+     * @var Driver|null
      */
-    private static $instance = null;
+    private static ?Driver $instance = null;
 
     /**
      * Database type.
@@ -44,13 +44,13 @@ class Database
     /**
      * @var Configuration
      */
-    protected $config;
+    protected Configuration $config;
     /**
      * DROP TABLE statements.
      *
      * @var array
      */
-    private $dropTableStmts = [
+    private array $dropTableStmts = [
         'DROP TABLE %sfaqadminlog',
         'DROP TABLE %sfaqattachment',
         'DROP TABLE %sfaqattachment_file',
@@ -102,12 +102,11 @@ class Database
      * Database factory.
      *
      * @param Configuration $config phpMyFAQ configuration container
-     * @param string        $type   Database management system type
-     *
-     * @return Driver
+     * @param string        $type Database management system type
+     * @return Driver|null
      * @throws Exception
      */
-    public static function factory(Configuration $config, $type)
+    public static function factory(Configuration $config, string $type): ?Driver
     {
         self::$dbType = $type;
 
@@ -125,9 +124,9 @@ class Database
     /**
      * Returns the single instance.
      *
-     * @return Driver
+     * @return Driver|null
      */
-    public static function getInstance()
+    public static function getInstance(): ?Driver
     {
         if (null === self::$instance) {
             $className = __CLASS__;
@@ -141,10 +140,9 @@ class Database
      * Executes all DROP TABLE statements.
      *
      * @param string $prefix
-     *
      * @return bool
      */
-    public function dropTables($prefix = '')
+    public function dropTables(string $prefix = ''): bool
     {
         foreach ($this->dropTableStmts as $stmt) {
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));

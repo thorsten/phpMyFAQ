@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL.
+ * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL Server.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -30,7 +30,7 @@ class Sqlsrv extends Database implements Driver
     /**
      * @var array
      */
-    private $createTableStatements = [
+    private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,
             time INTEGER NOT NULL,
@@ -52,7 +52,7 @@ class Sqlsrv extends Database implements Driver
             mime_type VARCHAR(255) NULL,
             PRIMARY KEY (id))',
 
-        'faqattachment file' => 'CREATE TABLE %sfaqattachment_file (
+        'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
             contents VARCHAR(MAX) NOT NULL,
             PRIMARY KEY (virtual_hash))',
