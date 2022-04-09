@@ -371,22 +371,16 @@ if ($step == 3) {
     // UPDATES FROM 3.1.0-beta
     //
     if (version_compare($version, '3.1.0-beta', '<=')) {
-        switch ($DB['type']) {
-            case 'mysqli':
-                $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_order (
+        $query[] = match ($DB['type']) {
+            'mysqli' => 'CREATE TABLE ' . $prefix . 'faqcategory_order (
                     category_id int(11) NOT NULL,
                     position int(11) NOT NULL,
-                    PRIMARY KEY (category_id))';
-                break;
-            case 'pgsql':
-            case 'sqlite3':
-            case 'sqlsrv':
-                $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_order (
+                    PRIMARY KEY (category_id))',
+            'pgsql', 'sqlite3', 'sqlsrv' => 'CREATE TABLE ' . $prefix . 'faqcategory_order (
                     category_id INTEGER NOT NULL,
                     position INTEGER NOT NULL,
-                    PRIMARY KEY (category_id))';
-                break;
-        }
+                    PRIMARY KEY (category_id))',
+        };
     }
 
     //
@@ -395,6 +389,17 @@ if ($step == 3) {
     if (version_compare($version, '3.1.0-RC', '<=')) {
         $faqConfig->delete('records.autosaveActive');
         $faqConfig->delete('records.autosaveSecs');
+    }
+
+    //
+    // UPDATES FROM 3.1.0-alpha
+    //
+    if (version_compare($version, '3.1.0-alpha', '<=')) {
+        if ('sqlserv' === $DB['type']) {
+            // queries to update VARCHAR -> NVARCHAR on MS SQL Server
+            // @todo ALTER TABLE [TableName] ALTER COLUMN [ColumnName] nvarchar(N) null
+            $query[] = 'DBCC CLEANTABLE';
+        }
     }
 
     //

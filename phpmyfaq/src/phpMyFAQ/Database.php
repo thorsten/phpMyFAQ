@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Mysqli;
 use phpMyFAQ\Database\Pgsql;
@@ -33,23 +34,23 @@ class Database
     /**
      * Instance.
      *
-     * @var DatabaseDriver
+     * @var DatabaseDriver|null
      */
-    private static $instance = null;
+    private static ?DatabaseDriver $instance = null;
 
     /**
      * Database type.
      *
-     * @var string
+     * @var string|null
      */
-    private static $dbType = null;
+    private static ?string $dbType = null;
 
     /**
      * Table prefix.
      *
-     * @var string
+     * @var string|null
      */
-    private static $tablePrefix = null;
+    private static ?string $tablePrefix = null;
 
     /**
      * Constructor.
@@ -62,15 +63,14 @@ class Database
      * Database factory.
      *
      * @param string $type Database management system type
-     *
-     * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
+     * @return Pgsql|Sqlsrv|Mysqli|Sqlite3|DatabaseDriver|null
      * @throws Exception
      */
-    public static function factory($type)
+    public static function factory(string $type): Pgsql|Sqlsrv|Mysqli|Sqlite3|DatabaseDriver|null
     {
         self::$dbType = $type;
 
-        if (0 === strpos($type, 'pdo_')) {
+        if (str_starts_with($type, 'pdo_')) {
             $class = 'phpMyFAQ\Database\Pdo_' . ucfirst(substr($type, 4));
         } else {
             $class = 'phpMyFAQ\Database\\' . ucfirst($type);
@@ -88,9 +88,9 @@ class Database
     /**
      * Returns the single instance.
      *
-     * @return DatabaseDriver
+     * @return DatabaseDriver|null
      */
-    public static function getInstance()
+    public static function getInstance(): ?DatabaseDriver
     {
         if (null == self::$instance) {
             $className = __CLASS__;
@@ -110,9 +110,9 @@ class Database
     /**
      * Returns the database type.
      *
-     * @return string
+     * @return string|null
      */
-    public static function getType()
+    public static function getType(): ?string
     {
         return self::$dbType;
     }
@@ -121,10 +121,9 @@ class Database
      * Check if a table is filled with data.
      *
      * @param string $tableName Table name
-     *
      * @return bool true, if table is empty, otherwise false
      */
-    public static function checkOnEmptyTable($tableName)
+    public static function checkOnEmptyTable(string $tableName): bool
     {
         if (
             self::$instance->numRows(
@@ -139,18 +138,16 @@ class Database
 
     /**
      * Error page, if the database connection is not possible.
+     *
      * @param string $method
      */
-    public static function errorPage($method)
+    public static function errorPage(string $method)
     {
         echo '<!DOCTYPE html>
             <html lang="en" class="no-js">
             <head>
                 <meta charset="utf-8">
                 <title>Fatal phpMyFAQ Error</title>
-                <style type="text/css">
-                @import url("assets/themes/default/css/style.min.css");
-                </style>
             </head>
             <body>
                 <div class="container">
@@ -166,7 +163,7 @@ class Database
      *
      * @param string $tablePrefix
      */
-    public static function setTablePrefix($tablePrefix)
+    public static function setTablePrefix(string $tablePrefix)
     {
         self::$tablePrefix = $tablePrefix;
     }
@@ -174,9 +171,9 @@ class Database
     /**
      * Returns the table prefix.
      *
-     * @return string
+     * @return string|null
      */
-    public static function getTablePrefix()
+    public static function getTablePrefix(): ?string
     {
         return self::$tablePrefix;
     }
