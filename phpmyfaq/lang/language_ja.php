@@ -8,7 +8,7 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @author Tadashi Jokagi <http://poyo.jp/>
+ * @author Tadashi Jokagi <https://poyo.jp/>
  * @author Minoru TODA <todam@netjapan.co.jp>
  * @copyright 2004-2022 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -121,12 +121,12 @@ $PMF_LANG['err_noArticles'] = '登録されている FAQ がありません。';
 $PMF_LANG['err_badID'] = '間違った ID です。';
 $PMF_LANG['err_noTopTen'] = '人気の FAQ がまだ利用できません。';
 $PMF_LANG['err_nothingFound'] = 'エントリーが見つかりません。';
-$PMF_LANG['err_SaveEntries'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリー</strong>、<strong>件名</strong>、<strong>FAQ 内容</strong>、要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須フィールドです!<br><br><a href="javascript:history.back();">戻る</a><br><br>';
-$PMF_LANG['err_SaveComment'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>コメント</strong>と要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です!<br><br><a href="javascript:history.back();">戻る</a><br><br>';
+$PMF_LANG['err_SaveEntries'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリー</strong>、<strong>件名</strong>、<strong>FAQ 内容</strong>、要求された場合は <strong><a href="https://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須フィールドです!<br><br><a href="javascript:history.back();">戻る</a><br><br>';
+$PMF_LANG['err_SaveComment'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>コメント</strong>と要求された場合は <strong><a href="https://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です!<br><br><a href="javascript:history.back();">戻る</a><br><br>';
 $PMF_LANG['err_VoteTooMuch'] = '複数回の評価はできません。ここをクリックすると戻ります。';
 $PMF_LANG['err_noVote'] = '<strong>評価点数を選択してください。</strong> 評価をするためには<a href="javascript:history.back();">ここ</a>をクリックしてください。';
 $PMF_LANG['err_noMailAdress'] = 'メールアドレスが正しくありません。<br><a href="javascript:history.back();">戻る</a>';
-$PMF_LANG['err_sendMail'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です!';
+$PMF_LANG['err_sendMail'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href="https://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です!';
 $PMF_LANG['help_search'] = '<strong>内容検索: </strong><br><strong style="color: Red;">言葉1 言葉2</strong>のように検索すると、2 個以上の検索結果が関連度が高い順番で表示されます。<strong>注意:</strong> 英文を検索する際には、少なくとも 4 文字以上を入力してください。';
 $PMF_LANG['ad'] = '管理者ページ';
 $PMF_LANG['ad_menu_user_administration'] = 'ユーザー';
@@ -439,7 +439,7 @@ $PMF_LANG['ad_user_realname'] = '本名:';
 $PMF_LANG['ad_export_generate_pdf'] = 'PDF ファイル生成';
 $PMF_LANG['ad_export_full_faq'] = 'FAQ を PDF ファイルにする: ';
 $PMF_LANG['err_bannedIP'] = 'あなたのIPアドレスからのアクセスは遮断されています。';
-$PMF_LANG['err_SaveQuestion'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です。<br><br><a href="javascript:history.back();">戻る</a><br><br>';
+$PMF_LANG['err_SaveQuestion'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href="https://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です。<br><br><a href="javascript:history.back();">戻る</a><br><br>';
 $PMF_LANG['ad_entry_fontcolor'] = 'フォント色: ';
 $PMF_LANG['ad_entry_fontsize'] = 'フォントサイズ: ';
 $LANG_CONF['main.language'] = array("select", "言語");
@@ -462,7 +462,7 @@ $LANG_CONF['main.numberOfShownNewsEntries'] = array("input", "お知らせの表
 $LANG_CONF['security.bannedIPs'] = array('area', '拒否する IP アドレス');
 $LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'mod_rewrite のサポートを使用しますか? (初期値: 無効)');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'LDAP のサポートを有効にしますか? (初期値: 無効)');
-$LANG_CONF['main.referenceURL'] = array('input', 'リンク確認の基準 URL (例: http://www.example.org/faq/)');
+$LANG_CONF['main.referenceURL'] = array('input', 'リンク確認の基準 URL (例: https://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array('input', 'AJAX リンクの確認間隔 (秒単位)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', '新しい質問の表示を無効にする');
 $LANG_CONF['security.permLevel'] = array('select', 'パーミッションレベル');

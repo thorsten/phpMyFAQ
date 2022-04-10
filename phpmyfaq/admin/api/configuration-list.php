@@ -300,7 +300,7 @@ foreach ($LANG_CONF as $key => $value) {
                 break;
             case 'main.dateFormat':
                 printf(
-                    '<a target="_blank" href="http://www.php.net/manual/%s/function.date.php">%s</a>',
+                    '<a target="_blank" href="https://www.php.net/manual/%s/function.date.php">%s</a>',
                     $faqLangCode,
                     $value[1]
                 );

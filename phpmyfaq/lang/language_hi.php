@@ -147,12 +147,12 @@ $PMF_LANG["err_noArticles"] = "कोई भी लेख उपलब्ध न
 $PMF_LANG["err_badID"] = "क्षमा करें, गलत ID.";
 $PMF_LANG["err_noTopTen"] = "अभी सर्वोत्तम १० उपलब्ध नहीं है.";
 $PMF_LANG["err_nothingFound"] = "कोई भी लेख उपलब्ध नहीं है.";
-$PMF_LANG["err_SaveEntries"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>वर्ग</strong>, <strong>मुख्य वाक्य</strong>, <strong>आपका रिकॉर्ड</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपकी टिप्पणी</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>वर्ग</strong>, <strong>मुख्य वाक्य</strong>, <strong>आपका रिकॉर्ड</strong> और, कब अनुरोध किया, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपकी टिप्पणी</strong> और, कब अनुरोध किया, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "हम दो बार दिए गए मत की गिनती नहीं करते हैं. पीछे जाने के लिए, क्लिक करें.";
 $PMF_LANG["err_noVote"] = "<strong>आपने सवाल को मत नहीं दिया!</strong> मत देने के लिए यहाँ पर <a href=\"javascript:history.back();\">क्लिक करें</a>.";
 $PMF_LANG["err_noMailAdress"] = "आपका ईमेल पता सही नहीं है.<br><a href=\"javascript:history.back();\">पीछे</a>";
-$PMF_LANG["err_sendMail"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कब अनुरोध किया, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<strong>लेख खोजें:</strong><br><strong style=\"color: Red;\">शब्द1 शब्द2</strong> तरह से खोजे गए शब्दों से आप दो या दो से जयादा मानदण्डों पर घटते क्रम में उपयुक्त लेख खोज सकतें हैं.<strong>ध्यान दें:</strong> आपका खोजने का मानदण्ड कम से कम ४ अक्षरों का होना चाहिए, वरना उस खोज मानदण्ड को नकार दिया जाएगा.";
@@ -253,7 +253,7 @@ $PMF_LANG["ad_entry_back"] = "पीछे";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "लेख मुख्य";
 $PMF_LANG["ad_news_text"] = "लेख";
-$PMF_LANG["ad_news_link_url"] = "कड़ी (<strong>बिना http://</strong>)";
+$PMF_LANG["ad_news_link_url"] = "कड़ी (<strong>बिना https://</strong>)";
 $PMF_LANG["ad_news_link_title"] = "कड़ी का विषय";
 $PMF_LANG["ad_news_link_target"] = "कड़ी का टार्गेट";
 $PMF_LANG["ad_news_link_window"] = "कड़ी नया विण्डो खोलती है";
@@ -541,7 +541,7 @@ $PMF_LANG["ad_user_realname"] = "वास्तविक नाम";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF फाइल बनाएं";
 $PMF_LANG["ad_export_full_faq"] = "आपका FAQ PDF फाइल में: ";
 $PMF_LANG["err_bannedIP"] = "आपके IP पते को प्रतिबंधित कर दिया गया है.";
-$PMF_LANG["err_SaveQuestion"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कण अनुरोध किया गया,  <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br><br><a href=\"javascript:history.back();\">एक पृष्ठ पीछे</a><br><br>\n";
+$PMF_LANG["err_SaveQuestion"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कण अनुरोध किया गया,  <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br><br><a href=\"javascript:history.back();\">एक पृष्ठ पीछे</a><br><br>\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "फॉण्ट का रंग: ";
@@ -568,7 +568,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "समाचा
 $LANG_CONF['security.bannedIPs'] = array("area", "इन IPs को प्रतिबंधित करें");
 $LANG_CONF["main.enableRewriteRules"] = array("checkbox", "mod_rewrite को सक्रिय करें? (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
-$LANG_CONF["main.referenceURL"] = array("input", "कड़ी सत्यापन के लिए आधार URL (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.referenceURL"] = array("input", "कड़ी सत्यापन के लिए आधार URL (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX कड़ी सत्यापन के मध्य समय अवधि (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "नए सवाल न दिखायें?");
 $LANG_CONF['security.permLevel'] = array("input", "आज्ञा समतल");

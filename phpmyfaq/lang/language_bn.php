@@ -253,7 +253,7 @@ $PMF_LANG["ad_entry_back"] = "Back";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Article header";
 $PMF_LANG["ad_news_text"] = "Text of the Record";
-$PMF_LANG["ad_news_link_url"] = "Link (<strong>without http://</strong>)";
+$PMF_LANG["ad_news_link_url"] = "Link (<strong>without https://</strong>)";
 $PMF_LANG["ad_news_link_title"] = "Title of the link";
 $PMF_LANG["ad_news_link_target"] = "Target of the link";
 $PMF_LANG["ad_news_link_window"] = "Link opens new window";
@@ -567,7 +567,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array("input", "Base URL for link verification (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.referenceURL"] = array("input", "Base URL for link verification (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");

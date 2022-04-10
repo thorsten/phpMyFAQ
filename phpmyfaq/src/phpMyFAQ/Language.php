@@ -64,7 +64,7 @@ class Language
      * ROOT/admin/editor/langs/$langcode.js
      *
      * TinyMCE language packs can be downloaded from
-     * http://tinymce.moxiecode.com/download_i18n.php
+     * https://tinymce.moxiecode.com/download_i18n.php
      * and extracted to ROOT/admin/editor
      *
      * @param string $langCode Language code

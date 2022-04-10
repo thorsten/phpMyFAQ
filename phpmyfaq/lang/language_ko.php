@@ -248,7 +248,7 @@ $PMF_LANG["ad_entry_back"] = "뒤로";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "공지 제목";
 $PMF_LANG["ad_news_text"] = "내용";
-$PMF_LANG["ad_news_link_url"] = "관련 Link: (<strong>http:// 없이 입력</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "관련 Link: (<strong>https:// 없이 입력</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Link의 간략 설명(타이틀)";
 $PMF_LANG["ad_news_link_target"] = "Link 보이기";
 $PMF_LANG["ad_news_link_window"] = "새창에서 보이기";

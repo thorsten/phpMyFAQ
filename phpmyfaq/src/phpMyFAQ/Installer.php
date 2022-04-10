@@ -589,28 +589,32 @@ class Installer
     }
 
     /**
-     * Checks some non critical settings and print some hints.
+     * Checks some non-critical settings and print some hints.
      *
      * @todo We should return an array of messages
      */
     public function checkNoncriticalSettings()
     {
+        if (!$this->system->getHttpsStatus()) {
+            echo '<p class="alert alert-warning">phpMyFAQ could not find HTTPS support. For security reasons we ' .
+                'recommend activating HTTPS.</p>';
+        }
         if (!extension_loaded('gd')) {
-            echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please ' .
+            echo '<p class="alert alert-warning">You don\'t have GD support enabled in your PHP installation. Please ' .
                 'enable GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
         }
         if (!function_exists('imagettftext')) {
-            echo '<p class="alert alert-danger">You don\'t have Freetype support enabled in the GD extension of ' .
+            echo '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension of ' .
                 'your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
                 'for spam protection will be quite easy to break.</p>';
         }
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-            echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
+            echo '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
                 'installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t ' .
                 'use the Twitter  support or Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
-            echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. ' .
+            echo '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP installation. ' .
                 'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
                 'functionality.</p>';
         }

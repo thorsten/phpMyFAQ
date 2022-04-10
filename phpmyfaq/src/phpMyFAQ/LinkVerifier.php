@@ -460,7 +460,7 @@ class LinkVerifier
         }
 
         // If relative URI is absolute URI, don't process it.
-        foreach (['http://', 'https://'] as $protocol) {
+        foreach (['https://', 'http://'] as $protocol) {
             if (Strings::strpos($relativeUri, $protocol) === 0) {
                 return $relativeUri;
             }

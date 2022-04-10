@@ -99,7 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
         item.classList.remove('btn-secondary');
         item.classList.add('btn-primary');
         item.setAttribute('disabled', '');
-        setupContent.style.display = 'block';
+        if (setupContent) {
+          setupContent.style.display = 'block';
+        }
       }
     });
   });

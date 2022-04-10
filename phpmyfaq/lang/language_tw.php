@@ -138,12 +138,12 @@ $PMF_LANG["err_noArticles"] = "沒有 FAQs 存在。";
 $PMF_LANG["err_badID"] = "錯誤 ID。";
 $PMF_LANG["err_noTopTen"] = "尚無熱門 FAQs。";
 $PMF_LANG["err_nothingFound"] = "尚未有記錄.";
-$PMF_LANG["err_SaveEntries"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email </strong>，<strong>類別</strong>，<strong>問題</strong>, <strong>您的紀錄</strong> 與，, 何時提出，<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
-$PMF_LANG["err_SaveComment"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email </strong>，<strong>您的評論</strong> 和，何時提出，<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
+$PMF_LANG["err_SaveEntries"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email </strong>，<strong>類別</strong>，<strong>問題</strong>, <strong>您的紀錄</strong> 與，, 何時提出，<strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
+$PMF_LANG["err_SaveComment"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email </strong>，<strong>您的評論</strong> 和，何時提出，<strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
 $PMF_LANG["err_VoteTooMuch"] = "我們不統計重複評分。";
 $PMF_LANG["err_noVote"] = "您沒有對此問題評分!";
 $PMF_LANG["err_noMailAdress"] = "您的 email 地址不正確。";
-$PMF_LANG["err_sendMail"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email</strong>，<strong>您的問題</strong> 和，何時提出， <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
+$PMF_LANG["err_sendMail"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email</strong>，<strong>您的問題</strong> 和，何時提出， <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
 
 // Hilfe zur Suche / Help to the search / 搜尋提示幫忙
 $PMF_LANG["help_search"] = "<strong>搜尋記錄:</strong><br>與一筆記錄類似 <strong style=\"color: Red;\">字串1 字串2</strong> 您也可以用兩個或更多的搜尋選項來排序。<strong>注意:</strong> 您的搜尋至少必須有四個字元，不然不會被執行。";
@@ -521,7 +521,7 @@ $PMF_LANG["ad_user_realname"] = "真實姓名";
 $PMF_LANG["ad_export_generate_pdf"] = "建立 PDF 檔案";
 $PMF_LANG["ad_export_full_faq"] = "您的 FAQ 以輸出為一個 PDF 檔案: ";
 $PMF_LANG["err_bannedIP"] = "您的 IP 來源位置已被禁止訪視。";
-$PMF_LANG["err_SaveQuestion"] = "必要填寫欄位為 <strong>您的姓名</strong>，<strong>您的 email 信箱</strong>，<strong>您的提示問題</strong> 和，當提出要求，<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於維基 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>。";
+$PMF_LANG["err_SaveQuestion"] = "必要填寫欄位為 <strong>您的姓名</strong>，<strong>您的 email 信箱</strong>，<strong>您的提示問題</strong> 和，當提出要求，<strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於維基 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>。";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias 開發者
 $LANG_CONF["main.language"] = array("select", "語言 Language");
@@ -544,7 +544,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "新聞文章數
 $LANG_CONF['security.bannedIPs'] = array("area", "禁止訪問 IPs 位置 Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array("checkbox", "啟用 URL 覆寫支援? (預設: 關閉) <br> Enable URL rewrite support? (default: disabled)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "啟用 LDAP 支援? (預設: 關閉) <br> Enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array("input", "URL 網址確認 (舉例: http://www.example.org/faq/) <br>URL for link verification (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.referenceURL"] = array("input", "URL 網址確認 (舉例: https://www.example.org/faq/) <br>URL for link verification (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX 連結確認時間(以秒計時) <br>Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "新問題不可被顯示? Disable visibility of new questions?");
 $LANG_CONF["security.permLevel"] = array("select", "權限等級 Permission level");

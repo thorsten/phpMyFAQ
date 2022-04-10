@@ -5,6 +5,7 @@
  *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -25,7 +26,8 @@
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Installer;
-use phpMyFAQ\Language\LanguageCodes;use phpMyFAQ\Strings;
+use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
@@ -108,9 +110,6 @@ $loader->register();
                 </div>
             </div>
         </div>
-
-
-
 
     <div class="container mt-4 mb-3">
 
@@ -371,7 +370,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         $options = [];
                         while ($dat = readdir($dir)) {
                             $option = '';
-                            if (substr($dat, -4) === '.php') {
+                            if (str_ends_with($dat, '.php')) {
                                 $option .= sprintf('<option value="%s"', $dat);
                                 if ($dat == 'language_en.php') {
                                     $option .= ' selected="selected"';
@@ -457,27 +456,30 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         </div>
 
       </form>
-    <?php
-    } else {
+
+<?php
+} else {
     try {
         $installer->startInstall();
     } catch (Exception $e) {
         echo $e->getMessage();
     }
-    ?>
-      <div class="row" id="done">
-        <div class="col-12">
-          <h3 class="mb-3"> Step 2: Admin user setup</h3>
+?>
+  <div class="row" id="done">
+    <div class="col-12">
+      <h3 class="mb-3"> Step 2: Admin user setup</h3>
 
-          <p class="alert alert-success">
-            Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
-          </p>
+      <p class="alert alert-success">
+        Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
+      </p>
 
-          <p>
-            You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
-            <a href="../admin/index.php">admin section</a>.
-           </p>
-         </div>
-       </div>
-    <?php
-    }System::renderFooter();
+      <p>
+        You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+        <a href="../admin/index.php">admin section</a>.
+       </p>
+     </div>
+   </div>
+<?php
+}
+
+System::renderFooter();

@@ -248,7 +248,7 @@ $PMF_LANG["ad_entry_back"] = "Nazaj";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Zaglavje &egrave;lanka";
 $PMF_LANG["ad_news_text"] = "Tekst vnosa";
-$PMF_LANG["ad_news_link_url"] = "Povezava: (<strong>brez http://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Povezava: (<strong>brez https://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Opis povezave";
 $PMF_LANG["ad_news_link_target"] = "Cilj povezave";
 $PMF_LANG["ad_news_link_window"] = "Povezavo odpri v novo okno";

@@ -57,8 +57,6 @@ require PMF_ROOT_DIR . '/config/database.php';
     <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
     <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
     <link rel="stylesheet" href="../assets/dist/styles.css">
-    <script src="../assets/dist/vendors.js"></script>
-    <script src="../assets/dist/phpmyfaq.js"></script>
     <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
   </head>
 <body>
@@ -153,6 +151,7 @@ if ($step === 1) { ?>
             <ul>
               <li>phpMyFAQ 3.0.x</li>
               <li>phpMyFAQ 3.1.x</li>
+              <li>phpMyFAQ 3.2.x</li>
             </ul>
           </div>
           <div class="col">

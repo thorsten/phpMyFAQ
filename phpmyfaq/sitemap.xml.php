@@ -3,14 +3,14 @@
 /**
  * The dynamic Google Sitemap builder.
  *
- * http://[...]/sitemap.xml.php
- * http://[...]/sitemap.xml.php?gz=1
- * http://[...]/sitemap.xml
- * http://[...]/sitemap.gz
- * http://[...]/sitemap.xml.gz
+ * https://[...]/sitemap.xml.php
+ * https://[...]/sitemap.xml.php?gz=1
+ * https://[...]/sitemap.xml
+ * https://[...]/sitemap.gz
+ * https://[...]/sitemap.xml.gz
  *
  * The Google Sitemap protocol is described here:
- * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
+ * https://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

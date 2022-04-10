@@ -21,7 +21,7 @@
  * Set the string below according to your users (main) timezone.
  * For your convenience find below the list of the available timezones:.
  *
- * http://www.php.net/manual/en/timezones.php
+ * https://www.php.net/manual/en/timezones.php
  *
  * Note: a wrong timezone setting could affect on-line users tracking as well as
  *       any filter criterion built using a date.

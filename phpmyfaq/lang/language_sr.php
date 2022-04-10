@@ -250,7 +250,7 @@ $PMF_LANG["ad_entry_back"] = "Nazad";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Naslov";
 $PMF_LANG["ad_news_text"] = "Tekst";
-$PMF_LANG["ad_news_link_url"] = "Link: (<strong>bez http://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Link: (<strong>bez https://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Ime za link (URL)";
 $PMF_LANG["ad_news_link_target"] = "Otvaranje linka (URL-a)";
 $PMF_LANG["ad_news_link_window"] = "Link se otvara u novom prozoru";

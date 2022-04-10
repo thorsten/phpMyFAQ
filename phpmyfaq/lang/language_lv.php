@@ -253,7 +253,7 @@ $PMF_LANG["ad_entry_back"] = "Atgriezties";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Ieraksta ievads";
 $PMF_LANG["ad_news_text"] = "Ieraksta teksts";
-$PMF_LANG["ad_news_link_url"] = "Saite: (<strong>bez http://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Saite: (<strong>bez https://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Saites teksts";
 $PMF_LANG["ad_news_link_target"] = "Saites veids";
 $PMF_LANG["ad_news_link_window"] = "Atver&acirc;s jaun&acirc; log&acirc;";

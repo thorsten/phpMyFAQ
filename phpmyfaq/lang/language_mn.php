@@ -137,12 +137,12 @@ $PMF_LANG["err_noArticles"] = "<p>Ямар нэг FAQs алга.</p>";
 $PMF_LANG["err_badID"] = "<p>Буруу ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Онцлох FAQs алга.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Өгөгдөл алга.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 $PMF_LANG["err_VoteTooMuch"] = "Үнэлгээ дахин өгөхийг тоолохгүй.";
 $PMF_LANG["err_noVote"] = "Та энэ асуултыг үнэлээгүй байна!";
 $PMF_LANG["err_noMailAdress"] = "Таны имэйл хаяг алдаатай байна.";
-$PMF_LANG["err_sendMail"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong> email хаяг</strong>, <strong>таны асуулт</strong> болон, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong> email хаяг</strong>, <strong>таны асуулт</strong> болон, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Хайлт хийхдээ:</strong><br>With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
@@ -520,7 +520,7 @@ $PMF_LANG["ad_user_realname"] = "Жинхэнэ нэр:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF файл үүсгэх";
 $PMF_LANG["ad_export_full_faq"] = "Таны FAQ PDF файлаар: ";
 $PMF_LANG["err_bannedIP"] = "Таны IP хаяг блоклогдсон байна.";
-$PMF_LANG["err_SaveQuestion"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong>email  хаяг</strong>, <strong>таны асуулт</strong> болон, шаардлагатай <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Хамгаалалтын Captcha </a> коод</strong>.";
+$PMF_LANG["err_SaveQuestion"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong>email  хаяг</strong>, <strong>таны асуулт</strong> болон, шаардлагатай <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Хамгаалалтын Captcha </a> коод</strong>.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Хэл");
@@ -543,7 +543,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Enable URL rewrite support? (үндсэн: идэвхгүй)");
 $LANG_CONF["security.ldapSupport"] = array("checkbox", "Enable LDAP support? (үндсэн: идэвхгүй)");
-$LANG_CONF["main.referenceURL"] = array("input", "URL for link verification (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.referenceURL"] = array("input", "URL for link verification (e.g.: https://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Зөвшөөрлийн түвшин");

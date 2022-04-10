@@ -141,12 +141,12 @@ $PMF_LANG["err_noArticles"] = "FAQ nedostupná.";
 $PMF_LANG["err_badID"] = "Chybné ID.";
 $PMF_LANG["err_noTopTen"] = "Nie je dostupné žiadne FAQ.";
 $PMF_LANG["err_nothingFound"] = "Vstup sa nenašiel.";
-$PMF_LANG["err_SaveEntries"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>category</strong>, <strong>názov</strong>, <strong>Váš záznam</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Povinné polia sú <strong>Vaše meno </strong>, <strong>Váš e-mail</strong>, <strong>Vaše komentáre</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>category</strong>, <strong>názov</strong>, <strong>Váš záznam</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Povinné polia sú <strong>Vaše meno </strong>, <strong>Váš e-mail</strong>, <strong>Vaše komentáre</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "Dvojité hlasovania nebudú započítané.";
 $PMF_LANG["err_noVote"] = "<strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.";
 $PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny.<br><a href=\"javascript:history.back();\">späť</a>";
-$PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<strong>Hľadanie záznamu:</strong><br>So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.<strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
@@ -534,7 +534,7 @@ $PMF_LANG["ad_user_realname"] = "skutočné meno";
 $PMF_LANG["ad_export_generate_pdf"] = "generovať PDF súbor";
 $PMF_LANG["ad_export_full_faq"] = "Vaša FAQ ako PDF súbor: ";
 $PMF_LANG["err_bannedIP"] = "Vaša IP adresa bola odmietnutá.";
-$PMF_LANG["err_SaveQuestion"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>Vaša otázka</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>Vaša otázka</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Farba písma: ";
@@ -561,7 +561,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Počet článko
 $LANG_CONF['security.bannedIPs'] = array("area", "Zakázať tieto IP");
 $LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
-$LANG_CONF["main.referenceURL"] = array("input", "Overiť URL (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.referenceURL"] = array("input", "Overiť URL (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval medzi AJAX overením (v sekundách)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Vypnúť viditeľnosť nových otázok?");
 $LANG_CONF['security.permLevel'] = array("select", "Úroveň povolenia");

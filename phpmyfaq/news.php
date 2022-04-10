@@ -45,8 +45,7 @@ $oNews = new News($faqConfig);
 $newsId = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
-    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
-    exit();
+    // @todo -> 404
 }
 
 try {

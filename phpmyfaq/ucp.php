@@ -32,7 +32,7 @@ if ($user->isLoggedIn()) {
     if ($faqConfig->get('main.enableGravatarSupport')) {
         $gravatar = new Gravatar($faqConfig);
         $gravatarImg = sprintf(
-            '<a target="_blank" href="http://www.gravatar.com">%s</a>',
+            '<a target="_blank" href="https://www.gravatar.com">%s</a>',
             $gravatar->getImage(
                 $user->getUserData('email'),
                 ['class' => 'img-responsive rounded-circle', 'size' => 125]

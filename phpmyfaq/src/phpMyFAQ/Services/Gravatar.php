@@ -26,12 +26,7 @@ class Gravatar
     /**
      * @var string
      */
-    private $httpBaseUrl = 'http://gravatar.com/';
-
-    /**
-     * @var string
-     */
-    private $httpsBaseUrl = 'https://secure.gravatar.com/';
+    private string $httpBaseUrl = 'https://secure.gravatar.com/';
 
     /**
      * Returns a image or the URL to the image of a Gravatar based off an email
@@ -72,14 +67,13 @@ class Gravatar
     }
 
     /**
-     * Returns the base URL we are working with depending what protocol we
-     * are using.
+     * Returns the base URL
      *
      * @return string
      */
     public function getUrl(): string
     {
-        return (isset($_SERVER['HTTPS'])) ? $this->httpsBaseUrl : $this->httpBaseUrl;
+        return $this->httpBaseUrl;
     }
 
     /**

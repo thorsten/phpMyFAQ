@@ -11,7 +11,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-01
  */
@@ -255,7 +255,7 @@ class Utils
      */
     public static function parseUrl(string $string): string
     {
-        $protocols = array('http://', 'https://', 'ftp://');
+        $protocols = ['http://', 'https://', 'ftp://'];
 
         $string = str_replace($protocols, '', $string);
         $string = str_replace('www.', 'http://www.', $string);

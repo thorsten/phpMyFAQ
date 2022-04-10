@@ -245,7 +245,7 @@ $PMF_LANG["ad_entry_back"] = "Back";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Заголовок";
 $PMF_LANG["ad_news_text"] = "Текст новини";
-$PMF_LANG["ad_news_link_url"] = "Посилання: (<strong>без http://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Посилання: (<strong>без https://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Текст посилання";
 $PMF_LANG["ad_news_link_target"] = "По кліку на посилання";
 $PMF_LANG["ad_news_link_window"] = "відкрити в новому вікні";

@@ -139,12 +139,12 @@ $PMF_LANG["err_noArticles"] = "Soru bulunamadı.";
 $PMF_LANG["err_badID"] = "Geçersiz ID.";
 $PMF_LANG["err_noTopTen"] = "Henüz popüler soru bulunmuyor.";
 $PMF_LANG["err_nothingFound"] = "Kayıt bulunamadı.";
-$PMF_LANG["err_SaveEntries"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>soru</strong>, <strong>cevap</strong> ve, eğer isteniyorsa <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
-$PMF_LANG["err_SaveComment"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>yorumunuz</strong> ve, eğer isteniyorsa <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_SaveEntries"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>soru</strong>, <strong>cevap</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_SaveComment"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>yorumunuz</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
 $PMF_LANG["err_VoteTooMuch"] = "Çoklu oylar sayılmamaktadır.";
 $PMF_LANG["err_noVote"] = "Soru oylanamadı!";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz geçersiz.";
-$PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<strong>Arama ipuçları:</strong><br>Şunun gibi kelimeler <strong style=\"color: Red;\">kelime1 kelime2</strong> you can do a relevance descending search for two or more search criterion.<strong>Önemli:</strong> aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
@@ -522,7 +522,7 @@ $PMF_LANG["ad_user_realname"] = "Gerçek adınız";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF oluştur";
 $PMF_LANG["ad_export_full_faq"] = "soruların PDf çıktısı: ";
 $PMF_LANG["err_bannedIP"] = "IP adresiniz yasaklandı.";
-$PMF_LANG["err_SaveQuestion"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_SaveQuestion"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Language");
@@ -546,7 +546,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Enable URL rewrite support? (default: disabled)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array("input", "URL of your FAQ (e.g.: http://www.example.org/faq/)");
+$LANG_CONF["main.referenceURL"] = array("input", "URL of your FAQ (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");

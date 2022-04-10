@@ -381,7 +381,7 @@ switch ($action) {
 
             if (!is_null($contentLink) && Strings::substr($contentLink, 7) !== '') {
                 $answer = sprintf(
-                    '%s<br><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
+                    '%s<br><div id="newFAQContentLink">%s<a href="https://%s" target="_blank">%s</a></div>',
                     $answer,
                     $PMF_LANG['msgInfo'],
                     Strings::substr($contentLink, 7),

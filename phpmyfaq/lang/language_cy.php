@@ -255,7 +255,7 @@ $PMF_LANG["ad_entry_back"] = "Yn ôl";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Pennawd yr Erthygl";
 $PMF_LANG["ad_news_text"] = "Testun y Cofnod";
-$PMF_LANG["ad_news_link_url"] = "Dolen: (<strong>without http://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Dolen: (<strong>without https://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Teitl y ddolen";
 $PMF_LANG["ad_news_link_target"] = "Targed y ddolen";
 $PMF_LANG["ad_news_link_window"] = "Bydd y ddolen yn agor ffenestr newydd";

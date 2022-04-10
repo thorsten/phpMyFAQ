@@ -170,7 +170,7 @@ class System
         printf(
             '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
             '</body></html>',
-            '&copy; 2001-2021 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
+            '&copy; 2001-2022 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
         );
         exit(-1);
     }
@@ -259,6 +259,26 @@ class System
         }
 
         return $mainUrl;
+    }
+
+    /**
+     * Returns true, if phpMyFAQ is running on HTTPS
+     * @return bool
+     */
+    public function getHttpsStatus(): bool
+    {
+        if (
+            ( ! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || ( ! empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+            || ( ! empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on')
+            || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+            || (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT'] == 443)
+            || (isset($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https')
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

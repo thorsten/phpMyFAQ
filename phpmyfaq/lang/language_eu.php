@@ -256,7 +256,7 @@ $PMF_LANG["ad_entry_back"] = "Itzuli";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Artikuluaren goiburua";
 $PMF_LANG["ad_news_text"] = "Erregistroaren  testua";
-$PMF_LANG["ad_news_link_url"] = "Esteka: (<strong>http:// gabe</strong>)";
+$PMF_LANG["ad_news_link_url"] = "Esteka: (<strong>https:// gabe</strong>)";
 $PMF_LANG["ad_news_link_title"] = "Estekaren izenburua";
 $PMF_LANG["ad_news_link_target"] = "Estekaren jomuga";
 $PMF_LANG["ad_news_link_window"] = "Esteka beste leiho batean irekiko da";

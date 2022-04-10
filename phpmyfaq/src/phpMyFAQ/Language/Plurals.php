@@ -76,7 +76,7 @@ class Plurals
     /**
      * Returns the plural form for language $lang or -1 if language $lang is not supported.
      *
-     * @link   http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
+     * @link   https://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
      * @param  string $lang The language code
      * @param  int    $n    The number used to determine the plural form
      * @return int
