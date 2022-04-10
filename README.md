@@ -66,7 +66,7 @@ _Running apache web server with PHP 8.1 support:_
 
 Then services will be available at following addresses:
 
-- phpMyFAQ: (http://localhost:8080)
+- phpMyFAQ: (http://localhost:8080 or https://localhost:443)
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 

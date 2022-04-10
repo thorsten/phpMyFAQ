@@ -59,6 +59,7 @@ services:
       - elasticsearch
     ports:
       - '8080:80'
+      - '443:443'
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
