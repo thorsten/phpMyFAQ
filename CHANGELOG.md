@@ -9,6 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v3.2.0-dev - 2022-XX-XX
 
 - changed PHP requirement to PHP 8.0+ (Thorsten)
+- changed to HTTPS as new default (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - updated to Bootstrap v5.1 (Thorsten)

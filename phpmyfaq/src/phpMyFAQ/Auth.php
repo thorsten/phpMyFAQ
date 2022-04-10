@@ -3,18 +3,12 @@
 /**
  * Manages the user authentication in phpMyFAQ
  *
- * Subclasses of Auth implement authentication functionality with
- * different types. The class AuthLdap for example provides
- * authentication functionality LDAP-database access, AuthDatabase
- * with database access. Authentication functionality includes
- * creation of a new login-and-password, deletion of an existing
- * login-and-password combination and validation of given by a user.
- * These functions are provided by the database-specific see
- * documentation of the database-specific authentication classes
- * AuthDatabase, or AuthLdap for further details.
- * Passwords are usually encrypted before stored in a database. For
- * and security, a password encryption method may be chosen. See
- * documentation of Encryption class for further details.
+ * Subclasses of Auth implement authentication functionality with different types. The class AuthLdap for example
+ * provides with database access. Authentication functionality includes creation of a new login-and-password, deletion
+ * of an existing login-and-password combination and validation of given by a user.
+ * These functions are provided by the database-specific see documentation of the database-specific authentication
+ * classes AuthDatabase, or AuthLdap for further details. Passwords are usually encrypted before stored in a database.
+ * For security, a password encryption method may be chosen. See documentation of Encryption class for further details.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -48,28 +42,28 @@ class Auth
      *
      * @var array<string>
      */
-    public $errors = [];
+    public array $errors = [];
 
     /**
      * p container that stores the encryption object.
      *
-     * @var Encryption
+     * @var Encryption|null
      */
-    protected $encContainer = null;
+    protected ?Encryption $encContainer = null;
 
     /**
      * Configuration.
      *
-     * @var Configuration
+     * @var Configuration|null
      */
-    protected $config = null;
+    protected ?Configuration $config = null;
 
     /**
      * Short description of attribute read_only.
      *
      * @var bool
      */
-    private $readOnly = false;
+    private bool $readOnly = false;
 
     /**
      * Constructor.
@@ -161,7 +155,7 @@ class Auth
         }
 
         $oldReadOnly = $this->readOnly;
-        $this->readOnly = (bool)$readOnly;
+        $this->readOnly = $readOnly;
 
         return $oldReadOnly;
     }

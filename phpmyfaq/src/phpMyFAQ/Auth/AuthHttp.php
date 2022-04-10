@@ -2,6 +2,7 @@
 
 /**
  * Manages user authentication with Apache's HTTP authentication.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -19,6 +20,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
 
 /**
@@ -38,7 +40,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     public function create(string $login, string $password, string $domain = ''): bool
     {

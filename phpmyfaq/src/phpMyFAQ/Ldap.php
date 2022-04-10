@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The PMF_Ldap class provides methods and functions for a LDAP database.
+ * The Ldap class provides methods and functions for LDAP and/or Active Directory.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -193,7 +193,7 @@ class Ldap
      * @param string $data     MapKey
      * @return string|false
      */
-    private function getLdapData(string $username, string $data)
+    private function getLdapData(string $username, string $data): bool|string
     {
         if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';

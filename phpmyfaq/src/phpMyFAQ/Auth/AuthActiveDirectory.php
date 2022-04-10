@@ -9,10 +9,10 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2021 phpMyFAQ Team
+ * @copyright 2021-2022 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2021-0513
+ * @since     2021-05-13
  */
 
 namespace phpMyFAQ\Auth;
@@ -30,17 +30,17 @@ use phpMyFAQ\User;
  */
 class AuthActiveDirectory extends Auth implements AuthDriverInterface
 {
-    /** @var LdapCore */
-    private $ldap = null;
+    /** @var LdapCore|null */
+    private ?LdapCore $ldap = null;
 
     /** @var string[] Array of AD servers */
-    private $activeDirectoryServers;
+    private array $activeDirectoryServers;
 
     /** @var int Active AD server */
-    private $activeServer = 0;
+    private int $activeServer = 0;
 
     /** @var bool */
-    private $multipleServers;
+    private mixed $multipleServers;
 
     /**
      * @inheritDoc
@@ -59,42 +59,23 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
         }
 
         $this->ldap = new LdapCore($this->config);
-        $this->ldap->connect(
-            $this->activeDirectoryServers[$this->activeServer]['ad_server'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_port'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_base'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_user'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_password']
-        );
-
-        if ($this->ldap->error) {
-            $this->errors[] = $this->ldap->error;
-        }
+        $this->connect($this->activeServer);
     }
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function create($login, $password, $domain = ''): bool
     {
         $user = new User($this->config);
         $result = $user->createUser($login, '', $domain);
 
-        $this->ldap->connect(
-            $this->activeDirectoryServers[$this->activeServer]['ad_server'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_port'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_base'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_user'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_password']
-        );
-
-        if ($this->ldap->error) {
-            $this->errors[] = $this->ldap->error;
-        }
+        $this->connect($this->activeServer);
 
         $user->setStatus('active');
 
-        // Set user information from LDAP
+        // Set user information from Active Directory
         $user->setUserData(
             array(
                 'display_name' => $this->ldap->getCompleteName($login),
@@ -123,6 +104,7 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function checkCredentials($login, $password, array $optionalData = null): bool
     {
@@ -132,20 +114,11 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
             return false;
         }
 
-        // Get active LDAP server for current user
+        // Get active AD server for current user
         if ($this->multipleServers) {
-            // Try all LDAP servers
+            // Try all AD servers
             foreach ($this->activeDirectoryServers as $key => $value) {
-                $this->ldap->connect(
-                    $this->activeDirectoryServers[$key]['ad_server'],
-                    $this->activeDirectoryServers[$key]['ad_port'],
-                    $this->activeDirectoryServers[$key]['ad_base'],
-                    $this->activeDirectoryServers[$key]['ad_user'],
-                    $this->activeDirectoryServers[$key]['ad_password']
-                );
-                if ($this->ldap->error) {
-                    $this->errors[] = $this->ldap->error;
-                }
+                $this->connect($key);
 
                 if (false !== $this->ldap->getDn($login)) {
                     $this->activeServer = (int)$key;
@@ -160,16 +133,7 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
         } else {
-            $this->ldap->connect(
-                $this->activeDirectoryServers[$this->activeServer]['ad_server'],
-                $this->activeDirectoryServers[$this->activeServer]['ad_port'],
-                $this->activeDirectoryServers[$this->activeServer]['ad_base'],
-                $this->activeDirectoryServers[$this->activeServer]['ad_user'],
-                $this->activeDirectoryServers[$this->activeServer]['ad_password']
-            );
-            if ($this->ldap->error) {
-                $this->errors[] = $this->ldap->error;
-            }
+            $this->connect($this->activeServer);
 
             $bindLogin = $this->ldap->getDn($login);
         }
@@ -198,20 +162,11 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
      */
     public function isValidLogin($login, array $optionalData = null): int
     {
-        // Get active LDAP server for current user
+        // Get active AD server for current user
         if ($this->multipleServers) {
-            // Try all LDAP servers
+            // Try all AD servers
             foreach ($this->activeDirectoryServers as $key => $value) {
-                $this->ldap->connect(
-                    $this->activeDirectoryServers[$key]['ad_server'],
-                    $this->activeDirectoryServers[$key]['ad_port'],
-                    $this->activeDirectoryServers[$key]['ad_base'],
-                    $this->activeDirectoryServers[$key]['ad_user'],
-                    $this->activeDirectoryServers[$key]['ad_password']
-                );
-                if ($this->ldap->error) {
-                    $this->errors[] = $this->ldap->error;
-                }
+                $this->connect($key);
 
                 if (false !== $this->ldap->getDn($login)) {
                     $this->activeServer = (int)$key;
@@ -220,14 +175,26 @@ class AuthActiveDirectory extends Auth implements AuthDriverInterface
             }
         }
 
-        $this->ldap->connect(
-            $this->activeDirectoryServers[$this->activeServer]['ad_server'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_port'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_base'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_user'],
-            $this->activeDirectoryServers[$this->activeServer]['ad_password']
-        );
+        $this->connect($this->activeServer);
 
         return strlen($this->ldap->getCompleteName($login));
+    }
+
+    /**
+     * @param int $activeServer
+     */
+    private function connect(int $activeServer = 0): void
+    {
+        $this->ldap->connect(
+            $this->activeDirectoryServers[$activeServer]['ad_server'],
+            $this->activeDirectoryServers[$activeServer]['ad_port'],
+            $this->activeDirectoryServers[$activeServer]['ad_base'],
+            $this->activeDirectoryServers[$activeServer]['ad_user'],
+            $this->activeDirectoryServers[$activeServer]['ad_password']
+        );
+
+        if ($this->ldap->error) {
+            $this->errors[] = $this->ldap->error;
+        }
     }
 }

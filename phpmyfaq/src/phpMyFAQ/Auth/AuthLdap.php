@@ -42,7 +42,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private int $activeServer = 0;
 
     /** @var bool */
-    private $multipleServers;
+    private mixed $multipleServers;
 
     /**
      * @inheritDoc

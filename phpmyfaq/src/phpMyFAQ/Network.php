@@ -32,7 +32,7 @@ class Network
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -72,7 +72,7 @@ class Network
                 // Handle IPv6
                 try {
                     return $this->checkForAddrMatchIpv6($ip, $ipAddress);
-                } catch (InvalidArgumentException $e) {
+                } catch (InvalidArgumentException) {
                     return false;
                 }
             }
@@ -86,10 +86,9 @@ class Network
      *
      * @param string $ip      IPv4 Address
      * @param string $network Network Address or IPv4 Address
-     *
      * @return bool true if IP matched
      */
-    public function checkForAddrMatchIpv4($ip, $network): bool
+    public function checkForAddrMatchIpv4(string $ip, string $network): bool
     {
         // See also ip2long PHP online manual: Kenneth Shaw
         // coded a network matching function called net_match.
@@ -125,7 +124,7 @@ class Network
      */
     public function checkForAddrMatchIpv6(string $ip, string $network): bool
     {
-        if (false === strpos($network, '/')) {
+        if (!str_contains($network, '/')) {
             throw new InvalidArgumentException('Not a valid IPv6 subnet.');
         }
 

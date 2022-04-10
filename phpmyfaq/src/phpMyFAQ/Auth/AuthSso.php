@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Manages user authentication with Apache's SSO authentication, e.g. mod_sspi
- * or mod_auth_kerb.
+ * Manages user authentication with Apache's SSO authentication, e.g. mod_sspi or mod_auth_kerb.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -66,7 +66,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update(string $login, string $pass): bool
+    public function update(string $login, string $password): bool
     {
         return true;
     }
@@ -81,6 +81,7 @@ class AuthSso extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function checkCredentials(string $login, string $password, array $optionalData = null): bool
     {

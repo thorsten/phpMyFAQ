@@ -2,6 +2,7 @@
 
 /**
  * Interface for managing user authentication.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -34,7 +35,7 @@ interface AuthDriverInterface
      * @param string $domain
      * @return mixed
      */
-    public function create(string $login, string $password, string $domain = '');
+    public function create(string $login, string $password, string $domain = ''): mixed;
 
     /**
      * Changes the password for the account specified by login.
