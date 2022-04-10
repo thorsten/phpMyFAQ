@@ -19,7 +19,8 @@ use phpMyFAQ\Language;
 use phpMyFAQ\User\CurrentUser;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
-define('IS_VALID_PHPMYFAQ', null);
+
+const IS_VALID_PHPMYFAQ = null;
 
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
@@ -68,14 +69,15 @@ $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', '
 if (!is_dir(PMF_ROOT_DIR . '/images')) {
     echo '<p class="alert alert-danger">' . sprintf($PMF_LANG['ad_dir_missing'], '/images') . '</p>';
 } else {
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
     foreach ($files as $file) {
         if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
             continue;
         }
         $path = str_replace(dirname(__DIR__) . '/', '', $file->getPath());
         printf(
-            '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
+            '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview" alt="%s">%s</div>',
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
             $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
             $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
             $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename()
