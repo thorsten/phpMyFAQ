@@ -11,6 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed PHP requirement to PHP 8.0+ (Thorsten)
 - changed to HTTPS as new default (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
+- added Monolog v2 as logging solution (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - updated to Bootstrap v5.1 (Thorsten)
 - updated to TinyMCE v5.10 (Thorsten)

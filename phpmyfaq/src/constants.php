@@ -28,3 +28,10 @@ if (!defined('PMF_ROOT_DIR')) {
 if (!defined('PMF_SRC_DIR')) {
     define('PMF_SRC_DIR', __DIR__);
 }
+
+//
+// The path to the logs
+//
+if (!defined('PMF_LOG_DIR')) {
+    define('PMF_LOG_DIR', dirname(__DIR__) . '/logs/phpmyfaq.log');
+}

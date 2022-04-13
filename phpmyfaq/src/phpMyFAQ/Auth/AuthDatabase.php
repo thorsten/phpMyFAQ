@@ -51,6 +51,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     {
         if ($this->isValidLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
+            $this->config->logger->error(User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE);
 
             return false;
         }
@@ -69,11 +70,13 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . 'error(): ' . $error;
+            $this->config->logger->error(User::ERROR_USER_ADD . 'error(): ' . $error);
 
             return false;
         }
         if (!$add) {
             $this->errors[] = User::ERROR_USER_ADD;
+            $this->config->logger->error(User::ERROR_USER_ADD);
 
             return false;
         }
@@ -98,11 +101,13 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
+            $this->config->logger->error(User::ERROR_USER_CHANGE . 'error(): ' . $error);
 
             return false;
         }
         if (!$change) {
             $this->errors[] = User::ERROR_USER_CHANGE;
+            $this->config->logger->error(User::ERROR_USER_CHANGE);
 
             return false;
         }
@@ -126,11 +131,13 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_DELETE . 'error(): ' . $error;
+            $this->config->logger->error(User::ERROR_USER_DELETE . 'error(): ' . $error);
 
             return false;
         }
         if (!$delete) {
             $this->errors[] = User::ERROR_USER_DELETE;
+            $this->config->logger->error(User::ERROR_USER_DELETE);
 
             return false;
         }
@@ -154,6 +161,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
+            $this->config->logger->error(User::ERROR_USER_NOT_FOUND . 'error(): ' . $error);
 
             return false;
         }
@@ -161,6 +169,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $numRows = $this->db->numRows($check);
         if ($numRows < 1) {
             $this->errors[] = User::ERROR_USER_NOT_FOUND;
+            $this->config->logger->error(User::ERROR_USER_NOT_FOUND);
 
             return false;
         }
@@ -168,6 +177,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         // if login not unique, raise an error, but continue
         if ($numRows > 1) {
             $this->errors[] = User::ERROR_USER_LOGIN_NOT_UNIQUE;
+            $this->config->logger->error(User::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
 
         // if multiple accounts are ok, just 1 valid required
@@ -177,6 +187,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             }
         }
         $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
+        $this->config->logger->error(User::ERROR_USER_INCORRECT_PASSWORD);
 
         return false;
     }
@@ -197,6 +208,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         if (strlen($error) > 0) {
             $this->errors[] = $error;
+            $this->config->logger->error($error);
 
             return 0;
         }

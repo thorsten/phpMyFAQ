@@ -2,9 +2,11 @@
 
 /**
  * Creates a new user object.
+ *
  * A user are recognized by the session-id using getUserBySessionId(), by his
  * using getUserById() or by his nickname (login) using getUserByLogin(). New
  * are created using createNewUser().
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -51,10 +53,10 @@ class User
     public const ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
     public const ERROR_USER_CHANGE = 'Account could not be updated. ';
     public const ERROR_USER_DELETE = 'Account could not be deleted. ';
-    public const ERROR_USER_INCORRECT_LOGIN = 'Specified login could not be found. ';
-    public const ERROR_USER_INCORRECT_PASSWORD = 'Specified password is not correct.';
+    public const ERROR_USER_INCORRECT_LOGIN = 'The login name could not be found. ';
+    public const ERROR_USER_INCORRECT_PASSWORD = 'The password is not correct.';
     public const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
-    public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen loginname is too short.';
+    public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen login name is too short.';
     public const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
     public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
         'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';

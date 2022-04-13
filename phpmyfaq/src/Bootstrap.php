@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Bootstrap phpMyFAQ.
+ * Bootstraps a phpMyFAQ instance
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-07
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-03-07
  */
 
 use Elasticsearch\ClientBuilder;
@@ -111,9 +111,9 @@ set_exception_handler('\phpMyFAQ\Core\Error::exceptionHandler');
 try {
     Database::setTablePrefix($DB['prefix']);
     $db = Database::factory($DB['type']);
-    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], isset($DB['port']) ? $DB['port'] : null);
-} catch (Exception $e) {
-    Database::errorPage($e->getMessage());
+    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], $DB['port'] ?? null);
+} catch (Exception $exception) {
+    Database::errorPage($exception->getMessage());
     exit(-1);
 }
 
@@ -174,11 +174,11 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
     // If we're here, some windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
 } else {
-    // otherwise build the absolute path
+    // otherwise, build the absolute path
     $tmp = dirname(__DIR__) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
 
     // Check that nobody is traversing
-    if (0 === strpos((string)$tmp, dirname(__DIR__))) {
+    if (str_starts_with($tmp, dirname(__DIR__))) {
         define('PMF_ATTACHMENTS_DIR', $tmp);
     } else {
         define('PMF_ATTACHMENTS_DIR', false);
