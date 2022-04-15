@@ -328,7 +328,7 @@ class Template
     {
         $output = '';
         foreach ($this->outputs as $val) {
-            $output .= str_replace("\n\n", "\n", $val);
+            $output .= str_replace("\n\n", "\n", $val ?? '');
         }
 
         echo $output;
@@ -355,7 +355,7 @@ class Template
                     $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
                 }
             } else {
-                $content[$var] = str_replace('`', '&acute;', $content[$var]);
+                $content[$var] = str_replace('`', '&acute;', $content[$var] ?? '');
                 $content[$var] = Strings::preg_replace($search, $replace, $val);
             }
         }

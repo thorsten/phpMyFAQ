@@ -290,7 +290,7 @@ if (!Language::isASupportedLanguage($lang)) {
 //
 // Found a search string?
 //
-$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
+$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW, '');
 
 //
 // Create a new FAQ object
