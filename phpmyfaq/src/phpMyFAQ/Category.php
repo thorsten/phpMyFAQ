@@ -170,6 +170,22 @@ class Category
     }
 
     /**
+     * @return int
+     */
+    public function getUser(): int
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroups(): array
+    {
+        return $this->groups;
+    }
+
+    /**
      * Returns all categories with ordered category IDs according to the user
      * and group permissions.
      *
