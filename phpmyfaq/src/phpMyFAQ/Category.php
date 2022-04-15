@@ -1179,7 +1179,7 @@ class Category
      */
     public function updateParentCategory(int $categoryId, int $parentId): bool
     {
-        if ($categoryId !== $parentId) {
+        if ($categoryId === $parentId) {
             return false;
         }
 

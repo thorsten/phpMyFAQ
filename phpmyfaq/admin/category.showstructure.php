@@ -21,6 +21,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,12 +31,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_structure'] ?>
+      <i aria-hidden="true" class="fa fa-folder"></i> <?= Translation::get('ad_menu_categ_structure') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <a class="btn btn-sm btn-success" href="?action=addcategory">
-          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
+          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= Translation::get('ad_kateg_add'); ?>
         </a>
       </div>
     </div>
@@ -53,7 +54,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $showCategory = Filter::filterInput(INPUT_POST, 'showCategory', FILTER_UNSAFE_RAW);
 
     // translate an existing category
-    if (!is_null($showCategory) && $showCategory == 'yes') {
+    if ($showCategory === 'yes') {
         $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryData = [
             'id' => Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
@@ -99,12 +100,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     foreach ($category->getCategoryTree() as $cat) {
         print "<tr>\n";
 
-        $indent = '';
-        for ($i = 0; $i < $cat['indent']; ++$i) {
-            $indent .= '&nbsp;&nbsp;&nbsp;';
-        }
+        $indent = str_repeat('&nbsp;&nbsp;&nbsp;', $cat['indent']);
         // category translated in this language?
-        ($cat['lang'] == $faqLangCode) ? $catname = $cat['name'] : $catname = $cat['name'] . ' (' . LanguageCodes::get($cat['lang']) . ')';
+        ($cat['lang'] == $faqLangCode) ? $categoryName = $cat['name'] : $categoryName = $cat['name'] . ' (' . LanguageCodes::get($cat['lang']) . ')';
 
         // show category name in actual language
         print '<td>';
@@ -115,14 +113,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 $currentLink,
                 $cat['id'],
                 $faqLangCode,
-                $PMF_LANG['ad_categ_translate'],
-                $PMF_LANG['ad_categ_translate']
+                Translation::get('ad_categ_translate'),
+                Translation::get('ad_categ_translate')
             );
         }
         printf(
             '&nbsp;%s<strong>%s</strong>',
             $indent,
-            $catname
+            $categoryName
         );
         print "</td>\n";
 
@@ -138,12 +136,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 $spokenLanguage = Strings::preg_replace('/\(.*\)/', '', $id_languages[$language]);
                 printf(
                     '<td class="text-center" title="%s: %s">',
-                    $PMF_LANG['ad_categ_titel'],
+                    Translation::get('ad_categ_titel'),
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="badge badge-success"><i aria-hidden="true" class="fa fa-check"></i></span></td>',
-                    $PMF_LANG['ad_categ_titel'],
+                    '<span title="%s: %s" class="badge bg-success"><i aria-hidden="true" class="fa fa-check"></i></span></td>',
+                    Translation::get('ad_categ_titel'),
                     $spokenLanguage
                 );
             } else {
@@ -152,11 +150,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                     $currentLink,
                     $cat['id'],
                     $lang,
-                    $PMF_LANG['ad_categ_translate']
+                    Translation::get('ad_categ_translate')
                 );
                 printf(
-                    '<span title="%s" class="badge badge-primary"><i aria-hidden="true" class="fa fa-globe fa-white"></i></span></a>',
-                    $PMF_LANG['ad_categ_translate']
+                    '<span title="%s" class="badge bg-primary"><i aria-hidden="true" class="fa fa-globe fa-white"></i></span></a>',
+                    Translation::get('ad_categ_translate')
                 );
             }
             print "</td>\n";
@@ -167,7 +165,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         </tbody>
         </table>
     <?php
-    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_overview']);
+    printf('<p>%s</p>', Translation::get('ad_categ_remark_overview'));
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    print Translation::get('err_NotAuth');
 }

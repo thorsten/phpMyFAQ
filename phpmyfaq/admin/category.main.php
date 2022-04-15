@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-12-20
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-12-20
  */
 
 use phpMyFAQ\Category;
@@ -23,6 +23,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -31,15 +32,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_edit'] ?>
+      <i aria-hidden="true" class="fa fa-folder"></i> <?= Translation::get('ad_menu_categ_edit') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <a class="btn btn-sm btn-success" href="?action=addcategory">
-          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
+          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= Translation::get('ad_kateg_add'); ?>
         </a>
         <a class="btn btn-sm btn-info" href="?action=showcategory">
-          <i aria-hidden="true" class="fa fa-list"></i> <?= $PMF_LANG['ad_categ_show']; ?>
+          <i aria-hidden="true" class="fa fa-list"></i> <?= Translation::get('ad_categ_show'); ?>
         </a>
       </div>
     </div>
@@ -378,7 +379,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     '<a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fa fa-indent" title="%s"></i></a></a> ',
                     $cat['id'],
                     $cat['lang'],
-                    $PMF_LANG['ad_quick_entry']
+                    Translation::get('ad_quick_entry')
                 );
 
                 if ($cat['lang'] == $lang) {
@@ -387,14 +388,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         '<a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fa fa-plus-square" title="%s"></i></a> ',
                         $cat['id'],
                         $cat['lang'],
-                        $PMF_LANG['ad_quick_category']
+                        Translation::get('ad_quick_category')
                     );
 
                     // rename (sub) category (if current language)
                     printf(
                         '<a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><i aria-hidden="true" class="fa fa-edit" title="%s"></i></a> ',
                         $cat['id'],
-                        $PMF_LANG['ad_kateg_rename']
+                        Translation::get('ad_kateg_rename')
                     );
                 }
 
@@ -402,7 +403,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 printf(
                     '<a class="btn btn-info btn-sm" href="?action=translatecategory&amp;cat=%s"><i aria-hidden="true" class="fa fa-globe" title="%s"></i></a> ',
                     $cat['id'],
-                    $PMF_LANG['ad_categ_translate']
+                    Translation::get('ad_categ_translate')
                 );
 
                 // delete (sub) category (if current language)
@@ -411,7 +412,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><i aria-hidden="true" class="fa fa-trash" title="%s"></i></a> ',
                         $cat['id'],
                         $cat['lang'],
-                        $PMF_LANG['ad_categ_delete']
+                        Translation::get('ad_categ_delete')
                     );
                 } else {
                     echo '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i aria-hidden="true" class="fa fa-trash"></i></a>';
@@ -422,7 +423,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     printf(
                         '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i aria-hidden="true" class="fa fa-cut" title="%s"></i></a>  ',
                         $cat['id'],
-                        $PMF_LANG['ad_categ_cut']
+                        Translation::get('ad_categ_cut')
                     );
                 }
                 echo '</span>';
@@ -443,5 +444,5 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   </div>
             <?php
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
