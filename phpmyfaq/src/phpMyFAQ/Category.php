@@ -769,19 +769,19 @@ class Category
     /**
      * Creates a category link.
      *
-     * @param string $sids Session id
-     * @param int    $categoryId Parent category
-     * @param string $categoryName Entity name
-     * @param string $description Description
-     * @param bool   $hasChildren Child categories available
-     * @param bool   $isActive Sets a link active via CSS
+     * @param string      $sids Session id
+     * @param int         $categoryId Parent category
+     * @param string      $categoryName Entity name
+     * @param string|null $description Description
+     * @param bool        $hasChildren Child categories available
+     * @param bool        $isActive Sets a link active via CSS
      * @return string
      */
     public function addCategoryLink(
         string $sids,
         int $categoryId,
         string $categoryName,
-        string $description = '',
+        string $description = null,
         bool $hasChildren = false,
         bool $isActive = false
     ): string {
