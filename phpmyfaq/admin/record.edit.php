@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
@@ -33,6 +33,7 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -237,7 +238,7 @@ if (
 
     // Header
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
-        $currentRevision = sprintf('%s 1.%d', $PMF_LANG['ad_entry_revision'], $selectedRevisionId);
+        $currentRevision = sprintf('%s 1.%d', Translation::get('ad_entry_revision'), $selectedRevisionId);
         $faqUrl = sprintf(
             '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
             $faqConfig->getDefaultUrl(),
@@ -251,8 +252,8 @@ if (
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
                 <i aria-hidden="true" class="fa fa-edit"></i>
-                <?= $PMF_LANG['ad_entry_edit_1'] ?>
-                <?= $PMF_LANG['ad_entry_edit_2'] ?>
+                <?= Translation::get('ad_entry_edit_1') ?>
+                <?= Translation::get('ad_entry_edit_2') ?>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
@@ -262,7 +263,7 @@ if (
               </span>
                     <a href="<?= $link->toString() ?>" class="btn btn-sm btn-success">
                         <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
-                        <?= $PMF_LANG['ad_view_faq'] ?>
+                        <?= Translation::get('ad_view_faq') ?>
                     </a>
                 </div>
             </div>
@@ -272,7 +273,7 @@ if (
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
                 <i aria-hidden="true" class="fa fa-edit"></i>
-                <?= $PMF_LANG['ad_entry_add'] ?>
+                <?= Translation::get('ad_entry_add') ?>
             </h1>
         </div>
 
@@ -285,22 +286,23 @@ if (
                         <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
-                                    <i class="fa fa-pencil-square-o"></i> <?= $PMF_LANG['ad_record_faq'] ?>
+                                    <i class="fa fa-pencil-square-o"></i> <?= Translation::get('ad_record_faq') ?>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
-                                    <i class="fa fa-database"></i> <?= $PMF_LANG['ad_menu_faq_meta'] ?>
+                                    <i class="fa fa-database"></i> <?= Translation::get('ad_menu_faq_meta') ?>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
-                                    <i class="fa fa-unlock-alt"></i> <?= $PMF_LANG['ad_record_permissions'] ?>
+                                    <i class="fa fa-unlock-alt"></i> <?= Translation::get('ad_record_permissions') ?>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#tab-notes-changelog" role="tab">
-                                    <i class="fa fa-sticky-note-o"></i> <?= $PMF_LANG['ad_admin_notes'] . ' / ' . $PMF_LANG['ad_entry_changelog'] ?>
+                                    <i class="fa fa-sticky-note-o"></i>
+                                    <?= Translation::get('ad_admin_notes') . ' / ' . Translation::get('ad_entry_changelog') ?>
                                 </a>
                             </li>
                         </ul>
@@ -320,7 +322,7 @@ if (
                                                 <select name="revisionid_selected" onchange="this.form.submit();"
                                                         class="form-control">
                                                     <option value="<?= $faqData['revision_id'] ?>">
-                                                        <?= $PMF_LANG['ad_changerev'] ?>
+                                                        <?= Translation::get('ad_changerev') ?>
                                                     </option>
                                                     <?php foreach ($revisions as $revisionId => $revisionData) { ?>
                                                         <option value="<?= $revisionData['revision_id'] ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) {
@@ -329,7 +331,7 @@ if (
                                                                         ?>>
                                                             <?php printf(
                                                                 '%s 1.%d: %s - %s',
-                                                                $PMF_LANG['ad_entry_revision'],
+                                                                Translation::get('ad_entry_revision'),
                                                                 $revisionData['revision_id'],
                                                                 Date::createIsoDate($revisionData['updated']),
                                                                 $revisionData['author']
@@ -368,7 +370,7 @@ if (
                                 <div class="form-group">
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
-                                           placeholder="<?= $PMF_LANG['ad_entry_theme'] ?>"
+                                           placeholder="<?= Translation::get('ad_entry_theme') ?>"
                                            value="<?= htmlspecialchars($faqData['title']) ?>">
                                 </div>
 
@@ -378,7 +380,7 @@ if (
                                         <div class="col-lg-12">
                                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                                             <textarea id="answer" name="answer" class="form-control" rows="7"
-                                                      placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"
+                                                      placeholder="<?= Translation::get('ad_entry_content') ?>"
                                             ><?= $faqData['content'] ?></textarea>
                                         </div>
                                     </div>
@@ -399,7 +401,7 @@ if (
                                             <div class="row">
                                               <div class="col-lg-12">
                                                 <textarea id="answer-markdown" name="answer" class="form-control"
-                                                          rows="7" placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"
+                                                          rows="7" placeholder="<?= Translation::get('ad_entry_content') ?>"
                                                 ><?= $faqData['content'] ?></textarea>
                                               </div>
                                             </div>
@@ -416,7 +418,7 @@ if (
                                 <!-- Categories -->
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="phpmyfaq-categories">
-                                        <?= $PMF_LANG['ad_entry_category'] ?>
+                                        <?= Translation::get('ad_entry_category') ?>
                                     </label>
                                     <div class="col-lg-10">
                                         <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple
@@ -429,7 +431,7 @@ if (
                                 <!-- Language -->
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="lang">
-                                        <?= $PMF_LANG['ad_entry_locale'] ?>:
+                                        <?= Translation::get('ad_entry_locale') ?>:
                                     </label>
                                     <div class="col-lg-10">
                                         <?= LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang') ?>
@@ -440,7 +442,7 @@ if (
                                 <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')) : ?>
                                     <div class="row">
                                         <label class="col-lg-2 col-form-label">
-                                            <?= $PMF_LANG['ad_menu_attachments'] ?>:
+                                            <?= Translation::get('ad_menu_attachments') ?>:
                                         </label>
                                         <div class="col-lg-10">
                                             <ul class="list-unstyled adminAttachments">
@@ -470,7 +472,7 @@ if (
                                             <?php
                                             printf(
                                                 '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attachmentModal">%s</button>',
-                                                $PMF_LANG['ad_att_add']
+                                                Translation::get('ad_att_add')
                                             );
                                             ?>
                                         </div>
@@ -480,7 +482,7 @@ if (
                                 <!-- Tags -->
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="tags">
-                                        <?= $PMF_LANG['ad_entry_tags'] ?>:
+                                        <?= Translation::get('ad_entry_tags') ?>:
                                     </label>
                                     <div class="col-lg-10">
                                         <input type="text" name="tags" id="tags" value="<?= $faqData['tags'] ?>"
@@ -488,28 +490,28 @@ if (
                                                class="form-control pmf-tags-autocomplete"
                                                data-tag-list="<?= $faqData['tags'] ?>">
                                         <small id="tagsHelp"
-                                               class="form-text text-muted"><?= $PMF_LANG['msgShowHelp'] ?></small>
+                                               class="form-text text-muted"><?= Translation::get('msgShowHelp') ?></small>
                                     </div>
                                 </div>
 
                                 <!-- Keywords -->
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="keywords">
-                                        <?= $PMF_LANG['ad_entry_keywords'] ?>:
+                                        <?= Translation::get('ad_entry_keywords') ?>:
                                     </label>
                                     <div class="col-lg-10">
                                         <input type="text" name="keywords" id="keywords" maxlength="255"
                                                class="form-control"
                                                value="<?= $faqData['keywords'] ?>">
                                         <small id="keywordsHelp"
-                                               class="form-text text-muted"><?= $PMF_LANG['msgShowHelp'] ?></small>
+                                               class="form-text text-muted"><?= Translation::get('msgShowHelp') ?></small>
                                     </div>
                                 </div>
 
                                 <!-- Author -->
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="author">
-                                        <?= $PMF_LANG['ad_entry_author'] ?>
+                                        <?= Translation::get('ad_entry_author') ?>
                                     </label>
                                     <div class="col-lg-10">
                                         <input type="text" name="author" id="author" value="<?= $faqData['author'] ?>"
@@ -520,7 +522,7 @@ if (
                                 <!-- E-Mail -->
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="email">
-                                        <?= $PMF_LANG['ad_entry_email'] ?>
+                                        <?= Translation::get('ad_entry_email') ?>
                                     </label>
                                     <div class="col-lg-10">
                                         <input type="email" name="email" id="email" value="<?= $faqData['email'] ?>"
@@ -535,7 +537,7 @@ if (
                                     <fieldset class="form-group">
                                         <div class="row">
                                             <legend class="col-lg-2 col-form-label pt-0">
-                                              <?= $PMF_LANG['ad_entry_grouppermission'] ?>
+                                              <?= Translation::get('ad_entry_grouppermission') ?>
                                             </legend>
                                             <div class="col-lg-10">
                                               <div class="form-check">
@@ -543,7 +545,7 @@ if (
                                                        value="all" class="form-check-input"
                                                   <?php echo($allGroups ? 'checked' : ''); ?>>
                                                 <label class="form-check-label" for="allgroups">
-                                                  <?= $PMF_LANG['ad_entry_all_groups'] ?>
+                                                  <?= Translation::get('ad_entry_all_groups') ?>
                                                 </label>
                                               </div>
                                               <div class="form-check">
@@ -552,7 +554,7 @@ if (
                                                        value="restricted" <?php echo($restrictedGroups ? 'checked' : ''); ?>>
                                                 <label for="selected-groups" class="form-check-label"
                                                        for="restrictedgroups">
-                                                  <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
+                                                  <?= Translation::get('ad_entry_restricted_groups') ?>
                                                 </label>
                                                 <select id="selected-groups" name="restricted_groups[]" size="3"
                                                         class="form-control" multiple>
@@ -568,14 +570,14 @@ if (
 
                                 <fieldset class="form-group">
                                     <div class="row">
-                                        <legend class="col-lg-2 col-form-label pt-0"><?= $PMF_LANG['ad_entry_userpermission'] ?></legend>
+                                        <legend class="col-lg-2 col-form-label pt-0"><?= Translation::get('ad_entry_userpermission') ?></legend>
                                         <div class="col-lg-10">
                                             <div class="form-check">
                                                 <input type="radio" id="allusers" name="userpermission" value="all"
                                                        class="form-check-input"
                                                        <?= $allUsers ? 'checked' : '' ?>>
                                                 <label class="form-check-label" for="allusers">
-                                                    <?= $PMF_LANG['ad_entry_all_users'] ?>
+                                                    <?= Translation::get('ad_entry_all_users') ?>
                                                 </label>
                                             </div>
                                             <div class="form-check">
@@ -583,7 +585,7 @@ if (
                                                        class="form-check-input"
                                                        value="restricted" <?= $restrictedUsers ? 'checked' : '' ?>>
                                                 <label class="form-check-label" for="restrictedusers">
-                                                    <?= $PMF_LANG['ad_entry_restricted_users'] ?>
+                                                    <?= Translation::get('ad_entry_restricted_users') ?>
                                                 </label>
                                                 <select name="restricted_users" class="form-control">
                                                     <?= $userHelper->getAllUserOptions($userPermission[0], false) ?>
@@ -597,11 +599,11 @@ if (
 
                             <div class="tab-pane" id="tab-notes-changelog">
                                 <h6 class="card-title sr-only">
-                                    <?= $PMF_LANG['ad_entry_changelog'] ?>
+                                    <?= Translation::get('ad_entry_changelog') ?>
                                 </h6>
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="changelog-date">
-                                        <?= $PMF_LANG['ad_entry_date'] ?>
+                                        <?= Translation::get('ad_entry_date') ?>
                                     </label>
                                     <div class="col-lg-10">
                                         <input type="text" readonly class="form-control-plaintext" id="changelog-date"
@@ -610,7 +612,7 @@ if (
                                 </div>
                                 <div class="row">
                                     <label class="col-lg-2 col-form-label" for="changed">
-                                        <?= $PMF_LANG['ad_entry_changed'] ?>
+                                        <?= Translation::get('ad_entry_changed') ?>
                                     </label>
                                     <div class="col-lg-10">
                                         <textarea name="changed" id="changed" rows="3" class="form-control"
@@ -620,20 +622,20 @@ if (
 
                                 <h6 class="card-title">
                                     <label for="notes">
-                                        <?php printf($PMF_LANG['ad_admin_notes_hint'], $PMF_LANG['ad_admin_notes']) ?>
+                                        <?php printf(Translation::get('ad_admin_notes_hint'), Translation::get('ad_admin_notes')) ?>
                                     </label>
                                 </h6>
                                 <div class="row">
                                     <div class="col-lg-10 offset-lg-2">
                                         <textarea id="notes" name="notes" class="form-control" rows="3"
-                                        ><?= isset($faqData['notes']) ? $faqData['notes'] : '' ?></textarea>
+                                        ><?= $faqData['notes'] ?? '' ?></textarea>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-2">
                                         <h6 class="card-title">
-                                            <?= $PMF_LANG['ad_entry_changelog_history'] ?>
+                                            <?= Translation::get('ad_entry_changelog_history') ?>
                                         </h6>
                                     </div>
                                     <div class="col-lg-10">
@@ -645,7 +647,7 @@ if (
                                                 <li class="small pt-0">
                                                     <?php printf(
                                                         '<i class="fa fa-hand-o-right"></i> %s  1.%d <i class="fa fa-calendar"></i> %s <i class="fa fa-user"></i> %s',
-                                                        $PMF_LANG['ad_entry_revision'],
+                                                        Translation::get('ad_entry_revision'),
                                                         $entry['revision_id'],
                                                         $date->format(date('Y-m-d H:i', $entry['date'])),
                                                         $entryUser->getUserData('display_name')
@@ -671,17 +673,17 @@ if (
                         <div class="card-header text-center" role="tab" id="pmf-heading-date">
                             <?php if ($selectedRevisionId === $faqData['revision_id']) : ?>
                                 <button class="btn btn-lg btn-info" type="reset">
-                                    <?= $PMF_LANG['ad_gen_reset'] ?>
+                                    <?= Translation::get('ad_gen_reset') ?>
                                 </button>
                                 <button class="btn btn-lg btn-primary" type="submit">
-                                    <?= $PMF_LANG['ad_entry_save'] ?>
+                                    <?= Translation::get('ad_entry_save') ?>
                                 </button>
                             <?php endif ?>
 
                         </div>
                         <div class="card-body">
                             <h5 class="mb-0">
-                                <?= $PMF_LANG['ad_entry_date'] ?>
+                                <?= Translation::get('ad_entry_date') ?>
                             </h5>
                             <div class="form-group">
                                 <div class="form-check">
@@ -689,14 +691,14 @@ if (
                                            class="form-check-input"
                                            onchange="setRecordDate(this.id);">
                                     <label class="form-check-label" for="dateActualize">
-                                        <?= $PMF_LANG['msgUpdateFaqDate'] ?>
+                                        <?= Translation::get('msgUpdateFaqDate') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input type="radio" id="dateKeep" name="recordDateHandling" class="form-check-input"
                                            onchange="setRecordDate(this.id);">
                                     <label class="form-check-label" for="dateKeep">
-                                        <?= $PMF_LANG['msgKeepFaqDate'] ?>
+                                        <?= Translation::get('msgKeepFaqDate') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -704,7 +706,7 @@ if (
                                            class="form-check-input"
                                            onchange="setRecordDate(this.id);">
                                     <label class="form-check-label" for="dateCustomize">
-                                        <?= $PMF_LANG['msgEditFaqDat'] ?>
+                                        <?= Translation::get('msgEditFaqDat') ?>
                                     </label>
                                 </div>
                                 <div id="recordDateInputContainer" class="invisible">
@@ -713,7 +715,7 @@ if (
                                 </div>
                             </div>
                             <h5 class="mb-0">
-                                <?= $PMF_LANG['ad_entry_status'] ?>
+                                <?= Translation::get('ad_entry_status') ?>
                             </h5>
                             <div class="form-group">
                                 <!-- active or not -->
@@ -736,7 +738,7 @@ if (
                                                 echo $suf;
                                             } ?>>
                                         <label class="form-check-label" for="active">
-                                            <?= $PMF_LANG['ad_entry_visibility'] ?>
+                                            <?= Translation::get('ad_entry_visibility') ?>
                                         </label>
                                     </div>
                                     <div class="form-check">
@@ -746,7 +748,7 @@ if (
                                                 echo $sul;
                                             } ?>>
                                         <label class="form-check-label" for="inactive">
-                                          <?= $PMF_LANG['ad_entry_not_visibility'] ?>
+                                          <?= Translation::get('ad_entry_not_visibility') ?>
                                         </label>
                                     </div>
                                 <?php else : ?>
@@ -754,7 +756,7 @@ if (
                                         <input type="radio" id="inactive" name="active" value="no"
                                                class="form-check-input" checked>
                                         <label class="form-check-label" for="inactive">
-                                            <?= $PMF_LANG['ad_entry_not_visibility'] ?>
+                                            <?= Translation::get('ad_entry_not_visibility') ?>
                                         </label>
                                     </div>
                                 <?php endif; ?>
@@ -762,20 +764,20 @@ if (
 
                             <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')) : ?>
                               <h5 class="mb-0">
-                                  <?= $PMF_LANG['ad_entry_new_revision'] ?>
+                                  <?= Translation::get('ad_entry_new_revision') ?>
                               </h5>
                               <div class="form-group">
                                 <div class="form-check">
                                   <input type="radio" name="revision" id="revision" value="yes"
                                          class="form-check-input">
                                   <label class="form-check-label"
-                                         for="revision"><?= $PMF_LANG['ad_gen_yes'] ?></label>
+                                         for="revision"><?= Translation::get('ad_gen_yes') ?></label>
                                 </div>
                                 <div class="form-check">
                                   <input type="radio" name="revision" id="no-revision" value="no"
                                          checked class="form-check-input">
                                   <label class="form-check-label"
-                                         for="no-revision"><?= $PMF_LANG['ad_gen_no'] ?></label>
+                                         for="no-revision"><?= Translation::get('ad_gen_no') ?></label>
                                 </div>
                               </div>
                             <?php endif ?>
@@ -786,7 +788,7 @@ if (
                                     <input type="checkbox" id="sticky" name="sticky" class="form-check-input"
                                         <?php echo(isset($faqData['sticky']) && $faqData['sticky'] ? 'checked' : '') ?>>
                                     <label class="form-check-label"
-                                           for="sticky"><?= $PMF_LANG['ad_entry_sticky'] ?></label>
+                                           for="sticky"><?= Translation::get('ad_entry_sticky') ?></label>
                                 </div>
 
                                 <!-- comments allowed or not -->
@@ -795,19 +797,18 @@ if (
                                            class="form-check-input"
                                            <?= $faqData['comment'] ?>>
                                     <label class="form-check-label"
-                                           for="comment"><?= $PMF_LANG['ad_entry_allowComments'] ?></label>
+                                           for="comment"><?= Translation::get('ad_entry_allowComments') ?></label>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <!-- solution id -->
                                 <label class="col-form-label" for="solution_id">
-                                    <?= $PMF_LANG['ad_entry_solution_id'] ?>:
+                                    <?= Translation::get('ad_entry_solution_id') ?>:
                                 </label>
                                 <input type="number" name="solution_id" id="solution_id" size="5" class="form-control"
                                        readonly
-                                       value="<?= isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getNextSolutionId(
-                                       ) ?>">
+                                       value="<?= $faqData['solution_id'] ?? $faq->getNextSolutionId() ?>">
                             </div>
                         </div>
                     </div>
@@ -832,7 +833,7 @@ if (
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="attachmentModalLabel">
-              <?= $PMF_LANG['ad_att_addto'] . ' ' . $PMF_LANG['ad_att_addto_2'] ?>
+              <?= Translation::get('ad_att_addto') . ' ' . Translation::get('ad_att_addto_2') ?>
             (max <?= round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -855,7 +856,7 @@ if (
               <div class="custom-file">
                 <input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload" multiple>
                 <label class="custom-file-label" for="filesToUpload">
-                    <?= $PMF_LANG['ad_att_att'] ?>
+                    <?= Translation::get('ad_att_att') ?>
                 </label>
                 <div class="invalid-feedback">
                   The file is too big.
@@ -863,7 +864,7 @@ if (
               </div>
 
               <div class="pmf-attachment-upload-files invisible">
-                  <?= $PMF_LANG['msgAttachmentsFilesize'] ?>:
+                  <?= Translation::get('msgAttachmentsFilesize') ?>:
                 <output id="filesize"></output>
               </div>
               <div class="progress invisible">
@@ -876,10 +877,10 @@ if (
         </div>
         <div class="modal-footer">
           <button type="reset" class="btn btn-primary" data-dismiss="modal" id="pmf-attachment-modal-close">
-              <?= $PMF_LANG['ad_att_close'] ?>
+              <?= Translation::get('ad_att_close') ?>
           </button>
           <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
-              <?= $PMF_LANG['ad_att_butt'] ?>
+              <?= Translation::get('ad_att_butt') ?>
           </button>
         </div>
       </div>
@@ -900,8 +901,8 @@ if (
       }
     </script>
     <?php
-} elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') !== 1 && !Database::checkOnEmptyTable('faqcategories')) {
-    echo $PMF_LANG['err_NotAuth'];
+} elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && !Database::checkOnEmptyTable('faqcategories')) {
+    echo Translation::get('err_NotAuth');
 } elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
-    echo $PMF_LANG['no_cats'];
+    echo Translation::get('no_cats');
 }

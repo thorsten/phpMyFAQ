@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Entity\Comment;
@@ -48,7 +49,7 @@ class Comments
      * @param int $id Comment ID
      * @param string $type Comment type: {faq|news}
      * @return string
-     * @throws \Exception
+     * @throws Exception
      * @todo   Move this code to a helper class
      */
     public function getComments(int $id, string $type): string
@@ -232,10 +233,9 @@ class Comments
      * Returns the number of comments of each FAQ record as an array.
      *
      * @param string $type Type of comment: faq or news
-     *
      * @return array
      */
-    public function getNumberOfComments($type = CommentType::FAQ)
+    public function getNumberOfComments(string $type = CommentType::FAQ): array
     {
         $num = [];
 
@@ -268,10 +268,9 @@ class Comments
      * Returns all comments with their categories.
      *
      * @param string $type Type of comment: faq or news
-     *
      * @return Comment[]
      */
-    public function getAllComments($type = CommentType::FAQ)
+    public function getAllComments(string $type = CommentType::FAQ): array
     {
         $comments = [];
 

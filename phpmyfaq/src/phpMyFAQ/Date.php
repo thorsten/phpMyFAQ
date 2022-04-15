@@ -89,10 +89,9 @@ class Date
      *
      * @param string $file     Filename
      * @param bool   $endOfDay End of day?
-     *
      * @return int
      */
-    public static function getTrackingFileDate($file, $endOfDay = false)
+    public static function getTrackingFileDate(string $file, bool $endOfDay = false): int
     {
         if (Strings::strlen($file) >= 16) {
             $day = Strings::substr($file, 8, 2);
@@ -116,7 +115,6 @@ class Date
      *
      * @param string $unformattedDate
      * @return string
-     * @throws Exception
      */
     public function format(string $unformattedDate): string
     {
@@ -124,7 +122,7 @@ class Date
             $date = new DateTime($unformattedDate);
             return $date->format($this->config->get('main.dateFormat'));
         } catch (Exception $e) {
-            // handle the exception
+            $this->config->logger->error($e->getMessage());
             return '';
         }
     }

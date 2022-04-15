@@ -79,13 +79,6 @@ class Faq
     private Configuration $config;
 
     /**
-     * Language strings.
-     *
-     * @var string
-     */
-    private $translation;
-
-    /**
      * Plural form support.
      *
      * @var Plurals
@@ -120,10 +113,9 @@ class Faq
      */
     public function __construct(Configuration $config)
     {
-        global $PMF_LANG, $plr;
+        global $plr;
 
         $this->config = $config;
-        $this->translation = $PMF_LANG;
         $this->plurals = $plr;
 
         if ($this->config->get('security.permLevel') !== 'basic') {
@@ -782,14 +774,18 @@ class Faq
     /**
      * Executes a query to retrieve a single FAQ.
      *
-     * @param int    $faqId
-     * @param string $faqLanguage
-     * @param null   $faqRevisionId
-     * @param bool   $isAdmin
+     * @param int      $faqId
+     * @param string   $faqLanguage
+     * @param int|null $faqRevisionId
+     * @param bool     $isAdmin
      * @return mixed
      */
-    public function getRecordResult($faqId, $faqLanguage, $faqRevisionId = null, $isAdmin = false)
-    {
+    public function getRecordResult(
+        int $faqId,
+        string $faqLanguage,
+        int $faqRevisionId = null,
+        bool $isAdmin = false
+    ): mixed {
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
@@ -927,7 +923,7 @@ class Faq
      *
      * @return int
      */
-    public function addRecord(array $data, $newRecord = true)
+    public function addRecord(array $data, bool $newRecord = true): int
     {
         if ($newRecord) {
             $recordId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id');
@@ -1041,7 +1037,7 @@ class Faq
      *
      * @return bool
      */
-    public function updateRecord(array $data)
+    public function updateRecord(array $data): bool
     {
         // Update entry
         $query = sprintf(
@@ -1098,12 +1094,11 @@ class Faq
      *
      * @param int    $recordId   Record id
      * @param string $recordLang Record language
-     *
      * @return bool
      * @throws Attachment\AttachmentException
      * @throws Attachment\Filesystem\File\FileException
      */
-    public function deleteRecord($recordId, $recordLang)
+    public function deleteRecord(int $recordId, string $recordLang): bool
     {
         $solutionId = $this->getSolutionIdFromId($recordId, $recordLang);
 
@@ -1199,10 +1194,9 @@ class Faq
      *
      * @param integer $faqId
      * @param string  $faqLang
-     *
      * @return int
      */
-    public function getSolutionIdFromId($faqId, $faqLang)
+    public function getSolutionIdFromId(int $faqId, string $faqLang): int
     {
         $query = sprintf(
             "
@@ -1215,7 +1209,7 @@ class Faq
                 AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            (int)$faqId,
+            $faqId,
             $this->config->getDb()->escape($faqLang)
         );
 
@@ -1233,10 +1227,9 @@ class Faq
      *
      * @param int    $recordId   Record id
      * @param string $recordLang Record language
-     *
      * @return bool
      */
-    public function hasTranslation($recordId, $recordLang)
+    public function hasTranslation(int $recordId, string $recordLang): bool
     {
         $query = sprintf(
             "
@@ -1268,10 +1261,9 @@ class Faq
      * @param int    $recordId    Id of FAQ or news entry
      * @param string $recordLang  Language
      * @param string $commentType Type of comment: faq or news
-     *
      * @return bool true, if comments are disabled
      */
-    public function commentDisabled($recordId, $recordLang, $commentType = 'faq')
+    public function commentDisabled(int $recordId, string $recordLang, string $commentType = 'faq'): bool
     {
         if ('news' == $commentType) {
             $table = 'faqnews';
@@ -1309,7 +1301,7 @@ class Faq
      *
      * @param int $solutionId Solution ID
      */
-    public function getRecordBySolutionId($solutionId)
+    public function getRecordBySolutionId(int $solutionId)
     {
         $query = sprintf(
             'SELECT
@@ -1376,10 +1368,9 @@ class Faq
      * Gets the record ID from a given solution ID.
      *
      * @param int $solutionId Solution ID
-     *
      * @return array
      */
-    public function getIdFromSolutionId($solutionId)
+    public function getIdFromSolutionId(int $solutionId): array
     {
         $query = sprintf(
             '
@@ -1422,12 +1413,15 @@ class Faq
     /**
      * Returns an array with all data from all FAQ records.
      *
-     * @param int    $sortType  Sorting type
-     * @param array  $condition Condition
-     * @param string $sortOrder Sorting order
+     * @param int        $sortType  Sorting type
+     * @param array|null $condition Condition
+     * @param string     $sortOrder Sorting order
      */
-    public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, array $condition = null, $sortOrder = 'ASC')
-    {
+    public function getAllRecords(
+        int $sortType = FAQ_SORTING_TYPE_CATID_FAQID,
+        array $condition = null,
+        string $sortOrder = 'ASC'
+    ): void {
         $where = '';
         if (!is_null($condition)) {
             $num = count($condition);
@@ -1452,50 +1446,13 @@ class Faq
             }
         }
 
-        switch ($sortType) {
-            case FAQ_SORTING_TYPE_CATID_FAQID:
-                $orderBy = sprintf(
-                    '
-            ORDER BY
-                fcr.category_id,
-                fd.id %s',
-                    $sortOrder
-                );
-                break;
-
-            case FAQ_SORTING_TYPE_FAQID:
-                $orderBy = sprintf(
-                    '
-            ORDER BY
-                fd.id %s',
-                    $sortOrder
-                );
-                break;
-
-            case FAQ_SORTING_TYPE_FAQTITLE_FAQID:
-                $orderBy = sprintf(
-                    '
-            ORDER BY
-                fcr.category_id,
-                fd.thema %s',
-                    $sortOrder
-                );
-                break;
-
-            case FAQ_SORTING_TYPE_DATE_FAQID:
-                $orderBy = sprintf(
-                    '
-            ORDER BY
-                fcr.category_id,
-                fd.updated %s',
-                    $sortOrder
-                );
-                break;
-
-            default:
-                $orderBy = '';
-                break;
-        }
+        $orderBy = match ($sortType) {
+            FAQ_SORTING_TYPE_CATID_FAQID => sprintf('ORDER BY fcr.category_id, fd.id %s', $sortOrder),
+            FAQ_SORTING_TYPE_FAQID => sprintf('ORDER BY fd.id %s', $sortOrder),
+            FAQ_SORTING_TYPE_FAQTITLE_FAQID => sprintf('ORDER BY fcr.category_id, fd.thema %s', $sortOrder),
+            FAQ_SORTING_TYPE_DATE_FAQID => sprintf('ORDER BY fcr.category_id, fd.updated %s', $sortOrder),
+            default => '',
+        };
 
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
         $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,' .
@@ -1596,10 +1553,9 @@ class Faq
      * Returns the FAQ record title from the ID and language.
      *
      * @param int $id Record id
-     *
      * @return string
      */
-    public function getRecordTitle($id)
+    public function getRecordTitle(int $id): string
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
             return $this->faqRecord['title'];
@@ -1635,10 +1591,9 @@ class Faq
      * Returns the keywords of a FAQ record from the ID and language.
      *
      * @param int $id record id
-     *
      * @return string
      */
-    public function getRecordKeywords($id)
+    public function getRecordKeywords(int $id): string
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
             return $this->faqRecord['keywords'];
@@ -1671,10 +1626,9 @@ class Faq
      *
      * @param int $recordId  FAQ record ID
      * @param int $wordCount Number of words, default: 12
-     *
      * @return string
      */
-    public function getRecordPreview($recordId, $wordCount = 12)
+    public function getRecordPreview(int $recordId, int $wordCount = 12): string
     {
         if (isset($this->faqRecord['id']) && ((int)$this->faqRecord['id'] === (int)$recordId)) {
             $answerPreview = $this->faqRecord['content'];
@@ -1713,10 +1667,10 @@ class Faq
      * Returns the number of activated and not expired records, optionally
      * not limited to the current language.
      *
-     * @param null $language Language
+     * @param string|null $language Language
      * @return int
      */
-    public function getNumberOfRecords($language = null)
+    public function getNumberOfRecords(string $language = null): int
     {
         $now = date('YmdHis');
 
@@ -1751,10 +1705,10 @@ class Faq
     /**
      * This function generates a list with the most voted or most visited records.
      *
-     * @param  string $type Type definition visits/voted
+     * @param string $type Type definition visits/voted
      * @return array
      */
-    public function getTopTen($type = 'visits')
+    public function getTopTen(string $type = 'visits'): array
     {
         if ('visits' === $type) {
             $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->config->getLanguage()->getLanguage());
