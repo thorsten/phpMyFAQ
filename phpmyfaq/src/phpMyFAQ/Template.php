@@ -356,7 +356,7 @@ class Template
                 }
             } else {
                 $content[$var] = str_replace('`', '&acute;', $content[$var] ?? '');
-                $content[$var] = Strings::preg_replace($search, $replace, $val);
+                $content[$var] = Strings::preg_replace($search, $replace, $val ?? '');
             }
         }
 
