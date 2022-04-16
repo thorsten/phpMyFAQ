@@ -50,7 +50,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
     $category->buildCategoryTree();
 
-    $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
+    $linkVerifier = new LinkVerifier($faqConfig);
     ?>
 
                 <form action="?action=view" method="post"  accept-charset="utf-8">

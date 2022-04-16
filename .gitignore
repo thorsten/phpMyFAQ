@@ -56,4 +56,5 @@ backup/*
 # PHPUnit
 .phpunit.result.cache
 tests/test.db
+tests/test.db-journal
 tests/config/database.php

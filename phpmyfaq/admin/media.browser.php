@@ -52,7 +52,7 @@ if ($user) {
     <meta charset='UTF-8'>
     <title>phpMyFAQ Media Browser</title>
     <style>
-        @import url('../assets/dist/admin-styles.css');
+        @import url('../assets/dist/admin.css');
 
         body {
             padding: 10px;
@@ -90,10 +90,7 @@ if (!is_dir(PMF_ROOT_DIR . '/images')) {
     }
 }
 ?>
-<script src="../assets/dist/vendors.js"></script>
-<script src="../assets/dist/phpmyfaq.js"></script>
-<script src="../assets/dist/backend.js"></script>
-<script src="assets/js/editor/tinymce.min.js"></script>
+<script src="../assets/dist/backend.js?<?= time(); ?>"></script>
 <script>
     /**
      * Search for image names

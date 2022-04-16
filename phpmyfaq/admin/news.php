@@ -22,6 +22,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Translation;
 
@@ -49,7 +50,11 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
 <div class="row">
     <div class="col-12">
-        <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate>
+        <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate
+              data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
+              data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($faqConfig->getDefaultLanguage()) ? $faqConfig->getDefaultLanguage() : 'en') ?>"
+              data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
+            <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
             <div class="row mb-2">
                 <label class="col-3 col-form-label" for="newsheader">
@@ -63,7 +68,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
             <div class="row mb-2">
                 <label class="col-3 col-form-label" for="news"><?= Translation::get('ad_news_text') ?>:</label>
                 <div class="col-9">
-                    <textarea name="news" rows="5" class="form-control" id="news"></textarea>
+                    <textarea name="news" rows="5" class="form-control" id="editor"></textarea>
                 </div>
             </div>
 
@@ -261,8 +266,12 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
 <div class="row">
     <div class="col-12">
-        <form  action="?action=update-news" method="post" accept-charset="utf-8">
+        <form id="faqEditor" action="?action=update-news" method="post" accept-charset="utf-8"
+              data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
+              data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($newsData['lang']) ? $newsData['lang'] : 'en') ?>"
+              data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
             <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
+            <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
             <div class="row mb-2">
                 <label class="col-3 col-form-label" for="newsheader">
@@ -280,7 +289,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 </label>
                 <div class="col-9">
                     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                    <textarea id="news" name="news" class="form-control" rows="5"><?php
+                    <textarea id="editor" name="news" class="form-control" rows="5"><?php
                     if (isset($newsData['content'])) {
                         echo htmlspecialchars($newsData['content'], ENT_QUOTES);
                     } ?></textarea>

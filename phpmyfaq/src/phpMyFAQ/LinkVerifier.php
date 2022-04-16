@@ -73,13 +73,6 @@ class LinkVerifier
     private array $slowHosts = [];
 
     /**
-     * User.
-     *
-     * @var int
-     */
-    private $user = null;
-
-    /**
      * @var Configuration|null
      */
     private ?Configuration $config;
@@ -88,12 +81,10 @@ class LinkVerifier
      * Constructor.
      *
      * @param Configuration $config
-     * @param int|null   $user User
      */
-    public function __construct(Configuration $config, int $user = null)
+    public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->user = $user;
 
         if (!extension_loaded('openssl')) {
             $this->addIgnoreProtocol('https:', sprintf(Translation::get('ad_linkcheck_protocol_unsupported'), 'https'));

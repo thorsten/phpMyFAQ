@@ -27,6 +27,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Question;
@@ -356,9 +357,13 @@ if (
                                         $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
                                         $faqData['revision_id'] = $selectedRevisionId;
                                     }
-                                } ?>
+                                }
+                                ?>
 
-                              <form id="faqEditor" action="?action=<?= $queryString ?>" method="post">
+                              <form id="faqEditor" action="?action=<?= $queryString ?>" method="post"
+                                    data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
+                                    data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($faqData['lang']) ? $faqData['lang'] : 'en') ?>"
+                                    data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
                                 <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
                                 <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
                                 <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
@@ -367,7 +372,7 @@ if (
                                 <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
 
                                 <!-- Question -->
-                                <div class="form-group">
+                                <div class="form-group mb-2">
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
@@ -375,16 +380,17 @@ if (
                                 </div>
 
                                 <!-- Answer -->
-                                <?php if ($faqConfig->get('main.enableWysiwygEditor')) : ?>
+                                <?php if ($faqConfig->get('main.enableWysiwygEditor')): ?>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                                            <textarea id="answer" name="answer" class="form-control" rows="7"
+                                            <textarea id="editor" name="answer" class="form-control" rows="7"
                                                       placeholder="<?= Translation::get('ad_entry_content') ?>"
                                             ><?= $faqData['content'] ?></textarea>
                                         </div>
                                     </div>
                                 <?php endif; ?>
+
                                 <?php if ($faqConfig->get('main.enableMarkdownEditor')) : ?>
                                     <div class="row">
                                       <div class="col-lg-12">
@@ -687,25 +693,25 @@ if (
                             </h5>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input type="radio" id="dateActualize" checked name="recordDateHandling"
+                                    <input type="radio" id="updateDate" checked name="recordDateHandling"
                                            class="form-check-input"
                                            onchange="setRecordDate(this.id);">
-                                    <label class="form-check-label" for="dateActualize">
+                                    <label class="form-check-label" for="updateDate">
                                         <?= Translation::get('msgUpdateFaqDate') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="radio" id="dateKeep" name="recordDateHandling" class="form-check-input"
+                                    <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input"
                                            onchange="setRecordDate(this.id);">
-                                    <label class="form-check-label" for="dateKeep">
+                                    <label class="form-check-label" for="keepDate">
                                         <?= Translation::get('msgKeepFaqDate') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="radio" id="dateCustomize" name="recordDateHandling"
+                                    <input type="radio" id="manualDate" name="recordDateHandling"
                                            class="form-check-input"
                                            onchange="setRecordDate(this.id);">
-                                    <label class="form-check-label" for="dateCustomize">
+                                    <label class="form-check-label" for="manualDate">
                                         <?= Translation::get('msgEditFaqDat') ?>
                                     </label>
                                 </div>
@@ -887,16 +893,15 @@ if (
     </div>
   </div>
 
-    <script src="assets/js/record.js"></script>
     <script>
       function setRecordDate(how) {
-        if ('dateActualize' === how) {
-          $('#date').val('');
-        } else if ('dateKeep' === how) {
-          $('#date').val('<?= $faqData['isoDate'] ?>');
-        } else if ('dateCustomize' === how) {
-          $('#recordDateInputContainer').removeClass('invisible');
-          $('#date').val('');
+        if ('updateDate' === how) {
+          document.getElementById('date').value = '';
+        } else if ('keepDate' === how) {
+          document.getElementById('date').value = '<?= $faqData['isoDate'] ?>';
+        } else if ('manualDate' === how) {
+          document.getElementById('recordDateInputContainer').classList.remove('invisible');
+          document.getElementById('date').value = '';
         }
       }
     </script>

@@ -37,7 +37,7 @@ $http = new HttpHelper();
 $http->setContentType('text/html');
 $http->addHeader();
 
-$linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
+$linkVerifier = new LinkVerifier($faqConfig);
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();

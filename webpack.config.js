@@ -51,12 +51,8 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /skin\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /content\.css$/i,
-        use: ['css-loader'],
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },

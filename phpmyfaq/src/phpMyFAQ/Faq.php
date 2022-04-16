@@ -1415,12 +1415,12 @@ class Faq
      *
      * @param int        $sortType  Sorting type
      * @param array|null $condition Condition
-     * @param string     $sortOrder Sorting order
+     * @param ?string     $sortOrder Sorting order
      */
     public function getAllRecords(
         int $sortType = FAQ_SORTING_TYPE_CATID_FAQID,
         array $condition = null,
-        string $sortOrder = 'ASC'
+        ?string $sortOrder = 'ASC'
     ): void {
         $where = '';
         if (!is_null($condition)) {

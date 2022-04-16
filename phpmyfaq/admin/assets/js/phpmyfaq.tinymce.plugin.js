@@ -42,7 +42,7 @@ tinymce.PluginManager.add('phpmyfaq', function (editor, url) {
       onChange: (api) => {
         const data = api.getData();
         const url = location.protocol + '//' + location.host + location.pathname;
-        const list = $('#pmf-faq-list');
+        const list = document.getElementById('pmf-faq-list');
 
         if (data.search.length > 0) {
           $.ajax({

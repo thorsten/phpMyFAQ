@@ -61,7 +61,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $faqHelper = new FaqHelper($faqConfig);
 
 
-    $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
+    $linkVerifier = new LinkVerifier($faqConfig);
     if ($linkVerifier->isReady()) {
         ?>
     <script>
@@ -351,7 +351,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             <div class="card-header" role="tab" id="category-heading-<?= $cid ?>">
               <span class="float-right"><?= $catInfo ?></span>
               <h5>
-                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
+                <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
                    aria-expanded="true" aria-controls="collapseOne">
                   <i class="icon fa fa-chevron-circle-right "></i>
                 <?= $category->getPath($cid) ?>
@@ -472,7 +472,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <td>
                         <div class="dropdown">
                           <a class="btn btn-primary dropdown-toggle" href="#" role="button"
-                             id="dropdownAddNewTranslation" data-toggle="dropdown" aria-haspopup="true"
+                             id="dropdownAddNewTranslation" data-bs-toggle="dropdown" aria-haspopup="true"
                              aria-expanded="false">
                             <i aria-hidden="true" class="fa fa-globe"
                                title="<?= $PMF_LANG['msgTransToolAddNewTranslation'] ?>"></i>
