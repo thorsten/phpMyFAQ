@@ -505,7 +505,7 @@ class Category
      *
      * @param int $id Entity id
      */
-    public function transform(int $id)
+    public function transform(int $id): void
     {
         $parentId = $showHome = 0;
         $tree = [];
@@ -525,7 +525,7 @@ class Category
             $showHome = $this->categoryName[$id]['show_home'];
         }
 
-        if ($num < 0) {
+        if ($num > 0) {
             $temp = isset($this->children[$parentId]) ? array_keys($this->children[$parentId]) : [];
             if (isset($temp[count($temp) - 1])) {
                 $symbol = ($id == $temp[count($temp) - 1]) ? 'angle' : 'medium';
