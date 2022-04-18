@@ -7,15 +7,16 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-01
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-01
  */
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Entity\TemplateMetaDataEntity;
@@ -27,6 +28,7 @@ use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Language;
 use phpMyFAQ\Template\TemplateMetaData;
 use phpMyFAQ\StopWords;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -51,7 +53,7 @@ switch ($ajaxAction) {
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
@@ -90,7 +92,7 @@ switch ($ajaxAction) {
 
             try {
                 $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
-            } catch (\phpMyFAQ\Core\Exception $e) {
+            } catch (Exception $e) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
                 exit(1);
@@ -124,7 +126,12 @@ switch ($ajaxAction) {
             $instanceAdmin->setUserData($instanceAdminData);
 
             // Add anonymous user account
-            $clientSetup->createAnonymousUser($faqConfig);
+            try {
+                $clientSetup->createAnonymousUser($faqConfig);
+            } catch (Exception $e) {
+                $http->setStatus(400);
+                $payload = ['error' => $e->getMessage()];
+            }
 
             Database::setTablePrefix($DB['prefix']);
         } else {
@@ -148,7 +155,7 @@ switch ($ajaxAction) {
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
@@ -190,7 +197,7 @@ switch ($ajaxAction) {
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
             $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
@@ -214,7 +221,7 @@ switch ($ajaxAction) {
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
@@ -239,7 +246,7 @@ switch ($ajaxAction) {
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
             $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
@@ -269,7 +276,7 @@ switch ($ajaxAction) {
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
             $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 

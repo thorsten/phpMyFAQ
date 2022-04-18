@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-03-31
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-03-31
  */
 
 use phpMyFAQ\Attachment\AttachmentException;
@@ -29,6 +29,7 @@ use phpMyFAQ\Logging;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -42,7 +43,7 @@ $csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
     exit(1);
 }
 
@@ -62,6 +63,7 @@ switch ($ajaxAction) {
 
         $faqPermission = new FaqPermission($faqConfig);
 
+        $http->setStatus(200);
         $http->sendJsonWithHeaders(
             [
                 'user' => $faqPermission->get(FaqPermission::USER, $faqId),
@@ -83,7 +85,7 @@ switch ($ajaxAction) {
                 }
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         break;
 
@@ -100,7 +102,7 @@ switch ($ajaxAction) {
                 }
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         break;
 
@@ -125,7 +127,7 @@ switch ($ajaxAction) {
                 echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         break;
 
@@ -143,9 +145,9 @@ switch ($ajaxAction) {
             } catch (FileException $e) {
             } catch (AttachmentException $e) {
             }
-            echo $PMF_LANG['ad_entry_delsuc'];
+            echo Translation::get('ad_entry_delsuc');
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         break;
 
@@ -164,9 +166,9 @@ switch ($ajaxAction) {
                     $question->deleteQuestion((int)$questionId);
                 }
             }
-            echo $PMF_LANG['ad_entry_delsuc'];
+            echo Translation::get('ad_entry_delsuc');
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         break;
 }

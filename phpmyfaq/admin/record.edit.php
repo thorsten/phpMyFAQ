@@ -317,11 +317,11 @@ if (
                                     $faqRevision = new Revision($faqConfig);
                                     $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
                                     if (count($revisions)) { ?>
-                                        <div class="form-group">
+                                        <div class="form-group mb-2">
                                             <form id="selectRevision" name="selectRevision" method="post"
                                                   action="?action=editentry&amp;id=<?= $faqData['id'] ?>&amp;lang=<?= $faqData['lang'] ?>">
                                                 <select name="revisionid_selected" onchange="this.form.submit();"
-                                                        class="form-control">
+                                                        class="form-select">
                                                     <option value="<?= $faqData['revision_id'] ?>">
                                                         <?= Translation::get('ad_changerev') ?>
                                                     </option>
@@ -422,7 +422,7 @@ if (
                             </div>
                             <div class="tab-pane" id="tab-meta-data">
                                 <!-- Categories -->
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="phpmyfaq-categories">
                                         <?= Translation::get('ad_entry_category') ?>
                                     </label>
@@ -435,7 +435,7 @@ if (
                                 </div>
 
                                 <!-- Language -->
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="lang">
                                         <?= Translation::get('ad_entry_locale') ?>:
                                     </label>
@@ -446,7 +446,7 @@ if (
 
                                 <!-- Attachments -->
                                 <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')) : ?>
-                                    <div class="row">
+                                    <div class="row mb-2">
                                         <label class="col-lg-2 col-form-label">
                                             <?= Translation::get('ad_menu_attachments') ?>:
                                         </label>
@@ -486,7 +486,7 @@ if (
                                 <?php endif; ?>
 
                                 <!-- Tags -->
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="tags">
                                         <?= Translation::get('ad_entry_tags') ?>:
                                     </label>
@@ -501,7 +501,7 @@ if (
                                 </div>
 
                                 <!-- Keywords -->
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="keywords">
                                         <?= Translation::get('ad_entry_keywords') ?>:
                                     </label>
@@ -515,7 +515,7 @@ if (
                                 </div>
 
                                 <!-- Author -->
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="author">
                                         <?= Translation::get('ad_entry_author') ?>
                                     </label>
@@ -526,7 +526,7 @@ if (
                                 </div>
 
                                 <!-- E-Mail -->
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="email">
                                         <?= Translation::get('ad_entry_email') ?>
                                     </label>
@@ -576,7 +576,9 @@ if (
 
                                 <fieldset class="form-group">
                                     <div class="row">
-                                        <legend class="col-lg-2 col-form-label pt-0"><?= Translation::get('ad_entry_userpermission') ?></legend>
+                                        <legend class="col-lg-2 col-form-label pt-0">
+                                            <?= Translation::get('ad_entry_userpermission') ?>
+                                        </legend>
                                         <div class="col-lg-10">
                                             <div class="form-check">
                                                 <input type="radio" id="allusers" name="userpermission" value="all"
@@ -607,7 +609,7 @@ if (
                                 <h6 class="card-title sr-only">
                                     <?= Translation::get('ad_entry_changelog') ?>
                                 </h6>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="changelog-date">
                                         <?= Translation::get('ad_entry_date') ?>
                                     </label>
@@ -616,7 +618,7 @@ if (
                                                value="<?= $faqData['date'] ?>">
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <label class="col-lg-2 col-form-label" for="changed">
                                         <?= Translation::get('ad_entry_changed') ?>
                                     </label>
@@ -631,14 +633,14 @@ if (
                                         <?php printf(Translation::get('ad_admin_notes_hint'), Translation::get('ad_admin_notes')) ?>
                                     </label>
                                 </h6>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col-lg-10 offset-lg-2">
                                         <textarea id="notes" name="notes" class="form-control" rows="3"
                                         ><?= $faqData['notes'] ?? '' ?></textarea>
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                <div class="row mb-2">
                                     <div class="col-lg-2">
                                         <h6 class="card-title">
                                             <?= Translation::get('ad_entry_changelog_history') ?>
@@ -715,7 +717,7 @@ if (
                                         <?= Translation::get('msgEditFaqDat') ?>
                                     </label>
                                 </div>
-                                <div id="recordDateInputContainer" class="invisible">
+                                <div id="recordDateInputContainer" class="invisible mb-2">
                                     <input type="datetime-local" name="date" id="date" class="form-control"
                                            placeholder="<?= $faqData['date'] ?>">
                                 </div>
@@ -842,22 +844,17 @@ if (
               <?= Translation::get('ad_att_addto') . ' ' . Translation::get('ad_att_addto_2') ?>
             (max <?= round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
           </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form action="api/attachment.php?action=upload" enctype="multipart/form-data" method="post"
                 id="attachmentForm" novalidate>
             <fieldset>
-              <input type="hidden" name="MAX_FILE_SIZE"
-                     value="<?= $faqConfig->get('records.maxAttachmentSize') ?>">
-              <input type="hidden" name="record_id" id="attachment_record_id"
-                     value="<?= $faqData['id'] ?>">
-              <input type="hidden" name="record_lang" id="attachment_record_lang"
-                     value="<?= $faqData['lang'] ?>">
+              <input type="hidden" name="MAX_FILE_SIZE" value="<?= $faqConfig->get('records.maxAttachmentSize') ?>">
+              <input type="hidden" name="record_id" id="attachment_record_id" value="<?= $faqData['id'] ?>">
+              <input type="hidden" name="record_lang" id="attachment_record_lang" value="<?= $faqData['lang'] ?>">
               <input type="hidden" name="save" value="true">
-              <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+              <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
               <div class="custom-file">
                 <input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload" multiple>
@@ -877,14 +874,10 @@ if (
                 <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
                      role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-
             </fieldset>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="reset" class="btn btn-primary" data-dismiss="modal" id="pmf-attachment-modal-close">
-              <?= Translation::get('ad_att_close') ?>
-          </button>
           <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
               <?= Translation::get('ad_att_butt') ?>
           </button>

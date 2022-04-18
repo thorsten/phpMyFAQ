@@ -19,6 +19,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -41,14 +42,14 @@ try {
     switch ($ajaxAction) {
         case 'delete':
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-                echo $PMF_LANG['err_NotAuth'];
+                echo Translation::get('err_NotAuth');
                 exit(1);
             }
 
             if ($attachment->delete()) {
-                echo $PMF_LANG['msgAttachmentsDeleted'];
+                echo Translation::get('msgAttachmentsDeleted');
             } else {
-                echo $PMF_LANG['ad_att_delfail'];
+                echo Translation::get('ad_att_delfail');
             }
             break;
 
@@ -90,6 +91,7 @@ try {
                 }
             }
 
+            $http->setStatus(200);
             $http->sendJsonWithHeaders($uploadedFiles);
 
             break;

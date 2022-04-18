@@ -15,18 +15,19 @@
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
  *
- * @package phpMyFAQ
- * @author Minoru TODA <todam@netjapan.co.jp>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2022 NetJapan, Inc.
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-30
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-30
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\LinkVerifier;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -55,7 +56,7 @@ if (count(ob_list_handlers()) > 0) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= $PMF_LANG['metaLanguage']; ?>">
+<html lang="<?= Translation::get('metaLanguage'); ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -71,13 +72,10 @@ if (count(ob_list_handlers()) > 0) {
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 
-  <link rel="stylesheet" href="../assets/dist/admin-styles.css">
-
-  <script src="../assets/dist/vendors.js"></script>
-  <script src="../assets/dist/phpmyfaq.js"></script>
-  <script src="../../assets/dist/backend.js"></script>
+    <link rel="stylesheet" href="../../assets/dist/admin.css">
+    <script src="../../assets/dist/backend.js"></script>
 </head>
-<body dir="<?= $PMF_LANG['dir']; ?>">
+<body dir="<?= Translation::get('dir'); ?>">
 <?php
 
 if (!(isset($id) && isset($artlang))) {

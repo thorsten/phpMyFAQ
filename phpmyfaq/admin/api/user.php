@@ -123,7 +123,7 @@ if (
         case 'add_user':
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }
 
@@ -142,16 +142,16 @@ if (
             $newUser = new User($faqConfig);
 
             if (!$newUser->isValidLogin($userName)) {
-                $errorMessage[] = $PMF_LANG['ad_user_error_loginInvalid'];
+                $errorMessage[] = Translation::get('ad_user_error_loginInvalid');
             }
             if ($newUser->getUserByLogin($userName)) {
-                $errorMessage[] = $PMF_LANG['ad_adus_exerr'];
+                $errorMessage[] = Translation::get('ad_adus_exerr');
             }
             if ($userRealName === '') {
-                $errorMessage[] = $PMF_LANG['ad_user_error_noRealName'];
+                $errorMessage[] = Translation::get('ad_user_error_noRealName');
             }
             if (is_null($userEmail)) {
-                $errorMessage[] = $PMF_LANG['ad_user_error_noEmail'];
+                $errorMessage[] = Translation::get('ad_user_error_noEmail');
             }
             if (count($errorMessage) === 0) {
                 if (!$newUser->createUser($userName, $userPassword)) {
@@ -162,7 +162,7 @@ if (
                     $newUser->setSuperAdmin((bool)$userIsSuperAdmin);
                     $mailHelper = new MailHelper($faqConfig);
                     $mailHelper->sendMailToNewUser($newUser, $userPassword);
-                    $successMessage = [ 'data' => $PMF_LANG['ad_adus_suc'] ];
+                    $successMessage = [ 'data' => Translation::get('ad_adus_suc') ];
                 }
 
                 $http->setStatus(201);
@@ -188,10 +188,10 @@ if (
 
             $user->getUserById($userId, true);
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message = '<p class="alert alert-error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
+                $message = '<p class="alert alert-error">' . Translation::get('ad_user_error_protectedAccount') . '</p>';
             } else {
                 if (!$user->deleteUser()) {
-                    $message = $PMF_LANG['ad_user_error_delete'];
+                    $message = Translation::get('ad_user_error_delete');
                 } else {
                     $category = new Category($faqConfig, [], false);
                     $category->moveOwnership((int) $userId, 1);

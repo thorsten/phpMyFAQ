@@ -20,6 +20,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -28,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 
-$esInstance = new Elasticsearch($faqConfig);
+$elasticsearch = new Elasticsearch($faqConfig);
 
 $http = new HttpHelper();
 $http->setContentType('application/json');
@@ -38,33 +39,30 @@ $result = [];
 
 switch ($ajaxAction) {
     case 'create':
-        if ($esInstance->createIndex()) {
-            $result = ['success' => $PMF_LANG['ad_es_create_index_success']];
+        if ($elasticsearch->createIndex()) {
+            $result = ['success' => Translation::get('ad_es_create_index_success')];
         }
         break;
 
     case 'drop':
-        if ($esInstance->dropIndex()) {
-            $result = ['success' => $PMF_LANG['ad_es_drop_index_success']];
+        if ($elasticsearch->dropIndex()) {
+            $result = ['success' => Translation::get('ad_es_drop_index_success')];
         }
         break;
 
     case 'import':
         $faq = new Faq($faqConfig);
         $faq->getAllRecords();
-        $bulkIndexResult = $esInstance->bulkIndex($faq->faqRecords);
+        $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
         if ($bulkIndexResult['success']) {
-            $result = ['success' => $PMF_LANG['ad_es_create_import_success']];
+            $result = ['success' => Translation::get('ad_es_create_import_success')];
         }
         break;
 
     case 'stats':
-        try {
-            $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
-        } catch (Missing404Exception $e) {
-            $result = $e->getMessage();
-        }
+        $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
         break;
 }
 
+$http->setStatus(200);
 $http->sendJsonWithHeaders($result);
