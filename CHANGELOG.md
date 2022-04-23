@@ -10,6 +10,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - changed PHP requirement to PHP 8.0+ (Thorsten)
 - changed to HTTPS as new default (Thorsten)
+- changed MySQL / MariaDB / Percona Server / Galera Cluster to InnoDB only (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - added Monolog v2 as logging solution (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)

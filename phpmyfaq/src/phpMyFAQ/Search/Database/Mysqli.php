@@ -48,7 +48,7 @@ class Mysqli extends SearchDatabase
      * @throws \Exception
      * @return mixed
      */
-    public function search(string $searchTerm)
+    public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
@@ -82,7 +82,7 @@ class Mysqli extends SearchDatabase
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
+                    MATCH (%s) AGAINST ('%s' IN NATURAL LANGUAGE MODE)
                     %s
                     %s",
                 $columns,
@@ -138,7 +138,7 @@ class Mysqli extends SearchDatabase
 
         foreach ($this->matchingColumns as $matchColumn) {
             $column = sprintf(
-                "MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
+                "MATCH (%s) AGAINST ('*%s*' IN NATURAL LANGUAGE MODE) AS relevance_%s",
                 $matchColumn,
                 $this->config->getDb()->escape($searchTerm),
                 substr(strstr($matchColumn, '.'), 1)

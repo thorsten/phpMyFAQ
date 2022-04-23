@@ -153,7 +153,7 @@ class Mysqli extends Database implements Driver
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes TEXT DEFAULT NULL,
             FULLTEXT (keywords,thema,content),
-            PRIMARY KEY (id, lang)) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
             id INT(11) NOT NULL,
