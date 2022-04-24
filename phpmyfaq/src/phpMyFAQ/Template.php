@@ -261,11 +261,15 @@ class Template
     }
 
     /**
-     * @param string $template
+     * @param string|null $template
      * @return array<int, array<string, string>>
      */
-    private function readFilters(string $template): array
+    private function readFilters(?string $template = null): array
     {
+        if (is_null($template)) {
+            return [];
+        }
+
         $tmpFilter = $tplFilter = [];
         Strings::preg_match_all('/\{\{.+?\}\}/', $template, $tmpFilter);
 
