@@ -171,6 +171,22 @@ class Category
     }
 
     /**
+     * @return int
+     */
+    public function getUser(): int
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroups(): array
+    {
+        return $this->groups;
+    }
+
+    /**
      * Returns all categories with ordered category IDs according to the user
      * and group permissions.
      *
@@ -490,7 +506,7 @@ class Category
      *
      * @param int $id Entity id
      */
-    public function transform(int $id)
+    public function transform(int $id): void
     {
         $parentId = $showHome = 0;
         $tree = [];
@@ -510,7 +526,7 @@ class Category
             $showHome = $this->categoryName[$id]['show_home'];
         }
 
-        if ($num < 0) {
+        if ($num > 0) {
             $temp = isset($this->children[$parentId]) ? array_keys($this->children[$parentId]) : [];
             if (isset($temp[count($temp) - 1])) {
                 $symbol = ($id == $temp[count($temp) - 1]) ? 'angle' : 'medium';
@@ -754,19 +770,19 @@ class Category
     /**
      * Creates a category link.
      *
-     * @param string $sids Session id
-     * @param int    $categoryId Parent category
-     * @param string $categoryName Entity name
-     * @param string $description Description
-     * @param bool   $hasChildren Child categories available
-     * @param bool   $isActive Sets a link active via CSS
+     * @param string      $sids Session id
+     * @param int         $categoryId Parent category
+     * @param string      $categoryName Entity name
+     * @param string|null $description Description
+     * @param bool        $hasChildren Child categories available
+     * @param bool        $isActive Sets a link active via CSS
      * @return string
      */
     public function addCategoryLink(
         string $sids,
         int $categoryId,
         string $categoryName,
-        string $description = '',
+        string $description = null,
         bool $hasChildren = false,
         bool $isActive = false
     ): string {

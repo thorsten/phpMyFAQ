@@ -95,18 +95,18 @@ class CategoryEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      * @return CategoryEntity
      */
-    public function setDescription(string $description): CategoryEntity
+    public function setDescription(?string $description): CategoryEntity
     {
         $this->description = $description;
 

@@ -275,16 +275,16 @@ class Strings
      * Convert special chars to html entities.
      *
      * @param string|null $string The input string.
-     * @param int    $quoteStyle Quote style
-     * @param string $charset Character set, UTF-8 by default
-     * @param bool   $doubleEncode If set to false, no encoding of existing entities
+     * @param int         $quoteStyle Quote style
+     * @param string      $charset Character set, UTF-8 by default
+     * @param bool        $doubleEncode If set to false, no encoding of existing entities
      * @return string
      */
     public static function htmlspecialchars(
-        ?string $string,
-        $quoteStyle = ENT_HTML5,
-        $charset = 'utf-8',
-        $doubleEncode = false
+        ?string $string = '',
+        int $quoteStyle = ENT_HTML5,
+        string $charset = 'utf-8',
+        bool $doubleEncode = false
     ): string {
         return htmlspecialchars(
             $string,

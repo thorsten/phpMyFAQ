@@ -96,11 +96,15 @@ class Template
     /**
      * This function reads the block.
      *
-     * @param string $block Block to read
+     * @param string|null $block Block to read
      * @return array<string, string>
      */
-    private function readBlocks(string $block): array
+    private function readBlocks(?string $block = null): array
     {
+        if ($block === null) {
+            return [];
+        }
+
         $tmpBlocks = $tplBlocks = [];
 
         // read all blocks into $tmpBlocks
@@ -237,11 +241,15 @@ class Template
     }
 
     /**
-     * @param string $template
+     * @param string|null $template
      * @return array<int, array<string, string>>
      */
-    private function readFilters(string $template): array
+    private function readFilters(?string $template = null): array
     {
+        if (is_null($template)) {
+            return [];
+        }
+
         $tmpFilter = $tplFilter = [];
         Strings::preg_match_all('/\{\{.+?\}\}/', $template, $tmpFilter);
 

@@ -82,7 +82,8 @@ if (!is_dir(PMF_ROOT_DIR . '/images')) {
         }
         $path = str_replace(dirname(__DIR__) . '/', '', $file->getPath());
         printf(
-            '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
+            '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview" alt="%s">%s</div>',
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
             $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
             $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
             $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename()

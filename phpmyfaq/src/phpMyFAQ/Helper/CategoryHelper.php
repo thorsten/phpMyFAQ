@@ -34,10 +34,9 @@ class CategoryHelper extends Helper
      * Renders the main navigation.
      *
      * @param int $activeCategory Selected category
-     *
      * @return string
      */
-    public function renderNavigation($activeCategory = 0): string
+    public function renderNavigation(int $activeCategory = 0): string
     {
         global $sids;
 
@@ -388,17 +387,42 @@ class CategoryHelper extends Helper
             '
             SELECT
                 fcr.category_id AS category_id,
-                count(fcr.category_id) AS number
+                count(DISTINCT fcr.category_id) AS number
             FROM
-                %sfaqcategoryrelations fcr,
-                %sfaqdata fd
-            WHERE
-                fcr.record_id = fd.id
-            AND
-                fcr.record_lang = fd.lang',
+                %sfaqcategoryrelations fcr
+                JOIN %sfaqdata fd ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang
+                LEFT JOIN %sfaqdata_group AS fdg ON fd.id = fdg.record_id
+                LEFT JOIN %sfaqdata_user AS fdu ON fd.id = fdu.record_id
+                LEFT JOIN %sfaqcategory_group AS fcg ON fcr.category_id = fcg.category_id
+                LEFT JOIN %sfaqcategory_user AS fcu ON fcr.category_id = fcu.category_id
+            WHERE 1=1 
+            ',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix()
         );
+
+        if (-1 === $this->Category->getUser()) {
+            $query .= sprintf(
+                'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
+                implode(', ', $this->Category->getGroups()),
+                implode(', ', $this->Category->getGroups())
+            );
+        } else {
+            $query .= sprintf(
+                'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )
+                AND ( fcg.group_id IN (%s) OR (fcu.user_id = %d OR fcg.group_id IN (%s)) )',
+                implode(', ', $this->Category->getGroups()),
+                $this->Category->getUser(),
+                implode(', ', $this->Category->getGroups()),
+                implode(', ', $this->Category->getGroups()),
+                $this->Category->getUser(),
+                implode(', ', $this->Category->getGroups())
+            );
+        }
 
         if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
@@ -415,7 +439,7 @@ class CategoryHelper extends Helper
             }
         }
         $output = '<ul class="pmf-category-overview">';
-        $open = 0;
+        $open = 1;
         $this->Category->expandAll();
 
         for ($y = 0; $y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
