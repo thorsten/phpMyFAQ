@@ -1,10 +1,14 @@
-# phpMyFAQ 3.1.3
+# phpMyFAQ 3.1.4
 
 **Codename "Poseidon"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.1.4 - 2022-04-25
+
+- added missing assets (Thorsten)
 
 ### phpMyFAQ v3.1.3 - 2022-04-24
 
