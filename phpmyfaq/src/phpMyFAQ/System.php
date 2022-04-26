@@ -170,7 +170,7 @@ class System
         printf(
             '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
             '</body></html>',
-            '&copy; 2001-2021 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
+            '&copy; 2001-2022 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
         );
         exit(-1);
     }
