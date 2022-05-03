@@ -19,7 +19,7 @@
 
 /*global document: false, window: false, $: false */
 
-let selectSelectAll, selectUnselectAll, saveVoting;
+let saveVoting;
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param select_id
    * @return void
    */
-  selectSelectAll = function selectSelectAll(select_id) {
+  const selectSelectAll = function selectSelectAll(select_id) {
     const selectOptions = $('#' + select_id + ' option');
     for (let i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = true;
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param select_id
    * @return void
    */
-  selectUnselectAll = function selectUnselectAll(select_id) {
+  const selectUnselectAll = function selectUnselectAll(select_id) {
     const selectOptions = $('#' + select_id + ' option');
     for (let i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = false;
