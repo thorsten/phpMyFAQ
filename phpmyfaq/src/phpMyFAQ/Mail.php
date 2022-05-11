@@ -351,11 +351,11 @@ class Mail
             );
         }
 
-        if (!empty($name)) {
+        if (isset($name)) {
             // Remove CR and LF characters to prevent header injection
             $name = str_replace(["\n", "\r"], '', $name);
 
-            if (function_exists('mb_encode_mimeheader')) {
+            if (function_exists('mb_encode_mimeheader') && !is_null($name)) {
                 // Encode any special characters in the displayed name
                 $name = mb_encode_mimeheader($name);
             }
