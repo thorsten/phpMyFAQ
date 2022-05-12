@@ -365,7 +365,7 @@ class Pgsql extends Database implements Driver
         'faqvisits' => 'CREATE TABLE %sfaqvisits (
             id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            visits SMALLINT NOT NULL,
+            visits INTEGER NOT NULL,
             last_visit INTEGER NOT NULL,
             PRIMARY KEY (id, lang))',
 

@@ -364,7 +364,7 @@ class Sqlsrv extends Database implements Driver
         'faqvisits' => 'CREATE TABLE %sfaqvisits (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
-            visits SMALLINT NOT NULL,
+            visits INTEGER NOT NULL,
             last_visit INTEGER NOT NULL,
             PRIMARY KEY (id, lang))',
 

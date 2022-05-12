@@ -363,7 +363,7 @@ class Mysqli extends Database implements Driver
         'faqvisits' => 'CREATE TABLE %sfaqvisits (
             id INT(11) NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            visits SMALLINT NOT NULL,
+            visits INT(11) NOT NULL,
             last_visit INT(11) NOT NULL,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
