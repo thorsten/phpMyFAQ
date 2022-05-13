@@ -331,13 +331,13 @@ class Mail
      * Add an e-mail address to an array.
      *
      * @param array<string> $target Target array.
-     * @param string $targetAlias Alias Target alias.
-     * @param string $address User e-mail address.
-     * @param string|null $name User name (optional).
+     * @param string        $targetAlias Alias Target alias.
+     * @param string        $address User e-mail address.
+     * @param string|null   $name Username (optional).
      * @throws Exception
      * @return bool True if successful, false otherwise.
      */
-    private function addEmailTo(array &$target, string $targetAlias, string $address, $name = null): bool
+    private function addEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
     {
         // Sanity check
         if (!self::validateEmail($address)) {
@@ -355,17 +355,15 @@ class Mail
             // Remove CR and LF characters to prevent header injection
             $name = str_replace(["\n", "\r"], '', $name);
 
-            if (function_exists('mb_encode_mimeheader') && !is_null($name)) {
-                // Encode any special characters in the displayed name
-                $name = mb_encode_mimeheader($name);
-            }
+            // Encode any special characters in the displayed name
+            $name = iconv_mime_encode($targetAlias, $name);
 
-            // Wrap the displayed name in quotes (to fix problems with commas etc),
+            // Wrap the displayed name in quotes (to fix problems with commas etc.),
             // and escape any existing quotes
             $name = '"' . str_replace('"', '\"', $name) . '"';
         }
 
-        // Add the e-mail address into the target array
+        // Add the email address into the target array
         $target[$address] = $name;
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
         if (('WIN' === strtoupper(substr(PHP_OS, 0, 3))) && ('built-in' == $this->agent)) {
