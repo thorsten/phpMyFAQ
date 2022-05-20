@@ -29,9 +29,7 @@ namespace phpMyFAQ;
  */
 class Link
 {
-    /**
-     * class constants.
-     */
+    /** Class constants. */
     private const LINK_AMPERSAND = '&amp;';
     private const LINK_CATEGORY = 'category/';
     private const LINK_CONTENT = 'content/';
@@ -139,56 +137,56 @@ class Link
      *
      * @var string
      */
-    public $url = '';
+    public string $url = '';
 
     /**
      * CSS class.
      *
      * @var string
      */
-    public $class = '';
+    public string $class = '';
 
     /**
      * Linktext.
      *
      * @var string
      */
-    public $text = '';
+    public string $text = '';
 
     /**
      * Tooltip.
      *
      * @var string
      */
-    public $tooltip = '';
+    public string $tooltip = '';
 
     /**
      * Target.
      *
      * @var string
      */
-    public $target = '';
+    public string $target = '';
 
     /**
      * Name selector.
      *
      * @var string
      */
-    public $name = '';
+    public string $name = '';
 
     /**
      * property specific to the SEO/SEF URLs.
      *
      * @var string
      */
-    public $itemTitle = '';
+    public string $itemTitle = '';
 
     /**
      * id selector.
      *
      * @var string
      */
-    public $id = '';
+    public string $id = '';
 
     /**
      * rel property.
@@ -196,12 +194,12 @@ class Link
      * @var string
      */
 
-    protected $rel = '';
+    protected string $rel = '';
 
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -298,7 +296,7 @@ class Link
     }
 
     /**
-     * Builds a HTML anchor.
+     * Builds an HTML anchor.
      *
      * @return string
      */
@@ -617,7 +615,7 @@ class Link
     }
 
     /**
-     * Checks if the the current URL is the main index.php file.
+     * Checks if the current URL is the main index.php file.
      *
      * @return bool
      */
@@ -689,10 +687,9 @@ class Link
      * Returns a search engine optimized title.
      *
      * @param string $title
-     *
      * @return string
      */
-    public function getSEOItemTitle($title = ''): string
+    public function getSEOItemTitle(string $title = ''): string
     {
         if ('' === $title) {
             $title = $this->itemTitle;
@@ -801,7 +798,7 @@ class Link
         if (isset($parsedUrl['query'])) {
             parse_str($parsedUrl['query'], $parameters);
 
-            if (!isset(self::$allowedActionParameters[$parameters['action']])) {
+            if (isset($parameters['action']) && !isset(self::$allowedActionParameters[$parameters['action']])) {
                 return $defaultUrl;
             }
 
