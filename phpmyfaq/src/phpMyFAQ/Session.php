@@ -35,16 +35,16 @@ class Session
     public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
     /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     /** @var int */
     private $currentSessionId;
 
     /** @var CurrentUser*/
-    private $currentUser;
+    private CurrentUser $currentUser;
 
     /** @var string[] List of bots we don't track */
-    private $botIgnoreList = [
+    private array $botIgnoreList = [
         'nustcrape',
         'webpost',
         'GoogleBot',
@@ -273,7 +273,7 @@ class Session
             }
 
             foreach ($this->botIgnoreList as $bot) {
-                if ((bool)Strings::strstr($agent, $bot)) {
+                if (Strings::strstr($agent, $bot)) {
                     ++$bots;
                 }
             }

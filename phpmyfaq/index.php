@@ -222,6 +222,7 @@ $sidGet = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALI
 $sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);
+
 // Note: do not track internal calls
 $internal = false;
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -236,9 +237,17 @@ if (!$internal) {
             $pmfExceptions[] = $e->getMessage();
         }
     } elseif (!is_null($sidCookie)) {
+        try {
             $faqSession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
+        } catch (Exception $e) {
+            $pmfExceptions[] = $e->getMessage();
+        }
     } else {
-        $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
+        try {
+            $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
+        } catch (Exception $e) {
+            $pmfExceptions[] = $e->getMessage();
+        }
     }
 }
 
