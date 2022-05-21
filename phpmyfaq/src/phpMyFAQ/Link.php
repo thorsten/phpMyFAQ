@@ -156,9 +156,9 @@ class Link
     /**
      * Tooltip.
      *
-     * @var string
+     * @var string|null
      */
-    public string $tooltip = '';
+    public $tooltip = '';
 
     /**
      * Target.

@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use ErrorException;
 use phpMyFAQ\Core\Exception;
 use stdClass;
 
@@ -30,22 +31,22 @@ class Api
     /**
      * @var string
      */
-    private $apiUrl = 'https://api.phpmyfaq.de';
+    private string $apiUrl = 'https://api.phpmyfaq.de';
 
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * @var System
      */
-    private $system;
+    private System $system;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $remoteHashes = null;
+    private ?string $remoteHashes = null;
 
     /**
      * Api constructor.
@@ -117,9 +118,14 @@ class Api
     /**
      * @param string $url
      * @return string
+     * @throws Exception
      */
     public function fetchData(string $url): string
     {
-        return file_get_contents($url);
+        try {
+            return file_get_contents($url);
+        } catch (ErrorException $exception) {
+            throw new Exception($exception->getMessage());
+        }
     }
 }
