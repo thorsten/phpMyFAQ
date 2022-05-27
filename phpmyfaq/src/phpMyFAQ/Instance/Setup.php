@@ -165,8 +165,7 @@ class Setup
             $this->rootDir . $folder . '/config/elasticsearch.php',
             "<?php\n" .
             "\$PMF_ES['hosts'] = ['" . implode("'], ['", $data['hosts']) . "'];\n" .
-            "\$PMF_ES['index'] = '" . $data['index'] . "';\n" .
-            "\$PMF_ES['type'] = 'faqs';",
+            "\$PMF_ES['index'] = '" . $data['index'] . "';\n",
             LOCK_EX
         );
     }
