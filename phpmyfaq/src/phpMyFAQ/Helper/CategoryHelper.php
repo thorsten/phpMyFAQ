@@ -387,7 +387,7 @@ class CategoryHelper extends Helper
             '
             SELECT
                 fcr.category_id AS category_id,
-                count(DISTINCT fcr.category_id) AS number
+                count(fcr.category_id) AS number
             FROM
                 %sfaqcategoryrelations fcr
                 JOIN %sfaqdata fd ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang

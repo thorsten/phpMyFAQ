@@ -28,10 +28,10 @@ use phpMyFAQ\Configuration;
 class Elasticsearch
 {
     /** @var Configuration */
-    protected $config;
+    protected Configuration $config;
 
     /** @var Client */
-    protected $client;
+    protected Client $client;
 
     /** @var array<string, mixed> */
     protected $esConfig;

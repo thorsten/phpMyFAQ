@@ -32,22 +32,22 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     /**
      * @var Client
      */
-    private $client;
+    private Client $client;
 
     /**
      * @var string[]
      */
-    private $esConfig;
+    private array $esConfig;
 
     /**
      * @var string
      */
-    private $language = '';
+    private string $language = '';
 
     /**
      * @var int[]
      */
-    private $categoryIds = [];
+    private array $categoryIds = [];
 
     /**
      * Constructor.

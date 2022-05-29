@@ -16,20 +16,21 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at https://mozilla.org/MPL/2.0/.
 #
-# @package phpMyFAQ
-# @author Matteo Scaramuccia <matteo@scaramuccia.com>
-# @author Thorsten Rinne <thorsten@phpmyfaq.de>
-# @author Rene Treffer <treffer+phpmyfaq@measite.de>
-# @author David Soria Parra <dsp@php.net>
-# @author Florian Anderiasch <florian@phpmyfaq.de>
+# @package   phpMyFAQ
+# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+# @author    Rene Treffer <treffer+phpmyfaq@measite.de>
+# @author    David Soria Parra <dsp@php.net>
+# @author    Florian Anderiasch <florian@phpmyfaq.de>
 # @copyright 2008-2022 phpMyFAQ Team
-# @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-# @link https://www.phpmyfaq.de
-# @version 2008-09-10
+# @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+# @link      https://www.phpmyfaq.de
+# @version   2008-09-10
 
 # phpMyFAQ Version
 . scripts/version.sh
 
+# md5bin
 if [ "x${MD5BIN}" = "x" ]; then
     if which md5 > /dev/null; then
         MD5BIN="$(which md5)"
@@ -53,9 +54,13 @@ mkdir -p "$cwd"/build/package/"${PMF_PACKAGE_FOLDER}"/
 
 cd "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/ || exit
 
-printf "\n 🚀 Add dependencies\n";
+printf "\n 🚀 Add PHP dependencies\n";
 composer install --no-dev --prefer-dist
+
+printf "\n 🚀 Add JS dependencies\n";
 yarn install
+
+printf "\n 🚀 Build JS\n";
 yarn build
 
 printf "\n 🚀 Remove fonts from TCPDF\n"
