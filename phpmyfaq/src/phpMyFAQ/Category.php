@@ -1141,7 +1141,7 @@ class Category
             $categoryData['lang']
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**

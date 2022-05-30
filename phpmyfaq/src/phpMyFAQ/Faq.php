@@ -2390,7 +2390,7 @@ class Faq
                 fd.lang = '%s'
                 %s
             GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits
+                fd.id,fd.lang,fd.thema,fcr.category_id,fv.visits
             ORDER BY
                 %s %s",
             Database::getTablePrefix(),

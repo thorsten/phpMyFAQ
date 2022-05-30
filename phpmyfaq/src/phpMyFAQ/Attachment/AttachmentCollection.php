@@ -32,7 +32,7 @@ class AttachmentCollection
      *
      * @var Configuration
      */
-    protected $config;
+    protected Configuration $config;
 
     /**
      * Constructor.
@@ -45,7 +45,7 @@ class AttachmentCollection
     }
 
     /**
-     * Get an array with minimalistic attachment meta data.
+     * Get an array with minimalistic attachment metadata.
      *
      * @return array
      */
@@ -70,7 +70,7 @@ class AttachmentCollection
             ON
                 fa.record_id = fd.id
             GROUP BY
-                fa.id,fd.thema',
+                fa.id,fa.record_id,fa.record_lang,fa.filename,fa.filesize,fa.mime_type,fd.thema',
             Database::getTablePrefix() . 'faqattachment',
             Database::getTablePrefix() . 'faqdata'
         );
