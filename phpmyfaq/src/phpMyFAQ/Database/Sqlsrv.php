@@ -34,7 +34,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @var array
      */
-    public $tableNames = [];
+    public array $tableNames = [];
 
     /**
      * @var resource
@@ -45,13 +45,13 @@ class Sqlsrv implements DatabaseDriver
      *
      * @var string
      */
-    private $sqllog = '';
+    private string $sqllog = '';
     /**
      * Connection options array.
      *
      * @var array
      */
-    private $connectionOptions = [];
+    private array $connectionOptions = [];
 
     /**
      * Connects to the database.
@@ -99,6 +99,7 @@ class Sqlsrv implements DatabaseDriver
             'PWD' => $password,
             'Database' => $database,
             'CharacterSet' => 'UTF-8',
+            'TrustServerCertificate' => true, // even trust self-signed certificates
         ];
     }
 
