@@ -157,7 +157,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
         $user->enableRememberMe();
     }
-    if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
+    if ($faqConfig->isLdapActive() && function_exists('ldap_connect')) {
         try {
             $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');

@@ -126,7 +126,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if (!is_null($rememberMe) && 'rememberMe' === $rememberMe) {
         $user->enableRememberMe();
     }
-    if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
+    if ($faqConfig->isLdapActive() && function_exists('ldap_connect')) {
         try {
             $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
@@ -667,20 +667,14 @@ if (isset($auth)) {
         $adminSection = '';
     }
 
-    if ($faqConfig->get('ldap.ldapSupport')) {
-        $userControlDropdown = '';
-    } else {
-        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] .
-            '</a>';
-    }
-
     $template->parseBlock(
         'index',
         'userloggedIn',
         [
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
-            'msgUserControlDropDown' => $userControlDropdown,
+            'msgUserControlDropDown' => '<a class="dropdown-item" href="?action=ucp">' .
+                $PMF_LANG['headerUserControlPanel'] . '</a>',
             'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
                 $PMF_LANG['ad_menu_RequestRemove'] . '</a>',
             'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>',

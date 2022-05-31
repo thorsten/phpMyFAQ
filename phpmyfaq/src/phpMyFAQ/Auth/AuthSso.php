@@ -43,7 +43,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      */
     public function create(string $login, string $password, string $domain = ''): bool
     {
-        if ($this->config->get('ldap.ldapSupport')) {
+        if ($this->config->isLdapActive()) {
             // LDAP/AD + SSO
             $authLdap = new AuthLdap($this->config);
             return $authLdap->create($login, null, $domain);

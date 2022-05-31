@@ -49,6 +49,7 @@ if ($user->isLoggedIn()) {
             'ucpGravatarImage' => $gravatarImg,
             'userid' => $user->getUserId(),
             'csrf' => $user->getCsrfTokenFromSession(),
+            'readonly' => $faqConfig->isLdapActive() ? 'readonly' : '',
             'msgRealName' => $PMF_LANG['ad_user_name'],
             'realname' => $user->getUserData('display_name'),
             'msgEmail' => $PMF_LANG['msgNewContentMail'],

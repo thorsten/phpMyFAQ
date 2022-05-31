@@ -343,6 +343,14 @@ class Configuration
     }
 
     /**
+     * @return bool
+     */
+    public function isLdapActive(): bool
+    {
+        return $this->get('ldap.ldapSupport');
+    }
+
+    /**
      * Sets the Elasticsearch client instance.
      *
      * @param Client $esClient
