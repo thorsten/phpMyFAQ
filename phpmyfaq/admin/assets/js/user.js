@@ -23,11 +23,12 @@
 function getUserRights(userId) {
   'use strict';
 
+  resetUserRights();
   $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId, (data) => {
     $.each(data, (i, val) => {
-      $('#user_right_' + val).attr('checked', true);
+      document.getElementById('user_right_' + val).checked = true;
     });
-    $('#rights_user_id').val(userId);
+    document.getElementById('rights_user_id').value = userId;
   });
 }
 
@@ -38,8 +39,16 @@ function getUserRights(userId) {
  */
 function updateUser(userId) {
   'use strict';
+
   getUserData(userId);
   getUserRights(userId);
+}
+
+function resetUserRights() {
+  const inputs = document.querySelectorAll('.permission');
+  for(let i = 0; i < inputs.length; i++) {
+    inputs[i].checked = false;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
