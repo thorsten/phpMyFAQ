@@ -414,7 +414,7 @@ class Category
         }
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $url = sprintf('%s?action=show&amp;cat=%d', $this->config->getDefaultUrl(), $row['id']);
+            $url = sprintf('%sindex.php?action=show&cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
             if ('' === $row['image']) {
@@ -786,7 +786,7 @@ class Category
         bool $isActive = false
     ): string {
         $url = sprintf(
-            '%s?%saction=show&amp;cat=%d',
+            '%sindex.php?%saction=show&amp;cat=%d',
             $this->config->getDefaultUrl(),
             $sids,
             $categoryId
@@ -891,7 +891,7 @@ class Category
         if ($renderAsHtml) {
             foreach ($tempName as $key => $category) {
                 $url = sprintf(
-                    '%s?%saction=show&amp;cat=%d',
+                    '%sindex.php?%saction=show&amp;cat=%d',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $categoryId[$key]

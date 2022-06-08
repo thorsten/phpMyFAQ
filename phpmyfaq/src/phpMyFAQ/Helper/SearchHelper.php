@@ -102,7 +102,7 @@ class SearchHelper extends Helper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
                     $this->config->getDefaultUrl() . 'index.php',
                     $this->sessionId,
                     $result->category_id,
@@ -248,7 +248,7 @@ class SearchHelper extends Helper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
                     $this->config->getDefaultUrl(),
                     $this->sessionId,
                     $result->category_id,
@@ -336,7 +336,7 @@ class SearchHelper extends Helper
                 ++$counter;
 
                 $url = sprintf(
-                    '%s?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $result->category_id,
                     $result->id,

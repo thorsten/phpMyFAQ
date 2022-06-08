@@ -234,7 +234,7 @@ class CategoryHelper extends Helper
                 }
 
                 $url = sprintf(
-                    '%s?%saction=show&amp;cat=%d',
+                    '%sindex.php?%saction=show&amp;cat=%d',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $parent
@@ -493,7 +493,7 @@ class CategoryHelper extends Helper
             }
 
             $url = sprintf(
-                '%s?%saction=show&amp;cat=%d',
+                '%sindex.php?%saction=show&amp;cat=%d',
                 $this->config->getDefaultUrl(),
                 $sids,
                 $parent

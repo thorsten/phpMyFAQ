@@ -74,7 +74,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $up = '';
     if ($categoryData->getParentId() !== 0) {
         $url = sprintf(
-            '%s?%saction=show&amp;cat=%d',
+            '%sindex.php?%saction=show&amp;cat=%d',
             $faqConfig->getDefaultUrl(),
             $sids,
             $categoryData->getParentId()
