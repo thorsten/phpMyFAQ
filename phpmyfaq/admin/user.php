@@ -325,9 +325,6 @@ if (
         }
       </script>
 
-
-      <div id="user_message"><?= $message ?></div>
-
       <div class="row">
         <div class="col-lg-4">
           <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
