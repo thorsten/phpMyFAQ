@@ -132,7 +132,7 @@ if (!is_null($user) && $user instanceof CurrentUser) {
 //
 switch ($action) {
     //
-    // v2.1
+    // v2.2
     //
     case 'version':
         $result = $faqConfig->getVersion();
@@ -173,6 +173,14 @@ switch ($action) {
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
         $result = array_values($category->getAllCategories());
+        if (count($result) === 0) {
+            $http->setStatus(404);
+        }
+        break;
+
+    case 'groups':
+        $groupPermission = new MediumPermission($faqConfig);
+        $result = $groupPermission->getAllGroups($user);
         if (count($result) === 0) {
             $http->setStatus(404);
         }
