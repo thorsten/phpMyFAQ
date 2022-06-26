@@ -5,12 +5,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-11-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2013-11-17
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
 
     const target = $(event.target).attr('href');
+
+    // Clear previous active tab
+    const relatedTarget = $(event.relatedTarget).attr('href');
+    $(relatedTarget).empty();
 
     $.get(
       'index.php',

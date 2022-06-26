@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Thomas Zeithaml <tom@annatom.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-12-26
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-12-26
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -89,31 +89,35 @@ function renderInputForm($key, $type)
                 echo '</div>';
                 ?>
                 <script>
-                  const generateUUID = () => {
-                    let date = new Date().getTime();
+                  try {
+                    const generateUUID = () => {
+                      let date = new Date().getTime();
 
-                    if (window.performance && typeof window.performance.now === 'function') {
-                      date += performance.now();
+                      if (window.performance && typeof window.performance.now === 'function') {
+                        date += performance.now();
+                      }
+
+                      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+                        const random = (date + Math.random() * 16) % 16 | 0;
+                        date = Math.floor(date / 16);
+                        return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
+                      });
                     }
 
-                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
-                      const random = (date + Math.random() * 16) % 16 | 0;
-                      date = Math.floor(date / 16);
-                      return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
-                    });
-                  }
+                    const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
+                    const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
 
-                  const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
-                  const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
-
-                  if (buttonGenerateApiToken) {
-                    if (inputConfigurationApiToken.value !== '') {
-                      buttonGenerateApiToken.disabled = true;
+                    if (buttonGenerateApiToken) {
+                      if (inputConfigurationApiToken.value !== '') {
+                        buttonGenerateApiToken.disabled = true;
+                      }
+                      buttonGenerateApiToken.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        inputConfigurationApiToken.value = generateUUID();
+                      });
                     }
-                    buttonGenerateApiToken.addEventListener('click', (event) => {
-                      event.preventDefault();
-                      inputConfigurationApiToken.value = generateUUID();
-                    });
+                  } catch (e) {
+                    // do nothing
                   }
                 </script>
                 <?php
