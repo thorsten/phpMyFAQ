@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.5 - 2022-05-
+### phpMyFAQ v3.1.5 - 2022-06-27
 
 - added compatibility with Elasticsearch v8+ (Thorsten)
 - added trust of self-signed certificates with MS SQL (Thorsten)
