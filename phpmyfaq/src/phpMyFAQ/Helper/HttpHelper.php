@@ -28,13 +28,13 @@ use phpMyFAQ\Helper;
 class HttpHelper extends Helper
 {
     /** @var string Content type */
-    private $contentType = '';
+    private string $contentType = '';
 
     /** @var int HTTP status code */
-    private $statusCode = 200;
+    private int $statusCode = 200;
 
     /** @var string[] Array of HTTP header entries */
-    private $headers = [];
+    private array $headers = [];
 
     /**
      * Setter for content type.
@@ -57,20 +57,21 @@ class HttpHelper extends Helper
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
+        header('X-Frame-Options: SAMEORIGIN');
     }
 
     /**
-     * Adds an additional header.
+     * Adds an extra header.
      *
      * @param string $header
      */
-    public function addAdditionalHeader(string $header): void
+    public function addExtraHeader(string $header): void
     {
         header($header);
     }
 
     /**
-     *
+     * Starts Gzip compression.
      */
     public function startCompression(): void
     {
@@ -111,6 +112,7 @@ class HttpHelper extends Helper
 
     /**
      * Returns the HTTP header value for "X-PMF-Token"
+     * 
      * @return string
      */
     public function getClientApiToken(): string
@@ -161,9 +163,10 @@ class HttpHelper extends Helper
      * @param string|array $headers Which headers to send
      * @param bool         $isJson  Send as JSON?
      */
-    public function sendWithHeaders($payload, $headers = '', $isJson = false): void
+    public function sendWithHeaders($payload, $headers = '', bool $isJson = false): void
     {
         $validHeaders = [];
+
         if (is_string($headers) && strlen($headers) > 0) {
             $validHeaders[] = $headers;
         } elseif (is_array($headers)) {
@@ -173,9 +176,11 @@ class HttpHelper extends Helper
                 }
             }
         }
+
         foreach ($validHeaders as $header) {
             header($header);
         }
+
         if ($isJson) {
             header('Content-Type: application/json');
             echo json_encode($payload);
