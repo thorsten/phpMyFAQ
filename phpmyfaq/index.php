@@ -539,7 +539,7 @@ $tplMainPage = [
     'dir' => $PMF_LANG['dir'],
     'writeSendAdress' => '?' . $sids . 'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
-    'searchTerm' => $searchTerm,
+    'searchTerm' => Strings::htmlspecialchars($searchTerm),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],
