@@ -112,7 +112,7 @@ class HttpHelper extends Helper
 
     /**
      * Returns the HTTP header value for "X-PMF-Token"
-     * 
+     *
      * @return string
      */
     public function getClientApiToken(): string
