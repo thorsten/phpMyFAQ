@@ -21,6 +21,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -200,19 +201,26 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 $oLink = new Link($url, $faqConfig);
 
                 // notify the user who added the question
-                $notifyEmail = Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
-                $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_UNSAFE_RAW);
-
-                $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
+                try {
+                    $notifyEmail = Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
+                    $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_UNSAFE_RAW);
+                    $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
+                } catch (Exception $e) {
+                    printf('<p class="alert alert-warning">%s</p>', $e->getMessage());
+                }
             }
 
             // Let the admin and the category owners to be informed by email of this new entry
-            $categoryHelper = new CategoryHelper();
-            $categoryHelper
-                ->setCategory($category)
-                ->setConfiguration($faqConfig);
-            $moderators = $categoryHelper->getModerators($categories['rubrik']);
-            $notification->sendNewFaqAdded($moderators, $recordId, $recordLang);
+            try {
+                $categoryHelper = new CategoryHelper();
+                $categoryHelper
+                    ->setCategory($category)
+                    ->setConfiguration($faqConfig);
+                $moderators = $categoryHelper->getModerators($categories['rubrik']);
+                $notification->sendNewFaqAdded($moderators, $recordId, $recordLang);
+            } catch (Exception $e) {
+                printf('<p class="alert alert-warning">%s</p>', $e->getMessage());
+            }
 
             // Call Link Verification
             LinkVerifierHelper::linkOndemandJavascript($recordId, $recordData['lang']);

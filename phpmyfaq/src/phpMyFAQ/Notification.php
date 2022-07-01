@@ -24,10 +24,10 @@ namespace phpMyFAQ;
 class Notification
 {
     /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     /** @var Mail */
-    private $mail;
+    private Mail $mail;
 
     /** @var array<string> */
     private $translation;
@@ -36,6 +36,7 @@ class Notification
      * Constructor.
      *
      * @param Configuration $config
+     * @throws Core\Exception
      */
     public function __construct(Configuration $config)
     {
@@ -56,6 +57,7 @@ class Notification
      * @param string $email Email address of the user
      * @param string $userName Name of the user
      * @param string $url URL of answered FAQ
+     * @throws Core\Exception
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
@@ -72,8 +74,9 @@ class Notification
      * Sends mails to FAQ admin and other given users about a newly added FAQ.
      *
      * @param array<string> $emails
-     * @param int $faqId
-     * @param string $faqLanguage
+     * @param int           $faqId
+     * @param string        $faqLanguage
+     * @throws Core\Exception
      */
     public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage): void
     {
