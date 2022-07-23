@@ -56,7 +56,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
     $dbHelper = new DatabaseHelper($faqConfig);
     $httpHelper = new HttpHelper();
     $httpHelper->addHeader();
-    $httpHelper->addAdditionalHeader('Content-Type: application/octet-stream');
+    $httpHelper->addExtraHeader('Content-Type: application/octet-stream');
 
     switch ($action) {
         case 'backup_content':
@@ -100,7 +100,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
                     )
                 )
             );
-            $httpHelper->addAdditionalHeader($header);
+            $httpHelper->addExtraHeader($header);
             foreach (explode(' ', $tableNames) as $table) {
                 echo implode("\r\n", $text);
                 if ('' !== $table) {
@@ -119,7 +119,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
                     )
                 )
             );
-            $httpHelper->addAdditionalHeader($header);
+            $httpHelper->addExtraHeader($header);
             foreach (explode(' ', $tableNames) as $table) {
                 echo implode("\r\n", $text);
                 if ('' !== $table) {

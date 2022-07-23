@@ -2,6 +2,7 @@
 
 /**
  * Category relations class.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -26,13 +27,11 @@ use phpMyFAQ\Database;
  */
 class CategoryRelation
 {
-    /**
-     * @var Configuration
-     */
-    private $config;
+    /** @var Configuration */
+    private Configuration $config;
 
     /** @var array */
-    private $groups;
+    private array $groups;
 
     /**
      * CategoryRelation constructor.
@@ -59,7 +58,7 @@ class CategoryRelation
      *
      * @return array
      */
-    public function getCategoryFaqsMatrix()
+    public function getCategoryFaqsMatrix(): array
     {
         $matrix = [];
 
@@ -196,7 +195,7 @@ class CategoryRelation
      * @param string $language Language
      * @return bool
      */
-    public function add(array $categories, $faqId, $language): bool
+    public function add(array $categories, int $faqId, string $language): bool
     {
         foreach ($categories as $categoryId) {
             $this->config->getDb()->query(
@@ -234,7 +233,7 @@ class CategoryRelation
             $query .= sprintf(" AND category_lang = '%s'", $categoryLang);
         }
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**
@@ -253,6 +252,6 @@ class CategoryRelation
             $faqLanguage
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 }

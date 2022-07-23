@@ -151,6 +151,8 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      */
     public function autoComplete(string $searchTerm): array
     {
+        $this->resultSet = [];
+
         $searchParams = [
             'index' => $this->esConfig['index'],
             'size' => 100,

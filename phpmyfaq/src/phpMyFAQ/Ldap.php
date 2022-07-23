@@ -251,9 +251,14 @@ class Ldap
             return false;
         }
 
-        $values = ldap_get_values($this->ds, $entryId, $fields[0]);
+        $entries = ldap_get_entries($this->ds, $searchResult);
+        for ($i = 0; $i < $entries['count']; $i++) {
+            if (isset($entries[$i][$fields[0]][0])) {
+                return $entries[$i][$fields[0]][0];
+            }
+        }
 
-        return $values[0];
+        return false;
     }
 
     /**

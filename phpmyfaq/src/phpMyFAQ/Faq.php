@@ -438,7 +438,7 @@ class Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -489,7 +489,7 @@ class Faq
                 $rewriteUrl = '';
             }
             $baseUrl = sprintf(
-                '%s?%saction=show&amp;cat=%d&amp;seite=%d',
+                '%sindex.php?%saction=show&amp;cat=%d&amp;seite=%d',
                 $this->config->getDefaultUrl(),
                 (empty($sids) ? '' : $sids),
                 $categoryId,
@@ -636,7 +636,7 @@ class Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -1934,7 +1934,7 @@ class Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -2344,7 +2344,7 @@ class Faq
                 fd.lang = '%s'
                 %s
             GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits
+                fd.id,fd.lang,fd.thema,fcr.category_id,fv.visits
             ORDER BY
                 %s %s",
             Database::getTablePrefix(),
@@ -2368,7 +2368,7 @@ class Faq
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -2649,7 +2649,7 @@ class Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,

@@ -141,7 +141,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if (!is_null($rememberMe) && 'rememberMe' === $rememberMe) {
         $user->enableRememberMe();
     }
-    if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
+    if ($faqConfig->isLdapActive() && function_exists('ldap_connect')) {
         try {
             $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
@@ -547,7 +547,7 @@ $tplMainPage = [
     'dir' => Translation::get('dir'),
     'writeSendAdress' => '?' . $sids . 'action=search',
     'searchBox' => Translation::get('msgSearch'),
-    'searchTerm' => $searchTerm,
+    'searchTerm' =>Strings::htmlspecialchars($searchTerm),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => Translation::get('msgFullCategories'),
     'msgCategory' => Translation::get('msgCategory'),
@@ -688,7 +688,8 @@ if (isset($auth)) {
         [
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
-            'msgUserControlDropDown' => $userControlDropdown,
+            'msgUserControlDropDown' => '<a class="dropdown-item" href="?action=ucp">' .
+                Translation::get('headerUserControlPanel') . '</a>',
             'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
                 Translation::get('ad_menu_RequestRemove') . '</a>',
             'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">' . Translation::get('ad_menu_logout') . '</a>',

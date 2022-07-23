@@ -11,21 +11,53 @@
     <div class="row">
       <label class="col-lg-4 form-control-label" for="name">{{ msgRealName }}:</label>
       <div class="col-lg-8 controls">
-        <input type="text" name="name" id="name" tabindex="1" value="{{ realname }}" class="form-control" required />
+        <input
+          type="text"
+          name="name"
+          id="name"
+          tabindex="1"
+          value="{{ realname }}"
+          class="form-control"
+          required
+          {{
+          readonly
+          }}
+        />
       </div>
     </div>
 
     <div class="row">
       <label class="col-lg-4 form-control-label" for="email">{{ msgEmail }}:</label>
       <div class="col-lg-8 controls">
-        <input type="email" name="email" id="email" tabindex="2" value="{{ email }}" class="form-control" required />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          tabindex="2"
+          value="{{ email }}"
+          class="form-control"
+          required
+          {{
+          readonly
+          }}
+        />
       </div>
     </div>
 
     <div class="row">
       <label class="col-lg-4 form-control-label" for="password">{{ msgPassword }}:</label>
       <div class="col-lg-8 controls">
-        <input type="password" autocomplete="off" name="password" id="password" tabindex="3" class="form-control" />
+        <input
+          type="password"
+          autocomplete="off"
+          name="password"
+          id="password"
+          tabindex="3"
+          class="form-control"
+          {{
+          readonly
+          }}
+        />
       </div>
     </div>
 
@@ -39,6 +71,9 @@
           id="password_confirm"
           tabindex="4"
           class="form-control"
+          {{
+          readonly
+          }}
         />
       </div>
     </div>

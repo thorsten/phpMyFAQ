@@ -13,6 +13,9 @@
     "phpMyFAQ"
   ],
   "homepage": "https://www.phpmyfaq.de/",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch --progress",

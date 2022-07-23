@@ -77,9 +77,23 @@ function renderInputForm(mixed $key, string $type)
                 $value = str_replace('"', '&quot;', $faqConfig->get($key));
             }
             echo '<div class="input-group">';
+
+            switch ($key) {
+                case 'main.administrationMail':
+                    $type = 'email';
+                    break;
+                case 'main.referenceURL':
+                case 'main.privacyURL':
+                    $type = 'url';
+                    break;
+                default:
+                  $type = 'text';
+                  break;
+            }
+
             printf(
                 '<input class="form-control" type="%s" name="edit[%s]" id="edit[%s]" value="%s" step="1" min="0">',
-                is_numeric($value) ? 'number' : 'text',
+                is_numeric($value) ? 'number' : $type,
                 $key,
                 $key,
                 $value
@@ -89,6 +103,40 @@ function renderInputForm(mixed $key, string $type)
                 echo '<div class="input-group-append">';
                 echo '<button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">Generate API Client Token</button>';
                 echo '</div>';
+                ?>
+                <script>
+                  try {
+                    const generateUUID = () => {
+                      let date = new Date().getTime();
+
+                      if (window.performance && typeof window.performance.now === 'function') {
+                        date += performance.now();
+                      }
+
+                      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+                        const random = (date + Math.random() * 16) % 16 | 0;
+                        date = Math.floor(date / 16);
+                        return (char === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
+                      });
+                    }
+
+                    const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
+                    const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
+
+                    if (buttonGenerateApiToken) {
+                      if (inputConfigurationApiToken.value !== '') {
+                        buttonGenerateApiToken.disabled = true;
+                      }
+                      buttonGenerateApiToken.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        inputConfigurationApiToken.value = generateUUID();
+                      });
+                    }
+                  } catch (e) {
+                    // do nothing
+                  }
+                </script>
+                <?php
             }
             echo '</div></div>';
             break;

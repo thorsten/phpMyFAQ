@@ -60,7 +60,7 @@ class Tags
 
         foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
             $title = Strings::htmlspecialchars($taggingName, ENT_QUOTES, 'utf-8');
-            $url = sprintf('%s?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $taggingId);
+            $url = sprintf('%sindex.php?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $taggingId);
             $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $taggingName;
             $oLink->text = $taggingName;
@@ -378,7 +378,7 @@ class Tags
         foreach ($tags as $tag) {
             ++$i;
             $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES);
-            $url = sprintf('%s?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $tag['id']);
+            $url = sprintf('%sindex.php?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $tag['id']);
             $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];

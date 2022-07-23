@@ -185,7 +185,7 @@ class Services
     public function getSuggestLink(): string
     {
         return sprintf(
-            '%s?action=send2friend&cat=%d&id=%d&artlang=%s',
+            '%sindex.php?action=send2friend&cat=%d&id=%d&artlang=%s',
             $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),

@@ -360,6 +360,7 @@ class System
             '/config/constants.php' => false,
             '/config/constants_elasticsearch.php' => false,
             '/config/database.php' => false,
+            '/config/elasticsearch.php' => false,
             '/config/ldap.php' => false,
         ];
         $current = '';

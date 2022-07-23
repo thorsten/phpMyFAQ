@@ -153,7 +153,7 @@ class CurrentUser extends User
 
         // Additional code for LDAP: user\\domain
         if (
-            $this->config->get('ldap.ldapSupport') && $this->config->get('ldap.ldap_use_domain_prefix')
+            $this->config->isLdapActive() && $this->config->get('ldap.ldap_use_domain_prefix')
             && '' !== $password
         ) {
             // If LDAP configuration and ldap_use_domain_prefix is true

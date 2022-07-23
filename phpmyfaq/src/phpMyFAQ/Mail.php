@@ -342,7 +342,7 @@ class Mail
     {
         // Sanity check
         if (!self::validateEmail($address)) {
-            throw new Exception('<strong>Mail Class</strong>: ' . $address . ' is not a valid e-mail address!');
+            throw new Exception('"' . $address . '" is not a valid email address!');
         }
 
         // Don't allow duplicated addresses
@@ -481,12 +481,12 @@ class Mail
     /**
      * Add a recipient as <TO>.
      *
-     * @param string      $address User e-mail address.
-     * @param string|null $name Username (optional).
+     * @param string $address User e-mail address.
+     * @param string|null   $name User name (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addTo(string $address, string $name = null): bool
+    public function addTo(string $address, $name = null): bool
     {
         return $this->addEmailTo($this->to, 'To', $address, $name);
     }
@@ -829,9 +829,7 @@ class Mail
             $text
         );
         // Set any LF to the RFC 2822 EOL
-        $text = str_replace("\n", $this->eol, $text);
-
-        return $text;
+        return str_replace("\n", $this->eol, $text);
     }
 
     /**
@@ -910,12 +908,12 @@ class Mail
     /**
      * Set the "Reply-to" address.
      *
-     * @param string $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string      $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function setReplyTo(string $address, $name = null): bool
+    public function setReplyTo(string $address, string $name = null): bool
     {
         return $this->setEmailTo($this->replyTo, 'Reply-To', $address, $name);
     }

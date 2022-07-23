@@ -19,9 +19,16 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to TinyMCE v5.10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
-### phpMyFAQ v3.1.5 - 2022-05-
+### phpMyFAQ v3.1.6 - 2022-07-23
+
+- fixed XSS vulnerability (jhond0e, Thorsten)
+- fixed dismiss error for cookie consent (Thorsten)
+- fixed minor bugs (Thorsten)
+
+### phpMyFAQ v3.1.5 - 2022-06-27
 
 - added compatibility with Elasticsearch v8+ (Thorsten)
+- added trust of self-signed certificates with MS SQL (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.4 - 2022-04-25

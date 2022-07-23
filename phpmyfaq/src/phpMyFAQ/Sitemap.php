@@ -175,7 +175,7 @@ class Sitemap
             $letters = Strings::strtoupper($row->letters);
             if (Strings::preg_match("/^\w+/iu", $letters)) {
                 $url = sprintf(
-                    '%s?%saction=sitemap&amp;letter=%s&amp;lang=%s',
+                    '%sindex.php?%saction=sitemap&amp;letter=%s&amp;lang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $letters,
@@ -312,7 +312,7 @@ class Sitemap
             if ($oldId != $row->id) {
                 $title = Strings::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
                 $url = sprintf(
-                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,

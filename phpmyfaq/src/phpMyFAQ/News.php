@@ -57,7 +57,7 @@ class News
 
         foreach ($news as $item) {
             $url = sprintf(
-                '%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
                 $this->config->getDefaultUrl(),
                 $item['id'],
                 $item['lang']
@@ -141,7 +141,7 @@ class News
                     ((!$showArchive) && $forceConfLimit)
                 ) {
                     $url = sprintf(
-                        '%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                        '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
                         $this->config->getDefaultUrl(),
                         $row->id,
                         $row->lang

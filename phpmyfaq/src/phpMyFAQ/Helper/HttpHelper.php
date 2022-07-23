@@ -57,15 +57,16 @@ class HttpHelper extends Helper
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
         header('Content-type: ' . $this->contentType);
+        header('X-Frame-Options: SAMEORIGIN');
         header('X-Powered-By: phpMyFAQ');
     }
 
     /**
-     * Adds a header.
+     * Adds an extra header.
      *
      * @param string $header
      */
-    public function addAdditionalHeader(string $header): void
+    public function addExtraHeader(string $header): void
     {
         header($header);
     }
@@ -81,7 +82,7 @@ class HttpHelper extends Helper
     }
 
     /**
-     *
+     * Starts Gzip compression.
      */
     public function startCompression(): void
     {
@@ -122,6 +123,7 @@ class HttpHelper extends Helper
 
     /**
      * Returns the HTTP header value for "X-PMF-Token"
+     *
      * @return string
      */
     public function getClientApiToken(): string
@@ -175,6 +177,7 @@ class HttpHelper extends Helper
     public function sendWithHeaders(mixed $payload, array|string $headers = '', bool $isJson = false): void
     {
         $validHeaders = [];
+
         if (is_string($headers) && strlen($headers) > 0) {
             $validHeaders[] = $headers;
         } elseif (is_array($headers)) {
@@ -184,9 +187,11 @@ class HttpHelper extends Helper
                 }
             }
         }
+
         foreach ($validHeaders as $header) {
             header($header);
         }
+
         if ($isJson) {
             header('Content-Type: application/json');
             echo json_encode($payload);
