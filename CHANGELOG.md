@@ -1,10 +1,17 @@
-# phpMyFAQ 3.1.5
+# phpMyFAQ 3.1.6
 
 **Codename "Poseidon"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+
+### phpMyFAQ v3.1.6 - 2022-07-23
+
+- fixed XSS vulnerability (jhond0e, Thorsten)
+- fixed dismiss error for cookie consent (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.5 - 2022-06-27
 
