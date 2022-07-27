@@ -120,6 +120,16 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqpassword = '';
 }
 
+//
+// Get CSRF Token
+//
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    $csrfChecked = false;
+} else {
+    $csrfChecked = true;
+}
+
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
@@ -175,7 +185,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 // Logout
 //
-if ('logout' === $action && isset($auth)) {
+if ($csrfChecked && 'logout' === $action && isset($auth)) {
     $user->deleteFromSession(true);
     $auth = null;
     $action = 'main';
@@ -677,7 +687,11 @@ if (isset($auth)) {
                 $PMF_LANG['headerUserControlPanel'] . '</a>',
             'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
                 $PMF_LANG['ad_menu_RequestRemove'] . '</a>',
-            'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>',
+            'msgLogoutUser' => sprintf(
+                '<a class="dropdown-item" href="?action=logout&csrf=%s">%s</a>',
+                $user->getCsrfTokenFromSession(),
+                $PMF_LANG['ad_menu_logout'],
+            ),
             'activeUserControl' => ('ucp' == $action) ? 'active' : ''
         ]
     );

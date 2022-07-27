@@ -112,7 +112,6 @@ $(document).ready(function () {
       ),
       isValid = true;
 
-    console.log('Button clicked', curStepBtn);
 
     $('.form-group.row input').removeClass('is-invalid');
     for (let i = 0; i < curInputs.length; i++) {
