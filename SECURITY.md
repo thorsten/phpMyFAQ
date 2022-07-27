@@ -23,3 +23,10 @@ Please act in good faith towards our users’ privacy and data during your discl
 you or administrative action against your account if you act accordingly: White hat researchers are always appreciated.
 
 Copyright © 2001 - 2022 Thorsten Rinne and the phpMyFAQ Team
+
+
+# Reporting a Vulnerability
+
+If you discover a security vulnerability in phpmyfaq please disclose it via [our huntr page](https://huntr.dev/repos/thorsten/phpmyfaq/). Bounty eligibility, CVE assignment, response times and past reports are all there.
+
+Thank you for improving the security of phpmyfaq.
