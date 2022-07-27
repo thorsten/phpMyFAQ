@@ -12,21 +12,20 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 | 3.0.x   | ✓         | 2020 - 2022        |
 | < 2.9   | ✗         | 2001 - 2019        |
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
 Publicly disclosing a vulnerability can put the entire community at risk. If you’ve discovered a security concern,
 please email us at security@phpmyfaq.de. We’ll work with you to make sure that we understand the scope of the issue,
 and that we fully address your concern. We consider correspondence sent to security@phpmyfaq.de our highest priority,
 and work to address any issues that arise as quickly as possible.
 
+Another option if you discover a security vulnerability in phpMyFAQ please disclose it via
+[our huntr page](https://huntr.dev/repos/thorsten/phpmyfaq/). Bounty eligibility, CVE assignment, response times and
+past reports are all there.
+
 Please act in good faith towards our users’ privacy and data during your disclosure. We won’t take legal action against
 you or administrative action against your account if you act accordingly: White hat researchers are always appreciated.
 
+Thank you for improving the security of phpMyFAQ.
+
 Copyright © 2001 - 2022 Thorsten Rinne and the phpMyFAQ Team
-
-
-# Reporting a Vulnerability
-
-If you discover a security vulnerability in phpmyfaq please disclose it via [our huntr page](https://huntr.dev/repos/thorsten/phpmyfaq/). Bounty eligibility, CVE assignment, response times and past reports are all there.
-
-Thank you for improving the security of phpmyfaq.
