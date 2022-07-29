@@ -128,10 +128,10 @@ class CurrentUser extends User
      * addAuth() method. The given password must not be encrypted, since the
      * auth object takes care about the encryption method.
      *
-     * @param string $login    Login name
+     * @param string $login Login name
      * @param string $password Password
-     *
      * @return bool
+     * @throws \phpMyFAQ\Core\Exception
      */
     public function login(string $login, string $password): bool
     {
