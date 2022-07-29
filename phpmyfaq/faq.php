@@ -223,7 +223,7 @@ if (
         [
             'numberOfComments' => sprintf(
                 '%d %s',
-                isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
+                $numComments[$recordId] ?? 0,
                 $PMF_LANG['ad_start_comments']
             ),
         ]

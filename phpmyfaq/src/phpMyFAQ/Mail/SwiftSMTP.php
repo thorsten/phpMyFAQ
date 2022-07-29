@@ -78,7 +78,7 @@ class SwiftSMTP implements MailUserAgentInterface
         $mailHeaders = $message->getHeaders();
 
         if (isset($headers['CC'])) {
-            $mailHeaders->addTextHeader('Cc', $headers['Cc']);
+            $mailHeaders->addTextHeader('Cc', $headers['CC']);
         }
         if (isset($headers['Bcc'])) {
             $mailHeaders->addTextHeader('Bcc', $headers['Bcc']);

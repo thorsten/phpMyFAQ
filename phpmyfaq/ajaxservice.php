@@ -320,7 +320,7 @@ switch ($action) {
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_UNSAFE_RAW);
+        $faqLanguage = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -442,8 +442,13 @@ switch ($action) {
 
             $moderators = $categoryHelper->getModerators($categories);
 
-            $notification = new Notification($faqConfig);
-            $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
+            try {
+                $notification = new Notification($faqConfig);
+                $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
+            } catch (Exception $e) {
+                // @todo handle exception in v3.2
+            }
+
 
             $message = [
                 'success' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks']),
