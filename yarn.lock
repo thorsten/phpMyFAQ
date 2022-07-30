@@ -192,6 +192,11 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@highlightjs/cdn-assets@^11.6.0":
+  version "11.6.0"
+  resolved "https://registry.yarnpkg.com/@highlightjs/cdn-assets/-/cdn-assets-11.6.0.tgz#092b2b11213df16c33b7d94770f489bb0c2bbbd3"
+  integrity sha512-Mod+0LGTetSd0JbLGOHesCP3FLz8T/BOuDitF6stBNmHSLDmds1i4hT02T98Xlj3bGgPCbRsiF2D7i0Nraa+sQ==
+
 "@jridgewell/resolve-uri@^3.0.3":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-3.0.5.tgz#68eb521368db76d040a6315cdb24bf2483037b9c"
@@ -2660,11 +2665,6 @@ hash.js@^1.0.0, hash.js@^1.0.3:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
-
-highlight.js@^10.4.1:
-  version "10.7.3"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.7.3.tgz#697272e3991356e40c3cac566a74eef681756531"
-  integrity sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==
 
 hmac-drbg@^1.0.1:
   version "1.0.1"
