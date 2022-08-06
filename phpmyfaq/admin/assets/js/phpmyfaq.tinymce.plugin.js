@@ -38,7 +38,7 @@ tinymce.PluginManager.add('phpmyfaq', function (editor) {
             if (search.length > 0) {
               $.ajax({
                 type: 'POST',
-                url: url + 'index.php?action=ajax&ajax=records&ajaxaction=search_records',
+                url: url + '?action=ajax&ajax=records&ajaxaction=search_records',
                 data: 'search=' + search + '&csrf=' + args.csrf,
                 success: function (searchresults) {
                   list.empty();
