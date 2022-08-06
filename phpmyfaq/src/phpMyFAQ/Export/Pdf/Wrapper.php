@@ -159,7 +159,7 @@ define('PDF_FONT_SIZE_DATA', 8);
 /*
  * default monospaced font name
  */
-define('PDF_FONT_MONOSPACED', 'courier');
+define('PDF_FONT_MONOSPACED', 'DejaVuSansMono');
 
 /*
  * ratio used to adjust the conversion of pixels to user units
@@ -225,18 +225,21 @@ class Wrapper extends TCPDF
      * @var array
      */
     public $faq = [];
+
     /**
      * Configuration.
      *
      * @var Configuration
      */
     protected $config = null;
+
     /**
      * Question.
      *
      * @var string
      */
     private $question = '';
+
     /**
      * Font files.
      *
@@ -285,6 +288,9 @@ class Wrapper extends TCPDF
 
         // set image scale factor
         $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set default monospaced font
+        $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // Check on RTL
         if ('rtl' == $PMF_LANG['dir']) {
@@ -471,7 +477,7 @@ class Wrapper extends TCPDF
      *
      * @return string
      */
-    public function getCurrentFont()
+    public function getCurrentFont(): string
     {
         return $this->currentFont;
     }
