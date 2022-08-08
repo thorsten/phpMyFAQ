@@ -32,22 +32,22 @@ class CategoryImage
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * @var bool
      */
-    private $isUpload = false;
+    private bool $isUpload = false;
 
     /**
      * @var array
      */
-    private $uploadedFile = [];
+    private array $uploadedFile = [];
 
     /**
      * @var string
      */
-    private $fileName = '';
+    private string $fileName = '';
 
     /**
      * Constructor.
@@ -66,7 +66,7 @@ class CategoryImage
      *
      * @return CategoryImage
      */
-    public function setUploadedFile(array $uploadedFile)
+    public function setUploadedFile(array $uploadedFile): CategoryImage
     {
         if (isset($uploadedFile['error']) && UPLOAD_ERR_OK === $uploadedFile['error']) {
             $this->isUpload = true;
@@ -79,19 +79,18 @@ class CategoryImage
     /**
      * Returns the filename for the given category ID and language.
      *
-     * @param integer $categoryId
-     * @param string  $categoryName
-     *
+     * @param int    $categoryId
+     * @param string $categoryName
      * @return string
      */
-    public function getFileName($categoryId, $categoryName)
+    public function getFileName(int $categoryId, string $categoryName): string
     {
         if ($this->isUpload) {
             $this->setFileName(
                 sprintf(
                     'category-%d-%s.%s',
-                    (int)$categoryId,
-                    (string)$categoryName,
+                    $categoryId,
+                    $categoryName,
                     $this->getFileExtension($this->uploadedFile['type'])
                 )
             );
@@ -104,10 +103,9 @@ class CategoryImage
      * Returns the filename.
      *
      * @param string $fileName
-     *
      * @return CategoryImage
      */
-    public function setFileName($fileName)
+    public function setFileName(string $fileName): CategoryImage
     {
         $this->fileName = $fileName;
 
@@ -118,10 +116,9 @@ class CategoryImage
      * Returns the image file extension from a given MIME type.
      *
      * @param string $mimeType
-     *
      * @return string
      */
-    private function getFileExtension($mimeType)
+    private function getFileExtension(string $mimeType): string
     {
         $mapping = [
             'image/gif' => 'gif',
@@ -129,7 +126,7 @@ class CategoryImage
             'image/png' => 'png'
         ];
 
-        return isset($mapping[$mimeType]) ? $mapping[$mimeType] : '';
+        return $mapping[$mimeType] ?? '';
     }
 
     /**
@@ -145,12 +142,11 @@ class CategoryImage
         ) {
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {
                 return false;
+            }
+            if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
+                return true;
             } else {
-                if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return false;
             }
         } else {
             return false;
