@@ -1100,12 +1100,11 @@ class Faq
      *
      * @param int    $recordId   Record id
      * @param string $recordLang Record language
-     *
      * @return bool
      * @throws Attachment\AttachmentException
      * @throws Attachment\Filesystem\File\FileException
      */
-    public function deleteRecord($recordId, $recordLang)
+    public function deleteRecord(int $recordId, string $recordLang): bool
     {
         $solutionId = $this->getSolutionIdFromId($recordId, $recordLang);
 
@@ -1143,14 +1142,12 @@ class Faq
             sprintf(
                 'DELETE FROM %sfaqdata_user WHERE record_id = %d',
                 Database::getTablePrefix(),
-                $recordId,
-                $recordLang
+                $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_group WHERE record_id = %d',
                 Database::getTablePrefix(),
-                $recordId,
-                $recordLang
+                $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_tags WHERE record_id = %d',

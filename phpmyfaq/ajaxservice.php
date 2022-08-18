@@ -349,9 +349,9 @@ switch ($action) {
         }
 
         if (
-            !is_null($author) && !is_null($email) && !is_null($question) &&
+            !is_null($author) && !is_null($email) && !empty($question) &&
             $stopWords->checkBannedWord(strip_tags($question)) &&
-            !is_null($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
+            !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
                     Language::isASupportedLanguage($faqLanguage)))
         ) {
