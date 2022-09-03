@@ -187,16 +187,16 @@ if (
             break;
 
         case 'overwrite_password':
+            $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
+            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
+
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
                 exit(1);
             }
-
-            $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-            $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-            $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
-            $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
 
             $user->getUserById($userId, true);
             $auth = new Auth($faqConfig);
