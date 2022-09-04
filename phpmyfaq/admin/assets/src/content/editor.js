@@ -65,8 +65,6 @@ export const renderEditor = () => {
     const editorLanguage = form.getAttribute('data-pmf-editor-language');
     const defaultLanguage = form.getAttribute('data-pmf-default-url');
 
-    console.log('editor', editorEnabled);
-
     if ('1' !== editorEnabled) {
       return;
     }
