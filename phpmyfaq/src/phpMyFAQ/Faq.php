@@ -153,8 +153,11 @@ class Faq
      * @return array
      * @throws Exception
      */
-    public function getAllRecordsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): array
-    {
+    public function getAllFaqPreviewsByCategoryId(
+        int $categoryId,
+        string $orderBy = 'id',
+        string $sortBy = 'ASC'
+    ): array {
         global $sids;
 
         $faqData = [];

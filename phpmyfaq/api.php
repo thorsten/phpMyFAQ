@@ -254,7 +254,7 @@ switch ($action) {
         // api/v2.1/faqs/:categoryId
         if (!is_null($categoryId)) {
             try {
-                $result = $faq->getAllRecordsByCategoryId($categoryId);
+                $result = $faq->getAllFaqPreviewsByCategoryId($categoryId);
             } catch (Exception $e) {
                 $http->setStatus(400);
             }
