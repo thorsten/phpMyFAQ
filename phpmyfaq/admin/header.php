@@ -231,7 +231,6 @@ switch ($action) {
 <html lang="<?= $PMF_LANG['metaLanguage']; ?>">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title><?= $faqConfig->getTitle(); ?> - powered by phpMyFAQ <?= System::getVersion() ?></title>
   <base href="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/">

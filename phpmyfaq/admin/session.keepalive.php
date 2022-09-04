@@ -60,7 +60,6 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 <html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>phpMyFAQ - "Welcome to the real world."</title>
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
