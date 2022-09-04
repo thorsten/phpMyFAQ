@@ -23,7 +23,7 @@ import {
   handleElasticsearch,
 } from './configuration';
 import { handleStatistics } from './statistics';
-import { handleCategories, handleTags, renderEditor } from './content';
+import { handleCategories, handleFaqForm, handleTags, renderEditor } from './content';
 import { handleUserList, handleUsers } from './user';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -65,4 +65,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Content -> add/edit FAQs
   renderEditor();
+  handleFaqForm();
 });

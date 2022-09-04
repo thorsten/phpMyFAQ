@@ -496,7 +496,7 @@ if (
                                                class="form-control pmf-tags-autocomplete"
                                                data-tag-list="<?= $faqData['tags'] ?>">
                                         <small id="tagsHelp"
-                                               class="form-text text-muted"><?= Translation::get('msgShowHelp') ?></small>
+                                               class="form-text visually-hidden"><?= Translation::get('msgShowHelp') ?></small>
                                     </div>
                                 </div>
 
@@ -507,10 +507,10 @@ if (
                                     </label>
                                     <div class="col-lg-10">
                                         <input type="text" name="keywords" id="keywords" maxlength="255"
-                                               class="form-control"
+                                               class="form-control" autocomplete="off"
                                                value="<?= $faqData['keywords'] ?>">
                                         <small id="keywordsHelp"
-                                               class="form-text text-muted"><?= Translation::get('msgShowHelp') ?></small>
+                                               class="form-text visually-hidden"><?= Translation::get('msgShowHelp') ?></small>
                                     </div>
                                 </div>
 
@@ -595,7 +595,7 @@ if (
                                                 <label class="form-check-label" for="restrictedusers">
                                                     <?= Translation::get('ad_entry_restricted_users') ?>
                                                 </label>
-                                                <select name="restricted_users" class="form-control">
+                                                <select name="restricted_users" id="selected-user" class="form-control">
                                                     <?= $userHelper->getAllUserOptions($userPermission[0], false) ?>
                                                 </select>
                                             </div>

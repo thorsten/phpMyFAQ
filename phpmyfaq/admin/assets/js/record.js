@@ -13,62 +13,6 @@
  * @since     2013-11-17
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  'use strict';
-
-  // Show help for keywords and users
-  $('#keywords').on('focus', () => {
-    showHelp('keywords');
-  });
-  $('#tags').on('focus', () => {
-    showHelp('tags');
-  });
-
-  let categories = $('#phpmyfaq-categories option:selected')
-    .map(function () {
-      return $(this).val();
-    })
-    .get();
-
-  getCategoryPermissions(categories);
-
-  // Override FAQ permissions with Category permission to avoid confused users
-  $('#phpmyfaq-categories').on('click', () => {
-    categories = $('#phpmyfaq-categories option:selected')
-      .map(function () {
-        return $(this).val();
-      })
-      .get();
-    getCategoryPermissions(categories);
-  });
-
-  const faqId = document.getElementById('record_id');
-  if (faqId > 0) {
-    getFaqPermissions(faqId.value);
-  }
-});
-
-function getCategoryPermissions(categories) {
-  fetch(`index.php?action=ajax&ajax=categories&ajaxaction=getpermissions&categories=${categories}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((permissions) => {
-      setPermissions(permissions);
-    });
-}
-
-function getFaqPermissions(faqId) {
-  const csrfToken = document.getElementById('csrf').value;
-  fetch(`index.php?action=ajax&ajax=records&ajaxaction=permissions&faq-id=${faqId}&csrf=${csrfToken}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((permissions) => {
-      setPermissions(permissions);
-    });
-}
-
 function setPermissions(permissions) {
   const perms = permissions;
 
@@ -95,12 +39,6 @@ function setPermissions(permissions) {
       $("#selected-groups option[value='" + value + "']").prop('selected', true);
     });
   }
-}
-
-function showHelp(option) {
-  const optionHelp = $('#' + option + 'Help');
-  optionHelp.removeClass('hide');
-  optionHelp.fadeOut(2500);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
