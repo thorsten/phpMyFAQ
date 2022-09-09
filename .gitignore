@@ -23,6 +23,8 @@ phpmyfaq/config/ldap.php
 phpmyfaq/config/ldap.php.bak
 phpmyfaq/config/elasticsearch.php
 phpmyfaq/config/elasticsearch.php.bak
+phpmyfaq/config/azure.php
+phpmyfaq/config/azure.php.bak
 phpmyfaq/config/index.html
 phpmyfaq/data/*
 phpmyfaq/logs/*

@@ -81,8 +81,13 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                 <?php
                                 if ($faqConfig->get('security.enableRegistration')) { ?>
                                     <div class="card-footer text-center py-3">
-                                        <div class="small"><a
-                                                href="../?action=register"><?= Translation::get('msgRegistration') ?></a></div>
+                                        <div class="small">
+                                            <a href="../?action=register"><?= Translation::get('msgRegistration') ?></a>
+                                        </div>
+                                        <hr>
+                                        <div class="small">
+                                            <a href="../services/azure">Login via Azure</a>
+                                        </div>
                                     </div>
                                 <?php
                                 } ?>

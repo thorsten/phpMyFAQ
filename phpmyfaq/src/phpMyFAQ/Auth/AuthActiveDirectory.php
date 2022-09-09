@@ -24,7 +24,7 @@ use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\User;
 
 /**
- * Class AuthLdap
+ * Class AuthActiveDirectory
  *
  * @package phpMyFAQ\Auth
  */

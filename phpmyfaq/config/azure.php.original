@@ -1,0 +1,6 @@
+<?php
+
+const AAD_OAUTH_TENANTID = '';
+const AAD_OAUTH_CLIENTID = '';
+const AAD_OAUTH_SECRET = '';
+const AAD_OAUTH_SCOPE = 'openid%20offline_access%20profile%20user.read';

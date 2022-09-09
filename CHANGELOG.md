@@ -11,6 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed PHP requirement to PHP 8.0+ (Thorsten)
 - changed to HTTPS as new default (Thorsten)
 - changed MySQL / MariaDB / Percona Server / Galera Cluster to InnoDB only (Thorsten)
+- added experimental Azure AD login (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - added Monolog v2 as logging solution (Thorsten)
 - added REST API v2.2 to fetch groups (Thorsten)
