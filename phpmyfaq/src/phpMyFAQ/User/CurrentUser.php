@@ -25,9 +25,11 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
+use stdClass;
 
 /* user defined constants */
 define('SESSION_CURRENT_USER', 'CURRENT_USER');
@@ -51,7 +53,7 @@ class CurrentUser extends User
      *
      * @var bool
      */
-    private $loggedIn = false;
+    private bool $loggedIn = false;
 
     /**
      * Specifies the timeout for the session in minutes. If the session ID was
@@ -60,14 +62,14 @@ class CurrentUser extends User
      *
      * @var int
      */
-    private $sessionTimeout = PMF_AUTH_TIMEOUT;
+    private int $sessionTimeout = PMF_AUTH_TIMEOUT;
 
     /**
      * The Session class object
      *
      * @var Session
      */
-    private $session;
+    private Session $session;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
@@ -77,7 +79,7 @@ class CurrentUser extends User
      *
      * @var int
      */
-    private $sessionIdTimeout = 1;
+    private int $sessionIdTimeout = 1;
 
     /**
      * LDAP configuration if available.
@@ -91,21 +93,21 @@ class CurrentUser extends User
      *
      * @var bool
      */
-    private $rememberMe = false;
+    private bool $rememberMe = false;
 
     /**
      * Number of failed login attempts
      *
      * @var int
      */
-    private $loginAttempts = 0;
+    private int $loginAttempts = 0;
 
     /**
      * Lockout time in seconds
      *
      * @var int
      */
-    private $lockoutTime = 600;
+    private int $lockoutTime = 600;
 
     /**
      * Constructor.
@@ -128,10 +130,10 @@ class CurrentUser extends User
      * addAuth() method. The given password must not be encrypted, since the
      * auth object takes care about the encryption method.
      *
-     * @param string $login    Login name
+     * @param string $login Login name
      * @param string $password Password
-     *
      * @return bool
+     * @throws Exception
      */
     public function login(string $login, string $password): bool
     {
@@ -148,6 +150,7 @@ class CurrentUser extends User
         $this->getUserByLogin($login);
         if ($this->isFailedLastLoginAttempt()) {
             $this->errors[] = parent::ERROR_USER_TOO_MANY_FAILED_LOGINS;
+            $this->config->logger->info(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
             return false;
         }
 
@@ -169,7 +172,7 @@ class CurrentUser extends User
 
         // Additional code for SSO
         if ($this->config->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
-            // if SSO configuration is enabled, REMOTE_USER is provided and we try to login using SSO (no password)
+            // if SSO configuration is enabled, REMOTE_USER is provided, and we try to log in using SSO (no password)
             if (($pos = strpos($login, '@')) !== false) {
                 if ($pos !== 0) {
                     $login = substr($login, 0, $pos);
@@ -201,13 +204,13 @@ class CurrentUser extends User
             // $login exists, but $pass is incorrect, so stop!
             if (!$auth->checkCredentials($login, $password, $optData)) {
                 ++$passwordError;
-                // Don't stop, as other auth method could work:
+                // Don't stop, as other auth method could work
                 continue;
             }
 
             // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
-            $this->loggedIn = true;
+            $this->setLoggedIn(true);
             $this->updateSessionId(true);
             $this->saveToSession();
             $this->saveCrsfTokenToSession();
@@ -223,21 +226,8 @@ class CurrentUser extends User
                 );
             }
 
-            // remember the auth container for administration
-            $update = sprintf(
-                "
-                UPDATE
-                    %sfaquser
-                SET
-                    auth_source = '%s'
-                WHERE
-                    user_id = %d",
-                Database::getTablePrefix(),
-                $this->config->getDb()->escape($authSource),
-                $this->getUserId()
-            );
-            $result = $this->config->getDb()->query($update);
-            if (!$result) {
+            // Set auth source
+            if (!$this->setAuthSource($authSource)) {
                 $this->setSuccess(false);
                 return false;
             }
@@ -269,6 +259,14 @@ class CurrentUser extends User
     public function isLoggedIn(): bool
     {
         return $this->loggedIn;
+    }
+
+    /**
+     * @param bool $loggedIn
+     */
+    public function setLoggedIn(bool $loggedIn): void
+    {
+        $this->loggedIn = $loggedIn;
     }
 
     /**
@@ -346,7 +344,7 @@ class CurrentUser extends User
     }
 
     /**
-     * Updates the session-ID, does not care about time outs.
+     * Updates the session-ID, does not care about time-outs.
      * Stores session information in the user table: session_id,
      * session_timestamp and ip.
      * Optionally it should update the 'last login' time.
@@ -362,7 +360,7 @@ class CurrentUser extends User
         $oldSessionId = session_id();
         if (session_regenerate_id(true)) {
             $sessionPath = session_save_path();
-            if (strpos($sessionPath, ';') !== false) {
+            if (str_contains($sessionPath, ';')) {
                 $sessionPath = substr($sessionPath, strpos($sessionPath, ';') + 1);
             }
             $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
@@ -430,7 +428,7 @@ class CurrentUser extends User
         unset($_SESSION[SESSION_CURRENT_USER]);
 
         // log CurrentUser out
-        $this->loggedIn = false;
+        $this->setLoggedIn(false);
 
         // delete session-ID
         $update = sprintf(
@@ -573,11 +571,28 @@ class CurrentUser extends User
     }
 
     /**
-     * Enables the remember me decision.
+     * Enables to remember me decision.
      */
     public function enableRememberMe(): void
     {
         $this->rememberMe = true;
+    }
+
+    /**
+     * Remember the auth container for administration
+     * @param string $authSource
+     * @return bool
+     */
+    public function setAuthSource(string $authSource): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaquser SET auth_source = '%s' WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->config->getDb()->escape($authSource),
+            $this->getUserId()
+        );
+
+        return $this->config->getDb()->query($update);
     }
 
     /**
@@ -589,13 +604,7 @@ class CurrentUser extends User
     protected function setRememberMe(string $rememberMe): bool
     {
         $update = sprintf(
-            "
-            UPDATE
-                %sfaquser
-            SET
-                remember_me = '%s'
-            WHERE
-                user_id = %d",
+            "UPDATE %sfaquser SET remember_me = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->config->getDb()->escape($rememberMe),
             $this->getUserId()
@@ -608,10 +617,9 @@ class CurrentUser extends User
      * Sets login success/failure.
      *
      * @param bool $success
-     *
      * @return bool
      */
-    protected function setSuccess(bool $success): bool
+    public function setSuccess(bool $success): bool
     {
         $loginState = (int)$success;
         $this->loginAttempts = 0;
@@ -635,12 +643,60 @@ class CurrentUser extends User
     }
 
     /**
+     * @param array $token
+     * @return bool
+     */
+    public function setTokenData(array $token): bool
+    {
+        $update = sprintf(
+            "
+            UPDATE
+                %sfaquser
+            SET
+                refresh_token = '%s',
+                access_token = '%s',
+                code_verifier = '%s',
+                jwt = '%s'
+            WHERE
+                user_id = %d",
+            Database::getTablePrefix(),
+            $token['refresh_token'],
+            $token['access_token'],
+            $token['code_verifier'],
+            json_encode($token['jwt']),
+            $this->getUserId()
+        );
+
+        return (bool) $this->config->getDb()->query($update);
+    }
+
+    /**
+     * Returns the CSRF token from session.
+     *
+     * @return string
+     */
+    public function getCsrfTokenFromSession(): string
+    {
+        return $_SESSION['phpmyfaq_csrf_token'];
+    }
+
+    /**
+     * Save CSRF token to session.
+     */
+    public function saveCrsfTokenToSession(): void
+    {
+        if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
+            $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
+        }
+    }
+
+    /**
      * Sets IP and session timestamp plus lockout time, success flag to
      * false.
      *
      * @return mixed
      */
-    protected function setLoginAttempt()
+    protected function setLoginAttempt(): mixed
     {
         $this->loginAttempts++;
 
@@ -702,26 +758,6 @@ class CurrentUser extends User
             return true;
         } else {
             return false;
-        }
-    }
-
-    /**
-     * Returns the CSRF token from session.
-     *
-     * @return string
-     */
-    public function getCsrfTokenFromSession(): string
-    {
-        return $_SESSION['phpmyfaq_csrf_token'];
-    }
-
-    /**
-     * Save CSRF token to session.
-     */
-    public function saveCrsfTokenToSession(): void
-    {
-        if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
-            $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
         }
     }
 

@@ -35,4 +35,4 @@ $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
 $auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
 
-$auth->authorize();
+$auth->logout();

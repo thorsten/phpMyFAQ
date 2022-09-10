@@ -439,6 +439,7 @@ class User
      * @param int    $userId
      * @return bool
      * @throws Core\Exception
+     * @throws Exception
      */
     public function createUser(string $login, string $pass = '', string $domain = '', int $userId = 0): bool
     {

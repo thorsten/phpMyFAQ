@@ -32,7 +32,7 @@ use phpMyFAQ\User;
 class AuthDatabase extends Auth implements AuthDriverInterface
 {
     /** @var DatabaseDriver */
-    private $db;
+    private DatabaseDriver $db;
 
     /**
      * @inheritDoc

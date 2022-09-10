@@ -32,7 +32,8 @@
     "ext-xml": "*",
     "ext-zip": "*",
     "ext-xmlwriter": "*",
-    "symfony/mailer": "^5.4"
+    "symfony/mailer": "^5.4",
+    "guzzlehttp/guzzle": "^7.5"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",

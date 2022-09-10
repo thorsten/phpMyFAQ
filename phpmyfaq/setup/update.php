@@ -391,9 +391,24 @@ if ($step == 3) {
     }
 
     //
-    // UPDATES FROM 3.1.0-alpha
+    // UPDATES FROM 3.2.0-alpha
     //
-    if (version_compare($version, '3.1.0-alpha', '<=')) {
+    if (version_compare($version, '3.2.0-alpha', '<=')) {
+        // Azure AD support
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser 
+                ADD COLUMN refresh_token TEXT NULL DEFAULT NULL,
+                ADD COLUMN access_token TEXT NULL DEFAULT NULL,
+                ADD COLUMN code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                ADD COLUMN jwt TEXT NULL DEFAULT NULL';
+        } else {
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser 
+                ADD refresh_token TEXT NULL DEFAULT NULL,
+                ADD access_token TEXT NULL DEFAULT NULL,
+                ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                ADD jwt TEXT NULL DEFAULT NULL';
+        }
+
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server
             // @todo ALTER TABLE [TableName] ALTER COLUMN [ColumnName] nvarchar(N) null

@@ -336,6 +336,10 @@ class Sqlsrv extends Database implements Driver
             success INTEGER NULL DEFAULT 1,
             is_superadmin INTEGER NULL DEFAULT 0,
             login_attempts INTEGER NULL DEFAULT 0,
+            refresh_token TEXT NULL DEFAULT NULL,
+            access_token TEXT NULL DEFAULT NULL,
+            code_verifier VARCHAR(255) NULL DEFAULT NULL,
+            jwt TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (

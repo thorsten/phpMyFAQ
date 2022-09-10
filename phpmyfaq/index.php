@@ -138,9 +138,11 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
+
     if (!is_null($rememberMe) && 'rememberMe' === $rememberMe) {
         $user->enableRememberMe();
     }
+
     if ($faqConfig->isLdapActive() && function_exists('ldap_connect')) {
         try {
             $authLdap = new AuthLdap($faqConfig);
@@ -149,6 +151,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $error = $e->getMessage() . '<br>';
         }
     }
+
     if ($faqConfig->get('security.ssoSupport')) {
         $authSso = new AuthSso($faqConfig);
         $user->addAuth($authSso, 'sso');

@@ -18,8 +18,12 @@
 namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
+use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Session;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 
 /**
  * Class AuthAzureActiveDirectory
@@ -29,67 +33,106 @@ use phpMyFAQ\Core\Exception;
 class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
 {
     /** @var Azure\OAuth */
-    private Auth\Azure\OAuth $oAuth;
+    private OAuth $oAuth;
 
+    /** @var Session */
+    private Session $session;
+
+    /** @var string */
     private string $oAuthVerifier = '';
 
+    /** @var string */
     private string $oAuthChallenge;
 
-    private const CHALLENGE_METHOD = 'S256';
+    /** @var string */
+    private const AAD_CHALLENGE_METHOD = 'S256';
+
+    /** @var string URL to logout */
+    private const AAD_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
 
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $config, OAuth $oAuth)
     {
         $this->config = $config;
-        $this->oAuth = new Auth\Azure\OAuth();
+        $this->oAuth = $oAuth;
+        $this->session = new Session($config);
 
         parent::__construct($config);
-
-        $this->login();
     }
 
+    /**
+     * @throws Exception
+     */
     public function create(string $login, string $password, string $domain = ''): mixed
     {
-        // TODO: Implement create() method.
+        $user = new User($this->config);
+        $result = $user->createUser($login, '', $domain);
+        $user->setStatus('active');
+
+        // Set user information from JWT
+        $user->setUserData(
+            [
+                'display_name' => $this->oAuth->getName(),
+                'email' => $this->oAuth->getMail(),
+            ]
+        );
+
+        return $result;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function update(string $login, string $password): bool
     {
-        // TODO: Implement update() method.
+        return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function delete(string $login): bool
     {
-        // TODO: Implement delete() method.
+        return true;
     }
 
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
     public function checkCredentials(string $login, string $password, array $optionalData = []): bool
     {
-        // TODO: Implement checkCredentials() method.
+        $this->create($login, '');
+        return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isValidLogin(string $login, array $optionalData = []): int
     {
-        // TODO: Implement isValidLogin() method.
+        if ($login === $this->oAuth->getMail()) {
+            return 1;
+        }
+
+        return 0;
     }
 
     /**
-     * Method to login
+     * Method to authorize against Azure AD
      *
      */
-    private function login()
+    public function authorize()
     {
-        $this->oAuthChallenge();
-        $this->redirect();
-    }
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $this->createOAuthChallenge();
+        $this->session->setCurrentSessionKey();
+        $this->session->set(OAuth::PMF_SESSION_AAD_OAUTH_VERIFIER, $this->oAuthVerifier);
 
-    /**
-     * Redirect to oAuth URL
-     */
-    private function redirect()
-    {
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize' .
             '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s',
@@ -98,16 +141,36 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             urlencode($this->config->getDefaultUrl() . 'services/azure/callback.php'),
             AAD_OAUTH_SCOPE,
             $this->oAuthChallenge,
-            self::CHALLENGE_METHOD
+            self::AAD_CHALLENGE_METHOD
         );
+
         header('Location: ' . $oAuthURL);
+    }
+
+    /**
+     * Logout
+     *
+     */
+    public function logout()
+    {
+        // Try to authenticate with cookie information
+        $user = CurrentUser::getFromCookie($this->config);
+
+        // authenticate with session information
+        if (!$user instanceof CurrentUser) {
+            $user = CurrentUser::getFromSession($this->config);
+        }
+
+        $user->getUserByLogin($this->oAuth->getMail());
+        $user->deleteFromSession(true);
+        header('Location: ' . self::AAD_LOGOUT_URL);
     }
 
     /**
      * Method to generate code verifier and code challenge for oAuth login.
      * See RFC7636 for details.
      */
-    private function oAuthChallenge()
+    private function createOAuthChallenge()
     {
         $verifier = $this->oAuthVerifier;
 

@@ -335,6 +335,10 @@ class Mysqli extends Database implements Driver
             success INT(1) NULL DEFAULT 1,
             is_superadmin INT(1) NULL DEFAULT 0,
             login_attempts INT(1) NULL DEFAULT 0,
+            refresh_token TEXT NULL DEFAULT NULL,
+            access_token TEXT NULL DEFAULT NULL,
+            code_verifier VARCHAR(255) NULL DEFAULT NULL,
+            jwt TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (

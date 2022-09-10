@@ -306,62 +306,6 @@ class Configuration
     }
 
     /**
-     * Sets the Active Directory configuration.
-     *
-     * @param string[] $ldapConfig
-     */
-    public function setActiveDirectoryConfig(array $ldapConfig): void
-    {
-        // Always add main Active Directory server
-        $this->config['core.activeDirectoryServer'][0] = [
-            'ad_server' => $ldapConfig['ad_server'],
-            'ad_port' => $ldapConfig['ad_port'],
-            'ad_user' => $ldapConfig['ad_user'],
-            'ad_password' => $ldapConfig['ad_password'],
-            'ad_base' => $ldapConfig['ad_base'],
-        ];
-
-        // Add multiple Active Directory servers if enabled
-        if (true === $this->get('ad.ad_use_multiple_servers')) {
-            $key = 1;
-            while ($key >= 1) {
-                if (isset($ldapConfig[$key])) {
-                    $this->config['core.activeDirectoryServer'][$key] = $ldapConfig[$key];
-                    ++$key;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        // Set LDAP configuration
-        $this->config['core.ldapConfig'] = [
-            'ad_use_multiple_servers' => $this->get('ad.ad_use_multiple_servers'),
-            'ad_mapping' => $this->getActiveDirectoryMapping(),
-            'ad_use_domain_prefix' => $this->get('ad.ad_use_domain_prefix'),
-            'ad_options' => $this->getActiveDirectoryOptions(),
-            'ad_use_memberOf' => $this->get('ad.ad_use_memberOf'),
-            'ad_use_sasl' => $this->get('ad.ad_use_sasl'),
-            'ad_use_anonymous_login' => $this->get('ad.ad_use_anonymous_login'),
-        ];
-    }
-
-    /**
-     * Returns the Active Directory mapping configuration.
-     *
-     * @return string[]
-     */
-    public function getActiveDirectoryMapping(): array
-    {
-        return [
-            'name' => $this->get('ad.ad_mapping.name'),
-            'username' => $this->get('ad.ad_mapping.username'),
-            'mail' => $this->get('ad.ad_mapping.mail'),
-            'memberOf' => $this->get('ad.ad_mapping.memberOf')
-        ];
-    }
-
-    /**
      * Returns the LDAP mapping configuration.
      *
      * @return string[]
@@ -390,19 +334,6 @@ class Configuration
     }
 
     /**
-     * Returns the Active Directory options configuration.
-     *
-     * @return string[]
-     */
-    public function getActiveDirectoryOptions(): array
-    {
-        return [
-            'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ad.ad_options.LDAP_OPT_PROTOCOL_VERSION'),
-            'LDAP_OPT_REFERRALS' => $this->get('ad.ad_options.LDAP_OPT_REFERRALS')
-        ];
-    }
-
-    /**
      * Returns the LDAP configuration.
      *
      * @return string[]
@@ -413,16 +344,6 @@ class Configuration
     }
 
     /**
-     * Returns the Active Directory configuration.
-     *
-     * @return string[]
-     */
-    public function getActiveDirectoryConfig(): array
-    {
-        return $this->config['core.activeDirectoryConfig'] ?? [];
-    }
-
-    /**
      * Returns the LDAP server(s).
      *
      * @return string[]
@@ -430,16 +351,6 @@ class Configuration
     public function getLdapServer(): array
     {
         return $this->config['core.ldapServer'] ?? [];
-    }
-
-    /**
-     * Returns the Active Directory server(s).
-     *
-     * @return string[]
-     */
-    public function getActiveDirectoryServer(): array
-    {
-        return $this->config['core.activeDirectoryServer'] ?? [];
     }
 
     /**
@@ -549,8 +460,6 @@ class Configuration
             'core.language', // Language
             'core.ldapServer', // Ldap
             'core.ldapConfig', // $LDAP
-            'core.activeDirectoryServer', // Active Directory
-            'core.activeDirectoryConfig', // $AD
             'core.elasticsearch', // Elasticsearch\Client
             'core.elasticsearchConfig' // $ES
         ];

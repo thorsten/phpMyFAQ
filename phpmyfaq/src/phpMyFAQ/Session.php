@@ -34,11 +34,17 @@ class Session
     /** @var string Name of the session cookie */
     public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
+    /** @var string Azure AD session key */
+    public const PMF_AZURE_AD_SESSIONKEY = 'pmf_aad_sessionkey';
+
     /** @var Configuration */
     private Configuration $config;
 
-    /** @var int */
-    private $currentSessionId;
+    /** @var ?int */
+    private ?int $currentSessionId = null;
+
+    /** @var string */
+    private string $currentSessionKey;
 
     /** @var CurrentUser*/
     private CurrentUser $currentUser;
@@ -103,6 +109,47 @@ class Session
     {
         $this->currentUser = $currentUser;
         return $this;
+    }
+
+    /**
+     * Returns the current UUID session key
+     * @return string
+     */
+    public function getCurrentSessionKey(): string
+    {
+        return $this->currentSessionKey ?? $_SESSION[self::PMF_AZURE_AD_SESSIONKEY];
+    }
+
+    /**
+     * Sets the current UUID session key
+     * @return Session
+     */
+    public function setCurrentSessionKey(): Session
+    {
+        if (!isset($this->currentSessionKey)) {
+            $this->createCurrentSessionKey();
+        }
+
+        $_SESSION[self::PMF_AZURE_AD_SESSIONKEY] = $this->getCurrentSessionKey();
+        return $this;
+    }
+
+    /**
+     * Creates the current UUID session key
+     */
+    public function createCurrentSessionKey(): void
+    {
+        $this->currentSessionKey = $this->uuid();
+    }
+
+    public function set(string $key, string $value)
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    public function get(string $key)
+    {
+        return $_SESSION[$key];
     }
 
     /**
@@ -205,7 +252,7 @@ class Session
      *
      * @return mixed
      */
-    public function deleteAllSessions()
+    public function deleteAllSessions(): mixed
     {
         $query = sprintf('DELETE FROM %sfaqsessions', Database::getTablePrefix());
 
@@ -251,12 +298,11 @@ class Session
     /**
      * Tracks the user and log what he did.
      *
-     * @param string $action Action string
-     * @param string|int|null $data
-     *
+     * @param string          $action Action string
+     * @param int|string|null $data
      * @throws Exception
      */
-    public function userTracking(string $action, $data = null): void
+    public function userTracking(string $action, int|string $data = null): void
     {
         if ($this->config->get('main.enableUserTracking')) {
             $bots = 0;
@@ -325,8 +371,8 @@ class Session
                     str_replace(';', ',', $action) . ';' .
                     $data . ';' .
                     $remoteAddress . ';' .
-                    str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
-                    str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' .
+                    str_replace(';', ',', $_SERVER['QUERY_STRING'] ?? '') . ';' .
+                    str_replace(';', ',', $_SERVER['HTTP_REFERER'] ?? '') . ';' .
                     str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
                     $_SERVER['REQUEST_TIME'] . ";\n";
 
@@ -478,5 +524,24 @@ class Session
         }
 
         return $completeData;
+    }
+
+    /**
+     * Returns a UUID Version 4 compatible universally unique identifier.
+     * @return string
+     */
+    public function uuid(): string
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
+        );
     }
 }
