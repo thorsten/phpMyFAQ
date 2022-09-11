@@ -63,6 +63,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     }
 
     /**
+     * @inheritDoc
      * @throws Exception
      */
     public function create(string $login, string $password, string $domain = ''): mixed
@@ -126,12 +127,9 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      */
     public function authorize()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         $this->createOAuthChallenge();
         $this->session->setCurrentSessionKey();
-        $this->session->set(OAuth::PMF_SESSION_AAD_OAUTH_VERIFIER, $this->oAuthVerifier);
+        $this->session->set(Session::PMF_AZURE_AD_OAUTH_VERIFIER, $this->oAuthVerifier);
 
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize' .
@@ -161,7 +159,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             $user = CurrentUser::getFromSession($this->config);
         }
 
-        $user->getUserByLogin($this->oAuth->getMail());
+        $user->getUserByLogin($user->getLogin());
         $user->deleteFromSession(true);
         header('Location: ' . self::AAD_LOGOUT_URL);
     }

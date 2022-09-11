@@ -86,7 +86,9 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                         </div>
                                         <hr>
                                         <div class="small">
-                                            <a href="../services/azure">Login via Azure</a>
+                                            <a href="../services/azure">
+                                                <?= Translation::get('msgSignInWithMicrosoft') ?>
+                                            </a>
                                         </div>
                                     </div>
                                 <?php

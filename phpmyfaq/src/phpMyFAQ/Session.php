@@ -28,23 +28,32 @@ use stdClass;
  */
 class Session
 {
-    /** @var string Name of the remember me cookie */
+    /** @var string Name of "remember me" cookie */
     public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
 
     /** @var string Name of the session cookie */
     public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
     /** @var string Azure AD session key */
-    public const PMF_AZURE_AD_SESSIONKEY = 'pmf_aad_sessionkey';
+    public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
+
+    /** @var string */
+    public const PMF_AZURE_AD_OAUTH_VERIFIER = 'phpmyfaq_azure_ad_oauth_verifier';
+
+    /** @var string */
+    public const PMF_AZURE_AD_JWT = 'phpmyfaq_azure_ad_jwt';
 
     /** @var Configuration */
     private Configuration $config;
 
-    /** @var ?int */
+    /** @var int|null */
     private ?int $currentSessionId = null;
 
     /** @var string */
     private string $currentSessionKey;
+
+    /** @var string */
+    private string $currentToken;
 
     /** @var CurrentUser*/
     private CurrentUser $currentUser;
@@ -118,6 +127,14 @@ class Session
     public function getCurrentSessionKey(): string
     {
         return $this->currentSessionKey ?? $_SESSION[self::PMF_AZURE_AD_SESSIONKEY];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCurrentToken(): ?string
+    {
+        return $this->currentToken ?? $_SESSION[self::PMF_AZURE_AD_JWT];
     }
 
     /**
@@ -407,30 +424,18 @@ class Session
             $protocol = 'https';
         }
 
-        if (PHP_VERSION_ID < 70300) {
-            return setcookie(
-                $name,
-                $sessionId,
-                $_SERVER['REQUEST_TIME'] + $timeout,
-                dirname($_SERVER['SCRIPT_NAME']) . '; samesite=strict',
-                parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
-                'https' === $protocol, // only secure running via HTTPS
-                true
-            );
-        } else {
-            return setcookie(
-                $name,
-                $sessionId,
-                [
-                    'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
-                    'path' => dirname($_SERVER['SCRIPT_NAME']),
-                    'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
-                    'samesite' => 'strict',
-                    'secure' => 'https' === $protocol, // only secure running via HTTPS
-                    'httponly' => true,
-                ]
-            );
-        }
+        return setcookie(
+            $name,
+            $sessionId,
+            [
+                'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
+                'path' => dirname($_SERVER['SCRIPT_NAME']),
+                'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
+                'samesite' => 'strict',
+                'secure' => 'https' === $protocol, // only secure running via HTTPS
+                'httponly' => true,
+            ]
+        );
     }
 
     /**

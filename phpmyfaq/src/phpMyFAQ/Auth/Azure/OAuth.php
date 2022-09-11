@@ -24,7 +24,9 @@ use phpMyFAQ\Session;
 use stdClass;
 
 /**
+ * Class OAuth
  *
+ * @package phpMyFAQ\Auth\Azure
  */
 class OAuth
 {
@@ -34,11 +36,14 @@ class OAuth
     /** @var Session */
     private Session $session;
 
-    /** @var ?stdClass JWT */
+    /** @var stdClass|null JWT */
     private ?stdClass $token = null;
 
-    /** @var string */
-    private const PMF_SESSION_AAD_OAUTH_VERIFIER = 'pmf_aad_oauth_verifier';
+    /** @var string|null */
+    private ?string $refreshToken = null;
+
+    /** @var string|null */
+    private ?string $accessToken = null;
 
     /**
      * Constructor.
@@ -82,8 +87,29 @@ class OAuth
                 'client_id' => AAD_OAUTH_CLIENTID,
                 'redirect_uri' => $this->config->getDefaultUrl() . 'services/azure/callback.php',
                 'code' => $code,
-                'code_verifier' => $this->session->get(self::PMF_SESSION_AAD_OAUTH_VERIFIER),
+                'code_verifier' => $this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER),
                 'client_secret' => AAD_OAUTH_SECRET
+            ]
+        ]);
+
+        return json_decode($response->getBody());
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function refreshToken()
+    {
+        $client = new Client([
+            'base_uri' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/',
+        ]);
+
+        $response = $client->request('POST', 'token', [
+            'form_params' => [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $this->getRefreshToken(),
+                'client_id' => AAD_OAUTH_CLIENTID,
+                'scope' => AAD_OAUTH_SCOPE
             ]
         ]);
 
@@ -100,11 +126,50 @@ class OAuth
 
     /**
      * @param stdClass $token
+     * @return OAuth
      */
-    public function setToken(stdClass $token): void
+    public function setToken(stdClass $token): OAuth
     {
         $idToken = base64_decode(explode('.', $token->id_token)[1]);
         $this->token = json_decode($idToken);
+        $this->session->set(Session::PMF_AZURE_AD_JWT, json_encode($this->token));
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * @param string|null $refreshToken
+     * @return OAuth
+     */
+    public function setRefreshToken(?string $refreshToken): OAuth
+    {
+        $this->refreshToken = $refreshToken;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAccessToken(): ?string
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * @param string|null $accessToken
+     * @return OAuth
+     */
+    public function setAccessToken(?string $accessToken): OAuth
+    {
+        $this->accessToken = $accessToken;
+        return $this;
     }
 
     /**

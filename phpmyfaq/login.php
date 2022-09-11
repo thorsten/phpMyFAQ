@@ -50,5 +50,6 @@ $template->parse(
         'username' => Translation::get('ad_auth_user'),
         'password' => Translation::get('ad_auth_passwd'),
         'rememberMe' => Translation::get('rememberMe'),
+        'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
     ]
 );

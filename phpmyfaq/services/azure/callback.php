@@ -41,46 +41,49 @@ $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
 $auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
 
-try {
-    $token = $oAuth->getOAuthToken($code);
-    $oAuth->setToken($token);
-    $user = new CurrentUser($faqConfig);
+if ($session->getCurrentSessionKey()) {
+    try {
+        $token = $oAuth->getOAuthToken($code);
+        $oAuth->setToken($token)->setAccessToken($token->access_token)->setRefreshToken($token->refresh_token);
 
-    if (!$auth->isValidLogin($oAuth->getMail())) {
-        // @todo proper error handling
-        echo 'Login not valid.';
-        exit();
+        $user = new CurrentUser($faqConfig);
+
+        if (!$auth->isValidLogin($oAuth->getMail())) {
+            // @todo proper error handling
+            echo 'Login not valid.';
+            exit();
+        }
+
+        if (!$auth->checkCredentials($oAuth->getMail(), '')) {
+            // @todo proper error handling
+            echo 'Credentials not valid.';
+            exit();
+        }
+
+        $user->getUserByLogin($oAuth->getMail());
+        $user->setLoggedIn(true);
+        $user->setAuthSource('azure');
+        $user->updateSessionId(true);
+        $user->saveToSession();
+        $user->saveCrsfTokenToSession();
+        $user->setTokenData([
+                'refresh_token' => $oAuth->getRefreshToken(),
+                'access_token' => $oAuth->getAccessToken(),
+                'code_verifier' => $session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER),
+                'jwt' => $oAuth->getToken()
+            ]);
+        $user->setSuccess(true);
+
+        // @todo -> redirect to where the user came from
+        header('Location: ' . $faqConfig->getDefaultUrl());
+
+    } catch (GuzzleException $e) {
+        echo $e->getMessage();
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
-
-    if (!$auth->checkCredentials($oAuth->getMail(), '')) {
-        // @todo proper error handling
-        echo 'Credentials not valid.';
-        exit();
-    }
-
-    $user->getUserByLogin($oAuth->getMail());
-    $user->setLoggedIn(true);
-    $user->setAuthSource('azure');
-    $user->updateSessionId(true);
-    $user->saveToSession();
-    $user->saveCrsfTokenToSession();
-    $user->setTokenData(
-        [
-            'refresh_token' => $token->refresh_token,
-            'access_token' => $token->access_token,
-            'code_verifier' => $session->get(OAuth::PMF_SESSION_AAD_OAUTH_VERIFIER),
-            'jwt' => $oAuth->getToken()
-        ]
-    );
-    $user->setSuccess(true);
-
-    // @todo -> redirect to where the user came from
-    var_dump($user->getUserData());
-
-} catch (GuzzleException $e) {
-    echo $e->getMessage();
-} catch (\phpMyFAQ\Core\Exception $e) {
-    echo $e->getMessage();
+} else {
+    header('Location: ' . $faqConfig->getDefaultUrl());
 }
 
 

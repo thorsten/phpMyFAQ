@@ -1340,4 +1340,7 @@ $LANG_CONF['api.apiClientToken'] = ['input', 'REST API Client Token'];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Erlaubte Domains bei Registrierungen'];
 $LANG_CONF['main.loginWithEmailAddress'] = ['checkbox', 'Login nur mit E-Mailadresse'];
 
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Mit Microsoft anmelden';
+
 return $PMF_LANG;
