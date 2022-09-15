@@ -78,14 +78,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryId = $faqConfig->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
                 $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
                 $categoryData = [
-                'lang' => $categoryLang,
-                'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW),
-                'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_UNSAFE_RAW),
-                'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
-                'group_id' => Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
-                'active' => Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
-                'image' => $categoryImage->getFileName($categoryId, $categoryLang),
-                'show_home' => Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT)
+                    'lang' => $categoryLang,
+                    'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW),
+                    'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_UNSAFE_RAW),
+                    'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+                    'group_id' => Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
+                    'active' => Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
+                    'image' => $categoryImage->getFileName($categoryId, $categoryLang),
+                    'show_home' => Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT)
                 ];
 
                 $permissions = [];

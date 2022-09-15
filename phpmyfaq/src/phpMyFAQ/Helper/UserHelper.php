@@ -9,7 +9,7 @@
  *
  * @package    phpMyFAQ\Helper
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright  2021 phpMyFAQ Team
+ * @copyright  2021-2022 phpMyFAQ Team
  * @license    http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link       https://www.phpmyfaq.de
  * @since      2021-03-14
@@ -27,7 +27,7 @@ use phpMyFAQ\User;
 class UserHelper
 {
     /** @var User */
-    private $user;
+    private User $user;
 
     /**
      * UserHelper constructor.
@@ -46,7 +46,7 @@ class UserHelper
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      * @return string
      */
-    public function getAllUserOptions($id = 1, $allowBlockedUsers = false): string
+    public function getAllUserOptions(int $id = 1, bool $allowBlockedUsers = false): string
     {
         $options = '';
         $allUsers = $this->user->getAllUsers(true, $allowBlockedUsers);

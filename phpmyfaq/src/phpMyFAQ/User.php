@@ -749,7 +749,7 @@ class User
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      * @return array<int>
      */
-    public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true): array
+    public function getAllUsers(bool $withoutAnonymous = true, bool $allowBlockedUsers = true): array
     {
         $select = sprintf(
             '
@@ -775,7 +775,7 @@ class User
 
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result[] = $row['user_id'];
+            $result[] = (int) $row['user_id'];
         }
 
         return $result;
