@@ -47,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $perPage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
-    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfChecked = false;

@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Database;
 
-use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Utils;
 use SQLite3Result;
@@ -34,12 +33,12 @@ class Sqlite3 implements DatabaseDriver
      *
      * @var array
      */
-    public $tableNames = [];
+    public array $tableNames = [];
 
     /**
      * The connection object.
      *
-     * @var SQLite3
+     * @var SQLite3|bool
      */
     private $conn = false;
 
@@ -50,7 +49,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @see query()
      */
-    private $sqllog = '';
+    private string $sqllog = '';
 
     /** @var string */
     private const ERROR_MESSAGE =

@@ -19,6 +19,7 @@
 namespace phpMyFAQ\Database;
 
 use mysqli_result;
+use mysqli_sql_exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Utils;
@@ -35,12 +36,12 @@ class Mysqli implements DatabaseDriver
      *
      * @var array
      */
-    public $tableNames = [];
+    public array $tableNames = [];
 
     /**
      * The connection object.
      *
-     * @var \mysqli
+     * @var \mysqli|bool
      */
     private $conn = false;
 
@@ -49,7 +50,7 @@ class Mysqli implements DatabaseDriver
      *
      * @var string
      */
-    private $sqllog = '';
+    private string $sqllog = '';
 
     /**
      * Connects to the database.
@@ -69,12 +70,16 @@ class Mysqli implements DatabaseDriver
         string $database = '',
         int $port = null
     ): ?bool {
-        if (substr($host, 0, 1) === '/') {
-            // Connect to MySQL via socket
-            $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
-        } else {
-            // Connect to MySQL via network
-            $this->conn = new \mysqli($host, $user, $password, null, $port);
+        try {
+            if (substr($host, 0, 1) === '/') {
+                // Connect to MySQL via socket
+                $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
+            } else {
+                // Connect to MySQL via network
+                $this->conn = new \mysqli($host, $user, $password, null, $port);
+            }
+        } catch (mysqli_sql_exception $exception) {
+            throw new Exception('Cannot connect to database ' . $database);
         }
 
         if ($this->conn->connect_error) {
@@ -88,7 +93,9 @@ class Mysqli implements DatabaseDriver
         }
 
         if ('' !== $database) {
-            if (!$this->conn->select_db($database)) {
+            try {
+                $this->conn->select_db($database);
+            } catch (mysqli_sql_exception $exception) {
                 throw new Exception('Cannot connect to database ' . $database);
             }
         }

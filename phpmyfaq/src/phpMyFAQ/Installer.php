@@ -39,14 +39,14 @@ class Installer
      *
      * @var System
      */
-    protected $system;
+    protected System $system;
 
     /**
      * Array with user rights.
      *
      * @var array
      */
-    protected $mainRights = [
+    protected array $mainRights = [
         [
             'name' => 'add_user',
             'description' => 'Right to add user accounts',
@@ -311,7 +311,7 @@ class Installer
      *
      * @var array
      */
-    protected $mainConfig = [
+    protected array $mainConfig = [
         'main.currentVersion' => null,
         'main.currentApiVersion' => null,
         'main.language' => '__PHPMYFAQ_LANGUAGE__',
@@ -456,7 +456,7 @@ class Installer
     /**
      * Check absolutely necessary stuff and die.
      */
-    public function checkBasicStuff()
+    public function checkBasicStuff(): void
     {
         if (!$this->checkMinimumPhpVersion()) {
             printf(
@@ -586,11 +586,11 @@ class Installer
     }
 
     /**
-     * Checks some non critical settings and print some hints.
+     * Checks some non-critical settings and print some hints.
      *
      * @todo We should return an array of messages
      */
-    public function checkNoncriticalSettings()
+    public function checkNoncriticalSettings(): void
     {
         if (!extension_loaded('gd')) {
             echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please ' .
@@ -618,7 +618,7 @@ class Installer
      *
      * @param DatabaseDriver $database
      */
-    public function checkAvailableDatabaseTables(DatabaseDriver $database)
+    public function checkAvailableDatabaseTables(DatabaseDriver $database): void
     {
         $query = sprintf(
             'SELECT * FROM %s%s',
@@ -638,7 +638,7 @@ class Installer
      * @param array|null $setup
      * @throws Exception
      */
-    public function startInstall(array $setup = null)
+    public function startInstall(array $setup = null): void
     {
         $query = $uninst = $dbSetup = [];
 
@@ -699,7 +699,7 @@ class Installer
 
         // Check database name
         if (!isset($setup['dbType'])) {
-            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
+            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_UNSAFE_RAW);
         } else {
             $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
         }
