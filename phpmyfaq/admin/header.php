@@ -273,7 +273,6 @@ switch ($action) {
     <li>
       <hr class="sidebar-divider my-0">
     </li>
-
       <?php if (
         isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
         ))

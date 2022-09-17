@@ -159,7 +159,7 @@ class User
      *
      * @var bool
      */
-    private $isSuperAdmin = false;
+    private bool $isSuperAdmin = false;
 
     /**
      * array of allowed values for status.
@@ -546,14 +546,15 @@ class User
      * @param bool   $raiseError Raise error?
      * @return bool
      */
-    public function getUserByLogin(string $login, $raiseError = true): bool
+    public function getUserByLogin(string $login, bool $raiseError = true): bool
     {
         $select = sprintf(
             "
             SELECT
                 user_id,
                 login,
-                account_status
+                account_status,
+                is_superadmin
             FROM
                 %sfaquser
             WHERE
@@ -570,10 +571,13 @@ class User
 
             return false;
         }
+
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int)$user['user_id'];
-        $this->login = (string)$user['login'];
-        $this->status = (string)$user['account_status'];
+
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
+        $this->isSuperAdmin = (bool) $user['is_superadmin'];
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
@@ -592,7 +596,7 @@ class User
      * @return string
      * @throws Exception
      */
-    public function createPassword($minimumLength = 8, $allowUnderscore = true): string
+    public function createPassword(int $minimumLength = 8, bool $allowUnderscore = true): string
     {
         // To make passwords harder to get wrong, a few letters & numbers have been omitted.
         // This will ensure safety with browsers using fonts with confusable letters.
@@ -812,11 +816,13 @@ class User
 
             return false;
         }
+
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int)$user['user_id'];
-        $this->login = (string)$user['login'];
-        $this->status = (string)$user['account_status'];
-        $this->isSuperAdmin = (bool)$user['is_superadmin'];
+
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
+        $this->isSuperAdmin = (bool) $user['is_superadmin'];
 
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.

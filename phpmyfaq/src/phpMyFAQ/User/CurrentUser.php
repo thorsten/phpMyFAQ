@@ -25,6 +25,7 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
@@ -131,7 +132,7 @@ class CurrentUser extends User
      * @param string $login Login name
      * @param string $password Password
      * @return bool
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     public function login(string $login, string $password): bool
     {
