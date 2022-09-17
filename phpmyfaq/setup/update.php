@@ -408,6 +408,7 @@ if ($step == 3) {
                 ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
                 ADD jwt TEXT NULL DEFAULT NULL';
         }
+        $faqConfig->add('security.enableSignInWithMicrosoft', false);
 
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server

@@ -1343,5 +1343,6 @@ $LANG_CONF['main.loginWithEmailAddress'] = ['checkbox', 'Login only with email a
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Sign in with Microsoft';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Enable Sign in with Microsoft'];
 
 return $PMF_LANG;

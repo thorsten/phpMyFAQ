@@ -362,6 +362,14 @@ class Configuration
     }
 
     /**
+     * @return bool
+     */
+    public function isSignInWithMicrosoftActive(): bool
+    {
+        return $this->get('security.enableSignInWithMicrosoft');
+    }
+
+    /**
      * Sets the Elasticsearch client instance.
      *
      * @param Client $esClient

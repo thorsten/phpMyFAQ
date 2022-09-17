@@ -84,12 +84,14 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                         <div class="small">
                                             <a href="../?action=register"><?= Translation::get('msgRegistration') ?></a>
                                         </div>
+                                        <?php if ($faqConfig->isSignInWithMicrosoftActive()) { ?>
                                         <hr>
                                         <div class="small">
                                             <a href="../services/azure">
                                                 <?= Translation::get('msgSignInWithMicrosoft') ?>
                                             </a>
                                         </div>
+                                        <?php } ?>
                                     </div>
                                 <?php
                                 } ?>

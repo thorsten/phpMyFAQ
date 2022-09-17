@@ -393,6 +393,7 @@ class Installer
         'security.forcePasswordUpdate' => 'false',
         'security.enableRegistration' => 'true',
         'security.domainWhiteListForRegistrations' => '',
+        'security.enableSignInWithMicrosoft' => 'false',
 
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,
