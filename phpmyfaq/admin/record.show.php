@@ -364,45 +364,51 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 <table class="table table-hover table-sm">
                   <thead class="thead-light">
                   <tr>
-                    <th colspan="2" style="width: 24px;">
-                      <a href="?action=view&category=<?= $cid ?>&orderby=id&sortby=desc">
-                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                      </a>
-                      <a href="?action=view&category=<?= $cid ?>&orderby=id&sortby=asc">
-                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
-                      </a>
+                    <th colspan="3" style="width: 24px; vertical-align: middle;">
+                      <div style="display: inline-flex; flex-direction: column;">
+                        <a href="?action=view&category=<?= $cid ?>&orderby=id&sortby=asc">
+                          <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                        </a>
+                        ID
+                        <a href="?action=view&category=<?= $cid ?>&orderby=id&sortby=desc">
+                          <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                        </a>
+                      </div>
                     </th>
-                    <th>
-                      #
+                    <th style="vertical-align: middle;">
+                      <div style="display: inline-flex; flex-direction: column;">
+                        <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=asc">
+                          <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                        </a>
+                        <?= $PMF_LANG['ad_entry_theme'] ?>
+                        <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=desc">
+                          <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                        </a>
+                      </div>
                     </th>
-                    <th>
-                      <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=desc">
-                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                      </a>
-                      <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=asc">
-                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
-                      </a>
-                    </th>
-                    <th style="width: 100px;">
-                      <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=desc">
-                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                      </a>
-                      <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=asc">
-                        <i class="fa fa-sort-asc" aria-hidden="true"></i>
-                      </a>
+                    <th style="width: 100px; vertical-align: middle;">
+                      <div style="display: inline-flex; flex-direction: column;">
+                        <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=asc">
+                          <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                        </a>
+                        <?= $PMF_LANG['ad_entry_date'] ?>
+                        <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=desc">
+                          <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                        </a>
+                      </div>
                     </th>
                     <th colspan="2">
                       &nbsp;
                     </th>
 
-                    <th style="width: 120px;">
+                    <th style="width: 120px; vertical-align: middle;">
                       <label>
                         <input type="checkbox" id="sticky_category_block_<?= $cid ?>"
                                onclick="saveStatusForCategory(<?= $cid ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>')"/>
                       <?= $PMF_LANG['ad_record_sticky'] ?>
                       </label>
                     </th>
-                    <th style="width: 120px;">
+                    <th style="width: 120px; vertical-align: middle;">
                     <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
@@ -602,14 +608,16 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         if ('active' === type) {
           for (let j = 0; j < sameRecords.length; j++) {
             $('#' + sameRecords[j].id).attr('checked', status);
-            const catid = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
-            $('#js-active-records-' + catid).html($('.active-records-category-' + cid + ':not(:checked)').length);
+            const catId = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
+            $('#js-active-records-' + catId).html($('.active-records-category-' + cid + ':not(:checked)').length);
           }
         } else {
           for (let j = 0; j < sameRecords.length; j++) {
             $('#' + sameRecords[j].id).attr('checked', status);
-            const catid = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
-            $('#js-active-records-' + catid).html($('.active-records-category-' + cid + ':not(:checked)').length);
+            if (sameRecords[j].id.match(/active_record_(\d+)_\d+/)) {
+              const catId = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
+              $('#js-active-records-' + catId).html($('.active-records-category-' + cid + ':not(:checked)').length);
+            }
           }
         }
       }
