@@ -56,6 +56,8 @@ $groupActionList = [
 // actions defined by url: group_action=
 $groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_UNSAFE_RAW, $defaultGroupAction);
 
+$currentUser = new CurrentUser($faqConfig);
+
 // actions defined by submit button
 if (isset($_POST['group_action_deleteConfirm'])) {
     $groupAction = 'delete_confirm';
@@ -250,8 +252,9 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
             $messages[] = $PMF_LANG['ad_adus_dberr'];
         }
     }
+
     // no errors, show list
-    if (count($messages) == 0) {
+    if (count($messages) === 0) {
         $groupAction = $defaultGroupAction;
         $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
         // display error messages and show form again
@@ -334,6 +337,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
 }
 
 // Import LDAP groups
+/*
 if ('import-ldap-groups' === $groupAction && $user->perm->hasPermission($user->getUserId(), 'addgroup')) {
     $user = new CurrentUser($faqConfig);
     $message = '';
@@ -384,6 +388,7 @@ if ('import-ldap-groups' === $groupAction && $user->perm->hasPermission($user->g
         $message .= '</p>';
     }
 }
+*/
 
 // show list of users
 if ('list' === $groupAction) {
@@ -416,7 +421,7 @@ if ('list' === $groupAction) {
         <div class="card-header py-3">
           <form id="group-import-ldap-groups" method="post"
                 name="group-import-ldap-groups" action="?action=group&amp;group_action=import-ldap-groups">
-            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
             <button class="btn btn-success" type="submit">
               Import LDAP groups
             </button>
