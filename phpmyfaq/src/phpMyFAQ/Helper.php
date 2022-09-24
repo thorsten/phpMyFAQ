@@ -30,54 +30,54 @@ abstract class Helper
     /**
      * Entity class.
      *
-     * @var Category
+     * @var Category|null
      */
-    protected $Category = null;
+    protected ?Category $Category = null;
 
     /**
      * @var CategoryRelation
      */
-    protected $categoryRelation;
+    protected CategoryRelation $categoryRelation;
 
     /**
      * Tagging class.
      *
-     * @var Tags
+     * @var Tags|null
      */
-    protected $Tags = null;
+    protected ?Tags $Tags = null;
 
     /**
      * Template class.
      *
-     * @var Template
+     * @var Template|null
      */
-    protected $Template = null;
+    protected ?Template $Template = null;
 
     /**
      * Plurals class.
      *
-     * @var Plurals
+     * @var Plurals|null
      */
-    protected $plurals = null;
+    protected ?Plurals $plurals = null;
 
     /**
      * phpMyFAQ's session ID.
      *
-     * @var int
+     * @var int|null
      */
-    protected $sessionId = null;
+    protected ?int $sessionId = null;
 
     /**
      * Array with all translations.
      *
      * @var string[]
      */
-    protected $translation = [];
+    protected array $translation = [];
 
     /**
      * @var Configuration
      */
-    protected $config;
+    protected Configuration $config;
 
     /**
      * Entity Setter.

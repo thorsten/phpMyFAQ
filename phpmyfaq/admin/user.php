@@ -542,8 +542,8 @@ if (
         <tbody>
         <?php
         $counter = $displayedCounter = 0;
-        foreach ($allUsers as $userId) {
-            $user->getUserById($userId, true);
+        foreach ($allUsers as $listedUserId) {
+            $user->getUserById($listedUserId, true);
 
             if ($displayedCounter >= $perPage) {
                 continue;

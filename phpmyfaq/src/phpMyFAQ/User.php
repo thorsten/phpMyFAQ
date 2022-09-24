@@ -861,7 +861,7 @@ class User
      * @param string $field Field
      * @return array<string>|string|int
      */
-    public function getUserData($field = '*')
+    public function getUserData(string $field = '*')
     {
         if (!($this->userdata instanceof UserData)) {
             $this->userdata = new UserData($this->config);

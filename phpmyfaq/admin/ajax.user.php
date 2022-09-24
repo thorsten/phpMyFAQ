@@ -7,16 +7,17 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-04
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-04
  */
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
@@ -142,9 +143,13 @@ if (
                 } else {
                     $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
                     $newUser->setStatus('active');
-                    $newUser->setSuperAdmin($userIsSuperAdmin);
+                    $newUser->setSuperAdmin(!is_null($userIsSuperAdmin));
                     $mailHelper = new MailHelper($faqConfig);
-                    $mailHelper->sendMailToNewUser($newUser, $userPassword);
+                    try {
+                        $mailHelper->sendMailToNewUser($newUser, $userPassword);
+                    } catch (Exception $e) {
+                        // @todo catch exception
+                    }
                     $successMessage = [ 'data' => $PMF_LANG['ad_adus_suc'] ];
                 }
 

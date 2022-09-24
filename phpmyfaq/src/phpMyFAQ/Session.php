@@ -38,7 +38,7 @@ class Session
     private Configuration $config;
 
     /** @var int */
-    private $currentSessionId;
+    private int $currentSessionId = 1;
 
     /** @var CurrentUser*/
     private CurrentUser $currentUser;
