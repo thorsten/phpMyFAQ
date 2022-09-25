@@ -28,7 +28,7 @@ use stdClass;
  */
 class Session
 {
-    /** @var string Name of the remember me cookie */
+    /** @var string Name of the "remember me" cookie */
     public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
 
     /** @var string Name of the session cookie */
@@ -37,8 +37,8 @@ class Session
     /** @var Configuration */
     private Configuration $config;
 
-    /** @var int */
-    private int $currentSessionId = 1;
+    /** @var int|null */
+    private ?int $currentSessionId = 1;
 
     /** @var CurrentUser*/
     private CurrentUser $currentUser;
