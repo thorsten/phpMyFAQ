@@ -365,6 +365,7 @@ class Mail
 
         // Add the email address into the target array
         $target[$address] = $name;
+
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
         if (('WIN' === strtoupper(substr(PHP_OS, 0, 3))) && ('built-in' == $this->agent)) {
             $target[$address] = null;

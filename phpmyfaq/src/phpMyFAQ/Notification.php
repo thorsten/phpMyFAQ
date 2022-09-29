@@ -89,6 +89,7 @@ class Notification
             $this->translation['msgMailCheck']
         ) . "\n\n" . $this->config->getTitle() . ': ' . $this->config->getDefaultUrl(
         ) . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
+
         $this->mail->send();
     }
 }
