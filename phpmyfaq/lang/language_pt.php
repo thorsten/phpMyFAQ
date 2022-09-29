@@ -7,15 +7,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author João Martins <jm@reit.up.pt>
- * @author Fernando G. Monteiro <fgmont@reit.up.pt>
- * @author Luis Costa <izhirahider@gmail.com>
- * @author... Carlos E. Gorges <carlos@linuxwaves.com>
+ * @package   phpMyFAQ
+ * @author    João Martins <jm@reit.up.pt>
+ * @author    Fernando G. Monteiro <fgmont@reit.up.pt>
+ * @author    Luis Costa <izhirahider@gmail.com>
+ * @author    Carlos E. Gorges <carlos@linuxwaves.com>
  * @copyright 2004-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-06-24
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-06-24
  * @codingStandardsIgnoreFile
  */
 
@@ -892,3 +892,4 @@ $PMF_LANG['msgAccessDenied'] = 'Acesso negado.';
 $PMF_LANG['ad_xml_gen'] = 'Criar exportação XML';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Número de termos de procura');
 $PMF_LANG['msgPDF'] = 'Versão PDF';
+$PMF_LANG['msgPopularTags'] = 'Pesquisas mais frequentes';
