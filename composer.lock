@@ -1946,16 +1946,16 @@
         },
         {
             "name": "symfony/mailer",
-            "version": "v5.4.12",
+            "version": "v5.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mailer.git",
-                "reference": "076043af11e58b20a68d2fd93f59cdbc6e8fdd00"
+                "reference": "63bf36a5150ac0bfed1c4d0a4e0b114a57b77e11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mailer/zipball/076043af11e58b20a68d2fd93f59cdbc6e8fdd00",
-                "reference": "076043af11e58b20a68d2fd93f59cdbc6e8fdd00",
+                "url": "https://api.github.com/repos/symfony/mailer/zipball/63bf36a5150ac0bfed1c4d0a4e0b114a57b77e11",
+                "reference": "63bf36a5150ac0bfed1c4d0a4e0b114a57b77e11",
                 "shasum": ""
             },
             "require": {
@@ -2002,7 +2002,7 @@
             "description": "Helps sending emails",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/mailer/tree/v5.4.12"
+                "source": "https://github.com/symfony/mailer/tree/v5.4.13"
             },
             "funding": [
                 {
@@ -2018,20 +2018,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-03T05:17:26+00:00"
+            "time": "2022-08-29T06:47:07+00:00"
         },
         {
             "name": "symfony/mime",
-            "version": "v5.4.12",
+            "version": "v5.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "03876e9c5a36f5b45e7d9a381edda5421eff8a90"
+                "reference": "bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/03876e9c5a36f5b45e7d9a381edda5421eff8a90",
-                "reference": "03876e9c5a36f5b45e7d9a381edda5421eff8a90",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd",
+                "reference": "bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd",
                 "shasum": ""
             },
             "require": {
@@ -2085,7 +2085,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v5.4.12"
+                "source": "https://github.com/symfony/mime/tree/v5.4.13"
             },
             "funding": [
                 {
@@ -2101,7 +2101,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-19T14:24:03+00:00"
+            "time": "2022-09-01T18:18:29+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
