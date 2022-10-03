@@ -28,7 +28,7 @@ use stdClass;
  */
 class Session
 {
-    /** @var string Name of "remember me" cookie */
+    /** @var string Name of the "remember me" cookie */
     public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
 
     /** @var string Name of the session cookie */

@@ -2,6 +2,7 @@
 
 /**
  * Displays the user management frontend.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -496,11 +497,11 @@ if (
                 <?php
             endif;
             ?>
-            <tbody>
-            <?php
-            $counter = $displayedCounter = 0;
-            foreach ($allUsers as $userId) {
-                $user->getUserById($userId, true);
+        <tbody>
+        <?php
+        $counter = $displayedCounter = 0;
+        foreach ($allUsers as $listedUserId) {
+            $user->getUserById($listedUserId, true);
 
                 if ($displayedCounter >= $perPage) {
                     continue;

@@ -18,6 +18,7 @@
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
@@ -161,7 +162,11 @@ if (
                     $newUser->setStatus('active');
                     $newUser->setSuperAdmin((bool)$userIsSuperAdmin);
                     $mailHelper = new MailHelper($faqConfig);
-                    $mailHelper->sendMailToNewUser($newUser, $userPassword);
+                    try {
+                        $mailHelper->sendMailToNewUser($newUser, $userPassword);
+                    } catch (Exception $e) {
+                        // @todo catch exception
+                    }
                     $successMessage = [ 'data' => Translation::get('ad_adus_suc') ];
                 }
 
@@ -213,16 +218,16 @@ if (
             $json = file_get_contents('php://input', true);
             $postData = json_decode($json);
 
+            $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
+            $csrfToken = Filter::filterVar($postData->csrf, FILTER_UNSAFE_RAW);
+            $newPassword = Filter::filterVar($postData->newPassword, FILTER_UNSAFE_RAW);
+            $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_UNSAFE_RAW);
+
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }
-
-            $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
-            $csrfToken = Filter::filterVar($postData->csrf, FILTER_UNSAFE_RAW);
-            $newPassword = Filter::filterVar($postData->newPassword, FILTER_UNSAFE_RAW);
-            $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_UNSAFE_RAW);
 
             $user->getUserById($userId, true);
             $auth = new Auth($faqConfig);

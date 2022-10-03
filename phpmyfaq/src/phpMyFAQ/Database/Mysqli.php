@@ -93,7 +93,9 @@ class Mysqli implements DatabaseDriver
         }
 
         if ('' !== $database) {
-            if (!$this->conn->select_db($database)) {
+            try {
+                $this->conn->select_db($database);
+            } catch (mysqli_sql_exception $exception) {
                 throw new Exception('Cannot connect to database ' . $database);
             }
         }

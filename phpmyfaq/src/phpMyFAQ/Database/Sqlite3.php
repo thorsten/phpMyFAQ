@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Database;
 
-use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Utils;
 use SQLite3Result;
@@ -39,7 +38,7 @@ class Sqlite3 implements DatabaseDriver
     /**
      * The connection object.
      *
-     * @var SQLite3
+     * @var SQLite3|bool
      */
     private \Sqlite3|bool $conn = false;
 

@@ -475,7 +475,7 @@ class Installer
     /**
      * Check absolutely necessary stuff and die.
      */
-    public function checkBasicStuff()
+    public function checkBasicStuff(): void
     {
         if (!$this->checkMinimumPhpVersion()) {
             printf(
@@ -609,7 +609,7 @@ class Installer
      *
      * @todo We should return an array of messages
      */
-    public function checkNoncriticalSettings()
+    public function checkNoncriticalSettings(): void
     {
         if (!$this->system->getHttpsStatus()) {
             echo '<p class="alert alert-warning">phpMyFAQ could not find HTTPS support. For security reasons we ' .
@@ -641,7 +641,7 @@ class Installer
      *
      * @param DatabaseDriver $database
      */
-    public function checkAvailableDatabaseTables(DatabaseDriver $database)
+    public function checkAvailableDatabaseTables(DatabaseDriver $database): void
     {
         $query = sprintf(
             'SELECT * FROM %s%s',
@@ -661,7 +661,7 @@ class Installer
      * @param array|null $setup
      * @throws Exception
      */
-    public function startInstall(array $setup = null)
+    public function startInstall(array $setup = null): void
     {
         $query = $uninstall = $dbSetup = [];
 
@@ -722,7 +722,7 @@ class Installer
 
         // Check database name
         if (!isset($setup['dbType'])) {
-            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
+            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_UNSAFE_RAW);
         } else {
             $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
         }

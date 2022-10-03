@@ -142,8 +142,7 @@ switch ($ajaxAction) {
 
             try {
                 $faq->deleteRecord($recordId, $recordLang);
-            } catch (FileException $e) {
-            } catch (AttachmentException $e) {
+            } catch (FileException | AttachmentException $e) {
             }
             echo Translation::get('ad_entry_delsuc');
         } else {

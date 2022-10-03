@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('answer').value = tinyMCE.activeEditor.getContent();
     }
     saveFormValues('savefaq', 'faq');
+    return false;
   });
   $('form#formValues').submit(() => {
     return false;

@@ -1,7 +1,11 @@
 <section class="col-12">
   <h1>{{ pageHeader }}</h1>
   <p>{{ msgNewContentAddon }}</p>
-  <form id="formValues" action="#" method="post" accept-charset="utf-8">
+
+  <div id="loader"></div>
+  <div id="faqs"></div>
+
+  <form id="formValues" action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
     <input type="hidden" value="{{ openQuestionID }}" id="openQuestionID" name="openQuestionID" />
 
@@ -66,9 +70,6 @@
       </div>
     </div>
   </form>
-
-  <div id="loader"></div>
-  <div id="faqs"></div>
 </section>
 
 <script src="{{ baseHref }}assets/dist/frontend.js"></script>

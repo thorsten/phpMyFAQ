@@ -1139,14 +1139,12 @@ class Faq
             sprintf(
                 'DELETE FROM %sfaqdata_user WHERE record_id = %d',
                 Database::getTablePrefix(),
-                $recordId,
-                $recordLang
+                $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_group WHERE record_id = %d',
                 Database::getTablePrefix(),
-                $recordId,
-                $recordLang
+                $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_tags WHERE record_id = %d',

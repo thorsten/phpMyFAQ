@@ -405,23 +405,25 @@ class CategoryHelper extends Helper
             Database::getTablePrefix()
         );
 
-        if (-1 === $this->Category->getUser()) {
-            $query .= sprintf(
-                'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
-                implode(', ', $this->Category->getGroups()),
-                implode(', ', $this->Category->getGroups())
-            );
-        } else {
-            $query .= sprintf(
-                'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )
-                AND ( fcg.group_id IN (%s) OR (fcu.user_id = %d OR fcg.group_id IN (%s)) )',
-                implode(', ', $this->Category->getGroups()),
-                $this->Category->getUser(),
-                implode(', ', $this->Category->getGroups()),
-                implode(', ', $this->Category->getGroups()),
-                $this->Category->getUser(),
-                implode(', ', $this->Category->getGroups())
-            );
+        if ($this->config->get('security.permLevel') !== 'basic') {
+            if (-1 === $this->Category->getUser()) {
+                $query .= sprintf(
+                    'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
+                    implode(', ', $this->Category->getGroups()),
+                    implode(', ', $this->Category->getGroups())
+                );
+            } else {
+                $query .= sprintf(
+                    'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )
+                    AND ( fcg.group_id IN (%s) OR (fcu.user_id = %d OR fcg.group_id IN (%s)) )',
+                    implode(', ', $this->Category->getGroups()),
+                    $this->Category->getUser(),
+                    implode(', ', $this->Category->getGroups()),
+                    implode(', ', $this->Category->getGroups()),
+                    $this->Category->getUser(),
+                    implode(', ', $this->Category->getGroups())
+                );
+            }
         }
 
         if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
@@ -432,6 +434,7 @@ class CategoryHelper extends Helper
         }
 
         $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id";
+
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {

@@ -20,6 +20,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to TinyMCE v5.10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
+### phpMyFAQ v3.1.7 - 2022-10-02
+
+- fixed CSRF vulnerability (KhanhCM, Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.1.6 - 2022-07-23
 
 - fixed XSS vulnerability (jhond0e, Thorsten)
