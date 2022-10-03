@@ -176,7 +176,7 @@ class Template
      * Parses the template.
      *
      * @param string $templateName Name of the template
-     * @param array<int, array<string>>  $templateContent Content of the template
+     * @param array<string, string|null> $templateContent Content of the template
      */
     public function parse(string $templateName, array $templateContent): void
     {
@@ -297,7 +297,7 @@ class Template
      *
      * @param string $templateName Name of the template
      * @param string $blockName Block name
-     * @param array<int, array<string>>  $blockContent Content of the block
+     * @param array<string, mixed>  $blockContent Content of the block
      */
     public function parseBlock(string $templateName, string $blockName, array $blockContent): void
     {
@@ -325,7 +325,7 @@ class Template
     /**
      * This function checks the content.
      *
-     * @param array<int, string|array<string>> $content Content to check
+     * @param array<string, string|array<string>> $content Content to check
      * @return array
      */
     private function checkContent(array $content): array

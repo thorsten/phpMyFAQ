@@ -691,8 +691,10 @@ if (isset($auth)) {
     if ($faqConfig->get('ldap.ldapSupport')) {
         $userControlDropdown = '';
     } else {
-        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">' . Translation::get('headerUserControlPanel') .
-            '</a>';
+        $userControlDropdown = sprintf(
+            '<a class="dropdown-item" href="?action=ucp">%s</a>',
+            Translation::get('headerUserControlPanel')
+        );
     }
 
     $template->parseBlock(

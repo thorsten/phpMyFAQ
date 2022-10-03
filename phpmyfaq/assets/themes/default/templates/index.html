@@ -17,6 +17,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
     <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" />
+    <script src="assets/dist/frontend.js"></script>
 
     <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" rel="shortcut icon" />
     <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" rel="apple-touch-icon" />
@@ -35,53 +36,45 @@
       }
     </style>
   </head>
-  <body class="flex-column" dir="{{ dir }}">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <body dir="{{ dir }}">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
       <div class="container">
         <a class="navbar-brand" href="{{ faqHome }}" id="phpmyfaq-logo" title="{{ header }}">
           <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
         </a>
         <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#pmf-navbar-toggle"
           aria-controls="pmf-navbar-toggle"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          class="navbar-toggler"
-          data-bs-target="#pmf-navbar-toggle"
-          data-toggle="collapse"
-          type="button"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-          <ul class="navbar-nav mr-md-12">
+
+        <div class="collapse navbar-collapse" id="pmf-navbar-toggle">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
             <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
             <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
             <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
             <li class="nav-item dropdown">
-              <a
-                aria-expanded="false"
-                aria-haspopup="true"
-                class="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-                href="#"
-                id="dropdown"
-              >
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ msgLoginUser }}
               </a>
-              <div aria-labelledby="dropdown" class="dropdown-menu">
+              <ul class="dropdown-menu">
                 [notLoggedIn]
-                <div>{{ msgRegisterUser }} {{ msgLoginUser }}</div>
+                <li>{{ msgRegisterUser }}</li>
+                <li>{{ msgLoginUser }}</li>
                 [/notLoggedIn] [userloggedIn]
-                <div>
-                  {{ msgUserControlDropDown }} {{ msgUserControl }}
-                  <div class="dropdown-divider"></div>
-                  {{ msgUserRemoval }}
-                  <div class="dropdown-divider"></div>
-                  {{ msgLogoutUser }}
-                </div>
+                <li>{{ msgUserControlDropDown }}</li>
+                <li>{{ msgUserControl }}</li>
+                <li>{{ msgUserRemoval }}</li>
+                <li>{{ msgLogoutUser }}</li>
                 [/userloggedIn]
-              </div>
+              </ul>
             </li>
           </ul>
         </div>
@@ -164,15 +157,13 @@
       [/debugMode]
     </footer>
 
-    <script src="{{ baseHref }}assets/dist/vendors.js"></script>
-    <script src="{{ baseHref }}assets/dist/phpmyfaq.js"></script>
-    <script src="{{ baseHref }}assets/dist/frontend.js"></script>
     <script>
       // $('.topten').tooltip();
       // $('.latest-entries').tooltip();
       // $('.sticky-faqs').tooltip();
     </script>
     <script>
+      /*
       window.addEventListener('load', () => {
         window.cookieconsent.initialise({
           palette: {
@@ -186,6 +177,7 @@
           },
         });
       });
+      */
     </script>
   </body>
 </html>

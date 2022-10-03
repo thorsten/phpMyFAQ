@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: {
     backend: './phpmyfaq/admin/assets/src/index.js',
-    //frontend: './phpmyfaq/assets/src/frontend.js',
+    frontend: './phpmyfaq/assets/src/frontend.js',
     setup: './phpmyfaq/assets/src/setup.js',
     styles: './phpmyfaq/assets/themes/default/scss/style.scss',
     admin: './phpmyfaq/admin/assets/scss/style.scss',

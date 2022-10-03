@@ -14,6 +14,7 @@
  */
 
 import 'cookieconsent';
+import 'bootstrap';
 import { calculateReadingTime } from './reading-time';
 
 // Calculate reading time

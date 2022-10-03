@@ -1,40 +1,26 @@
 /**
- * phpMyFAQ 3.0 default layout
+ * phpMyFAQ 3.2 default layout
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-01-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-01-17
  */
 
-// Import variables
+// Import Variables
 @import 'variables.scss';
 
 // Import Bootstrap
-@import '~bootstrap';
+@import '~bootstrap/scss/bootstrap.scss';
 
 // Import global styles
 @import 'global.scss';
-@import 'utilities.scss';
-
-// Custom Components
-@import 'dropdowns.scss';
-@import 'navs.scss';
-@import 'buttons.scss';
-@import 'cards.scss';
-@import 'error.scss';
-@import 'footer.scss';
-@import 'breadcrumbs';
-@import 'search';
-@import 'faq';
-@import 'category';
-@import 'setup';
 
 // Fork Awesome
 $fa-font-path: '~fork-awesome/fonts';
@@ -42,55 +28,3 @@ $fa-font-path: '~fork-awesome/fonts';
 
 // Cookie Consent
 @import '~cookieconsent/build/cookieconsent.min.css';
-
-//
-// LOGIN
-//
-.pmf-form-login {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
-
-  .pmf-form-login-heading,
-  .checkbox {
-    margin-bottom: 10px;
-  }
-
-  .checkbox {
-    font-weight: 400;
-  }
-
-  .form-control {
-    position: relative;
-    box-sizing: border-box;
-    height: auto;
-    padding: 10px;
-    font-size: 16px;
-
-    &:focus {
-      z-index: 2;
-    }
-  }
-
-  input[type='text'] {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  input[type='password'] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-}
-
-//
-// TAG CLOUD
-//
-.pmf-tag-cloud {
-  .btn {
-    margin-right: 0.2rem;
-    margin-bottom: 0.2rem;
-  }
-}

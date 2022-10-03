@@ -1,81 +1,17 @@
-// Override Bootstrap default variables here
-// Do not edit any of the files in /vendor/bootstrap/scss/!
+/**
+ * phpMyFAQ 3.2 variables
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2022 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2022-10-03
+ */
 
-// Color Variables
-// Bootstrap Color Overrides
-
-$white: #fff !default;
-$gray-100: #f8f9fc !default;
-$gray-200: #eaecf4 !default;
-$gray-300: #dddfeb !default;
-$gray-400: #d1d3e2 !default;
-$gray-500: #b7b9cc !default;
-$gray-600: #858796 !default;
-$gray-700: #6e707e !default;
-$gray-800: #5a5c69 !default;
-$gray-900: #3a3b45 !default;
-$black: #000 !default;
-
-$blue: #4e73df !default;
-$indigo: #6610f2 !default;
-$purple: #6f42c1 !default;
-$pink: #e83e8c !default;
-$red: #e74a3b !default;
-$orange: #fd7e14 !default;
-$yellow: #f6c23e !default;
-$green: #1cc88a !default;
-$teal: #20c9a6 !default;
-$cyan: #36b9cc !default;
-
-$primary: #2f414a !default;
-$secondary: #f47b53 !default;
-$success: $green !default;
-$danger: #f2460d !default;
-$info: #7ebcfa !default;
-$warning: #ff9933 !default;
-$light: #eef0f2 !default;
-$dark: #000633 !default;
-
-// Custom Colors
-$brand-google: #ea4335;
-$brand-facebook: #3b5998;
-
-// Set Contrast Threshold
-$yiq-contrasted-threshold: 195 !default;
-
-// Typography
-$body-color: $gray-600 !default;
-
-$font-family-sans-serif: Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-  'Segoe UI Symbol', 'Noto Color Emoji' !default;
-
-$font-weight-light: 300 !default;
-$headings-font-weight: 400 !default;
-
-// Shadows
-$box-shadow-sm: 0 0.125rem 0.25rem 0 rgba($gray-900, 0.2) !default;
-$box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, 0.15) !default;
-
-// Borders Radius
-$border-radius: 0.35rem !default;
-$border-color: darken($gray-200, 2%);
-
-// Spacing Variables
-$topbar-base-height: 4.375rem;
-$sidebar-base-width: 14rem;
-$sidebar-collapsed-width: 6.5rem;
-
-// Card
-$card-cap-bg: $gray-100;
-$card-border-color: $border-color;
-
-// Adjust column spacing for symmetry
-$spacer: 1rem;
-$grid-gutter-width: $spacer * 1.5;
-
-// Transitions
-$transition-collapse: height 0.15s ease !default;
-
-// Dropdowns
-$dropdown-font-size: 0.85rem;
-$dropdown-border-color: $border-color;
+@import '~bootstrap/scss/functions.scss';
+@import '~bootstrap/scss/variables.scss';
