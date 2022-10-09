@@ -237,10 +237,10 @@ class Utils
             $debug = debug_backtrace();
             $ret = '';
             if (isset($debug[2]['class'])) {
-                $ret = $debug[2]['file'] . ':<br>';
+                $ret = $debug[2]['file'] . ': ';
                 $ret .= $debug[2]['class'] . $debug[1]['type'];
                 $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-                $ret .= ': <code>' . $string . "</code><br>\n";
+                $ret .= ':<br><code>' . $string . "</code><br>\n";
             }
         }
 
