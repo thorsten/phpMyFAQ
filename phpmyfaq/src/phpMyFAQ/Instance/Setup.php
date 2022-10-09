@@ -31,7 +31,7 @@ class Setup
     /**
      * @var string
      */
-    private $rootDir;
+    private string $rootDir;
 
     /**
      * Setup constructor.
@@ -46,7 +46,7 @@ class Setup
      *
      * @param string $rootDir
      */
-    public function setRootDir($rootDir)
+    public function setRootDir(string $rootDir): void
     {
         $this->rootDir = $rootDir;
     }
@@ -73,9 +73,9 @@ class Setup
      * Checks basic folders and creates them if necessary.
      *
      * @param  string[] $dirs
-     * @return array
+     * @return string[]
      */
-    public function checkDirs(array $dirs)
+    public function checkDirs(array $dirs): array
     {
         $failedDirs = [];
 
@@ -113,11 +113,11 @@ class Setup
     /**
      * Creates the file /config/database.php.
      *
-     * @param  array  $data   Array with database credentials
-     * @param  string $folder Folder
+     * @param  int[]|string[] $data   Array with database credentials
+     * @param  string         $folder Folder
      * @return int|bool
      */
-    public function createDatabaseFile(array $data, $folder = '/config')
+    public function createDatabaseFile(array $data, string $folder = '/config'): int|bool
     {
         return file_put_contents(
             $this->rootDir . $folder . '/database.php',
@@ -136,11 +136,11 @@ class Setup
     /**
      * Creates the file /config/ldap.php.
      *
-     * @param  array  $data   Array with LDAP credentials
-     * @param  string $folder Folder
+     * @param  int[]|string[] $data   Array with LDAP credentials
+     * @param  string         $folder Folder
      * @return int|bool
      */
-    public function createLdapFile(array $data, string $folder = '/config')
+    public function createLdapFile(array $data, string $folder = '/config'): int|bool
     {
         return file_put_contents(
             $this->rootDir . $folder . '/config/ldap.php',
@@ -157,11 +157,11 @@ class Setup
     /**
      * Creates the file /config/elasticsearch.php
      *
-     * @param  array  $data   Array with LDAP credentials
-     * @param  string $folder Folder
+     * @param  int[]|string[] $data   Array with Elasticsearch credentials
+     * @param  string         $folder Folder
      * @return int|bool
      */
-    public function createElasticsearchFile(array $data, string $folder = '/config')
+    public function createElasticsearchFile(array $data, string $folder = '/config'): int|bool
     {
         return file_put_contents(
             $this->rootDir . $folder . '/config/elasticsearch.php',

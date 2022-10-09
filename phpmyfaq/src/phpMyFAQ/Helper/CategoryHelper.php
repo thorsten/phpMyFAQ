@@ -342,31 +342,20 @@ class CategoryHelper extends Helper
         }
 
         $decks = '';
-        $key = 1;
         foreach ($categories as $category) {
-            $decks .= '<div class="card mb-4"><a href="' . $category['url'] . '">';
+            $decks .= '<div class="phpmyfaq-startpage-item phpmyfaq-startpage-item-primary col-lg-4 col-6">';
+            $decks .= ' <div class="phpmyfaq-startpage-item-inner">';
+            $decks .= '   <div class="icon-holder">';
             if ('' !== $category['image']) {
                 $decks .= '<img class="card-img-top embed-responsive-item" width="200" alt="' .
-                $category['name'] . '" src="' . $category['image'] . '" />';
+                    $category['name'] . '" src="' . $category['image'] . '" />';
             }
-            $decks .= '</a>' .
-                '<div class="card-body">' .
-                '<h4 class="card-title text-center">' .
-                '<a href="' . $category['url'] . '">' . $category['name'] . '</a>' .
-                '</h4>' .
-                '<p class="card-text">' . $category['description'] . '</p>' .
-                '</div>' .
-                '</div>';
-            if ($key % 2 === 0) {
-                $decks .= '<div class="w-100 d-none d-sm-block d-md-none"></div>';
-            }
-            if ($key % 3 === 0) {
-                $decks .= '<div class="w-100 d-none d-md-block d-lg-none"></div>';
-            }
-            if ($key % 4 === 0) {
-                $decks .= '<div class="w-100 d-none d-lg-block d-xl-block"></div>';
-            }
-            $key++;
+            $decks .= '     </div>';
+            $decks .= '     <h3 class="title">' . $category['name'] . '</h3>';
+            $decks .= '     <p class="intro">' . $category['description'] . '</p>';
+            $decks .= '     <a class="link" href="' . $category['url'] . '"><span></span></a>';
+            $decks .= ' </div>';
+            $decks .= '</div>';
         }
 
         return $decks;

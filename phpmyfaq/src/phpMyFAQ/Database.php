@@ -141,13 +141,15 @@ class Database
      *
      * @param string $method
      */
-    public static function errorPage(string $method)
+    public static function errorPage(string $method): void
     {
         echo '<!DOCTYPE html>
             <html lang="en" class="no-js">
             <head>
                 <meta charset="utf-8">
                 <title>Fatal phpMyFAQ Error</title>
+                <link href="assets/dist/styles.css" rel="stylesheet">
+                <script src="assets/dist/frontend.js"></script>
             </head>
             <body>
                 <div class="container">
@@ -163,7 +165,7 @@ class Database
      *
      * @param string $tablePrefix
      */
-    public static function setTablePrefix(string $tablePrefix)
+    public static function setTablePrefix(string $tablePrefix): void
     {
         self::$tablePrefix = $tablePrefix;
     }

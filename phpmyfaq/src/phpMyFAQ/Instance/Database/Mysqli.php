@@ -57,6 +57,14 @@ class Mysqli extends Database implements Driver
             contents BLOB NOT NULL,
             PRIMARY KEY (virtual_hash)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
+        'faqbackup' => 'CREATE TABLE %sfaqbackup (
+            id INT(11) NOT NULL,
+            filename VARCHAR(255) NOT NULL,
+            authkey VARCHAR(255) NOT NULL,
+            authcode VARCHAR(255) NOT NULL,
+            created timestamp NOT NULL,
+            PRIMARY KEY (id))',
+
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
             useragent VARCHAR(255) NOT NULL,

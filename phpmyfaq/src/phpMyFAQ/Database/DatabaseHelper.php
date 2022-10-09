@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-04-12
  */
 
 namespace phpMyFAQ\Database;
@@ -28,10 +28,8 @@ use phpMyFAQ\Strings;
  */
 class DatabaseHelper
 {
-    /**
-     * @var Configuration
-     */
-    private $config;
+    /** @var Configuration */
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -103,7 +101,7 @@ class DatabaseHelper
      *
      * @param string $query
      * @param string $table
-     * @return array
+     * @return string[]
      */
     public function buildInsertQueries(string $query, string $table): array
     {
@@ -118,6 +116,9 @@ class DatabaseHelper
             $p1 = [];
             $p2 = [];
             foreach ($row as $key => $val) {
+                if (is_int($key)) {
+                    continue; // Fix for SQLite3
+                }
                 $p1[] = $key;
                 if ('rights' != $key && is_numeric($val)) {
                     $p2[] = $val;

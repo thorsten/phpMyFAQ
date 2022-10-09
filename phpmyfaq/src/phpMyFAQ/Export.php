@@ -30,14 +30,14 @@ use phpMyFAQ\Export\Pdf;
  */
 class Export
 {
-    /** @var Faq */
-    protected $faq = null;
+    /** @var Faq|null */
+    protected ?Faq $faq = null;
 
-    /** @var Category */
-    protected $category = null;
+    /** @var Category|null */
+    protected ?Category $category = null;
 
-    /** @var Configuration */
-    protected $config = null;
+    /** @var Configuration|null */
+    protected ?Configuration $config = null;
 
     /**
      * Factory.
@@ -49,18 +49,14 @@ class Export
      * @return mixed
      * @throws \Exception
      */
-    public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf')
+    public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf'): mixed
     {
-        switch ($mode) {
-            case 'json':
-                return new Json($faq, $category, $config);
-            case 'pdf':
-                return new Pdf($faq, $category, $config);
-            case 'html5':
-                return new Html5($faq, $category, $config);
-            default:
-                throw new Exception('Export not implemented!');
-        }
+        return match ($mode) {
+            'json' => new Json($faq, $category, $config),
+            'pdf' => new Pdf($faq, $category, $config),
+            'html5' => new Html5($faq, $category, $config),
+            default => throw new Exception('Export not implemented!'),
+        };
     }
 
     /**

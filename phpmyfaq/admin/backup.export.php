@@ -15,6 +15,7 @@
  * @since     2009-08-18
  */
 
+use phpMyFAQ\Backup;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Filter;
@@ -49,11 +50,12 @@ if ($user) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
-    $tables = $tableNames = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
-    $tablePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
+    $tables = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
     $tableNames = '';
-    $majorVersion = substr($faqConfig->getVersion(), 0, 3);
+
     $dbHelper = new DatabaseHelper($faqConfig);
+    $backup = new Backup($faqConfig, $dbHelper);
+
     $httpHelper = new HttpHelper();
     $httpHelper->addHeader();
     $httpHelper->addExtraHeader('Content-Type: application/octet-stream');
@@ -82,49 +84,29 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
             break;
     }
 
-    $text[] = '-- pmf' . $majorVersion . ': ' . $tableNames;
-    $text[] = '-- DO NOT REMOVE THE FIRST LINE!';
-    $text[] = '-- pmftableprefix: ' . Database::getTablePrefix();
-    $text[] = '-- DO NOT REMOVE THE LINES ABOVE!';
-    $text[] = '-- Otherwise this backup will be broken.';
-
     switch ($action) {
         case 'backup_content':
-            $header = sprintf(
-                'Content-Disposition: attachment; filename=%s',
-                urlencode(
-                    sprintf(
-                        '%s-data.%s.sql',
-                        $tablePrefix,
-                        date('Y-m-d-H-i-s')
-                    )
-                )
-            );
-            $httpHelper->addExtraHeader($header);
-            foreach (explode(' ', $tableNames) as $table) {
-                echo implode("\r\n", $text);
-                if ('' !== $table) {
-                    $text = $dbHelper->buildInsertQueries('SELECT * FROM ' . $table, $table);
-                }
+            $backupQueries = $backup->generateBackupQueries($tableNames);
+            try {
+                $backupFileName = $backup->createBackup(Backup::BACKUP_TYPE_DATA, $backupQueries);
+                $header = sprintf('Content-Disposition: attachment; filename=%s', urlencode($backupFileName));
+                $httpHelper->addExtraHeader($header);
+
+                echo $backupQueries;
+            } catch (SodiumException $e) {
+                // Handle exception
             }
             break;
         case 'backup_logs':
-            $header = sprintf(
-                'Content-Disposition: attachment; filename=%s',
-                urlencode(
-                    sprintf(
-                        '%s-logs.%s.sql',
-                        $tablePrefix,
-                        date('Y-m-d-H-i-s')
-                    )
-                )
-            );
-            $httpHelper->addExtraHeader($header);
-            foreach (explode(' ', $tableNames) as $table) {
-                echo implode("\r\n", $text);
-                if ('' !== $table) {
-                    $text = $dbHelper->buildInsertQueries('SELECT * FROM ' . $table, $table);
-                }
+            $backupQueries = $backup->generateBackupQueries($tableNames);
+            try {
+                $backupFileName = $backup->createBackup(Backup::BACKUP_TYPE_LOGS, $backupQueries);
+                $header = sprintf('Content-Disposition: attachment; filename=%s', urlencode($backupFileName));
+                $httpHelper->addExtraHeader($header);
+
+                echo $backupQueries;
+            } catch (SodiumException $e) {
+                // Handle exception
             }
             break;
     }

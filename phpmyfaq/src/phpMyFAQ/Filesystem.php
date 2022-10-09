@@ -29,27 +29,27 @@ class Filesystem
     /**
      * @var string
      */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * @var string
      */
-    private $path;
+    private string $path;
 
     /**
      * @var string[]
      */
-    private $folders = [];
+    private array $folders = [];
 
     /**
      * Constructor, sets the root path of the master phpMyFAQ installation.
      *
      * @param string $rootPath
      */
-    public function __construct($rootPath = '')
+    public function __construct(string $rootPath = '')
     {
         if (empty($rootPath)) {
-            $this->rootPath = dirname(dirname(__DIR__));
+            $this->rootPath = dirname(__DIR__, 2);
         } else {
             $this->rootPath = $rootPath;
         }
@@ -141,7 +141,7 @@ class Filesystem
      *                          specified in the pathname.
      * @return bool
      */
-    public function createDirectory(string $pathname, $mode = 0777, $recursive = false): bool
+    public function createDirectory(string $pathname, int $mode = 0777, bool $recursive = false): bool
     {
         if (is_dir($pathname)) {
             return true; // Directory already exists

@@ -395,6 +395,7 @@ if ($step == 3) {
     //
     if (version_compare($version, '3.2.0-alpha', '<=')) {
         // Azure AD support
+        $faqConfig->add('security.enableSignInWithMicrosoft', false);
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser 
                 ADD COLUMN refresh_token TEXT NULL DEFAULT NULL,
@@ -408,7 +409,16 @@ if ($step == 3) {
                 ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
                 ADD jwt TEXT NULL DEFAULT NULL';
         }
-        $faqConfig->add('security.enableSignInWithMicrosoft', false);
+
+        // New backup
+        $query[] = 'CREATE TABLE ' . $prefix . 'faqbackup (
+            id INT(11) NOT NULL,
+            filename VARCHAR(255) NOT NULL,
+            authkey VARCHAR(255) NOT NULL,
+            authcode VARCHAR(255) NOT NULL,
+            created timestamp NOT NULL,
+            PRIMARY KEY (id))';
+
 
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server

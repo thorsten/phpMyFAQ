@@ -29,6 +29,7 @@
     "ext-filter": "*",
     "ext-gd": "*",
     "ext-json": "*",
+    "ext-sodium": "*",
     "ext-xml": "*",
     "ext-zip": "*",
     "ext-xmlwriter": "*",

@@ -57,6 +57,14 @@ class Sqlsrv extends Database implements Driver
             contents NVARCHAR(MAX) NOT NULL,
             PRIMARY KEY (virtual_hash))',
 
+        'faqbackup' => 'CREATE TABLE %sfaqbackup (
+            id INT(11) NOT NULL,
+            filename VARCHAR(255) NOT NULL,
+            authkey VARCHAR(255) NOT NULL,
+            authcode VARCHAR(255) NOT NULL,
+            created timestamp NOT NULL,
+            PRIMARY KEY (id))',
+
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id NVARCHAR(6) NOT NULL,
             useragent NVARCHAR(255) NOT NULL,
