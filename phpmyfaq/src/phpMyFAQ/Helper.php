@@ -63,9 +63,9 @@ abstract class Helper
     /**
      * phpMyFAQ's session ID.
      *
-     * @var int|null
+     * @var int|string|null
      */
-    protected ?int $sessionId = null;
+    protected $sessionId = null;
 
     /**
      * Array with all translations.

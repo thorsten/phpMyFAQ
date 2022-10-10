@@ -47,8 +47,8 @@ $faq->setGroups($currentGroups);
 // Get possible user input
 $inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_UNSAFE_RAW);
 $inputCategory = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
-$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW);
+$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW, '');
+$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW, '');
 $inputTag = str_replace(' ', '', $inputTag);
 $inputTag = str_replace(',,', ',', $inputTag);
 
