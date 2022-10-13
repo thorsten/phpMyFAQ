@@ -1,8 +1,8 @@
 <?php
 
 /**
- * The Template class provides methods and functions for the
- * template parser.
+ * The Template class provides methods and functions for the template parser.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -28,39 +28,19 @@ use phpMyFAQ\Template\TemplateHelper;
  */
 class Template
 {
-    /**
-     * Name of active template set.
-     *
-     * @var string
-     */
+    /** @var string Name of active template set. */
     private static string $tplSetName;
 
-    /**
-     * The template array.
-     *
-     * @var array<string, string>
-     */
+    /** @var array<string, string> The array with the templates */
     public $templates = [];
 
-    /**
-     * The output array.
-     *
-     * @var array<string, string|null>
-     */
+    /** @var array<string, string|null> The rendered HTML output */
     private $outputs = [];
 
-    /**
-     * The blocks array.
-     *
-     * @var array<string, array<string>>
-     */
+    /** @var array<string, array<string>> The array with the template blocks array. */
     private $blocks = [];
 
-    /**
-     * array containing the touched blocks.
-     *
-     * @var array<string>
-     */
+    /** @var array<string> Array containing the touched blocks. */
     private $blocksTouched = [];
 
     /** @var array<string> Array containing the errors */
@@ -135,9 +115,11 @@ class Template
             $blockCount = count($tmpBlocks[0]);
             for ($i = 0; $i < $blockCount; ++$i) {
                 $name = '';
+
                 // find block name
-                Strings::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
+                Strings::preg_match('/\[.+\]/U', $tmpBlocks[0][$i], $name);
                 $name = Strings::preg_replace('/[\[\[\/\]]/', '', $name);
+
                 // remove block tags from block
                 $res = str_replace('[' . $name[0] . ']', '', $tmpBlocks[0][$i]);
                 $res = str_replace('[/' . $name[0] . ']', '', $res);
