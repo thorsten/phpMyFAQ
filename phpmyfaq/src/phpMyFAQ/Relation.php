@@ -80,7 +80,7 @@ class Relation
                     'fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'",
                 ]
             )
-            ->setMatchingColumns(['fd.keywords'])
+            ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
             ->disableRelevance();
 
         $result = $search->search($terms);
