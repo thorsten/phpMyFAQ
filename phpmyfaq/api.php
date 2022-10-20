@@ -316,6 +316,7 @@ switch ($action) {
 
                 $result = $service->getPdfApiLink();
             }
+            break;
         }
 
         //

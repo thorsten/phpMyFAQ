@@ -168,6 +168,6 @@ RewriteRule api/v2.1/faqs/latest                   api.php?action=faqs&filter=la
 RewriteRule api/v2.1/faqs/sticky                   api.php?action=faqs&filter=sticky [L,QSA]
 RewriteRule api/v2.1/faqs/tags/([0-9]+)            api.php?action=faqs&tagId=$1 [L,QSA]
 RewriteRule api/v2.1/faqs                          api.php?action=faqs [L,QSA]
-RewriteRule api/v2.1/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.1/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId=$1&recordId=$2 [L,QSA]
+RewriteRule api/v2.1/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.1/register                      api.php?action=register [L,QSA]

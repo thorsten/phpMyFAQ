@@ -29,8 +29,8 @@ Open endpoints require no Authentication.
 - [All FAQs](api-docs/faqs.md): `GET /api/v2.1/faqs`
 - [All FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v2.1/faqs/:categoryId`
 - [All FAQs per Tags](api-docs/faqs/tags.md): `GET /api/v2.1/faqs/tags/:tagId`
-- [FAQ](api-docs/faq.md): `GET /api/v2.1/faq/:faqId`
-- [FAQ as PDF](api-docs/faq/pdf.md): `GET /api/v2.1/faq/:faqId?filter=pdf`
+- [FAQ](api-docs/faq.md): `GET /api/v2.1/faq/:categoryId/:faqId`
+- [FAQ as PDF](api-docs/faq/pdf.md): `GET /api/v2.1/faq/:categoryId/:faqId?filter=pdf`
 - [Latest FAQs](api-docs/faqs/latest.md): `GET /api/v2.1/faqs/latest`
 - [Popular FAQs](api-docs/faqs/popular.md): `GET /api/v2.1/faqs/popular`
 - [Sticky FAQs](api-docs/faqs/sticky.md): `GET /api/v2.1/faqs/sticky`
