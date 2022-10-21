@@ -845,14 +845,14 @@ class Installer
             $esSetup = [];
         }
 
-        // check loginname
+        // check login name
         if (!isset($setup['loginname'])) {
             $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_UNSAFE_RAW);
         } else {
             $loginName = $setup['loginname'];
         }
         if (is_null($loginName)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a loginname for your account.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a login name for your account.</p>';
             System::renderFooter(true);
         }
 
@@ -863,8 +863,7 @@ class Installer
             $password = $setup['password'];
         }
         if (is_null($password)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your ' .
-                'account.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for your account.</p>';
             System::renderFooter(true);
         }
 
@@ -873,16 +872,18 @@ class Installer
         } else {
             $passwordRetyped = $setup['password_retyped'];
         }
+
         if (is_null($passwordRetyped)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a retyped password.</p>';
             System::renderFooter(true);
         }
 
-        if (strlen($password) <= 5 || strlen($passwordRetyped) <= 5) {
+        if (strlen($password) <= 7 || strlen($passwordRetyped) <= 7) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
                 'short. Please set your password and your retyped password with a minimum of 6 characters.</p>';
             System::renderFooter(true);
         }
+
         if ($password != $passwordRetyped) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not ' .
                 'equal. Please check your password and your retyped password.</p>';
