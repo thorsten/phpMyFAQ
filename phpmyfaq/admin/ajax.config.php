@@ -203,8 +203,8 @@ switch ($ajaxAction) {
         $entity = new MetaEntity();
 
         $entity
-            ->setPageId(Filter::filterInput(INPUT_GET, 'page_id', FILTER_UNSAFE_RAW))
-            ->setType(Filter::filterInput(INPUT_GET, 'type', FILTER_UNSAFE_RAW))
+            ->setPageId(Filter::filterInput(INPUT_GET, 'page_id', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setType(Filter::filterInput(INPUT_GET, 'type', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setContent(Filter::filterInput(INPUT_GET, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
 
         $metaId = $meta->add($entity);

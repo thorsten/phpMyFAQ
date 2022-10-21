@@ -56,7 +56,7 @@ $metaData = $meta->getById((int)$metaId);
   <div class="form-group row">
     <label for="page_id" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_page_id'] ?></label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" name="page_id" value="<?= $metaData->getPageId() ?>" required>
+      <input type="text" class="form-control" name="page_id" maxlength="48" value="<?= $metaData->getPageId() ?>" required>
     </div>
   </div>
 

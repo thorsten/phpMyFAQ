@@ -135,7 +135,7 @@ $metaData = $meta->getAll();
           <div class="form-group row">
             <label for="page_id" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_page_id'] ?></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="page_id" required>
+              <input type="text" class="form-control" id="page_id" maxlength="48" required>
             </div>
           </div>
 
