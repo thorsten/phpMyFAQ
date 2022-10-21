@@ -305,9 +305,9 @@ class Strings
      */
     public static function htmlentities(
         string $string,
-        $quoteStyle = ENT_HTML5,
-        $charset = 'utf-8',
-        $doubleEncode = true
+        int $quoteStyle = ENT_HTML5,
+        string $charset = 'utf-8',
+        bool $doubleEncode = false
     ): string
     {
         return htmlentities(
