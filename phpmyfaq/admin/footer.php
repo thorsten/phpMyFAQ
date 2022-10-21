@@ -17,6 +17,8 @@
  */
 
 use phpMyFAQ\Language;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -73,6 +75,12 @@ if (isset($auth)) {
             ('add-news' == $action) || ('edit-news' == $action) || ('copyentry' == $action))
     ) {
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
+
+            $user = CurrentUser::getFromCookie($faqConfig);
+            // authenticate with session information
+            if (!$user instanceof CurrentUser) {
+                $user = CurrentUser::getFromSession($faqConfig);
+            }
             ?>
           <script>
 
@@ -118,7 +126,7 @@ if (isset($auth)) {
               entities: '10',
               entity_encoding: 'raw',
               toolbar1: 'newdocument | undo redo | bold italic underline subscript superscript strikethrough | styleselect | formatselect | fontselect | fontsizeselect | outdent indent | alignleft aligncenter alignright alignjustify | removeformat',
-              toolbar2: 'insertfile | cut copy paste pastetext codesample | bullist numlist | link unlink anchor image media | charmap | insertdatetime | table | forecolor backcolor emoticons | searchreplace | spellchecker | hr | pagebreak | code | phpmyfaq print | preview | custFontSize | toc | fullscreen',
+              toolbar2: 'insertfile | template | cut copy paste pastetext codesample | bullist numlist | link unlink anchor image media | charmap | insertdatetime | table | forecolor backcolor emoticons | searchreplace | spellchecker | hr | pagebreak | code | phpmyfaq print | preview | custFontSize | toc | fullscreen',
               height: '<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>',
               image_advtab: true,
               image_class_list: [
@@ -181,8 +189,17 @@ if (isset($auth)) {
               // Replace values for the template plugin
               template_replace_values: {
                 username: '<?= addslashes($user->userdata->get('display_name')) ?>',
-                user_id: '<?= $user->userdata->get('user_id') ?>',
+                userId: '<?= $user->userdata->get('user_id') ?>',
               },
+
+              // Templates examples
+              templates : [
+                {
+                  title: 'Replace values example',
+                  description: 'These values will be replaced when the template is inserted into the editor content.',
+                  content: '<p>Name: {$username}, User ID: {$userId}</p>'
+                },
+              ],
 
               // File browser
               // @deprecated have to be rewritten for TinyMCE v5 in phpMyFAQ v3.2
