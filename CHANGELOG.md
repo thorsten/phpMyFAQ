@@ -1,10 +1,15 @@
-# phpMyFAQ 3.1.7
+# phpMyFAQ 3.1.8
 
 **Codename "Poseidon"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.1.8 - 2022-10-24
+
+- fixed multiple security vulnerabilities (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.7 - 2022-10-02
 
