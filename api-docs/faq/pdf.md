@@ -2,11 +2,14 @@
 
 This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided by "Accept-Language".
 
-**URL** : `/api/v2.0/faq/:faqId?filter=pdf`
+**URL** : `/api/v2.0/faq/:categoryId/:faqId?filter=pdf`
 
 **HTTP Header** : `Accept-Language: en-US,en`
 
-**URL parameters** : `faqId=[int]` where `faqId` is the ID of a FAQ
+**URL parameters** :
+
+- `categorId=[int]` where `categorId` is the ID of a category
+- `faqId=[int]` where `faqId` is the ID of a FAQ
 
 **Method** : `GET`
 

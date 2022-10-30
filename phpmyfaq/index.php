@@ -560,7 +560,7 @@ $tplMainPage = [
     'dir' => Translation::get('dir'),
     'writeSendAdress' => '?' . $sids . 'action=search',
     'searchBox' => Translation::get('msgSearch'),
-    'searchTerm' =>Strings::htmlspecialchars($searchTerm),
+    'searchTerm' =>Strings::htmlspecialchars($searchTerm, ENT_QUOTES),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => Translation::get('msgFullCategories'),
     'msgCategory' => Translation::get('msgCategory'),

@@ -181,7 +181,7 @@ class Comments
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
             $comment->getRecordId(),
             $comment->getType(),
-            $comment->getUsername(),
+            $this->config->getDb()->escape($comment->getUsername()),
             $this->config->getDb()->escape($comment->getEmail()),
             $this->config->getDb()->escape($comment->getComment()),
             $comment->getDate(),
@@ -205,10 +205,6 @@ class Comments
      */
     public function deleteComment(int $recordId, int $commentId): bool
     {
-        if (!is_int($recordId) && !is_int($commentId)) {
-            return false;
-        }
-
         $query = sprintf(
             '
             DELETE FROM
@@ -233,7 +229,7 @@ class Comments
      * Returns the number of comments of each FAQ record as an array.
      *
      * @param string $type Type of comment: faq or news
-     * @return array
+     * @return string[]
      */
     public function getNumberOfComments(string $type = CommentType::FAQ): array
     {

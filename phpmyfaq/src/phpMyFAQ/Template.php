@@ -1,8 +1,8 @@
 <?php
 
 /**
- * The Template class provides methods and functions for the
- * template parser.
+ * The Template class provides methods and functions for the template parser.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -31,13 +31,13 @@ class Template
     /** @var string Name of active template set. */
     private static string $tplSetName;
 
-    /** @var array<string, string> The templates array. */
+    /** @var array<string, string> The array with the templates */
     public array $templates = [];
 
-    /** @var array<string, string|null> The output array. */
+    /** @var array<string, string|null> The rendered HTML output */
     private array $outputs = [];
 
-    /** @var array<string, array<string>> The blocks array. */
+    /** @var array<string, array<string>> The array with the template blocks array. */
     private array $blocks = [];
 
     /** @var array<string> Array containing the touched blocks. */
@@ -115,9 +115,11 @@ class Template
             $blockCount = count($tmpBlocks[0]);
             for ($i = 0; $i < $blockCount; ++$i) {
                 $name = '';
+
                 // find block name
-                Strings::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
+                Strings::preg_match('/\[.+\]/U', $tmpBlocks[0][$i], $name);
                 $name = Strings::preg_replace('/[\[\[\/\]]/', '', $name);
+
                 // remove block tags from block
                 $res = str_replace('[' . $name[0] . ']', '', $tmpBlocks[0][$i]);
                 $res = str_replace('[/' . $name[0] . ']', '', $res);

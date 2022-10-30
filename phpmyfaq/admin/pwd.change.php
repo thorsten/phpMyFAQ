@@ -54,13 +54,23 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
         $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
 
-        if (($authSource->checkCredentials($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
-            if (!$user->changePassword($newPassword)) {
+        if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
+            printf(
+                '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
+                $PMF_LANG['ad_passwd_fail']
+            );
+        } else {
+            if (($authSource->checkCredentials(
+                    $user->getLogin(),
+                    $oldPassword
+                )) && ($newPassword == $retypedPassword)) {
+                if (!$user->changePassword($newPassword)) {
+                    echo Alert::danger('ad_passwd_fail');
+                }
+                echo Alert::success('ad_passwdsuc');
+            } else {
                 echo Alert::danger('ad_passwd_fail');
             }
-            echo Alert::success('ad_passwdsuc');
-        } else {
-            echo Alert::danger('ad_passwd_fail');
         }
     }
     ?>

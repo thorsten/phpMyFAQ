@@ -31,7 +31,7 @@ class Relation
      * Configuration object.
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Relation constructor.
@@ -47,16 +47,13 @@ class Relation
      *
      * @param string $question FAQ title
      * @param string $keywords FAQ keywords
-     * @return mixed[]
+     * @return array
      * @throws Exception
      */
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
         $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
-        $search = SearchFactory::create(
-            $this->config,
-            ['database' => Database::getType()]
-        );
+        $search = SearchFactory::create($this->config, ['database' => Database::getType()]);
 
         $search
             ->setTable(Database::getTablePrefix() . 'faqdata AS fd')
@@ -83,7 +80,7 @@ class Relation
                     'fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'",
                 ]
             )
-            ->setMatchingColumns(['fd.keywords'])
+            ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
             ->disableRelevance();
 
         $result = $search->search($terms);
