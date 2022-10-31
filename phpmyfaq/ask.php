@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-17
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-17
  */
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -57,20 +58,20 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => $PMF_LANG['msgQuestion'],
-        'msgQuestion' => $PMF_LANG['msgQuestion'],
-        'msgNewQuestion' => $PMF_LANG['msgNewQuestion'],
-        'msgMatchingQuestions' => $PMF_LANG['msgMatchingQuestions'],
-        'msgFinishSubmission' => $PMF_LANG['msgFinishSubmission'],
+        'pageHeader' => Translation::get('msgQuestion'),
+        'msgQuestion' => Translation::get('msgQuestion'),
+        'msgNewQuestion' => Translation::get('msgNewQuestion'),
+        'msgMatchingQuestions' => Translation::get('msgMatchingQuestions'),
+        'msgFinishSubmission' => Translation::get('msgFinishSubmission'),
         'lang' => $Language->getLanguage(),
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+        'msgNewContentName' => Translation::get('msgNewContentName'),
+        'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgAskCategory' => $PMF_LANG['msgAskCategory'],
+        'msgAskCategory' => Translation::get('msgAskCategory'),
         'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
-        'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha'], $auth),
-        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+        'msgAskYourQuestion' => Translation::get('msgAskYourQuestion'),
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $auth),
+        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     ]
 );

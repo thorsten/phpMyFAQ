@@ -7,15 +7,16 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-09-27
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-09-27
  */
 
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -36,7 +37,7 @@ $faq->setGroups($currentGroups);
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => $PMF_LANG['faqOverview'],
+        'pageHeader' => Translation::get('faqOverview'),
         'overview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
     ]
 );

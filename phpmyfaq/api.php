@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-03
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-03
  */
 
 const IS_VALID_PHPMYFAQ = null;
@@ -20,7 +20,6 @@ const IS_VALID_PHPMYFAQ = null;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
@@ -40,6 +39,7 @@ use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 
@@ -84,6 +84,18 @@ if (Language::isASupportedLanguage($currentLanguage)) {
     require PMF_LANGUAGE_DIR . '/language_en.php';
 }
 $faqConfig->setLanguage($language);
+
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
+}
 
 $plr = new Plurals($PMF_LANG);
 Strings::init($currentLanguage);
@@ -394,7 +406,7 @@ switch ($action) {
                 $http->setStatus(400);
                 $result = [
                     'loggedin' => false,
-                    'error' => $PMF_LANG['ad_auth_fail']
+                    'error' => Translation::get('ad_auth_fail')
                 ];
             }
         } else {
@@ -402,7 +414,7 @@ switch ($action) {
             $http->setStatus(400);
             $result = [
                 'loggedin' => false,
-                'error' => $PMF_LANG['ad_auth_fail']
+                'error' => Translation::get('ad_auth_fail')
             ];
         }
         break;
@@ -441,7 +453,7 @@ switch ($action) {
             $http->setStatus(400);
             $result = [
                 'registered' => false,
-                'error' => $PMF_LANG['err_sendMail']
+                'error' => Translation::get('err_sendMail')
             ];
         }
 

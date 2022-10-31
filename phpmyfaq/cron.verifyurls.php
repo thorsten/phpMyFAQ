@@ -11,13 +11,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-09-17
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-09-17
  */
 
 use phpMyFAQ\Faq;
@@ -32,10 +32,10 @@ use phpMyFAQ\Utils;
  *
  * @var string en
  */
-define('LANGCODE', 'en');
+const LANGCODE = 'en';
 
 // Do not change anything below this line!
-define('PMF_ROOT_DIR', __DIR__);
+const PMF_ROOT_DIR = __DIR__;
 
 $output = '';
 $isCronRequest = false;
@@ -58,7 +58,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     // Preload English strings
     require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
-    if ((LANGCODE != 'en') && Language::isASupportedLanguage(LANGCODE)) {
+    if ((LANGCODE !== 'en') && Language::isASupportedLanguage(LANGCODE)) {
         // Overwrite English strings with the ones we have in the current language
         require_once PMF_ROOT_DIR . '/lang/language_' . LANGCODE . '.php';
     }
@@ -67,7 +67,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     $plr = new Plurals($PMF_LANG);
 
     //
-    // Initalizing static string wrapper
+    // Initializing static string wrapper
     //
     Strings::init(LANGCODE);
 

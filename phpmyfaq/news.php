@@ -8,13 +8,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-07-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-07-23
  */
 
 use phpMyFAQ\Captcha;
@@ -25,6 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\News;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -37,7 +38,11 @@ $comment = new Comments($faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
-    $captcha->drawCaptchaImage();
+    try {
+        $captcha->drawCaptchaImage();
+    } catch (Exception $e) {
+        // handle exception
+    }
     exit;
 }
 
@@ -45,7 +50,7 @@ $oNews = new News($faqConfig);
 $newsId = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
-    // @todo -> 404
+    $http->setStatus(404);
 }
 
 try {
@@ -55,7 +60,7 @@ try {
 }
 
 // Define the header of the page
-$newsMainHeader = $faqConfig->getTitle() . $PMF_LANG['msgNews'];
+$newsMainHeader = $faqConfig->getTitle() . Translation::get('msgNews');
 
 // Get all data from the news record
 $news = $oNews->getNewsEntry($newsId);
@@ -72,7 +77,7 @@ $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
 if (strlen($news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
-        $PMF_LANG['msgInfo'],
+        Translation::get('msgInfo'),
         $news['link'],
         $news['target'],
         $news['linkTitle']
@@ -85,7 +90,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
         '<a href="./admin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
         $newsId,
-        $PMF_LANG['ad_menu_news_edit']
+        Translation::get('ad_menu_news_edit')
     );
 }
 
@@ -97,9 +102,9 @@ if (
     (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
     (!$news['active']) || (!$news['allowComments']) || $expired
 ) {
-    $commentMessage = $PMF_LANG['msgWriteNoComment'];
+    $commentMessage = Translation::get('msgWriteNoComment');
 } else {
-    $commentMessage = sprintf('<a href="#" class="show-comment-form">%s</a>', $PMF_LANG['newsWriteComment']);
+    $commentMessage = sprintf('<a href="#" class="show-comment-form">%s</a>', Translation::get('newsWriteComment'));
 }
 
 // date of news entry
@@ -107,7 +112,7 @@ if ($news['active'] && (!$expired)) {
     $date = new Date($faqConfig);
     $newsDate = sprintf(
         '%s<span id="newsLastUpd">%s</span>',
-        $PMF_LANG['msgLastUpdateArticle'],
+        Translation::get('msgLastUpdateArticle'),
         $date->format($news['date'])
     );
 } else {
@@ -123,21 +128,21 @@ $template->parse(
         'writeHeader' => $newsHeader,
         'mainPageContent' => $newsContent,
         'writeDateMsg' => $newsDate,
-        'msgAboutThisNews' => $PMF_LANG['msgAboutThisNews'],
-        'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
+        'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
+        'writeAuthor' => ($news['active'] && (!$expired)) ? Translation::get('msgAuthor') . ': ' . $news['authorName'] : '',
         'editThisEntry' => $editThisEntry,
         'writeCommentMsg' => $commentMessage,
-        'msgWriteComment' => $PMF_LANG['newsWriteComment'],
+        'msgWriteComment' => Translation::get('newsWriteComment'),
         'newsId' => $newsId,
         'newsLang' => $news['lang'],
-        'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+        'msgCommentHeader' => Translation::get('msgCommentHeader'),
+        'msgNewContentName' => Translation::get('msgNewContentName'),
+        'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgYourComment' => $PMF_LANG['msgYourComment'],
-        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
+        'msgYourComment' => Translation::get('msgYourComment'),
+        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
         'renderComments' => $comment->getComments($newsId, CommentType::NEWS),
     ]
 );

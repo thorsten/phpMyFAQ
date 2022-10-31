@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-16
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -45,20 +46,20 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => $PMF_LANG['msgContact'],
+        'pageHeader' => Translation::get('msgContact'),
         'msgContactOwnText' => nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformations'))),
-        'msgContactEMail' => $PMF_LANG['msgContactEMail'],
-        'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
+        'msgContactEMail' => Translation::get('msgContactEMail'),
+        'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
         'privacyURL' => $faqConfig->get('main.privacyURL'),
-        'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+        'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
+        'msgNewContentName' => Translation::get('msgNewContentName'),
+        'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'lang' => $Language->getLanguage(),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgMessage' => $PMF_LANG['msgMessage'],
-        'msgS2FButton' => $PMF_LANG['msgS2FButton'],
+        'msgMessage' => Translation::get('msgMessage'),
+        'msgS2FButton' => Translation::get('msgS2FButton'),
         'version' => $faqConfig->getVersion(),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', $PMF_LANG['msgCaptcha'], $auth),
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $auth),
     ]
 );

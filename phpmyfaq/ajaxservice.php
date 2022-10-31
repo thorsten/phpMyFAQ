@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-09-15
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-09-15
  */
 
 const IS_VALID_PHPMYFAQ = null;
@@ -45,9 +45,11 @@ use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 //
 // Bootstrapping
@@ -73,6 +75,18 @@ if (Language::isASupportedLanguage($ajaxLang)) {
 }
 
 //
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
+}
+
+//
 // Load plurals support for selected language
 //
 $plr = new Plurals($PMF_LANG);
@@ -93,7 +107,7 @@ $network = new Network($faqConfig);
 $stopWords = new StopWords($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
-    $message = ['error' => $PMF_LANG['err_bannedIP']];
+    $message = ['error' => Translation::get('err_bannedIP')];
 }
 
 //
@@ -119,7 +133,7 @@ if (
 'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action && !is_null($code) &&
     !$captcha->checkCaptchaCode($code)
 ) {
-    $message = ['error' => $PMF_LANG['msgCaptcha']];
+    $message = ['error' => Translation::get('msgCaptcha')];
 }
 
 //
@@ -129,7 +143,7 @@ if (
     false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&
     'changepassword' !== $action && 'saveregistration' !== $action
 ) {
-    $message = ['error' => $PMF_LANG['ad_msg_noauth']];
+    $message = ['error' => Translation::get('ad_msg_noauth')];
 }
 
 if (isset($message['error'])) {
@@ -147,7 +161,7 @@ switch ($action) {
             !$faqConfig->get('records.allowCommentsForGuests') &&
             !$user->perm->hasPermission($user->getUserId(), 'addcomment')
         ) {
-            $message = ['error' => $PMF_LANG['err_NotAuth']];
+            $message = ['error' => Translation::get('err_NotAuth')];
             break;
         }
 
@@ -179,7 +193,7 @@ switch ($action) {
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
-                $message = ['error' => '-' . $PMF_LANG['err_SaveComment']];
+                $message = ['error' => '-' . Translation::get('err_SaveComment')];
                 break;
             }
         }
@@ -290,14 +304,14 @@ switch ($action) {
                 $result = $mailer->send();
                 unset($mailer);
 
-                $message = ['success' => $PMF_LANG['msgCommentThanks']];
+                $message = ['success' => Translation::get('msgCommentThanks')];
             } else {
                 try {
                     $faqSession->userTracking('error_save_comment', $id);
                 } catch (Exception $e) {
                     // @todo handle the exception
                 }
-                $message = ['error' => $PMF_LANG['err_SaveComment']];
+                $message = ['error' => Translation::get('err_SaveComment')];
             }
         } else {
             $message = ['error' => 'Please add your name, your e-mail address and a comment!'];
@@ -309,7 +323,7 @@ switch ($action) {
             !$faqConfig->get('records.allowNewFaqsForGuests') &&
             !$user->perm->hasPermission($user->getUserId(), 'addfaq')
         ) {
-            $message = ['error' => $PMF_LANG['err_NotAuth']];
+            $message = ['error' => Translation::get('err_NotAuth')];
             break;
         }
 
@@ -383,7 +397,7 @@ switch ($action) {
                 $answer = sprintf(
                     '%s<br><div id="newFAQContentLink">%s<a href="https://%s" target="_blank">%s</a></div>',
                     $answer,
-                    $PMF_LANG['msgInfo'],
+                    Translation::get('msgInfo'),
                     Strings::substr($contentLink, 7),
                     $contentLink
                 );
@@ -451,11 +465,11 @@ switch ($action) {
 
 
             $message = [
-                'success' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks']),
+                'success' => ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
             ];
         } else {
             $message = [
-                'error' => $PMF_LANG['err_SaveEntries']
+                'error' => Translation::get('err_SaveEntries')
             ];
         }
 
@@ -470,7 +484,7 @@ switch ($action) {
             !$faqConfig->get('main.enableAskQuestions') &&
             !$user->perm->hasPermission($user->getUserId(), 'addquestion')
         ) {
-            $message = ['error' => $PMF_LANG['err_NotAuth']];
+            $message = ['error' => Translation::get('err_NotAuth')];
             break;
         }
 
@@ -573,15 +587,15 @@ switch ($action) {
                 } else {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     $questionHelper->sendSuccessMail($questionData, $categories);
-                    $message = ['success' => $PMF_LANG['msgAskThx4Mail']];
+                    $message = ['success' => Translation::get('msgAskThx4Mail')];
                 }
             } else {
                 $questionHelper = new QuestionHelper($faqConfig, $cat);
                 $questionHelper->sendSuccessMail($questionData, $categories);
-                $message = ['success' => $PMF_LANG['msgAskThx4Mail']];
+                $message = ['success' => Translation::get('msgAskThx4Mail')];
             }
         } else {
-            $message = ['error' => $PMF_LANG['err_SaveQuestion']];
+            $message = ['error' => Translation::get('err_SaveQuestion')];
         }
 
         break;
@@ -600,9 +614,13 @@ switch ($action) {
         }
 
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
-            $message = $registration->createUser($userName, $fullName, $email, $isVisible);
+            try {
+                $message = $registration->createUser($userName, $fullName, $email, $isVisible);
+            } catch (TransportExceptionInterface | \phpMyFAQ\Core\Exception $e) {
+                // handle exceptions
+            }
         } else {
-            $message = ['error' => $PMF_LANG['err_sendMail']];
+            $message = ['error' => Translation::get('err_sendMail')];
         }
         break;
 
@@ -633,7 +651,7 @@ switch ($action) {
                 $rating->update($votingData);
             }
             $message = [
-                'success' => $PMF_LANG['msgVoteThanks'],
+                'success' => Translation::get('msgVoteThanks'),
                 'rating' => $rating->getVotingResult($recordId),
             ];
         } elseif (!$rating->check($recordId, $userIp)) {
@@ -642,14 +660,14 @@ switch ($action) {
             } catch (Exception $e) {
                 // @todo handle the exception
             }
-            $message = ['error' => $PMF_LANG['err_VoteTooMuch']];
+            $message = ['error' => Translation::get('err_VoteTooMuch')];
         } else {
             try {
                 $faqSession->userTracking('error_save_voting', $recordId);
             } catch (Exception $e) {
                 // @todo handle the exception
             }
-            $message = ['error' => $PMF_LANG['err_noVote']];
+            $message = ['error' => Translation::get('err_noVote')];
         }
 
         break;
@@ -666,14 +684,14 @@ switch ($action) {
         }
 
         if (
-            !is_null($author) && !is_null($email) && !is_null($question) && !empty($question) &&
+            !is_null($author) && !is_null($email) && !empty($question) &&
             $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
         ) {
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
-                $PMF_LANG['msgNewContentName'],
+                Translation::get('msgNewContentName'),
                 $author,
-                $PMF_LANG['msgNewContentMail'],
+                Translation::get('msgNewContentMail'),
                 $email,
                 $question
             );
@@ -687,9 +705,9 @@ switch ($action) {
 
             unset($mailer);
 
-            $message = ['success' => $PMF_LANG['msgMailContact']];
+            $message = ['success' => Translation::get('msgMailContact')];
         } else {
-            $message = ['error' => $PMF_LANG['err_sendMail']];
+            $message = ['error' => Translation::get('err_sendMail')];
         }
         break;
 
@@ -719,11 +737,11 @@ switch ($action) {
                     $mailer = new Mail($faqConfig);
                     $mailer->setReplyTo($email, $author);
                     $mailer->addTo($recipient);
-                    $mailer->subject = $PMF_LANG['msgS2FMailSubject'] . $author;
+                    $mailer->subject = Translation::get('msgS2FMailSubject') . $author;
                     $mailer->message = sprintf(
                         "%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
                         $faqConfig->get('main.send2friendText'),
-                        $PMF_LANG['msgS2FText2'],
+                        Translation::get('msgS2FText2'),
                         $link,
                         $attached
                     );
@@ -735,9 +753,9 @@ switch ($action) {
                 }
             }
 
-            $message = ['success' => $PMF_LANG['msgS2FThx']];
+            $message = ['success' => Translation::get('msgS2FThx')];
         } else {
-            $message = ['error' => $PMF_LANG['err_sendMail']];
+            $message = ['error' => Translation::get('err_sendMail')];
         }
         break;
 
@@ -746,7 +764,7 @@ switch ($action) {
     //
     case 'saveuserdata':
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
-            $message = ['error' => $PMF_LANG['ad_msg_noauth']];
+            $message = ['error' => Translation::get('ad_msg_noauth')];
             break;
         }
 
@@ -765,7 +783,7 @@ switch ($action) {
         }
 
         if ($password !== $confirm) {
-            $message = ['error' => $PMF_LANG['ad_user_error_passwordsDontMatch']];
+            $message = ['error' => Translation::get('ad_user_error_passwordsDontMatch')];
             break;
         }
 
@@ -791,9 +809,9 @@ switch ($action) {
         }
 
         if ($success) {
-            $message = ['success' => $PMF_LANG['ad_entry_savedsuc']];
+            $message = ['success' => Translation::get('ad_entry_savedsuc')];
         } else {
-            $message = ['error' => $PMF_LANG['ad_entry_savedfail']];
+            $message = ['error' => Translation::get('ad_entry_savedfail')];
         }
         break;
 
@@ -809,9 +827,18 @@ switch ($action) {
             $loginExist = $user->getUserByLogin($username);
 
             if ($loginExist && ($email == $user->getUserData('email'))) {
-                $newPassword = $user->createPassword();
-                $user->changePassword($newPassword);
-                $text = $PMF_LANG['lostpwd_text_1'] . "\nUsername: " . $username . "\nNew Password: " . $newPassword . "\n\n" . $PMF_LANG['lostpwd_text_2'];
+                try {
+                    $newPassword = $user->createPassword();
+                } catch (Exception $e) {
+                    // handle exception
+                }
+                try {
+                    $user->changePassword($newPassword);
+                } catch (Exception $e) {
+                    // handle exception
+                }
+                $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .
+                    $newPassword . "\n\n" . Translation::get('lostpwd_text_2');
 
                 $mailer = new Mail($faqConfig);
                 $mailer->addTo($email);
@@ -820,12 +847,12 @@ switch ($action) {
                 $result = $mailer->send();
                 unset($mailer);
                 // Trust that the email has been sent
-                $message = ['success' => $PMF_LANG['lostpwd_mail_okay']];
+                $message = ['success' => Translation::get('lostpwd_mail_okay')];
             } else {
-                $message = ['error' => $PMF_LANG['lostpwd_err_1']];
+                $message = ['error' => Translation::get('lostpwd_err_1')];
             }
         } else {
-            $message = ['error' => $PMF_LANG['lostpwd_err_2']];
+            $message = ['error' => Translation::get('lostpwd_err_2')];
         }
         break;
 
@@ -849,11 +876,11 @@ switch ($action) {
         ) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
-                $PMF_LANG['ad_user_loginname'],
+                Translation::get('ad_user_loginname'),
                 $loginName,
-                $PMF_LANG['msgNewContentName'],
+                Translation::get('msgNewContentName'),
                 $author,
-                $PMF_LANG['msgNewContentMail'],
+                Translation::get('msgNewContentMail'),
                 $email,
                 $question
             );
@@ -866,9 +893,9 @@ switch ($action) {
             $result = $mailer->send();
             unset($mailer);
 
-            $message = ['success' => $PMF_LANG['msgMailContact']];
+            $message = ['success' => Translation::get('msgMailContact')];
         } else {
-            $message = ['error' => $PMF_LANG['err_sendMail']];
+            $message = ['error' => Translation::get('err_sendMail')];
         }
         break;
 }

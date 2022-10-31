@@ -7,13 +7,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-17
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-17
  */
+
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,10 +32,10 @@ try {
     $template->parse(
         'mainPageContent',
         [
-            'pageHeader' => $PMF_LANG['msgOpenQuestions'],
-            'msgQuestionText' => $PMF_LANG['msgQuestionText'],
-            'msgDate_User' => $PMF_LANG['msgDate_User'],
-            'msgQuestion2' => $PMF_LANG['msgQuestion2'],
+            'pageHeader' => Translation::get('msgOpenQuestions'),
+            'msgQuestionText' => Translation::get('msgQuestionText'),
+            'msgDate_User' => Translation::get('msgDate_User'),
+            'msgQuestion2' => Translation::get('msgQuestion2'),
             'renderOpenQuestionTable' => $faq->renderOpenQuestions()
         ]
     );

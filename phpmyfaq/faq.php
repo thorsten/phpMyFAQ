@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Lars Tiedemann <larstiedemann@yahoo.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-08-27
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-27
  */
 
 use phpMyFAQ\Attachment\AttachmentException;
@@ -38,6 +38,7 @@ use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
@@ -143,7 +144,7 @@ if (isset($linkArray['href'])) {
             $_id = $matches[1];
             $_title = $faq->getRecordTitle($_id);
             $_link = substr($_url, $xpos + 9);
-            if (strpos($_url, '&amp;') === false) {
+            if (!str_contains($_url, '&amp;')) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
             $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
@@ -178,12 +179,16 @@ if (count($multiCategories) > 1) {
 }
 
 // Related FAQs
-$faqSearchResult->reviewResultSet(
-    $faqRelation->getAllRelatedByQuestion(
-        $faq->faqRecord['title'],
-        $faq->faqRecord['keywords']
-    )
-);
+try {
+    $faqSearchResult->reviewResultSet(
+        $faqRelation->getAllRelatedByQuestion(
+            $faq->faqRecord['title'],
+            $faq->faqRecord['keywords']
+        )
+    );
+} catch (Exception $e) {
+    // handle exception
+}
 
 $searchHelper = new SearchHelper($faqConfig);
 $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
@@ -192,10 +197,11 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 $editThisEntry = '';
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     $editThisEntry = sprintf(
-        '<i aria-hidden="true" class="fa fa-pencil"></i> <a class="data" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
+        '<i aria-hidden="true" class="fa fa-pencil"></i> ' .
+        '<a class="data" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         $recordId,
         $lang,
-        $PMF_LANG['ad_entry_edit_1'] . ' ' . $PMF_LANG['ad_entry_edit_2']
+        Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2')
     );
 }
 
@@ -210,12 +216,12 @@ if (
     (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
     ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired
 ) {
-    $commentMessage = $PMF_LANG['msgWriteNoComment'];
+    $commentMessage = Translation::get('msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
         '%s<a href="#" class="show-comment-form">%s</a>',
-        $PMF_LANG['msgYouCan'],
-        $PMF_LANG['msgWriteComment']
+        Translation::get('msgYouCan'),
+        Translation::get('msgWriteComment')
     );
     $template->parseBlock(
         'mainPageContent',
@@ -224,7 +230,7 @@ if (
             'numberOfComments' => sprintf(
                 '%d %s',
                 $numComments[$recordId] ?? 0,
-                $PMF_LANG['ad_start_comments']
+                Translation::get('ad_start_comments')
             ),
         ]
     );
@@ -249,7 +255,7 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
         'mainPageContent',
         'switchLanguage',
         [
-            'msgChangeLanguage' => $PMF_LANG['msgLanguageSubmit'],
+            'msgChangeLanguage' => Translation::get('msgLanguageSubmit'),
         ]
     );
 }
@@ -262,7 +268,7 @@ if (
         'mainPageContent',
         'addTranslation',
         [
-            'msgTranslate' => $PMF_LANG['msgTranslate'],
+            'msgTranslate' => Translation::get('msgTranslate'),
         ]
     );
 }
@@ -272,7 +278,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') && !empty($faq->f
         'mainPageContent',
         'privateNotes',
         [
-            'notesHeader' => $PMF_LANG['ad_admin_notes'],
+            'notesHeader' => Translation::get('ad_admin_notes'),
             'notes' => $faq->faqRecord['notes']
         ]
     );
@@ -283,7 +289,7 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
         'mainPageContent',
         'tagsAvailable',
         [
-            'renderTags' => $PMF_LANG['msg_tags'] . ': ' . $faqTagging->getAllLinkTagsById($recordId),
+            'renderTags' => Translation::get('msg_tags') . ': ' . $faqTagging->getAllLinkTagsById($recordId),
         ]
     );
 }
@@ -293,7 +299,7 @@ if ('' !== $htmlAllCategories) {
         'mainPageContent',
         'relatedCategories',
         [
-            'renderRelatedCategoriesHeader' => $PMF_LANG['msgArticleCategories'],
+            'renderRelatedCategoriesHeader' => Translation::get('msgArticleCategories'),
             'renderRelatedCategories' => $htmlAllCategories,
         ]
     );
@@ -304,7 +310,7 @@ if ('' !== $relatedFaqs) {
         'mainPageContent',
         'relatedFaqs',
         [
-            'renderRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'],
+            'renderRelatedArticlesHeader' => Translation::get('msg_related_articles'),
             'renderRelatedArticles' => $relatedFaqs,
         ]
     );
@@ -343,8 +349,8 @@ $template->parse(
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => $author,
         'editThisEntry' => $editThisEntry,
-        'msgPdf' => $PMF_LANG['msgPDF'],
-        'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
+        'msgPdf' => Translation::get('msgPDF'),
+        'msgPrintFaq' => Translation::get('msgPrintArticle'),
         'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
         'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
         'linkToPdf' => $faqServices->getPdfLink(),
@@ -355,7 +361,7 @@ $template->parse(
             $availableLanguages,
             'translation'
         ),
-        'msgTranslateSubmit' => $PMF_LANG['msgTranslateSubmit'],
+        'msgTranslateSubmit' => Translation::get('msgTranslateSubmit'),
         'saveVotingPATH' => sprintf(
             str_replace(
                 '%',
@@ -366,28 +372,28 @@ $template->parse(
         ),
         'saveVotingID' => $recordId,
         'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
-        'msgAverageVote' => $PMF_LANG['msgAverageVote'],
+        'msgAverageVote' => Translation::get('msgAverageVote'),
         'renderVotingStars' => '',
         'printVotings' => $faqRating->getVotingResult($recordId),
         'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
-        'msgVoteUsability' => $PMF_LANG['msgVoteUsability'],
-        'msgVoteBad' => $PMF_LANG['msgVoteBad'],
-        'msgVoteGood' => $PMF_LANG['msgVoteGood'],
-        'msgVoteSubmit' => $PMF_LANG['msgVoteSubmit'],
+        'msgVoteUsability' => Translation::get('msgVoteUsability'),
+        'msgVoteBad' => Translation::get('msgVoteBad'),
+        'msgVoteGood' => Translation::get('msgVoteGood'),
+        'msgVoteSubmit' => Translation::get('msgVoteSubmit'),
         'writeCommentMsg' => $commentMessage,
-        'msgWriteComment' => $PMF_LANG['msgWriteComment'],
+        'msgWriteComment' => Translation::get('msgWriteComment'),
         'id' => $recordId,
         'lang' => $lang,
-        'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+        'msgCommentHeader' => Translation::get('msgCommentHeader'),
+        'msgNewContentName' => Translation::get('msgNewContentName'),
+        'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgYourComment' => $PMF_LANG['msgYourComment'],
-        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
+        'msgYourComment' => Translation::get('msgYourComment'),
+        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
         'renderComments' => $faqComment->getComments($recordId, CommentType::FAQ),
-        'msg_about_faq' => $PMF_LANG['msg_about_faq'],
+        'msg_about_faq' => Translation::get('msg_about_faq'),
     ]
 );
 

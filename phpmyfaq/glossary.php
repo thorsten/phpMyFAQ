@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-09-03
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-09-03
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -60,7 +61,6 @@ if (0 < $numItems) {
     foreach ($visibleItems as $item) {
         $output['item'][] = $item['item'];
         $output['definition'][] = $item['definition'];
-        ++$i;
     }
 
     $template->parseBlock(
@@ -76,7 +76,7 @@ if (0 < $numItems) {
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => $PMF_LANG['ad_menu_glossary'],
+        'pageHeader' => Translation::get('ad_menu_glossary'),
         'pagination' => $pagination->render(),
     ]
 );

@@ -20,6 +20,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -56,7 +57,7 @@ try {
     $userPermission = $faqPermission->get(FaqPermission::USER, $attachment->getRecordId());
     $groupPermission = $faqPermission->get(FaqPermission::GROUP, $attachment->getRecordId());
 } catch (AttachmentException $e) {
-    $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
+    $attachmentErrors[] = Translation::get('msgAttachmentInvalid') . ' (' . $e->getMessage() . ')';
 }
 
 // Check on group permissions
@@ -103,10 +104,14 @@ if (
     $attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
         (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))
 ) {
-    $attachment->rawOut();
+    try {
+        $attachment->rawOut();
+    } catch (AttachmentException $e) {
+        $attachmentErrors[] = $e->getMessage();
+    }
     exit(0);
 } else {
-    $attachmentErrors[] = $PMF_LANG['err_NotAuth'];
+    $attachmentErrors[] = Translation::get('err_NotAuth');
 }
 
 // If we're here, there was an error with file download

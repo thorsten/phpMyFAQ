@@ -108,8 +108,13 @@
                       <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
                     </form>
                     <p class="mt-5 mb-3 text-center">
-                      {{ sendPassword }} <br />
+                      {{ sendPassword }}
+                      <br />
                       {{ registerUser }}
+                      <br />
+                      [useSignInWithMicrosoft]
+                      <a href="services/azure/"> {{ msgSignInWithMicrosoft }} </a>
+                      [/useSignInWithMicrosoft]
                     </p>
                     <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="mt-5">
                       {{ switchLanguages }}
