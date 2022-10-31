@@ -140,7 +140,7 @@ class CurrentUser extends User
         $optData = [];
         $loginError = $passwordError = $count = 0;
 
-        if ($this->config->get('main.loginWithEmailAddress')) {
+        if ($this->config->get('security.loginWithEmailAddress')) {
             $userId = $this->getUserIdByEmail($login);
             $this->getUserById($userId);
             $login = $this->getLogin();

@@ -1339,10 +1339,12 @@ $PMF_LANG['ad_add_user_change_password'] = 'User must change password after firs
 $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API enabled'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Allowed hosts for registrations'];
-$LANG_CONF['main.loginWithEmailAddress'] = ['checkbox', 'Login only with email address'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Login only with email address'];
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Sign in with Microsoft';
-$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Enable Sign in with Microsoft'];
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Enable Sign in with Microsoft (Azure AD)'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Enable "Ask question"'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Enable notifications'];
 
 return $PMF_LANG;

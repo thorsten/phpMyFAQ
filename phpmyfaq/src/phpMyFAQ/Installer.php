@@ -347,7 +347,9 @@ class Installer
         'main.enableSendToFriend' => 'true',
         'main.privacyURL' => '',
         'main.enableAutoUpdateHint' => 'true',
-        'main.loginWithEmailAddress' => 'false',
+        'security.loginWithEmailAddress' => 'false',
+        'main.enableAskQuestions' => 'false',
+        'main.enableNotifications' => 'false',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',

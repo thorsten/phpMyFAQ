@@ -419,6 +419,14 @@ if ($step == 3) {
             created timestamp NOT NULL,
             PRIMARY KEY (id))';
 
+        // new options
+        $faqConfig->add('main.enableAskQuestions', true);
+        $faqConfig->add('main.enableNotifications', true);
+
+        // update options
+        $faqConfig->rename('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
+
+
 
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server

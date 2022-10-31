@@ -623,9 +623,16 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
         'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' .
             Translation::get('msgAddContent') . '</a>',
-        'msgQuestion' => '<a class="nav-link" href="./ask.html">' . Translation::get('msgQuestion') . '</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="./open-questions.html">' . Translation::get('msgOpenQuestions') .
-            '</a>',
+        'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+            :
+            '',
+        'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link" href="./open-questions.html">' . Translation::get('msgOpenQuestions') . '</a>'
+            :
+            '',
         'msgContact' => '<a href="./contact.html">' . Translation::get('msgContact') . '</a>',
         'msgGlossary' => '<a href="./glossary.html">' . Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
@@ -634,7 +641,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('msgPrivacyNote')
         ),
         'backToHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
-        'allCategories' => '<a class="nav-link" href="./showcat.html">' . Translation::get('msgShowAllCategories') . '</a>',
+        'allCategories' => '<a class="nav-link" href="./showcat.html">' .
+            Translation::get('msgShowAllCategories') . '</a>',
         'faqOverview' => '<a href="./overview.html">' . Translation::get('faqOverview') . '</a>',
         'showSitemap' => '<a href="./sitemap/A/' . $faqLangCode . '.html">' . Translation::get('msgSitemap') . '</a>',
         'msgUserRemoval' => '<a href="./request-removal.html">' . Translation::get('msgUserRemoval') . '</a>'
@@ -645,12 +653,21 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('msgAdvancedSearch') . '</a>',
         'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
             Translation::get('msgAddContent') . '</a>',
-        'msgQuestion' => '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
-            Translation::get('msgQuestion') . '</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' .
-            Translation::get('msgOpenQuestions') . '</a>',
+        'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
+            Translation::get('msgQuestion') . '</a>'
+            :
+            '',
+        'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' .
+            Translation::get('msgOpenQuestions') . '</a>'
+            :
+            '',
         'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . Translation::get('msgContact') . '</a>',
-        'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' . Translation::get('ad_menu_glossary') . '</a>',
+        'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' .
+            Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
             '<a target="_blank" href="%s">%s</a>',
             $faqConfig->get('main.privacyURL'),
@@ -662,8 +679,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
         'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' .
             Translation::get('msgSitemap') . '</a>',
-        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . Translation::get('msgUserRemoval') .
-            '</a>',
+        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' .
+            Translation::get('msgUserRemoval') . '</a>',
     ];
 }
 

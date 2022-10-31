@@ -16,6 +16,8 @@
 
 namespace phpMyFAQ;
 
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+
 /**
  * Class Notification
  *
@@ -51,17 +53,19 @@ class Notification
      * @param string $email Email address of the user
      * @param string $userName Name of the user
      * @param string $url URL of answered FAQ
-     * @throws Core\Exception
+     * @throws Core\Exception|TransportExceptionInterface
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
-        $this->mail->addTo($email, $userName);
-        $this->mail->subject = $this->config->getTitle() . ' - ' . Translation::get('msgQuestionAnswered');
-        $this->mail->message = sprintf(
-            Translation::get('msgMessageQuestionAnswered'),
-            $this->config->getTitle()
-        ) . "\n\r" . $url;
-        $this->mail->send();
+        if ($this->config->get('main.enableNotifications')) {
+            $this->mail->addTo($email, $userName);
+            $this->mail->subject = $this->config->getTitle() . ' - ' . Translation::get('msgQuestionAnswered');
+            $this->mail->message = sprintf(
+                Translation::get('msgMessageQuestionAnswered'),
+                $this->config->getTitle()
+            ) . "\n\r" . $url;
+            $this->mail->send();
+        }
     }
 
     /**
@@ -70,20 +74,22 @@ class Notification
      * @param array<string> $emails
      * @param int           $faqId
      * @param string        $faqLanguage
-     * @throws Core\Exception
+     * @throws Core\Exception|TransportExceptionInterface
      */
     public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage): void
     {
-        $this->mail->addTo($this->config->getAdminEmail());
-        foreach ($emails as $email) {
-            $this->mail->addCc($email);
-        }
-        $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
-        $this->mail->message = html_entity_decode(
-            Translation::get('msgMailCheck')
-        ) . "\n\n" . $this->config->getTitle() . ': ' . $this->config->getDefaultUrl(
-        ) . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
+        if ($this->config->get('main.enableNotifications')) {
+            $this->mail->addTo($this->config->getAdminEmail());
+            foreach ($emails as $email) {
+                $this->mail->addCc($email);
+            }
+            $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
+            $this->mail->message = html_entity_decode(
+                Translation::get('msgMailCheck')
+            ) . "\n\n" . $this->config->getTitle() . ': ' . $this->config->getDefaultUrl(
+            ) . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
 
-        $this->mail->send();
+            $this->mail->send();
+        }
     }
 }

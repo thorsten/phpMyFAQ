@@ -419,10 +419,7 @@ class Configuration
     public function add(string $name, mixed $value): object|bool
     {
         $insert = sprintf(
-            "INSERT INTO
-                %s%s
-            VALUES
-                ('%s', '%s')",
+            "INSERT INTO %s%s VALUES ('%s', '%s')",
             Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($name)),
@@ -451,6 +448,26 @@ class Configuration
         );
 
         return (bool)$this->getDb()->query($delete);
+    }
+
+    /**
+     * Renames a configuration key for the database.
+     *
+     * @param string $currentKey
+     * @param string $newKey
+     * @return bool
+     */
+    public function rename(string $currentKey, string $newKey): bool
+    {
+        $rename = sprintf(
+            "UPDATE %s%s SET config_name = '%s' WHERE config_name = '%s'",
+            Database::getTablePrefix(),
+            $this->tableName,
+            $newKey,
+            $currentKey
+        );
+
+        return (bool)$this->getDb()->query($rename);
     }
 
     /**

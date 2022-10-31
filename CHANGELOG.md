@@ -16,6 +16,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Monolog v2 as logging solution (Thorsten)
 - added REST API v2.2 to fetch groups (Thorsten)
 - added verification of backup files (Thorsten)
+- added possibility to disable questions and notifications (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - updated to Bootstrap v5.1 (Thorsten)
 - updated to TinyMCE v5.10 (Thorsten)

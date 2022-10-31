@@ -1340,6 +1340,6 @@ $PMF_LANG["ad_add_user_change_password"] = "L'utilisateur doit changer son mot d
 $LANG_CONF["api.enableAccess"] = ["checkbox", "API REST"];
 $LANG_CONF["api.apiClientToken"] = ["input", "API Client Token"];
 $LANG_CONF["security.domainWhiteListForRegistrations"] = ["area", "Hôtes autorisées pour l'inscription"];
-$LANG_CONF["main.loginWithEmailAddress"] = ["checkbox", "Se logger uniquement avec l'adresse email"];
+$LANG_CONF["security.loginWithEmailAddress"] = ["checkbox", "Se logger uniquement avec l'adresse email"];
 
 return $PMF_LANG;

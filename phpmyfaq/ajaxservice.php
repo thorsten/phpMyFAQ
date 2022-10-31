@@ -467,6 +467,7 @@ switch ($action) {
     case 'savequestion':
         if (
             !$faqConfig->get('records.allowQuestionsForGuests') &&
+            !$faqConfig->get('main.enableAskQuestions') &&
             !$user->perm->hasPermission($user->getUserId(), 'addquestion')
         ) {
             $message = ['error' => $PMF_LANG['err_NotAuth']];
