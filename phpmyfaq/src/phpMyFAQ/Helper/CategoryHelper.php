@@ -20,6 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Database;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 
 /**
@@ -351,7 +352,8 @@ class CategoryHelper extends Helper
             $decks .= '</a>' .
                 '<div class="card-body">' .
                 '<h4 class="card-title text-center">' .
-                '<a href="' . $category['url'] . '">' . $category['name'] . '</a>' .
+                '<a href="' . Strings::htmlentities($category['url']) . '">' .
+                Strings::htmlentities($category['name']) . '</a>' .
                 '</h4>' .
                 '<p class="card-text">' . $category['description'] . '</p>' .
                 '</div>' .
