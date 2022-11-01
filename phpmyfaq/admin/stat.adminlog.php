@@ -7,19 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -114,7 +114,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
         <tr>
             <td><?= $loggingId ?></td>
             <td><?= $date->format(date('Y-m-d H:i', $loggingValue['time'])) ?></td>
-            <td><?= $user->getLogin() ?></td>
+            <td><?= Strings::htmlentities($user->getLogin()) ?></td>
             <td><?= $loggingValue['ip'] ?></td>
             <td><small><?php
             $text = $loggingValue['text'];

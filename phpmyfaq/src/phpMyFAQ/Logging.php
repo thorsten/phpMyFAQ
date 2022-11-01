@@ -24,10 +24,8 @@ namespace phpMyFAQ;
  */
 class Logging
 {
-    /**
-     * @var Configuration
-     */
-    private $config = null;
+    /** @var Configuration */
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -44,16 +42,9 @@ class Logging
      *
      * @return int
      */
-    public function getNumberOfEntries()
+    public function getNumberOfEntries(): int
     {
-        $query = sprintf(
-            '
-            SELECT
-                id
-            FROM
-                %sfaqadminlog',
-            Database::getTablePrefix()
-        );
+        $query = sprintf('SELECT id FROM %sfaqadminlog', Database::getTablePrefix());
 
         return $this->config->getDb()->numRows(
             $this->config->getDb()->query($query)
@@ -65,7 +56,7 @@ class Logging
      *
      * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $data = [];
 
@@ -80,6 +71,7 @@ class Logging
         );
 
         $result = $this->config->getDb()->query($query);
+
         while ($row = $this->config->getDb()->fetchObject($result)) {
             $data[$row->id] = array(
                 'time' => $row->time,
@@ -100,7 +92,7 @@ class Logging
      *
      * @return bool
      */
-    public function logAdmin(User $user, $logText = '')
+    public function logAdmin(User $user, string $logText = ''): bool
     {
         if ($this->config->get('main.enableAdminLog')) {
             $query = sprintf(
@@ -112,10 +104,10 @@ class Logging
                 (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
                 $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
-                $_SERVER['REQUEST_TIME'],
+                $this->config->getDb()->escape($_SERVER['REQUEST_TIME']),
                 $user->userdata->get('user_id'),
                 $this->config->getDb()->escape(nl2br($logText)),
-                $_SERVER['REMOTE_ADDR']
+                $this->config->getDb()->escape($_SERVER['REMOTE_ADDR'])
             );
 
             return $this->config->getDb()->query($query);
