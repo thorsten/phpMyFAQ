@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Instance;
 
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 use phpMyFAQ\Configuration;
 
 /**

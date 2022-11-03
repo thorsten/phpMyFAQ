@@ -94,7 +94,7 @@ class Link
     private const LINK_HTML_PASSWORD = 'password.html';
     private const LINK_HTML_REGISTER = 'register.html';
     private const LINK_HTML_SEARCH = 'search.html';
-    private const LINK_HTML_SHOWCAT = 'showcat.html';
+    private const LINK_HTML_SHOWCAT = 'show-categories.html';
 
     /**
      * @var int[] List of allowed action parameters

@@ -27,6 +27,7 @@ namespace phpMyFAQ\User;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use stdClass;
@@ -140,7 +141,7 @@ class CurrentUser extends User
         $optData = [];
         $loginError = $passwordError = $count = 0;
 
-        if ($this->config->get('security.loginWithEmailAddress')) {
+        if ($this->config->get('security.loginWithEmailAddress') && Filter::filterVar($login, FILTER_VALIDATE_EMAIL)) {
             $userId = $this->getUserIdByEmail($login);
             $this->getUserById($userId);
             $login = $this->getLogin();

@@ -110,7 +110,7 @@ services:
       - '8008:80'
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
     container_name: phpmyfaq-32_elasticsearch-v7
     restart: always
     environment:

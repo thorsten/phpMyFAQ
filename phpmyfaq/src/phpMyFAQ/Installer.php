@@ -18,7 +18,7 @@
 namespace phpMyFAQ;
 
 use Composer\Autoload\ClassLoader;
-use Elasticsearch\ClientBuilder;
+use Elastic\Elasticsearch\ClientBuilder;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;

@@ -25,6 +25,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use stdClass;
 
@@ -165,7 +166,7 @@ class SearchHelper extends Helper
                 ++$i;
             }
         } else {
-            $html = $this->translation['err_noArticles'];
+            $html = Translation::get('err_noArticles');
         }
 
         return $html;
@@ -186,7 +187,7 @@ class SearchHelper extends Helper
         $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
 
-        $totalPages = ceil($numOfResults / $confPerPage);
+        $totalPages = (int)ceil($numOfResults / $confPerPage);
         $lastPage = $currentPage * $confPerPage;
         $firstPage = $lastPage - $confPerPage;
 
@@ -199,9 +200,9 @@ class SearchHelper extends Helper
             if (1 < $totalPages) {
                 $html .= sprintf(
                     "<p><strong>%s%d %s %s</strong></p>\n",
-                    $this->translation['msgPage'],
+                    Translation::get('msgPage'),
                     $currentPage,
-                    $this->translation['msgVoteFrom'],
+                    Translation::get('msgVoteFrom'),
                     $this->plurals->GetMsg('plmsgPagesTotal', $totalPages)
                 );
             }
@@ -269,7 +270,7 @@ class SearchHelper extends Helper
                 );
                 $html .= sprintf(
                     "<small class=\"searchpreview\"><strong>%s</strong> %s...</small>\n",
-                    $this->translation['msgSearchContent'],
+                    Translation::get('msgSearchContent'),
                     $answerPreview
                 );
                 $html .= '</li>';
@@ -281,7 +282,7 @@ class SearchHelper extends Helper
                 $html .= $this->pagination->render();
             }
         } else {
-            $html = $this->translation['err_noArticles'];
+            $html = Translation::get('err_noArticles');
         }
 
         return $html;
@@ -298,7 +299,7 @@ class SearchHelper extends Helper
         $emptyStar = '<i aria-hidden="true" class="fa fa-star-o"></i>';
         $fullStar = '<i aria-hidden="true" class="fa fa-star"></i>';
 
-        if (0 === (int)$relevance) {
+        if (0 === $relevance) {
             $html .= $emptyStar . $emptyStar . $emptyStar;
         } elseif ($relevance < 33) {
             $html .= $fullStar . $emptyStar . $emptyStar;
@@ -360,7 +361,7 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    public function renderMostPopularSearches(array $mostPopularSearches)
+    public function renderMostPopularSearches(array $mostPopularSearches): string
     {
         $html = '';
 

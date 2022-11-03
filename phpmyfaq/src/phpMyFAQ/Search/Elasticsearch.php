@@ -17,8 +17,8 @@
 
 namespace phpMyFAQ\Search;
 
-use Elasticsearch\Client;
-use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+use Elastic\Elasticsearch\Client;
+use Elastic\Transport\Exception\NoNodeAvailableException;
 use phpMyFAQ\Configuration;
 use stdClass;
 
@@ -98,7 +98,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         try {
             $result = $this->client->search($searchParams);
-        } catch (NoNodesAvailableException $e) {
+        } catch (NoNodeAvailableException $e) {
             $this->resultSet = [];
         }
 

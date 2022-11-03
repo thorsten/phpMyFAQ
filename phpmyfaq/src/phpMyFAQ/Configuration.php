@@ -18,7 +18,7 @@
 
 namespace phpMyFAQ;
 
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;

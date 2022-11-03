@@ -55,7 +55,7 @@ class System
     /**
      * API version.
      */
-    private const VERSION_API = '2.1';
+    private const VERSION_API = '2.2';
 
     /**
      * Minimum required PHP version.
