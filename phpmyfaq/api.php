@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-03
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-03
  */
 
 const IS_VALID_PHPMYFAQ = null;
@@ -20,7 +20,6 @@ const IS_VALID_PHPMYFAQ = null;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
@@ -151,20 +150,23 @@ switch ($action) {
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
-        $searchResults = $search->search($searchString, false);
-        $faqSearchResult->reviewResultSet($searchResults);
-        if ($faqSearchResult->getNumberOfResults() > 0) {
-            $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
-            foreach ($faqSearchResult->getResultSet() as $data) {
-                $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-                $data->answer = Utils::makeShorterText($data->answer, 12);
-                $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
-                $result[] = $data;
+        try {
+            $searchResults = $search->search($searchString, false);
+            $faqSearchResult->reviewResultSet($searchResults);
+            if ($faqSearchResult->getNumberOfResults() > 0) {
+                $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+                foreach ($faqSearchResult->getResultSet() as $data) {
+                    $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+                    $data->answer = Utils::makeShorterText($data->answer, 12);
+                    $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+                    $result[] = $data;
+                }
+            } else {
+                $http->setStatus(404);
             }
-        } else {
-            $http->setStatus(404);
+        } catch (Exception $e) {
+            $http->setStatus(400);
         }
-
         break;
 
     case 'categories':
