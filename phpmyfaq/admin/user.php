@@ -22,6 +22,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
@@ -96,7 +97,7 @@ if (
             $message .= sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 $PMF_LANG['ad_msg_savedsuc_1'],
-                $user->getLogin(),
+                Strings::htmlentities($user->getLogin(), ENT_QUOTES),
                 $PMF_LANG['ad_msg_savedsuc_2']
             );
             $message .= '<script>updateUser(' . $userId . ')</script>';
@@ -144,7 +145,7 @@ if (
                 $message .= sprintf(
                     '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                     $PMF_LANG['ad_msg_savedsuc_1'],
-                    $user->getLogin(),
+                    Strings::htmlentities($user->getLogin(), ENT_QUOTES),
                     $PMF_LANG['ad_msg_savedsuc_2']
                 );
                 $message .= '<script>updateUser(' . $userId . ');</script>';
@@ -177,7 +178,7 @@ if (
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">
                   <i aria-hidden="true" class="fa fa-user"></i>
-                    <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
+                    <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= Strings::htmlentities($user->getLogin(), ENT_QUOTES) ?>
                 </h1>
               </div>
 
@@ -576,8 +577,8 @@ if (
             <td class="text-center">
               <i class="fa <?= $user->getUserData('is_visible') ? 'fa-user' : 'fa-user-o' ?>"></i>
             </td>
-            <td><?= $user->getUserData('display_name') ?></td>
-            <td><?= $user->getLogin() ?></td>
+            <td><?= Strings::htmlentities($user->getUserData('display_name'), ENT_QUOTES) ?></td>
+            <td><?= Strings::htmlentities($user->getLogin(), ENT_QUOTES) ?></td>
             <td>
               <a href="mailto:<?= $user->getUserData('email') ?>">
                   <?= $user->getUserData('email') ?>

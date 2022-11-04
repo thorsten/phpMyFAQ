@@ -79,9 +79,9 @@ class User
     /**
      * User-data storage container.
      *
-     * @var UserData
+     * @var UserData|null
      */
-    public $userdata = null;
+    public ?UserData $userdata = null;
 
     /**
      * Public array that contains error messages.
@@ -100,9 +100,9 @@ class User
     /**
      * Configuration.
      *
-     * @var Configuration
+     * @var Configuration|null
      */
-    protected $config = null;
+    protected ?Configuration $config = null;
 
     /**
      * Default Authentication properties.
@@ -123,36 +123,36 @@ class User
      *
      * @var string
      */
-    private $login = '';
+    private string $login = '';
 
     /**
      * minimum length of login string (default: 2).
      *
      * @var int
      */
-    private $loginMinLength = 2;
+    private int $loginMinLength = 2;
 
     /**
      * regular expression to find invalid login strings
-     * (default: /^[a-z0-9][\w\.\-@]+/i ).
+     * (default: /^[a-z0-9][\w\.\-@]+/is ).
      *
      * @var string
      */
-    private $validUsername = '/^[a-z0-9][\w\.\-@]+/i';
+    private string $validUsername = '/^[a-z0-9][\w\.\-@]+/is';
 
     /**
      * user ID.
      *
      * @var int
      */
-    private $userId = -1;
+    private int $userId = -1;
 
     /**
      * Status of user.
      *
      * @var string
      */
-    private $status = '';
+    private string $status = '';
 
     /**
      * IS the user a super admin?
@@ -461,7 +461,7 @@ class User
 
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int)$this->config->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
+            $this->userId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
@@ -527,8 +527,6 @@ class User
      */
     public function isValidLogin(string $login): bool
     {
-        $login = (string)$login;
-
         if (strlen($login) < $this->loginMinLength || !preg_match($this->validUsername, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
 
