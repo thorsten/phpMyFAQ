@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-16
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-03-16
  */
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -122,9 +123,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         ?>
       <tr id="row-instance-<?= $site->id ?>">
         <td><?= $site->id ?></td>
-        <td><a href="<?= $site->url . $site->instance ?>"><?= $site->url ?></a></td>
-        <td><?= $site->instance ?></td>
-        <td><?= $site->comment ?></td>
+        <td>
+          <a href="<?= Strings::htmlentities($site->url . $site->instance, ENT_QUOTES) ?>">
+                <?= Strings::htmlentities($site->url, ENT_QUOTES) ?>
+          </a>
+        </td>
+        <td><?= Strings::htmlentities($site->instance, ENT_QUOTES) ?></td>
+        <td><?= Strings::htmlentities($site->comment, ENT_QUOTES) ?></td>
         <td>
           <a href="?action=editinstance&instance_id=<?= $site->id ?>" class="btn btn-info">
             <i aria-hidden="true" class="fa fa-pencil"></i>

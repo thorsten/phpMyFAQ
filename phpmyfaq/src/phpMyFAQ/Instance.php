@@ -24,26 +24,14 @@ namespace phpMyFAQ;
  */
 class Instance
 {
-    /**
-     * Configuration.
-     *
-     * @var Configuration
-     */
-    protected $config = null;
+    /** @var Configuration|null */
+    protected ?Configuration $config = null;
 
-    /**
-     * Instance ID.
-     *
-     * @var int
-     */
-    protected $id;
+    /** @var int */
+    protected int $id;
 
-    /**
-     * Instance configuration.
-     *
-     * @var string[]
-     */
-    protected $instanceConfig = [];
+    /** @var string[] */
+    protected array $instanceConfig = [];
 
     /**
      * Constructor.
@@ -70,9 +58,9 @@ class Instance
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             Database::getTablePrefix(),
             $this->getId(),
-            $data['url'],
-            $data['instance'],
-            $data['comment'],
+            $this->config->getDb()->escape($data['url']),
+            $this->config->getDb()->escape($data['instance']),
+            $this->config->getDb()->escape($data['comment']),
             $this->config->getDb()->now(),
             $this->config->getDb()->now()
         );
@@ -101,7 +89,7 @@ class Instance
      */
     public function setId(int $id): void
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 
     /**
@@ -154,10 +142,10 @@ class Instance
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $data['instance'],
-            $data['comment'],
-            $data['url'],
-            (int)$id
+            $this->config->getDb()->escape($data['instance']),
+            $this->config->getDb()->escape($data['comment']),
+            $this->config->getDb()->escape($data['url']),
+            $id
         );
 
         return $this->config->getDb()->query($update);
