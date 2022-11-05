@@ -1345,5 +1345,7 @@ $PMF_LANG['msgSignInWithMicrosoft'] = 'Mit Microsoft anmelden';
 $LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiviere Anmeldung mit Microsoft (Azure AD)'];
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiviere "Frage stellen"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktiviere Benachrichtigungen'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Sende eine E-Mail an den Administrator'];
+$PMF_LANG['mail.sendTestEmail'] = 'Sende eine E-Mail an den Administrator';
 
 return $PMF_LANG;
