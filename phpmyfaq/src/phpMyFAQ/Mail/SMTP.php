@@ -52,9 +52,9 @@ class SMTP implements MailUserAgentInterface
     }
 
     /**
-     * @param string $recipients
-     * @param array  $headers
-     * @param string $body
+     * @param string   $recipients
+     * @param string[] $headers
+     * @param string   $body
      * @return int
      * @throws TransportExceptionInterface
      */
@@ -68,7 +68,7 @@ class SMTP implements MailUserAgentInterface
 
         $email = (new Email())
             ->from(empty($sender) ? $this->user : $sender)
-            ->to('you@example.com')
+            ->to($recipients)
             ->subject($headers['Subject'])
             ->text($body);
 
@@ -83,5 +83,7 @@ class SMTP implements MailUserAgentInterface
         }
 
         $this->mailer->send($email);
+
+        return 1;
     }
 }

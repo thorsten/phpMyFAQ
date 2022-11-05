@@ -562,8 +562,7 @@ class Mail
         }
 
         return match ($this->agent) {
-            'SMTP' => $mua->send($this->to, $this->headers, $this->body),
-            'built-in' => $mua->send($recipients, $this->headers, $this->body),
+            'SMTP', 'built-in' => $mua->send($recipients, $this->headers, $this->body),
             default => throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!'),
         };
     }
