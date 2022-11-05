@@ -26,10 +26,12 @@ use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Language;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Template\TemplateMetaData;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -291,5 +293,31 @@ switch ($ajaxAction) {
 
         $http->setStatus(200);
         $http->sendJsonWithHeaders($payload);
+        break;
+
+    case 'send-test-mail':
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+            $http->setStatus(401);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            exit(1);
+        }
+
+        $mailer = new Mail($faqConfig);
+        try {
+            $mailer->setReplyTo($faqConfig->getAdminEmail());
+            $mailer->addTo($faqConfig->getAdminEmail());
+            $mailer->subject = $faqConfig->getTitle() . ': Mail test successful.';
+            $mailer->message = 'It works on my machine. 🚀';
+            $result = $mailer->send();
+
+            $http->setStatus(200);
+            $http->sendJsonWithHeaders(['success' => $result]);
+        } catch (Exception | TransportExceptionInterface $e) {
+            $http->setStatus(401);
+            $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+        }
         break;
 }

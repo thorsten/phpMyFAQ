@@ -299,8 +299,15 @@ function renderInputForm(mixed $key, string $type)
             printf(
                 '<input type="text" readonly name="edit[%s]" class="form-control-plaintext" value="%s"></div>',
                 $key,
-                str_replace('"', '&quot;', $faqConfig->get($key)),
-                $faqConfig->get($key)
+                str_replace('"', '&quot;', $faqConfig->get($key))
+            );
+            break;
+
+        case 'button':
+            printf(
+                '<button type="button" class="btn btn-primary" id="btn-phpmyfaq-%s" onclick="handleSendTestMail()">%s</button>',
+                str_replace('.', '-', $key),
+                Translation::get($key)
             );
             break;
     }

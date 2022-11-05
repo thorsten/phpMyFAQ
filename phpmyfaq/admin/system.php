@@ -52,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                 $systemInformation = [
                     'phpMyFAQ Version' => $faqSystem->getVersion(),
                     'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
-                    'phpMyFAQ Installation Path' => dirname(dirname($_SERVER['SCRIPT_FILENAME'])),
+                    'phpMyFAQ Installation Path' => dirname($_SERVER['SCRIPT_FILENAME'], 2),
                     'Web server software' => $_SERVER['SERVER_SOFTWARE'],
                     'Web server document root' => $_SERVER['DOCUMENT_ROOT'],
                     'Web server Interface' => strtoupper(PHP_SAPI),
@@ -66,10 +66,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                 ];
                 foreach ($systemInformation as $name => $info) : ?>
                     <tr>
-                        <td style="width: 20%"><strong><?= $name ?></strong></td>
+                        <td class="col-2"><strong><?= $name ?></strong></td>
                         <td><?= $info ?></td>
                     </tr>
-                <?php
+                    <?php
                 endforeach;
                 ?>
                 </tbody>

@@ -1,6 +1,9 @@
 /**
- * Code to generate the API Token, needs to be loaded before as we fetch the
- * configuration data from the server.
+ * Configuration related code, needs to be loaded before as we fetch the
+ * configuration data from the server:
+ *
+ * - Code to generate the API Token
+ * - Code to send a test mail to the admin
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -26,6 +29,41 @@ const generateUUID = () => {
     date = Math.floor(date / 16);
     return (char === 'x' ? random : (random & 0x3) | 0x8).toString(16);
   });
+};
+
+const handleSendTestMail = () => {
+  const button = document.getElementById('btn-phpmyfaq-mail-sendTestEmail');
+  if (button) {
+    const csrf = document.querySelector('#csrf').value;
+
+    fetch('index.php?action=ajax&ajax=config&ajaxaction=send-test-mail', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrf: csrf,
+      }),
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then((response) => {
+        if (response.success === 1) {
+          const element = document.createElement('span');
+          element.textContent = ' ✅';
+          button.append(element);
+        } else {
+          const element = document.createElement('span');
+          element.textContent = '👎 ' + response.error;
+          button.append(element);
+        }
+      });
+  }
 };
 
 function generateApiToken() {

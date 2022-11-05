@@ -90,7 +90,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     ?>
   <form id="configuration-list" name="configuration-list" method="post"
         action="?action=config&amp;config_action=saveConfig">
-    <input type="hidden" name="csrf" value="<?= $currentToken ?>">
+    <input type="hidden" name="csrf" id="csrf" value="<?= $currentToken ?>">
 
     <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
