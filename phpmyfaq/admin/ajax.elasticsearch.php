@@ -7,15 +7,14 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-26
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-12-26
  */
 
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -29,6 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 
 $esInstance = new Elasticsearch($faqConfig);
+
+$esConfigData = $faqConfig->getElasticsearchConfig();
 
 $http = new HttpHelper();
 $http->setContentType('application/json');
@@ -59,11 +60,7 @@ switch ($ajaxAction) {
         break;
 
     case 'stats':
-        try {
-            $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
-        } catch (Missing404Exception $e) {
-            $result = $e->getMessage();
-        }
+        $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => $esConfigData['index']]);
         break;
 }
 
