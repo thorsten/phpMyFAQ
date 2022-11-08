@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Mysqli;
 use phpMyFAQ\Database\Pgsql;
@@ -33,23 +34,23 @@ class Database
     /**
      * Instance.
      *
-     * @var DatabaseDriver
+     * @var DatabaseDriver|null
      */
-    private static $instance = null;
+    private static ?DatabaseDriver $instance = null;
 
     /**
      * Database type.
      *
-     * @var string
+     * @var string|null
      */
-    private static $dbType = null;
+    private static ?string $dbType = null;
 
     /**
      * Table prefix.
      *
-     * @var string
+     * @var string|null
      */
-    private static $tablePrefix = null;
+    private static ?string $tablePrefix = null;
 
     /**
      * Constructor.
@@ -62,11 +63,10 @@ class Database
      * Database factory.
      *
      * @param string $type Database management system type
-     *
      * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
      * @throws Exception
      */
-    public static function factory($type)
+    public static function factory(string $type)
     {
         self::$dbType = $type;
 
@@ -90,7 +90,7 @@ class Database
      *
      * @return DatabaseDriver
      */
-    public static function getInstance()
+    public static function getInstance(): ?DatabaseDriver
     {
         if (null == self::$instance) {
             $className = __CLASS__;
@@ -112,7 +112,7 @@ class Database
      *
      * @return string
      */
-    public static function getType()
+    public static function getType(): ?string
     {
         return self::$dbType;
     }
@@ -121,10 +121,9 @@ class Database
      * Check if a table is filled with data.
      *
      * @param string $tableName Table name
-     *
      * @return bool true, if table is empty, otherwise false
      */
-    public static function checkOnEmptyTable($tableName)
+    public static function checkOnEmptyTable(string $tableName): bool
     {
         if (
             self::$instance->numRows(
@@ -139,9 +138,10 @@ class Database
 
     /**
      * Error page, if the database connection is not possible.
+     *
      * @param string $method
      */
-    public static function errorPage($method)
+    public static function errorPage(string $method): void
     {
         echo '<!DOCTYPE html>
             <html lang="en" class="no-js">
@@ -153,7 +153,7 @@ class Database
                 </style>
             </head>
             <body>
-                <div class="container">
+                <div class="container mt-5">
                 <p class="alert alert-danger">The connection to the database server could not be established.</p>
                 <p class="alert alert-danger">The error message of the database server:<br>' . $method . '</p>
                 </div>
@@ -166,7 +166,7 @@ class Database
      *
      * @param string $tablePrefix
      */
-    public static function setTablePrefix($tablePrefix)
+    public static function setTablePrefix(string $tablePrefix): void
     {
         self::$tablePrefix = $tablePrefix;
     }
@@ -176,7 +176,7 @@ class Database
      *
      * @return string
      */
-    public static function getTablePrefix()
+    public static function getTablePrefix(): string
     {
         return self::$tablePrefix;
     }
