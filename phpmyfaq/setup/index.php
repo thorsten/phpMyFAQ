@@ -171,6 +171,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
               <div class="col-sm-9">
                   <select name="sql_type" id="sql_type" class="form-control">
+                      <option value="">Please select your preferred database</option>
                       <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                   </select>
                   <small class="form-text text-muted">Please select your preferred database type.</small>
@@ -192,7 +193,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
                 <div class="col-sm-9">
                   <input type="number" name="sql_port" id="sql_port" class="form-control"
-                      value="3306" required>
+                      value="" required>
                   <small class="form-text text-muted">Please enter the port your database server.</small>
                 </div>
               </div>
