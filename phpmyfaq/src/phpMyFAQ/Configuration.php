@@ -31,12 +31,12 @@ class Configuration
     /**
      * @var array
      */
-    public $config = [];
+    public array $config = [];
 
     /**
      * @var string
      */
-    protected $tableName = 'faqconfig';
+    protected string $tableName = 'faqconfig';
 
     /**
      * Constructor.
@@ -347,7 +347,7 @@ class Configuration
      */
     public function isLdapActive(): bool
     {
-        return $this->get('ldap.ldapSupport');
+        return (bool) $this->get('ldap.ldapSupport');
     }
 
     /**
