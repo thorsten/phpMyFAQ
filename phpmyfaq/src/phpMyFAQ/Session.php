@@ -356,9 +356,9 @@ class Session
      */
     public function setCookie(string $name, $sessionId, int $timeout = 3600): bool
     {
-        $protocol = 'http';
+        $secure = false;
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
-            $protocol = 'https';
+            $secure = true;
         }
 
         if (PHP_VERSION_ID < 70300) {
@@ -368,7 +368,7 @@ class Session
                 $_SERVER['REQUEST_TIME'] + $timeout,
                 dirname($_SERVER['SCRIPT_NAME']) . '; samesite=strict',
                 parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
-                'https' === $protocol, // only secure running via HTTPS
+                $secure,
                 true
             );
         } else {
@@ -380,7 +380,7 @@ class Session
                     'path' => dirname($_SERVER['SCRIPT_NAME']),
                     'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
                     'samesite' => 'strict',
-                    'secure' => 'https' === $protocol, // only secure running via HTTPS
+                    'secure' => $secure,
                     'httponly' => true,
                 ]
             );

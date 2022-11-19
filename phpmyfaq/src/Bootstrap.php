@@ -123,6 +123,11 @@ try {
 $faqConfig = new Configuration($db);
 $faqConfig->getAll();
 
+$secureCookie = 'false';
+if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
+    $secureCookie = 'true';
+}
+
 //
 // We always need a valid session!
 //
@@ -131,6 +136,7 @@ ini_set('session.auto_start', '0'); // Prevent error to use session_start() if i
 ini_set('session.use_trans_sid', '0');
 ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.cookie_httponly', 'true');
+ini_set('session.cookie_secure', $secureCookie);
 ini_set('url_rewriter.tags', '');
 
 //
