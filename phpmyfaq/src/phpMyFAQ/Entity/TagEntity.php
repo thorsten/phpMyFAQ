@@ -24,46 +24,26 @@ namespace phpMyFAQ\Entity;
  */
 class TagEntity
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private ?int $id = null;
 
-    /**
-     * @var string
-     */
-    private $name;
+    private ?string $name = null;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param  int $id
-     * @return TagEntity
-     */
     public function setId(int $id): TagEntity
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param  string $name
-     * @return TagEntity
-     */
     public function setName(string $name): TagEntity
     {
         $this->name = $name;

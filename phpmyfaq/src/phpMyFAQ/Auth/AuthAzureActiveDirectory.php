@@ -32,9 +32,6 @@ use phpMyFAQ\User\CurrentUser;
  */
 class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
 {
-    /** @var Azure\OAuth */
-    private OAuth $oAuth;
-
     /** @var Session */
     private Session $session;
 
@@ -53,10 +50,9 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $config, OAuth $oAuth)
+    public function __construct(Configuration $config, private OAuth $oAuth)
     {
         $this->config = $config;
-        $this->oAuth = $oAuth;
         $this->session = new Session($config);
 
         parent::__construct($config);
@@ -178,7 +174,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             $verifier = '';
 
             for ($i = 0; $i < 128; $i++) {
-                $verifier .= $chars[mt_rand(0, $charLen)];
+                $verifier .= $chars[random_int(0, $charLen)];
             }
 
             $this->oAuthVerifier = $verifier;

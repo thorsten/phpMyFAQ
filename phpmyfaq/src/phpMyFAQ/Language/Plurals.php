@@ -27,13 +27,6 @@ use phpMyFAQ\Translation;
 class Plurals
 {
     /**
-     * The currently loaded PMF translations.
-     *
-     * @var array
-     */
-    private array $PMF_TRANSL;
-
-    /**
      * The number of plural forms for current language $lang.
      *
      * @var int
@@ -57,11 +50,10 @@ class Plurals
     /**
      * Constructor.
      *
-     * @param array $translation PMF translation array for current language
+     * @param array $PMF_TRANSL PMF translation array for current language
      */
-    public function __construct(array $translation)
+    public function __construct(private array $PMF_TRANSL)
     {
-        $this->PMF_TRANSL = $translation;
         $this->nPlurals = (int)Translation::get('nplurals');
         $this->lang = Translation::get('metaLanguage');
 
@@ -79,7 +71,6 @@ class Plurals
      * @link   https://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
      * @param  string $lang The language code
      * @param  int    $n    The number used to determine the plural form
-     * @return int
      */
     private function plural(string $lang, int $n): int
     {
@@ -151,7 +142,6 @@ class Plurals
      *
      * @param string $translationKey Message identification
      * @param int    $number     The number used to determine the plural form
-     * @return string
      */
     public function getMsg(string $translationKey, int $number): string
     {
@@ -164,7 +154,6 @@ class Plurals
      *
      * @param string $msgID Message identification
      * @param int    $n     The number used to determine the plural form
-     * @return string
      */
     public function getMsgTemplate(string $msgID, int $n): string
     {
@@ -177,7 +166,6 @@ class Plurals
      * Returned integer is from interval [0, $nPlurals).
      *
      * @param int $number The number used to determine the plural form
-     * @return int
      */
     private function getPlural(int $number): int
     {

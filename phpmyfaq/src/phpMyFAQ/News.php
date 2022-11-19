@@ -27,18 +27,10 @@ use Exception;
 class News
 {
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -46,10 +38,9 @@ class News
      *
      * @param bool $showArchive Show archived news
      * @param bool $active Show active news
-     * @return string
      * @throws Exception
      */
-    public function getNews($showArchive = false, $active = true): string
+    public function getNews(bool $showArchive = false, bool $active = true): string
     {
         $output = '';
         $news = $this->getLatestData($showArchive, $active);
@@ -199,14 +190,14 @@ class News
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $expired = ($now > $row->date_end);
-                $headers[] = array(
+                $headers[] = [
                     'id' => $row->id,
                     'lang' => $row->lang,
                     'header' => $row->header,
                     'date' => Date::createIsoDate($row->datum),
                     'active' => $row->active,
-                    'expired' => $expired,
-                );
+                    'expired' => $expired
+                ];
             }
         }
 
@@ -251,7 +242,7 @@ class News
                     }
                 }
 
-                $news = array(
+                $news = [
                     'id' => $row->id,
                     'lang' => $row->lang,
                     'date' => Date::createIsoDate($row->datum),
@@ -265,8 +256,8 @@ class News
                     'allowComments' => $allowComments,
                     'link' => $row->link,
                     'linkTitle' => $row->linktitel,
-                    'target' => $row->target,
-                );
+                    'target' => $row->target
+                ];
             }
         }
 
@@ -277,7 +268,6 @@ class News
      * Adds a new news entry.
      *
      * @param array<mixed> $data Array with news data
-     * @return bool
      */
     public function addNewsEntry(array $data): bool
     {
@@ -318,7 +308,6 @@ class News
      *
      * @param int          $id News ID
      * @param array<mixed> $data Array with news data
-     * @return bool
      */
     public function updateNewsEntry(int $id, array $data): bool
     {
@@ -370,10 +359,9 @@ class News
      * Deletes a news entry identified by its ID.
      *
      * @param int $id News ID
-     * @return bool
      * @todo   check if there are comments attached to the deleted news
      */
-    public function deleteNews($id): bool
+    public function deleteNews(int $id): bool
     {
         $query = sprintf("DELETE FROM
                 %sfaqnews

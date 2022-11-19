@@ -24,17 +24,11 @@ namespace phpMyFAQ;
  */
 class Section
 {
-    /** @var Configuration */
-    private $config;
-
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -42,7 +36,6 @@ class Section
      *
      * @param string $name Name of the section
      * @param string $description Description of the category
-     * @return int
      */
     public function addSection(string $name, string $description): int
     {
@@ -68,7 +61,6 @@ class Section
     /**
      * Gets one section by id.
      *
-     * @param int $sectionId
      * @return string[]
      */
     public function getSection(int $sectionId): array
@@ -111,7 +103,6 @@ class Section
      * @param int    $id Id of the section to edit
      * @param string $name Name of the section
      * @param string $description Description of the category
-     * @return bool
      */
     public function updateSection(int $id, string $name, string $description): bool
     {
@@ -135,7 +126,6 @@ class Section
      * deletes a section entry.
      *
      * @param int $id Id of the section to edit
-     * @return bool
      */
     public function deleteSection($id): bool
     {

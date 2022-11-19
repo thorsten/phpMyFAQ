@@ -22,7 +22,7 @@ namespace phpMyFAQ\Attachment\Filesystem;
  *
  * @package phpMyFAQ\Attachment\Filesystem
  */
-abstract class AbstractEntry
+abstract class AbstractEntry implements \Stringable
 {
     /**
      * Path to the entry in the filesystem.
@@ -42,8 +42,6 @@ abstract class AbstractEntry
      * Move file to another location.
      *
      * @param object|string $entry an entry to move to
-     *
-     * @return bool
      */
     public function moveTo($entry): bool
     {
@@ -54,8 +52,6 @@ abstract class AbstractEntry
      * Copy file to another location.
      *
      * @param object|string $entry an entry to copy to
-     *
-     * @return bool
      */
     abstract public function copyTo($entry): bool;
 
@@ -68,8 +64,6 @@ abstract class AbstractEntry
 
     /**
      * Either file is encrypted.
-     *
-     * @return bool
      */
     public function isEncrypted(): bool
     {
@@ -78,8 +72,6 @@ abstract class AbstractEntry
 
     /**
      * Return current file path.
-     *
-     * @return string
      */
     public function getPath(): string
     {

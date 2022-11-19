@@ -52,13 +52,6 @@ class Auth
     protected ?Encryption $encContainer = null;
 
     /**
-     * Configuration.
-     *
-     * @var Configuration|null
-     */
-    protected ?Configuration $config = null;
-
-    /**
      * Short description of attribute read_only.
      *
      * @var bool
@@ -68,11 +61,10 @@ class Auth
     /**
      * Constructor.
      *
-     * @param Configuration $config
+     * @param Configuration|null $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected ?Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -80,7 +72,6 @@ class Auth
      * method.
      *
      * @param string $encType encryption type
-     * @return Encryption
      */
     public function selectEncType(string $encType): Encryption
     {
@@ -92,8 +83,6 @@ class Auth
      * The string returned by error() contains messages for all errors that
      * during object processing. Messages are separated by new lines.
      * Error messages are stored in the public array errors.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -120,7 +109,6 @@ class Auth
      * of the error() method for further details.
      *
      * @param string $method Authentication access methods
-     * @return Auth
      */
     public function selectAuth(string $method): Auth
     {
@@ -146,7 +134,6 @@ class Auth
 
     /**
      * @param bool $readOnly boolean flag
-     * @return bool
      */
     public function setReadOnly(bool $readOnly = null): bool
     {
@@ -162,7 +149,6 @@ class Auth
 
     /**
      * @param string $string string
-     * @return string
      */
     public function encrypt(string $string): string
     {

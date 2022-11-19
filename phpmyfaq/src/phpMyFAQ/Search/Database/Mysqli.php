@@ -46,7 +46,6 @@ class Mysqli extends SearchDatabase
      *
      * @param  string $searchTerm Search term
      * @throws \Exception
-     * @return mixed
      */
     public function search(string $searchTerm): mixed
     {
@@ -128,9 +127,7 @@ class Mysqli extends SearchDatabase
     /**
      * Add the matching columns into the columns for the result set.
      *
-     * @param string $searchTerm
      *
-     * @return string
      */
     public function getMatchingColumnsAsResult(string $searchTerm): string
     {
@@ -154,8 +151,6 @@ class Mysqli extends SearchDatabase
      * Returns the part of the SQL query with the order by.
      *
      * The order is calculate by weight depend on the search.relevance order
-     *
-     * @return string
      */
     public function getMatchingOrder(): string
     {

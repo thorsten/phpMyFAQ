@@ -29,26 +29,12 @@ use phpMyFAQ\Entity\TemplateMetaDataEntity;
 class TemplateMetaData
 {
     /**
-     * Configuration object.
-     *
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
-    /**
-     * @param TemplateMetaDataEntity $data
-     * @return int
-     */
     public function add(TemplateMetaDataEntity $data): int
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
@@ -68,10 +54,6 @@ class TemplateMetaData
         return $id;
     }
 
-    /**
-     * @param int $metaId
-     * @return TemplateMetaDataEntity
-     */
     public function getById(int $metaId): TemplateMetaDataEntity
     {
         $entity = new TemplateMetaDataEntity();
@@ -97,10 +79,6 @@ class TemplateMetaData
         return $entity;
     }
 
-    /**
-     * @param string $pageId
-     * @return TemplateMetaDataEntity
-     */
     public function getByPageId(string $pageId): TemplateMetaDataEntity
     {
         $entity = new TemplateMetaDataEntity();
@@ -156,11 +134,6 @@ class TemplateMetaData
         return $metaData;
     }
 
-    /**
-     * @param int                    $metaId
-     * @param TemplateMetaDataEntity $data
-     * @return bool
-     */
     public function update(int $metaId, TemplateMetaDataEntity $data): bool
     {
         $query = sprintf(
@@ -176,10 +149,6 @@ class TemplateMetaData
         return (bool)$this->config->getDb()->query($query);
     }
 
-    /**
-     * @param int $id
-     * @return bool
-     */
     public function delete(int $id): bool
     {
         $query = sprintf(

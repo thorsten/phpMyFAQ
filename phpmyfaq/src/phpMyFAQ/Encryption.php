@@ -40,13 +40,6 @@ class Encryption
     public array $errors = [];
 
     /**
-     * Configuration.
-     *
-     * @var Configuration|null
-     */
-    protected ?Configuration $config = null;
-
-    /**
      * Salt.
      *
      * @var string
@@ -56,11 +49,10 @@ class Encryption
     /**
      * Constructor.
      *
-     * @param Configuration $config
+     * @param Configuration|null $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected ?Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -78,8 +70,6 @@ class Encryption
      *
      * @param string        $encType
      * @param Configuration $config
-     *
-     * @return Encryption
      */
     public static function selectEnc(string $encType, Configuration $config): Encryption
     {
@@ -107,8 +97,6 @@ class Encryption
      * Encrypts the string str and returns the result.
      *
      * @param string $password String
-     *
-     * @return string
      */
     public function encrypt(string $password): string
     {
@@ -118,8 +106,6 @@ class Encryption
     /**
      * The string returned by error() contains messages for all errors that
      * during object processing. Messages are separated by new lines.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -137,9 +123,7 @@ class Encryption
     /**
      * Setter for salt.
      *
-     * @param string $login
      *
-     * @return Encryption
      */
     public function setSalt(string $login): Encryption
     {

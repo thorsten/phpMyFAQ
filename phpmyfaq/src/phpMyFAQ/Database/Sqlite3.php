@@ -59,12 +59,7 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param string $database
      * @param int|null $port
-     * @return null|bool
      */
     public function connect(
         string $host,
@@ -82,8 +77,6 @@ class Sqlite3 implements DatabaseDriver
      * Escapes a string for use in a query.
      *
      * @param string
-     *
-     * @return string
      */
     public function escape($string): string
     {
@@ -93,10 +86,9 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
      * @return object|null or NULL if there are no more results
      */
-    public function fetchObject($result): ?object
+    public function fetchObject(mixed $result): ?object
     {
         $result->fetchedByPMF = true;
         $return = $result->fetchArray(SQLITE3_ASSOC);
@@ -110,7 +102,6 @@ class Sqlite3 implements DatabaseDriver
      * Fetch a result row as an array.
      *
      * @param SQLite3Result $result
-     * @return array|null
      */
     public function fetchArray($result): ?array
     {
@@ -155,8 +146,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Returns the error string.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -169,8 +158,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Logs the queries.
-     *
-     * @return string
      */
     public function log(): string
     {
@@ -181,8 +168,6 @@ class Sqlite3 implements DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableStatus(string $prefix = ''): array
     {
@@ -200,9 +185,6 @@ class Sqlite3 implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     * @param string $query
-     * @param int $offset
-     * @param int $rowcount
      *
      * @return mixed $result
      */
@@ -227,9 +209,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Fetch a result row as an associate array.
-     *
-     * @param SQLite3Result $result
-     * @return array
      */
     public function fetchAssoc(SQLite3Result $result): array
     {
@@ -244,8 +223,6 @@ class Sqlite3 implements DatabaseDriver
      * Number of rows in a result.
      *
      * @param SQLite3Result $result
-     *
-     * @return int
      */
     public function numRows($result): int
     {
@@ -321,8 +298,6 @@ class Sqlite3 implements DatabaseDriver
      *
      * @param string      the name of the table
      * @param string      the name of the ID column
-     *
-     * @return int
      */
     public function nextId($table, $id): int
     {
@@ -339,8 +314,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Returns the library version string.
-     *
-     * @return string
      */
     public function serverVersion(): string
     {
@@ -349,8 +322,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Returns the library version string.
-     *
-     * @return string
      */
     public function clientVersion(): string
     {
@@ -361,17 +332,12 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Closes the connection to the database.
-     *
-     * @return bool
      */
     public function close(): bool
     {
         return $this->conn->close();
     }
 
-    /**
-     * @return string
-     */
     public function now(): string
     {
         return "DATETIME('now', 'localtime')";

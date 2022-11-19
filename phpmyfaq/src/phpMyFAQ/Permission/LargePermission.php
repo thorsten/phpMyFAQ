@@ -57,10 +57,8 @@ class LargePermission extends MediumPermission
      * group-membership in a section. The parameter $right may
      * be a right-ID (recommended for performance) or a right-name.
      *
-     * @param int   $userId
      * @param mixed $right
      *
-     * @return bool
      */
     public function hasPermission(int $userId, $right): bool
     {
@@ -91,10 +89,7 @@ class LargePermission extends MediumPermission
      * Returns true if the user $userId owns the right $rightId
      * because of a section membership, otherwise false.
      *
-     * @param int $userId
-     * @param int $rightId
      *
-     * @return bool
      */
     public function checkUserSectionRight(int $userId, int $rightId): bool
     {
@@ -138,8 +133,6 @@ class LargePermission extends MediumPermission
      * data for the new section.
      *
      * @param array<string> $sectionData Array of section data
-     *
-     * @return int
      */
     public function addSection(array $sectionData): int
     {
@@ -174,9 +167,6 @@ class LargePermission extends MediumPermission
     /**
      * Returns the ID of the section that has the name $name. Returns
      * 0 if the section name cannot be found.
-     *
-     * @param  string $name
-     * @return int
      */
     public function getSectionId(string $name): int
     {
@@ -225,9 +215,7 @@ class LargePermission extends MediumPermission
     /**
      * Changes the section data of the given section.
      *
-     * @param  int $sectionId
      * @param  array<string> $sectionData
-     * @return bool
      */
     public function changeSection(int $sectionId, array $sectionData): bool
     {
@@ -265,9 +253,6 @@ class LargePermission extends MediumPermission
     /**
      * Removes the section given by $sectionId from the database.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $sectionId
-     * @return bool
      */
     public function deleteSection(int $sectionId): bool
     {
@@ -327,7 +312,6 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the group IDs of all groups
      * of the section $sectionId.
      *
-     * @param  int $sectionId
      * @return array<int>
      */
     public function getSectionGroups(int $sectionId): array
@@ -364,10 +348,6 @@ class LargePermission extends MediumPermission
     /**
      * Adds a new group $groupId to the section $sectionId.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $groupId
-     * @param  int $sectionId
-     * @return bool
      */
     public function addGroupToSection(int $groupId, int $sectionId): bool
     {
@@ -420,9 +400,6 @@ class LargePermission extends MediumPermission
     /**
      * Removes all groups from the section $sectionId.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $sectionId
-     * @return bool
      */
     public function removeAllGroupsFromSection(int $sectionId): bool
     {
@@ -452,7 +429,6 @@ class LargePermission extends MediumPermission
      * Returns an associative array with the section data of the section
      * $sectionId.
      *
-     * @param  int $sectionId
      * @return array<string>
      */
     public function getSectionData(int $sectionId): array
@@ -482,7 +458,6 @@ class LargePermission extends MediumPermission
      * Returns an array with the IDs of all sections stored in the
      * database if no user ID is passed.
      *
-     * @param  int $userId
      * @return array<int>
      */
     public function getAllSections(int $userId = -1): array
@@ -509,7 +484,6 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the IDs of all sections in which
      * the user $userId is a member.
      *
-     * @param  int $userId
      * @return array<int>
      */
     public function getUserSections(int $userId): array
@@ -553,7 +527,6 @@ class LargePermission extends MediumPermission
      * the user $userId owns. User-rights and the rights the user
      * owns because of a section membership are taken into account.
      *
-     * @param  int $userId
      * @return array<int>
      */
     public function getAllUserRights(int $userId): array
@@ -572,7 +545,6 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the IDs of all rights the user
      * $userId owns because of a section membership.
      *
-     * @param  int $userId
      * @return array<int>
      */
     public function getUserSectionRights(int $userId): array
@@ -610,9 +582,6 @@ class LargePermission extends MediumPermission
 
     /**
      * Returns the name of the section $sectionId.
-     *
-     * @param  int $sectionId
-     * @return string
      */
     public function getSectionName(int $sectionId): string
     {
@@ -642,10 +611,6 @@ class LargePermission extends MediumPermission
     /**
      * Adds a new category $categoryId to the section $sectionId.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $categoryId
-     * @param  int $sectionId
-     * @return bool
      */
     public function addCategoryToSection(int $categoryId, int $sectionId): bool
     {
@@ -673,10 +638,6 @@ class LargePermission extends MediumPermission
     /**
      * Removes a category $categoryId to the section $sectionId.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $categoryId
-     * @param  int $sectionId
-     * @return bool
      */
     public function removeCategoryFromSection(int $categoryId, int $sectionId): bool
     {
@@ -706,7 +667,6 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the category IDs of all categories
      * of the section $sectionId.
      *
-     * @param  int $sectionId
      * @return array<int>
      */
     public function getSectionCategories(int $sectionId): array
@@ -736,9 +696,6 @@ class LargePermission extends MediumPermission
     /**
      * Removes the category $categoryId from all sections.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $categoryId
-     * @return bool
      */
     public function removeCategoryFromAllSections(int $categoryId): bool
     {
@@ -764,10 +721,6 @@ class LargePermission extends MediumPermission
     /**
      * Adds a new news $newsId to the section $sectionId.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $newsId
-     * @param  int $sectionId
-     * @return bool
      */
     public function addNewsToSection(int $newsId, int $sectionId): bool
     {
@@ -795,10 +748,6 @@ class LargePermission extends MediumPermission
     /**
      * Removes a news $newsId from the section $sectionId.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $newsId
-     * @param  int $sectionId
-     * @return bool
      */
     public function removeNewsFromSection(int $newsId, int $sectionId): bool
     {
@@ -828,7 +777,6 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the news IDs of all news
      * of the section $sectionId.
      *
-     * @param  int $sectionId
      * @return array<int>
      */
     public function getSectionNews(int $sectionId): array
@@ -858,9 +806,6 @@ class LargePermission extends MediumPermission
     /**
      * Removes the news $newsId from all sections.
      * Returns true on success, otherwise false.
-     *
-     * @param  int $newsId
-     * @return bool
      */
     public function removeNewsFromAllSections(int $newsId): bool
     {

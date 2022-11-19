@@ -89,8 +89,6 @@ class Pgsql extends SearchDatabase
 
     /**
      * Add the matching columns into the columns for the resultset.
-     *
-     * @return string
      */
     public function getMatchingColumnsAsResult(): string
     {
@@ -99,7 +97,7 @@ class Pgsql extends SearchDatabase
         $list = explode(',', $config);
 
         // Set weight
-        $weights = array('A', 'B', 'C', 'D');
+        $weights = ['A', 'B', 'C', 'D'];
         $weight = [];
         foreach ($list as $columnName) {
             $weight[$columnName] = array_shift($weights);
@@ -127,8 +125,6 @@ class Pgsql extends SearchDatabase
      * Returns the part of the SQL query with the order by.
      *
      * The order is calculate by weight depend on the search.relevance order
-     *
-     * @return string
      */
     public function getMatchingOrder(): string
     {
@@ -152,8 +148,6 @@ class Pgsql extends SearchDatabase
 
     /**
      * Returns the part of the SQL query with the matching columns.
-     *
-     * @return string
      */
     public function getMatchingColumns(): string
     {

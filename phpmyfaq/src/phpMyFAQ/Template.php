@@ -46,19 +46,14 @@ class Template
     /** @var array<string> Array containing the errors */
     private array $errors = [];
 
-    /** @var TemplateHelper */
-    private TemplateHelper $tplHelper;
-
     /**
      * Combine all template files into the main templates array
      *
      * @param array<string, string> $myTemplate Templates
-     * @param TemplateHelper        $tplHelper
      * @param string                $tplSetName Active template name
      */
-    public function __construct(array $myTemplate, TemplateHelper $tplHelper, string $tplSetName = 'default')
+    public function __construct(array $myTemplate, private TemplateHelper $tplHelper, string $tplSetName = 'default')
     {
-        $this->tplHelper = $tplHelper;
         self::$tplSetName = $tplSetName;
 
         foreach ($myTemplate as $templateName => $filename) {
@@ -78,7 +73,6 @@ class Template
      *
      * @param string $filename Filename
      * @param string $tplName Name of the template
-     * @return string
      * @throws FileNotFoundException
      */
     protected function readTemplateFile(string $filename, string $tplName): string
@@ -112,7 +106,7 @@ class Template
 
         $unblocked = $block;
         if (isset($tmpBlocks)) {
-            $blockCount = count($tmpBlocks[0]);
+            $blockCount = is_countable($tmpBlocks[0]) ? count($tmpBlocks[0]) : 0;
             for ($i = 0; $i < $blockCount; ++$i) {
                 $name = '';
 
@@ -144,8 +138,6 @@ class Template
 
     /**
      * Get name of the actual template set.
-     *
-     * @return string
      */
     public static function getTplSetName(): string
     {
@@ -154,8 +146,6 @@ class Template
 
     /**
      * Set the template set name to use.
-     *
-     * @param string $tplSetName
      */
     public static function setTplSetName(string $tplSetName): void
     {
@@ -182,6 +172,7 @@ class Template
      */
     public function parse(string $templateName, array $templateContent): void
     {
+        $filters = [];
         $tmp = $this->templates[$templateName];
         $rawBlocks = $this->readBlocks($tmp);
         $filters[$templateName] = $this->readFilters($tmp);
@@ -243,7 +234,6 @@ class Template
     }
 
     /**
-     * @param string|null $template
      * @return array<int, array<string, string>>
      */
     private function readFilters(?string $template = null): array
@@ -256,11 +246,11 @@ class Template
         Strings::preg_match_all('/\{\{.+?\}\}/', $template, $tmpFilter);
 
         if (isset($tmpFilter)) {
-            $filterCount = count($tmpFilter[0]);
+            $filterCount = is_countable($tmpFilter[0]) ? count($tmpFilter[0]) : 0;
             for ($i = 0; $i < $filterCount; ++$i) {
                 if (str_contains($tmpFilter[0][$i], ' | meta ')) {
                     $rawFilter = str_replace(['{{', '}}'], '', $tmpFilter[0][$i]);
-                    list($identifier, $filter) = explode('|', $rawFilter);
+                    [$identifier, $filter] = explode('|', $rawFilter);
                     $tplFilter[] = [trim($filter) => trim($identifier)];
                 }
             }
@@ -276,7 +266,7 @@ class Template
     {
         $output = '';
         foreach ($this->outputs as $val) {
-            $output .= str_replace("\n\n", "\n", $val === null ? '' : $val);
+            $output .= str_replace("\n\n", "\n", $val ?? '');
         }
 
         echo $output;
@@ -328,7 +318,6 @@ class Template
      * This function checks the content.
      *
      * @param array<string, string|array<string>> $content Content to check
-     * @return array
      */
     private function checkContent(array $content): array
     {
@@ -345,8 +334,8 @@ class Template
                     $content[$var][$key] = Strings::preg_replace($search, $replace, $value);
                 }
             } else {
-                $content[$var] = str_replace('`', '&acute;', $val === null ? '' : $val);
-                $content[$var] = Strings::preg_replace($search, $replace, $val === null ? '' : $val);
+                $content[$var] = str_replace('`', '&acute;', $val ?? '');
+                $content[$var] = Strings::preg_replace($search, $replace, $val ?? '');
             }
         }
 
@@ -358,7 +347,6 @@ class Template
      *
      * @param string $blockName Block name
      * @param array<int, array<string>>  $blockContent Content of block
-     * @return string
      */
     private function multiplyBlock(string $blockName, array $blockContent): string
     {

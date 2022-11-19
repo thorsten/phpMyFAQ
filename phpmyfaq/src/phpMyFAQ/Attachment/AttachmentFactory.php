@@ -60,20 +60,16 @@ class AttachmentFactory
      */
     public static function create(int $id = null, string $key = null): File
     {
-        switch (self::$storageType) {
-            case Attachment::STORAGE_TYPE_FILESYSTEM:
-                $return = new File($id);
-                break;
-
-            default:
-                throw new AttachmentException('Unknown attachment storage type');
-        }
+        $return = match (self::$storageType) {
+            Attachment::STORAGE_TYPE_FILESYSTEM => new File($id),
+            default => throw new AttachmentException('Unknown attachment storage type'),
+        };
 
         /*
          * If encryption isn't enabled, just ignoring all keys
          */
         if (self::$encryptionEnabled) {
-            $key = null === $key ? self::$defaultKey : $key;
+            $key ??= self::$defaultKey;
         } else {
             $key = null;
         }
@@ -86,11 +82,9 @@ class AttachmentFactory
     /**
      * Fetch all record attachments.
      *
-     * @param Configuration $config
      * @param int           $recordId ID of the record
      *
      * @throws AttachmentException
-     *
      * @return File[]
      */
     public static function fetchByRecordId(Configuration $config, int $recordId): array
@@ -148,12 +142,11 @@ class AttachmentFactory
      * Re-arranges the $_FILES array for multiple file uploads.
      *
      * @param $filePost
-     * @return array
      */
     public static function rearrangeUploadedFiles(&$filePost): array
     {
         $filesArray = [];
-        $filesCount = count($filePost['name']);
+        $filesCount = is_countable($filePost['name']) ? count($filePost['name']) : 0;
         $filesKeys = array_keys($filePost);
 
         for ($i = 0; $i < $filesCount; $i++) {

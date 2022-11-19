@@ -54,8 +54,6 @@ class Client extends Instance
 
     /**
      * Sets client URL.
-     *
-     * @param string $clientUrl
      */
     public function setClientUrl(string $clientUrl): void
     {
@@ -72,9 +70,6 @@ class Client extends Instance
         $this->fileSystem = $fileSystem;
     }
 
-    /**
-     * @param Instance $instance
-     */
     public function createClient(Instance $instance): void
     {
         $instance->addConfig('isMaster', 'false');
@@ -84,7 +79,6 @@ class Client extends Instance
      * Adds a new folder named by the given hostname in /path/to/faq/multisite/.
      *
      * @param string $hostname Hostname of the client instance
-     * @return bool
      */
     public function createClientFolder(string $hostname): bool
     {
@@ -137,7 +131,7 @@ class Client extends Instance
                     Database::getTablePrefix()
                 )
             );
-        } catch (Exception $exception) {
+        } catch (Exception) {
         }
     }
 
@@ -145,7 +139,6 @@ class Client extends Instance
      * Copies the config/constants.php file to a new client instance.
      *
      * @param string $destination Destination file
-     * @return bool
      * @throws Exception
      */
     public function copyConstantsFile(string $destination): bool
@@ -175,10 +168,6 @@ class Client extends Instance
 
     /**
      * Moves the entire folder to the new destination
-     *
-     * @param string $sourceUrl
-     * @param string $destinationUrl
-     * @return bool
      */
     public function moveClientFolder(string $sourceUrl, string $destinationUrl): bool
     {
@@ -197,9 +186,6 @@ class Client extends Instance
 
     /**
      * Deletes the given client folder
-     *
-     * @param string $sourceUrl
-     * @return bool
      */
     public function deleteClientFolder(string $sourceUrl): bool
     {
@@ -213,8 +199,6 @@ class Client extends Instance
 
     /**
      * Checks if the multisite/ folder is writeable
-     *
-     * @return bool
      */
     public function isMultiSiteWriteable(): bool
     {

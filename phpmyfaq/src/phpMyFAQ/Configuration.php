@@ -76,9 +76,6 @@ class Configuration
 
     /**
      * Returns all sorting possibilities for FAQ records.
-     *
-     * @param string $current
-     * @return string
      */
     public static function sortingOptions(string $current): string
     {
@@ -99,10 +96,6 @@ class Configuration
 
     /**
      * Sets one single configuration item.
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @return bool
      */
     public function set(string $key, mixed $value): bool
     {
@@ -129,8 +122,6 @@ class Configuration
 
     /**
      * Sets the Instance object.
-     *
-     * @param Instance $instance
      */
     public function setInstance(Instance $instance): void
     {
@@ -139,8 +130,6 @@ class Configuration
 
     /**
      * Returns the Instance object.
-     *
-     * @return Instance
      */
     public function getInstance(): Instance
     {
@@ -149,8 +138,6 @@ class Configuration
 
     /**
      * Sets the Language object.
-     *
-     * @param Language $language
      */
     public function setLanguage(Language $language): void
     {
@@ -159,8 +146,6 @@ class Configuration
 
     /**
      * Returns the Language object.
-     *
-     * @return Language
      */
     public function getLanguage(): Language
     {
@@ -169,7 +154,6 @@ class Configuration
 
     /**
      * Returns the default language.
-     * @return string
      */
     public function getDefaultLanguage(): string
     {
@@ -178,7 +162,6 @@ class Configuration
 
     /**
      * Returns the current version
-     * @return string
      */
     public function getVersion(): string
     {
@@ -187,7 +170,6 @@ class Configuration
 
     /**
      * Returns the title of the FAQ installation
-     * @return string
      */
     public function getTitle(): string
     {
@@ -196,7 +178,6 @@ class Configuration
 
     /**
      * Returns the email address of the main admin
-     * @return string
      */
     public function getAdminEmail(): string
     {
@@ -205,8 +186,6 @@ class Configuration
 
     /**
      * Returns the default URL of the phpMyFAQ installation.
-     *
-     * @return string
      */
     public function getDefaultUrl(): string
     {
@@ -223,7 +202,6 @@ class Configuration
      * Returns a configuration item.
      *
      * @param string $item Configuration item
-     * @return mixed
      */
     public function get(string $item): mixed
     {
@@ -353,17 +331,11 @@ class Configuration
         return $this->config['core.ldapServer'] ?? [];
     }
 
-    /**
-     * @return bool
-     */
     public function isLdapActive(): bool
     {
         return $this->get('ldap.ldapSupport');
     }
 
-    /**
-     * @return bool
-     */
     public function isSignInWithMicrosoftActive(): bool
     {
         return $this->get('security.enableSignInWithMicrosoft');
@@ -371,8 +343,6 @@ class Configuration
 
     /**
      * Sets the Elasticsearch client instance.
-     *
-     * @param Client $esClient
      */
     public function setElasticsearch(Client $esClient): void
     {
@@ -381,8 +351,6 @@ class Configuration
 
     /**
      * Returns the Elasticsearch client instance.
-     *
-     * @return Client
      */
     public function getElasticsearch(): Client
     {
@@ -411,10 +379,6 @@ class Configuration
 
     /**
      * Adds a configuration item for the database.
-     *
-     * @param string $name
-     * @param mixed  $value
-     * @return bool|object
      */
     public function add(string $name, mixed $value): object|bool
     {
@@ -431,9 +395,6 @@ class Configuration
 
     /**
      * Deletes a configuration item for the database.
-     *
-     * @param string $name
-     * @return bool
      */
     public function delete(string $name): bool
     {
@@ -452,10 +413,6 @@ class Configuration
 
     /**
      * Renames a configuration key for the database.
-     *
-     * @param string $currentKey
-     * @param string $newKey
-     * @return bool
      */
     public function rename(string $currentKey, string $newKey): bool
     {
@@ -474,8 +431,6 @@ class Configuration
      * Updates all configuration items.
      *
      * @param string[] $newConfigs Array with new configuration values
-     *
-     * @return bool
      */
     public function update(array $newConfigs): bool
     {

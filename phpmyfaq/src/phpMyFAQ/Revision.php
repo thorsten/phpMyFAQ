@@ -24,25 +24,15 @@ namespace phpMyFAQ;
  */
 class Revision
 {
-    /** @var Configuration */
-    private $config;
-
     /**
      * Revision constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Adds a new revision from a given FAQ ID and FAQ language
-     *
-     * @param int    $faqId
-     * @param string $faqLanguage
-     * @return bool
      */
     public function create(int $faqId, string $faqLanguage): bool
     {
@@ -71,9 +61,6 @@ class Revision
     /**
      * Gets all revisions from a given FAQ ID and FAQ language
      *
-     * @param int    $faqId
-     * @param string $faqLanguage
-     * @param string $faqAuthor
      * @return array<string[]>
      */
     public function get(int $faqId, string $faqLanguage, string $faqAuthor): array
@@ -111,8 +98,6 @@ class Revision
 
     /**
      * Deletes all revisions for a given FAQ ID and FAQ language
-     * @param int    $faqId
-     * @param string $faqLanguage
      * @return mixed
      */
     public function delete(int $faqId, string $faqLanguage)

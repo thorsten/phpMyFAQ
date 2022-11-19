@@ -35,10 +35,8 @@ class Strings
 {
     /**
      * Instance.
-     *
-     * @var Mbstring|StringBasic|null
      */
-    private static $instance = null;
+    private static null|\phpMyFAQ\Strings\Mbstring|\phpMyFAQ\Strings\StringBasic $instance = null;
 
     /**
      * Constructor.
@@ -65,8 +63,6 @@ class Strings
 
     /**
      * Get current encoding.
-     *
-     * @return string
      */
     public static function getEncoding(): string
     {
@@ -77,7 +73,6 @@ class Strings
      * Get string character count.
      *
      * @param string $str String
-     * @return int
      */
     public static function strlen(string $str): int
     {
@@ -90,7 +85,6 @@ class Strings
      * @param string $string String
      * @param int $start Start
      * @param int|null $length Length
-     * @return string
      */
     public static function substr(string $string, int $start, $length = 0): string
     {
@@ -103,7 +97,6 @@ class Strings
      * @param string $haystack Haystack
      * @param string $needle Needle
      * @param int    $offset Offset
-     * @return int
      */
     public static function strpos(string $haystack, string $needle, $offset = 0): int
     {
@@ -114,7 +107,6 @@ class Strings
      * Make a string lower case.
      *
      * @param string $str String
-     * @return string
      */
     public static function strtolower(string $str): string
     {
@@ -125,7 +117,6 @@ class Strings
      * Make a string upper case.
      *
      * @param string $str String
-     * @return string
      */
     public static function strtoupper(string $str): string
     {
@@ -138,17 +129,14 @@ class Strings
      * @param string $haystack Haystack
      * @param string $needle Needle
      * @param bool   $part Part
-     * @return string|false
      */
-    public static function strstr(string $haystack, string $needle, $part = false)
+    public static function strstr(string $haystack, string $needle, $part = false): string|false
     {
         return self::$instance->strstr($haystack, $needle, $part);
     }
 
     /**
      * Set current encoding.
-     *
-     * @param string $encoding
      */
     public static function setEncoding(string $encoding): void
     {
@@ -157,10 +145,6 @@ class Strings
 
     /**
      * Count substring occurrences.
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @return int
      */
     public static function substr_count(string $haystack, string $needle): int // phpcs:ignore
     {
@@ -170,10 +154,7 @@ class Strings
     /**
      * Find position of last occurrence of a char in a string.
      *
-     * @param string $haystack
-     * @param string $needle
      * @param int    $offset
-     * @return int
      */
     public static function strrpos(string $haystack, string $needle, $offset = 0): int
     {
@@ -183,12 +164,9 @@ class Strings
     /**
      * Match a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param null   $matches
      * @param int    $flags
      * @param int    $offset
-     * @return int
      */
     public static function preg_match(
         string $pattern,
@@ -204,12 +182,9 @@ class Strings
     /**
      * Match a regexp globally.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param null   $matches
      * @param int    $flags
      * @param int    $offset
-     * @return int
      */
     public static function preg_match_all(
         string $pattern,
@@ -225,13 +200,10 @@ class Strings
     /**
      * Split string by a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param int    $limit
      * @param int    $flags
-     * @return string[]|array|false
      */
-    public static function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0) // phpcs:ignore
+    public static function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array|bool // phpcs:ignore
     {
         return self::$instance->preg_split($pattern, $subject, $limit, $flags);
     }
@@ -239,8 +211,6 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string $pattern
-     * @param callable $callback
      * @param string|string[] $subject
      * @param int $limit
      * @param int $count
@@ -249,10 +219,10 @@ class Strings
     public static function preg_replace_callback(
         string $pattern,
         callable $callback,
-        $subject,
+        string|array $subject,
         $limit = -1,
         &$count = 0
-    ) {
+    ): string|array {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 
@@ -266,7 +236,7 @@ class Strings
      * @param int $count
      * @return string|string[]|null
      */
-    public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
+    public static function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, $limit = -1, &$count = 0)
     {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
@@ -278,7 +248,6 @@ class Strings
      * @param int         $quoteStyle Quote style
      * @param string      $charset Character set, UTF-8 by default
      * @param bool        $doubleEncode If set to false, no encoding of existing entities
-     * @return string
      */
     public static function htmlspecialchars(
         ?string $string = '',
@@ -301,7 +270,6 @@ class Strings
      * @param int    $quoteStyle Quote style
      * @param string $charset Character set, UTF-8 by default
      * @param bool   $doubleEncode If set to false, no encoding of existing entities
-     * @return string
      */
     public static function htmlentities(
         string $string,

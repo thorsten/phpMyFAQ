@@ -37,7 +37,6 @@ class Utils
      * Check if a given string could be a language.
      *
      * @param string $lang Language
-     * @return bool
      */
     public static function isLanguage(string $lang): bool
     {
@@ -48,7 +47,6 @@ class Utils
      * Checks if a date is a phpMyFAQ valid date.
      *
      * @param string $date Date
-     * @return bool
      */
     public static function isLikeOnPMFDate(string $date): bool
     {
@@ -71,7 +69,6 @@ class Utils
      *
      * @param string $string String
      * @param int    $characters Characters
-     * @return string
      * @todo This function doesn't work with Chinese, Japanese, Korean and Thai
      *       because they don't have spaces as word delimiters
      */
@@ -98,8 +95,6 @@ class Utils
      * Resolves the PMF markers like e.g. %sitename%.
      *
      * @param string        $text Text contains PMF markers
-     * @param Configuration $config
-     * @return string
      */
     public static function resolveMarkers(string $text, Configuration $config): string
     {
@@ -121,7 +116,6 @@ class Utils
      *
      * @param string $string String to chop
      * @param int    $words Number of words
-     * @return string
      */
     public static function chopString(string $string, int $words): string
     {
@@ -143,7 +137,6 @@ class Utils
      *
      * @param string $string String
      * @param string $highlight Given word for highlighting
-     * @return string
      */
     public static function setHighlightedString(string $string, string $highlight): string
     {
@@ -180,8 +173,6 @@ class Utils
      * Callback function for filtering HTML from URLs and images.
      *
      * @param array<int, string> $matches Array of matches from regex pattern
-     *
-     * @return string
      */
     public static function highlightNoLinks(array $matches): string
     {
@@ -203,9 +194,7 @@ class Utils
     /**
      * Tries to detect if a string could be a HTML element
      *
-     * @param string $string
      *
-     * @return bool
      */
     public static function isForbiddenElement(string $string): bool
     {
@@ -224,9 +213,6 @@ class Utils
 
     /**
      * debug_backtrace() wrapper function.
-     *
-     * @param string $string
-     * @return string
      */
     public static function debug(string $string): string
     {
@@ -249,9 +235,6 @@ class Utils
 
     /**
      * Parses a given string and convert all the URLs into links.
-     *
-     * @param string $string
-     * @return string
      */
     public static function parseUrl(string $string): string
     {
@@ -271,7 +254,6 @@ class Utils
      * Moves given key of an array to the top
      *
      * @param array<int> $array
-     * @param string $key
      */
     public static function moveToTop(array &$array, string $key): void
     {

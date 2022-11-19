@@ -25,42 +25,35 @@ namespace phpMyFAQ;
 class Glossary
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Item.
      *
      * @var array
      */
-    private $item = [];
+    private array $item = [];
 
     /**
      * Definition of an item.
      *
      * @var string
      */
-    private $definition = '';
+    private string $definition = '';
 
     /**
      * Constructor.
      *
      * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Fill the passed string with the current Glossary items.
      *
      * @param string $content Content
-     *
      * @return string
      */
-    public function insertItemsIntoContent($content = '')
+    public function insertItemsIntoContent(string $content = ''): string
     {
         if ('' == $content) {
             return '';
@@ -184,7 +177,7 @@ class Glossary
      *
      * @return array
      */
-    public function getAllGlossaryItems()
+    public function getAllGlossaryItems(): array
     {
         $items = [];
 
@@ -221,7 +214,7 @@ class Glossary
      *
      * @return string
      */
-    public function setTooltip(array $matches)
+    public function setTooltip(array $matches): string
     {
         $prefix = $postfix = '';
 
@@ -263,7 +256,7 @@ class Glossary
      *
      * @return array
      */
-    public function getGlossaryItem($id)
+    public function getGlossaryItem($id): array
     {
         $item = [];
 
@@ -298,10 +291,9 @@ class Glossary
      *
      * @param string $item       Item
      * @param string $definition Definition
-     *
      * @return bool
      */
-    public function addGlossaryItem($item, $definition)
+    public function addGlossaryItem(string $item, string $definition): bool
     {
         $this->item = $this->config->getDb()->escape($item);
         $this->definition = $this->config->getDb()->escape($definition);
@@ -333,13 +325,12 @@ class Glossary
      * @param int    $id         Glossary ID
      * @param string $item       Item
      * @param string $definition Definition
-     *
      * @return bool
      */
-    public function updateGlossaryItem($id, $item, $definition)
+    public function updateGlossaryItem(int $id, string $item, string $definition): bool
     {
-        $this->item = $this->config->getDb()->escape($item);
-        $this->definition = $this->config->getDb()->escape($definition);
+        $item = $this->config->getDb()->escape($item);
+        $definition = $this->config->getDb()->escape($definition);
 
         $query = sprintf(
             "
@@ -351,8 +342,8 @@ class Glossary
             WHERE
                 id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            Strings::htmlspecialchars($this->item),
-            Strings::htmlspecialchars($this->definition),
+            Strings::htmlspecialchars($item),
+            Strings::htmlspecialchars($definition),
             (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
@@ -368,10 +359,9 @@ class Glossary
      * Deletes an item and definition into the database.
      *
      * @param int $id Glossary ID
-     *
      * @return bool
      */
-    public function deleteGlossaryItem($id)
+    public function deleteGlossaryItem(int $id): bool
     {
         $query = sprintf(
             "
@@ -380,7 +370,7 @@ class Glossary
             WHERE
                 id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            (int)$id,
+            $id,
             $this->config->getLanguage()->getLanguage()
         );
 

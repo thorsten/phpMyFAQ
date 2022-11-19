@@ -26,317 +26,216 @@ use DateTime;
 class FaqEntity
 {
     /** @var int The primary key of the FAQ */
-    private $id;
+    private ?int $id = null;
 
     /** @var string The language of the FAQ */
-    private $language;
+    private ?string $language = null;
 
     /** @var int The unique solution ID of the FAQ */
-    private $solutionId;
+    private ?int $solutionId = null;
 
     /** @var int The current revision ID of the FAQ */
-    private $revisionId;
+    private ?int $revisionId = null;
 
     /** @var bool The active flag of the FAQ */
-    private $active;
+    private ?bool $active = null;
 
     /** @var bool The sticky flag of the FAQ */
-    private $sticky;
+    private ?bool $sticky = null;
 
     /** @var string The keywords of the FAQ as comma separated string */
-    private $keywords;
+    private ?string $keywords = null;
 
     /** @var string The question of the FAQ */
-    private $question;
+    private ?string $question = null;
 
     /** @var string The answer of the FAQ */
-    private $answer;
+    private ?string $answer = null;
 
     /** @var string The name of the FAQ author */
-    private $author;
+    private ?string $author = null;
 
     /** @var string The email address of the FAQ author */
-    private $email;
+    private ?string $email = null;
 
     /** @var bool The flag if comments are allowed */
-    private $comment;
+    private ?bool $comment = null;
 
     /** @var string Notes about the FAQ, only visible in the admin backend */
-    private $notes;
+    private ?string $notes = null;
 
     /** @var string The state if the links: "nolinks", "linkok" or "linkbad" */
-    private $linkState;
+    private ?string $linkState = null;
 
     /** @var DateTime The date of the last verification of the links */
-    private $linksCheckedDate;
+    private ?\DateTime $linksCheckedDate = null;
 
     /** @var DateTime The date from which the FAQ is valid */
-    private $validFrom;
+    private ?\DateTime $validFrom = null;
 
     /** @var DateTime The date until which the FAQ is valid */
-    private $validTo;
+    private ?\DateTime $validTo = null;
 
     /** @var DateTime The date when the FAQ was created */
-    private $createdDate;
+    private ?\DateTime $createdDate = null;
 
     /** @var DateTime The date when the FAQ was updated the last time */
-    private $updatedDate;
+    private ?\DateTime $updatedDate = null;
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return FaqEntity
-     */
     public function setId(int $id): FaqEntity
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @param string $language
-     * @return FaqEntity
-     */
     public function setLanguage(string $language): FaqEntity
     {
         $this->language = $language;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSolutionId(): int
     {
         return $this->solutionId;
     }
 
-    /**
-     * @param int $solutionId
-     * @return FaqEntity
-     */
     public function setSolutionId(int $solutionId): FaqEntity
     {
         $this->solutionId = $solutionId;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getRevisionId(): int
     {
         return $this->revisionId;
     }
 
-    /**
-     * @param int $revisionId
-     * @return FaqEntity
-     */
     public function setRevisionId(int $revisionId): FaqEntity
     {
         $this->revisionId = $revisionId;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return $this->active;
     }
 
-    /**
-     * @param bool $active
-     * @return FaqEntity
-     */
     public function setActive(bool $active): FaqEntity
     {
         $this->active = $active;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSticky(): bool
     {
         return $this->sticky;
     }
 
-    /**
-     * @param bool $sticky
-     * @return FaqEntity
-     */
     public function setSticky(bool $sticky): FaqEntity
     {
         $this->sticky = $sticky;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getKeywords(): string
     {
         return $this->keywords;
     }
 
-    /**
-     * @param string $keywords
-     * @return FaqEntity
-     */
     public function setKeywords(string $keywords): FaqEntity
     {
         $this->keywords = $keywords;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getQuestion(): string
     {
         return $this->question;
     }
 
-    /**
-     * @param string $question
-     * @return FaqEntity
-     */
     public function setQuestion(string $question): FaqEntity
     {
         $this->question = $question;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAnswer(): string
     {
         return $this->answer;
     }
 
-    /**
-     * @param string $answer
-     * @return FaqEntity
-     */
     public function setAnswer(string $answer): FaqEntity
     {
         $this->answer = $answer;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAuthor(): string
     {
         return $this->author;
     }
 
-    /**
-     * @param string $author
-     * @return FaqEntity
-     */
     public function setAuthor(string $author): FaqEntity
     {
         $this->author = $author;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return FaqEntity
-     */
     public function setEmail(string $email): FaqEntity
     {
         $this->email = $email;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isComment(): bool
     {
         return $this->comment;
     }
 
-    /**
-     * @param bool $comment
-     * @return FaqEntity
-     */
     public function setComment(bool $comment): FaqEntity
     {
         $this->comment = $comment;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getNotes(): string
     {
         return $this->notes;
     }
 
-    /**
-     * @param string $notes
-     * @return FaqEntity
-     */
     public function setNotes(string $notes): FaqEntity
     {
         $this->notes = $notes;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLinkState(): string
     {
         return $this->linkState;
     }
 
-    /**
-     * @param string $linkState
-     * @return FaqEntity
-     */
     public function setLinkState(string $linkState): FaqEntity
     {
         $this->linkState = $linkState;
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getLinksCheckedDate(): DateTime
     {
         if ($this->linksCheckedDate instanceof DateTime) {
@@ -346,19 +245,12 @@ class FaqEntity
         }
     }
 
-    /**
-     * @param DateTime $linksCheckedDate
-     * @return FaqEntity
-     */
     public function setLinksCheckedDate(DateTime $linksCheckedDate): FaqEntity
     {
         $this->linksCheckedDate = $linksCheckedDate;
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getValidFrom(): DateTime
     {
         if ($this->validFrom instanceof DateTime) {
@@ -368,19 +260,12 @@ class FaqEntity
         }
     }
 
-    /**
-     * @param DateTime $validFrom
-     * @return FaqEntity
-     */
     public function setValidFrom(DateTime $validFrom): FaqEntity
     {
         $this->validFrom = $validFrom;
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getValidTo(): DateTime
     {
         if ($this->validTo instanceof DateTime) {
@@ -390,19 +275,12 @@ class FaqEntity
         }
     }
 
-    /**
-     * @param DateTime $validTo
-     * @return FaqEntity
-     */
     public function setValidTo(DateTime $validTo): FaqEntity
     {
         $this->validTo = $validTo;
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getCreatedDate(): DateTime
     {
         if ($this->createdDate instanceof DateTime) {
@@ -412,19 +290,12 @@ class FaqEntity
         }
     }
 
-    /**
-     * @param DateTime $createdDate
-     * @return FaqEntity
-     */
     public function setCreatedDate(DateTime $createdDate): FaqEntity
     {
         $this->createdDate = $createdDate;
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getUpdatedDate(): DateTime
     {
         if ($this->updatedDate instanceof DateTime) {
@@ -434,10 +305,6 @@ class FaqEntity
         }
     }
 
-    /**
-     * @param DateTime $updatedDate
-     * @return FaqEntity
-     */
     public function setUpdatedDate(DateTime $updatedDate): FaqEntity
     {
         $this->updatedDate = $updatedDate;

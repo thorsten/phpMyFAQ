@@ -26,9 +26,6 @@ use phpMyFAQ\Instance;
  */
 class Master extends Instance
 {
-    /**
-     * @param Instance $instance
-     */
     public function createMaster(Instance $instance)
     {
         $this->setId($instance->getId());

@@ -32,17 +32,11 @@ class CategoryPermission
     /** @var string */
     public const GROUP = 'group';
 
-    /** @var Configuration */
-    private $config;
-
     /**
      * FaqPermission constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -51,7 +45,6 @@ class CategoryPermission
      * @param string $mode 'group' or 'user'
      * @param array  $categories ID of the current category
      * @param array  $ids Array of group or user IDs
-     * @return bool
      */
     public function add(string $mode, array $categories, array $ids): bool
     {
@@ -95,7 +88,6 @@ class CategoryPermission
      *
      * @param string $mode 'group' or 'user'
      * @param array  $categories ID of the current category
-     * @return bool
      */
     public function delete(string $mode, array $categories): bool
     {
@@ -123,9 +115,6 @@ class CategoryPermission
     /**
      * Returns true, if a given category has user or group permissions.
      * Otherwise, the methods returns false.
-     *
-     * @param int $categoryId
-     * @return bool
      */
     public function isRestricted(int $categoryId): bool
     {
@@ -144,7 +133,6 @@ class CategoryPermission
      *
      * @param string $mode 'group' or 'user'
      * @param array  $categories Array of category ids
-     * @return array
      */
     public function get(string $mode, array $categories): array
     {

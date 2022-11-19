@@ -31,28 +31,14 @@ class Backup
     public const BACKUP_TYPE_DATA = 'data';
     public const BACKUP_TYPE_LOGS = 'logs';
 
-    /** @var Configuration */
-    private Configuration $config;
-
-    /** @var DatabaseHelper */
-    private DatabaseHelper $databaseHelper;
-
     /**
      * Constructor.
-     *
-     * @param Configuration  $config
-     * @param DatabaseHelper $databaseHelper
      */
-    public function __construct(Configuration $config, DatabaseHelper $databaseHelper)
+    public function __construct(private Configuration $config, private DatabaseHelper $databaseHelper)
     {
-        $this->config = $config;
-        $this->databaseHelper = $databaseHelper;
     }
 
     /**
-     * @param string $backupType
-     * @param string $backupFile
-     * @return string
      * @throws SodiumException
      */
     public function createBackup(string $backupType, string $backupFile): string
@@ -81,9 +67,6 @@ class Backup
     }
 
     /**
-     * @param string $backup
-     * @param string $backupFileName
-     * @return bool
      * @throws SodiumException
      */
     public function verifyBackup(string $backup, string $backupFileName): bool
@@ -109,10 +92,6 @@ class Backup
         return false;
     }
 
-    /**
-     * @param string $tableNames
-     * @return string
-     */
     public function generateBackupQueries(string $tableNames): string
     {
         $backup = implode("\r\n", $this->getBackupHeader($tableNames));
@@ -131,7 +110,6 @@ class Backup
 
     /**
      * Returns the backup file header
-     * @param string $tableNames
      * @return string[]
      */
     private function getBackupHeader(string $tableNames): array

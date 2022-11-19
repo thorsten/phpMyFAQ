@@ -74,11 +74,6 @@ class Faq
     public array $faqRecords = [];
 
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Plural form support.
      *
      * @var Plurals
@@ -95,7 +90,7 @@ class Faq
     /**
      * Groups.
      *
-     * @var array
+     * @var int[]
      */
     private array $groups = [-1];
 
@@ -111,11 +106,10 @@ class Faq
      *
      * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
         global $plr;
 
-        $this->config = $config;
         $this->plurals = $plr;
 
         if ($this->config->get('security.permLevel') !== 'basic') {

@@ -39,7 +39,7 @@ abstract class AttachmentAbstract
      *
      * @var ?string
      */
-    protected ?string $key;
+    protected ?string $key = null;
 
     /**
      * Errors.
@@ -110,7 +110,7 @@ abstract class AttachmentAbstract
      *
      * @var bool|null
      */
-    protected ?bool $encrypted;
+    protected ?bool $encrypted = null;
 
     /**
      * Attachment file mime type.
@@ -124,7 +124,7 @@ abstract class AttachmentAbstract
      *
      * @param mixed $id attachment id
      */
-    public function __construct($id = null)
+    public function __construct(mixed $id = null)
     {
         $this->db = Database::getInstance();
 
@@ -136,8 +136,6 @@ abstract class AttachmentAbstract
 
     /**
      * Get meta data.
-     *
-     * @return bool
      */
     protected function getMeta(): bool
     {
@@ -182,7 +180,6 @@ abstract class AttachmentAbstract
      * Build attachment url.
      *
      * @param bool $forHTML either to use ampersands directly
-     * @return string
      */
     public function buildUrl(bool $forHTML = true): string
     {
@@ -221,8 +218,6 @@ abstract class AttachmentAbstract
 
     /**
      * Get attachment id.
-     *
-     * @return int
      */
     public function getId(): int
     {
@@ -231,8 +226,6 @@ abstract class AttachmentAbstract
 
     /**
      * Sets attachment id.
-     *
-     * @param int $id
      */
     public function setId(int $id): void
     {
@@ -241,8 +234,6 @@ abstract class AttachmentAbstract
 
     /**
      * Get attachment record id.
-     *
-     * @return int
      */
     public function getRecordId(): int
     {
@@ -302,8 +293,6 @@ abstract class AttachmentAbstract
 
     /**
      * Returns filename.
-     *
-     * @return string
      */
     public function getFilename(): string
     {
@@ -312,7 +301,6 @@ abstract class AttachmentAbstract
 
     /**
      * Returns the MIME type
-     * @return string
      */
     public function getMimeType(): string
     {
@@ -343,8 +331,6 @@ abstract class AttachmentAbstract
     /**
      * The function is supposed to detect the file mime
      * type.
-     *
-     * @return string
      */
     protected function readMimeType(): string
     {
@@ -394,8 +380,6 @@ abstract class AttachmentAbstract
      * Check if the same virtual hash exists more than once
      * in the database. If so, this means the file
      * is already uploaded as unencrypted.
-     *
-     * @return bool
      */
     protected function linkedRecords(): bool
     {

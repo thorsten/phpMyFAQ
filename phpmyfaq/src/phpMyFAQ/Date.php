@@ -29,32 +29,10 @@ use Exception;
 class Date
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
-    }
-
-    /**
-     * Converts the phpMyFAQ/Unix date format to the RFC 822 format.
-     *
-     * @param string $date      Date string
-     * @param bool   $pmfFormat true if the passed date is in phpMyFAQ format, false if in
-     *                          Unix timestamp format
-     *
-     * @return string RFC 822 date
-     */
-    public static function createRFC822Date($date, $pmfFormat = true)
-    {
-        return self::createIsoDate($date, DATE_RFC822, $pmfFormat);
     }
 
     /**
@@ -64,10 +42,9 @@ class Date
      * @param string $format    Date format
      * @param bool   $pmfFormat true if the passed date is in phpMyFAQ format, false if in
      *                          Unix timestamp format
-     *
      * @return string
      */
-    public static function createIsoDate($date, $format = 'Y-m-d H:i', $pmfFormat = true)
+    public static function createIsoDate(string $date, string $format = 'Y-m-d H:i', bool $pmfFormat = true): string
     {
         if ($pmfFormat) {
             $dateString = strtotime(
@@ -89,7 +66,6 @@ class Date
      *
      * @param string $file     Filename
      * @param bool   $endOfDay End of day?
-     * @return int
      */
     public static function getTrackingFileDate(string $file, bool $endOfDay = false): int
     {
@@ -99,9 +75,9 @@ class Date
             $year = Strings::substr($file, 12, 4);
 
             if (!$endOfDay) {
-                $time = mktime(0, 0, 0, $month, $day, $year);
+                $time = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
             } else {
-                $time = mktime(23, 59, 59, $month, $day, $year);
+                $time = mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
             }
 
             return $time;
@@ -112,9 +88,6 @@ class Date
 
     /**
      * Returns date formatted according to user defined format.
-     *
-     * @param string $unformattedDate
-     * @return string
      */
     public function format(string $unformattedDate): string
     {

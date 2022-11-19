@@ -25,18 +25,10 @@ namespace phpMyFAQ;
 class Logging
 {
     /**
-     * @var Configuration
-     */
-    private $config = null;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -81,12 +73,7 @@ class Logging
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $data[$row->id] = array(
-                'time' => $row->time,
-                'usr' => $row->usr,
-                'text' => $row->text,
-                'ip' => $row->ip,
-            );
+            $data[$row->id] = ['time' => $row->time, 'usr' => $row->usr, 'text' => $row->text, 'ip' => $row->ip];
         }
 
         return $data;
@@ -126,8 +113,6 @@ class Logging
 
     /**
      * Deletes logging data older than 30 days.
-     *
-     * @return bool
      */
     public function delete(): bool
     {

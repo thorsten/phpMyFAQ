@@ -27,31 +27,21 @@ namespace phpMyFAQ\Core;
 class Router
 {
     /** @var array Array with routes */
-    private $routes = [];
+    private array $routes = [];
 
     /** @var array Parameters of the matched route */
-    private $parameters = [];
+    private array $parameters = [];
 
-    /**
-     * @return array
-     */
     public function getRoutes(): array
     {
         return $this->routes;
     }
 
-    /**
-     * @return array
-     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     * @param array $parameters
-     * @return Router
-     */
     public function setParameters(array $parameters): Router
     {
         $this->parameters = $parameters;
@@ -60,8 +50,6 @@ class Router
 
     /**
      * Adds a route with parameters to the array of routes.
-     * @param string $route
-     * @param array  $parameters
      */
     public function add(string $route, array $parameters = [])
     {
@@ -76,8 +64,6 @@ class Router
     /**
      * Match the route in the URL with the known routes and adds the
      * parameter if the route matched.
-     * @param string $url
-     * @return bool
      */
     public function match(string $url): bool
     {

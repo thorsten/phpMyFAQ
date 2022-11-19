@@ -27,26 +27,16 @@ use phpMyFAQ\Database;
  */
 class CategoryRelation
 {
-    /** @var Configuration */
-    private Configuration $config;
-
     /** @var array */
     private array $groups;
 
     /**
      * CategoryRelation constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
-    /**
-     * @param array $groups
-     * @return CategoryRelation
-     */
     public function setGroups(array $groups): CategoryRelation
     {
         $this->groups = $groups;
@@ -55,8 +45,6 @@ class CategoryRelation
 
     /**
      * Create a matrix for representing categories and FAQs.
-     *
-     * @return array
      */
     public function getCategoryFaqsMatrix(): array
     {
@@ -94,7 +82,6 @@ class CategoryRelation
     /**
      * Returns the number of records in each category.
      *
-     * @param bool $categoryRestriction
      * @return int[]
      */
     public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false): array
@@ -155,7 +142,6 @@ class CategoryRelation
      *
      * @param int    $faqId FAQ id
      * @param string $faqLang FAQ language
-     * @return array
      */
     public function getCategories(int $faqId, string $faqLang): array
     {
@@ -178,10 +164,10 @@ class CategoryRelation
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $categories[$row->category_id] = array(
+            $categories[$row->category_id] = [
                 'category_id' => $row->category_id,
-                'category_lang' => $row->category_lang,
-            );
+                'category_lang' => $row->category_lang
+            ];
         }
 
         return $categories;
@@ -193,7 +179,6 @@ class CategoryRelation
      * @param array  $categories Array of categories
      * @param int    $faqId FAQ id
      * @param string $language Language
-     * @return bool
      */
     public function add(array $categories, int $faqId, string $language): bool
     {
@@ -219,7 +204,6 @@ class CategoryRelation
      * @param int    $categoryId Category id
      * @param string $categoryLang Category language
      * @param bool   $deleteForAllLanguages Delete all languages?
-     * @return bool
      */
     public function delete(int $categoryId, string $categoryLang, bool $deleteForAllLanguages = false): bool
     {
@@ -241,7 +225,6 @@ class CategoryRelation
      *
      * @param int    $faqId   Record id
      * @param string $faqLanguage Language
-     * @return bool
      */
     public function deleteByFAQ(int $faqId, string $faqLanguage): bool
     {

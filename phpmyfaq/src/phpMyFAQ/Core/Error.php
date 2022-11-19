@@ -30,10 +30,6 @@ class Error
      * Error handler to convert all errors to PHP exceptions by
      * throwing a PHP ErrorException.
      *
-     * @param int    $level
-     * @param string $message
-     * @param string $filename
-     * @param int    $line
      * @throws ErrorException
      */
     public static function errorHandler(int $level, string $message, string $filename, int $line): void
@@ -59,7 +55,7 @@ class Error
 
         if (DEBUG) {
             echo "<h1>phpMyFAQ Fatal error</h1>";
-            echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
+            echo "<p>Uncaught exception: '" . $exception::class . "'</p>";
             echo "<p>Message: '" . $exception->getMessage() . "'</p>";
             echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
             echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
@@ -68,7 +64,7 @@ class Error
             error_log(
                 sprintf(
                     "phpMyFAQ %s: %s in %s on line %d\nStack trace:\n%s",
-                    get_class($exception),
+                    $exception::class,
                     $exception->getMessage(),
                     $exception->getFile(),
                     $exception->getLine(),

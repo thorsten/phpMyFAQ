@@ -53,24 +53,14 @@ class Services
     protected $question;
 
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Returns the current URL.
-     *
-     * @return string
      */
     public function getLink(): string
     {
@@ -88,9 +78,6 @@ class Services
         return urlencode($link->toString());
     }
 
-    /**
-     * @return int
-     */
     public function getCategoryId(): int
     {
         return $this->categoryId;
@@ -104,9 +91,6 @@ class Services
         $this->categoryId = $categoryId;
     }
 
-    /**
-     * @return int
-     */
     public function getFaqId(): int
     {
         return $this->faqId;
@@ -120,9 +104,6 @@ class Services
         $this->faqId = $faqId;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
@@ -138,8 +119,6 @@ class Services
 
     /**
      * Returns the current "share on Twitter" URL.
-     *
-     * @return string
      */
     public function getShareOnTwitterLink(): string
     {
@@ -161,17 +140,11 @@ class Services
         );
     }
 
-    /**
-     * @return string
-     */
     public function getQuestion(): string
     {
         return urlencode(trim($this->question));
     }
 
-    /**
-     * @param string $question
-     */
     public function setQuestion(string $question): void
     {
         $this->question = $question;
@@ -179,8 +152,6 @@ class Services
 
     /**
      * Returns the "Send 2 Friends" URL.
-     *
-     * @return string
      */
     public function getSuggestLink(): string
     {
@@ -195,8 +166,6 @@ class Services
 
     /**
      * Returns the "Show FAQ as PDF" URL.
-     *
-     * @return string
      */
     public function getPdfLink(): string
     {
@@ -211,8 +180,6 @@ class Services
 
     /**
      * Returns the "Show FAQ as PDF" URL.
-     *
-     * @return string
      */
     public function getPdfApiLink(): string
     {

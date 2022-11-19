@@ -43,8 +43,6 @@ class Setup
 
     /**
      * Sets the root directory of the phpMyFAQ instance.
-     *
-     * @param string $rootDir
      */
     public function setRootDir(string $rootDir): void
     {
@@ -54,7 +52,6 @@ class Setup
     /**
      * Creates the anonymous default user.
      *
-     * @param Configuration $faqConfig
      * @throws Exception
      */
     public function createAnonymousUser(Configuration $faqConfig): void
@@ -115,7 +112,6 @@ class Setup
      *
      * @param  int[]|string[] $data   Array with database credentials
      * @param  string         $folder Folder
-     * @return int|bool
      */
     public function createDatabaseFile(array $data, string $folder = '/config'): int|bool
     {
@@ -138,7 +134,6 @@ class Setup
      *
      * @param  int[]|string[] $data   Array with LDAP credentials
      * @param  string         $folder Folder
-     * @return int|bool
      */
     public function createLdapFile(array $data, string $folder = '/config'): int|bool
     {
@@ -159,7 +154,6 @@ class Setup
      *
      * @param  int[]|string[] $data   Array with Elasticsearch credentials
      * @param  string         $folder Folder
-     * @return int|bool
      */
     public function createElasticsearchFile(array $data, string $folder = '/config'): int|bool
     {

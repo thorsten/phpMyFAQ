@@ -49,7 +49,7 @@ class Init
         }
 
         // clean external variables
-        $externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
+        $externals = ['_REQUEST', '_GET', '_POST', '_COOKIE'];
         foreach ($externals as $external) {
             if (isset($GLOBALS[$external]) && is_array($GLOBALS[$external])) {
                 // first clean XSS issues
@@ -109,7 +109,7 @@ class Init
      */
     private static function basicXSSClean($string)
     {
-        if (strpos($string, '\0') !== false) {
+        if (str_contains($string, '\0')) {
             return '';
         }
 
@@ -117,7 +117,7 @@ class Init
             $string = stripslashes($string);
         }
 
-        $string = str_replace(array('&amp;', '&lt;', '&gt;'), array('&amp;amp;', '&amp;lt;', '&amp;gt;'), $string);
+        $string = str_replace(['&amp;', '&lt;', '&gt;'], ['&amp;amp;', '&amp;lt;', '&amp;gt;'], $string);
 
         // fix &entitiy\n;
         $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#', '$1;', $string);
@@ -261,7 +261,7 @@ class Init
         // 0. main/rfc1867.c: rfc1867_post_handler removes any char before the last occurence of \/
         // 1. Besides \/ on Windows: :*?"<>|
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $reservedChars = array(':', '*', '?', '"', '<', '>', "'", '|');
+            $reservedChars = [':', '*', '?', '"', '<', '>', "'", '|'];
             $filename = str_replace($reservedChars, '_', $filename);
         }
 

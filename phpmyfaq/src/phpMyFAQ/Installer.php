@@ -525,8 +525,6 @@ class Installer
 
     /**
      * Checks the minimum required PHP version, defined in System.
-     *
-     * @return bool
      */
     public function checkMinimumPhpVersion(): bool
     {
@@ -540,11 +538,11 @@ class Installer
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
      *
-     * @param string $databaseType
      * @return void
      */
     public function checkPreUpgrade(string $databaseType)
     {
+        $database = null;
         if (!$this->checkMinimumPhpVersion()) {
             printf(
                 '<p class="alert alert-danger">Sorry, but you need PHP %s or later!</p>',
@@ -665,6 +663,9 @@ class Installer
      */
     public function startInstall(array $setup = null): void
     {
+        $ldapSetup = [];
+        $DB = [];
+        $PMF_ES = [];
         $query = $uninstall = $dbSetup = [];
 
         // Check table prefix

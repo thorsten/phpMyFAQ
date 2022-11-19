@@ -50,144 +50,88 @@ class Comment
     /** @var bool|null */
     public $helped;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return Comment
-     */
     public function setId(int $id): Comment
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getRecordId(): int
     {
         return $this->recordId;
     }
 
-    /**
-     * @param int $recordId
-     * @return Comment
-     */
     public function setRecordId(int $recordId): Comment
     {
         $this->recordId = $recordId;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCategoryId(): int
     {
         return $this->categoryId;
     }
 
-    /**
-     * @param int $categoryId
-     * @return Comment
-     */
     public function setCategoryId(int $categoryId): Comment
     {
         $this->categoryId = $categoryId;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     * @return Comment
-     */
     public function setType(string $type): Comment
     {
         $this->type = $type;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     * @return Comment
-     */
     public function setUsername(string $username): Comment
     {
         $this->username = $username;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return Comment
-     */
     public function setEmail(string $email): Comment
     {
         $this->email = $email;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getComment(): string
     {
         return $this->comment;
     }
 
-    /**
-     * @param string $comment
-     * @return Comment
-     */
     public function setComment(string $comment): Comment
     {
         $this->comment = $comment;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDate(): string
     {
         return $this->date;
     }
 
-    /**
-     * @param string $date
-     * @return Comment
-     */
     public function setDate(string $date): Comment
     {
         $this->date = $date;
@@ -202,10 +146,6 @@ class Comment
         return $this->helped;
     }
 
-    /**
-     * @param bool $helped
-     * @return Comment
-     */
     public function setHelped(bool $helped): Comment
     {
         $this->helped = $helped;

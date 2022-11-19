@@ -47,11 +47,6 @@ class Ldap
     private array $ldapConfig;
 
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * An LDAP link identifier, returned by ldap_connect()
      *
      * @var resource|false
@@ -67,24 +62,14 @@ class Ldap
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->ldapConfig = $this->config->getLdapConfig();
     }
 
     /**
      * Connects to given LDAP server with given credentials.
-     *
-     * @param string $ldapServer
-     * @param int $ldapPort
-     * @param string $ldapBase
-     * @param string $ldapUser
-     * @param string $ldapPassword
-     * @return bool
      */
     public function connect(
         string $ldapServer,
@@ -155,10 +140,7 @@ class Ldap
     /**
      * Binds to the LDAP directory with specified RDN and password.
      *
-     * @param string $rdn
-     * @param string $password
      *
-     * @return bool
      */
     public function bind(string $rdn = '', string $password = ''): bool
     {
@@ -191,7 +173,6 @@ class Ldap
      *
      * @param string $username Username
      * @param string $data     MapKey
-     * @return string|false
      */
     private function getLdapData(string $username, string $data): bool|string
     {
@@ -263,9 +244,6 @@ class Ldap
 
     /**
      * Quotes LDAP strings in accordance with the RFC 2254.
-     *
-     * @param string $string
-     * @return string
      */
     public function quote(string $string): string
     {
@@ -291,9 +269,8 @@ class Ldap
      * Returns the DN from LDAP.
      *
      * @param string $username Username
-     * @return string|false
      */
-    private function getLdapDn(string $username)
+    private function getLdapDn(string $username): string|false
     {
         if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
@@ -349,8 +326,6 @@ class Ldap
      * Returns the LDAP error message of the last LDAP command.
      *
      * @param resource $ds LDAP resource
-     *
-     * @return string
      */
     public function error($ds = null): string
     {

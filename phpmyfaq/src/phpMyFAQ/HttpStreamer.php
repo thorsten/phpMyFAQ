@@ -71,32 +71,14 @@ class HttpStreamer
     private const EXPORT_BUFFER_ENABLE = true;
 
     /**
-     * PMF export data type.
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
      * HTTP Content Disposition.
-     *
-     * @var string
      */
-    private $disposition;
-
-    /**
-     * HTTP streaming data.
-     *
-     * @var string
-     */
-    private $content;
+    private string $disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
 
     /**
      * HTTP streaming data length.
-     *
-     * @var int
      */
-    private $size;
+    private int $size;
 
     /**
      * Constructor.
@@ -104,11 +86,8 @@ class HttpStreamer
      * @param string $type Type
      * @param string $content Content
      */
-    public function __construct(string $type, string $content)
+    public function __construct(private string $type, private string $content)
     {
-        $this->type = $type;
-        $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
-        $this->content = $content;
         $this->size = strlen($this->content);
     }
 
@@ -197,7 +176,7 @@ class HttpStreamer
         header('Content-Type: ' . $mimeType);
         if (
             ($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT)
-            && isset($_SERVER['HTTP_USER_AGENT']) && !(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false)
+            && isset($_SERVER['HTTP_USER_AGENT']) && !(!str_contains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
         ) {
             header('Content-Type: application/force-download');
         }

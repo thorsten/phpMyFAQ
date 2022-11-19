@@ -93,7 +93,7 @@ class Database
     public static function getInstance(): ?DatabaseDriver
     {
         if (null == self::$instance) {
-            $className = __CLASS__;
+            $className = self::class;
             self::$instance = new $className();
         }
 
@@ -109,8 +109,6 @@ class Database
 
     /**
      * Returns the database type.
-     *
-     * @return string|null
      */
     public static function getType(): ?string
     {
@@ -138,8 +136,6 @@ class Database
 
     /**
      * Error page, if the database connection is not possible.
-     *
-     * @param string $method
      */
     public static function errorPage(string $method): void
     {
@@ -152,9 +148,9 @@ class Database
                 <script src="assets/dist/frontend.js"></script>
             </head>
             <body>
-                <div class="container">
+                <div class="container mt-5">
                 <p class="alert alert-danger">The connection to the database server could not be established.</p>
-                <p class="alert alert-danger">The error message of the database server:<br>' . $method . '</p>
+                <p class="alert alert-danger">The error message of the database server: ' . $method . '</p>
                 </div>
             </body>
             </html>';
@@ -162,8 +158,6 @@ class Database
 
     /**
      * Sets the table prefix.
-     *
-     * @param string $tablePrefix
      */
     public static function setTablePrefix(string $tablePrefix): void
     {
@@ -172,8 +166,6 @@ class Database
 
     /**
      * Returns the table prefix.
-     *
-     * @return string|null
      */
     public static function getTablePrefix(): ?string
     {

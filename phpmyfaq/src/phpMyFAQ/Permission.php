@@ -53,28 +53,18 @@ use phpMyFAQ\Permission\MediumPermission;
 class Permission
 {
     /**
-     * Configuration object.
-     *
-     * @var Configuration
-     */
-    protected $config;
-
-    /**
      * Constructor.
      *
      * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Permission::selectPerm() returns an instance of a subclass of
      * Permission. $permLevel which subclass is returned.
      *
-     * @param  string $permLevel
-     * @param  Configuration $config
      * @return Permission|BasicPermission|MediumPermission|LargePermission
      */
     public static function selectPerm(string $permLevel, Configuration $config)

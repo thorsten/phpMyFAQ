@@ -22,7 +22,7 @@ namespace phpMyFAQ\Core;
  *
  * @package phpMyFAQ
  */
-class Exception extends \Exception
+class Exception extends \Exception implements \Stringable
 {
     /**
      * Converts Exception to a string.
@@ -32,7 +32,7 @@ class Exception extends \Exception
     {
         return sprintf(
             "Exception %s with message %s in %s: %s\nStack trace:\n%s",
-            get_class(),
+            self::class,
             $this->getMessage(),
             $this->getFile(),
             $this->getLine(),

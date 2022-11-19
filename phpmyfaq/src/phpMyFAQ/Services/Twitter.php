@@ -28,18 +28,10 @@ use phpMyFAQ\Strings;
 class Twitter
 {
     /**
-     * @var TwitterOAuth
-     */
-    protected $connection = null;
-
-    /**
      * Constructor.
-     *
-     * @param TwitterOAuth $connection
      */
-    public function __construct(TwitterOAuth $connection)
+    public function __construct(protected TwitterOAuth $connection)
     {
-        $this->connection = $connection;
     }
 
     /**
@@ -61,6 +53,6 @@ class Twitter
         $message .= ' ' . $hashtags;
         $message .= ' ' . $link;
 
-        $this->connection->post('statuses/update', array('status' => $message));
+        $this->connection->post('statuses/update', ['status' => $message]);
     }
 }

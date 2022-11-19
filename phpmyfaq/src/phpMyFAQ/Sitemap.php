@@ -28,48 +28,32 @@ use phpMyFAQ\Database\Sqlite3;
 class Sitemap
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * User
-     *
-     * @var int
      */
-    private $user = -1;
+    private int $user = -1;
 
     /**
      * Groups.
      *
      * @var int[]
      */
-    private $groups = [];
+    private array $groups = [];
 
     /**
      * Flag for Group support.
-     *
-     * @var bool
      */
-    private $groupSupport = false;
+    private bool $groupSupport = false;
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
-
         if ($this->config->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }
 
-    /**
-     * @param int $userId
-     */
     public function setUser(int $userId = -1): void
     {
         $this->user = $userId;
@@ -85,8 +69,6 @@ class Sitemap
 
     /**
      * Returns all available first letters.
-     *
-     * @return string
      */
     public function getAllFirstLetters(): string
     {
@@ -197,7 +179,6 @@ class Sitemap
      *
      * @param string $letter Letter
      * @throws \Exception
-     * @return string
      */
     public function getRecordsFromLetter($letter = 'A'): string
     {
@@ -223,10 +204,9 @@ class Sitemap
 
         $renderSiteMap = '';
 
-        switch (Database::getType()) {
-            case 'sqlite3':
-                $query = sprintf(
-                    "
+        $query = match (Database::getType()) {
+            'sqlite3' => sprintf(
+                "
                     SELECT
                         fd.thema AS thema,
                         fd.id AS id,
@@ -254,19 +234,16 @@ class Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    $letter,
-                    $this->config->getLanguage()->getLanguage(),
-                    $permPart
-                );
-                break;
-
-            default:
-                $query = sprintf(
-                    "
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                $letter,
+                $this->config->getLanguage()->getLanguage(),
+                $permPart
+            ),
+            default => sprintf(
+                "
                     SELECT
                         fd.thema AS thema,
                         fd.id AS id,
@@ -294,16 +271,15 @@ class Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    $letter,
-                    $this->config->getLanguage()->getLanguage(),
-                    $permPart
-                );
-                break;
-        }
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                $letter,
+                $this->config->getLanguage()->getLanguage(),
+                $permPart
+            ),
+        };
 
         $result = $this->config->getDb()->query($query);
         $oldId = 0;

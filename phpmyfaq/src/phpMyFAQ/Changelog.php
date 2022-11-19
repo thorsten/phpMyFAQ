@@ -25,28 +25,14 @@ namespace phpMyFAQ;
 class Changelog
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Changelog constructor.
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Adds a new changelog entry in the table "faqchanges".
-     *
-     * @param  int    $id
-     * @param  int    $userId
-     * @param  string $text
-     * @param  string $lang
-     * @param  int    $revisionId
-     * @return bool
      */
     public function addEntry(int $id, int $userId, string $text, string $lang, int $revisionId = 0): bool
     {
@@ -71,9 +57,6 @@ class Changelog
 
     /**
      * Returns the changelog of a FAQ record.
-     *
-     * @param  int $recordId
-     * @return array
      */
     public function getChangeEntries(int $recordId): array
     {

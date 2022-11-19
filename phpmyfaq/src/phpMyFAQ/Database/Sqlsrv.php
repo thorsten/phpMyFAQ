@@ -107,8 +107,6 @@ class Sqlsrv implements DatabaseDriver
      * Escapes a string for use in a query.
      *
      * @param string $string String
-     *
-     * @return string
      */
     public function escape($string): string
     {
@@ -163,8 +161,6 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Returns the error string.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -191,8 +187,6 @@ class Sqlsrv implements DatabaseDriver
      * Number of rows in a result.
      *
      * @param resource $result Resultset
-     *
-     * @return int
      */
     public function numRows($result): int
     {
@@ -201,8 +195,6 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Logs the queries.
-     *
-     * @return string
      */
     public function log(): string
     {
@@ -213,8 +205,6 @@ class Sqlsrv implements DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableStatus(string $prefix = ''): array
     {
@@ -242,9 +232,6 @@ class Sqlsrv implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     * @param string $query
-     * @param int $offset
-     * @param int $rowcount
      *
      * @return mixed $result
      */
@@ -254,7 +241,7 @@ class Sqlsrv implements DatabaseDriver
             $this->sqllog .= Utils::debug($query);
         }
 
-        $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+        $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 
         if (0 < $rowcount) {
             $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
@@ -274,8 +261,6 @@ class Sqlsrv implements DatabaseDriver
      *
      * @param string $table the name of the table
      * @param string $id    the name of the ID column
-     *
-     * @return int
      */
     public function nextId($table, $id): int
     {
@@ -297,8 +282,6 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Returns the library version string.
-     *
-     * @return string
      */
     public function clientVersion(): string
     {
@@ -309,8 +292,6 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Returns the library version string.
-     *
-     * @return string
      */
     public function serverVersion(): string
     {
@@ -325,8 +306,6 @@ class Sqlsrv implements DatabaseDriver
      * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableNames(string $prefix = ''): array
     {
@@ -384,9 +363,6 @@ class Sqlsrv implements DatabaseDriver
         sqlsrv_close($this->conn);
     }
 
-    /**
-     * @return string
-     */
     public function now(): string
     {
         return 'GETDATE()';

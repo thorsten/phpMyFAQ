@@ -52,8 +52,6 @@ class SearchHelper extends Helper
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -84,8 +82,6 @@ class SearchHelper extends Helper
      * Renders the results for Typehead.
      *
      * @param SearchResultSet $resultSet Result set object
-     *
-     * @return string
      */
     public function renderInstantResponseResult(SearchResultSet $resultSet): string
     {
@@ -123,15 +119,13 @@ class SearchHelper extends Helper
             }
         }
 
-        return json_encode($results);
+        return json_encode($results, JSON_THROW_ON_ERROR);
     }
 
     /**
      * Renders the result page for Instant Response.
      *
      * @param SearchResultSet $resultSet SearchResultSet object
-     *
-     * @return string
      */
     public function renderAdminSuggestionResult(SearchResultSet $resultSet): string
     {
@@ -175,10 +169,7 @@ class SearchHelper extends Helper
     /**
      * Renders the result page for the main search page.
      *
-     * @param SearchResultSet $resultSet
-     * @param int             $currentPage
      *
-     * @return string
      * @throws Exception
      */
     public function renderSearchResult(SearchResultSet $resultSet, int $currentPage): string
@@ -290,8 +281,6 @@ class SearchHelper extends Helper
 
     /**
      * Renders the scoring stars
-     * @param int $relevance
-     * @return string
      */
     private function renderScore(int $relevance = 0): string
     {
@@ -312,12 +301,6 @@ class SearchHelper extends Helper
         return $html . '</span> ';
     }
 
-    /**
-     * @param SearchResultSet $resultSet
-     * @param int             $recordId
-     *
-     * @return string
-     */
     public function renderRelatedFaqs(SearchResultSet $resultSet, int $recordId): string
     {
         $html = '';
@@ -358,8 +341,6 @@ class SearchHelper extends Helper
      * Renders the list of the most popular search terms.
      *
      * @param array $mostPopularSearches Array with popular search terms
-     *
-     * @return string
      */
     public function renderMostPopularSearches(array $mostPopularSearches): string
     {

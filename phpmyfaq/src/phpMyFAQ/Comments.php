@@ -29,18 +29,10 @@ use phpMyFAQ\Entity\Comment;
 class Comments
 {
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -48,7 +40,6 @@ class Comments
      *
      * @param int $id Comment ID
      * @param string $type Comment type: {faq|news}
-     * @return string
      * @throws Exception
      * @todo   Move this code to a helper class
      */
@@ -138,10 +129,6 @@ class Comments
 
     /**
      * Adds some fancy HTML if a comment is too long.
-     *
-     * @param int $id
-     * @param string $comment
-     * @return string
      */
     private function showShortComment(int $id, string $comment): string
     {
@@ -166,8 +153,6 @@ class Comments
 
     /**
      * Adds a new comment.
-     * @param Comment $comment
-     * @return bool
      */
     public function addComment(Comment $comment): bool
     {
@@ -200,8 +185,6 @@ class Comments
      *
      * @param int $recordId Record id
      * @param int $commentId Comment id
-     *
-     * @return bool
      */
     public function deleteComment(int $recordId, int $commentId): bool
     {

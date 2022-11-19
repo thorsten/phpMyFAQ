@@ -43,9 +43,6 @@ class Session
     /** @var string */
     public const PMF_AZURE_AD_JWT = 'phpmyfaq_azure_ad_jwt';
 
-    /** @var Configuration */
-    private Configuration $config;
-
     /** @var int|null */
     private ?int $currentSessionId = null;
 
@@ -81,17 +78,13 @@ class Session
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Returns the current session ID.
-     * @return int|null
      */
     public function getCurrentSessionId(): ?int
     {
@@ -100,8 +93,6 @@ class Session
 
     /**
      * Sets the current session ID.
-     * @param int $currentSessionId
-     * @return Session
      */
     public function setCurrentSessionId(int $currentSessionId): Session
     {
@@ -111,8 +102,6 @@ class Session
 
     /**
      * Sets current User object
-     * @param CurrentUser $currentUser
-     * @return Session
      */
     public function setCurrentUser(CurrentUser $currentUser): Session
     {
@@ -122,16 +111,12 @@ class Session
 
     /**
      * Returns the current UUID session key
-     * @return string
      */
     public function getCurrentSessionKey(): string
     {
         return $this->currentSessionKey ?? $_SESSION[self::PMF_AZURE_AD_SESSIONKEY];
     }
 
-    /**
-     * @return string|null
-     */
     public function getCurrentToken(): ?string
     {
         return $this->currentToken ?? $_SESSION[self::PMF_AZURE_AD_JWT];
@@ -139,7 +124,6 @@ class Session
 
     /**
      * Sets the current UUID session key
-     * @return Session
      */
     public function setCurrentSessionKey(): Session
     {
@@ -173,8 +157,6 @@ class Session
      * Returns the timestamp of a session.
      *
      * @param int $sessionId Session ID
-     *
-     * @return int
      */
     public function getTimeFromSessionId(int $sessionId): int
     {
@@ -224,8 +206,6 @@ class Session
 
     /**
      * Returns the number of sessions.
-     *
-     * @return int
      */
     public function getNumberOfSessions(): int
     {
@@ -247,8 +227,6 @@ class Session
      *
      * @param int $first First session ID
      * @param int $last Last session ID
-     *
-     * @return bool
      */
     public function deleteSessions(int $first, int $last): bool
     {
@@ -266,8 +244,6 @@ class Session
 
     /**
      * Deletes all entries in the table.
-     *
-     * @return mixed
      */
     public function deleteAllSessions(): mixed
     {
@@ -415,7 +391,6 @@ class Session
      * @param string          $name Cookie name
      * @param int|string|null $sessionId Session ID
      * @param int             $timeout Cookie timeout
-     * @return bool
      */
     public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600): bool
     {
@@ -533,20 +508,19 @@ class Session
 
     /**
      * Returns a UUID Version 4 compatible universally unique identifier.
-     * @return string
      */
     public function uuid(): string
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
+            random_int(0, 0xffff),
+            random_int(0, 0xffff),
+            random_int(0, 0xffff),
+            random_int(0, 0x0fff) | 0x4000,
+            random_int(0, 0x3fff) | 0x8000,
+            random_int(0, 0xffff),
+            random_int(0, 0xffff),
+            random_int(0, 0xffff)
         );
     }
 }

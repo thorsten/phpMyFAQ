@@ -79,10 +79,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Set user information from LDAP
         $user->setUserData(
-            array(
-                'display_name' => $this->ldap->getCompleteName($login),
-                'email' => $this->ldap->getMail($login),
-            )
+            ['display_name' => $this->ldap->getCompleteName($login), 'email' => $this->ldap->getMail($login)]
         );
 
         return $result;
@@ -181,9 +178,6 @@ class AuthLdap extends Auth implements AuthDriverInterface
         return strlen($this->ldap->getCompleteName($login));
     }
 
-    /**
-     * @param int $activeServer
-     */
     private function connect(int $activeServer = 0): void
     {
         $this->ldap->connect(

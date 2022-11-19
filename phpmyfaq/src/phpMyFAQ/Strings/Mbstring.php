@@ -29,10 +29,8 @@ class Mbstring extends StringsAbstract
 {
     /**
      * Instance.
-     *
-     * @var Mbstring
      */
-    private static $instance;
+    private static ?\phpMyFAQ\Strings\Mbstring $instance = null;
 
     /**
      * Constructor.
@@ -45,7 +43,6 @@ class Mbstring extends StringsAbstract
      * Create and return an instance.
      *
      * @param  string $language
-     * @return Mbstring
      */
     public static function getInstance($language = 'en'): Mbstring
     {
@@ -63,7 +60,6 @@ class Mbstring extends StringsAbstract
      * Get string character count.
      *
      * @param string $str String
-     * @return int
      */
     public function strlen(string $str): int
     {
@@ -76,8 +72,6 @@ class Mbstring extends StringsAbstract
      * @param string $str String
      * @param int $start Start
      * @param null $length Length
-     *
-     * @return string
      */
     public function substr(string $str, int $start, $length = null): string
     {
@@ -92,8 +86,6 @@ class Mbstring extends StringsAbstract
      * @param string $haystack Haystack
      * @param string $needle Needle
      * @param int $offset Offset
-     *
-     * @return int
      */
     public function strpos(string $haystack, string $needle, $offset = 0): int
     {
@@ -104,8 +96,6 @@ class Mbstring extends StringsAbstract
      * Make a string lower case.
      *
      * @param string $str String
-     *
-     * @return string
      */
     public function strtolower(string $str): string
     {
@@ -116,8 +106,6 @@ class Mbstring extends StringsAbstract
      * Make a string upper case.
      *
      * @param string $str String
-     *
-     * @return string
      */
     public function strtoupper(string $str): string
     {
@@ -130,10 +118,8 @@ class Mbstring extends StringsAbstract
      * @param string $haystack Haystack
      * @param string $needle Needle
      * @param bool $part Part
-     *
-     * @return string|false
      */
-    public function strstr(string $haystack, string $needle, $part = false)
+    public function strstr(string $haystack, string $needle, $part = false): string|false
     {
         return mb_strstr($haystack, $needle, $part, $this->encoding);
     }
@@ -141,10 +127,7 @@ class Mbstring extends StringsAbstract
     /**
      * Count substring occurrences.
      *
-     * @param string $haystack
-     * @param string $needle
      *
-     * @return int
      */
     public function substr_count(string $haystack, string $needle): int
     {
@@ -154,13 +137,10 @@ class Mbstring extends StringsAbstract
     /**
      * Match a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param null $matches
      * @param int $flags
      * @param int $offset
      *
-     * @return int
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, $flags = 0, $offset = 0): int
     {
@@ -170,13 +150,10 @@ class Mbstring extends StringsAbstract
     /**
      * Match a regexp globally.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param string[][] $matches
      * @param int $flags
      * @param int $offset
      *
-     * @return int
      */
     public function preg_match_all(string $pattern, string $subject, array &$matches, $flags = 0, $offset = 0): int
     {
@@ -186,14 +163,11 @@ class Mbstring extends StringsAbstract
     /**
      * Split string by a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param int $limit
      * @param int $flags
      *
-     * @return string[]|array|false
      */
-    public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0)
+    public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array|bool
     {
         return preg_split(self::appendU($pattern), $subject, $limit, $flags);
     }
@@ -202,14 +176,11 @@ class Mbstring extends StringsAbstract
      * Search and replace by a regexp using a callback.
      *
      * @param string|string[] $pattern
-     * @param callable $callback
      * @param string|string[] $subject
-     * @param int $limit
-     * @param int $count
      *
      * @return string|string[]
      */
-    public function preg_replace_callback($pattern, callable $callback, $subject, int $limit = -1, int &$count = 0)
+    public function preg_replace_callback(string|array $pattern, callable $callback, string|array $subject, int $limit = -1, int &$count = 0): string|array
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
@@ -228,12 +199,10 @@ class Mbstring extends StringsAbstract
      * @param string|string[] $pattern
      * @param string|string[] $replacement
      * @param string|string[] $subject
-     * @param int $limit
-     * @param int $count
      *
      * @return string|string[]|null
      */
-    public function preg_replace($pattern, $replacement, $subject, int $limit = -1, int &$count = 0)
+    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0)
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
@@ -250,9 +219,7 @@ class Mbstring extends StringsAbstract
      * Append an u to the string. The string is supposed
      * to be a regex prepared to use with a preg_* function.
      *
-     * @param string $str
      *
-     * @return string
      */
     private static function appendU(string $str): string
     {

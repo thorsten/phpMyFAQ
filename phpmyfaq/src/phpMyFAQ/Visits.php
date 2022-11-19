@@ -25,18 +25,10 @@ namespace phpMyFAQ;
 class Visits
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -71,8 +63,6 @@ class Visits
      * Adds a new entry in the table "faqvisits".
      *
      * @param int $id Record ID
-     *
-     * @return bool
      */
     public function add(int $id): bool
     {
@@ -92,8 +82,6 @@ class Visits
      * Updates an entry in the table "faqvisits".
      *
      * @param int $id FAQ record ID
-     *
-     * @return bool
      */
     private function update(int $id): bool
     {
@@ -137,8 +125,6 @@ class Visits
 
     /**
      * Resets all visits to current date and one visit per FAQ.
-     *
-     * @return bool
      */
     public function resetAll(): bool
     {

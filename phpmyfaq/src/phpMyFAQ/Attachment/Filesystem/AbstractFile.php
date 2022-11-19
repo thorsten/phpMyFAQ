@@ -42,13 +42,6 @@ abstract class AbstractFile extends AbstractEntry
     public const MODE_WRITE = 'wb';
 
     /**
-     * Filemode.
-     *
-     * @var string
-     */
-    protected $mode;
-
-    /**
      * Constructor.
      *
      * @param string $filepath path to file
@@ -56,10 +49,9 @@ abstract class AbstractFile extends AbstractEntry
      *
      * @throws FileException
      */
-    public function __construct($filepath, $mode = self::MODE_READ)
+    public function __construct($filepath, protected $mode = self::MODE_READ)
     {
         $this->path = $filepath;
-        $this->mode = $mode;
 
         $this->handle = @fopen($this->path, $this->mode);
 
@@ -80,8 +72,6 @@ abstract class AbstractFile extends AbstractEntry
 
     /**
      * Either EOF was reached.
-     *
-     * @return bool
      */
     public function eof(): bool
     {
@@ -109,7 +99,6 @@ abstract class AbstractFile extends AbstractEntry
      *
      * @see inc/PMF_Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#delete()
      *
-     * @return bool
      * @throws FileException
      */
     public function delete(): bool
@@ -129,8 +118,6 @@ abstract class AbstractFile extends AbstractEntry
 
     /**
      * Return current file mode.
-     *
-     * @return string
      */
     public function getMode(): string
     {
@@ -141,14 +128,12 @@ abstract class AbstractFile extends AbstractEntry
      * Reopen file in given mode.
      *
      * @param string $mode file mode
-     *
-     * @return bool
      */
     public function setMode($mode): bool
     {
         $retval = false;
 
-        if (in_array($mode, array(self::MODE_WRITE, self::MODE_READ, self::MODE_APPEND))) {
+        if (in_array($mode, [self::MODE_WRITE, self::MODE_READ, self::MODE_APPEND])) {
             fclose($this->handle);
             $this->handle = fopen($this->path, $mode);
 
@@ -162,8 +147,6 @@ abstract class AbstractFile extends AbstractEntry
      * Simple copy file.
      *
      * @param string $target filepath
-     *
-     * @return bool
      */
     public function copyToSimple($target): bool
     {
@@ -191,7 +174,6 @@ abstract class AbstractFile extends AbstractEntry
      *
      * @param string $path
      *
-     * @return bool
      * @throws FileException
      */
     public function deleteDir($path): bool
@@ -206,7 +188,7 @@ abstract class AbstractFile extends AbstractEntry
         );
 
         foreach ($it as $file) {
-            if (in_array($file->getBasename(), array('.', '..'))) {
+            if (in_array($file->getBasename(), ['.', '..'])) {
                 continue;
             } elseif ($file->isDir()) {
                 rmdir($file->getPathname());

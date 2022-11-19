@@ -42,7 +42,8 @@
     "symfony/yaml": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",
     "squizlabs/php_codesniffer": "*",
-    "phpstan/phpstan": "^1.0.0"
+    "phpstan/phpstan": "^1.0.0",
+    "rector/rector": "^0.14.8"
   },
   "config": {
     "platform": {

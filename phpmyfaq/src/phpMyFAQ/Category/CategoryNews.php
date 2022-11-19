@@ -27,18 +27,10 @@ use phpMyFAQ\Configuration;
 class CategoryNews
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**

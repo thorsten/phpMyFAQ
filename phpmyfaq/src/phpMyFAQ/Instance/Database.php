@@ -37,14 +37,8 @@ class Database
 
     /**
      * Database type.
-     *
-     * @var string
      */
-    private static $dbType = null;
-    /**
-     * @var Configuration
-     */
-    protected Configuration $config;
+    private static ?string $dbType = null;
     /**
      * DROP TABLE statements.
      *
@@ -90,12 +84,9 @@ class Database
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    private function __construct(Configuration $config)
+    private function __construct(protected Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -103,7 +94,6 @@ class Database
      *
      * @param Configuration $config phpMyFAQ configuration container
      * @param string        $type Database management system type
-     * @return Driver|null
      * @throws Exception
      */
     public static function factory(Configuration $config, string $type): ?Driver
@@ -123,13 +113,11 @@ class Database
 
     /**
      * Returns the single instance.
-     *
-     * @return Driver|null
      */
     public static function getInstance(): ?Driver
     {
         if (null === self::$instance) {
-            $className = __CLASS__;
+            $className = self::class;
             self::$instance = new $className();
         }
 
@@ -138,9 +126,6 @@ class Database
 
     /**
      * Executes all DROP TABLE statements.
-     *
-     * @param string $prefix
-     * @return bool
      */
     public function dropTables(string $prefix = ''): bool
     {

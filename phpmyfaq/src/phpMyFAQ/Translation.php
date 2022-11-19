@@ -40,7 +40,6 @@ class Translation
     /** @var Translation|null */
     private static ?Translation $instance = null;
 
-    /** @return Translation */
     public static function create(): Translation
     {
         if (self::$instance === null) {
@@ -52,9 +51,6 @@ class Translation
 
     /**
      * Returns the translation of a specific key from the current language
-     *
-     * @param string $languageKey
-     * @return string|null
      */
     public static function get(string $languageKey): ?string
     {
@@ -67,7 +63,7 @@ class Translation
             }
 
             return self::$instance->loadedLanguages[self::$instance->defaultLanguage][$languageKey];
-        } catch (Exception $e) {
+        } catch (Exception) {
             // handle exception
             // log to stderr
         }
@@ -76,8 +72,6 @@ class Translation
     }
 
     /**
-     * @param string $languagesDir
-     * @return Translation
      * @throws Exception
      */
     public function setLanguagesDir(string $languagesDir): Translation
@@ -89,8 +83,6 @@ class Translation
     }
 
     /**
-     * @param string $defaultLanguage
-     * @return Translation
      * @throws Exception
      */
     public function setDefaultLanguage(string $defaultLanguage): Translation
@@ -102,17 +94,12 @@ class Translation
         return self::$instance;
     }
 
-    /**
-     * @return string
-     */
     public function getDefaultLanguage(): string
     {
         return $this->defaultLanguage;
     }
 
     /**
-     * @param string $currentLanguage
-     * @return Translation
      * @throws Exception
      */
     public function setCurrentLanguage(string $currentLanguage): Translation
@@ -124,9 +111,6 @@ class Translation
         return self::$instance;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrentLanguage(): string
     {
         return self::$instance->currentLanguage;
@@ -134,13 +118,11 @@ class Translation
 
     /**
      * Returns the single instance.
-     *
-     * @return Translation
      */
     public static function getInstance(): Translation
     {
         if (null == self::$instance) {
-            $className = __CLASS__;
+            $className = self::class;
             self::$instance = new $className();
         }
 
@@ -229,8 +211,6 @@ class Translation
 
     /**
      * Returns the filename for the given language.
-     * @param string $language
-     * @return string
      */
     protected function filename(string $language): string
     {

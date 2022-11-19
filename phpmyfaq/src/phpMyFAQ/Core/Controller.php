@@ -26,22 +26,14 @@ namespace phpMyFAQ\Core;
  */
 abstract class Controller
 {
-    /** @var array */
-    protected array $routeParameters = [];
-
     /**
      * Controller constructor.
-     *
-     * @param array $routeParameters
      */
-    public function __construct(array $routeParameters)
+    public function __construct(protected array $routeParameters)
     {
-        $this->routeParameters = $routeParameters;
     }
 
     /**
-     * @param string $name
-     * @param array  $arguments
      * @throws Exception
      */
     public function __call(string $name, array $arguments)
@@ -51,7 +43,7 @@ abstract class Controller
         if (method_exists($this, $method)) {
             call_user_func_array([$this, $method], $arguments);
         } else {
-            throw new Exception('Method ' . $method . ' not found in controller ' . get_class($this));
+            throw new Exception('Method ' . $method . ' not found in controller ' . $this::class);
         }
     }
 }

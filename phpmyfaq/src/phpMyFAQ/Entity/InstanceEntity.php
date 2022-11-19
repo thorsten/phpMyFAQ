@@ -27,54 +27,33 @@ class InstanceEntity
     /** @var string */
     private string $comment;
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     * @return InstanceEntity
-     */
     public function setUrl(string $url): InstanceEntity
     {
         $this->url = $url;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getInstance(): string
     {
         return $this->instance;
     }
 
-    /**
-     * @param string $instance
-     * @return InstanceEntity
-     */
     public function setInstance(string $instance): InstanceEntity
     {
         $this->instance = $instance;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getComment(): string
     {
         return $this->comment;
     }
 
-    /**
-     * @param string $comment
-     * @return InstanceEntity
-     */
     public function setComment(string $comment): InstanceEntity
     {
         $this->comment = $comment;

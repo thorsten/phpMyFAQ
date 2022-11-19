@@ -57,7 +57,6 @@ class Pgsql implements DatabaseDriver
      * @param string $user Database username
      * @param string $password Password
      * @param string $database Database name
-     * @param int $port
      * @return null|bool true, if connected, otherwise false
      */
     public function connect(
@@ -89,9 +88,6 @@ class Pgsql implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     * @param string $query
-     * @param int $offset
-     * @param int $rowcount
      *
      * @return mixed $result
      */
@@ -116,8 +112,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Returns the error string.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -128,8 +122,6 @@ class Pgsql implements DatabaseDriver
      * Escapes a string for use in a query.
      *
      * @param string
-     *
-     * @return string
      */
     public function escape($string): string
     {
@@ -183,19 +175,15 @@ class Pgsql implements DatabaseDriver
     /**
      * Number of rows in a result.
      *
-     * @param mixed $result
      *
-     * @return int
      */
-    public function numRows($result): int
+    public function numRows(mixed $result): int
     {
         return pg_num_rows($result);
     }
 
     /**
      * Logs the queries.
-     *
-     * @return string
      */
     public function log(): string
     {
@@ -206,8 +194,6 @@ class Pgsql implements DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableStatus(string $prefix = ''): array
     {
@@ -225,11 +211,10 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
      *
      * @return array
      */
-    public function fetchArray($result): ?array
+    public function fetchArray(mixed $result): ?array
     {
         $result = pg_fetch_array($result, null, PGSQL_ASSOC);
         if ($result) {
@@ -242,8 +227,6 @@ class Pgsql implements DatabaseDriver
      * Returns just one row.
      *
      * @param string
-     *
-     * @return string
      */
     private function getOne($query): string
     {
@@ -257,8 +240,6 @@ class Pgsql implements DatabaseDriver
      *
      * @param string $table the name of the table
      * @param string $id    the name of the ID column
-     *
-     * @return int
      */
     public function nextId($table, $id): int
     {
@@ -267,8 +248,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * This function returns the client version string.
-     *
-     * @return string
      */
     public function clientVersion(): string
     {
@@ -282,8 +261,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Returns the server version string.
-     *
-     * @return string
      */
     public function serverVersion(): string
     {
@@ -354,17 +331,12 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Closes the connection to the database.
-     *
-     * @return bool
      */
     public function close(): bool
     {
         return pg_close($this->conn);
     }
 
-    /**
-     * @return string
-     */
     public function now(): string
     {
         return 'CURRENT_TIMESTAMP';

@@ -28,18 +28,10 @@ use phpMyFAQ\Search\SearchFactory;
 class Relation
 {
     /**
-     * Configuration object.
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Relation constructor.
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -47,7 +39,6 @@ class Relation
      *
      * @param string $question FAQ title
      * @param string $keywords FAQ keywords
-     * @return array
      * @throws Exception
      */
     public function getAllRelatedByQuestion(string $question, string $keywords): array

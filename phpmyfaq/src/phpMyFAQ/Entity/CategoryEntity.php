@@ -24,59 +24,26 @@ namespace phpMyFAQ\Entity;
  */
 class CategoryEntity
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private ?int $id = null;
 
-    /**
-     * @var string
-     */
-    private $lang;
+    private ?string $lang = null;
 
-    /**
-     * @var int
-     */
-    private $parentId;
+    private ?int $parentId = null;
 
-    /**
-     * @var string
-     */
-    private $name;
+    private ?string $name = null;
 
-    /**
-     * @var string
-     */
-    private $description;
+    private ?string $description = null;
 
-    /**
-     * @var int
-     */
-    private $userId;
+    private ?int $userId = null;
 
-    /**
-     * @var int
-     */
-    private $groupId = -1;
+    private int $groupId = -1;
 
-    /**
-     * @var bool
-     */
-    private $active;
+    private ?bool $active = null;
 
-    /**
-     * @var bool
-     */
-    private $showHome;
+    private ?bool $showHome = null;
 
-    /**
-     * @var string
-     */
-    private $image = '';
+    private ?string $image = '';
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;
@@ -84,8 +51,6 @@ class CategoryEntity
 
     /**
      * @param bool $active
-     *
-     * @return CategoryEntity
      */
     public function setActive($active): CategoryEntity
     {
@@ -94,18 +59,11 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     * @return CategoryEntity
-     */
     public function setDescription(?string $description): CategoryEntity
     {
         $this->description = $description;
@@ -113,9 +71,6 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGroupId(): int
     {
         return $this->groupId;
@@ -123,8 +78,6 @@ class CategoryEntity
 
     /**
      * @param int $groupId
-     *
-     * @return CategoryEntity
      */
     public function setGroupId($groupId): CategoryEntity
     {
@@ -133,9 +86,6 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int)$this->id;
@@ -143,8 +93,6 @@ class CategoryEntity
 
     /**
      * @param int $id
-     *
-     * @return CategoryEntity
      */
     public function setId($id): CategoryEntity
     {
@@ -153,18 +101,11 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLang(): string
     {
         return $this->lang;
     }
 
-    /**
-     * @param string $lang
-     * @return CategoryEntity
-     */
     public function setLang(string $lang): CategoryEntity
     {
         $this->lang = $lang;
@@ -172,18 +113,11 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return CategoryEntity
-     */
     public function setName(string $name): CategoryEntity
     {
         $this->name = $name;
@@ -191,9 +125,6 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParentId(): int
     {
         return (int)$this->parentId;
@@ -201,8 +132,6 @@ class CategoryEntity
 
     /**
      * @param int $parentId
-     *
-     * @return CategoryEntity
      */
     public function setParentId($parentId): CategoryEntity
     {
@@ -211,9 +140,6 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getUserId(): int
     {
         return (int)$this->userId;
@@ -221,7 +147,6 @@ class CategoryEntity
 
     /**
      * @param int $userId
-     * @return CategoryEntity
      */
     public function setUserId($userId): CategoryEntity
     {
@@ -230,18 +155,11 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getImage(): ?string
     {
         return $this->image;
     }
 
-    /**
-     * @param string|null $image
-     * @return CategoryEntity
-     */
     public function setImage(?string $image): CategoryEntity
     {
         $this->image = $image;
@@ -249,9 +167,6 @@ class CategoryEntity
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getShowHome(): bool
     {
         return (bool) $this->showHome;
@@ -259,7 +174,6 @@ class CategoryEntity
 
     /**
      * @param bool $showHome
-     * @return CategoryEntity
      */
     public function setShowHome(?bool $showHome): CategoryEntity
     {

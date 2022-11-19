@@ -147,11 +147,6 @@ class Pagination
     protected $rewriteUrl = '';
 
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Constructor.
      *
      * We read in the current page from the baseUrl, so if it contains
@@ -172,10 +167,8 @@ class Pagination
      *                               pageParamName (default
      *                               "page") - useRewrite
      */
-    public function __construct(Configuration $config, array $options = null)
+    public function __construct(private Configuration $config, array $options = null)
     {
-        $this->config = $config;
-
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
         }
@@ -237,8 +230,6 @@ class Pagination
      * Returns the current page URL.
      *
      * @param string $url URL
-     *
-     * @return int
      */
     protected function getCurrentPageFromUrl($url): int
     {
@@ -247,7 +238,7 @@ class Pagination
         if (!empty($url)) {
             $match = [];
             if (Strings::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match)) {
-                $page = isset($match[2]) ? $match[2] : $page;
+                $page = $match[2] ?? $page;
             }
         }
 
@@ -256,8 +247,6 @@ class Pagination
 
     /**
      * Render full pagination string.
-     *
-     * @return string
      */
     public function render(): string
     {
@@ -356,9 +345,8 @@ class Pagination
      * @param string           $tpl link template
      * @param string           $url url value for template container
      * @param string|int|float $linkText text value for template container
-     * @return string
      */
-    protected function renderLink(string $tpl, string $url, $linkText): string
+    protected function renderLink(string $tpl, string $url, string|int|float $linkText): string
     {
         $search = [self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT];
         $replace = [$url, $linkText];
@@ -370,7 +358,6 @@ class Pagination
      * Render the whole pagination layout.
      *
      * @param string $content layout contents
-     * @return string
      */
     protected function renderLayout(string $content): string
     {

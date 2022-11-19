@@ -133,13 +133,6 @@ class Link
     ];
 
     /**
-     * URL.
-     *
-     * @var string
-     */
-    public string $url = '';
-
-    /**
      * CSS class.
      *
      * @var string
@@ -197,20 +190,12 @@ class Link
     protected string $rel = '';
 
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Constructor.
      *
      * @param string $url URL
-     * @param Configuration $config
      */
-    public function __construct(string $url, Configuration $config)
+    public function __construct(public string $url, private Configuration $config)
     {
-        $this->url = $url;
-        $this->config = $config;
     }
 
     /**
@@ -230,10 +215,10 @@ class Link
      *           being requested, as obtained from the original URI given by the user or referring resource
      *
      * @param string|null $path
-     * @return string
      */
     public function getSystemUri($path = null): string
     {
+        $pattern = [];
         // Remove any ref to standard ports 80 and 443.
         $pattern[0] = '/:80$/'; // HTTP: port 80
         $pattern[1] = '/:443$/'; // HTTPS: port 443
@@ -244,8 +229,6 @@ class Link
 
     /**
      * Returns the system scheme, http or https.
-     *
-     * @return string
      */
     public function getSystemScheme(): string
     {
@@ -272,8 +255,6 @@ class Link
 
     /**
      * Checks if webserver is an IIS Server.
-     *
-     * @return bool
      */
     public static function isIISServer(): bool
     {
@@ -284,7 +265,6 @@ class Link
      * Returns the relative URI.
      *
      * @param string|null $path
-     * @return string
      */
     public static function getSystemRelativeUri(string $path = null): string
     {
@@ -297,8 +277,6 @@ class Link
 
     /**
      * Builds an HTML anchor.
-     *
-     * @return string
      */
     public function toHtmlAnchor(): string
     {
@@ -353,7 +331,6 @@ class Link
      * in .htaccess
      *
      * @param bool $removeSessionFromUrl Remove session from URL
-     * @return string
      */
     public function toString(bool $removeSessionFromUrl = false): string
     {
@@ -524,8 +501,6 @@ class Link
 
     /**
      * Transforms a URI.
-     *
-     * @return string
      */
     public function toUri(): string
     {
@@ -541,8 +516,6 @@ class Link
 
     /**
      * Checks if URL contains a scheme.
-     *
-     * @return bool
      */
     private function hasScheme(): bool
     {
@@ -553,15 +526,13 @@ class Link
 
     /**
      * Checks if URL is an internal reference.
-     *
-     * @return bool
      */
     protected function isInternalReference(): bool
     {
         if ($this->isRelativeSystemLink()) {
             return true;
         }
-        if (false === strpos($this->url, '#')) {
+        if (!str_contains($this->url, '#')) {
             return false;
         }
 
@@ -570,8 +541,6 @@ class Link
 
     /**
      * Checks if URL is a relative system link.
-     *
-     * @return bool
      */
     private function isRelativeSystemLink(): bool
     {
@@ -585,8 +554,6 @@ class Link
 
     /**
      * Returns the default scheme.
-     *
-     * @return string
      */
     protected function getDefaultScheme(): string
     {
@@ -600,8 +567,6 @@ class Link
 
     /**
      * Checks if URL is a system link.
-     *
-     * @return bool
      */
     protected function isSystemLink(): bool
     {
@@ -611,13 +576,11 @@ class Link
             return true;
         }
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
-        return !(false === strpos($this->url, $_SERVER['HTTP_HOST']));
+        return !(!str_contains($this->url, $_SERVER['HTTP_HOST']));
     }
 
     /**
      * Checks if the current URL is the main index.php file.
-     *
-     * @return bool
      */
     protected function isHomeIndex(): bool
     {
@@ -625,13 +588,11 @@ class Link
             return false;
         }
 
-        return !(false === strpos($this->url, self::LINK_INDEX_HOME));
+        return !(!str_contains($this->url, self::LINK_INDEX_HOME));
     }
 
     /**
      * Returns the HTTP GET parameters.
-     *
-     * @return array
      */
     protected function getHttpGetParameters(): array
     {
@@ -651,7 +612,7 @@ class Link
             foreach ($params as $param) {
                 if (!empty($param)) {
                     $couple = explode(self::LINK_EQUAL, $param);
-                    list($key, $val) = $couple;
+                    [$key, $val] = $couple;
                     $parameters[$key] = urldecode($val);
                 }
             }
@@ -662,8 +623,6 @@ class Link
 
     /**
      * Returns the query of an URL.
-     *
-     * @return array
      */
     protected function getQuery(): array
     {
@@ -685,9 +644,6 @@ class Link
 
     /**
      * Returns a search engine optimized title.
-     *
-     * @param string $title
-     * @return string
      */
     public function getSEOItemTitle(string $title = ''): string
     {
@@ -771,11 +727,10 @@ class Link
      *
      * @param string $url URL
      * @param int $sids Session Id
-     * @return string
      */
     private function appendSids(string $url, int $sids): string
     {
-        $separator = (false === strpos($url, self::LINK_SEARCHPART_SEPARATOR))
+        $separator = (!str_contains($url, self::LINK_SEARCHPART_SEPARATOR))
             ?
             self::LINK_SEARCHPART_SEPARATOR
             :
@@ -786,8 +741,6 @@ class Link
 
     /**
      * Returns the current URL.
-     *
-     * @return string
      */
     public function getCurrentUrl(): string
     {

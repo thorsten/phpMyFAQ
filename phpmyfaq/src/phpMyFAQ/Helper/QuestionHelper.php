@@ -32,27 +32,14 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class QuestionHelper
 {
-    /** @var Configuration */
-    private Configuration $config;
-
-    /** @var Category */
-    private Category $category;
-
-
     /**
      * QuestionHelper constructor.
-     * @param Configuration $config
-     * @param Category $category
      */
-    public function __construct(Configuration $config, Category $category)
+    public function __construct(private Configuration $config, private Category $category)
     {
-        $this->config = $config;
-        $this->category = $category;
     }
 
     /**
-     * @param array $questionData
-     * @param array $categories
      * @throws TransportExceptionInterface
      * @throws Exception
      */

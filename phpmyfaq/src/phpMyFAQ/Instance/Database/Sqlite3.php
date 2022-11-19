@@ -403,9 +403,7 @@ class Sqlite3 extends Database implements Driver
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.
      *
-     * @param string $prefix
      *
-     * @return bool
      */
     public function createTables(string $prefix = ''): bool
     {

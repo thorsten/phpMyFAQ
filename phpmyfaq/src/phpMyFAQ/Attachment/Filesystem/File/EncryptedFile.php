@@ -46,8 +46,6 @@ class EncryptedFile extends File
 
     /**
      * @param string $filepath
-     * @param string $mode
-     * @param string $key
      */
     public function __construct($filepath, string $mode, string $key)
     {
@@ -57,11 +55,7 @@ class EncryptedFile extends File
         parent::__construct($filepath);
     }
 
-    /**
-     * @param string $chunk
-     * @return int|false
-     */
-    public function putChunk(string $chunk)
+    public function putChunk(string $chunk): int|false
     {
         $content = $this->aes->encrypt($chunk) . self::CHUNKDELIMITER;
 
@@ -69,8 +63,6 @@ class EncryptedFile extends File
     }
 
     /**
-     * @param string $target
-     * @return bool
      * @throws FileException
      */
     public function copyTo(string $target): bool

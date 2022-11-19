@@ -29,17 +29,13 @@ class TagsHelper extends Helper
 {
     /**
      * The array of Tag IDs
-     *
-     * @var array
      */
-    private $taggingIds;
+    private ?array $taggingIds = null;
 
     /**
      * Renders the tag list.
      *
      * @param array $tags Array of tags.
-     *
-     * @return string
      */
     public function renderTagList(array $tags): string
     {
@@ -56,8 +52,6 @@ class TagsHelper extends Helper
      *
      * @param int    $tagId   The ID of the tag
      * @param string $tagName The tag name
-     *
-     * @return string
      */
     public function renderSearchTag(int $tagId, string $tagName): string
     {
@@ -95,9 +89,7 @@ class TagsHelper extends Helper
      */
     public function setTaggingIds(array $taggingIds)
     {
-        $this->taggingIds = array_filter($taggingIds, function ($tagId) {
-            return Filter::filterVar($tagId, FILTER_VALIDATE_INT);
-        });
+        $this->taggingIds = array_filter($taggingIds, fn($tagId) => Filter::filterVar($tagId, FILTER_VALIDATE_INT));
     }
 
 
@@ -107,8 +99,6 @@ class TagsHelper extends Helper
      * @param int     $tagId     The given Tag ID.
      * @param string  $tagName   The name of the tag.
      * @param int     $relevance The relevance of the tag.
-     *
-     * @return string
      */
     public function renderRelatedTag(int $tagId, string $tagName, int $relevance): string
     {

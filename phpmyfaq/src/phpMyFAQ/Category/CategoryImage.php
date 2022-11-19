@@ -30,11 +30,6 @@ class CategoryImage
     private const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
 
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * @var bool
      */
     private bool $isUpload = false;
@@ -54,17 +49,14 @@ class CategoryImage
      *
      * @param Configuration $config Configuration object
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Sets the uploaded file array from $_FILES.
      *
-     * @param array $uploadedFile
      *
-     * @return CategoryImage
      */
     public function setUploadedFile(array $uploadedFile): CategoryImage
     {
@@ -78,10 +70,6 @@ class CategoryImage
 
     /**
      * Returns the filename for the given category ID and language.
-     *
-     * @param int    $categoryId
-     * @param string $categoryName
-     * @return string
      */
     public function getFileName(int $categoryId, string $categoryName): string
     {
@@ -101,9 +89,6 @@ class CategoryImage
 
     /**
      * Returns the filename.
-     *
-     * @param string $fileName
-     * @return CategoryImage
      */
     public function setFileName(string $fileName): CategoryImage
     {
@@ -114,9 +99,6 @@ class CategoryImage
 
     /**
      * Returns the image file extension from a given MIME type.
-     *
-     * @param string $mimeType
-     * @return string
      */
     private function getFileExtension(string $mimeType): string
     {
@@ -131,8 +113,6 @@ class CategoryImage
 
     /**
      * Uploads the current file and moves it into the images/ folder.
-     *
-     * @return bool
      */
     public function upload(): bool
     {
@@ -155,8 +135,6 @@ class CategoryImage
 
     /**
      * Deletes the current file, returns true, if no file is available.
-     *
-     * @return bool
      */
     public function delete(): bool
     {

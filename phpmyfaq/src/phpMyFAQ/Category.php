@@ -36,14 +36,14 @@ class Category
      *
      * @var array<int>
      */
-    public $categories = [];
+    public array $categories = [];
 
     /**
      * The category names as an array.
      *
      * @var array<string>
      */
-    public $categoryName = [];
+    public array $categoryName = [];
 
     /**
      * The image as an array.
@@ -64,11 +64,6 @@ class Category
      * @var array
      */
     private array $catTree = [];
-
-    /**
-     * @var Configuration
-     */
-    private Configuration $config;
 
     /**
      * User ID.
@@ -103,14 +98,14 @@ class Category
      *
      * @var array<int, int>>
      */
-    private $owner = [];
+    private array $owner = [];
 
     /**
      * Entity moderators
      *
      * @var array<int, int>>
      */
-    private $moderators = [];
+    private array $moderators = [];
 
     /**
      * Symbol for each item
@@ -134,10 +129,8 @@ class Category
      * @param int[] $groups Array with group IDs
      * @param bool $withPerm With or without permission check
      */
-    public function __construct(Configuration $config, array $groups = [], bool $withPerm = true)
+    public function __construct(private Configuration $config, array $groups = [], bool $withPerm = true)
     {
-        $this->config = $config;
-
         $this->setGroups($groups);
         $this->setLanguage($this->config->getLanguage()->getLanguage());
 
@@ -149,7 +142,6 @@ class Category
 
     /**
      * @param int[] $groups
-     * @return Category
      */
     public function setGroups(array $groups): Category
     {
@@ -160,27 +152,17 @@ class Category
         return $this;
     }
 
-    /**
-     * @param string $language
-     * @return Category
-     */
     public function setLanguage(string $language): Category
     {
         $this->language = $language;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getUser(): int
     {
         return $this->user;
     }
 
-    /**
-     * @return array
-     */
     public function getGroups(): array
     {
         return $this->groups;
@@ -191,10 +173,8 @@ class Category
      * and group permissions.
      *
      * @param bool $withPermission With or without permission check
-     *
-     * @return array
      */
-    private function getOrderedCategories(bool $withPermission = true): array
+    private function getOrderedCategories(bool $withPermission = true): void
     {
         $where = '';
 
@@ -272,16 +252,12 @@ class Category
                 $this->moderators[(int)$row['id']] = &$row['group_id'];
             }
         }
-
-        return $this->categories;
     }
 
     /**
      * Get the level of the item id.
      *
      * @param int $id Entity id
-     *
-     * @return int
      */
     private function getLevelOf(int $id): int
     {
@@ -301,10 +277,6 @@ class Category
         return $level;
     }
 
-    /**
-     * @param int $userId
-     * @return Category
-     */
     public function setUser(int $userId = -1): Category
     {
         $this->user = $userId;
@@ -316,8 +288,6 @@ class Category
      *
      * @param string $categories String of parent category ids
      * @param bool $parentId Only top level categories?
-     *
-     * @return array
      */
     public function getCategories(string $categories, bool $parentId = true): array
     {
@@ -355,8 +325,6 @@ class Category
 
     /**
      * Gets all categories and write them in an array.
-     *
-     * @return array
      */
     public function getAllCategories(): array
     {
@@ -439,8 +407,6 @@ class Category
 
     /**
      * Gets all category IDs
-     *
-     * @return array
      */
     public function getAllCategoryIds(): array
     {
@@ -569,12 +535,8 @@ class Category
     }
 
     //
-
     /**
      * List in array the root, super-root, ... of the $id.
-     *
-     * @param int $id
-     * @return array
      */
     private function getNodes(int $id): array
     {
@@ -596,8 +558,6 @@ class Category
      * Gets the list of the brothers of $id (include $id).
      *
      * @param int $id Brothers
-     *
-     * @return array
      */
     private function getBrothers(int $id): array
     {
@@ -607,9 +567,7 @@ class Category
     /**
      * List in a array of the $id of the child.
      *
-     * @param int $categoryId
      *
-     * @return array
      */
     public function getChildren(int $categoryId): array
     {
@@ -639,7 +597,6 @@ class Category
     /**
      * Try to expand from the parent_id to the node $id
      *
-     * @param int $id
      * @return void
      */
     public function expandTo(int $id)
@@ -677,7 +634,6 @@ class Category
      * Get the line number where to find the node $id in the category tree.
      *
      * @param int $id Entity id
-     * @return int
      */
     private function getLineCategory(int $id): int
     {
@@ -718,8 +674,6 @@ class Category
 
     /**
      * Total height of the expanded tree.
-     *
-     * @return int
      */
     public function height(): int
     {
@@ -731,7 +685,6 @@ class Category
      * collapse/expand node.
      *
      * @param int $line Current line
-     * @return int
      */
     public function getNextLineTree(int $line): int
     {
@@ -751,9 +704,6 @@ class Category
     /**
      * Returns the four parts of a line to display: category name, the ID of
      * the root node, the description and if the category is active
-     *
-     * @param int $node
-     * @return array
      */
     public function getLineDisplay(int $node): array
     {
@@ -776,7 +726,6 @@ class Category
      * @param string|null $description Description
      * @param bool        $hasChildren Child categories available
      * @param bool        $isActive Sets a link active via CSS
-     * @return string
      */
     public function addCategoryLink(
         string $sids,
@@ -818,8 +767,6 @@ class Category
      * Returns the data of the given category.
      *
      * @param int $categoryId
-     *
-     * @return CategoryEntity
      */
     public function getCategoryData($categoryId): CategoryEntity
     {
@@ -858,7 +805,6 @@ class Category
      * @param string $separator Path separator
      * @param bool   $renderAsHtml Renders breadcrumbs as HTML
      * @param string $useCssClass Use CSS class "breadcrumb"
-     * @return string
      */
     public function getPath(
         int $id,
@@ -927,7 +873,6 @@ class Category
      * Returns the ID of a category that associated with the given article.
      *
      * @param int $faqId FAQ id
-     * @return int
      */
     public function getCategoryIdFromFaq(int $faqId): int
     {
@@ -964,7 +909,6 @@ class Category
      * 'parent_id' and 'description'.
      *
      * @param int $faqId Record id
-     * @return array
      */
     public function getCategoriesFromFaq(int $faqId): array
     {
@@ -1008,10 +952,6 @@ class Category
 
     /**
      * Given FAQ ID and category ID are connected or not.
-     *
-     * @param int $faqId
-     * @param int $categoryId
-     * @return bool
      */
     public function categoryHasLinkToFaq(int $faqId, int $categoryId): bool
     {
@@ -1027,8 +967,6 @@ class Category
 
     /**
      * Returns the category tree as array.
-     *
-     * @return array
      */
     public function getCategoryTree(): array
     {
@@ -1037,9 +975,6 @@ class Category
 
     /**
      * Returns the moderator group ID of the given category.
-     *
-     * @param int $categoryId
-     * @return int
      */
     public function getModeratorGroupId(int $categoryId): int
     {
@@ -1089,8 +1024,6 @@ class Category
      * Check if category already exists.
      *
      * @param array $categoryData Array of category data
-     *
-     * @return int
      */
     public function checkIfCategoryExists(array $categoryData): int
     {
@@ -1109,8 +1042,6 @@ class Category
      * Updates an existent category entry.
      *
      * @param array $categoryData Array of category data
-     *
-     * @return bool
      */
     public function updateCategory(array $categoryData): bool
     {
@@ -1150,7 +1081,6 @@ class Category
      *
      * @param int $from Old user id
      * @param int $to New user id
-     * @return bool
      */
     public function moveOwnership(int $from, int $to): bool
     {
@@ -1170,7 +1100,6 @@ class Category
      *
      * @param int    $categoryId Entity id
      * @param string $categoryLanguage Entity language
-     * @return bool
      */
     public function checkLanguage(int $categoryId, string $categoryLanguage): bool
     {
@@ -1191,7 +1120,6 @@ class Category
      *
      * @param int $categoryId Entity id
      * @param int $parentId Parent category id
-     * @return bool
      */
     public function updateParentCategory(int $categoryId, int $parentId): bool
     {
@@ -1212,10 +1140,6 @@ class Category
 
     /**
      * Deletes a category.
-     *
-     * @param int $categoryId
-     * @param string $categoryLang
-     * @return bool
      */
     public function deleteCategory(int $categoryId, string $categoryLang): bool
     {
@@ -1232,7 +1156,6 @@ class Category
     /**
      * Create array with translated categories.
      *
-     * @param int $categoryId
      * @return string[]
      */
     public function getCategoryLanguagesTranslated(int $categoryId): array
@@ -1271,8 +1194,6 @@ class Category
      *
      * @param int $category_id Entity id
      * @param string $selected_lang Selected language
-     *
-     * @return string
      */
     public function getCategoryLanguagesToTranslate($category_id, $selected_lang): string
     {
@@ -1324,8 +1245,6 @@ class Category
      * Get number of nodes at the same parent_id level.
      *
      * @param int $parentId Parent id
-     *
-     * @return int
      */
     public function numParent(int $parentId): int
     {
@@ -1347,9 +1266,6 @@ class Category
 
     /**
      * Returns the user id of the category owner
-     *
-     * @param int $categoryId
-     * @return int
      */
     public function getOwner(int $categoryId): int
     {

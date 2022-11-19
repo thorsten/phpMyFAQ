@@ -32,9 +32,6 @@ class Captcha
     /** @var int */
     public int $captchaLength = 6;
 
-    /** @var Configuration */
-    private Configuration $config;
-
     /** @var string */
     private string $sessionId;
 
@@ -112,12 +109,9 @@ class Captcha
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->ip = $_SERVER['REMOTE_ADDR'];
         $this->fonts = $this->getFonts();
@@ -136,9 +130,6 @@ class Captcha
 
     /**
      * Setter for session id.
-     *
-     * @param string $sessionId
-     * @return Captcha
      */
     public function setSessionId(string $sessionId): Captcha
     {
@@ -146,18 +137,11 @@ class Captcha
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isUserIsLoggedIn(): bool
     {
         return $this->userIsLoggedIn;
     }
 
-    /**
-     * @param bool $userIsLoggedIn
-     * @return Captcha
-     */
     public function setUserIsLoggedIn(bool $userIsLoggedIn): Captcha
     {
         $this->userIsLoggedIn = $userIsLoggedIn;
@@ -168,15 +152,13 @@ class Captcha
      * Gives the HTML output code for the Captcha.
      *
      * @param string $action The action parameter
-     *
-     * @return string
      */
     public function renderCaptchaImage(string $action): string
     {
         return sprintf(
             '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s">',
             $_SERVER['SCRIPT_NAME'],
-            isset($this->sessionId) ? $this->sessionId : '',
+            $this->sessionId ?? '',
             $action,
             $_SERVER['REQUEST_TIME'],
             $this->height,
@@ -209,7 +191,6 @@ class Captcha
     /**
      * Create the background.
      *
-     * @return void
      * @throws Exception
      */
     private function createBackground(): void
@@ -232,7 +213,6 @@ class Captcha
     /**
      * Draw random lines.
      *
-     * @return void
      * @throws Exception
      */
     private function drawLines(): void
@@ -284,7 +264,6 @@ class Captcha
      * to find out *bots and human attempts
      *
      * @param int $capLength Length of captcha code
-     * @return string
      * @throws Exception
      */
     private function generateCaptchaCode(int $capLength): string
@@ -344,8 +323,6 @@ class Captcha
 
     /**
      * Save the Captcha.
-     *
-     * @return bool
      */
     private function saveCaptcha(): bool
     {
@@ -395,7 +372,6 @@ class Captcha
     /**
      * Draw the Text.
      *
-     * @return void
      * @throws Exception
      */
     private function drawText(): void
@@ -459,7 +435,6 @@ class Captcha
      * if the captcha code spam protection has been activated from the general PMF configuration.
      *
      * @param string $code Captcha Code
-     * @return bool
      */
     public function checkCaptchaCode(string $code): bool
     {
@@ -477,7 +452,6 @@ class Captcha
      * Validate the Captcha.
      *
      * @param string $captchaCode Captcha code
-     * @return bool
      */
     public function validateCaptchaCode(string $captchaCode): bool
     {

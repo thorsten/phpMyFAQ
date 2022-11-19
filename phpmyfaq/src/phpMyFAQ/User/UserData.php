@@ -33,32 +33,22 @@ use phpMyFAQ\Database;
 class UserData
 {
     /**
-     * @var Configuration
-     */
-    private $config = null;
-
-    /**
      * associative array containing user data.
      *
      * @var string[]
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * User-ID.
-     *
-     * @var int
      */
-    private $userId = 0;
+    private int $userId = 0;
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -68,7 +58,7 @@ class UserData
      * @param mixed $field Field(s)
      * @return mixed
      */
-    public function get($field)
+    public function get(mixed $field)
     {
         $singleReturn = false;
         if (!is_array($field)) {
@@ -168,14 +158,14 @@ class UserData
      *
      * @return bool
      */
-    public function set($field, $value = null)
+    public function set(mixed $field, mixed $value = null)
     {
         // check input
         if (!is_array($field)) {
-            $field = array($field);
+            $field = [$field];
         }
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
         if (count($field) != count($value)) {
             return false;

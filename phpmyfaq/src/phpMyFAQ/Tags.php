@@ -29,30 +29,21 @@ use phpMyFAQ\Entity\TagEntity as EntityTags;
 class Tags
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * @var array<int, string>
      */
-    private $recordsByTagName = [];
+    private array $recordsByTagName = [];
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Returns all tags for a FAQ record.
      *
      * @param int $recordId Record ID
-     * @return string
      */
     public function getAllLinkTagsById(int $recordId): string
     {
@@ -114,7 +105,6 @@ class Tags
      *
      * @param int $recordId Record ID
      * @param array<int, string> $tags Array of tags
-     * @return bool
      */
     public function saveTags(int $recordId, array $tags): bool
     {
@@ -187,15 +177,10 @@ class Tags
     ): array {
         $allTags = [];
 
-        // Hack: LIKE is case sensitive under PostgreSQL
-        switch (Database::getType()) {
-            case 'pgsql':
-                $like = 'ILIKE';
-                break;
-            default:
-                $like = 'LIKE';
-                break;
-        }
+        $like = match (Database::getType()) {
+            'pgsql' => 'ILIKE',
+            default => 'LIKE',
+        };
 
         $query = sprintf(
             '
@@ -247,7 +232,6 @@ class Tags
      * Deletes all tags from a given record id.
      *
      * @param int $recordId Record ID
-     * @return bool
      */
     public function deleteTagsFromRecordId(int $recordId): bool
     {
@@ -264,9 +248,6 @@ class Tags
 
     /**
      * Updates a tag.
-     *
-     * @param EntityTags $entity
-     * @return bool
      */
     public function updateTag(EntityTags $entity): bool
     {
@@ -282,9 +263,6 @@ class Tags
 
     /**
      * Deletes a given tag.
-     *
-     * @param int $tagId
-     * @return bool
      */
     public function deleteTag(int $tagId): bool
     {
@@ -352,8 +330,6 @@ class Tags
 
     /**
      * Returns the HTML for the Tags Cloud.
-     *
-     * @return string
      */
     public function renderTagCloud(): string
     {
@@ -466,10 +442,6 @@ class Tags
         return $records;
     }
 
-    /**
-     * @param int $limit
-     * @return string
-     */
     public function renderPopularTags(int $limit = 0): string
     {
         $html = '';
@@ -530,7 +502,6 @@ class Tags
      * Returns the tagged item.
      *
      * @param int $tagId Tagging ID
-     * @return string
      */
     public function getTagNameById(int $tagId): string
     {
@@ -551,7 +522,6 @@ class Tags
     /**
      * Returns the popular Tags as an array
      *
-     * @param int $limit
      * @return array<int, array<string, int|string>>
      */
     public function getPopularTagsAsArray(int $limit = 0): array

@@ -27,9 +27,6 @@ use phpMyFAQ\Configuration;
  */
 class Elasticsearch
 {
-    /** @var Configuration */
-    protected Configuration $config;
-
     /** @var Client */
     protected Client $client;
 
@@ -40,7 +37,7 @@ class Elasticsearch
      * Elasticsearch mapping
      * @var array<string, mixed>
      */
-    private $mappings = [
+    private array $mappings = [
         '_source' => [
             'enabled' => true
         ],
@@ -66,20 +63,15 @@ class Elasticsearch
 
     /**
      * Elasticsearch constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected Configuration $config)
     {
-        $this->config = $config;
         $this->client = $config->getElasticsearch();
         $this->esConfig = $config->getElasticsearchConfig();
     }
 
     /**
      * Creates the Elasticsearch index.
-     *
-     * @return bool
      */
     public function createIndex(): bool
     {
@@ -131,14 +123,20 @@ class Elasticsearch
 
     /**
      * Puts phpMyFAQ Elasticsearch mapping into index.
-     *
-     * @return bool
      */
     public function putMapping(): bool
     {
         $response = $this->getMapping();
 
-        if (0 === count($response[$this->esConfig['index']]['mappings'])) {
+        if (
+            0 === (
+            is_countable($response[$this->esConfig['index']]['mappings'])
+                ?
+                count($response[$this->esConfig['index']]['mappings'])
+                :
+                0
+            )
+        ) {
             $params = [
                 'index' => $this->esConfig['index'],
                 'body' => $this->mappings
@@ -245,7 +243,7 @@ class Elasticsearch
             $responses = $this->client->bulk($params);
         }
 
-        if (isset($responses) && count($responses)) {
+        if (isset($responses) && (is_countable($responses) ? count($responses) : 0)) {
             return ['success' => $responses];
         }
 
@@ -281,7 +279,6 @@ class Elasticsearch
     /**
      * Deletes a FAQ document
      *
-     * @param int $solutionId
      * @return string[]
      */
     public function delete(int $solutionId): array

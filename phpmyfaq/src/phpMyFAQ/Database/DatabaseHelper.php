@@ -28,17 +28,11 @@ use phpMyFAQ\Strings;
  */
 class DatabaseHelper
 {
-    /** @var Configuration */
-    private Configuration $config;
-
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -48,11 +42,7 @@ class DatabaseHelper
      * This alignment will be performed upon all the SQL query "patterns"
      * provided within the PMF backup file.
      *
-     * @param string $query
-     * @param string $oldValue
-     * @param string $newValue
      *
-     * @return string
      */
     public static function alignTablePrefix(string $query, string $oldValue, string $newValue): string
     {
@@ -69,12 +59,7 @@ class DatabaseHelper
      * This alignment will be performed ONLY upon those given SQL queries starting
      * with the given pattern.
      *
-     * @param string $query
-     * @param string $startPattern
-     * @param string $oldValue
-     * @param string $newValue
      *
-     * @return string
      */
     private static function alignTablePrefixByPattern(
         string $query,
@@ -99,8 +84,6 @@ class DatabaseHelper
     /**
      * This function builds the queries for the backup.
      *
-     * @param string $query
-     * @param string $table
      * @return string[]
      */
     public function buildInsertQueries(string $query, string $table): array

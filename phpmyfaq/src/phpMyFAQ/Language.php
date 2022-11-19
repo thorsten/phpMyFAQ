@@ -37,24 +37,14 @@ class Language
 
     /**
      * The accepted language of the user agent.
-     *
-     * @var string
      */
-    private $acceptLanguage = '';
-
-    /**
-     * @var Configuration
-     */
-    private $config;
+    private string $acceptLanguage = '';
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -68,8 +58,6 @@ class Language
      * and extracted to ROOT/admin/editor
      *
      * @param string $langCode Language code
-     *
-     * @return bool
      */
     public static function isASupportedTinyMCELanguage(string $langCode): bool
     {
@@ -84,8 +72,6 @@ class Language
      *
      * @param int    $id    ID
      * @param string $table Specifies table
-     *
-     * @return array
      */
     public function languageAvailable(int $id, string $table = 'faqdata'): array
     {
@@ -132,8 +118,6 @@ class Language
      *
      * @param bool   $configDetection Configuration detection
      * @param string $configLanguage  Language from configuration
-     *
-     * @return string
      */
     public function setLanguage(bool $configDetection, string $configLanguage): string
     {
@@ -199,9 +183,6 @@ class Language
         return $_SESSION['lang'] = self::$language;
     }
 
-    /**
-     * @return string
-     */
     public function setLanguageByAcceptLanguage(): string
     {
         self::getUserAgentLanguage();
@@ -228,7 +209,7 @@ class Language
                 $matches
             );
 
-            if (count($matches[1])) {
+            if (is_countable($matches[1]) ? count($matches[1]) : 0) {
                 $languages = array_combine($matches[1], $matches[4]);
                 foreach ($languages as $lang => $val) {
                     if ($val === '') {
@@ -262,8 +243,6 @@ class Language
      * True if the language is supported by the current phpMyFAQ installation.
      *
      * @param string|null $langCode Language code
-     *
-     * @return bool
      */
     public static function isASupportedLanguage(?string $langCode): bool
     {
@@ -272,8 +251,6 @@ class Language
 
     /**
      * Returns the current language.
-     *
-     * @return string
      */
     public function getLanguage(): string
     {

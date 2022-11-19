@@ -70,6 +70,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      */
     public function search(string $searchTerm): array
     {
+        $result = [];
         $this->resultSet = [];
         $searchParams = [
             'index' => $this->esConfig['index'],
@@ -98,7 +99,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         try {
             $result = $this->client->search($searchParams);
-        } catch (NoNodeAvailableException $e) {
+        } catch (NoNodeAvailableException) {
             $this->resultSet = [];
         }
 
@@ -182,7 +183,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         try {
             $result = $this->client->search($searchParams);
-        } catch (NoNodesAvailableException $e) {
+        } catch (NoNodesAvailableException) {
             return [];
         }
 
@@ -208,8 +209,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the current language, empty string if all languages
-     *
-     * @return string
      */
     public function getLanguage(): string
     {
@@ -218,8 +217,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
     /**
      * Sets the current language
-     *
-     * @param string $language
      */
     public function setLanguage(string $language): void
     {

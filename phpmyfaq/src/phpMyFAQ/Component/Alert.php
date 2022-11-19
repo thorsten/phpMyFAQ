@@ -23,9 +23,6 @@ class Alert
 {
     /**
      * Renders a Bootstrap success alert component.
-     *
-     * @param  string $translationKey
-     * @return string
      */
     public static function success(string $translationKey): string
     {
@@ -38,10 +35,6 @@ class Alert
 
     /**
      * Renders a Bootstrap danger alert component.
-     *
-     * @param string $translationKey
-     * @param string|null $errorMessage
-     * @return string
      */
     public static function danger(string $translationKey, ?string $errorMessage = null): string
     {
@@ -55,9 +48,6 @@ class Alert
 
     /**
      * Renders a Bootstrap info alert component.
-     *
-     * @param  string $translationKey
-     * @return string
      */
     public static function info(string $translationKey): string
     {
@@ -66,9 +56,6 @@ class Alert
 
     /**
      * Renders a Bootstrap warning alert component.
-     *
-     * @param  string $translationKey
-     * @return string
      */
     public static function warning(string $translationKey): string
     {

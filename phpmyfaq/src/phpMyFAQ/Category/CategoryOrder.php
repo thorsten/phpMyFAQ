@@ -26,23 +26,16 @@ use phpMyFAQ\Database;
  */
 class CategoryOrder
 {
-    /** @var Configuration */
-    private $config;
-
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Returns the current position for the given category ID
      *
-     * @param int $categoryId
      * @return mixed
      */
     public function getPositionById(int $categoryId)
@@ -60,8 +53,6 @@ class CategoryOrder
     /**
      * Inserts the position for the given category ID
      *
-     * @param int $categoryId
-     * @param int $position
      * @return mixed
      */
     public function setPositionById(int $categoryId, int $position)
@@ -79,8 +70,6 @@ class CategoryOrder
     /**
      * Updates the position for the given category ID
      *
-     * @param int $categoryId
-     * @param int $position
      * @return mixed
      */
     public function updatePositionById(int $categoryId, int $position)

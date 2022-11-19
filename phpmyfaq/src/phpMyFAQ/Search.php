@@ -32,26 +32,17 @@ use stdClass;
  */
 class Search
 {
-    /** @var Configuration */
-    private $config;
+    private ?int $categoryId = null;
 
-    /** @var int */
-    private $categoryId = null;
+    private ?\phpMyFAQ\Category $category = null;
 
-    /** @var Category */
-    private $category = null;
-
-    /** @var string */
-    private $table;
+    private string $table;
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->table = Database::getTablePrefix() . 'faqsearches';
     }
 
@@ -241,9 +232,6 @@ class Search
 
     /**
      * Deletes a search term.
-     *
-     * @param int $searchTermId
-     * @return bool
      */
     public function deleteSearchTermById(int $searchTermId): bool
     {
@@ -262,8 +250,6 @@ class Search
 
     /**
      * Deletes all search terms.
-     *
-     * @return bool
      */
     public function deleteAllSearchTerms(): bool
     {
@@ -318,8 +304,6 @@ class Search
 
     /**
      * Returns row count from the "faqsearches" table.
-     *
-     * @return int
      */
     public function getSearchesCount(): int
     {
@@ -335,17 +319,12 @@ class Search
 
     /**
      * Sets the Entity object.
-     *
-     * @param Category $category
      */
     public function setCategory(Category $category): void
     {
         $this->category = $category;
     }
 
-    /**
-     * @return Category
-     */
     public function getCategory(): Category
     {
         return $this->category;

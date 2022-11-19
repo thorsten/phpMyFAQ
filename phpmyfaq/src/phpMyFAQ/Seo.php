@@ -26,38 +26,22 @@ namespace phpMyFAQ;
 class Seo
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
-     * @param  string $action
      * @return mixed
      */
     public function getMetaRobots(string $action)
     {
-        switch ($action) {
-            case 'main':
-                return $this->config->get('seo.metaTagsHome');
-
-            case 'faq':
-                return $this->config->get('seo.metaTagsFaqs');
-
-            case 'show':
-                return $this->config->get('seo.metaTagsCategories');
-
-            default:
-                return $this->config->get('seo.metaTagsPages');
-        }
+        return match ($action) {
+            'main' => $this->config->get('seo.metaTagsHome'),
+            'faq' => $this->config->get('seo.metaTagsFaqs'),
+            'show' => $this->config->get('seo.metaTagsCategories'),
+            default => $this->config->get('seo.metaTagsPages'),
+        };
     }
 }

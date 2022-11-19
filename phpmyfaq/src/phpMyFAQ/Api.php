@@ -18,6 +18,7 @@
 namespace phpMyFAQ;
 
 use ErrorException;
+use JsonException;
 use phpMyFAQ\Core\Exception;
 use stdClass;
 
@@ -34,43 +35,28 @@ class Api
     private string $apiUrl = 'https://api.phpmyfaq.de';
 
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
-     * @var System
-     */
-    private System $system;
-
-    /**
      * @var string|null
      */
     private ?string $remoteHashes = null;
 
     /**
      * Api constructor.
-     *
-     * @param Configuration $config
-     * @param System        $system
      */
-    public function __construct(Configuration $config, System $system)
+    public function __construct(private Configuration $config, private System $system)
     {
-        $this->config = $config;
-        $this->system = $system;
     }
 
     /**
      * Returns the installed, the current available and the next version
      * as array.
      *
-     * @return array
+     * @throws JsonException
      * @throws Exception
      */
     public function getVersions(): array
     {
         $json = $this->fetchData($this->apiUrl . '/versions');
-        $result = json_decode($json);
+        $result = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
         if ($result instanceof stdClass) {
             return [
                 'installed' => $this->config->getVersion(),
@@ -79,53 +65,47 @@ class Api
             ];
         }
 
-        throw new Exception('phpMyFAQ Version API is not available.');
+        throw new JsonException('phpMyFAQ Version API is not available.');
     }
 
     /**
-     * Returns true, if installed version can be verified. Otherwise false.
+     * Returns true, if installed version can be verified. Otherwise, false.
      *
-     * @return bool
+     * @throws JsonException
      * @throws Exception
      */
     public function isVerified(): bool
     {
         $this->remoteHashes = $this->fetchData($this->apiUrl . '/verify/' . $this->config->getVersion());
 
-        if (json_decode($this->remoteHashes) instanceof stdClass) {
-            if (!is_array(json_decode($this->remoteHashes, true))) {
+        if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
+            if (!is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
                 return false;
             }
 
             return true;
         }
 
-        throw new Exception('phpMyFAQ Verification API is not available.');
+        throw new JsonException('phpMyFAQ Verification API is not available.');
     }
 
     /**
-     * @return array
+     * @throws JsonException
      * @throws \Exception
      */
     public function getVerificationIssues(): array
     {
         return array_diff(
-            json_decode($this->system->createHashes(), true),
-            json_decode($this->remoteHashes, true)
+            json_decode($this->system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
+            json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
         );
     }
 
     /**
-     * @param string $url
-     * @return string
-     * @throws Exception
+     * Return the fetched content from a given URL
      */
     public function fetchData(string $url): string
     {
-        try {
-            return file_get_contents($url);
-        } catch (ErrorException $exception) {
-            throw new Exception($exception->getMessage());
-        }
+        return file_get_contents($url);
     }
 }

@@ -38,12 +38,6 @@ class SMTP implements MailUserAgentInterface
      */
     private MailerInterface $mailer;
 
-    /**
-     * @param string $server
-     * @param string $user
-     * @param string $password
-     * @param int    $port
-     */
     public function setAuthConfig(string $server, string $user, string $password, int $port = 25): void
     {
         $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, $password, $server, $port);
@@ -52,10 +46,7 @@ class SMTP implements MailUserAgentInterface
     }
 
     /**
-     * @param string   $recipients
      * @param string[] $headers
-     * @param string   $body
-     * @return int
      * @throws TransportExceptionInterface
      */
     public function send(string $recipients, array $headers, string $body): int

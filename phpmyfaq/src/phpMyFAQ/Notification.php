@@ -25,21 +25,16 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class Notification
 {
-    /** @var Configuration */
-    private Configuration $config;
-
     /** @var Mail */
     private Mail $mail;
 
     /**
      * Constructor.
      *
-     * @param Configuration $config
      * @throws Core\Exception
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->mail = new Mail($this->config);
         $this->mail->setReplyTo(
             $this->config->getAdminEmail(),
@@ -72,8 +67,6 @@ class Notification
      * Sends mails to FAQ admin and other given users about a newly added FAQ.
      *
      * @param array<string> $emails
-     * @param int           $faqId
-     * @param string        $faqLanguage
      * @throws Core\Exception|TransportExceptionInterface
      */
     public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage): void

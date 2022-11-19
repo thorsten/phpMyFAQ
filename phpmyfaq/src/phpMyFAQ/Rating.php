@@ -26,11 +26,6 @@ use phpMyFAQ\Language\Plurals;
 class Rating
 {
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Plural form support.
      *
      * @var Plurals
@@ -39,14 +34,10 @@ class Rating
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
         global $plr;
-
-        $this->config = $config;
         $this->plr = $plr;
     }
 
@@ -59,17 +50,9 @@ class Rating
     {
         $ratings = [];
 
-        switch (Database::getType()) {
-            case 'mssql':
-            case 'sqlsrv':
-                // In order to remove this MS SQL 2000/2005 "limit" below:
-                //  The text, ntext, and image data types cannot be compared or sorted, except when using IS NULL or
-                //  LIKE operator.
-                // we'll cast faqdata.thema datatype from text to char(2000)
-                // Note: the char length is simply an heuristic value
-                // Doing so we'll also need to trim $row->thema to remove blank chars when it is shorter than 2000 chars
-                $query = sprintf(
-                    '
+        $query = match (Database::getType()) {
+            'mssql', 'sqlsrv' => sprintf(
+                '
                     SELECT
                         fd.id AS id,
                         fd.lang AS lang,
@@ -98,15 +81,12 @@ class Rating
                         fv.usr
                     ORDER BY
                         fcr.category_id',
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix()
-                );
-                break;
-
-            default:
-                $query = sprintf(
-                    '
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix()
+            ),
+            default => sprintf(
+                '
                     SELECT
                         fd.id AS id,
                         fd.lang AS lang,
@@ -135,23 +115,22 @@ class Rating
                         fv.usr
                     ORDER BY
                         fcr.category_id',
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix(),
-                    Database::getTablePrefix()
-                );
-                break;
-        }
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix()
+            ),
+        };
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $ratings[] = array(
+            $ratings[] = [
                 'id' => $row->id,
                 'lang' => $row->lang,
                 'category_id' => $row->category_id,
                 'question' => $row->question,
                 'num' => $row->num,
-                'usr' => $row->usr,
-            );
+                'usr' => $row->usr
+            ];
         }
 
         return $ratings;
@@ -160,9 +139,7 @@ class Rating
     /**
      * Calculates the rating of the user voting.
      *
-     * @param int $id
      *
-     * @return string
      */
     public function getVotingResult(int $id): string
     {
@@ -196,8 +173,6 @@ class Rating
      *
      * @param int    $id FAQ record id
      * @param string $ip IP
-     *
-     * @return bool
      */
     public function check(int $id, string $ip): bool
     {
@@ -225,9 +200,7 @@ class Rating
     /**
      * Returns the number of users from the table "faqvotings".
      *
-     * @param integer $recordId
      *
-     * @return integer
      */
     public function getNumberOfVotings(int $recordId): int
     {
@@ -254,8 +227,6 @@ class Rating
      * Adds a new voting record.
      *
      * @param int[] $votingData
-     *
-     * @return bool
      */
     public function addVoting(array $votingData): bool
     {
@@ -280,8 +251,6 @@ class Rating
      * Updates an existing voting record.
      *
      * @param int[] $votingData
-     *
-     * @return bool
      */
     public function update(array $votingData): bool
     {
@@ -308,8 +277,6 @@ class Rating
 
     /**
      * Deletes all votes.
-     *
-     * @return bool
      */
     public function deleteAll(): bool
     {

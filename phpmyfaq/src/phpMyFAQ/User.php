@@ -101,13 +101,6 @@ class User
     protected array $authContainer = [];
 
     /**
-     * Configuration.
-     *
-     * @var Configuration|null
-     */
-    protected ?Configuration $config = null;
-
-    /**
      * Default Authentication properties.
      *
      * @var array<string, array<string, string>|string|false>
@@ -180,10 +173,8 @@ class User
      *
      * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected ?\phpMyFAQ\Configuration $config)
     {
-        $this->config = $config;
-
         $perm = Permission::selectPerm($this->config->get('security.permLevel'), $this->config);
         /** @phpstan-ignore-next-line */
         if (!$this->addPerm($perm)) {
@@ -231,7 +222,6 @@ class User
     /**
      * Returns a specific entry from the auth data source array.
      *
-     * @param string $key
      * @return string|null
      */
     public function getAuthSource(string $key): ?string
@@ -245,7 +235,6 @@ class User
     /**
      * Returns a specific entry from the auth data array.
      *
-     * @param string $key
      * @return mixed
      */
     public function getAuthData(string $key): mixed
@@ -296,7 +285,6 @@ class User
      * loads basic user information from the database selecting the user with
      * specified cookie information.
      *
-     * @param string $cookie
      * @return bool
      */
     public function getUserByCookie(string $cookie): bool
@@ -360,7 +348,6 @@ class User
     /**
      * Checks if display name is already used. Returns true, if already in use.
      *
-     * @param string $name
      * @return bool
      */
     public function checkDisplayName(string $name): bool
@@ -379,7 +366,6 @@ class User
     /**
      * Checks if email address is already used. Returns true, if already in use.
      *
-     * @param string $name
      * @return bool
      */
     public function checkMailAddress(string $name): bool
@@ -433,10 +419,6 @@ class User
     /**
      * Creates a new user and stores basic data in the database.
      *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
-     * @param int    $userId
      * @return bool
      * @throws Core\Exception
      * @throws Exception
@@ -593,8 +575,6 @@ class User
     /**
      * Returns a new password.
      *
-     * @param int  $minimumLength
-     * @param bool $allowUnderscore
      * @return string
      * @throws Exception
      */
@@ -632,7 +612,7 @@ class User
             $skipped = false;
 
             // Ensure letters and numbers only occur once.
-            if (strpos($newPassword, $nextChar) === false) {
+            if (!str_contains($newPassword, $nextChar)) {
                 $newPassword .= $nextChar;
             } else {
                 $skipped = true;
@@ -901,7 +881,6 @@ class User
     /**
      * Returns the user ID from the given email address
      *
-     * @param string $email
      * @return int
      */
     public function getUserIdByEmail(string $email): int
@@ -920,7 +899,6 @@ class User
      * address, if the user is not a registered user, the method
      * returns false for anonymous users
      *
-     * @param string $email
      * @return bool
      */
     public function getUserVisibilityByEmail(string $email): bool
@@ -1058,8 +1036,6 @@ class User
     /**
      * Sends mail to the current user.
      *
-     * @param string $subject
-     * @param string $message
      * @return int
      * @throws Core\Exception|TransportExceptionInterface
      */
@@ -1088,7 +1064,6 @@ class User
     /**
      * Sets the users "is_superadmin" flag and updates the database entry.
      *
-     * @param bool $isSuperAdmin
      * @return bool
      */
     public function setSuperAdmin(bool $isSuperAdmin): bool

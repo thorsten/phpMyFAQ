@@ -49,90 +49,55 @@ class TemplateMetaDataEntity
      */
     private string $content;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param  int $id
-     * @return TemplateMetaDataEntity
-     */
     public function setId(int $id): TemplateMetaDataEntity
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLang(): string
     {
         return $this->lang;
     }
 
-    /**
-     * @param  string $lang
-     * @return TemplateMetaDataEntity
-     */
     public function setLang(string $lang): TemplateMetaDataEntity
     {
         $this->lang = $lang;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPageId(): string
     {
         return $this->pageId;
     }
 
-    /**
-     * @param  string $pageId
-     * @return TemplateMetaDataEntity
-     */
     public function setPageId(string $pageId): TemplateMetaDataEntity
     {
         $this->pageId = $pageId;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param  string $type
-     * @return TemplateMetaDataEntity
-     */
     public function setType(string $type): TemplateMetaDataEntity
     {
         $this->type = $type;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param  string $content
-     * @return TemplateMetaDataEntity
-     */
     public function setContent(string $content): TemplateMetaDataEntity
     {
         $this->content = $content;

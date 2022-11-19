@@ -506,7 +506,6 @@ class MediumPermission extends BasicPermission
      * Get all groups in <option> tags.
      *
      * @param array<int> $groups Selected groups
-     * @param CurrentUser $user
      * @return string
      * @todo   Move into the Helper class
      */
@@ -533,7 +532,6 @@ class MediumPermission extends BasicPermission
      * Returns an array with the IDs of all groups stored in the
      * database if no user is passed.
      *
-     * @param CurrentUser $user
      * @return array<int>
      */
     public function getAllGroups(CurrentUser $user): array

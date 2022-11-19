@@ -26,17 +26,11 @@ use phpMyFAQ\User;
  */
 class UserHelper
 {
-    /** @var User */
-    private User $user;
-
     /**
      * UserHelper constructor.
-     *
-     * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(private User $user)
     {
-        $this->user = $user;
     }
 
     /**
@@ -44,7 +38,6 @@ class UserHelper
      *
      * @param int  $id Selected user ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     * @return string
      */
     public function getAllUserOptions(int $id = 1, bool $allowBlockedUsers = false): string
     {

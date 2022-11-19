@@ -27,24 +27,16 @@ use phpMyFAQ\Entity\QuestionEntity;
 class Question
 {
     /**
-     * @var Configuration
-     */
-    private $config;
-
-    /**
      * Question constructor.
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Adds a new question.
      *
      * @param string[] $questionData
-     * @return bool
      */
     public function addQuestion(array $questionData): bool
     {
@@ -73,9 +65,6 @@ class Question
 
     /**
      * Deletes a question for the table "faqquestions".
-     *
-     * @param  int $questionId
-     * @return bool
      */
     public function deleteQuestion(int $questionId): bool
     {
@@ -94,7 +83,6 @@ class Question
     /**
      * Returns a new question.
      *
-     * @param int $questionId
      * @return array<string, int|string>
      */
     public function getQuestion(int $questionId): array
@@ -152,7 +140,6 @@ class Question
     /**
      * Returns all open questions.
      *
-     * @param bool $showAll
      * @return QuestionEntity[]
      */
     public function getAllOpenQuestions(bool $showAll = true): array
@@ -199,9 +186,6 @@ class Question
 
     /**
      * Returns the visibility of a question.
-     *
-     * @param  int $questionId
-     * @return string
      */
     public function getVisibility(int $questionId): string
     {
@@ -224,10 +208,6 @@ class Question
 
     /**
      * Sets the visibility of a question.
-     *
-     * @param  int    $questionId
-     * @param  string $isVisible
-     * @return bool
      */
     public function setVisibility(int $questionId, string $isVisible): bool
     {
@@ -246,11 +226,6 @@ class Question
 
     /**
      * Updates field answer_id in the table "faqquestion".
-     *
-     * @param  int $openQuestionId
-     * @param  int $faqId
-     * @param  int $categoryId
-     * @return bool
      */
     public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool
     {

@@ -108,8 +108,6 @@ class System
      * version in the database.
      * Releases will be numbered with the follow format:
      * <major>.<minor>.<patch>[-<prerelease>]
-     *
-     * @return string
      */
     public static function getVersion(): string
     {
@@ -134,8 +132,6 @@ class System
     /**
      * Returns the current API version of phpMyFAQ for installation and
      * version in the database.
-     *
-     * @return string
      */
     public static function getApiVersion(): string
     {
@@ -146,8 +142,6 @@ class System
      * Returns true or false on SQLite3.
      *
      * @static
-     * @param string $dbType
-     * @return bool
      */
     public static function isSqlite(string $dbType): bool
     {
@@ -156,8 +150,6 @@ class System
 
     /**
      * Print out the HTML5 Footer.
-     *
-     * @param bool $onePageBack
      */
     public static function renderFooter(bool $onePageBack = false): void
     {
@@ -179,7 +171,6 @@ class System
      * Sets the database handler.
      *
      * @param DatabaseDriver $database
-     * @return System
      */
     public function setDatabase(DatabaseDriver $database): System
     {
@@ -209,7 +200,6 @@ class System
     /**
      * Returns the locally supported databases.
      *
-     * @param bool $returnAsHtml
      * @return array<string, string>
      */
     public function getSupportedSafeDatabases(bool $returnAsHtml = false): array
@@ -240,9 +230,6 @@ class System
 
     /**
      * Checks if the system URI is running with http or https.
-     *
-     * @param Configuration $faqConfig
-     * @return string
      */
     public function getSystemUri(Configuration $faqConfig): string
     {
@@ -263,7 +250,6 @@ class System
 
     /**
      * Returns true, if phpMyFAQ is running on HTTPS
-     * @return bool
      */
     public function getHttpsStatus(): bool
     {
@@ -284,8 +270,6 @@ class System
     /**
      * Checks for installed database extensions, if the first supported
      * extension is enabled, return true.
-     *
-     * @return bool
      */
     public function checkDatabase(): bool
     {
@@ -300,8 +284,6 @@ class System
 
     /**
      * Checks for required PHP extensions.
-     *
-     * @return bool
      */
     public function checkRequiredExtensions(): bool
     {
@@ -321,8 +303,6 @@ class System
     /**
      * Checks for an installed phpMyFAQ version.
      * config/database.php -> phpMyFAQ 2.6 and later
-     *
-     * @return bool
      */
     public function checkInstallation(): bool
     {
@@ -342,7 +322,6 @@ class System
     /**
      * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes.
      *
-     * @return string
      * @throws Exception
      */
     public function createHashes(): string
@@ -385,7 +364,7 @@ class System
             $hashes[$current . ' failed'] = $e->getMessage();
         }
 
-        return json_encode($hashes);
+        return json_encode($hashes, JSON_THROW_ON_ERROR);
     }
 
     /**

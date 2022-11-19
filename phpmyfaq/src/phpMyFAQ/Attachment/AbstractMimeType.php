@@ -187,11 +187,9 @@ abstract class AbstractMimeType
      * Read mime type mapped to extension.
      *
      * @param string $ext file extension
-     *
-     * @return string
      */
     public static function guessByExt($ext): string
     {
-        return isset(self::$list[$ext]) ? self::$list[$ext] : 'application/octet-stream';
+        return self::$list[$ext] ?? 'application/octet-stream';
     }
 }

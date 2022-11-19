@@ -87,7 +87,7 @@ class CurrentUser extends User
      *
      * @var array<string>
      */
-    private $ldapConfig;
+    private array $ldapConfig;
 
     /**
      * Remember me activated or deactivated.
@@ -133,7 +133,6 @@ class CurrentUser extends User
      *
      * @param string $login Login name
      * @param string $password Password
-     * @return bool
      * @throws Exception
      */
     public function login(string $login, string $password): bool
@@ -254,17 +253,12 @@ class CurrentUser extends User
 
     /**
      * Returns true if CurrentUser is logged in, otherwise false.
-     *
-     * @return bool
      */
     public function isLoggedIn(): bool
     {
         return $this->loggedIn;
     }
 
-    /**
-     * @param bool $loggedIn
-     */
     public function setLoggedIn(bool $loggedIn): void
     {
         $this->loggedIn = $loggedIn;
@@ -275,8 +269,6 @@ class CurrentUser extends User
      * session is valid and not timed out. There are two
      * parameters for session timeouts: $this->_sessionTimeout
      * and $this->_sessionIdTimeout.
-     *
-     * @return bool
      */
     public function sessionIsTimedOut(): bool
     {
@@ -288,8 +280,6 @@ class CurrentUser extends User
 
     /**
      * Returns false if the session-ID is not timed out.
-     *
-     * @return bool
      */
     public function sessionIdIsTimedOut(): bool
     {
@@ -301,8 +291,6 @@ class CurrentUser extends User
 
     /**
      * Returns the age of the current session-ID in minutes.
-     *
-     * @return float
      */
     public function sessionAge(): float
     {
@@ -352,8 +340,6 @@ class CurrentUser extends User
      * Returns true on success, otherwise false.
      *
      * @param bool $updateLastLogin Update the last login time?
-     *
-     * @return bool
      */
     public function updateSessionId(bool $updateLastLogin = false): bool
     {
@@ -415,9 +401,6 @@ class CurrentUser extends User
     /**
      * Deletes the CurrentUser from the session. The user
      * will be logged out. Return true on success, otherwise false.
-     *
-     * @param  bool $deleteCookie
-     * @return bool
      */
     public function deleteFromSession(bool $deleteCookie = false): bool
     {
@@ -473,7 +456,6 @@ class CurrentUser extends User
      * returned. On success, a valid CurrentUser object is returned.
      *
      * @static
-     * @param  Configuration $config
      * @return null|CurrentUser
      */
     public static function getFromSession(Configuration $config)
@@ -530,9 +512,7 @@ class CurrentUser extends User
      *
      * @static
      *
-     * @param Configuration $config
      *
-     * @return null|CurrentUser
      */
     public static function getFromCookie(Configuration $config): ?CurrentUser
     {
@@ -581,8 +561,6 @@ class CurrentUser extends User
 
     /**
      * Remember the auth container for administration
-     * @param string $authSource
-     * @return bool
      */
     public function setAuthSource(string $authSource): bool
     {
@@ -598,9 +576,6 @@ class CurrentUser extends User
 
     /**
      * Saves remember me token in the database.
-     *
-     * @param string $rememberMe
-     * @return bool
      */
     protected function setRememberMe(string $rememberMe): bool
     {
@@ -616,9 +591,6 @@ class CurrentUser extends User
 
     /**
      * Sets login success/failure.
-     *
-     * @param bool $success
-     * @return bool
      */
     public function setSuccess(bool $success): bool
     {
@@ -643,10 +615,6 @@ class CurrentUser extends User
         return (bool) $this->config->getDb()->query($update);
     }
 
-    /**
-     * @param array $token
-     * @return bool
-     */
     public function setTokenData(array $token): bool
     {
         $update = sprintf(
@@ -664,7 +632,7 @@ class CurrentUser extends User
             $token['refresh_token'],
             $token['access_token'],
             $token['code_verifier'],
-            json_encode($token['jwt']),
+            json_encode($token['jwt'], JSON_THROW_ON_ERROR),
             $this->getUserId()
         );
 
@@ -673,8 +641,6 @@ class CurrentUser extends User
 
     /**
      * Returns the CSRF token from session.
-     *
-     * @return string
      */
     public function getCsrfTokenFromSession(): string
     {
@@ -694,8 +660,6 @@ class CurrentUser extends User
     /**
      * Sets IP and session timestamp plus lockout time, success flag to
      * false.
-     *
-     * @return mixed
      */
     protected function setLoginAttempt(): mixed
     {
@@ -723,8 +687,6 @@ class CurrentUser extends User
 
     /**
      * Checks if the last login attempt from current user failed.
-     *
-     * @return bool
      */
     protected function isFailedLastLoginAttempt(): bool
     {
@@ -772,8 +734,6 @@ class CurrentUser extends User
 
     /**
      * Creates a CSRF token.
-     *
-     * @return string
      */
     private function createCsrfToken(): string
     {

@@ -28,26 +28,14 @@ use phpMyFAQ\Database;
 class AttachmentCollection
 {
     /**
-     * Configuration.
-     *
-     * @var Configuration
-     */
-    protected Configuration $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Get an array with minimalistic attachment metadata.
-     *
-     * @return array
      */
     public function getBreadcrumbs(): array
     {

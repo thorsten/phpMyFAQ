@@ -27,28 +27,19 @@ use phpMyFAQ\Configuration;
  */
 class TemplateHelper
 {
-    /** @var Configuration */
-    private Configuration $config;
-
     /** @var TemplateMetaData */
     private TemplateMetaData $meta;
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->meta = new TemplateMetaData($this->config);
     }
 
     /**
      * Renders all {{ var | meta }} filters.
-     *
-     * @param string $key
-     * @return string
      */
     public function renderMetaFilter(string $key): string
     {

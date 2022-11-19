@@ -94,7 +94,6 @@ class BasicPermission extends Permission
      * database for the specified right. The keys of the returned
      * array are the field names.
      *
-     * @param int $rightId
      * @return array<string, bool>
      */
     public function getRightData(int $rightId): array
@@ -364,8 +363,6 @@ class BasicPermission extends Permission
     /**
      * Renames rights, only used for updates.
      *
-     * @param  string $oldName
-     * @param  string $newName
      * @return bool
      */
     public function renameRight(string $oldName, string $newName): bool

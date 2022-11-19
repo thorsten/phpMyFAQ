@@ -30,18 +30,10 @@ use InvalidArgumentException;
 class Network
 {
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -128,7 +120,7 @@ class Network
             throw new InvalidArgumentException('Not a valid IPv6 subnet.');
         }
 
-        list($addr, $preflen) = explode('/', $network);
+        [$addr, $preflen] = explode('/', $network);
         if (!is_numeric($preflen)) {
             throw new InvalidArgumentException('Not a valid IPv6 preflen.');
         }
@@ -156,9 +148,6 @@ class Network
 
     /**
      * Anonymize an IPv4 or IPv6 address.
-     *
-     * @param string $ipAddress
-     * @return string
      */
     public function anonymizeIp(string $ipAddress): string
     {

@@ -28,13 +28,6 @@ use stdClass;
 class Instance
 {
     /**
-     * Configuration.
-     *
-     * @var Configuration
-     */
-    protected Configuration $config;
-
-    /**
      * Instance ID.
      *
      * @var int
@@ -50,18 +43,14 @@ class Instance
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Adds a new instance.
      *
-     * @param InstanceEntity $data
      * @return int $id
      */
     public function addInstance(InstanceEntity $data): int
@@ -98,8 +87,6 @@ class Instance
 
     /**
      * Sets the instance ID.
-     *
-     * @param int $id
      */
     public function setId(int $id): void
     {
@@ -126,7 +113,6 @@ class Instance
     /**
      * Returns the instance.
      *
-     * @param int $id
      *
      * @return object
      */
@@ -146,8 +132,6 @@ class Instance
     /**
      * Updates the instance data.
      *
-     * @param int            $id
-     * @param InstanceEntity $data
      * @return bool
      */
     public function updateInstance(int $id, InstanceEntity $data): bool
@@ -167,7 +151,6 @@ class Instance
     /**
      * Deletes an instance.
      *
-     * @param int $id
      *
      * @return bool
      */
@@ -199,8 +182,6 @@ class Instance
     /**
      * Adds a configuration item for the database.
      *
-     * @param string $name
-     * @param string $value
      *
      * @return mixed
      */
@@ -223,7 +204,6 @@ class Instance
     /**
      * Returns the configuration value.
      *
-     * @param string $name
      * @return bool|string
      */
     public function getConfig(string $name): bool|string
@@ -242,7 +222,6 @@ class Instance
     /**
      * Returns the configuration of the given instance ID.
      *
-     * @param int $instanceId
      * @return string[]
      */
     public function getInstanceConfig(int $instanceId): array

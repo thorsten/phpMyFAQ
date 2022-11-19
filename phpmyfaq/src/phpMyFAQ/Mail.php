@@ -43,7 +43,7 @@ class Mail
      *
      * @var mixed
      */
-    public mixed $attachments;
+    public mixed $attachments = [];
 
     /**
      * Body of the e-mail.
@@ -100,21 +100,21 @@ class Mail
      *
      * @var array<string|int>
      */
-    public array $headers;
+    public array $headers = [];
 
     /**
      * Message of the e-mail: HTML text allowed.
      *
      * @var string
      */
-    public string $message;
+    public string $message = '';
 
     /**
      * Alternate message of the e-mail: only plain text allowed.
      *
      * @var string
      */
-    public string $messageAlt;
+    public string $messageAlt = '';
 
     /**
      * Message-ID of the e-mail.
@@ -143,35 +143,35 @@ class Mail
      *
      * @see priorities
      */
-    public int $priority;
+    public int $priority = 3;
 
     /**
      * Subject of the e-mail.
      *
      * @var string
      */
-    public string $subject;
+    public string $subject = '';
 
     /**
      * Recipients of the e-mail as <BCC>.
      *
      * @var mixed
      */
-    private mixed $bcc;
+    private mixed $bcc = [];
 
     /**
      * Recipients of the e-mail as <CC>.
      *
      * @var mixed
      */
-    private mixed $cc;
+    private mixed $cc = [];
 
     /**
      * Recipients of the e-mail as <From>.
      *
      * @var mixed
      */
-    private mixed $from;
+    private mixed $from = [];
 
     /**
      * Mailer string.
@@ -185,35 +185,35 @@ class Mail
      *
      * @var mixed
      */
-    private mixed $notifyTo;
+    private mixed $notifyTo = [];
 
     /**
      * Recipient of the e-mail as <Reply-To>.
      *
      * @var mixed
      */
-    private mixed $replyTo;
+    private mixed $replyTo = [];
 
     /**
      * Recipient of the e-mail as <Return-Path>.
      *
      * @var mixed
      */
-    private mixed $returnPath;
+    private mixed $returnPath = [];
 
     /**
      * Recipient of the e-mail as <Sender>.
      *
      * @var mixed
      */
-    private mixed $sender;
+    private mixed $sender = [];
 
     /**
      * Recipients of the e-mail as <TO:>.
      *
      * @var mixed
      */
-    private mixed $to;
+    private mixed $to = [];
 
     /**
      * @var Configuration
@@ -231,32 +231,18 @@ class Mail
     {
         // Set default value for public properties
         $this->agent = $config->get('mail.remoteSMTP') ? 'SMTP' : 'built-in';
-        $this->attachments = [];
         $this->boundary = self::createBoundary();
-        $this->headers = [];
-        $this->message = '';
-        $this->messageAlt = '';
         $this->messageId = '<' . $_SERVER['REQUEST_TIME'] . '.' . md5(microtime()) . '@' . self::getServerName() . '>';
-        $this->priority = 3; // 3 -> Normal
-        $this->subject = '';
 
         // Set default value for private properties
         $this->config = $config;
-        $this->bcc = [];
-        $this->cc = [];
-        $this->from = [];
         $this->mailer = 'phpMyFAQ on PHP/' . PHP_VERSION;
-        $this->notifyTo = [];
-        $this->replyTo = [];
-        $this->returnPath = [];
-        $this->sender = [];
-        $this->to = [];
 
         // Set phpMyFAQ related data
         $this->mailer = 'phpMyFAQ/' . $this->config->getVersion();
         try {
             $this->setFrom($this->config->getAdminEmail(), $this->config->getTitle());
-        } catch (Exception $e) {
+        } catch (Exception) {
             // @todo handle exception
         }
     }
@@ -428,13 +414,13 @@ class Mail
                 $name = basename($path);
             }
 
-            $this->attachments[] = array(
+            $this->attachments[] = [
                 'cid' => $cid,
                 'disposition' => $disposition,
                 'mimetype' => $mimetype,
                 'name' => $name,
-                'path' => $path,
-            );
+                'path' => $path
+            ];
 
             return true;
         }
@@ -495,7 +481,6 @@ class Mail
     /**
      * Send the email according to the current settings.
      *
-     * @return int
      * @throws Exception|TransportExceptionInterface
      */
     public function send(): int
@@ -716,10 +701,7 @@ class Mail
         if (
             in_array(
                 $this->contentType,
-                array(
-                'multipart/mixed',
-                'multipart/related',
-                )
+                ['multipart/mixed', 'multipart/related']
             )
         ) {
             $lines[] = '--' . $mainBoundary;
@@ -754,10 +736,7 @@ class Mail
         if (
             in_array(
                 $this->contentType,
-                array(
-                'multipart/mixed',
-                'multipart/related',
-                )
+                ['multipart/mixed', 'multipart/related']
             )
         ) {
             // Back to the main boundary
@@ -820,11 +799,13 @@ class Mail
     {
         // Assure that anything among CRLF, CR will be replaced with just LF
         $text = str_replace(
-            array(
-                "\r\n", // CRLF
-                "\r", // CR
-                "\n", // LF
-            ),
+            [
+                "\r\n",
+                // CRLF
+                "\r",
+                // CR
+                "\n",
+            ],
             "\n", // LF
             $text
         );
@@ -837,7 +818,6 @@ class Mail
      *
      * @static
      * @param string $mua Type of the MUA.
-     * @return Builtin|SMTP
      */
     public static function getMUA(string $mua): Builtin|SMTP
     {
@@ -962,13 +942,12 @@ class Mail
      * it will return the plain email address.
      *
      * @param string $email E-mail address
-     * @return string
      * @static
      */
     public function safeEmail(string $email): string
     {
         if ($this->config->get('spam.enableSafeEmail')) {
-            return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
+            return str_replace(['@', '.'], ['_AT_', '_DOT_'], $email);
         } else {
             return $email;
         }

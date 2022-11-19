@@ -27,9 +27,6 @@ use phpMyFAQ\Configuration;
  */
 abstract class AbstractSearch
 {
-    /** @var Configuration */
-    protected $config = null;
-
     /**
      * ResultSet
      *
@@ -42,8 +39,7 @@ abstract class AbstractSearch
      *
      * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected Configuration $config)
     {
-        $this->config = $config;
     }
 }

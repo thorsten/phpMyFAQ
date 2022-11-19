@@ -89,8 +89,6 @@ abstract class StringsAbstract
 
     /**
      * Set current encoding.
-     *
-     * @param string $encoding
      */
     public function setEncoding(string $encoding): void
     {

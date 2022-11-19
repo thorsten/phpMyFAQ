@@ -302,7 +302,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     public function getMatchClause($searchTerm = ''): string
     {
         $keys = Strings::preg_split("/\s+/", $searchTerm);
-        $numKeys = count($keys);
+        $numKeys = is_countable($keys) ? count($keys) : 0;
         $numMatch = count($this->matchingColumns);
         $where = '';
 

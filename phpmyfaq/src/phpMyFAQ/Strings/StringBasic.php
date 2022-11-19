@@ -34,10 +34,8 @@ class StringBasic extends StringsAbstract
     public const DEFAULT_ENCODING = 'utf-8';
     /**
      * Instance.
-     *
-     * @var StringBasic
      */
-    private static $instance;
+    private static ?\phpMyFAQ\Strings\StringBasic $instance = null;
 
     /**
      * Constructor.
@@ -50,8 +48,6 @@ class StringBasic extends StringsAbstract
      * Create and return an instance.
      *
      * @param string|null $encoding
-     * @param string      $language
-     * @return self
      */
     public static function getInstance(string $encoding = null, string $language = 'en'): StringBasic
     {
@@ -68,8 +64,6 @@ class StringBasic extends StringsAbstract
      * Get string character count.
      *
      * @param string $str String
-     *
-     * @return int
      */
     public static function strlen(string $str): int
     {
@@ -135,9 +129,8 @@ class StringBasic extends StringsAbstract
      * @param string $haystack Haystack
      * @param string $needle Needle
      * @param bool   $part Part
-     * @return string|false
      */
-    public function strstr(string $haystack, string $needle, $part = false)
+    public function strstr(string $haystack, string $needle, $part = false): string|false
     {
         return strstr($haystack, $needle, (bool)$part);
     }
@@ -145,8 +138,6 @@ class StringBasic extends StringsAbstract
     /**
      * Count substring occurrences.
      *
-     * @param string $haystack
-     * @param string $needle
      * @return int
      */
     public function substr_count(string $haystack, string $needle) // phpcs:ignore
@@ -157,8 +148,6 @@ class StringBasic extends StringsAbstract
     /**
      * Find position of last occurrence of a char in a string.
      *
-     * @param string $haystack
-     * @param string $needle
      * @param int    $offset
      * @return int
      */
@@ -170,8 +159,6 @@ class StringBasic extends StringsAbstract
     /**
      * Match a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param null   $matches
      * @param int    $flags
      * @param int    $offset
@@ -185,8 +172,6 @@ class StringBasic extends StringsAbstract
     /**
      * Match a regexp globally.
      *
-     * @param string     $pattern
-     * @param string     $subject
      * @param string[][] $matches
      * @param int        $flags
      * @param int        $offset
@@ -200,14 +185,11 @@ class StringBasic extends StringsAbstract
     /**
      * Split string by a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param int    $limit
      * @param int    $flags
      *
-     * @return string[]|array|false
      */
-    public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0) // phpcs:ignore
+    public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array|bool // phpcs:ignore
     {
         return preg_split($pattern, $subject, $limit, $flags);
     }
@@ -216,13 +198,12 @@ class StringBasic extends StringsAbstract
      * Search and replace by a regexp using a callback.
      *
      * @param string|string[] $pattern
-     * @param callable $callback
      * @param string|string[] $subject
      * @param int $limit
      * @param int $count
      * @return string|string[]
      */
-    public function preg_replace_callback($pattern, callable $callback, $subject, $limit = -1, &$count = 0) // phpcs:ignore
+    public function preg_replace_callback(string|array $pattern, callable $callback, string|array $subject, $limit = -1, &$count = 0): string|array // phpcs:ignore
     {
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -233,12 +214,10 @@ class StringBasic extends StringsAbstract
      * @param string|string[] $pattern
      * @param string|string[] $replacement
      * @param string|string[] $subject
-     * @param int $limit
-     * @param int $count
      *
      * @return string|string[]|null
      */
-    public function preg_replace($pattern, $replacement, $subject, int $limit = -1, int &$count = 0) // phpcs:ignore
+    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0) // phpcs:ignore
     {
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

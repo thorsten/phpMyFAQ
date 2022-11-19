@@ -34,11 +34,10 @@ class Gravatar
      *
      * @param string $email Email address
      * @param string[] $params Allows multiple keys with values to give more control
-     * @return string
      */
     public function getImage(string $email, array $params = []): string
     {
-        $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
+        $imageUrl = $this->getUrl() . 'avatar/' . static::getHash($email);
         $opts = [];
 
         if (isset($params['default'])) {
@@ -68,8 +67,6 @@ class Gravatar
 
     /**
      * Returns the base URL
-     *
-     * @return string
      */
     public function getUrl(): string
     {
@@ -80,7 +77,6 @@ class Gravatar
      * Returns a MD5 hash of an email address.
      *
      * @param string $email Email address
-     * @return string
      */
     public static function getHash(string $email): string
     {

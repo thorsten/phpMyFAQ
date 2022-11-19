@@ -30,12 +30,6 @@ use stdClass;
  */
 class OAuth
 {
-    /** @var Configuration */
-    private Configuration $config;
-
-    /** @var Session */
-    private Session $session;
-
     /** @var stdClass|null JWT */
     private ?stdClass $token = null;
 
@@ -47,21 +41,13 @@ class OAuth
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
-     * @param Session       $session
      */
-    public function __construct(Configuration $config, Session $session)
+    public function __construct(private Configuration $config, private Session $session)
     {
-        $this->config = $config;
-        $this->session = $session;
     }
 
     /**
      * Returns the error message.
-     *
-     * @param string $message
-     * @return string
      */
     public function errorMessage(string $message): string
     {
@@ -71,8 +57,6 @@ class OAuth
     /**
      * Returns the Authorization Code from Azure AD.
      *
-     * @param string $code
-     * @return stdClass
      * @throws GuzzleException
      */
     public function getOAuthToken(string $code): stdClass
@@ -92,7 +76,7 @@ class OAuth
             ]
         ]);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), null, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -113,76 +97,49 @@ class OAuth
             ]
         ]);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), null, 512, JSON_THROW_ON_ERROR);
     }
 
-    /**
-     * @return stdClass
-     */
     public function getToken(): stdClass
     {
         return $this->token;
     }
 
-    /**
-     * @param stdClass $token
-     * @return OAuth
-     */
     public function setToken(stdClass $token): OAuth
     {
         $idToken = base64_decode(explode('.', $token->id_token)[1]);
-        $this->token = json_decode($idToken);
-        $this->session->set(Session::PMF_AZURE_AD_JWT, json_encode($this->token));
+        $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
+        $this->session->set(Session::PMF_AZURE_AD_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRefreshToken(): ?string
     {
         return $this->refreshToken;
     }
 
-    /**
-     * @param string|null $refreshToken
-     * @return OAuth
-     */
     public function setRefreshToken(?string $refreshToken): OAuth
     {
         $this->refreshToken = $refreshToken;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAccessToken(): ?string
     {
         return $this->accessToken;
     }
 
-    /**
-     * @param string|null $accessToken
-     * @return OAuth
-     */
     public function setAccessToken(?string $accessToken): OAuth
     {
         $this->accessToken = $accessToken;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->token->name;
     }
 
-    /**
-     * @return string
-     */
     public function getMail(): string
     {
         return $this->token->preferred_username;

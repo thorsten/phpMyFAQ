@@ -30,7 +30,6 @@ class Crypt extends Encryption
      * encrypts the string str and returns the result.
      *
      * @param string $password String
-     * @return string
      */
     public function encrypt(string $password): string
     {

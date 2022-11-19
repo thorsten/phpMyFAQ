@@ -65,8 +65,6 @@ class Html5 extends Export
      * @param int    $categoryId CategoryHelper Id
      * @param bool   $downwards  If true, downwards, otherwise upward ordering
      * @param string $language   Language
-     *
-     * @return string
      */
     public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
@@ -96,7 +94,7 @@ class Html5 extends Export
         $this->xml->startElement('body');
         $this->xml->writeAttribute('dir', Translation::get('dir'));
 
-        if (count($faqData)) {
+        if (is_countable($faqData) ? count($faqData) : 0) {
             $lastCategory = 0;
             foreach ($faqData as $data) {
                 if ($data['category_id'] != $lastCategory) {

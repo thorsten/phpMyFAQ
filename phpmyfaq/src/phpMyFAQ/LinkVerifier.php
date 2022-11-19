@@ -73,19 +73,12 @@ class LinkVerifier
     private array $slowHosts = [];
 
     /**
-     * @var Configuration|null
-     */
-    private ?Configuration $config;
-
-    /**
      * Constructor.
      *
-     * @param Configuration $config
+     * @param Configuration|null $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private ?Configuration $config)
     {
-        $this->config = $config;
-
         if (!extension_loaded('openssl')) {
             $this->addIgnoreProtocol('https:', sprintf(Translation::get('ad_linkcheck_protocol_unsupported'), 'https'));
         }
@@ -107,8 +100,6 @@ class LinkVerifier
     /**
      * Adds protocols we want to ignore to an array, executed in constructor.
      *
-     * @param string $protocol
-     * @param string $message
      *
      * @return bool true, if successfully added, otherwise false
      */
@@ -124,8 +115,6 @@ class LinkVerifier
 
     /**
      * Get current urls.
-     *
-     * @return array
      */
     public function getUrlPool(): array
     {
@@ -135,10 +124,7 @@ class LinkVerifier
     /**
      * Returns the HTML text that needs to be shown in entry listing.
      *
-     * @param int    $id
-     * @param string $faqLang
      *
-     * @return string
      */
     public function getEntryStateHTML(int $id = 0, string $faqLang = ''): string
     {
@@ -197,11 +183,6 @@ class LinkVerifier
 
     /**
      * retrieves stored link state and validates timestamp.
-     *
-     * @param int    $id
-     * @param string $faqLang
-     * @param bool   $checkDate
-     * @return bool|string
      */
     public function getEntryState(int $id = 0, string $faqLang = '', bool $checkDate = false): bool|string
     {
@@ -245,8 +226,6 @@ class LinkVerifier
 
     /**
      * Retrieves the oldest timestamp for stored link validation result.
-     *
-     * @return int
      */
     public function getURLValidateInterval(): int
     {
@@ -263,10 +242,6 @@ class LinkVerifier
     /**
      * Verifies specified article content and update links_state database entry.
      *
-     * @param string $contents
-     * @param int    $id
-     * @param string $faqLang
-     * @param bool   $cron
      * @return string HTML text, if $cron is false (default)
      */
     public function verifyArticleURL(
@@ -377,7 +352,6 @@ class LinkVerifier
      * URLs found.
      *
      * @param string $string String
-     * @return int
      */
     public function parseString(string $string = ''): int
     {
@@ -401,9 +375,6 @@ class LinkVerifier
 
     /**
      * Perform link validation to each URLs found.
-     *
-     * @param string $referenceUri
-     * @return array
      */
     public function verifyURLs(string $referenceUri = ''): array
     {
@@ -421,7 +392,7 @@ class LinkVerifier
                     $_absurl = $this->makeAbsoluteURL($_url, $referenceUri);
                     $_result['absurl'] = $_absurl;
 
-                    list($_result['valid'], $_result['redirects'], $_result['reason']) = $this->openURL($_absurl);
+                    [$_result['valid'], $_result['redirects'], $_result['reason']] = $this->openURL($_absurl);
                     $this->lastResult[$_type][$_url] = $_result;
                 }
             }
@@ -437,8 +408,6 @@ class LinkVerifier
      *   $referenceUri = "http://example.com:8000/sample/index.php"
      * will generate "http://example.com:8000/sample/test/foo.html".
      *
-     * @param string $relativeUri
-     * @param string $referenceUri
      * @return string $result
      */
     protected function makeAbsoluteURL(string $relativeUri = '', string $referenceUri = ''): string
@@ -461,7 +430,7 @@ class LinkVerifier
         $pathParts = parse_url($referenceUri);
 
         // If port is specified in reference uri, prefix with ":"
-        if (isset($pathParts['port']) && $pathParts['port'] !== '') {
+        if (isset($pathParts['port']) && $pathParts['port'] !== 0) {
             $pathParts['port'] = ':' . $pathParts['port'];
         } else {
             $pathParts['port'] = '';
@@ -492,11 +461,6 @@ class LinkVerifier
     /**
      * Checks whether a URL can be opened.
      * if $redirect is specified, will handle Location: redirects.
-     *
-     * @param string $url
-     * @param string $redirect
-     * @param int    $redirectCount
-     * @return array
      */
     protected function openURL(string $url = '', string $redirect = '', int $redirectCount = 0): array
     {
@@ -659,49 +623,40 @@ class LinkVerifier
                     Strings::htmlspecialchars($url)
                 ) : '';
 
-                return array(true, $redirectCount, $_reason);
-                break;
+                return [true, $redirectCount, $_reason];
             case '301': // Moved Permanently (go recursive ?)
             case '302': // Found (go recursive ?)
                 return $this->openURL($url, $location, $redirectCount + 1);
-                break;
             case 400:   // Bad Request
-                return array(
+                return [
                     false,
                     $redirectCount,
                     sprintf(Translation::get('ad_linkcheck_openurl_ambiguous') . '<br>' . $httpStatusMsg, $code)
-                );
-                break;
+                ];
             case 404:   // Not found
-                return array(
+                return [
                     false,
                     $redirectCount,
                     sprintf(Translation::get('ad_linkcheck_openurl_not_found'), $urlParts['host'])
-                );
-                break;
+                ];
             case '300': // Multiple choices
             case '401': // Unauthorized (but it's there. right ?)
-                return array(true, $redirectCount, sprintf(Translation::get('ad_linkcheck_openurl_ambiguous'), $code));
-                break;
+                return [true, $redirectCount, sprintf(Translation::get('ad_linkcheck_openurl_ambiguous'), $code)];
             case '405': // Method Not Allowed
-                // TODO: Add a fallback to use GET method, otherwise this link should be marked as bad
-                return array(
+                // @todo: Add a fallback to use GET method, otherwise this link should be marked as bad
+                return [
                     true,
                     $redirectCount,
                     sprintf(Translation::get('ad_linkcheck_openurl_not_allowed'), $urlParts['host'], $allowVerbs)
-                );
-                break;
+                ];
             default:    // All other statuses
-                return array(false, $redirectCount, sprintf(Translation::get('ad_linkcheck_openurl_ambiguous'), $code));
-                break;
+                return [false, $redirectCount, sprintf(Translation::get('ad_linkcheck_openurl_ambiguous'), $code)];
         }
     }
 
     /**
      * logs the current state of link to the specified entry.
      *
-     * @param int    $id
-     * @param string $faqLang
      * @param string $state   (optional)
      * @return bool true if operation successful, otherwise false
      */

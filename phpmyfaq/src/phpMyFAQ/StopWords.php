@@ -26,11 +26,6 @@ namespace phpMyFAQ;
 class StopWords
 {
     /**
-     * @var Configuration
-     */
-    private Configuration $config;
-
-    /**
      * @var string
      */
     private string $language;
@@ -44,44 +39,28 @@ class StopWords
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->tableName = Database::getTablePrefix() . 'faqstopwords';
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @return string
-     */
     public function getTableName(): string
     {
         return $this->tableName;
     }
 
-    /**
-     * @param string $language
-     * @return StopWords
-     */
     public function setLanguage(string $language): StopWords
     {
         $this->language = $language;
         return $this;
     }
 
-    /**
-     * @param string $tableName
-     */
     public function setTableName(string $tableName): void
     {
         $this->tableName = $tableName;
@@ -90,9 +69,6 @@ class StopWords
     /**
      * Add a word to the stop words dictionary.
      * If the given word already exists, false is returned.
-     *
-     * @param string $word
-     * @return bool
      */
     public function add(string $word): bool
     {
@@ -114,10 +90,6 @@ class StopWords
 
     /**
      * Update a word in the stop words dictionary.
-     *
-     * @param int    $id
-     * @param string $word
-     * @return bool
      */
     public function update(int $id, string $word): bool
     {
@@ -135,9 +107,6 @@ class StopWords
 
     /**
      * Remove a word from the stop word dictionary.
-     *
-     * @param int $id
-     * @return bool
      */
     public function remove(int $id): bool
     {
@@ -153,9 +122,6 @@ class StopWords
 
     /**
      * Match a word against the stop words dictionary.
-     *
-     * @param string $word
-     * @return bool
      */
     public function match(string $word): bool
     {
@@ -175,7 +141,6 @@ class StopWords
      * Retrieve all the stop words by a certain language.
      *
      * @param string|null $lang      Language to retrieve stop words by
-     * @param bool        $wordsOnly
      * @return string[]
      */
     public function getByLang(string $lang = null, bool $wordsOnly = false): array
@@ -231,9 +196,6 @@ class StopWords
      * This function checks the content against a bad word list if the banned
      * word spam protection has been activated from the general phpMyFAQ
      * configuration.
-     *
-     * @param string $content
-     * @return bool
      */
     public function checkBannedWord(string $content): bool
     {

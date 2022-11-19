@@ -36,8 +36,6 @@ class RegistrationHelper extends Helper
 {
     /**
      * RegistrationHelper constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -50,11 +48,6 @@ class RegistrationHelper extends Helper
      * The password will be automatically generated and sent by email
      * as soon if admin switch user to "active"
      *
-     * @param string $userName
-     * @param string $fullName
-     * @param string $email
-     * @param bool   $isVisible
-     * @return array
      * @throws Exception|TransportExceptionInterface
      */
     public function createUser(string $userName, string $fullName, string $email, bool $isVisible): array
@@ -114,9 +107,6 @@ class RegistrationHelper extends Helper
     /**
      * Returns true, if hostname of the given email address is whitelisted,
      * otherwise false.
-     *
-     * @param string $email
-     * @return bool
      */
     public function isDomainWhitelisted(string $email): bool
     {

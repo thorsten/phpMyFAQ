@@ -242,7 +242,6 @@ class LanguageCodes
     /**
      * Return language name from language code.
      *
-     * @param string $key
      * @return string|null → language code or null
      */
     public static function get(string $key): ?string

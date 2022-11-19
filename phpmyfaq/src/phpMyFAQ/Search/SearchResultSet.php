@@ -31,17 +31,12 @@ use stdClass;
 class SearchResultSet
 {
     /**
-     * @var Configuration
-     */
-    protected $config = null;
-
-    /**
      * "Raw" search result set without permission checks and with possible
      * duplicates.
      *
      * @var stdClass[]
      */
-    protected $rawResultSet = [];
+    protected array $rawResultSet = [];
 
     /**
      * "Reviewed" search result set with checked permissions and without
@@ -49,31 +44,21 @@ class SearchResultSet
      *
      * @var stdClass[]
      */
-    protected $reviewedResultSet = [];
+    protected array $reviewedResultSet = [];
 
     /**
      * Ordering of result set.
      *
      * @var string
      */
-    protected $ordering;
+    protected string $ordering;
 
     /**
      * Number of search results.
      *
      * @var int
      */
-    protected $numberOfResults = 0;
-
-    /**
-     * User object.
-     *
-     * @var User
-     */
-    protected $user = null;
-
-    /** @var FaqPermission */
-    private $faqPermission;
+    protected int $numberOfResults = 0;
 
     /**
      * Constructor.
@@ -82,11 +67,11 @@ class SearchResultSet
      * @param FaqPermission $faqPermission
      * @param Configuration $config Configuration object
      */
-    public function __construct(CurrentUser $user, FaqPermission $faqPermission, Configuration $config)
-    {
-        $this->user = $user;
-        $this->faqPermission = $faqPermission;
-        $this->config = $config;
+    public function __construct(
+        protected CurrentUser $user,
+        private FaqPermission $faqPermission,
+        protected Configuration $config
+    ) {
     }
 
     /**
@@ -166,11 +151,6 @@ class SearchResultSet
         $this->rawResultSet = $resultSet;
     }
 
-    /**
-     * @param stdClass $object
-     *
-     * @return float
-     */
     public function getScore(stdClass $object): float
     {
         $score = 0;
@@ -202,8 +182,6 @@ class SearchResultSet
 
     /**
      * Returns the number search results.
-     *
-     * @return int
      */
     public function getNumberOfResults(): int
     {

@@ -95,7 +95,7 @@ class Mysqli implements DatabaseDriver
         if ('' !== $database) {
             try {
                 $this->conn->select_db($database);
-            } catch (mysqli_sql_exception $exception) {
+            } catch (mysqli_sql_exception) {
                 throw new Exception('Cannot connect to database ' . $database);
             }
         }
@@ -105,8 +105,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Returns the error string.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -117,8 +115,6 @@ class Mysqli implements DatabaseDriver
      * Escapes a string for use in a query.
      *
      * @param string
-     *
-     * @return string
      */
     public function escape($string): string
     {
@@ -134,7 +130,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result): ?array
+    public function fetchArray(mixed $result): ?array
     {
         return $result->fetch_assoc();
     }
@@ -193,8 +189,6 @@ class Mysqli implements DatabaseDriver
      * Number of rows in a result.
      *
      * @param mysqli_result $result
-     *
-     * @return int
      */
     public function numRows($result): int
     {
@@ -207,8 +201,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Logs the queries.
-     *
-     * @return string
      */
     public function log(): string
     {
@@ -219,8 +211,6 @@ class Mysqli implements DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableStatus(string $prefix = ''): array
     {
@@ -293,8 +283,6 @@ class Mysqli implements DatabaseDriver
      * Returns just one row.
      *
      * @param string $query
-     *
-     * @return string
      */
     private function getOne($query): string
     {
@@ -309,8 +297,6 @@ class Mysqli implements DatabaseDriver
      *
      * @param string $table The name of the table
      * @param string $id    The name of the ID column
-     *
-     * @return int
      */
     public function nextId($table, $id): int
     {
@@ -338,9 +324,6 @@ class Mysqli implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     * @param string $query
-     * @param int $offset
-     * @param int $rowcount
      *
      * @return mysqli_result $result
      */
@@ -365,8 +348,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Returns the client version string.
-     *
-     * @return string
      */
     public function clientVersion(): string
     {
@@ -375,8 +356,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Returns the server version string.
-     *
-     * @return string
      */
     public function serverVersion(): string
     {
@@ -403,9 +382,6 @@ class Mysqli implements DatabaseDriver
         }
     }
 
-    /**
-     * @return string
-     */
     public function now(): string
     {
         return 'NOW()';

@@ -33,9 +33,7 @@ class SearchFactory
     /**
      * Factory for generating search instances.
      *
-     * @param Configuration $config
      * @param string[] $searchHandler Array with search handlers, e.g. array('database' => 'mysqli')
-     *
      * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
      */
     public static function create(Configuration $config, array $searchHandler)
