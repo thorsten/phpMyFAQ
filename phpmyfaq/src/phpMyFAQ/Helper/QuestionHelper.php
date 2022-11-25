@@ -19,6 +19,7 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Question;
 use phpMyFAQ\User;
@@ -53,9 +54,10 @@ class QuestionHelper
 
     /**
      * @param array $questionData
-     * @param $categories
+     * @param array $categories
+     * @throws Exception
      */
-    public function sendSuccessMail(array $questionData, $categories)
+    public function sendSuccessMail(array $questionData, array $categories): void
     {
         $questionObject = new Question($this->config);
         $questionObject->addQuestion($questionData);
