@@ -39,6 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="copyright text-center my-auto">
       Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong> |
       <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">phpMyFAQ documentation</a> |
+      <a target="_blank" rel="noopener" href="https://www.buymeacoffee.com/thorsten">Buy us a coffee</a> |
       Follow us on <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">Twitter</a> |
       Like us on <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ"> Facebook</a> |
       &copy; 2001-<?= date('Y') ?> <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
