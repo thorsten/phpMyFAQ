@@ -119,6 +119,7 @@ $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 if (is_null($action)) {
     $action = Filter::filterInput(INPUT_POST, 'action', FILTER_UNSAFE_RAW);
 }
+$action = Strings::htmlentities($action);
 
 //
 // Get CSRF Token
