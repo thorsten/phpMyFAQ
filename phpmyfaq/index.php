@@ -748,8 +748,9 @@ if ('artikel' === $action) {
         $id,
         $lang
     );
+    $link = new Link($url, $faqConfig);
     $http->setStatus(301);
-    $http->redirect($url);
+    $http->redirect($link->toString());
     exit();
 }
 
