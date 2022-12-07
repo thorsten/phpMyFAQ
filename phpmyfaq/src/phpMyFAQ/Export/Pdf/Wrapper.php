@@ -318,7 +318,7 @@ class Wrapper extends TCPDF
      *
      * @param string $question Question
      */
-    public function setQuestion($question = '')
+    public function setQuestion($question = ''): void
     {
         $this->question = $question;
     }
@@ -328,7 +328,7 @@ class Wrapper extends TCPDF
      *
      * @param array $categories Categories
      */
-    public function setCategories(array $categories)
+    public function setCategories(array $categories): void
     {
         $this->categories = $categories;
     }
@@ -336,7 +336,7 @@ class Wrapper extends TCPDF
     /**
      * @param Configuration $config
      */
-    public function setConfig(Configuration $config)
+    public function setConfig(Configuration $config): void
     {
         $this->config = $config;
     }
@@ -390,7 +390,7 @@ class Wrapper extends TCPDF
         $date = new Date($this->config);
 
         $footer = sprintf(
-            '(c) %d %s <%s> | %s',
+            '© %d %s <%s> | %s',
             date('Y'),
             $this->config->get('main.metaPublisher'),
             $this->config->getAdminEmail(),
