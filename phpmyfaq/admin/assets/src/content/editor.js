@@ -15,6 +15,7 @@
 
 // TinyMCE global which is used to init the editor
 import tinymce from 'tinymce/tinymce';
+import 'tinymce/models/dom';
 
 // Theme
 import 'tinymce/themes/silver';
@@ -30,9 +31,7 @@ import 'tinymce/plugins/link';
 import 'tinymce/plugins/image';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/charmap';
-import 'tinymce/plugins/hr';
 import 'tinymce/plugins/anchor';
-import 'tinymce/plugins/spellchecker';
 import 'tinymce/plugins/searchreplace';
 import 'tinymce/plugins/wordcount';
 import 'tinymce/plugins/code';
@@ -42,10 +41,8 @@ import 'tinymce/plugins/nonbreaking';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/template';
 import 'tinymce/plugins/help';
-import 'tinymce/plugins/print';
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/visualblocks';
-import 'tinymce/plugins/paste';
 import 'tinymce/plugins/pagebreak';
 import 'tinymce/plugins/visualchars';
 import 'tinymce/plugins/codesample';
@@ -53,7 +50,6 @@ import 'tinymce/plugins/save';
 import 'tinymce/plugins/directionality';
 import 'tinymce/plugins/emoticons';
 import 'tinymce/plugins/emoticons/js/emojis';
-import 'tinymce/plugins/textpattern';
 
 import contentCss from '!!raw-loader!tinymce/skins/content/default/content.min.css';
 import contentUiCss from '!!raw-loader!tinymce/skins/ui/oxide/content.min.css';
@@ -112,23 +108,23 @@ export const renderEditor = () => {
         'Wingdings=wingdings,zapf dingbats',
 
       // Plugins
-      plugins: [
-        'advlist autolink link image lists charmap print preview hr anchor pagebreak',
-        'searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking codesample',
-        'save table directionality template paste textpattern help emoticons', //  phpmyfaq
-      ],
+      plugins:
+        'advlist autolink link image lists charmap preview anchor pagebreak ' +
+        'searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking ' +
+        'save table directionality template help emoticons', //  phpmyfaq
+
       emoticons_database: 'emojis',
 
       // Toolbar
       menubar: false,
       toolbar1:
         'newdocument | undo redo | bold italic underline subscript superscript ' +
-        'strikethrough | styleselect | formatselect | fontselect | fontsizeselect |' +
+        'strikethrough | styleselect | blocks | fontfamily | fontsize |' +
         'outdent indent | alignleft aligncenter alignright alignjustify | removeformat |' +
-        'insertfile | cut copy paste pastetext codesample | bullist numlist |' +
+        'insertfile | cut copy codesample | bullist numlist |' +
         'link unlink anchor image media | charmap | insertdatetime | table |' +
-        'forecolor backcolor emoticons | searchreplace | spellchecker | hr |' +
-        'pagebreak | code | phpmyfaq print | preview',
+        'forecolor backcolor emoticons | searchreplace | ' +
+        'pagebreak | code | phpmyfaq | preview',
 
       // Formatting
       style_formats: [

@@ -20,7 +20,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added support for PHP 8.2 (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - updated to Bootstrap v5.1 (Thorsten)
-- updated to TinyMCE v5.10 (Thorsten)
+- updated to TinyMCE v6.3 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
 ### phpMyFAQ v3.1.8 - 2022-10-24
