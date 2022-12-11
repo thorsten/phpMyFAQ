@@ -31,6 +31,8 @@ $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
 
 $elasticsearch = new Elasticsearch($faqConfig);
 
+$esConfigData = $faqConfig->getElasticsearchConfig();
+
 $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
@@ -60,7 +62,7 @@ switch ($ajaxAction) {
         break;
 
     case 'stats':
-        $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
+        $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => $esConfigData['index']]);
         break;
 }
 

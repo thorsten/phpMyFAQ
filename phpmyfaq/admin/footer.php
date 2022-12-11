@@ -32,6 +32,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <div>
                         <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">Documentation</a>
                         &middot;
+                        <a target="_blank" rel="noopener" href="https://www.buymeacoffee.com/thorsten">Buy us a coffee</a> |
+                        &middot;
                         <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">Twitter</a>
                         &middot;
                         <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">Facebook</a>

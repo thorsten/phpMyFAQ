@@ -21,6 +21,7 @@ use phpMyFAQ\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 
@@ -110,9 +111,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         ?>
       <tr id="row-instance-<?= $site->id ?>">
         <td><?= $site->id ?></td>
-        <td><a href="<?= $site->url . $site->instance ?>"><?= $site->url ?></a></td>
-        <td><?= $site->instance ?></td>
-        <td><?= $site->comment ?></td>
+        <td>
+          <a href="<?= Strings::htmlentities($site->url . $site->instance, ENT_QUOTES) ?>">
+                <?= Strings::htmlentities($site->url, ENT_QUOTES) ?>
+          </a>
+        </td>
+        <td><?= Strings::htmlentities($site->instance, ENT_QUOTES) ?></td>
+        <td><?= Strings::htmlentities($site->comment, ENT_QUOTES) ?></td>
         <td>
           <a href="?action=edit-instance&instance_id=<?= $site->id ?>" class="btn btn-info">
             <i aria-hidden="true" class="fa fa-pencil"></i>

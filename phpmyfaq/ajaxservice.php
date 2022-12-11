@@ -522,7 +522,7 @@ switch ($action) {
                 'username' => $author,
                 'email' => $email,
                 'category_id' => $ucategory,
-                'question' => $question,
+                'question' => Strings::htmlspecialchars($question),
                 'is_visible' => $visibility
             ];
 
@@ -586,12 +586,20 @@ switch ($action) {
                     $message = ['result' => $response];
                 } else {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
-                    $questionHelper->sendSuccessMail($questionData, $categories);
+                    try {
+                        $questionHelper->sendSuccessMail($questionData, $categories);
+                    } catch (Exception $e) {
+                        // @todo Handle exception
+                    }
                     $message = ['success' => Translation::get('msgAskThx4Mail')];
                 }
             } else {
                 $questionHelper = new QuestionHelper($faqConfig, $cat);
-                $questionHelper->sendSuccessMail($questionData, $categories);
+                try {
+                    $questionHelper->sendSuccessMail($questionData, $categories);
+                } catch (Exception $e) {
+                    // @todo Handle exception
+                }
                 $message = ['success' => Translation::get('msgAskThx4Mail')];
             }
         } else {

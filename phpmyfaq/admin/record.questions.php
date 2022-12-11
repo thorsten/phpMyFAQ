@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -95,7 +96,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <td>
                       <strong><?= $category->categoryName[$openQuestion->getCategoryId()]['name'] ?></strong>
                       <br>
-                        <?= $openQuestion->getQuestion() ?>
+                        <?= Strings::htmlentities($openQuestion->getQuestion()) ?>
                     </td>
                     <td>
                       <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= $user->getCsrfTokenFromSession() ?>"

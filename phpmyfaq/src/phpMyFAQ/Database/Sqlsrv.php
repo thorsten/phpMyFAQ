@@ -75,32 +75,13 @@ class Sqlsrv implements DatabaseDriver
     ): ?bool {
         $this->setConnectionOptions($user, $password, $database);
 
-        $this->conn = sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
+        $this->conn = $this->sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
         if (!$this->conn) {
-            Database::errorPage((string)sqlsrv_errors());
+            Database::errorPage($this->formatErrors(sqlsrv_errors()));
             die();
         }
 
         return true;
-    }
-
-    /**
-     * Sets the connection options.
-     *
-     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param string $password Specifies the password associated with the User ID to be used when connecting with
-     *                         SQL Server Authentication
-     * @param string $database Specifies the name of the database in use for the connection being established
-     */
-    private function setConnectionOptions(string $user, string $password, string $database)
-    {
-        $this->connectionOptions = [
-            'UID' => $user,
-            'PWD' => $password,
-            'Database' => $database,
-            'CharacterSet' => 'UTF-8',
-            'TrustServerCertificate' => true, // even trust self-signed certificates
-        ];
     }
 
     /**
@@ -358,7 +339,7 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Closes the connection to the database.
      */
-    public function close()
+    public function close(): void
     {
         sqlsrv_close($this->conn);
     }
@@ -366,5 +347,45 @@ class Sqlsrv implements DatabaseDriver
     public function now(): string
     {
         return 'GETDATE()';
+    }
+
+    /**
+     * Sets the connection options.
+     *
+     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $password Specifies the password associated with the User ID to be used when connecting with
+     *                         SQL Server Authentication
+     * @param string $database Specifies the name of the database in use for the connection being established
+     */
+    private function setConnectionOptions(string $user, string $password, string $database): void
+    {
+        $this->connectionOptions = [
+            'UID' => $user,
+            'PWD' => $password,
+            'Database' => $database,
+            'CharacterSet' => 'UTF-8',
+            'TrustServerCertificate' => true, // even trust self-signed certificates
+        ];
+    }
+
+    /**
+     * Formats the error output
+     *
+     * @param array $errors
+     * @return string
+     */
+    private function formatErrors(array $errors): string
+    {
+        $error = '<h3>SQL Error:</h3>' . 'MS SQL Error information: <br/>';
+        foreach ($errors as $error) {
+            $error .= sprintf(
+                'SQLSTATE: %s<br/>Code: %s<br/>Message: %s<br/>',
+                $error['SQLSTATE'],
+                $error['code'],
+                $error['message']
+            );
+        }
+
+        return $error;
     }
 }

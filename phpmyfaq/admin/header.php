@@ -19,6 +19,7 @@ use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
 
@@ -232,14 +233,16 @@ switch ($action) {
 <head>
   <meta charset="utf-8">
 
-  <title><?= $faqConfig->getTitle(); ?> - powered by phpMyFAQ <?= System::getVersion() ?></title>
+  <title>
+    <?= Strings::htmlentities($faqConfig->getTitle(), ENT_QUOTES) ?> - powered by phpMyFAQ <?= System::getVersion() ?>
+  </title>
   <base href="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/">
 
   <meta name="description" content="Only Chuck Norris can divide by zero.">
   <meta name="author" content="phpMyFAQ Team">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="application-name" content="phpMyFAQ <?= $faqConfig->getVersion(); ?>">
-  <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
+  <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
+  <meta name="copyright" content="© 2001-<?= date('Y') ?> phpMyFAQ Team">
   <meta name="publisher" content="phpMyFAQ Team">
   <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
 

@@ -130,11 +130,11 @@ class User
 
     /**
      * regular expression to find invalid login strings
-     * (default: /^[a-z0-9][\w\.\-@]+/i ).
+     * (default: /^[a-z0-9][\w\.\-@]+/is ).
      *
      * @var string
      */
-    private string $validUsername = '/^[a-z0-9][\w\.\-@]+/i';
+    private string $validUsername = '/^[a-z0-9][\w\.\-@]+/is';
 
     /**
      * user ID.
@@ -447,7 +447,7 @@ class User
 
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int)$this->config->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
+            $this->userId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }

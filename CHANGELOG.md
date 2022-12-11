@@ -23,6 +23,12 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to TinyMCE v6.3 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
+### phpMyFAQ v3.1.9 - 2022-12-11
+
+- fixed multiple security vulnerabilities (Thorsten)
+- fixed minor bugs (Thorsten)
+- updated bundled dependencies (Thorsten)
+
 ### phpMyFAQ v3.1.8 - 2022-10-24
 
 - fixed multiple security vulnerabilities (Thorsten)

@@ -20,6 +20,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -116,7 +117,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
         <tr>
             <td><?= $loggingId ?></td>
             <td><?= $date->format(date('Y-m-d H:i', $loggingValue['time'])) ?></td>
-            <td><?= $user->getLogin() ?></td>
+            <td><?= Strings::htmlentities($user->getLogin()) ?></td>
             <td><?= $loggingValue['ip'] ?></td>
             <td><small><?php
             $text = $loggingValue['text'];

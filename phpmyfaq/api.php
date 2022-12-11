@@ -163,20 +163,23 @@ switch ($action) {
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
-        $searchResults = $search->search($searchString, false);
-        $faqSearchResult->reviewResultSet($searchResults);
-        if ($faqSearchResult->getNumberOfResults() > 0) {
-            $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
-            foreach ($faqSearchResult->getResultSet() as $data) {
-                $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-                $data->answer = Utils::makeShorterText($data->answer, 12);
-                $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
-                $result[] = $data;
+        try {
+            $searchResults = $search->search($searchString, false);
+            $faqSearchResult->reviewResultSet($searchResults);
+            if ($faqSearchResult->getNumberOfResults() > 0) {
+                $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+                foreach ($faqSearchResult->getResultSet() as $data) {
+                    $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+                    $data->answer = Utils::makeShorterText($data->answer, 12);
+                    $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+                    $result[] = $data;
+                }
+            } else {
+                $http->setStatus(404);
             }
-        } else {
-            $http->setStatus(404);
+        } catch (Exception $e) {
+            $http->setStatus(400);
         }
-
         break;
 
     case 'categories':

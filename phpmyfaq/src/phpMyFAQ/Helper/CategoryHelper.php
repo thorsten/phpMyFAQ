@@ -20,6 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Database;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
@@ -351,9 +352,9 @@ class CategoryHelper extends Helper
                     $category['name'] . '" src="' . $category['image'] . '" />';
             }
             $decks .= '     </div>';
-            $decks .= '     <h3 class="title">' . $category['name'] . '</h3>';
-            $decks .= '     <p class="intro">' . $category['description'] . '</p>';
-            $decks .= '     <a class="link" href="' . $category['url'] . '"><span></span></a>';
+            $decks .= '     <h3 class="title">' . Strings::htmlentities($category['name']) . '</h3>';
+            $decks .= '     <p class="intro">' . Strings::htmlentities($category['description']) . '</p>';
+            $decks .= '     <a class="link" href="' . Strings::htmlentities($category['url']) . '"><span></span></a>';
             $decks .= ' </div>';
             $decks .= '</div>';
         }

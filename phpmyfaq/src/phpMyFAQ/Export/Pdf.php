@@ -108,15 +108,32 @@ class Pdf extends Export
 
         $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
 
+        $currentCategory = 0;
+
         foreach ($faqData as $faq) {
             $this->pdf->AddPage();
+
+            // Bookmark for categories
+            if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
+                $this->pdf->Bookmark(
+                    html_entity_decode(
+                        $this->category->categoryName[$faq['category_id']]['name'],
+                        ENT_QUOTES,
+                        'utf-8'
+                    ),
+                    $this->category->categoryName[$faq['category_id']]['level'] - 1,
+                    0
+                );
+            }
+
+            // Bookmark for FAQs
             $this->pdf->Bookmark(
                 html_entity_decode(
                     $faq['topic'],
                     ENT_QUOTES,
                     'utf-8'
                 ),
-                $this->category->categoryName[$faq['category_id']]['level'] + 1,
+                $this->category->categoryName[$faq['category_id']]['level'],
                 0
             );
 
@@ -124,10 +141,11 @@ class Pdf extends Export
                 $tags = $this->tags->getAllTagsById($faq['id']);
             }
 
-            $this->pdf->WriteHTML('<h2 style="text-align: center;">' . $faq['topic'] . '</h2>', true);
+            $this->pdf->WriteHTML('<h1>' . $this->category->categoryName[$faq['category_id']]['name'] . '</h1>');
+            $this->pdf->WriteHTML('<h2>' . $faq['topic'] . '</h2>');
             $this->pdf->Ln(10);
 
-            $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
+            $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
 
             if ($this->config->get('main.enableMarkdownEditor')) {
                 $this->pdf->WriteHTML(trim($this->parsedown->text($faq['content'])));
@@ -152,6 +170,8 @@ class Pdf extends Export
                 5,
                 Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified'])
             );
+
+            $currentCategory = $this->category->categoryName[$faq['category_id']]['id'];
         }
 
         // remove default header/footer
@@ -188,10 +208,10 @@ class Pdf extends Export
             $this->config->getVersion()
         );
         $this->pdf->AddPage();
-        $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
+        $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
         $this->pdf->SetDisplayMode('real');
         $this->pdf->Ln();
-        $this->pdf->WriteHTML('<h1 style="text-align: center;">' . $faqData['title'] . '</h1>', true);
+        $this->pdf->WriteHTML('<h2>' . $faqData['title'] . '</h2>');
         $this->pdf->Ln();
         $this->pdf->Ln();
 
@@ -203,7 +223,7 @@ class Pdf extends Export
 
         $this->pdf->Ln(10);
         $this->pdf->Ln();
-        $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 11);
+        $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 9);
         $this->pdf->Write(5, Translation::get('ad_entry_solution_id') . ': #' . $faqData['solution_id']);
 
         // Check if author name should be visible according to GDPR option

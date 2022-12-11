@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -44,21 +45,22 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     <div class="row mb-2">
       <label for="url" class="col-lg-2 col-form-label"><?= Translation::get('ad_instance_url') ?>:</label>
       <div class="col-lg-8">
-        <input type="url" name="url" id="url" class="form-control" value="<?= $instanceData->url ?>" required>
+        <input type="url" name="url" id="url" class="form-control"
+               value="<?= Strings::htmlentities($instanceData->url, ENT_QUOTES) ?>" required>
       </div>
     </div>
     <div class="row mb-2">
       <label for="instance" class="col-lg-2 col-form-label"><?= Translation::get('ad_instance_path') ?>:</label>
       <div class="col-lg-8">
         <input type="text" name="instance" id="instance" class="form-control" required
-               value="<?= $instanceData->instance ?>">
+               value="<?= Strings::htmlentities($instanceData->instance, ENT_QUOTES) ?>">
       </div>
     </div>
     <div class="row mb-2">
       <label for="comment" class="col-lg-2 col-form-label"><?= Translation::get('ad_instance_name') ?>:</label>
       <div class="col-lg-8">
         <input type="text" name="comment" id="comment" class="form-control" required
-               value="<?= $instanceData->comment ?>">
+               value="<?= Strings::htmlentities($instanceData->comment, ENT_QUOTES) ?>">
       </div>
     </div>
     <div class="row mb-2">

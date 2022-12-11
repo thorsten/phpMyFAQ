@@ -275,14 +275,14 @@ abstract class AttachmentAbstract
                 $attachmentTableName,
                 $this->id,
                 $this->recordId,
-                $this->recordLang,
-                $this->realHash,
-                $this->virtualHash,
-                $this->passwordHash,
-                $this->filename,
+                $this->db->escape($this->recordLang),
+                $this->db->escape($this->realHash),
+                $this->db->escape($this->virtualHash),
+                $this->db->escape($this->passwordHash),
+                $this->db->escape($this->filename),
                 $this->filesize,
                 $this->encrypted ? 1 : 0,
-                $this->mimeType
+                $this->db->escape($this->mimeType)
             );
 
             $this->db->query($sql);
@@ -320,7 +320,7 @@ abstract class AttachmentAbstract
                 mime_type = '%s'
             WHERE id = %d",
             Database::getTablePrefix(),
-            $this->virtualHash,
+            $this->db->escape($this->virtualHash),
             $this->readMimeType(),
             $this->id
         );
@@ -388,7 +388,7 @@ abstract class AttachmentAbstract
         $sql = sprintf(
             "SELECT COUNT(1) AS count FROM  %sfaqattachment WHERE virtual_hash = '%s'",
             Database::getTablePrefix(),
-            $this->virtualHash
+            $this->db->escape($this->virtualHash),
         );
 
         $result = $this->db->query($sql);

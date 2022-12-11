@@ -61,9 +61,9 @@ class Instance
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             Database::getTablePrefix(),
             $this->getId(),
-            $data->getUrl(),
-            $data->getInstance(),
-            $data->getComment(),
+            $this->config->getDb()->escape($data->getUrl()),
+            $this->config->getDb()->escape($data->getInstance()),
+            $this->config->getDb()->escape($data->getComment()),
             $this->config->getDb()->now(),
             $this->config->getDb()->now()
         );
@@ -113,7 +113,6 @@ class Instance
     /**
      * Returns the instance.
      *
-     *
      * @return object
      */
     public function getInstanceById(int $id): object
@@ -139,9 +138,9 @@ class Instance
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $data->getInstance(),
-            $data->getComment(),
-            $data->getUrl(),
+            $this->config->getDb()->escape($data->getInstance()),
+            $this->config->getDb()->escape($data->getComment()),
+            $this->config->getDb()->escape($data->getUrl()),
             $id
         );
 

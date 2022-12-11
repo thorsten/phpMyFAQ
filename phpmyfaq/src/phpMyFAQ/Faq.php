@@ -289,17 +289,15 @@ class Faq
                     implode(', ', $this->groups)
                 );
             }
+        }
+
+        if (-1 !== $this->user) {
+            return sprintf(
+                'AND ( fdu.user_id = %d OR fdu.user_id = -1 )',
+                $this->user
+            );
         } else {
-            if (-1 !== $this->user) {
-                return sprintf(
-                    'AND ( fdu.user_id = %d OR fdu.user_id = -1 )',
-                    $this->user
-                );
-            } else {
-                return sprintf(
-                    'AND fdu.user_id = -1'
-                );
-            }
+            return 'AND fdu.user_id = -1';
         }
     }
 
@@ -934,7 +932,7 @@ class Faq
             (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $recordId,
-            $data['lang'],
+            $this->config->getDb()->escape($data['lang']),
             $this->getNextSolutionId(),
             0,
             $data['active'],
@@ -976,7 +974,7 @@ class Faq
             (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $faq->getId(),
-            $faq->getLanguage(),
+            $this->config->getDb()->escape($faq->getLanguage()),
             $this->getNextSolutionId(),
             0,
             $faq->isActive() ? 'yes' : 'no',
@@ -1104,31 +1102,31 @@ class Faq
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $recordLang
+                $this->config->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $recordLang
+                $this->config->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $recordLang
+                $this->config->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $recordLang
+                $this->config->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $recordLang
+                $this->config->getDb()->escape($recordLang)
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_user WHERE record_id = %d',
@@ -1238,7 +1236,7 @@ class Faq
                 lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
-            $recordLang
+            $this->config->getDb()->escape($recordLang)
         );
 
         $result = $this->config->getDb()->query($query);
@@ -1279,13 +1277,13 @@ class Faq
             Database::getTablePrefix(),
             $table,
             $recordId,
-            $recordLang
+            $this->config->getDb()->escape($recordLang)
         );
 
         $result = $this->config->getDb()->query($query);
 
         if ($row = $this->config->getDb()->fetchObject($result)) {
-            return ($row->comment === 'y') ? false : true;
+            return !(($row->comment === 'y'));
         } else {
             return true;
         }
@@ -1296,7 +1294,7 @@ class Faq
      *
      * @param int $solutionId Solution ID
      */
-    public function getRecordBySolutionId(int $solutionId)
+    public function getRecordBySolutionId(int $solutionId): void
     {
         $query = sprintf(
             'SELECT
@@ -1683,7 +1681,7 @@ class Faq
             AND
                 date_end >= '%s'",
             Database::getTablePrefix(),
-            null == $language ? '' : "AND lang = '" . $language . "'",
+            null === $language ? '' : "AND lang = '" . $this->config->getDb()->escape($language) . "'",
             $now,
             $now
         );
@@ -1743,11 +1741,14 @@ class Faq
      *
      * @param int  $count Number of records
      * @param int  $categoryId Entity ID
-     * @param null $language Language
+     * @param string|null $language Language
      * @return array
      */
-    public function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
-    {
+    public function getTopTenData(
+        int $count = PMF_NUMBER_RECORDS_TOPTEN,
+        int $categoryId = 0,
+        string $language = null
+    ): array {
         global $sids;
 
         $now = date('YmdHis');
@@ -1795,7 +1796,7 @@ class Faq
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language . '\'';
+                fd.lang = \'' . $this->config->getDb()->escape($language) . '\'';
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
@@ -1858,11 +1859,10 @@ class Faq
      * This function generates a data-set with the most voted FAQs.
      *
      * @param int    $count    Number of records
-     * @param string $language Language
-     *
+     * @param string|null $language Language
      * @return array
      */
-    public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $language = null)
+    public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, string $language = null): array
     {
         global $sids;
 
@@ -1909,7 +1909,7 @@ class Faq
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language . '\'';
+                fd.lang = \'' . $this->config->getDb()->escape($language) . '\'';
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
@@ -1956,7 +1956,7 @@ class Faq
      * @return array
      * @throws Exception
      */
-    public function getLatest()
+    public function getLatest(): array
     {
         $date = new Date($this->config);
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->config->getLanguage()->getLanguage());
@@ -2027,7 +2027,7 @@ class Faq
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language . '\'';
+                fd.lang = \'' . $this->config->getDb()->escape($language) . '\'';
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
@@ -2135,17 +2135,22 @@ class Faq
     /**
      * Build the SQL query for retrieving faq records according to the constraints provided.
      *
-     * @param string  $queryType
-     * @param integer $categoryId
-     * @param boolean $bDownwards
-     * @param string  $lang
-     * @param string  $date
-     * @param $faqId
-     *
+     * @param string $queryType
+     * @param int    $categoryId
+     * @param bool   $bDownwards
+     * @param string $lang
+     * @param string $date
+     * @param int    $faqId
      * @return string
      */
-    private function getSQLQuery($queryType, $categoryId, $bDownwards, $lang, $date, $faqId = 0): string
-    {
+    private function getSQLQuery(
+        string $queryType,
+        int $categoryId,
+        bool $bDownwards,
+        string $lang,
+        string $date,
+        int $faqId = 0
+    ): string {
         $now = date('YmdHis');
         $query = sprintf(
             "
@@ -2195,7 +2200,7 @@ class Faq
             AND
                 fd.lang = fv.lang';
         $needAndOp = true;
-        if ((!empty($categoryId)) && is_int($categoryId) && $categoryId > 0) {
+        if ((!empty($categoryId)) && $categoryId > 0) {
             if ($needAndOp) {
                 $query .= ' AND';
             }
@@ -2217,7 +2222,7 @@ class Faq
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= " fd.lang = '" . $lang . "'";
+            $query .= " fd.lang = '" . $this->config->getDb()->escape($lang) . "'";
             $needAndOp = true;
         }
         switch ($queryType) {
@@ -2499,10 +2504,9 @@ class Faq
      * @param string $lang language code which is valid with Language::isASupportedLanguage
      * @param bool   $flag record is set to sticky or not
      * @param string $type type of the flag to set, use the column name
-     *
      * @return bool
      */
-    public function updateRecordFlag($id, $lang, $flag, $type)
+    public function updateRecordFlag(int $id, string $lang, bool $flag, string $type): bool
     {
         $retval = false;
 
@@ -2536,7 +2540,7 @@ class Faq
                 $type,
                 $flag,
                 $id,
-                $lang
+                $this->config->getDb()->escape($lang)
             );
 
             $retval = (bool)$this->config->getDb()->query($update);
@@ -2550,7 +2554,7 @@ class Faq
      *
      * @return array
      */
-    public function getStickyRecords()
+    public function getStickyRecords(): array
     {
         $result = $this->getStickyRecordsData();
         $output = [];
@@ -2669,7 +2673,7 @@ class Faq
      *
      * @return array
      */
-    public function getInactiveFaqsData()
+    public function getInactiveFaqsData(): array
     {
         $query = sprintf(
             "

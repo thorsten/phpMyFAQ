@@ -333,7 +333,7 @@ class Configuration
 
     public function isLdapActive(): bool
     {
-        return $this->get('ldap.ldapSupport');
+        return (bool) $this->get('ldap.ldapSupport');
     }
 
     public function isSignInWithMicrosoftActive(): bool
