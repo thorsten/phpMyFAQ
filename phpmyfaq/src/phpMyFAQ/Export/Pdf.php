@@ -86,7 +86,6 @@ class Pdf extends Export
      * @param int    $categoryId CategoryHelper Id
      * @param bool   $downwards  If true, downwards, otherwise upward ordering
      * @param string $language   Language
-     * @return string
      */
     public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
@@ -159,7 +158,7 @@ class Pdf extends Export
                 $this->pdf->Ln();
                 $this->pdf->Write(5, Translation::get('msgNewContentKeywords') . ' ' . $faq['keywords']);
             }
-            if (isset($tags) && 0 !== count($tags)) {
+            if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->pdf->Ln();
                 $this->pdf->Write(5, Translation::get('ad_entry_tags') . ': ' . implode(', ', $tags));
             }
@@ -184,9 +183,7 @@ class Pdf extends Export
     /**
      * Builds the PDF delivery for the given faq.
      *
-     * @param array       $faqData
      * @param string|null $filename
-     * @return string
      */
     public function generateFile(array $faqData, string $filename = null): string
     {

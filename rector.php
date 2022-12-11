@@ -8,6 +8,9 @@ use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
+        __DIR__ . '/phpmyfaq/admin/*.php',
+        __DIR__ . '/phpmyfaq/services/*.php',
+        __DIR__ . '/phpmyfaq/setup/*.php',
         __DIR__ . '/phpmyfaq/src/phpMyFAQ',
         __DIR__ . '/phpmyfaq/*.php',
     ]);

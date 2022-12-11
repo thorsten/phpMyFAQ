@@ -211,7 +211,6 @@ class User
      * Adds a permission object to the user.
      *
      * @param BasicPermission|MediumPermission|LargePermission $perm Permission object
-     * @return bool
      */
     public function addPerm($perm): bool
     {
@@ -221,8 +220,6 @@ class User
 
     /**
      * Returns a specific entry from the auth data source array.
-     *
-     * @return string|null
      */
     public function getAuthSource(string $key): ?string
     {
@@ -234,8 +231,6 @@ class User
 
     /**
      * Returns a specific entry from the auth data array.
-     *
-     * @return mixed
      */
     public function getAuthData(string $key): mixed
     {
@@ -250,7 +245,6 @@ class User
      *
      * @param AuthDatabase|AuthHttp|AuthLdap|AuthSso $auth Driver object
      * @param string              $name Auth name
-     * @return bool
      */
     public function addAuth($auth, string $name): bool
     {
@@ -267,7 +261,6 @@ class User
      * Returns true if auth is a valid authentication object.
      *
      * @param Auth $auth Auth object
-     * @return bool
      */
     protected function checkAuth(Auth $auth): bool
     {
@@ -284,8 +277,6 @@ class User
     /**
      * loads basic user information from the database selecting the user with
      * specified cookie information.
-     *
-     * @return bool
      */
     public function getUserByCookie(string $cookie): bool
     {
@@ -331,8 +322,6 @@ class User
 
     /**
      * Returns the User ID of the user.
-     *
-     * @return int
      */
     public function getUserId(): int
     {
@@ -347,8 +336,6 @@ class User
 
     /**
      * Checks if display name is already used. Returns true, if already in use.
-     *
-     * @return bool
      */
     public function checkDisplayName(string $name): bool
     {
@@ -365,8 +352,6 @@ class User
 
     /**
      * Checks if email address is already used. Returns true, if already in use.
-     *
-     * @return bool
      */
     public function checkMailAddress(string $name): bool
     {
@@ -419,7 +404,6 @@ class User
     /**
      * Creates a new user and stores basic data in the database.
      *
-     * @return bool
      * @throws Core\Exception
      * @throws Exception
      */
@@ -509,7 +493,6 @@ class User
      * If login matches this false is returned.
      *
      * @param string $login Login name
-     * @return bool
      */
     public function isValidLogin(string $login): bool
     {
@@ -528,7 +511,6 @@ class User
      *
      * @param string $login Login name
      * @param bool   $raiseError Raise error?
-     * @return bool
      */
     public function getUserByLogin(string $login, bool $raiseError = true): bool
     {
@@ -575,7 +557,6 @@ class User
     /**
      * Returns a new password.
      *
-     * @return string
      * @throws Exception
      */
     public function createPassword(int $minimumLength = 8, bool $allowUnderscore = true): string
@@ -624,8 +605,6 @@ class User
 
     /**
      * deletes the user from the database.
-     *
-     * @return bool
      */
     public function deleteUser(): bool
     {
@@ -702,8 +681,6 @@ class User
      * The string returned by error() contains messages for all errors that
      * during object processing. Messages are separated by new lines.
      * Error messages are stored in the public array errors.
-     *
-     * @return string
      */
     public function error(): string
     {
@@ -773,7 +750,6 @@ class User
      *
      * @param int  $userId User ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
-     * @return bool
      */
     public function getUserById(int $userId, bool $allowBlockedUsers = false): bool
     {
@@ -856,7 +832,6 @@ class User
      * Adds user data.
      *
      * @param array<string> $data Array with user data
-     * @return bool
      */
     public function setUserData(array $data): bool
     {
@@ -870,8 +845,6 @@ class User
 
     /**
      * returns the user's login.
-     *
-     * @return string
      */
     public function getLogin(): string
     {
@@ -880,8 +853,6 @@ class User
 
     /**
      * Returns the user ID from the given email address
-     *
-     * @return int
      */
     public function getUserIdByEmail(string $email): int
     {
@@ -898,8 +869,6 @@ class User
      * Returns true or false for the visibility for the given email
      * address, if the user is not a registered user, the method
      * returns false for anonymous users
-     *
-     * @return bool
      */
     public function getUserVisibilityByEmail(string $email): bool
     {
@@ -916,7 +885,6 @@ class User
      * Returns true on success.
      * This will change a users' status to active, and send an email with a new password.
      *
-     * @return bool
      * @throws Exception|TransportExceptionInterface
      */
     public function activateUser(): bool
@@ -945,8 +913,6 @@ class User
 
     /**
      * returns the user's status.
-     *
-     * @return string
      */
     public function getStatus(): string
     {
@@ -961,7 +927,6 @@ class User
      * Sets the user's status and updates the database entry.
      *
      * @param string $status Status
-     * @return bool
      */
     public function setStatus(string $status): bool
     {
@@ -1002,7 +967,6 @@ class User
      * password is generated using the createPassword() method.
      *
      * @param string $pass Password
-     * @return bool
      * @throws Exception
      */
     public function changePassword(string $pass = ''): bool
@@ -1036,7 +1000,6 @@ class User
     /**
      * Sends mail to the current user.
      *
-     * @return int
      * @throws Core\Exception|TransportExceptionInterface
      */
     public function mailUser(string $subject, string $message): int
@@ -1053,8 +1016,6 @@ class User
 
     /**
      * Returns true, if a user is a super admin.
-     *
-     * @return bool
      */
     public function isSuperAdmin(): bool
     {
@@ -1063,8 +1024,6 @@ class User
 
     /**
      * Sets the users "is_superadmin" flag and updates the database entry.
-     *
-     * @return bool
      */
     public function setSuperAdmin(bool $isSuperAdmin): bool
     {

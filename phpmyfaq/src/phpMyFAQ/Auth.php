@@ -60,8 +60,6 @@ class Auth
 
     /**
      * Constructor.
-     *
-     * @param Configuration|null $config
      */
     public function __construct(protected ?Configuration $config)
     {

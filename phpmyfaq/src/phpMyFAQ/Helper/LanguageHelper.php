@@ -31,11 +31,7 @@ class LanguageHelper
      * This function displays the <select> box for the available languages
      * optionally filtered by excluding some provided languages.
      *
-     * @param  string $default
-     * @param  bool   $submitOnChange
      * @param  string[]  $excludedLanguages
-     * @param  string $id
-     * @return string
      */
     public static function renderSelectLanguage(
         string $default,
@@ -73,7 +69,7 @@ class LanguageHelper
      */
     public static function getAvailableLanguages(): array
     {
-        $search = array('language_', '.php');
+        $search = ['language_', '.php'];
         $languages = $languageFiles = [];
 
         $dir = new DirectoryIterator(PMF_LANGUAGE_DIR);
@@ -106,8 +102,6 @@ class LanguageHelper
      * @param string $lang              the language to be selected
      * @param bool   $onlyThisLang      print only the passed language?
      * @param bool   $fileLanguageValue print the <language file> instead of the <language code> as value?
-     *
-     * @return string
      */
     public static function renderLanguageOptions(
         string $lang = '',

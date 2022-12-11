@@ -33,8 +33,6 @@ class Logging
 
     /**
      * Returns the number of entries.
-     *
-     * @return int
      */
     public function getNumberOfEntries(): int
     {
@@ -47,8 +45,6 @@ class Logging
 
     /**
      * Returns all data from the admin log.
-     *
-     * @return array
      */
     public function getAll(): array
     {
@@ -78,8 +74,6 @@ class Logging
      *
      * @param User   $user    User object
      * @param string $logText Logged string
-     *
-     * @return bool
      */
     public function logAdmin(User $user, string $logText = ''): bool
     {

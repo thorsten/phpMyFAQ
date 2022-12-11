@@ -74,8 +74,6 @@ class LinkVerifier
 
     /**
      * Constructor.
-     *
-     * @param Configuration|null $config
      */
     public function __construct(private ?Configuration $config)
     {

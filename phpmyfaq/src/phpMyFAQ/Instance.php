@@ -77,8 +77,6 @@ class Instance
 
     /**
      * Returns the current instance id.
-     *
-     * @return int
      */
     public function getId(): int
     {
@@ -112,8 +110,6 @@ class Instance
 
     /**
      * Returns the instance.
-     *
-     * @return object
      */
     public function getInstanceById(int $id): object
     {
@@ -130,8 +126,6 @@ class Instance
 
     /**
      * Updates the instance data.
-     *
-     * @return bool
      */
     public function updateInstance(int $id, InstanceEntity $data): bool
     {
@@ -150,8 +144,6 @@ class Instance
     /**
      * Deletes an instance.
      *
-     *
-     * @return bool
      */
     public function removeInstance(int $id): bool
     {
@@ -181,8 +173,6 @@ class Instance
     /**
      * Adds a configuration item for the database.
      *
-     *
-     * @return mixed
      */
     public function addConfig(string $name, string $value): mixed
     {
@@ -202,8 +192,6 @@ class Instance
 
     /**
      * Returns the configuration value.
-     *
-     * @return bool|string
      */
     public function getConfig(string $name): bool|string
     {

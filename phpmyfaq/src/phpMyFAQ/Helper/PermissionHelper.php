@@ -28,7 +28,6 @@ class PermissionHelper
      * Renders a select box for permission types.
      *
      * @param  string $current Selected option
-     * @return string
      */
     public static function permOptions(string $current): string
     {

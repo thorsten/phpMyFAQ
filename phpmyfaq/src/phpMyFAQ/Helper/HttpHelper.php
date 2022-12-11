@@ -63,8 +63,6 @@ class HttpHelper extends Helper
 
     /**
      * Adds an extra header.
-     *
-     * @param string $header
      */
     public function addExtraHeader(string $header): void
     {
@@ -113,8 +111,6 @@ class HttpHelper extends Helper
 
     /**
      * Returns the HTTP status code
-     *
-     * @return int
      */
     public function getStatusCode(): int
     {
@@ -123,8 +119,6 @@ class HttpHelper extends Helper
 
     /**
      * Returns the HTTP header value for "X-PMF-Token"
-     *
-     * @return string
      */
     public function getClientApiToken(): string
     {
@@ -133,8 +127,6 @@ class HttpHelper extends Helper
 
     /**
      * URL to redirect
-     *
-     * @param string $url
      */
     public function redirect(string $url): void
     {
@@ -194,7 +186,7 @@ class HttpHelper extends Helper
 
         if ($isJson) {
             header('Content-Type: application/json');
-            echo json_encode($payload);
+            echo json_encode($payload, JSON_THROW_ON_ERROR);
         } else {
             echo $payload;
         }

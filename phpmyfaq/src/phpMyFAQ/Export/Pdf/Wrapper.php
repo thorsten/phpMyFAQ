@@ -329,9 +329,6 @@ class Wrapper extends TCPDF
         $this->categories = $categories;
     }
 
-    /**
-     * @param Configuration $config
-     */
     public function setConfig(Configuration $config): void
     {
         $this->config = $config;
@@ -460,14 +457,12 @@ class Wrapper extends TCPDF
         $this->SetFont($this->currentFont, '', 12);
 
         // Render TOC
-        $this->addTOC(1, $this->currentFont, '.', Translation::get('msgTableOfContent'), 'B', array(128, 0, 0));
+        $this->addTOC(1, $this->currentFont, '.', Translation::get('msgTableOfContent'), 'B', [128, 0, 0]);
         $this->endTOCPage();
     }
 
     /**
      * Returns the current font for PDF export.
-     *
-     * @return string
      */
     public function getCurrentFont(): string
     {
@@ -476,8 +471,6 @@ class Wrapper extends TCPDF
 
     /**
      * Sets the FAQ array.
-     *
-     * @param array $faq
      */
     public function setFaq(array $faq)
     {
@@ -520,7 +513,6 @@ class Wrapper extends TCPDF
      * @param array  $altimgs Array of alternate images IDs. Each alternative image must be an array with two values:
      *                          an integer representing the image ID (the value returned by the Image method) and a
      *                          boolean value to indicate if the image is the default for printing.
-     * @return void
      */
     public function Image(// phpcs:ignore
         $file,

@@ -42,7 +42,6 @@ class Date
      * @param string $format    Date format
      * @param bool   $pmfFormat true if the passed date is in phpMyFAQ format, false if in
      *                          Unix timestamp format
-     * @return string
      */
     public static function createIsoDate(string $date, string $format = 'Y-m-d H:i', bool $pmfFormat = true): string
     {

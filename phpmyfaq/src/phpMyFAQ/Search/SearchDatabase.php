@@ -79,8 +79,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -118,8 +116,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the part of the SQL query with the columns for the result set.
-     *
-     * @return string
      */
     public function getResultColumns(): string
     {
@@ -140,8 +136,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Sets the part of the SQL query with the columns for the result set.
      *
      * @param string[] $columns Array of columns
-     *
-     * @return SearchDatabase
      */
     public function setResultColumns(array $columns): SearchDatabase
     {
@@ -152,8 +146,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the search table.
-     *
-     * @return string
      */
     public function getTable(): string
     {
@@ -164,8 +156,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Sets search table.
      *
      * @param string $table Table where search should be performed
-     *
-     * @return SearchDatabase
      */
     public function setTable($table): SearchDatabase
     {
@@ -176,8 +166,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the joined table.
-     *
-     * @return string
      */
     public function getJoinedTable(): string
     {
@@ -192,8 +180,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Sets joined search table.
      *
      * @param string $joinedTable Joined table where search should be performed
-     *
-     * @return SearchDatabase
      */
     public function setJoinedTable($joinedTable = ''): SearchDatabase
     {
@@ -204,8 +190,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the part of the SQL query with the columns for the join.
-     *
-     * @return string
      */
     public function getJoinedColumns(): string
     {
@@ -222,8 +206,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Sets the part of the SQL query with the columns for the join.
      *
      * @param string[] $joinedColumns Array of columns
-     *
-     * @return SearchDatabase
      */
     public function setJoinedColumns(array $joinedColumns): SearchDatabase
     {
@@ -234,8 +216,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the part of the SQL query with the matching columns.
-     *
-     * @return string
      */
     public function getMatchingColumns(): string
     {
@@ -246,8 +226,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Sets the part of the SQL query with the matching columns.
      *
      * @param string[] $matchingColumns Array of columns
-     *
-     * @return SearchDatabase
      */
     public function setMatchingColumns(array $matchingColumns): SearchDatabase
     {
@@ -258,8 +236,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Returns the part of the SQL query with the conditions.
-     *
-     * @return string
      */
     public function getConditions(): string
     {
@@ -282,8 +258,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Sets the part of the SQL query with the conditions.
      *
      * @param array<string, array<int>|string> $conditions Array of columns
-     *
-     * @return SearchDatabase
      */
     public function setConditions(array $conditions): SearchDatabase
     {
@@ -296,8 +270,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Creates the part for the WHERE clause.
      *
      * @param string $searchTerm Search term
-     *
-     * @return string
      */
     public function getMatchClause($searchTerm = ''): string
     {

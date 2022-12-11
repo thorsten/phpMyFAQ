@@ -32,27 +32,18 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class MailHelper
 {
-    /** @var Configuration */
-    private Configuration $config;
-
     /** @var Mail */
     private Mail $mail;
 
     /**
      * MailHelper constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->mail = new Mail($this->config);
     }
 
     /**
-     * @param User   $user
-     * @param string $password
-     * @return bool
      * @throws Exception
      * @throws TransportExceptionInterface
      */

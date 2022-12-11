@@ -370,9 +370,6 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Formats the error output
-     *
-     * @param array $errors
-     * @return string
      */
     private function formatErrors(array $errors): string
     {

@@ -75,6 +75,15 @@ class Configuration
     }
 
     /**
+     * Returns the logger instance
+     * @return Logger
+     */
+    public function getLogger(): Logger
+    {
+        return $this->logger;
+    }
+
+    /**
      * Returns all sorting possibilities for FAQ records.
      */
     public static function sortingOptions(string $current): string

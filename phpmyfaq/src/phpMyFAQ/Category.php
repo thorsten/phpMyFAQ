@@ -756,8 +756,6 @@ class Category
 
     /**
      * Returns the data of the given category.
-     *
-     * @param int $categoryId
      */
     public function getCategoryData(int $categoryId): CategoryEntity
     {

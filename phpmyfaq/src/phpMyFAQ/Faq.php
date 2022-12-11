@@ -103,8 +103,6 @@ class Faq
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(private Configuration $config)
     {
@@ -117,10 +115,6 @@ class Faq
         }
     }
 
-    /**
-     * @param int $userId
-     * @return Faq
-     */
     public function setUser(int $userId = -1): Faq
     {
         $this->user = $userId;
@@ -129,7 +123,6 @@ class Faq
 
     /**
      * @param int[] $groups
-     * @return Faq
      */
     public function setGroups(array $groups): Faq
     {
@@ -144,7 +137,6 @@ class Faq
      * @param string $orderBy    Order by
      * @param string $sortBy     Sort by
      *
-     * @return array
      * @throws Exception
      */
     public function getAllFaqPreviewsByCategoryId(
@@ -269,9 +261,7 @@ class Faq
     /**
      * Returns a part of a query to check permissions.
      *
-     * @param bool $hasGroupSupport
      *
-     * @return string
      */
     protected function queryPermission(bool $hasGroupSupport = false): string
     {
@@ -307,8 +297,6 @@ class Faq
      * @param int    $categoryId Entity ID
      * @param string $orderBy    Order by
      * @param string $sortBy     Sort by
-     *
-     * @return string
      */
     public function renderRecordsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): string
     {
@@ -491,14 +479,14 @@ class Faq
                 $page
             );
 
-            $options = array(
+            $options = [
                 'baseUrl' => $baseUrl,
                 'total' => $num,
                 'perPage' => $this->config->get('records.numberOfRecordsPerPage'),
                 'useRewrite' => $useRewrite,
                 'rewriteUrl' => $rewriteUrl,
-                'pageParamName' => 'seite',
-            );
+                'pageParamName' => 'seite'
+            ];
 
             $pagination = new Pagination($this->config, $options);
             $output .= $pagination->render();
@@ -513,8 +501,6 @@ class Faq
      * @param array  $recordIds Array of record ids
      * @param string $orderBy   Order by
      * @param string $sortBy    Sort by
-     *
-     * @return string
      */
     public function renderRecordsByFaqIds(array $recordIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): string
     {
@@ -769,11 +755,7 @@ class Faq
     /**
      * Executes a query to retrieve a single FAQ.
      *
-     * @param int      $faqId
-     * @param string   $faqLanguage
      * @param int|null $faqRevisionId
-     * @param bool     $isAdmin
-     * @return mixed
      */
     public function getRecordResult(
         int $faqId,
@@ -818,8 +800,6 @@ class Faq
     /**
      * Return records from given IDs
      *
-     * @param  array $faqIds
-     * @return array
      * @throws Exception
      */
     public function getRecordsByIds(array $faqIds): array
@@ -915,8 +895,6 @@ class Faq
      * @param array $data      Array of FAQ data
      * @param bool  $newRecord Do not create a new ID if false
      * @deprecated will be removed in v3.2
-     *
-     * @return int
      */
     public function addRecord(array $data, bool $newRecord = true): int
     {
@@ -961,7 +939,6 @@ class Faq
      * Creates a new FAQ.
      *
      * @param FaqEntity $faq
-     * @return int
      */
     public function create(FaqEntity $faq): int
     {
@@ -1001,8 +978,6 @@ class Faq
 
     /**
      * Gets the latest solution id for a FAQ record.
-     *
-     * @return int
      */
     public function getNextSolutionId(): int
     {
@@ -1029,8 +1004,6 @@ class Faq
      * Updates a record.
      *
      * @param array $data Array of FAQ data
-     *
-     * @return bool
      */
     public function updateRecord(array $data): bool
     {
@@ -1089,7 +1062,6 @@ class Faq
      *
      * @param int    $recordId   Record id
      * @param string $recordLang Record language
-     * @return bool
      * @throws Attachment\AttachmentException
      * @throws Attachment\Filesystem\File\FileException
      */
@@ -1097,70 +1069,58 @@ class Faq
     {
         $solutionId = $this->getSolutionIdFromId($recordId, $recordLang);
 
-        $queries = array(
-            sprintf(
-                "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $recordId,
-                $this->config->getDb()->escape($recordLang)
-            ),
-            sprintf(
-                "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
-                Database::getTablePrefix(),
-                $recordId,
-                $this->config->getDb()->escape($recordLang)
-            ),
-            sprintf(
-                "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $recordId,
-                $this->config->getDb()->escape($recordLang)
-            ),
-            sprintf(
-                "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $recordId,
-                $this->config->getDb()->escape($recordLang)
-            ),
-            sprintf(
-                "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-                Database::getTablePrefix(),
-                $recordId,
-                $this->config->getDb()->escape($recordLang)
-            ),
-            sprintf(
-                'DELETE FROM %sfaqdata_user WHERE record_id = %d',
-                Database::getTablePrefix(),
-                $recordId
-            ),
-            sprintf(
-                'DELETE FROM %sfaqdata_group WHERE record_id = %d',
-                Database::getTablePrefix(),
-                $recordId
-            ),
-            sprintf(
-                'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
-                Database::getTablePrefix(),
-                $recordId
-            ),
-            sprintf(
-                'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix()
-            ),
-            sprintf(
-                'DELETE FROM %sfaqcomments WHERE id = %d',
-                Database::getTablePrefix(),
-                $recordId
-            ),
-            sprintf(
-                'DELETE FROM %sfaqvoting WHERE artikel = %d',
-                Database::getTablePrefix(),
-                $recordId
-            ),
-        );
+        $queries = [sprintf(
+            "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $recordId,
+            $this->config->getDb()->escape($recordLang)
+        ), sprintf(
+            "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
+            Database::getTablePrefix(),
+            $recordId,
+            $this->config->getDb()->escape($recordLang)
+        ), sprintf(
+            "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $recordId,
+            $this->config->getDb()->escape($recordLang)
+        ), sprintf(
+            "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $recordId,
+            $this->config->getDb()->escape($recordLang)
+        ), sprintf(
+            "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $recordId,
+            $this->config->getDb()->escape($recordLang)
+        ), sprintf(
+            'DELETE FROM %sfaqdata_user WHERE record_id = %d',
+            Database::getTablePrefix(),
+            $recordId
+        ), sprintf(
+            'DELETE FROM %sfaqdata_group WHERE record_id = %d',
+            Database::getTablePrefix(),
+            $recordId
+        ), sprintf(
+            'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
+            Database::getTablePrefix(),
+            $recordId
+        ), sprintf(
+            'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix()
+        ), sprintf(
+            'DELETE FROM %sfaqcomments WHERE id = %d',
+            Database::getTablePrefix(),
+            $recordId
+        ), sprintf(
+            'DELETE FROM %sfaqvoting WHERE artikel = %d',
+            Database::getTablePrefix(),
+            $recordId
+        )];
 
         foreach ($queries as $query) {
             $this->config->getDb()->query($query);
@@ -1184,10 +1144,6 @@ class Faq
 
     /**
      * Returns the solution ID from a given ID and language
-     *
-     * @param integer $faqId
-     * @param string  $faqLang
-     * @return int
      */
     public function getSolutionIdFromId(int $faqId, string $faqLang): int
     {
@@ -1220,7 +1176,6 @@ class Faq
      *
      * @param int    $recordId   Record id
      * @param string $recordLang Record language
-     * @return bool
      */
     public function hasTranslation(int $recordId, string $recordLang): bool
     {
@@ -1334,7 +1289,7 @@ class Faq
                 $content = Translation::get('err_expiredArticle');
             }
 
-            $this->faqRecord = array(
+            $this->faqRecord = [
                 'id' => $row->id,
                 'lang' => $row->lang,
                 'solution_id' => $row->solution_id,
@@ -1353,7 +1308,7 @@ class Faq
                 'linkState' => $row->links_state,
                 'linkCheckDate' => $row->links_check_date,
                 'notes' => $row->notes
-            );
+            ];
         }
     }
 
@@ -1361,7 +1316,6 @@ class Faq
      * Gets the record ID from a given solution ID.
      *
      * @param int $solutionId Solution ID
-     * @return array
      */
     public function getIdFromSolutionId(int $solutionId): array
     {
@@ -1546,7 +1500,6 @@ class Faq
      * Returns the FAQ record title from the ID and language.
      *
      * @param int $id Record id
-     * @return string
      */
     public function getRecordTitle(int $id): string
     {
@@ -1584,7 +1537,6 @@ class Faq
      * Returns the keywords of a FAQ record from the ID and language.
      *
      * @param int $id record id
-     * @return string
      */
     public function getRecordKeywords(int $id): string
     {
@@ -1619,7 +1571,6 @@ class Faq
      *
      * @param int $recordId  FAQ record ID
      * @param int $wordCount Number of words, default: 12
-     * @return string
      */
     public function getRecordPreview(int $recordId, int $wordCount = 12): string
     {
@@ -1661,7 +1612,6 @@ class Faq
      * not limited to the current language.
      *
      * @param string|null $language Language
-     * @return int
      */
     public function getNumberOfRecords(string $language = null): int
     {
@@ -1699,7 +1649,6 @@ class Faq
      * This function generates a list with the most voted or most visited records.
      *
      * @param string $type Type definition visits/voted
-     * @return array
      */
     public function getTopTen(string $type = 'visits'): array
     {
@@ -1742,7 +1691,6 @@ class Faq
      * @param int  $count Number of records
      * @param int  $categoryId Entity ID
      * @param string|null $language Language
-     * @return array
      */
     public function getTopTenData(
         int $count = PMF_NUMBER_RECORDS_TOPTEN,
@@ -1813,11 +1761,11 @@ class Faq
         if ($result) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    if (!in_array($row->user_id, [-1, $this->user]) || !in_array($row->group_id, $this->groups)) {
                         continue;
                     }
                 } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                    if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
                 }
@@ -1860,7 +1808,6 @@ class Faq
      *
      * @param int    $count    Number of records
      * @param string|null $language Language
-     * @return array
      */
     public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, string $language = null): array
     {
@@ -1953,7 +1900,6 @@ class Faq
     /**
      * This function generates the list with the latest published records.
      *
-     * @return array
      * @throws Exception
      */
     public function getLatest(): array
@@ -1982,7 +1928,6 @@ class Faq
      *
      * @param int    $count    Number of records
      * @param string $language Language
-     * @return array
      */
     public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, $language = null): array
     {
@@ -2084,13 +2029,6 @@ class Faq
 
     /**
      * Retrieve faq records according to the constraints provided.
-     *
-     * @param string $queryType
-     * @param int    $nCatid
-     * @param bool   $bDownwards
-     * @param string $lang
-     * @param string $date
-     * @return array
      */
     public function get(
         string $queryType = FAQ_QUERY_TYPE_DEFAULT,
@@ -2134,14 +2072,6 @@ class Faq
 
     /**
      * Build the SQL query for retrieving faq records according to the constraints provided.
-     *
-     * @param string $queryType
-     * @param int    $categoryId
-     * @param bool   $bDownwards
-     * @param string $lang
-     * @param string $date
-     * @param int    $faqId
-     * @return string
      */
     private function getSQLQuery(
         string $queryType,
@@ -2247,18 +2177,12 @@ class Faq
                 $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
                 break;
         }
-        // Sort criteria
-        switch ($queryType) {
-            case FAQ_QUERY_TYPE_EXPORT_PDF:
-            case FAQ_QUERY_TYPE_EXPORT_XHTML:
-            case FAQ_QUERY_TYPE_EXPORT_XML:
-                $query .= "\nORDER BY fcr.category_id, fd.id";
-                break;
-            default:
-                // Normal ordering
-                $query .= "\nORDER BY fcr.category_id, fd.id";
-                break;
-        }
+        match ($queryType) {
+            FAQ_QUERY_TYPE_EXPORT_PDF,
+            FAQ_QUERY_TYPE_EXPORT_XHTML,
+            FAQ_QUERY_TYPE_EXPORT_XML => $query .= "\nORDER BY fcr.category_id, fd.id",
+            default => $query .= "\nORDER BY fcr.category_id, fd.id",
+        };
 
         return $query;
     }
@@ -2267,10 +2191,7 @@ class Faq
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
-     * @param integer       $nCatid
-     * @param string        $logicOp
      * @param Category|null $oCat
-     * @return string
      */
     private function getCatidWhereSequence(int $nCatid, string $logicOp = 'OR', Category $oCat = null): string
     {
@@ -2292,9 +2213,7 @@ class Faq
     /**
      * Returns all records of one category.
      *
-     * @param int $categoryId
      *
-     * @return string
      */
     public function getRecordsWithoutPagingByCategoryId(int $categoryId): string
     {
@@ -2394,7 +2313,6 @@ class Faq
      * Prints the open questions as a HTML table.
      *
      * @todo   needs to be moved to a QuestionHelper class
-     * @return string
      * @throws Exception
      */
     public function renderOpenQuestions(): string
@@ -2462,9 +2380,7 @@ class Faq
                 );
                 $output .= sprintf(
                     '<td><strong>%s:</strong><br>%s</td>',
-                    isset($category->categoryName[$row->category_id]['name']) ?
-                        $category->categoryName[$row->category_id]['name'] :
-                        '',
+                    $category->categoryName[$row->category_id]['name'] ?? '',
                     strip_tags($row->question)
                 );
                 if ($this->config->get('records.enableCloseQuestion') && $row->answer_id) {
@@ -2504,26 +2420,16 @@ class Faq
      * @param string $lang language code which is valid with Language::isASupportedLanguage
      * @param bool   $flag record is set to sticky or not
      * @param string $type type of the flag to set, use the column name
-     * @return bool
      */
     public function updateRecordFlag(int $id, string $lang, bool $flag, string $type): bool
     {
         $retval = false;
 
-        switch ($type) {
-            case 'sticky':
-                $flag = ($flag === 'checked' ? 1 : 0);
-                break;
-
-            case 'active':
-                $flag = ($flag === 'checked' ? "'yes'" : "'no'");
-                break;
-
-            default:
-                // This is because we would run into unknown db column
-                $flag = null;
-                break;
-        }
+        $flag = match ($type) {
+            'sticky' => $flag === 'checked' ? 1 : 0,
+            'active' => $flag === 'checked' ? "'yes'" : "'no'",
+            default => null,
+        };
 
         if (null !== $flag) {
             $update = sprintf(
@@ -2551,8 +2457,6 @@ class Faq
 
     /**
      * Prepares and returns the sticky records for the frontend.
-     *
-     * @return array
      */
     public function getStickyRecords(): array
     {
@@ -2574,8 +2478,6 @@ class Faq
 
     /**
      * Returns the sticky records with URL and Title.
-     *
-     * @return array
      */
     public function getStickyRecordsData(): array
     {
@@ -2670,8 +2572,6 @@ class Faq
 
     /**
      * Returns the inactive records with admin URL to edit the FAQ and title.
-     *
-     * @return array
      */
     public function getInactiveFaqsData(): array
     {

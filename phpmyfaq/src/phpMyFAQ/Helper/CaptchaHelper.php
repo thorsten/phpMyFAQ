@@ -33,8 +33,6 @@ class CaptchaHelper extends Helper
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -45,10 +43,7 @@ class CaptchaHelper extends Helper
      * Renders the captcha check.
      *
      * @param Captcha $captcha
-     * @param string  $action
-     * @param string  $legend
      * @param bool    $auth
-     * @return string
      */
     public function renderCaptcha(Captcha $captcha, string $action, string $legend, $auth = false): string
     {

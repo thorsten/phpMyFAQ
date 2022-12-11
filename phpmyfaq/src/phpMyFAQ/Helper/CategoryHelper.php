@@ -35,7 +35,6 @@ class CategoryHelper extends Helper
      * Renders the main navigation.
      *
      * @param int $activeCategory Selected category
-     * @return string
      */
     public function renderNavigation(int $activeCategory = 0): string
     {
@@ -48,7 +47,7 @@ class CategoryHelper extends Helper
 
         if ($numCategories > 0) {
             for ($y = 0; $y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
-                list($hasChild, $name, $categoryId, $description, $active) = $this->Category->getLineDisplay($y);
+                [$hasChild, $name, $categoryId, $description, $active] = $this->Category->getLineDisplay($y);
 
                 if (!$active) {
                     continue;
@@ -158,11 +157,10 @@ class CategoryHelper extends Helper
 
     /**
      * Renders the main navigation dropdown.
-     *
-     * @return string
      */
     public function renderCategoryDropDown(): string
     {
+        $number = [];
         global $sids;
 
         $open = 0;
@@ -173,7 +171,7 @@ class CategoryHelper extends Helper
 
         if ($numCategories > 0) {
             for ($y = 0; $y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
-                list($hasChild, $categoryName, $parent, $description, $active) = $this->Category->getLineDisplay($y);
+                [$hasChild, $categoryName, $parent, $description, $active] = $this->Category->getLineDisplay($y);
 
                 if (!$active) {
                     continue;
@@ -264,8 +262,6 @@ class CategoryHelper extends Helper
 
     /**
      * Returns all top-level categories in <li> tags.
-     *
-     * @return string
      */
     public function renderMainCategories(): string
     {
@@ -287,10 +283,8 @@ class CategoryHelper extends Helper
      * Get all categories in <option> tags.
      *
      * @param int[]|int $categoryId CategoryHelper ID or array of category IDs
-     *
-     * @return string
      */
-    public function renderOptions($categoryId): string
+    public function renderOptions(array|int $categoryId): string
     {
         $categories = '';
 
@@ -333,8 +327,6 @@ class CategoryHelper extends Helper
 
     /**
      * Renders the start page category card decks
-     * @param array $categories
-     * @return string
      */
     public function renderStartPageCategories(array $categories): string
     {
@@ -364,8 +356,6 @@ class CategoryHelper extends Helper
 
     /**
      * Renders the static tree with the number of records.
-     *
-     * @return string
      */
     public function renderCategoryTree(): string
     {
@@ -436,7 +426,7 @@ class CategoryHelper extends Helper
         $this->Category->expandAll();
 
         for ($y = 0; $y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
-            list($hasChild, $categoryName, $parent, $description) = $this->Category->getLineDisplay($y);
+            [$hasChild, $categoryName, $parent, $description] = $this->Category->getLineDisplay($y);
 
             $level = $this->Category->treeTab[$y]['level'];
             $levelDiff = $open - $level;
@@ -553,9 +543,6 @@ class CategoryHelper extends Helper
 
     /**
      * Renders the <option> tags for the available translations for a given category.
-     *
-     * @param int $categoryId
-     * @return string
      */
     public function renderAvailableTranslationsOptions(int $categoryId): string
     {
