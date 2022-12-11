@@ -6,10 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.9 - 2022-11-
+### phpMyFAQ v3.1.9 - 2022-12-11
 
 - fixed multiple security vulnerabilities (Thorsten)
 - fixed minor bugs (Thorsten)
+- updated bundled dependencies (Thorsten)
 
 ### phpMyFAQ v3.1.8 - 2022-10-24
 

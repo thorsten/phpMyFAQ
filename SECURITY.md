@@ -6,10 +6,10 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 ## Supported Versions
 
 | Version | Supported | Active development |
-| ------- | --------- | ------------------ |
-| 3.2.x   | ✓         | 2022 -             |
+| ------- | --------- |--------------------|
+| 3.2.x   | ✓         | 2023 -             |
 | 3.1.x   | ✓         | 2022 -             |
-| 3.0.x   | ✓         | 2020 - 2022        |
+| 3.0.x   | ✗         | 2020 - 2022        |
 | < 2.9   | ✗         | 2001 - 2019        |
 
 ## Reporting a Vulnerability
