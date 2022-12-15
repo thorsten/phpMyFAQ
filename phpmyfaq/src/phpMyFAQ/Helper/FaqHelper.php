@@ -163,12 +163,12 @@ class FaqHelper extends Helper
      * Creates an overview with all categories with their FAQs.
      *
      * @param Category $category
-     * @param Faq $faq
-     * @param string $language
+     * @param Faq      $faq
+     * @param string   $language
      * @return string
      * @throws Exception
      */
-    public function createOverview(Category $category, Faq $faq, $language = ''): string
+    public function createOverview(Category $category, Faq $faq, string $language = ''): string
     {
         global $PMF_LANG;
 
@@ -209,8 +209,8 @@ class FaqHelper extends Helper
      * Creates a list of links with available languages to edit a FAQ
      * in the admin backend.
      *
-     * @param  $faqId
-     * @param  $faqLang
+     * @param int    $faqId
+     * @param string $faqLang
      * @return string
      */
     public function createFaqTranslationLinkList(int $faqId, string $faqLang): string

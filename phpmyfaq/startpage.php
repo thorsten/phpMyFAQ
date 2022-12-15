@@ -36,6 +36,7 @@ if (!is_null($archived)) {
 } else {
     $writeNewsHeader = ' ' . $PMF_LANG['msgNews'];
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
+    $archived = false;
 }
 
 $startPageCategories = $category->getHomeCategories();

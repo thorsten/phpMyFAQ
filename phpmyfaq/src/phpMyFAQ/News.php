@@ -59,7 +59,7 @@ class News
      * @return string
      * @throws Exception
      */
-    public function getNews($showArchive = false, $active = true): string
+    public function getNews(bool $showArchive = false, bool $active = true): string
     {
         $output = '';
         $news = $this->getLatestData($showArchive, $active);
@@ -75,7 +75,7 @@ class News
             $oLink = new Link($url, $this->config);
 
             if (isset($item['header'])) {
-                $oLink->itemTitle = $item['header'];
+                $oLink->itemTitle = Strings::htmlentities($item['header']);
             }
 
             $output .= sprintf(
@@ -83,7 +83,7 @@ class News
                 ' class="pmf-news-heading"',
                 $item['id'],
                 $oLink->toString(),
-                $item['header']
+                Strings::htmlentities($item['header'])
             );
 
             $output .= sprintf('%s', $item['content']);
@@ -303,16 +303,16 @@ class News
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
             $data['date'],
             $data['lang'],
-            $data['header'],
-            $data['content'],
-            $data['authorName'],
+            $this->config->getDb()->escape($data['header']),
+            $this->config->getDb()->escape($data['content']),
+            $this->config->getDb()->escape($data['authorName']),
             $data['authorEmail'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['active'],
             $data['comment'],
-            $data['link'],
-            $data['linkTitle'],
+            $this->config->getDb()->escape($data['link']),
+            $this->config->getDb()->escape($data['linkTitle']),
             $data['target']
         );
 
@@ -355,16 +355,16 @@ class News
             Database::getTablePrefix(),
             $data['date'],
             $data['lang'],
-            $data['header'],
-            $data['content'],
-            $data['authorName'],
+            $this->config->getDb()->escape($data['header']),
+            $this->config->getDb()->escape($data['content']),
+            $this->config->getDb()->escape($data['authorName']),
             $data['authorEmail'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['active'],
             $data['comment'],
-            $data['link'],
-            $data['linkTitle'],
+            $this->config->getDb()->escape($data['link']),
+            $this->config->getDb()->escape($data['linkTitle']),
             $data['target'],
             $id
         );

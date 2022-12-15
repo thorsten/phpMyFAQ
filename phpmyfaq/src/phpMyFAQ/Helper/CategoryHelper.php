@@ -241,9 +241,9 @@ class CategoryHelper extends Helper
                     $parent
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $categoryName;
-                $oLink->text = $categoryName;
-                $oLink->tooltip = $description;
+                $oLink->itemTitle = Strings::htmlentities($categoryName);
+                $oLink->text = Strings::htmlentities($categoryName);
+                $oLink->tooltip = !is_null($description) ?? Strings::htmlentities($description);
 
                 $output .= $oLink->toHtmlAnchor();
                 $open = $level;
@@ -274,7 +274,7 @@ class CategoryHelper extends Helper
                 $categories .= sprintf(
                     '<li><a href="?action=show&cat=%d">%s</a></li>',
                     $cat['id'],
-                    $cat['name']
+                    Strings::htmlentities($cat['name'])
                 );
             }
         }
@@ -323,7 +323,7 @@ class CategoryHelper extends Helper
             }
 
             $categories .= '>';
-            $categories .= $indent . $cat['name'] . "</option>\n";
+            $categories .= $indent . Strings::htmlentities($cat['name']) . "</option>\n";
             ++$i;
         }
 
@@ -355,7 +355,7 @@ class CategoryHelper extends Helper
                 '<a href="' . Strings::htmlentities($category['url']) . '">' .
                 Strings::htmlentities($category['name']) . '</a>' .
                 '</h4>' .
-                '<p class="card-text">' . $category['description'] . '</p>' .
+                '<p class="card-text">' . Strings::htmlentities($category['description']) . '</p>' .
                 '</div>' .
                 '</div>';
             if ($key % 2 === 0) {
@@ -504,9 +504,9 @@ class CategoryHelper extends Helper
                 $parent
             );
             $oLink = new Link($url, $this->config);
-            $oLink->itemTitle = $categoryName;
-            $oLink->text = $categoryName;
-            $oLink->tooltip = $description;
+            $oLink->itemTitle = Strings::htmlentities($categoryName);
+            $oLink->text = Strings::htmlentities($categoryName);
+            $oLink->tooltip = !is_null($description) ?? Strings::htmlentities($description);
 
             $output .= $oLink->toHtmlAnchor() . $numFaqs;
             $open = $level;

@@ -7,8 +7,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package    phpMyFAQ\Helper
- * @subpackage TagsHelper
+ * @package    phpMyFAQ
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright  2013-2022 phpMyFAQ Team
  * @license    http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -20,6 +19,7 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper;
+use phpMyFAQ\Strings;
 
 /**
  * Class TagsHelper
@@ -32,7 +32,7 @@ class TagsHelper extends Helper
      *
      * @var array
      */
-    private $taggingIds;
+    private array $taggingIds;
 
     /**
      * Renders the tag list.
@@ -61,7 +61,7 @@ class TagsHelper extends Helper
      */
     public function renderSearchTag(int $tagId, string $tagName): string
     {
-        $taggingIds = str_replace($tagId, '', $this->getTaggingIds());
+        $taggingIds = str_replace((string) $tagId, '', $this->getTaggingIds());
         $taggingIds = str_replace(' ', '', $taggingIds);
         $taggingIds = str_replace(',,', ',', $taggingIds);
         $taggingIds = trim(implode(',', $taggingIds), ',');
@@ -70,11 +70,11 @@ class TagsHelper extends Helper
             '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s ' .
             '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
             $taggingIds,
-            $tagName
+            Strings::htmlentities($tagName)
         ) : sprintf(
             '<a class="btn btn-primary m-1" href="?action=search&amp;search=">%s ' .
             '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
-            $tagName
+            Strings::htmlentities($tagName)
         );
     }
 
@@ -83,7 +83,7 @@ class TagsHelper extends Helper
      *
      * @return array
      */
-    public function getTaggingIds()
+    public function getTaggingIds(): array
     {
         return $this->taggingIds;
     }
@@ -93,7 +93,7 @@ class TagsHelper extends Helper
      *
      * @param array $taggingIds The tag IDs as array
      */
-    public function setTaggingIds(array $taggingIds)
+    public function setTaggingIds(array $taggingIds): void
     {
         $this->taggingIds = array_filter($taggingIds, function ($tagId) {
             return Filter::filterVar($tagId, FILTER_VALIDATE_INT);
@@ -117,7 +117,7 @@ class TagsHelper extends Helper
             '<span class="badge badge-dark">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
-            $tagName,
+            Strings::htmlentities($tagName),
             $relevance
         );
     }

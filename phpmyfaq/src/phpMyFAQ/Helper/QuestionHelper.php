@@ -31,13 +31,13 @@ use phpMyFAQ\User;
 class QuestionHelper
 {
     /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     /** @var Category */
-    private $category;
+    private Category $category;
 
     /** @var array */
-    private $translation;
+    private array $translation;
 
     /**
      * QuestionHelper constructor.

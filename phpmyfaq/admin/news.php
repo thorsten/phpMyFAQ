@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Comments;
@@ -21,7 +21,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
-use phpMyFAQ\News;
+use phpMyFAQ\News;use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -66,7 +66,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
+                        <label class="col-3 col-form-label" for="authorName">
+                        <?= $PMF_LANG['ad_news_author_name'] ?>
+                        </label>
                         <div class="col-9">
                             <input class="form-control" type="text" name="authorName" id="authorName"
                                    value="<?= $user->getUserData('display_name') ?>">
@@ -74,7 +76,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
+                        <label class="col-3 col-form-label" for="authorEmail">
+                        <?= $PMF_LANG['ad_news_author_email'] ?>
+                        </label>
                         <div class="col-9">
                             <input class="form-control" type="email" name="authorEmail" id="authorEmail"
                                    value="<?= $user->getUserData('email') ?>">
@@ -94,7 +98,9 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
+                        <label class="col-3 col-form-label" for="comment">
+                        <?= $PMF_LANG['ad_news_allowComments'] ?>
+                        </label>
                         <div class="col-9 checkbox">
                             <label>
                                 <input type="checkbox" name="comment" id="comment" value="y">
@@ -106,12 +112,15 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-9">
-                            <input class="form-control" type="text" name="link" id="link" placeholder="http://www.example.com/">
+                            <input class="form-control" type="text" name="link" id="link"
+                            placeholder="http://www.example.com/">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
+                        <label class="col-3 col-form-label" for="linkTitle">
+                        <?= $PMF_LANG['ad_news_link_title'] ?>
+                        </label>
                         <div class="col-9">
                             <input type="text" name="linkTitle" id="linkTitle" class="form-control">
                         </div>
@@ -207,7 +216,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         foreach ($newsHeader as $newsItem) {
             ?>
                     <tr>
-                        <td><?= $newsItem['header'] ?></td>
+                        <td><?= Strings::htmlentities($newsItem['header']) ?></td>
                         <td><?= $date->format($newsItem['date']) ?></td>
                         <td>
                             <a class="btn btn-primary" href="?action=edit-news&amp;id=<?= $newsItem['id'] ?>">
@@ -254,7 +263,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                         <label class="col-3 col-form-label" for="newsheader"><?= $PMF_LANG['ad_news_header'] ?></label>
                         <div class="col-9">
                             <input type="text" name="newsheader" id="newsheader" class="form-control"
-                                   value="<?= $newsData['header'] ?? '' ?>">
+                                   value="<?= Strings::htmlentities($newsData['header']) ?? '' ?>">
                         </div>
                     </div>
 
@@ -270,16 +279,20 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
+                        <label class="col-3 col-form-label" for="authorName">
+                        <?= $PMF_LANG['ad_news_author_name'] ?>
+                        </label>
                         <div class="col-9">
-                            <input type="text" name="authorName" value="<?= $newsData['authorName'] ?>" class="form-control">
+                            <input type="text" name="authorName" class="form-control"
+                                value="<?= Strings::htmlentities($newsData['authorName']) ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
                         <div class="col-9">
-                            <input type="email" name="authorEmail" value="<?= $newsData['authorEmail'] ?>" class="form-control">
+                            <input type="email" name="authorEmail" class="form-control"
+                                value="<?= Strings::htmlentities($newsData['authorEmail']) ?>">
                         </div>
                     </div>
 
@@ -315,15 +328,16 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-9">
-                            <input type="text" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
+                            <input type="text" id="link" name="link"
+                            value="<?= Strings::htmlentities($newsData['link']) ?>" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
                         <div class="col-9">
-                            <input type="text" id="linkTitle" name="linkTitle" value="<?= $newsData['linkTitle'] ?>"
-                            class="form-control">
+                            <input type="text" id="linkTitle" name="linkTitle"
+                            value="<?= Strings::htmlentities($newsData['linkTitle']) ?>" class="form-control">
                         </div>
                     </div>
 
@@ -429,14 +443,14 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_UNSAFE_RAW);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
     $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
     $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_UNSAFE_RAW);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 

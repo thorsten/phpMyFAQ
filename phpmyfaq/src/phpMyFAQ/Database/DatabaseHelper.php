@@ -31,7 +31,7 @@ class DatabaseHelper
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Constructor.

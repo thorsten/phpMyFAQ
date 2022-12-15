@@ -787,13 +787,13 @@ class Category
 
         $oLink = new Link($url, $this->config);
         $oLink->id = 'category_' . $categoryId;
-        $oLink->itemTitle = $categoryName;
-        $oLink->text = $categoryName;
+        $oLink->itemTitle = Strings::htmlentities($categoryName);
+        $oLink->text = Strings::htmlentities($categoryName);
 
         if ($hasChildren) {
             $oLink->text .= sprintf(
                 '<i aria-hidden="true" class="fa fa-caret-right" title="%s"></i>',
-                $categoryName
+                Strings::htmlentities($categoryName)
             );
         }
 
@@ -890,8 +890,8 @@ class Category
                 );
                 $oLink = new Link($url, $this->config);
                 $oLink->text = sprintf('<span>%s</span>', $category);
-                $oLink->itemTitle = $category;
-                $oLink->tooltip = $description[$key];
+                $oLink->itemTitle = Strings::htmlentities($category);
+                $oLink->tooltip = Strings::htmlentities($description[$key]);
                 if (0 === $key) {
                     $oLink->setRelation('index');
                 }

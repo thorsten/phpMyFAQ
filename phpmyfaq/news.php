@@ -8,13 +8,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-07-23
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-07-23
  */
 
 use phpMyFAQ\Captcha;
@@ -25,6 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\News;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -74,9 +75,9 @@ if (strlen($news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
         $PMF_LANG['msgInfo'],
-        $news['link'],
+        Strings::htmlentities($news['link']),
         $news['target'],
-        $news['linkTitle']
+        Strings::htmlentities($news['linkTitle'])
     );
 }
 
@@ -121,11 +122,11 @@ $template->parse(
     'mainPageContent',
     [
         'writeNewsHeader' => $newsMainHeader,
-        'writeHeader' => $newsHeader,
-        'mainPageContent' => $newsContent,
+        'writeHeader' => Strings::htmlentities($newsHeader),
+        'mainPageContent' => Strings::htmlentities($newsContent),
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => $PMF_LANG['msgAboutThisNews'],
-        'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
+        'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . Strings::htmlentities($news['authorName']) : '',
         'editThisEntry' => $editThisEntry,
         'writeCommentMsg' => $commentMessage,
         'msgWriteComment' => $PMF_LANG['newsWriteComment'],

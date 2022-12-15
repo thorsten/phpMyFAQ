@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Lars Tiedemann <larstiedemann@yahoo.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-08-27
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-27
  */
 
 use phpMyFAQ\Attachment\AttachmentException;
@@ -338,7 +338,7 @@ $template->parse(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'solutionId' => $faq->faqRecord['solution_id'],
         'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
-        'question' => $question,
+        'question' => Strings::htmlentities($question),
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => $author,
