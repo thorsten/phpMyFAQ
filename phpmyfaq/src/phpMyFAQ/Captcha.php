@@ -434,7 +434,7 @@ class Captcha
         $codeLength = Strings::strlen($this->code);
         $numFonts = count($this->fonts);
         $w1 = 15;
-        $w2 = $this->width / ($codeLength + 1);
+        $w2 = floor($this->width / ($codeLength + 1));
 
         for ($p = 0; $p < $codeLength; ++$p) {
             $letter = $this->code[$p];
@@ -515,7 +515,7 @@ class Captcha
     public function validateCaptchaCode(string $captchaCode): bool
     {
         // Sanity check
-        if (0 === Strings::strlen($captchaCode)) {
+        if (Strings::strlen($captchaCode) !== $this->captchaLength) {
             return false;
         }
 
