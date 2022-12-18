@@ -235,7 +235,7 @@ switch ($action) {
   <title>
     <?= Strings::htmlentities($faqConfig->getTitle(), ENT_QUOTES) ?> - powered by phpMyFAQ <?= System::getVersion() ?>
   </title>
-  <base href="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/">
+  <base href="<?= Strings::htmlentities($faqConfig->getDefaultUrl()) ?>admin/">
 
   <meta name="description" content="Only Chuck Norris can divide by zero.">
   <meta name="author" content="phpMyFAQ Team">
