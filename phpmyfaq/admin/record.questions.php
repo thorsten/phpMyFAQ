@@ -90,7 +90,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         <?= $date->format(Date::createIsoDate($openQuestion->getCreated())) ?>
                       <br>
                       <a href="mailto:<?= $openQuestion->getEmail() ?>">
-                          <?= $openQuestion->getUsername() ?>
+                          <?= Strings::htmlentities($openQuestion->getUsername()) ?>
                       </a>
                     </td>
                     <td>
