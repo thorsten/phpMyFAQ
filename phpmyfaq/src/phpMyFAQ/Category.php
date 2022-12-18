@@ -424,7 +424,7 @@ class Category
             }
 
             $category = [
-                'url' => $link->toString(),
+                'url' => Strings::htmlentities($link->toString()),
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'image' => $image

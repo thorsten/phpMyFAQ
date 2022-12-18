@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alexander M. Turek <me@derrabus.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Alexander M. Turek <me@derrabus.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-02-05
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2013-02-05
  */
 
 use phpMyFAQ\Api;
@@ -21,6 +21,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -146,7 +147,11 @@ $faqSession = new Session($faqConfig);
                 $inactiveFaqs = $faq->getInactiveFaqsData();
                 if (count($inactiveFaqs) > 0) {
                     foreach ($inactiveFaqs as $inactiveFaq) {
-                        printf('<li><a href="%s">%s</a></li>', $inactiveFaq['url'], $inactiveFaq['question']);
+                        printf(
+                          '<li><a href="%s">%s</a></li>',
+                          Strings::htmlentities($inactiveFaq['url']),
+                          Strings::htmlentities($inactiveFaq['question'])
+                        );
                     }
                 } else {
                     echo '<li>n/a</li>';
@@ -183,7 +188,7 @@ $faqSession = new Session($faqConfig);
                     }
                 } else {
                     ?>
-                  <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php" method="post"
                         accept-charset="utf-8">
                     <input type="hidden" name="param" value="version"/>
                     <button class="btn btn-info" type="submit">
@@ -233,7 +238,7 @@ $faqSession = new Session($faqConfig);
                     }
                 } else {
                     ?>
-                  <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php" method="post"
                         accept-charset="utf-8">
                     <input type="hidden" name="getJson" value="verify"/>
                     <button class="btn btn-info" type="submit">

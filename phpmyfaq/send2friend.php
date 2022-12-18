@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-16
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -74,7 +75,7 @@ $template->parse(
         'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
         'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
         'msgS2FText' => $PMF_LANG['msgS2FText'],
-        'send2friend_text' => $faqConfig->get('main.send2friendText'),
+        'send2friend_text' => Strings::htmlentities($faqConfig->get('main.send2friendText')),
         'msgS2FText2' => $PMF_LANG['msgS2FText2'],
         'send2friendLink' => $send2friendLink,
         'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],

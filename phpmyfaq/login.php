@@ -14,6 +14,8 @@
  * @since 2012-02-12
  */
 
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
@@ -40,7 +42,7 @@ $template->parse(
         'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
         'loginHeader' => $PMF_LANG['msgLoginUser'],
         'loginMessage' => $loginMessage,
-        'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
+        'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
         'faqloginaction' => $action,
         'login' => $PMF_LANG['ad_auth_ok'],
         'username' => $PMF_LANG['ad_auth_user'],

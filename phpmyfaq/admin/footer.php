@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -67,7 +68,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if (isset($auth)) {
     ?>
-  <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
+  <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;"></iframe>
     <?php
     if (
@@ -119,7 +120,7 @@ if (isset($auth)) {
               ],
               relative_urls: false,
               convert_urls: false,
-              document_base_url: '<?= $faqConfig->getDefaultUrl() ?>',
+              document_base_url: '<?= Strings::htmlentities($faqConfig->getDefaultUrl()) ?>',
               remove_linebreaks: false,
               use_native_selects: true,
               paste_remove_spans: true,
@@ -184,7 +185,7 @@ if (isset($auth)) {
               },
 
               // phpMyFAQ CSS
-              content_css: '<?php $faqConfig->getDefaultUrl() ?>/assets/dist/styles.css?<?= time(); ?>',
+              content_css: '<?php Strings::htmlentities($faqConfig->getDefaultUrl()) ?>/assets/dist/styles.css?<?= time(); ?>',
 
               // Replace values for the template plugin
               template_replace_values: {

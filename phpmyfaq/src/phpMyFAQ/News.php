@@ -68,7 +68,7 @@ class News
         foreach ($news as $item) {
             $url = sprintf(
                 '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
-                $this->config->getDefaultUrl(),
+                Strings::htmlentities($this->config->getDefaultUrl()),
                 $item['id'],
                 $item['lang']
             );
@@ -82,7 +82,7 @@ class News
                 '<h6%s><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
                 ' class="pmf-news-heading"',
                 $item['id'],
-                $oLink->toString(),
+                Strings::htmlentities($oLink->toString()),
                 Strings::htmlentities($item['header'])
             );
 
@@ -92,7 +92,7 @@ class News
                 $output .= sprintf(
                     '<br>%s <a href="%s" target="_%s">%s</a>',
                     $this->pmfLang['msgInfo'],
-                    $item['link'],
+                    Strings::htmlentities($item['link']),
                     $item['target'],
                     $item['linkTitle']
                 );

@@ -335,7 +335,7 @@ $oTag = new Tags($faqConfig);
 //
 $faqSystem = new System();
 $faqLink = new Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
-$currentPageUrl = $faqLink->getCurrentUrl();
+$currentPageUrl = Strings::htmlentities($faqLink->getCurrentUrl());
 
 //
 // Found a record ID?
@@ -348,7 +348,7 @@ if (!is_null($id)) {
     $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
-        $faqConfig->getDefaultUrl(),
+        Strings::htmlentities($faqConfig->getDefaultUrl()),
         $sids,
         $category->getCategoryIdFromFaq($id),
         $id,
@@ -380,7 +380,7 @@ if (!is_null($solutionId)) {
         $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags($faqData['content']), 12));
         $url = sprintf(
             '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
-            $faqConfig->getDefaultUrl(),
+            Strings::htmlentities($faqConfig->getDefaultUrl()),
             $sids,
             $faqData['category_id'],
             $id,
@@ -533,13 +533,13 @@ $faqSeo = new Seo($faqConfig);
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : $PMF_LANG['msgLoginUser'],
     'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),
-    'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
     'version' => $faqConfig->getVersion(),
-    'header' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->getTitle())),
-    'metaTitle' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->getTitle() . $title)),
-    'metaDescription' => Strings::htmlspecialchars($metaDescription ?? ''),
-    'metaKeywords' => Strings::htmlspecialchars($keywords),
-    'metaPublisher' => Strings::htmlspecialchars($faqConfig->get('main.metaPublisher')),
+    'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
+    'metaTitle' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle() . $title)),
+    'metaDescription' => Strings::htmlentities($metaDescription ?? ''),
+    'metaKeywords' => Strings::htmlentities($keywords),
+    'metaPublisher' => Strings::htmlentities($faqConfig->get('main.metaPublisher')),
     'metaLanguage' => $PMF_LANG['metaLanguage'],
     'metaRobots' => $faqSeo->getMetaRobots($action),
     'phpmyfaqversion' => $faqConfig->getVersion(),
@@ -549,7 +549,7 @@ $tplMainPage = [
     'dir' => $PMF_LANG['dir'],
     'writeSendAdress' => '?' . $sids . 'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
-    'searchTerm' => Strings::htmlspecialchars($searchTerm, ENT_QUOTES),
+    'searchTerm' => Strings::htmlentities($searchTerm, ENT_QUOTES),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],
@@ -568,7 +568,7 @@ $tplMainPage = [
     'msgLoginName' => $user->getUserData('display_name'),
     'loginHeader' => $PMF_LANG['msgLoginUser'],
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig) . '?' . Filter::getFilteredQueryString(),
+    'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) . '?' . Filter::getFilteredQueryString(),
     'faqloginaction' => $action,
     'login' => $PMF_LANG['ad_auth_ok'],
     'username' => $PMF_LANG['ad_auth_user'],
@@ -610,7 +610,7 @@ if ('main' == $action || 'show' == $action) {
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = [
         'msgSearch' => '<a class="nav-link" href="./search.html">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
-        'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' .
+        'msgAddContent' => '<a class="nav-link" href="./addcontent.html">' .
             $PMF_LANG['msgAddContent'] . '</a>',
         'msgQuestion' => '<a class="nav-link" href="./ask.html">' . $PMF_LANG['msgQuestion'] . '</a>',
         'msgOpenQuestions' => '<a class="nav-link" href="./open-questions.html">' . $PMF_LANG['msgOpenQuestions'] .
@@ -656,7 +656,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
     ];
 }
 
-$tplNavigation['faqHome'] = $faqConfig->getDefaultUrl();
+$tplNavigation['faqHome'] = Strings::htmlentities($faqConfig->getDefaultUrl());
 $tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';
 $tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
@@ -743,7 +743,7 @@ if (DEBUG) {
 if ('artikel' === $action) {
     $url = sprintf(
         '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-        $faqConfig->getDefaultUrl(),
+        Strings::htmlentities($faqConfig->getDefaultUrl()),
         $category->getCategoryIdFromFaq($id),
         $id,
         $lang
