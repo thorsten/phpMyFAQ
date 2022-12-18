@@ -20,6 +20,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -73,7 +74,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                 <td>
                 <span style="font-weight: bold;">
                     <a href="mailto:<?= $faqComment->getEmail() ?>">
-                        <?= $faqComment->getUsername() ?>
+                        <?= Strings::htmlentities($faqComment->getUsername()) ?>
                     </a> |
                     <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
                     <a href="<?php printf(
@@ -84,8 +85,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                              ) ?>">
                         <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
                     </a>
-                </span><br/>
-                    <?= $faqComment->getComment() ?>
+                </span><br>
+                    <?= Strings::htmlentities($faqComment->getComment()) ?>
                 </td>
               </tr>
                 <?php
