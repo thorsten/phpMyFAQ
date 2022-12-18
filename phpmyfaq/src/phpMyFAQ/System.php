@@ -239,7 +239,7 @@ class System
     }
 
     /**
-     * Checks if the system URI is running with http or https.
+     * Returns the system URI
      *
      * @param Configuration $faqConfig
      * @return string
