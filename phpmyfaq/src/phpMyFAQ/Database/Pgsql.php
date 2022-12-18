@@ -34,14 +34,14 @@ class Pgsql implements DatabaseDriver
      *
      * @var string
      */
-    public $sqllog = '';
+    public string $sqllog = '';
 
     /**
      * Tables.
      *
      * @var array
      */
-    public $tableNames = [];
+    public array $tableNames = [];
 
     /**
      * The connection resource.
@@ -53,11 +53,11 @@ class Pgsql implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host Database hostname
-     * @param string $user Database username
-     * @param string $password Password
-     * @param string $database Database name
-     * @param int $port
+     * @param string   $host Database hostname
+     * @param string   $user Database username
+     * @param string   $password Password
+     * @param string   $database Database name
+     * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      */
     public function connect(
@@ -78,7 +78,7 @@ class Pgsql implements DatabaseDriver
 
         $this->conn = pg_connect($connectionString);
 
-        if (empty($database) || $this->conn == false) {
+        if (empty($database) || !$this->conn) {
             Database::errorPage(pg_last_error($this->conn));
             die();
         }
@@ -127,8 +127,7 @@ class Pgsql implements DatabaseDriver
     /**
      * Escapes a string for use in a query.
      *
-     * @param string
-     *
+     * @param string $string
      * @return string
      */
     public function escape($string): string

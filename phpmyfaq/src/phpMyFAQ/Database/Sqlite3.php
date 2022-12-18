@@ -31,14 +31,14 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Tables.
      *
-     * @var array
+     * @var array|string[]
      */
     public array $tableNames = [];
 
     /**
      * The connection object.
      *
-     * @var SQLite3|bool
+     * @var bool|SQLite3
      */
     private $conn = false;
 
@@ -54,7 +54,7 @@ class Sqlite3 implements DatabaseDriver
     /** @var string */
     private const ERROR_MESSAGE =
         'Do not call numRows() after you\'ve fetched one or more result records, because ' .
-        'phpMyFAQ\Database\Sqlite3::numRows() has to reset the resultset at its end.';
+        'phpMyFAQ\Database\Sqlite3::numRows() has to reset the result set at its end.';
 
     /**
      * Connects to the database.

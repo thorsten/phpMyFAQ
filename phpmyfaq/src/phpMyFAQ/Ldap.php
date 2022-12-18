@@ -42,7 +42,7 @@ class Ldap
     public ?int $errno = null;
 
     /**
-     * @var array
+     * @var array|string[]
      */
     private array $ldapConfig;
 

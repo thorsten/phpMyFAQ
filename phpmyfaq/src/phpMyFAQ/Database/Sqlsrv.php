@@ -32,7 +32,7 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Tables.
      *
-     * @var array
+     * @var array|string[]
      */
     public array $tableNames = [];
 

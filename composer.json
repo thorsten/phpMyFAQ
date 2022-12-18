@@ -43,6 +43,12 @@
     "squizlabs/php_codesniffer": "*",
     "phpstan/phpstan": "^1.0.0"
   },
+  "suggest": {
+    "ext-ldap": "*",
+    "ext-pgsql": "*",
+    "ext-sqlite3": "*",
+    "ext-sqlsrv": "*"
+  },
   "config": {
     "platform": {
       "php": "7.4.0"
