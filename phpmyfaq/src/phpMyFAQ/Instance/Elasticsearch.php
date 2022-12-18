@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Instance;
 
 use Elasticsearch\Client;
+use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use phpMyFAQ\Configuration;
 
 /**
@@ -291,6 +292,11 @@ class Elasticsearch
             'id' => $solutionId
         ];
 
-        return $this->client->delete($params);
+        try {
+            return $this->client->delete($params);
+        } catch (BadRequest400Exception $exception) {
+            // @todo handle exception in v3.2
+            return [];
+        }
     }
 }
