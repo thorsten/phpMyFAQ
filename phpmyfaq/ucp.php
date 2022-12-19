@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -51,7 +52,7 @@ if ($user->isLoggedIn()) {
             'csrf' => $user->getCsrfTokenFromSession(),
             'readonly' => $faqConfig->isLdapActive() ? 'readonly' : '',
             'msgRealName' => $PMF_LANG['ad_user_name'],
-            'realname' => $user->getUserData('display_name'),
+            'realname' => Strings::htmlentities($user->getUserData('display_name')),
             'msgEmail' => $PMF_LANG['msgNewContentMail'],
             'email' => $user->getUserData('email'),
             'msgIsVisible' => $PMF_LANG['ad_user_data_is_visible'],

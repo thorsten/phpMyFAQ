@@ -758,7 +758,7 @@ switch ($action) {
         }
 
         $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW);
         $password = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW);

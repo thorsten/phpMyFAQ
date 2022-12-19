@@ -565,7 +565,7 @@ $tplMainPage = [
         $PMF_LANG['msgRegistration'] . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
     'msgFullName' => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
-    'msgLoginName' => $user->getUserData('display_name'),
+    'msgLoginName' => Strings::htmlentities($user->getUserData('display_name')),
     'loginHeader' => $PMF_LANG['msgLoginUser'],
     'loginMessage' => $loginMessage,
     'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) . '?' . Filter::getFilteredQueryString(),
