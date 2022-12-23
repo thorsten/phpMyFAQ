@@ -98,8 +98,6 @@ class System
 
     /**
      * Database handle.
-     *
-     * @var ?DatabaseDriver
      */
     private ?DatabaseDriver $database = null;
 
@@ -169,8 +167,6 @@ class System
 
     /**
      * Sets the database handler.
-     *
-     * @param DatabaseDriver $database
      */
     public function setDatabase(DatabaseDriver $database): System
     {

@@ -530,9 +530,9 @@ class Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $data[] = [
-                'tagId' => (int)$tagId,
+                'tagId' => $tagId,
                 'tagName' => $tagName,
-                'tagFrequency' => (int)$tagFreq
+                'tagFrequency' => $tagFreq
             ];
         }
 

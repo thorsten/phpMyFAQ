@@ -30,19 +30,10 @@ class Database
 {
     /**
      * Instance.
-     *
-     * @var Driver|null
      */
     private static ?Driver $instance = null;
-
-    /**
-     * Database type.
-     */
-    private static ?string $dbType = null;
     /**
      * DROP TABLE statements.
-     *
-     * @var array
      */
     private array $dropTableStmts = [
         'DROP TABLE %sfaqadminlog',
@@ -98,8 +89,6 @@ class Database
      */
     public static function factory(Configuration $config, string $type): ?Driver
     {
-        self::$dbType = $type;
-
         $class = '\phpMyFAQ\Instance\Database\\' . ucfirst($type);
 
         if (class_exists($class)) {
@@ -138,12 +127,5 @@ class Database
         }
 
         return true;
-    }
-
-    /**
-     * __clone() Magic method to prevent cloning.
-     */
-    private function __clone()
-    {
     }
 }

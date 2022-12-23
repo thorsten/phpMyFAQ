@@ -32,7 +32,6 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Build file path under which the attachment, file is accessible in filesystem
      *
-     * @return string
      * @throws AttachmentException
      */
     protected function buildFilePath(): string
@@ -46,9 +45,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
             $attachmentPath .= DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength, $subDirNameLength);
         }
 
-        $attachmentPath .= DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength);
-
-        return $attachmentPath;
+        return $attachmentPath . (DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength));
     }
 
     /**
@@ -68,7 +65,6 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Check whether the file storage is ok.
      *
-     * @return bool
      * @throws AttachmentException
      */
     public function isStorageOk(): bool
@@ -90,7 +86,6 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @param string $filePath full path to the attachment file
      * @param string $filename filename to force
-     * @return bool
      * @throws FileException|AttachmentException
      * @todo rollback if something went wrong
      */
@@ -135,7 +130,6 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Delete attachment.
      *
-     * @return bool
      * @throws FileException
      */
     public function delete(): bool
@@ -154,8 +148,6 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
     /**
      * Retrieve file contents into a variable.
-     *
-     * @return string
      */
     public function get(): string
     {
@@ -166,7 +158,6 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @param bool   $headers if headers must be sent
      * @param string $disposition disposition type (ignored if $headers false)
-     * @return void
      * @throws AttachmentException
      */
     public function rawOut($headers = true, $disposition = 'attachment'): void

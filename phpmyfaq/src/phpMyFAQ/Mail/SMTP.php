@@ -28,14 +28,8 @@ use Symfony\Component\Mime\Email;
  */
 class SMTP implements MailUserAgentInterface
 {
-    /**
-     * @var string
-     */
     private string $user;
 
-    /**
-     * @var MailerInterface
-     */
     private MailerInterface $mailer;
 
     public function setAuthConfig(string $server, string $user, string $password, int $port = 25): void

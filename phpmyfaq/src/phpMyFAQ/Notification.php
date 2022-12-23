@@ -25,7 +25,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class Notification
 {
-    /** @var Mail */
     private Mail $mail;
 
     /**

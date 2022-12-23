@@ -26,7 +26,6 @@ class Exception extends \Exception implements \Stringable
 {
     /**
      * Converts Exception to a string.
-     * @return string
      */
     public function __toString(): string
     {

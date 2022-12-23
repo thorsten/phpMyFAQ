@@ -23,9 +23,6 @@ namespace phpMyFAQ\Services;
  */
 class Gravatar
 {
-    /**
-     * @var string
-     */
     private string $httpBaseUrl = 'https://secure.gravatar.com/';
 
     /**

@@ -28,9 +28,6 @@ use phpMyFAQ\User;
  */
 class Setup
 {
-    /**
-     * @var string
-     */
     private string $rootDir;
 
     /**

@@ -35,20 +35,12 @@ class Link
     private const LINK_CONTENT = 'content/';
     private const LINK_EQUAL = '=';
     private const LINK_FRAGMENT_SEPARATOR = '#';
-    private const LINK_HTML_MINUS = '-';
-    private const LINK_HTML_UNDERSCORE = '_';
     private const LINK_HTML_SLASH = '/';
-    private const LINK_HTML_TARGET_BLANK = '_blank';
-    private const LINK_HTML_TARGET_PARENT = '_parent';
-    private const LINK_HTML_TARGET_SELF = '_self';
-    private const LINK_HTML_TARGET_TOP = '_top';
     private const LINK_NEWS = 'news/';
     private const LINK_SITEMAP = 'sitemap/';
     private const LINK_SLASH = '/';
     private const LINK_SEARCHPART_SEPARATOR = '?';
     private const LINK_TAGS = 'tags/';
-
-    private const LINK_INDEX_ADMIN = '/admin/index.php';
     private const LINK_INDEX_HOME = '/index.php';
 
     private const LINK_GET_ACTION = 'action';
@@ -74,15 +66,10 @@ class Link
     private const LINK_GET_ACTION_LOGIN = 'login';
     private const LINK_GET_ACTION_NEWS = 'news';
     private const LINK_GET_ACTION_OPEN = 'open-questions';
-    private const LINK_GET_ACTION_PASSWORD = 'password';
-    private const LINK_GET_ACTION_REGISTER = 'register';
     private const LINK_GET_ACTION_SEARCH = 'search';
     private const LINK_GET_ACTION_SITEMAP = 'sitemap';
     private const LINK_GET_ACTION_SHOW = 'show';
-
-    private const LINK_HTML_CATEGORY = 'category';
     private const LINK_HTML_EXTENSION = '.html';
-    private const LINK_HTML_SITEMAP = 'sitemap';
 
     private const LINK_HTML_ADDCONTENT = 'addcontent.html';
     private const LINK_HTML_ASK = 'ask.html';
@@ -91,8 +78,6 @@ class Link
     private const LINK_HTML_HELP = 'help.html';
     private const LINK_HTML_LOGIN = 'login.html';
     private const LINK_HTML_OPEN = 'open-questions.html';
-    private const LINK_HTML_PASSWORD = 'password.html';
-    private const LINK_HTML_REGISTER = 'register.html';
     private const LINK_HTML_SEARCH = 'search.html';
     private const LINK_HTML_SHOWCAT = 'show-categories.html';
 
@@ -134,15 +119,11 @@ class Link
 
     /**
      * CSS class.
-     *
-     * @var string
      */
     public string $class = '';
 
     /**
      * Linktext.
-     *
-     * @var string
      */
     public string $text = '';
 
@@ -155,38 +136,27 @@ class Link
 
     /**
      * Target.
-     *
-     * @var string
      */
     public string $target = '';
 
     /**
      * Name selector.
-     *
-     * @var string
      */
     public string $name = '';
 
     /**
      * property specific to the SEO/SEF URLs.
-     *
-     * @var string
      */
     public string $itemTitle = '';
 
     /**
      * id selector.
-     *
-     * @var string
      */
     public string $id = '';
 
     /**
      * rel property.
-     *
-     * @var string
      */
-
     protected string $rel = '';
 
     /**
@@ -320,9 +290,8 @@ class Link
                 $htmlAnchor .= $url;
             }
         }
-        $htmlAnchor .= '</a>';
 
-        return $htmlAnchor;
+        return $htmlAnchor . '</a>';
     }
 
     /**
@@ -611,8 +580,7 @@ class Link
             $params = explode('&', $query['main']);
             foreach ($params as $param) {
                 if (!empty($param)) {
-                    $couple = explode(self::LINK_EQUAL, $param);
-                    [$key, $val] = $couple;
+                    [$key, $val] = explode(self::LINK_EQUAL, $param);
                     $parameters[$key] = urldecode($val);
                 }
             }

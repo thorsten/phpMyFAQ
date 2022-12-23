@@ -29,19 +29,10 @@ class CategoryImage
     /** @var string */
     private const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
 
-    /**
-     * @var bool
-     */
     private bool $isUpload = false;
 
-    /**
-     * @var array
-     */
     private array $uploadedFile = [];
 
-    /**
-     * @var string
-     */
     private string $fileName = '';
 
     /**

@@ -43,16 +43,12 @@ class Session
     /** @var string */
     public const PMF_AZURE_AD_JWT = 'phpmyfaq_azure_ad_jwt';
 
-    /** @var int|null */
     private ?int $currentSessionId = null;
 
-    /** @var string */
     private string $currentSessionKey;
 
-    /** @var string */
     private string $currentToken;
 
-    /** @var CurrentUser*/
     private CurrentUser $currentUser;
 
     /** @var string[] List of bots we don't track */

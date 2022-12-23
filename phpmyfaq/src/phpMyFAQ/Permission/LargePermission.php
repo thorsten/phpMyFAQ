@@ -41,16 +41,6 @@ class LargePermission extends MediumPermission
     ];
 
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
-     */
-    public function __construct(Configuration $config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
      * Returns true, if the user given by $userId owns the right
      * specified by $right in a section. It does not matter if
      * the user owns this right as a user-right or because of a
@@ -449,9 +439,8 @@ class LargePermission extends MediumPermission
         if ($this->config->getDb()->numRows($res) != 1) {
             return [];
         }
-        $row = $this->config->getDb()->fetchArray($res);
 
-        return $row;
+        return $this->config->getDb()->fetchArray($res);
     }
 
     /**

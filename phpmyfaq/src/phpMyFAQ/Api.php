@@ -29,14 +29,8 @@ use stdClass;
  */
 class Api
 {
-    /**
-     * @var string
-     */
-    private string $apiUrl = 'https://api.phpmyfaq.de';
+    private string $apiUrl = 'https://api.phpmyfaq.de/';
 
-    /**
-     * @var string|null
-     */
     private ?string $remoteHashes = null;
 
     /**
@@ -55,7 +49,7 @@ class Api
      */
     public function getVersions(): array
     {
-        $json = $this->fetchData($this->apiUrl . '/versions');
+        $json = $this->fetchData($this->apiUrl . 'versions');
         $result = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
         if ($result instanceof stdClass) {
             return [
@@ -76,7 +70,7 @@ class Api
      */
     public function isVerified(): bool
     {
-        $this->remoteHashes = $this->fetchData($this->apiUrl . '/verify/' . $this->config->getVersion());
+        $this->remoteHashes = $this->fetchData($this->apiUrl . 'verify/' . $this->config->getVersion());
 
         if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
             if (!is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {

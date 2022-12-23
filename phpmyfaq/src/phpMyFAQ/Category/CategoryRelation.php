@@ -27,7 +27,6 @@ use phpMyFAQ\Database;
  */
 class CategoryRelation
 {
-    /** @var array */
     private array $groups;
 
     /**

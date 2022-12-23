@@ -52,14 +52,11 @@ class Error
             $code = 500;
         }
         http_response_code($code);
-
-        if (DEBUG) {
-            echo "<h1>phpMyFAQ Fatal error</h1>";
-            echo "<p>Uncaught exception: '" . $exception::class . "'</p>";
-            echo "<p>Message: '" . $exception->getMessage() . "'</p>";
-            echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
-            echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
-        }
+        echo "<h1>phpMyFAQ Fatal error</h1>";
+        echo "<p>Uncaught exception: '" . $exception::class . "'</p>";
+        echo "<p>Message: '" . $exception->getMessage() . "'</p>";
+        echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
+        echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
         if (ini_get('log_errors')) {
             error_log(
                 sprintf(

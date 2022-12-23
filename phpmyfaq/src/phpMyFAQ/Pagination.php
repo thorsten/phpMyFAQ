@@ -25,9 +25,7 @@ namespace phpMyFAQ;
  */
 class Pagination
 {
-    /**
-     * Template vars.
-     */
+    /** Template vars. */
     private const TPL_VAR_LINK_URL = '{LINK_URL}';
     private const TPL_VAR_LINK_TEXT = '{LINK_TEXT}';
     private const TPL_VAR_LAYOUT_CONTENT = '{LAYOUT_CONTENT}';
@@ -37,28 +35,28 @@ class Pagination
      *
      * @var string
      */
-    protected $baseUrl = '';
+    protected string $baseUrl = '';
 
     /**
      * Total items count.
      *
      * @var int
      */
-    protected $total = 0;
+    protected int $total = 0;
 
     /**
      * Items per page count.
      *
      * @var int
      */
-    protected $perPage = 0;
+    protected int $perPage = 0;
 
     /**
      * Number of adjacent links.
      *
      * @var int
      */
-    protected $adjacents = 4;
+    protected int $adjacent = 4;
 
     /**
      * Default link template.
@@ -66,14 +64,14 @@ class Pagination
      *
      * @var string
      */
-    protected $linkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
+    protected string $linkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Current page link template.
      *
      * @var string
      */
-    protected $currentPageLinkTpl =
+    protected string $currentPageLinkTpl =
         '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
@@ -81,78 +79,77 @@ class Pagination
      *
      * @var string
      */
-    protected $nextPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>';
+    protected string $nextPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>';
 
     /**
      * Previous page link template.
      *
      * @var string
      */
-    protected $prevPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>';
+    protected string $prevPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>';
 
     /**
      * First page link template.
      *
      * @var string
      */
-    protected $firstPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
+    protected string $firstPageLinkTpl =
+        '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
 
     /**
      * Last page link template.
      *
      * @var string
      */
-    protected $lastPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>';
+    protected string $lastPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>';
 
     /**
      * Layout template.
      *
      * @var string
      */
-    protected $layoutTpl = '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>';
+    protected string $layoutTpl = '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>';
 
     /**
      * Current page index.
      *
      * @var int
      */
-    protected $currentPage = 0;
+    protected int $currentPage = 0;
 
     /**
      * Param name to associate the page numbers to.
      *
      * @var string
      */
-    protected $pageParamName = 'page';
+    protected string $pageParamName = 'page';
 
     /**
      * SEO name.
      *
      * @var string
      */
-    protected $seoName = '';
+    protected string $seoName = '';
 
     /**
      * Use rewritten URLs without GET variables.
      *
      * @var bool
      */
-    protected $useRewrite = false;
+    protected bool $useRewrite = false;
 
     /**
      * Rewritten URL format for page param.
      *
      * @var string
      */
-    protected $rewriteUrl = '';
+    protected string $rewriteUrl = '';
 
     /**
      * Constructor.
-     *
      * We read in the current page from the baseUrl, so if it contains
      * no pageParamName, first page is assumed
      *
-     * @param Configuration $config
      * @param array<string|int|bool> $options initialization options,
      *                               possible options: -
      *                               baseUrl (default "") -
@@ -167,7 +164,7 @@ class Pagination
      *                               pageParamName (default
      *                               "page") - useRewrite
      */
-    public function __construct(private Configuration $config, array $options = null)
+    public function __construct(array $options = null)
     {
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
@@ -231,7 +228,7 @@ class Pagination
      *
      * @param string $url URL
      */
-    protected function getCurrentPageFromUrl($url): int
+    protected function getCurrentPageFromUrl(string $url): int
     {
         $page = 1;
 
@@ -252,18 +249,18 @@ class Pagination
     {
         $content = [];
         $pages = ceil($this->total / $this->perPage);
-        $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
+        $adjacents = max(floor($this->adjacent / 2), 1);
 
         for ($page = 1; $page <= $pages; ++$page) {
-            if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {
+            if ($page > $this->adjacent && $page < $this->currentPage - $adjacents) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page = $this->currentPage - $adjacents - 1;
                 continue;
             }
 
-            if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacents) {
+            if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacent) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
-                $page = $pages - $this->adjacents;
+                $page = $pages - $this->adjacent;
                 continue;
             }
 
@@ -298,21 +295,15 @@ class Pagination
         }
 
         if ($page - 1 > $this->currentPage) {
-            array_push(
-                $content,
-                $this->renderLink(
-                    $this->nextPageLinkTpl,
-                    $this->renderUrl($this->baseUrl, $this->currentPage + 1),
-                    $this->currentPage + 1
-                )
+            $content[] = $this->renderLink(
+                $this->nextPageLinkTpl,
+                $this->renderUrl($this->baseUrl, $this->currentPage + 1),
+                $this->currentPage + 1
             );
-            array_push(
-                $content,
-                $this->renderLink(
-                    $this->lastPageLinkTpl,
-                    $this->renderUrl($this->baseUrl, $page - 1),
-                    $page - 1
-                )
+            $content[] = $this->renderLink(
+                $this->lastPageLinkTpl,
+                $this->renderUrl($this->baseUrl, $page - 1),
+                $page - 1
             );
         }
 
@@ -323,11 +314,10 @@ class Pagination
      * Render url for a given page.
      *
      * @param string $url url
-     * @param int $page page number
-     *
+     * @param int    $page page number
      * @return string
      */
-    protected function renderUrl($url, $page)
+    protected function renderUrl(string $url, int $page): string
     {
         if ($this->useRewrite) {
             $url = sprintf($this->rewriteUrl, $page);

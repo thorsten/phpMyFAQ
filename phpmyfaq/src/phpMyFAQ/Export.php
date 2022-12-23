@@ -30,13 +30,10 @@ use phpMyFAQ\Export\Pdf;
  */
 class Export
 {
-    /** @var Faq|null */
     protected ?Faq $faq = null;
 
-    /** @var Category|null */
     protected ?Category $category = null;
 
-    /** @var Configuration|null */
     protected ?Configuration $config = null;
 
     /**
@@ -46,7 +43,6 @@ class Export
      * @param Category      $category Entity object
      * @param Configuration $config Configuration object
      * @param string        $mode Export
-     * @return mixed
      * @throws \Exception
      */
     public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf'): mixed
@@ -61,8 +57,6 @@ class Export
 
     /**
      * Returns the timestamp of the export.
-     *
-     * @return string
      */
     public static function getExportTimestamp(): string
     {

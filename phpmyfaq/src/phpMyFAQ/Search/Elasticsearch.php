@@ -29,9 +29,6 @@ use stdClass;
  */
 class Elasticsearch extends AbstractSearch implements SearchInterface
 {
-    /**
-     * @var Client
-     */
     private Client $client;
 
     /**
@@ -39,9 +36,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
      */
     private array $esConfig;
 
-    /**
-     * @var string
-     */
     private string $language = '';
 
     /**
@@ -51,8 +45,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

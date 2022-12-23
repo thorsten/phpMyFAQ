@@ -46,9 +46,6 @@ interface DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     * @param string $query
-     * @param int $offset
-     * @param int $rowcount
      *
      * @return mixed $result
      */
@@ -58,8 +55,6 @@ interface DatabaseDriver
      * Escapes a string for use in a query.
      *
      * @param string
-     *
-     * @return string
      */
     public function escape($string): string;
 
@@ -101,15 +96,11 @@ interface DatabaseDriver
      * Number of rows in a result.
      *
      * @param mixed $result
-     *
-     * @return int
      */
     public function numRows($result): int;
 
     /**
      * Logs the queries.
-     *
-     * @return string
      */
     public function log(): string;
 
@@ -117,8 +108,6 @@ interface DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableStatus(string $prefix = ''): array;
 
@@ -127,29 +116,21 @@ interface DatabaseDriver
      *
      * @param string The name of the table
      * @param string      the name of the ID column
-     *
-     * @return int
      */
     public function nextId($table, $id): int;
 
     /**
      * Returns the error string.
-     *
-     * @return string
      */
     public function error(): string;
 
     /**
      * Returns the library version string.
-     *
-     * @return string
      */
     public function clientVersion(): string;
 
     /**
      * Returns the library version string.
-     *
-     * @return string
      */
     public function serverVersion(): string;
 
@@ -157,8 +138,6 @@ interface DatabaseDriver
      * Returns an array with all table names.
      *
      * @param string $prefix Table prefix
-     *
-     * @return array
      */
     public function getTableNames(string $prefix = ''): array;
 

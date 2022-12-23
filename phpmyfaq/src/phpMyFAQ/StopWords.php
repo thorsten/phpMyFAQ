@@ -25,15 +25,10 @@ namespace phpMyFAQ;
  */
 class StopWords
 {
-    /**
-     * @var string
-     */
     private string $language;
 
     /**
      * Table name.
-     *
-     * @var string
      */
     private string $tableName;
 
@@ -213,12 +208,10 @@ class StopWords
 
         $bannedWords = $this->getBannedWords();
         // We just search a match of, at least, one banned word into $content
-        if (is_array($bannedWords)) {
-            foreach ($bannedWords as $bannedWord) {
-                foreach ($checkWords as $word) {
-                    if (Strings::strtolower($word) === Strings::strtolower($bannedWord)) {
-                        return false;
-                    }
+        foreach ($bannedWords as $bannedWord) {
+            foreach ($checkWords as $word) {
+                if (Strings::strtolower($word) === Strings::strtolower($bannedWord)) {
+                    return false;
                 }
             }
         }

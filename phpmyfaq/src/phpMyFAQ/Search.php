@@ -186,13 +186,12 @@ class Search
      */
     public function searchElasticsearch(string $searchTerm, $allLanguages = true): array
     {
+        $children = null;
         $esSearch = new Elasticsearch($this->config);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
-            if ($this->getCategory() instanceof Category) {
-                $children = $this->getCategory()->getChildNodes($this->getCategoryId());
-                $esSearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
-            }
+            $children = $this->getCategory()->getChildNodes($this->getCategoryId());
+            $esSearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
         } else {
             $allCategories = $this->getCategory()->getAllCategoryIds();
             $esSearch->setCategoryIds($allCategories);

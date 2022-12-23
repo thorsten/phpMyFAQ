@@ -31,22 +31,16 @@ class AttachmentFactory
 {
     /**
      * Default encryption key.
-     *
-     * @var string|null
      */
     private static ?string $defaultKey = null;
 
     /**
      * Storage type.
-     *
-     * @var int|null
      */
     private static ?int $storageType = null;
 
     /**
      * File encryption is enabled.
-     *
-     * @var bool|null
      */
     private static ?bool $encryptionEnabled = null;
 
@@ -55,7 +49,6 @@ class AttachmentFactory
      *
      * @param int|null    $id  ID
      * @param string|null $key Key
-     * @return File
      * @throws AttachmentException
      */
     public static function create(int $id = null, string $key = null): File

@@ -38,15 +38,11 @@ class SearchHelper extends Helper
 {
     /**
      * Pagination object.
-     *
-     * @var Pagination|null
      */
     private ?Pagination $pagination = null;
 
     /**
      * Search term.
-     *
-     * @var string
      */
     private string $searchTerm = '';
 

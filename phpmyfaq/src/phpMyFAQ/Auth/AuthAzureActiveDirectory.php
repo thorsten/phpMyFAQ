@@ -32,13 +32,10 @@ use phpMyFAQ\User\CurrentUser;
  */
 class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
 {
-    /** @var Session */
     private Session $session;
 
-    /** @var string */
     private string $oAuthVerifier = '';
 
-    /** @var string */
     private string $oAuthChallenge;
 
     /** @var string */

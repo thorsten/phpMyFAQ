@@ -18,10 +18,7 @@
 namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Search\Database\Mysqli;
-use phpMyFAQ\Search\Database\Pgsql;
-use phpMyFAQ\Search\Database\Sqlite3;
-use phpMyFAQ\Search\Database\Sqlsrv;
+use phpMyFAQ\Search\Database\DatabaseInterface;
 
 /**
  * Class SearchFactory
@@ -34,9 +31,8 @@ class SearchFactory
      * Factory for generating search instances.
      *
      * @param string[] $searchHandler Array with search handlers, e.g. array('database' => 'mysqli')
-     * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
      */
-    public static function create(Configuration $config, array $searchHandler)
+    public static function create(Configuration $config, array $searchHandler): DatabaseInterface
     {
         $searchClass = sprintf(
             '\phpMyFAQ\Search\%s\%s',

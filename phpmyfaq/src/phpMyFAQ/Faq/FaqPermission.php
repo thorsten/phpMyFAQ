@@ -32,17 +32,11 @@ class FaqPermission
     /** @var string */
     public const GROUP = 'group';
 
-    /** @var Configuration */
-    private $config;
-
     /**
      * FaqPermission constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
@@ -51,7 +45,6 @@ class FaqPermission
      * @param string $mode 'group' or 'user'
      * @param int    $faqId ID of the current record
      * @param array  $ids Array of group or user IDs
-     * @return bool
      */
     public function add(string $mode, int $faqId, array $ids): bool
     {
@@ -80,7 +73,6 @@ class FaqPermission
      *
      * @param string $mode 'group' or 'user'
      * @param int    $faqId ID of the current record
-     * @return bool
      */
     public function delete(string $mode, int $faqId): bool
     {
@@ -103,8 +95,6 @@ class FaqPermission
      * Returns the record permissions for users and groups.
      *
      * @param string $mode 'group' or 'user'
-     * @param int    $faqId
-     * @return array
      */
     public function get(string $mode, int $faqId): array
     {

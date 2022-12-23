@@ -26,14 +26,8 @@ use phpMyFAQ\Core\Exception;
  */
 class Filesystem
 {
-    /**
-     * @var string
-     */
     private string $rootPath;
 
-    /**
-     * @var string
-     */
     private string $path;
 
     /**
@@ -43,8 +37,6 @@ class Filesystem
 
     /**
      * Constructor, sets the root path of the master phpMyFAQ installation.
-     *
-     * @param string $rootPath
      */
     public function __construct(string $rootPath = '')
     {
@@ -55,9 +47,6 @@ class Filesystem
         }
     }
 
-    /**
-     * @return string
-     */
     public function getRootPath(): string
     {
         return $this->rootPath;
@@ -79,17 +68,11 @@ class Filesystem
         $this->folders = $folders;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @param string $path
-     */
     public function setPath(string $path): void
     {
         $this->path = $path;
@@ -98,10 +81,7 @@ class Filesystem
     /**
      * Copies recursively the source to the destination.
      *
-     * @param  string $source
-     * @param  string $dest
      * @throws Exception
-     * @return bool
      */
     public function recursiveCopy(string $source, string $dest): bool
     {
@@ -139,7 +119,6 @@ class Filesystem
      * @param int    $mode      The mode is 0777 by default
      * @param bool   $recursive Allows the creation of nested directories
      *                          specified in the pathname.
-     * @return bool
      */
     public function createDirectory(string $pathname, int $mode = 0777, bool $recursive = false): bool
     {
@@ -153,10 +132,7 @@ class Filesystem
     /**
      * Moves given directory.
      *
-     * @param string $sourcePath
-     * @param string $destinationPath
      *
-     * @return bool
      */
     public function moveDirectory(string $sourcePath, string $destinationPath): bool
     {
@@ -169,9 +145,6 @@ class Filesystem
 
     /**
      * Deletes given directory.
-     *
-     * @param string $pathname
-     * @return bool
      */
     public function deleteDirectory(string $pathname): bool
     {
@@ -198,9 +171,6 @@ class Filesystem
     /**
      * Copies the source file to the destination.
      *
-     * @param string $source
-     * @param string $dest
-     * @return bool
      * @throws Exception
      */
     public function copy(string $source, string $dest): bool

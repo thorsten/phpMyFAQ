@@ -32,16 +32,6 @@ use stdClass;
 class Sqlite3 extends SearchDatabase
 {
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
-     */
-    public function __construct(Configuration $config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search ter

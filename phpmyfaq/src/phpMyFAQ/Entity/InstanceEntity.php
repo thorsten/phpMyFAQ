@@ -18,13 +18,10 @@ namespace phpMyFAQ\Entity;
 
 class InstanceEntity
 {
-    /** @var string */
     private string $url;
 
-    /** @var string */
     private string $instance;
 
-    /** @var string */
     private string $comment;
 
     public function getUrl(): string

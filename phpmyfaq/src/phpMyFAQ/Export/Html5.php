@@ -34,8 +34,6 @@ class Html5 extends Export
 {
     /**
      * XMLWriter object.
-     *
-     * @var XMLWriter
      */
     private XMLWriter $xml;
 

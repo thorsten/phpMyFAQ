@@ -42,7 +42,6 @@ class CaptchaHelper extends Helper
     /**
      * Renders the captcha check.
      *
-     * @param Captcha $captcha
      * @param bool    $auth
      */
     public function renderCaptcha(Captcha $captcha, string $action, string $legend, $auth = false): string

@@ -29,21 +29,14 @@ class Ldap
 {
     /**
      * Error.
-     *
-     * @var string|null
      */
     public ?string $error = null;
 
     /**
      * LDAP error number.
-     *
-     * @var int|null
      */
     public ?int $errno = null;
 
-    /**
-     * @var array
-     */
     private array $ldapConfig;
 
     /**
@@ -51,12 +44,10 @@ class Ldap
      *
      * @var resource|false
      */
-    private $ds;
+    private \LDAP\Connection|bool|null $ds = null;
 
     /**
      * The LDAP base.
-     *
-     * @var string|null
      */
     private ?string $base = null;
 

@@ -31,8 +31,6 @@ class Sqlsrv implements DatabaseDriver
 {
     /**
      * Tables.
-     *
-     * @var array
      */
     public array $tableNames = [];
 
@@ -42,14 +40,10 @@ class Sqlsrv implements DatabaseDriver
     private $conn = false;
     /**
      * The query log string.
-     *
-     * @var string
      */
     private string $sqllog = '';
     /**
      * Connection options array.
-     *
-     * @var array
      */
     private array $connectionOptions = [];
 
@@ -218,9 +212,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
-        if (DEBUG) {
-            $this->sqllog .= Utils::debug($query);
-        }
+        $this->sqllog .= Utils::debug($query);
 
         $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 

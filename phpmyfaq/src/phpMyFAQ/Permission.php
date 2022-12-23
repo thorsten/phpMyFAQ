@@ -54,8 +54,6 @@ class Permission
 {
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(protected Configuration $config)
     {

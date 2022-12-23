@@ -47,28 +47,20 @@ class Category
 
     /**
      * The image as an array.
-     *
-     * @var array
      */
     public array $image = [];
 
     /**
      * The tree with the tabs.
-     *
-     * @var array
      */
     public array $treeTab = [];
     /**
      * The category tree.
-     *
-     * @var array
      */
     private array $catTree = [];
 
     /**
      * User ID.
-     *
-     * @var int
      */
     private int $user = -1;
 
@@ -81,15 +73,11 @@ class Category
 
     /**
      * The children nodes.
-     *
-     * @var array
      */
     private array $children = [];
 
     /**
      * The current language.
-     *
-     * @var string|null
      */
     private ?string $language = null;
 
@@ -946,7 +934,7 @@ class Category
     {
         $categories = $this->getCategoriesFromFaq($faqId);
         foreach ($categories as $category) {
-            if ((int)$category['id'] === (int)$categoryId) {
+            if ((int)$category['id'] === $categoryId) {
                 return true;
             }
         }
@@ -981,9 +969,7 @@ class Category
     public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
     {
         // If we only need a new language, we don't need a new category id
-        if (is_null($id)) {
-            $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
-        }
+        $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
 
         $query = sprintf(
             "
@@ -1247,6 +1233,6 @@ class Category
      */
     public function getOwner(int $categoryId): int
     {
-        return isset($this->owner[$categoryId]) ? (int)$this->owner[$categoryId] : 1;
+        return $this->owner[$categoryId] ?? 1;
     }
 }

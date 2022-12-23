@@ -29,34 +29,23 @@ abstract class Helper
 {
     /**
      * Entity class.
-     *
-     * @var Category|null
      */
     protected ?Category $Category = null;
 
-    /**
-     * @var CategoryRelation
-     */
     protected CategoryRelation $categoryRelation;
 
     /**
      * Tagging class.
-     *
-     * @var Tags|null
      */
     protected ?Tags $Tags = null;
 
     /**
      * Template class.
-     *
-     * @var Template|null
      */
     protected ?Template $Template = null;
 
     /**
      * Plurals class.
-     *
-     * @var Plurals|null
      */
     protected ?Plurals $plurals = null;
 
@@ -67,16 +56,12 @@ abstract class Helper
      */
     protected mixed $sessionId = null;
 
-    /**
-     * @var Configuration
-     */
     protected Configuration $config;
 
     /**
      * Entity Setter.
      *
      * @param Category $Category Entity object
-     * @return Helper
      */
     public function setCategory(Category $Category): Helper
     {
@@ -84,10 +69,6 @@ abstract class Helper
         return $this;
     }
 
-    /**
-     * @param  CategoryRelation $categoryRelation
-     * @return Helper
-     */
     public function setCategoryRelation(CategoryRelation $categoryRelation): Helper
     {
         $this->categoryRelation = $categoryRelation;
@@ -96,9 +77,6 @@ abstract class Helper
 
     /**
      * Tagging Setter.
-     *
-     * @param Tags $Tags
-     * @return Helper
      */
     public function setTags(Tags $Tags): Helper
     {
@@ -110,7 +88,6 @@ abstract class Helper
      * Template Setter.
      *
      * @param Template $Template Template object
-     * @return Helper
      */
     public function setTemplate(Template $Template): Helper
     {
@@ -122,7 +99,6 @@ abstract class Helper
      * Plurals setter.
      *
      * @param Plurals $plurals Language_Plurals object
-     * @return Helper
      */
     public function setPlurals(Plurals $plurals): Helper
     {
@@ -134,7 +110,6 @@ abstract class Helper
      * Session ID setter.
      *
      * @param int|string $sid Session id
-     * @return Helper
      */
     public function setSessionId(int|string $sid): Helper
     {
@@ -144,9 +119,6 @@ abstract class Helper
 
     /**
      * Sets configuration.
-     *
-     * @param Configuration $config
-     * @return Helper
      */
     public function setConfiguration(Configuration $config): Helper
     {

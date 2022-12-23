@@ -27,7 +27,6 @@ use phpMyFAQ\Configuration;
  */
 class TemplateHelper
 {
-    /** @var TemplateMetaData */
     private TemplateMetaData $meta;
 
     /**

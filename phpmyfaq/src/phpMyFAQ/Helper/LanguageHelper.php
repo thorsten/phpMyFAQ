@@ -57,9 +57,8 @@ class LanguageHelper
         } else {
             $output .= "\t<option value=\"en\">" . LanguageCodes::get('en') . '</option>';
         }
-        $output .= "</select>\n";
 
-        return $output;
+        return $output . "</select>\n";
     }
 
     /**

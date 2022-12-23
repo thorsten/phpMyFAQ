@@ -27,13 +27,6 @@ use phpMyFAQ\Configuration;
 class CategoryNews
 {
     /**
-     * Constructor.
-     */
-    public function __construct(private Configuration $config)
-    {
-    }
-
-    /**
      * Adds a new news $newsId to the category $categoryId.
      * Returns true on success, otherwise false.
      *

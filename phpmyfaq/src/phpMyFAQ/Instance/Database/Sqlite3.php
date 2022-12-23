@@ -27,9 +27,6 @@ use phpMyFAQ\Instance\Database;
  */
 class Sqlite3 extends Database implements Driver
 {
-    /**
-     * @var array
-     */
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,
@@ -392,8 +389,6 @@ class Sqlite3 extends Database implements Driver
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

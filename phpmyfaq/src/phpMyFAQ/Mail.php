@@ -33,65 +33,47 @@ class Mail
     /**
      * Type of the used MUA. Possible values:
      * - built-in.
-     *
-     * @var string
      */
     public string $agent;
 
     /**
      * Attached filed.
-     *
-     * @var mixed
      */
     public mixed $attachments = [];
 
     /**
      * Body of the e-mail.
-     *
-     * @var string
      */
     public string $body = '';
 
     /**
      * Boundary.
-     *
-     * @var string
      */
     public string $boundary = '----------';
 
     /**
      * Charset.
-     *
-     * @var string
      */
     public string $charset = 'utf-8';
 
     /**
      * Content disposition.
-     *
-     * @var string
      */
     public string $contentDisposition = 'inline';
 
     /**
      * Content type.
-     *
-     * @var string
      */
     public string $contentType = 'text/plain';
 
     /**
      * Content transfer encoding.
-     *
-     * @var string
      */
     public string $contentTransferEncoding = '8bit';
 
     /**
      * The one and only valid End Of Line sequence as per RFC 2822:
      * carriage-return followed by line-feed.
-     *
-     * @var string
      */
     public string $eol = "\r\n";
 
@@ -104,22 +86,16 @@ class Mail
 
     /**
      * Message of the e-mail: HTML text allowed.
-     *
-     * @var string
      */
     public string $message = '';
 
     /**
      * Alternate message of the e-mail: only plain text allowed.
-     *
-     * @var string
      */
     public string $messageAlt = '';
 
     /**
      * Message-ID of the e-mail.
-     *
-     * @var string
      */
     public string $messageId;
 
@@ -139,7 +115,6 @@ class Mail
     /**
      * Priority of the e-mail: 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
      *
-     * @var int
      *
      * @see priorities
      */
@@ -147,77 +122,54 @@ class Mail
 
     /**
      * Subject of the e-mail.
-     *
-     * @var string
      */
     public string $subject = '';
 
     /**
      * Recipients of the e-mail as <BCC>.
-     *
-     * @var mixed
      */
     private mixed $bcc = [];
 
     /**
      * Recipients of the e-mail as <CC>.
-     *
-     * @var mixed
      */
     private mixed $cc = [];
 
     /**
      * Recipients of the e-mail as <From>.
-     *
-     * @var mixed
      */
     private mixed $from = [];
 
     /**
      * Mailer string.
-     *
-     * @var string
      */
     private string $mailer;
 
     /**
      * Recipient of the optional notification.
-     *
-     * @var mixed
      */
     private mixed $notifyTo = [];
 
     /**
      * Recipient of the e-mail as <Reply-To>.
-     *
-     * @var mixed
      */
     private mixed $replyTo = [];
 
     /**
      * Recipient of the e-mail as <Return-Path>.
-     *
-     * @var mixed
      */
     private mixed $returnPath = [];
 
     /**
      * Recipient of the e-mail as <Sender>.
-     *
-     * @var mixed
      */
     private mixed $sender = [];
 
     /**
      * Recipients of the e-mail as <TO:>.
-     *
-     * @var mixed
      */
     private mixed $to = [];
 
-    /**
-     * @var Configuration
-     */
     private Configuration $config;
 
     /*
@@ -236,7 +188,6 @@ class Mail
 
         // Set default value for private properties
         $this->config = $config;
-        $this->mailer = 'phpMyFAQ on PHP/' . PHP_VERSION;
 
         // Set phpMyFAQ related data
         $this->mailer = 'phpMyFAQ/' . $this->config->getVersion();
@@ -638,8 +589,8 @@ class Mail
         $this->headers['X-Mailer'] = $this->mailer;
 
         // X-MSMail-Priority
-        if (isset($this->priorities[(int)$this->priority])) {
-            $this->headers['X-MSMail-Priority'] = $this->priorities[(int)$this->priority];
+        if (isset($this->priorities[$this->priority])) {
+            $this->headers['X-MSMail-Priority'] = $this->priorities[$this->priority];
         }
 
         // X-Originating-IP

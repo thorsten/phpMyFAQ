@@ -31,8 +31,6 @@ class Pgsql extends SearchDatabase
 {
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

@@ -32,7 +32,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class MailHelper
 {
-    /** @var Mail */
     private Mail $mail;
 
     /**

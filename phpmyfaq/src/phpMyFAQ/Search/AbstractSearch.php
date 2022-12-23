@@ -36,8 +36,6 @@ abstract class AbstractSearch
 
     /**
      * AbstractSearch constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(protected Configuration $config)
     {

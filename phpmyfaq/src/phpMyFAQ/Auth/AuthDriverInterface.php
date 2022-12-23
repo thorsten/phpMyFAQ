@@ -29,11 +29,6 @@ interface AuthDriverInterface
      * Adds a new user account to the authentication table. The domain
      * is only used in LDAP/AD environments. Returns true on success,
      * otherwise false.
-     *
-     * @param string $login
-     * @param string $password
-     * @param string $domain
-     * @return mixed
      */
     public function create(string $login, string $password, string $domain = ''): mixed;
 
@@ -44,7 +39,6 @@ interface AuthDriverInterface
      *
      * @param string $login Login name
      * @param string $password Password
-     * @return bool
      */
     public function update(string $login, string $password): bool;
 
@@ -54,7 +48,6 @@ interface AuthDriverInterface
      * Error messages are added to the array errors.
      *
      * @param string $login Login name
-     * @return bool
      */
     public function delete(string $login): bool;
 
@@ -69,7 +62,6 @@ interface AuthDriverInterface
      * @param string $login Login name
      * @param string $password Password
      * @param array<string>  $optionalData Optional data
-     * @return bool
      */
     public function checkCredentials(string $login, string $password, array $optionalData = []): bool;
 
@@ -78,7 +70,6 @@ interface AuthDriverInterface
      *
      * @param string $login Login name
      * @param array<string>  $optionalData Optional data
-     * @return int
      */
     public function isValidLogin(string $login, array $optionalData = []): int;
 }

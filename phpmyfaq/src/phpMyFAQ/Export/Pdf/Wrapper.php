@@ -196,52 +196,38 @@ class Wrapper extends TCPDF
 {
     /**
      * With or without bookmarks.
-     *
-     * @var bool
      */
     public bool $enableBookmarks = false;
 
     /**
      * Full export from admin backend?
-     *
-     * @var bool
      */
     public bool $isFullExport = false;
 
     /**
      * Categories.
-     *
-     * @var array
      */
     public array $categories = [];
 
     /**
      * The current category.
      */
-    public $category = null;
+    public $category;
 
     /**
      * The current faq.
-     *
-     * @var array
      */
     public array $faq = [];
     /**
      * Configuration.
-     *
-     * @var Configuration|null
      */
     protected ?Configuration $config = null;
     /**
      * Question.
-     *
-     * @var string
      */
     private string $question = '';
     /**
      * Font files.
-     *
-     * @var array
      */
     private array $fontFiles = [
         'zh' => 'arialunicid0',
@@ -258,19 +244,11 @@ class Wrapper extends TCPDF
 
     /**
      * Current font.
-     *
-     * @var string
      */
     private string $currentFont = 'dejavusans';
 
-    /**
-     * @var string
-     */
     private string $customHeader;
 
-    /**
-     * @var string
-     */
     private string $customFooter;
 
     /**

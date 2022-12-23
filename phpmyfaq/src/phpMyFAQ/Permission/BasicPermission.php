@@ -43,22 +43,11 @@ class BasicPermission extends Permission
     ];
 
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
-     */
-    public function __construct(Configuration $config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
      * Gives the user a new user-right.
      * Returns true on success, otherwise false.
      *
      * @param  int $userId  User ID
      * @param  int $rightId Right ID
-     * @return bool
      */
     public function grantUserRight(int $userId, int $rightId): bool
     {
@@ -138,8 +127,6 @@ class BasicPermission extends Permission
      *
      * @param int   $userId User ID
      * @param mixed $right  Right ID or right name
-     *
-     * @return bool
      */
     public function hasPermission(int $userId, $right): bool
     {
@@ -161,8 +148,6 @@ class BasicPermission extends Permission
      * Returns the right-ID of the right with the name $name.
      *
      * @param string $name Name
-     *
-     * @return int
      */
     public function getRightId(string $name): int
     {
@@ -194,8 +179,6 @@ class BasicPermission extends Permission
      *
      * @param int $userId  User ID
      * @param int $rightId Right ID
-     *
-     * @return bool
      */
     public function checkUserRight(int $userId, int $rightId): bool
     {
@@ -291,7 +274,6 @@ class BasicPermission extends Permission
      * data stored in the rights table.
      *
      * @param array<string> $rightData Array if rights
-     * @return int
      */
     public function addRight(array $rightData): int
     {
@@ -313,9 +295,9 @@ class BasicPermission extends Permission
             $nextId,
             $rightData['name'],
             $rightData['description'],
-            isset($rightData['for_users']) ? (int)$rightData['for_users'] : 1,
-            isset($rightData['for_groups']) ? (int)$rightData['for_groups'] : 1,
-            isset($rightData['for_sections']) ? (int)$rightData['for_sections'] : 1
+            $rightData['for_users'] ?? 1,
+            $rightData['for_groups'] ?? 1,
+            $rightData['for_sections'] ?? 1
         );
 
         if (!$this->config->getDb()->query($insert)) {
@@ -362,8 +344,6 @@ class BasicPermission extends Permission
 
     /**
      * Renames rights, only used for updates.
-     *
-     * @return bool
      */
     public function renameRight(string $oldName, string $newName): bool
     {
@@ -441,8 +421,6 @@ class BasicPermission extends Permission
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     *
-     * @return bool
      */
     public function refuseAllUserRights(int $userId): bool
     {

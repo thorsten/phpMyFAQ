@@ -31,19 +31,14 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
  */
 class Client extends Instance
 {
-    /** @var Filesystem */
     private Filesystem $fileSystem;
 
-    /** @var string */
     private string $clientFolder;
 
-    /** @var string */
     private string $clientUrl;
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -62,8 +57,6 @@ class Client extends Instance
 
     /**
      * Sets the Filesystem.
-     *
-     * @param Filesystem $fileSystem
      */
     public function setFileSystem(Filesystem $fileSystem): void
     {
@@ -202,10 +195,6 @@ class Client extends Instance
      */
     public function isMultiSiteWriteable(): bool
     {
-        if (!$this->fileSystem instanceof Filesystem) {
-            $this->fileSystem = new Filesystem();
-        }
-
         if (!is_writeable($this->clientFolder)) {
             return false;
         }

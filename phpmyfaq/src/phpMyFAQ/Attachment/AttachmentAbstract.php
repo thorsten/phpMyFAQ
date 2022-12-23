@@ -36,8 +36,6 @@ abstract class AttachmentAbstract
 
     /**
      * The key to encrypt with.
-     *
-     * @var ?string
      */
     protected ?string $key = null;
 
@@ -50,72 +48,52 @@ abstract class AttachmentAbstract
 
     /**
      * Database instance.
-     *
-     * @var DatabaseDriver
      */
     protected DatabaseDriver $db;
 
     /**
      * Record ID.
-     *
-     * @var int
      */
     protected int $recordId;
 
     /**
      * Record language.
-     *
-     * @var string
      */
     protected string $recordLang;
 
     /**
      * Real file md5 hash.
-     *
-     * @var string
      */
     protected string $realHash;
 
     /**
      * Virtual unique md5 hash used for encrypted files.
      * Must equal real hash for unencrypted files.
-     *
-     * @var string
      */
     protected string $virtualHash = '';
 
     /**
      * If this is set, the sh1 hashed key we got must equal to it.
-     *
-     * @var string
      */
     protected string $passwordHash = '';
 
     /**
      * Filesize in bytes.
-     *
-     * @var int
      */
     protected int $filesize;
 
     /**
      * Filename.
-     *
-     * @var string
      */
     protected string $filename;
 
     /**
      * Encrypted.
-     *
-     * @var bool|null
      */
     protected ?bool $encrypted = null;
 
     /**
      * Attachment file mime type.
-     *
-     * @var string
      */
     protected string $mimeType = '';
 

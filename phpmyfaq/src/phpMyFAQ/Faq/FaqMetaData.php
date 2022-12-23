@@ -28,52 +28,31 @@ use phpMyFAQ\Visits;
  */
 class FaqMetaData
 {
-    /** @var Configuration */
-    private $config;
+    private ?int $faqId = null;
 
-    /** @var int */
-    private $faqId;
+    private ?string $faqLanguage = null;
 
-    /** @var string */
-    private $faqLanguage;
-
-    /** @var array */
-    private $categories;
+    private ?array $categories = null;
 
     /**
      * FaqPermission constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
-    /**
-     * @param int $faqId
-     * @return FaqMetaData
-     */
     public function setFaqId(int $faqId): FaqMetaData
     {
         $this->faqId = $faqId;
         return $this;
     }
 
-    /**
-     * @param string $faqLanguage
-     * @return FaqMetaData
-     */
     public function setFaqLanguage(string $faqLanguage): FaqMetaData
     {
         $this->faqLanguage = $faqLanguage;
         return $this;
     }
 
-    /**
-     * @param array $categories
-     * @return FaqMetaData
-     */
     public function setCategories(array $categories): FaqMetaData
     {
         $this->categories = $categories;

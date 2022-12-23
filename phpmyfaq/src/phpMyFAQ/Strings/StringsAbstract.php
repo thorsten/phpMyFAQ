@@ -56,7 +56,6 @@ abstract class StringsAbstract
      * Check if the string is a unicode string.
      *
      * @param string $str String
-     * @return bool
      */
     public static function isUTF8(string $str): bool
     {
@@ -79,8 +78,6 @@ abstract class StringsAbstract
 
     /**
      * Get current encoding.
-     *
-     * @return string
      */
     public function getEncoding(): string
     {

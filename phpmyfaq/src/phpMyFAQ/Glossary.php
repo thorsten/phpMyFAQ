@@ -26,22 +26,16 @@ class Glossary
 {
     /**
      * Item.
-     *
-     * @var array
      */
     private array $item = [];
 
     /**
      * Definition of an item.
-     *
-     * @var string
      */
     private string $definition = '';
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(private Configuration $config)
     {
@@ -51,7 +45,6 @@ class Glossary
      * Fill the passed string with the current Glossary items.
      *
      * @param string $content Content
-     * @return string
      */
     public function insertItemsIntoContent(string $content = ''): string
     {
@@ -174,8 +167,6 @@ class Glossary
 
     /**
      * Gets all items and definitions from the database.
-     *
-     * @return array
      */
     public function getAllGlossaryItems(): array
     {
@@ -211,8 +202,6 @@ class Glossary
      * Callback function for filtering HTML from URLs and images.
      *
      * @param array $matches Matches
-     *
-     * @return string
      */
     public function setTooltip(array $matches): string
     {
@@ -253,8 +242,6 @@ class Glossary
      * Gets one item and definition from the database.
      *
      * @param int $id Glossary ID
-     *
-     * @return array
      */
     public function getGlossaryItem($id): array
     {
@@ -291,7 +278,6 @@ class Glossary
      *
      * @param string $item       Item
      * @param string $definition Definition
-     * @return bool
      */
     public function addGlossaryItem(string $item, string $definition): bool
     {
@@ -325,7 +311,6 @@ class Glossary
      * @param int    $id         Glossary ID
      * @param string $item       Item
      * @param string $definition Definition
-     * @return bool
      */
     public function updateGlossaryItem(int $id, string $item, string $definition): bool
     {
@@ -344,7 +329,7 @@ class Glossary
             Database::getTablePrefix(),
             Strings::htmlspecialchars($item),
             Strings::htmlspecialchars($definition),
-            (int)$id,
+            $id,
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -359,7 +344,6 @@ class Glossary
      * Deletes an item and definition into the database.
      *
      * @param int $id Glossary ID
-     * @return bool
      */
     public function deleteGlossaryItem(int $id): bool
     {

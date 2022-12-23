@@ -48,15 +48,11 @@ class SearchResultSet
 
     /**
      * Ordering of result set.
-     *
-     * @var string
      */
     protected string $ordering;
 
     /**
      * Number of search results.
-     *
-     * @var int
      */
     protected int $numberOfResults = 0;
 
@@ -64,7 +60,6 @@ class SearchResultSet
      * Constructor.
      *
      * @param CurrentUser   $user User object
-     * @param FaqPermission $faqPermission
      * @param Configuration $config Configuration object
      */
     public function __construct(
@@ -103,11 +98,9 @@ class SearchResultSet
             // check permissions for groups
             if ('medium' === $this->config->get('security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(FaqPermission::GROUP, $result->id);
-                if (is_array($groupPermissions)) {
-                    foreach ($groupPermissions as $groupPermission) {
-                        if (in_array($groupPermission, $currentGroupIds)) {
-                            $permission = true;
-                        }
+                foreach ($groupPermissions as $groupPermission) {
+                    if (in_array($groupPermission, $currentGroupIds)) {
+                        $permission = true;
                     }
                 }
             }

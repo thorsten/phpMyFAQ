@@ -46,15 +46,11 @@ class Auth
 
     /**
      * p container that stores the encryption object.
-     *
-     * @var Encryption|null
      */
     protected ?Encryption $encContainer = null;
 
     /**
      * Short description of attribute read_only.
-     *
-     * @var bool
      */
     private bool $readOnly = false;
 
@@ -93,9 +89,7 @@ class Auth
             $message .= $error . "\n";
         }
 
-        $message .= $this->encContainer->error();
-
-        return $message;
+        return $message . $this->encContainer->error();
     }
 
     /**

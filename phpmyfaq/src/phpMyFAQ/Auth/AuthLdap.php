@@ -32,7 +32,6 @@ use phpMyFAQ\User;
  */
 class AuthLdap extends Auth implements AuthDriverInterface
 {
-    /** @var LdapCore|null */
     private ?LdapCore $ldap = null;
 
     /** @var string[] Array of LDAP servers */
@@ -117,11 +116,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
             // Try all LDAP servers
             foreach ($this->ldapServer as $key => $value) {
                 $this->connect($key);
-
-                if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = (int)$key;
-                    break;
-                }
+                $this->activeServer = (int)$key;
+                break;
             }
         }
 
@@ -165,11 +161,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
             // Try all LDAP servers
             foreach ($this->ldapServer as $key => $value) {
                 $this->connect($key);
-
-                if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = (int)$key;
-                    break;
-                }
+                $this->activeServer = (int)$key;
+                break;
             }
         }
 

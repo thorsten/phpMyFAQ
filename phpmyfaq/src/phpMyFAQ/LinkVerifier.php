@@ -46,29 +46,21 @@ class LinkVerifier
 
     /**
      * List of protocol and urls.
-     *
-     * @var array
      */
     private array $urlPool = [];
 
     /**
      * List of protocols we do not want to look at.
-     *
-     * @var array
      */
     private array $invalidProtocols = [];
 
     /**
      * Last verify results (we might use it later).
-     *
-     * @var array
      */
     private array $lastResult = [];
 
     /**
      * List of hosts that are slow to resolve.
-     *
-     * @var array
      */
     private array $slowHosts = [];
 
@@ -379,20 +371,15 @@ class LinkVerifier
         $this->lastResult = [];
 
         foreach ($this->urlPool as $_type => $_value) {
-            foreach ($_value as $_key => $_url) {
-                if (!(isset($result[$_type][$_url]))) {
-                    $_result = [];
-                    $_result['type'] = $_type;
-                    $_result['rawurl'] = $_url;
-                    $_result['reference'] = $referenceUri;
-
-                    // Expand uri into absolute URL.
-                    $_absurl = $this->makeAbsoluteURL($_url, $referenceUri);
-                    $_result['absurl'] = $_absurl;
-
-                    [$_result['valid'], $_result['redirects'], $_result['reason']] = $this->openURL($_absurl);
-                    $this->lastResult[$_type][$_url] = $_result;
-                }
+            foreach ($_value as $_url) {
+                $_result = [];
+                $_result['type'] = $_type;
+                $_result['rawurl'] = $_url;
+                $_result['reference'] = $referenceUri;
+                $_absurl = $this->makeAbsoluteURL($_url, $referenceUri);
+                $_result['absurl'] = $_absurl;
+                [$_result['valid'], $_result['redirects'], $_result['reason']] = $this->openURL($_absurl);
+                $this->lastResult[$_type][$_url] = $_result;
             }
         }
 
@@ -705,8 +692,8 @@ class LinkVerifier
     {
         $linkCount = $errorCount = 0;
 
-        foreach ($this->lastResult as $_type => $_value) {
-            foreach ($_value as $_url => $value) {
+        foreach ($this->lastResult as $_value) {
+            foreach ($_value as $value) {
                 ++$linkCount;
                 if ($value['valid'] == false) {
                     ++$errorCount;

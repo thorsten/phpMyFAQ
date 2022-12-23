@@ -27,9 +27,6 @@ use phpMyFAQ\Instance\Database;
  */
 class Mysqli extends Database implements Driver
 {
-    /**
-     * @var array
-     */
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INT(11) NOT NULL,
@@ -391,8 +388,6 @@ class Mysqli extends Database implements Driver
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

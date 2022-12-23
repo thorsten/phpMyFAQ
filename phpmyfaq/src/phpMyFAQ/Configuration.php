@@ -31,19 +31,14 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 class Configuration
 {
-    /** @var array */
     public array $config = [];
 
-    /** @var Logger */
     public Logger $logger;
 
-    /** @var string */
     protected string $tableName = 'faqconfig';
 
     /**
      * Constructor.
-     *
-     * @param DatabaseDriver $database
      */
     public function __construct(DatabaseDriver $database)
     {
@@ -53,8 +48,6 @@ class Configuration
 
     /**
      * Sets the phpMyFAQ\Db_Driver object.
-     *
-     * @param DatabaseDriver $database
      */
     public function setDb(DatabaseDriver $database): void
     {
@@ -69,14 +62,11 @@ class Configuration
     {
         $this->logger = new Logger('phpmyfaq');
         $this->logger->pushHandler(new StreamHandler(PMF_LOG_DIR, DEBUG ? Logger::DEBUG : Logger::WARNING));
-        if (DEBUG) {
-            $this->logger->pushHandler(new BrowserConsoleHandler());
-        }
+        $this->logger->pushHandler(new BrowserConsoleHandler());
     }
 
     /**
      * Returns the logger instance
-     * @return Logger
      */
     public function getLogger(): Logger
     {
@@ -121,8 +111,6 @@ class Configuration
 
     /**
      * Returns the DatabaseDriver object.
-     *
-     * @return DatabaseDriver
      */
     public function getDb(): DatabaseDriver
     {

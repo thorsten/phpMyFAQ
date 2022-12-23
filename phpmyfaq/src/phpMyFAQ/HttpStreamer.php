@@ -99,32 +99,24 @@ class HttpStreamer
      */
     public function send(string $disposition)
     {
-        if (isset($disposition)) {
-            $this->disposition = $disposition;
-        }
+        $this->disposition = $disposition;
 
         // Sanity checks
         if (headers_sent()) {
             throw new Exception('Error: unable to send my headers: someone already sent other headers!');
         }
-        if (self::EXPORT_BUFFER_ENABLE) {
-            if (ob_get_contents()) {
-                throw new Exception('Error: unable to send my data: someone already sent other data!');
-            }
+        if (ob_get_contents()) {
+            throw new Exception('Error: unable to send my data: someone already sent other data!');
         }
 
         // Manage output buffering
-        if (self::EXPORT_BUFFER_ENABLE) {
-            ob_start();
-        }
+        ob_start();
         // Send the right HTTP headers
         $this->setHttpHeaders();
         // Send the raw content
         $this->streamContent();
         // Manage output buffer flushing
-        if (self::EXPORT_BUFFER_ENABLE) {
-            ob_end_flush();
-        }
+        ob_end_flush();
     }
 
     /**
@@ -182,9 +174,7 @@ class HttpStreamer
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
         header('Content-Disposition: ' . $this->disposition . '; filename="phpMyFAQ_' . $filename . '"');
-        if (!empty($description)) {
-            header('Content-Description: ' . $description);
-        }
+        header('Content-Description: ' . $description);
         header('Content-Transfer-Encoding: binary');
         header('Accept-Ranges: none');
         header('Content-Length: ' . $this->size);

@@ -30,8 +30,6 @@ class AdministrationHelper
 {
     /**
      * Array with permissions.
-     *
-     * @var array
      */
     private array $permission = [];
 
@@ -44,7 +42,6 @@ class AdministrationHelper
      * @param string $caption      Caption
      * @param string|null $active  Active
      * @param bool   $checkPerm    Check permission (default: true)
-     * @return string
      */
     public function addMenuEntry(
         string $restrictions = '',
@@ -89,7 +86,6 @@ class AdministrationHelper
      *
      * @param string $restrictions
      *
-     * @return  bool
      * @example right1*right2+right3+right4*right5
      */
     private function evaluatePermission(string $restrictions): bool
@@ -121,8 +117,6 @@ class AdministrationHelper
 
     /**
      * Setter for permission array.
-     *
-     * @param User $user
      */
     public function setUser(User $user): void
     {
@@ -148,11 +142,6 @@ class AdministrationHelper
         }
     }
 
-    /**
-     * @param string $metaRobots
-     *
-     * @return string
-     */
     public function renderMetaRobotsDropdown(string $metaRobots): string
     {
         $html = '';

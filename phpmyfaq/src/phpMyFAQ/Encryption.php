@@ -41,8 +41,6 @@ class Encryption
 
     /**
      * Salt.
-     *
-     * @var string
      */
     protected string $salt = '';
 

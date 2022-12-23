@@ -30,8 +30,6 @@ class Sqlite3 implements DatabaseDriver
 {
     /**
      * Tables.
-     *
-     * @var array
      */
     public array $tableNames = [];
 
@@ -45,7 +43,6 @@ class Sqlite3 implements DatabaseDriver
     /**
      * The query log string.
      *
-     * @var string
      *
      * @see query()
      */
@@ -190,9 +187,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        if (DEBUG) {
-            $this->sqllog .= Utils::debug($query);
-        }
+        $this->sqllog .= Utils::debug($query);
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);

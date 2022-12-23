@@ -31,7 +31,6 @@ use phpMyFAQ\User;
  */
 class AuthDatabase extends Auth implements AuthDriverInterface
 {
-    /** @var DatabaseDriver */
     private DatabaseDriver $db;
 
     /**

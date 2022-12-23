@@ -29,8 +29,6 @@ class Instance
 {
     /**
      * Instance ID.
-     *
-     * @var int
      */
     protected int $id;
 

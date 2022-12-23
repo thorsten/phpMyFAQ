@@ -45,10 +45,8 @@ class Pgsql implements DatabaseDriver
 
     /**
      * The connection resource.
-     *
-     * @var resource
      */
-    private $conn = null;
+    private \PgSql\Connection|bool|null $conn = null;
 
     /**
      * Connects to the database.
@@ -93,9 +91,7 @@ class Pgsql implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
-        if (DEBUG) {
-            $this->sqllog .= Utils::debug($query);
-        }
+        $this->sqllog .= Utils::debug($query);
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d OFFSET %d', $rowcount, $offset);

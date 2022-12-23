@@ -33,22 +33,16 @@ class Database
 {
     /**
      * Instance.
-     *
-     * @var DatabaseDriver|null
      */
     private static ?DatabaseDriver $instance = null;
 
     /**
      * Database type.
-     *
-     * @var string|null
      */
     private static ?string $dbType = null;
 
     /**
      * Table prefix.
-     *
-     * @var string|null
      */
     private static ?string $tablePrefix = null;
 
@@ -87,8 +81,6 @@ class Database
 
     /**
      * Returns the single instance.
-     *
-     * @return DatabaseDriver|null
      */
     public static function getInstance(): ?DatabaseDriver
     {
@@ -98,13 +90,6 @@ class Database
         }
 
         return self::$instance;
-    }
-
-    /**
-     * __clone() Magic method to prevent cloning.
-     */
-    private function __clone()
-    {
     }
 
     /**

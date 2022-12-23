@@ -33,10 +33,8 @@ class OAuth
     /** @var stdClass|null JWT */
     private ?stdClass $token = null;
 
-    /** @var string|null */
     private ?string $refreshToken = null;
 
-    /** @var string|null */
     private ?string $accessToken = null;
 
     /**

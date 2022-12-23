@@ -24,11 +24,7 @@
 namespace phpMyFAQ;
 
 use Exception;
-use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\AuthDriverInterface;
-use phpMyFAQ\Auth\AuthHttp;
-use phpMyFAQ\Auth\AuthLdap;
-use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
@@ -81,8 +77,6 @@ class User
 
     /**
      * User-data storage container.
-     *
-     * @var UserData|null
      */
     public ?UserData $userdata = null;
 
@@ -96,7 +90,7 @@ class User
     /**
      * authentication container.
      *
-     * @var array<string, AuthDatabase|AuthHttp|AuthLdap|AuthSso>
+     * @var array<string, AuthDriverInterface>
      */
     protected array $authContainer = [];
 
@@ -116,44 +110,32 @@ class User
 
     /**
      * login string.
-     *
-     * @var string
      */
     private string $login = '';
 
     /**
      * minimum length of login string (default: 2).
-     *
-     * @var int
      */
     private int $loginMinLength = 2;
 
     /**
      * regular expression to find invalid login strings
      * (default: /^[a-z0-9][\w\.\-@]+/is ).
-     *
-     * @var string
      */
     private string $validUsername = '/^[a-z0-9][\w\.\-@]+/is';
 
     /**
      * user ID.
-     *
-     * @var int
      */
     private int $userId = -1;
 
     /**
      * Status of user.
-     *
-     * @var string
      */
     private string $status = '';
 
     /**
      * IS the user a super admin?
-     *
-     * @var bool
      */
     private bool $isSuperAdmin = false;
 
@@ -185,7 +167,6 @@ class User
         $this->authContainer = [];
         $auth = new Auth($this->config);
 
-        /** @var AuthDatabase|AuthHttp|AuthLdap|AuthSso */
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
@@ -212,7 +193,7 @@ class User
      *
      * @param BasicPermission|MediumPermission|LargePermission $perm Permission object
      */
-    public function addPerm($perm): bool
+    public function addPerm(BasicPermission|MediumPermission|LargePermission $perm): bool
     {
         $this->perm = $perm;
         return true;
@@ -243,10 +224,11 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param AuthDatabase|AuthHttp|AuthLdap|AuthSso $auth Driver object
-     * @param string              $name Auth name
+     * @param AuthDriverInterface $auth Driver object
+     * @param string                                                          $name Auth name
+     * @return bool
      */
-    public function addAuth($auth, string $name): bool
+    public function addAuth(AuthDriverInterface $auth, string $name): bool
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;
@@ -326,7 +308,7 @@ class User
     public function getUserId(): int
     {
         if (isset($this->userId) && is_int($this->userId)) {
-            return (int)$this->userId;
+            return $this->userId;
         }
         $this->userId = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
@@ -765,7 +747,7 @@ class User
             WHERE
                 user_id = %d ' . ($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
             Database::getTablePrefix(),
-            (int)$userId
+            $userId
         );
 
         $res = $this->config->getDb()->query($select);
@@ -862,7 +844,7 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return (int)$userData['user_id'];
+        return $userData['user_id'];
     }
 
     /**

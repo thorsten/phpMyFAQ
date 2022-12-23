@@ -51,8 +51,6 @@ class Json extends Export
      * @param int    $categoryId Entity Id
      * @param bool   $downwards  If true, downwards, otherwise upward ordering
      * @param string $language   Language
-     *
-     * @return string
      */
     public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
@@ -82,6 +80,6 @@ class Json extends Export
 
         header('Content-type: application/json');
 
-        return json_encode($generated);
+        return json_encode($generated, JSON_THROW_ON_ERROR);
     }
 }

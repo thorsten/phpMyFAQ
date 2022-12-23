@@ -25,61 +25,42 @@ use DateTime;
  */
 class FaqEntity
 {
-    /** @var int The primary key of the FAQ */
     private ?int $id = null;
 
-    /** @var string The language of the FAQ */
     private ?string $language = null;
 
-    /** @var int The unique solution ID of the FAQ */
     private ?int $solutionId = null;
 
-    /** @var int The current revision ID of the FAQ */
     private ?int $revisionId = null;
 
-    /** @var bool The active flag of the FAQ */
     private ?bool $active = null;
 
-    /** @var bool The sticky flag of the FAQ */
     private ?bool $sticky = null;
 
-    /** @var string The keywords of the FAQ as comma separated string */
     private ?string $keywords = null;
 
-    /** @var string The question of the FAQ */
     private ?string $question = null;
 
-    /** @var string The answer of the FAQ */
     private ?string $answer = null;
 
-    /** @var string The name of the FAQ author */
     private ?string $author = null;
 
-    /** @var string The email address of the FAQ author */
     private ?string $email = null;
 
-    /** @var bool The flag if comments are allowed */
     private ?bool $comment = null;
 
-    /** @var string Notes about the FAQ, only visible in the admin backend */
     private ?string $notes = null;
 
-    /** @var string The state if the links: "nolinks", "linkok" or "linkbad" */
     private ?string $linkState = null;
 
-    /** @var DateTime The date of the last verification of the links */
     private ?\DateTime $linksCheckedDate = null;
 
-    /** @var DateTime The date from which the FAQ is valid */
     private ?\DateTime $validFrom = null;
 
-    /** @var DateTime The date until which the FAQ is valid */
     private ?\DateTime $validTo = null;
 
-    /** @var DateTime The date when the FAQ was created */
     private ?\DateTime $createdDate = null;
 
-    /** @var DateTime The date when the FAQ was updated the last time */
     private ?\DateTime $updatedDate = null;
 
     public function getId(): ?int

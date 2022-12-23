@@ -27,8 +27,6 @@ class Rating
 {
     /**
      * Plural form support.
-     *
-     * @var Plurals
      */
     private Plurals $plr;
 

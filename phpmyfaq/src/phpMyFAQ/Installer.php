@@ -37,15 +37,11 @@ class Installer
 {
     /**
      * System object.
-     *
-     * @var System
      */
     protected System $system;
 
     /**
      * Array with user rights.
-     *
-     * @var array
      */
     protected array $mainRights = [
         [
@@ -309,8 +305,6 @@ class Installer
 
     /**
      * Configuration array.
-     *
-     * @var array
      */
     protected array $mainConfig = [
         'main.currentVersion' => null,
@@ -528,10 +522,6 @@ class Installer
      */
     public function checkMinimumPhpVersion(): bool
     {
-        if (version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP, '<')) {
-            return false;
-        }
-
         return true;
     }
 
@@ -638,8 +628,6 @@ class Installer
 
     /**
      * Checks if phpMyFAQ database tables are available
-     *
-     * @param DatabaseDriver $database
      */
     public function checkAvailableDatabaseTables(DatabaseDriver $database): void
     {

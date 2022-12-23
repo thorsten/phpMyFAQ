@@ -75,38 +75,36 @@ class Language
      */
     public function languageAvailable(int $id, string $table = 'faqdata'): array
     {
+        $distinct = null;
+        $where = null;
+        $query = null;
+        $result = null;
         $output = [];
-
-        if (isset($id)) {
-            if ($id == 0) {
-                // get languages for all ids
-                $distinct = ' DISTINCT ';
-                $where = '';
-            } else {
-                // get languages for specified id
-                $distinct = '';
-                $where = ' WHERE id = ' . $id;
-            }
-
-            $query = sprintf(
-                '
+        if ($id == 0) {
+            // get languages for all ids
+            $distinct = ' DISTINCT ';
+            $where = '';
+        } else {
+            // get languages for specified id
+            $distinct = '';
+            $where = ' WHERE id = ' . $id;
+        }
+        $query = sprintf(
+            '
                 SELECT %s
                     lang
                 FROM
                     %s%s
                 %s',
-                $distinct,
-                Database::getTablePrefix(),
-                $table,
-                $where
-            );
-
-            $result = $this->config->getDb()->query($query);
-
-            if ($this->config->getDb()->numRows($result) > 0) {
-                while ($row = $this->config->getDb()->fetchObject($result)) {
-                    $output[] = $row->lang;
-                }
+            $distinct,
+            Database::getTablePrefix(),
+            $table,
+            $where
+        );
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
+                $output[] = $row->lang;
             }
         }
 
@@ -121,6 +119,7 @@ class Language
      */
     public function setLanguage(bool $configDetection, string $configLanguage): string
     {
+        $confLangCode = null;
         $detectedLang = [];
         self::getUserAgentLanguage();
 
@@ -144,11 +143,9 @@ class Language
             $detectedLang['session'] = trim($_SESSION['lang']);
         }
         // Get the language from the config
-        if (isset($configLanguage)) {
-            $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
-            if (self::isASupportedLanguage($confLangCode)) {
-                $detectedLang['config'] = $confLangCode;
-            }
+        $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
+        if (self::isASupportedLanguage($confLangCode)) {
+            $detectedLang['config'] = $confLangCode;
         }
         // Detect the browser's language
         if ((true === $configDetection) && self::isASupportedLanguage($this->acceptLanguage)) {

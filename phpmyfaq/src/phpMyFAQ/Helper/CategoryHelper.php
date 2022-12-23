@@ -145,9 +145,8 @@ class CategoryHelper extends Helper
             if ($open > 0) {
                 $output .= str_repeat("</li>\n\t</ul>\n\t", $open);
             }
-            $output .= '</li>';
 
-            return $output;
+            return $output . '</li>';
         } else {
             $output = '<li><a href="#">' . Translation::get('no_cats') . '</a></li>';
         }
@@ -495,9 +494,7 @@ class CategoryHelper extends Helper
             $output .= str_repeat('</li></ul>', $level);
         }
 
-        $output .= '</li></ul>';
-
-        return $output;
+        return $output . '</li></ul>';
     }
 
     /**

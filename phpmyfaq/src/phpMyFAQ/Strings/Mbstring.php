@@ -223,8 +223,6 @@ class Mbstring extends StringsAbstract
      */
     private static function appendU(string $str): string
     {
-        $str = (string)$str;
-
         return parent::isUTF8($str) ? $str . 'u' : $str;
     }
 }

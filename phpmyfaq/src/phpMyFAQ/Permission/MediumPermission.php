@@ -40,16 +40,6 @@ class MediumPermission extends BasicPermission
     ];
 
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
-     */
-    public function __construct(Configuration $config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
      * Returns an array that contains the right-IDs of all
      * group-rights the group $groupId owns.
      *
@@ -99,8 +89,6 @@ class MediumPermission extends BasicPermission
      *
      * @param int   $userId Group ID
      * @param mixed $right  Rights
-     *
-     * @return bool
      */
     public function hasPermission(int $userId, $right): bool
     {
@@ -133,8 +121,6 @@ class MediumPermission extends BasicPermission
      *
      * @param int $userId  User ID
      * @param int $rightId Right ID
-     *
-     * @return bool
      */
     public function checkUserGroupRight(int $userId, int $rightId): bool
     {
@@ -183,8 +169,6 @@ class MediumPermission extends BasicPermission
      *
      * @param int $groupId Group ID
      * @param int $rightId Right ID
-     *
-     * @return bool
      */
     public function grantGroupRight(int $groupId, int $rightId): bool
     {
@@ -226,8 +210,6 @@ class MediumPermission extends BasicPermission
      * data for the new group.
      *
      * @param array<string> $groupData Array of group data
-     *
-     * @return int
      */
     public function addGroup(array $groupData): int
     {
@@ -265,8 +247,6 @@ class MediumPermission extends BasicPermission
      * 0 if the group-name cannot be found.
      *
      * @param string $name Group name
-     *
-     * @return int
      */
     public function getGroupId(string $name): int
     {
@@ -322,8 +302,6 @@ class MediumPermission extends BasicPermission
      *
      * @param int $groupId Group ID
      * @param array<string> $groupData Array of group data
-     *
-     * @return bool
      */
     public function changeGroup(int $groupId, array $groupData): bool
     {
@@ -363,8 +341,6 @@ class MediumPermission extends BasicPermission
      * Returns true on success, otherwise false.
      *
      * @param int $groupId Group ID
-     *
-     * @return bool
      */
     public function deleteGroup(int $groupId): bool
     {
@@ -506,7 +482,6 @@ class MediumPermission extends BasicPermission
      * Get all groups in <option> tags.
      *
      * @param array<int> $groups Selected groups
-     * @return string
      * @todo   Move into the Helper class
      */
     public function getAllGroupsOptions(array $groups, CurrentUser $user): string
@@ -572,8 +547,6 @@ class MediumPermission extends BasicPermission
      * Returns the name of the group $groupId.
      *
      * @param int $groupId Group ID
-     *
-     * @return string
      */
     public function getGroupName(int $groupId): string
     {
@@ -678,8 +651,6 @@ class MediumPermission extends BasicPermission
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     *
-     * @return bool
      */
     public function autoJoin(int $userId): bool
     {
@@ -722,8 +693,6 @@ class MediumPermission extends BasicPermission
      *
      * @param int $userId  User ID
      * @param int $groupId Group ID
-     *
-     * @return bool
      */
     public function addToGroup(int $userId, int $groupId): bool
     {
@@ -798,8 +767,6 @@ class MediumPermission extends BasicPermission
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     *
-     * @return bool
      */
     public function removeFromAllGroups(int $userId): bool
     {
@@ -830,8 +797,6 @@ class MediumPermission extends BasicPermission
      * Returns true on success, otherwise false.
      *
      * @param int $groupId Group ID
-     *
-     * @return bool
      */
     public function refuseAllGroupRights(int $groupId): bool
     {
@@ -862,8 +827,6 @@ class MediumPermission extends BasicPermission
      * Returns true on success, otherwise false.
      *
      * @param int $groupId Group ID
-     *
-     * @return bool
      */
     public function removeAllUsersFromGroup(int $groupId): bool
     {

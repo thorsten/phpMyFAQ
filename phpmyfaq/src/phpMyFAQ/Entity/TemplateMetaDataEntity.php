@@ -24,29 +24,14 @@ namespace phpMyFAQ\Entity;
  */
 class TemplateMetaDataEntity
 {
-    /**
-     * @var int
-     */
     private int $id;
 
-    /**
-     * @var string
-     */
     private string $lang;
 
-    /**
-     * @var string
-     */
     private string $pageId;
 
-    /**
-     * @var string
-     */
     private string $type;
 
-    /**
-     * @var string
-     */
     private string $content;
 
     public function getId(): int

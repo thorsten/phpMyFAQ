@@ -27,9 +27,6 @@ use phpMyFAQ\Instance\Database;
  */
 class Sqlsrv extends Database implements Driver
 {
-    /**
-     * @var array
-     */
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,
@@ -392,8 +389,6 @@ class Sqlsrv extends Database implements Driver
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

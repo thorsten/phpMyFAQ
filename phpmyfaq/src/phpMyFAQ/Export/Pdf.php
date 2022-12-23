@@ -38,19 +38,11 @@ class Pdf extends Export
 {
     /**
      * Wrapper object.
-     *
-     * @var Wrapper|null
      */
     private ?Wrapper $pdf = null;
 
-    /**
-     * @var Tags|null
-     */
     private ?Tags $tags = null;
 
-    /**
-     * @var ParsedownExtra|null
-     */
     private ?ParsedownExtra $parsedown = null;
 
     /**

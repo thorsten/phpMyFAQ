@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Attachment\File;
 use phpMyFAQ\Translation;
 
 /**
@@ -28,9 +27,6 @@ class AttachmentHelper
 {
     /**
      * Returns a HTML list of attached files.
-     *
-     * @param array $attachmentList
-     * @return string
      */
     public function renderAttachmentList(array $attachmentList): string
     {
@@ -52,69 +48,28 @@ class AttachmentHelper
         return $html . '</ul>';
     }
 
-    /**
-     * @param string $mimeType
-     * @return string
-     */
     private function mapMimeTypeToIcon(string $mimeType): string
     {
-        switch ($mimeType) {
-            case 'application/zip':
-                return 'file-archive-o';
-            case 'audio/basic':
-            case 'audio/midi':
-            case 'audio/mpeg':
-            case 'audio/x-aiff':
-            case 'audio/x-mpegurl':
-            case 'audio/x-pn-realaudio':
-            case 'audio/x-pn-realaudio-plugin':
-            case 'audio/x-realaudio':
-            case 'audio/x-wav':
-                return 'file-audio-o';
-            case 'application/xhtml+xml':
-            case 'text/xml':
-                return 'file-code-o';
-            case 'application/vnd.ms-excel':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                return 'file-excel-o';
-            case 'image/bmp':
-            case 'image/gif':
-            case 'image/ief':
-            case 'image/jpeg':
-            case 'image/png':
-            case 'image/tiff':
-            case 'image/vnd.djvu':
-            case 'image/vnd.wap.wbmp':
-            case 'image/x-cmu-raster':
-            case 'image/x-portable-anymap':
-            case 'image/x-portable-bitmap':
-            case 'image/x-portable-graymap':
-            case 'image/x-portable-pixmap':
-            case 'image/x-rgb':
-            case 'image/x-xbitmap':
-            case 'image/x-xpixmap':
-            case 'image/x-xwindowdump':
-                return 'file-image-o';
-            case 'application/vnd.ms-powerpoint':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                return 'file-powerpoint-o';
-            case 'application/pdf':
-                return 'file-pdf-o';
-            case 'text/plain':
-            case 'text/richtext':
-            case 'text/rtf':
-                return 'file-text-o';
-            case 'application/msword':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                return 'file-word-o';
-            case 'video/mpeg':
-            case 'video/quicktime':
-            case 'video/vnd.mpegurl':
-            case 'video/x-msvideo':
-            case 'video/x-sgi-movie':
-                return 'file-video-o';
-        }
-
-        return 'file-o';
+        return match ($mimeType) {
+            'application/zip' => 'file-archive-o',
+            'audio/basic', 'audio/midi', 'audio/mpeg', 'audio/x-aiff', 'audio/x-mpegurl', 'audio/x-pn-realaudio',
+            'audio/x-pn-realaudio-plugin', 'audio/x-realaudio', 'audio/x-wav' => 'file-audio-o',
+            'application/xhtml+xml', 'text/xml' => 'file-code-o',
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'file-excel-o',
+            'image/bmp', 'image/gif', 'image/ief', 'image/jpeg', 'image/png', 'image/tiff', 'image/vnd.djvu',
+            'image/vnd.wap.wbmp', 'image/x-cmu-raster', 'image/x-portable-anymap', 'image/x-portable-bitmap',
+            'image/x-portable-graymap', 'image/x-portable-pixmap', 'image/x-rgb', 'image/x-xbitmap', 'image/x-xpixmap',
+            'image/x-xwindowdump' => 'file-image-o',
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'file-powerpoint-o',
+            'application/pdf' => 'file-pdf-o',
+            'text/plain', 'text/richtext', 'text/rtf' => 'file-text-o',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'file-word-o',
+            'video/mpeg', 'video/quicktime', 'video/vnd.mpegurl', 'video/x-msvideo',
+            'video/x-sgi-movie' => 'file-video-o',
+            default => 'file-o',
+        };
     }
 }

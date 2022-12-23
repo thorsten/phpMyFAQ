@@ -37,7 +37,6 @@ class Translation
     /** @var bool Translation already initialized? */
     protected bool $isReady = false;
 
-    /** @var Translation|null */
     private static ?Translation $instance = null;
 
     public static function create(): Translation
@@ -215,12 +214,5 @@ class Translation
     protected function filename(string $language): string
     {
         return self::$instance->languagesDir . DIRECTORY_SEPARATOR . 'language_' . $language . '.php';
-    }
-
-    /**
-     * __clone() Magic method to prevent cloning.
-     */
-    private function __clone()
-    {
     }
 }

@@ -30,16 +30,6 @@ use stdClass;
 class Sqlsrv extends SearchDatabase
 {
     /**
-     * Constructor.
-     *
-     * @param Configuration $config
-     */
-    public function __construct(Configuration $config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search term

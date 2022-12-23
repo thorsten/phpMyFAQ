@@ -33,8 +33,6 @@ class Mysqli implements DatabaseDriver
 {
     /**
      * Tables.
-     *
-     * @var array
      */
     public array $tableNames = [];
 
@@ -47,8 +45,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * The query log string.
-     *
-     * @var string
      */
     private string $sqllog = '';
 
@@ -178,11 +174,7 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchObject($result)
     {
-        if ($result instanceof mysqli_result) {
-            return $result->fetch_object();
-        }
-
-        throw new Exception($this->error());
+        return $result->fetch_object();
     }
 
     /**
@@ -329,9 +321,7 @@ class Mysqli implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0)
     {
-        if (DEBUG) {
-            $this->sqllog .= Utils::debug($query);
-        }
+        $this->sqllog .= Utils::debug($query);
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);

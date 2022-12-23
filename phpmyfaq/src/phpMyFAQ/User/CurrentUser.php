@@ -51,8 +51,6 @@ class CurrentUser extends User
 {
     /**
      * true if CurrentUser is logged in, otherwise false.
-     *
-     * @var bool
      */
     private bool $loggedIn = false;
 
@@ -60,15 +58,11 @@ class CurrentUser extends User
      * Specifies the timeout for the session in minutes. If the session ID was
      * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
      * will be logged out automatically if no cookie was set.
-     *
-     * @var int
      */
     private int $sessionTimeout = PMF_AUTH_TIMEOUT;
 
     /**
      * The Session class object
-     *
-     * @var Session
      */
     private Session $session;
 
@@ -77,48 +71,30 @@ class CurrentUser extends User
      * was not updated for the last $this->_sessionIdTimeout minutes, it will
      * be updated. If set to 0, the session ID will be updated on every click.
      * The session ID timeout must not be greater than Session timeout.
-     *
-     * @var int
      */
     private int $sessionIdTimeout = 1;
 
     /**
-     * LDAP configuration if available.
-     *
-     * @var array<string>
-     */
-    private array $ldapConfig;
-
-    /**
      * Remember me activated or deactivated.
-     *
-     * @var bool
      */
     private bool $rememberMe = false;
 
     /**
      * Number of failed login attempts
-     *
-     * @var int
      */
     private int $loginAttempts = 0;
 
     /**
      * Lockout time in seconds
-     *
-     * @var int
      */
     private int $lockoutTime = 600;
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
         parent::__construct($config);
-        $this->ldapConfig = $config->getLdapConfig();
         $this->session = new Session($config);
     }
 

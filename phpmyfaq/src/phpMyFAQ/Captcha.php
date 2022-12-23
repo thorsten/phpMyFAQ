@@ -29,19 +29,15 @@ use GdImage;
  */
 class Captcha
 {
-    /** @var int */
     public int $captchaLength = 6;
 
-    /** @var string */
     private string $sessionId;
 
-    /** @var bool */
     private bool $userIsLoggedIn = false;
 
     /** @var string[] */
     private array $fonts;
 
-    /** @var string */
     private string $code = '';
 
     /** @var string[] */
@@ -83,19 +79,15 @@ class Captcha
         'Z',
     ];
 
-    /** @var int */
     private int $width = 165;
 
-    /** @var int */
     private int $height = 40;
 
-    /** @var int */
     private int $quality = 60;
 
     /** @var int[] */
     private array $backgroundColor;
 
-    /** @var GdImage */
     private GdImage $img;
 
     /** @var string */
@@ -180,7 +172,7 @@ class Captcha
         $this->drawText();
         if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');
-            imagejpeg($this->img, null, (int)$this->quality);
+            imagejpeg($this->img, null, $this->quality);
         } elseif (function_exists('imagegif')) {
             header('Content-Type: image/gif');
             imagegif($this->img);
@@ -402,13 +394,13 @@ class Captcha
             $colorOne = imagecolorallocate($this->img, $foreColor['r'], $foreColor['g'], $foreColor['b']);
 
             do {
-                $backColor['r'] = ((int)$foreColor['r'] < 100 ? (int)$foreColor['r'] * 2 : random_int(30, 99));
+                $backColor['r'] = ($foreColor['r'] < 100 ? $foreColor['r'] * 2 : random_int(30, 99));
             } while (($backColor['r'] === $this->backgroundColor['r']) && ($backColor['r'] === $foreColor['r']));
             do {
-                $backColor['g'] = ((int)$foreColor['g'] < 100 ? (int)$foreColor['g'] * 2 : random_int(30, 199));
+                $backColor['g'] = ($foreColor['g'] < 100 ? $foreColor['g'] * 2 : random_int(30, 199));
             } while (($backColor['g'] === $this->backgroundColor['g']) && ($backColor['g'] === $foreColor['g']));
             do {
-                $backColor['b'] = ((int)$foreColor['b'] < 100 ? (int)$foreColor['b'] * 2 : random_int(90, 199));
+                $backColor['b'] = ($foreColor['b'] < 100 ? $foreColor['b'] * 2 : random_int(90, 199));
             } while (($backColor['b'] === $this->backgroundColor['b']) && ($backColor['b'] === $foreColor['b']));
             $colorTwo = imagecolorallocate($this->img, $backColor['r'], $backColor['g'], $backColor['b']);
 

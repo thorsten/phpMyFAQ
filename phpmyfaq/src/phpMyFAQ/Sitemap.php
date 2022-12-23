@@ -164,14 +164,13 @@ class Sitemap
                     $this->config->getLanguage()->getLanguage()
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->text = (string)$letters;
+                $oLink->text = $letters;
                 $oLink->class = 'nav-link';
                 $renderLetters .= '<li class="nav-item">' . $oLink->toHtmlAnchor() . '</li>';
             }
         }
-        $renderLetters .= '</ul>';
 
-        return $renderLetters;
+        return $renderLetters . '</ul>';
     }
 
     /**
@@ -312,8 +311,6 @@ class Sitemap
             $oldId = $row->id;
         }
 
-        $renderSiteMap = empty($renderSiteMap) ? '' : '<ul>' . $renderSiteMap . '</ul>';
-
-        return $renderSiteMap;
+        return empty($renderSiteMap) ? '' : '<ul>' . $renderSiteMap . '</ul>';
     }
 }

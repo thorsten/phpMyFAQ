@@ -80,8 +80,6 @@ abstract class AbstractEntry implements \Stringable
 
     /**
      * Magic to use in string context.
-     *
-     * @return string
      */
     public function __toString(): string
     {

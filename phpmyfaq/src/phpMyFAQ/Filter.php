@@ -32,7 +32,6 @@ class Filter
      * @param string     $variableName Variable name
      * @param int        $filter Filter
      * @param mixed|null $default Default value
-     * @return mixed
      */
     public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
@@ -55,7 +54,6 @@ class Filter
      *
      * @param int   $type Filter type
      * @param array $definition Definition
-     * @return array|bool|null
      */
     public static function filterInputArray(int $type, array $definition): array|bool|null
     {
@@ -68,7 +66,6 @@ class Filter
      * @param mixed      $variable Variable
      * @param int        $filter Filter
      * @param mixed|null $default Default value
-     * @return mixed
      */
     public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
@@ -87,10 +84,6 @@ class Filter
 
     /**
      * Static wrapper method for filter_var_array().
-     * @param array     $array
-     * @param array|int $options
-     * @param bool      $addEmpty
-     * @return bool|array|null
      */
     public static function filterArray(
         array $array,
@@ -102,8 +95,6 @@ class Filter
 
     /**
      * Filters a query string.
-     *
-     * @return string
      */
     public static function getFilteredQueryString(): string
     {
@@ -125,8 +116,6 @@ class Filter
 
     /**
      * This method is a polyfill for FILTER_SANITIZE_STRING, deprecated since PHP 8.1.
-     * @param string $string
-     * @return string
      */
     public function filterSanitizeString(string $string): string
     {
@@ -137,9 +126,6 @@ class Filter
 
     /**
      * Removes a lot of HTML attributes.
-     *
-     * @param string $html
-     * @return string
      */
     public static function removeAttributes(string $html = ''): string
     {
@@ -177,10 +163,6 @@ class Filter
         return $html;
     }
 
-    /**
-     * @param string $attribute
-     * @return bool
-     */
     private static function isAttribute(string $attribute): bool
     {
         $globalAttributes = [

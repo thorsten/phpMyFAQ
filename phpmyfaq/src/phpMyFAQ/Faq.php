@@ -61,29 +61,21 @@ class Faq
 {
     /**
      * The current FAQ record.
-     *
-     * @var array
      */
     public array $faqRecord = [];
 
     /**
      * All current FAQ records in an array.
-     *
-     * @var array
      */
     public array $faqRecords = [];
 
     /**
      * Plural form support.
-     *
-     * @var Plurals
      */
     private Plurals $plurals;
 
     /**
      * Users.
-     *
-     * @var int
      */
     private int $user = -1;
 
@@ -96,8 +88,6 @@ class Faq
 
     /**
      * Flag for Group support.
-     *
-     * @var bool
      */
     private bool $groupSupport = false;
 
@@ -937,8 +927,6 @@ class Faq
 
     /**
      * Creates a new FAQ.
-     *
-     * @param FaqEntity $faq
      */
     public function create(FaqEntity $faq): int
     {
@@ -1574,7 +1562,7 @@ class Faq
      */
     public function getRecordPreview(int $recordId, int $wordCount = 12): string
     {
-        if (isset($this->faqRecord['id']) && ((int)$this->faqRecord['id'] === (int)$recordId)) {
+        if (isset($this->faqRecord['id']) && ((int)$this->faqRecord['id'] === $recordId)) {
             $answerPreview = $this->faqRecord['content'];
 
             return Utils::makeShorterText($answerPreview, $wordCount);
@@ -2131,9 +2119,7 @@ class Faq
                 fd.lang = fv.lang';
         $needAndOp = true;
         if ((!empty($categoryId)) && $categoryId > 0) {
-            if ($needAndOp) {
-                $query .= ' AND';
-            }
+            $query .= ' AND';
             $query .= ' (fcr.category_id = ' . $categoryId;
             if ($bDownwards) {
                 $query .= $this->getCatidWhereSequence($categoryId, 'OR');
@@ -2142,38 +2128,25 @@ class Faq
             $needAndOp = true;
         }
         if ((!empty($date)) && Utils::isLikeOnPMFDate($date)) {
-            if ($needAndOp) {
-                $query .= ' AND';
-            }
+            $query .= ' AND';
             $query .= " fd.updated LIKE '" . $date . "'";
             $needAndOp = true;
         }
         if ((!empty($lang)) && Utils::isLanguage($lang)) {
-            if ($needAndOp) {
-                $query .= ' AND';
-            }
+            $query .= ' AND';
             $query .= " fd.lang = '" . $this->config->getDb()->escape($lang) . "'";
             $needAndOp = true;
         }
         switch ($queryType) {
             case FAQ_QUERY_TYPE_APPROVAL:
-                if ($needAndOp) {
-                    $query .= ' AND';
-                }
+                $query .= ' AND';
                 $query .= " fd.active = '" . FAQ_SQL_ACTIVE_NO . "'";
                 break;
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
-                if ($needAndOp) {
-                    $query .= ' AND';
-                }
-                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
-                break;
             default:
-                if ($needAndOp) {
-                    $query .= ' AND';
-                }
+                $query .= ' AND';
                 $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
                 break;
         }
