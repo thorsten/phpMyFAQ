@@ -53,7 +53,7 @@ if (
 
     var_dump($numRecordsByCat);
 
-    foreach ($category->getCategoryTree() as $categoryId => $cat) {
+    foreach ($category->getCategoryTree() as $cat) {
         ?>
         <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
           <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">

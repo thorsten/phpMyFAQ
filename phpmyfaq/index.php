@@ -225,7 +225,7 @@ if (!is_null($user) && $user instanceof CurrentUser) {
     } else {
         $currentGroups = [-1];
     }
-    if (0 == count($currentGroups)) {
+    if (0 == (is_countable($currentGroups) ? count($currentGroups) : 0)) {
         $currentGroups = [-1];
     }
 } else {
@@ -390,24 +390,22 @@ if (!is_null($solutionId)) {
     $title = ' -  powered by phpMyFAQ ' . $faqConfig->getVersion();
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
-    if (is_array($faqData)) {
-        $id = $faqData['id'];
-        $lang = $faqData['lang'];
-        $title = ' - ' . $faq->getRecordTitle($id);
-        $keywords = ',' . $faq->getRecordKeywords($id);
-        $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags($faqData['content']), 12));
-        $url = sprintf(
-            '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
-            $faqConfig->getDefaultUrl(),
-            $sids,
-            $faqData['category_id'],
-            $id,
-            $lang
-        );
-        $faqLink = new Link($url, $faqConfig);
-        $faqLink->itemTitle = $faqData['question'];
-        $currentPageUrl = $faqLink->toString(true);
-    }
+    $id = $faqData['id'];
+    $lang = $faqData['lang'];
+    $title = ' - ' . $faq->getRecordTitle($id);
+    $keywords = ',' . $faq->getRecordKeywords($id);
+    $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags($faqData['content']), 12));
+    $url = sprintf(
+        '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+        $faqConfig->getDefaultUrl(),
+        $sids,
+        $faqData['category_id'],
+        $id,
+        $lang
+    );
+    $faqLink = new Link($url, $faqConfig);
+    $faqLink->itemTitle = $faqData['question'];
+    $currentPageUrl = $faqLink->toString(true);
 }
 
 //
@@ -640,12 +638,12 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             $faqConfig->get('main.privacyURL'),
             Translation::get('msgPrivacyNote')
         ),
-        'backToHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
-        'allCategories' => '<a class="nav-link" href="./showcat.html">' .
-            Translation::get('msgShowAllCategories') . '</a>',
+        'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
+        'allCategories' => '<a class="nav-link" href="./show-categories.html">' . Translation::get('msgShowAllCategories') . '</a>',
         'faqOverview' => '<a href="./overview.html">' . Translation::get('faqOverview') . '</a>',
         'showSitemap' => '<a href="./sitemap/A/' . $faqLangCode . '.html">' . Translation::get('msgSitemap') . '</a>',
-        'msgUserRemoval' => '<a href="./request-removal.html">' . Translation::get('msgUserRemoval') . '</a>'
+        'msgUserRemoval' => '<a href="./request-removal.html">' . Translation::get('msgUserRemoval') . '</a>',
+        'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
     ];
 } else {
     $tplNavigation = [
@@ -679,8 +677,9 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
         'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' .
             Translation::get('msgSitemap') . '</a>',
-        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' .
-            Translation::get('msgUserRemoval') . '</a>',
+        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . Translation::get('msgUserRemoval') .
+            '</a>',
+        'breadcrumbHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
     ];
 }
 
@@ -764,15 +763,13 @@ $template->parse(
     ]
 );
 
-if (DEBUG) {
-    $template->parseBlock(
-        'index',
-        'debugMode',
-        [
-            'debugQueries' => $faqConfig->getDb()->log(),
-        ]
-    );
-}
+$template->parseBlock(
+    'index',
+    'debugMode',
+    [
+        'debugQueries' => $faqConfig->getDb()->log(),
+    ]
+);
 
 //
 // Redirect old "action=artikel" URLs via 301 to new location

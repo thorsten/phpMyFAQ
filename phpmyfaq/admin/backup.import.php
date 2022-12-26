@@ -72,7 +72,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
             } else {
                 $ok = 0;
             }
-        } catch (SodiumException $e) {
+        } catch (SodiumException) {
             echo 'This file cannot be verified.<br>';
             $ok = 0;
         }

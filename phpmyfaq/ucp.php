@@ -7,15 +7,16 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-01-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-01-12
  */
 
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -25,12 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->isLoggedIn()) {
     try {
         $faqSession->userTracking('user_control_panel', $user->getUserId());
-    } catch (Exception $e) {
-        // @todo handle the exception
+    } catch (Exception $exception) {
+        $faqConfig->getLogger()->error('Tracking of user control panel', ['exception' => $exception->getMessage()]);
     }
 
     if ($faqConfig->get('main.enableGravatarSupport')) {
-        $gravatar = new Gravatar($faqConfig);
+        $gravatar = new Gravatar();
         $gravatarImg = sprintf(
             '<a target="_blank" href="https://www.gravatar.com">%s</a>',
             $gravatar->getImage(
@@ -45,21 +46,21 @@ if ($user->isLoggedIn()) {
     $template->parse(
         'mainPageContent',
         [
-            'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
+            'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
             'ucpGravatarImage' => $gravatarImg,
             'userid' => $user->getUserId(),
             'csrf' => $user->getCsrfTokenFromSession(),
             'readonly' => $faqConfig->isLdapActive() ? 'readonly' : '',
-            'msgRealName' => $PMF_LANG['ad_user_name'],
+            'msgRealName' => Translation::get('ad_user_name'),
             'realname' => $user->getUserData('display_name'),
-            'msgEmail' => $PMF_LANG['msgNewContentMail'],
+            'msgEmail' => Translation::get('msgNewContentMail'),
             'email' => $user->getUserData('email'),
-            'msgIsVisible' => $PMF_LANG['ad_user_data_is_visible'],
+            'msgIsVisible' => Translation::get('ad_user_data_is_visible'),
             'checked' => (int)$user->getUserData('is_visible') === 1 ? 'checked' : '',
-            'msgPassword' => $PMF_LANG['ad_auth_passwd'],
-            'msgConfirm' => $PMF_LANG['ad_user_confirm'],
-            'msgSave' => $PMF_LANG['msgSave'],
-            'msgCancel' => $PMF_LANG['msgCancel'],
+            'msgPassword' => Translation::get('ad_auth_passwd'),
+            'msgConfirm' => Translation::get('ad_user_confirm'),
+            'msgSave' => Translation::get('msgSave'),
+            'msgCancel' => Translation::get('msgCancel'),
         ]
     );
 
@@ -67,7 +68,7 @@ if ($user->isLoggedIn()) {
         'index',
         'breadcrumb',
         [
-            'breadcrumbHeadline' => $PMF_LANG['headerUserControlPanel']
+            'breadcrumbHeadline' => Translation::get('headerUserControlPanel')
         ]
     );
 } else {

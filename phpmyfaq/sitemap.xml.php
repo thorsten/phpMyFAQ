@@ -16,12 +16,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-06-26
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-06-26
  */
 
 use phpMyFAQ\Date;
@@ -53,8 +53,10 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
     exit();
 }
 
-// {{{ Functions
-function buildSiteMapNode($location, $lastModified = null)
+/**
+ * @param string|null $lastModified
+ */
+function buildSiteMapNode(string $location, string $lastModified = null): string
 {
     if (empty($lastModified)) {
         $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
@@ -125,7 +127,7 @@ foreach ($items as $item) {
 $siteMap .= '</urlset>';
 
 $getGzip = Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
-if (!is_null($getGzip) && (1 == $getGzip)) {
+if ((1 === $getGzip)) {
     if (function_exists('gzencode')) {
         $sitemapGz = gzencode($siteMap);
         header('Content-Type: application/x-gzip');

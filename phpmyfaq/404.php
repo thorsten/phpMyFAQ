@@ -22,8 +22,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('404', 0);
-} catch (Exception $e) {
-    // @todo handle the exception
+} catch (Exception $exception) {
+    $faqConfig->getLogger()->error('Tracking of 404 page', ['exception' => $exception->getMessage()]);
 }
 
 $template->parse('mainPageContent', []);

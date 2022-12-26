@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('overview', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 

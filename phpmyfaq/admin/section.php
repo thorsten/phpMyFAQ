@@ -57,7 +57,7 @@ if ($sectionAction == 'update_members' && $user->perm->hasPermission($user->getU
     $message = '';
     $sectionAction = $defaultSectionAction;
     $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
-    $sectionMembers = isset($_POST['section_members']) ? $_POST['section_members'] : [];
+    $sectionMembers = $_POST['section_members'] ?? [];
 
     if ($sectionId == 0) {
         $message .= Alert::danger('ad_user_error_noId');
@@ -243,7 +243,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
           <label class="col-lg-2 col-form-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>
           <div class="col-lg-3">
             <input type="text" name="section_name" id="section_name" autofocus class="form-control"
-                   value="<?= (isset($sectionName) ? $sectionName : '') ?>" tabindex="1">
+                   value="<?= ($sectionName ?? '') ?>" tabindex="1">
           </div>
         </div>
 
@@ -253,7 +253,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
           <div class="col-lg-3">
             <textarea name="section_description" id="section_description" cols="<?= $descriptionCols ?>"
                       rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
-            ><?= (isset($sectionDescription) ? $sectionDescription : '') ?></textarea>
+            ><?= ($sectionDescription ?? '') ?></textarea>
           </div>
         </div>
 
@@ -333,7 +333,7 @@ if ('list' === $sectionAction) {
               </label>
               <div class="col-lg-9">
                 <input id="update_section_name" type="text" name="name" class="form-control"
-                       tabindex="1" value="<?= (isset($sectionName) ? $sectionName : '') ?>">
+                       tabindex="1" value="<?= ($sectionName ?? '') ?>">
               </div>
             </div>
             <div class="row">
@@ -343,7 +343,7 @@ if ('list' === $sectionAction) {
               <div class="col-lg-9">
                 <textarea name="description" id="update_section_description" cols="<?= $descriptionCols ?>"
                           rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
-                ><?= isset($sectionDescription) ? $sectionDescription : '' ?></textarea>
+                ><?= $sectionDescription ?? '' ?></textarea>
               </div>
             </div>
           </div>

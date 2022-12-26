@@ -81,11 +81,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     foreach ($report->getReportingData() as $data) {
         echo '<tr>';
         if ($useCategory) {
-            if (0 !== $data['category_parent']) {
-                printf('<td>%s</td>', $data['category_name']);
-            } else {
-                printf('<td>%s</td>', $data['category_name']);
-            }
+            printf('<td>%s</td>', $data['category_name']);
         }
         if ($useSubcategory) {
             if (0 != $data['category_parent']) {

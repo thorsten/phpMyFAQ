@@ -15,7 +15,6 @@
  * @since     2012-02-12
  */
 
-use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,9 +30,17 @@ if (!is_null($error)) {
 
 try {
     $faqSession->userTracking('login', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
+
+$template->parseBlock(
+    'mainPageContent',
+    'useSignInWithMicrosoft',
+    [
+        'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+    ]
+);
 
 $template->parse(
     'mainPageContent',

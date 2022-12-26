@@ -84,7 +84,7 @@ if (!is_null($user) && $user instanceof CurrentUser) {
     } else {
         $currentGroups = [-1];
     }
-    if (0 == count($currentGroups)) {
+    if (0 == (is_countable($currentGroups) ? count($currentGroups) : 0)) {
         $currentGroups = [-1];
     }
 } else {
@@ -105,7 +105,7 @@ $category->setUser($currentUser);
 
 try {
     $pdf = new Pdf($faq, $category, $faqConfig);
-} catch (Exception $e) {
+} catch (Exception) {
     // handle exception
 }
 $http = new HttpHelper();

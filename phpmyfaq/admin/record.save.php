@@ -224,7 +224,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
                         ]
                     );
                 }
-            } catch (Missing404Exception $e) {
+            } catch (Missing404Exception) {
                 // @todo handle exception
             }
         }

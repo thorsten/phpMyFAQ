@@ -40,7 +40,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
         if ($att && $att->delete()) {
             echo Alert::success('ad_att_delsuc');
         }
-    } catch (AttachmentException $e) {
+    } catch (AttachmentException) {
         echo Alert::danger('ad_att_delfail');
     }
 

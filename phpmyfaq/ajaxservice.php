@@ -209,8 +209,8 @@ switch ($action) {
         ) {
             try {
                 $faqSession->userTracking('save_comment', $id);
-            } catch (Exception $e) {
-                // @todo handle the exception
+            } catch (Exception $exception) {
+                $faqConfig->getLogger()->error('Tracking of save new comment', ['exception' => $exception->getMessage()]);
             }
 
             $commentEntity = new Comment();
@@ -308,7 +308,7 @@ switch ($action) {
             } else {
                 try {
                     $faqSession->userTracking('error_save_comment', $id);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // @todo handle the exception
                 }
                 $message = ['error' => Translation::get('err_SaveComment')];
@@ -376,13 +376,13 @@ switch ($action) {
                 $isNew = false;
                 try {
                     $faqSession->userTracking('save_new_translation_entry', 0);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // @todo handle the exception
                 }
             } else {
                 try {
                     $faqSession->userTracking('save_new_entry', 0);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // @todo handle the exception
                 }
             }
@@ -459,7 +459,7 @@ switch ($action) {
             try {
                 $notification = new Notification($faqConfig);
                 $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // @todo handle exception in v3.2
             }
 
@@ -577,7 +577,7 @@ switch ($action) {
                                 $oLink->toHtmlAnchor(),
                                 $faqHelper->renderAnswerPreview($result->answer, 10)
                             );
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             // handle exception
                         }
                     }
@@ -588,7 +588,7 @@ switch ($action) {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     try {
                         $questionHelper->sendSuccessMail($questionData, $categories);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         // @todo Handle exception
                     }
                     $message = ['success' => Translation::get('msgAskThx4Mail')];
@@ -597,7 +597,7 @@ switch ($action) {
                 $questionHelper = new QuestionHelper($faqConfig, $cat);
                 try {
                     $questionHelper->sendSuccessMail($questionData, $categories);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // @todo Handle exception
                 }
                 $message = ['success' => Translation::get('msgAskThx4Mail')];
@@ -624,7 +624,7 @@ switch ($action) {
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
             try {
                 $message = $registration->createUser($userName, $fullName, $email, $isVisible);
-            } catch (TransportExceptionInterface | \phpMyFAQ\Core\Exception $e) {
+            } catch (TransportExceptionInterface | \phpMyFAQ\Core\Exception) {
                 // handle exceptions
             }
         } else {
@@ -643,7 +643,7 @@ switch ($action) {
         if (isset($vote) && $rating->check($recordId, $userIp) && $vote > 0 && $vote < 6) {
             try {
                 $faqSession->userTracking('save_voting', $recordId);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // @todo handle the exception
             }
 
@@ -665,14 +665,14 @@ switch ($action) {
         } elseif (!$rating->check($recordId, $userIp)) {
             try {
                 $faqSession->userTracking('error_save_voting', $recordId);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // @todo handle the exception
             }
             $message = ['error' => Translation::get('err_VoteTooMuch')];
         } else {
             try {
                 $faqSession->userTracking('error_save_voting', $recordId);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // @todo handle the exception
             }
             $message = ['error' => Translation::get('err_noVote')];
@@ -803,7 +803,7 @@ switch ($action) {
         $success = $user->setUserData($userData);
 
         if (0 !== strlen($password) && 0 !== strlen($confirm)) {
-            foreach ($user->getAuthContainer() as $author => $auth) {
+            foreach ($user->getAuthContainer() as $auth) {
                 if ($auth->setReadOnly()) {
                     continue;
                 }
@@ -837,12 +837,12 @@ switch ($action) {
             if ($loginExist && ($email == $user->getUserData('email'))) {
                 try {
                     $newPassword = $user->createPassword();
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // handle exception
                 }
                 try {
                     $user->changePassword($newPassword);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // handle exception
                 }
                 $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .

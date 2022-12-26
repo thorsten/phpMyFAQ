@@ -27,7 +27,7 @@ use stdClass;
  *
  * @package phpMyFAQ\Search\Database
  */
-class Sqlsrv extends SearchDatabase
+class Sqlsrv extends SearchDatabase implements DatabaseInterface
 {
     /**
      * Prepares the search and executes it.
@@ -36,7 +36,7 @@ class Sqlsrv extends SearchDatabase
      * @throws \Exception
      * @return mixed
      */
-    public function search(string $searchTerm)
+    public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);

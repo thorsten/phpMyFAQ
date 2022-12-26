@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-08-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-23
  */
 
 use phpMyFAQ\Filter;
@@ -36,10 +36,11 @@ if (!is_null($archived)) {
 } else {
     $writeNewsHeader = ' ' . $PMF_LANG['msgNews'];
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
+    $archived = false;
 }
 
 $startPageCategories = $category->getHomeCategories();
-if (count($startPageCategories) > 0) {
+if ((is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0) {
     $template->parseBlock(
         'mainPageContent',
         'startPageCategories',

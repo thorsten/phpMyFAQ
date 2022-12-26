@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-11-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-11-12
  */
 
 use phpMyFAQ\Captcha;
@@ -20,6 +20,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -48,7 +49,7 @@ $faqSource['keywords'] = 'writeSourceKeywords';
 
 try {
     $faqSession->userTracking('new_translation_entry', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -69,43 +70,47 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     $template->parseBlock(
         'mainPageContent',
         'enableWysiwygEditor',
-        array(
+        [
             'currentTimestamp' => $_SERVER['REQUEST_TIME'],
-        )
+        ]
     );
 }
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
         'writeSourceFaqId' => $faqSource['id'],
         'writeSourceTitle' => $faqSource['title'],
         'writeSourceContent' => strip_tags($faqSource['content']),
         'writeSourceKeywords' => $faqSource['keywords'],
         'categoryId' => $categoryId,
-        'msgNewTranslationHeader' => $PMF_LANG['msgNewTranslationHeader'],
-        'msgNewTranslationAddon' => $PMF_LANG['msgNewTranslationAddon'],
-        'msgNewTransSourcePane' => $PMF_LANG['msgNewTransSourcePane'],
-        'msgNewTranslationPane' => $PMF_LANG['msgNewTranslationPane'],
+        'msgNewTranslationHeader' => Translation::get('msgNewTranslationHeader'),
+        'msgNewTranslationAddon' => Translation::get('msgNewTranslationAddon'),
+        'msgNewTransSourcePane' => Translation::get('msgNewTransSourcePane'),
+        'msgNewTranslationPane' => Translation::get('msgNewTranslationPane'),
         'writeSendAdress' => '?' . $sids . 'action=save',
         'defaultContentName' => ($user ? $user->getUserData('display_name') : ''),
         'defaultContentMail' => ($user ? $user->getUserData('email') : ''),
-        'msgNewTranslationQuestion' => $PMF_LANG['msgNewContentTheme'],
-        'msgNewTranslationAnswer' => $PMF_LANG['msgNewContentArticle'],
-        'msgNewTranslationName' => $PMF_LANG['msgNewTranslationName'],
-        'msgNewTranslationMail' => $PMF_LANG['msgNewTranslationMail'],
-        'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
+        'msgNewTranslationQuestion' => Translation::get('msgNewContentTheme'),
+        'msgNewTranslationAnswer' => Translation::get('msgNewContentArticle'),
+        'msgNewTranslationName' => Translation::get('msgNewTranslationName'),
+        'msgNewTranslationMail' => Translation::get('msgNewTranslationMail'),
+        'msgNewTranslationKeywords' => Translation::get('msgNewTranslationKeywords'),
         'writeTransFaqLanguage' => $translationLanguage,
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'translate', $PMF_LANG['msgCaptcha'], $auth),
-        'msgNewTranslationSubmit' => $PMF_LANG['msgNewTranslationSubmit'],
-        'tinyMCELanguage' => (Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en'),
-    )
+        'captchaFieldset' => $captchaHelper->renderCaptcha(
+            $captcha,
+            'translate',
+            Translation::get('msgCaptcha'),
+            $auth
+        ),
+        'msgNewTranslationSubmit' => Translation::get('msgNewTranslationSubmit'),
+        'tinyMCELanguage' => (Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en')]
 );
 
 $template->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => $PMF_LANG['msgNewTranslationHeader']
+        'breadcrumbHeadline' => Translation::get('msgNewTranslationHeader')
     ]
 );

@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('fulltext_search', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -104,7 +104,7 @@ if (!is_null($inputTag) && '' !== $inputTag) {
 
     $recordIds = $tagging->getFaqsByIntersectionTags($tags);
 
-    if (0 === count($recordIds)) {
+    if (0 === (is_countable($recordIds) ? count($recordIds) : 0)) {
         $searchResult = '';
     } else {
         $relatedTags = [];
@@ -125,14 +125,12 @@ if (!is_null($inputTag) && '' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, function ($a, $b) {
-            return ($b - $a);
-        });
+        uasort($relatedTags, fn($a, $b) => $b - $a);
         $numTags = 0;
         $relTags = '';
 
         foreach ($relatedTags as $tagId => $relevance) {
-            $relTags .= $tagHelper->renderRelatedTag((int)$tagId, $tagging->getTagNameById($tagId), $relevance);
+            $relTags .= $tagHelper->renderRelatedTag($tagId, $tagging->getTagNameById($tagId), $relevance);
             if ($numTags++ > 20) {
                 break;
             }
@@ -171,7 +169,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     $inputSearchTerm = stripslashes($inputSearchTerm);
     try {
         $faqSearch->logSearchTerm($inputSearchTerm);
-    } catch (Exception $e) {
+    } catch (Exception) {
         // @todo handle exception
     }
 } else {
@@ -183,7 +181,7 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 try {
     $faqSession->userTracking('fulltext_search', $inputSearchTerm);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -241,9 +239,7 @@ $categoryHelper = new CategoryHelper();
 $categoryHelper->setCategory($category);
 
 $searchHelper = new SearchHelper($faqConfig);
-if (!is_null($inputSearchTerm)) {
-    $searchHelper->setSearchTerm($inputSearchTerm);
-}
+$searchHelper->setSearchTerm($inputSearchTerm);
 $searchHelper->setCategory($category);
 $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals($plr);
@@ -252,7 +248,7 @@ $searchHelper->setSessionId($sids);
 if ('' == $searchResult && !is_null($inputSearchTerm)) {
     try {
         $searchResult = $searchHelper->renderSearchResult($faqSearchResult, $page);
-    } catch (Exception $e) {
+    } catch (Exception) {
         // @todo handle exception
     }
 }

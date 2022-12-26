@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('open_questions', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -39,5 +39,5 @@ try {
             'renderOpenQuestionTable' => $faq->renderOpenQuestions()
         ]
     );
-} catch (Exception $e) {
+} catch (Exception) {
 }

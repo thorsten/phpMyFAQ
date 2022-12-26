@@ -66,9 +66,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 printf(
                     '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s">' .
                     '<i aria-hidden="true" class="fa fa-edit" data-btn-id="%d"></i></a></td>',
-                    (int)$key,
+                    $key,
                     Translation::get('ad_user_edit'),
-                    (int)$key,
+                    $key,
                 );
 
                 printf(

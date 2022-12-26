@@ -76,7 +76,7 @@ if ($groupAction == 'update_members' && $user->perm->hasPermission($user->getUse
     $message = '';
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
-    $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : [];
+    $groupMembers = $_POST['group_members'] ?? [];
 
     if ($groupId == 0) {
         $message .= Alert::danger('ad_user_error_noId');
@@ -108,7 +108,7 @@ if ($groupAction == 'update_rights' && $user->perm->hasPermission($user->getUser
     } else {
         $user = new User($faqConfig);
         $perm = $user->perm;
-        $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : [];
+        $groupRights = $_POST['group_rights'] ?? [];
         if (!$perm->refuseAllGroupRights($groupId)) {
             $message .= Alert::danger('ad_msg_mysqlerr');
         }
@@ -291,7 +291,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
           <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
           <div class="col-lg-3">
             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
-                   value="<?= (isset($groupName) ? $groupName : '') ?>" tabindex="1">
+                   value="<?= ($groupName ?? '') ?>" tabindex="1">
           </div>
         </div>
 
@@ -301,7 +301,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
           <div class="col-lg-3">
             <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
                       rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
-            ><?= (isset($groupDescription) ? $groupDescription : '') ?></textarea>
+            ><?= ($groupDescription ?? '') ?></textarea>
           </div>
         </div>
 
@@ -461,7 +461,7 @@ if ('list' === $groupAction) {
               </label>
               <div class="col-lg-9">
                 <input id="update_group_name" type="text" name="name" class="form-control"
-                       tabindex="1" value="<?= (isset($groupName) ? $groupName : '') ?>">
+                       tabindex="1" value="<?= ($groupName ?? '') ?>">
               </div>
             </div>
             <div class="row">
@@ -472,7 +472,7 @@ if ('list' === $groupAction) {
                 <textarea id="update_group_description" name="description" class="form-control"
                           rows="<?= $descriptionRows ?>"
                           tabindex="2"><?php
-                            echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
+                            echo($groupDescription ?? '') ?></textarea>
               </div>
             </div>
             <div class="row">

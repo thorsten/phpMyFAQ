@@ -131,7 +131,7 @@ if (!is_null($user) && $user instanceof CurrentUser) {
     } else {
         $currentGroups = [-1];
     }
-    if (0 == count($currentGroups)) {
+    if (0 == (is_countable($currentGroups) ? count($currentGroups) : 0)) {
         $currentGroups = [-1];
     }
 } else {
@@ -177,7 +177,7 @@ switch ($action) {
             } else {
                 $http->setStatus(404);
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             $http->setStatus(400);
         }
         break;
@@ -196,7 +196,7 @@ switch ($action) {
     case 'groups':
         $groupPermission = new MediumPermission($faqConfig);
         $result = $groupPermission->getAllGroups($user);
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $http->setStatus(404);
         }
         break;
@@ -204,7 +204,7 @@ switch ($action) {
     case 'tags':
         $tags = new Tags($faqConfig);
         $result = $tags->getPopularTagsAsArray(16);
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $http->setStatus(404);
         }
         break;
@@ -212,7 +212,7 @@ switch ($action) {
     case 'open-questions':
         $questions = new Question($faqConfig);
         $result = $questions->getAllOpenQuestions();
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $http->setStatus(404);
         }
         break;
@@ -220,7 +220,7 @@ switch ($action) {
     case 'searches':
         $search = new Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $http->setStatus(404);
         }
         break;
@@ -228,7 +228,7 @@ switch ($action) {
     case 'comments':
         $comment = new Comments($faqConfig);
         $result = $comment->getCommentsData($recordId, CommentType::FAQ);
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $http->setStatus(404);
         }
         break;
@@ -237,7 +237,7 @@ switch ($action) {
         $attachments = $result = [];
         try {
             $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
-        } catch (AttachmentException $e) {
+        } catch (AttachmentException) {
             $result = [];
         }
         foreach ($attachments as $attachment) {
@@ -254,7 +254,7 @@ switch ($action) {
     case 'news':
         $news = new News($faqConfig);
         $result = $news->getLatestData(false, true, true);
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $http->setStatus(404);
         }
         break;
@@ -270,7 +270,7 @@ switch ($action) {
         if (!is_null($categoryId)) {
             try {
                 $result = $faq->getAllFaqPreviewsByCategoryId($categoryId);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $http->setStatus(400);
             }
         }
@@ -281,7 +281,7 @@ switch ($action) {
             $recordIds = $tags->getFaqsByTagId($tagId);
             try {
                 $result = $faq->getRecordsByIds($recordIds);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $http->setStatus(400);
             }
         }

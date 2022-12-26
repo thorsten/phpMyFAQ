@@ -28,7 +28,7 @@ use stdClass;
  *
  * @package phpMyFAQ\Search\Database
  */
-class Mysqli extends SearchDatabase
+class Mysqli extends SearchDatabase implements DatabaseInterface
 {
     /**
      * Constructor.

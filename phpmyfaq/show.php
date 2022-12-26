@@ -38,7 +38,7 @@ $categoryHelper = new CategoryHelper();
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {
         $faqSession->userTracking('show_category', $selectedCategoryId);
-    } catch (Exception $e) {
+    } catch (Exception) {
         // @todo handle the exception
     }
 
@@ -59,7 +59,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         if (empty($records)) {
             $records = $categoryHelper->renderCategoryTree();
         }
-        if (count($category->getChildNodes((int) $selectedCategoryId))) {
+        if (is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) {
             $categoryFaqsHeader = Translation::get('msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree();
             $template->parseBlock(
@@ -110,7 +110,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
 } else {
     try {
         $faqSession->userTracking('show_all_categories', 0);
-    } catch (Exception $e) {
+    } catch (Exception) {
         // @todo handle the exception
     }
 

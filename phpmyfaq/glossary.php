@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('glossary', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -36,7 +36,7 @@ $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
 $glossary = new Glossary($faqConfig);
 $glossaryItems = $glossary->getAllGlossaryItems();
-$numItems = count($glossaryItems);
+$numItems = is_countable($glossaryItems) ? count($glossaryItems) : 0;
 $itemsPerPage = 10;
 
 $baseUrl = sprintf(
@@ -48,11 +48,11 @@ $baseUrl = sprintf(
 // Pagination options
 $options = [
     'baseUrl' => $baseUrl,
-    'total' => count($glossaryItems),
+    'total' => is_countable($glossaryItems) ? count($glossaryItems) : 0,
     'perPage' => $itemsPerPage,
     'pageParamName' => 'page',
 ];
-$pagination = new Pagination($faqConfig, $options);
+$pagination = new Pagination($options);
 
 if (0 < $numItems) {
     $output = [];

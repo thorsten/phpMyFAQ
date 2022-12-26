@@ -54,9 +54,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_UNSAFE_RAW);
           if ($csrfChecked && $toggle === 'toggle') {
               $isVisible = $question->getVisibility($questionId);
-              if (!is_null($isVisible)) {
-                  $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
-              }
+              $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
           }
 
             echo '<div id="returnMessage"></div>';

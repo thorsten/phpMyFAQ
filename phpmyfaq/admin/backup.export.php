@@ -93,7 +93,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
                 $httpHelper->addExtraHeader($header);
 
                 echo $backupQueries;
-            } catch (SodiumException $e) {
+            } catch (SodiumException) {
                 // Handle exception
             }
             break;
@@ -105,7 +105,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
                 $httpHelper->addExtraHeader($header);
 
                 echo $backupQueries;
-            } catch (SodiumException $e) {
+            } catch (SodiumException) {
                 // Handle exception
             }
             break;

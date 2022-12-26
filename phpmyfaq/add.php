@@ -53,13 +53,13 @@ if (!is_null($showCaptcha)) {
 
 try {
     $faqSession->userTracking('new_entry', 0);
-} catch (Exception $e) {
-    // @todo handle the exception
+} catch (Exception $exception) {
+    $faqConfig->getLogger()->error('Tracking of new entry', ['exception' => $exception->getMessage()]);
 }
 
 // Get possible user input
 $selectedQuestion = Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
-$selectedCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$selectedCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, -1);
 
 $question = $readonly = '';
 if (!is_null($selectedQuestion)) {

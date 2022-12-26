@@ -41,7 +41,7 @@ RewriteBase /
 ErrorDocument 404 /index.php?action=404
 
 # show all categories
-RewriteCond %{REQUEST_URI}          /showcat\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /show-categories\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=show [L,QSA]
 
 # the search page
@@ -121,11 +121,11 @@ RewriteRule sitemap.gz$                                             sitemap.xml.
 RewriteRule sitemap.xml.gz$                                         sitemap.xml.php?gz=1 [L]
 
 # PMF tags page with page count
-# * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.htm
+# * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
 
 # PMF tags page
-# * http://[...]/tags/<ID>/<HEADER>.htm
+# * http://[...]/tags/<ID>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
 
 # REST API v2.0
@@ -192,6 +192,6 @@ RewriteRule api/v2.2/faqs/latest                   api.php?action=faqs&filter=la
 RewriteRule api/v2.2/faqs/sticky                   api.php?action=faqs&filter=sticky [L,QSA]
 RewriteRule api/v2.2/faqs/tags/([0-9]+)            api.php?action=faqs&tagId=$1 [L,QSA]
 RewriteRule api/v2.2/faqs                          api.php?action=faqs [L,QSA]
-RewriteRule api/v2.2/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.2/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId=$1&recordId=$2 [L,QSA]
+RewriteRule api/v2.2/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.2/register                      api.php?action=register [L,QSA]

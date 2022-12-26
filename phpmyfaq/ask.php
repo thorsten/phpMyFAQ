@@ -42,7 +42,7 @@ if (!is_null($showCaptcha)) {
 
 try {
     $faqSession->userTracking('ask_question', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 

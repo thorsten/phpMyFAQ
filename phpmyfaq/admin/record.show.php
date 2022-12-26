@@ -292,7 +292,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
         // Sort search result ordered by category ID
         ksort($faqsFound);
-        foreach ($faqsFound as $categoryId => $faqFound) {
+        foreach ($faqsFound as $faqFound) {
             foreach ($faqFound as $singleFaq) {
                 $faq->faqRecords[] = $singleFaq;
             }

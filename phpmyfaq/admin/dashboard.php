@@ -146,7 +146,7 @@ $faqSession = new Session($faqConfig);
           <ul class="list-unstyled">
               <?php
                 $inactiveFaqs = $faq->getInactiveFaqsData();
-                if (count($inactiveFaqs) > 0) {
+                if ((is_countable($inactiveFaqs) ? count($inactiveFaqs) : 0) > 0) {
                     foreach ($inactiveFaqs as $inactiveFaq) {
                         printf('<li><a href="%s">%s</a></li>', $inactiveFaq['url'], $inactiveFaq['question']);
                     }

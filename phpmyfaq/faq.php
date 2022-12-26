@@ -89,7 +89,7 @@ if (isset($faq->faqRecord['id'])) {
 
 try {
     $faqSession->userTracking('article_view', $recordId);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -160,7 +160,7 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
     try {
         $attList = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
         $answer .= $attachmentHelper->renderAttachmentList($attList);
-    } catch (AttachmentException $e) {
+    } catch (AttachmentException) {
         // handle exception
     }
 }
@@ -168,7 +168,7 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
 // List all categories for this faq
 $htmlAllCategories = '';
 $multiCategories = $category->getCategoriesFromFaq($recordId);
-if (count($multiCategories) > 1) {
+if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
     foreach ($multiCategories as $multiCat) {
         $path = $category->getPath($multiCat['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
         if ('' === trim($path)) {
@@ -186,7 +186,7 @@ try {
             $faq->faqRecord['keywords']
         )
     );
-} catch (Exception $e) {
+} catch (Exception) {
     // handle exception
 }
 
@@ -250,7 +250,7 @@ $translationUrl = sprintf(
 
 $availableLanguages = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
-if (!empty($availableLanguages) && count($availableLanguages) > 1) {
+if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
     $template->parseBlock(
         'mainPageContent',
         'switchLanguage',
@@ -262,7 +262,7 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
 
 if (
     $user->perm->hasPermission($user->getUserId(), 'addtranslation') &&
-    !empty($availableLanguages) && count($availableLanguages) > 1
+    !empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1
 ) {
     $template->parseBlock(
         'mainPageContent',

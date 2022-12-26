@@ -28,7 +28,7 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ\Permission
  */
-class LargePermission extends MediumPermission
+class LargePermission extends MediumPermission implements PermissionInterface
 {
     /**
      * Default data for new sections.
@@ -48,9 +48,8 @@ class LargePermission extends MediumPermission
      * be a right-ID (recommended for performance) or a right-name.
      *
      * @param mixed $right
-     *
      */
-    public function hasPermission(int $userId, $right): bool
+    public function hasPermission(int $userId, mixed $right): bool
     {
         $user = new CurrentUser($this->config);
         $user->getUserById($userId);

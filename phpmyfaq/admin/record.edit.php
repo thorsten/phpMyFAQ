@@ -227,7 +227,7 @@ if (
     ));
     $faqData['isoDate'] = ($faqData['date'] ?? date('Y-m-d H:i'));
     $faqData['date'] = (isset($faqData['date']) ? $date->format($faqData['date']) : $date->format(date('Y-m-d H:i')));
-    $faqData['changed'] = ($faqData['changed'] ?? '');
+    $faqData['changed'] ??= '';
 
     if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
         $faqData['comment'] = ' checked';
@@ -325,7 +325,7 @@ if (
                                                     <option value="<?= $faqData['revision_id'] ?>">
                                                         <?= Translation::get('ad_changerev') ?>
                                                     </option>
-                                                    <?php foreach ($revisions as $revisionId => $revisionData) { ?>
+                                                    <?php foreach ($revisions as $revisionData) { ?>
                                                         <option value="<?= $revisionData['revision_id'] ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) {
                                                             echo 'selected';
                                                                        }
@@ -842,7 +842,7 @@ if (
         <div class="modal-header">
           <h5 class="modal-title" id="attachmentModalLabel">
               <?= Translation::get('ad_att_addto') . ' ' . Translation::get('ad_att_addto_2') ?>
-            (max <?= round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
+            (max <?= round($faqConfig->get('records.maxAttachmentSize') / 1024 ** 2, 2) ?> MB)
           </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>

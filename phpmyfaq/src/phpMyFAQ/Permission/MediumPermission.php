@@ -26,7 +26,7 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ\Permission
  */
-class MediumPermission extends BasicPermission
+class MediumPermission extends BasicPermission implements PermissionInterface
 {
     /**
      * Default data for new groups.
@@ -90,7 +90,7 @@ class MediumPermission extends BasicPermission
      * @param int   $userId Group ID
      * @param mixed $right  Rights
      */
-    public function hasPermission(int $userId, $right): bool
+    public function hasPermission(int $userId, mixed $right): bool
     {
         $user = new CurrentUser($this->config);
         $user->getUserById($userId);

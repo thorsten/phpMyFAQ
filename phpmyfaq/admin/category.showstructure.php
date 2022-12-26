@@ -87,7 +87,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                     $all_lang[$lang] = LanguageCodes::get($lang);
                 }
                 asort($all_lang);
-                foreach ($all_lang as $lang => $language) {
+                foreach ($all_lang as $language) {
                     if ($language != $currentLanguage) {
                         printf('<th class="text-center">' . $language . "</th>\n", $language);
                     }

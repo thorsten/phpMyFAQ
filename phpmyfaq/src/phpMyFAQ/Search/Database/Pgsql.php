@@ -27,7 +27,7 @@ use stdClass;
  *
  * @package phpMyFAQ\Search\Database
  */
-class Pgsql extends SearchDatabase
+class Pgsql extends SearchDatabase implements DatabaseInterface
 {
     /**
      * Constructor.
@@ -45,7 +45,7 @@ class Pgsql extends SearchDatabase
      * @throws Exception
      * @return mixed
      */
-    public function search(string $searchTerm)
+    public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);

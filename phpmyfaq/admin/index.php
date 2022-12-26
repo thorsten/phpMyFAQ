@@ -118,7 +118,7 @@ $faq = new Faq($faqConfig);
 //
 // use mbstring extension if available and when possible
 //
-$validMbStrings = array('ja', 'en', 'uni');
+$validMbStrings = ['ja', 'en', 'uni'];
 $mbLanguage = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
 if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
     mb_language($mbLanguage);
@@ -154,20 +154,26 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
     $action = $redirectAction;
 }
 
-// authenticate current user
+//
+// Authenticate current user
+//
 $auth = null;
 $error = '';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
 
+//
 // Set username via SSO
+//
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
     $faqusername = trim($_SERVER['REMOTE_USER']);
     $faqpassword = '';
 }
 
+//
 // Login via local DB or LDAP or SSO
+//
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
@@ -212,7 +218,9 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 }
 
-// logout
+//
+// Logout
+//
 if ($csrfChecked && $action === 'logout' && $auth) {
     $user->deleteFromSession(true);
     $auth = null;
@@ -221,24 +229,22 @@ if ($csrfChecked && $action === 'logout' && $auth) {
         $http->redirect($ssoLogout);
     }
 }
-
 //
 // Get current admin user and group id - default: -1
 //
-if (isset($user) && is_object($user)) {
-    $currentAdminUser = $user->getUserId();
-    if ($user->perm instanceof MediumPermission) {
-        $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
-    } else {
-        $currentAdminGroups = [-1];
-    }
-    if (0 === count($currentAdminGroups)) {
-        $currentAdminGroups = [-1];
-    }
+$currentAdminUser = $user->getUserId();
+if ($user->perm instanceof MediumPermission) {
+    $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
+} else {
+    $currentAdminGroups = [-1];
+}
+if (0 === (is_countable($currentAdminGroups) ? count($currentAdminGroups) : 0)) {
+    $currentAdminGroups = [-1];
 }
 
 //
 // Get action from _GET and _POST first
+//
 $ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_UNSAFE_RAW);
 if (is_null($ajax)) {
     $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_UNSAFE_RAW);
@@ -324,11 +330,9 @@ switch ($action) {
     case 'exportfile':
         require 'export.file.php';
         exit();
-        break;
     case 'reportexport':
         require 'report.export.php';
         exit();
-        break;
 }
 
 // Header of the admin page including the navigation

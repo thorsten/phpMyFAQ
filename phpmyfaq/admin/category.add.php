@@ -65,8 +65,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
     <?php
     if ($parentId > 0) {
-        $userAllowed = $categoryPermission->get(CategoryPermission::USER, array($parentId));
-        $groupsAllowed = $categoryPermission->get(CategoryPermission::GROUP, array($parentId));
+        $userAllowed = $categoryPermission->get(CategoryPermission::USER, [$parentId]);
+        $groupsAllowed = $categoryPermission->get(CategoryPermission::GROUP, [$parentId]);
         ?>
             <input type="hidden" name="restricted_users" value="<?= $userAllowed[0] ?>">
             <?php foreach ($groupsAllowed as $group): ?>

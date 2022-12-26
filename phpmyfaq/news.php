@@ -40,7 +40,7 @@ $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
     try {
         $captcha->drawCaptchaImage();
-    } catch (Exception $e) {
+    } catch (Exception) {
         // handle exception
     }
     exit;
@@ -55,7 +55,7 @@ if (is_null($newsId)) {
 
 try {
     $faqSession->userTracking('news_view', $newsId);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 

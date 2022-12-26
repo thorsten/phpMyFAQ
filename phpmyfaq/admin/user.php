@@ -85,7 +85,7 @@ if (
             $user = new User($faqConfig);
             $perm = $user->perm;
             // @todo: Add Filter::filterInput[]
-            $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : [];
+            $userRights = $_POST['user_rights'] ?? [];
             if (!$perm->refuseAllUserRights($userId)) {
                 $message .= Alert::danger('ad_msg_mysqlerr');
             }
@@ -427,7 +427,7 @@ if (
     // show list of all users
     if ($userAction == 'listallusers' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
         $allUsers = $user->getAllUsers(false);
-        $numUsers = count($allUsers);
+        $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
         $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
         $perPage = 10;
         $numPages = ceil($numUsers / $perPage);

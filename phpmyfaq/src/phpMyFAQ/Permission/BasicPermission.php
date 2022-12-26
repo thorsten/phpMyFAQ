@@ -27,7 +27,7 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ\Permission
  */
-class BasicPermission extends Permission
+class BasicPermission extends Permission implements PermissionInterface
 {
     /**
      * Default right data stored when a new right is created.
@@ -128,7 +128,7 @@ class BasicPermission extends Permission
      * @param int   $userId User ID
      * @param mixed $right  Right ID or right name
      */
-    public function hasPermission(int $userId, $right): bool
+    public function hasPermission(int $userId, mixed $right): bool
     {
         $user = new CurrentUser($this->config);
         $user->getUserById($userId);

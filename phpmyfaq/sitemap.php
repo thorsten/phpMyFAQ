@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thomas Zeithaml <seo@annatom.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-08-21
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-08-21
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -27,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('sitemap', 0);
-} catch (Exception $e) {
+} catch (Exception) {
     // @todo handle the exception
 }
 
@@ -45,9 +46,9 @@ $siteMap->setGroups($currentGroups);
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter,
+        'pageHeader' => empty($currentLetter) ? Translation::get('msgSitemap') : $currentLetter,
         'renderLetters' => $siteMap->getAllFirstLetters(),
         'renderSiteMap' => $siteMap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter,
+        'writeCurrentLetter' => empty($currentLetter) ? Translation::get('msgSitemap') : $currentLetter,
     ]
 );

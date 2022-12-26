@@ -317,7 +317,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $open = $lastCatId = $openDiv = 0;
 
             echo '<div class="list-group list-group-root">';
-            foreach ($category->getCategoryTree() as $id => $cat) {
+            foreach ($category->getCategoryTree() as $cat) {
                 // CategoryHelper translated in this language?
                 if ($cat['lang'] == $lang) {
                     $categoryName = $cat['name'];
