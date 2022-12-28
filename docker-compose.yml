@@ -61,12 +61,14 @@ services:
       - '8080:80'
       - '443:443'
     volumes:
-      - ./phpmyfaq:/var/www/html
+      - type: bind
+        source: ./phpmyfaq
+        target: /var/www/html
     depends_on:
       - yarn
 
   yarn:
-    image: node:14
+    image: node:16
     restart: 'no'
     command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app

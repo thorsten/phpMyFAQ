@@ -90,6 +90,7 @@ fi
   echo "opcache.revalidate_freq=2"
   echo "opcache.fast_shutdown=1"
   echo "opcache.enable_cli=1"
+  echo "opcache.enable=0" # disable cache for development
 } | tee $PHP_INI_DIR/conf.d/opcache-recommended.ini
 
 docker-php-entrypoint "$@"
