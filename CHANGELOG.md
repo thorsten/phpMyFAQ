@@ -1,10 +1,13 @@
-# phpMyFAQ 3.1.9
+# phpMyFAQ 3.1.10
 
 **Codename "Poseidon"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.1.10 - 2023-01
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.9 - 2022-12-11
 
