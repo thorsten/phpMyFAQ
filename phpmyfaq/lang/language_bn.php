@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * Bangla language file - try to be the best of Bangladeshi Bangla
@@ -7,26 +7,20 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Md. Masum Billah <jewelurp@dhaka.net>
+ * @package   phpMyFAQ
+ * @author    Md. Masum Billah <jewelurp@dhaka.net>
  * @copyright 2008-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2008-04-01
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2008-04-01
  * @codingStandardsIgnoreFile
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "bn";
 $PMF_LANG["language"] = "bangla";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "বিভাগ";

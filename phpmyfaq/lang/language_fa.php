@@ -1,9 +1,8 @@
-﻿<?php
+<?php
 
 /**
  * The Farsi language file
  *
- * @codingStandardsIgnoreFile
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -23,6 +22,7 @@ $PMF_LANG['metaLanguage'] = 'fa';
 $PMF_LANG['language'] = 'Farsi';
 $PMF_LANG['dir'] = 'rtl';
 $PMF_LANG['nplurals'] = '2';
+
 $PMF_LANG['msgCategory'] = 'موضوع';
 $PMF_LANG['msgShowAllCategories'] = 'نمایش همه موضوعات';
 $PMF_LANG['msgSearch'] = 'جستجو';
@@ -602,11 +602,6 @@ $PMF_LANG['msgMaintenanceMode'] = 'پرسش‌های متداول در حالت 
 $PMF_LANG['msgOnlineMode'] = ' فعال سازی پرسش‌های متداول ';
 $LANG_CONF['security.enableLoginOnly'] = array('checkbox', 'پرسش‌های متداول کاملا امن شود(پیش‌فرض: غیرفعال)');
 $LANG_CONF['security.useSslOnly'] = array('checkbox', 'پرسش‌های متداول فقط با SSL (پیش‌فرض: غیرفعال)');
-$LANG_CONF['cache.varnishEnable'] = array('checkbox', 'فعال سازی Varnish >=3.0 پشتیبانی<br><small>شما به توسعه PECL برای Varnish نیاز دارید</small>');
-$LANG_CONF['cache.varnishHost'] = array('input', 'میزبان Varnish');
-$LANG_CONF['cache.varnishPort'] = array('input', 'درگاه Varnish');
-$LANG_CONF['cache.varnishSecret'] = array('input', 'رمز Varnish');
-$LANG_CONF['cache.varnishTimeout'] = array('input', 'Varnish timeout');
 $LANG_CONF['records.enableCloseQuestion'] = array('checkbox', 'بستن پرسش پس از پاسخ؟');
 $LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', 'حذف پرسش پس از پاسخ?');
 $LANG_CONF['main.maintenanceMode'] = array('checkbox', 'قرار دادن در حالت پشتیبانی');
