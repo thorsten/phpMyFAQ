@@ -332,15 +332,17 @@ switch ($action) {
             ];
         }
 
-        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW);
-        $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
-        $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
-        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
-        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
-        $isActive = Filter::filterInput(INPUT_POST, 'is-active', FILTER_UNSAFE_RAW);
-        $isSticky = Filter::filterInput(INPUT_POST, 'is-sticky', FILTER_UNSAFE_RAW);
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
+        $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($postData['keywords'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($postData['author'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($postData['email'], FILTER_SANITIZE_EMAIL);
+        $isActive = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
+        $isSticky = Filter::filterVar($postData['is-sticky'], FILTER_VALIDATE_BOOLEAN);
 
         $categories = [ $categoryId ];
         $isActive = $isActive === 'true';
