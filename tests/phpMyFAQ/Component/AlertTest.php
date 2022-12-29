@@ -55,7 +55,8 @@ class AlertTest extends TestCase
     public function testWarning(): void
     {
         $this->assertEquals(
-            '<div class="alert alert-warning">Hilfe</div>',
+            '<div class="alert alert-warning alert-dismissible fade show">Hilfe' .
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
             Alert::warning('msgHelp')
         );
     }

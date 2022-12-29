@@ -1,4 +1,4 @@
-# phpMyFAQ 3.2.0-dev
+# phpMyFAQ 3.2.0-alpha
 
 **Codename "Pontus"**
 
@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.0-dev - 2022-XX-XX
+### phpMyFAQ v3.2.0-alpha - 2023-XX-XX
 
 - changed PHP requirement to PHP 8.0+ (Thorsten)
 - changed to HTTPS as new default (Thorsten)
@@ -19,7 +19,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added possibility to disable questions and notifications (Thorsten)
 - added support for PHP 8.2 (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
-- updated to Bootstrap v5.2 (Thorsten)
+- updated to Bootstrap v5.3 (Thorsten)
 - updated to TinyMCE v6.3 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
