@@ -1,21 +1,17 @@
-<div class="col-12">
-  <h1>{{ categoryHeader }}</h1>
+<div class="row g-5">
+  <div class="col-md-8">
+    <h2 class="pb-4 mb-4 border-bottom">{{ categoryHeader }}</h2>
 
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" href="#faqs" data-bs-toggle="tab" role="tab">{{ categoryFaqsHeader }}</a>
-    </li>
-    [subCategories]
-    <li class="nav-item">
-      <a class="nav-link" href="#subcategories" data-bs-toggle="tab" role="tab">{{ categorySubsHeader }}</a>
-    </li>
-    [/subCategories]
-  </ul>
+    {{ categoryContent }}
 
-  <div class="tab-content mt-3">
-    <div class="tab-pane fade show active" id="faqs">
-      <p>
-        {{ categoryDescription }} [categoryImage]
+    <p>{{ categoryLevelUp }}</p>
+  </div>
+
+  <div class="col-md-4">
+    <div class="position-sticky" style="top: 2rem">
+      <div class="p-4 mb-3 bg-light rounded">
+        <h4 class="fst-italic">{{ categoryFaqsHeader }}</h4>
+        [categoryImage]
         <img
           src="{{ categoryImage }}"
           alt="{{ categoryFaqsHeader }}"
@@ -24,13 +20,13 @@
           class="rounded img-fluid float-right"
         />
         [/categoryImage]
-      </p>
-      {{ categoryContent }}
-      <p>{{ categoryLevelUp }}</p>
-    </div>
-    <div class="tab-pane fade" id="subcategories">
-      <p>{{ categoryDescription }}</p>
-      {{ subCategoryContent }}
+        <p class="mb-0">{{ categoryDescription }}</p>
+      </div>
+
+      <div class="p-4">
+        <h4 class="fst-italic">{{ categorySubsHeader }}</h4>
+        {{ subCategoryContent }}
+      </div>
     </div>
   </div>
 </div>

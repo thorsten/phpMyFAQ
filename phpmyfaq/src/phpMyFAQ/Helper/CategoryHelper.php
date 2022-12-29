@@ -474,7 +474,7 @@ class CategoryHelper extends Helper
             if (0 === $number[$parent] && 0 === $level) {
                 $numFaqs = '';
             } else {
-                $numFaqs = ' <span class="badge badge-primary badge-pill">' .
+                $numFaqs = ' <span class="badge bg-primary-subtle">' .
                     $plr->getMsg('plmsgEntries', $number[$parent]) .
                     '</span>';
             }

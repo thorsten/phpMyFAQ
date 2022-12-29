@@ -101,7 +101,8 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         [
             'categoryHeader' => Translation::get('msgEntriesIn') . $categoryData->getName(),
             'categoryDescription' => $categoryData->getDescription(),
-            'categoryFaqsHeader' => Translation::get('msgEntries'),
+            'categoryFaqsHeader' => $categoryData->getName(),
+            'categorySubsHeader' => Translation::get('msgSubCategories'),
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => $up
@@ -124,6 +125,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'categoryHeader' => Translation::get('msgFullCategories'),
             'categoryDescription' => '',
             'categoryFaqsHeader' => '',
+            'categorySubsHeader' => '',
             'categoryContent' => $categoryHelper->renderCategoryTree(),
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => '',

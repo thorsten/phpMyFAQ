@@ -385,13 +385,15 @@ class Faq
         if ($num > 0) {
             if ($pages > 1) {
                 $output .= sprintf(
-                    '<p><strong>%s %s %s</strong></p>',
-                    Translation::get('msgPage') . $page,
+                    '<p>%s <strong>%d</strong> %s <strong>%d</strong> %s</p>',
+                    Translation::get('msgPage'),
+                    $page,
                     Translation::get('msgVoteFrom'),
-                    $pages . Translation::get('msgPages')
+                    $pages,
+                    Translation::get('msgPages')
                 );
             }
-            $output .= '<ul class="phpmyfaq_ul">';
+            $output .= '<ul class="list-group">';
 
             $counter = 0;
             $displayedCounter = 0;
