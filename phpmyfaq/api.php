@@ -345,8 +345,9 @@ switch ($action) {
         $isSticky = Filter::filterVar($postData['is-sticky'], FILTER_VALIDATE_BOOLEAN);
 
         $categories = [ $categoryId ];
-        $isActive = $isActive === 'true';
-        $isSticky = $isSticky === 'true';
+
+        $isActive = !is_null($isActive);
+        $isSticky = !is_null($isSticky);
 
         $faqData = new FaqEntity();
         $faqData
