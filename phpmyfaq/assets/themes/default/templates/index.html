@@ -37,51 +37,68 @@
     </style>
   </head>
   <body dir="{{ dir }}">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
+    <nav class="p-3 text-bg-dark border-bottom">
       <div class="container">
-        <a class="navbar-brand" href="{{ faqHome }}" id="phpmyfaq-logo" title="{{ header }}">
-          <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#pmf-navbar-toggle"
-          aria-controls="pmf-navbar-toggle"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a
+            href="{{ faqHome }}"
+            id="phpmyfaq-logo"
+            title="{{ header }}"
+            class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+          >
+            <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
+          </a>
 
-        <div class="collapse navbar-collapse" id="pmf-navbar-toggle">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
-            <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
-            <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
-            <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ msgLoginUser }}
-              </a>
-              <ul class="dropdown-menu">
-                [notLoggedIn]
-                <li>{{ msgRegisterUser }}</li>
-                <li>{{ msgLoginUser }}</li>
-                [/notLoggedIn] [userloggedIn]
-                <li>{{ msgUserControlDropDown }}</li>
-                <li>{{ msgUserControl }}</li>
-                <li>{{ msgUserRemoval }}</li>
-                <li>{{ msgLogoutUser }}</li>
-                [/userloggedIn]
-              </ul>
-            </li>
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li class="nav-link px-2 text-white {{ activeAllCategories }}">{{ allCategories }}</li>
+            <li class="nav-link px-2 text-white {{ activeAddContent }}">{{ msgAddContent }}</li>
+            <li class="nav-link px-2 text-white {{ activeAddQuestion }}">{{ msgQuestion }}</li>
+            <li class="nav-link px-2 text-white {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
           </ul>
+
+          <form
+            action="{{ writeSendAdress }}"
+            id="search"
+            method="post"
+            role="search"
+            class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+          >
+            <input
+              type="search"
+              class="form-control text-bg-dark"
+              placeholder="{{ searchBox }} ..."
+              aria-label="Search"
+            />
+          </form>
+
+          <div class="dropdown text-end">
+            <a
+              href="#"
+              class="d-block text-decoration-none dropdown-toggle text-white"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ msgLoginUser }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small">
+              [notLoggedIn]
+              <li>{{ msgRegisterUser }}</li>
+              <li>{{ msgLoginUser }}</li>
+              [/notLoggedIn] [userloggedIn]
+              <li>{{ msgUserControlDropDown }}</li>
+              <li>{{ msgUserControl }}</li>
+              <li>{{ msgUserRemoval }}</li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>{{ msgLogoutUser }}</li>
+              [/userloggedIn]
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
 
     <!-- SEARCH -->
+    <!--
     <section class="pmf-search-section">
       <div class="pmf-masthead pmf-single-masthead">
         <div class="container">
@@ -107,6 +124,7 @@
         </div>
       </div>
     </section>
+    -->
 
     <!-- BREADCRUMB -->
     [breadcrumb]
@@ -116,40 +134,49 @@
     [/breadcrumb]
 
     <!-- MAIN CONTENT -->
-    <section class="mt-3" id="wrapper">
-      <div class="container">
-        <div class="row">{{ mainPageContent }} {{ sidebar }}</div>
-      </div>
+    <section class="my-3" id="wrapper">
+      <div class="container">{{ mainPageContent }} {{ sidebar }}</div>
     </section>
 
-    <footer class="pmf-footer font-small pt-4">
+    <footer class="pt-4 text-bg-dark">
       <div class="container">
         <div class="row">
-          <div class="col-8 mb-4">
-            <ul class="pmf-footer-menu">
-              <li class="foot-menu-item">{{ faqOverview }}</li>
-              <li class="foot-menu-item">{{ showSitemap }}</li>
-              <li class="foot-menu-item">{{ msgGlossary }}</li>
-              <li class="foot-menu-item">{{ msgContact }}</li>
-              <li class="foot-menu-item">{{ privacyLink }}</li>
-            </ul>
+          <div class="col-md-8 mb-md-0 mb-4">
+            <h5 class="footer-heading">{{ writeTagCloudHeader }}</h5>
+            <p class="card-text pmf-tag-cloud">{{ writeTags }}</p>
           </div>
-          <div class="col-4 mb-4">
-            <form accept-charset="utf-8" action="{{ renderUri }}" class="pmf-footer-language" method="post">
-              {{ switchLanguages }}
-              <input name="action" type="hidden" value="" />
+          <div class="col-md-4 mb-md-0 mb-4">
+            <h5 class="footer-heading">{{ languageBox }}</h5>
+            <form accept-charset="utf-8" action="{{ renderUri }}" method="post" class="subscribe-form">
+              <div class="form-group d-flex">
+                {{ switchLanguages }}
+                <input name="action" type="hidden" value="" />
+              </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="text-center py-3">{{ copyright }}</div>
+      <div class="w-100">
+        <div class="container">
+          <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-6 mb-0 text-white">{{ copyright }}</p>
+
+            <ul class="nav col-md-6 justify-content-end">
+              <li class="nav-item">{{ faqOverview }}</li>
+              <li class="nav-item">{{ showSitemap }}</li>
+              <li class="nav-item">{{ msgGlossary }}</li>
+              <li class="nav-item">{{ msgContact }}</li>
+              <li class="nav-item">{{ privacyLink }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       [debugMode]
-      <div class="container debug-mode">
-        <hr />
-        <h4>DEBUG INFORMATION</h4>
+      <div class="container">
+        <h5 class="border-top">⚠︎ DEBUG MODE ENABLED ⚠︎</h5>
         <div class="row">
           <div class="col-12">
-            <h5>DATABASE QUERIES</h5>
+            <h6 class="text-danger">DATABASE QUERIES</h6>
             {{ debugQueries }}
           </div>
         </div>

@@ -1,112 +1,118 @@
 <!-- Header -->
-<div class="col-12">
-  <h1>{{ pageHeader }}</h1>
+<div class="row">
+  <div class="col-12">
+    <h1>{{ pageHeader }}</h1>
+  </div>
 </div>
 
 <!-- Start page -->
-<div class="container p-0">
-  [startPageCategories]
-  <div class="card-deck">{{ startPageCategoryDecks }}</div>
-  [/startPageCategories]
+<div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
+  [startPageCategories] {{ startPageCategoryDecks }} [/startPageCategories]
 </div>
 
 <!-- Start page content -->
-<div class="row">
-  <div class="col-12">
-    <div class="card-columns">
-      <!-- Sticky FAQs -->
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title text-center">{{ stickyRecordsHeader }}</h5>
-          <ul class="list-unstyled">
-            [stickyRecordsList]
-            <li class="mb-1">
-              <a
-                class="sticky-faqs"
-                title="{{ stickyTitle }}"
-                href="{{ stickyUrl }}"
-                data-toggle="tooltip"
-                data-placement="top"
-              >
-                {{ stickyPreview }}
-              </a>
-            </li>
-            [/stickyRecordsList]
-          </ul>
-        </div>
+<div class="row masonry-grid">
+  <!-- Sticky FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ stickyRecordsHeader }}</h5>
+        <ul class="list-unstyled">
+          [stickyRecordsList]
+          <li class="mb-1">
+            <a
+              class="sticky-faqs"
+              title="{{ stickyTitle }}"
+              href="{{ stickyUrl }}"
+              data-toggle="tooltip"
+              data-placement="top"
+            >
+              {{ stickyPreview }}
+            </a>
+          </li>
+          [/stickyRecordsList]
+        </ul>
       </div>
-
-      <!-- Top FAQs -->
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title text-center">{{ writeTopTenHeader }}</h5>
-          <ol class="list-unstyled">
-            [toptenList]
-            <li class="mb-1">
-              <a
-                class="topten"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="{{ toptenPreview }}"
-                href="{{ toptenUrl }}"
-                >{{ toptenTitle }}</a
-              >
-              <small>({{ toptenVisits }})</small>
-            </li>
-            [/toptenList] [toptenListError]
-            <li>{{ errorMsgTopTen }}</li>
-            [/toptenListError]
-          </ol>
-          <p class="card-text">
-            <small class="text-muted">{{ writeNumberOfArticles }}</small>
-          </p>
-        </div>
-      </div>
-
-      <!-- Latest FAQs -->
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title text-center">{{ writeNewestHeader }}</h5>
-          <ol class="list-unstyled">
-            [latestEntriesList]
-            <li class="mb-1">
-              <a
-                class="latest-entries"
-                data-toggle="tooltip"
-                data-placement="top"
-                title="{{ latestEntriesPreview }}"
-                href="{{ latestEntriesUrl }}"
-                >{{ latestEntriesTitle }}</a
-              >
-              <small>({{ latestEntriesDate }})</small>
-            </li>
-            [/latestEntriesList] [latestEntriesListError]
-            <li>{{ errorMsgLatest }}</li>
-            [/latestEntriesListError]
-          </ol>
-        </div>
-      </div>
-
-      <!-- News -->
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ writeNewsHeader }}</h5>
-          <p class="card-text">{{ writeNews }}</p>
-          <p class="card-text">
-            <small class="text-muted">{{ showAllNews }}</small>
-          </p>
-        </div>
-      </div>
-
-      <!-- Tag Cloud -->
-      [tagListSection]
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ msgTags }}</h5>
-          <p class="card-text pmf-tag-cloud">{{ tagList }}</p>
-        </div>
-      </div>
-      [/tagListSection]
     </div>
   </div>
+
+  <!-- Top FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ writeTopTenHeader }}</h5>
+        <ol class="list-unstyled">
+          [toptenList]
+          <li class="mb-1">
+            <a
+              class="topten"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="{{ toptenPreview }}"
+              href="{{ toptenUrl }}"
+              >{{ toptenTitle }}</a
+            >
+            <small>({{ toptenVisits }})</small>
+          </li>
+          [/toptenList] [toptenListError]
+          <li>{{ errorMsgTopTen }}</li>
+          [/toptenListError]
+        </ol>
+        <p class="card-text">
+          <small class="text-muted">{{ writeNumberOfArticles }}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ writeNewestHeader }}</h5>
+        <ol class="list-unstyled">
+          [latestEntriesList]
+          <li class="mb-1">
+            <a
+              class="latest-entries"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="{{ latestEntriesPreview }}"
+              href="{{ latestEntriesUrl }}"
+              >{{ latestEntriesTitle }}</a
+            >
+            <small>({{ latestEntriesDate }})</small>
+          </li>
+          [/latestEntriesList] [latestEntriesListError]
+          <li>{{ errorMsgLatest }}</li>
+          [/latestEntriesListError]
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- News -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ writeNewsHeader }}</h5>
+        <p class="card-text">{{ writeNews }}</p>
+        <p class="card-text">
+          <small class="text-muted">{{ showAllNews }}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tag Cloud -->
+  [tagListSection]
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ msgTags }}</h5>
+        <p class="card-text pmf-tag-cloud">{{ tagList }}</p>
+      </div>
+    </div>
+  </div>
+  [/tagListSection]
 </div>
