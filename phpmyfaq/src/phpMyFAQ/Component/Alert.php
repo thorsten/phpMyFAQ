@@ -57,8 +57,13 @@ class Alert
     /**
      * Renders a Bootstrap warning alert component.
      */
-    public static function warning(string $translationKey): string
+    public static function warning(string $translationKey, ?string $warningMessage = null): string
     {
-        return sprintf('<div class="alert alert-warning">%s</div>', Translation::get($translationKey));
+        return sprintf(
+            '<div class="alert alert-warning alert-dismissible fade show">%s%s%s</div>',
+            Translation::get($translationKey),
+            $warningMessage !== null ? '<br>' . $warningMessage : '',
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+        );
     }
 }

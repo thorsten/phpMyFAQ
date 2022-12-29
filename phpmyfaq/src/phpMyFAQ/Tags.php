@@ -359,7 +359,7 @@ class Tags
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
-            $oLink->class = 'btn btn-primary m-1';
+            $oLink->class = 'btn btn-primary mr-1 my-1';
             $html .= $oLink->toHtmlAnchor();
             $html .= (count($tags) == $i ? '' : ' ');
         }
@@ -449,7 +449,7 @@ class Tags
             $tagName = $this->getTagNameById($tagId);
             $html .= sprintf(
                 '<a class="btn btn-primary m-1" href="?action=search&tagging_id=%d">%s ' .
-                '<span class="badge badge-info">%d</span></a>',
+                '<span class="badge bg-info">%d</span></a>',
                 $tagId,
                 $tagName,
                 $tagFreq

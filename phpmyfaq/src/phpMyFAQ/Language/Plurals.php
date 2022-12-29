@@ -47,12 +47,7 @@ class Plurals
      */
     private bool $useDefaultPluralForm;
 
-    /**
-     * Constructor.
-     *
-     * @param array $PMF_TRANSL PMF translation array for current language
-     */
-    public function __construct(private array $PMF_TRANSL)
+    public function __construct()
     {
         $this->nPlurals = (int)Translation::get('nplurals');
         $this->lang = Translation::get('metaLanguage');
@@ -60,7 +55,6 @@ class Plurals
         if ($this->plural($this->lang, 0) != -1) {
             $this->useDefaultPluralForm = false;
         } else {
-            //  @todo update $this->PMF_TRANSL with English plural messages for fall-back
             $this->useDefaultPluralForm = true;
         }
     }
@@ -158,7 +152,7 @@ class Plurals
     public function getMsgTemplate(string $msgID, int $n): string
     {
         $plural = $this->getPlural($n);
-        return $this->PMF_TRANSL[$msgID][$plural] ?? $this->PMF_TRANSL[$msgID][1];
+        return Translation::get($msgID)[$plural] ?? Translation::get($msgID)[1];
     }
 
     /**

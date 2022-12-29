@@ -234,7 +234,7 @@ $options = [
     'layoutTpl' => '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
 ];
 
-$faqPagination = new Pagination($faqConfig, $options);
+$faqPagination = new Pagination($options);
 $categoryHelper = new CategoryHelper();
 $categoryHelper->setCategory($category);
 

@@ -34,22 +34,29 @@ try {
     // @todo handle the exception
 }
 
-$template->parseBlock(
-    'mainPageContent',
-    'useSignInWithMicrosoft',
-    [
-        'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
-    ]
-);
+if ($faqConfig->get('security.enableRegistration')) {
+    $template->parseBlock(
+        'mainPageContent',
+        'enableRegistration',
+        [
+            'registerUser' => Translation::get('msgRegistration'),
+        ]
+    );
+}
+
+if ($faqConfig->isSignInWithMicrosoftActive()) {
+    $template->parseBlock(
+        'mainPageContent', 'useSignInWithMicrosoft', [
+            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+        ]
+    );
+}
 
 $template->parse(
     'mainPageContent',
     [
-        'registerUser' => $faqConfig->get(
-            'security.enableRegistration'
-        ) ? '<a href="?action=register">' . Translation::get('msgRegistration') . '</a>' : '',
-        'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
         'loginHeader' => Translation::get('msgLoginUser'),
+        'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
         'loginMessage' => $loginMessage,
         'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
         'faqloginaction' => $action,
@@ -57,6 +64,5 @@ $template->parse(
         'username' => Translation::get('ad_auth_user'),
         'password' => Translation::get('ad_auth_passwd'),
         'rememberMe' => Translation::get('rememberMe'),
-        'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
     ]
 );

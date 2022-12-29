@@ -304,7 +304,7 @@ class CategoryHelper extends Helper
             for ($j = 0; $j < $cat['indent']; ++$j) {
                 $indent .= '....';
             }
-            $categories .= "\t<option value=\"" . $cat['id'] . '"';
+            $categories .= sprintf('<option value="%s"', $cat['id']);
 
             if (0 === $i && count($categoryId) === 0) {
                 $categories .= ' selected';
@@ -316,8 +316,7 @@ class CategoryHelper extends Helper
                 }
             }
 
-            $categories .= '>';
-            $categories .= $indent . $cat['name'] . "</option>\n";
+            $categories .= sprintf('>%s %s </option>', $indent, $cat['name']);
             ++$i;
         }
 
@@ -335,18 +334,23 @@ class CategoryHelper extends Helper
 
         $decks = '';
         foreach ($categories as $category) {
-            $decks .= '<div class="phpmyfaq-startpage-item phpmyfaq-startpage-item-primary col-lg-4 col-6">';
-            $decks .= ' <div class="phpmyfaq-startpage-item-inner">';
-            $decks .= '   <div class="icon-holder">';
+            $decks .= '<div class="col">';
+            $decks .= '  <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-3 shadow-lg p-1" ';
             if ('' !== $category['image']) {
-                $decks .= '<img class="card-img-top embed-responsive-item" width="200" alt="' .
-                    $category['name'] . '" src="' . $category['image'] . '" />';
+                $decks .= sprintf(
+                    'style="%s background-image: url(\'%s\')"',
+                    'background-size: cover; background-repeat: no-repeat; background-position: center center;',
+                    $category['image']
+                );
             }
-            $decks .= '     </div>';
-            $decks .= '     <h3 class="title">' . Strings::htmlentities($category['name']) . '</h3>';
-            $decks .= '     <p class="intro">' . Strings::htmlentities($category['description']) . '</p>';
-            $decks .= '     <a class="link" href="' . Strings::htmlentities($category['url']) . '"><span></span></a>';
-            $decks .= ' </div>';
+            $decks .= '>';
+            $decks .= sprintf(
+                '<h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">%s</h3>',
+                Strings::htmlentities($category['name'])
+            );
+            $decks .= '   <a class="btn btn-primary" href="' .
+                Strings::htmlentities($category['url']) . '">' . Translation::get('msgGoToCategory') . '</a>';
+            $decks .= '  </div>';
             $decks .= '</div>';
         }
 

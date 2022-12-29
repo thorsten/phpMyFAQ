@@ -7,17 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-02-03
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-02-03
  */
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -44,23 +46,24 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => $PMF_LANG['msgUserRemoval'],
-        'msgContact' => $PMF_LANG['msgContact'],
-        'msgUserRemovalText' => $PMF_LANG['msgUserRemovalText'],
-        'msgContactRemove' => $PMF_LANG['msgContactRemove'],
-        'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
-        'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
-        'privacyURL' => $faqConfig->get('main.privacyURL'),
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-        'ad_user_loginname' => $PMF_LANG['ad_user_loginname'],
+        'pageHeader' => Translation::get('msgUserRemoval'),
+        'msgContact' => Translation::get('msgContact'),
+        'msgUserRemovalText' => Translation::get('msgUserRemovalText'),
+        'msgContactRemove' => Translation::get('msgContactRemove'),
+        'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
+        'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
+        'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
+        'msgNewContentName' => Translation::get('msgNewContentName'),
+        'msgNewContentMail' => Translation::get('msgNewContentMail'),
+        'ad_user_loginname' => Translation::get('ad_user_loginname'),
         'lang' => $Language->getLanguage(),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
-        'defaultLoginName' => ($user instanceof CurrentUser) ? $user->getLogin() : '',
-        'msgMessage' => $PMF_LANG['msgMessage'],
-        'msgS2FButton' => $PMF_LANG['msgS2FButton'],
+        'defaultContentName' =>
+            ($user instanceof CurrentUser) ? Strings::htmlentities($user->getUserData('display_name')) : '',
+        'defaultLoginName' => ($user instanceof CurrentUser) ? Strings::htmlentities($user->getLogin()) : '',
+        'msgMessage' => Translation::get('msgMessage'),
+        'msgS2FButton' => Translation::get('msgS2FButton'),
         'version' => $faqConfig->getVersion(),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', $PMF_LANG['msgCaptcha'], $auth),
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $auth)
     ]
 );

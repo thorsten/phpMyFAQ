@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 
 /**
  * Class CategoryImage
@@ -104,6 +105,8 @@ class CategoryImage
 
     /**
      * Uploads the current file and moves it into the images/ folder.
+     *
+     * @throws Exception
      */
     public function upload(): bool
     {
@@ -112,15 +115,15 @@ class CategoryImage
             && $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')
         ) {
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {
-                return false;
+                throw new Exception('Cannot detect image size');
             }
             if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
                 return true;
             } else {
-                return false;
+                throw new Exception('Cannot move uploaded image');
             }
         } else {
-            return false;
+            throw new Exception('Uploaded image is too big');
         }
     }
 

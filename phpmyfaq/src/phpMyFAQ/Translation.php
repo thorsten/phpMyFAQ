@@ -51,7 +51,7 @@ class Translation
     /**
      * Returns the translation of a specific key from the current language
      */
-    public static function get(string $languageKey): ?string
+    public static function get(string $languageKey): string|array|null
     {
         try {
             self::$instance->checkInit();

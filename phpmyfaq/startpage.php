@@ -19,6 +19,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,12 +31,12 @@ $categoryHelper = new CategoryHelper();
 $archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (!is_null($archived)) {
-    $writeNewsHeader = $PMF_LANG['newsArchive'];
-    $showAllNews = sprintf('<a href="?%s">%s</a>', $sids, $PMF_LANG['newsShowCurrent']);
+    $writeNewsHeader = Translation::get('newsArchive');
+    $showAllNews = sprintf('<a href="?%s">%s</a>', $sids, Translation::get('newsShowCurrent'));
     $archived = true;
 } else {
-    $writeNewsHeader = ' ' . $PMF_LANG['msgNews'];
-    $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
+    $writeNewsHeader = ' ' . Translation::get('msgNews');
+    $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, Translation::get('newsShowArchive'));
     $archived = false;
 }
 
@@ -118,7 +119,7 @@ $template->parseBlock(
     'mainPageContent',
     'tagListSection',
     [
-        'msgTags' => $PMF_LANG['msgPopularTags'],
+        'msgTags' => Translation::get('msgPopularTags'),
         'tagList' => $oTag->renderPopularTags(12)
     ]
 );
@@ -128,20 +129,20 @@ $template->parse(
     [
         'pageHeader' => Strings::htmlspecialchars($faqConfig->getTitle()),
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
-        'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
-        'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-        'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+        'stickyRecordsHeader' => Translation::get('stickyRecordsHeader'),
+        'writeTopTenHeader' => Translation::get('msgTopTen'),
+        'writeNewestHeader' => Translation::get('msgLatestArticles'),
         'writeNewsHeader' => $writeNewsHeader,
         'writeNews' => $news->getNews($archived),
         'showAllNews' => $showAllNews,
         'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($faqLangCode)),
         'writeSendAdress' => '?' . $sids . 'action=search',
-        'searchBox' => $PMF_LANG['msgSearch'],
+        'searchBox' => Translation::get('msgSearch'),
         'categoryId' => ($cat === 0) ? '%' : (int)$cat,
         'msgSearch' => sprintf(
             '<a class="help" href="%sindex.php?action=search">%s</a>',
             $faqSystem->getSystemUri($faqConfig),
-            $PMF_LANG['msgAdvancedSearch']
+            Translation::get('msgAdvancedSearch')
         )
     ]
 );

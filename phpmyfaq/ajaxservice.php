@@ -89,7 +89,7 @@ try {
 //
 // Load plurals support for selected language
 //
-$plr = new Plurals($PMF_LANG);
+$plr = new Plurals();
 
 //
 // Initializing static string wrapper

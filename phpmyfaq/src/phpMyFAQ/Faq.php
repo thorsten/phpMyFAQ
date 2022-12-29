@@ -478,7 +478,7 @@ class Faq
                 'pageParamName' => 'seite'
             ];
 
-            $pagination = new Pagination($this->config, $options);
+            $pagination = new Pagination($options);
             $output .= $pagination->render();
         }
 

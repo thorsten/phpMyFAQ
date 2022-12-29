@@ -80,17 +80,16 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                 </div>
                                 <?php
                                 if ($faqConfig->get('security.enableRegistration')) { ?>
+
                                     <div class="card-footer text-center py-3">
-                                        <div class="small">
-                                            <a href="../?action=register"><?= Translation::get('msgRegistration') ?></a>
-                                        </div>
+                                        <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="../?action=register">
+                                            <?= Translation::get('msgRegistration') ?>
+                                        </a>
                                         <?php if ($faqConfig->isSignInWithMicrosoftActive()) { ?>
-                                        <hr>
-                                        <div class="small">
-                                            <a href="../services/azure">
-                                                <?= Translation::get('msgSignInWithMicrosoft') ?>
-                                            </a>
-                                        </div>
+                                        <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" href="../services/azure">
+                                            <i class="fa fa-windows" aria-hidden="true"></i>
+                                            <?= Translation::get('msgSignInWithMicrosoft') ?>
+                                        </a>
                                         <?php } ?>
                                     </div>
                                 <?php

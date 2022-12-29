@@ -10,14 +10,14 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2001-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2001-02-12
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2001-02-12
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
@@ -57,28 +57,24 @@ const IS_VALID_PHPMYFAQ = null;
 require __DIR__ . '/src/Bootstrap.php';
 
 //
-// HTTP Helper
+// Send headers and print template
 //
 $http = new HelperHttp();
+$http->setConfiguration($faqConfig);
+$http->setContentType('text/html');
+$http->addHeader();
+$http->startCompression();
 
 //
 // Get language (default: english)
 //
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-// Preload English strings
-require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
 $showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
-if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
-    // Overwrite English strings with the ones we have in the current language,
-    // but don't include UTF-8 encoded files, these will break the captcha images
-    if (!file_exists('lang/language_' . $faqLangCode . '.php')) {
-        $faqLangCode = 'en';
-    }
-    require_once 'lang/language_' . $faqLangCode . '.php';
-} else {
+
+if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
     $faqLangCode = 'en';
 }
 
@@ -97,7 +93,7 @@ try {
 //
 // Load plurals support for selected language
 //
-$plr = new Plurals($PMF_LANG);
+$plr = new Plurals();
 
 //
 // Initializing static string wrapper
@@ -588,7 +584,9 @@ $tplMainPage = [
     'msgEmail' => Translation::get('ad_entry_email'),
     'msgSubmit' => Translation::get('msgNewContentSubmit'),
     'loginPageMessage' => Translation::get('loginPageMessage'),
-    'msgAdvancedSearch' => Translation::get('msgAdvancedSearch')
+    'msgAdvancedSearch' => Translation::get('msgAdvancedSearch'),
+    'writeTagCloudHeader' => Translation::get('msg_tags'),
+    'writeTags' => $oTag->renderTagCloud(),
 ];
 
 $template->parseBlock(
@@ -618,37 +616,41 @@ if ('main' == $action || 'show' == $action) {
 
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = [
-        'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
-        'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' .
+        'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
+        'allCategories' => '<a class="nav-link px-2 text-white" href="./show-categories.html">' .
+            Translation::get('msgShowAllCategories') . '</a>',
+        'msgAddContent' => '<a class="nav-link px-2 text-white" href="./addcontent.html">' .
             Translation::get('msgAddContent') . '</a>',
         'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
             ?
-            '<a class="nav-link" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+            '<a class="nav-link px-2 text-white" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
             :
             '',
         'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
             ?
-            '<a class="nav-link" href="./open-questions.html">' . Translation::get('msgOpenQuestions') . '</a>'
+            '<a class="nav-link px-2 text-white" href="./open-questions.html">' .
+            Translation::get('msgOpenQuestions') . '</a>'
             :
             '',
-        'msgContact' => '<a href="./contact.html">' . Translation::get('msgContact') . '</a>',
-        'msgGlossary' => '<a href="./glossary.html">' . Translation::get('ad_menu_glossary') . '</a>',
+        'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
+        'msgContact' => '<a class="nav-link px-1 " href="./contact.html">' . Translation::get('msgContact') . '</a>',
+        'msgGlossary' => '<a class="nav-link px-1 " href="./glossary.html">' .
+            Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
-            '<a target="_blank" href="%s">%s</a>',
+            '<a class="nav-link px-1 " target="_blank" href="%s">%s</a>',
             $faqConfig->get('main.privacyURL'),
             Translation::get('msgPrivacyNote')
         ),
-        'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
-        'allCategories' => '<a class="nav-link" href="./show-categories.html">' . Translation::get('msgShowAllCategories') . '</a>',
-        'faqOverview' => '<a href="./overview.html">' . Translation::get('faqOverview') . '</a>',
-        'showSitemap' => '<a href="./sitemap/A/' . $faqLangCode . '.html">' . Translation::get('msgSitemap') . '</a>',
-        'msgUserRemoval' => '<a href="./request-removal.html">' . Translation::get('msgUserRemoval') . '</a>',
+        'faqOverview' => '<a class="nav-link px-1 " href="./overview.html">' . Translation::get('faqOverview') . '</a>',
+        'showSitemap' => '<a class="nav-link px-1 " href="./sitemap/A/' . $faqLangCode . '.html">' .
+            Translation::get('msgSitemap') . '</a>',
         'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
     ];
 } else {
     $tplNavigation = [
-        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' .
-            Translation::get('msgAdvancedSearch') . '</a>',
+        'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
+        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' .
+            Translation::get('msgShowAllCategories') . '</a>',
         'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
             Translation::get('msgAddContent') . '</a>',
         'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
@@ -663,6 +665,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('msgOpenQuestions') . '</a>'
             :
             '',
+        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' .
+            Translation::get('msgAdvancedSearch') . '</a>',
         'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . Translation::get('msgContact') . '</a>',
         'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' .
             Translation::get('ad_menu_glossary') . '</a>',
@@ -671,14 +675,9 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             $faqConfig->get('main.privacyURL'),
             Translation::get('msgPrivacyNote')
         ),
-        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' .
-            Translation::get('msgShowAllCategories') . '</a>',
         'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . Translation::get('faqOverview') . '</a>',
-        'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
         'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' .
             Translation::get('msgSitemap') . '</a>',
-        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . Translation::get('msgUserRemoval') .
-            '</a>',
         'breadcrumbHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
     ];
 }
@@ -719,6 +718,7 @@ if (isset($auth)) {
         [
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
+            'activeUserControl' => ('ucp' == $action) ? 'active' : '',
             'msgUserControlDropDown' => '<a class="dropdown-item" href="?action=ucp">' .
                 Translation::get('headerUserControlPanel') . '</a>',
             'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
@@ -727,8 +727,7 @@ if (isset($auth)) {
                 '<a class="dropdown-item" href="?action=logout&csrf=%s">%s</a>',
                 $user->getCsrfTokenFromSession(),
                 Translation::get('ad_menu_logout'),
-            ),
-            'activeUserControl' => ('ucp' == $action) ? 'active' : ''
+            )
         ]
     );
 } else {
@@ -743,7 +742,8 @@ if (isset($auth)) {
         [
             'msgRegisterUser' => $faqConfig->get('security.enableRegistration')
                 ?
-                '<a class="dropdown-item" href="?action=register">' . Translation::get('msgRegisterUser') . '</a>'
+                '<a class="dropdown-item" href="?action=register">' .
+                Translation::get('msgRegisterUser') . '</a>'
                 :
                 '',
             'msgLoginUser' => sprintf($msgLoginUser, Translation::get('msgLoginUser')),
@@ -756,20 +756,20 @@ if (isset($auth)) {
 $template->parse(
     'sidebar',
     [
-        'writeTagCloudHeader' => Translation::get('msg_tags'),
-        'writeTags' => $oTag->renderTagCloud(),
         'msgAllCatArticles' => Translation::get('msgAllCatArticles'),
         'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
     ]
 );
 
-$template->parseBlock(
-    'index',
-    'debugMode',
-    [
-        'debugQueries' => $faqConfig->getDb()->log(),
-    ]
-);
+if (DEBUG) {
+    $template->parseBlock(
+        'index',
+        'debugMode',
+        [
+            'debugQueries' => $faqConfig->getDb()->log(),
+        ]
+    );
+}
 
 //
 // Redirect old "action=artikel" URLs via 301 to new location
@@ -799,14 +799,6 @@ require $includePhp;
 $template->parse('index', array_merge($tplMainPage, $tplNavigation));
 $template->merge('sidebar', 'index');
 $template->merge('mainPageContent', 'index');
-
-//
-// Send headers and print template
-//
-$http->setConfiguration($faqConfig);
-$http->setContentType('text/html');
-$http->addHeader();
-$http->startCompression();
 
 //
 // Check for 404 HTTP status code

@@ -1348,5 +1348,6 @@ $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Enable "Ask question"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Enable notifications'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Send test email to the administrator'];
 $PMF_LANG['mail.sendTestEmail'] = 'Send test email to the administrator';
+$PMF_LANG['msgGoToCategory'] = 'Go to category';
 
 return $PMF_LANG;

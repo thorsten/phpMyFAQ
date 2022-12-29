@@ -1347,5 +1347,6 @@ $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiviere "Frage stellen"'
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktiviere Benachrichtigungen'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Sende eine E-Mail an den Administrator'];
 $PMF_LANG['mail.sendTestEmail'] = 'Sende eine E-Mail an den Administrator';
+$PMF_LANG['msgGoToCategory'] = 'Zur Kategorie';
 
 return $PMF_LANG;

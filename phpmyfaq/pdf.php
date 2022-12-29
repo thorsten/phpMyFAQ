@@ -63,7 +63,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);
-$plr = new Plurals($PMF_LANG);
+$plr = new Plurals();
 
 // authenticate with session information
 $user = CurrentUser::getFromCookie($faqConfig);

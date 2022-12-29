@@ -141,7 +141,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         $permissions['restricted_groups']
                     );
 
-                    $categoryImage->upload();
+                    if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+                        try {
+                            $categoryImage->upload();
+                        } catch (Exception $exception) {
+                            echo Alert::warning('ad_adus_dberr', $exception->getMessage());
+                        }
+                    }
 
                     // All the other translations
                     $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_UNSAFE_RAW);
@@ -165,6 +171,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     $categoryId,
                     $categoryLang
                 ) : $existingImage;
+
                 $categoryData = [
                     'id' => $categoryId,
                     'lang' => $categoryLang,
@@ -244,7 +251,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                             $permissions['restricted_groups']
                         );
 
-                        $categoryImage->upload();
+                        if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+                            try {
+                                $categoryImage->upload();
+                            } catch (Exception $exception) {
+                                echo Alert::warning('ad_adus_dberr', $exception->getMessage());
+                            }
+                        }
 
                         echo Alert::success('ad_categ_updated');
                     } else {

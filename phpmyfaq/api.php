@@ -97,7 +97,7 @@ try {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
-$plr = new Plurals($PMF_LANG);
+$plr = new Plurals();
 Strings::init($currentLanguage);
 
 //

@@ -28,8 +28,8 @@ const IS_VALID_PHPMYFAQ = null;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 
-if (version_compare(PHP_VERSION, '8.0.0') < 0) {
-    die('Sorry, but you need PHP 8.0.0 or later!');
+if (version_compare(PHP_VERSION, '8.0.2') < 0) {
+    die('Sorry, but you need PHP 8.0.2 or later!');
 }
 
 set_time_limit(0);
