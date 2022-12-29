@@ -15,6 +15,7 @@
 
 import 'cookieconsent';
 import 'bootstrap';
+import Masonry from 'masonry-layout';
 import { calculateReadingTime } from './reading-time';
 
 // Calculate reading time
@@ -22,3 +23,14 @@ const faqBody = document.querySelector('.pmf-faq-body');
 if (faqBody !== null) {
   calculateReadingTime();
 }
+
+// Masonry
+window.onload = () => {
+  const masonryElement = document.querySelector('.masonry-grid');
+
+  console.log(masonryElement);
+
+  if (masonryElement) {
+    new Masonry(masonryElement, { columnWidth: 0 });
+  }
+};
