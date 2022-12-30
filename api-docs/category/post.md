@@ -19,16 +19,21 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 
 ```json
 {
-  "language": "[language code]",
-  "parent-id": "[category parent id as integer value, 0 is a root category]",
-  "category-name": "[name in plain text]",
-  "description": "[question in plain text]",
-  "user-id": "[user id as integer value]",
-  "group-id": "[group-id as integer value]",
-  "is-active": "true/false",
-  "show-on-homepage": "true/false"
+  "language": "[language code, required value]",
+  "parent-id": "[category parent id as integer value, 0 is a root category, required value]",
+  "parent-category-name": "[parent category name in plain text, optional value]",
+  "category-name": "[name in plain text, required value]",
+  "description": "[question in plain text or empty string, required value]",
+  "user-id": "[user id as integer value, required value]",
+  "group-id": "[group-id as integer value, required value]",
+  "is-active": "true/false, required value",
+  "show-on-homepage": "true/false, required value"
 }
 ```
+
+The parent category ID is a required value, the parent category name is optional. If the parent category name is present
+and the ID can be mapped, the parent category ID from the name will be used. If the parent category name cannot be
+mapped, a 409 error is thrown
 
 **Data example**
 
@@ -36,6 +41,7 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 {
   "language": "de",
   "parent-id": "0",
+  "parent-category-name": "Open Source Software",
   "category-name": "phpMyFAQ",
   "description": "Hello, World",
   "user-id": "1",
@@ -63,7 +69,7 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 
 **Condition** : If something didn't worked.
 
-**Code** : `400 BAD REQUEST`
+**Code** : `400 Bad Request`
 
 **Content** :
 
@@ -71,5 +77,18 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 {
   "stored": false,
   "error": "Cannot add category"
+}
+```
+
+**Condition** : If parent category name cannot be mapped to a valid ID
+
+**Code** : `409 Conflict`
+
+**Content** :
+
+```json
+{
+  "stored": false,
+  "error": "The given parent category name was not found."
 }
 ```

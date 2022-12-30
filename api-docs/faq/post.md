@@ -21,7 +21,7 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 {
   "language": "[language code, required value]",
   "category-id": "[category id as integer value, required value]",
-  "category-name": "[category-name in plain text, optional value]",
+  "category-name": "[category name in plain text, optional value]",
   "question": "[question in plain text, required value]",
   "answer": "[question in plain text, required value]",
   "keywords": "[keywords in comma separated plain text or empty string, required value]",

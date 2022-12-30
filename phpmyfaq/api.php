@@ -220,12 +220,28 @@ switch ($action) {
 
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($postData['parent-id'], FILTER_VALIDATE_INT);
+        $parentCategoryName = Filter::filterVar($postData['parent-category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
         $name = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
         $description = Filter::filterVar($postData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = Filter::filterVar($postData['user-id'], FILTER_VALIDATE_INT);
         $groupId = Filter::filterVar($postData['group-id'], FILTER_VALIDATE_INT);
         $active = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
         $showOnHome = Filter::filterVar($postData['show-on-homepage'], FILTER_VALIDATE_BOOLEAN);
+
+        // Check if parent category name can be mapped
+        if (!is_null($parentCategoryName)) {
+            $parentCategoryIdFound = $category->getCategoryIdFromName($parentCategoryName);
+            if ($parentCategoryIdFound === false) {
+                $http->setStatus(409);
+                $result = [
+                    'stored' => false,
+                    'error' => 'The given parent category name was not found.'
+                ];
+                break;
+            }
+
+            $parentId = $parentCategoryIdFound;
+        }
 
         $categoryData = new CategoryEntity();
         $categoryData
