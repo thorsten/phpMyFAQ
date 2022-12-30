@@ -63,7 +63,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
         'perPage' => $perpage,
         'pageParamName' => 'page',
     ];
-    $pagination = new Pagination($faqConfig, $options);
+    $pagination = new Pagination($options);
 
     $loggingData = $logging->getAll();
 ?>

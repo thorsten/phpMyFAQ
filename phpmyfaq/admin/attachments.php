@@ -35,7 +35,6 @@ $allCrumbs = $attachmentCollection->getBreadcrumbs();
 $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
 $pagination = new Pagination(
-    $faqConfig,
     [
         'baseUrl' => $faqConfig->getDefaultUrl() . 'admin/?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
         'total' => count($allCrumbs),

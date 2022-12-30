@@ -91,7 +91,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         'perPage' => $perPage,
         'pageParamName' => 'page',
     ];
-    $pagination = new Pagination($faqConfig, $options);
+    $pagination = new Pagination($options);
     ?>
           <div id="ajaxresponse"></div>
           <table class="table table-striped align-middle">
