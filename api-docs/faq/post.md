@@ -32,8 +32,8 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
 }
 ```
 
-If the category name is given, the given category ID will be overwritten by the ID from the category name, if it's
-valid. Otherwise an error occurs.
+The category ID is a required value, the category name is optional. If the category name is present and the ID can be
+mapped, the category ID from the name will be used. If the category name cannot be mapped, a 409 error is thrown
 
 **Data example**
 
