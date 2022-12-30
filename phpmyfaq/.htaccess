@@ -177,6 +177,7 @@ RewriteRule api/v2.1/register                      api.php?action=register [L,QS
 RewriteRule api/v2.2/version                       api.php?action=version [L,QSA]
 RewriteRule api/v2.2/language                      api.php?action=language [L,QSA]
 RewriteRule api/v2.2/categories                    api.php?action=categories [L,QSA]
+RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
 RewriteRule api/v2.2/groups                        api.php?action=groups [L,QSA]
 RewriteRule api/v2.2/searches/popular              api.php?action=searches&filter=popular [L,QSA]
 RewriteRule api/v2.2/search                        api.php?action=search [L,QSA]

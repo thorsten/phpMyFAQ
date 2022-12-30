@@ -20,7 +20,9 @@ const IS_VALID_PHPMYFAQ = null;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
@@ -30,7 +32,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Question;
@@ -92,12 +93,11 @@ try {
     Translation::create()
         ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
-        ->setCurrentLanguage($faqLangCode);
+        ->setCurrentLanguage($currentLanguage);
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
-$plr = new Plurals();
 Strings::init($currentLanguage);
 
 //
@@ -190,6 +190,68 @@ switch ($action) {
         $result = array_values($category->getAllCategories());
         if (count($result) === 0) {
             $http->setStatus(404);
+        }
+        break;
+
+    case 'category':
+        $category = new Category($faqConfig, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->setLanguage($currentLanguage);
+
+        $categoryPermission = new CategoryPermission($faqConfig);
+
+        //
+        // POST
+        //
+        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
+            $http->setStatus(401);
+            $result = [
+                'stored' => false,
+                'error' => 'X_PMF_Token not valid.'
+            ];
+            break;
+        }
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $parentId = Filter::filterVar($postData['parent-id'], FILTER_VALIDATE_INT);
+        $name = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $description = Filter::filterVar($postData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = Filter::filterVar($postData['user-id'], FILTER_VALIDATE_INT);
+        $groupId = Filter::filterVar($postData['group-id'], FILTER_VALIDATE_INT);
+        $active = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
+        $showOnHome = Filter::filterVar($postData['show-on-homepage'], FILTER_VALIDATE_BOOLEAN);
+
+        $categoryData = new CategoryEntity();
+        $categoryData
+            ->setLang($languageCode)
+            ->setParentId($parentId)
+            ->setName($name)
+            ->setDescription($description)
+            ->setUserId($userId)
+            ->setGroupId($groupId)
+            ->setActive($active)
+            ->setImage('')
+            ->setShowHome($showOnHome);
+
+        $categoryId = $category->create($categoryData);
+
+        if ($categoryId) {
+            $categoryPermission->add(CategoryPermission::USER, [$categoryId], [-1]);
+            $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], [-1]);
+
+            $http->setStatus(200);
+            $result = [
+                'stored' => true
+            ];
+        } else {
+            $http->setStatus(400);
+            $result = [
+                'stored' => false,
+                'error' => 'Cannot add category'
+            ];
         }
         break;
 
@@ -397,6 +459,10 @@ switch ($action) {
 
     case 'login':
         $currentUser = new CurrentUser($faqConfig);
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+        $faqUsername = Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
 
         if ($currentUser->login($faqUsername, $faqPassword)) {
             if ($currentUser->getStatus() !== 'blocked') {

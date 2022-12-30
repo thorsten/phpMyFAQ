@@ -44,6 +44,10 @@ Open endpoints require no Authentication.
 Closed endpoints require a valid API client token to be included in the header of the request. An API client token can
 be acquired from the admin configuration.
 
+### Category related APIs
+
+- [Add category](api-docs/category/post.md): `POST /api/v2.2/category`
+
 ### FAQ related APIs
 
 - [Add FAQ](api-docs/faq/post.md): `POST /api/v2.2/faq`

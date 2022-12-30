@@ -2,7 +2,7 @@
 
 Used to login a registered user.
 
-**URL** : `/api/v2.0/login`
+**URL** : `/api/v2.2/login`
 
 **HTTP Header** :
 

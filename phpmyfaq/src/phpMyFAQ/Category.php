@@ -964,6 +964,7 @@ class Category
      * @param array $categoryData Array of category data
      * @param int   $parentId Parent id
      * @param null  $id Entity id
+     * @deprecated will be removed in v3.3, please use Category::create()
      * @return int
      */
     public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
@@ -993,6 +994,39 @@ class Category
         $this->config->getDb()->query($query);
 
         return $id;
+    }
+
+    /**
+     * Creates a new category
+     * @param CategoryEntity $categoryData
+     * @return int|null
+     */
+    public function create(CategoryEntity $categoryData): ?int
+    {
+        $categoryId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+
+        $query = sprintf(
+            "
+            INSERT INTO
+                %sfaqcategories
+            (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+                VALUES
+            (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
+            Database::getTablePrefix(),
+            $categoryId,
+            $this->config->getDb()->escape($categoryData->getLang()),
+            $categoryData->getParentId(),
+            $this->config->getDb()->escape($categoryData->getName()),
+            $this->config->getDb()->escape($categoryData->getDescription()),
+            $categoryData->getUserId(),
+            $categoryData->getGroupId(),
+            $categoryData->getActive(),
+            $this->config->getDb()->escape($categoryData->getImage()),
+            $categoryData->getShowHome()
+        );
+        $this->config->getDb()->query($query);
+
+        return $categoryId;
     }
 
     /**

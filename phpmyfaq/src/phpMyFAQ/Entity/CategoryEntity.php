@@ -79,7 +79,7 @@ class CategoryEntity
     /**
      * @param int $groupId
      */
-    public function setGroupId($groupId): CategoryEntity
+    public function setGroupId(int $groupId): CategoryEntity
     {
         $this->groupId = $groupId;
 
@@ -94,7 +94,7 @@ class CategoryEntity
     /**
      * @param int $id
      */
-    public function setId($id): CategoryEntity
+    public function setId(int $id): CategoryEntity
     {
         $this->id = $id;
 
