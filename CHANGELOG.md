@@ -8,17 +8,18 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v3.2.0-alpha - 2023-XX-XX
 
-- changed PHP requirement to PHP 8.0+ (Thorsten)
+- changed PHP requirement to PHP 8.0.2 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
 - changed MySQL / MariaDB / Percona Server / Galera Cluster to InnoDB only (Thorsten)
 - added experimental Azure AD login (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - added Monolog v2 as logging solution (Thorsten)
-- added REST API v2.2 to fetch groups (Thorsten)
+- added REST API v2.2 to fetch groups and add categories (Thorsten)
 - added verification of backup files (Thorsten)
 - added possibility to disable questions and notifications (Thorsten)
 - added support for PHP 8.2 (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
+- migrated codebase to use PHP 8.0 language features
 - updated to Bootstrap v5.3 (Thorsten)
 - updated to TinyMCE v6.3 (Thorsten)
 - updated Japanese translation (Advanced Bear)
