@@ -4,9 +4,9 @@ phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients l
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
 phpMyFAQ installation.
 
-## Open Endpoints
+## Public Endpoints
 
-Open endpoints require no Authentication.
+Public endpoints require no Authentication.
 
 ### General APIs
 

@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use JsonException;
 use phpMyFAQ\Helper;
 
 /**
@@ -153,6 +154,7 @@ class HttpHelper extends Helper
      *
      * @param mixed           $payload What to send
      * @param string[]|string $headers Which headers to send
+     * @throws JsonException
      */
     public function sendJsonWithHeaders(mixed $payload, array|string $headers = ''): void
     {
@@ -164,7 +166,8 @@ class HttpHelper extends Helper
      *
      * @param mixed           $payload What to send
      * @param string|string[] $headers Which headers to send
-     * @param bool            $isJson  Send as JSON?
+     * @param bool            $isJson Send as JSON?
+     * @throws JsonException
      */
     public function sendWithHeaders(mixed $payload, array|string $headers = '', bool $isJson = false): void
     {

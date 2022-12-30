@@ -879,6 +879,22 @@ class Category
         return $result;
     }
 
+    public function getCategoryIdFromName(string $categoryName): int|bool
+    {
+        $query = sprintf(
+            "SELECT id FROM %sfaqcategories WHERE name = '%s'",
+            Database::getTablePrefix(),
+            $this->config->getDb()->escape($categoryName)
+        );
+
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            return (int) $this->config->getDb()->fetchRow($result);
+        }
+
+        return false;
+    }
+
     /**
      * Returns all categories that are related to the given article-id and
      * the current language $this->language in an unsorted array which consists
