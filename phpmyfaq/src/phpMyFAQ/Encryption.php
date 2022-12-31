@@ -55,31 +55,22 @@ class Encryption
      * This method is called statically. The parameter encType specifies the
      * of encryption method for the encryption object. Supported
      * are 'crypt', 'hash', 'bcrypt', and 'none'.
-     *
      * $enc = EncryptionTypes::selectEnc('hash');
-     *
      * $enc is an instance of the class EncryptionTypes\Hash.
-     *
      * If the given encryption-type is not supported, selectEnc() will return an
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
      * @param string        $encType
      * @param Configuration $config
+     * @return Encryption
      */
     public static function selectEnc(string $encType, Configuration $config): Encryption
     {
         $enc = new self($config);
         $encType = ucfirst(strtolower($encType));
 
-        if (!isset($encType)) {
-            $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
-
-            return $enc;
-        }
-
         $encClass = 'phpMyFAQ\\EncryptionTypes\\' . $encType;
-
         if (!class_exists($encClass)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
 

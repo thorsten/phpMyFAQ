@@ -98,7 +98,7 @@ abstract class Helper
     /**
      * Plurals setter.
      *
-     * @param Plurals $plurals Language_Plurals object
+     * @param Plurals $plurals Plurals object
      */
     public function setPlurals(Plurals $plurals): Helper
     {

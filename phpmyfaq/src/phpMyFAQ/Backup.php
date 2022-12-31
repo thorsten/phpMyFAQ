@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseHelper;
 use SodiumException;
 

@@ -34,6 +34,9 @@ class Session
     /** @var string Name of the session cookie */
     public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
+    /** @var string Name of the session GET parameter */
+    public const PMF_GET_KEY_NAME_SESSIONID = 'sid';
+
     /** @var string Azure AD session key */
     public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
 
@@ -297,7 +300,11 @@ class Session
             $bots = 0;
             $banned = false;
             $agent = $_SERVER['HTTP_USER_AGENT'];
-            $this->currentSessionId = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $this->currentSessionId = Filter::filterInput(
+                INPUT_GET,
+                self::PMF_GET_KEY_NAME_SESSIONID,
+                FILTER_VALIDATE_INT
+            );
             $cookieId = Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 
             if (!is_null($cookieId)) {

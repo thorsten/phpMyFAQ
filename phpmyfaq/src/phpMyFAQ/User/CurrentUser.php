@@ -49,6 +49,7 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
  */
 class CurrentUser extends User
 {
+    private const PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
     /**
      * true if CurrentUser is logged in, otherwise false.
      */
@@ -198,7 +199,7 @@ class CurrentUser extends User
                 $this->session->setCookie(
                     Session::PMF_COOKIE_NAME_REMEMBERME,
                     $rememberMe,
-                    $_SERVER['REQUEST_TIME'] + PMF_REMEMBER_ME_EXPIRED_TIME
+                    $_SERVER['REQUEST_TIME'] + self::PMF_REMEMBER_ME_EXPIRED_TIME
                 );
             }
 

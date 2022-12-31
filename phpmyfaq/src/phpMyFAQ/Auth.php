@@ -35,7 +35,7 @@ class Auth
     /**
      * @var string
      */
-    private const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
+    private const PMF_ERROR_USER_NO_AUTH_TYPE = 'Specified authentication access class could not be found.';
 
     /**
      * public array that contains error messages.
@@ -107,16 +107,10 @@ class Auth
         // verify selected database
         $method = ucfirst(strtolower($method));
 
-        if (!isset($method)) {
-            $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
-
-            return $this;
-        }
-
         $authClass = '\phpMyFAQ\\Auth\\Auth' . $method;
 
         if (!class_exists($authClass)) {
-            $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
+            $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;
 
             return $this;
         }

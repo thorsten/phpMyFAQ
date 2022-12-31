@@ -19,6 +19,7 @@ namespace phpMyFAQ;
 
 use Composer\Autoload\ClassLoader;
 use Elastic\Elasticsearch\ClientBuilder;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;
@@ -474,14 +475,18 @@ class Installer
     public function checkBasicStuff(): void
     {
         if (!$this->checkMinimumPhpVersion()) {
-            printf(
-                '<p class="alert alert-danger">Sorry, but you need PHP %s or later!</p>',
-                System::VERSION_MINIMUM_PHP
+            Alert::danger(
+                'ad_entryins_fail',
+                sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP)
             );
             System::renderFooter();
         }
 
         if (!function_exists('date_default_timezone_set')) {
+            Alert::danger(
+                'ad_entryins_fail',
+                'Sorry, but setting a default timezone does not work in your environment!'
+            );
             echo '<p class="alert alert-danger">Sorry, but setting a default timezone does not work in your ' .
                 'environment!</p>';
             System::renderFooter();
@@ -530,13 +535,13 @@ class Installer
      *
      * @return void
      */
-    public function checkPreUpgrade(string $databaseType)
+    public function checkPreUpgrade(string $databaseType): void
     {
         $database = null;
         if (!$this->checkMinimumPhpVersion()) {
-            printf(
-                '<p class="alert alert-danger">Sorry, but you need PHP %s or later!</p>',
-                System::VERSION_MINIMUM_PHP
+            Alert::danger(
+                'ad_entryins_fail',
+                sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP)
             );
             System::renderFooter();
         }
@@ -617,7 +622,7 @@ class Installer
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
             echo '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
                 'installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t ' .
-                'use the Twitter  support or Elasticsearch.</p>';
+                'use the Twitter support and/or Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
             echo '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP installation. ' .

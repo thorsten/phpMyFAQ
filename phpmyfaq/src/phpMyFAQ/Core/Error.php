@@ -43,9 +43,9 @@ class Error
     /**
      * Exception handler.
      *
-     * @param $exception
+     * @param \Exception $exception
      */
-    public static function exceptionHandler($exception): void
+    public static function exceptionHandler(\Exception $exception): void
     {
         $code = $exception->getCode();
         if ($code !== 404) {

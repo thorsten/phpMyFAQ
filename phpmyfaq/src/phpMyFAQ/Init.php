@@ -42,7 +42,7 @@ class Init
      * - xss in the request string,
      * - uncorrect filenames when file are uploaded.
      */
-    public static function cleanRequest()
+    public static function cleanRequest(): void
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
@@ -77,7 +77,7 @@ class Init
      * @param  array $data Array of data
      * @return array
      */
-    private static function removeXSSGPC(array $data)
+    private static function removeXSSGPC(array $data): array
     {
         static $recursionCounter = 0;
         // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
@@ -104,10 +104,9 @@ class Init
      * Cleans a html string from some xss issues.
      *
      * @param string $string String
-     *
      * @return string
      */
-    private static function basicXSSClean($string)
+    private static function basicXSSClean(string $string): string
     {
         if (str_contains($string, '\0')) {
             return '';
@@ -191,7 +190,7 @@ class Init
      * Clean the filename of any uploaded file by the user and force an error
      * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong.
      */
-    private static function cleanFilenames()
+    private static function cleanFilenames(): void
     {
         reset($_FILES);
         foreach ($_FILES as $key => $value) {
@@ -218,7 +217,6 @@ class Init
                 }
             }
         }
-        reset($_FILES);
     }
 
     /**
@@ -227,7 +225,7 @@ class Init
      * @param string $filename Filename
      * @return string
      */
-    private static function basicFilenameClean(string $filename)
+    private static function basicFilenameClean(string $filename): string
     {
         global $denyUploadExts;
 

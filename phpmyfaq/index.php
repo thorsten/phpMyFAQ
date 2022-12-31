@@ -125,9 +125,11 @@ $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW,
 $faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_UNSAFE_RAW);
 $rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
 
+//
 // Set username via SSO
+//
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
-    $faqusername = trim($_SERVER['REMOTE_USER']);
+    $faqusername = trim(Strings::htmlentities($_SERVER['REMOTE_USER']));
     $faqpassword = '';
 }
 
@@ -242,7 +244,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sidGet = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sidGet = Filter::filterInput(INPUT_GET, Session::PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);
@@ -296,7 +298,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     !$faqSession->setCookie(
         Session::PMF_COOKIE_NAME_SESSIONID,
         $faqSession->getCurrentSessionId(),
-        $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME
+        $_SERVER['REQUEST_TIME'] + 3600
     )
 ) {
     $sids = sprintf('lang=%s&amp;', $faqLangCode);

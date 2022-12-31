@@ -57,10 +57,10 @@ class Database
      * Database factory.
      *
      * @param string $type Database management system type
-     * @return Pgsql|Sqlsrv|Mysqli|Sqlite3|DatabaseDriver|null
+     * @return DatabaseDriver|null
      * @throws Exception
      */
-    public static function factory(string $type): Pgsql|Sqlsrv|Mysqli|Sqlite3|DatabaseDriver|null
+    public static function factory(string $type): ?DatabaseDriver
     {
         self::$dbType = $type;
 

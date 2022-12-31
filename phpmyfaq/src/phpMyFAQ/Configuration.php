@@ -223,11 +223,7 @@ class Configuration
     public function getAll(): void
     {
         $query = sprintf(
-            '
-            SELECT
-                config_name, config_value
-            FROM
-                %s%s',
+            'SELECT config_name, config_value FROM %s%s',
             Database::getTablePrefix(),
             $this->tableName
         );
@@ -258,7 +254,7 @@ class Configuration
         // Add multiple LDAP servers if enabled
         if (true === $this->get('ldap.ldap_use_multiple_servers')) {
             $key = 1;
-            while ($key >= 1) {
+            while (true) {
                 if (isset($ldapConfig[$key])) {
                     $this->config['core.ldapServer'][$key] = $ldapConfig[$key];
                     ++$key;
@@ -396,10 +392,7 @@ class Configuration
     public function delete(string $name): bool
     {
         $delete = sprintf(
-            "DELETE FROM
-                %s%s
-            WHERE
-              config_name = '%s'",
+            "DELETE FROM %s%s WHERE config_name = '%s'",
             Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($name))
@@ -447,13 +440,7 @@ class Configuration
                 && !in_array($name, $runtimeConfigs)
             ) {
                 $update = sprintf(
-                    "
-                    UPDATE
-                        %s%s
-                    SET
-                        config_value = '%s'
-                    WHERE
-                        config_name = '%s'",
+                    "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
                     Database::getTablePrefix(),
                     $this->tableName,
                     $this->getDb()->escape(trim($value)),

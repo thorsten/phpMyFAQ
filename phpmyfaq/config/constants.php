@@ -1,19 +1,20 @@
 <?php
 
 /**
- * Constants for phpMyFAQ.
+ * Constants for phpMyFAQ, you can change them for your needs. Please back up this file
+ * before updating phpMyFAQ as it will be overwritten.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-12-10
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-12-10
  * @codingStandardsIgnoreFile
  */
 
@@ -30,6 +31,11 @@
  * @var string
  */
 const DATETIME_TIMEZONE_DEFAULT = 'Europe/Berlin';
+
+//
+// Set the default timezone used by all date/time functions
+//
+date_default_timezone_set(DATETIME_TIMEZONE_DEFAULT);
 
 /**
  * Sets the current session save path if needed, by default not used
@@ -102,7 +108,7 @@ const PMF_TAGS_CLOUD_RESULT_SET_SIZE = 50;
 const PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE = 20;
 
 /**
- * This is the flag for choosing the encryption type for passwords. Currently
+ * This is the flag for choosing the encryption type for passwords. Currently,
  * you can choose
  *
  * - hash (default)
@@ -110,7 +116,7 @@ const PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE = 20;
  * - crypt (not recommended)
  *
  * WARNING: DO NOT CHANGE THIS VALUE AFTER YOUR INITIAL INSTALLATION!
- * OTHERWISE ALL YOUR REGISTERED USERS HAVE TO REQUEST A NEW PASSWORD.
+ * OTHERWISE, ALL YOUR REGISTERED USERS HAVE TO REQUEST A NEW PASSWORD.
  *
  * @var string
  */
@@ -118,7 +124,6 @@ const PMF_ENCRYPTION_TYPE = 'hash';
 
 /**
  * List of denied extensions when uploading a file.
- *
  * Here is an example:
  * <code>
  * $denyUploadExts = array(
@@ -133,65 +138,6 @@ const PMF_ENCRYPTION_TYPE = 'hash';
  * );
  * </code>
  *
- * @var array
+ * @var string[]
  */
 $denyUploadExts = [];
-
-/****************************************************************************
- *                  DO NOT CHANGE ANYTHING BELOW THIS LINE!                 *
- ****************************************************************************/
-
-/*
- * Allowed 'action' variables for GET. DO NOT CHANGE!
- *
- * @var array
- * @deprecated will be removed in v3.2
- */
-$allowedVariables = [
-    'add' => 1,
-    'faq' => 1,
-    'artikel' => 1,
-    'ask' => 1,
-    'attachment' => 1,
-    'contact' => 1,
-    'glossary' => 1,
-    'help' => 1,
-    'login' => 1,
-    'mailsend2friend' => 1,
-    'news' => 1,
-    'open-questions' => 1,
-    'overview' => 1,
-    'password' => 1,
-    'register' => 1,
-    'request-removal' => 1,
-    'save' => 1,
-    'savecomment' => 1,
-    'savequestion' => 1,
-    'savevoting' => 1,
-    'search' => 1,
-    'send2friend' => 1,
-    'sendmail' => 1,
-    'show' => 1,
-    'sitemap' => 1,
-    'thankyou' => 1,
-    'translate' => 1,
-    'ucp' => 1,
-    'writecomment' => 1,
-    '404' => 1
-];
-
-//
-// Define some internal constants
-//
-
-// HTTP GET parameters
-const PMF_GET_KEY_NAME_SESSIONID = 'sid';
-// Misc parameters
-const PMF_LANGUAGE_EXPIRED_TIME = 3600; // 30 minutes
-const PMF_SESSION_EXPIRED_TIME = 3600; // 30 minutes
-const PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
-
-//
-// Set the default timezone used by all date/time functions
-//
-date_default_timezone_set(DATETIME_TIMEZONE_DEFAULT);

@@ -6,10 +6,11 @@
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
  *
- * Currently it supports only 4 content (mime) types:
+ * Currently, it supports only 4 content (mime) types:
  * - PDF: application/pdf
  * - HTML5: text/html
  * - CSV: text/csv
+ * - JSON: application/json
  * - Generic file: application/octet-stream
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -64,13 +65,6 @@ class HttpStreamer
     public const EXPORT_DISPOSITION_INLINE = 'inline';
 
     /**
-     * Enable buffer.
-     *
-     * @var bool
-     */
-    private const EXPORT_BUFFER_ENABLE = true;
-
-    /**
      * HTTP Content Disposition.
      */
     private string $disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
@@ -97,7 +91,7 @@ class HttpStreamer
      * @param string $disposition Disposition
      * @throws Exception
      */
-    public function send(string $disposition)
+    public function send(string $disposition): void
     {
         $this->disposition = $disposition;
 
@@ -122,7 +116,7 @@ class HttpStreamer
     /**
      * Sends HTTP Headers.
      */
-    private function setHttpHeaders()
+    private function setHttpHeaders(): void
     {
         // Evaluate data upon export type request
         switch ($this->type) {
@@ -183,7 +177,7 @@ class HttpStreamer
     /**
      * Streams the content.
      */
-    private function streamContent()
+    private function streamContent(): void
     {
         echo $this->content;
     }

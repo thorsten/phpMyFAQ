@@ -1076,7 +1076,7 @@ $PMF_LANG['msgRegistrationNote'] = 'After successfully submitting this form, you
 $PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['security.ssoSupport'] = ['checkbox', 'Single Sign On Support'];
+$LANG_CONF['security.ssoSupport'] = ['checkbox', 'Enable Single Sign On Support'];
 $LANG_CONF['security.ssoLogoutRedirect'] = ['input', 'Single Sign On logout redirect service URL'];
 $LANG_CONF['main.dateFormat'] = ['input', 'Date format (default: Y-m-d H:i)'];
 $LANG_CONF['security.enableLoginOnly'] = ['checkbox', 'Complete secured FAQ'];

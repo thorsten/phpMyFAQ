@@ -45,7 +45,6 @@ class Api
      * as array.
      *
      * @throws JsonException
-     * @throws Exception
      */
     public function getVersions(): array
     {
@@ -66,7 +65,6 @@ class Api
      * Returns true, if installed version can be verified. Otherwise, false.
      *
      * @throws JsonException
-     * @throws Exception
      */
     public function isVerified(): bool
     {

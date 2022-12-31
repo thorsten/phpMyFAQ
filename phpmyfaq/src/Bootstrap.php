@@ -91,12 +91,19 @@ if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
     exit();
 }
 
+//
+// Get database credentials
+//
 require PMF_CONFIG_DIR . '/database.php';
+
+//
+// Get required phpMyFAQ constants
+//
 require PMF_CONFIG_DIR . '/constants.php';
 
-/*
- * The directory where the translations reside
- */
+//
+// The directory where the translations reside
+//
 define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 
 //
@@ -123,14 +130,13 @@ try {
 $faqConfig = new Configuration($db);
 $faqConfig->getAll();
 
+//
+// We always need a valid, secure session!
+//
 $secureCookie = 'false';
 if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
     $secureCookie = 'true';
 }
-
-//
-// We always need a valid session!
-//
 ini_set('session.use_only_cookies', '1'); // Avoid any PHP version to move sessions on URLs
 ini_set('session.auto_start', '0'); // Prevent error to use session_start() if it's active in php.ini
 ini_set('session.use_trans_sid', '0');
