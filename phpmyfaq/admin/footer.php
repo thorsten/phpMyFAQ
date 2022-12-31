@@ -28,17 +28,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong></div>
+                    <div class="text-muted">
+                        Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong>
+                    </div>
                     <div>
-                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">Documentation</a>
+                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">
+                            Documentation
+                        </a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://www.buymeacoffee.com/thorsten">Buy us a coffee</a> |
+                        <a target="_blank" rel="noopener" href="https://www.buymeacoffee.com/thorsten">
+                            Buy us a coffee
+                        </a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">Twitter</a>
+                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">
+                            Twitter
+                        </a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">Facebook</a>
+                        <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">
+                            Facebook
+                        </a>
                         &middot;
-                        &copy; 2001-<?= date('Y') ?> <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
+                        &copy; 2001 - <?= date('Y') ?>
+                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
                     </div>
                 </div>
             </div>

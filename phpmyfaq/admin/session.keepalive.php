@@ -9,19 +9,20 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Uwe Pries <uwe.pries@digartis.de>
+ * @package   phpMyFAQ
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
  * @copyright 2006-2022 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-05-08
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-05-08
  */
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -29,7 +30,7 @@ define('PMF_ROOT_DIR', dirname(__DIR__));
 //
 // Define the named constant used as a check by any included PHP file
 //
-define('IS_VALID_PHPMYFAQ', null);
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Bootstrapping
@@ -57,21 +58,23 @@ if (!$user instanceof CurrentUser) {
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>
-<html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js">
+<html lang="<?= Translation::get('metaLanguage'); ?>" class="no-js">
 <head>
     <meta charset="utf-8">
+
     <title>phpMyFAQ - "Welcome to the real world."</title>
 
-    <meta name="description" content="Only Chuck Norris can divide by zero.">
-    <meta name="author" content="phpMyFAQ Team">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-2022 phpMyFAQ Team">
-    <meta name="publisher" content="phpMyFAQ Team">
+    <meta content="Only Chuck Norris can divide by zero." name="description">
+    <meta content="phpMyFAQ Team" name="author" >
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="phpMyFAQ <?= $faqConfig->getVersion(); ?>" name="application-name">
+    <meta content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team" name="copyright">
+    <meta content="phpMyFAQ Team" name="publisher">
+
     <?php if (isset($user) && ($refreshTime > 0)) { ?>
     <script>
         const sessionTimeoutWarning = () => {
-          if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING); ?>')) {
+          if (window.confirm('<?php printf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING); ?>')) {
             location.href = location.href;
           }
         };
@@ -86,7 +89,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
           }
 
           if (topRef) {
-            topRef.innerHTML = new Date(duration).toISOString().substr(11, 8);
+            topRef.innerHTML = new Date(duration).toISOString().substring(11, 8);
           }
         };
 
