@@ -21,6 +21,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -46,6 +47,24 @@ if (!is_null($language) && Language::isASupportedLanguage($language)) {
     require PMF_ROOT_DIR . '/lang/language_' . $language . '.php';
 }
 
+
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($language);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
+}
+
+//
+// Load plurals support for selected language
+//
+$plr = new Plurals();
+
 //
 // Initializing static string wrapper
 //
@@ -70,7 +89,6 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta content="phpMyFAQ <?= $faqConfig->getVersion(); ?>" name="application-name">
     <meta content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team" name="copyright">
     <meta content="phpMyFAQ Team" name="publisher">
-
     <?php if (isset($user) && ($refreshTime > 0)) { ?>
     <script>
         const sessionTimeoutWarning = () => {
@@ -83,13 +101,13 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
           expire.setSeconds(expire.getSeconds() - 1);
           const duration = expire - sessionStart;
 
-          if (expire.getFullYear() < 2020) {
+          if (expire.getFullYear() < 2022) {
             parent.location.search = '?action=logout';
             return;
           }
 
           if (topRef) {
-            topRef.innerHTML = new Date(duration).toISOString().substring(11, 8);
+            topRef.innerHTML = new Date(duration).toISOString().substring(11, 19);
           }
         };
 

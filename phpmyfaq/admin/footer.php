@@ -16,6 +16,8 @@
  * @since     2003-02-26
  */
 
+use phpMyFAQ\Translation;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
@@ -24,6 +26,30 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
             </div>
         </main>
+
+        <!-- Session expired modal - not used yet -->
+        <div class="modal fade phpmyfaq-session-expired-modal" id="sessionExpiredModal" tabindex="-1"
+             aria-labelledby="sessionExpiredModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="sessionExpiredModalLabel">Session Warning</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <?= sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING); ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary"
+                                onClick="window.location.href=window.location.href">
+                            Refresh page
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">

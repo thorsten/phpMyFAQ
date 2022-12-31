@@ -79,7 +79,7 @@ try {
 //
 // Load plurals support for selected language
 //
-$plr = new Plurals($PMF_LANG);
+$plr = new Plurals();
 
 //
 // Initializing static string wrapper
@@ -502,7 +502,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
                 require 'elasticsearch.php';
                 break;
             case 'meta':
-            case 'meta.update';
+            case 'meta.update':
                 require 'template-metadata.php';
                 break;
             case 'meta.edit':

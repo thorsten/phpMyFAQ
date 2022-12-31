@@ -14,7 +14,11 @@
  * @since     2015-10-18
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -33,21 +37,44 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     $faqLangCode = 'en';
 }
 
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
+}
+
+//
+// Load plurals support for selected language
+//
+$plr = new Plurals();
+
+//
+// Initializing static string wrapper
+//
+Strings::init($faqLangCode);
+
 $auth = false;
 $user = CurrentUser::getFromCookie($faqConfig);
 if (!$user instanceof CurrentUser) {
     $user = CurrentUser::getFromSession($faqConfig);
 }
 if ($user) {
+    $error = null;
     $auth = true;
 } else {
-    $error = $PMF_LANG['ad_auth_sess'];
+    $error = Translation::get('ad_auth_sess');
     $user = null;
     unset($user);
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= $PMF_LANG['metaLanguage']; ?>">
+<html lang="<?= Translation::get('metaLanguage'); ?>">
 <head>
     <meta charset='UTF-8'>
     <title>phpMyFAQ Media Browser</title>
@@ -63,8 +90,8 @@ if ($user) {
 
 <form action="" method="post">
     <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="<?= $PMF_LANG['ad_media_name_search'] ?>" id="filter"
-               value="" aria-label="Recipient's username" aria-describedby="search">
+        <input type="text" class="form-control" placeholder="<?= Translation::get('ad_media_name_search') ?>"
+               id="filter" value="" aria-label="Recipient's username" aria-describedby="search">
         <span class="input-group-text" id="search"><i aria-hidden="true" class="fa fa-search"></i></span>
     </div>
 </form>
@@ -72,24 +99,29 @@ if ($user) {
 <?php
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', 'wmv', 'avi', 'webm'];
 
-if (!is_dir(PMF_ROOT_DIR . '/images')) {
-    echo '<p class="alert alert-danger">' . sprintf($PMF_LANG['ad_dir_missing'], '/images') . '</p>';
+if (!$auth && $error) {
+    Alert::danger('err_NotAuth');
 } else {
-    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
-    foreach ($files as $file) {
-        if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
-            continue;
+    if (!is_dir(PMF_ROOT_DIR . '/images')) {
+        echo '<p class="alert alert-danger">' . sprintf(Translation::get('ad_dir_missing'), '/images') . '</p>';
+    } else {
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
+        foreach ($files as $file) {
+            if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
+                continue;
+            }
+            $path = str_replace(dirname(__DIR__) . '/', '', $file->getPath());
+            printf(
+                '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview" alt="%s">%s</div>',
+                $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+                $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+                $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+                $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename()
+            );
         }
-        $path = str_replace(dirname(__DIR__) . '/', '', $file->getPath());
-        printf(
-            '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview" alt="%s">%s</div>',
-            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
-            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
-            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
-            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename()
-        );
     }
 }
+
 ?>
 <script src="../assets/dist/backend.js?<?= time(); ?>"></script>
 <script>

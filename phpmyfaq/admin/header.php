@@ -22,6 +22,7 @@ use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -229,7 +230,7 @@ switch ($action) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= $PMF_LANG['metaLanguage']; ?>">
+<html lang="<?= Translation::get('metaLanguage'); ?>">
 <head>
   <meta charset="utf-8">
 
@@ -253,7 +254,7 @@ switch ($action) {
   <script src="assets/js/configuration.js"></script>
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">
 </head>
-<body dir="<?= $PMF_LANG['dir']; ?>" id="page-top">
+<body dir="<?= Translation::get('dir'); ?>" id="page-top">
 
 <!-- phpMyFAQ Admin Top Bar -->
 <nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -266,12 +267,14 @@ switch ($action) {
 
     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
-            <span class="text-white-50 small">
-            <i class="fa fa-clock-o fa-fw"></i> <?= $PMF_LANG['ad_session_expiration']; ?>:
-            <span id="sessioncounter" class="pl-2">
-                <i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...
-            </span>
+            <div class="text-white-50 small">
+                <i class="fa fa-clock-o fa-fw"></i> <?= Translation::get('ad_session_expiration'); ?>:
+                <span id="sessioncounter" class="pl-2">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </span>
+            </div>
         </li>
     </ul>
     <?php endif; ?>
@@ -286,7 +289,8 @@ switch ($action) {
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+               aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                       <?= $user->getUserData('display_name'); ?>
                 </span>
@@ -305,13 +309,14 @@ switch ($action) {
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li>
                     <a class="dropdown-item" href="index.php?action=passwd">
-                        <?= $PMF_LANG['ad_menu_passwd'] ?>
+                        <?= Translation::get('ad_menu_passwd') ?>
                     </a>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
-                    <a class="dropdown-item" href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-                        <?= $PMF_LANG['admin_mainmenu_logout']; ?>
+                    <a class="dropdown-item"
+                       href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                        <?= Translation::get('admin_mainmenu_logout'); ?>
                     </a>
                 </li>
             </ul>
@@ -336,67 +341,80 @@ switch ($action) {
                     </a>
 
                     <!-- User -->
-                    <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
+                    <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-user"></i></div>
-                        <?= $PMF_LANG['admin_mainmenu_users']; ?>
+                        <?= Translation::get('admin_mainmenu_users'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
-                    <div class="<?= ($userPage) ? '' : 'collapse' ?>" id="collapseUsers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <div class="<?= ($userPage) ? '' : 'collapse' ?>" id="collapseUsers" aria-labelledby="headingOne"
+                         data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
                             <?= $secLevelEntries['user']; ?>
                         </nav>
                     </div>
                     <!-- Content -->
-                    <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                    <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-edit"></i></div>
-                        <?= $PMF_LANG['admin_mainmenu_content']; ?>
+                        <?= Translation::get('admin_mainmenu_content'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
-                    <div class="<?= ($contentPage) ? '' : 'collapse' ?>" id="collapseContent" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <div class="<?= ($contentPage) ? '' : 'collapse' ?>" id="collapseContent"
+                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
                             <?= $secLevelEntries['content']; ?>
                         </nav>
                     </div>
                     <!-- Statistics -->
-                    <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
+                    <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-tasks"></i></div>
-                        <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
+                        <?= Translation::get('admin_mainmenu_statistics'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
-                    <div class="<?= ($statisticsPage) ? '' : 'collapse' ?>" id="collapseStatistics" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <div class="<?= ($statisticsPage) ? '' : 'collapse' ?>" id="collapseStatistics"
+                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
                             <?= $secLevelEntries['statistics']; ?>
                         </nav>
                     </div>
                     <!-- Exports -->
-                    <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
+                    <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
-                        <?= $PMF_LANG['admin_mainmenu_exports']; ?>
+                        <?= Translation::get('admin_mainmenu_exports'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
-                    <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports"
+                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
                             <?= $secLevelEntries['exports']; ?>
                         </nav>
                     </div>
                     <!-- BackupAdmin -->
-                    <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
+                    <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
-                        <?= $PMF_LANG['admin_mainmenu_backup']; ?>
+                        <?= Translation::get('admin_mainmenu_backup'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
-                    <div class="<?= ($backupPage) ? '' : 'collapse' ?>" id="collapseBackupAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <div class="<?= ($backupPage) ? '' : 'collapse' ?>" id="collapseBackupAdmin"
+                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
                             <?= $secLevelEntries['backup']; ?>
                         </nav>
                     </div>
                     <!-- ConfigAdmin -->
-                    <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false" aria-controls="collapseConfigAdmin">
+                    <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#"
+                       data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
+                       aria-controls="collapseConfigAdmin">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
-                        <?= $PMF_LANG['admin_mainmenu_configuration']; ?>
+                        <?= Translation::get('admin_mainmenu_configuration'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
-                    <div class="<?= ($configurationPage) ? '' : 'collapse' ?>" id="collapseConfigAdmin" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <div class="<?= ($configurationPage) ? '' : 'collapse' ?>" id="collapseConfigAdmin"
+                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
                             <?= $secLevelEntries['config']; ?>
                         </nav>
