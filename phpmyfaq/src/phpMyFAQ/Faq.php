@@ -322,7 +322,8 @@ class Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.sticky AS sticky,
-                fd.thema AS thema,
+                fd.thema AS question,
+                fd.content as answer,
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
@@ -393,7 +394,7 @@ class Faq
                     Translation::get('msgPages')
                 );
             }
-            $output .= '<ul class="list-group">';
+            $output .= '<ul class="list-group list-group-flush mb-4">';
 
             $counter = 0;
             $displayedCounter = 0;
@@ -411,7 +412,7 @@ class Faq
                     $visits = $row->visits;
                 }
 
-                $title = $row->thema;
+                $title = $row->question;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
@@ -423,6 +424,7 @@ class Faq
 
                 $oLink = new Link($url, $this->config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
+                $oLink->class = 'text-decoration-none';
 
                 // If random FAQs are activated, we don't need sticky FAQs
                 if (true === $this->config->get('records.randomSort')) {
@@ -430,9 +432,16 @@ class Faq
                 }
 
                 $renderedItems[$row->id] = sprintf(
-                    '<li%s>%s<span id="viewsPerRecord"><small>(%s)</small></span></li>',
-                    ($row->sticky == 1) ? ' class="sticky-faqs"' : '',
+                    '<li class="list-group-item d-flex justify-content-between align-items-start %s">',
+                    ($row->sticky) ? 'sticky-faqs' : ''
+                );
+                $renderedItems[$row->id] .= sprintf(
+                    '<div class="ms-2 me-auto"><div class="fw-bold">%s</div><div class="small">%s</div></div>',
                     $oLink->toHtmlAnchor(),
+                    Utils::chopString(strip_tags($row->answer), 20)
+                );
+                $renderedItems[$row->id] .= sprintf(
+                    '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span></li>',
                     $this->plurals->getMsg('plmsgViews', $visits)
                 );
             }
