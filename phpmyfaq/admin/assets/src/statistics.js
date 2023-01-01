@@ -9,7 +9,7 @@ import { addElement } from '../../../assets/src/utils';
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2022 phpMyFAQ Team
+ * @copyright 2022-2023 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-21

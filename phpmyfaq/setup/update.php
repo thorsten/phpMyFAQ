@@ -11,7 +11,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2022 phpMyFAQ Team
+ * @copyright 2002-2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2002-01-10

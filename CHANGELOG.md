@@ -1755,4 +1755,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-Copyright © 2001-2022 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001-2023 Thorsten Rinne and the phpMyFAQ Team

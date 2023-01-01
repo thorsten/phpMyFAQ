@@ -7,14 +7,13 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne
- * @copyright 2022 phpMyFAQ Team
+ * @copyright 2022-2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-20
  */
 
 import { addElement } from '../../../../assets/src/utils';
-
 export const handleElasticsearch = () => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
 

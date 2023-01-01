@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2022 phpMyFAQ Team
+ * @copyright 2010-2023 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2010-09-18
@@ -18,8 +18,8 @@
 //
 // Prepend and start the PHP session
 //
-define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
-define('IS_VALID_PHPMYFAQ', null);
+define('PMF_ROOT_DIR', dirname(__DIR__, 2));
+const IS_VALID_PHPMYFAQ = null;
 
 //
 // Bootstrapping

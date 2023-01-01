@@ -5,12 +5,12 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 
 ## Supported Versions
 
-| Version | Supported | Active development |
-| ------- | --------- | ------------------ |
-| 3.2.x   | ✓         | 2023 -             |
-| 3.1.x   | ✓         | 2022 -             |
-| 3.0.x   | ✗         | 2020 - 2022        |
-| < 2.9   | ✗         | 2001 - 2019        |
+| Version | Supported | Active support / development |
+| ------- | --------- | ---------------------------- |
+| 3.2.x   | ✓         | 2023 -                       |
+| 3.1.x   | ✓         | 2022 -                       |
+| 3.0.x   | ✗         | 2020 - 2022                  |
+| < 2.9   | ✗         | 2001 - 2019                  |
 
 ## Reporting a vulnerability
 
@@ -28,4 +28,4 @@ you or administrative action against your account if you act accordingly: White 
 
 Thank you for improving the security of phpMyFAQ.
 
-Copyright © 2001 - 2022 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001 - 2023 Thorsten Rinne and the phpMyFAQ Team
