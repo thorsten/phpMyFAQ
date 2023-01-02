@@ -24,8 +24,6 @@ X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
   "parent-category-name": "[parent category name in plain text, optional value]",
   "category-name": "[name in plain text, required value]",
   "description": "[question in plain text or empty string, required value]",
-  "user-id": "[user id as integer value, required value]",
-  "group-id": "[group-id as integer value, required value]",
   "is-active": "true/false, required value",
   "show-on-homepage": "true/false, required value"
 }
@@ -44,8 +42,6 @@ mapped, a 409 error is thrown
   "parent-category-name": "Open Source Software",
   "category-name": "phpMyFAQ",
   "description": "Hello, World",
-  "user-id": "1",
-  "group-id": "-1",
   "is-active": "true",
   "show-on-homepage": "false"
 }

@@ -220,11 +220,13 @@ switch ($action) {
 
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($postData['parent-id'], FILTER_VALIDATE_INT);
-        $parentCategoryName = Filter::filterVar($postData['parent-category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
+        if (isset($postData['parent-category-name'])) {
+            $parentCategoryName = Filter::filterVar($postData['parent-category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
+        } else {
+            $parentCategoryName = null;
+        }
         $name = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
         $description = Filter::filterVar($postData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $userId = Filter::filterVar($postData['user-id'], FILTER_VALIDATE_INT);
-        $groupId = Filter::filterVar($postData['group-id'], FILTER_VALIDATE_INT);
         $active = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
         $showOnHome = Filter::filterVar($postData['show-on-homepage'], FILTER_VALIDATE_BOOLEAN);
 
@@ -249,8 +251,8 @@ switch ($action) {
             ->setParentId($parentId)
             ->setName($name)
             ->setDescription($description)
-            ->setUserId($userId)
-            ->setGroupId($groupId)
+            ->setUserId(1)
+            ->setGroupId(-1)
             ->setActive($active)
             ->setImage('')
             ->setShowHome($showOnHome);
@@ -444,7 +446,11 @@ switch ($action) {
 
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
-        $categoryName = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
+        if (isset($postData['category-name'])) {
+            $categoryName = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
+        } else {
+            $categoryName = null;
+        }
         $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($postData['keywords'], FILTER_SANITIZE_SPECIAL_CHARS);
