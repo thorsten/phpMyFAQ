@@ -8,7 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v3.2.0-alpha - 2023-XX-XX
 
-- changed PHP requirement to PHP 8.0.2 or later (Thorsten)
+- changed PHP requirement to PHP 8.0.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
 - changed MySQL / MariaDB / Percona Server / Galera Cluster to InnoDB only (Thorsten)
 - added experimental Azure AD login (Thorsten)
