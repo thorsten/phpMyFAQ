@@ -46,7 +46,7 @@ class Pgsql implements DatabaseDriver
     /**
      * The connection resource.
      */
-    private \PgSql\Connection|bool|null $conn = null;
+    private bool|null $conn = null;
 
     /**
      * Connects to the database.
@@ -75,7 +75,7 @@ class Pgsql implements DatabaseDriver
 
         $this->conn = pg_connect($connectionString);
 
-        if (empty($database) || $this->conn == false) {
+        if (empty($database) || !$this->conn) {
             Database::errorPage(pg_last_error($this->conn));
             die();
         }
@@ -119,7 +119,7 @@ class Pgsql implements DatabaseDriver
      *
      * @param string
      */
-    public function escape($string): string
+    public function escape(string $string): string
     {
         return pg_escape_string($this->conn, $string);
     }
@@ -127,12 +127,11 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetches a complete result as an object.
      *
-     * @param resource $result Resultset
-     *
+     * @param mixed $result Resultset
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result): ?array
+    public function fetchAll(mixed $result): ?array
     {
         $ret = [];
         if (false === $result) {
@@ -149,21 +148,21 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @param resource $result
-     *
+     * @param mixed $result
      * @return mixed
      */
-    public function fetchObject($result)
+    public function fetchObject(mixed $result)
     {
         return pg_fetch_object($result);
     }
 
     /**
      * Fetch a result row.
-     * @param $result
+     *
+     * @param mixed $result
      * @return false|mixed
      */
-    public function fetchRow($result)
+    public function fetchRow(mixed $result)
     {
         return pg_fetch_row($result);
     }
@@ -237,7 +236,7 @@ class Pgsql implements DatabaseDriver
      * @param string $table the name of the table
      * @param string $id    the name of the ID column
      */
-    public function nextId($table, $id): int
+    public function nextId(string $table, string $id): int
     {
         return (int) $this->getOne("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
     }

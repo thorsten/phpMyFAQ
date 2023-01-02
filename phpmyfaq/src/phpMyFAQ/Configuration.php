@@ -31,6 +31,7 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 class Configuration
 {
+    /** @var array */
     public array $config = [];
 
     public Logger $logger;
@@ -71,26 +72,6 @@ class Configuration
     public function getLogger(): Logger
     {
         return $this->logger;
-    }
-
-    /**
-     * Returns all sorting possibilities for FAQ records.
-     */
-    public static function sortingOptions(string $current): string
-    {
-        $options = ['id', 'thema', 'visits', 'updated', 'author'];
-        $output = '';
-
-        foreach ($options as $value) {
-            printf(
-                '<option value="%s" %s>%s</option>',
-                $value,
-                ($value == $current) ? 'selected' : '',
-                Translation::get('ad_conf_order_' . $value)
-            );
-        }
-
-        return $output;
     }
 
     /**

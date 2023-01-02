@@ -162,4 +162,24 @@ class AdministrationHelper
 
         return $html;
     }
+
+    /**
+     * Returns all sorting possibilities for FAQ records.
+     */
+    public static function sortingOptions(string $current): string
+    {
+        $options = ['id', 'thema', 'visits', 'updated', 'author'];
+        $output = '';
+
+        foreach ($options as $value) {
+            printf(
+                '<option value="%s" %s>%s</option>',
+                $value,
+                ($value == $current) ? 'selected' : '',
+                Translation::get('ad_conf_order_' . $value)
+            );
+        }
+
+        return $output;
+    }
 }

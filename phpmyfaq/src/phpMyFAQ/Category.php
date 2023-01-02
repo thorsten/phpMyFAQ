@@ -258,7 +258,7 @@ class Category
             if (in_array($id, $alreadyListed)) {
                 break;
             } else {
-                array_push($alreadyListed, $id);
+                $alreadyListed[] = $id;
             }
         }
 
@@ -980,8 +980,8 @@ class Category
      * @param array $categoryData Array of category data
      * @param int   $parentId Parent id
      * @param null  $id Entity id
+     * @return int|null
      * @deprecated will be removed in v3.3, please use Category::create()
-     * @return int
      */
     public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
     {
@@ -1259,23 +1259,6 @@ class Category
                 $this->children[$row['parent_id']][$row['id']] = &$this->categoryName[$row['id']];
             }
         }
-    }
-
-    /**
-     * Get number of nodes at the same parent_id level.
-     *
-     * @param int $parentId Parent id
-     */
-    public function numParent(int $parentId): int
-    {
-        $query = sprintf(
-            'SELECT DISTINCT id FROM %sfaqcategories WHERE parent_id = %d',
-            Database::getTablePrefix(),
-            $parentId
-        );
-        $result = $this->config->getDb()->query($query);
-
-        return $this->config->getDb()->numRows($result);
     }
 
     /**

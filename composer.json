@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "php": ">=8.0.0",
+    "php": ">=8.0.2",
     "phpseclib/phpseclib": "~3.0",
     "erusev/parsedown": "~1.0",
     "erusev/parsedown-extra": "~0.8.1",

@@ -110,21 +110,20 @@ class Mysqli implements DatabaseDriver
     /**
      * Escapes a string for use in a query.
      *
-     * @param string
+     * @param string $string
+     * @return string
      */
-    public function escape($string): string
+    public function escape(string $string): string
     {
         return $this->conn->real_escape_string($string);
     }
 
     /**
      * Fetch a result row as an object.
-     *
      * This function fetches a result as an associative array.
      *
      * @param mixed $result
-     *
-     * @return array
+     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -133,10 +132,11 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     * @param $result
+     *
+     * @param mixed $result
      * @return false|mixed
      */
-    public function fetchRow($result)
+    public function fetchRow(mixed $result): mixed
     {
         return $result->fetch_row()[0] ?? false;
     }
@@ -144,11 +144,11 @@ class Mysqli implements DatabaseDriver
     /**
      * Fetches a complete result as an object.
      *
-     * @param mysqli_result $result Result set
+     * @param mixed $result Result set
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result): ?array
+    public function fetchAll(mixed $result): ?array
     {
         $ret = [];
         if (false === $result) {
@@ -164,15 +164,13 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Fetch a result row as an object.
-     *
      * This function fetches a result row as an object.
      *
-     * @param mysqli_result $result
-     *
+     * @param mixed $result
      * @return mixed
      * @throws Exception
      */
-    public function fetchObject($result)
+    public function fetchObject(mixed $result): mixed
     {
         return $result->fetch_object();
     }
@@ -180,9 +178,9 @@ class Mysqli implements DatabaseDriver
     /**
      * Number of rows in a result.
      *
-     * @param mysqli_result $result
+     * @param mixed $result
      */
-    public function numRows($result): int
+    public function numRows(mixed $result): int
     {
         if ($result instanceof mysqli_result) {
             return $result->num_rows;
@@ -290,7 +288,7 @@ class Mysqli implements DatabaseDriver
      * @param string $table The name of the table
      * @param string $id    The name of the ID column
      */
-    public function nextId($table, $id): int
+    public function nextId(string $table, string $id): int
     {
         $select = sprintf(
             '
@@ -319,7 +317,7 @@ class Mysqli implements DatabaseDriver
      *
      * @return mysqli_result $result
      */
-    public function query(string $query, int $offset = 0, int $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
         $this->sqllog .= Utils::debug($query);
 

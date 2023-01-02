@@ -73,9 +73,10 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Escapes a string for use in a query.
      *
-     * @param string
+     * @param string $string
+     * @return string
      */
-    public function escape($string): string
+    public function escape(string $string): string
     {
         return \SQLite3::escapeString($string);
     }
@@ -98,9 +99,9 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Fetch a result row as an array.
      *
-     * @param SQLite3Result $result
+     * @param mixed $result
      */
-    public function fetchArray($result): ?array
+    public function fetchArray(mixed $result): ?array
     {
         $result->fetchedByPMF = true;
 
@@ -111,10 +112,11 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     * @param $result
+     *
+     * @param mixed $result
      * @return false|mixed
      */
-    public function fetchRow($result)
+    public function fetchRow(mixed $result): mixed
     {
         return $result->fetchSingle();
     }
@@ -122,11 +124,11 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Fetches a complete result as an object.
      *
-     * @param resource $result Resultset
+     * @param mixed $result Resultset
      * @return array|null of stdClass
      * @throws Exception
      */
-    public function fetchAll($result): ?array
+    public function fetchAll(mixed $result): ?array
     {
         $ret = [];
         if (false === $result) {
@@ -217,9 +219,9 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Number of rows in a result.
      *
-     * @param SQLite3Result $result
+     * @param mixed $result
      */
-    public function numRows($result): int
+    public function numRows(mixed $result): int
     {
         !isset($result->fetchedByPMF) || !$result->fetchedByPMF || die(self::ERROR_MESSAGE);
         $numberOfRows = 0;
@@ -294,7 +296,7 @@ class Sqlite3 implements DatabaseDriver
      * @param string      the name of the table
      * @param string      the name of the ID column
      */
-    public function nextId($table, $id): int
+    public function nextId(string $table, string $id): int
     {
         $result = (int)$this->conn->querySingle(
             sprintf(

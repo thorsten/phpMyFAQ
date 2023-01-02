@@ -47,13 +47,6 @@ class Database
     private static ?string $tablePrefix = null;
 
     /**
-     * Constructor.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
      * Database factory.
      *
      * @param string $type Database management system type

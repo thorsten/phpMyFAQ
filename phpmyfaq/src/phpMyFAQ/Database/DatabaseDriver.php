@@ -46,17 +46,16 @@ interface DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     *
      * @return mixed $result
      */
-    public function query(string $query, int $offset = 0, int $rowcount = 0);
+    public function query(string $query, int $offset = 0, int $rowcount = 0): mixed;
 
     /**
      * Escapes a string for use in a query.
      *
-     * @param string
+     * @param string $string
      */
-    public function escape($string): string;
+    public function escape(string $string): string;
 
     /**
      * Fetch a result row as an object.
@@ -65,7 +64,7 @@ interface DatabaseDriver
      *
      * @return mixed
      */
-    public function fetchObject($result);
+    public function fetchObject(mixed $result): mixed;
 
     /**
      * Fetch a result row as an array.
@@ -74,30 +73,30 @@ interface DatabaseDriver
      *
      * @return array
      */
-    public function fetchArray($result): ?array;
+    public function fetchArray(mixed $result): ?array;
 
     /**
      * Fetch a result row.
-     * @param $result
+     * @param mixed $result
      * @return false|mixed
      */
-    public function fetchRow($result);
+    public function fetchRow(mixed $result): mixed;
 
     /**
      * Fetches a complete result as an object.
      *
-     * @param mixed $result Resultset
+     * @param mixed $result Result
      *
      * @return array
      */
-    public function fetchAll($result): ?array;
+    public function fetchAll(mixed $result): ?array;
 
     /**
      * Number of rows in a result.
      *
      * @param mixed $result
      */
-    public function numRows($result): int;
+    public function numRows(mixed $result): int;
 
     /**
      * Logs the queries.
@@ -114,10 +113,10 @@ interface DatabaseDriver
     /**
      * Returns the next ID of a table.
      *
-     * @param string The name of the table
-     * @param string      the name of the ID column
+     * @param string $table The name of the table
+     * @param string $id The name of the ID column
      */
-    public function nextId($table, $id): int;
+    public function nextId(string $table, string $id): int;
 
     /**
      * Returns the error string.

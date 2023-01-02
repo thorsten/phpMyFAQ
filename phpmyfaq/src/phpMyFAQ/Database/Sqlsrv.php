@@ -29,19 +29,15 @@ use phpMyFAQ\Utils;
  */
 class Sqlsrv implements DatabaseDriver
 {
-    /**
-     * Tables.
-     */
+    /** @var string[] Tables */
     public array $tableNames = [];
 
-    /**
-     * @var resource
-     */
+    /** @var resource|bool */
     private $conn = false;
-    /**
-     * The query log string.
-     */
+
+    /** The query log string. */
     private string $sqllog = '';
+
     /**
      * Connection options array.
      */
@@ -83,7 +79,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @param string $string String
      */
-    public function escape($string): string
+    public function escape(string $string): string
     {
         return str_replace("'", "''", $string);
     }
@@ -91,11 +87,10 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Fetch a result row as an assoc array.
      *
-     * @param resource $result Resultset
-     *
+     * @param mixed $result Resultset
      * @return array
      */
-    public function fetchArray($result): ?array
+    public function fetchArray(mixed $result): ?array
     {
         $fetchedData = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
@@ -104,10 +99,11 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     * @param $result
+     *
+     * @param mixed $result
      * @return false|mixed
      */
-    public function fetchRow($result)
+    public function fetchRow(mixed $result)
     {
         return $this->fetchArray($result)[0];
     }
@@ -115,12 +111,11 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Fetches a complete result as an object.
      *
-     * @param resource $result Resultset
-     *
+     * @param mixed $result Resultset
      * @return array
      * @throws Exception
      */
-    public function fetchAll($result): ?array
+    public function fetchAll(mixed $result): ?array
     {
         $ret = [];
         if (false === $result) {
@@ -151,9 +146,9 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @param resource $result Results
+     * @param mixed $result Results
      */
-    public function fetchObject($result)
+    public function fetchObject(mixed $result)
     {
         return sqlsrv_fetch_object($result);
     }
@@ -161,9 +156,9 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Number of rows in a result.
      *
-     * @param resource $result Resultset
+     * @param mixed $result Resultset
      */
-    public function numRows($result): int
+    public function numRows(mixed $result): int
     {
         return sqlsrv_num_rows($result);
     }
@@ -235,7 +230,7 @@ class Sqlsrv implements DatabaseDriver
      * @param string $table the name of the table
      * @param string $id    the name of the ID column
      */
-    public function nextId($table, $id): int
+    public function nextId(string $table, string $id): int
     {
         $select = sprintf(
             '

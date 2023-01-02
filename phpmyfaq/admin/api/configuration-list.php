@@ -172,7 +172,7 @@ function renderInputForm(mixed $key, string $type)
                     break;
 
                 case 'records.orderby':
-                    echo Configuration::sortingOptions($faqConfig->get($key));
+                    echo AdministrationHelper::sortingOptions($faqConfig->get($key));
                     break;
 
                 case 'records.sortby':
