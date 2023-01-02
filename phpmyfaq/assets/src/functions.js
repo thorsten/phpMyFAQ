@@ -203,19 +203,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return false;
   };
-
-  $('#captcha-button').on('click', function () {
-    const action = $(this).data('action');
-    $.ajax({
-      url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
-      success: function () {
-        const captcha = $('#captcha');
-        $('#captchaImage').attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
-        captcha.val('');
-        captcha.focus();
-      },
-    });
-  });
-
   */
 });

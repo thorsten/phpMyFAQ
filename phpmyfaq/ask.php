@@ -58,6 +58,7 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 $template->parse(
     'mainPageContent',
     [
+        'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'pageHeader' => Translation::get('msgQuestion'),
         'msgQuestion' => Translation::get('msgQuestion'),
         'msgNewQuestion' => Translation::get('msgNewQuestion'),

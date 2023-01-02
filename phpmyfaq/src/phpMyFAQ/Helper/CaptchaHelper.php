@@ -33,18 +33,23 @@ class CaptchaHelper extends Helper
 
     /**
      * Constructor.
+     *
+     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(protected Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Renders the captcha check.
      *
+     * @param Captcha $captcha
+     * @param string  $action
+     * @param string  $legend
      * @param bool    $auth
+     * @return string
      */
-    public function renderCaptcha(Captcha $captcha, string $action, string $legend, $auth = false): string
+    public function renderCaptcha(Captcha $captcha, string $action, string $legend, bool|null $auth = false): string
     {
         $html = '';
 
@@ -52,9 +57,7 @@ class CaptchaHelper extends Helper
             $html .= '<div class="row">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $legend);
             $html .= '    <div class="col-sm-4">';
-            $html .= '        <p class="form-control-static">';
-            $html .= $captcha->renderCaptchaImage($action);
-            $html .= '        </p>';
+            $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage($action));
             $html .= '    </div>';
             $html .= '    <div class="col-sm-5">';
             $html .= '        <div class="input-group">';

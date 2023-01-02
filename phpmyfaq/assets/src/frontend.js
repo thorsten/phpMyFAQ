@@ -16,7 +16,14 @@
 import 'cookieconsent';
 import 'bootstrap';
 import Masonry from 'masonry-layout';
+import { handleReloadCaptcha } from './captcha';
 import { calculateReadingTime } from './reading-time';
+
+// Reload Captchas
+const reloadButton = document.querySelector('#captcha-button');
+if (reloadButton !== null) {
+  handleReloadCaptcha(reloadButton);
+}
 
 // Calculate reading time
 const faqBody = document.querySelector('.pmf-faq-body');
@@ -27,9 +34,6 @@ if (faqBody !== null) {
 // Masonry
 window.onload = () => {
   const masonryElement = document.querySelector('.masonry-grid');
-
-  console.log(masonryElement);
-
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });
   }
