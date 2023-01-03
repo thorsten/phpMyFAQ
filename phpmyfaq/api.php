@@ -220,13 +220,28 @@ switch ($action) {
 
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($postData['parent-id'], FILTER_VALIDATE_INT);
+
         if (isset($postData['parent-category-name'])) {
             $parentCategoryName = Filter::filterVar($postData['parent-category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $parentCategoryName = null;
         }
+
         $name = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
         $description = Filter::filterVar($postData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (isset($postData['user-id'])) {
+            $userId = Filter::filterVar($postData['user-id'], FILTER_VALIDATE_INT);
+        } else {
+            $userId = 1;
+        }
+
+        if (isset($postData['group-id'])) {
+            $groupId = Filter::filterVar($postData['group-id'], FILTER_VALIDATE_INT);
+        } else {
+            $groupId = -1;
+        }
+
         $active = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
         $showOnHome = Filter::filterVar($postData['show-on-homepage'], FILTER_VALIDATE_BOOLEAN);
 
@@ -251,8 +266,8 @@ switch ($action) {
             ->setParentId($parentId)
             ->setName($name)
             ->setDescription($description)
-            ->setUserId(1)
-            ->setGroupId(-1)
+            ->setUserId($userId)
+            ->setGroupId($groupId)
             ->setActive($active)
             ->setImage('')
             ->setShowHome($showOnHome);
