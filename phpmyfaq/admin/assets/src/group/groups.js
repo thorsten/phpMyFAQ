@@ -5,6 +5,10 @@ export const handleGroups = async () => {
   clearGroupList();
 
   const groupListSelect = document.querySelector('#group_list_select');
+  if (!groupListSelect) {
+    return;
+  }
+
   const addMember = document.querySelector('.pmf-add-member');
   const removeMember = document.querySelector('.pmf-remove-member');
   const selectAllUsers = document.getElementById('select_all_group_user_list');
@@ -79,7 +83,10 @@ const getGroupData = async (groupId) => {
 };
 
 const clearGroupList = () => {
-  document.getElementById('group_list_select').textContent = '';
+  const groupList = document.getElementById('group_list_select');
+  if (groupList) {
+    groupList.textContent = '';
+  }
 };
 
 const processGroupList = async () => {
