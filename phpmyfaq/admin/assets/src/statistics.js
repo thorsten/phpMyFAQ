@@ -1,5 +1,3 @@
-import { addElement } from '../../../assets/src/utils';
-
 /**
  * Statistics Handling
  *
@@ -14,6 +12,8 @@ import { addElement } from '../../../assets/src/utils';
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-21
  */
+
+import { addElement } from '../../../assets/src/utils';
 
 export const handleStatistics = () => {
   const buttonsDeleteSearchTerm = document.querySelectorAll('.pmf-delete-search-term');

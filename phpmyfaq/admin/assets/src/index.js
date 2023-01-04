@@ -25,6 +25,7 @@ import {
 import { handleStatistics } from './statistics';
 import { handleCategories, handleFaqForm, handleTags, renderEditor } from './content';
 import { handleUserList, handleUsers } from './user';
+import { handleGroups } from './group';
 
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
@@ -62,6 +63,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // User -> User Management
   await handleUsers();
   handleUserList();
+
+  // Group -> Group Management
+  await handleGroups();
 
   // Content -> add/edit FAQs
   renderEditor();

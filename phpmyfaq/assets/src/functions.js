@@ -25,32 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /**
-   * selects all list options in the select with the given ID.
-   *
-   * @param select_id
-   * @return void
-   */
-  const selectSelectAll = function selectSelectAll(select_id) {
-    const selectOptions = $('#' + select_id + ' option');
-    for (let i = 0; i < selectOptions.length; i += 1) {
-      selectOptions[i].selected = true;
-    }
-  };
-
-  /**
-   * deselects all list options in the select with the given ID.
-   *
-   * @param select_id
-   * @return void
-   */
-  const selectUnselectAll = function selectUnselectAll(select_id) {
-    const selectOptions = $('#' + select_id + ' option');
-    for (let i = 0; i < selectOptions.length; i += 1) {
-      selectOptions[i].selected = false;
-    }
-  };
-
-  /**
    * Saves all content from the given form via Ajax
    *
    * @param action   Actions: savecomment, savefaq, savequestion,

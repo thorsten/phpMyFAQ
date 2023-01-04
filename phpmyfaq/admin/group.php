@@ -19,6 +19,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
@@ -404,9 +405,6 @@ if ('list' === $groupAction) {
     </div>
   </div>
 
-  <script src="assets/js/user.js"></script>
-  <script src="assets/js/groups.js"></script>
-
   <div id="user_message"><?= $message ?></div>
 
   <div class="row">
@@ -434,7 +432,7 @@ if ('list' === $groupAction) {
             <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['ad_groups'] ?>
           </h5>
           <div class="card-body">
-            <select name="group_list_select" id="group_list_select" class="form-control"
+            <select name="group_list_select" id="group_list_select" class="form-select"
                     size="<?= $groupSelectSize ?>" tabindex="1">
             </select>
           </div>
@@ -511,16 +509,14 @@ if ('list' === $groupAction) {
             <div class="row">
               <div class="text-center">
                 <span class="select_all">
-                  <a class="btn btn-primary btn-sm"
-                     href="javascript:selectSelectAll('group_user_list')">
+                  <button type="button" class="btn btn-primary btn-sm" id="select_all_group_user_list">
                       <i aria-hidden="true" class="fa fa-user-plus"></i>
-                  </a>
+                  </button>
                 </span>
                 <span class="unselect_all">
-                  <a class="btn btn-primary btn-sm"
-                     href="javascript:selectUnselectAll('group_user_list')">
+                  <button type="button" class="btn btn-primary btn-sm" id="unselect_all_group_user_list">
                       <i aria-hidden="true" class="fa fa-user-times"></i>
-                  </a>
+                  </button>
                 </span>
               </div>
             </div>
@@ -535,9 +531,9 @@ if ('list' === $groupAction) {
             <div class="row">
               <div class="text-center">
                 <input class="btn btn-success pmf-add-member" type="button"
-                       value="<?= $PMF_LANG['ad_group_addMember'] ?>">
+                       value="<?= Translation::get('ad_group_addMember') ?>">
                 <input class="btn btn-danger pmf-remove-member" type="button"
-                       value="<?= $PMF_LANG['ad_group_removeMember'] ?>">
+                       value="<?= Translation::get('ad_group_removeMember') ?>">
               </div>
             </div>
           </div>
@@ -551,16 +547,14 @@ if ('list' === $groupAction) {
             <div class="row">
               <div class="text-center">
                 <span class="select_all">
-                    <a class="btn btn-primary btn-sm"
-                       href="javascript:selectSelectAll('group_member_list')">
+                    <button type="button" class="btn btn-primary btn-sm" id="select_all_members">
                         <i aria-hidden="true" class="fa fa-user-plus"></i>
-                    </a>
+                    </button>
                 </span>
                 <span class="unselect_all">
-                  <a class="btn btn-primary btn-sm"
-                     href="javascript:selectUnselectAll('group_member_list')">
+                  <button type="button" class="btn btn-primary btn-sm" id="unselect_all_members">
                       <i aria-hidden="true" class="fa fa-user-times"></i>
-                  </a>
+                  </button>
                 </span>
               </div>
             </div>

@@ -16,7 +16,6 @@
  */
 
 import { Modal } from 'bootstrap';
-import { userAutoComplete } from './autocomplete';
 import { fetchAllUsers, fetchUserData, fetchUserRights, postUserData } from './api';
 import { addElement } from '../../../../assets/src/utils';
 
