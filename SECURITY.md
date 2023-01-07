@@ -22,4 +22,4 @@ and work to address any issues that arise as quickly as possible.
 Please act in good faith towards our users’ privacy and data during your disclosure. We won’t take legal action against
 you or administrative action against your account if you act accordingly: White hat researchers are always appreciated.
 
-Copyright © 2001 - 2022 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001 - 2023 Thorsten Rinne and the phpMyFAQ Team

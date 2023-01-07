@@ -30,8 +30,8 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('PMF_SRC_DIR', PMF_ROOT_DIR . '/src');
-define('IS_VALID_PHPMYFAQ', null);
+const PMF_SRC_DIR = PMF_ROOT_DIR . '/src';
+const IS_VALID_PHPMYFAQ = null;
 
 if (version_compare(PHP_VERSION, '7.4.0') < 0) {
     die('Sorry, but you need PHP 7.4.0 or later!');
