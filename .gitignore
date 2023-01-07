@@ -18,11 +18,11 @@ volumes/*
 
 # phpMyFAQ generated folders
 phpmyfaq/config/database.php
-phpmyfaq/config/database.php.bak
+phpmyfaq/config/database.bak.php
 phpmyfaq/config/ldap.php
-phpmyfaq/config/ldap.php.bak
+phpmyfaq/config/ldap.bak.php
 phpmyfaq/config/elasticsearch.php
-phpmyfaq/config/elasticsearch.php.bak
+phpmyfaq/config/elasticsearch.bak.php
 phpmyfaq/config/index.html
 phpmyfaq/data/*
 phpmyfaq/logs/*
