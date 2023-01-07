@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alexander M. Turek <me@derrabus.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Alexander M. Turek <me@derrabus.de>
  * @copyright 2005-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-02-05
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2013-02-05
  */
 
 use phpMyFAQ\Api;
@@ -210,7 +210,7 @@ $faqSession = new Session($faqConfig);
             <div class="card-body">
                 <?php
                 $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_UNSAFE_RAW);
-                if (!is_null($getJson) && 'verify' === $getJson) {
+                if ('verify' === $getJson) {
                     $api = new Api($faqConfig, new System());
                     try {
                         if (!$api->isVerified()) {
@@ -240,7 +240,7 @@ $faqSession = new Session($faqConfig);
                     }
                 } else {
                     ?>
-                  <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+                  <form action="./admin/index.php" method="post"
                         accept-charset="utf-8">
                     <input type="hidden" name="getJson" value="verify"/>
                     <button class="btn btn-info" type="submit">
