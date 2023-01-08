@@ -2,28 +2,34 @@
   <h1>{{ pageHeader }}</h1>
   <p>{{ msgNewContentAddon }}</p>
 
-  <div id="loader"></div>
-  <div id="faqs"></div>
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="faqs"></div>
+    </div>
+  </div>
 
   <form id="formValues" action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
     <input type="hidden" value="{{ openQuestionID }}" id="openQuestionID" name="openQuestionID" />
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="name">{{ msgNewContentName }}</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" required />
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="email">{{ msgNewContentMail }}</label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" required />
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="rubrik">{{ msgNewContentCategory }}</label>
       <div class="col-sm-9">
         <select name="rubrik[]" class="form-control" id="rubrik" multiple="multiple" size="5" required>
@@ -32,7 +38,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="question">{{ msgNewContentTheme }}</label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="37" rows="3" name="question" id="question" required {{ readonly }}>
@@ -41,30 +47,30 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="answer">{{ msgNewContentArticle }}</label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="37" rows="10" name="answer" id="answer" required></textarea>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="keywords">{{ msgNewContentKeywords }}</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" name="keywords" id="keywords" />
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="contentlink">{{ msgNewContentLink }}</label>
       <div class="col-sm-9">
-        <input type="url" class="form-control" name="contentlink" id="contentlink" placeholder="http://" />
+        <input type="url" class="form-control" name="contentlink" id="contentlink" placeholder="https://" />
       </div>
     </div>
 
     {{ captchaFieldset }}
 
-    <div class="row">
+    <div class="row mb-2">
       <div class="col-sm-12 text-right">
         <button class="btn btn-primary btn-lg" type="submit" id="submitfaq">{{ msgNewContentSubmit }}</button>
       </div>
