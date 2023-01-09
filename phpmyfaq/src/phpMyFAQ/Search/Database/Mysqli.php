@@ -79,7 +79,7 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
                 FROM 
                     %s %s %s
                 WHERE
-                    MATCH (%s) AGAINST ('%s' IN NATURAL LANGUAGE MODE)
+                    MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
                     %s
                     %s",
                 $columns,

@@ -27,6 +27,7 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -265,7 +266,7 @@ if ($tagSearch) {
         'mainPageContent',
         'relatedTags',
         [
-            'relatedTagsHeader' => $PMF_LANG['msgRelatedTags'],
+            'relatedTagsHeader' => Translation::get('msgRelatedTags'),
             'relatedTags' => $relTags,
         ]
     );
@@ -275,7 +276,7 @@ if ($tagSearch) {
             'mainPageContent',
             'tagListSection',
             [
-                'msgTags' => $PMF_LANG['msgPopularTags'],
+                'msgTags' => Translation::get('msgPopularTags'),
                 'tagList' => $tagging->renderPopularTags(0),
             ]
         );
@@ -287,12 +288,12 @@ if ($tagSearch) {
         [
             'writeSendAdress' => '?' . $sids . 'action=search',
             'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
-            'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
+            'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
             'checkedAllLanguages' => $allLanguages ? ' checked' : '',
-            'selectCategories' => $PMF_LANG['msgSelectCategories'],
-            'allCategories' => $PMF_LANG['msgAllCategories'],
+            'selectCategories' => Translation::get('msgSelectCategories'),
+            'allCategories' => Translation::get('msgAllCategories'),
             'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
-            'msgSearch' => $PMF_LANG['msgSearch']
+            'msgSearch' => Translation::get('msgSearch')
         ]
     );
 
@@ -300,7 +301,7 @@ if ($tagSearch) {
         'mainPageContent',
         'popularSearchesSection',
         [
-            'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
+            'msgMostPopularSearches' => Translation::get('msgMostPopularSearches'),
             'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
         ]
     );
@@ -309,19 +310,19 @@ if ($tagSearch) {
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
-        'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
-        'msgSearchWord' => $PMF_LANG['msgSearchWord'],
+        'pageHeader' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
+        'msgAdvancedSearch' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
+        'msgSearchWord' => Translation::get('msgSearchWord'),
         'renderSearchResults' => $searchResult,
         'writeSendAdress' => '?' . $sids . 'action=search',
         'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
-        'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
+        'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
         'checkedAllLanguages' => $allLanguages ? ' checked' : '',
-        'selectCategories' => $PMF_LANG['msgSelectCategories'],
-        'allCategories' => $PMF_LANG['msgAllCategories'],
+        'selectCategories' => Translation::get('msgSelectCategories'),
+        'allCategories' => Translation::get('msgAllCategories'),
         'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
-        'msgSearch' => $PMF_LANG['msgSearch'],
-        'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
+        'msgSearch' => Translation::get('msgSearch'),
+        'msgMostPopularSearches' => Translation::get('msgMostPopularSearches'),
         'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
     ]
 );
