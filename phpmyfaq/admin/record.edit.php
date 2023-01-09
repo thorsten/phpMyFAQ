@@ -652,7 +652,7 @@ if (
                                                     );
                                                     ?>
                                                     <br>
-                                                    <?= $entry['changelog'] ?>
+                                                    <?= Strings::htmlentities($entry['changelog']) ?>
                                                 </li>
                                             <?php } ?>
                                         </ul>

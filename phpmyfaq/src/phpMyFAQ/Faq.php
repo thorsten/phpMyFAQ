@@ -2010,8 +2010,8 @@ class Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 $output['url'][] = Strings::htmlentities($row['url']);
-                $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                $output['preview'][] = $row['question'];
+                $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                $output['preview'][] = Strings::htmlentities($row['question']);
                 $output['date'][] = $date->format($row['date']);
             }
         } else {

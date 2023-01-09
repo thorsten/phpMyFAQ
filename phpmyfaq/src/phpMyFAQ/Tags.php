@@ -368,7 +368,7 @@ class Tags
             $totFaqByTag = count($this->getFaqsByTagName($tagName));
             if ($totFaqByTag > 0) {
                 $tags[$tagName]['id'] = $tagId;
-                $tags[$tagName]['name'] = $tagName;
+                $tags[$tagName]['name'] = Strings::htmlentities($tagName);
                 $tags[$tagName]['count'] = $totFaqByTag;
             }
         }
@@ -483,7 +483,7 @@ class Tags
                 '<a class="btn btn-primary m-1" href="?action=search&tagging_id=%d">%s ' .
                 '<span class="badge badge-info">%d</span></a>',
                 $tagId,
-                $tagName,
+                Strings::htmlentities($tagName),
                 $tagFreq
             );
         }

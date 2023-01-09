@@ -28,6 +28,7 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Search\SearchFactory;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -456,8 +457,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       </td>
                       <td>
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>"
-                           title="<?= $PMF_LANG['ad_user_edit'] ?> '<?= str_replace('"', '´', $record['title']) ?>'">
-                        <?= $record['title'] ?>
+                           title="<?= $PMF_LANG['ad_user_edit'] ?> '
+                           <?= str_replace('"', '´', Strings::htmlentities($record['title'])) ?>'">
+                        <?= Strings::htmlentities($record['title']) ?>
                         </a>
             <?php
             if (isset($numCommentsByFaq[$record['id']])) {
