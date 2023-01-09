@@ -23,7 +23,7 @@ use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
 
-const COPYRIGHT = '&copy; 2001-2022 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
+const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
 const IS_VALID_PHPMYFAQ = null;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
@@ -419,14 +419,18 @@ if ($step == 3) {
             created timestamp NOT NULL,
             PRIMARY KEY (id))';
 
+        // Migrate MySQL from MyISAM to InnoDB
+        if ('mysqli' === $DB['type']) {
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ENGINE=INNODB';
+        }
+
         // new options
         $faqConfig->add('main.enableAskQuestions', true);
         $faqConfig->add('main.enableNotifications', true);
 
         // update options
         $faqConfig->rename('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
-
-
+        
 
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server
