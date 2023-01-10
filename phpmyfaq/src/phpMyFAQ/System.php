@@ -90,10 +90,22 @@ class System
      * @var array<string, array<int, string>>
      */
     private array $supportedDatabases = [
-        'mysqli' => [self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB / Percona Server / Galera Cluster'],
-        'pgsql' => [self::VERSION_MINIMUM_PHP, 'PostgreSQL'],
-        'sqlite3' => [self::VERSION_MINIMUM_PHP, 'SQLite 3'],
-        'sqlsrv' => [self::VERSION_MINIMUM_PHP, 'MS SQL Server']
+        'mysqli' => [
+            self::VERSION_MINIMUM_PHP,
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 for MySQL'
+        ],
+        'pgsql' => [
+            self::VERSION_MINIMUM_PHP,
+            'PostgreSQL v10 or later'
+        ],
+        'sqlite3' => [
+            self::VERSION_MINIMUM_PHP,
+            'SQLite 3'
+        ],
+        'sqlsrv' => [
+            self::VERSION_MINIMUM_PHP,
+            'MS SQL Server 2016 or later'
+        ]
     ];
 
     /**

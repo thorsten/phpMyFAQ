@@ -10,7 +10,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - changed PHP requirement to PHP 8.0.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
-- changed MySQL / MariaDB / Percona Server / Galera Cluster to InnoDB only (Thorsten)
+- changed MariaDB / MySQL / Percona Server / Galera Cluster to InnoDB only (Thorsten)
+- changed MariaDB requirement to 10.0 (Thorsten)
+- changed MySQL / Percona Server / Galera Cluster requirement to 8.0 or later (Thorsten)
+- changed PostgreSQL requirement to 10.0 or later (Thorsten)
+- changed MS SQL Server requirement to 2016 or later (Thorsten)
 - added support for PHP 8.2 (Thorsten)
 - added experimental Azure AD login (Thorsten)
 - added REST API v2.2 to fetch groups and add categories (Thorsten)

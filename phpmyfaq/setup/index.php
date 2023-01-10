@@ -205,7 +205,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <div class="row">
                 <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
                 <div class="col-sm-9">
-                    <input name="sql_password" type="password" autocomplete="off" id="sql_password" class="form-control" required>
+                    <input name="sql_password" type="password" autocomplete="off" id="sql_password" class="form-control"
+                           required>
                     <small class="form-text text-muted">Please enter your database password.</small>
                 </div>
               </div>
