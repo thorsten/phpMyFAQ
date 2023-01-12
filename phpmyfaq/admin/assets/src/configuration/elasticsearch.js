@@ -26,10 +26,10 @@ export const handleElasticsearch = () => {
 
         fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=${action}`)
           .then(async (response) => {
-            if (response.status === 200) {
+            if (response.ok) {
               return response.json();
             }
-            throw new Error('Network response was not ok.');
+            throw new Error('Network response was not ok: ', { cause: { response } });
           })
           .then((response) => {
             const stats = document.getElementById('pmf-elasticsearch-result');
@@ -43,11 +43,13 @@ export const handleElasticsearch = () => {
 
             setInterval(elasticsearchStats, 5000);
           })
-          .catch((error) => {
+          .catch(async (error) => {
             const stats = document.getElementById('pmf-elasticsearch-result');
+            const errorMessage = await error.cause.response.json();
+            console.log(errorMessage);
             stats.insertAdjacentElement(
               'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: error })
+              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
             );
           });
       });
@@ -69,6 +71,9 @@ export const handleElasticsearch = () => {
             html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${sizeInBytes}</dd>`;
             html += '</dl>';
             div.innerHTML = html;
+          })
+          .catch((error) => {
+            console.error(error);
           });
       }
     };

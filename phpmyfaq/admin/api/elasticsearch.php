@@ -15,7 +15,8 @@
  * @since     2015-12-26
  */
 
-use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -41,14 +42,25 @@ $result = [];
 
 switch ($ajaxAction) {
     case 'create':
-        if ($elasticsearch->createIndex()) {
+        try {
+            $esResult = $elasticsearch->createIndex();
+            $http->setStatus(200);
             $result = ['success' => Translation::get('ad_es_create_index_success')];
+        } catch (Exception $e) {
+            $http->setStatus(409);
+            $result = ['error' => $e->getMessage()];
         }
         break;
 
     case 'drop':
-        if ($elasticsearch->dropIndex()) {
+
+        try {
+            $esResult = $elasticsearch->dropIndex();
+            $http->setStatus(200);
             $result = ['success' => Translation::get('ad_es_drop_index_success')];
+        } catch (Exception $e) {
+            $http->setStatus(400);
+            $result = ['error' => $e->getMessage()];
         }
         break;
 
@@ -56,15 +68,22 @@ switch ($ajaxAction) {
         $faq = new Faq($faqConfig);
         $faq->getAllRecords();
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
-        if ($bulkIndexResult['success']) {
+        if (isset($bulkIndexResult['success'])) {
+            $http->setStatus(200);
             $result = ['success' => Translation::get('ad_es_create_import_success')];
+        } else {
+            $result = ['error' => $bulkIndexResult];
         }
         break;
 
     case 'stats':
-        $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => $esConfigData['index']]);
+        try {
+            $http->setStatus(200);
+            $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => $esConfigData['index']])->asObject();
+        } catch (ClientResponseException | ServerResponseException $e) {
+            $result = ['error' => $e->getMessage()];
+        }
         break;
 }
 
-$http->setStatus(200);
 $http->sendJsonWithHeaders($result);

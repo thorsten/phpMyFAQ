@@ -18,7 +18,11 @@
 namespace phpMyFAQ\Instance;
 
 use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\MissingParameterException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 
 /**
  * Class Elasticsearch
@@ -72,11 +76,17 @@ class Elasticsearch
 
     /**
      * Creates the Elasticsearch index.
+     *
+     * @throws Exception
      */
     public function createIndex(): bool
     {
-        $this->client->indices()->create($this->getParams());
-        return $this->putMapping();
+        try {
+            $this->client->indices()->create($this->getParams());
+            return $this->putMapping();
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     /**
@@ -165,11 +175,16 @@ class Elasticsearch
     /**
      * Deletes the Elasticsearch index.
      *
-     * @return string[]
+     * @return object
+     * @throws Exception
      */
-    public function dropIndex(): array
+    public function dropIndex(): object
     {
-        return $this->client->indices()->delete(['index' => $this->esConfig['index']]);
+        try {
+            return $this->client->indices()->delete(['index' => $this->esConfig['index']])->asObject();
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     /**
@@ -193,7 +208,7 @@ class Elasticsearch
             ]
         ];
 
-        return $this->client->index($params);
+        return $this->client->index($params)->asObject();
     }
 
     /**
@@ -230,7 +245,11 @@ class Elasticsearch
             ];
 
             if ($i % 1000 == 0) {
-                $responses = $this->client->bulk($params);
+                try {
+                    $responses = $this->client->bulk($params);
+                } catch (ClientResponseException | ServerResponseException $e) {
+                    return ['error' => $e->getMessage()];
+                }
                 $params = ['body' => []];
                 unset($responses);
             }
@@ -240,7 +259,11 @@ class Elasticsearch
 
         // Send the last batch if it exists
         if (!empty($params['body'])) {
-            $responses = $this->client->bulk($params);
+            try {
+                $responses = $this->client->bulk($params);
+            } catch (ClientResponseException | ServerResponseException $e) {
+                return ['error' => $e->getMessage()];
+            }
         }
 
         if (isset($responses) && (is_countable($responses) ? count($responses) : 0)) {

@@ -15,6 +15,7 @@
  * @since     2015-12-25
  */
 
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,6 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
+
+    $elasticsearch = new Elasticsearch($faqConfig);
+    $esConfigData = $faqConfig->getElasticsearchConfig();
 ?>
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
