@@ -18,7 +18,8 @@
 namespace phpMyFAQ\Search;
 
 use Elastic\Elasticsearch\Client;
-use Elastic\Transport\Exception\NoNodeAvailableException;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;
 use stdClass;
 
@@ -31,16 +32,12 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 {
     private Client $client;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $esConfig;
 
     private string $language = '';
 
-    /**
-     * @var int[]
-     */
+    /**@var int[] */
     private array $categoryIds = [];
 
     /**
@@ -90,12 +87,12 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         ];
 
         try {
-            $result = $this->client->search($searchParams);
-        } catch (NoNodeAvailableException) {
+            $result = $this->client->search($searchParams)->asArray();
+        } catch (ClientResponseException | ServerResponseException $e) {
             $this->resultSet = [];
         }
 
-        if (0 !== $result['hits']['total']['value'] || 0 !== $result['hits']['total']) {
+        if ($result['hits']['total']['value'] > 0) {
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
@@ -174,8 +171,8 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         ];
 
         try {
-            $result = $this->client->search($searchParams);
-        } catch (NoNodesAvailableException) {
+            $result = $this->client->search($searchParams)->asArray();
+        } catch (ClientResponseException | ServerResponseException $e) {
             return [];
         }
 

@@ -156,7 +156,11 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     $faqSearch->setCategory($category);
     $faqSearch->setCategoryId((int) $inputCategory);
 
-    $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
+    try {
+        $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
+    } catch (Exception $exception) {
+        $faqConfig->getLogger()->debug($exception->getMessage());
+    }
 
     foreach ($searchResults as $faqKey => $faqValue) {
         $checkedFaq = $faq->getRecordResult($faqValue->id, $faqValue->lang);
@@ -170,8 +174,8 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     $inputSearchTerm = stripslashes($inputSearchTerm);
     try {
         $faqSearch->logSearchTerm($inputSearchTerm);
-    } catch (Exception) {
-        // @todo handle exception
+    } catch (Exception $exception) {
+        $faqConfig->getLogger()->debug($exception->getMessage());
     }
 } else {
     $inputSearchTerm = '';

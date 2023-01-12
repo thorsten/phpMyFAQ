@@ -78,6 +78,7 @@ class SearchHelper extends Helper
      * Renders the results for Typehead.
      *
      * @param SearchResultSet $resultSet Result set object
+     * @throws \JsonException
      */
     public function renderInstantResponseResult(SearchResultSet $resultSet): string
     {
@@ -202,10 +203,12 @@ class SearchHelper extends Helper
                 if ($displayedCounter >= $confPerPage) {
                     break;
                 }
+
                 ++$counter;
                 if ($counter <= $firstPage) {
                     continue;
                 }
+
                 ++$displayedCounter;
 
                 // Set language for current category to fetch the correct category name
@@ -214,7 +217,7 @@ class SearchHelper extends Helper
                 $categoryInfo = $this->Category->getCategoriesFromFaq($result->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question = Utils::chopString($result->question, 15);
-                $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 25);
+                $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 20);
 
                 $searchTerm = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
@@ -248,23 +251,21 @@ class SearchHelper extends Helper
                 $oLink->text = $question;
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
-                $html .= '<li>';
+                $html .= '<li class="mb-2">';
                 $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf(
-                    '<strong>%s</strong>: %s<br>',
-                    $categoryInfo[0]['name'],
+                    '<strong>%s</strong><br><i class="fa fa-question-circle-o"></i> %s<br>',
+                    $this->Category->getPath($categoryInfo[0]['id']),
                     $oLink->toHtmlAnchor()
                 );
                 $html .= sprintf(
-                    "<small class=\"searchpreview\"><strong>%s</strong> %s...</small>\n",
+                    "<small class=\"small\"><strong>%s</strong> %s...</small>\n",
                     Translation::get('msgSearchContent'),
                     $answerPreview
                 );
                 $html .= '</li>';
             }
-
             $html .= "</ul>\n";
-
             if (1 < $totalPages) {
                 $html .= $this->pagination->render();
             }
@@ -278,13 +279,13 @@ class SearchHelper extends Helper
     /**
      * Renders the scoring stars
      */
-    private function renderScore(int $relevance = 0): string
+    private function renderScore(float $relevance = 0): string
     {
         $html = sprintf('<span title="%01.2f%%">', $relevance);
         $emptyStar = '<i aria-hidden="true" class="fa fa-star-o"></i>';
         $fullStar = '<i aria-hidden="true" class="fa fa-star"></i>';
 
-        if (0 === $relevance) {
+        if (0 === (int) $relevance) {
             $html .= $emptyStar . $emptyStar . $emptyStar;
         } elseif ($relevance < 33) {
             $html .= $fullStar . $emptyStar . $emptyStar;
