@@ -81,7 +81,7 @@ try {
     Translation::create()
         ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
-        ->setCurrentLanguage($faqLangCode);
+        ->setCurrentLanguage($languageCode);
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
@@ -197,7 +197,7 @@ switch ($action) {
                 break;
             }
         }
-        
+
         if (
             !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
                 $comment
@@ -331,42 +331,41 @@ switch ($action) {
         $category = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
 
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $author = Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW);
+        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $question = Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
-            $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
+            $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = html_entity_decode($answer);
         } else {
-            $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
+            $answer = Filter::filterVar($postData['answer'], FILTER_UNSAFE_RAW);
             $answer = nl2br($answer);
         }
-        $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_UNSAFE_RAW);
-        $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_UNSAFE_RAW);
-        $contentLink = Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
-        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
-        $categories = Filter::filterInputArray(
-            INPUT_POST,
-            [
-                'rubrik' => [
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-                ],
-            ]
-        );
+        $contentLink = Filter::filterVar($postData['contentlink'], FILTER_VALIDATE_URL);
+        $keywords = Filter::filterVar($postData['keywords'], FILTER_UNSAFE_RAW);
+        if (isset($postData['rubrik[]'])) {
+            if (is_string($postData['rubrik[]'])) {
+                $postData['rubrik[]'] = [ $postData['rubrik[]'] ];
+            }
+            $categories = Filter::filterArray(
+                $postData['rubrik[]']
+            );
+        }
 
         // Check on translation
-        if (empty($answer) && !is_null($translatedAnswer)) {
-            $answer = $translatedAnswer;
+        if (isset($postData['faqid']) && isset($postData['lang']) && isset($postData['translated_answer'])) {
+            $faqId = Filter::filterVar($postData['faqid'], FILTER_VALIDATE_INT);
+            $faqLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
+            $answer = Filter::filterVar($postData['translated_answer'], FILTER_UNSAFE_RAW);
         }
 
         if (
             !is_null($author) && !is_null($email) && !empty($question) &&
             $stopWords->checkBannedWord(strip_tags($question)) &&
             !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
-            ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
+            ((is_null($faqId) && !is_null($categories)) || (!is_null($faqId) && !is_null($faqLanguage) &&
                     Language::isASupportedLanguage($faqLanguage)))
         ) {
             $isNew = true;
@@ -423,9 +422,7 @@ switch ($action) {
                 'notes' => ''
             ];
 
-            if ($isNew) {
-                $categories = $categories['rubrik'];
-            } else {
+            if (!$isNew) {
                 $newData['id'] = $faqId;
                 $categories = $category->getCategoryIdsFromFaq($newData['id']);
             }
