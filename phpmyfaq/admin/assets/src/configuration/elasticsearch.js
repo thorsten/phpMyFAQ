@@ -46,7 +46,6 @@ export const handleElasticsearch = () => {
           .catch(async (error) => {
             const stats = document.getElementById('pmf-elasticsearch-result');
             const errorMessage = await error.cause.response.json();
-            console.log(errorMessage);
             stats.insertAdjacentElement(
               'afterend',
               addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
