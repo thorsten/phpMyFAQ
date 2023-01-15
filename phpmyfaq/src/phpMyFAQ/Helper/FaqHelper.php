@@ -144,7 +144,7 @@ class FaqHelper extends Helper
      * @param string $language
      * @throws Exception
      */
-    public function createOverview(Category $category, Faq $faq, $language = ''): string
+    public function createOverview(Category $category, Faq $faq, string $language = ''): string
     {
         $output = '';
 

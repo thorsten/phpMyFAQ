@@ -774,7 +774,7 @@ switch ($action) {
         }
 
         $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW);
         $password = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
@@ -792,14 +792,17 @@ switch ($action) {
             break;
         }
 
-        $userData = [
-            'display_name' => $userName,
-            'email' => $email,
-            'is_visible' => $isVisible === 'on' ? 1 : 0
-        ];
-        $success = $user->setUserData($userData);
+        if (strlen($password) <= 7 || strlen($confirm) <= 7) {
+            $message = ['error' => $PMF_LANG['ad_passwd_fail']];
+            break;
+        } else {
+            $userData = [
+                'display_name' => $userName,
+                'email' => $email,
+                'is_visible' => $isVisible === 'on' ? 1 : 0
+            ];
+            $success = $user->setUserData($userData);
 
-        if (0 !== strlen($password) && 0 !== strlen($confirm)) {
             foreach ($user->getAuthContainer() as $auth) {
                 if ($auth->setReadOnly()) {
                     continue;

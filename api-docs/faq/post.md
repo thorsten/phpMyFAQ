@@ -9,6 +9,7 @@ Used to add a new FAQ in one existing category.
 ```
 Accept-Language: [language code]
 X-PMF-Token: [phpMyFAQ client API Token, generated in admin backend]
+Content-Type: application/json
 ```
 
 **Method** : `POST`

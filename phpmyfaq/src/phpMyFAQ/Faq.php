@@ -1663,12 +1663,12 @@ class Faq
                 if ('visits' == $type) {
                     $output['title'][] = Utils::makeShorterText($row['question'], 8);
                     $output['preview'][] = $row['question'];
-                    $output['url'][] = $row['url'];
+                    $output['url'][] = Strings::htmlentities($row['url']);
                     $output['visits'][] = $this->plurals->GetMsg('plmsgViews', $row['visits']);
                 } else {
                     $output['title'][] = Utils::makeShorterText($row['question'], 8);
                     $output['preview'][] = $row['question'];
-                    $output['url'][] = $row['url'];
+                    $output['url'][] = Strings::htmlentities($row['url']);
                     $output['voted'][] = sprintf(
                         '%s %s 5 - %s',
                         round($row['avg'], 2),
@@ -1909,9 +1909,9 @@ class Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-                $output['url'][] = $row['url'];
-                $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                $output['preview'][] = $row['question'];
+                $output['url'][] = Strings::htmlentities($row['url']);
+                $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                $output['preview'][] = Strings::htmlentities($row['question']);
                 $output['date'][] = $date->format($row['date']);
             }
         } else {
@@ -2451,7 +2451,7 @@ class Faq
             foreach ($result as $row) {
                 $output['title'][] = Utils::makeShorterText($row['question'], 8);
                 $output['preview'][] = $row['question'];
-                $output['url'][] = $row['url'];
+                $output['url'][] = Strings::htmlentities($row['url']);
             }
         } else {
             $output['error'] = sprintf('<li>%s</li>', Translation::get('err_noTopTen'));

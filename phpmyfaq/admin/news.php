@@ -24,6 +24,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -226,7 +227,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         foreach ($newsHeader as $newsItem) {
             ?>
             <tr>
-                <td><?= $newsItem['header'] ?></td>
+                <td><?= Strings::htmlentities($newsItem['header']) ?></td>
                 <td><?= $date->format($newsItem['date']) ?></td>
                 <td>
                     <a class="btn btn-primary" href="?action=edit-news&amp;id=<?= $newsItem['id'] ?>">
@@ -279,7 +280,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 </label>
                 <div class="col-9">
                     <input type="text" name="newsheader" id="newsheader" class="form-control"
-                           value="<?= $newsData['header'] ?? '' ?>">
+                           value="<?= Strings::htmlentities($newsData['header']) ?? '' ?>">
                 </div>
             </div>
 
@@ -301,7 +302,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 <?= Translation::get('ad_news_author_name') ?>
                 </label>
                 <div class="col-9">
-                    <input type="text" name="authorName" value="<?= $newsData['authorName'] ?>" class="form-control">
+                    <input type="text" name="authorName"
+                           value="<?= Strings::htmlentities($newsData['authorName']) ?>" class="form-control">
                 </div>
             </div>
 
@@ -310,7 +312,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 <?= Translation::get('ad_news_author_email') ?>
                 </label>
                 <div class="col-9">
-                    <input type="email" name="authorEmail" value="<?= $newsData['authorEmail'] ?>" class="form-control">
+                    <input type="email" name="authorEmail"
+                           value="<?= Strings::htmlentities($newsData['authorEmail']) ?>" class="form-control">
                 </div>
             </div>
 
@@ -342,7 +345,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 <?= Translation::get('ad_news_link_url') ?>
                 </label>
                 <div class="col-9">
-                    <input type="text" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
+                    <input type="text" id="link" name="link" value="<?= Strings::htmlentities($newsData['link']) ?>" class="form-control">
                 </div>
             </div>
 
@@ -351,7 +354,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 <?= Translation::get('ad_news_link_title') ?>
                 </label>
                 <div class="col-9">
-                    <input type="text" id="linkTitle" name="linkTitle" value="<?= $newsData['linkTitle'] ?>"
+                    <input type="text" id="linkTitle" name="linkTitle" value="<?= Strings::htmlentities($newsData['linkTitle']) ?>"
                     class="form-control">
                 </div>
             </div>
@@ -464,14 +467,14 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_UNSAFE_RAW);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
     $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
     $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_UNSAFE_RAW);
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_UNSAFE_RAW);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 

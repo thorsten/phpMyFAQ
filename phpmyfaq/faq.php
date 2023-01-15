@@ -344,7 +344,7 @@ $template->parse(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'solutionId' => $faq->faqRecord['solution_id'],
         'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
-        'question' => $question,
+        'question' => Strings::htmlentities($question),
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => $author,

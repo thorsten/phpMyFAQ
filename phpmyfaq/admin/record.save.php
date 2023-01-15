@@ -210,9 +210,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         if ($faqConfig->get('search.enableElasticsearch')) {
             $esInstance = new Elasticsearch($faqConfig);
             try {
-                $esInstance->delete($solutionId);
                 if ('yes' === $active) {
-                    $esInstance->index(
+                    $esInstance->update(
                         [
                             'id' => $recordId,
                             'lang' => $recordLang,

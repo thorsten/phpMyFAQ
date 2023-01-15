@@ -22,6 +22,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 
@@ -148,7 +149,11 @@ $faqSession = new Session($faqConfig);
                 $inactiveFaqs = $faq->getInactiveFaqsData();
                 if ((is_countable($inactiveFaqs) ? count($inactiveFaqs) : 0) > 0) {
                     foreach ($inactiveFaqs as $inactiveFaq) {
-                        printf('<li><a href="%s">%s</a></li>', $inactiveFaq['url'], $inactiveFaq['question']);
+                        printf(
+                          '<li><a href="%s">%s</a></li>',
+                          Strings::htmlentities($inactiveFaq['url']),
+                          Strings::htmlentities($inactiveFaq['question'])
+                        );
                     }
                 } else {
                     echo '<li>n/a</li>';
@@ -188,7 +193,7 @@ $faqSession = new Session($faqConfig);
                     }
                 } else {
                     ?>
-                  <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php" method="post"
                         accept-charset="utf-8">
                     <input type="hidden" name="param" value="version"/>
                     <button class="btn btn-info" type="submit">

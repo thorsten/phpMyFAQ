@@ -49,22 +49,22 @@ class News
         foreach ($news as $item) {
             $url = sprintf(
                 '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
-                $this->config->getDefaultUrl(),
+                Strings::htmlentities($this->config->getDefaultUrl()),
                 $item['id'],
                 $item['lang']
             );
             $oLink = new Link($url, $this->config);
 
             if (isset($item['header'])) {
-                $oLink->itemTitle = $item['header'];
+                $oLink->itemTitle = Strings::htmlentities($item['header']);
             }
 
             $output .= sprintf(
                 '<h6%s><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
                 ' class="pmf-news-heading"',
                 $item['id'],
-                $oLink->toString(),
-                $item['header']
+                Strings::htmlentities($oLink->toString()),
+                Strings::htmlentities($item['header'])
             );
 
             $output .= sprintf('%s', $item['content']);
@@ -73,7 +73,7 @@ class News
                 $output .= sprintf(
                     '<br>%s <a href="%s" target="_%s">%s</a>',
                     Translation::get('msgInfo'),
-                    $item['link'],
+                    Strings::htmlentities($item['link']),
                     $item['target'],
                     $item['linkTitle']
                 );
@@ -283,16 +283,16 @@ class News
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
             $data['date'],
             $data['lang'],
-            $data['header'],
-            $data['content'],
-            $data['authorName'],
+            $this->config->getDb()->escape($data['header']),
+            $this->config->getDb()->escape($data['content']),
+            $this->config->getDb()->escape($data['authorName']),
             $data['authorEmail'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['active'],
             $data['comment'],
-            $data['link'],
-            $data['linkTitle'],
+            $this->config->getDb()->escape($data['link']),
+            $this->config->getDb()->escape($data['linkTitle']),
             $data['target']
         );
 
@@ -334,16 +334,16 @@ class News
             Database::getTablePrefix(),
             $data['date'],
             $data['lang'],
-            $data['header'],
-            $data['content'],
-            $data['authorName'],
+            $this->config->getDb()->escape($data['header']),
+            $this->config->getDb()->escape($data['content']),
+            $this->config->getDb()->escape($data['authorName']),
             $data['authorEmail'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['active'],
             $data['comment'],
-            $data['link'],
-            $data['linkTitle'],
+            $this->config->getDb()->escape($data['link']),
+            $this->config->getDb()->escape($data['linkTitle']),
             $data['target'],
             $id
         );

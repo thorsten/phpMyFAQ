@@ -64,7 +64,7 @@ $selectedCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, -
 $question = $readonly = '';
 if (!is_null($selectedQuestion)) {
     $oQuestion = $questionObject->getQuestion($selectedQuestion);
-    $question = $oQuestion['question'];
+    $question = Strings::htmlentities($oQuestion['question']);
     if (Strings::strlen($question)) {
         $readonly = ' readonly';
     }

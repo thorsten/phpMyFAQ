@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -52,7 +53,7 @@ if ($user->isLoggedIn()) {
             'csrf' => $user->getCsrfTokenFromSession(),
             'readonly' => $faqConfig->isLdapActive() ? 'readonly' : '',
             'msgRealName' => Translation::get('ad_user_name'),
-            'realname' => $user->getUserData('display_name'),
+            'realname' => Strings::htmlentities($user->getUserData('display_name')),
             'msgEmail' => Translation::get('msgNewContentMail'),
             'email' => $user->getUserData('email'),
             'msgIsVisible' => Translation::get('ad_user_data_is_visible'),

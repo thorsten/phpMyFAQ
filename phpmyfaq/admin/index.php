@@ -149,7 +149,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 //
 // Get possible redirect action
 //
-$redirectAction = Filter::filterInput(INPUT_POST, 'redirect-action', FILTER_UNSAFE_RAW);
+$redirectAction = Filter::filterInput(INPUT_POST, 'redirect-action', FILTER_SANITIZE_SPECIAL_CHARS);
 if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) {
     $action = $redirectAction;
 }

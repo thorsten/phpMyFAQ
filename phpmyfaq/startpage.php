@@ -128,7 +128,7 @@ $template->parse(
     'mainPageContent',
     [
         'pageHeader' => Strings::htmlspecialchars($faqConfig->getTitle()),
-        'baseHref' => $faqSystem->getSystemUri($faqConfig),
+        'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
         'stickyRecordsHeader' => Translation::get('stickyRecordsHeader'),
         'writeTopTenHeader' => Translation::get('msgTopTen'),
         'writeNewestHeader' => Translation::get('msgLatestArticles'),
@@ -141,7 +141,7 @@ $template->parse(
         'categoryId' => ($cat === 0) ? '%' : (int)$cat,
         'msgSearch' => sprintf(
             '<a class="help" href="%sindex.php?action=search">%s</a>',
-            $faqSystem->getSystemUri($faqConfig),
+            Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
             Translation::get('msgAdvancedSearch')
         )
     ]

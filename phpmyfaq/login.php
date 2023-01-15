@@ -15,6 +15,7 @@
  * @since     2012-02-12
  */
 
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -58,7 +59,7 @@ $template->parse(
         'loginHeader' => Translation::get('msgLoginUser'),
         'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
         'loginMessage' => $loginMessage,
-        'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
+        'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
         'faqloginaction' => $action,
         'login' => Translation::get('ad_auth_ok'),
         'username' => Translation::get('ad_auth_user'),

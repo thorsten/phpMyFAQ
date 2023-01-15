@@ -130,8 +130,6 @@ class Ldap
 
     /**
      * Binds to the LDAP directory with specified RDN and password.
-     *
-     *
      */
     public function bind(string $rdn = '', string $password = ''): bool
     {

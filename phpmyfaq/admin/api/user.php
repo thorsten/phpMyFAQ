@@ -23,6 +23,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
@@ -65,7 +66,7 @@ if (
             $userdata = [];
             $userdata = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
-            $userdata['login'] = $user->getLogin();
+            $userdata['login'] = Strings::htmlentities($user->getLogin());
             $userdata['is_superadmin'] = $user->isSuperAdmin();
             $http->sendJsonWithHeaders($userdata);
             break;

@@ -91,7 +91,7 @@ if (DEBUG) {
 
 if (isset($auth)) {
     ?>
-  <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
+  <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;"></iframe>
     <?php
 }

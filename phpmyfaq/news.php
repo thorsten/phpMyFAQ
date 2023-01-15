@@ -25,6 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\News;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
@@ -78,9 +79,9 @@ if (strlen($news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
         Translation::get('msgInfo'),
-        $news['link'],
+        Strings::htmlentities($news['link']),
         $news['target'],
-        $news['linkTitle']
+        Strings::htmlentities($news['linkTitle'])
     );
 }
 
@@ -125,11 +126,12 @@ $template->parse(
     'mainPageContent',
     [
         'writeNewsHeader' => $newsMainHeader,
-        'writeHeader' => $newsHeader,
-        'mainPageContent' => $newsContent,
+        'writeHeader' => Strings::htmlentities($newsHeader),
+        'mainPageContent' => Strings::htmlentities($newsContent),
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
-        'writeAuthor' => ($news['active'] && (!$expired)) ? Translation::get('msgAuthor') . ': ' . $news['authorName'] : '',
+        'writeAuthor' => ($news['active'] && (!$expired)) ? Translation::get('msgAuthor') . ': ' .
+            Strings::htmlentities($news['authorName']) : '',
         'editThisEntry' => $editThisEntry,
         'writeCommentMsg' => $commentMessage,
         'msgWriteComment' => Translation::get('newsWriteComment'),

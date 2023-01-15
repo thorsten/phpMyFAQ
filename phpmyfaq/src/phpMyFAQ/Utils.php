@@ -218,7 +218,7 @@ class Utils
     {
         // sometimes Zend Optimizer causes segfaults with debug_backtrace()
         if (extension_loaded('Zend Optimizer')) {
-            $ret = '<code>' . $string . "</code><br>\n";
+            $ret = '<code>' . Strings::htmlentities($string) . "</code><br>\n";
         } else {
             $debug = debug_backtrace();
             $ret = '';
@@ -226,7 +226,7 @@ class Utils
                 $ret = $debug[2]['file'] . ': ';
                 $ret .= $debug[2]['class'] . $debug[1]['type'];
                 $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-                $ret .= ':<br><code>' . $string . "</code><br>\n";
+                $ret .= ':<br><code>' . Strings::htmlentities($string) . "</code><br>\n";
             }
         }
 

@@ -84,8 +84,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
                 $categoryData = [
                     'lang' => $categoryLang,
-                    'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW),
-                    'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_UNSAFE_RAW),
+                    'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS),
+                    'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS),
                     'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
                     'group_id' => Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
                     'active' => Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),

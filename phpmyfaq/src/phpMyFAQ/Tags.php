@@ -344,7 +344,7 @@ class Tags
             $totFaqByTag = count($this->getFaqsByTagName($tagName));
             if ($totFaqByTag > 0) {
                 $tags[$tagName]['id'] = $tagId;
-                $tags[$tagName]['name'] = $tagName;
+                $tags[$tagName]['name'] = Strings::htmlentities($tagName);
                 $tags[$tagName]['count'] = $totFaqByTag;
             }
         }
@@ -354,7 +354,11 @@ class Tags
         foreach ($tags as $tag) {
             ++$i;
             $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES);
-            $url = sprintf('%sindex.php?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $tag['id']);
+            $url = sprintf(
+                '%sindex.php?action=search&amp;tagging_id=%d',
+                Strings::htmlentities($this->config->getDefaultUrl()),
+                $tag['id']
+            );
             $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
@@ -451,7 +455,7 @@ class Tags
                 '<a class="btn btn-primary m-1" href="?action=search&tagging_id=%d">%s ' .
                 '<span class="badge bg-info">%d</span></a>',
                 $tagId,
-                $tagName,
+                Strings::htmlentities($tagName),
                 $tagFreq
             );
         }

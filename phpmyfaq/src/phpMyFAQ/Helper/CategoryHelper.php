@@ -239,9 +239,9 @@ class CategoryHelper extends Helper
                     $parent
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $categoryName;
-                $oLink->text = $categoryName;
-                $oLink->tooltip = $description;
+                $oLink->itemTitle = Strings::htmlentities($categoryName);
+                $oLink->text = Strings::htmlentities($categoryName);
+                $oLink->tooltip = !is_null($description) ?? Strings::htmlentities($description);
 
                 $output .= $oLink->toHtmlAnchor();
                 $open = $level;
@@ -270,7 +270,7 @@ class CategoryHelper extends Helper
                 $categories .= sprintf(
                     '<li><a href="?action=show&cat=%d">%s</a></li>',
                     $cat['id'],
-                    $cat['name']
+                    Strings::htmlentities($cat['name'])
                 );
             }
         }
@@ -316,7 +316,7 @@ class CategoryHelper extends Helper
                 }
             }
 
-            $categories .= sprintf('>%s %s </option>', $indent, $cat['name']);
+            $categories .= sprintf('>%s %s </option>', $indent, Strings::htmlentities($cat['name']));
             ++$i;
         }
 
@@ -486,9 +486,9 @@ class CategoryHelper extends Helper
                 $parent
             );
             $oLink = new Link($url, $this->config);
-            $oLink->itemTitle = $categoryName;
-            $oLink->text = $categoryName;
-            $oLink->tooltip = $description;
+            $oLink->itemTitle = Strings::htmlentities($categoryName);
+            $oLink->text = Strings::htmlentities($categoryName);
+            $oLink->tooltip = !is_null($description) ?? Strings::htmlentities($description);
 
             $output .= $oLink->toHtmlAnchor() . $numFaqs;
             $open = $level;
