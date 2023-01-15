@@ -16,8 +16,8 @@
 import 'cookieconsent';
 import 'bootstrap';
 import Masonry from 'masonry-layout';
-import { handleReloadCaptcha } from './captcha';
-import { calculateReadingTime } from './reading-time';
+import { calculateReadingTime, handleReloadCaptcha } from './utils';
+import { saveFormData } from './api/forms';
 
 // Reload Captchas
 const reloadButton = document.querySelector('#captcha-button');
@@ -31,10 +31,27 @@ if (faqBody !== null) {
   calculateReadingTime();
 }
 
-// Masonry
+// Masonry on startpage
 window.onload = () => {
   const masonryElement = document.querySelector('.masonry-grid');
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });
   }
 };
+
+// Events
+const submitNewFaq = document.getElementById('submitfaq');
+if (submitNewFaq) {
+  submitNewFaq.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const form = document.querySelector('.needs-validation');
+    if (!form.checkValidity()) {
+      console.log('no');
+      form.classList.add('was-validated');
+    } else {
+      console.log('yes');
+      saveFormData('savefaq');
+    }
+  });
+}
