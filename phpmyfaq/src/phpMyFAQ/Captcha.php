@@ -188,9 +188,9 @@ class Captcha
     private function createBackground(): void
     {
         $this->img = imagecreate($this->width, $this->height);
-        $this->backgroundColor['r'] = random_int(222, 255);
-        $this->backgroundColor['g'] = random_int(222, 255);
-        $this->backgroundColor['b'] = random_int(222, 255);
+        $this->backgroundColor['r'] = random_int(210, 255);
+        $this->backgroundColor['g'] = random_int(220, 255);
+        $this->backgroundColor['b'] = random_int(210, 255);
 
         $colorAllocate = imagecolorallocate(
             $this->img,
@@ -375,12 +375,11 @@ class Captcha
 
         for ($p = 0; $p < $codeLength; ++$p) {
             $letter = $this->code[$p];
-            $size = random_int(18, $this->height - 5);
-            $rotation = random_int(-23, 23);
+            $size = random_int(16, $this->height - 6);
+            $rotation = random_int(-15, 15);
             $y = random_int($size, $this->height + 5);
             $x = $w1 + $w2 * $p;
             $foreColor = [];
-            $backColor = [];
 
             do {
                 $foreColor['r'] = random_int(30, 199);
@@ -393,23 +392,12 @@ class Captcha
             } while ($foreColor['b'] === $this->backgroundColor['b']);
             $colorOne = imagecolorallocate($this->img, $foreColor['r'], $foreColor['g'], $foreColor['b']);
 
-            do {
-                $backColor['r'] = ($foreColor['r'] < 100 ? $foreColor['r'] * 2 : random_int(30, 99));
-            } while (($backColor['r'] === $this->backgroundColor['r']) && ($backColor['r'] === $foreColor['r']));
-            do {
-                $backColor['g'] = ($foreColor['g'] < 100 ? $foreColor['g'] * 2 : random_int(30, 199));
-            } while (($backColor['g'] === $this->backgroundColor['g']) && ($backColor['g'] === $foreColor['g']));
-            do {
-                $backColor['b'] = ($foreColor['b'] < 100 ? $foreColor['b'] * 2 : random_int(90, 199));
-            } while (($backColor['b'] === $this->backgroundColor['b']) && ($backColor['b'] === $foreColor['b']));
-            $colorTwo = imagecolorallocate($this->img, $backColor['r'], $backColor['g'], $backColor['b']);
-
             // Add the letter
             if (function_exists('imagettftext') && ($numFonts > 0)) {
                 $font = $this->fonts[random_int(0, $numFonts - 1)];
                 imagettftext($this->img, $size, $rotation, (int)$x + 2, $y, $colorOne, $font, $letter);
                 imagettftext($this->img, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $font, $letter);
-                imagettftext($this->img, $size, $rotation, (int)$x, $y - 2, $colorTwo, $font, $letter);
+                imagettftext($this->img, $size, $rotation, (int)$x, $y + 2, $colorOne, $font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
