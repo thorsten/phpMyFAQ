@@ -35,9 +35,6 @@ and open http://www.example.org/phpmyfaq/setup/index.php in your preferred brows
 The Dockerfile provided in this repo only build an environment to run any release it's for development purpose. It does
 not contain any code as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in the container.
 
-To build a production release please use the [docker-hub](https://github.com/phpMyFAQ/docker-hub) repository or use
-images provided on [docker.io](https://hub.docker.com/r/phpmyfaq/phpmyfaq/).
-
 #### docker-compose.yml
 
 For development purposes you can start a full stack to run your current PhpMyFAQ source code from your local repo.
@@ -60,7 +57,7 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 8.1 support:_
+_Running apache web server with PHP 8.2 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
@@ -113,7 +110,7 @@ To run phpMyFAQ locally you need at least a running web server with PHP support 
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
-    $ git checkout 3.1
+    $ git checkout main
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ curl -o- -L https://yarnpkg.com/install.sh | bash

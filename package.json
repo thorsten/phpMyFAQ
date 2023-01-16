@@ -65,6 +65,9 @@
     "webpack": "^5.67.0",
     "webpack-cli": "^5.0.1"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "composer lint && composer validate && composer test && yarn pretty-quick --staged",
