@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $.ajax({
       type: 'post',
-      url: 'ajaxservice.php?action=' + action,
+      url: 'api.service.php?action=' + action,
       data: formValues.serialize(),
       dataType: 'json',
       cache: false,
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = $('#loader');
     $.ajax({
       type: 'post',
-      url: 'ajaxservice.php?action=savevoting',
+      url: 'api.service.php?action=savevoting',
       data: 'type=' + type + '&id=' + id + '&vote=' + value + '&lang=' + lang,
       dataType: 'json',
       cache: false,
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $.ajax({
       type: 'post',
-      url: 'ajaxservice.php?action=savequestion',
+      url: 'api.service.php?action=savequestion',
       data: formValues.serialize(),
       dataType: 'json',
       cache: false,

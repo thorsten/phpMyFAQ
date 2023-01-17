@@ -21,6 +21,7 @@
 
 namespace phpMyFAQ;
 
+use DateTimeInterface;
 use Exception;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
@@ -963,7 +964,7 @@ class Faq
             $faq->isComment() ? 'y' : 'n',
             $faq->getUpdatedDate()->format('YmdHis'),
             $faq->getLinkState(),
-            $faq->getLinksCheckedDate()->format(DATE_ISO8601),
+            $faq->getLinksCheckedDate()->format(DateTimeInterface::ATOM),
             '00000000000000',
             '99991231235959',
             date('Y-m-d H:i:s'),

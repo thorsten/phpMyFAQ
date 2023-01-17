@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     minLength: 1,
     source: (request, response) => {
       $.ajax({
-        url: 'ajaxresponse.php',
+        url: 'api.search.php',
         type: 'GET',
         dataType: 'JSON',
         data: 'search=' + request,

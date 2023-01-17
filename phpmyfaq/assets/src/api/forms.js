@@ -21,7 +21,7 @@ export const saveFormData = (action) => {
   const formData = new FormData(form);
 
   loader.classList.remove('d-none');
-  fetch(`ajaxservice.php?action=${action}`, {
+  fetch(`api.service.php?action=${action}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -36,9 +36,17 @@ export const saveFormData = (action) => {
       throw new Error('Network response was not ok: ', { cause: { response } });
     })
     .then((response) => {
-      console.info(response);
+      loader.classList.add('d-none');
+      const message = document.getElementById('faqs');
+      const successMessage = response.success;
+      message.insertAdjacentElement(
+        'afterend',
+        addElement('div', { classList: 'alert alert-success', innerText: successMessage })
+      );
+      console.info(response.success);
     })
     .catch(async (error) => {
+      loader.classList.add('d-none');
       const message = document.getElementById('faqs');
       const errorMessage = await error.cause.response.json();
       message.insertAdjacentElement(

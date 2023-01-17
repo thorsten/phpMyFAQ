@@ -22,6 +22,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
@@ -364,14 +365,12 @@ switch ($action) {
         if (
             !is_null($author) && !is_null($email) && !empty($question) &&
             $stopWords->checkBannedWord(strip_tags($question)) &&
-            !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
-            ((is_null($faqId) && !is_null($categories)) || (!is_null($faqId) && !is_null($faqLanguage) &&
-                    Language::isASupportedLanguage($faqLanguage)))
+            !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer))
         ) {
             $isNew = true;
             $newLanguage = '';
 
-            if (!is_null($faqId)) {
+            if (!isset($faqId)) {
                 $isNew = false;
                 try {
                     $faqSession->userTracking('save_new_translation_entry', 0);
@@ -387,7 +386,7 @@ switch ($action) {
             }
 
             $isTranslation = false;
-            if (!is_null($faqLanguage)) {
+            if (isset($faqLanguage) && !is_null($faqLanguage)) {
                 $isTranslation = true;
                 $newLanguage = $faqLanguage;
             }
@@ -404,30 +403,26 @@ switch ($action) {
 
             $autoActivate = $faqConfig->get('records.defaultActivation');
 
-            $newData = [
-                'lang' => ($isTranslation === true ? $newLanguage : $languageCode),
-                'thema' => $question,
-                'active' => ($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO),
-                'sticky' => 0,
-                'content' => $answer,
-                'keywords' => $keywords,
-                'author' => $author,
-                'email' => $email,
-                'comment' => 'y',
-                'date' => date('YmdHis'),
-                'dateStart' => '00000000000000',
-                'dateEnd' => '99991231235959',
-                'linkState' => '',
-                'linkDateCheck' => 0,
-                'notes' => ''
-            ];
+            $faqEntity = new FaqEntity();
+            $faqEntity
+                ->setLanguage(($isTranslation === true ? $newLanguage : $languageCode))
+                ->setQuestion($question)
+                ->setActive(($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO))
+                ->setSticky(false)
+                ->setAnswer($answer)
+                ->setKeywords($keywords)
+                ->setAuthor($author)
+                ->setEmail($email)
+                ->setComment(true)
+                ->setLinkState('')
+                ->setNotes('');
 
-            if (!$isNew) {
-                $newData['id'] = $faqId;
-                $categories = $category->getCategoryIdsFromFaq($newData['id']);
+            if (!$isNew && isset($faqId)) {
+                $faqEntity->setId($faqId);
+                $categories = $category->getCategoryIdsFromFaq($faqId);
             }
 
-            $recordId = $faq->addRecord($newData, $isNew);
+            $recordId = $faq->create($faqEntity);
 
             $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
@@ -441,7 +436,7 @@ switch ($action) {
             $faqMetaData = new FaqMetaData($faqConfig);
             $faqMetaData
                 ->setFaqId($recordId)
-                ->setFaqLanguage($newData['lang'])
+                ->setFaqLanguage($faqEntity->getLanguage())
                 ->setCategories($categories)
                 ->save();
 
