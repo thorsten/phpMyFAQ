@@ -22,7 +22,7 @@
     "tecnickcom/tcpdf": "~6.0",
     "elasticsearch/elasticsearch": "8.*",
     "monolog/monolog": "^2.2",
-    "abraham/twitteroauth": "^4.0.0",
+    "abraham/twitteroauth": "^5.0.0",
     "myclabs/deep-copy": "~1.0",
     "ext-curl": "*",
     "ext-fileinfo": "*",
