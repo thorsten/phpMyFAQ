@@ -743,7 +743,7 @@ if (DEBUG) {
 if ('artikel' === $action) {
     $url = sprintf(
         '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-        Strings::htmlentities($faqConfig->getDefaultUrl()),
+        Strings::htmlspecialchars($faqConfig->getDefaultUrl()),
         $category->getCategoryIdFromFaq($id),
         $id,
         $lang
