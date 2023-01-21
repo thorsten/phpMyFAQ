@@ -20,6 +20,7 @@ export const handleAutoComplete = () => {
   const autoCompleteInput = document.getElementById('pmf-search-autocomplete');
   autocomplete({
     debounceWaitMs: 200,
+    preventSubmit: true,
     disableAutoSelect: false,
     input: autoCompleteInput,
     container: addElement('ul', { classList: 'list-group bg-dark' }),
