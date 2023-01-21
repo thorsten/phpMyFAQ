@@ -41,21 +41,6 @@
             <li class="nav-link px-2 text-white {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
           </ul>
 
-          <form
-            action="{{ writeSendAdress }}"
-            id="search"
-            method="post"
-            role="search"
-            class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
-          >
-            <input
-              type="search"
-              class="form-control form-control-dark text-bg-dark"
-              placeholder="{{ searchBox }} ..."
-              aria-label="Search"
-            />
-          </form>
-
           <div class="dropdown text-end">
             <a
               href="#"
@@ -83,33 +68,32 @@
     </nav>
 
     <!-- SEARCH -->
-    <!--
-    <section class="pmf-search-section">
-      <div class="pmf-masthead pmf-single-masthead">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-8 mx-md-auto">
-              <form action="{{ writeSendAdress }}" id="search" method="post" role="search">
-                <input
-                  autocomplete="off"
-                  class="typeahead pmf-search-field"
-                  data-provide="typeahead"
-                  name="search"
-                  placeholder="{{ searchBox }} ..."
-                  type="text"
-                  value="{{ searchTerm }}"
-                />
-                <button type="submit"><i class="fa fa-search"></i></button>
-                <small class="form-text text-muted">
-                  <a class="help" href="?action=search">{{ msgAdvancedSearch }}</a>
-                </small>
-              </form>
-            </div>
+    <div class="container-fluid m-5">
+      <div class="row height d-flex justify-content-center align-items-center">
+        <div class="col-md-8">
+          <div class="search">
+            <form action="{{ writeSendAdress }}" id="search" method="post" role="search">
+              <i class="fa fa-search"></i>
+              <input
+                autocomplete="off"
+                type="text"
+                class="form-control"
+                id="pmf-search-autocomplete"
+                name="search"
+                placeholder="{{ searchBox }} ..."
+                value="{{ searchTerm }}"
+              />
+              <button type="submit" class="btn btn-outline-info btn-lg">{{ searchBox }}</button>
+            </form>
+          </div>
+          <div>
+            <small class="form-text text-muted">
+              <a class="help" href="?action=search">{{ msgAdvancedSearch }}</a>
+            </small>
           </div>
         </div>
       </div>
-    </section>
-    -->
+    </div>
 
     <!-- BREADCRUMB -->
     [breadcrumb]

@@ -17,7 +17,7 @@ import 'cookieconsent';
 import 'bootstrap';
 import Masonry from 'masonry-layout';
 import { calculateReadingTime, handleReloadCaptcha } from './utils';
-import { saveFormData } from './api/forms';
+import { handleAutoComplete, saveFormData } from './api';
 
 //
 // Reload Captchas
@@ -39,6 +39,7 @@ if (faqBody !== null) {
 // Masonry on startpage
 //
 window.onload = () => {
+  handleAutoComplete();
   const masonryElement = document.querySelector('.masonry-grid');
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });

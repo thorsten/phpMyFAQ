@@ -1,0 +1,46 @@
+.search {
+  position: relative;
+  box-shadow: 0 0 40px rgba(51, 51, 51, 0.1);
+  background-color: transparent;
+
+  input {
+    height: 60px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4;
+
+    &:focus {
+      box-shadow: none;
+      border: 2px solid blue;
+    }
+  }
+
+  .fa-search {
+    position: absolute;
+    top: 20px;
+    left: 16px;
+  }
+
+  button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 50px;
+    width: 110px;
+    background: blue;
+  }
+}
+
+.autocomplete {
+  @extend .list-group;
+}
+
+.autocomplete > div {
+  font-size: 12px;
+  line-height: 21px;
+  padding: 0 9px 2px;
+}
+
+.autocomplete > li.selected {
+  @extend .list-group-item-info;
+  cursor: pointer;
+}

@@ -1,18 +1,18 @@
 <?php
 
 /**
- * The Ajax driven response page.
+ * The Autocomplete Search API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-03-27
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-03-27
  */
 
 use phpMyFAQ\Category;
@@ -26,6 +26,7 @@ use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 const IS_VALID_PHPMYFAQ = null;
@@ -39,27 +40,34 @@ $searchString = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
 $ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_UNSAFE_RAW, 'en');
 $categoryId = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
-$language = new Language($faqConfig);
-$languageCode = $language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-$faqConfig->setLanguage($language);
+//
+// Get language (default: english)
+//
+$Language = new Language($faqConfig);
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqConfig->setLanguage($Language);
 
-require_once 'lang/language_en.php';
-
-if (Language::isASupportedLanguage($ajaxLanguage)) {
-    $languageCode = trim($ajaxLanguage);
-    require_once 'lang/language_' . $languageCode . '.php';
-} else {
-    $languageCode = 'en';
-    require_once 'lang/language_en.php';
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
-//Load plurals support for selected language
+//
+// Load plurals support for selected language
+//
 $plr = new Plurals();
 
 //
 // Initializing static string wrapper
 //
-Strings::init($languageCode);
+Strings::init($faqLangCode);
 
 //
 // Get current user and group id - default: -1
@@ -115,5 +123,8 @@ if (!is_null($searchString)) {
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);
 
-    $http->sendWithHeaders($faqSearchHelper->renderInstantResponseResult($faqSearchResult));
+    try {
+        $http->sendWithHeaders($faqSearchHelper->renderInstantResponseResult($faqSearchResult));
+    } catch (JsonException $e) {
+    }
 }
