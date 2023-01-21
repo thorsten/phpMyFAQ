@@ -319,7 +319,7 @@ switch ($action) {
         }
         break;
 
-    case 'savefaq':
+    case 'add-faq':
         if (
             !$faqConfig->get('records.allowNewFaqsForGuests') &&
             !$user->perm->hasPermission($user->getUserId(), 'addfaq')
@@ -454,8 +454,7 @@ switch ($action) {
             } catch (Exception) {
                 // @todo handle exception in v3.2
             }
-
-
+            
             $message = [
                 'success' => ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
             ];
@@ -468,9 +467,9 @@ switch ($action) {
         break;
 
     //
-    // Add question
+    // Ask question
     //
-    case 'savequestion':
+    case 'ask-question':
         if (
             !$faqConfig->get('records.allowQuestionsForGuests') &&
             !$faqConfig->get('main.enableAskQuestions') &&
