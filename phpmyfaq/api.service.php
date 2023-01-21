@@ -454,7 +454,7 @@ switch ($action) {
             } catch (Exception) {
                 // @todo handle exception in v3.2
             }
-            
+
             $message = [
                 'success' => ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
             ];

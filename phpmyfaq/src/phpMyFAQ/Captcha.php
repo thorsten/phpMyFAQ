@@ -35,8 +35,7 @@ class Captcha
 
     private bool $userIsLoggedIn = false;
 
-    /** @var string[] */
-    private array $fonts;
+    private string $font;
 
     private string $code = '';
 
@@ -79,11 +78,11 @@ class Captcha
         'Z',
     ];
 
-    private int $width = 165;
+    private int $width = 200;
 
-    private int $height = 40;
+    private int $height = 50;
 
-    private int $quality = 60;
+    private int $quality = 80;
 
     /** @var int[] */
     private array $backgroundColor;
@@ -106,18 +105,18 @@ class Captcha
     {
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->ip = $_SERVER['REMOTE_ADDR'];
-        $this->fonts = $this->getFonts();
+        $this->font = $this->getFont();
         $this->timestamp = $_SERVER['REQUEST_TIME'];
     }
 
     /**
      * Get Fonts.
      *
-     * @return string[]
+     * @return string
      */
-    private function getFonts(): array
+    private function getFont(): string
     {
-        return glob(PMF_ROOT_DIR . '/assets/fonts/*.ttf');
+        return PMF_ROOT_DIR . '/assets/fonts/captcha.ttf';
     }
 
     /**
@@ -222,7 +221,7 @@ class Captcha
             if ($x < $this->height) {
                 imageline($this->img, 0, $x - $w2, $this->width - 1, $x - $w1, random_int($color1, $color2));
             }
-            if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
+            if (function_exists('imagettftext')) {
                 $nextLine += random_int(-5, 7);
                 if ($nextLine < 1) {
                     $nextLine = 2;
@@ -369,14 +368,13 @@ class Captcha
     private function drawText(): void
     {
         $codeLength = Strings::strlen($this->code);
-        $numFonts = count($this->fonts);
-        $w1 = 15;
+        $w1 = 25;
         $w2 = floor($this->width / ($codeLength + 1));
 
         for ($p = 0; $p < $codeLength; ++$p) {
             $letter = $this->code[$p];
-            $size = random_int(16, $this->height - 6);
-            $rotation = random_int(-15, 15);
+            $size = random_int(16, $this->height - 3);
+            $rotation = random_int(-10, 10);
             $y = random_int($size, $this->height + 5);
             $x = $w1 + $w2 * $p;
             $foreColor = [];
@@ -393,11 +391,10 @@ class Captcha
             $colorOne = imagecolorallocate($this->img, $foreColor['r'], $foreColor['g'], $foreColor['b']);
 
             // Add the letter
-            if (function_exists('imagettftext') && ($numFonts > 0)) {
-                $font = $this->fonts[random_int(0, $numFonts - 1)];
-                imagettftext($this->img, $size, $rotation, (int)$x + 2, $y, $colorOne, $font, $letter);
-                imagettftext($this->img, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $font, $letter);
-                imagettftext($this->img, $size, $rotation, (int)$x, $y + 2, $colorOne, $font, $letter);
+            if (function_exists('imagettftext')) {
+                imagettftext($this->img, $size, $rotation, (int)$x + 2, $y, $colorOne, $this->font, $letter);
+                imagettftext($this->img, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $this->font, $letter);
+                imagettftext($this->img, $size, $rotation, (int)$x, $y + 2, $colorOne, $this->font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
@@ -446,21 +443,17 @@ class Captcha
         if (!in_array('0', $this->letters)) {
             $captchaCode = str_replace('0', 'O', $captchaCode);
         }
+
         // Sanity check
         for ($i = 0; $i < Strings::strlen($captchaCode); ++$i) {
             if (!in_array($captchaCode[$i], $this->letters)) {
                 return false;
             }
         }
+
         // Search for this Captcha in the db
         $query = sprintf(
-            "
-            SELECT
-                id
-            FROM
-                %sfaqcaptcha
-            WHERE
-                id = '%s'",
+            "SELECT id FROM %sfaqcaptcha WHERE id = '%s'",
             Database::getTablePrefix(),
             $this->config->getDb()->escape($captchaCode)
         );
