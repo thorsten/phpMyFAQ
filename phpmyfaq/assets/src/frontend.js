@@ -16,8 +16,9 @@
 import 'cookieconsent';
 import 'bootstrap';
 import Masonry from 'masonry-layout';
+import { saveFormData } from './api';
+import { handleAutoComplete } from './search';
 import { calculateReadingTime, handleReloadCaptcha } from './utils';
-import { handleAutoComplete, saveFormData } from './api';
 
 //
 // Reload Captchas

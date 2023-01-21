@@ -11,7 +11,6 @@ module.exports = {
     setup: './phpmyfaq/assets/src/setup.js',
     styles: './phpmyfaq/assets/themes/default/scss/style.scss',
     admin: './phpmyfaq/admin/assets/scss/style.scss',
-    //vendors: './phpmyfaq/assets/src/vendors.js', // @todo still needed?
   },
   devtool: 'source-map',
   output: {

@@ -25,57 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /**
-   * Saves all content from the given form via Ajax
-   *
-   * @param action   Actions: savecomment, savefaq, savequestion,
-   *                          saveregistration, savevoting, sendcontact,
-   *                          sendtofriends
-   * @param formName Name of the current form
-   *
-   * @return boolean
-   */
-  window.saveFormValues = function saveFormValues(action, formName) {
-    const formValues = $('#formValues');
-    const loader = $('#loader');
-    const formNameId = $('#' + formName + 's');
-
-    loader.show().fadeIn(400).html('<img src="assets/img/ajax-loader.gif">Saving ...');
-
-    $.ajax({
-      type: 'post',
-      url: 'api.service.php?action=' + action,
-      data: formValues.serialize(),
-      dataType: 'json',
-      cache: false,
-      success: function (json) {
-        if (json.success === undefined) {
-          formNameId.html(
-            '<p class="alert alert-danger">' +
-              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-              json.error +
-              '</p>'
-          );
-          loader.hide();
-        } else {
-          formNameId.html(
-            '<p class="alert alert-success">' +
-              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-              json.success +
-              '</p>'
-          );
-          formNameId.fadeIn('slow');
-          loader.hide();
-          $('#' + formName + 'Form').hide();
-          formValues[0].reset();
-          // @todo add reload of content
-        }
-      },
-    });
-
-    return false;
-  };
-
-  /**
    * Saves the voting by Ajax
    *
    * @param type
