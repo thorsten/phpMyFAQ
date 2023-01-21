@@ -6,11 +6,10 @@
   input {
     height: 60px;
     text-indent: 25px;
-    border: 2px solid #d6d4d4;
 
     &:focus {
       box-shadow: none;
-      border: 2px solid blue;
+      border: 2px solid $primary-border-subtle-dark;
     }
   }
 
@@ -26,7 +25,6 @@
     right: 5px;
     height: 50px;
     width: 110px;
-    background: blue;
   }
 }
 
@@ -40,6 +38,7 @@
   padding: 0 9px 2px;
 }
 
+.autocomplete > li:hover,
 .autocomplete > li.selected {
   @extend .list-group-item-info;
   cursor: pointer;
