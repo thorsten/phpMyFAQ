@@ -147,7 +147,8 @@ class Captcha
     public function renderCaptchaImage(string $action): string
     {
         return sprintf(
-            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s">',
+            '<img id="captchaImage" %s src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s">',
+            'class="rounded border"',
             $_SERVER['SCRIPT_NAME'],
             $this->sessionId ?? '',
             $action,
