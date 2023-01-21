@@ -108,9 +108,9 @@ class SearchHelper extends Helper
                 $link = new Link($currentUrl, $this->config);
                 $link->itemTitle = $result->question;
                 $faq = new stdClass();
-                $faq->categoryName = $this->Category->getPath($result->category_id);
-                $faq->faqQuestion = Utils::chopString($question, 15);
-                $faq->faqLink = $link->toString();
+                $faq->category = $this->Category->getPath($result->category_id);
+                $faq->question = Utils::chopString($question, 15);
+                $faq->url = $link->toString();
 
                 $results[] = $faq;
             }
