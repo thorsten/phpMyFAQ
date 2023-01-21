@@ -580,8 +580,8 @@ switch ($action) {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     try {
                         $questionHelper->sendSuccessMail($questionData, $categories);
-                    } catch (Exception) {
-                        // @todo Handle exception
+                    } catch (Exception | TransportExceptionInterface $exception) {
+                        $message = ['error' => $exception->getMessage()];
                     }
                     $message = ['success' => Translation::get('msgAskThx4Mail')];
                 }
@@ -589,8 +589,8 @@ switch ($action) {
                 $questionHelper = new QuestionHelper($faqConfig, $cat);
                 try {
                     $questionHelper->sendSuccessMail($questionData, $categories);
-                } catch (Exception) {
-                    // @todo Handle exception
+                } catch (Exception | TransportExceptionInterface $exception) {
+                    $message = ['error' => $exception->getMessage()];
                 }
                 $message = ['success' => Translation::get('msgAskThx4Mail')];
             }
@@ -616,8 +616,8 @@ switch ($action) {
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
             try {
                 $message = $registration->createUser($userName, $fullName, $email, $isVisible);
-            } catch (TransportExceptionInterface | \phpMyFAQ\Core\Exception) {
-                // handle exceptions
+            } catch (Exception | TransportExceptionInterface $exception) {
+                $message = ['error' => $exception->getMessage()];
             }
         } else {
             $message = ['error' => Translation::get('err_sendMail')];
@@ -657,15 +657,15 @@ switch ($action) {
         } elseif (!$rating->check($recordId, $userIp)) {
             try {
                 $faqSession->userTracking('error_save_voting', $recordId);
-            } catch (Exception) {
-                // @todo handle the exception
+            } catch (Exception $exception) {
+                $message = ['error' => $exception->getMessage()];
             }
             $message = ['error' => Translation::get('err_VoteTooMuch')];
         } else {
             try {
                 $faqSession->userTracking('error_save_voting', $recordId);
-            } catch (Exception) {
-                // @todo handle the exception
+            } catch (Exception $exception) {
+                $message = ['error' => $exception->getMessage()];
             }
             $message = ['error' => Translation::get('err_noVote')];
         }
@@ -735,8 +735,12 @@ switch ($action) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
                     $mailer = new Mail($faqConfig);
-                    $mailer->setReplyTo($email, $author);
-                    $mailer->addTo($recipient);
+                    try {
+                        $mailer->setReplyTo($email, $author);
+                        $mailer->addTo($recipient);
+                    } catch (Exception $exception) {
+                        $message = ['error' => $exception->getMessage()];
+                    }
                     $mailer->subject = Translation::get('msgS2FMailSubject') . $author;
                     $mailer->message = sprintf(
                         "%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
@@ -832,22 +836,30 @@ switch ($action) {
             if ($loginExist && ($email == $user->getUserData('email'))) {
                 try {
                     $newPassword = $user->createPassword();
-                } catch (Exception) {
-                    // handle exception
+                } catch (Exception $exception) {
+                    $message = ['error' => $exception->getMessage()];
                 }
                 try {
                     $user->changePassword($newPassword);
-                } catch (Exception) {
-                    // handle exception
+                } catch (Exception $exception) {
+                    $message = ['error' => $exception->getMessage()];
                 }
                 $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .
                     $newPassword . "\n\n" . Translation::get('lostpwd_text_2');
 
                 $mailer = new Mail($faqConfig);
-                $mailer->addTo($email);
+                try {
+                    $mailer->addTo($email);
+                } catch (Exception $exception) {
+                    $message = ['error' => $exception->getMessage()];
+                }
                 $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $faqConfig);
                 $mailer->message = $text;
-                $result = $mailer->send();
+                try {
+                    $result = $mailer->send();
+                } catch (Exception | TransportExceptionInterface $exception) {
+                    $message = ['error' => $exception->getMessage()];
+                }
                 unset($mailer);
                 // Trust that the email has been sent
                 $message = ['success' => Translation::get('lostpwd_mail_okay')];
@@ -874,7 +886,7 @@ switch ($action) {
         }
 
         if (
-            !is_null($author) && !is_null($email) && !is_null($question) &&
+            !is_null($author) && !is_null($email) &&
             !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
         ) {
             $question = sprintf(
@@ -889,11 +901,19 @@ switch ($action) {
             );
 
             $mailer = new Mail($faqConfig);
-            $mailer->setReplyTo($email, $author);
-            $mailer->addTo($faqConfig->getAdminEmail());
+            try {
+                $mailer->setReplyTo($email, $author);
+                $mailer->addTo($faqConfig->getAdminEmail());
+            } catch (Exception $exception) {
+                $message = ['error' => $exception->getMessage()];
+            }
             $mailer->subject = $faqConfig->getTitle() . ': Remove User Request';
             $mailer->message = $question;
-            $result = $mailer->send();
+            try {
+                $result = $mailer->send();
+            } catch (Exception | TransportExceptionInterface $exception) {
+                $message = ['error' => $exception->getMessage()];
+            }
             unset($mailer);
 
             $message = ['success' => Translation::get('msgMailContact')];
@@ -903,5 +923,8 @@ switch ($action) {
         break;
 }
 
-$http->sendJsonWithHeaders($message);
+try {
+    $http->sendJsonWithHeaders($message);
+} catch (JsonException $e) {
+}
 exit();

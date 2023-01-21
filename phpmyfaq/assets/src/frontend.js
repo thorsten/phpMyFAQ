@@ -19,19 +19,25 @@ import Masonry from 'masonry-layout';
 import { calculateReadingTime, handleReloadCaptcha } from './utils';
 import { saveFormData } from './api/forms';
 
+//
 // Reload Captchas
+//
 const reloadButton = document.querySelector('#captcha-button');
 if (reloadButton !== null) {
   handleReloadCaptcha(reloadButton);
 }
 
+//
 // Calculate reading time
+//
 const faqBody = document.querySelector('.pmf-faq-body');
 if (faqBody !== null) {
   calculateReadingTime();
 }
 
+//
 // Masonry on startpage
+//
 window.onload = () => {
   const masonryElement = document.querySelector('.masonry-grid');
   if (masonryElement) {
@@ -39,19 +45,22 @@ window.onload = () => {
   }
 };
 
-// Events
-const submitNewFaq = document.getElementById('submitfaq');
-if (submitNewFaq) {
-  submitNewFaq.addEventListener('click', (event) => {
+//
+// Forms
+// - Add FAQ
+// - Ask question
+//
+const formHandler = document.getElementById('pmf-submit-values');
+if (formHandler) {
+  formHandler.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
     const form = document.querySelector('.needs-validation');
     if (!form.checkValidity()) {
-      console.log('no');
       form.classList.add('was-validated');
     } else {
-      console.log('yes');
-      saveFormData('savefaq');
+      saveFormData(formHandler.getAttribute('data-pmf-form'));
+      document.getElementById('formValues').reset();
     }
   });
 }
