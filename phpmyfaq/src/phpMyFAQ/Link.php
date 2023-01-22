@@ -84,10 +84,10 @@ class Link
     /**
      * @var int[] List of allowed action parameters
      */
-    public static $allowedActionParameters = [
+    public static array $allowedActionParameters = [
         'add' => 1,
         'faq' => 1,
-        'artikel' => 1,
+        'artikel' => 1, // @deprecated
         'ask' => 1,
         'attachment' => 1,
         'contact' => 1,
@@ -99,6 +99,7 @@ class Link
         'open-questions' => 1,
         'overview' => 1,
         'password' => 1,
+        'privacy' => 1,
         'register' => 1,
         'request-removal' => 1,
         'save' => 1,

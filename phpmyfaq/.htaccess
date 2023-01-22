@@ -80,6 +80,10 @@ RewriteRule ^(.*)$                  index.php?action=overview [L,QSA]
 RewriteCond %{REQUEST_URI}          /login\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=login [L,QSA]
 
+# the login page
+RewriteCond %{REQUEST_URI}          /privacy\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=privacy [L,QSA]
+
 # start page
 RewriteRule ^index.html$            index.php [PT]
 

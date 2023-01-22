@@ -13,9 +13,9 @@
  * @since     2019-12-20
  */
 
-import 'cookieconsent';
 import 'bootstrap';
 import Masonry from 'masonry-layout';
+
 import { saveFormData } from './api';
 import { handleAutoComplete } from './search';
 import { calculateReadingTime, handleReloadCaptcha } from './utils';
@@ -46,6 +46,11 @@ window.onload = () => {
     new Masonry(masonryElement, { columnWidth: 0 });
   }
 };
+
+//
+// Cookie Consent
+//
+import './utils/cookie-consent';
 
 //
 // Forms
