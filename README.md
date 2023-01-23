@@ -12,7 +12,7 @@ WYSIWYG editor and a media manager, real time search support with Elasticsearch,
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
 supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
 backup and restore system, a dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection
-systems, OpenLDAP and Microsoft Active Directory support, and an easy-to-use installation and update script.
+systems, Microsoft/Azure Active Directory and OpenLDAP support, and an easy-to-use installation and update script.
 
 ## Requirements
 
