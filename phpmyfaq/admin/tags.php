@@ -55,7 +55,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             $tagData = $tags->getAllTags();
 
-            if (count($tagData)) {
+            if (count($tagData) === 0) {
               printf('<p class="alert alert-warning" role="alert">%s</p>', $PMF_LANG['ad_news_nodata']);
             }
 
@@ -64,7 +64,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             foreach ($tagData as $key => $tag) {
                 echo '<tr>';
-                echo '<td><span data-tag-id="' . $key . '">' . Strings::htmlspecialchars($tag) . '</span></td>';
+                echo '<td><span data-tag-id="' . $key . '">' . Strings::htmlentities($tag) . '</span></td>';
                 printf(
                     '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s">' .
                     '<i aria-hidden="true" class="fa fa-edit"></i></a></td>',

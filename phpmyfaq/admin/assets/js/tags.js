@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const tag = input.val();
     const csrf = $('input[name=csrf]').val();
 
+    const escape = (unsafe) => {
+      return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+    }
+
     $.ajax({
       url: 'index.php?action=ajax&ajax=tags&ajaxaction=update',
       type: 'POST',
@@ -47,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
       },
       success: function (message) {
-        input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
+        input.replaceWith('<span data-tag-id="' + id + '">' + escape(input.val().replace(/\//g, '&#x2F;')) + '</span>');
         $('span[data-tag-id="' + id + '"]');
         $('#pmf-admin-saving-data-indicator').html(message);
       },
