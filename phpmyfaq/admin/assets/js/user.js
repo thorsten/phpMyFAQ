@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const userName = document.getElementById('add_user_name').value;
       const realName = document.getElementById('add_user_realname').value;
       const email = document.getElementById('add_user_email').value;
+      const automaticPassword = document.getElementById('add_user_automatic_password').checked;
       const password = document.getElementById('add_user_password').value;
       const passwordConfirm = document.getElementById('add_user_password_confirm').value;
       const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
@@ -167,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userName,
         realName,
         email,
+        automaticPassword,
         password,
         passwordConfirm,
         isSuperAdmin,

@@ -444,7 +444,8 @@ if (
                       <?= $PMF_LANG['ad_passwd_new'] ?>
                   </label>
                   <div class="col-lg-8">
-                    <input type="password" autocomplete="off" name="npass" id="npass" class="form-control" required>
+                    <input type="password" autocomplete="off" name="npass" id="npass" class="form-control" minlength="8"
+                           required>
                   </div>
                 </div>
 
@@ -453,7 +454,8 @@ if (
                       <?= $PMF_LANG['ad_passwd_con'] ?>
                   </label>
                   <div class="col-lg-8">
-                    <input type="password" autocomplete="off" name="bpass" id="bpass" class="form-control" required>
+                    <input type="password" autocomplete="off" name="bpass" id="bpass" class="form-control" minlength="8"
+                           required>
                   </div>
                 </div>
 
@@ -684,7 +686,7 @@ if (
                        for="add_user_password"><?= $PMF_LANG['ad_adus_password'] ?></label>
                 <div class="col-lg-8">
                   <input type="password" name="add_user_password" id="add_user_password" class="form-control"
-                         autocomplete="off" tabindex="4">
+                         minlength="8" autocomplete="off" tabindex="4">
                 </div>
               </div>
 
@@ -693,7 +695,7 @@ if (
                        for="add_user_password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
                 <div class="col-lg-8">
                   <input type="password" name="add_user_password_confirm" id="add_user_password_confirm"
-                         class="form-control" autocomplete="off" tabindex="5">
+                         minlength="8" class="form-control" autocomplete="off" tabindex="5">
                 </div>
               </div>
             </div>
