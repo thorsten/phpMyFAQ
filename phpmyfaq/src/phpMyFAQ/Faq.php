@@ -2450,15 +2450,7 @@ class Faq
         $mail = new Mail($this->config);
 
         $query = sprintf(
-            "
-            SELECT
-                COUNT(id) AS num
-            FROM
-                %sfaqquestions
-            WHERE
-                lang = '%s'
-            AND
-                is_visible != 'Y'",
+            "SELECT COUNT(id) AS num FROM %sfaqquestions WHERE lang = '%s' AND is_visible != 'Y'",
             Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
@@ -2478,17 +2470,7 @@ class Faq
         }
 
         $query = sprintf(
-            "
-            SELECT
-                *
-            FROM
-                %sfaqquestions
-            WHERE
-                lang = '%s'
-            AND
-                is_visible = 'Y'
-            ORDER BY
-                created ASC",
+            "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
             Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
@@ -2503,14 +2485,14 @@ class Faq
                     '<td><small>%s</small><br><a href="mailto:%s">%s</a></td>',
                     $date->format(Date::createIsoDate($row->created)),
                     $mail->safeEmail($row->email),
-                    $row->username
+                    Strings::htmlentities($row->username)
                 );
                 $output .= sprintf(
                     '<td><strong>%s:</strong><br>%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ?
                         $category->categoryName[$row->category_id]['name'] :
                         '',
-                    strip_tags($row->question)
+                    Strings::htmlentities($row->question)
                 );
                 if ($this->config->get('records.enableCloseQuestion') && $row->answer_id) {
                     $output .= sprintf(
