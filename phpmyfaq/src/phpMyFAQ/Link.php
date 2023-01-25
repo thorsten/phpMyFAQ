@@ -359,9 +359,6 @@ class Link
         $url = $this->toUri();
 
         if ($this->config->get('main.enableRewriteRules')) {
-
-            var_dump('foo');
-
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();
                 if (isset($getParams[self::LINK_GET_ACTION])) {
