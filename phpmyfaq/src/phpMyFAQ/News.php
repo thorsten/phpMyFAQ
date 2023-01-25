@@ -29,7 +29,7 @@ class News
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Language strings.
@@ -68,10 +68,11 @@ class News
         foreach ($news as $item) {
             $url = sprintf(
                 '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
-                Strings::htmlentities($this->config->getDefaultUrl()),
+                $this->config->getDefaultUrl(),
                 $item['id'],
                 $item['lang']
             );
+
             $oLink = new Link($url, $this->config);
 
             if (isset($item['header'])) {

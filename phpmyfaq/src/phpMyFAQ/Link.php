@@ -216,14 +216,13 @@ class Link
     /**
      * @param string $rel rel property
      */
-    public function setRelation(string $rel)
+    public function setRelation(string $rel): void
     {
         $this->rel = $rel;
     }
 
     /**
      * Returns the system URI.
-     *
      * $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
      * Precisely, it contains what the user has written in the Host request-header, see below.
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
@@ -232,7 +231,7 @@ class Link
      * @param string|null $path
      * @return string
      */
-    public function getSystemUri($path = null): string
+    public function getSystemUri(string $path = null): string
     {
         // Remove any ref to standard ports 80 and 443.
         $pattern[0] = '/:80$/'; // HTTP: port 80
@@ -316,14 +315,14 @@ class Link
         }
 
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= sprintf(' title="%s"', addslashes($this->tooltip));
+            $htmlAnchor .= sprintf(' title="%s"', addslashes(Strings::htmlentities($this->tooltip)));
         }
 
         if (!empty($this->name)) {
             $htmlAnchor .= sprintf(' name="%s"', $this->name);
         } else {
             if (!empty($this->url)) {
-                $htmlAnchor .= sprintf(' href="%s"', $url);
+                $htmlAnchor .= sprintf(' href="%s"', Strings::htmlentities($url));
             }
             if (!empty($this->target)) {
                 $htmlAnchor .= sprintf(' target="%s"', $this->target);
@@ -334,12 +333,12 @@ class Link
         }
         $htmlAnchor .= '>';
         if (('0' == $this->text) || (!empty($this->text))) {
-            $htmlAnchor .= $this->text;
+            $htmlAnchor .= Strings::htmlentities($this->text);
         } else {
             if (!empty($this->name)) {
-                $htmlAnchor .= $this->name;
+                $htmlAnchor .= Strings::htmlentities($this->name);
             } else {
-                $htmlAnchor .= $url;
+                $htmlAnchor .= Strings::htmlentities($url);
             }
         }
         $htmlAnchor .= '</a>';
@@ -358,7 +357,11 @@ class Link
     public function toString(bool $removeSessionFromUrl = false): string
     {
         $url = $this->toUri();
+
         if ($this->config->get('main.enableRewriteRules')) {
+
+            var_dump('foo');
+
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();
                 if (isset($getParams[self::LINK_GET_ACTION])) {
