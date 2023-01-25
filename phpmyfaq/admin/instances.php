@@ -243,6 +243,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         const admin = $('#admin').val();
         const password = $('#password').val();
 
+        const escape = (unsafe) => {
+          return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+        }
+
         $.ajax({
           url: 'index.php',
           type: 'GET',
@@ -256,8 +260,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
               '<tr id="row-instance-' + data.added + '">' +
               '<td>' + data.added + '</td>' +
               '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
-              '<td>' + instance + '</td>' +
-              '<td>' + comment + '</td>' +
+              '<td>' + escape(instance) + '</td>' +
+              '<td>' + escape(comment) + '</td>' +
               '<td>' +
               '<a href="?action=editinstance&instance_id=' + data.added +
               '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
