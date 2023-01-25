@@ -482,6 +482,7 @@ switch ($action) {
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+        $question = strip_tags($question);
         $save = Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
 
         // If e-mail address is set to optional
