@@ -322,11 +322,13 @@ switch ($action) {
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+        $question = strip_tags($question);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = html_entity_decode($answer);
         } else {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
+            $answer = strip_tags($answer);
             $answer = nl2br($answer);
         }
         $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_UNSAFE_RAW);
