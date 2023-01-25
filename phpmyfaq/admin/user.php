@@ -114,41 +114,46 @@ if (
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $userData = [];
-            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW, '');
-            $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
-            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_UNSAFE_RAW, '');
+            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW);
+            $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_UNSAFE_RAW);
             $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_UNSAFE_RAW, $defaultUserStatus);
             $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_UNSAFE_RAW);
             $isSuperAdmin = $isSuperAdmin === 'on';
 
-            $user = new User($faqConfig);
-            $user->getUserById($userId, true);
-
-            $stats = $user->getStatus();
-
-            // set new password an send email if user is switched to active
-            if ($stats == 'blocked' && $userStatus == 'active') {
-                if (!$user->activateUser()) {
-                    $userStatus = 'invalid_status';
-                }
-            }
-
-            // Set super-admin flag
-            $user->setSuperAdmin($isSuperAdmin);
-
-            if (
-                !$user->userdata->set(array_keys($userData), array_values($userData)) ||
-                !$user->setStatus($userStatus)
-            ) {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+            // Sanity check
+            if (is_null($userData['email'])) {
+                $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['err_noMailAdress']);
             } else {
-                $message .= sprintf(
-                    '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                    $PMF_LANG['ad_msg_savedsuc_1'],
-                    Strings::htmlentities($user->getLogin(), ENT_QUOTES),
-                    $PMF_LANG['ad_msg_savedsuc_2']
-                );
-                $message .= '<script>updateUser(' . $userId . ');</script>';
+                $user = new User($faqConfig);
+                $user->getUserById($userId, true);
+
+                $stats = $user->getStatus();
+
+                // set new password an send email if user is switched to active
+                if ($stats == 'blocked' && $userStatus == 'active') {
+                    if (!$user->activateUser()) {
+                        $userStatus = 'invalid_status';
+                    }
+                }
+
+                // Set super-admin flag
+                $user->setSuperAdmin($isSuperAdmin);
+
+                if (
+                    !$user->userdata->set(array_keys($userData), array_values($userData)) ||
+                    !$user->setStatus($userStatus)
+                ) {
+                    $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+                } else {
+                    $message .= sprintf(
+                        '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+                        $PMF_LANG['ad_msg_savedsuc_1'],
+                        Strings::htmlentities($user->getLogin(), ENT_QUOTES),
+                        $PMF_LANG['ad_msg_savedsuc_2']
+                    );
+                    $message .= '<script>updateUser(' . $userId . ');</script>';
+                }
             }
         }
     }
