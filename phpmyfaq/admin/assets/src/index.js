@@ -26,9 +26,13 @@ import { handleStatistics } from './statistics';
 import { handleCategories, handleFaqForm, handleTags, renderEditor } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
+import { handlePasswordToggle } from '../../../assets/src/utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
+
+  // Login
+  handlePasswordToggle();
 
   // Sidebar
   sidebarToggle();

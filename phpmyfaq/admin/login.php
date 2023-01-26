@@ -58,11 +58,16 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                                    placeholder="<?= Translation::get('ad_auth_user') ?>" />
                                             <label for="faqusername"><?= Translation::get('ad_auth_user') ?></label>
                                         </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" id="faqpassword" name="faqpassword"
-                                                   type="password" autocomplete="off"
-                                                   placeholder="<?= Translation::get('ad_auth_passwd') ?>" />
-                                            <label for="faqpassword"><?= Translation::get('ad_auth_passwd') ?></label>
+                                        <div class="input-group mb-3">
+                                            <div class="form-floating">
+                                                <input class="form-control" id="faqpassword" name="faqpassword"
+                                                       type="password" autocomplete="off"
+                                                       placeholder="<?= Translation::get('ad_auth_passwd') ?>" />
+                                                <label for="faqpassword"><?= Translation::get('ad_auth_passwd') ?></label>
+                                            </div>
+                                            <span class="input-group-text">
+                                                <i class="fa" id="togglePassword"></i>
+                                            </span>
                                         </div>
                                         <div class="form-check mb-3">
                                             <input class="form-check-input" id="faqrememberme" type="checkbox"

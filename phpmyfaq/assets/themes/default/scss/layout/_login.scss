@@ -1,0 +1,14 @@
+#togglePassword {
+  cursor: pointer;
+
+  &:before {
+    font-family: 'ForkAwesome';
+    content: '\f070';
+    font-style: normal;
+  }
+
+  &.is-active:before {
+    font-family: 'ForkAwesome';
+    content: '\f06e';
+  }
+}

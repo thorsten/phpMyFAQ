@@ -18,7 +18,7 @@ import Masonry from 'masonry-layout';
 
 import { saveFormData } from './api';
 import { handleAutoComplete } from './search';
-import { calculateReadingTime, handleReloadCaptcha } from './utils';
+import { calculateReadingTime, handlePasswordToggle, handleReloadCaptcha } from './utils';
 
 //
 // Reload Captchas
@@ -27,6 +27,11 @@ const reloadButton = document.querySelector('#captcha-button');
 if (reloadButton !== null) {
   handleReloadCaptcha(reloadButton);
 }
+
+//
+// Toggle password visibility
+//
+handlePasswordToggle();
 
 //
 // Calculate reading time

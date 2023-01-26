@@ -29,16 +29,21 @@
                       />
                       <label for="faqusername">{{ username }}</label>
                     </div>
-                    <div class="form-floating mb-3">
-                      <input
-                        class="form-control"
-                        id="faqpassword"
-                        name="faqpassword"
-                        type="password"
-                        autocomplete="off"
-                        placeholder="{{ password }}"
-                      />
-                      <label for="faqpassword">{{ password }}</label>
+                    <div class="input-group mb-3">
+                      <div class="form-floating">
+                        <input
+                          class="form-control"
+                          id="faqpassword"
+                          name="faqpassword"
+                          type="password"
+                          autocomplete="off"
+                          placeholder="{{ password }}"
+                        />
+                        <label for="faqpassword">{{ password }}</label>
+                      </div>
+                      <span class="input-group-text">
+                        <i class="fa" id="togglePassword"></i>
+                      </span>
                     </div>
                     <div class="form-check mb-3">
                       <input class="form-check-input" id="faqrememberme" type="checkbox" value="rememberMe" />
