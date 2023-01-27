@@ -180,8 +180,8 @@ if (count($multiCategories) > 1) {
 // Related FAQs
 $faqSearchResult->reviewResultSet(
     $faqRelation->getAllRelatedByQuestion(
-        $faq->faqRecord['title'],
-        $faq->faqRecord['keywords']
+        Strings::htmlentities($faq->faqRecord['title']),
+        Strings::htmlentities($faq->faqRecord['keywords'])
     )
 );
 
