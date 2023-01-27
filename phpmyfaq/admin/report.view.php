@@ -20,6 +20,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Report;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -80,12 +81,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             if (0 != $data['category_parent']) {
                 printf('<td>%s</td>', $data['category_parent']);
             } else {
-                printf('<td>%s</td>', $data['category_name']);
+                printf('<td>%s</td>', Strings::htmlentities($data['category_name'] ?? ''));
             }
         }
         if ($useSubcategory) {
             if (0 != $data['category_parent']) {
-                printf('<td>%s</td>', $data['category_name']);
+                printf('<td>%s</td>', Strings::htmlentities($data['category_name']));
             } else {
                 echo '<td>n/a</td>';
             }
@@ -103,16 +104,16 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             printf('<td>%s</td>', $data['faq_sticky']);
         }
         if ($useTitle) {
-            printf('<td>%s</td>', $data['faq_question']);
+            printf('<td>%s</td>', Strings::htmlentities($data['faq_question']));
         }
         if ($useCreationDate) {
             printf('<td>%s</td>', $data['faq_updated']);
         }
         if ($useOwner) {
-            printf('<td>%s</td>', $data['faq_org_author']);
+            printf('<td>%s</td>', Strings::htmlentities($data['faq_org_author']));
         }
         if ($useLastModified) {
-            printf('<td>%s</td>', $data['faq_last_author']);
+            printf('<td>%s</td>', Strings::htmlentities($data['faq_last_author'] ?? ''));
         }
         if ($useUrl) {
             $url = sprintf(

@@ -145,8 +145,6 @@ class Report
         }
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
-        $outputString = str_replace($toBeRemoved, '', $outputString);
-
-        return $outputString;
+        return str_replace($toBeRemoved, '', $outputString);
     }
 }
