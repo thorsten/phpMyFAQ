@@ -317,21 +317,21 @@ switch ($action) {
         $category = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
 
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $author = trim(Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW));
+        $email = trim(Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL));
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
-        $question = strip_tags($question);
+        $question = trim(strip_tags($question));
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-            $answer = html_entity_decode($answer);
+            $answer = trim(html_entity_decode($answer));
         } else {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
             $answer = strip_tags($answer);
-            $answer = nl2br($answer);
+            $answer = trim(nl2br($answer));
         }
-        $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_UNSAFE_RAW);
+        $translatedAnswer = trim(Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_UNSAFE_RAW));
         $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_UNSAFE_RAW);
         $contentLink = Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
         $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
@@ -478,11 +478,11 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
         $categories = $cat->getAllCategories();
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $author = trim(Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW));
+        $email = trim(Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL));
         $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
-        $question = strip_tags($question);
+        $question = trim(strip_tags($question));
         $save = Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
 
         // If e-mail address is set to optional
