@@ -1758,13 +1758,13 @@ class Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 if ('visits' == $type) {
-                    $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                    $output['preview'][] = $row['question'];
+                    $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                    $output['preview'][] = Strings::htmlentities($row['question']);
                     $output['url'][] = Strings::htmlentities($row['url']);
                     $output['visits'][] = $this->plurals->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                    $output['preview'][] = $row['question'];
+                    $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                    $output['preview'][] = Strings::htmlentities($row['question']);
                     $output['url'][] = Strings::htmlentities($row['url']);
                     $output['voted'][] = sprintf(
                         '%s %s 5 - %s',
