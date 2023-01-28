@@ -519,7 +519,7 @@ $template = new Template(
     $faqConfig->get('main.templateSet')
 );
 
-$categoryRelation = new CategoryRelation($faqConfig);
+$categoryRelation = new CategoryRelation($faqConfig, $category);
 
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
@@ -562,8 +562,6 @@ $tplMainPage = [
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => Translation::get('msgFullCategories'),
     'msgCategory' => Translation::get('msgCategory'),
-    'showCategories' => $categoryHelper->renderNavigation($cat),
-    'topCategories' => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs' => Translation::get('msgExportAllFaqs'),
     'languageBox' => Translation::get('msgLanguageSubmit'),
     'renderUri' => $renderUri,
@@ -577,7 +575,8 @@ $tplMainPage = [
     'msgLoginName' => Strings::htmlentities($user->getUserData('display_name')),
     'loginHeader' => Translation::get('msgLoginUser'),
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) . '?' . Filter::getFilteredQueryString(),
+    'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) . '?' .
+        Filter::getFilteredQueryString(),
     'faqloginaction' => $action,
     'login' => Translation::get('ad_auth_ok'),
     'username' => Translation::get('ad_auth_user'),
@@ -592,15 +591,6 @@ $tplMainPage = [
     'writeTagCloudHeader' => Translation::get('msg_tags'),
     'writeTags' => $oTag->renderTagCloud(),
 ];
-
-$template->parseBlock(
-    'index',
-    'categoryListSection',
-    [
-        'showCategories' => $categoryHelper->renderNavigation($cat),
-        'categoryDropDown' => $categoryHelper->renderCategoryDropDown(),
-    ]
-);
 
 if ('main' == $action || 'show' == $action) {
     $template->parseBlock(

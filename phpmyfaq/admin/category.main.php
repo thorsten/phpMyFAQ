@@ -278,7 +278,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $category->setUser($currentAdminUser);
                 $category->setGroups($currentAdminGroups);
 
-                $categoryRelation = new CategoryRelation($faqConfig);
+                $categoryRelation = new CategoryRelation($faqConfig, $category);
 
                 $categoryImage = new CategoryImage($faqConfig);
                 $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());

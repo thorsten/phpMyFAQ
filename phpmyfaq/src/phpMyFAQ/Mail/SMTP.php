@@ -58,7 +58,7 @@ class SMTP implements MailUserAgentInterface
             ->text($body);
 
         if (isset($headers['CC'])) {
-            $email->cc($headers['Cc']);
+            $email->cc($headers['CC']);
         }
         if (isset($headers['Bcc'])) {
             $email->bcc($headers['Bcc']);

@@ -61,7 +61,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         }
         if (is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) {
             $categoryFaqsHeader = Translation::get('msgSubCategories');
-            $subCategoryContent = $categoryHelper->renderCategoryTree();
+            $subCategoryContent = $categoryHelper->renderCategoryTree($selectedCategoryId);
             $template->parseBlock(
                 'mainPageContent',
                 'subCategories',
@@ -73,17 +73,20 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     }
 
     $up = '';
-    if ($categoryData->getParentId() !== 0) {
+    if ($categoryData->getId() !== 0) {
         $url = sprintf(
             '%sindex.php?%saction=show&amp;cat=%d',
             $faqConfig->getDefaultUrl(),
             $sids,
             $categoryData->getParentId()
         );
-        $oLink = new Link($url, $faqConfig);
-        $oLink->itemTitle = $category->categoryName[$categoryData->getParentId()]['name'];
-        $oLink->text = Translation::get('msgCategoryUp');
-        $up = $oLink->toHtmlAnchor();
+        $text = $category->categoryName[$categoryData->getParentId()]['name'] ?? Translation::get('msgCategoryUp');
+
+        $link = new Link($url, $faqConfig);
+        $link->itemTitle = $link->text = $text;
+        $link->tooltip = Translation::get('msgCategoryUp');
+
+        $up = sprintf('<i class="fa fa-level-up" aria-hidden="true"></i> %s', $link->toHtmlAnchor());
     }
 
     if (!is_null($categoryData->getImage()) && strlen($categoryData->getImage()) > 0) {

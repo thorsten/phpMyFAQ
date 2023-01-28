@@ -56,7 +56,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
-    $categoryRelation = new CategoryRelation($faqConfig);
+    $categoryRelation = new CategoryRelation($faqConfig, $category);
     $categoryRelation->setGroups($currentAdminGroups);
 
     $faqHelper = new FaqHelper($faqConfig);

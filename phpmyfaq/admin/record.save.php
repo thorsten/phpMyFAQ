@@ -15,7 +15,6 @@
  * @since 2003-02-23
  */
 
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
@@ -186,7 +185,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             $categories['rubrik'] = [];
         }
 
-        $categoryRelation = new CategoryRelation($faqConfig);
+        $categoryRelation = new CategoryRelation($faqConfig, $category);
         $categoryRelation->deleteByFaq($recordId, $recordLang);
         $categoryRelation->add($categories['rubrik'], $recordId, $recordLang);
 
@@ -209,7 +208,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         // If Elasticsearch is enabled, update active or delete inactive FAQ document
         if ($faqConfig->get('search.enableElasticsearch')) {
             $esInstance = new Elasticsearch($faqConfig);
-            try {
                 if ('yes' === $active) {
                     $esInstance->update(
                         [
@@ -223,9 +221,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
                         ]
                     );
                 }
-            } catch (Missing404Exception) {
-                // @todo handle exception
-            }
         }
 
         // All the other translations

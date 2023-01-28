@@ -16,6 +16,7 @@
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Configuration;
@@ -65,7 +66,7 @@ class FaqMetaData
      */
     public function save(): void
     {
-        $categoryRelation = new CategoryRelation($this->config);
+        $categoryRelation = new CategoryRelation($this->config, new Category($this->config));
         $categoryRelation->add($this->categories, $this->faqId, $this->faqLanguage);
 
         // Activate visits

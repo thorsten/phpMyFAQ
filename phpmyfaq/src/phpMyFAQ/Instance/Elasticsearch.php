@@ -21,6 +21,7 @@ use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 
@@ -35,7 +36,7 @@ class Elasticsearch
     protected Client $client;
 
     /** @var array<string, mixed> */
-    protected $esConfig;
+    protected array $esConfig;
 
     /**
      * Elasticsearch mapping
@@ -165,11 +166,16 @@ class Elasticsearch
     /**
      * Returns the current mapping.
      *
-     * @return array<string, mixed>
+     * @return \Elastic\Elasticsearch\Response\Elasticsearch|Promise
+     * @throws Exception
      */
-    public function getMapping(): array
+    public function getMapping(): \Elastic\Elasticsearch\Response\Elasticsearch|Promise
     {
-        return $this->client->indices()->getMapping();
+        try {
+            return $this->client->indices()->getMapping();
+        } catch (ClientResponseException | ServerResponseException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     /**
@@ -191,9 +197,9 @@ class Elasticsearch
      * Indexing of a FAQ
      *
      * @param string[] $faq
-     * @return string[]
+     * @return object
      */
-    public function index(array $faq): array
+    public function index(array $faq): object
     {
         $params = [
             'index' => $this->esConfig['index'],
@@ -208,7 +214,11 @@ class Elasticsearch
             ]
         ];
 
-        return $this->client->index($params)->asObject();
+        try {
+            return $this->client->index($params)->asObject();
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+            //return ['error' => $e->getMessage()];
+        }
     }
 
     /**
@@ -296,7 +306,11 @@ class Elasticsearch
             ]
         ];
 
-        return $this->client->update($params);
+        try {
+            return $this->client->update($params)->asArray();
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     /**
@@ -311,6 +325,10 @@ class Elasticsearch
             'id' => $solutionId
         ];
 
-        return $this->client->delete($params);
+        try {
+            return $this->client->delete($params)->asArray();
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 }

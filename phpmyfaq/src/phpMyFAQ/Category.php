@@ -59,6 +59,8 @@ class Category
      */
     private array $catTree = [];
 
+    private array $categoryList = [];
+
     /**
      * User ID.
      */
@@ -235,6 +237,7 @@ class Category
             while ($row = $this->config->getDb()->fetchArray($result)) {
                 $this->categoryName[(int)$row['id']] = $row;
                 $this->categories[(int)$row['id']] = $row;
+                $this->categoryList[] = $row;
                 $this->children[(int)$row['parent_id']][(int)$row['id']] = &$this->categoryName[(int)$row['id']];
                 $this->owner[(int)$row['id']] = &$row['user_id'];
                 $this->moderators[(int)$row['id']] = &$row['group_id'];
@@ -303,6 +306,7 @@ class Category
             $query .= " AND lang = '" . $this->config->getDb()->escape($this->language) . "'";
         }
         $query .= ' ORDER BY id';
+
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
             $this->categories[$row['id']] = $row;
@@ -576,9 +580,10 @@ class Category
     /**
      * Try to expand from the parent_id to the node $id
      *
+     * @param int $id
      * @return void
      */
-    public function expandTo(int $id)
+    public function expandTo(int $id): void
     {
         $this->collapseAll();
         $ascendants = $this->getNodes($id);
@@ -641,7 +646,7 @@ class Category
      *
      * @return void
      */
-    public function expandAll()
+    public function expandAll(): void
     {
         $numTreeTab = count($this->treeTab);
         for ($i = 0; $i < $numTreeTab; ++$i) {
@@ -698,6 +703,8 @@ class Category
 
     /**
      * Creates a category link.
+     *
+     * @deprecated has to be moved to the category helper class
      *
      * @param string      $sids Session id
      * @param int         $categoryId Parent category
@@ -843,6 +850,24 @@ class Category
             );
         } else {
             return implode($separator, $tempName);
+        }
+    }
+
+    /**
+     * Returns a path with the IDs of the current category
+     * @param array $category
+     * @param array $categories
+     * @return string
+     */
+    public function createCategoryPath(array $category, array $categories): string
+    {
+        if ($category['parent_id'] == 0) {
+            return $category['id'];
+        } else {
+            $parent = array_filter($categories, function ($c) use ($category) {
+                return $c['id'] == $category['parent_id'];
+            });
+            return $this->createCategoryPath(array_pop($parent), $categories) . '.' . $category['id'];
         }
     }
 

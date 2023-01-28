@@ -44,7 +44,7 @@ if (
     $category->transform(0);
     $category->buildCategoryTree();
 
-    $categoryRelation = new CategoryRelation($faqConfig);
+    $categoryRelation = new CategoryRelation($faqConfig, $category);
     $categoryRelation->setGroups($currentAdminGroups);
 
     $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory(

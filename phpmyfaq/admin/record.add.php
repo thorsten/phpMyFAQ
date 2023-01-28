@@ -161,7 +161,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             $visits = new Visits($faqConfig);
             $visits->logViews((int)$recordId);
 
-            $categoryRelation = new CategoryRelation($faqConfig);
+            $categoryRelation = new CategoryRelation($faqConfig, $category);
             $categoryRelation->add($categories['rubrik'], $recordId, $recordData['lang']);
 
             // Insert the tags

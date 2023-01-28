@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Database;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
@@ -31,253 +31,6 @@ use phpMyFAQ\User;
  */
 class CategoryHelper extends Helper
 {
-    /**
-     * Renders the main navigation.
-     *
-     * @param int $activeCategory Selected category
-     */
-    public function renderNavigation(int $activeCategory = 0): string
-    {
-        global $sids;
-
-        $open = 0;
-        $output = '';
-        $numCategories = $this->Category->height();
-        $numFaqs = $this->categoryRelation->getNumberOfFaqsPerCategory();
-
-        if ($numCategories > 0) {
-            for ($y = 0; $y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
-                [$hasChild, $name, $categoryId, $description, $active] = $this->Category->getLineDisplay($y);
-
-                if (!$active) {
-                    continue;
-                }
-
-                if ($activeCategory == $categoryId) {
-                    $isActive = true;
-                } else {
-                    $isActive = false;
-                }
-
-                $level = $this->Category->treeTab[$y]['level'];
-                $leveldiff = $open - $level;
-
-                if (
-                    $this->config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId])
-                    && '-' === $hasChild
-                ) {
-                    continue;
-                }
-
-                if ($leveldiff > 1) {
-                    $output .= '</li>';
-                    for ($i = $leveldiff; $i > 1; --$i) {
-                        $output .= sprintf(
-                            "\n%s</ul>\n%s</li>\n",
-                            str_repeat("\t", $level + $i + 1),
-                            str_repeat("\t", $level + $i)
-                        );
-                    }
-                }
-
-                if ($level < $open) {
-                    if (($level - $open) == -1) {
-                        $output .= '</li>';
-                    }
-                    $output .= "\n" . str_repeat("\t", $level + 2) . "</ul>\n" .
-                        str_repeat("\t", $level + 1) . "</li>\n";
-                } elseif ($level == $open && $y != 0) {
-                    $output .= "</li>\n";
-                }
-
-                if ($level > $open) {
-                    $output .= sprintf(
-                        "\n%s<ul class=\"nav nav-list\">\n%s<li%s>",
-                        str_repeat("\t", $level + 1),
-                        str_repeat("\t", $level + 1),
-                        $isActive ? ' class="active"' : ''
-                    );
-                } else {
-                    $output .= sprintf(
-                        '%s<li%s>',
-                        str_repeat("\t", $level + 1),
-                        $isActive ? ' class="active"' : ''
-                    );
-                }
-
-                if (isset($this->Category->treeTab[$y]['symbol']) && $this->Category->treeTab[$y]['symbol'] == 'plus') {
-                    $output .= $this->Category->addCategoryLink(
-                        $sids,
-                        $categoryId,
-                        $name,
-                        $description,
-                        true,
-                        $isActive
-                    );
-                }
-                if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
-                    $name = ($this->Category->treeTab[$y]['parent_id'] === 0)
-                        ?
-                        $name
-                        :
-                        $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
-                    $output .= $this->Category->addCategoryLink(
-                        $sids,
-                        $categoryId,
-                        $name,
-                        $description,
-                        false,
-                        $isActive
-                    );
-                } else {
-                    $output .= $this->Category->addCategoryLink(
-                        $sids,
-                        $categoryId,
-                        $name,
-                        $description,
-                        false,
-                        $isActive
-                    );
-                }
-
-                $open = $level;
-            }
-            if ($open > 0) {
-                $output .= str_repeat("</li>\n\t</ul>\n\t", $open);
-            }
-
-            return $output . '</li>';
-        } else {
-            $output = '<li><a href="#">' . Translation::get('no_cats') . '</a></li>';
-        }
-
-        return $output;
-    }
-
-    /**
-     * Renders the main navigation dropdown.
-     */
-    public function renderCategoryDropDown(): string
-    {
-        $number = [];
-        global $sids;
-
-        $open = 0;
-        $output = '';
-        $numCategories = $this->Category->height();
-
-        $this->Category->expandAll();
-
-        if ($numCategories > 0) {
-            for ($y = 0; $y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
-                [$hasChild, $categoryName, $parent, $description, $active] = $this->Category->getLineDisplay($y);
-
-                if (!$active) {
-                    continue;
-                }
-
-                $level = $this->Category->treeTab[$y]['level'];
-                $leveldiff = $open - $level;
-                $numChildren = $this->Category->treeTab[$y]['numChilds'];
-
-                if (!isset($number[$parent])) {
-                    $number[$parent] = 0;
-                }
-
-                if ($this->config->get('records.hideEmptyCategories') && 0 === $number[$parent] && '-' === $hasChild) {
-                    continue;
-                }
-
-                if ($leveldiff > 1) {
-                    $output .= '</li>';
-                    for ($i = $leveldiff; $i > 1; --$i) {
-                        $output .= sprintf(
-                            "\n%s</ul>\n%s</li>\n",
-                            str_repeat("\t", $level + $i + 1),
-                            str_repeat("\t", $level + $i)
-                        );
-                    }
-                }
-
-                if ($level < $open) {
-                    if (($level - $open) == -1) {
-                        $output .= '</li>';
-                    }
-                    $output .= sprintf(
-                        "\n%s</ul>\n%s</li>\n",
-                        str_repeat("\t", $level + 2),
-                        str_repeat("\t", $level + 1)
-                    );
-                } elseif ($level == $open && $y != 0) {
-                    $output .= "</li>\n";
-                }
-
-                if ($level > $open) {
-                    $output .= sprintf(
-                        "\n%s<ul class=\"dropdown-menu\">\n%s",
-                        str_repeat("\t", $level + 1),
-                        str_repeat("\t", $level + 1)
-                    );
-                    if ($numChildren > 0) {
-                        $output .= '<li class="dropdown-submenu">';
-                    } else {
-                        $output .= '<li>';
-                    }
-                } else {
-                    $output .= str_repeat("\t", $level + 1);
-                    if ($numChildren > 0) {
-                        $output .= '<li class="dropdown-submenu">';
-                    } else {
-                        $output .= '<li>';
-                    }
-                }
-
-                $url = sprintf(
-                    '%sindex.php?%saction=show&amp;cat=%d',
-                    $this->config->getDefaultUrl(),
-                    $sids,
-                    $parent
-                );
-                $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = Strings::htmlentities($categoryName);
-                $oLink->text = Strings::htmlentities($categoryName);
-                $oLink->tooltip = !is_null($description) ?? Strings::htmlentities($description);
-
-                $output .= $oLink->toHtmlAnchor();
-                $open = $level;
-            }
-
-            if (isset($level) && $level > 0) {
-                $output .= str_repeat("</li>\n\t</ul>\n\t", $level);
-            }
-
-            return $output;
-        } else {
-            $output = '<li><a href="#">' . Translation::get('no_cats') . '</a></li>';
-        }
-
-        return $output;
-    }
-
-    /**
-     * Returns all top-level categories in <li> tags.
-     */
-    public function renderMainCategories(): string
-    {
-        $categories = '';
-        foreach ($this->Category->categories as $cat) {
-            if (0 === (int)$cat['parent_id']) {
-                $categories .= sprintf(
-                    '<li><a href="?action=show&cat=%d">%s</a></li>',
-                    $cat['id'],
-                    Strings::htmlentities($cat['name'])
-                );
-            }
-        }
-
-        return $categories;
-    }
-
     /**
      * Get all categories in <option> tags.
      *
@@ -325,6 +78,9 @@ class CategoryHelper extends Helper
 
     /**
      * Renders the start page category card decks
+     *
+     * @param array $categories
+     * @return string
      */
     public function renderStartPageCategories(array $categories): string
     {
@@ -360,146 +116,73 @@ class CategoryHelper extends Helper
     /**
      * Renders the static tree with the number of records.
      */
-    public function renderCategoryTree(): string
+    public function renderCategoryTree(int $parentId = 0): string
+    {
+        $categoryRelation = new CategoryRelation($this->config, $this->Category);
+        $categoryRelation->setGroups($this->Category->getGroups());
+        $categoriesWithNumbers = $categoryRelation->getCategoryTree();
+        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($categoriesWithNumbers);
+
+        return sprintf(
+            '<ul class="pmf-category-overview">%s</ul>',
+            $this->buildCategoryList($this->Category->getAllCategories(), $parentId, $aggregatedNumbers)
+        );
+    }
+
+    /**
+     * Builds a category list
+     *
+     * @param array             $tree
+     * @param int               $parentId
+     * @param array<int, array> $aggregatedNumbers
+     * @return string
+     */
+    public function buildCategoryList(array $tree, int $parentId = 0, array $aggregatedNumbers = []): string
     {
         global $sids, $plr;
 
-        $number = [];
-
-        $query = sprintf(
-            '
-            SELECT
-                fcr.category_id AS category_id,
-                count(fcr.category_id) AS number
-            FROM
-                %sfaqcategoryrelations fcr
-                JOIN %sfaqdata fd ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang
-                LEFT JOIN %sfaqdata_group AS fdg ON fd.id = fdg.record_id
-                LEFT JOIN %sfaqdata_user AS fdu ON fd.id = fdu.record_id
-                LEFT JOIN %sfaqcategory_group AS fcg ON fcr.category_id = fcg.category_id
-                LEFT JOIN %sfaqcategory_user AS fcu ON fcr.category_id = fcu.category_id
-            WHERE 1=1 
-            ',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix()
-        );
-
-        if ($this->config->get('security.permLevel') !== 'basic') {
-            if (-1 === $this->Category->getUser()) {
-                $query .= sprintf(
-                    'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
-                    implode(', ', $this->Category->getGroups()),
-                    implode(', ', $this->Category->getGroups())
-                );
-            } else {
-                $query .= sprintf(
-                    'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )
-                    AND ( fcg.group_id IN (%s) OR (fcu.user_id = %d OR fcg.group_id IN (%s)) )',
-                    implode(', ', $this->Category->getGroups()),
-                    $this->Category->getUser(),
-                    implode(', ', $this->Category->getGroups()),
-                    implode(', ', $this->Category->getGroups()),
-                    $this->Category->getUser(),
-                    implode(', ', $this->Category->getGroups())
-                );
-            }
-        }
-
-        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
-            $query .= sprintf(
-                " AND fd.lang = '%s'",
-                $this->config->getLanguage()->getLanguage()
-            );
-        }
-
-        $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id";
-
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
-                $number[$row->category_id] = $row->number;
-            }
-        }
-        $output = '<ul class="pmf-category-overview">';
-        $open = 1;
-        $this->Category->expandAll();
-
-        for ($y = 0; $y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
-            [$hasChild, $categoryName, $parent, $description] = $this->Category->getLineDisplay($y);
-
-            $level = $this->Category->treeTab[$y]['level'];
-            $levelDiff = $open - $level;
-            if (!isset($number[$parent])) {
-                $number[$parent] = 0;
-            }
-
-            if ($this->config->get('records.hideEmptyCategories') && 0 === $number[$parent] && '-' === $hasChild) {
-                continue;
-            }
-
-            if ($levelDiff > 1) {
-                $output .= '</li>';
-                for ($i = $levelDiff; $i > 1; --$i) {
-                    $output .= '</ul></li>';
+        $html = '';
+        foreach ($tree as $node) {
+            if ($node['parent_id'] === $parentId) {
+                $number = 0;
+                foreach ($aggregatedNumbers as $aggregated) {
+                    if ($aggregated['id'] === $node['id']) {
+                        $number = $aggregated['faqs'];
+                        break;
+                    }
                 }
-            }
 
-            if ($level < $open) {
-                if (($level - $open) == -1) {
-                    $output .= '</li>';
+                if ($number > 0) {
+                    $url = sprintf(
+                        '%sindex.php?%saction=show&amp;cat=%d',
+                        $this->config->getDefaultUrl(),
+                        $sids,
+                        $node['id']
+                    );
+
+                    $link = new Link($url, $this->config);
+                    $link->itemTitle = Strings::htmlentities($node['name']);
+                    $link->text = Strings::htmlentities($node['name']);
+                    $link->tooltip = !is_null($node['description']) ? Strings::htmlentities($node['description']) : '';
+                    $name = $link->toHtmlAnchor();
+                } else {
+                    $name = Strings::htmlentities($node['name']);
                 }
-                $output .= '</ul></li>';
-            } elseif ($level == $open && $y != 0) {
-                $output .= '</li>';
-            }
 
-            if ($level > $open) {
-                $output .= sprintf(
-                    '<ul><li data-category-id="%d" data-category-level="%d">',
-                    $parent,
-                    $level
+                $html .= sprintf(
+                    '<li data-category-id="%d">%s <span class="badge bg-primary">%s</span><br><small>%s</small>',
+                    $node['id'],
+                    $name,
+                    $plr->getMsg('plmsgEntries', $number),
+                    $node['description']
                 );
-            } else {
-                $output .= sprintf(
-                    '<li data-category-id="%d" data-category-level="%d">',
-                    $parent,
-                    $level
-                );
+                $html .= '<ul>' . $this->buildCategoryList($tree, $node['id'], $aggregatedNumbers) . '</ul>';
+                $html .= '</li>';
             }
-
-            if (0 === $number[$parent] && 0 === $level) {
-                $numFaqs = '';
-            } else {
-                $numFaqs = ' <span class="badge bg-primary-subtle">' .
-                    $plr->getMsg('plmsgEntries', $number[$parent]) .
-                    '</span>';
-            }
-
-            $url = sprintf(
-                '%sindex.php?%saction=show&amp;cat=%d',
-                $this->config->getDefaultUrl(),
-                $sids,
-                $parent
-            );
-            $oLink = new Link($url, $this->config);
-            $oLink->itemTitle = Strings::htmlentities($categoryName);
-            $oLink->text = Strings::htmlentities($categoryName);
-            $oLink->tooltip = !is_null($description) ?? Strings::htmlentities($description);
-
-            $output .= $oLink->toHtmlAnchor() . $numFaqs;
-            $open = $level;
         }
-
-        if (isset($level) && $level > 0) {
-            $output .= str_repeat('</li></ul>', $level);
-        }
-
-        return $output . '</li></ul>';
+        return $html;
     }
+
 
     /**
      * Returns an array with all moderators for the given categories.

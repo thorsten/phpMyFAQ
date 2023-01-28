@@ -58,7 +58,7 @@ if (
     $category->setGroups($currentAdminGroups);
     $category->buildCategoryTree();
 
-    $categoryRelation = new CategoryRelation($faqConfig);
+    $categoryRelation = new CategoryRelation($faqConfig, $category);
 
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);

@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Category;
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 
@@ -27,15 +28,20 @@ use phpMyFAQ\Database;
  */
 class CategoryRelation
 {
+    /** @var int[] */
     private array $groups;
 
     /**
      * CategoryRelation constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private Configuration $config, private Category $category)
     {
     }
 
+    /**
+     * @param int[] $groups
+     * @return $this
+     */
     public function setGroups(array $groups): CategoryRelation
     {
         $this->groups = $groups;
@@ -78,19 +84,96 @@ class CategoryRelation
         return $matrix;
     }
 
+    public function getCategoryTree(): array
+    {
+        $categoryTree = [];
+
+        $query = sprintf(
+            '
+            SELECT
+                fcr.category_id AS id,
+                fc.parent_id AS parent_id,
+                fc.name AS category_name,
+                fc.description AS description,
+                count(fcr.category_id) AS number
+            FROM
+                %sfaqcategoryrelations fcr
+                JOIN %sfaqdata fd ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang
+                LEFT JOIN %sfaqdata_group AS fdg ON fd.id = fdg.record_id
+                LEFT JOIN %sfaqdata_user AS fdu ON fd.id = fdu.record_id
+                LEFT JOIN %sfaqcategory_group AS fcg ON fcr.category_id = fcg.category_id
+                LEFT JOIN %sfaqcategory_user AS fcu ON fcr.category_id = fcu.category_id
+                LEFT JOIN %sfaqcategories AS fc ON fcr.category_id = fc.id AND fcr.category_lang = fc.lang
+            WHERE 1=1 
+            ',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix()
+        );
+
+        if ($this->config->get('security.permLevel') !== 'basic') {
+            if (-1 === $this->category->getUser()) {
+                $query .= sprintf(
+                    'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
+                    implode(', ', $this->category->getGroups()),
+                    implode(', ', $this->category->getGroups())
+                );
+            } else {
+                $query .= sprintf(
+                    'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )
+                    AND ( fcg.group_id IN (%s) OR (fcu.user_id = %d OR fcg.group_id IN (%s)) )',
+                    implode(', ', $this->category->getGroups()),
+                    $this->category->getUser(),
+                    implode(', ', $this->category->getGroups()),
+                    implode(', ', $this->category->getGroups()),
+                    $this->category->getUser(),
+                    implode(', ', $this->category->getGroups())
+                );
+            }
+        }
+
+        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
+            $query .= sprintf(
+                " AND fd.lang = '%s'",
+                $this->config->getLanguage()->getLanguage()
+            );
+        }
+
+        $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id";
+
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($category = $this->config->getDb()->fetchObject($result)) {
+                $categoryTree[(int) $category->id] = [
+                    'id' => (int) $category->id,
+                    'parent_id' => (int) $category->parent_id,
+                    'name' => $category->category_name,
+                    'description' => $category->description,
+                    'faqs' => (int) $category->number
+                ];
+            }
+        }
+
+        return $categoryTree;
+    }
+
     /**
      * Returns the number of records in each category.
-     *
      * @return int[]
      */
-    public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false): array
+    public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false, bool $onlyActive = false): array
     {
         $numRecordsByCat = [];
         if ($categoryRestriction) {
             $query = sprintf(
-                '
+                "
                 SELECT
                     fcr.category_id AS category_id,
+                    fc.parent_id as parent_id,
                     COUNT(fcr.record_id) AS number
                 FROM
                     %sfaqcategoryrelations fcr
@@ -98,35 +181,53 @@ class CategoryRelation
                     %sfaqdata fd on fcr.record_id = fd.id
                 LEFT JOIN
                     %sfaqdata_group fdg on fdg.record_id = fcr.record_id
+                LEFT JOIN 
+                    %sfaqcategories fc ON fc.id = fcr.category_id AND fcr.category_lang = fc.lang
                 WHERE
                     fdg.group_id = %s
                 AND
                     fcr.record_lang = fd.lang
-                GROUP BY fcr.category_id',
+                %s",
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $this->groups[0]
+                Database::getTablePrefix(),
+                $this->groups[0],
+                $onlyActive ? " AND fd.active = 'yes'" : ''
             );
         } else {
             $query = sprintf(
-                '
+                "
                 SELECT
                     fcr.category_id AS category_id,
+                    fc.parent_id as parent_id,
                     COUNT(fcr.record_id) AS number
                 FROM
                     %sfaqcategoryrelations fcr, %sfaqdata fd
+                LEFT JOIN 
+                    %sfaqcategories fc ON fc.id = fcr.category_id
                 WHERE
                     fcr.record_id = fd.id
                 AND
                     fcr.record_lang = fd.lang
-                GROUP BY fcr.category_id',
+                %s",
                 Database::getTablePrefix(),
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                $onlyActive ? " AND fd.active = 'yes'" : ''
             );
         }
-        $result = $this->config->getDb()->query($query);
 
+        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
+            $query .= sprintf(
+                " AND fd.lang = '%s'",
+                $this->config->getLanguage()->getLanguage()
+            );
+        }
+
+        $query .= " GROUP BY fcr.category_id";
+
+        $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $numRecordsByCat[$row->category_id] = (int)$row->number;
@@ -134,6 +235,29 @@ class CategoryRelation
         }
 
         return $numRecordsByCat;
+    }
+
+    /**
+     * Calculates the aggregated numbers of FAQs for a given category
+     * @param array $categories
+     * @param int   $categoryId
+     * @return void
+     */
+    public function getAggregatedFaqNumbers(array $categories, $parentId = 0): array
+    {
+        $result = array();
+        foreach ($categories as $category) {
+            if ($category['parent_id'] == $parentId) {
+                $childCategories = $this->getAggregatedFaqNumbers($categories, $category['id']);
+                $result[$category['id']] = [
+                    'id' => $category['id'],
+                    'parent_id' => $category['parent_id'],
+                    'faqs' => $category['faqs'] + array_sum(array_column($childCategories, 'faqs'))
+                ];
+                $result = array_merge($result, $childCategories);
+            }
+        }
+        return $result;
     }
 
     /**
@@ -231,7 +355,7 @@ class CategoryRelation
             "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->config->getDb()->escape($faqLanguage)
         );
 
         return (bool) $this->config->getDb()->query($query);
