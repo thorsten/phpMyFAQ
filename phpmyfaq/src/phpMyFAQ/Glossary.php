@@ -24,15 +24,10 @@ namespace phpMyFAQ;
  */
 class Glossary
 {
-    /**
-     * Item.
-     */
     private array $item = [];
 
-    /**
-     * Definition of an item.
-     */
     private string $definition = '';
+    private array $cachedItems = [];
 
     /**
      * Constructor.
@@ -172,15 +167,12 @@ class Glossary
     {
         $items = [];
 
+        if (count($this->cachedItems) > 0) {
+            return $this->cachedItems;
+        }
+
         $query = sprintf(
-            "
-            SELECT
-                id, item, definition
-            FROM
-                %sfaqglossary
-            WHERE
-                lang = '%s'
-            ORDER BY item ASC",
+            "SELECT id, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
             Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
@@ -195,7 +187,7 @@ class Glossary
             ];
         }
 
-        return $items;
+        return $this->cachedItems = $items;
     }
 
     /**
@@ -211,10 +203,8 @@ class Glossary
             // if the word is at the end of the string
             $prefix = $matches[9];
             $item = $matches[10];
-            $postfix = '';
         } elseif (count($matches) > 7) {
             // if the word is at the beginning of the string
-            $prefix = '';
             $item = $matches[7];
             $postfix = $matches[8];
         } elseif (count($matches) > 4) {
@@ -243,20 +233,14 @@ class Glossary
      *
      * @param int $id Glossary ID
      */
-    public function getGlossaryItem($id): array
+    public function getGlossaryItem(int $id): array
     {
         $item = [];
 
         $query = sprintf(
-            "
-            SELECT
-                id, item, definition
-            FROM
-                %sfaqglossary
-            WHERE
-                id = %d AND lang = '%s'",
+            "SELECT id, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            (int)$id,
+            $id,
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -285,12 +269,7 @@ class Glossary
         $this->definition = $this->config->getDb()->escape($definition);
 
         $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqglossary
-            (id, lang, item, definition)
-                VALUES
-            (%d, '%s', '%s', '%s')",
+            "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
             $this->config->getLanguage()->getLanguage(),
@@ -318,14 +297,7 @@ class Glossary
         $definition = $this->config->getDb()->escape($definition);
 
         $query = sprintf(
-            "
-            UPDATE
-                %sfaqglossary
-            SET
-                item = '%s',
-                definition = '%s'
-            WHERE
-                id = %d AND lang = '%s'",
+            "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             Strings::htmlspecialchars($item),
             Strings::htmlspecialchars($definition),
@@ -348,11 +320,7 @@ class Glossary
     public function deleteGlossaryItem(int $id): bool
     {
         $query = sprintf(
-            "
-            DELETE FROM
-                %sfaqglossary
-            WHERE
-                id = %d AND lang = '%s'",
+            "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage()
