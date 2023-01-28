@@ -248,8 +248,8 @@ class LinkTest extends TestCase
         $this->assertEquals(
             sprintf(
                 '<a class="pmf-foo" href="%s">%s</a>',
-                Strings::htmlentities($url),
-                Strings::htmlentities($url)
+                $url,
+                $url
             ),
             $this->link->toHtmlAnchor()
         );
@@ -258,15 +258,15 @@ class LinkTest extends TestCase
         $this->assertEquals(
             sprintf(
                 '<a class="pmf-foo" id="pmf-id" href="%s">%s</a>',
-                Strings::htmlentities($url),
-                Strings::htmlentities($url)
+                $url,
+                $url
             ),
             $this->link->toHtmlAnchor()
         );
 
         $this->link->text = 'Foo FAQ';
         $this->assertEquals(
-            sprintf('<a class="pmf-foo" id="pmf-id" href="%s">Foo FAQ</a>', Strings::htmlentities($url)),
+            sprintf('<a class="pmf-foo" id="pmf-id" href="%s">Foo FAQ</a>', $url),
             $this->link->toHtmlAnchor()
         );
     }
