@@ -315,14 +315,14 @@ class Link
         }
 
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= sprintf(' title="%s"', addslashes(Strings::htmlentities($this->tooltip)));
+            $htmlAnchor .= sprintf(' title="%s"', addslashes($this->tooltip));
         }
 
         if (!empty($this->name)) {
             $htmlAnchor .= sprintf(' name="%s"', $this->name);
         } else {
             if (!empty($this->url)) {
-                $htmlAnchor .= sprintf(' href="%s"', Strings::htmlentities($url));
+                $htmlAnchor .= sprintf(' href="%s"', $url);
             }
             if (!empty($this->target)) {
                 $htmlAnchor .= sprintf(' target="%s"', $this->target);
@@ -333,12 +333,12 @@ class Link
         }
         $htmlAnchor .= '>';
         if (('0' == $this->text) || (!empty($this->text))) {
-            $htmlAnchor .= Strings::htmlentities($this->text);
+            $htmlAnchor .= $this->text;
         } else {
             if (!empty($this->name)) {
-                $htmlAnchor .= Strings::htmlentities($this->name);
+                $htmlAnchor .= $this->name;
             } else {
-                $htmlAnchor .= Strings::htmlentities($url);
+                $htmlAnchor .= $url;
             }
         }
         $htmlAnchor .= '</a>';

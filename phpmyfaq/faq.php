@@ -96,6 +96,7 @@ $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews((int) $recordId);
 
 $question = $faq->getRecordTitle($recordId);
+$question = Strings::htmlentities($question);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
 } else {
@@ -338,7 +339,7 @@ $template->parse(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'solutionId' => $faq->faqRecord['solution_id'],
         'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
-        'question' => Strings::htmlspecialchars($question),
+        'question' => $question,
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => Strings::htmlentities($author),

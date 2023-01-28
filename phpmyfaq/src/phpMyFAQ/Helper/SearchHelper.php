@@ -343,9 +343,9 @@ class SearchHelper extends Helper
                     $result->lang
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $result->question;
-                $oLink->text = $result->question;
-                $oLink->tooltip = $result->question;
+                $oLink->itemTitle = Strings::htmlentities($result->question);
+                $oLink->text = Strings::htmlentities($result->question);
+                $oLink->tooltip = Strings::htmlentities($result->question);
                 $html .= '<li>' . $oLink->toHtmlAnchor() . '</li>';
             }
             $html .= '</ul>';
