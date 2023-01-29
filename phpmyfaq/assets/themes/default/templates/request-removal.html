@@ -8,13 +8,20 @@
   </p>
   <p><strong>{{ msgContactRemove }}</strong></p>
 
-  <div id="loader"></div>
-  <div id="contacts"></div>
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="faqs"></div>
+    </div>
+  </div>
 
-  <form class="form-horizontal" id="formValues" action="#" method="post">
+  <form id="formValues" action="#" method="post" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+    <input type="hidden" name="csrf" value="{{ csrf }}" />
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="name">{{ ad_user_loginname }}</label>
       <div class="col-sm-9">
         <input
@@ -29,7 +36,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="name">{{ msgNewContentName }}</label>
       <div class="col-sm-9">
         <input
@@ -44,7 +51,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="email">{{ msgNewContentMail }}</label>
       <div class="col-sm-9">
         <input
@@ -59,31 +66,24 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="question">{{ msgMessage }}</label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="37" rows="5" name="question" id="question" required></textarea>
       </div>
     </div>
 
-    {{ captchaFieldset }}
-
-    <div class="row">
+    <div class="row mb-2">
       <div class="col-sm-12 text-right">
-        <button class="btn btn-primary btn-lg" type="submit" id="submitcontact">{{ msgS2FButton }}</button>
+        <button
+          class="btn btn-primary btn-lg"
+          type="submit"
+          id="pmf-submit-values"
+          data-pmf-form="submit-request-removal"
+        >
+          {{ msgS2FButton }}
+        </button>
       </div>
     </div>
   </form>
 </section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    'use strict';
-    $('#submitcontact').on('click', () => {
-      saveFormValues('request-removal', 'contact');
-    });
-    $('form#formValues').submit(() => {
-      return false;
-    });
-  });
-</script>

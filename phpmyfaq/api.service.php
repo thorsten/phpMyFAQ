@@ -891,21 +891,19 @@ switch ($action) {
     //
     // Request removal of user
     //
-    case 'request-removal':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
-        $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+    case 'submit-request-removal':
+        $postData = json_decode(file_get_contents('php://input'), true);
+        $author = trim(Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $loginName = trim(Filter::filterVar($postData['loginname'], FILTER_UNSAFE_RAW));
+        $email = trim(Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
+        $question = trim(Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW));
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
             $email = $faqConfig->getAdminEmail();
         }
 
-        if (
-            !is_null($author) && !is_null($email) &&
-            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
-        ) {
+        if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
                 Translation::get('ad_user_loginname'),
@@ -921,20 +919,19 @@ switch ($action) {
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($faqConfig->getAdminEmail());
-            } catch (Exception $exception) {
-                $message = ['error' => $exception->getMessage()];
-            }
-            $mailer->subject = $faqConfig->getTitle() . ': Remove User Request';
-            $mailer->message = $question;
-            try {
+                $mailer->subject = $faqConfig->getTitle() . ': Remove User Request';
+                $mailer->message = $question;
                 $result = $mailer->send();
+                unset($mailer);
+
+                $http->setStatus(200);
+                $message = ['success' => Translation::get('msgMailContact')];
             } catch (Exception | TransportExceptionInterface $exception) {
+                $http->setStatus(400);
                 $message = ['error' => $exception->getMessage()];
             }
-            unset($mailer);
-
-            $message = ['success' => Translation::get('msgMailContact')];
         } else {
+            $http->setStatus(400);
             $message = ['error' => Translation::get('err_sendMail')];
         }
         break;

@@ -15,9 +15,7 @@
  * @since     2018-02-03
  */
 
-use phpMyFAQ\Captcha;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -29,19 +27,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('request_removal', 0);
-} catch (Exception) {
-    // @todo handle the exception
+} catch (Exception $exception) {
+    $faqConfig->getLogger()->error('Tracking of request removal', ['exception' => $exception->getMessage()]);
 }
-
-$captcha = new Captcha($faqConfig);
-$captcha->setSessionId($sids);
-
-if (!is_null($showCaptcha)) {
-    $captcha->drawCaptchaImage();
-    exit;
-}
-
-$captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
     'mainPageContent',
@@ -56,14 +44,13 @@ $template->parse(
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'ad_user_loginname' => Translation::get('ad_user_loginname'),
+        'csrf' => $user->getCsrfTokenFromSession(),
         'lang' => $Language->getLanguage(),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' =>
             ($user instanceof CurrentUser) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'defaultLoginName' => ($user instanceof CurrentUser) ? Strings::htmlentities($user->getLogin()) : '',
         'msgMessage' => Translation::get('msgMessage'),
-        'msgS2FButton' => Translation::get('msgS2FButton'),
-        'version' => $faqConfig->getVersion(),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $auth)
+        'msgS2FButton' => Translation::get('msgS2FButton')
     ]
 );
