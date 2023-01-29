@@ -21,86 +21,84 @@
     <link rel="canonical" href="{{ currentPageUrl }}" />
   </head>
   <body dir="{{ dir }}" class="flex-column">
-    <section id="wrapper" class="mt-3">
-      <div class="container">
-        <div class="row">
-          <div class="container py-5">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="row">
-                  <div class="col-lg-6 mx-auto">
-                    <form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
-                      <div class="text-center mb-4">
-                        <img
-                          class="mb-4 rounded"
-                          src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png"
-                          alt="{{ header }}"
-                        />
-                        <h1 class="h3 mb-3 font-weight-normal">{{ loginPageMessage }} {{ header }}</h1>
-                        [useSslForLogins]
-                        <p>
-                          <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
-                        </p>
-                        [/useSslForLogins]
+    <div class="col-12">
+      [useSslForLogins]
+      <p>
+        <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
+      </p>
+      [/useSslForLogins] {{ loginMessage }}
 
-                        <p>{{ loginMessage }}</p>
-                      </div>
+      <div id="phpmyfaq-login" class="mb-5">
+        <div id="phpmyfaq-login-content">
+          <main>
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-5">
+                  <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                      <h3 class="text-center font-weight-light my-4">phpMyFAQ Login</h3>
+                      <?= $message ?>
+                    </div>
+                    <div class="card-body">
+                      <form action="{{ writeLoginPath }}" method="post" accept-charset="utf-8" role="form">
+                        <input type="hidden" name="redirect-action" value="<?= $action ?>" />
+                        <div class="form-floating mb-3">
+                          <input
+                            class="form-control"
+                            id="faqusername"
+                            name="faqusername"
+                            type="text"
+                            placeholder="{{ username }}"
+                          />
+                          <label for="faqusername">{{ username }}</label>
+                        </div>
+                        <div class="input-group mb-3">
+                          <div class="form-floating">
+                            <input
+                              class="form-control"
+                              id="faqpassword"
+                              name="faqpassword"
+                              type="password"
+                              autocomplete="off"
+                              placeholder="{{ password }}"
+                            />
+                            <label for="faqpassword">{{ password }}</label>
+                          </div>
+                          <span class="input-group-text">
+                            <i class="fa" id="togglePassword"></i>
+                          </span>
+                        </div>
+                        <div class="form-check mb-3">
+                          <input class="form-check-input" id="faqrememberme" type="checkbox" value="rememberMe" />
+                          <label class="form-check-label" for="faqrememberme">{{ rememberMe }}</label>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                          <a class="small" href="../?action=password">{{ sendPassword }}</a>
+                          <button type="submit" class="btn btn-primary">{{ loginHeader }}</button>
+                        </div>
+                      </form>
+                    </div>
 
-                      <div class="col-form-label-group">
-                        <input
-                          type="text"
-                          name="faqusername"
-                          id="faqusername"
-                          class="form-control"
-                          placeholder="{{ username }}"
-                          required
-                          autofocus
-                        />
-                        <label for="faqusername">{{ username }}</label>
-                      </div>
-
-                      <div class="col-form-label-group">
-                        <input
-                          type="password"
-                          name="faqpassword"
-                          id="faqpassword"
-                          class="form-control"
-                          placeholder="{{ password }}"
-                          autocomplete="off"
-                          required
-                        />
-                        <label for="faqpassword">{{ password }}</label>
-                      </div>
-
-                      <div class="checkbox mb-3">
-                        <label>
-                          <input type="checkbox" name="faqrememberme" value="rememberMe" id="faqrememberme" />
-                          {{ rememberMe }}
-                        </label>
-                      </div>
-                      <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
-                    </form>
-                    <p class="mt-5 mb-3 text-center">
-                      {{ sendPassword }}
-                      <br />
-                      {{ registerUser }}
-                      <br />
-                      [useSignInWithMicrosoft]
-                      <a href="services/azure/"> {{ msgSignInWithMicrosoft }} </a>
+                    <div class="card-footer text-center py-3">
+                      [enableRegistration]
+                      <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="./?action=register">
+                        {{ registerUser }}
+                      </a>
+                      [/enableRegistration] [useSignInWithMicrosoft]
+                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="./services/azure">
+                        <i class="fa fa-windows" aria-hidden="true"></i>
+                        {{ msgSignInWithMicrosoft }}
+                      </a>
                       [/useSignInWithMicrosoft]
-                    </p>
-                    <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="mt-5">
-                      {{ switchLanguages }}
-                      <input type="hidden" name="action" value="" />
-                    </form>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
-    </section>
+    </div>
 
     <script src="{{ baseHref }}assets/dist/frontend.js"></script>
   </body>

@@ -36,6 +36,9 @@ try {
 }
 
 if ($faqConfig->get('security.enableRegistration')) {
+
+
+
     $template->parseBlock(
         'mainPageContent',
         'enableRegistration',

@@ -24,14 +24,33 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqSession->userTracking('forgot_password', 0);
-} catch (Exception) {
-    // @todo handle the exception
+} catch (Exception $exception) {
+    $faqConfig->getLogger()->error('Tracking of forgot password', ['exception' => $exception->getMessage()]);
+}
+
+if ($faqConfig->get('security.enableRegistration')) {
+    $template->parseBlock(
+        'mainPageContent',
+        'enableRegistration',
+        [
+            'registerUser' => Translation::get('msgRegistration'),
+        ]
+    );
+}
+
+if ($faqConfig->isSignInWithMicrosoftActive()) {
+    $template->parseBlock(
+        'mainPageContent', 'useSignInWithMicrosoft', [
+            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+        ]
+    );
 }
 
 $template->parse(
     'mainPageContent',
     [
         'pageHeader' => Translation::get('lostPassword'),
+        'lang' => $Language->getLanguage(),
         'msgUsername' => Translation::get('ad_auth_user'),
         'msgEmail' => Translation::get('ad_entry_email'),
         'msgSubmit' => Translation::get('msgNewContentSubmit'),

@@ -539,6 +539,28 @@ if (!is_null($error)) {
 
 $faqSeo = new Seo($faqConfig);
 
+
+if ($faqConfig->get('security.enableRegistration')) {
+    $template->parseBlock(
+        'index',
+        'enableRegistration',
+        [
+            'registerUser' => Translation::get('msgRegistration'),
+        ]
+    );
+}
+
+if ($faqConfig->isSignInWithMicrosoftActive()) {
+    $template->parseBlock(
+        'index',
+        'useSignInWithMicrosoft',
+        [
+            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+        ]
+    );
+}
+
+
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
     'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),

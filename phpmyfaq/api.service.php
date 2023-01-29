@@ -60,7 +60,7 @@ require 'src/Bootstrap.php';
 $postData = json_decode(file_get_contents('php://input'), true);
 
 $apiLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
-$currentToken = Filter::filterVar($postData['csrf'], FILTER_UNSAFE_RAW);
+$currentToken = Filter::filterVar($postData['csrf'] ?? '', FILTER_UNSAFE_RAW);
 
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 $code = Filter::filterInput(INPUT_POST, 'captcha', FILTER_UNSAFE_RAW);
@@ -837,11 +837,12 @@ switch ($action) {
     //
     // Change password
     //
-    case 'changepassword':
-        $username = Filter::filterInput(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    case 'change-password':
+        $postData = json_decode(file_get_contents('php://input'), true);
+        $username = trim(Filter::filterVar($postData['username'], FILTER_UNSAFE_RAW));
+        $email = trim(Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
 
-        if (!is_null($username) && !is_null($email)) {
+        if (!empty($username) && !empty($email)) {
             $user = new CurrentUser($faqConfig);
             $loginExist = $user->getUserByLogin($username);
 
@@ -849,6 +850,7 @@ switch ($action) {
                 try {
                     $newPassword = $user->createPassword();
                 } catch (Exception $exception) {
+                    $http->setStatus(400);
                     $message = ['error' => $exception->getMessage()];
                 }
                 try {
