@@ -170,9 +170,7 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR 
     require PMF_CONFIG_DIR . '/elasticsearch.php';
     require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
 
-    $esClient = ClientBuilder::create()
-        ->setHosts($PMF_ES['hosts'])
-        ->build();
+    $esClient = ClientBuilder::create()->setHosts($PMF_ES['hosts'])->build();
 
     $faqConfig->setElasticsearch($esClient);
     $faqConfig->setElasticsearchConfig($PMF_ES);
