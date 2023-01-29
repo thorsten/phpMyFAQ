@@ -7,10 +7,16 @@
   </p>
   <p><strong>{{ msgContactEMail }}</strong></p>
 
-  <div id="loader"></div>
-  <div id="contacts"></div>
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="faqs"></div>
+    </div>
+  </div>
 
-  <form id="formValues" action="#" method="post">
+  <form id="formValues" action="#" method="post" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
     <div class="row mb-2">
@@ -38,7 +44,9 @@
 
     <div class="row mb-2">
       <div class="col-sm-12 text-right">
-        <button class="btn btn-primary btn-lg" type="submit" id="submitcontact">{{ msgS2FButton }}</button>
+        <button class="btn btn-primary btn-lg" type="submit" id="pmf-submit-values" data-pmf-form="submit-contact">
+          {{ msgS2FButton }}
+        </button>
       </div>
     </div>
   </form>
@@ -52,21 +60,9 @@
       <br />
       &copy; 2001-2023 by
       <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> under the
-      <a target="_blank" rel="noopener" href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License 2.0</a>. All
+      <a target="_blank" rel="noopener" href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License 2.0</a>. All
       rights reserved.<br />
     </small>
   </div>
   <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE - THANK YOU -->
 </section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    'use strict';
-    $('#submitcontact').on('click', () => {
-      saveFormValues('sendcontact', 'contact');
-    });
-    $('form#formValues').submit(() => {
-      return false;
-    });
-  });
-</script>

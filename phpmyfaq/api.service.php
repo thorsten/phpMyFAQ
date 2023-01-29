@@ -57,18 +57,21 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 //
 require 'src/Bootstrap.php';
 
+$postData = json_decode(file_get_contents('php://input'), true);
+
+$apiLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
+$currentToken = Filter::filterVar($postData['csrf'], FILTER_UNSAFE_RAW);
+
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
-$ajaxLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
 $code = Filter::filterInput(INPUT_POST, 'captcha', FILTER_UNSAFE_RAW);
-$currentToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
 $Language = new Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (Language::isASupportedLanguage($ajaxLang)) {
-    $languageCode = trim($ajaxLang);
+if (Language::isASupportedLanguage($apiLanguage)) {
+    $languageCode = trim($apiLanguage);
     require_once 'lang/language_' . $languageCode . '.php';
 } else {
     $languageCode = 'en';
@@ -671,23 +674,24 @@ switch ($action) {
 
         break;
 
-    // Send user generated mails
-    case 'sendcontact':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+    //
+    // Send mails from contact form
+    //
+    case 'submit-contact':
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $author = trim(Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $question = trim(Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW));
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
             $email = $faqConfig->getAdminEmail();
         }
 
-        if (
-            !is_null($author) && !is_null($email) && !empty($question) &&
-            $stopWords->checkBannedWord(Strings::htmlspecialchars($question))
-        ) {
+        if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
             $question = sprintf(
-                "%s %s\n%s %s\n\n %s",
+                "%s: %s\n%s: %s\n\n %s",
                 Translation::get('msgNewContentName'),
                 $author,
                 Translation::get('msgNewContentMail'),
@@ -696,15 +700,17 @@ switch ($action) {
             );
 
             $mailer = new Mail($faqConfig);
-            $mailer->setReplyTo($email, $author);
-            $mailer->addTo($faqConfig->getAdminEmail());
-            $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $faqConfig);
-            $mailer->message = $question;
-            $mailer->send();
-
-            unset($mailer);
-
-            $message = ['success' => Translation::get('msgMailContact')];
+            try {
+                $mailer->setReplyTo($email, $author);
+                $mailer->addTo($faqConfig->getAdminEmail());
+                $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $faqConfig);
+                $mailer->message = $question;
+                $mailer->send();
+                unset($mailer);
+                $message = ['success' => Translation::get('msgMailContact')];
+            } catch (Exception | TransportExceptionInterface $e) {
+                $message = ['error' => $e->getMessage()];
+            }
         } else {
             $message = ['error' => Translation::get('err_sendMail')];
         }
@@ -765,33 +771,37 @@ switch ($action) {
     //
     // Save user data from UCP
     //
-    case 'saveuserdata':
+    case 'submit-user-data':
+        $postData = json_decode(file_get_contents('php://input'), true);
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
             $message = ['error' => Translation::get('ad_msg_noauth')];
             break;
         }
 
-        $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW);
-        $password = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
-        $confirm = Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_UNSAFE_RAW);
+        $userId = Filter::filterVar($postData['userid'], FILTER_VALIDATE_INT);
+        $userName = trim(Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $isVisible = Filter::filterVar($postData['is_visible'], FILTER_UNSAFE_RAW);
+        $password = trim(Filter::filterVar($postData['faqpassword'], FILTER_UNSAFE_RAW));
+        $confirm = trim(Filter::filterVar($postData['faqpassword_confirm'], FILTER_UNSAFE_RAW));
 
         $user = CurrentUser::getFromSession($faqConfig);
 
         if ($userId !== $user->getUserId()) {
+            $http->setStatus(400);
             $message = ['error' => 'User ID mismatch!'];
             break;
         }
 
         if ($password !== $confirm) {
+            $http->setStatus(409);
             $message = ['error' => Translation::get('ad_user_error_passwordsDontMatch')];
             break;
         }
 
         if (strlen($password) <= 7 || strlen($confirm) <= 7) {
-            $message = ['error' => $PMF_LANG['ad_passwd_fail']];
+            $http->setStatus(409);
+            $message = ['error' => Translation::get('ad_passwd_fail')];
             break;
         } else {
             $userData = [
@@ -806,6 +816,7 @@ switch ($action) {
                     continue;
                 }
                 if (!$auth->update($user->getLogin(), $password)) {
+                    $http->setStatus(400);
                     $message = ['error' => $auth->error()];
                     $success = false;
                 } else {
@@ -815,8 +826,10 @@ switch ($action) {
         }
 
         if ($success) {
+            $http->setStatus(200);
             $message = ['success' => Translation::get('ad_entry_savedsuc')];
         } else {
+            $http->setStatus(400);
             $message = ['error' => Translation::get('ad_entry_savedfail')];
         }
         break;
@@ -841,6 +854,7 @@ switch ($action) {
                 try {
                     $user->changePassword($newPassword);
                 } catch (Exception $exception) {
+                    $http->setStatus(400);
                     $message = ['error' => $exception->getMessage()];
                 }
                 $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .
@@ -850,6 +864,7 @@ switch ($action) {
                 try {
                     $mailer->addTo($email);
                 } catch (Exception $exception) {
+                    $http->setStatus(400);
                     $message = ['error' => $exception->getMessage()];
                 }
                 $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $faqConfig);
@@ -857,15 +872,18 @@ switch ($action) {
                 try {
                     $result = $mailer->send();
                 } catch (Exception | TransportExceptionInterface $exception) {
+                    $http->setStatus(400);
                     $message = ['error' => $exception->getMessage()];
                 }
                 unset($mailer);
                 // Trust that the email has been sent
                 $message = ['success' => Translation::get('lostpwd_mail_okay')];
             } else {
+                $http->setStatus(409);
                 $message = ['error' => Translation::get('lostpwd_err_1')];
             }
         } else {
+            $http->setStatus(409);
             $message = ['error' => Translation::get('lostpwd_err_2')];
         }
         break;

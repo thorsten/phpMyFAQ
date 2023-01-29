@@ -51,6 +51,7 @@ if ($user->isLoggedIn()) {
             'ucpGravatarImage' => $gravatarImg,
             'userid' => $user->getUserId(),
             'csrf' => $user->getCsrfTokenFromSession(),
+            'lang' => $Language->getLanguage(),
             'readonly' => $faqConfig->isLdapActive() ? 'readonly' : '',
             'msgRealName' => Translation::get('ad_user_name'),
             'realname' => Strings::htmlentities($user->getUserData('display_name')),

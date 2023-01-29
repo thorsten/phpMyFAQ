@@ -51,7 +51,7 @@ export const saveFormData = (action) => {
       const errorMessage = await error.cause.response.json();
       message.insertAdjacentElement(
         'afterend',
-        addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
+        addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
       );
     });
 };
