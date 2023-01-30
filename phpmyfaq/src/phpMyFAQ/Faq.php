@@ -130,10 +130,11 @@ class Faq
      *
      * @throws Exception
      */
-    public function getAllFaqPreviewsByCategoryId(
+    public function getAllFaqsByCategoryId(
         int $categoryId,
         string $orderBy = 'id',
-        string $sortBy = 'ASC'
+        string $sortBy = 'ASC',
+        bool $preview = true
     ): array {
         global $sids;
 
@@ -230,17 +231,31 @@ class Faq
                 $oLink = new Link($url, $this->config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;
 
-                $faqData[] = [
-                    'record_id' => $row->id,
-                    'record_lang' => $row->lang,
-                    'category_id' => $row->category_id,
-                    'record_title' => $row->thema,
-                    'record_preview' => $faqHelper->renderAnswerPreview($row->record_content, 25),
-                    'record_link' => $oLink->toString(),
-                    'record_updated' => $row->updated,
-                    'visits' => $visits,
-                    'record_created' => $row->created,
-                ];
+                if ($preview) {
+                    $faqData[] = [
+                        'record_id' => $row->id,
+                        'record_lang' => $row->lang,
+                        'category_id' => $row->category_id,
+                        'record_title' => $row->thema,
+                        'record_preview' => $faqHelper->renderAnswerPreview($row->record_content, 25),
+                        'record_link' => $oLink->toString(),
+                        'record_updated' => $row->updated,
+                        'visits' => $visits,
+                        'record_created' => $row->created,
+                    ];
+                } else {
+                    $faqData[] = [
+                        'faq_id' => $row->id,
+                        'faq_lang' => $row->lang,
+                        'category_id' => $row->category_id,
+                        'question' => $row->thema,
+                        'answer' => $row->record_content,
+                        'link' => $oLink->toString(),
+                        'updated' => $row->updated,
+                        'visits' => $visits,
+                        'created' => $row->created,
+                    ];
+                }
             }
         } else {
             return $faqData;

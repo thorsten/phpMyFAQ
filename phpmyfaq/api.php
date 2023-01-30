@@ -364,16 +364,20 @@ switch ($action) {
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        // api/v2.1/faqs/:categoryId
+        // api/v2.2/faqs/:categoryId
         if (!is_null($categoryId)) {
             try {
-                $result = $faq->getAllFaqPreviewsByCategoryId($categoryId);
+                if ('all' === $filter) {
+                    $result = $faq->getAllFaqsByCategoryId($categoryId, 'id', 'ASC', false);
+                } else {
+                    $result = $faq->getAllFaqsByCategoryId($categoryId);
+                }
             } catch (Exception) {
                 $http->setStatus(400);
             }
         }
 
-        // api/v2.1/faqs/tags/:tagId
+        // api/v2.2/faqs/tags/:tagId
         if (!is_null($tagId)) {
             $tags = new Tags($faqConfig);
             $recordIds = $tags->getFaqsByTagId($tagId);
@@ -384,22 +388,22 @@ switch ($action) {
             }
         }
 
-        // api/v2.1/faqs/popular
+        // api/v2.2/faqs/popular
         if ('popular' === $filter) {
-            $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
+            $result = array_values($faq->getTopTenData());
         }
 
-        // api/v2.1/faqs/latest
+        // api/v2.2/faqs/latest
         if ('latest' === $filter) {
-            $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
+            $result = array_values($faq->getLatestData());
         }
 
-        // api/v2.1/faqs/sticky
+        // api/v2.2/faqs/sticky
         if ('sticky' === $filter) {
             $result = array_values($faq->getStickyRecordsData());
         }
 
-        // api/v2.1/faqs
+        // api/v2.2/faqs
         if (is_null($categoryId) && is_null($tagId) && is_null($filter)) {
             $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
             $result = $faq->faqRecords;
