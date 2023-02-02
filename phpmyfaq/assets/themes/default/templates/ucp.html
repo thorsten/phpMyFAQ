@@ -103,7 +103,15 @@
 
       <div class="row mb-2">
         <div class="col-lg-12 text-right">
-          <button class="btn btn-primary" type="submit" id="pmf-submit-values" data-pmf-form="submit-user-data">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            id="pmf-submit-values"
+            {{
+            readonly
+            }}
+            data-pmf-form="submit-user-data"
+          >
             {{ msgSave }}
           </button>
         </div>

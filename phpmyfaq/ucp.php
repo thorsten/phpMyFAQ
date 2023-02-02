@@ -52,7 +52,7 @@ if ($user->isLoggedIn()) {
             'userid' => $user->getUserId(),
             'csrf' => $user->getCsrfTokenFromSession(),
             'lang' => $Language->getLanguage(),
-            'readonly' => $faqConfig->isLdapActive() ? 'readonly' : '',
+            'readonly' => $user->isLocalUser() ? '' : 'readonly disabled',
             'msgRealName' => Translation::get('ad_user_name'),
             'realname' => Strings::htmlentities($user->getUserData('display_name')),
             'msgEmail' => Translation::get('msgNewContentMail'),

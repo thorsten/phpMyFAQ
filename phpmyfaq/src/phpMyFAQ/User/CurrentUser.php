@@ -241,6 +241,19 @@ class CurrentUser extends User
         $this->loggedIn = $loggedIn;
     }
 
+    public function isLocalUser(): bool
+    {
+        $query = sprintf(
+            "SELECT auth_source FROM %sfaquser WHERE auth_source = 'local' AND user_id = %d",
+            Database::getTablePrefix(),
+            $this->getUserId()
+        );
+
+        $result = $this->config->getDb()->query($query);
+
+        return (bool) $this->config->getDb()->fetchRow($result);
+    }
+
     /**
      * Returns false if the CurrentUser object stored in the
      * session is valid and not timed out. There are two
