@@ -478,18 +478,21 @@ switch ($action) {
             !$faqConfig->get('main.enableAskQuestions') &&
             !$user->perm->hasPermission($user->getUserId(), 'addquestion')
         ) {
+            $http->setStatus(401);
             $message = ['error' => Translation::get('err_NotAuth')];
             break;
         }
-
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
         $categories = $cat->getAllCategories();
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
-        $save = Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $author = Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW);
+        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $ucategory = Filter::filterVar($postData['category'], FILTER_VALIDATE_INT);
+        $question = Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW);
+        $save = Filter::filterVar($postData['save'] ?? 0, FILTER_VALIDATE_INT);
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
@@ -501,11 +504,7 @@ switch ($action) {
             $save = true;
         }
 
-        if (
-            !is_null($author) && !is_null($email) && !is_null($question) && $stopWords->checkBannedWord(
-                Strings::htmlspecialchars($question)
-            )
-        ) {
+        if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
                 $visibility = 'Y';
             } else {
@@ -516,7 +515,7 @@ switch ($action) {
                 'username' => $author,
                 'email' => $email,
                 'category_id' => $ucategory,
-                'question' => Strings::htmlspecialchars($question),
+                'question' => Strings::htmlentities($question),
                 'is_visible' => $visibility
             ];
 
@@ -534,7 +533,11 @@ switch ($action) {
 
                 foreach ($cleanQuestion as $word) {
                     if (!empty($word)) {
-                        $searchResult[] = $faqSearch->search($word, false);
+                        try {
+                            $searchResult[] = $faqSearch->search($word, false);
+                        } catch (Exception $e) {
+                            // @todo handle exception
+                        }
                     }
                 }
                 foreach ($searchResult as $resultSet) {
@@ -542,11 +545,12 @@ switch ($action) {
                         $mergedResult[] = $result;
                     }
                 }
+
                 $faqSearchResult->reviewResultSet($mergedResult);
 
                 if (0 < $faqSearchResult->getNumberOfResults()) {
                     $response = sprintf(
-                        '<p>%s</p>',
+                        '<h5>%s</h5>',
                         $plr->getMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults())
                     );
 
@@ -567,7 +571,7 @@ switch ($action) {
 
                         try {
                             $response .= sprintf(
-                                '<li>%s<br><div class="searchpreview">%s...</div></li>',
+                                '<li>%s<br><small class="pmf-search-preview">%s...</small></li>',
                                 $oLink->toHtmlAnchor(),
                                 $faqHelper->renderAnswerPreview($result->answer, 10)
                             );
@@ -583,8 +587,10 @@ switch ($action) {
                     try {
                         $questionHelper->sendSuccessMail($questionData, $categories);
                     } catch (Exception | TransportExceptionInterface $exception) {
+                        $http->setStatus(400);
                         $message = ['error' => $exception->getMessage()];
                     }
+                    $http->setStatus(200);
                     $message = ['success' => Translation::get('msgAskThx4Mail')];
                 }
             } else {
@@ -592,11 +598,14 @@ switch ($action) {
                 try {
                     $questionHelper->sendSuccessMail($questionData, $categories);
                 } catch (Exception | TransportExceptionInterface $exception) {
+                    $http->setStatus(400);
                     $message = ['error' => $exception->getMessage()];
                 }
+                $http->setStatus(200);
                 $message = ['success' => Translation::get('msgAskThx4Mail')];
             }
         } else {
+            $http->setStatus(400);
             $message = ['error' => Translation::get('err_SaveQuestion')];
         }
 

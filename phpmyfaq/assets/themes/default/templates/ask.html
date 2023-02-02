@@ -3,12 +3,18 @@
   <div id="questionForm">
     <p>{{ msgNewQuestion }}</p>
   </div>
+
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="answers"></div>
+    </div>
+  </div>
+
   <p class="hint-search-suggestion d-none">{{ msgMatchingQuestions }}</p>
   <div id="answerForm"></div>
-  <div id="answers"></div>
-
-  <div id="loader"></div>
-  <div id="qerror"></div>
 
   <p class="hint-search-suggestion d-none">{{ msgFinishSubmission }}</p>
 
@@ -56,16 +62,3 @@
     </div>
   </form>
 </section>
-
-<script>
-  /*
-  document.addEventListener('DOMContentLoaded', () => {
-    $(() => {
-      $('#submitquestion').on('click', (event) => {
-        event.preventDefault();
-        checkQuestion();
-      });
-    });
-  });
-   */
-</script>

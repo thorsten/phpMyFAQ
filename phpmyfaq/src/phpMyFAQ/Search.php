@@ -72,9 +72,9 @@ class Search
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
      * @throws Exception
-     * @return mixed[]
+     * @return array
      */
-    public function search(string $searchTerm, $allLanguages = true): array
+    public function search(string $searchTerm, bool $allLanguages = true): array
     {
         if (is_numeric($searchTerm)) {
             return $this->searchDatabase($searchTerm, $allLanguages);
@@ -184,9 +184,8 @@ class Search
      * @param bool   $allLanguages true to search over all languages
      * @return stdClass[]
      */
-    public function searchElasticsearch(string $searchTerm, $allLanguages = true): array
+    public function searchElasticsearch(string $searchTerm, bool $allLanguages = true): array
     {
-        $children = null;
         $esSearch = new Elasticsearch($this->config);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {

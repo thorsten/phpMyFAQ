@@ -17,8 +17,9 @@ import 'bootstrap';
 import Masonry from 'masonry-layout';
 
 import { saveFormData } from './api';
-import { handleAutoComplete } from './search';
+import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordToggle, handleReloadCaptcha } from './utils';
+import './utils/cookie-consent';
 
 //
 // Reload Captchas
@@ -53,14 +54,7 @@ window.onload = () => {
 };
 
 //
-// Cookie Consent
-//
-import './utils/cookie-consent';
-
-//
 // Forms
-// - Add FAQ
-// - Ask question
 //
 const formHandler = document.getElementById('pmf-submit-values');
 if (formHandler) {
@@ -71,8 +65,15 @@ if (formHandler) {
     if (!form.checkValidity()) {
       form.classList.add('was-validated');
     } else {
-      saveFormData(formHandler.getAttribute('data-pmf-form'));
-      document.getElementById('formValues').reset();
+      const action = formHandler.getAttribute('data-pmf-form');
+      if (action === 'ask-question') {
+        // Ask questions
+        handleQuestion();
+      } else {
+        // Everything else
+        saveFormData(formHandler.getAttribute('data-pmf-form'));
+        document.getElementById('formValues').reset();
+      }
     }
   });
 }

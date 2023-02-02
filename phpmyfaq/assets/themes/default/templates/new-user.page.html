@@ -21,89 +21,85 @@
     <link rel="canonical" href="{{ currentPageUrl }}" />
   </head>
   <body dir="{{ dir }}">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-          <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-bs-target="#pmf-navbar-toggle"
-          aria-controls="pmf-navbar-toggle"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-          <ul class="navbar-nav mr-md-12">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="dropdown"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {{ msgLoginUser }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown">
-                [notLoggedIn] {{ msgLoginUser }} [/notLoggedIn] [userloggedIn] {{ msgUserControl }} {{ msgLogoutUser }}
-                [/userloggedIn]
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <div class="col-12">
+      [useSslForLogins]
+      <p>
+        <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
+      </p>
+      [/useSslForLogins] {{ loginMessage }}
 
-    <div class="pmf-wrapper pmf-main">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-md-offset-3">
-            <section>{{ mainPageContent }}</section>
-          </div>
+      <div id="phpmyfaq-login" class="mb-5">
+        <div id="phpmyfaq-login-content">
+          <main>
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-5">
+                  <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                      <h3 class="text-center font-weight-light my-4">phpMyFAQ Registration</h3>
+                      <?= $message ?>
+                    </div>
+                    <div class="card-body">
+                      <form action="{{ writeLoginPath }}" method="post" accept-charset="utf-8" role="form">
+                        <div class="form-floating mb-3">
+                          <input
+                            class="form-control"
+                            id="faqusername"
+                            name="faqusername"
+                            type="text"
+                            placeholder="{{ username }}"
+                          />
+                          <label for="faqusername">{{ username }}</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <input
+                            class="form-control"
+                            id="realname"
+                            name="realname"
+                            type="text"
+                            placeholder="{{ realname }}"
+                          />
+                          <label for="faqusername">{{ realname }}</label>
+                        </div>
+
+                        <div class="input-group mb-3">
+                          <div class="form-floating">
+                            <input
+                              class="form-control"
+                              id="faqpassword"
+                              name="faqpassword"
+                              type="password"
+                              autocomplete="off"
+                              placeholder="{{ password }}"
+                            />
+                            <label for="faqpassword">{{ password }}</label>
+                          </div>
+                          <span class="input-group-text">
+                            <i class="fa" id="togglePassword"></i>
+                          </span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center mt-4 mb-0">
+                          <button type="submit" class="btn btn-primary">{{ submitRegister }}</button>
+                        </div>
+                      </form>
+                    </div>
+
+                    <div class="card-footer text-center py-3">
+                      [useSignInWithMicrosoft]
+                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="./services/azure">
+                        <i class="fa fa-windows" aria-hidden="true"></i>
+                        {{ msgSignInWithMicrosoft }}
+                      </a>
+                      [/useSignInWithMicrosoft]
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
     </div>
-
-    <footer class="pmf-footer font-small pt-4">
-      <div class="container">
-        <div class="row">
-          <div class="col-8 mb-4">
-            <ul class="pmf-footer-menu">
-              <li class="foot-menu-item">{{ faqOverview }}</li>
-              <li class="foot-menu-item">{{ showSitemap }}</li>
-              <li class="foot-menu-item">{{ msgGlossary }}</li>
-              <li class="foot-menu-item">{{ msgContact }}</li>
-              <li class="foot-menu-item">{{ privacyLink }}</li>
-            </ul>
-          </div>
-          <div class="col-4 mb-4">
-            <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-              {{ switchLanguages }}
-              <input type="hidden" name="action" value="" />
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="text-center py-3">{{ copyright }}</div>
-      [debugMode]
-      <div class="container debug-mode">
-        <hr />
-        <h4>DEBUG INFORMATION</h4>
-        <div class="row">
-          <div class="col-12">
-            <h5>DATABASE QUERIES</h5>
-            {{ debugQueries }}
-          </div>
-        </div>
-      </div>
-      [/debugMode]
-    </footer>
 
     <script src="{{ baseHref }}assets/dist/frontend.js"></script>
   </body>
