@@ -230,7 +230,7 @@ $faqSession = new Session($faqConfig);
                                         continue;
                                     }
                                     printf(
-                                        '<li><span class="pmf-popover" data-toggle="popover" data-bs-container="body" title="SHA-1" data-bs-content="%s">%s</span></li>',
+                                        '<li><span class="pmf-popover" data-bs-toggle="popover" data-bs-container="body" title="SHA-1" data-bs-content="%s">%s</span></li>',
                                         $hash,
                                         $file
                                     );

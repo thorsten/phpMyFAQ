@@ -62,7 +62,7 @@ if (
                 <span class="float-right"><?= $cat['name'] ?></span>
                 <h5>
                   <i class="icon fa fa-chevron-circle-right "></i>
-                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?= $cat['id'] ?>"
+                  <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#category-<?= $cat['id'] ?>"
                      aria-expanded="true" aria-controls="collapseOne">
                     <?= $category->getPath($cat['id']) ?>
                   </a>

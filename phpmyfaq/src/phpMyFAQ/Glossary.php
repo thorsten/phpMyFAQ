@@ -216,7 +216,7 @@ class Glossary
 
         if (!empty($item)) {
             return sprintf(
-                '%s<abbr data-toggle="tooltip" data-placement="bottom" title="%s">%s</abbr>%s',
+                '%s<abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="%s" class="initialism">%s</abbr>%s',
                 $prefix,
                 $this->definition,
                 $item,

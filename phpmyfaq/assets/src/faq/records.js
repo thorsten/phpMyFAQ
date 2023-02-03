@@ -48,10 +48,5 @@ document.addEventListener('DOMContentLoaded', () => {
     saveFormValues('savecomment', 'comment');
     return false;
   });
-
-  //
-  // Tooltips
-  //
-  $('[data-toggle="tooltip"]').tooltip();
   */
 });
