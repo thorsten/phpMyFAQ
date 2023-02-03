@@ -59,19 +59,7 @@ $plr = new Plurals();
 //
 Strings::init($faqLangCode);
 
-$auth = false;
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
-if ($user) {
-    $error = null;
-    $auth = true;
-} else {
-    $error = Translation::get('ad_auth_sess');
-    $user = null;
-    unset($user);
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 ?>
 <!DOCTYPE html>
 <html lang="<?= Translation::get('metaLanguage'); ?>">

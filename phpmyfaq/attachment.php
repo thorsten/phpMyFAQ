@@ -37,13 +37,7 @@ if (headers_sent()) {
 $attachmentErrors = [];
 
 // authenticate with session information
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
-if (!$user instanceof CurrentUser) {
-    $user = new CurrentUser($faqConfig); // user not logged in -> empty user object
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 

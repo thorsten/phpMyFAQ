@@ -29,6 +29,7 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 const IS_VALID_PHPMYFAQ = null;
@@ -60,37 +61,32 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 }
 
 //
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode);
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
+}
+
+//
+// Load plurals support for selected language
+//
+$plr = new Plurals();
+
+//
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);
-$plr = new Plurals();
 
 // authenticate with session information
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
-if ($user instanceof CurrentUser) {
-    $auth = true;
-} else {
-    $user = null;
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 
 // Get current user and group id - default: -1
-if (!is_null($user) && $user instanceof CurrentUser) {
-    $currentUser = $user->getUserId();
-    if ($user->perm instanceof MediumPermission) {
-        $currentGroups = $user->perm->getUserGroups($currentUser);
-    } else {
-        $currentGroups = [-1];
-    }
-    if (0 == (is_countable($currentGroups) ? count($currentGroups) : 0)) {
-        $currentGroups = [-1];
-    }
-} else {
-    $currentUser = -1;
-    $currentGroups = [-1];
-}
+[ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 $currentCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

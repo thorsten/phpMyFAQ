@@ -72,25 +72,8 @@ Strings::init($faqLangCode);
 //
 // Get current user and group id - default: -1
 //
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
-if (isset($user) && is_object($user)) {
-    $currentUser = $user->getUserId();
-    if ($user->perm instanceof MediumPermission) {
-        $currentGroups = $user->perm->getUserGroups($currentUser);
-    } else {
-        $currentGroups = [-1];
-    }
-    if (0 == count($currentGroups)) {
-        $currentGroups = [-1];
-    }
-} else {
-    $user = new CurrentUser($faqConfig);
-    $currentUser = -1;
-    $currentGroups = [-1];
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+[ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 $category = new Category($faqConfig, $currentGroups);
 $category->setUser($currentUser);

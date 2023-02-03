@@ -184,18 +184,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // Try to authenticate with cookie information
-    $user = CurrentUser::getFromCookie($faqConfig);
-
-    // authenticate with session information
-    if (!$user instanceof CurrentUser) {
-        $user = CurrentUser::getFromSession($faqConfig);
-    }
-
-    if ($user instanceof CurrentUser) {
-        $auth = true;
-    } else {
-        $user = new CurrentUser($faqConfig);
-    }
+    [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 }
 
 //
@@ -216,20 +205,7 @@ if ($csrfChecked && 'logout' === $action && isset($auth)) {
 //
 // Get current user and group id - default: -1
 //
-if (!is_null($user) && $user instanceof CurrentUser) {
-    $currentUser = $user->getUserId();
-    if ($user->perm instanceof MediumPermission) {
-        $currentGroups = $user->perm->getUserGroups($currentUser);
-    } else {
-        $currentGroups = [-1];
-    }
-    if (0 == (is_countable($currentGroups) ? count($currentGroups) : 0)) {
-        $currentGroups = [-1];
-    }
-} else {
-    $currentUser = -1;
-    $currentGroups = [-1];
-}
+[ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 //
 // Use mbstring extension if available and when possible

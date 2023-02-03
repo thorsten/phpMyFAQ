@@ -110,37 +110,8 @@ $result = [];
 //
 // Check if user is already authenticated
 //
-if (is_null($faqUsername) && is_null($faqPassword)) {
-    $user = CurrentUser::getFromCookie($faqConfig);
-    if (!$user instanceof CurrentUser) {
-        $user = CurrentUser::getFromSession($faqConfig);
-    }
-    if ($user instanceof CurrentUser) {
-        $auth = true;
-    } else {
-        $user = new CurrentUser($faqConfig);
-    }
-} else {
-    $user = new CurrentUser($faqConfig);
-}
-
-//
-// Get current user and group id - default: -1
-//
-if (!is_null($user) && $user instanceof CurrentUser) {
-    $currentUser = $user->getUserId();
-    if ($user->perm instanceof MediumPermission) {
-        $currentGroups = $user->perm->getUserGroups($currentUser);
-    } else {
-        $currentGroups = [-1];
-    }
-    if (0 == (is_countable($currentGroups) ? count($currentGroups) : 0)) {
-        $currentGroups = [-1];
-    }
-} else {
-    $currentUser = -1;
-    $currentGroups = [-1];
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+[ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 //
 // Handle actions

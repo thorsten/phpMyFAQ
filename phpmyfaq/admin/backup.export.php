@@ -37,17 +37,7 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 
-$auth = false;
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
-if ($user) {
-    $auth = true;
-} else {
-    $user = null;
-    unset($user);
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
     $tables = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());

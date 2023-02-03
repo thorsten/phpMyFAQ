@@ -437,6 +437,54 @@ class CurrentUser extends User
     }
 
     /**
+     * Returns the current user object from cookie or session and true,
+     * if the user is successfully authenticated.
+     *
+     * @param Configuration $faqConfig
+     * @return array
+     */
+    public static function getCurrentUser(Configuration $faqConfig): array
+    {
+        $auth = false;
+        $user = self::getFromCookie($faqConfig);
+        if (!$user instanceof CurrentUser) {
+            $user = self::getFromSession($faqConfig);
+        }
+        if ($user instanceof CurrentUser) {
+            $auth = true;
+        } else {
+            $user = new self($faqConfig);
+        }
+
+        return [ $user, $auth ];
+    }
+
+    /**
+     * Returns the current user ID and group IDs, default values are -1
+     * @param CurrentUser $user
+     * @return array
+     */
+    public static function getCurrentUserGroupId(CurrentUser $user): array
+    {
+        if (!is_null($user)) {
+            $currentUser = $user->getUserId();
+            if ($user->perm instanceof MediumPermission) {
+                $currentGroups = $user->perm->getUserGroups($currentUser);
+            } else {
+                $currentGroups = [-1];
+            }
+            if (0 === (is_countable($currentGroups) ? count($currentGroups) : 0)) {
+                $currentGroups = [-1];
+            }
+        } else {
+            $currentUser = -1;
+            $currentGroups = [-1];
+        }
+
+        return [ $currentUser, $currentGroups ];
+    }
+
+    /**
      * This static method returns a valid CurrentUser object if there is one
      * in the session that is not timed out. The session-ID is updated if
      * necessary. The CurrentUser will be removed from the session, if it is
@@ -446,9 +494,10 @@ class CurrentUser extends User
      * returned. On success, a valid CurrentUser object is returned.
      *
      * @static
+     * @param Configuration $config
      * @return null|CurrentUser
      */
-    public static function getFromSession(Configuration $config)
+    public static function getFromSession(Configuration $config): ?CurrentUser
     {
         // there is no valid user object in session
         if (!isset($_SESSION[SESSION_CURRENT_USER]) || !isset($_SESSION[SESSION_ID_TIMESTAMP])) {
@@ -501,8 +550,6 @@ class CurrentUser extends User
      * On success, a valid CurrentUser object is returned.
      *
      * @static
-     *
-     *
      */
     public static function getFromCookie(Configuration $config): ?CurrentUser
     {

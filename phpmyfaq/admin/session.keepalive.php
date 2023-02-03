@@ -70,10 +70,8 @@ $plr = new Plurals();
 //
 Strings::init($language);
 
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
+[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>

@@ -117,15 +117,7 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
 //
 // Check, if user is logged in
 //
-$user = CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof CurrentUser) {
-    $user = CurrentUser::getFromSession($faqConfig);
-}
-if ($user instanceof CurrentUser) {
-    $isLoggedIn = true;
-} else {
-    $isLoggedIn = false;
-}
+[ $user, $isLoggedIn ] = CurrentUser::getCurrentUser($faqConfig);
 
 //
 // Check captcha

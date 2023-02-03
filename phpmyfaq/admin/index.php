@@ -206,16 +206,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // Try to authenticate with cookie information
-    $user = CurrentUser::getFromCookie($faqConfig);
-    // authenticate with session information
-    if (!$user instanceof CurrentUser) {
-        $user = CurrentUser::getFromSession($faqConfig);
-    }
-    if ($user instanceof CurrentUser) {
-        $auth = true;
-    } else {
-        $user = new CurrentUser($faqConfig);
-    }
+    [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 }
 
 //
@@ -232,15 +223,7 @@ if ($csrfChecked && $action === 'logout' && $auth) {
 //
 // Get current admin user and group id - default: -1
 //
-$currentAdminUser = $user->getUserId();
-if ($user->perm instanceof MediumPermission) {
-    $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
-} else {
-    $currentAdminGroups = [-1];
-}
-if (0 === (is_countable($currentAdminGroups) ? count($currentAdminGroups) : 0)) {
-    $currentAdminGroups = [-1];
-}
+[ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 //
 // Get action from _GET and _POST first
