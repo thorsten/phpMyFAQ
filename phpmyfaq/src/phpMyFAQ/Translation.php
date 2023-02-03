@@ -129,6 +129,20 @@ class Translation
     }
 
     /**
+     * Use mbstring extension if available and when possible
+     * @return void
+     */
+    public function setMultiByteLanguage(): void
+    {
+        $validMultiByteStrings = ['ja', 'en', 'uni'];
+        $multiByteLanguage = (self::get('metaLanguage') != 'ja') ? 'uni' : self::get('metaLanguage');
+        if (function_exists('mb_language') && in_array($multiByteLanguage, $validMultiByteStrings)) {
+            mb_language($multiByteLanguage);
+            mb_internal_encoding('utf-8');
+        }
+    }
+
+    /**
      * Checks if the default language is already loaded.
      */
     protected function checkDefaultLanguageLoaded(): void

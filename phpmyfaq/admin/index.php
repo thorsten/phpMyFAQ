@@ -28,7 +28,6 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Logging;
-use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
@@ -71,7 +70,8 @@ try {
     Translation::create()
         ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
-        ->setCurrentLanguage($faqLangCode);
+        ->setCurrentLanguage($faqLangCode)
+        ->setMultiByteLanguage();
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
@@ -114,16 +114,6 @@ $http = new HttpHelper();
 // Create a new FAQ object
 //
 $faq = new Faq($faqConfig);
-
-//
-// use mbstring extension if available and when possible
-//
-$validMbStrings = ['ja', 'en', 'uni'];
-$mbLanguage = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
-if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
-    mb_language($mbLanguage);
-    mb_internal_encoding('utf-8');
-}
 
 //
 // Get user action

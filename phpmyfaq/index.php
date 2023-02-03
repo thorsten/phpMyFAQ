@@ -34,7 +34,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
-use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
@@ -72,12 +71,11 @@ $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
-$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
-
 if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
     $faqLangCode = 'en';
 }
 
+$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
 //
 // Set translation class
 //
@@ -85,7 +83,8 @@ try {
     Translation::create()
         ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
-        ->setCurrentLanguage($faqLangCode);
+        ->setCurrentLanguage($faqLangCode)
+        ->setMultiByteLanguage();
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
@@ -206,16 +205,6 @@ if ($csrfChecked && 'logout' === $action && isset($auth)) {
 // Get current user and group id - default: -1
 //
 [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-//
-// Use mbstring extension if available and when possible
-//
-$validMbStrings = ['ja', 'en', 'uni'];
-$mbLanguage = (Translation::get('metaLanguage') != 'ja') ? 'uni' : Translation::get('metaLanguage');
-if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
-    mb_language($mbLanguage);
-    mb_internal_encoding('utf-8');
-}
 
 //
 // Found a session ID in _GET or _COOKIE?
