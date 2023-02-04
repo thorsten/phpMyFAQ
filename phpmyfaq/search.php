@@ -290,7 +290,7 @@ if ($tagSearch) {
         'mainPageContent',
         'searchBoxSection',
         [
-            'writeSendAdress' => '?' . $sids . 'action=search',
+            'formActionUrl' => '?' . $sids . 'action=search',
             'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
             'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
             'checkedAllLanguages' => $allLanguages ? ' checked' : '',
@@ -318,7 +318,7 @@ $template->parse(
         'msgAdvancedSearch' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
         'msgSearchWord' => Translation::get('msgSearchWord'),
         'renderSearchResults' => $searchResult,
-        'writeSendAdress' => '?' . $sids . 'action=search',
+        'formActionUrl' => '?' . $sids . 'action=search',
         'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
         'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
         'checkedAllLanguages' => $allLanguages ? ' checked' : '',

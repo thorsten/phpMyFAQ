@@ -25,6 +25,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Export;
 use phpMyFAQ\Export\Pdf\Wrapper;
 use phpMyFAQ\Faq;
+use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -91,11 +92,7 @@ class Pdf extends Export
 
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
-        $this->pdf->SetCreator(
-            $this->config->getTitle() .
-            ' - powered by phpMyFAQ ' .
-            $this->config->getVersion()
-        );
+        $this->pdf->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
 
         $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
 
@@ -191,11 +188,8 @@ class Pdf extends Export
 
         // Set any item
         $this->pdf->SetTitle($faqData['title']);
-        $this->pdf->SetCreator(
-            $this->config->getTitle() .
-            ' - powered by phpMyFAQ ' .
-            $this->config->getVersion()
-        );
+        $this->pdf->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
+
         $this->pdf->AddPage();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
         $this->pdf->SetDisplayMode('real');

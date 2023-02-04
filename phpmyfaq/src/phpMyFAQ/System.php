@@ -148,6 +148,11 @@ class System
         return self::VERSION_API;
     }
 
+    public static function getPoweredByString(): string
+    {
+        return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
+    }
+
     /**
      * Returns true or false on SQLite3.
      *

@@ -88,7 +88,7 @@ $template->parse(
         'msgNewTranslationAddon' => Translation::get('msgNewTranslationAddon'),
         'msgNewTransSourcePane' => Translation::get('msgNewTransSourcePane'),
         'msgNewTranslationPane' => Translation::get('msgNewTranslationPane'),
-        'writeSendAdress' => '?' . $sids . 'action=save',
+        'formActionUrl' => '?' . $sids . 'action=save',
         'defaultContentName' => ($user ? $user->getUserData('display_name') : ''),
         'defaultContentMail' => ($user ? $user->getUserData('email') : ''),
         'msgNewTranslationQuestion' => Translation::get('msgNewContentTheme'),

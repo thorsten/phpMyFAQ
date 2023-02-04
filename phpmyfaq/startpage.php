@@ -136,7 +136,7 @@ $template->parse(
         'writeNews' => $news->getNews($archived),
         'showAllNews' => $showAllNews,
         'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($faqLangCode)),
-        'writeSendAdress' => '?' . $sids . 'action=search',
+        'formActionUrl' => '?' . $sids . 'action=search',
         'searchBox' => Translation::get('msgSearch'),
         'categoryId' => ($cat === 0) ? '%' : (int)$cat,
         'msgSearch' => sprintf(

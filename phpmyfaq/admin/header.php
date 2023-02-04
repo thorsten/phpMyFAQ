@@ -235,7 +235,7 @@ switch ($action) {
   <meta charset="utf-8">
 
   <title>
-    <?= Strings::htmlentities($faqConfig->getTitle()) ?> - powered by phpMyFAQ <?= System::getVersion() ?>
+    <?= Strings::htmlentities($faqConfig->getTitle()) ?> - <?= System::getPoweredByString() ?>
   </title>
   <base href="<?= Strings::htmlentities($faqConfig->getDefaultUrl()) ?>admin/">
 

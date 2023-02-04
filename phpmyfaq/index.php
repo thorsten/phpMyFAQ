@@ -242,7 +242,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
 }
 
 //
-// Found a article language?
+// Found an article language?
 //
 $lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_UNSAFE_RAW);
 if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
@@ -314,7 +314,7 @@ if (!is_null($id)) {
     $currentPageUrl = $faqLink->toString(true);
 } else {
     $id = '';
-    $title = ' - powered by phpMyFAQ ' . $faqConfig->getVersion();
+    $title = ' - ' . System::getPoweredByString();
     $keywords = '';
     $metaDescription = str_replace('"', '', $faqConfig->get('main.metaDescription'));
 }
@@ -324,7 +324,7 @@ if (!is_null($id)) {
 //
 $solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 if (!is_null($solutionId)) {
-    $title = ' -  powered by phpMyFAQ ' . $faqConfig->getVersion();
+    $title = ' - ' . System::getPoweredByString();
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
     if (is_array($faqData)) {
@@ -478,7 +478,6 @@ if (!is_null($error)) {
 
 $faqSeo = new Seo($faqConfig);
 
-
 if ($faqConfig->get('security.enableRegistration')) {
     $template->parseBlock(
         'index',
@@ -512,12 +511,12 @@ $tplMainPage = [
     'metaPublisher' => Strings::htmlentities($faqConfig->get('main.metaPublisher')),
     'metaLanguage' => Translation::get('metaLanguage'),
     'metaRobots' => $faqSeo->getMetaRobots($action),
-    'phpmyfaqversion' => $faqConfig->getVersion(),
+    'phpmyfaqVersion' => $faqConfig->getVersion(),
     'stylesheet' => Translation::get('dir') == 'rtl' ? 'style.rtl' : 'style',
     'currentPageUrl' => $currentPageUrl,
     'action' => $action,
     'dir' => Translation::get('dir'),
-    'writeSendAdress' => '?' . $sids . 'action=search',
+    'formActionUrl' => '?' . $sids . 'action=search',
     'searchBox' => Translation::get('msgSearch'),
     'searchTerm' =>Strings::htmlentities($searchTerm, ENT_QUOTES),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
@@ -527,8 +526,7 @@ $tplMainPage = [
     'languageBox' => Translation::get('msgLanguageSubmit'),
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
-    'copyright' => 'powered with ❤️ and ☕️ by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
-        $faqConfig->getVersion(),
+    'copyright' => System::getPoweredByString(),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
         Translation::get('msgRegistration') . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
@@ -558,11 +556,11 @@ if ('main' == $action || 'show' == $action) {
         'index',
         'globalSearchBox',
         [
-            'writeSendAdress' => '?' . $sids . 'action=search',
+            'formActionUrl' => '?' . $sids . 'action=search',
             'searchBox' => Translation::get('msgSearch'),
             'categoryId' => ($cat === 0) ? '%' : (int)$cat,
             'msgSearch' => sprintf(
-                '<a class="help" href="./index.php?action=search">%s</a>',
+                '<a class="help" href="?action=search">%s</a>',
                 Translation::get('msgAdvancedSearch')
             ),
         ]

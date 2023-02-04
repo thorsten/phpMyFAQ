@@ -16,6 +16,7 @@
  * @since     2003-02-26
  */
 
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -55,7 +56,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
                     <div class="text-muted">
-                        Proudly powered by <strong>phpMyFAQ <?= $faqConfig->getVersion(); ?></strong>
+                        Proudly <?= System::getPoweredByString() ?>
                     </div>
                     <div>
                         <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">
