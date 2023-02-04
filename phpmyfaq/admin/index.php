@@ -20,8 +20,6 @@
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Auth\AuthLdap;
-use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -33,6 +31,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserAuthentication;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
@@ -147,7 +146,7 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
 //
 // Authenticate current user
 //
-$auth = null;
+$auth = false;
 $error = '';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -166,33 +165,13 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 //
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
-    if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
-        $user->enableRememberMe();
-    }
-    if ($faqConfig->isLdapActive() && function_exists('ldap_connect')) {
-        try {
-            $authLdap = new AuthLdap($faqConfig);
-            $user->addAuth($authLdap, 'ldap');
-        } catch (Exception $e) {
-            $error = $e->getMessage() . '<br>';
-        }
-    }
-    if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new AuthSso($faqConfig);
-        $user->addAuth($authSso, 'sso');
-    }
-    if ($user->login($faqusername, $faqpassword)) {
-        // login, if user account is NOT blocked
-        if ($user->getStatus() != 'blocked') {
-            $auth = true;
-        } else {
-            $error = $error . $PMF_LANG['ad_auth_fail'];
-        }
-    } else {
-        // error
+    $userAuth = new UserAuthentication($faqConfig, $user);
+    $userAuth->setRememberMe($faqremember ?? false);
+    try {
+        [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+    } catch (Exception $e) {
         $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'Loginerror\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
-        $error = $error . $PMF_LANG['ad_auth_fail'];
+        $logging->logAdmin($user, 'Login-error\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
     }
 } else {
     // Try to authenticate with cookie information
@@ -204,7 +183,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 if ($csrfChecked && $action === 'logout' && $auth) {
     $user->deleteFromSession(true);
-    $auth = null;
+    $auth = false;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         $http->redirect($ssoLogout);
@@ -224,7 +203,7 @@ if (is_null($ajax)) {
 }
 
 // if performing AJAX operation, needs to branch before header.php
-if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())) {
+if ($auth && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())) {
     if (isset($action) && isset($ajax)) {
         if ('ajax' === $action) {
             switch ($ajax) {
@@ -314,7 +293,7 @@ require 'header.php';
 $numRights = count($user->perm->getAllUserRights($user->getUserId()));
 
 // User is authenticated
-if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
+if ($auth && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())) {
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {

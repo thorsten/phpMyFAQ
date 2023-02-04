@@ -32,7 +32,7 @@ use phpMyFAQ\User\UserData;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('PMF_ENCRYPTION_TYPE')) {
-    define('PMF_ENCRYPTION_TYPE', 'md5'); // Fallback to md5()
+    define('PMF_ENCRYPTION_TYPE', 'hash');
 }
 
 /**
@@ -153,9 +153,9 @@ class User
     /**
      * Constructor.
      *
-     * @param Configuration $config
+     * @param Configuration|null $config
      */
-    public function __construct(protected ?\phpMyFAQ\Configuration $config)
+    public function __construct(protected ?Configuration $config)
     {
         $perm = Permission::selectPerm($this->config->get('security.permLevel'), $this->config);
         /** @phpstan-ignore-next-line */
@@ -182,7 +182,6 @@ class User
                 break;
             }
         }
-
 
         // user data object
         $this->userdata = new UserData($this->config);

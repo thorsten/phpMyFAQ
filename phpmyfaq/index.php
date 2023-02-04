@@ -21,8 +21,6 @@
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Auth\AuthLdap as AuthLdap;
-use phpMyFAQ\Auth\AuthSso as AuthSso;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Core\Exception;
@@ -43,6 +41,7 @@ use phpMyFAQ\Template;
 use phpMyFAQ\Template\TemplateHelper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\Utils;
 
 //
@@ -64,6 +63,8 @@ $http->setContentType('text/html');
 $http->addHeader();
 $http->startCompression();
 
+$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
+
 //
 // Get language (default: english)
 //
@@ -75,7 +76,7 @@ if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
     $faqLangCode = 'en';
 }
 
-$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
+
 //
 // Set translation class
 //
@@ -122,7 +123,7 @@ $loginVisibility = 'hidden';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_UNSAFE_RAW);
-$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
+$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_VALIDATE_BOOLEAN);
 
 //
 // Set username via SSO
@@ -145,41 +146,12 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
-
-    if (!is_null($rememberMe) && 'rememberMe' === $rememberMe) {
-        $user->enableRememberMe();
-    }
-
-    if ($faqConfig->isLdapActive() && function_exists('ldap_connect')) {
-        try {
-            $authLdap = new AuthLdap($faqConfig);
-            $user->addAuth($authLdap, 'ldap');
-        } catch (Exception $e) {
-            $error = $e->getMessage() . '<br>';
-        }
-    }
-
-    if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new AuthSso($faqConfig);
-        $user->addAuth($authSso, 'sso');
-    }
-
-    if ($user->login($faqusername, $faqpassword)) {
-        if ($user->getStatus() != 'blocked') {
-            $auth = true;
-            if (empty($action)) {
-                $action = $faqaction; // SSO logins don't have $faqaction
-            }
-        } else {
-            $error = $error . Translation::get('ad_auth_fail') . ' (' . $faqusername . ')';
-            $loginVisibility = '';
-            $action = 'password' === $action ? 'password' : 'login';
-        }
-    } else {
-        // error
-        $error = $error . Translation::get('ad_auth_fail');
-        $loginVisibility = '';
-        $action = 'password' === $action ? 'password' : 'login';
+    $userAuth = new UserAuthentication($faqConfig, $user);
+    $userAuth->setRememberMe($rememberMe ?? false);
+    try {
+        [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+    } catch (Exception $e) {
+        $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
     }
 } else {
     // Try to authenticate with cookie information
@@ -296,14 +268,16 @@ $searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW, '');
 // Create a new FAQ object
 //
 $faq = new Faq($faqConfig);
-$faq->setUser($currentUser)
+$faq
+    ->setUser($currentUser)
     ->setGroups($currentGroups);
 
 //
 // Create a new Category object
 //
 $category = new Category($faqConfig, $currentGroups, true);
-$category->setUser($currentUser)
+$category
+    ->setUser($currentUser)
     ->setGroups($currentGroups);
 
 //
@@ -674,7 +648,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 //
 // Show login box or logged-in user information
 //
-if ($auth) {
+if ($user->getUserId() > 0) {
     if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',

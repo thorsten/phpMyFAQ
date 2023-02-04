@@ -111,7 +111,6 @@ class CurrentUser extends User
      *
      * @param string $login Login name
      * @param string $password Password
-     * @throws Exception
      */
     public function login(string $login, string $password): bool
     {
@@ -518,15 +517,15 @@ class CurrentUser extends User
             return null;
         }
         // session-id not found in user table
-        $session_info = $user->getSessionInfo();
-        $session_id = ($session_info['session_id'] ?? '');
-        if ($session_id == '' || $session_id != session_id()) {
+        $sessionInfo = $user->getSessionInfo();
+        $sessionId = ($sessionInfo['session_id'] ?? '');
+        if ($sessionId === '' || $sessionId !== session_id()) {
             return null;
         }
         // check ip
         if (
             $config->get('security.ipCheck')
-            && $session_info['ip'] != $_SERVER['REMOTE_ADDR']
+            && $sessionInfo['ip'] != $_SERVER['REMOTE_ADDR']
         ) {
             return null;
         }

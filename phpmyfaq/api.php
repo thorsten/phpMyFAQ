@@ -43,6 +43,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\Utils;
 
 //
@@ -497,28 +498,20 @@ switch ($action) {
         break;
 
     case 'login':
-        $currentUser = new CurrentUser($faqConfig);
-
         $postData = json_decode(file_get_contents('php://input'), true);
         $faqUsername = Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS);
         $faqPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
 
-        if ($currentUser->login($faqUsername, $faqPassword)) {
-            if ($currentUser->getStatus() !== 'blocked') {
-                $auth = true;
-                $result = [
-                    'loggedin' => true
-                ];
-            } else {
-                $auth = false;
-                $http->setStatus(400);
-                $result = [
-                    'loggedin' => false,
-                    'error' => Translation::get('ad_auth_fail')
-                ];
-            }
-        } else {
-            $auth = false;
+        $user = new CurrentUser($faqConfig);
+        $userAuth = new UserAuthentication($faqConfig, $user);
+        try {
+            [ $user, $auth ] = $userAuth->authenticate($faqUsername, $faqPassword);
+            $http->setStatus(200);
+            $result = [
+                'loggedin' => true
+            ];
+        } catch (Exception $e) {
+            $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
             $http->setStatus(400);
             $result = [
                 'loggedin' => false,
