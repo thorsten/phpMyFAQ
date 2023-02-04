@@ -28,6 +28,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use stdClass;
@@ -453,7 +454,7 @@ class CurrentUser extends User
         if ($user instanceof CurrentUser) {
             $auth = true;
         } else {
-            $user = new self($faqConfig);
+            $user = new CurrentUser($faqConfig);
         }
 
         return [ $user, $auth ];
@@ -461,10 +462,11 @@ class CurrentUser extends User
 
     /**
      * Returns the current user ID and group IDs, default values are -1
-     * @param CurrentUser $user
+     *
+     * @param CurrentUser|null $user
      * @return array
      */
-    public static function getCurrentUserGroupId(CurrentUser $user): array
+    public static function getCurrentUserGroupId(CurrentUser $user = null): array
     {
         if (!is_null($user)) {
             $currentUser = $user->getUserId();
@@ -681,7 +683,7 @@ class CurrentUser extends User
      */
     public function getCsrfTokenFromSession(): string
     {
-        return $_SESSION['phpmyfaq_csrf_token'];
+        return $_SESSION['phpmyfaq_csrf_token'] ?? '';
     }
 
     /**
