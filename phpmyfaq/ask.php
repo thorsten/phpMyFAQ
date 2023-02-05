@@ -36,7 +36,10 @@ $captcha = new Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
-    $captcha->drawCaptchaImage();
+    try {
+        $captcha->drawCaptchaImage();
+    } catch (Exception $e) {
+    }
     exit;
 }
 

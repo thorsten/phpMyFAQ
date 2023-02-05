@@ -98,16 +98,22 @@ $http->addHeader();
 if (!is_null($searchString)) {
     $faqSearch->setCategory($category);
 
-    $searchResult = $faqSearch->autoComplete($searchString);
-    $faqSearchResult->reviewResultSet($searchResult);
+    try {
+        $searchResult = $faqSearch->autoComplete($searchString);
 
-    $faqSearchHelper = new SearchHelper($faqConfig);
-    $faqSearchHelper->setSearchTerm($searchString);
-    $faqSearchHelper->setCategory($category);
-    $faqSearchHelper->setPlurals($plr);
+        $faqSearchResult->reviewResultSet($searchResult);
+
+        $faqSearchHelper = new SearchHelper($faqConfig);
+        $faqSearchHelper->setSearchTerm($searchString);
+        $faqSearchHelper->setCategory($category);
+        $faqSearchHelper->setPlurals($plr);
+    } catch (Exception $e) {
+        $faqConfig->getLogger()->error('Search exception: ' . $e->getMessage());
+    }
 
     try {
         $http->sendWithHeaders($faqSearchHelper->renderInstantResponseResult($faqSearchResult));
     } catch (JsonException $e) {
+        $faqConfig->getLogger()->error('Search exception: ' . $e->getMessage());
     }
 }
