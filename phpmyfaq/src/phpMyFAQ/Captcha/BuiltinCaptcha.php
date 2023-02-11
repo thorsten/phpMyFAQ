@@ -17,17 +17,20 @@
  * @since     2006-02-04
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Captcha;
 
 use Exception;
 use GdImage;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
+use phpMyFAQ\Strings;
 
 /**
  * Class Captcha
  *
  * @package phpMyFAQ
  */
-class Captcha
+class BuiltinCaptcha implements CaptchaInterface
 {
     public int $captchaLength = 6;
 
@@ -122,7 +125,7 @@ class Captcha
     /**
      * Setter for session id.
      */
-    public function setSessionId(string $sessionId): Captcha
+    public function setSessionId(string $sessionId): BuiltinCaptcha
     {
         $this->sessionId = $sessionId;
         return $this;
@@ -133,7 +136,7 @@ class Captcha
         return $this->userIsLoggedIn;
     }
 
-    public function setUserIsLoggedIn(bool $userIsLoggedIn): Captcha
+    public function setUserIsLoggedIn(bool $userIsLoggedIn): BuiltinCaptcha
     {
         $this->userIsLoggedIn = $userIsLoggedIn;
         return $this;

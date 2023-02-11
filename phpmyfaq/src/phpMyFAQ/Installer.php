@@ -391,6 +391,10 @@ class Installer
         'security.enableRegistration' => 'true',
         'security.domainWhiteListForRegistrations' => '',
         'security.enableSignInWithMicrosoft' => 'false',
+        'security.enableGoogleReCaptchaV2' => 'false',
+        'security.googleReCaptchaV2SiteKey' => '',
+        'security.googleReCaptchaV2SecretKey' => '',
+
 
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,

@@ -3,6 +3,7 @@
 namespace phpMyFAQ;
 
 use Exception;
+use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
@@ -14,8 +15,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CaptchaTest extends TestCase
 {
-    /** @var Captcha */
-    protected Captcha $captcha;
+    /** @var BuiltinCaptcha */
+    protected BuiltinCaptcha $captcha;
 
     /** @var Configuration */
     protected Configuration $configuration;
@@ -34,7 +35,7 @@ class CaptchaTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
-        $this->captcha = new Captcha($this->configuration);
+        $this->captcha = new BuiltinCaptcha($this->configuration);
     }
 
     /**
@@ -73,7 +74,7 @@ class CaptchaTest extends TestCase
     public function testSetSessionId(): void
     {
         $captcha = $this->captcha->setSessionId('sid=4711');
-        $this->assertInstanceOf('phpMyFAQ\Captcha', $captcha);
+        $this->assertInstanceOf('phpMyFAQ\Captcha\BuiltinCaptcha', $captcha);
     }
 
     /**

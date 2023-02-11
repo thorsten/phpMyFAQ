@@ -16,7 +16,8 @@
  * @since     2008-01-25
  */
 
-use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -35,7 +36,7 @@ try {
     // @todo handle the exception
 }
 
-$captcha = new phpMyFAQ\Captcha($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -43,7 +44,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 $template->parse(
     'mainPageContent',

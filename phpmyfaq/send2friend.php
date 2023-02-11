@@ -15,9 +15,9 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -29,15 +29,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $http = new HttpHelper();
-$captcha = new Captcha($faqConfig);
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
+$captcha->setSessionId($sids);
+
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 if (!$faqConfig->get('main.enableSendToFriend')) {
     $http->setStatus(403);
     $http->redirect($faqConfig->getDefaultUrl());
 }
 
-$captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
     $captcha->drawCaptchaImage();

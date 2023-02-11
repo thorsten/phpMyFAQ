@@ -18,7 +18,8 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Captcha\Helper\BuiltinCaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
@@ -26,7 +27,6 @@ use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\AttachmentHelper;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\SearchHelper;
@@ -48,7 +48,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = new BuiltinCaptcha($faqConfig);
 $oGlossary = new Glossary($faqConfig);
 $faqTagging = new Tags($faqConfig);
 $faqRelation = new Relation($faqConfig);
@@ -317,7 +317,7 @@ if ('' !== $relatedFaqs) {
 }
 
 $date = new Date($faqConfig);
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = new BuiltinCaptchaHelper($faqConfig);
 
 // We need some Links from social networks
 $faqServices = new Services($faqConfig);

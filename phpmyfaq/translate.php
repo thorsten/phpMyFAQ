@@ -15,10 +15,10 @@
  * @since     2006-11-12
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Captcha\Helper\BuiltinCaptchaHelper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = new BuiltinCaptcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -63,7 +63,7 @@ if (!is_null($id) && !is_null($srclang) && Language::isASupportedLanguage($srcla
     $faqSource = $oFaq->faqRecord;
 }
 
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = new BuiltinCaptchaHelper($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {

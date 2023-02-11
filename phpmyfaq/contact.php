@@ -15,9 +15,9 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -33,7 +33,7 @@ try {
     // @todo handle the exception
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -41,7 +41,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 $template->parse(
     'mainPageContent',

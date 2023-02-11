@@ -15,9 +15,9 @@
  * @since     2002-09-17
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -32,7 +32,7 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGue
     header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -56,7 +56,7 @@ $categoryId = Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT,
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 $template->parse(
     'mainPageContent',

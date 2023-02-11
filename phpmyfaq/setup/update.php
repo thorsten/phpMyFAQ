@@ -430,7 +430,11 @@ if ($step == 3) {
 
         // update options
         $faqConfig->rename('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
-        
+
+        // Google ReCAPTCHAv3 support
+        $faqConfig->add('security.enableGoogleReCaptchaV2', false);
+        $faqConfig->add('security.googleReCaptchaV2SiteKey', '');
+        $faqConfig->add('security.googleReCaptchaV2SecretKey', '');
 
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server

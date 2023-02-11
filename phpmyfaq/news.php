@@ -17,13 +17,13 @@
  * @since     2006-07-23
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -34,10 +34,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
+$captcha->setSessionId($sids);
+
 $comment = new Comments($faqConfig);
 
-$captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
     try {
         $captcha->drawCaptchaImage();
@@ -120,7 +121,7 @@ if ($news['active'] && (!$expired)) {
     $newsDate = '';
 }
 
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 $template->parse(
     'mainPageContent',

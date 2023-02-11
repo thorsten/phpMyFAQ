@@ -15,14 +15,14 @@
  * @since 2002-08-29
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\BuiltinCaptcha;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = new BuiltinCaptcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {

@@ -1349,5 +1349,8 @@ $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Enable notifications'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Send test email to the administrator'];
 $PMF_LANG['mail.sendTestEmail'] = 'Send test email to the administrator';
 $PMF_LANG['msgGoToCategory'] = 'Go to category';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Enable Invisible Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 site key'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 secret key'];
 
 return $PMF_LANG;

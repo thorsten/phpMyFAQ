@@ -15,9 +15,9 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\Captcha;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
@@ -41,7 +41,7 @@ if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(),
     exit;
 }
 
-$captcha = new Captcha($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
@@ -75,7 +75,7 @@ $category->buildCategoryTree();
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 
-$captchaHelper = new CaptchaHelper($faqConfig);
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {

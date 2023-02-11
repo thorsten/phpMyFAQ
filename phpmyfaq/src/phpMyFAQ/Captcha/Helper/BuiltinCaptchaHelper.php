@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Helper class for the default phpMyFAQ captcha.
+ * Helper class for the default phpMyFAQ captchas.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,9 +15,10 @@
  * @since     2010-01-11
  */
 
-namespace phpMyFAQ\Helper;
+namespace phpMyFAQ\Captcha\Helper;
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper;
 
@@ -26,7 +27,7 @@ use phpMyFAQ\Helper;
  *
  * @package phpMyFAQ\Helper
  */
-class CaptchaHelper extends Helper
+class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
 {
     private const FORM_ID = 'captcha';
     private const FORM_BUTTON = 'captcha-button';
@@ -43,19 +44,23 @@ class CaptchaHelper extends Helper
     /**
      * Renders the captcha check.
      *
-     * @param Captcha $captcha
-     * @param string  $action
-     * @param string  $legend
-     * @param bool    $auth
+     * @param BuiltinCaptcha $captcha
+     * @param string         $action
+     * @param string         $label
+     * @param bool           $auth
      * @return string
      */
-    public function renderCaptcha(Captcha $captcha, string $action, string $legend, bool|null $auth = false): string
-    {
+    public function renderCaptcha(
+        CaptchaInterface $captcha,
+        string $action = '',
+        string $label = '',
+        bool $auth = false
+    ): string {
         $html = '';
 
-        if (true === $this->config->get('spam.enableCaptchaCode') && is_null($auth)) {
-            $html .= '<div class="row">';
-            $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $legend);
+        if (true === $this->config->get('spam.enableCaptchaCode') && !$auth) {
+            $html .= '<div class="row mb-2">';
+            $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
             $html .= '    <div class="col-sm-4">';
             $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage($action));
             $html .= '    </div>';

@@ -17,7 +17,7 @@
 
 const IS_VALID_PHPMYFAQ = null;
 
-use phpMyFAQ\Captcha;
+use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\Comment;
@@ -63,7 +63,12 @@ $apiLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
 $currentToken = Filter::filterVar($postData['csrf'] ?? '', FILTER_UNSAFE_RAW);
 
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
-$code = Filter::filterInput(INPUT_POST, 'captcha', FILTER_UNSAFE_RAW);
+
+if ($faqConfig->get('security.enableGoogleReCaptchaV2')) {
+    $code = Filter::filterVar($postData['g-recaptcha-response'] ?? '', FILTER_UNSAFE_RAW);
+} else {
+    $code = Filter::filterVar($postData['captcha'] ?? '', FILTER_UNSAFE_RAW);
+}
 
 $Language = new Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
@@ -122,11 +127,11 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
 //
 // Check captcha
 //
-$captcha = new Captcha($faqConfig);
+$captcha = Captcha::getInstance($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
-'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action && !is_null($code) &&
+'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
     !$captcha->checkCaptchaCode($code)
 ) {
     $message = ['error' => Translation::get('msgCaptcha')];

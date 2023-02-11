@@ -17,7 +17,6 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -48,7 +47,7 @@ $configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_UNSAFE_RAW, 'main');
  * @param mixed  $key
  * @param string $type
  */
-function renderInputForm(mixed $key, string $type)
+function renderInputForm(mixed $key, string $type): void
 {
     global $faqConfig;
 
@@ -74,7 +73,7 @@ function renderInputForm(mixed $key, string $type)
             ) {
                 $value = $_SESSION['access_token']['oauth_token_secret'];
             } else {
-                $value = str_replace('"', '&quot;', $faqConfig->get($key));
+                $value = str_replace('"', '&quot;', $faqConfig->get($key) ?? '');
             }
             echo '<div class="input-group">';
 
