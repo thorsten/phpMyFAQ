@@ -424,7 +424,7 @@ switch ($action) {
             </div>
             <div class="pmf-admin-sidenav-footer">
                 <div class="small">Logged in as:</div>
-                <?= $user->getUserData('display_name'); ?>
+                <?= Strings::htmlentities($user->getUserData('display_name')) ?>
             </div>
         </nav>
     </div>

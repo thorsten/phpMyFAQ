@@ -129,6 +129,7 @@ class Pdf extends Export
                 $tags = $this->tags->getAllTagsById($faq['id']);
             }
 
+            $this->pdf->SetFont($this->pdf->getCurrentFont(), 'b', 12);
             $this->pdf->WriteHTML('<h1>' . $this->category->categoryName[$faq['category_id']]['name'] . '</h1>');
             $this->pdf->WriteHTML('<h2>' . $faq['topic'] . '</h2>');
             $this->pdf->Ln(10);

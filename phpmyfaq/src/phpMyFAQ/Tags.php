@@ -356,7 +356,7 @@ class Tags
             $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES);
             $url = sprintf(
                 '%sindex.php?action=search&amp;tagging_id=%d',
-                Strings::htmlentities($this->config->getDefaultUrl()),
+                $this->config->getDefaultUrl(),
                 $tag['id']
             );
             $oLink = new Link($url, $this->config);

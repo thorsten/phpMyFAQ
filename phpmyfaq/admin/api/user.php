@@ -137,6 +137,7 @@ if (
             $userName = Filter::filterVar($postData['userName'], FILTER_UNSAFE_RAW);
             $userRealName = Filter::filterVar($postData['realName'], FILTER_UNSAFE_RAW);
             $userEmail = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+            $automaticPassword = Filter::filterVar($postData['automaticPassword'], FILTER_VALIDATE_BOOLEAN);
             $userPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
             $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_UNSAFE_RAW);
             $userIsSuperAdmin = Filter::filterVar($postData['isSuperAdmin'], FILTER_VALIDATE_BOOLEAN);
@@ -155,6 +156,12 @@ if (
             if (is_null($userEmail)) {
                 $errorMessage[] = Translation::get('ad_user_error_noEmail');
             }
+            if (!$automaticPassword) {
+                if (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7) {
+                    $errorMessage[] = $PMF_LANG['ad_passwd_fail'];
+                }
+            }
+
             if (count($errorMessage) === 0) {
                 if (!$newUser->createUser($userName, $userPassword)) {
                     $errorMessage[] = $newUser->error();
@@ -227,6 +234,12 @@ if (
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+                exit(1);
+            }
+
+            if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
                 exit(1);
             }
 

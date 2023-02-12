@@ -26,6 +26,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 
@@ -162,12 +163,12 @@ class FaqHelper extends Helper
                     $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
                 }
 
-                $output .= sprintf('<h4>%s</h4>', strip_tags($data['title']));
+                $output .= sprintf('<h4>%s</h4>', Strings::htmlentities($data['title']));
                 $output .= sprintf('<article>%s</article>', $data['content']);
                 $output .= sprintf(
                     '<p>%s: %s<br>%s',
                     Translation::get('msgAuthor'),
-                    $data['author'],
+                    Strings::htmlentities($data['author']),
                     Translation::get('msgLastUpdateArticle') . $date->format($data['updated'])
                 );
                 $output .= '<hr>';

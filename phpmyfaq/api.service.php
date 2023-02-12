@@ -334,15 +334,17 @@ switch ($action) {
 
         $postData = json_decode(file_get_contents('php://input'), true);
 
-        $author = Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW);
-        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $author = trim(Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $email = trim(Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
         $question = Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW);
+        $question = trim(strip_tags($question));
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
-            $answer = html_entity_decode($answer);
+            $answer = trim(html_entity_decode($answer));
         } else {
             $answer = Filter::filterVar($postData['answer'], FILTER_UNSAFE_RAW);
-            $answer = nl2br($answer);
+            $answer = strip_tags($answer);
+            $answer = trim(nl2br($answer));
         }
         $contentLink = Filter::filterVar($postData['contentlink'], FILTER_VALIDATE_URL);
         $keywords = Filter::filterVar($postData['keywords'], FILTER_UNSAFE_RAW);
@@ -359,7 +361,7 @@ switch ($action) {
         if (isset($postData['faqid']) && isset($postData['lang']) && isset($postData['translated_answer'])) {
             $faqId = Filter::filterVar($postData['faqid'], FILTER_VALIDATE_INT);
             $faqLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
-            $answer = Filter::filterVar($postData['translated_answer'], FILTER_UNSAFE_RAW);
+            $answer = trim(Filter::filterVar($postData['translated_answer'], FILTER_UNSAFE_RAW));
         }
 
         if (
@@ -485,10 +487,11 @@ switch ($action) {
 
         $postData = json_decode(file_get_contents('php://input'), true);
 
-        $author = Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW);
-        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $author = trim(Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $email = trim(Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
         $ucategory = Filter::filterVar($postData['category'], FILTER_VALIDATE_INT);
         $question = Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW);
+        $question = trim(strip_tags($question));
         $save = Filter::filterVar($postData['save'] ?? 0, FILTER_VALIDATE_INT);
 
         // If e-mail address is set to optional

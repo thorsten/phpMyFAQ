@@ -1677,13 +1677,13 @@ class Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 if ('visits' == $type) {
-                    $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                    $output['preview'][] = $row['question'];
+                    $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                    $output['preview'][] = Strings::htmlentities($row['question']);
                     $output['url'][] = Strings::htmlentities($row['url']);
                     $output['visits'][] = $this->plurals->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                    $output['preview'][] = $row['question'];
+                    $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                    $output['preview'][] = Strings::htmlentities($row['question']);
                     $output['url'][] = Strings::htmlentities($row['url']);
                     $output['voted'][] = sprintf(
                         '%s %s 5 - %s',
@@ -2323,15 +2323,7 @@ class Faq
         $mail = new Mail($this->config);
 
         $query = sprintf(
-            "
-            SELECT
-                COUNT(id) AS num
-            FROM
-                %sfaqquestions
-            WHERE
-                lang = '%s'
-            AND
-                is_visible != 'Y'",
+            "SELECT COUNT(id) AS num FROM %sfaqquestions WHERE lang = '%s' AND is_visible != 'Y'",
             Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
@@ -2351,17 +2343,7 @@ class Faq
         }
 
         $query = sprintf(
-            "
-            SELECT
-                *
-            FROM
-                %sfaqquestions
-            WHERE
-                lang = '%s'
-            AND
-                is_visible = 'Y'
-            ORDER BY
-                created ASC",
+            "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
             Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
@@ -2376,12 +2358,12 @@ class Faq
                     '<td><small>%s</small><br><a href="mailto:%s">%s</a></td>',
                     $date->format(Date::createIsoDate($row->created)),
                     $mail->safeEmail($row->email),
-                    $row->username
+                    Strings::htmlentities($row->username)
                 );
                 $output .= sprintf(
                     '<td><strong>%s:</strong><br>%s</td>',
                     $category->categoryName[$row->category_id]['name'] ?? '',
-                    strip_tags($row->question)
+                    Strings::htmlentities($row->question)
                 );
                 if ($this->config->get('records.enableCloseQuestion') && $row->answer_id) {
                     $output .= sprintf(

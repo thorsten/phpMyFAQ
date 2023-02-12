@@ -220,22 +220,32 @@ class LinkTest extends TestCase
     {
         $this->Configuration->config['main.enableRewriteRules'] = true;
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->Configuration);
+        $url = 'https://faq.example.org/my-test-faq/';
+        
+        $this->link = new Link($url, $this->Configuration);
         $this->link->class = 'pmf-foo';
         $this->assertEquals(
-            '<a class="pmf-foo" href="https://faq.example.org/my-test-faq/">https://faq.example.org/my-test-faq/</a>',
+            sprintf(
+                '<a class="pmf-foo" href="%s">%s</a>',
+                $url,
+                $url
+            ),
             $this->link->toHtmlAnchor()
         );
 
         $this->link->id = 'pmf-id';
         $this->assertEquals(
-            '<a class="pmf-foo" id="pmf-id" href="https://faq.example.org/my-test-faq/">https://faq.example.org/my-test-faq/</a>',
+            sprintf(
+                '<a class="pmf-foo" id="pmf-id" href="%s">%s</a>',
+                $url,
+                $url
+            ),
             $this->link->toHtmlAnchor()
         );
 
         $this->link->text = 'Foo FAQ';
         $this->assertEquals(
-            '<a class="pmf-foo" id="pmf-id" href="https://faq.example.org/my-test-faq/">Foo FAQ</a>',
+            sprintf('<a class="pmf-foo" id="pmf-id" href="%s">Foo FAQ</a>', $url),
             $this->link->toHtmlAnchor()
         );
     }

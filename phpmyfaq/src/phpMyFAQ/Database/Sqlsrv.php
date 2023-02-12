@@ -65,7 +65,7 @@ class Sqlsrv implements DatabaseDriver
     ): ?bool {
         $this->setConnectionOptions($user, $password, $database);
 
-        $this->conn = $this->sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
+        $this->conn = sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
         if (!$this->conn) {
             Database::errorPage($this->formatErrors(sqlsrv_errors()));
             die();

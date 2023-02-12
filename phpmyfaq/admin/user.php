@@ -112,9 +112,9 @@ if (
             $message .= Alert::danger('ad_user_error_noId');
         } else {
             $userData = [];
-            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW, '');
-            $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
-            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_UNSAFE_RAW, '');
+            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW);
+            $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_UNSAFE_RAW);
             $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_UNSAFE_RAW, $defaultUserStatus);
             $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_UNSAFE_RAW);
             $isSuperAdmin = $isSuperAdmin === 'on';
@@ -655,7 +655,7 @@ if (
                                        for="add_user_password"><?= Translation::get('ad_adus_password') ?></label>
                                 <div class="col-lg-8">
                                     <input type="password" name="add_user_password" id="add_user_password"
-                                           class="form-control"
+                                           class="form-control" minlength="8"
                                            autocomplete="off" tabindex="4">
                                 </div>
                             </div>
@@ -665,7 +665,7 @@ if (
                                        for="add_user_password_confirm"><?= Translation::get('ad_passwd_con') ?></label>
                                 <div class="col-lg-8">
                                     <input type="password" name="add_user_password_confirm"
-                                           id="add_user_password_confirm"
+                                           id="add_user_password_confirm" minlength="8"
                                            class="form-control" autocomplete="off" tabindex="5">
                                 </div>
                             </div>

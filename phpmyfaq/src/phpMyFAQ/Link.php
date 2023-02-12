@@ -172,14 +172,13 @@ class Link
     /**
      * @param string $rel rel property
      */
-    public function setRelation(string $rel)
+    public function setRelation(string $rel): void
     {
         $this->rel = $rel;
     }
 
     /**
      * Returns the system URI.
-     *
      * $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
      * Precisely, it contains what the user has written in the Host request-header, see below.
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
@@ -187,7 +186,7 @@ class Link
      *
      * @param string|null $path
      */
-    public function getSystemUri($path = null): string
+    public function getSystemUri(string $path = null): string
     {
         $pattern = [];
         // Remove any ref to standard ports 80 and 443.
@@ -305,6 +304,7 @@ class Link
     public function toString(bool $removeSessionFromUrl = false): string
     {
         $url = $this->toUri();
+
         if ($this->config->get('main.enableRewriteRules')) {
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();

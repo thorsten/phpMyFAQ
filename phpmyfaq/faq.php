@@ -97,6 +97,7 @@ $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews((int) $recordId);
 
 $question = $faq->getRecordTitle($recordId);
+$question = Strings::htmlentities($question);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
 } else {
@@ -182,8 +183,8 @@ if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
 try {
     $faqSearchResult->reviewResultSet(
         $faqRelation->getAllRelatedByQuestion(
-            $faq->faqRecord['title'],
-            $faq->faqRecord['keywords']
+            Strings::htmlentities($faq->faqRecord['title']),
+            Strings::htmlentities($faq->faqRecord['keywords'])
         )
     );
 } catch (Exception) {
@@ -347,7 +348,7 @@ $template->parse(
         'question' => $question,
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
-        'faqAuthor' => $author,
+        'faqAuthor' => Strings::htmlentities($author),
         'editThisEntry' => $editThisEntry,
         'msgPdf' => Translation::get('msgPDF'),
         'msgPrintFaq' => Translation::get('msgPrintArticle'),
