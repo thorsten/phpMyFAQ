@@ -75,29 +75,30 @@ $loader->register();
 </head>
 <body>
 
-  <header>
-    <div class="px-3 py-2 bg-light">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-            <li class="nav-item">
-              <a href="https://www.phpmyfaq.de/documentation" class="nav-link" target="_blank">Documentation</a>
-            </li>
-            <li class="nav-item">
-              <a href="https://www.phpmyfaq.de/support" class="nav-link" target="_blank">Support</a>
-            </li>
-            <li class="nav-item">
-              <a href="https://forum.phpmyfaq.de/" class="nav-link" target="_blank">Forums</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+<nav class="p-3 text-bg-dark border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li class="nav-link px-2 text-white">
+            <a href="https://www.phpmyfaq.de/documentation" class="nav-link px-2 text-white" target="_blank">
+                Documentation
+            </a>
+        </li>
+        <li class="nav-link px-2 text-white {{ activeAddContent }}">
+            <a href="https://www.phpmyfaq.de/support" class="nav-link px-2 text-white" target="_blank">Support</a>
+        </li>
+        <li class="nav-link px-2 text-white {{ activeAddQuestion }}">
+            <a href="https://forum.phpmyfaq.de/" class="nav-link px-2 text-white" target="_blank">Forums</a>
+        </li>
+      </ul>
     </div>
-  </header>
+  </div>
+</nav>
 
 <main role="main">
     <section id="content">
 
+        <!--
         <div class="bg-dark text-secondary px-4 py-5 text-center">
             <div class="py-5">
                 <h1 class="display-5 fw-bold text-white">phpMyFAQ <?= System::getVersion() ?></h1>
@@ -110,6 +111,7 @@ $loader->register();
                 </div>
             </div>
         </div>
+        -->
 
     <div class="container mt-4 mb-3">
 
