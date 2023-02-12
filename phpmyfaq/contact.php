@@ -49,7 +49,7 @@ $template->parse(
         'msgContactOwnText' => nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformations'))),
         'msgContactEMail' => $PMF_LANG['msgContactEMail'],
         'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
-        'privacyURL' => $faqConfig->get('main.privacyURL'),
+        'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
         'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],

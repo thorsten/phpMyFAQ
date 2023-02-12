@@ -18,6 +18,7 @@
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -50,7 +51,7 @@ $template->parse(
         'msgContactRemove' => $PMF_LANG['msgContactRemove'],
         'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
         'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
-        'privacyURL' => $faqConfig->get('main.privacyURL'),
+        'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
         'ad_user_loginname' => $PMF_LANG['ad_user_loginname'],
