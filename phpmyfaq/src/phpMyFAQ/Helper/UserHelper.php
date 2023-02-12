@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 
 /**
@@ -58,7 +59,7 @@ class UserHelper
                     '<option value="%d" %s>%s (%s)</option>',
                     $userId,
                     (($userId === $id) ? 'selected' : ''),
-                    $this->user->getUserData('display_name'),
+                    Strings::htmlentities($this->user->getUserData('display_name')),
                     $this->user->getLogin()
                 );
             }
