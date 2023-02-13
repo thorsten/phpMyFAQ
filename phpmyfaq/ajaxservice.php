@@ -175,7 +175,7 @@ switch ($action) {
             $mailer = $faqConfig->getAdminEmail();
         }
 
-        // Check display name and e-mail address for not logged in users
+        // Check display name and e-mail address for not logged-in users
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
@@ -183,7 +183,7 @@ switch ($action) {
                 break;
             }
         }
-        
+
         if (
             !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
                 $comment

@@ -416,12 +416,12 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         ?>
                 <div class="form-group row">
                     <?= $PMF_LANG['ad_entry_commentby'] ?>
-                    <a href="mailto:<?= $item['email'] ?>">
-                        <?= $item['user'] ?>
+                    <a href="mailto:<?= $item->email ?>">
+                        <?= $item->username ?>
                     </a>:<br>
-                    <?= $item['content'] ?><br>
-                    <?= $PMF_LANG['newsCommentDate'] . Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
-                    <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= CommentType::NEWS ?>">
+                    <?= $item->comment ?><br>
+                    <?= $PMF_LANG['newsCommentDate'] . Date::createIsoDate((int)$item->date, 'Y-m-d H:i', false) ?>
+                    <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item->id ?>&type=<?= CommentType::NEWS ?>">
                         <i aria-hidden="true" class="fa fa-trash"></i>
                     </a>
                 </div>
