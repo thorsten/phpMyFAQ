@@ -165,7 +165,7 @@ switch ($action) {
             case 'news':
                 $id = $newsId;
                 break;
-            case 'faq';
+            case 'faq':
                 $id = $faqId;
                 break;
         }
