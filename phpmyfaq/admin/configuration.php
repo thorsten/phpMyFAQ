@@ -52,7 +52,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
         // Special checks
         if (isset($editData['edit']['main.enableMarkdownEditor'])) {
-            $editData['edit']['main.enableWysiwygEditor'] = false; // Disable WYSIWG editor if Markdown is enabled
+            $editData['edit']['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
+        }
+        if (isset($editData['edit']['main.currentVersion'])) {
+            unset($editData['edit']['main.currentVersion']); // don't update the version number
         }
 
         foreach ($editData['edit'] as $key => $value) {
