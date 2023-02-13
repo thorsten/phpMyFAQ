@@ -123,7 +123,7 @@ $template->parse(
     [
         'writeNewsHeader' => $newsMainHeader,
         'writeHeader' => Strings::htmlentities($newsHeader),
-        'mainPageContent' => Strings::htmlentities($newsContent),
+        'mainPageContent' => $newsContent,
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => $PMF_LANG['msgAboutThisNews'],
         'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . Strings::htmlentities($news['authorName']) : '',
