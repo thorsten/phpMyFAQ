@@ -21,6 +21,7 @@ use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -319,9 +320,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             foreach ($category->getCategoryTree() as $id => $cat) {
                 // CategoryHelper translated in this language?
                 if ($cat['lang'] == $lang) {
-                    $categoryName = $cat['name'];
+                    $categoryName = Strings::htmlentities($cat['name']);
                 } else {
-                    $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+                    $categoryName = Strings::htmlentities($cat['name']) .
+                        ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
                 }
 
 
