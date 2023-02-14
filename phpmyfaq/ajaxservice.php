@@ -185,13 +185,8 @@ switch ($action) {
         }
 
         if (
-            !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
-                $comment
-            ) && !$faq->commentDisabled(
-                $id,
-                $languageCode,
-                $type
-            )
+            !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord($comment) &&
+            !$faq->commentDisabled($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
         ) {
             try {
                 $faqSession->userTracking('save_comment', $id);
