@@ -127,10 +127,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                 <td>
                 <span style="font-weight: bold;">
                     <a href="mailto:<?= $newsComment->getEmail() ?>">
-                        <?= $newsComment->getUsername() ?>
+                        <?= Strings::htmlentities($newsComment->getUsername()) ?>
                     </a> |
-                    <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
-                    <a href="<?php printf('../?action=news&id=%d&artlang=%s', $faqComment->getRecordId(), $faqLangCode) ?>">
+                    <?= $date->format(date('Y-m-d H:i', $newsComment->getDate())) ?> |
+                    <a href="<?php printf('../?action=news&id=%d&artlang=%s', $newsComment->getRecordId(), $faqLangCode) ?>">
                         <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                     </a>
                 </span><br/>
