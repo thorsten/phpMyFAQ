@@ -95,7 +95,7 @@ class News
                     $this->pmfLang['msgInfo'],
                     Strings::htmlentities($item['link']),
                     $item['target'],
-                    $item['linkTitle']
+                    Strings::htmlentities($item['linkTitle'])
                 );
             }
 

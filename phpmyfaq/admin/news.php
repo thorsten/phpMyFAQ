@@ -47,7 +47,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
             <div class="col-12">
-                <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate>
+                <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" class="needs-validation"
+                      novalidate>
 
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="newsheader">
@@ -112,7 +113,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-9">
-                            <input class="form-control" type="text" name="link" id="link"
+                            <input class="form-control" type="url" name="link" id="link"
                             placeholder="http://www.example.com/">
                         </div>
                     </div>
@@ -256,7 +257,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
             <div class="col-12">
-                <form  action="?action=update-news" method="post" accept-charset="utf-8">
+                <form action="?action=update-news" method="post" accept-charset="utf-8" class="needs-validation"
+                      novalidate>
                     <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
 
                     <div class="form-group row">
@@ -328,7 +330,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <div class="form-group row">
                         <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-9">
-                            <input type="text" id="link" name="link"
+                            <input type="url" id="link" name="link"
                             value="<?= Strings::htmlentities($newsData['link']) ?>" class="form-control">
                         </div>
                     </div>
@@ -449,8 +451,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_ENCODED);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 
@@ -500,8 +502,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_UNSAFE_RAW);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_ENCODED);
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 
