@@ -88,6 +88,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         }
 
         $faqConfig->getAll();
+    } elseif ('saveConfig' === $userAction && $currentToken !== $csrfToken) {
+        echo '<div class="alert alert-danger">Error: CSRF Token mismatch!</div>';
     }
     ?>
   <form id="config_list" name="config_list" method="post"
