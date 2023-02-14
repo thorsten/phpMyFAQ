@@ -83,7 +83,7 @@ class Comments
             $output .= sprintf(
                 '<strong><a href="mailto:%s">%s</a></strong>',
                 $mail->safeEmail($item->getEmail()),
-                $item->getUsername()
+                Strings::htmlentities($item->getUsername())
             );
             $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item->getDate()));
             $output .= '     </div>';

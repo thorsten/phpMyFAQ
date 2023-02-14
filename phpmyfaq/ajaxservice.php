@@ -200,7 +200,7 @@ switch ($action) {
                 ->setType($type)
                 ->setUsername($username)
                 ->setEmail($mailer)
-                ->setComment(nl2br($comment))
+                ->setComment(nl2br(strip_tags($comment)))
                 ->setDate($_SERVER['REQUEST_TIME']);
 
             if ($oComment->addComment($commentEntity)) {
