@@ -121,6 +121,10 @@ if (
             $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_UNSAFE_RAW);
             $isSuperAdmin = $isSuperAdmin === 'on';
 
+            if (!$user->isSuperAdmin()) {
+                $isSuperAdmin = false;
+            }
+
             // Sanity check
             if (is_null($userData['email'])) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['err_noMailAdress']);
@@ -705,6 +709,7 @@ if (
               </div>
             </div>
 
+            <?php if ($user->isSuperAdmin()) { ?>
             <div class="form-group row">
               <div class="col-lg-4"></div>
               <div class="col-lg-8">
@@ -716,6 +721,7 @@ if (
                 </div>
               </div>
             </div>
+            <?php } ?>
 
           </form>
         </div>
