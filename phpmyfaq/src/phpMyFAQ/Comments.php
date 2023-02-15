@@ -159,7 +159,7 @@ class Comments
 
         $comment = '';
         foreach ($words as $word) {
-            $comment .= $word . ' ';
+            $comment .= Strings::htmlentities($word . ' ');
             if (15 === $numWords) {
                 $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
                     '<a href="#" data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
