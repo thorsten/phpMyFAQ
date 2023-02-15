@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2022 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-03-31
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-03-31
  */
 
 use phpMyFAQ\Attachment\AttachmentException;
@@ -41,7 +41,10 @@ $csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
+$http = new HttpHelper();
+
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    $http->setStatus(401);
     echo $PMF_LANG['err_NotAuth'];
     exit(1);
 }
@@ -56,7 +59,6 @@ switch ($ajaxAction) {
     // Get permissions
     case 'permissions':
         $faqId = Filter::filterInput(INPUT_GET, 'faq-id', FILTER_VALIDATE_INT);
-        $http = new HttpHelper();
         $http->setContentType('application/json');
         $http->addHeader();
 
@@ -83,6 +85,7 @@ switch ($ajaxAction) {
                 }
             }
         } else {
+            $http->setStatus(401);
             echo $PMF_LANG['err_NotAuth'];
         }
         break;
@@ -100,6 +103,7 @@ switch ($ajaxAction) {
                 }
             }
         } else {
+            $http->setStatus(401);
             echo $PMF_LANG['err_NotAuth'];
         }
         break;
@@ -125,6 +129,7 @@ switch ($ajaxAction) {
                 echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
             }
         } else {
+            $http->setStatus(401);
             echo $PMF_LANG['err_NotAuth'];
         }
         break;
@@ -144,6 +149,7 @@ switch ($ajaxAction) {
             }
             echo $PMF_LANG['ad_entry_delsuc'];
         } else {
+            $http->setStatus(401);
             echo $PMF_LANG['err_NotAuth'];
         }
         break;
@@ -165,6 +171,7 @@ switch ($ajaxAction) {
             }
             echo $PMF_LANG['ad_entry_delsuc'];
         } else {
+            $http->setStatus(401);
             echo $PMF_LANG['err_NotAuth'];
         }
         break;

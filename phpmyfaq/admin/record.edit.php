@@ -673,9 +673,11 @@ if (
                                 <button class="btn btn-lg btn-info" type="reset">
                                     <?= $PMF_LANG['ad_gen_reset'] ?>
                                 </button>
+
                                 <button class="btn btn-lg btn-primary" type="submit">
                                     <?= $PMF_LANG['ad_entry_save'] ?>
                                 </button>
+
                             <?php endif ?>
 
                         </div>

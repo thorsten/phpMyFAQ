@@ -110,7 +110,7 @@ if (
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-        if ($userId == 0) {
+        if ($userId === 0) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $userData = [];
