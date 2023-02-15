@@ -22,6 +22,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Init;
+use phpMyFAQ\Strings;
 use XMLWriter;
 
 /**
@@ -109,7 +111,7 @@ class Html5 extends Export
                 $this->xml->text(strip_tags($data['topic']));
                 $this->xml->endElement();
                 $this->xml->startElement('p');
-                $this->xml->writeCdata(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
+                $this->xml->writeCdata(html_entity_decode($data['content'], ENT_HTML5, 'UTF-8'));
                 $this->xml->endElement();
                 $this->xml->writeElement('p', $PMF_LANG['msgAuthor'] . ': ' . $data['author_email']);
                 $this->xml->writeElement(

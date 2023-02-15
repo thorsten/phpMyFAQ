@@ -104,10 +104,9 @@ class Init
      * Cleans a html string from some xss issues.
      *
      * @param string $string String
-     *
      * @return string
      */
-    private static function basicXSSClean($string)
+    private static function basicXSSClean(string $string): string
     {
         if (strpos($string, '\0') !== false) {
             return '';
@@ -225,10 +224,9 @@ class Init
      * Clean up a filename: if anything goes wrong, an empty string will be returned.
      *
      * @param string $filename Filename
-     *
      * @return string
      */
-    private static function basicFilenameClean($filename)
+    private static function basicFilenameClean(string $filename): string
     {
         global $denyUploadExts;
 
