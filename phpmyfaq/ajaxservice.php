@@ -116,8 +116,8 @@ $captcha = new Captcha($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
-'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action && !is_null($code) &&
-    !$captcha->checkCaptchaCode($code)
+    'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
+    !$captcha->checkCaptchaCode($code ?? '')
 ) {
     $message = ['error' => $PMF_LANG['msgCaptcha']];
 }

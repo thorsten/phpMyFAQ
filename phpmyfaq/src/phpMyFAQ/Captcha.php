@@ -491,10 +491,10 @@ class Captcha
      * This function checks the provided captcha code
      * if the captcha code spam protection has been activated from the general PMF configuration.
      *
-     * @param string $code Captcha Code
+     * @param string|null $code Captcha Code
      * @return bool
      */
-    public function checkCaptchaCode(string $code): bool
+    public function checkCaptchaCode(string $code = null): bool
     {
         if ($this->isUserIsLoggedIn()) {
             return true;
