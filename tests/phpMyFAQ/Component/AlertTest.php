@@ -43,7 +43,7 @@ class AlertTest extends TestCase
     {
         $this->assertEquals(
             '<div class="alert alert-danger alert-dismissible fade show">Hilfe' .
-            '<br><strong>Datenbankfehler!</strong><br>FooBarError!' .
+            '<br>Datenbankfehler!<br>FooBarError!' .
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
             Alert::danger('msgHelp', 'FooBarError!')
         );

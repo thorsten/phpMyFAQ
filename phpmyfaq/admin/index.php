@@ -172,6 +172,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     } catch (Exception $e) {
         $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'Login-error\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
+        $action = 'login';
+        $error = $e->getMessage();
     }
 } else {
     // Try to authenticate with cookie information
@@ -484,7 +486,7 @@ if ($auth && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())
         require 'dashboard.php';
     }
 // User is authenticated, but has no rights
-} elseif (isset($auth) && $numRights === 0) {
+} elseif ($auth && $numRights === 0) {
     require 'noperm.php';
 // User is NOT authenticated
 } else {

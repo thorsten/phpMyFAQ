@@ -108,7 +108,7 @@ $PMF_LANG['msgSearchContent'] = "Antwort: ";
 
 // new Content
 $PMF_LANG['msgNewContentHeader'] = "Vorschlag für neuen FAQ-Eintrag";
-$PMF_LANG['msgNewContentAddon'] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Suchbegriffe bitte nur Kommas trennen.";
+$PMF_LANG['msgNewContentAddon'] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind Name, E-Mail-Adresse, Kategorie, Frage und Antwort. Die Suchbegriffe bitte nur Kommas trennen.";
 $PMF_LANG['msgNewContentName'] = "Name";
 $PMF_LANG['msgNewContentMail'] = "E-Mail";
 $PMF_LANG['msgNewContentCategory'] = "Kategorie";
@@ -154,15 +154,15 @@ $PMF_LANG['err_noArticles'] = "Es gibt noch keine Einträge.";
 $PMF_LANG['err_badID'] = "Fehlerhafte ID!";
 $PMF_LANG['err_noTopTen'] = "Derzeit sind keine beliebten FAQs verfügbar.";
 $PMF_LANG['err_nothingFound'] = "Es wurde kein Eintrag gefunden.";
-$PMF_LANG['err_SaveEntries'] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>!";
-$PMF_LANG['err_SaveComment'] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!";
+$PMF_LANG['err_SaveEntries'] = "Pflichtfelder sind Name, E-Mail-Adresse, Kategorie, Frage und Antwort!";
+$PMF_LANG['err_SaveComment'] = "Pflichtfelder sind Name, E-Mail-Adresse und Kommentar!";
 $PMF_LANG['err_VoteTooMuch'] = "Leider konnte die Bewertung nicht gespeichert werden, da mit der IP bereits bewertet wurde.";
 $PMF_LANG['err_noVote'] = "Es wurde keine Bewertung abgegeben!";
 $PMF_LANG['err_noMailAdress'] = "Die angegebene E-Mail-Adresse ist nicht korrekt.";
-$PMF_LANG['err_sendMail'] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!";
+$PMF_LANG['err_sendMail'] = "Pflichtfelder sind u.a. Name und E-Mail-Adresse!";
 
 // Hilfe zur Suche
-$PMF_LANG['help_search'] = "<strong>Antwort finden:</strong><br>Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.<strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.";
+$PMF_LANG['help_search'] = "Antwort finden:<br>Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2 können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.Hinweis: Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.";
 
 // Menü
 $PMF_LANG['ad'] = "ADMIN-BEREICH";
@@ -184,10 +184,10 @@ $PMF_LANG['ad_menu_startpage'] = "Startseite";
 
 // Nachrichten
 $PMF_LANG['ad_msg_identify'] = "Bitte identifizieren.";
-$PMF_LANG['ad_msg_passmatch'] = "Beide Passwörter müssen <strong>übereinstimmen</strong>!";
+$PMF_LANG['ad_msg_passmatch'] = "Beide Passwörter müssen übereinstimmen!";
 $PMF_LANG['ad_msg_savedsuc_1'] = "Das Profil von";
 $PMF_LANG['ad_msg_savedsuc_2'] = "wurde erfolgreich gespeichert.";
-$PMF_LANG['ad_msg_mysqlerr'] = "Aufgrund eines <strong>Datenbankfehlers</strong> konnte das Profil nicht gespeichert werden.";
+$PMF_LANG['ad_msg_mysqlerr'] = "Aufgrund eines Datenbankfehlers konnte das Profil nicht gespeichert werden.";
 $PMF_LANG['ad_msg_noauth'] = "Hierfür nicht authorisiert.";
 
 // Allgemein
@@ -244,16 +244,16 @@ $PMF_LANG['ad_entry_save'] = "Speichern";
 $PMF_LANG['ad_entry_delete'] = "Löschen";
 $PMF_LANG['ad_entry_delcom_1'] = "Sicher, dass der Kommentar des Benutzers";
 $PMF_LANG['ad_entry_delcom_2'] = "gelöscht werden soll?";
-$PMF_LANG['ad_entry_commentdelsuc'] = "Der Kommentar wurde <strong>erfolgreich</strong> gelöscht.";
+$PMF_LANG['ad_entry_commentdelsuc'] = "Der Kommentar wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_entry_back'] = "Zurück zur FAQ";
-$PMF_LANG['ad_entry_commentdelfail'] = "Der Kommentar wurde <strong>nicht</strong> gelöscht.";
-$PMF_LANG['ad_entry_savedsuc'] = "Die Änderungen wurden <strong>erfolgreich</strong> gespeichert.";
-$PMF_LANG['ad_entry_savedfail'] = "Ein <strong>Datenbankfehler</strong> ist aufgetreten.";
+$PMF_LANG['ad_entry_commentdelfail'] = "Der Kommentar wurde nicht gelöscht.";
+$PMF_LANG['ad_entry_savedsuc'] = "Die Änderungen wurden erfolgreich gespeichert.";
+$PMF_LANG['ad_entry_savedfail'] = "Ein Datenbankfehler ist aufgetreten.";
 $PMF_LANG['ad_entry_del_1'] = "Bist du sicher, dass die FAQ";
 $PMF_LANG['ad_entry_del_2'] = "des Benutzers";
 $PMF_LANG['ad_entry_del_3'] = "gelöscht werden soll?";
-$PMF_LANG['ad_entry_delsuc'] = "Der FAQ-Eintrag <strong>erfolgreich</strong> gelöscht.";
-$PMF_LANG['ad_entry_delfail'] = "Die FAQ-Eintrag wurde <strong>nicht gelöscht</strong>!";
+$PMF_LANG['ad_entry_delsuc'] = "Der FAQ-Eintrag erfolgreich gelöscht.";
+$PMF_LANG['ad_entry_delfail'] = "Die FAQ-Eintrag wurde nicht gelöscht!";
 $PMF_LANG['ad_entry_back'] = "Zurück";
 
 // Newsverwaltung
@@ -272,11 +272,11 @@ $PMF_LANG['ad_news_action'] = "Aktion";
 $PMF_LANG['ad_news_update'] = "bearbeiten";
 $PMF_LANG['ad_news_delete'] = "Löschen";
 $PMF_LANG['ad_news_nodata'] = "Keine Daten in der Datenbank gefunden.";
-$PMF_LANG['ad_news_updatesuc'] = "Der Eintrag wurde <strong>erfolgreich</strong> gespeichert.";
-$PMF_LANG['ad_news_del'] = "Sicher, dass der Eintrag <strong>gelöscht</strong> werden sollen?";
+$PMF_LANG['ad_news_updatesuc'] = "Der Eintrag wurde erfolgreich gespeichert.";
+$PMF_LANG['ad_news_del'] = "Sicher, dass der Eintrag gelöscht werden sollen?";
 $PMF_LANG['ad_news_yesdelete'] = "Ja, löschen!";
 $PMF_LANG['ad_news_nodelete'] = "Nein!";
-$PMF_LANG['ad_news_delsuc'] = "Der Eintrag wurde <strong>erfolgreich gelöscht</strong>.";
+$PMF_LANG['ad_news_delsuc'] = "Der Eintrag wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_news_updatenews'] = "News-Eintrag bearbeiten";
 
 // Kategorieverwaltung
@@ -307,7 +307,7 @@ $PMF_LANG['ad_categ_deletesure'] = "Sicher, dass die Kategorie gelöscht werden 
 $PMF_LANG['ad_categ_deleted'] = "Kategorie gelöscht.";
 
 // Cookies
-$PMF_LANG['ad_cookie_cookiesuc'] = "Das Cookie wurde <strong>erfolgreich</strong> gesetzt.";
+$PMF_LANG['ad_cookie_cookiesuc'] = "Das Cookie wurde erfolgreich gesetzt.";
 $PMF_LANG['ad_cookie_already'] = "Es ist bereits ein Cookie gesetzt. Es gibt nun folgende Möglichkeiten";
 $PMF_LANG['ad_cookie_again'] = "Cookie erneut setzen";
 $PMF_LANG['ad_cookie_delete'] = "Cookie löschen";
@@ -325,18 +325,18 @@ $PMF_LANG['ad_passwd_new'] = "Neues Passwort";
 $PMF_LANG['ad_passwd_con'] = "Passwort wiederholen";
 $PMF_LANG['ad_passwd_change'] = "Änderung speichern";
 $PMF_LANG['ad_passwd_suc'] = "Passwort erfolgreich geändert.";
-$PMF_LANG['ad_passwd_remark'] = "<strong>ACHTUNG:</strong><br>Das Cookie muß neu gesetzt werden!";
-$PMF_LANG['ad_passwd_fail'] = "Das alte Passwort muss <strong>korrekt</strong> eingegeben werden und beide neuen müssen <strong>übereinstimmen</strong>.";
+$PMF_LANG['ad_passwd_remark'] = "ACHTUNG:<br>Das Cookie muß neu gesetzt werden!";
+$PMF_LANG['ad_passwd_fail'] = "Das alte Passwort muss korrekt eingegeben werden und beide neuen müssen übereinstimmen.";
 
 // Adduser
 $PMF_LANG['ad_adus_adduser'] = "Benutzer hinzufügen";
 $PMF_LANG['ad_adus_name'] = "Loginname";
 $PMF_LANG['ad_adus_password'] = "Passwort";
 $PMF_LANG['ad_adus_add'] = "Hinzufügen";
-$PMF_LANG['ad_adus_suc'] = "Der Benutzer wurde <strong>erfolgreich</strong> hinzugefügt.";
+$PMF_LANG['ad_adus_suc'] = "Der Benutzer wurde erfolgreich hinzugefügt.";
 $PMF_LANG['ad_adus_edit'] = "Profil bearbeiten";
-$PMF_LANG['ad_adus_dberr'] = "<strong>Datenbankfehler!</strong>";
-$PMF_LANG['ad_adus_exerr'] = "Der Loginname <strong>existiert</strong> bereits.";
+$PMF_LANG['ad_adus_dberr'] = "Datenbankfehler!";
+$PMF_LANG['ad_adus_exerr'] = "Der Loginname existiert bereits.";
 
 // Sessions
 $PMF_LANG['ad_sess_id'] = "ID";
@@ -417,7 +417,7 @@ $PMF_LANG['ad_csv_ok'] = "Datei hochladen und einspielen";
 $PMF_LANG['ad_csv_linklog'] = "Sicherung der Loggingdaten herunterladen";
 $PMF_LANG['ad_csv_linkdat'] = "Sicherung der Daten herunterladen";
 $PMF_LANG['ad_csv_head2'] = "Datensicherung einspielen";
-$PMF_LANG['ad_csv_no'] = "Dies scheint <strong>keine</strong> Sicherungsdatei von phpMyFAQ zu sein.";
+$PMF_LANG['ad_csv_no'] = "Dies scheint keine Sicherungsdatei von phpMyFAQ zu sein.";
 $PMF_LANG['ad_csv_prepare'] = "Bereite die Datenbankanfragen vor...";
 $PMF_LANG['ad_csv_process'] = "Führe die Datenbankabfragen aus...";
 $PMF_LANG['ad_csv_of'] = "von";
@@ -479,7 +479,7 @@ $PMF_LANG['ad_categ_copy'] = "kopieren";
 $PMF_LANG['ad_categ_process'] = "Bearbeite Kategorien...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG['err_NotAuth'] = "<strong>Sie haben keine ausreichende Berechtigung hierfür.</strong>";
+$PMF_LANG['err_NotAuth'] = "Sie haben keine ausreichende Berechtigung hierfür.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG['msgPreviusPage'] = "vorherige Seite";
@@ -534,7 +534,7 @@ $PMF_LANG['ad_user_realname'] = "Echter Name";
 $PMF_LANG['ad_export_generate_pdf'] = "Als PDF-Datei exportieren";
 $PMF_LANG['ad_export_full_faq'] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG['err_bannedIP'] = "Diese IP ist gesperrt.";
-$PMF_LANG['err_SaveQuestion'] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Frage</strong>!";
+$PMF_LANG['err_SaveQuestion'] = "Pflichtfelder sind Name, E-Mail-Adresse und Frage!";
 
 // added v1.4.0 - 2003-12-04 by Thorsten
 $LANG_CONF['main.language'] = ["select", "Sprache"];
@@ -638,16 +638,16 @@ $PMF_LANG['ad_linkcheck_failReason'] = "Gründe";
 $PMF_LANG['ad_linkcheck_noLinksFound'] = "Keine URLs zum Überprüfen gefunden.";
 $PMF_LANG['ad_linkcheck_searchbadonly'] = "Nur mit nicht erreichbaren Links";
 $PMF_LANG['ad_linkcheck_infoReason'] = "Weitere Informationen";
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = "Found while testing <strong>%s</strong>: ";
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = "Found while testing %s: ";
 $PMF_LANG['ad_linkcheck_openurl_notready'] = "Die Linküberprüfung ist nicht bereit.";
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = "Maximale Anzahl von <strong>%d</strong> Weiterleitungen überschritten.";
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = "Maximale Anzahl von %d Weiterleitungen überschritten.";
 $PMF_LANG['ad_linkcheck_openurl_urlisblank'] = "Leere URL aufgelöst.";
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = "Der Host <strong>%s</strong> ist langsam oder antwortet nicht.";
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = "Der Host <strong>%s</strong> ist langsam oder hat keinen DNS-Eintrag.";
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = "Die URL wurde auf <strong>%s</strong> weitergeleitet.";
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = "Unklarer HTTP Status <strong>%s</strong> gefunden.";
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Die Methode <em>HEAD</em> wird vom Host nicht unterstützt <strong>%s</strong>, erlaubte Methoden: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Diese Ressource ist nicht auf dem Host zu finden <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = "Der Host %s ist langsam oder antwortet nicht.";
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = "Der Host %s ist langsam oder hat keinen DNS-Eintrag.";
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = "Die URL wurde auf %s weitergeleitet.";
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = "Unklarer HTTP Status %s gefunden.";
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Die Methode <em>HEAD</em> wird vom Host nicht unterstützt %s, erlaubte Methoden: %s.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Diese Ressource ist nicht auf dem Host zu finden %s.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = "Das Protokoll %s wird nicht für die automatische Linküberprüfung unterstützt.";
 $PMF_LANG['msgNewQuestionVisible'] = "Dazu muss der Administrator allerdings diese erst freigeben.";
 $PMF_LANG['msgQuestionsWaiting'] = "Wartend auf die Freigabe durch den Administrator";
@@ -678,7 +678,7 @@ $PMF_LANG['ad_group_add_link'] = "Gruppe hinzufügen";
 $PMF_LANG['ad_group_name'] = "Name";
 $PMF_LANG['ad_group_description'] = "Beschreibung";
 $PMF_LANG['ad_group_autoJoin'] = "Automatischer Eintritt";
-$PMF_LANG['ad_group_suc'] = "Die Gruppe wurde <strong>erfolgreich</strong> hinzugefügt.";
+$PMF_LANG['ad_group_suc'] = "Die Gruppe wurde erfolgreich hinzugefügt.";
 $PMF_LANG['ad_group_error_noName'] = "Bitte geben Sie einen Namen für die Gruppe ein.";
 $PMF_LANG['ad_group_error_delete'] = "Die Gruppe konnte nicht gelöscht werden.";
 $PMF_LANG['ad_group_deleted'] = "Die Gruppe wurde erfolgreich gelöscht.";
@@ -804,7 +804,7 @@ $PMF_LANG['ad_quick_group'] = "Neue Benutzergruppe anlegen";
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = "Übersetzung vorschlagen";
-$PMF_LANG['msgNewTranslationAddon'] = "Die Übersetzung erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.";
+$PMF_LANG['msgNewTranslationAddon'] = "Die Übersetzung erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind Name, E-Mail-Adresse, Kategorie, Frage und Antwort. Die Keywords bitte nur mit Leerzeichen trennen.";
 $PMF_LANG['msgNewTransSourcePane'] = "Ursprungsbeitrag";
 $PMF_LANG['msgNewTranslationPane'] = "Übersetzung";
 $PMF_LANG['msgNewTranslationName'] = "Name";
@@ -1046,7 +1046,7 @@ $PMF_LANG['msgAttachmentsFilename'] = "Dateiname";
 $PMF_LANG['msgAttachmentsFilesize'] = "Dateigröße";
 $PMF_LANG['msgAttachmentsMimeType'] = "MIME Typ";
 $PMF_LANG['msgAttachmentsWannaDelete'] = "Sind Sie sicher, dass Sie diesen Anhang löschen wollen?";
-$PMF_LANG['msgAttachmentsDeleted'] = "Anhang <strong>erfolgreich</strong> gelöscht.";
+$PMF_LANG['msgAttachmentsDeleted'] = "Anhang erfolgreich gelöscht.";
 
 // added v2.7.0-alpha2 - 2011-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = "Reports";
@@ -1313,7 +1313,7 @@ $PMF_LANG['ad_section_deleteSection'] = "Lösche Bereich";
 $PMF_LANG['ad_section_deleteQuestion'] = "Sind Sie sicher, dass Sie diesen Bereich löschen wollen?";
 $PMF_LANG['ad_section_error_delete'] = "Der Bereich konnte nicht gelöscht werden.";
 $PMF_LANG['ad_section_error_noName'] = "Bitte geben Sie einen Namen für den Bereich ein.";
-$PMF_LANG['ad_section_suc'] = "Der Bereich wurde <strong>erfolgreich</strong> hinzugefügt.";
+$PMF_LANG['ad_section_suc'] = "Der Bereich wurde erfolgreich hinzugefügt.";
 $PMF_LANG['ad_section_deleted'] = "Der Bereich wurde erfolgreich gelöscht.";
 $PMF_LANG['rightsLanguage']['viewadminlink'] = 'Link zur Administration sichtbar';
 
