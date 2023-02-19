@@ -1,0 +1,77 @@
+#phpmyfaq-setup-form {
+  .form-header {
+    gap: 5px;
+    text-align: center;
+    font-size: 0.9em;
+
+    .stepIndicator {
+      position: relative;
+      flex: 1;
+      padding-bottom: 30px;
+
+      &.active {
+        font-weight: 600;
+
+        &::before {
+          background-color: $green;
+          border: 3px solid $green;
+        }
+
+        &::after {
+          background-color: $green;
+        }
+      }
+
+      &.finish {
+        font-weight: 600;
+        color: $green;
+
+        &::before {
+          background-color: $green;
+          border: 3px solid $secondary;
+        }
+
+        &::after {
+          background-color: $green;
+        }
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        z-index: 9;
+        width: 20px;
+        height: 20px;
+        background-color: $black;
+        border-radius: 50%;
+        border: 3px solid $primary;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 8px;
+        width: 100%;
+        height: 3px;
+        background-color: #f3f3f3;
+      }
+
+      &:last-child:after {
+        display: none;
+      }
+    }
+  }
+
+  .step {
+    display: none;
+  }
+
+  .form-footer {
+    overflow: auto;
+    gap: 20px;
+  }
+}

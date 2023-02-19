@@ -537,6 +537,7 @@ class Installer
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
      *
+     * @param string $databaseType
      * @return void
      */
     public function checkPreUpgrade(string $databaseType): void
@@ -918,7 +919,7 @@ class Installer
 
         $rootDir = $setup['rootDir'] ?? PMF_ROOT_DIR;
 
-        $instanceSetup = new setUp();
+        $instanceSetup = new Setup();
         $instanceSetup->setRootDir($rootDir);
 
         // Write the DB variables in database.php

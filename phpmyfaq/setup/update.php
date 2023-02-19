@@ -48,54 +48,62 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
 require PMF_ROOT_DIR . '/config/database.php';
 
 ?>
-  <!doctype html>
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
-    <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
-    <link rel="stylesheet" href="../assets/dist/styles.css">
-    <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
-  </head>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
+  <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
+  <link rel="stylesheet" href="../assets/dist/styles.css">
+  <script src="../assets/dist/frontend.js"></script>
+  <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
+</head>
 <body>
 
 <nav class="p-3 text-bg-dark border-bottom">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li class="nav-link px-2 text-white">
-                    <a href="https://www.phpmyfaq.de/documentation" class="nav-link px-2 text-white" target="_blank">
-                        Documentation
-                    </a>
-                </li>
-                <li class="nav-link px-2 text-white {{ activeAddContent }}">
-                    <a href="https://www.phpmyfaq.de/support" class="nav-link px-2 text-white" target="_blank">Support</a>
-                </li>
-                <li class="nav-link px-2 text-white {{ activeAddQuestion }}">
-                    <a href="https://forum.phpmyfaq.de/" class="nav-link px-2 text-white" target="_blank">Forums</a>
-                </li>
-            </ul>
-        </div>
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li class="nav-link px-2 text-white">
+          <a href="https://www.phpmyfaq.de/documentation" class="nav-link px-2 text-white" target="_blank">
+            Documentation
+          </a>
+        </li>
+        <li class="nav-link px-2 text-white {{ activeAddContent }}">
+          <a href="https://www.phpmyfaq.de/support" class="nav-link px-2 text-white" target="_blank">
+            Support
+          </a>
+        </li>
+        <li class="nav-link px-2 text-white {{ activeAddQuestion }}">
+          <a href="https://forum.phpmyfaq.de/" class="nav-link px-2 text-white" target="_blank">
+            Forums
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
 
 <main role="main">
-  <section id="content">
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-4 text-center mt-5">
-          phpMyFAQ <?= System::getVersion() ?> Update
-        </h1>
-        <p class="text-center">
-          Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.0">documentation</a>
-          carefully before updating your phpMyFAQ installation?
-        </p>
+  <section id="phpmyfaq-setup-form">
+    <div class="container shadow-lg p-5 mt-5 bg-light-subtle">
+      <div class="px-4 pt-2 my-2 text-center border-bottom">
+        <h1 class="display-4 fw-bold">phpMyFAQ <?= System::getVersion() ?></h1>
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">
+            Did you already read our <a target="_blank" href="https://www.phpmyfaq.de/docs/3.2">documentation</a>
+            carefully before starting the phpMyFAQ setup?
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="container mb-3">
+      <div class="form-header d-flex mb-4">
+        <span class="stepIndicator">Update information</span>
+        <span class="stepIndicator">File backups</span>
+        <span class="stepIndicator">Database updates</span>
+    </div>
 <?php
 
 $version = $faqConfig->getVersion();
@@ -108,30 +116,7 @@ if ($step === 1) { ?>
       <form action="update.php?step=2" method="post">
         <input name="version" type="hidden" value="<?= $version ?>">
 
-        <div class="pmf-setup-stepwizard">
-          <div class="pmf-setup-stepwizard-row setup-panel">
-            <div class="pmf-setup-stepwizard-step">
-              <a href="#step-1" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">1</a>
-              <p>Update information</p>
-            </div>
-            <div class="pmf-setup-stepwizard-step">
-              <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-                 disabled="disabled">
-                2
-              </a>
-              <p>File backups</p>
-            </div>
-            <div class="pmf-setup-stepwizard-step">
-              <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-                 disabled="disabled">
-                3
-              </a>
-              <p>Database updates</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" id="step1">
+        <div class="row">
           <div class="col">
             <div class="alert alert-info text-center mt-2" role="alert">
               <strong>
@@ -253,30 +238,7 @@ if ($step == 2) {
       <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?= $version ?>">
 
-        <div class="pmf-setup-stepwizard">
-          <div class="pmf-setup-stepwizard-row setup-panel">
-            <div class="pmf-setup-stepwizard-step">
-              <a href="#step-1" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-                 disabled="disabled">1</a>
-              <p>Update information</p>
-            </div>
-            <div class="pmf-setup-stepwizard-step">
-              <a href="#step-2" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">
-                2
-              </a>
-              <p>File backups</p>
-            </div>
-            <div class="pmf-setup-stepwizard-step">
-              <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-                 disabled="disabled">
-                3
-              </a>
-              <p>Database updates</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" id="step2">
+          <div class="row">
           <div class="col text-center mt-5">
               <?php
                 foreach ($updateMessages as $updateMessage) {
@@ -303,30 +265,7 @@ if ($step == 2) {
 if ($step == 3) {
     ?>
 
-  <div class="pmf-setup-stepwizard">
-    <div class="pmf-setup-stepwizard-row setup-panel">
-      <div class="pmf-setup-stepwizard-step">
-        <a href="#step-1" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-           disabled="disabled">1</a>
-        <p>Update information</p>
-      </div>
-      <div class="pmf-setup-stepwizard-step">
-        <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle">
-          2
-        </a>
-        <p>File backups</p>
-      </div>
-      <div class="pmf-setup-stepwizard-step">
-        <a href="#step-3" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle"
-           disabled="disabled">
-          3
-        </a>
-        <p>Database updates</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="row " id="step2">
+  <div class="row" id="step2">
     <div class="col">
     <?php
     $images = [];
@@ -391,7 +330,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.2.0-alpha
     //
-    if (version_compare($version, '3.2.0-alpha', '<=')) {
+    if (version_compare($version, '3.2.0-alpha', '<')) {
         // Azure AD support
         $faqConfig->add('security.enableSignInWithMicrosoft', false);
         if ('sqlite3' === $DB['type']) {

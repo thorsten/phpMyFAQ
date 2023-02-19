@@ -2,10 +2,8 @@
 
 /**
  * The main phpMyFAQ Setup.
- *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -54,6 +52,7 @@ session_name('phpmyfaq-setup');
 session_start();
 
 require PMF_ROOT_DIR . '/src/libs/autoload.php';
+require PMF_ROOT_DIR . '/src/constants.php';
 require PMF_ROOT_DIR . '/config/constants.php';
 require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
 
@@ -80,15 +79,19 @@ $loader->register();
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li class="nav-link px-2 text-white">
-            <a href="https://www.phpmyfaq.de/documentation" class="nav-link px-2 text-white" target="_blank">
-                Documentation
-            </a>
+          <a href="https://www.phpmyfaq.de/documentation" class="nav-link px-2 text-white" target="_blank">
+            Documentation
+          </a>
         </li>
         <li class="nav-link px-2 text-white {{ activeAddContent }}">
-            <a href="https://www.phpmyfaq.de/support" class="nav-link px-2 text-white" target="_blank">Support</a>
+          <a href="https://www.phpmyfaq.de/support" class="nav-link px-2 text-white" target="_blank">
+            Support
+          </a>
         </li>
         <li class="nav-link px-2 text-white {{ activeAddQuestion }}">
-            <a href="https://forum.phpmyfaq.de/" class="nav-link px-2 text-white" target="_blank">Forums</a>
+          <a href="https://forum.phpmyfaq.de/" class="nav-link px-2 text-white" target="_blank">
+            Forums
+          </a>
         </li>
       </ul>
     </div>
@@ -96,54 +99,28 @@ $loader->register();
 </nav>
 
 <main role="main">
-    <section id="content">
+  <section id="content">
 
-        <!--
-        <div class="bg-dark text-secondary px-4 py-5 text-center">
-            <div class="py-5">
-                <h1 class="display-5 fw-bold text-white">phpMyFAQ <?= System::getVersion() ?></h1>
-                <div class="col-lg-6 mx-auto">
-                    <p class="fs-5 mb-4">
-                        Did you already read our
-                        <a target="_blank" href="https://www.phpmyfaq.de/docs/3.2">documentation</a>
-                        carefully before starting the phpMyFAQ setup?
-                    </p>
-                </div>
+    <div class="container shadow-lg p-5 mt-5 bg-light-subtle">
+      <form action="index.php" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form"
+            class="needs-validation" novalidate>
+
+        <div class="px-4 pt-2 my-2 text-center border-bottom">
+          <h1 class="display-4 fw-bold">phpMyFAQ <?= System::getVersion() ?></h1>
+            <div class="col-lg-6 mx-auto">
+              <p class="lead mb-4">
+                Did you already read our <a target="_blank" href="https://www.phpmyfaq.de/docs/3.2">documentation</a>
+                carefully before starting the phpMyFAQ setup?
+              </p>
             </div>
-        </div>
-        -->
+          </div>
 
-    <div class="container mt-4 mb-3">
-
-      <div class="pmf-setup-stepwizard">
-        <div class="pmf-setup-stepwizard-row setup-panel">
-          <div class="pmf-setup-stepwizard-step">
-            <a href="#step-1" type="button" class="btn btn-primary pmf-setup-stepwizard-btn-circle">1</a>
-            <p>Database setup</p>
+          <div class="form-header d-flex mb-4">
+            <span class="stepIndicator">Database Setup</span>
+            <span class="stepIndicator">LDAP Setup</span>
+            <span class="stepIndicator">Elasticsearch Setup</span>
+            <span class="stepIndicator">Admin user account</span>
           </div>
-          <div class="pmf-setup-stepwizard-step">
-            <a href="#step-2" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-            disabled="disabled">
-            2
-            </a>
-            <p>LDAP setup</p>
-          </div>
-          <div class="pmf-setup-stepwizard-step">
-            <a href="#step-3" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-            disabled="disabled">
-            3
-            </a>
-            <p>Elasticsearch setup</p>
-          </div>
-          <div class="pmf-setup-stepwizard-step">
-            <a href="#step-4" type="button" class="btn btn-secondary pmf-setup-stepwizard-btn-circle"
-            disabled="disabled">
-            4
-            </a>
-            <p>Admin user setup</p>
-          </div>
-        </div>
-      </div>
 
 <?php
 //
@@ -160,99 +137,96 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
     $installer->checkNoncriticalSettings()
     ?>
 
-      <form action="index.php" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form"
-            class="needs-validation" novalidate>
+          <div class="step">
 
-        <div class="row setup-content" id="step-1">
-          <div class="col-12">
             <h3 class="mb-3"> Step 1/4: Database setup</h3>
 
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
-              <div class="col-sm-9">
+                <div class="col-sm-9">
                   <select name="sql_type" id="sql_type" class="form-select">
-                      <option value="">Please select your preferred database</option>
-                      <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
+                    <option value="">Please select your preferred database</option>
+                    <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                   </select>
                   <small class="form-text text-muted">Please select your preferred database type.</small>
+                </div>
               </div>
-            </div>
 
-            <div id="dbdatafull" style="display: block;">
-              <div class="row">
-                <label class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
-                <div class="col-sm-9">
-                  <input type="text" name="sql_server" id="sql_server" class="form-control"
-                      placeholder="e.g. 127.0.0.1" required>
-                  <small class="form-text text-muted">
-                    Please enter the host or path to the socket of your database server.
-                  </small>
+              <div id="dbdatafull" class="d-block">
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_server" id="sql_server" class="form-control"
+                           placeholder="e.g. 127.0.0.1" required>
+                    <small class="form-text text-muted">
+                      Please enter the host or path to the socket of your database server.
+                    </small>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
-                <div class="col-sm-9">
-                  <input type="number" name="sql_port" id="sql_port" class="form-control"
-                      value="" required>
-                  <small class="form-text text-muted">Please enter the port your database server.</small>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
+                  <div class="col-sm-9">
+                    <input type="number" name="sql_port" id="sql_port" class="form-control"
+                           value="" required>
+                    <small class="form-text text-muted">Please enter the port your database server.</small>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
-                <div class="col-sm-9">
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
+                  <div class="col-sm-9">
                     <input type="text" name="sql_user" id="sql_user" class="form-control" required>
                     <small class="form-text text-muted">Please enter your database user.</small>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
-                <div class="col-sm-9">
-                    <input name="sql_password" type="password" autocomplete="off" id="sql_password" class="form-control"
-                           required>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
+                  <div class="col-sm-9">
+                    <div class="input-group">
+                      <input name="sql_password" type="password" autocomplete="off" id="faqpassword"
+                             class="form-control" required>
+                      <span class="input-group-text">
+                        <i class="fa" id="togglePassword"></i>
+                      </span>
+                    </div>
                     <small class="form-text text-muted">Please enter your database password.</small>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_db">Database:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_db" id="sql_db" class="form-control" required>
+                    <small class="form-text text-muted">Please enter your existing database name.</small>
+                  </div>
                 </div>
               </div>
-              <div class="row">
-                <label class="col-sm-3 col-form-label" for="sql_db">Database:</label>
-                <div class="col-sm-9">
-                  <input type="text" name="sql_db" id="sql_db" class="form-control" required>
-                  <small class="form-text text-muted">Please enter your existing database name.</small>
-                </div>
-              </div>
-            </div>
 
-            <div id="dbsqlite" style="display: none;">
-              <div class="row">
-                <label class="col-sm-3 col-form-label" for="sql_sqlitefile">SQLite database file:</label>
+              <div id="dbsqlite" class="d-none">
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_sqlitefile">SQLite database file:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
+                           value="<?= dirname(__DIR__) ?>" required>
+                    <small class="form-text text-muted">
+                      Please enter the full path to your SQLite datafile which should be outside your document root.
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
                 <div class="col-sm-9">
-                  <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
-                         value="<?= dirname(__DIR__) ?>" required>
+                  <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
                   <small class="form-text text-muted">
-                    Please enter the full path to your SQLite datafile which should be outside your document root.
+                    Please enter a table prefix here if you want to install more phpMyFAQ installations in one
+                    database.
                   </small>
                 </div>
               </div>
             </div>
 
-            <div class="row">
-              <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
-              <div class="col-sm-9">
-                <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
-                <small class="form-text text-muted">
-                  Please enter a table prefix here if you want to install more phpMyFAQ installations in one database.
-                </small>
-              </div>
-            </div>
-              <button class="btn btn-primary btn-next btn-lg pull-right" type="button"
-                data-pmf-current-step="step-1" data-pmf-next-step="step-2">
-                Next: LDAP setup
-              </button>
-            </div>
-        </div>
 
-
-        <div class="row setup-content" id="step-2">
-          <div class="col-12">
+        <div class="step">
             <h3 class="mb-3"> Step 2/4: LDAP setup</h3>
             <?php if (extension_loaded('ldap')) : ?>
               <div class="form-group">
@@ -289,7 +263,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <div class="row">
                 <label class="col-sm-3 col-form-label" for="ldap_password">Password:</label>
                 <div class="col-sm-9">
-                    <input name="ldap_password" type="password" autocomplete="off" id="ldap_password" class="form-control">
+                    <input name="ldap_password" type="password" autocomplete="off" id="ldap_password"
+                           class="form-control">
                     <small class="form-text text-muted">Please enter your LDAP password.</small>
                 </div>
               </div>
@@ -302,22 +277,15 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </small>
                 </div>
               </div>
-              <p class="alert alert-info">
+              <p class="alert alert-info m-4">
                 You can add additional LDAP configuration in the admin configuration panel.
               </p>
             <?php endif; ?>
-
-            <button class="btn btn-primary btn-next btn-lg pull-right" type="button" data-pmf-current-step="step-2"
-              data-pmf-next-step="step-3">
-              Next: Elasticsearch setup
-            </button>
           </div>
-        </div>
 
 
 
-        <div class="row setup-content" id="step-3">
-          <div class="col-12">
+        <div class="step">
             <h3 class="mb-3"> Step 3/4: Elasticsearch setup</h3>
             <?php if (extension_loaded('curl')) : ?>
               <div class="form-group">
@@ -344,7 +312,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </small>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                   <label class="col-sm-3 col-form-label" for="elasticsearch_index">Index name:</label>
                   <div class="col-sm-9">
                     <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
@@ -352,20 +320,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </div>
                 </div>
             <?php endif; ?>
-            <button class="btn btn-primary btn-next btn-lg pull-right" type="button" data-pmf-current-step="step-3"
-              data-pmf-next-step="step-4">
-              Next: Admin user setup
-            </button>
           </div>
-        </div>
 
 
 
-        <div class="row setup-content" id="step-4">
-          <div class="col-12">
+        <div class="step">
             <h3 class="mb-3"> Step 4/4: Admin user setup</h3>
 
-              <div class="row">
+              <div class="row mb-2">
                 <label class="col-sm-3 col-form-label" for="language">Default language:</label>
                 <div class="col-sm-9">
                   <select name="language" id="language" class="form-control">
@@ -395,7 +357,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
               <div class="col-sm-9">
                 <select id="permLevel" name="permLevel" class="form-control" required>
@@ -408,58 +370,62 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </small>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="realname">Your name:</label>
               <div class="col-sm-9">
                 <input type="text" name="realname" id="realname" class="form-control" required>
                 <small class="form-text text-muted">Please enter your real name.</small>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
               <div class="col-sm-9">
                 <input type="email" name="email" id="email" class="form-control" required>
                 <small class="form-text text-muted">Please enter your email address.</small>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="loginname">Your login name:</label>
               <div class="col-sm-9">
                 <input type="text" name="loginname" id="loginname" class="form-control" required>
                 <small class="form-text text-muted">Please enter your login name.</small>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password" id="password" class="form-control" required>
                 <small class="form-text text-muted">Please enter your password.</small>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
               <div class="col-sm-9">
-                <input type="password" autocomplete="off" name="password_retyped" id="password_retype" class="form-control"
-                       required>
+                <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
+                       class="form-control" required>
                 <small class="form-text text-muted">Please retype your password.</small>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <div class="col-sm">
-                <p class="alert alert-info text-center">
+                <p class="alert alert-info text-center mt-4">
                   <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
                   Your password will be saved with a <strong>salted <?= PMF_ENCRYPTION_TYPE ?></strong>. You can
                   change the encryption type for passwords in <em>config/constants.php</em>.
                 </p>
               </div>
             </div>
-
-            <button class="btn btn-primary btn-next btn-lg pull-right" type="button" data-pmf-current-step="step-4"
-              data-pmf-next-step="submit">Click to install phpMyFAQ <?= System::getVersion() ?></button>
           </div>
-        </div>
+
+          <!-- start previous / next buttons -->
+          <div class="form-footer d-flex mt-5">
+              <button class="btn btn-lg btn-danger w-100" type="button" id="prevBtn">Previous</button>
+              <button class="btn btn-lg btn-success w-100" type="button" id="nextBtn">Next</button>
+          </div>
+          <!-- end previous / next buttons -->
 
       </form>
+      </div>
 
 <?php
 } else {

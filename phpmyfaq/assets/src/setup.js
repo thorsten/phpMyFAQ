@@ -14,6 +14,7 @@
  */
 
 import { insertAfter } from './utils';
+import { handlePasswordToggle } from './utils';
 
 export const selectDatabaseSetup = (event) => {
   const database = document.getElementById('dbdatafull');
@@ -23,26 +24,26 @@ export const selectDatabaseSetup = (event) => {
   switch (event.target.value) {
     case 'mysqli':
       databasePort.value = 3306;
-      sqlite.style.display = 'none';
-      database.style.display = 'block';
+      sqlite.className = 'd-none';
+      database.className = 'd-block';
       break;
     case 'pgsql':
       databasePort.value = 5432;
-      sqlite.style.display = 'none';
-      database.style.display = 'block';
+      sqlite.className = 'd-none';
+      database.className = 'd-block';
       break;
     case 'sqlsrv':
       databasePort.value = 1433;
-      sqlite.style.display = 'none';
-      database.style.display = 'block';
+      sqlite.className = 'd-none';
+      database.className = 'd-block';
       break;
     case 'sqlite3':
-      sqlite.style.display = 'block';
-      database.style.display = 'none';
+      sqlite.className = 'd-block';
+      database.className = 'd-none';
       break;
     default:
-      sqlite.style.display = 'none';
-      database.style.display = 'block';
+      sqlite.className = 'd-none';
+      database.className = 'd-block';
       break;
   }
 };
@@ -61,8 +62,22 @@ export const addElasticsearchServerInput = () => {
   insertAfter(wrapper, input);
 };
 
+const stepIndicator = (step) => {
+  // This function removes the "active" class of all steps...
+  let i,
+    steps = document.getElementsByClassName('stepIndicator');
+  for (i = 0; i < steps.length; i++) {
+    steps[i].className = steps[i].className.replace(' active', '');
+  }
+  //... and adds the "active" class on the current step:
+  steps[step].className += ' active';
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
+
+  // Toggle password visibility
+  handlePasswordToggle();
 
   // Switch between database selection
   const setupType = document.getElementById('sql_type');
@@ -77,75 +92,91 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Wizard
-  const setupTabs = document.querySelectorAll('.setup-content');
-  const navListItems = document.querySelectorAll('div.setup-panel div a');
-  const nextButtons = document.querySelectorAll('.btn-next');
-
-  setupTabs.forEach((setupContent) => {
-    setupContent.style.display = 'none';
-  });
-
-  navListItems.forEach((navListItem) => {
-    navListItem.addEventListener('click', (event) => {
-      event.preventDefault();
-
-      const target = event.target.getAttribute('href');
-      const item = event.target;
-      const setupContent = document.getElementById(target.replace('#', ''));
-
-      if (item.getAttribute('disabled') === null || item.getAttribute('disabled') === 'disabled') {
-        navListItem.classList.remove('btn-primary');
-        navListItem.classList.add('btn-secondary');
-        item.classList.remove('btn-secondary');
-        item.classList.add('btn-primary');
-        item.setAttribute('disabled', '');
-        if (setupContent) {
-          setupContent.style.display = 'block';
-        }
-      }
-    });
-  });
-
-  nextButtons.forEach((nextButton) => {
+  let currentTab = 0;
+  const nextButton = document.getElementById('nextBtn');
+  const prevButton = document.getElementById('prevBtn');
+  if (nextButton) {
     nextButton.addEventListener('click', (event) => {
       event.preventDefault();
-
-      const currentStep = event.target.getAttribute('data-pmf-current-step');
-      const nextStep = event.target.getAttribute('data-pmf-next-step');
-
-      const currentSetupContent = document.getElementById(currentStep);
-      const nextSetupContent = document.getElementById(nextStep);
-
-      const currentInputs = currentSetupContent.querySelectorAll(
-        'input[type="text"],input[type="url"],input[type="email"],input[type="number"],input[type="password"]'
-      );
-      let isValid = true;
-
-      if (currentInputs) {
-        currentInputs.forEach((input) => {
-          input.classList.remove('is-invalid');
-        });
-
-        currentInputs.forEach((input) => {
-          if (!input.validity.valid) {
-            isValid = false;
-            input.classList.add('is-invalid');
-          }
-        });
-      }
-
-      if (isValid && nextStep === 'submit') {
-        event.stopPropagation();
-        document.forms['phpmyfaq-setup-form'].submit();
-      }
-
-      if (isValid && nextStep !== 'submit') {
-        currentSetupContent.style.display = 'none';
-        nextSetupContent.style.display = 'block';
-        document.querySelector(`div.setup-panel div a[href="#${nextStep}"]`).dispatchEvent(new Event('click'));
-      }
+      nextPrev(1);
     });
-  });
+  }
+  if (prevButton) {
+    prevButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      nextPrev(-1);
+    });
+  }
+  showTab(currentTab);
 
-  document.querySelector('div.setup-panel div a.btn-primary').dispatchEvent(new Event('click'));
+  function showTab(n) {
+    const currentStep = document.getElementsByClassName('step');
+
+    currentStep[n].style.display = 'block';
+
+    const prevButton = document.getElementById('prevBtn');
+    const nextButton = document.getElementById('nextBtn');
+    if (n === 0) {
+      prevButton.style.display = 'none';
+    } else {
+      prevButton.style.display = 'inline';
+    }
+    if (n === currentStep.length - 1) {
+      nextButton.innerHTML = 'Submit';
+    } else {
+      nextButton.innerHTML = 'Next';
+    }
+    stepIndicator(n);
+  }
+
+  const nextPrev = (n) => {
+    const currentStep = document.getElementsByClassName('step');
+
+    if (n === 1 && !validateForm()) {
+      return false;
+    }
+
+    currentStep[currentTab].style.display = 'none';
+    currentTab = currentTab + n;
+    if (currentTab >= currentStep.length) {
+      document.getElementById('phpmyfaq-setup-form').submit();
+      return false;
+    }
+    showTab(currentTab);
+  };
+
+  const validateForm = () => {
+    let currentStep,
+      y,
+      i,
+      valid = true;
+    currentStep = document.getElementsByClassName('step');
+    y = currentStep[currentTab].getElementsByTagName('input');
+
+    for (i = 0; i < y.length; i++) {
+      if (y[i].value === '' && y[i].hasAttribute('required')) {
+        y[i].className += ' is-invalid';
+        // and set the current valid status to false
+        valid = false;
+      }
+    }
+    // If the valid status is true, mark the step as finished and valid:
+    if (valid) {
+      document.getElementsByClassName('stepIndicator')[currentTab].className += ' finish';
+    }
+
+    return valid; // return the valid status
+  };
+
+  const resetValidateForm = () => {
+    let currentStep, y, i;
+    currentStep = document.getElementsByClassName('step');
+    y = currentStep[currentTab].getElementsByTagName('input');
+
+    for (i = 0; i < y.length; i++) {
+      if (y[i].value === '' && y[i].hasAttribute('required')) {
+        y[i].className -= ' is-invalid';
+      }
+    }
+  };
 });
