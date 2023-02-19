@@ -152,6 +152,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
     } catch (Exception $e) {
         $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
+        $action = 'login';
+        $error = $e->getMessage();
     }
 } else {
     // Try to authenticate with cookie information
@@ -471,7 +473,7 @@ shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 if (!is_null($error)) {
-    $loginMessage = '<p class="error">' . $error . '</p>';
+    $loginMessage = '<p class="alert alert-danger">' . $error . '</p>';
 } else {
     $loginMessage = '';
 }
