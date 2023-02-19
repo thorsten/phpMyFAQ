@@ -14,7 +14,7 @@
 
     <form id="formValues" action="#" method="post" class="needs-validation" novalidate>
       <input type="hidden" name="userid" value="{{ userid }}" />
-      <input type="hidden" name="csrf" value="{{ csrf }}" />
+      {{ csrf }}
       <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
       <div class="row mb-2">
@@ -60,7 +60,8 @@
             name="faqpassword"
             id="faqpassword"
             class="form-control"
-            required{{
+            required
+            {{
             readonly
             }}
           />

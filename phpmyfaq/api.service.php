@@ -44,6 +44,7 @@ use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -131,7 +132,7 @@ $captcha = Captcha::getInstance($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
-'savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
+'savevoting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
     !$captcha->checkCaptchaCode($code)
 ) {
     $message = ['error' => Translation::get('msgCaptcha')];
@@ -782,7 +783,10 @@ switch ($action) {
     //
     case 'submit-user-data':
         $postData = json_decode(file_get_contents('php://input'), true);
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
+
+        $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance($faqConfig)->verifyToken('ucp', $csrfToken)) {
             $message = ['error' => Translation::get('ad_msg_noauth')];
             break;
         }

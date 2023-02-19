@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
@@ -50,7 +51,7 @@ if ($user->isLoggedIn()) {
             'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
             'ucpGravatarImage' => $gravatarImg,
             'userid' => $user->getUserId(),
-            'csrf' => $user->getCsrfTokenFromSession(),
+            'csrf' => Token::getInstance($faqConfig)->getTokenInput('ucp'),
             'lang' => $Language->getLanguage(),
             'readonly' => $user->isLocalUser() ? '' : 'readonly disabled',
             'msgRealName' => Translation::get('ad_user_name'),

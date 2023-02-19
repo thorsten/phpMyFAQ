@@ -58,7 +58,10 @@
     },
     "secure-http": true,
     "vendor-dir": "phpmyfaq/src/libs",
-    "bin-dir": "phpmyfaq/src/libs/bin"
+    "bin-dir": "phpmyfaq/src/libs/bin",
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   },
   "minimum-stability": "stable",
   "scripts": {
