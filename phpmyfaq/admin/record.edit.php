@@ -214,7 +214,8 @@ if (
 
     // Set data for forms
     $faqData['title'] = (isset($faqData['title']) ? Strings::htmlspecialchars($faqData['title']) : '');
-    $faqData['content'] = (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'])) : '');
+    $faqData['content'] =
+        (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)) : '');
     $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlspecialchars($faqData['tags']) : '');
     $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlspecialchars($faqData['keywords']) : '');
     $faqData['author'] = (isset($faqData['author']) ? Strings::htmlspecialchars(
