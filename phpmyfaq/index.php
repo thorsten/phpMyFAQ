@@ -551,7 +551,7 @@ $tplMainPage = [
     'msgAdvancedSearch' => Translation::get('msgAdvancedSearch'),
     'writeTagCloudHeader' => Translation::get('msg_tags'),
     'writeTags' => $oTag->renderTagCloud(),
-    'currentYear' => date("Y", time())
+    'currentYear' => date('Y', time())
 ];
 
 if ('main' == $action || 'show' == $action) {
