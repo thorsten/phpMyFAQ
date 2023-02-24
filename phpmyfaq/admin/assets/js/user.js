@@ -160,7 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const automaticPassword = document.getElementById('add_user_automatic_password').checked;
       const password = document.getElementById('add_user_password').value;
       const passwordConfirm = document.getElementById('add_user_password_confirm').value;
-      const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
+      let isSuperAdmin;
+      const hasSuperAdminCheckbox = document.querySelector('#add_user_is_superadmin');
+      if (hasSuperAdminCheckbox) {
+        isSuperAdmin = hasSuperAdminCheckbox.checked;
+      }
 
       addUserForm.classList.add('was-validated');
 
