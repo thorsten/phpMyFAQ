@@ -18,6 +18,7 @@
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -71,7 +72,8 @@ $pagination = new Pagination(
           <td><?= $item->mime_type ?></td>
           <td>
             <button class="btn btn-danger btn-delete-attachment" title="<?= Translation::get('ad_gen_delete') ?>"
-                    data-attachment-id="<?= $item->id ?>" data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
+                    data-attachment-id="<?= $item->id ?>"
+                    data-csrf="<?= Token::getInstance()->getTokenString('delete-attachment') ?>">
               <i aria-hidden="true" class="fa fa-trash"></i>
             </button>
           </td>

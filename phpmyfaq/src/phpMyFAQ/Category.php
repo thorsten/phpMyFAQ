@@ -1011,7 +1011,9 @@ class Category
     public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
     {
         // If we only need a new language, we don't need a new category id
-        $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+        if (is_null($id)) {
+            $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+        }
 
         $query = sprintf(
             "
@@ -1029,7 +1031,7 @@ class Category
             $categoryData['user_id'],
             $categoryData['group_id'],
             $categoryData['active'],
-            $this->config->getDb()->escape($categoryData['image']),
+            $this->config->getDb()->escape($categoryData['image'] ?? ''),
             $categoryData['show_home']
         );
         $this->config->getDb()->query($query);

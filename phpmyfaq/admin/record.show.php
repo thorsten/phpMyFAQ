@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Minoru TODA <todam@netjapan.co.jp>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
  * @copyright 2003-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Category;
@@ -28,7 +28,9 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Search\SearchFactory;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -39,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-list-alt"></i>
-              <?= $PMF_LANG['ad_entry_aor'] ?>
+              <?= Translation::get('ad_entry_aor') ?>
           </h1>
         </div>
 
@@ -97,7 +99,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             //target.src = "images/url-checking.png";
             getDivElement(id, lang).className = "url-checking";
-            target.innerHTML = "<?= $PMF_LANG['ad_linkcheck_feedback_url-checking'] ?>";
+            target.innerHTML = "<?= Translation::get('ad_linkcheck_feedback_url-checking') ?>";
 
             const url = 'index.php';
             const pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
@@ -110,17 +112,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             function verifyEntryURL_success(XmlRequest)
             {
                 let allResponses = new [];
-                allResponses['batch1'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch1'] ?>";
-                allResponses['batch2'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch2'] ?>";
-                allResponses['batch3'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch3'] ?>";
-                allResponses['checking'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-checking'] ?>";
-                allResponses['disabled'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-disabled'] ?>";
-                allResponses['linkbad'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-linkbad'] ?>";
-                allResponses['linkok'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-linkok'] ?>";
-                allResponses['noaccess'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] ?>";
-                allResponses['noajax'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noajax'] ?>";
-                allResponses['nolinks'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] ?>";
-                allResponses['noscript'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noscript'] ?>";
+                allResponses['batch1'] = "<?= Translation::get('ad_linkcheck_feedback_url-batch1') ?>";
+                allResponses['batch2'] = "<?= Translation::get('ad_linkcheck_feedback_url-batch2') ?>";
+                allResponses['batch3'] = "<?= Translation::get('ad_linkcheck_feedback_url-batch3') ?>";
+                allResponses['checking'] = "<?= Translation::get('ad_linkcheck_feedback_url-checking') ?>";
+                allResponses['disabled'] = "<?= Translation::get('ad_linkcheck_feedback_url-disabled') ?>";
+                allResponses['linkbad'] = "<?= Translation::get('ad_linkcheck_feedback_url-linkbad') ?>";
+                allResponses['linkok'] = "<?= Translation::get('ad_linkcheck_feedback_url-linkok') ?>";
+                allResponses['noaccess'] = "<?= Translation::get('ad_linkcheck_feedback_url-noaccess') ?>";
+                allResponses['noajax'] = "<?= Translation::get('ad_linkcheck_feedback_url-noajax') ?>";
+                allResponses['nolinks'] = "<?= Translation::get('ad_linkcheck_feedback_url-nolinks') ?>";
+                allResponses['noscript'] = "<?= Translation::get('ad_linkcheck_feedback_url-noscript') ?>";
                 getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
                 if (typeof(allResponses[XmlRequest.responseText]) === "undefined") {
                     getDivElement(id, lang).className = "url-noajax ";
@@ -133,7 +135,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             function verifyEntryURL_failure(XmlRequest)
             {
                 getDivElement(id, lang).className = "url-noaccess";
-                target.html("<?= $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] ?>");
+                target.html("<?= Translation::get('ad_linkcheck_feedback_url-noaccess') ?>");
             }
 
         }
@@ -319,7 +321,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     '<span class="badge badge-info" id="category_%d_item_count">%d %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid],
-                    $PMF_LANG['msgEntries']
+                    Translation::get('msgEntries')
                 );
             }
 
@@ -328,7 +330,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     '<span class="badge badge-danger"><span id="js-active-records-%d">%d</span> %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid] - $numActiveByCat[$cid],
-                    $PMF_LANG['ad_record_inactive']
+                    Translation::get('ad_record_inactive')
                 );
             }
 
@@ -336,10 +338,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 $catInfo .= sprintf(
                     '<span class="badge badge-info">%d %s</span>',
                     $numCommentsByCat[$cid],
-                    $PMF_LANG['ad_start_comments']
+                    Translation::get('ad_start_comments')
                 );
             }
             $catInfo .= '';
+
+            $csrfToken = Token::getInstance()->getTokenString('set-faq-state');
 
             if ($cid != $old) {
                 if ($old == 0) {
@@ -381,7 +385,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=asc">
                           <i class="fa fa-sort-asc" aria-hidden="true"></i>
                         </a>
-                        <?= $PMF_LANG['ad_entry_theme'] ?>
+                        <?= Translation::get('ad_entry_theme') ?>
                         <a href="?action=view&category=<?= $cid ?>&orderby=title&sortby=desc">
                           <i class="fa fa-sort-desc" aria-hidden="true"></i>
                         </a>
@@ -392,7 +396,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=asc">
                           <i class="fa fa-sort-asc" aria-hidden="true"></i>
                         </a>
-                        <?= $PMF_LANG['ad_entry_date'] ?>
+                        <?= Translation::get('ad_entry_date') ?>
                         <a href="?action=view&category=<?= $cid ?>&orderby=date&sortby=desc">
                           <i class="fa fa-sort-desc" aria-hidden="true"></i>
                         </a>
@@ -405,15 +409,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     <th style="width: 120px; vertical-align: middle;">
                       <label>
                         <input type="checkbox" id="sticky_category_block_<?= $cid ?>"
-                               onclick="saveStatusForCategory(<?= $cid ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>')"/>
-                      <?= $PMF_LANG['ad_record_sticky'] ?>
+                               onclick="saveStatusForCategory(<?= $cid ?>, 'sticky', '<?= $csrfToken ?>')"/>
+                      <?= Translation::get('ad_record_sticky') ?>
                       </label>
                     </th>
                     <th style="width: 120px; vertical-align: middle;">
                     <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
-                                   onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>')"
+                                   onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $csrfToken ?>')"
                                 <?php
                                 if (
                                     isset($numRecordsByCat[$cid]) && isset($numActiveByCat[$cid]) &&
@@ -422,7 +426,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                                     echo 'checked';
                                 }
                                 ?>>
-                              <?= $PMF_LANG['ad_record_active'] ?>
+                              <?= Translation::get('ad_record_active') ?>
                           </label>
                     <?php } else { ?>
                           <span class="fa-stack">
@@ -451,13 +455,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       </td>
                       <td style="width: 24px;">
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>"
-                           title="<?= $PMF_LANG['ad_user_edit'] ?> '<?= str_replace('"', '´', $record['title']) ?>'">
+                           title="<?= Translation::get('ad_user_edit') ?> '<?= str_replace('"', '´', $record['title']) ?>'">
                         <?= $record['solution_id'] ?>
                         </a>
                       </td>
                       <td>
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>"
-                           title="<?= $PMF_LANG['ad_user_edit'] ?> '
+                           title="<?= Translation::get('ad_user_edit') ?> '
                            <?= str_replace('"', '´', Strings::htmlentities($record['title'])) ?>'">
                         <?= Strings::htmlentities($record['title']) ?>
                         </a>
@@ -467,7 +471,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     '<br><a class="badge badge-primary" href="?action=comments#record_id_%d">%d %s</a>',
                     $record['id'],
                     $numCommentsByFaq[$record['id']],
-                    $PMF_LANG['ad_start_comments']
+                    Translation::get('ad_start_comments')
                 );
             }
             ?></td>
@@ -483,7 +487,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                              id="dropdownAddNewTranslation" data-bs-toggle="dropdown" aria-haspopup="true"
                              aria-expanded="false">
                             <i aria-hidden="true" class="fa fa-globe"
-                               title="<?= $PMF_LANG['msgTransToolAddNewTranslation'] ?>"></i>
+                               title="<?= Translation::get('msgTransToolAddNewTranslation') ?>"></i>
                           </a>
                           <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
                           <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
@@ -493,7 +497,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <td style="width: 56px;">
                         <label>
                           <input type="checkbox" lang="<?= $record['lang'] ?>"
-                                 onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>');"
+                                 onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?= $csrfToken ?>');"
                                  id="sticky_record_<?= $cid . '_' . $record['id'] ?>"
                           <?= $record['sticky'] ? 'checked' : '    ' ?>>
                         </label>
@@ -502,7 +506,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                             <label>
                               <input type="checkbox" lang="<?= $record['lang'] ?>" class="active-records-category-<?= $cid ?>"
-                                     onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
+                                     onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $csrfToken ?>');"
                                      id="active_record_<?= $cid . '_' . $record['id'] ?>"
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                             </label>
@@ -516,14 +520,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <td style="width: 16px;">
                         <a class="btn btn-info"
                            href="?action=copyentry&id=<?= $record['id'] ?>&lang=<?= $record['lang']; ?>"
-                           title="<?= $PMF_LANG['ad_categ_copy'] ?>">
+                           title="<?= Translation::get('ad_categ_copy') ?>">
                           <i aria-hidden="true" class="fa fa-copy"></i>
                         </a>
                       </td>
                       <td style="width: 16px;">
                         <a class="btn btn-danger" href="javascript:void(0);"
-                           onclick="deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $user->getCsrfTokenFromSession() ?>');"
-                           title="<?= $PMF_LANG['ad_user_delete'] ?>">
+                           onclick="deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $csrfToken ?>');"
+                           title="<?= Translation::get('ad_user_delete') ?>">
                           <i aria-hidden="true" class="fa fa-trash"></i>
                         </a>
                       </td>
@@ -625,7 +629,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
       }
 
       $.get('index.php', data, null);
-      indicator.html('<?= $PMF_LANG['ad_entry_savedsuc'] ?>');
+      indicator.html('<?= Translation::get('ad_entry_savedsuc') ?>');
     }
 
     /**
@@ -639,7 +643,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
      */
     function deleteRecord(record_id, record_lang, csrf_token)
     {
-        if (confirm('<?= addslashes($PMF_LANG['ad_entry_del_1'] . ' ' . $PMF_LANG['ad_entry_del_3']);
+        if (confirm('<?= addslashes(Translation::get('ad_entry_del_1') . ' ' . Translation::get('ad_entry_del_3'));
         ?>')) {
             $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
             $.ajax({
@@ -648,7 +652,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 data:    "record_id=" + record_id + "&record_lang=" + record_lang + "&csrf=" + csrf_token,
                 success: function() {
                     $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
-                    $('#pmf-admin-saving-data-indicator').html('<?= $PMF_LANG['ad_entry_delsuc'];
+                    $('#pmf-admin-saving-data-indicator').html('<?= Translation::get('ad_entry_delsuc');
                     ?>');
                 }
             });
@@ -657,10 +661,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     </script>
         <?php
     } else {
-        echo $PMF_LANG['err_nothingFound'];
+        echo Translation::get('err_nothingFound');
     }
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
 ?>
     </div>

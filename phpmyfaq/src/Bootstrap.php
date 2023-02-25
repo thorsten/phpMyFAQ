@@ -113,6 +113,11 @@ set_error_handler('\phpMyFAQ\Core\Error::errorHandler');
 set_exception_handler('\phpMyFAQ\Core\Error::exceptionHandler');
 
 //
+// Start output buffering
+//
+ob_start();
+
+//
 // Create a database connection
 //
 try {

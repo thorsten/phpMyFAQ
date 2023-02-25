@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Session;
 
 use Exception;
-use phpMyFAQ\Configuration;
 
 class Token
 {
@@ -38,7 +37,7 @@ class Token
     /**
      * Constructor.
      */
-    final private function __construct(private Configuration $config)
+    final private function __construct()
     {
     }
 
@@ -116,13 +115,12 @@ class Token
 
 
     /**
-     * @param Configuration $config
      * @return Token
      */
-    public static function getInstance(Configuration $config): Token
+    public static function getInstance(): Token
     {
         if (!(self::$instance instanceof Token)) {
-            self::$instance = new self($config);
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -136,10 +134,6 @@ class Token
      */
     public function getTokenInput(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
-        if (!$this->sessionHasStarted()) {
-            throw new Exception('CSRF Input can not be created.');
-        }
-
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
 
         return sprintf(
@@ -158,10 +152,6 @@ class Token
      */
     public function getTokenString(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
-        if (!$this->sessionHasStarted()) {
-            throw new Exception('CSRF Input can not be created.');
-        }
-
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
 
         return $token->sessionToken;
@@ -176,10 +166,6 @@ class Token
      */
     public function verifyToken(string $page, string $requestToken = null, bool $removeToken = false): bool
     {
-        if (!$this->sessionHasStarted()) {
-            throw new Exception('Token can not be verified.');
-        }
-
         // if the request token has not been passed, check POST
         $requestToken = ($requestToken ?? $_POST[self::PMF_SESSION_NAME] ?? null);
         if (is_null($requestToken)) {
@@ -218,10 +204,6 @@ class Token
      */
     public function removeToken(string $page): bool
     {
-        if (!$this->sessionHasStarted()) {
-            throw new Exception('Token can not be removed.');
-        }
-
         unset($_COOKIE[$this->getCookie($page)], $_SESSION[self::PMF_SESSION_NAME][$page]);
 
         return true;
@@ -267,17 +249,5 @@ class Token
     private function getCookieName(string $page): string
     {
         return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(md5($page), 0, 10));
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function sessionHasStarted(): bool
-    {
-        if (!isset($_SESSION)) {
-            throw new Exception('Session has not been started.');
-        }
-
-        return true;
     }
 }

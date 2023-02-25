@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
@@ -133,7 +134,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->hasPermission($user->getU
           <p><?= $PMF_LANG['ad_section_deleteQuestion'] ?></p>
           <form action="?action=section&amp;section_action=delete" method="post">
             <input type="hidden" name="section_id" value="<?= $sectionId ?>">
-            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <?= Token::getInstance()->getTokenInput('delete-section') ?>
             <p>
               <a class="btn btn-secondary" href="?action=section">
                   <?= $PMF_LANG['ad_gen_cancel'] ?>
@@ -237,7 +238,7 @@ if ($sectionAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'a
     <div class="col-lg-12">
       <div id="user_message"><?= $message ?></div>
       <form name="section_create" action="?action=section&amp;section_action=addsave" method="post">
-        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+          <?= Token::getInstance()->getTokenInput('add-section') ?>
 
         <div class="row">
           <label class="col-lg-2 col-form-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>

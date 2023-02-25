@@ -53,7 +53,7 @@ export const handleCategories = () => {
          */
         set: (sortable) => {
           const order = sortable.toArray();
-          const csrf = document.querySelector('input[name=csrf]').value;
+          const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           localStorage.setItem(sortable.options.group.name, order.join('|'));
 
           fetch('index.php?action=ajax&ajax=categories&ajaxaction=update-order', {

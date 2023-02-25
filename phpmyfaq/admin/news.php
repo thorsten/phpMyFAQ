@@ -24,7 +24,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Session\Token;use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -55,7 +55,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
               data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
               data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($faqConfig->getDefaultLanguage()) ? $faqConfig->getDefaultLanguage() : 'en') ?>"
               data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
-            <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <?= Token::getInstance()->getTokenInput('save-news') ?>
 
             <div class="row mb-2">
                 <label class="col-3 col-form-label" for="newsheader">
@@ -272,7 +272,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
               data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($newsData['lang']) ? $newsData['lang'] : 'en') ?>"
               data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
             <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
-            <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <?= Token::getInstance()->getTokenInput('update-news') ?>
 
             <div class="row mb-2">
                 <label class="col-3 col-form-label" for="newsheader">
@@ -564,8 +564,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <div class="text-center">
     <form action="?action=delete-news" method="post" accept-charset="utf-8">
     <input type="hidden" name="id" value="<?= $deleteId ?>">
-    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
     <input type="hidden" name="really" value="yes">
+    <?= Token::getInstance()->getTokenInput('delete-news') ?>
         <button class="btn btn-warning" type="submit" name="submit">
             <?= Translation::get('ad_news_yesdelete') ?>
         </button>

@@ -18,6 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
@@ -44,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a class="btn btn-sm btn-danger"
-               href="?action=clear-statistics&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+               href="?action=clear-statistics&csrf=<?= Token::getInstance()->getTokenString('clear-statistics') ?>">
                 <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_delete_all_votings') ?>
             </a>
         </div>

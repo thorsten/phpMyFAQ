@@ -23,6 +23,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -76,7 +77,7 @@ if (
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
         $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        if (!Token::getInstance()->verifyToken('user', $csrfToken)) {
             $csrfOkay = false;
         }
         if (0 === (int)$userId || !$csrfOkay) {
@@ -184,7 +185,7 @@ if (
                 </p>
                 <form action="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
                     <input type="hidden" name="user_id" value="<?= $userId ?>">
-                    <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
+                    <?= Token::getInstance()->getTokenInput('delete-user') ?>
                     <p class="text-center">
                         <button class="btn btn-danger" type="submit">
                             <?= Translation::get('ad_gen_yes') ?>
@@ -208,7 +209,7 @@ if (
         $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
         $userAction = $defaultUserAction;
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        if (!Token::getInstance()->verifyToken('user', $csrfToken)) {
             $csrfOkay = false;
         }
         $userAction = $defaultUserAction;
@@ -307,7 +308,7 @@ if (
                         <div class="card-body">
                             <input type="hidden" id="last_modified" name="last_modified" value="">
                             <input id="update_user_id" type="hidden" name="user_id" value="0">
-                            <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession(); ?>">
+                            <?= Token::getInstance()->getTokenInput('update-user-data') ?>
 
                             <div class="row mb-2">
                                 <label for="user_status" class="col-lg-4 col-form-label">
@@ -375,8 +376,8 @@ if (
             <div class="col-lg-4" id="userRights">
                 <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post"
                       accept-charset="utf-8">
-                    <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="user_id" id="rights_user_id" value="0">
+                    <?= Token::getInstance()->getTokenInput('update-user-rights') ?>
 
                     <div class="card mb-4">
                         <h5 class="card-header py-3" id="user_rights_legend">
@@ -553,7 +554,7 @@ if (
                         if ($user->getStatus() === 'blocked') : ?>
                             <button type="button" class="btn btn-sm btn-success btn-activate-user"
                                     id="btn_activate_user_id_<?= $user->getUserData('user_id') ?>"
-                                    data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
+                                    data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
                                 <?= Translation::get('ad_news_set_active') ?>
                             </button>
@@ -563,17 +564,19 @@ if (
                     </td>
                     <td>
                         <?php
-                        if ($user->getStatus() !== 'protected') : ?>
+                        if ($user->getStatus() !== 'protected') {
+                            $csrfToken = Token::getInstance()->getTokenString('delete-user');
+                        ?>
                             <button type="button" class="btn btn-sm btn-danger btn-delete-user"
                                     id="btn_user_id_<?= $user->getUserData('user_id') ?>"
-                                    data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
+                                    data-csrf-token="<?= $csrfToken ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
-                                <i class="fa fa-trash" data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
+                                <i class="fa fa-trash" data-csrf-token="<?= $csrfToken ?>"
                                    data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_user_delete') ?>
                             </button>
-                            <?php
-                        endif;
+                        <?php
+                        }
                         ?>
                     </td>
                 </tr>
@@ -603,7 +606,7 @@ if (
                           novalidate>
 
                         <input type="hidden" id="add_user_csrf" name="add_user_csrf"
-                               value="<?= $currentUser->getCsrfTokenFromSession() ?>">
+                               value="<?= Token::getInstance()->getTokenString('add-user') ?>">
 
                         <div class="alert alert-danger d-none" id="pmf-add-user-error-message"></div>
 
@@ -710,7 +713,7 @@ if (
                 <div class="modal-body">
                     <form action="#" method="post" accept-charset="utf-8" autocomplete="off">
                         <input type="hidden" name="csrf" id="modal_csrf"
-                               value="<?= $currentUser->getCsrfTokenFromSession() ?>">
+                               value="<?= Token::getInstance()->getTokenString('overwrite-password') ?>">
                         <input type="hidden" name="user_id" id="modal_user_id" value="<?= $userId ?>">
 
                         <div class="row mb-2">

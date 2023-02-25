@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -44,7 +45,7 @@ $template->parse(
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'ad_user_loginname' => Translation::get('ad_user_loginname'),
-        'csrf' => $user->getCsrfTokenFromSession(),
+        'csrf' => Token::getInstance()->getTokenInput('request-removal'),
         'lang' => $Language->getLanguage(),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' =>

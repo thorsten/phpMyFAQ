@@ -106,6 +106,7 @@ export const handleUsers = async () => {
       const csrf = document.getElementById('add_user_csrf').value;
       const userName = document.getElementById('add_user_name').value;
       const realName = document.getElementById('add_user_realname').value;
+      const automaticPassword = document.getElementById('add_user_automatic_password').value;
       const email = document.getElementById('add_user_email').value;
       const password = document.getElementById('add_user_password').value;
       const passwordConfirm = document.getElementById('add_user_password_confirm').value;
@@ -117,6 +118,7 @@ export const handleUsers = async () => {
         userName,
         realName,
         email,
+        automaticPassword,
         password,
         passwordConfirm,
         isSuperAdmin,

@@ -18,6 +18,7 @@
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Entity\TemplateMetaDataEntity;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TemplateMetaData;
 use phpMyFAQ\Translation;
 
@@ -87,7 +88,9 @@ $metaData = $meta->getAll();
     </thead>
     <tbody>
     <?php
-    foreach ($metaData as $data) : ?>
+    foreach ($metaData as $data) {
+        $csrfToken = Token::getInstance()->getTokenString('delete-meta-data');
+    ?>
         <tr id="row-meta-<?= $data->getId() ?>">
             <td><?= $data->getId() ?></td>
             <td><?= $data->getPageId() ?></td>
@@ -98,9 +101,9 @@ $metaData = $meta->getAll();
                     <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
                 <a href="#" data-delete-meta-id="<?= $data->getId() ?>" class="btn btn-sm btn-danger pmf-meta-delete"
-                   data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
+                   data-csrf-token="<?= $csrfToken ?>">
                     <i aria-hidden="true" class="fa fa-trash" data-delete-meta-id="<?= $data->getId() ?>"
-                       data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>"></i>
+                       data-csrf-token="<?= $csrfToken ?>"></i>
                 </a>
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#codeModal"
                         data-code-snippet="<?= $data->getContent() ?>">
@@ -108,8 +111,7 @@ $metaData = $meta->getAll();
                 </button>
             </td>
         </tr>
-    <?php
-    endforeach; ?>
+    <?php } ?>
     </tbody>
 </table>
 
@@ -124,7 +126,7 @@ $metaData = $meta->getAll();
             </div>
             <div class="modal-body">
                 <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
-                    <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                    <?= Token::getInstance()->getTokenInput('add-metadata') ?>
 
                     <div class="row mb-2">
                         <label for="page_id" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_page_id') ?></label>

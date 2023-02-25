@@ -32,6 +32,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Question;
 use phpMyFAQ\Revision;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -366,10 +367,10 @@ if (
                                     data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
                                 <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
                                 <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
-                                <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                                 <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
                                 <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
                                 <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
+                                <?= Token::getInstance()->getTokenInput('edit-faq') ?>
 
                                 <!-- Question -->
                                 <div class="form-group mb-2">
@@ -854,7 +855,7 @@ if (
               <input type="hidden" name="record_id" id="attachment_record_id" value="<?= $faqData['id'] ?>">
               <input type="hidden" name="record_lang" id="attachment_record_lang" value="<?= $faqData['lang'] ?>">
               <input type="hidden" name="save" value="true">
-              <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+              <?= Token::getInstance()->getTokenInput('upload-attachment') ?>
 
               <div class="custom-file">
                 <input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload" multiple>

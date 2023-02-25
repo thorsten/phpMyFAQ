@@ -190,7 +190,6 @@ class CurrentUser extends User
             $this->setLoggedIn(true);
             $this->updateSessionId(true);
             $this->saveToSession();
-            $this->saveCrsfTokenToSession();
 
             // save remember me cookie if set
             if ($this->rememberMe) {
@@ -383,7 +382,7 @@ class CurrentUser extends User
      *
      * @return void
      */
-    public function saveToSession()
+    public function saveToSession(): void
     {
         $_SESSION[SESSION_CURRENT_USER] = $this->getUserId();
     }
@@ -394,9 +393,6 @@ class CurrentUser extends User
      */
     public function deleteFromSession(bool $deleteCookie = false): bool
     {
-        // delete CSRF Token
-        $this->deleteCsrfTokenFromSession();
-
         // delete CurrentUser object from session
         $_SESSION[SESSION_CURRENT_USER] = null;
         unset($_SESSION[SESSION_CURRENT_USER]);
@@ -447,6 +443,7 @@ class CurrentUser extends User
     {
         $auth = false;
         $user = self::getFromCookie($faqConfig);
+
         if (!$user instanceof CurrentUser) {
             $user = self::getFromSession($faqConfig);
         }
@@ -523,10 +520,7 @@ class CurrentUser extends User
             return null;
         }
         // check ip
-        if (
-            $config->get('security.ipCheck')
-            && $sessionInfo['ip'] != $_SERVER['REMOTE_ADDR']
-        ) {
+        if ($config->get('security.ipCheck') && $sessionInfo['ip'] != $_SERVER['REMOTE_ADDR']) {
             return null;
         }
         // session-id needs to be updated
@@ -572,8 +566,6 @@ class CurrentUser extends User
         $user->loggedIn = true;
         // save current user to session and return the instance
         $user->saveToSession();
-        // add CSRF token to session
-        $user->saveCrsfTokenToSession();
 
         return $user;
     }
@@ -678,24 +670,6 @@ class CurrentUser extends User
     }
 
     /**
-     * Returns the CSRF token from session.
-     */
-    public function getCsrfTokenFromSession(): string
-    {
-        return $_SESSION['phpmyfaq_csrf_token'] ?? '';
-    }
-
-    /**
-     * Save CSRF token to session.
-     */
-    public function saveCrsfTokenToSession(): void
-    {
-        if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
-            $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
-        }
-    }
-
-    /**
      * Sets IP and session timestamp plus lockout time, success flag to
      * false.
      */
@@ -760,21 +734,5 @@ class CurrentUser extends User
         } else {
             return false;
         }
-    }
-
-    /**
-     * Deletes CSRF token from session.
-     */
-    protected function deleteCsrfTokenFromSession(): void
-    {
-        unset($_SESSION['phpmyfaq_csrf_token']);
-    }
-
-    /**
-     * Creates a CSRF token.
-     */
-    private function createCsrfToken(): string
-    {
-        return sha1(microtime() . $this->getLogin());
     }
 }

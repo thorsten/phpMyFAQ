@@ -19,6 +19,7 @@ use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
@@ -315,7 +316,7 @@ switch ($action) {
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                     <a class="dropdown-item"
-                       href="index.php?action=logout&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                       href="index.php?action=logout&csrf=<?= Token::getInstance()->getTokenString('logout') ?>">
                         <?= Translation::get('admin_mainmenu_logout'); ?>
                     </a>
                 </li>

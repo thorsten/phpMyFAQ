@@ -20,6 +20,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
@@ -75,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
                 <a class="btn btn-sm btn-danger"
-                   href="?action=deleteadminlog&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                   href="?action=deleteadminlog&csrf=<?= Token::getInstance()->getTokenString('delete-adminlog') ?>">
                     <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_adminlog_del_older_30d') ?>
                 </a>
             </div>

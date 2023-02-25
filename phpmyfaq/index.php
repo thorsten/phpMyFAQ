@@ -34,6 +34,7 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
@@ -137,7 +138,7 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 // Get CSRF Token
 //
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
-if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
     $csrfChecked = false;
 } else {
     $csrfChecked = true;
@@ -159,6 +160,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     // Try to authenticate with cookie information
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 }
+
+$faqConfig->getLogger()->error('Auth: ' . $auth);
 
 //
 // Logout
@@ -681,7 +684,7 @@ if ($user->getUserId() > 0) {
                 Translation::get('ad_menu_RequestRemove') . '</a>',
             'msgLogoutUser' => sprintf(
                 '<a class="dropdown-item" href="?action=logout&csrf=%s">%s</a>',
-                $user->getCsrfTokenFromSession(),
+                Token::getInstance()->getTokenString('logout'),
                 Translation::get('ad_menu_logout'),
             )
         ]

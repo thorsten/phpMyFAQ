@@ -52,8 +52,8 @@ $metaData = $meta->getById((int)$metaId);
 ?>
 
 <form action="?action=meta.update" method="post" accept-charset="utf-8">
-  <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
   <input type="hidden" name="meta_id" value="<?= $metaData->getId() ?>">
+    <?= Token::getInstance()->getTokenInput('update-metadata') ?>
 
   <div class="row mb-2">
     <label for="page_id" class="col-sm-2 col-form-label"><?= Translation::get('ad_meta_page_id') ?></label>

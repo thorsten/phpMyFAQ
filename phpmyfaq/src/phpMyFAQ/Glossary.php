@@ -24,8 +24,6 @@ namespace phpMyFAQ;
  */
 class Glossary
 {
-    private array $item = [];
-
     private string $definition = '';
     private array $cachedItems = [];
 
@@ -265,7 +263,6 @@ class Glossary
      */
     public function addGlossaryItem(string $item, string $definition): bool
     {
-        $this->item = $this->config->getDb()->escape($item);
         $this->definition = $this->config->getDb()->escape($definition);
 
         $query = sprintf(
@@ -273,7 +270,7 @@ class Glossary
             Database::getTablePrefix(),
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
             $this->config->getLanguage()->getLanguage(),
-            Strings::htmlspecialchars($this->item),
+            Strings::htmlspecialchars($item),
             Strings::htmlspecialchars($this->definition)
         );
 

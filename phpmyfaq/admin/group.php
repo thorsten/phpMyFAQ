@@ -19,6 +19,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -179,7 +180,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
           <p><?= $PMF_LANG['ad_group_deleteQuestion'] ?></p>
           <form action="?action=group&amp;group_action=delete" method="post">
             <input type="hidden" name="group_id" value="<?= $groupId ?>">
-            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <?= Token::getInstance()->getTokenInput('delete-group') ?>
             <p>
               <button class="btn btn-inverse" type="submit" name="cancel">
                   <?= $PMF_LANG['ad_gen_cancel'] ?>
@@ -286,7 +287,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
     <div class="col-lg-12">
       <div id="user_message"><?= $message ?></div>
       <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
-        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+        <?= Token::getInstance()->getTokenInput('add-group') ?>
 
         <div class="row">
           <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
@@ -410,21 +411,6 @@ if ('list' === $groupAction) {
   <div class="row">
 
     <div class="col-lg-4" id="group_list">
-
-      <!--
-      <div class="card mb-4">
-        <div class="card-header py-3">
-          <form id="group-import-ldap-groups" method="post"
-                name="group-import-ldap-groups" action="?action=group&amp;group_action=import-ldap-groups">
-            <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
-            <button class="btn btn-success" type="submit">
-              Import LDAP groups
-            </button>
-          </form>
-        </div>
-      </div>
-      -->
-
       <div class="card mb-4">
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
               method="post">

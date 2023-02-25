@@ -18,6 +18,7 @@
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -46,16 +47,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
       <?php
         $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
         $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
-            $csrfCheck = false;
-        } else {
-            $csrfCheck = true;
-        }
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromGet) {
-            $csrfCheckDelete = false;
-        } else {
-            $csrfCheckDelete = true;
-        }
 
         if (
             $user->perm->hasPermission($user->getUserId(), 'addglossary') ||
@@ -64,7 +55,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         ) {
             $glossary = new Glossary($faqConfig);
 
-            if ('saveglossary' == $action && $user->perm->hasPermission($user->getUserId(), 'addglossary') && $csrfCheck) {
+            if (
+                'saveglossary' == $action && $user->perm->hasPermission($user->getUserId(), 'addglossary') &&
+                Token::getInstance()->verifyToken('add-glossary', $csrfTokenFromPost)
+            ) {
                 $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
                 $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
                 if ($glossary->addGlossaryItem($item, $definition)) {
@@ -75,10 +69,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
 
             if (
-                'updateglossary' == $action && $user->perm->hasPermission(
-                    $user->getUserId(),
-                    'editglossary'
-                ) && $csrfCheck
+                'updateglossary' == $action && $user->perm->hasPermission($user->getUserId(), 'editglossary') &&
+                Token::getInstance()->verifyToken('edit-glossary', $csrfTokenFromPost)
             ) {
                 $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
                 $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -91,10 +83,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
 
             if (
-                'deleteglossary' == $action && $user->perm->hasPermission(
-                    $user->getUserId(),
-                    'editglossary'
-                ) && $csrfCheckDelete
+                'deleteglossary' == $action && $user->perm->hasPermission($user->getUserId(), 'editglossary') &&
+                Token::getInstance()->verifyToken('delete-glossary', $csrfTokenFromGet)
             ) {
                 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
                 if ($glossary->deleteGlossaryItem($id)) {
@@ -131,7 +121,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     '?action=deleteglossary&amp;id=',
                     $items['id'],
                     '&csrf=',
-                    $user->getCsrfTokenFromSession()
+                    Token::getInstance()->getTokenString('delete-glossary')
                 );
                 printf(
                     '<span title="%s"><i aria-hidden="true" class="fa fa-trash"></i></span></a></td>',

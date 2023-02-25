@@ -51,7 +51,7 @@ if ($user->isLoggedIn()) {
             'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
             'ucpGravatarImage' => $gravatarImg,
             'userid' => $user->getUserId(),
-            'csrf' => Token::getInstance($faqConfig)->getTokenInput('ucp'),
+            'csrf' => Token::getInstance()->getTokenInput('ucp'),
             'lang' => $Language->getLanguage(),
             'readonly' => $user->isLocalUser() ? '' : 'readonly disabled',
             'msgRealName' => Translation::get('ad_user_name'),

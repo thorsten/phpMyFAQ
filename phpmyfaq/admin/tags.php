@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -37,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
     <form action="" method="post" id="tag-form">
-      <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+        <?= Token::getInstance()->getTokenInput('tags') ?>
         <?php
         if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             $tags = new Tags($faqConfig);

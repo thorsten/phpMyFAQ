@@ -20,6 +20,7 @@ use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -62,11 +63,10 @@ switch ($ajaxAction) {
         break;
 
     case 'update-order':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+        $postData = json_decode(file_get_contents('php://input', true));
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
-            $http->setStatus(400);
+        if (!Token::getInstance()->verifyToken('category', $postData->csrf)) {
+            $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }

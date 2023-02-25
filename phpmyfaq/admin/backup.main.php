@@ -15,6 +15,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -51,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
       </div>
     </div>
     <div class="card mb-4">
-      <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>"
+      <form method="post" action="?action=restore&csrf=<?= Token::getInstance()->getTokenString('restore') ?>"
             enctype="multipart/form-data">
         <div class="card-header py-3">
             <?= Translation::get('ad_csv_head2') ?>

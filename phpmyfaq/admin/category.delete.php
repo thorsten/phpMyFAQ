@@ -18,6 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -49,7 +50,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcateg')) {
     <div class="col-lg-12">
       <form action="?action=removecategory" method="post" accept-charset="utf-8">
         <input type="hidden" name="cat" value="<?= $id ?>">
-        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+          <?= Token::getInstance()->getTokenInput('remove-category') ?>
 
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="categoryName">

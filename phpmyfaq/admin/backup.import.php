@@ -20,6 +20,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
@@ -30,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+if (!Token::getInstance()->verifyToken('restore', $csrfToken)) {
     $csrfCheck = false;
 } else {
     $csrfCheck = true;

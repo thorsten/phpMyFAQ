@@ -80,7 +80,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
                                 <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
-                                <?= $categoryHelper->renderOptions($searchCategory) ?>
+                                <?= $categoryHelper->renderOptions($searchCategory ?? 0) ?>
                             </select>
                         </div>
                     </div>

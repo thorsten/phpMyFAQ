@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -45,10 +46,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
           $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-          if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-              $csrfChecked = false;
-          } else {
+          if (Token::getInstance()->verifyToken('questions', $csrfToken)) {
               $csrfChecked = true;
+          } else {
+              $csrfChecked = false;
           }
 
           $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_UNSAFE_RAW);
@@ -64,7 +65,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if (count($openQuestions) > 0) {
                 ?>
             <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
-              <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+              <?= Token::getInstance()->getTokenInput('questions') ?>
               <table class="table table-striped align-middle">
                 <thead>
                 <tr>
@@ -97,7 +98,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         <?= Strings::htmlentities($openQuestion->getQuestion()) ?>
                     </td>
                     <td>
-                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= $user->getCsrfTokenFromSession() ?>"
+                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= Token::getInstance()->getTokenString('toggle-question-visibility') ?>"
                          class="btn btn-info">
                           <?= ('Y' === $openQuestion->isVisible()) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
                       </a>

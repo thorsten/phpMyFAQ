@@ -21,6 +21,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
@@ -36,7 +37,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <a class="btn btn-sm btn-danger" href="?action=truncatesearchterms&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+      <a class="btn btn-sm btn-danger"
+         href="?action=truncatesearchterms&csrf=<?= Token::getInstance()->getTokenString('truncate-seaerchterms') ?>">
         <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_searchterm_del') ?>
       </a>
     </div>
@@ -127,6 +129,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         ++$displayedCounter;
 
         $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
+        $csrfToken = Token::getInstance()->getTokenString('delete-seaerchterms');
         ?>
               <tr id="row-search-id-<?= $searchItem['id'] ?>">
                   <td><?= Strings::htmlspecialchars($searchItem['searchterm']) ?></td>
@@ -138,10 +141,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                       <button class="btn btn-danger pmf-delete-search-term" href="#"
                               title="<?= Translation::get('ad_news_delete') ?>"
                               data-delete-search-term-id="<?= $searchItem['id'] ?>"
-                              data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
+                              data-csrf-token="<?= $csrfToken ?>">
                         <i aria-hidden="true" class="fa fa-trash"
                            data-delete-search-term-id="<?= $searchItem['id'] ?>"
-                           data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>"></i>
+                           data-csrf-token="<?= $csrfToken ?>"></i>
                       </button>
                   </td>
               </tr>

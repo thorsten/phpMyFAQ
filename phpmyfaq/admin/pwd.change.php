@@ -77,8 +77,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
   <div class="row">
     <div class="col-lg-12">
       <form action="?action=passwd" method="post" accept-charset="utf-8">
-        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
         <input type="hidden" name="save" value="newpassword">
+        <?= Token::getInstance()->getTokenInput('password') ?>
         <div class="row">
           <label class="col-lg-2 col-form-label" for="opass">
               <?= $PMF_LANG['ad_passwd_old'] ?>

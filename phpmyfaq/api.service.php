@@ -132,8 +132,8 @@ $captcha = Captcha::getInstance($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
-'savevoting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
-    !$captcha->checkCaptchaCode($code)
+    'savevoting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
+    'submit-request-removal' !== $action && !$captcha->checkCaptchaCode($code)
 ) {
     $message = ['error' => Translation::get('msgCaptcha')];
 }
@@ -142,8 +142,8 @@ if (
 // Check if the user is logged in when FAQ is completely secured
 //
 if (
-    false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&
-    'changepassword' !== $action && 'saveregistration' !== $action
+    !$isLoggedIn && $faqConfig->get('security.enableLoginOnly') && 'submit-request-removal' !== $action &&
+    'change-password' !== $action && 'saveregistration' !== $action
 ) {
     $message = ['error' => Translation::get('ad_msg_noauth')];
 }
@@ -786,7 +786,7 @@ switch ($action) {
 
         $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($faqConfig)->verifyToken('ucp', $csrfToken)) {
+        if (!Token::getInstance()->verifyToken('ucp', $csrfToken)) {
             $message = ['error' => Translation::get('ad_msg_noauth')];
             break;
         }
@@ -908,6 +908,13 @@ switch ($action) {
     //
     case 'submit-request-removal':
         $postData = json_decode(file_get_contents('php://input'), true);
+
+        $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_UNSAFE_RAW);
+        if (!Token::getInstance()->verifyToken('request-removal', $csrfToken)) {
+            $message = ['error' => 'TOKEN' . Translation::get('ad_msg_noauth')];
+            break;
+        }
+
         $author = trim(Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
         $loginName = trim(Filter::filterVar($postData['loginname'], FILTER_UNSAFE_RAW));
         $email = trim(Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));

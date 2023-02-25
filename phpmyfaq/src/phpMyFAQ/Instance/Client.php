@@ -31,7 +31,7 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
  */
 class Client extends Instance
 {
-    private Filesystem $fileSystem;
+    private ?Filesystem $fileSystem = null;
 
     private string $clientFolder;
 

@@ -65,7 +65,6 @@ if ($session->getCurrentSessionKey()) {
         $user->setAuthSource('azure');
         $user->updateSessionId(true);
         $user->saveToSession();
-        $user->saveCrsfTokenToSession();
         $user->setTokenData([
                 'refresh_token' => $oAuth->getRefreshToken(),
                 'access_token' => $oAuth->getAccessToken(),

@@ -23,6 +23,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -96,10 +97,9 @@ if (
             break;
 
         case 'activate_user':
-            $json = file_get_contents('php://input', true);
-            $postData = json_decode($json);
+            $postData = json_decode(file_get_contents('php://input', true));
 
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrfToken) {
+            if (!Token::getInstance()->verifyToken('user', $postData->csrfToken)) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
@@ -123,7 +123,7 @@ if (
             break;
 
         case 'add_user':
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
@@ -188,10 +188,9 @@ if (
             break;
 
         case 'delete_user':
-            $json = file_get_contents('php://input', true);
-            $deleteData = json_decode($json);
+            $deleteData = json_decode(file_get_contents('php://input', true));
 
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrfToken) {
+            if (!Token::getInstance()->verifyToken('user', $deleteData->csrfToken)) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
@@ -227,11 +226,12 @@ if (
             $postData = json_decode($json);
 
             $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
-            $csrfToken = Filter::filterVar($postData->csrf, FILTER_UNSAFE_RAW);
             $newPassword = Filter::filterVar($postData->newPassword, FILTER_UNSAFE_RAW);
             $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_UNSAFE_RAW);
 
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+            var_dump($csrfToken);
+
+            if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
                 $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);

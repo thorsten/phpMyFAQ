@@ -19,7 +19,7 @@
 
   <form id="formValues" action="#" method="post" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
-    <input type="hidden" name="csrf" value="{{ csrf }}" />
+    {{ csrf }}
 
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="name">{{ ad_user_loginname }}</label>

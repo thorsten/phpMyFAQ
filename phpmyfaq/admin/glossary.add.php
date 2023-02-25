@@ -17,6 +17,7 @@
  * @since 2005-09-15
  */
 
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -35,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   <div class="col-lg-12">
       <?php if ($user->perm->hasPermission($user->getUserId(), 'addglossary')) { ?>
         <form action="?action=saveglossary" method="post" accept-charset="utf-8">
-          <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+          <?= Token::getInstance()->getTokenInput('add-glossary') ?>
 
           <div class="row mb-2">
             <label class="col-lg-2 col-form-label" for="item"><?= Translation::get('ad_glossary_item') ?>:</label>

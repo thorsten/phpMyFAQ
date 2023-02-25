@@ -27,6 +27,7 @@ use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TemplateMetaData;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
@@ -50,10 +51,9 @@ $stopWords = new StopWords($faqConfig);
 
 switch ($ajaxAction) {
     case 'add-instance':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+        $postData = json_decode(file_get_contents('php://input', true));
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+        if (!Token::getInstance()->verifyToken('add-instance', $postData->csrf)) {
             $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
@@ -152,11 +152,10 @@ switch ($ajaxAction) {
         break;
 
     case 'delete-instance':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+        $postData = json_decode(file_get_contents('php://input', true));
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
-            $http->setStatus(400);
+        if (!Token::getInstance()->verifyToken('delete-instance', $postData->csrf)) {
+            $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
@@ -214,14 +213,13 @@ switch ($ajaxAction) {
         break;
 
     case 'save_stop_word':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+        $postData = json_decode(file_get_contents('php://input', true));
 
         $stopWordId = Filter::filterVar($postData->stopWordId, FILTER_VALIDATE_INT);
         $stopWordsLang = Filter::filterVar($postData->stopWordsLang, FILTER_UNSAFE_RAW);
         $stopWord = Filter::filterVar($postData->stopWord, FILTER_UNSAFE_RAW);
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+        if (!Token::getInstance()->verifyToken('stopwords', $postData->csrf)) {
             $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
@@ -243,10 +241,9 @@ switch ($ajaxAction) {
         break;
 
     case 'add-template-metadata':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+        $postData = json_decode(file_get_contents('php://input', true));
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+        if (!Token::getInstance()->getTokenString('add-metadata', $postData->csrf)) {
             $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
@@ -276,7 +273,7 @@ switch ($ajaxAction) {
         $json = file_get_contents('php://input', true);
         $deleteData = json_decode($json);
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
+        if (!Token::getInstance()->getTokenString('delete-meta-data', $deleteData->csrf)) {
             $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
@@ -299,7 +296,7 @@ switch ($ajaxAction) {
         $json = file_get_contents('php://input', true);
         $postData = json_decode($json);
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
+        if (!Token::getInstance()->getTokenString('configuration', $postData->csrf)) {
             $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);

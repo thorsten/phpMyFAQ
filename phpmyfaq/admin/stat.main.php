@@ -19,6 +19,7 @@
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 
@@ -35,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a class="btn btn-sm btn-danger"
-               href="?action=clear-visits&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+               href="?action=clear-visits&csrf=<?= Token::getInstance()->getTokenString('clear-visits') ?>">
                 <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_clear_all_visits') ?>
             </a>
         </div>
@@ -231,7 +232,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <form action="?action=viewsessions" method="post"
               class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-12">
-                <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                <?= Token::getInstance()->getTokenInput('sessions') ?>
 
                   <label class="form-label" for="month"><?= Translation::get('ad_stat_choose') ?>:</label>
                   <select name="month" id="month" class="form-select">

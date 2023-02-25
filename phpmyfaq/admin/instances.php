@@ -21,6 +21,7 @@ use phpMyFAQ\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -124,14 +125,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
           </a>
         </td>
         <td>
-            <?php if (!$currentInstance->getConfig('isMaster')) : ?>
+            <?php
+            if (!$currentInstance->getConfig('isMaster')) {
+                $csrfToken = Token::getInstance()->getTokenString('delete-instance');
+            ?>
               <button data-delete-instance-id="<?= $site->id ?>" type="button"
                  class="btn btn-danger pmf-instance-delete"
-                 data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
+                 data-csrf-token="<?= $csrfToken ?>">
                 <i aria-hidden="true" class="fa fa-trash" data-delete-instance-id="<?= $site->id ?>"
-                   data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>"></i>
+                   data-csrf-token="<?= $csrfToken ?>"></i>
               </button>
-            <?php endif; ?>
+            <?php } ?>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -147,7 +151,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         </div>
         <div class="modal-body">
           <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
-            <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <?= Token::getInstance()->getTokenInput('add-instance') ?>
             <div class="form-group row">
               <label class="col-form-label col-lg-4" for="url">
                   <?= Translation::get('ad_instance_url') ?>:

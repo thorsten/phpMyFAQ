@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -44,8 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
           <?= Translation::get('ad_stopwords_desc') ?>
       </p>
         <form class="row row-cols-lg-auto g-3 align-items-center">
-            <input type="hidden" name="pmf-stop-words-csrf-token" id="pmf-stop-words-csrf-token"
-                   value="<?= $user->getCsrfTokenFromSession() ?>">
+            <?= Token::getInstance()->getTokenInput('stopwords') ?>
 
             <div class="col-12">
                 <label class="visually-hidden" for="pmf-stop-words-language-selector">

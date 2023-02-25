@@ -20,6 +20,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -76,7 +77,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                   <input type="hidden" name="restricted_groups[]" value="-1">
                 <?php endif; ?>
               <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
-              <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                <?= Token::getInstance()->getTokenInput('update-category') ?>
 
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="name"><?= Translation::get('ad_categ_titel') ?>:</label>

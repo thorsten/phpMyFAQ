@@ -53,7 +53,7 @@ export const handleInstances = () => {
           if (response.status === 200) {
             return response.json();
           }
-          throw new Error('Network response was not ok.');
+          throw new Error('Network response was not ok: ', { cause: { response } });
         })
         .then((response) => {
           const table = document.querySelector('.table tbody');
@@ -99,11 +99,12 @@ export const handleInstances = () => {
           table.appendChild(row);
           modal.hide();
         })
-        .catch((error) => {
+        .catch(async (error) => {
           const table = document.querySelector('.table');
+          const errorMessage = await error.cause.response.json();
           table.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: error })
+            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
           );
         });
     });
@@ -133,18 +134,19 @@ export const handleInstances = () => {
               if (response.status === 200) {
                 return response.json();
               }
-              throw new Error('Network response was not ok.');
+              throw new Error('Network response was not ok: ', { cause: { response } });
             })
             .then((response) => {
               const row = document.getElementById(`row-instance-${response.deleted}`);
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
             })
-            .catch((error) => {
+            .catch(async (error) => {
               const table = document.querySelector('.table');
+              const errorMessage = await error.cause.response.json();
               table.insertAdjacentElement(
-                'beforebegin',
-                addElement('div', { classList: 'alert alert-danger', innerText: error })
+                'afterend',
+                addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
               );
             });
         }

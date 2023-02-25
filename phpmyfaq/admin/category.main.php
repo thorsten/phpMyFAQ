@@ -23,6 +23,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -49,20 +50,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   <div class="row">
     <div class="col-lg-12">
       <form method="post">
-        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+        <?= Token::getInstance()->getTokenInput('category') ?>
         <?php
-        //
-        // CSRF Check
-        //
         $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-        if (
-            'category' != $action && 'content' != $action &&
-            (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)
-        ) {
-            $csrfCheck = false;
-        } else {
-            $csrfCheck = true;
-        }
 
         //
         // Image upload
@@ -73,9 +63,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
         $categoryPermission = new CategoryPermission($faqConfig);
 
-        if ($user->perm->hasPermission($user->getUserId(), 'editcateg') && $csrfCheck) {
+        if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             // Save a new category
-            if ($action == 'savecategory') {
+            if ($action === 'savecategory' && Token::getInstance()->verifyToken('save-category', $csrfToken)) {
                 $category = new Category($faqConfig, [], false);
                 $category->setUser($currentAdminUser);
                 $category->setGroups($currentAdminGroups);
@@ -158,7 +148,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
 
             // Updates an existing category
-            if ($action == 'updatecategory') {
+            if ($action === 'updatecategory' && Token::getInstance()->verifyToken('update-category', $csrfToken)) {
                 $category = new Category($faqConfig, [], false);
                 $category->setUser($currentAdminUser);
                 $category->setGroups($currentAdminGroups);
@@ -270,7 +260,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
 
             // Deletes an existing category
-            if ($user->perm->hasPermission($user->getUserId(), 'delcateg') && $action == 'removecategory') {
+            if (
+                $user->perm->hasPermission($user->getUserId(), 'delcateg') && $action === 'removecategory' &&
+                Token::getInstance()->verifyToken('remove-category', $csrfToken)
+            ) {
                 $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
                 $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
 

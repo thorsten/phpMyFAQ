@@ -19,6 +19,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,8 +43,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         $glossaryItem = $glossary->getGlossaryItem($id);
         ?>
         <form action="?action=updateglossary" method="post" accept-charset="utf-8">
-            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
             <input type="hidden" name="id" value="<?= $glossaryItem['id'] ?>">
+            <?= Token::getInstance()->getTokenInput('edit-glossary') ?>
             <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="item">
                     <?= Translation::get('ad_glossary_item') ?>:

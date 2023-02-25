@@ -21,6 +21,7 @@ use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -62,7 +63,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
                 <form enctype="multipart/form-data"  action="?action=savecategory" method="post">
                     <input type="hidden" id="lang" name="lang" value="<?= $faqLangCode ?>">
                     <input type="hidden" name="parent_id" value="<?= $parentId ?>">
-                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                    <?= Token::getInstance()->getTokenInput('save-category') ?>
     <?php
     if ($parentId > 0) {
         $userAllowed = $categoryPermission->get(CategoryPermission::USER, [$parentId]);

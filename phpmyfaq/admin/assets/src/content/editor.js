@@ -191,7 +191,7 @@ export const renderEditor = () => {
 
       // override default upload handler to simulate successful upload
       images_upload_handler: (blobInfo, success, failure) => {
-        const csrf = document.getElementById('csrf').value;
+        const csrf = document.getElementById('pmf-csrf-token').value;
         const formData = new FormData();
         formData.append('file', blobInfo.blob(), blobInfo.filename());
 
@@ -215,7 +215,7 @@ export const renderEditor = () => {
       },
 
       // Custom params
-      csrf: document.getElementById('csrf').value,
+      csrf: document.getElementById('pmf-csrf-token').value,
 
       // Image handling
       image_advtab: true,

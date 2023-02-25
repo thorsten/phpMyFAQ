@@ -121,7 +121,10 @@ class CategoryPermission
         $hasUserPermissions = $this->get(self::USER, [$categoryId]);
         $hasGroupPermissions = $this->get(self::GROUP, [$categoryId]);
 
-        if ($hasUserPermissions[0] !== -1 || $hasGroupPermissions[0] !== -1) {
+        if (
+            (isset($hasUserPermissions[0]) && $hasUserPermissions[0] !== -1) ||
+            (isset($hasGroupPermissions[0]) && $hasGroupPermissions[0] !== -1)
+        ) {
             return true;
         }
 

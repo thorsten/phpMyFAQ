@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -74,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             <input type="hidden" name="id" value="<?= $categoryId ?>">
             <input type="hidden" name="catlang" id="catlang" value="<?= $categoryData->getLang() ?>">
             <input type="hidden" name="parent_id" value="<?= $categoryData->getParentId() ?>">
-            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+              <?= Token::getInstance()->getTokenInput('update-category') ?>
             <input type="hidden" name="existing_image" value="<?= $categoryData->getImage() ?>"
                    id="pmf-category-existing-image">
 
