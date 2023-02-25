@@ -43,6 +43,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'add_faq')) {
+    $faqPermission = new FaqPermission($faqConfig);
+
     // FAQ data
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
@@ -73,38 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_UNSAFE_RAW);
 
     // Permissions
-    $permissions = [];
-    if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_UNSAFE_RAW)) {
-        $permissions += [
-            'restricted_user' => [
-                -1,
-            ],
-        ];
-    } else {
-        $permissions += [
-            'restricted_user' => [
-                Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
-            ],
-        ];
-    }
-
-    if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_UNSAFE_RAW)) {
-        $permissions += [
-            'restricted_groups' => [
-                -1,
-            ],
-        ];
-    } else {
-        $permissions += Filter::filterInputArray(
-            INPUT_POST,
-            [
-                'restricted_groups' => [
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-                ],
-            ]
-        );
-    }
+    $permissions = $faqPermission->createPermissionArray();
 
     if (!isset($categories['rubrik'])) {
         $categories['rubrik'] = [];
@@ -124,8 +95,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         $category->setGroups($currentAdminGroups);
 
         $categoryPermission = new CategoryPermission($faqConfig);
-
-        $faqPermission = new FaqPermission($faqConfig);
 
         $tagging = new Tags($faqConfig);
 

@@ -1019,6 +1019,7 @@ class Faq
      * Updates a record.
      *
      * @param array $data Array of FAQ data
+     * @deprecated will be removed in v3.2
      */
     public function updateRecord(array $data): bool
     {
@@ -1070,6 +1071,56 @@ class Faq
         $this->config->getDb()->query($query);
 
         return true;
+    }
+
+    public function update(FaqEntity $faq): bool
+    {
+        // Update entry
+        $query = sprintf(
+            "
+            UPDATE
+                %sfaqdata
+            SET
+                revision_id = %d,
+                active = '%s',
+                sticky = %d,
+                keywords = '%s',
+                thema = '%s',
+                content = '%s',
+                author = '%s',
+                email = '%s',
+                comment = '%s',
+                updated = '%s',
+                links_state = '%s',
+                links_check_date = %d,
+                date_start = '%s',
+                date_end = '%s',
+                notes = '%s'
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            Database::getTablePrefix(),
+            $faq->getRevisionId(),
+            $faq->isActive(),
+            $faq->isSticky(),
+            $this->config->getDb()->escape($faq->getKeywords()),
+            $this->config->getDb()->escape($faq->getQuestion()),
+            $this->config->getDb()->escape($faq->getAnswer()),
+            $this->config->getDb()->escape($faq->getAuthor()),
+            $faq->getEmail(),
+            $faq->isComment(),
+            $faq->getUpdatedDate()->format('YmdHis'),
+            $faq->getLinkState(),
+            $faq->getLinksCheckedDate()->format('YmdHis'),
+            $faq->getValidFrom()->format('YmdHis'),
+            $faq->getValidTo()->format('YmdHis'),
+            $faq->getNotes(),
+            $faq->getId(),
+            $faq->getLanguage()
+        );
+
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**

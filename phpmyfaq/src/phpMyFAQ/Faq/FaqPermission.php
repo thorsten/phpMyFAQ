@@ -18,6 +18,7 @@ namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Filter;
 
 /**
  * Class FaqPermission
@@ -44,7 +45,7 @@ class FaqPermission
      *
      * @param string $mode 'group' or 'user'
      * @param int    $faqId ID of the current record
-     * @param array  $ids Array of group or user IDs
+     * @param int[]  $ids Array of group or user IDs
      */
     public function add(string $mode, int $faqId, array $ids): bool
     {
@@ -122,6 +123,41 @@ class FaqPermission
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 $permissions[] = (int)$row->permission;
             }
+        }
+
+        return $permissions;
+    }
+
+    public function createPermissionArray(): array
+    {
+        $permissions = [];
+
+        if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_UNSAFE_RAW)) {
+            $permissions += [
+                'restricted_user' => [-1],
+            ];
+        } else {
+            $permissions += [
+                'restricted_user' => [
+                    Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                ],
+            ];
+        }
+
+        if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_UNSAFE_RAW)) {
+            $permissions += [
+                'restricted_groups' => [-1],
+            ];
+        } else {
+            $permissions += Filter::filterInputArray(
+                INPUT_POST,
+                [
+                    'restricted_groups' => [
+                        'filter' => FILTER_VALIDATE_INT,
+                        'flags' => FILTER_REQUIRE_ARRAY,
+                    ],
+                ]
+            );
         }
 
         return $permissions;
