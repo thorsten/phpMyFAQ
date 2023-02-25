@@ -21,6 +21,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="fa fa-question-circle-o"></i>
-      <?= $PMF_LANG['msgOpenQuestions'] ?>
+      <?= Translation::get('msgOpenQuestions') ?>
   </h1>
 </div>
 
@@ -70,9 +71,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <thead>
                 <tr>
                   <th></th>
-                  <th><?= $PMF_LANG['ad_entry_author'] ?></th>
-                  <th><?= $PMF_LANG['ad_entry_theme'] ?></th>
-                  <th colspan="2"><?= $PMF_LANG['ad_entry_visibility'] ?>?</th>
+                  <th><?= Translation::get('ad_entry_author') ?></th>
+                  <th><?= Translation::get('ad_entry_theme') ?></th>
+                  <th colspan="2"><?= Translation::get('ad_entry_visibility') ?>?</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -100,18 +101,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <td>
                       <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= Token::getInstance()->getTokenString('toggle-question-visibility') ?>"
                          class="btn btn-info">
-                          <?= ('Y' === $openQuestion->isVisible()) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
+                          <?= ('Y' === $openQuestion->isVisible()) ? Translation::get('ad_gen_yes') : Translation::get('ad_gen_no') ?>
                       </a>
                     </td>
                     <td>
                         <?php if ($faqConfig->get('records.enableCloseQuestion') && $openQuestion->getAnswerId()) { ?>
                         <a href="?action=editentry&amp;id=<?= $openQuestion->getAnswerId() ?>&amp;lang=<?= $faqLangCode ?>"
                            class="btn btn-success">
-                            <?= $PMF_LANG['msg2answerFAQ'] ?>
+                            <?= Translation::get('msg2answerFAQ') ?>
                         </a>
                         <?php } else { ?>
                         <a href="?action=takequestion&amp;id=<?= $openQuestion->getId() ?>" class="btn btn-success">
-                            <?= $PMF_LANG['ad_ques_take'] ?>
+                            <?= Translation::get('ad_ques_take') ?>
                         </a>
                         <?php } ?>
                     </td>
@@ -122,7 +123,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
               <div class="text-right">
                 <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
-                    <?= $PMF_LANG['ad_entry_delete'] ?>
+                    <?= Translation::get('ad_entry_delete') ?>
                 </button>
               </div>
 
@@ -130,10 +131,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <script src="assets/js/record.js"></script>
                 <?php
             } else {
-                echo $PMF_LANG['msgNoQuestionsAvailable'];
+                echo Translation::get('msgNoQuestionsAvailable');
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         ?>
   </div>

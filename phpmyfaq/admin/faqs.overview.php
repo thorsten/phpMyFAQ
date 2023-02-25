@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -27,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="fa fa-list-alt"></i>
-      <?= $PMF_LANG['ad_entry_aor'] ?>
+      <?= Translation::get('ad_entry_aor') ?>
   </h1>
 </div>
 
@@ -109,14 +110,14 @@ if (
                       <th style="width: 120px;">
                         <label>
                           <input type="checkbox" id="sticky_category_block_<?= $cat['id'] ?>">
-                            <?= $PMF_LANG['ad_record_sticky'] ?>
+                            <?= Translation::get('ad_record_sticky') ?>
                         </label>
                       </th>
                       <th style="width: 120px;">
                           <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                             <label>
                               <input type="checkbox" id="active_category_block_<?= $cat['id'] ?>">
-                                <?= $PMF_LANG['ad_record_active'] ?>
+                                <?= Translation::get('ad_record_active') ?>
                             </label>
                           <?php } else { ?>
                             <span class="fa-stack">
@@ -142,7 +143,7 @@ if (
         <?php
     }
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
 ?>
     </div>

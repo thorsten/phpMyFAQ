@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-search"></i>
-              <?= $PMF_LANG['ad_menu_searchfaqs'] ?>
+              <?= Translation::get('ad_menu_searchfaqs') ?>
           </h1>
         </div>
 
@@ -56,7 +56,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 <form action="?action=view" method="post"  accept-charset="utf-8">
 
                     <div class="row">
-                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['msgSearchWord'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= Translation::get('msgSearchWord') ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
                                    value="<?= $searchTerm ?>">
@@ -69,17 +69,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         <div class="offset-lg-2 col-lg-4 checkbox">
                             <label>
                                 <input type="checkbox" name="linkstate" value="linkbad">
-                                <?= $PMF_LANG['ad_linkcheck_searchbadonly'] ?>
+                                <?= Translation::get('ad_linkcheck_searchbadonly') ?>
                             </label>
                         </div>
                     </div>
                     <?php endif; ?>
 
                     <div class="row">
-                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['msgCategory'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= Translation::get('msgCategory') ?>:</label>
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
-                                <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
+                                <option value="0"><?= Translation::get('msgShowAllCategories') ?></option>
                                 <?= $categoryHelper->renderOptions($searchCategory ?? 0) ?>
                             </select>
                         </div>
@@ -88,14 +88,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     <div class="row">
                         <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?= $PMF_LANG['msgSearch'] ?>
+                                <?= Translation::get('msgSearch') ?>
                             </button>
                         </div>
                     </div>
                 </form>
     <?php
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }
 ?>
             </div>

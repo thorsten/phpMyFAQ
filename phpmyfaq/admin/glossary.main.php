@@ -99,8 +99,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             echo '<table class="table table-striped align-middle">';
             printf(
                 '<thead><tr><th>%s</th><th>%s</th><th style="width: 16px">&nbsp;</th></tr></thead>',
-                $PMF_LANG['ad_glossary_item'],
-                $PMF_LANG['ad_glossary_definition']
+                Translation::get('ad_glossary_item'),
+                Translation::get('ad_glossary_definition')
             );
 
             foreach ($glossaryItems as $items) {
@@ -117,7 +117,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 );
                 printf(
                     '<td><a class="btn btn-danger" onclick="return confirm(\'%s\');" href="%s%d%s%s">',
-                    $PMF_LANG['ad_user_del_3'],
+                    Translation::get('ad_user_del_3'),
                     '?action=deleteglossary&amp;id=',
                     $items['id'],
                     '&csrf=',
@@ -125,13 +125,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 );
                 printf(
                     '<span title="%s"><i aria-hidden="true" class="fa fa-trash"></i></span></a></td>',
-                    $PMF_LANG['ad_entry_delete']
+                    Translation::get('ad_entry_delete')
                 );
                 echo '</tr>';
             }
             echo '</table>';
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            echo Translation::get('err_NotAuth');
         }
         ?>
   </div>

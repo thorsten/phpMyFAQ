@@ -97,7 +97,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
-            $PMF_LANG['ad_entry_aor']
+            Translation::get('ad_entry_aor')
         );
 
         $tagging = new Tags($faqConfig);
@@ -205,5 +205,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         <?php
     }
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

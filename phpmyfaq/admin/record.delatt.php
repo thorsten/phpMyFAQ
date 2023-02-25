@@ -7,18 +7,19 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-24
  */
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -27,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 printf(
     '<header><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></header>',
-    $PMF_LANG['ad_entry_aor']
+    Translation::get('ad_entry_aor')
 );
 
 if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
@@ -48,8 +49,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
         '<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
         $recordId,
         $recordLang,
-        $PMF_LANG['ad_entry_back']
+        Translation::get('ad_entry_back')
     );
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    print Translation::get('err_NotAuth');
 }

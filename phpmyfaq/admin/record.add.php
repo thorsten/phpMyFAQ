@@ -87,7 +87,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         $logging->logAdmin($user, 'admin-save-new-faq');
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header">%s</h2></div></header>',
-            $PMF_LANG['ad_entry_aor']
+            Translation::get('ad_entry_aor')
         );
 
         $category = new Category($faqConfig, [], false);
@@ -128,13 +128,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             // Create the visit entry
             $visits = new Visits($faqConfig);
-            $visits->logViews((int)$recordId);
+            $visits->logViews($recordId);
 
             $categoryRelation = new CategoryRelation($faqConfig, $category);
             $categoryRelation->add($categories['rubrik'], $recordId, $recordData['lang']);
 
             // Insert the tags
-            if ($tags != '') {
+            if ($tags !== '') {
                 $tagging->saveTags($recordId, explode(',', trim($tags)));
             }
 
@@ -253,7 +253,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     } else {
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
-            $PMF_LANG['ad_entry_aor']
+            Translation::get('ad_entry_aor')
         );
         echo Alert::danger('ad_entryins_fail');
         ?>
@@ -287,12 +287,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         <input type="hidden" name="notes" value="<?= $notes ?>">
         <p class="text-center">
           <button class="btn btn-primary" type="submit" name="submit">
-              <?= $PMF_LANG['ad_entry_back'] ?>
+              <?= Translation::get('ad_entry_back') ?>
           </button>
         </p>
       </form>
         <?php
     }
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    echo Translation::get('err_NotAuth');
 }

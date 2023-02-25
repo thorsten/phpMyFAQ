@@ -158,7 +158,7 @@ if (
             }
             if (!$automaticPassword) {
                 if (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7) {
-                    $errorMessage[] = $PMF_LANG['ad_passwd_fail'];
+                    $errorMessage[] = Translation::get('ad_passwd_fail');
                 }
             }
 
@@ -239,7 +239,7 @@ if (
 
             if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
                 $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
+                $http->sendJsonWithHeaders(['error' => Translation::get('ad_passwd_fail')]);
                 exit(1);
             }
 
