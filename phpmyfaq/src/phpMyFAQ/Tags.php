@@ -50,7 +50,7 @@ class Tags
         $tagListing = '';
 
         foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
-            $title = Strings::htmlspecialchars($taggingName, ENT_QUOTES, 'utf-8');
+            $title = Strings::htmlspecialchars($taggingName, ENT_QUOTES);
             $url = sprintf('%sindex.php?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $taggingId);
             $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $taggingName;
@@ -59,7 +59,7 @@ class Tags
             $tagListing .= $oLink->toHtmlAnchor() . ', ';
         }
 
-        return '' == $tagListing ? '-' : Strings::substr($tagListing, 0, -2);
+        return '' === $tagListing ? '-' : Strings::substr($tagListing, 0, -2);
     }
 
     /**
@@ -142,7 +142,6 @@ class Tags
                         $recordId,
                         $newTagId
                     );
-                    $this->config->getDb()->query($query);
                 } else {
                     // Add the tag reference for the faq record
                     $query = sprintf(
@@ -154,8 +153,8 @@ class Tags
                             array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags)
                         )
                     );
-                    $this->config->getDb()->query($query);
                 }
+                $this->config->getDb()->query($query);
             }
         }
 

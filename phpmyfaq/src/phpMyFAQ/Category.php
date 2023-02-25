@@ -836,7 +836,7 @@ class Category
                 }
 
                 $breadcrumb[] = sprintf(
-                    '<li>%s</li>',
+                    '<li class="breadcrumb-item">%s</li>',
                     $oLink->toHtmlAnchor()
                 );
             }
@@ -850,24 +850,6 @@ class Category
             );
         } else {
             return implode($separator, $tempName);
-        }
-    }
-
-    /**
-     * Returns a path with the IDs of the current category
-     * @param array $category
-     * @param array $categories
-     * @return string
-     */
-    public function createCategoryPath(array $category, array $categories): string
-    {
-        if ($category['parent_id'] == 0) {
-            return $category['id'];
-        } else {
-            $parent = array_filter($categories, function ($c) use ($category) {
-                return $c['id'] == $category['parent_id'];
-            });
-            return $this->createCategoryPath(array_pop($parent), $categories) . '.' . $category['id'];
         }
     }
 

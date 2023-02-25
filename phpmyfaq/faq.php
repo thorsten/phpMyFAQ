@@ -112,7 +112,7 @@ $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
 $answer = $oGlossary->insertItemsIntoContent($answer);
 
 // Set the path of the current category
-$categoryName = $category->getPath($currentCategory, ' &raquo; ', true, '');
+$categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
 $highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_UNSAFE_RAW);
 if (
