@@ -46,10 +46,11 @@ $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
 // Get possible user input
-$inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_UNSAFE_RAW);
-$inputCategory = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
+$inputLanguage = Filter::filterInput(INPUT_GET, 'pmf-all-languages', FILTER_UNSAFE_RAW);
+$inputCategory = Filter::filterInput(INPUT_GET, 'pmf-search-category', FILTER_VALIDATE_INT, '%');
 $inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
 $inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW);
+
 if (!is_null($inputTag)) {
     $inputTag = str_replace(' ', '', $inputTag);
     $inputTag = str_replace(',,', ',', $inputTag);
@@ -181,7 +182,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     $inputSearchTerm = '';
 }
 
-// Change a little bit the $searchCategory value;
+// Change a little the $searchCategory value;
 $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 try {

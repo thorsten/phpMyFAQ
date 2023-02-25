@@ -1,65 +1,82 @@
-<section class="col-12">
-  <h1>{{ pageHeader }}</h1>
-  [searchTagsSection]
-  <div class="pmf-tag-cloud">{{ searchTags }}</div>
-  [/searchTagsSection] [tagListSection]
-  <h3>{{ msgTags }}</h3>
-  <div class="clearfix">{{ tagList }}</div>
-  [/tagListSection] [relatedTags]
-  <h4>{{ relatedTagsHeader }}</h4>
-  <div class="pmf-tag-cloud">{{ relatedTags }}</div>
-  [/relatedTags] {{ renderSearchResults }} [searchBoxSection]
-  <div class="jumbotron justify-content-center col-12" id="searchBox">
-    <form action="{{ formActionUrl }}" method="get">
-      <input type="hidden" name="action" value="search" />
+<div class="row g-5">
+  <div class="col-md-8">
+    <h2 class="pb-4 mb-4 border-bottom">{{ pageHeader }}</h2>
 
-      <div class="form-row align-items-center">
-        <div class="col-auto">
-          <label class="sr-only" for="searchcategory">{{ selectCategories }}</label>
-          <select class="form-select form-select-lg mb-2" name="searchcategory" id="searchcategory">
-            <option value="%" selected="selected">{{ allCategories }}</option>
-            {{ renderCategoryOptions }}
-          </select>
+    [searchBoxSection]
+    <div class="jumbotron justify-content-center col-12 border rounded p-2 mb-2 bg-light-subtle" id="searchBox">
+      <form action="{{ formActionUrl }}" method="get">
+        <input type="hidden" name="action" value="search" />
+
+        <div class="row">
+          <div class="col-6">
+            <label class="sr-only" for="searchfield">{{ msgSearch }}</label>
+            <input
+              id="searchfield"
+              type="search"
+              name="search"
+              value="{{ searchString }}"
+              class="form-control form-control-lg mb-2"
+              placeholder="{{ msgSearch }}"
+            />
+          </div>
+
+          <div class="col-4">
+            <label class="sr-only" for="pmf-search-category">{{ selectCategories }}</label>
+            <select class="form-select form-select-lg mb-2" name="pmf-search-category" id="pmf-search-category">
+              <option value="%" selected="selected">{{ allCategories }}</option>
+              {{ renderCategoryOptions }}
+            </select>
+          </div>
+
+          <div class="col-2">
+            <button type="submit" class="btn btn-lg btn-primary mb-2" aria-label="{{ msgSearch }}">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="col-5">
-          <label class="sr-only" for="searchfield">{{ msgSearch }}</label>
-          <input
-            id="searchfield"
-            type="search"
-            name="search"
-            value="{{ searchString }}"
-            class="form-control form-control-lg mb-2"
-            placeholder="{{ msgSearch }}"
-          />
-        </div>
-
-        <div class="col-auto">
-          <div class="form-check mb-2">
+        <div class="row">
+          <div class="col">
             <input
               class="form-check-input"
               type="checkbox"
               {{
               checkedAllLanguages
               }}
-              name="langs"
-              id="langs"
+              name="pmf-all-languages"
+              id="pmf-all-languages"
               value="all"
             />
-            <label class="form-check-label" for="langs"> {{ searchOnAllLanguages }} </label>
+            <label class="form-check-label" for="pmf-all-languages"> {{ searchOnAllLanguages }} </label>
           </div>
         </div>
-
-        <div class="col-auto">
-          <button type="submit" class="btn btn-lg btn-primary mb-2" aria-label="{{ msgSearch }}">
-            <span class="fa fa-search"></span>
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
+    [/searchBoxSection] {{ renderSearchResults }}
   </div>
-  [/searchBoxSection] [popularSearchesSection]
-  <h4>{{ msgMostPopularSearches }}</h4>
-  <div class="clearfix">{{ printMostPopularSearches }}</div>
-  [/popularSearchesSection]
-</section>
+
+  <div class="col-md-4">
+    <div class="position-sticky mt-2">
+      [searchTagsSection]
+      <div class="p-4 mb-3 bg-light rounded">
+        <div class="pmf-tag-cloud">{{ searchTags }}</div>
+      </div>
+      [/searchTagsSection] [tagListSection]
+      <div class="p-4 mb-3 bg-light rounded">
+        <h4 class="fst-italic">{{ msgTags }}</h4>
+        <div class="clearfix">{{ tagList }}</div>
+      </div>
+      [/tagListSection] [relatedTags]
+      <div class="p-4 mb-3 bg-light rounded">
+        <h4 class="fst-italic">{{ relatedTagsHeader }}</h4>
+        <div class="pmf-tag-cloud">{{ relatedTags }}</div>
+      </div>
+      [/relatedTags] [popularSearchesSection]
+      <div class="p-4 mb-3 bg-light rounded">
+        <h4 class="fst-italic">{{ msgMostPopularSearches }}</h4>
+        <div class="clearfix">{{ printMostPopularSearches }}</div>
+      </div>
+      [/popularSearchesSection]
+    </div>
+  </div>
+</div>

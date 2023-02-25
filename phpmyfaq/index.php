@@ -161,8 +161,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 }
 
-$faqConfig->getLogger()->error('Auth: ' . $auth);
-
 //
 // Logout
 //
