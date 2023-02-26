@@ -23,7 +23,7 @@ import {
   handleElasticsearch,
 } from './configuration';
 import { handleStatistics } from './statistics';
-import { handleCategories, handleFaqForm, handleTags, renderEditor } from './content';
+import { handleCategories, handleFaqForm, handleFaqOverview, handleTags, renderEditor } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordToggle } from '../../../assets/src/utils';
@@ -40,8 +40,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Dashboard
   renderVisitorCharts();
 
+  // User -> User Management
+  await handleUsers();
+  handleUserList();
+
+  // Group -> Group Management
+  await handleGroups();
+
   // Content -> Categories
   handleCategories();
+
+  // Content -> add/edit FAQs
+  renderEditor();
+  handleFaqForm();
+  await handleFaqOverview();
 
   // Content -> Tags
   handleTags();
@@ -63,15 +75,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Configuration -> Elasticsearch configuration
   handleElasticsearch();
-
-  // User -> User Management
-  await handleUsers();
-  handleUserList();
-
-  // Group -> Group Management
-  await handleGroups();
-
-  // Content -> add/edit FAQs
-  renderEditor();
-  handleFaqForm();
 });

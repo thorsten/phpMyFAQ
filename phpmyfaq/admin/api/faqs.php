@@ -29,6 +29,7 @@ use phpMyFAQ\Logging;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,10 +43,16 @@ $csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
-if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+/*
+if (!Token::getInstance()->verifyToken('faq-overview', $csrfToken)) {
     echo Translation::get('err_NotAuth');
     exit(1);
 }
+*/
+
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : [];
 
@@ -57,9 +64,6 @@ switch ($ajaxAction) {
     // Get permissions
     case 'permissions':
         $faqId = Filter::filterInput(INPUT_GET, 'faq-id', FILTER_VALIDATE_INT);
-        $http = new HttpHelper();
-        $http->setContentType('application/json');
-        $http->addHeader();
 
         $faqPermission = new FaqPermission($faqConfig);
 
@@ -133,9 +137,14 @@ switch ($ajaxAction) {
 
     // delete FAQs
     case 'delete_record':
-        if ($user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
-            $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-            $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_UNSAFE_RAW);
+        $deleteData = json_decode(file_get_contents('php://input', true));
+
+        if (
+            $user->perm->hasPermission($user->getUserId(), 'delete_faq') &&
+            Token::getInstance()->verifyToken('faq-overview', $deleteData->csrf)
+        ) {
+            $recordId = Filter::filterVar($deleteData->record_id, FILTER_VALIDATE_INT);
+            $recordLang = Filter::filterVar($deleteData->record_lang, FILTER_UNSAFE_RAW);
 
             $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
@@ -143,15 +152,20 @@ switch ($ajaxAction) {
             try {
                 $faq->deleteRecord($recordId, $recordLang);
             } catch (FileException | AttachmentException $e) {
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
             }
-            echo Translation::get('ad_entry_delsuc');
+            $http->setStatus(200);
+            $http->sendJsonWithHeaders(['success' => Translation::get('ad_entry_delsuc') ]);
         } else {
-            echo Translation::get('err_NotAuth');
+            $http->setStatus(401);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
         }
         break;
 
     // delete open questions
     case 'delete_question':
+
         if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
             $checks = [
                 'filter' => FILTER_VALIDATE_INT,

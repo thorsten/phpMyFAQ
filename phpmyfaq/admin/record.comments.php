@@ -155,7 +155,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     ?>
 
   <script>
-      console.log('needs to be refactured without jQuery.');
+      console.log('needs to be refactored without jQuery.');
     (() => {
       $('#submitFaqComments').on('click', () => {
         deleteComments('faq');

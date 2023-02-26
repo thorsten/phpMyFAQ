@@ -291,10 +291,6 @@ if ('list' === $sectionAction) {
     </div>
   </div>
 
-  <script src="assets/js/user.js"></script>
-  <script src="assets/js/groups.js"></script>
-  <script src="assets/js/sections.js"></script>
-
   <div id="user_message"><?= $message ?></div>
 
   <div class="row">

@@ -128,7 +128,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               </div>
 
             </form>
-            <script src="assets/js/record.js"></script>
                 <?php
             } else {
                 echo Translation::get('msgNoQuestionsAvailable');

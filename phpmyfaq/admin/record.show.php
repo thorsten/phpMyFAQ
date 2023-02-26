@@ -68,6 +68,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     if ($linkVerifier->isReady()) {
         ?>
     <script>
+        // @deprecated
         function getImageElement(id, lang) {
             return $('#imgurl_' + lang + '_' + id);
         }
@@ -194,6 +195,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     );
     $numActiveByCat = [];
 
+    $csrfToken = Token::getInstance()->getTokenString('faq-overview');
+
     $matrix = $categoryRelation->getCategoryFaqsMatrix();
     foreach ($matrix as $categoryKey => $value) {
         $numCommentsByCat[$categoryKey] = 0;
@@ -318,7 +321,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             if (isset($numRecordsByCat[$cid])) {
                 $catInfo .= sprintf(
-                    '<span class="badge badge-info" id="category_%d_item_count">%d %s</span> ',
+                    '<span class="badge bg-info" id="category_%d_item_count">%d %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid],
                     Translation::get('msgEntries')
@@ -327,7 +330,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
                 $catInfo .= sprintf(
-                    '<span class="badge badge-danger"><span id="js-active-records-%d">%d</span> %s</span> ',
+                    '<span class="badge bg-danger"><span id="js-active-records-%d">%d</span> %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid] - $numActiveByCat[$cid],
                     Translation::get('ad_record_inactive')
@@ -336,14 +339,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
                 $catInfo .= sprintf(
-                    '<span class="badge badge-info">%d %s</span>',
+                    '<span class="badge bg-info">%d %s</span>',
                     $numCommentsByCat[$cid],
                     Translation::get('ad_start_comments')
                 );
             }
             $catInfo .= '';
-
-            $csrfToken = Token::getInstance()->getTokenString('set-faq-state');
 
             if ($cid != $old) {
                 if ($old == 0) {
@@ -352,8 +353,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     echo '</tbody></table></div></div></div>';
                 }
                 ?>
-          <div class="card card-default">
-            <div class="card-header" role="tab" id="category-heading-<?= $cid ?>">
+          <div class="card card-default mb-1">
+            <div class="card-header bg-light-subtle" role="tab" id="category-heading-<?= $cid ?>">
               <span class="float-right"><?= $catInfo ?></span>
               <h5>
                 <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
@@ -525,11 +526,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         </a>
                       </td>
                       <td style="width: 16px;">
-                        <a class="btn btn-danger" href="javascript:void(0);"
-                           onclick="deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $csrfToken ?>');"
-                           title="<?= Translation::get('ad_user_delete') ?>">
-                          <i aria-hidden="true" class="fa fa-trash"></i>
-                        </a>
+                        <button class="btn btn-danger pmf-button-delete-faq" type="button"
+                                data-pmf-id="<?= $record['id'] ?>" data-pmf-language="<?= $record['lang'] ?>"
+                                data-pmf-token="<?= $csrfToken ?>">
+                            <?= Translation::get('ad_user_delete') ?>
+                        </button>
                       </td>
                     </tr>
             <?php
@@ -548,7 +549,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
         </div>
     </form>
 
-    <script src="assets/js/record.js"></script>
     <script>
     /**
      * Saves the sticky record status for the whole category
@@ -630,33 +630,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
       $.get('index.php', data, null);
       indicator.html('<?= Translation::get('ad_entry_savedsuc') ?>');
-    }
-
-    /**
-     * Ajax call for deleting records
-     *
-     * @param record_id   Record id
-     * @param record_lang Record language
-     * @param csrf_token  CSRF Token
-     *
-     * @return void
-     */
-    function deleteRecord(record_id, record_lang, csrf_token)
-    {
-        if (confirm('<?= addslashes(Translation::get('ad_entry_del_1') . ' ' . Translation::get('ad_entry_del_3'));
-        ?>')) {
-            $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
-            $.ajax({
-                type:    "POST",
-                url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
-                data:    "record_id=" + record_id + "&record_lang=" + record_lang + "&csrf=" + csrf_token,
-                success: function() {
-                    $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
-                    $('#pmf-admin-saving-data-indicator').html('<?= Translation::get('ad_entry_delsuc');
-                    ?>');
-                }
-            });
-        }
     }
     </script>
         <?php
