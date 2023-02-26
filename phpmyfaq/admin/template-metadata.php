@@ -58,7 +58,7 @@ $meta = new TemplateMetaData($faqConfig);
 
 // Update meta data
 if ('meta.update' === $action && is_integer($metaId)) {
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    if (!Token::getInstance()->verifyToken('template-metadata', $csrfToken)) {
         echo Translation::get('err_NotAuth');
     } else {
         $entity = new TemplateMetaDataEntity();
@@ -89,7 +89,7 @@ $metaData = $meta->getAll();
     <tbody>
     <?php
     foreach ($metaData as $data) {
-        $csrfToken = Token::getInstance()->getTokenString('delete-meta-data');
+        $csrfToken = Token::getInstance()->getTokenString('template-metadata');
     ?>
         <tr id="row-meta-<?= $data->getId() ?>">
             <td><?= $data->getId() ?></td>

@@ -54,15 +54,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        $csrfChecked = false;
-    } else {
-        $csrfChecked = true;
-    }
-
     $search = new Search($faqConfig);
 
-    if ($csrfChecked && 'truncatesearchterms' === $action) {
+    if (Token::getInstance()->verifyToken('truncate-seaerchterms', $csrfToken) && 'truncatesearchterms' === $action) {
         if ($search->deleteAllSearchTerms()) {
             echo Alert::success('ad_searchterm_del_suc');
         } else {
@@ -129,7 +123,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         ++$displayedCounter;
 
         $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
-        $csrfToken = Token::getInstance()->getTokenString('delete-seaerchterms');
+        $csrfToken = Token::getInstance()->getTokenString('delete-searchterms');
         ?>
               <tr id="row-search-id-<?= $searchItem['id'] ?>">
                   <td><?= Strings::htmlspecialchars($searchItem['searchterm']) ?></td>

@@ -202,7 +202,7 @@ if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), '
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $csrfOkay = true;
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    if (!Token::getInstance()->verifyToken('delete-group', $csrfToken)) {
         $csrfOkay = false;
     }
     $groupAction = $defaultGroupAction;
@@ -231,7 +231,7 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     $csrfOkay = true;
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
 
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    if (!Token::getInstance()->verifyToken('add-group', $csrfToken)) {
         $csrfOkay = false;
     }
     // check group name

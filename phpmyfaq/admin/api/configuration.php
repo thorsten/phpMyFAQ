@@ -190,13 +190,12 @@ switch ($ajaxAction) {
         break;
 
     case 'delete_stop_word':
-        $json = file_get_contents('php://input', true);
-        $deleteData = json_decode($json);
+        $deleteData = json_decode(file_get_contents('php://input', true));
 
         $stopWordId = Filter::filterVar($deleteData->stopWordId, FILTER_VALIDATE_INT);
         $stopWordsLang = Filter::filterVar($deleteData->stopWordsLang, FILTER_UNSAFE_RAW);
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
+        if (!Token::getInstance()->verifyToken('stopwords', $deleteData->csrf)) {
             $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);

@@ -35,11 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new News($faqConfig);
 
 $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-    $csrfCheck = false;
-} else {
-    $csrfCheck = true;
-}
 
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) { ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -577,7 +572,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     
         <?php
     } else {
-        if ($csrfCheck) {
+        if (Token::getInstance()->verifyToken('delete-news', $csrfToken)) {
             $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
             $news->deleteNews((int)$deleteId);
             echo Alert::success('ad_news_delsuc');

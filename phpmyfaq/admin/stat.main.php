@@ -55,11 +55,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
             $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
+            if (!Token::getInstance()->verifyToken('sessions', $csrfTokenFromPost)) {
                 $statdelete = null;
             }
 
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromGet) {
+            if (!Token::getInstance()->verifyToken('clear-visits', $csrfTokenFromGet)) {
                 $clearVisits = false;
             } else {
                 $clearVisits = true;

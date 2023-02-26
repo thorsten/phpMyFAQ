@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Entity\TagEntity as TagEntity;
 use phpMyFAQ\Translation;
@@ -66,11 +67,10 @@ switch ($ajaxAction) {
         break;
 
     case 'update':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+        $postData = json_decode(file_get_contents('php://input', true));
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $postData->csrf) {
-            $http->setStatus(400);
+        if (!Token::getInstance()->verifyToken('tags', $postData->csrf)) {
+            $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }

@@ -18,6 +18,7 @@
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Search;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -32,26 +33,22 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-switch ($ajaxAction) {
-    case 'delete_searchterm':
-        $json = file_get_contents('php://input', true);
-        $deleteData = json_decode($json);
+if ($ajaxAction === 'delete_searchterm') {
+    $deleteData = json_decode(file_get_contents('php://input', true));
 
-        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $deleteData->csrf) {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
-        }
+    if (!Token::getInstance()->verifyToken('delete-searchterms', $deleteData->csrf)) {
+        $http->setStatus(400);
+        $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+        exit(1);
+    }
 
-        $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
+    $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
 
-        if ($search->deleteSearchTermById($searchId)) {
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders(['deleted' => $searchId]);
-        } else {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => $searchId]);
-        }
-
-        break;
+    if ($search->deleteSearchTermById($searchId)) {
+        $http->setStatus(200);
+        $http->sendJsonWithHeaders(['deleted' => $searchId]);
+    } else {
+        $http->setStatus(400);
+        $http->sendJsonWithHeaders(['error' => $searchId]);
+    }
 }

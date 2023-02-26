@@ -19,6 +19,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -41,7 +42,7 @@ try {
 
     switch ($ajaxAction) {
         case 'delete':
-            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            if (!Token::getInstance()->verifyToken('delete-attachment', $csrfToken)) {
                 echo Translation::get('err_NotAuth');
                 exit(1);
             }

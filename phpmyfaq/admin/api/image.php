@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Session\Token;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -33,47 +34,47 @@ $uploadedFile = $_FILES['upload'] ?? '';
 
 $csrfOkay = true;
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
-if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+
+if (!Token::getInstance()->verifyToken('edit-faq', $csrfToken)) {
     $csrfOkay = false;
 }
-switch ($ajaxAction) {
-    case 'upload':
-        $uploadDir = '../images/';
-        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
-        $timestamp = time();
-        if ($csrfOkay) {
-            reset($_FILES);
-            $temp = current($_FILES);
-            if (is_uploaded_file($temp['tmp_name'])) {
-                if (isset($_SERVER['HTTP_ORIGIN'])) {
-                    if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
-                        $http->sendCorsHeader();
-                    }
+
+if ($ajaxAction === 'upload') {
+    $uploadDir = '../images/';
+    $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+    $timestamp = time();
+    if ($csrfOkay) {
+        reset($_FILES);
+        $temp = current($_FILES);
+        if (is_uploaded_file($temp['tmp_name'])) {
+            if (isset($_SERVER['HTTP_ORIGIN'])) {
+                if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
+                    $http->sendCorsHeader();
                 }
-
-                // Sanitize input
-                if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-                    $http->setStatus(400);
-                    return;
-                }
-
-                // Verify extension
-                if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
-                    $http->setStatus(400);
-                    return;
-                }
-
-                // Accept upload if there was no origin, or if it is an accepted origin
-                $fileName = $timestamp . $temp['name'];
-                move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
-
-                // Respond to the successful upload with JSON with the full URL of the uploaded image.
-                $http->sendJsonWithHeaders(['location' => $faqConfig->getDefaultUrl() . 'images/' . $fileName]);
-            } else {
-                $http->setStatus(500);
             }
+
+            // Sanitize input
+            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
+                $http->setStatus(400);
+                return;
+            }
+
+            // Verify extension
+            if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
+                $http->setStatus(400);
+                return;
+            }
+
+            // Accept upload if there was no origin, or if it is an accepted origin
+            $fileName = $timestamp . $temp['name'];
+            move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
+
+            // Respond to the successful upload with JSON with the full URL of the uploaded image.
+            $http->sendJsonWithHeaders(['location' => $faqConfig->getDefaultUrl() . 'images/' . $fileName]);
         } else {
-            $http->setStatus(401);
+            $http->setStatus(500);
         }
-        break;
+    } else {
+        $http->setStatus(401);
+    }
 }

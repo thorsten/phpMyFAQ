@@ -55,7 +55,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     <?php
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    if (!Token::getInstance()->verifyToken('clear-statistics', $csrfToken)) {
         $clearStatistics = false;
     } else {
         $clearStatistics = true;

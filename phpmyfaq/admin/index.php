@@ -26,6 +26,7 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Logging;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
@@ -126,16 +127,6 @@ if (!is_null($action)) {
 }
 
 //
-// Get CSRF Token
-//
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
-if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-    $csrfChecked = false;
-} else {
-    $csrfChecked = true;
-}
-
-//
 // Get possible redirect action
 //
 $redirectAction = Filter::filterInput(INPUT_POST, 'redirect-action', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -183,7 +174,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 // Logout
 //
-if ($csrfChecked && $action === 'logout' && $auth) {
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+if (Token::getInstance()->verifyToken('logout', $csrfToken) && $action === 'logout' && $auth) {
     $user->deleteFromSession(true);
     $auth = false;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
