@@ -7,14 +7,14 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author A. Neufang <B_A_F_F@gmx.de>
- * @author René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    A. Neufang <B_A_F_F@gmx.de>
+ * @author    René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
  * @copyright 2004-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-02-19
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-02-19
  * @codingStandardsIgnoreFile
  */
 
@@ -283,7 +283,7 @@ $PMF_LANG['ad_news_updatenews'] = "News-Eintrag bearbeiten";
 $PMF_LANG['ad_categ_new'] = "Neue Kategorie hinzufügen";
 $PMF_LANG['ad_categ_catnum'] = "Kategorienummer";
 $PMF_LANG['ad_categ_subcatnum'] = "Unterkategorienummer";
-$PMF_LANG['ad_categ_nya'] = "<em>noch nicht verfügbar!</em>";
+$PMF_LANG['ad_categ_nya'] = "Noch nicht verfügbar!";
 $PMF_LANG['ad_categ_titel'] = "Kategoriename";
 $PMF_LANG['ad_categ_add'] = "Kategorie hinzufügen";
 $PMF_LANG['ad_categ_existing'] = "Bestehende Kategorien";
