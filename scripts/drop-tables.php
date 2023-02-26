@@ -50,10 +50,9 @@ try {
         $prefix . 'faqdata, ' . $prefix . 'faqdata_group, ' . $prefix . 'faqdata_revisions, ' . $prefix . 'faqdata_tags, ' .
         $prefix . 'faqdata_user, ' . $prefix . 'faqglossary, ' . $prefix . 'faqgroup, ' . $prefix . 'faqgroup_right, ' .
         $prefix . 'faqinstances, ' . $prefix . 'faqinstances_config, ' . $prefix . 'faqmeta, ' . $prefix . 'faqnews, ' .
-        $prefix . 'faqquestions, ' . $prefix . 'faqright, ' . $prefix . 'faqsearches, ' . $prefix . 'faqsections, ' .
-        $prefix . 'faqsection_category, ' . $prefix . 'faqsection_group, ' . $prefix . 'faqsection_news, ' .
-        $prefix . 'faqsessions, ' . $prefix . 'faqstopwords, ' . $prefix . 'faqtags, ' . $prefix . 'faquser, ' .
-        $prefix . 'faquserdata, ' . $prefix . 'faquserlogin, ' . $prefix . 'faquser_group, ' . $prefix . 'faquser_right, ' .
+        $prefix . 'faqquestions, ' . $prefix . 'faqright, ' . $prefix . 'faqsearches, ' . $prefix . 'faqsessions, ' .
+        $prefix . 'faqstopwords, ' . $prefix . 'faqtags, ' . $prefix . 'faquser, ' . $prefix . 'faquserdata, ' .
+        $prefix . 'faquserlogin, ' . $prefix . 'faquser_group, ' . $prefix . 'faquser_right, ' .
         $prefix . 'faqvisits, ' . $prefix . 'faqvoting'
     );
 } catch (Exception $e) {
