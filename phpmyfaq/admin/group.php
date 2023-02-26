@@ -7,14 +7,14 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Charles Boin <c.boin@h-tube.com>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Charles Boin <c.boin@h-tube.com>
  * @copyright 2005-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-12-15
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-12-15
  */
 
 use phpMyFAQ\Component\Alert;
@@ -93,9 +93,9 @@ if ($groupAction == 'update_members' && $user->perm->hasPermission($user->getUse
         }
         $message .= sprintf(
             '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-            $PMF_LANG['ad_msg_savedsuc_1'],
+            Translation::get('ad_msg_savedsuc_1'),
             $perm->getGroupName($groupId),
-            $PMF_LANG['ad_msg_savedsuc_2']
+            Translation::get('ad_msg_savedsuc_2')
         );
     }
 }
@@ -119,9 +119,9 @@ if ($groupAction == 'update_rights' && $user->perm->hasPermission($user->getUser
         }
         $message .= sprintf(
             '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-            $PMF_LANG['ad_msg_savedsuc_1'],
+            Translation::get('ad_msg_savedsuc_1'),
             $perm->getGroupName($groupId),
-            $PMF_LANG['ad_msg_savedsuc_2']
+            Translation::get('ad_msg_savedsuc_2')
         );
     }
 }
@@ -146,9 +146,9 @@ if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId
         } else {
             $message .= sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                $PMF_LANG['ad_msg_savedsuc_1'],
+                Translation::get('ad_msg_savedsuc_1'),
                 $perm->getGroupName($groupId),
-                $PMF_LANG['ad_msg_savedsuc_2']
+                Translation::get('ad_msg_savedsuc_2')
             );
         }
     }
@@ -170,23 +170,23 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
         <div class="col-lg-12">
           <h2 class="page-header">
             <i aria-hidden="true" class="fa fa-users fa-fw"></i>
-              <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
+              <?= Translation::get('ad_group_deleteGroup') ?> "<?= $groupData['name'] ?>"
           </h2>
         </div>
       </header>
 
       <div class="row">
         <div class="col-lg-12">
-          <p><?= $PMF_LANG['ad_group_deleteQuestion'] ?></p>
+          <p><?= Translation::get('ad_group_deleteQuestion') ?></p>
           <form action="?action=group&amp;group_action=delete" method="post">
             <input type="hidden" name="group_id" value="<?= $groupId ?>">
             <?= Token::getInstance()->getTokenInput('delete-group') ?>
             <p>
               <button class="btn btn-inverse" type="submit" name="cancel">
-                  <?= $PMF_LANG['ad_gen_cancel'] ?>
+                  <?= Translation::get('ad_gen_cancel') ?>
               </button>
               <button class="btn btn-primary" type="submit">
-                  <?= $PMF_LANG['ad_gen_save'] ?>
+                  <?= Translation::get('ad_gen_save') ?>
               </button>
             </p>
           </form>
@@ -236,7 +236,7 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     }
     // check group name
     if ($groupName == '') {
-        $messages[] = $PMF_LANG['ad_group_error_noName'];
+        $messages[] = Translation::get('ad_group_error_noName');
     }
     // ok, let's go
     if (count($messages) == 0 && $csrfOkay) {
@@ -248,7 +248,7 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
         ];
 
         if ($user->perm->addGroup($groupData) <= 0) {
-            $messages[] = $PMF_LANG['ad_adus_dberr'];
+            $messages[] = Translation::get('ad_adus_dberr');
         }
     }
 
@@ -279,7 +279,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-users"></i>
-        <?= $PMF_LANG['ad_group_add'] ?>
+        <?= Translation::get('ad_group_add') ?>
     </h1>
   </div>
 
@@ -290,7 +290,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
         <?= Token::getInstance()->getTokenInput('add-group') ?>
 
         <div class="row">
-          <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
+          <label class="col-lg-2 col-form-label" for="group_name"><?= Translation::get('ad_group_name') ?></label>
           <div class="col-lg-3">
             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
                    value="<?= ($groupName ?? '') ?>" tabindex="1">
@@ -299,7 +299,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
 
         <div class="row">
           <label class="col-lg-2 col-form-label"
-                 for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
+                 for="group_description"><?= Translation::get('ad_group_description') ?></label>
           <div class="col-lg-3">
             <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
                       rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
@@ -308,7 +308,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
         </div>
 
         <div class="row">
-          <label class="col-lg-2 col-form-label" for="group_auto_join"><?= $PMF_LANG['ad_group_autoJoin'] ?></label>
+          <label class="col-lg-2 col-form-label" for="group_auto_join"><?= Translation::get('ad_group_autoJoin') ?></label>
           <div class="col-lg-3">
             <div class="form-check">
               <label>
@@ -322,10 +322,10 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="row">
           <div class="offset-lg-2 col-lg-3">
             <button class="btn btn-info" type="reset" name="cancel">
-                <?= $PMF_LANG['ad_gen_cancel'] ?>
+                <?= Translation::get('ad_gen_cancel') ?>
             </button>
             <button class="btn btn-primary" type="submit">
-                <?= $PMF_LANG['ad_gen_save'] ?>
+                <?= Translation::get('ad_gen_save') ?>
             </button>
           </div>
         </div>
@@ -335,72 +335,18 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
 }
 
-// Import LDAP groups
-/*
-if ('import-ldap-groups' === $groupAction && $user->perm->hasPermission($user->getUserId(), 'addgroup')) {
-    $user = new CurrentUser($faqConfig);
-    $message = '';
-    $messages = [];
-
-    // Temporary data
-    $groupName = 'LDAP Group';
-    $groupDescription = 'This is a LDAP group import demo';
-    $groupAutoJoin = false;
-
-    $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        $csrfOkay = false;
-    }
-
-    // check group name
-    if ($groupName == '') {
-        $messages[] = $PMF_LANG['ad_group_error_noName'];
-    }
-
-    // ok, let's go
-    if (count($messages) == 0 && $csrfOkay) {
-        // create group
-        $groupData = [
-            'name' => $groupName,
-            'description' => $groupDescription,
-            'auto_join' => $groupAutoJoin,
-        ];
-
-        if ($user->perm->addGroup($groupData) <= 0) {
-            $messages[] = $PMF_LANG['ad_adus_dberr'];
-        }
-    }
-
-    // no errors, show list
-    if (count($messages) == 0) {
-        $groupAction = $defaultGroupAction;
-        $message = Alert::success('ad_group_suc');
-        // display error messages and show form again
-    } else {
-        $groupAction = 'import-ldap-groups';
-        $message = '<p class="alert alert-danger">';
-        foreach ($messages as $err) {
-            $message .= $err . '<br>';
-        }
-        $message .= '</p>';
-    }
-}
-*/
-
 // show list of users
 if ('list' === $groupAction) {
     ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-users"></i>
-        <?= $PMF_LANG['ad_menu_group_administration'] ?>
+        <?= Translation::get('ad_menu_group_administration') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <a class="btn btn-sm btn-success" href="?action=group&amp;group_action=add">
-          <?= $PMF_LANG['ad_group_add_link'] ?>
+          <?= Translation::get('ad_group_add_link') ?>
         </a>
       </div>
     </div>
@@ -415,7 +361,7 @@ if ('list' === $groupAction) {
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
               method="post">
           <h5 class="card-header py-3">
-            <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['ad_groups'] ?>
+            <i aria-hidden="true" class="fa fa-users"></i> <?= Translation::get('ad_groups') ?>
           </h5>
           <div class="card-body">
             <select name="group_list_select" id="group_list_select" class="form-select"
@@ -425,7 +371,7 @@ if ('list' === $groupAction) {
           <div class="card-footer">
             <div class="card-button text-right">
               <button class="btn btn-danger" type="submit">
-                  <?= $PMF_LANG['ad_gen_delete'] ?>
+                  <?= Translation::get('ad_gen_delete') ?>
               </button>
             </div>
           </div>
@@ -434,14 +380,14 @@ if ('list' === $groupAction) {
 
       <div id="group_data" class="card mb-4">
         <h5 class="card-header py-3">
-          <i class="fa fa-info-circle" aria-hidden="true"></i> <?= $PMF_LANG['ad_group_details'] ?>
+          <i class="fa fa-info-circle" aria-hidden="true"></i> <?= Translation::get('ad_group_details') ?>
         </h5>
         <form action="?action=group&group_action=update_data" method="post">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
           <div class="card-body">
             <div class="row">
               <label class="col-lg-3 col-form-label" for="update_group_name">
-                  <?= $PMF_LANG['ad_group_name'] ?>
+                  <?= Translation::get('ad_group_name') ?>
               </label>
               <div class="col-lg-9">
                 <input id="update_group_name" type="text" name="name" class="form-control"
@@ -450,7 +396,7 @@ if ('list' === $groupAction) {
             </div>
             <div class="row">
               <label class="col-lg-3 col-form-label" for="update_group_description">
-                  <?= $PMF_LANG['ad_group_description'] ?>
+                  <?= Translation::get('ad_group_description') ?>
               </label>
               <div class="col-lg-9">
                 <textarea id="update_group_description" name="description" class="form-control"
@@ -466,7 +412,7 @@ if ('list' === $groupAction) {
                     <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
                            tabindex="3"<?php
                             echo((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
-                      <?= $PMF_LANG['ad_group_autoJoin'] ?>
+                      <?= Translation::get('ad_group_autoJoin') ?>
                   </label>
                 </div>
               </div>
@@ -475,7 +421,7 @@ if ('list' === $groupAction) {
           <div class="card-footer">
             <div class="card-button text-right">
               <button class="btn btn-primary" type="submit">
-                  <?= $PMF_LANG['ad_gen_save'] ?>
+                  <?= Translation::get('ad_gen_save') ?>
               </button>
             </div>
           </div>
@@ -489,7 +435,7 @@ if ('list' === $groupAction) {
         <input id="update_member_group_id" type="hidden" name="group_id" value="0">
         <div class="card mb-4">
           <h5 class="card-header py-3">
-            <i aria-hidden="true" class="fa fa-user-circle"></i> <?= $PMF_LANG['ad_group_membership'] ?>
+            <i aria-hidden="true" class="fa fa-user-circle"></i> <?= Translation::get('ad_group_membership') ?>
           </h5>
           <div class="card-body">
             <div class="row">
@@ -526,7 +472,7 @@ if ('list' === $groupAction) {
 
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
-              <i aria-hidden="true" class="fa fa-user-circle"></i> <?= $PMF_LANG['ad_group_members']; ?></li>
+              <i aria-hidden="true" class="fa fa-user-circle"></i> <?= Translation::get('ad_group_members'); ?></li>
           </ul>
 
           <div class="card-body">
@@ -555,7 +501,7 @@ if ('list' === $groupAction) {
           <div class="card-footer">
             <div class="card-button text-right">
               <button class="btn btn-primary" onclick="javascript:selectSelectAll('group_member_list')" type="submit">
-                  <?= $PMF_LANG['ad_gen_save'] ?>
+                  <?= Translation::get('ad_gen_save') ?>
               </button>
             </div>
           </div>
@@ -569,14 +515,14 @@ if ('list' === $groupAction) {
         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
           <h5 class="card-header py-3" id="user_rights_legend">
-            <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
+            <i aria-hidden="true" class="fa fa-lock"></i> <?= Translation::get('ad_group_rights') ?>
 
           </h5>
 
           <div class="card-body">
               <div class="text-center mb-3">
               <a class="btn btn-primary btn-sm" href="#" id="checkAll">
-                <?= $PMF_LANG['ad_user_checkall'] ?> / <?= $PMF_LANG['ad_user_uncheckall'] ?>
+                <?= Translation::get('ad_user_checkall') ?> / <?= Translation::get('ad_user_uncheckall') ?>
               </a>
             </div>
               <?php foreach ($user->perm->getAllRightsData() as $right) : ?>
@@ -599,7 +545,7 @@ if ('list' === $groupAction) {
           <div class="card-footer">
             <div class="card-button text-right">
               <button class="btn btn-primary" type="submit">
-                  <?= $PMF_LANG['ad_gen_save'] ?>
+                  <?= Translation::get('ad_gen_save') ?>
               </button>
             </div>
           </div>
