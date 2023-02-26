@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class SearchFactoryTest extends TestCase
 {
     /** @var Configuration */
-    private $configuration;
+    private Configuration $configuration;
 
     /**
      * Prepares the environment before running a test.
@@ -22,7 +22,7 @@ class SearchFactoryTest extends TestCase
     {
         parent::setUp();
 
-        Strings::init('en');
+        Strings::init();
 
         $dbHandle = new Sqlite3();
         $this->configuration = new Configuration($dbHandle);
@@ -33,7 +33,6 @@ class SearchFactoryTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->PMF_Search_Database = null;
         parent::tearDown();
     }
 
@@ -41,7 +40,6 @@ class SearchFactoryTest extends TestCase
     {
         $search = SearchFactory::create($this->configuration, array('database' => 'sqlite3'));
 
-        //$this->assertEquals(new Sqlite3($this->configuration), $search);
         $this->assertInstanceOf('phpMyFAQ\Search\Database\Sqlite3', $search);
     }
 
