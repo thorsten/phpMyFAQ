@@ -175,7 +175,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 // Logout
 //
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
-if (Token::getInstance()->verifyToken('logout', $csrfToken) && $action === 'logout' && $auth) {
+if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken) && $action === 'logout' && $auth) {
     $user->deleteFromSession(true);
     $auth = false;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
