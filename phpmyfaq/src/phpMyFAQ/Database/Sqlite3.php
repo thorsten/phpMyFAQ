@@ -88,7 +88,6 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchObject(mixed $result): ?object
     {
-        $result->fetchedByPMF = true;
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
         return $return
@@ -103,8 +102,6 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
-        $result->fetchedByPMF = true;
-
         $fetchedData = $result->fetchArray();
 
         return is_array($fetchedData) ? $fetchedData : [];
@@ -135,7 +132,6 @@ class Sqlite3 implements DatabaseDriver
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        $result->fetchedByPMF = true;
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
             $ret[] = (object)$row;
         }
@@ -207,10 +203,8 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Fetch a result row as an associate array.
      */
-    public function fetchAssoc(SQLite3Result $result): array
+    public function fetchAssoc(mixed $result): array
     {
-        $result->fetchedByPMF = true;
-
         $fetchedData = $result->fetchArray(SQLITE3_ASSOC);
 
         return is_array($fetchedData) ? $fetchedData : [];
@@ -289,8 +283,8 @@ class Sqlite3 implements DatabaseDriver
     /**
      * Returns the next ID of a table.
      *
-     * @param string      the name of the table
-     * @param string      the name of the ID column
+     * @param string $table the name of the table
+     * @param string $id the name of the ID column
      */
     public function nextId(string $table, string $id): int
     {
