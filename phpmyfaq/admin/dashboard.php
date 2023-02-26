@@ -83,40 +83,53 @@ $faqSession = new Session($faqConfig);
         </h5>
         <div class="card-body">
           <div class="list-group-flush">
-            <a href="?action=viewsessions" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= Translation::get('ad_start_visits') ?>
-              <span class="float-right text-muted small">
-                <em><?= $faqSession->getNumberOfSessions() ?></em>
+            <a href="?action=viewsessions" class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= Translation::get('ad_start_visits') ?>
+              </div>
+              <span class="badge bg-primary rounded-pill">
+                <?= $faqSession->getNumberOfSessions() ?>
               </span>
             </a>
-            <a href="?action=view" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-list-alt"></i> <?= Translation::get('ad_start_articles') ?>
-              <span class="float-right text-muted small">
-                <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqdata']; ?></em>
+            <a href="?action=view" class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <i aria-hidden="true" class="fa fa-list-alt"></i> <?= Translation::get('ad_start_articles') ?>
+              </div>
+              <span class="badge bg-primary rounded-pill">
+                <?= $faqTableInfo[Database::getTablePrefix() . 'faqdata']; ?>
               </span>
             </a>
-            <a href="?action=comments" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-comments"></i> <?= Translation::get('ad_start_comments') ?>
-              <span class="float-right text-muted small">
-                <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqcomments']; ?></em>
+            <a href="?action=comments" class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <i aria-hidden="true" class="fa fa-comments"></i> <?= Translation::get('ad_start_comments') ?>
+              </div>
+              <span class="badge bg-primary rounded-pill">
+                <?= $faqTableInfo[Database::getTablePrefix() . 'faqcomments']; ?>
               </span>
             </a>
-            <a href="?action=question" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-question-circle"></i> <?= Translation::get('msgOpenQuestions') ?>
-              <span class="float-right text-muted small">
-                <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqquestions']; ?></em>
+            <a href="?action=question" class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <i aria-hidden="true" class="fa fa-question-circle"></i> <?= Translation::get('msgOpenQuestions') ?>
+              </div>
+                <span class="badge bg-primary rounded-pill">
+                    <?= $faqTableInfo[Database::getTablePrefix() . 'faqquestions']; ?>
               </span>
             </a>
-            <a href="?action=news" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-list-alt"></i> <?= Translation::get('msgNews') ?>
-              <span class="float-right text-muted small">
-                <em><?= $faqTableInfo[Database::getTablePrefix() . 'faqnews']; ?></em>
+            <a href="?action=news" class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <i aria-hidden="true" class="fa fa-list-alt"></i> <?= Translation::get('msgNews') ?>
+              </div>
+              <span class="badge bg-primary rounded-pill">
+                <?= $faqTableInfo[Database::getTablePrefix() . 'faqnews']; ?>
               </span>
             </a>
-            <a href="?action=user&user_action=listallusers" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-users"></i> <?= Translation::get('admin_mainmenu_users') ?>
-              <span class="float-right text-muted small">
-                <em><?= $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1; ?></em>
+            <a href="?action=user&user_action=listallusers"
+               class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <i aria-hidden="true" class="fa fa-users"></i> <?= Translation::get('admin_mainmenu_users') ?>
+              </div>
+              <span class="badge bg-primary rounded-pill">
+                <?= $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1; ?>
               </span>
             </a>
           </div>
