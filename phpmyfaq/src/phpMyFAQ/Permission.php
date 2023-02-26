@@ -3,21 +3,12 @@
 /**
  * This class manages user permissions and group memberships.
  *
- * There are three possible extensions of this class: basic, medium and large
- * by the classes BasicPermission, MediumPermission and LargePermission. The
- * classes to allow for scalability.
+ * There are three possible extensions of this class: basic and medium by the
+ * classes BasicPermission and MediumPermission.
  *
  * The permission type can be selected by calling $perm = Permission(perm_type) or
  * static method $perm = Permission::selectPerm(perm_type) where perm_type is
- * 'medium' or 'large'. Both ways, a BasicPermission, MediumPermission or
- * is returned.
- *
- * Before calling any method, the object $perm needs to be initialised calling
- * user_id, context, context_id). The parameters context and context_id are
- * accepted, but do only matter in LargePermission. In other words, if you have a
- * or MediumPermission, it does not matter if you pass context and context_id or
- * But in LargePermission, they do make a significant difference if passed, thus
- * for up- and downwards-compatibility.
+ * 'medium'. Both ways, a BasicPermission or MediumPermission is returned.
  *
  * Perhaps the most important method is $perm->hasPermission(right_name). This
  * checks whether the user having the user_id set with $perm->setPerm()
@@ -42,7 +33,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Permission\BasicPermission;
-use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
 
 /**
@@ -63,7 +53,7 @@ class Permission
      * Permission::selectPerm() returns an instance of a subclass of
      * Permission. $permLevel which subclass is returned.
      *
-     * @return Permission|BasicPermission|MediumPermission|LargePermission
+     * @return Permission|BasicPermission|MediumPermission
      */
     public static function selectPerm(string $permLevel, Configuration $config)
     {

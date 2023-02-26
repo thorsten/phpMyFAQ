@@ -31,7 +31,7 @@ class PermissionHelper
      */
     public static function permOptions(string $current): string
     {
-        $options = ['basic', 'medium', 'large'];
+        $options = ['basic', 'medium'];
         $output = '';
 
         foreach ($options as $value) {

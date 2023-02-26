@@ -373,6 +373,12 @@ if ($step == 3) {
         $faqConfig->add('security.googleReCaptchaV2SiteKey', '');
         $faqConfig->add('security.googleReCaptchaV2SecretKey', '');
 
+        // Remove section tables
+        $query[] = 'DROP TABLE ' . $prefix . 'faqsections';
+        $query[] = 'DROP TABLE ' . $prefix . 'faqsection_category';
+        $query[] = 'DROP TABLE ' . $prefix . 'faqsection_group';
+        $query[] = 'DROP TABLE ' . $prefix . 'faqsection_news';
+
         if ('sqlserv' === $DB['type']) {
             // queries to update VARCHAR -> NVARCHAR on MS SQL Server
             // @todo ALTER TABLE [TableName] ALTER COLUMN [ColumnName] nvarchar(N) null

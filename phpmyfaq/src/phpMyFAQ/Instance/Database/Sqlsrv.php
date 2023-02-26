@@ -286,27 +286,6 @@ class Sqlsrv extends Database implements Driver
             searchdate DATETIME,
             PRIMARY KEY (id, lang))',
 
-        'faqsections' => 'CREATE TABLE %sfaqsections (
-            id INTEGER NOT NULL,
-            name NVARCHAR(255) NOT NULL,
-            description NVARCHAR(255) DEFAULT NULL,
-            PRIMARY KEY (id))',
-
-        'faqsection_category' => 'CREATE TABLE %sfaqsection_category (
-            section_id INTEGER NOT NULL,
-            category_id INTEGER NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, category_id))',
-
-        'faqsection_group' => 'CREATE TABLE %sfaqsection_group (
-            section_id INTEGER NOT NULL,
-            group_id INTEGER NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, group_id))',
-
-        'faqsection_news' => 'CREATE TABLE %sfaqsection_news (
-            section_id INTEGER NOT NULL,
-            news_id INTEGER NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, news_id))',
-
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid INTEGER NOT NULL,
             user_id INTEGER NOT NULL,

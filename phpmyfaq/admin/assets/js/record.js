@@ -15,34 +15,6 @@
  * @since     2013-11-17
  */
 
-function setPermissions(permissions) {
-  const perms = permissions;
-
-  // Users
-  if (-1 === parseInt(perms.user[0])) {
-    $('#restrictedusers').prop('checked', false);
-    $('#allusers').prop('checked', true);
-  } else {
-    $('#allusers').prop('checked', false);
-    $('#restrictedusers').prop('checked', true);
-    $.each(perms.user, function (key, value) {
-      $(".selected-users option[value='" + value + "']").prop('selected', true);
-    });
-  }
-
-  // Groups
-  if (-1 === parseInt(perms.group[0])) {
-    $('#restrictedgroups').prop('checked', false).prop('disabled', false);
-    $('#allgroups').prop('checked', true).prop('disabled', false);
-  } else {
-    $('#allgroups').prop('checked', false).prop('disabled', true);
-    $('#restrictedgroups').prop('checked', true).prop('disabled', false);
-    $.each(perms.group, function (key, value) {
-      $("#selected-groups option[value='" + value + "']").prop('selected', true);
-    });
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 

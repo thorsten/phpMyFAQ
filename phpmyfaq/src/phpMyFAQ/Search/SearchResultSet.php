@@ -89,11 +89,6 @@ class SearchResultSet
 
         foreach ($this->rawResultSet as $result) {
             $permission = false;
-            // check permission for sections
-            if ('large' === $this->config->get('security.permLevel')) {
-                // @todo Add code for section permissions
-                $permission = true;
-            }
 
             // check permissions for groups
             if ('medium' === $this->config->get('security.permLevel')) {

@@ -26,7 +26,6 @@ namespace phpMyFAQ;
 use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Permission\BasicPermission;
-use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -71,9 +70,9 @@ class User
     /**
      * Permission container.
      *
-     * @var BasicPermission|MediumPermission|LargePermission
+     * @var BasicPermission|MediumPermission
      */
-    public LargePermission|MediumPermission|BasicPermission $perm;
+    public MediumPermission|BasicPermission $perm;
 
     /**
      * User-data storage container.
@@ -190,9 +189,9 @@ class User
     /**
      * Adds a permission object to the user.
      *
-     * @param BasicPermission|MediumPermission|LargePermission $perm Permission object
+     * @param BasicPermission|MediumPermission $perm Permission object
      */
-    public function addPerm(BasicPermission|MediumPermission|LargePermission $perm): bool
+    public function addPerm(BasicPermission|MediumPermission $perm): bool
     {
         $this->perm = $perm;
         return true;

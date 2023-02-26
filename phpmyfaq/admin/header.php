@@ -67,14 +67,6 @@ if ($faqConfig->get('security.permLevel') !== 'basic') {
         $action
     );
 }
-if ($faqConfig->get('security.permLevel') === 'large') {
-    $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
-        'add_section+edit_section+del_section',
-        'section',
-        'ad_menu_section_administration',
-        $action
-    );
-}
 $secLevelEntries['content'] = $adminHelper->addMenuEntry(
     'addcateg+editcateg+delcateg',
     'category',
@@ -156,7 +148,6 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 switch ($action) {
     case 'user':
     case 'group':
-    case 'section':
     case 'passwd':
     case 'cookies':
         $userPage = true;
