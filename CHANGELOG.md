@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.0-alpha - 2023-XX-XX
+### phpMyFAQ v3.2.0-alpha - 2023-03-XX
 
 - changed PHP requirement to PHP 8.0.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)

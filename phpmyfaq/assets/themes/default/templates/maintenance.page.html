@@ -21,41 +21,37 @@
     <link rel="canonical" href="{{ currentPageUrl }}" />
   </head>
   <body dir="{{ dir }}">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="p-3 text-bg-dark border-bottom">
       <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-          <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#pmf-navbar-toggle"
-          aria-controls="pmf-navbar-toggle"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-          <ul class="navbar-nav mr-md-12">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="dropdown"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {{ msgLoginUser }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown">
-                [notLoggedIn] {{ msgLoginUser }} [/notLoggedIn] [userloggedIn] {{ msgUserControl }} {{ msgLogoutUser }}
-                [/userloggedIn]
-              </div>
-            </li>
-          </ul>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a
+            href="{{ faqHome }}"
+            id="phpmyfaq-logo"
+            title="{{ header }}"
+            class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+          >
+            <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
+          </a>
+
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></ul>
+
+          <div class="dropdown justify-content-end">
+            <a
+              href="#"
+              class="d-block text-decoration-none dropdown-toggle text-white"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ msgLoginUser }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small">
+              [notLoggedIn] [/notLoggedIn] [userloggedIn]
+              <li>{{ msgUserControl }}</li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>{{ msgLogoutUser }}</li>
+              [/userloggedIn]
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
@@ -64,7 +60,7 @@
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <div class="jumbotron text-center mt-5">
+            <div class="jumbotron text-center m-5">
               <h3>We are performing scheduled maintenance operations. Please visit us later.</h3>
             </div>
           </div>
@@ -72,31 +68,42 @@
       </div>
     </div>
 
-    <footer class="pmf-footer font-small pt-4">
+    <footer class="pt-4 text-bg-dark">
       <div class="container">
         <div class="row">
-          <div class="col-8 mb-4">
-            <ul class="pmf-footer-menu">
-              <li class="foot-menu-item">{{ msgContact }}</li>
-              <li class="foot-menu-item">{{ privacyLink }}</li>
-            </ul>
+          <div class="col-md-8 mb-md-0 mb-4">
+            <h5 class="footer-heading">{{ writeTagCloudHeader }}</h5>
+            <p class="card-text pmf-tag-cloud">{{ writeTags }}</p>
           </div>
-          <div class="col-4 mb-4">
-            <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-              {{ switchLanguages }}
-              <input type="hidden" name="action" value="" />
+          <div class="col-md-4 mb-md-0 mb-4">
+            <h5 class="footer-heading">{{ languageBox }}</h5>
+            <form accept-charset="utf-8" action="{{ renderUri }}" method="post" class="subscribe-form">
+              <div class="form-group d-flex">
+                {{ switchLanguages }}
+                <input name="action" type="hidden" value="" />
+              </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="text-center py-3">{{ copyright }}</div>
+      <div class="w-100">
+        <div class="container">
+          <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-6 mb-0 text-white">{{ copyright }}</p>
+
+            <ul class="nav col-md-6 justify-content-end">
+              <li class="nav-item">{{ msgContact }}</li>
+              <li class="nav-item">{{ privacyLink }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       [debugMode]
-      <div class="container debug-mode">
-        <hr />
-        <h4>DEBUG INFORMATION</h4>
+      <div class="container">
+        <h5 class="border-top">⚠︎ DEBUG MODE ENABLED ⚠︎</h5>
         <div class="row">
           <div class="col-12">
-            <h5>DATABASE QUERIES</h5>
+            <h6 class="text-danger">DATABASE QUERIES</h6>
             {{ debugQueries }}
           </div>
         </div>
@@ -104,6 +111,6 @@
       [/debugMode]
     </footer>
 
-    <script src="{{ baseHref }}assets/dist/frontend.js"></script>
+    <script src="./assets/dist/frontend.js"></script>
   </body>
 </html>
