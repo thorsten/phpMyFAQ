@@ -19,7 +19,6 @@
 use phpMyFAQ\Api;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
@@ -201,7 +200,7 @@ $faqSession = new Session($faqConfig);
                         if (-1 == version_compare($versions['installed'], $versions['current'])) {
                             echo '<br>' . Translation::get('ad_you_should_update');
                         }
-                    } catch (Exception $e) {
+                    } catch (JsonException $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                     }
                 } else {
@@ -253,12 +252,12 @@ $faqSession = new Session($faqConfig);
                                 echo Alert::success('ad_verification_okay');
                             }
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                     }
                 } else {
                     ?>
-                  <form action="./admin/index.php" method="post"
+                  <form action="./index.php" method="post"
                         accept-charset="utf-8">
                     <input type="hidden" name="getJson" value="verify"/>
                     <button class="btn btn-info" type="submit">

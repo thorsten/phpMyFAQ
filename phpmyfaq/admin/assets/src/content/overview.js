@@ -1,5 +1,3 @@
-import { deleteFaq } from './api';
-
 export const handleFaqOverview = async () => {
   const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
   let result;

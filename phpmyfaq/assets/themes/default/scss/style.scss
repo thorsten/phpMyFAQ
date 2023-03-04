@@ -8,19 +8,24 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2023 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-17
  */
 
-// Import Variables
-@import 'variables.scss';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+// Import Theme
+@import 'theme';
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
 
 // Import Bootstrap
-@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/bootstrap';
 
 // Import global styles
-@import 'global.scss';
+@import 'global';
 
 // Fork Awesome
 $fa-font-path: '~fork-awesome/fonts';
