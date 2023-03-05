@@ -395,7 +395,7 @@ if (
                                 <?php if ($faqConfig->get('main.enableMarkdownEditor')) : ?>
                                     <div class="row">
                                       <div class="col-lg-12">
-                                        <ul class="nav nav-tabs markdown-tabs mb-2">
+                                        <ul class="nav nav-tabs mb-2" id="markdown-tabs">
                                           <li class="nav-item">
                                             <a class="nav-link active" data-bs-toggle="tab" href="#text">Text</a>
                                           </li>
@@ -414,7 +414,7 @@ if (
                                             </div>
                                           </div>
                                           <div class="tab-pane" id="preview">
-                                            <article class="markdown-preview"></article>
+                                            <article id="markdown-preview"></article>
                                           </div>
                                         </div>
                                       </div>

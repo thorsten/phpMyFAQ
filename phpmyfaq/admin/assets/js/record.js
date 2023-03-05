@@ -129,38 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   });
 
-  $(function () {
-    // set the textarea to its previous height
-    const answerHeight = localStorage.getItem('textarea.answer.height'),
-      answer = $('#answer-markdown');
-
-    if (answerHeight !== 'undefined') {
-      answer.height(answerHeight);
-    }
-
-    // when resized, store the textarea's height
-    answer.on('mouseup', function () {
-      localStorage.setItem('textarea.answer.height', $(this).height());
-    });
-
-    // on clicking the Preview tab, refresh the preview
-    $('.markdown-tabs')
-      .find('a')
-      .on('click', function () {
-        if ($(this).attr('data-markdown-tab') === 'preview') {
-          $('.markdown-preview').height(answer.height());
-          $.ajax({
-            type: 'POST',
-            url: 'index.php?action=ajax&ajax=markdown',
-            data: 'text=' + answer.val(),
-            success: (data) => {
-              $('.markdown-preview').html(data);
-            },
-          });
-        }
-      });
-  });
-
   // Typeahead
   $('.pmf-tags-autocomplete').typeahead({
     autoSelect: true,

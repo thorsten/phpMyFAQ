@@ -27,6 +27,7 @@ import {
   handleCategories,
   handleFaqForm,
   handleFaqOverview,
+  handleMarkdownForm,
   handleOpenQuestions,
   handleTags,
   renderEditor,
@@ -60,6 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Content -> add/edit FAQs
   renderEditor();
   handleFaqForm();
+  handleMarkdownForm();
   await handleFaqOverview();
 
   // Content -> Open questions

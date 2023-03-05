@@ -24,11 +24,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$answer = Filter::filterInput(INPUT_POST, 'text', FILTER_UNSAFE_RAW);
+$postData = json_decode(file_get_contents('php://input', true));
+
+$answer = Filter::filterVar($postData->text, FILTER_SANITIZE_SPECIAL_CHARS);
+
 $http = new HttpHelper();
 $http->addHeader();
 
 $parseDown = new ParsedownExtra();
 
 $http->setStatus(200);
-$http->sendWithHeaders($parseDown->text($answer));
+$http->sendJsonWithHeaders(['success' => $parseDown->text($answer)]);

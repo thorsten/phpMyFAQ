@@ -1,5 +1,5 @@
 /**
- * JavaScript functions for all FAQ category administration stuff
+ * Category administration stuff
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -31,11 +31,11 @@ export const handleCategories = () => {
   });
 
   if (sortableCategories) {
-    const sortable = Sortable.create(sortableCategories, {
+    Sortable.create(sortableCategories, {
       animation: 150,
       dataIdAttr: 'data-id',
       filter: '.pmf-category-not-sortable',
-      group: 'pmf-category-order',
+      group: 'phpmyfaq.category.order',
       store: {
         /**
          * Get the order of elements. Called once during initialization.
