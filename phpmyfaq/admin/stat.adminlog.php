@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $logging = new Logging($faqConfig);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-if (!Token::getInstance()->verifyToken('delete-adminlog', $csrfToken)) {
+if ($csrfToken && !Token::getInstance()->verifyToken('delete-adminlog', $csrfToken)) {
     $deleteLog = false;
 } else {
     $deleteLog = true;

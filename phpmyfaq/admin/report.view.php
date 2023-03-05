@@ -82,11 +82,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     foreach ($report->getReportingData() as $data) {
         echo '<tr>';
         if ($useCategory) {
-            printf('<td>%s</td>', Strings::htmlentities($data['category_name']));
+            printf('<td>%s</td>', Strings::htmlentities($data['category_name'] ?? ''));
         }
         if ($useSubcategory) {
             if (0 != $data['category_parent']) {
-                printf('<td>%s</td>', Strings::htmlentities($data['category_name']));
+                printf('<td>%s</td>', Strings::htmlentities($data['category_name'] ?? ''));
             } else {
                 echo '<td></td>';
             }

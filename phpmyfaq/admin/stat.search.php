@@ -56,7 +56,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 
     $search = new Search($faqConfig);
 
-    if (Token::getInstance()->verifyToken('truncate-seaerchterms', $csrfToken) && 'truncatesearchterms' === $action) {
+    if ($csrfToken && Token::getInstance()->verifyToken('truncate-seaerchterms', $csrfToken) && 'truncatesearchterms' === $action) {
         if ($search->deleteAllSearchTerms()) {
             echo Alert::success('ad_searchterm_del_suc');
         } else {
