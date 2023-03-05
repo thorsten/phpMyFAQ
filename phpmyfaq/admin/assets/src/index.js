@@ -23,7 +23,14 @@ import {
   handleElasticsearch,
 } from './configuration';
 import { handleStatistics } from './statistics';
-import { handleCategories, handleFaqForm, handleFaqOverview, handleTags, renderEditor } from './content';
+import {
+  handleCategories,
+  handleFaqForm,
+  handleFaqOverview,
+  handleOpenQuestions,
+  handleTags,
+  renderEditor,
+} from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordToggle } from '../../../assets/src/utils';
@@ -54,6 +61,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderEditor();
   handleFaqForm();
   await handleFaqOverview();
+
+  // Content -> Open questions
+  handleOpenQuestions();
 
   // Content -> Tags
   handleTags();

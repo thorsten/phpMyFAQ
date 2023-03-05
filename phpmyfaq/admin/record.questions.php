@@ -47,7 +47,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
           $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
-          if (Token::getInstance()->verifyToken('questions', $csrfToken)) {
+          if ($csrfToken && Token::getInstance()->verifyToken('toggle-question-visibility', $csrfToken)) {
               $csrfChecked = true;
           } else {
               $csrfChecked = false;
@@ -65,8 +65,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             if (count($openQuestions) > 0) {
                 ?>
-            <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
-              <?= Token::getInstance()->getTokenInput('questions') ?>
+            <form id="phpmyfaq-open-questions" name="phpmyfaq-open-questions" method="post" accept-charset="utf-8">
+              <?= Token::getInstance()->getTokenInput('delete-questions') ?>
               <table class="table table-striped align-middle">
                 <thead>
                 <tr>
@@ -122,7 +122,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               </table>
 
               <div class="text-right">
-                <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
+                <button class="btn btn-danger" id="pmf-delete-questions" type="button">
                     <?= Translation::get('ad_entry_delete') ?>
                 </button>
               </div>

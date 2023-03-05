@@ -129,26 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   });
 
-  /** Delete questions */
-  $('#submitDeleteQuestions').on('click', function () {
-    const questions = $('#questionSelection').serialize(),
-      indicator = $('#pmf-admin-saving-data-indicator');
-
-    $('#returnMessage').empty();
-    $.ajax({
-      type: 'POST',
-      url: 'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
-      data: questions,
-      success: function (msg) {
-        indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
-        $('tr td input:checked').parent().parent().parent().fadeOut('slow');
-        indicator.fadeOut('slow');
-        $('#returnMessage').html('<p class="alert alert-success">' + msg + '</p>');
-      },
-    });
-    return false;
-  });
-
   $(function () {
     // set the textarea to its previous height
     const answerHeight = localStorage.getItem('textarea.answer.height'),

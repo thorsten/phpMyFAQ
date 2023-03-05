@@ -43,13 +43,6 @@ $csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
-/*
-if (!Token::getInstance()->verifyToken('faq-overview', $csrfToken)) {
-    echo Translation::get('err_NotAuth');
-    exit(1);
-}
-*/
-
 $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
@@ -165,23 +158,33 @@ switch ($ajaxAction) {
 
     // delete open questions
     case 'delete_question':
+        $deleteData = json_decode(file_get_contents('php://input', true));
+
+        if (!Token::getInstance()->verifyToken('delete-questions', $deleteData->data->{'pmf-csrf-token'})) {
+            $http->setStatus(401);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            exit(1);
+        }
 
         if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
-            $checks = [
-                'filter' => FILTER_VALIDATE_INT,
-                'flags' => FILTER_REQUIRE_ARRAY,
-            ];
-            $questionIds = Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
+            $questionIds = $deleteData->data->{'questions[]'};
             $question = new Question($faqConfig);
 
-            if (!is_null($questionIds['questions'])) {
-                foreach ($questionIds['questions'] as $questionId) {
-                    $question->deleteQuestion((int)$questionId);
+
+            if (!is_null($questionIds)) {
+                if (!is_array($questionIds)) {
+                    $questionIds = [$questionIds];
                 }
+                foreach ($questionIds as $questionId) {
+                    #$question->deleteQuestion((int)$questionId);
+                }
+
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(['success' => Translation::get('ad_entry_delsuc')]);
+            } else {
+                $http->setStatus(401);
+                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             }
-            echo Translation::get('ad_entry_delsuc');
-        } else {
-            echo Translation::get('err_NotAuth');
         }
         break;
 }
