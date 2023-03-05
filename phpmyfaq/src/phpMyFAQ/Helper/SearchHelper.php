@@ -124,11 +124,11 @@ class SearchHelper extends Helper
      *
      * @param SearchResultSet $resultSet SearchResultSet object
      */
-    public function renderAdminSuggestionResult(SearchResultSet $resultSet): string
+    public function renderAdminSuggestionResult(SearchResultSet $resultSet): array
     {
-        $html = '';
         $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
+        $results = [];
 
         if (0 < $numOfResults) {
             $i = 0;
@@ -147,20 +147,12 @@ class SearchHelper extends Helper
                 // Build the link to the faq record
                 $currentUrl = $this->config->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
 
-                $html .= sprintf(
-                    '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br>',
-                    $result->id,
-                    $result->id,
-                    $currentUrl,
-                    $result->question
-                );
+                $results[] = [ 'url' => $currentUrl, 'question' => $result->question ];
                 ++$i;
             }
-        } else {
-            $html = Translation::get('err_noArticles');
         }
 
-        return $html;
+        return $results;
     }
 
     /**

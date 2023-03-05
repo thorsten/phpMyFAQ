@@ -105,13 +105,19 @@ switch ($ajaxAction) {
 
     // search FAQs for suggestions
     case 'search_records':
-        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+        $postData = json_decode(file_get_contents('php://input', true));
+
+        if (
+            $user->perm->hasPermission($user->getUserId(), 'edit_faq') &&
+            Token::getInstance()->verifyToken('edit-faq', $postData->csrf)
+        ) {
+
             $faqPermission = new FaqPermission($faqConfig);
             $faqSearch = new Search($faqConfig);
             $faqSearch->setCategory(new Category($faqConfig));
             $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
             $searchResult = '';
-            $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_UNSAFE_RAW);
+            $searchString = Filter::filterVar($postData->search, FILTER_SANITIZE_SPECIAL_CHARS);
 
             if (!is_null($searchString)) {
                 $searchResult = $faqSearch->search($searchString, false);
@@ -121,10 +127,14 @@ switch ($ajaxAction) {
                 $searchHelper = new SearchHelper($faqConfig);
                 $searchHelper->setSearchTerm($searchString);
 
-                echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(
+                    ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult) ]
+                );
             }
         } else {
-            echo Translation::get('err_NotAuth');
+            $http->setStatus(401);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
         }
         break;
 

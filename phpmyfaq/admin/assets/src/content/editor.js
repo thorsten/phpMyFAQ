@@ -111,7 +111,7 @@ export const renderEditor = () => {
       plugins:
         'advlist autolink link image lists charmap preview anchor pagebreak ' +
         'searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking ' +
-        'save table directionality template help emoticons', //  phpmyfaq
+        'save table directionality template help emoticons phpmyfaq',
 
       emoticons_database: 'emojis',
 

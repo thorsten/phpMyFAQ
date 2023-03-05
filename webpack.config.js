@@ -29,8 +29,8 @@ module.exports = {
     }),
     // Concat phpMyFAQ TinyMCE plugin and uglify it
     new ConcatPlugin({
-      fileName: '../../../phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js',
-      filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js')],
+      fileName: '../../../phpmyfaq/assets/dist/plugins/phpmyfaq/plugin.js',
+      filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/src/tinymce/phpmyfaq.tinymce.plugin.js')],
     }),
   ],
   module: {
