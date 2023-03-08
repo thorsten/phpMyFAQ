@@ -22,7 +22,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
-
 const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
 const IS_VALID_PHPMYFAQ = null;
 
@@ -666,7 +665,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.0.0-beta.3
     //
-    if (version_compare($version, '3.0.0-beta.3', '<=')) {
+    if (version_compare($version, '3.0.0-beta.3', '<')) {
         // Fix category table
         switch ($DB['type']) {
             case 'mysqli':
@@ -685,7 +684,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.0.0-RC
     //
-    if (version_compare($version, '3.0.0-RC', '<=')) {
+    if (version_compare($version, '3.0.0-RC', '<')) {
         $query[] = 'UPDATE ' . $prefix . "faqconfig SET config_name = 'main.customPdfFooter'
             WHERE config_name = 'main.customPdfHFooter'";
     }
@@ -693,7 +692,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.1.0-alpha
     //
-    if (version_compare($version, '3.1.0-alpha', '<=')) {
+    if (version_compare($version, '3.1.0-alpha', '<')) {
         // Add is_visible flag for user data
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
@@ -723,7 +722,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.1.0-beta
     //
-    if (version_compare($version, '3.1.0-beta', '<=')) {
+    if (version_compare($version, '3.1.0-beta', '<')) {
         switch ($DB['type']) {
             case 'mysqli':
                 $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_order (
@@ -745,7 +744,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.1.0-RC
     //
-    if (version_compare($version, '3.1.0-RC', '<=')) {
+    if (version_compare($version, '3.1.0-RC', '<')) {
         $faqConfig->delete('records.autosaveActive');
         $faqConfig->delete('records.autosaveSecs');
     }
