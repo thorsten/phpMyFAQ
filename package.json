@@ -32,7 +32,7 @@
     "cookieconsent": "^3.1.0",
     "fork-awesome": "^1.1.7",
     "handlebars": "^4.0.12",
-    "jquery": "^3.6.1",
+    "jquery": "3.6.0",
     "jquery-ui": "^1.13.2",
     "popper.js": "^1.14.6",
     "tinymce": "^4.9.11"
