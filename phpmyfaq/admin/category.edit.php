@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -58,7 +59,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         $restrictedGroups = true;
     }
 
-    $header = $PMF_LANG['ad_categ_edit_1'] . ' "' . $categoryData->getName() . '" ' . $PMF_LANG['ad_categ_edit_2'];
+    $header = $PMF_LANG['ad_categ_edit_1'] . ' "' . Strings::htmlentities($categoryData->getName()) .
+        '" ' . $PMF_LANG['ad_categ_edit_2'];
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -81,7 +83,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                   <?= $PMF_LANG['ad_categ_titel'] ?>:
               </label>
               <div class="col-lg-4">
-                <input type="text" id="name" name="name" value="<?= $categoryData->getName() ?>"
+                <input type="text" id="name" name="name" value="<?= Strings::htmlentities($categoryData->getName()) ?>"
                        class="form-control">
               </div>
             </div>
@@ -92,7 +94,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               </label>
               <div class="col-lg-4">
                 <textarea id="description" name="description" rows="3"
-                          class="form-control"><?= $categoryData->getDescription() ?></textarea>
+                          class="form-control"><?= Strings::htmlentities($categoryData->getDescription()) ?></textarea>
               </div>
             </div>
 

@@ -155,8 +155,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                 $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
                 $categoryId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-                $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_UNSAFE_RAW);
-                $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_UNSAFE_RAW);
+                $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_SPECIAL_CHARS);
+                $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_SPECIAL_CHARS);
                 $image = count($uploadedFile) ? $categoryImage->getFileName(
                     $categoryId,
                     $categoryLang
