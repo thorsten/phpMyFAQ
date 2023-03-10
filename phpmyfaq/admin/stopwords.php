@@ -106,10 +106,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             }
 
             // id attribute is of the format stopword_<id>_<lang>
-            elem_id = buildStopWordInputElemId(data[i].id, data[i].lang);
+            elem_id = buildStopWordInputElemId(data[i].id, escape(data[i].lang));
 
             html += '<td>';
-            html += buildStopWordInputElement(elem_id, data[i].stopword);
+            html += buildStopWordInputElement(elem_id, escape(data[i].stopword));
             html += '</td>';
 
             if (i % maxCols === maxCols - 1) {
@@ -136,7 +136,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
           elementId = elementId || buildStopWordInputElemId();
           stopword = stopword || '';
           const attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWordHandleEnter(this.id, event)" onfocus="saveOldValue(this.id)"';
-          return '<input class="form-control form-control-sm" id="' + elementId + '" value="' + stopword + '" ' + attrs + '>';
+          return '<input class="form-control form-control-sm" id="' + elementId + '" value="' + escape(stopword) + '" ' + attrs + '>';
         }
 
         /**
@@ -286,6 +286,21 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             );
           }
         }
+
+        const escape = (text) => {
+          const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;',
+          };
+
+          return text.replace(/[&<>"']/g, (mapped) => {
+            return map[mapped];
+          });
+        };
+
       </script>
     </div>
   </div>
