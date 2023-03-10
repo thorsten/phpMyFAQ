@@ -114,9 +114,9 @@ if (
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $userData = [];
-            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW);
+            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_SPECIAL_CHARS);
             $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_UNSAFE_RAW);
+            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_SPECIAL_CHARS);
             $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_UNSAFE_RAW, $defaultUserStatus);
             $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_UNSAFE_RAW);
             $isSuperAdmin = $isSuperAdmin === 'on';
