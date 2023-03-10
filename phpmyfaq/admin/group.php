@@ -18,6 +18,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
@@ -171,7 +172,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
         <div class="col-lg-12">
           <h2 class="page-header">
             <i aria-hidden="true" class="fa fa-users fa-fw"></i>
-              <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
+              <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= Strings::htmlentities($groupData['name']) ?>"
           </h2>
         </div>
       </header>
@@ -226,8 +227,8 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
-    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_UNSAFE_RAW, '');
-    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_UNSAFE_RAW, '');
+    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_SPECIAL_CHARS, '');
+    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_SPECIAL_CHARS, '');
     $groupAutoJoin = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_UNSAFE_RAW, '');
     $csrfOkay = true;
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
@@ -236,7 +237,7 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
         $csrfOkay = false;
     }
     // check group name
-    if ($groupName == '') {
+    if ($groupName === '') {
         $messages[] = $PMF_LANG['ad_group_error_noName'];
     }
     // ok, let's go
@@ -336,60 +337,6 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
 }
 
-// Import LDAP groups
-/*
-if ('import-ldap-groups' === $groupAction && $user->perm->hasPermission($user->getUserId(), 'addgroup')) {
-    $user = new CurrentUser($faqConfig);
-    $message = '';
-    $messages = [];
-
-    // Temporary data
-    $groupName = 'LDAP Group';
-    $groupDescription = 'This is a LDAP group import demo';
-    $groupAutoJoin = false;
-
-    $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
-
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        $csrfOkay = false;
-    }
-
-    // check group name
-    if ($groupName == '') {
-        $messages[] = $PMF_LANG['ad_group_error_noName'];
-    }
-
-    // ok, let's go
-    if (count($messages) == 0 && $csrfOkay) {
-        // create group
-        $groupData = [
-            'name' => $groupName,
-            'description' => $groupDescription,
-            'auto_join' => $groupAutoJoin,
-        ];
-
-        if ($user->perm->addGroup($groupData) <= 0) {
-            $messages[] = $PMF_LANG['ad_adus_dberr'];
-        }
-    }
-
-    // no errors, show list
-    if (count($messages) == 0) {
-        $groupAction = $defaultGroupAction;
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
-        // display error messages and show form again
-    } else {
-        $groupAction = 'import-ldap-groups';
-        $message = '<p class="alert alert-danger">';
-        foreach ($messages as $err) {
-            $message .= $err . '<br>';
-        }
-        $message .= '</p>';
-    }
-}
-*/
-
 // show list of users
 if ('list' === $groupAction) {
     ?>
@@ -415,20 +362,6 @@ if ('list' === $groupAction) {
   <div class="row">
 
     <div class="col-lg-4" id="group_list">
-
-      <!--
-      <div class="card mb-4">
-        <div class="card-header py-3">
-          <form id="group-import-ldap-groups" method="post"
-                name="group-import-ldap-groups" action="?action=group&amp;group_action=import-ldap-groups">
-            <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
-            <button class="btn btn-success" type="submit">
-              Import LDAP groups
-            </button>
-          </form>
-        </div>
-      </div>
-      -->
 
       <div class="card mb-4">
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
