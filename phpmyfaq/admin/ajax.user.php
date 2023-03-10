@@ -143,6 +143,8 @@ if (
                 if (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7) {
                     $errorMessage[] = $PMF_LANG['ad_passwd_fail'];
                 }
+            } else {
+                $userPassword = ''; // set password to empty, so a new one is created
             }
 
             if (count($errorMessage) === 0) {
