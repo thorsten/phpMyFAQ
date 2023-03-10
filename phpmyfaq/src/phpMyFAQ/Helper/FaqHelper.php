@@ -71,7 +71,8 @@ class FaqHelper extends Helper
         }
 
         return sprintf(
-            '<a rel="nofollow" href="%s" target="_blank"><i aria-hidden="true" class="fa fa-twitter"></i></a>',
+            '<i aria-hidden="true" class="fa fa-twitter"></i>' .
+            '<a rel="nofollow" href="%s" target="_blank" class="text-decoration-none">Twitter</a>',
             $url
         );
     }
@@ -86,8 +87,10 @@ class FaqHelper extends Helper
         }
 
         return sprintf(
-            '<a rel="nofollow" href="%s"><i aria-hidden="true" class="fa fa-envelope"></i></a>',
-            $url
+            '<i aria-hidden="true" class="fa fa-envelope"></i>' .
+            '<a rel="nofollow" href="%s" class="text-decoration-none">%s</a>',
+            $url,
+            Translation::get('msgSend2Friend')
         );
     }
 

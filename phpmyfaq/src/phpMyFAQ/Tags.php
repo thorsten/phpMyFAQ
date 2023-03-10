@@ -56,10 +56,11 @@ class Tags
             $oLink->itemTitle = $taggingName;
             $oLink->text = $taggingName;
             $oLink->tooltip = $title;
-            $tagListing .= $oLink->toHtmlAnchor() . ', ';
+            $oLink->class = 'badge bg-primary text-decoration-none';
+            $tagListing .= $oLink->toHtmlAnchor() . ' ';
         }
 
-        return '' === $tagListing ? '-' : Strings::substr($tagListing, 0, -2);
+        return '' === $tagListing ? '-' : Strings::substr($tagListing, 0, -1);
     }
 
     /**

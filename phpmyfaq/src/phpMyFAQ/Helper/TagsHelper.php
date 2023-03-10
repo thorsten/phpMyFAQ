@@ -103,8 +103,8 @@ class TagsHelper extends Helper
     public function renderRelatedTag(int $tagId, string $tagName, int $relevance): string
     {
         return sprintf(
-            '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s %s ' .
-            '<span class="badge badge-dark">%d</span></a>',
+            '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s %s ' .
+            '<span class="badge bg-secondary">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
             Strings::htmlentities($tagName),

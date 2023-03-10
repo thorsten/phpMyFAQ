@@ -199,7 +199,7 @@ $editThisEntry = '';
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     $editThisEntry = sprintf(
         '<i aria-hidden="true" class="fa fa-pencil"></i> ' .
-        '<a class="data" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
+        '<a class="text-decoration-none" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         $recordId,
         $lang,
         Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2')
@@ -290,7 +290,8 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
         'mainPageContent',
         'tagsAvailable',
         [
-            'renderTags' => Translation::get('msg_tags') . ': ' . $faqTagging->getAllLinkTagsById($recordId),
+            'renderTagsHeader' => Translation::get('msg_tags'),
+            'renderTags' =>  $faqTagging->getAllLinkTagsById($recordId),
         ]
     );
 }

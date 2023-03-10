@@ -2,101 +2,76 @@
   <div class="col-md-8">
     <h2 class="pb-4 mb-4 border-bottom">{{ question }}</h2>
 
-    {{ answer }}
+    <article class="pmf-faq-body">{{ answer }}</article>
   </div>
 
   <div class="col-md-4">
     <div class="position-sticky" style="top: 2rem">
-      <div class="p-4 mb-3 bg-light rounded">
-        <header>
-          <div class="float-right d-print-none" id="solution_id">
-            <a class="badge bg-info" href="{{ solutionIdLink }}"> ID #{{ solutionId }} </a>
-          </div>
-          <h2></h2>
-          <div class="pmf-faq-meta clearfix">
-            <div class="pmf-faq-reading-time">
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
               <i aria-hidden="true" class="fa fa-clock-o"></i>
               <span class="data" id="pmf-reading-time-minutes">~ 0 min</span>
             </div>
-            <div class="pmf-faq-author">
-              <i aria-hidden="true" class="fa fa-user"></i>
-              <span class="data" rel="author">{{ faqAuthor }}</span>
-            </div>
-            <div class="pmf-faq-date">
-              <i aria-hidden="true" class="fa fa-calendar"></i>
-              <span class="data">{{ faqDate }}</span>
-            </div>
-            [enableComments]
-            <div class="pmf-faq-comments">
-              <i aria-hidden="true" class="fa fa-comments"></i>
-              <span class="data"><a class="show-comment-form" href="#">{{ numberOfComments }}</a></span>
-            </div>
-            [/enableComments]
-            <div class="pmf-faq-edit">{{ editThisEntry }}</div>
-            <div class="pmf-social-links">
-              <i aria-hidden="true" class="fa fa-file-pdf-o"></i>
-              <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}"> {{ msgPdf }} </a>
-            </div>
-            <div class="pmf-social-links">{{ sendToFriend }}</div>
-            <div class="pmf-social-links">{{ shareOnTwitter }}</div>
-          </div>
-        </header>
+            <a class="badge bg-secondary rounded-pill text-decoration-none" href="{{ solutionIdLink }}">
+              ID #{{ solutionId }}
+            </a>
+          </li>
+          <li class="list-group-item">
+            <i aria-hidden="true" class="fa fa-user"></i>
+            <span class="data" rel="author">{{ faqAuthor }}</span>
+          </li>
+          <li class="list-group-item">
+            <i aria-hidden="true" class="fa fa-calendar"></i>
+            <span class="data">{{ faqDate }}</span>
+          </li>
+          [enableComments]
+          <li class="list-group-item">
+            <i aria-hidden="true" class="fa fa-comments"></i>
+            <a class="show-comment-form text-decoration-none" href="#"> {{ numberOfComments }} </a>
+          </li>
+          [/enableComments]
+          <li class="list-group-item">{{ editThisEntry }}</li>
+          <li class="list-group-item">
+            <i aria-hidden="true" class="fa fa-file-pdf-o"></i>
+            <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}" class="text-decoration-none">
+              {{ msgPdf }}
+            </a>
+          </li>
+          <li class="list-group-item">{{ sendToFriend }}</li>
+          <li class="list-group-item">{{ shareOnTwitter }}</li>
+        </ul>
       </div>
 
-      <div class="p-4">
-        [tagsAvailable] {{ renderTags }} [/tagsAvailable] [privateNotes]
-        <div class="pmf-private-notes">
-          <h4>{{ notesHeader }}</h4>
-          <p>{{ notes }}</p>
-        </div>
-        [/privateNotes]
+      [tagsAvailable]
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ renderTagsHeader }}</h4>
+        <div>{{ renderTags }}</div>
       </div>
+      [/tagsAvailable] [relatedFaqs]
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ renderRelatedArticlesHeader }}</h4>
+        {{ renderRelatedArticles }}
+      </div>
+      [/relatedFaqs] [relatedCategories]
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ renderRelatedCategoriesHeader }}</h4>
+        {{ renderRelatedCategories }}
+      </div>
+      [/relatedCategories] [privateNotes]
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4>{{ notesHeader }}</h4>
+        <p>{{ notes }}</p>
+      </div>
+      [/privateNotes]
     </div>
   </div>
 </div>
 
+<!--
 <section class="col-12">
-  <article class="pmf-faq">
-    <div class="pmf-faq-body">
-      [relatedFaqs]
-      <aside id="accordionFaqs" class="accordion related-faqs d-print-none mt-3 mb-3">
-        <div class="accordion-group">
-          <div class="accordion-heading">
-            <a
-              class="accordion-toggle"
-              href="#collapseRelatedFaqs"
-              data-parent="#accordionFaqs"
-              data-bs-toggle="collapse"
-            >
-              {{ renderRelatedArticlesHeader }}
-            </a>
-          </div>
-          <div id="collapseRelatedFaqs" class="accordion-body collapse">
-            <div class="accordion-inner">{{ renderRelatedArticles }}</div>
-          </div>
-        </div>
-      </aside>
-      [/relatedFaqs] [relatedCategories]
-      <aside id="accordionCategories" class="accordion related-categories d-print-none mt-3 mb-3">
-        <div class="accordion-group">
-          <div class="accordion-heading">
-            <a
-              class="accordion-toggle"
-              href="#collapseRelatedCategories"
-              data-parent="#accordionCategories"
-              data-bs-toggle="collapse"
-            >
-              {{ renderRelatedCategoriesHeader }}
-            </a>
-          </div>
-          <div id="collapseRelatedCategories" class="accordion-body collapse">
-            <div class="accordion-inner">{{ renderRelatedCategories }}</div>
-          </div>
-        </div>
-      </aside>
-      [/relatedCategories]
-    </div>
-  </article>
+
 
   <ul id="tab" class="nav nav-tabs d-print-none" role="tablist">
     <li class="nav-item">
@@ -213,3 +188,4 @@
      */
   });
 </script>
+-->

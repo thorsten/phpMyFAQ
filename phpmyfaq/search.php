@@ -264,6 +264,7 @@ if ($tagSearch) {
         'mainPageContent',
         'searchTagsSection',
         [
+            'msgCurrentTags' => Translation::get('msg_tags'),
             'searchTags' => $tagHelper->renderTagList($tags),
         ]
     );

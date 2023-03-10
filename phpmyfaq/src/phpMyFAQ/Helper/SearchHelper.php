@@ -173,7 +173,7 @@ class SearchHelper extends Helper
 
         if (0 < $numOfResults) {
             $html .= sprintf(
-                "<p role=\"heading\" aria-level=\"1\">%s</p>\n",
+                '<h4 class="mt-3">%s</h4>',
                 $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults)
             );
 
@@ -296,7 +296,7 @@ class SearchHelper extends Helper
         $numOfResults = $resultSet->getNumberOfResults();
 
         if ($numOfResults > 0) {
-            $html .= '<ul>';
+            $html .= '<ul class="list-unstyled">';
             $counter = 0;
             foreach ($resultSet->getResultSet() as $result) {
                 if ($counter >= 5) {
@@ -314,11 +314,12 @@ class SearchHelper extends Helper
                     $result->id,
                     $result->lang
                 );
-                $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = Strings::htmlentities($result->question);
-                $oLink->text = Strings::htmlentities($result->question);
-                $oLink->tooltip = Strings::htmlentities($result->question);
-                $html .= '<li>' . $oLink->toHtmlAnchor() . '</li>';
+                $link = new Link($url, $this->config);
+                $link->itemTitle = Strings::htmlentities($result->question);
+                $link->text = Strings::htmlentities($result->question);
+                $link->tooltip = Strings::htmlentities($result->question);
+                $link->class = 'text-decoration-none';
+                $html .= '<li><i class="fa fa-question-circle"></i> ' . $link->toHtmlAnchor() . '</li>';
             }
             $html .= '</ul>';
         }
@@ -339,7 +340,7 @@ class SearchHelper extends Helper
             if (Strings::strlen($searchItem['searchterm']) > 0) {
                 $html .= sprintf(
                     '<a class="btn btn-primary m-1" href="?search=%s&submit=Search&action=search">%s ' .
-                    '<span class="badge badge-info">%dx</span> </a>',
+                    '<span class="badge bg-secondary">%dx</span> </a>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']

@@ -52,27 +52,30 @@
         </div>
       </form>
     </div>
-    [/searchBoxSection] {{ renderSearchResults }}
+    [/searchBoxSection]
+
+    <section>{{ renderSearchResults }}</section>
   </div>
 
   <div class="col-md-4">
-    <div class="position-sticky mt-2">
+    <div class="position-sticky" style="top: 2rem">
       [searchTagsSection]
-      <div class="p-4 mb-3 bg-light rounded">
+      <div class="p-4 mb-3 bg-light-subtle rounded border">
+        <h4 class="fst-italic">{{ msgCurrentTags }}</h4>
         <div class="pmf-tag-cloud">{{ searchTags }}</div>
       </div>
       [/searchTagsSection] [tagListSection]
-      <div class="p-4 mb-3 bg-light rounded">
+      <div class="p-4 mb-3 bg-light-subtle rounded">
         <h4 class="fst-italic">{{ msgTags }}</h4>
         <div class="clearfix">{{ tagList }}</div>
       </div>
       [/tagListSection] [relatedTags]
-      <div class="p-4 mb-3 bg-light rounded">
+      <div class="p-4 mb-3 bg-light-subtle rounded">
         <h4 class="fst-italic">{{ relatedTagsHeader }}</h4>
         <div class="pmf-tag-cloud">{{ relatedTags }}</div>
       </div>
       [/relatedTags] [popularSearchesSection]
-      <div class="p-4 mb-3 bg-light rounded">
+      <div class="p-4 mb-3 bg-light-subtle rounded">
         <h4 class="fst-italic">{{ msgMostPopularSearches }}</h4>
         <div class="clearfix">{{ printMostPopularSearches }}</div>
       </div>
