@@ -466,7 +466,7 @@ if (
                                                     );
                                                     if ($user->perm->hasPermission($currentUserId, 'delattachment')) {
                                                         printf(
-                                                            '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
+                                                            '<a class="badge bg-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
                                                             $faqData['id'],
                                                             $att->getId(),
                                                             $faqData['lang']

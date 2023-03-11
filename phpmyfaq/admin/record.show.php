@@ -339,7 +339,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
                 $catInfo .= sprintf(
-                    '<span class="badge bg-info">%d %s</span>',
+                    '<span class="badge bg-primary">%d %s</span>',
                     $numCommentsByCat[$cid],
                     Translation::get('ad_start_comments')
                 );
@@ -469,7 +469,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             <?php
             if (isset($numCommentsByFaq[$record['id']])) {
                 printf(
-                    '<br><a class="badge badge-primary" href="?action=comments#record_id_%d">%d %s</a>',
+                    '<br><a class="badge bg-primary" href="?action=comments#record_id_%d">%d %s</a>',
                     $record['id'],
                     $numCommentsByFaq[$record['id']],
                     Translation::get('ad_start_comments')
