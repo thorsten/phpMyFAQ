@@ -1576,12 +1576,7 @@ class Faq
         $question = '';
 
         $query = sprintf(
-            "SELECT
-                thema AS question
-            FROM
-                %sfaqdata
-            WHERE
-                id = %d AND lang = '%s'",
+            "SELECT thema AS question FROM %sfaqdata WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage()

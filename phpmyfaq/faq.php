@@ -19,7 +19,9 @@
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\BuiltinCaptchaHelper;
+use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
@@ -48,12 +50,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new BuiltinCaptcha($faqConfig);
-$oGlossary = new Glossary($faqConfig);
-$faqTagging = new Tags($faqConfig);
-$faqRelation = new Relation($faqConfig);
-$faqRating = new Rating($faqConfig);
-$faqComment = new Comments($faqConfig);
+$glossary = new Glossary($faqConfig);
+$tagging = new Tags($faqConfig);
+$relation = new Relation($faqConfig);
+$rating = new Rating($faqConfig);
+$comment = new Comments($faqConfig);
 $markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
 $faqPermission = new FaqPermission($faqConfig);
@@ -65,6 +66,7 @@ if (is_null($user)) {
 
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
+$captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
     $captcha->drawCaptchaImage();
@@ -109,7 +111,7 @@ $currentUrl = htmlspecialchars("//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI'
 $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
 
 // Add Glossary entries for answers only
-$answer = $oGlossary->insertItemsIntoContent($answer);
+$answer = $glossary->insertItemsIntoContent($answer);
 
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
@@ -182,7 +184,7 @@ if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
 // Related FAQs
 try {
     $faqSearchResult->reviewResultSet(
-        $faqRelation->getAllRelatedByQuestion(
+        $relation->getAllRelatedByQuestion(
             Strings::htmlentities($faq->faqRecord['title']),
             Strings::htmlentities($faq->faqRecord['keywords'])
         )
@@ -210,7 +212,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Number of comments
-$numComments = $faqComment->getNumberOfComments();
+$numComments = $comment->getNumberOfComments();
 
 // Does the user have the right to add a comment?
 if (
@@ -220,7 +222,7 @@ if (
     $commentMessage = Translation::get('msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
-        '%s<a href="#" class="show-comment-form">%s</a>',
+        '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment" >%s</a>',
         Translation::get('msgYouCan'),
         Translation::get('msgWriteComment')
     );
@@ -285,13 +287,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') && !empty($faq->f
     );
 }
 
-if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
+if ('-' !== $tagging->getAllLinkTagsById($recordId)) {
     $template->parseBlock(
         'mainPageContent',
         'tagsAvailable',
         [
             'renderTagsHeader' => Translation::get('msg_tags'),
-            'renderTags' =>  $faqTagging->getAllLinkTagsById($recordId),
+            'renderTags' =>  $tagging->getAllLinkTagsById($recordId),
         ]
     );
 }
@@ -319,7 +321,7 @@ if ('' !== $relatedFaqs) {
 }
 
 $date = new Date($faqConfig);
-$captchaHelper = new BuiltinCaptchaHelper($faqConfig);
+$captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 // We need some Links from social networks
 $faqServices = new Services($faqConfig);
@@ -376,7 +378,7 @@ $template->parse(
         'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
         'msgAverageVote' => Translation::get('msgAverageVote'),
         'renderVotingStars' => '',
-        'printVotings' => $faqRating->getVotingResult($recordId),
+        'printVotings' => $rating->getVotingResult($recordId),
         'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
         'msgVoteUsability' => Translation::get('msgVoteUsability'),
         'msgVoteBad' => Translation::get('msgVoteBad'),
@@ -392,9 +394,10 @@ $template->parse(
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment' => Translation::get('msgYourComment'),
+        'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
-        'renderComments' => $faqComment->getComments($recordId, CommentType::FAQ),
+        'renderComments' => $comment->getComments($recordId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
     ]
 );

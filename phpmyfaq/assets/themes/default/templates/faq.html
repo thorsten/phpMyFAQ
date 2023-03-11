@@ -2,7 +2,10 @@
   <div class="col-md-8">
     <h2 class="pb-4 mb-4 border-bottom">{{ question }}</h2>
 
-    <article class="pmf-faq-body">{{ answer }}</article>
+    <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer }}</article>
+
+    <p class="d-print-none">{{ writeCommentMsg }}</p>
+    <div class="d-print-none" id="comments">{{ renderComments }}</div>
   </div>
 
   <div class="col-md-4">
@@ -49,7 +52,20 @@
 
       <div class="p-4 mb-3 bg-light-subtle border rounded">
         <h4 class="fst-italic">{{ msgVoteUsability }}</h4>
-        <div></div>
+        <form action="#" method="post" class="form-inline">
+          <input type="hidden" name="artikel" value="{{ saveVotingID }}" />
+          <div class="pmf-stars">
+            <div class="pmf-star-rating" data-rating="{{ msgAverageVote }}">
+              <span data-stars="5">☆</span>
+              <span data-stars="4">☆</span>
+              <span data-stars="3">☆</span>
+              <span data-stars="2">☆</span>
+              <span data-stars="1">☆</span>
+            </div>
+          </div>
+          <div class="text-end bold">&empty; <span id="rating">{{ printVotings }}</span></div>
+        </form>
+        <div id="votings"></div>
       </div>
 
       [tagsAvailable]
@@ -77,6 +93,70 @@
   </div>
 </div>
 
+<div class="modal fade" id="pmf-modal-add-comment" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="commentModalLabel">{{ msgCommentHeader }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ msgCancel }}"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formValues" action="#" method="post" accept-charset="utf-8">
+          <input type="hidden" name="id" id="id" value="{{ id }}" />
+          <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+          <input type="hidden" name="type" id="type" value="faq" />
+
+          <div class="row mb-2">
+            <div class="col">
+              <label class="sr-only" for="user">{{ msgNewContentName }}</label>
+              <input
+                type="text"
+                name="user"
+                id="user"
+                class="form-control"
+                required
+                placeholder="{{ msgNewContentName }}"
+                value="{{ defaultContentName }}"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
+              <input
+                type="email"
+                name="mail"
+                id="mail"
+                class="form-control"
+                required
+                placeholder="{{ msgNewContentMail }}"
+                value="{{ defaultContentMail }}"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <textarea
+                rows="10"
+                name="comment_text"
+                id="comment_text"
+                class="form-control"
+                placeholder="{{ msgYourComment }}"
+              ></textarea>
+            </div>
+          </div>
+
+          {{ captchaFieldset }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ msgCancel }}</button>
+        <button type="button" class="btn btn-primary">{{ msgNewContentSubmit }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!--
 <section class="col-12">
 
@@ -96,23 +176,6 @@
   </ul>
 
   <div class="tab-content pmf-faq-info d-print-none">
-    <div class="tab-pane active d-print-none" id="votingForm">
-      <form action="#" method="post" class="form-inline">
-        <input type="hidden" name="artikel" value="{{ saveVotingID }}" />
-        <div class="pmf-stars">
-          <div class="pmf-star-rating" data-rating="{{ msgAverageVote }}">
-            <span data-stars="5">☆</span>
-            <span data-stars="4">☆</span>
-            <span data-stars="3">☆</span>
-            <span data-stars="2">☆</span>
-            <span data-stars="1">☆</span>
-          </div>
-        </div>
-
-        <div class="text-right"><strong>{{ msgAverageVote }}</strong><span id="rating">{{ printVotings }}</span></div>
-      </form>
-      <div id="votings"></div>
-    </div>
     <div class="tab-pane d-print-none" id="switchAvailableLanguage">{{ switchLanguage }}</div>
     <div class="tab-pane d-print-none" id="addTranslation">
       <form action="{{ translationUrl }}" method="post" class="form-inline" accept-charset="utf-8">
@@ -122,67 +185,6 @@
     </div>
   </div>
 
-  <p class="d-print-none d-none">{{ writeCommentMsg }}</p>
-
-  <aside class="pmf-create-comment d-print-none d-none" id="pmf-create-comment">
-    <hr />
-
-    <div id="loader"></div>
-
-    <h4><i aria-hidden="true" class="fa fa-heart"></i> {{ msgCommentHeader }}</h4>
-
-    <form id="formValues" action="#" method="post" accept-charset="utf-8">
-      <input type="hidden" name="id" id="id" value="{{ id }}" />
-      <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
-      <input type="hidden" name="type" id="type" value="faq" />
-
-      <div class="form-row">
-        <div class="col">
-          <label class="sr-only" for="user">{{ msgNewContentName }}</label>
-          <input
-            type="text"
-            name="user"
-            id="user"
-            class="form-control"
-            required
-            placeholder="{{ msgNewContentName }}"
-            value="{{ defaultContentName }}"
-          />
-        </div>
-        <div class="col">
-          <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
-          <input
-            type="email"
-            name="mail"
-            id="mail"
-            class="form-control"
-            required
-            placeholder="{{ msgNewContentMail }}"
-            value="{{ defaultContentMail }}"
-          />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="col">
-          <textarea
-            rows="10"
-            name="comment_text"
-            id="comment_text"
-            class="form-control"
-            placeholder="{{ msgYourComment }}"
-          ></textarea>
-        </div>
-      </div>
-
-      {{ captchaFieldset }}
-
-      <div class="text-right">
-        <button class="btn btn-primary" id="submitcomment" type="submit">{{ msgNewContentSubmit }}</button>
-      </div>
-    </form>
-  </aside>
-
-  <div class="d-print-none" id="comments">{{ renderComments }}</div>
 </section>
 
 <script>
