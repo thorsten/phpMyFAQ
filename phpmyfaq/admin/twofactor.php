@@ -10,7 +10,7 @@
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Alexander M. Turek <me@derrabus.de>
- * @author Jan Harms <model_railroader@gmx.de>
+ * @author Jan Harms <model_railroader@gmx-topmail.de>
  * @copyright 2005-2023 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
