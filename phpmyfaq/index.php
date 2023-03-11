@@ -41,6 +41,7 @@ use phpMyFAQ\Tags;
 use phpMyFAQ\Template;
 use phpMyFAQ\Template\TemplateHelper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twofactor;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\Utils;
@@ -125,6 +126,8 @@ $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW)
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_UNSAFE_RAW);
 $rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_VALIDATE_BOOLEAN);
+$token = Filter::filterInput(INPUT_POST, 'token', FILTER_UNSAFE_RAW);
+$userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
 
 //
 // Set username via SSO
@@ -144,6 +147,30 @@ if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
     $csrfChecked = true;
 }
 
+// Validating token from 2fa if given; else: returns error message
+if (!is_null($token) && !is_null($userid)) {
+    $user = new CurrentUser($faqConfig);
+    $user->getUserById($userid);
+    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
+        $tfa = new Twofactor($faqConfig);
+        $res = $tfa->validateToken($token, $userid);
+        if (!$res) {
+            $error = $PMF_LANG['msgTwofactorErrorToken'];
+            $action = 'twofactor';
+        } else {
+            $auth = true;
+            $user->twofactorSuccess();
+        }
+    } else {
+        $error = $PMF_LANG['msgTwofactorErrorToken'];
+        $action = 'twofactor';
+    }
+}
+
+if(!isset($user)) {
+    $user = new CurrentUser($faqConfig);
+}
+
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
@@ -159,6 +186,9 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 } else {
     // Try to authenticate with cookie information
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+    if(!$user->isLoggedIn()) {
+        $auth = null;
+    }
 }
 
 //
@@ -743,6 +773,11 @@ if ('artikel' === $action) {
     $http->setStatus(301);
     $http->redirect($link->toString());
     exit();
+}
+
+if($action==='twofactor') {
+    $user->getUserById($userid);
+    $userid = $user->getUserId();
 }
 
 //
