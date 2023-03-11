@@ -223,7 +223,7 @@ if (
     $commentMessage = Translation::get('msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
-        '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment" >%s</a>',
+        '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
         Translation::get('msgYouCan'),
         Translation::get('msgWriteComment')
     );
