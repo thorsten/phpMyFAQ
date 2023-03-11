@@ -1,4 +1,23 @@
 <?php
+/**
+ * Class for two-factor-authentification.
+ *
+ * This class handles all operations around creating, saving and getting the secret
+ * for a CurrentUser for two-factor-authentification. It also validates given tokens in
+ * comparison to a given secret and returns a qr-code for transmitting a secret to
+ * the authenticator-app.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Jan Harms <model_railroader@gmx-topmail.de>
+ * @copyright 2012-2023 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2023-03-11
+ */
 
 namespace phpMyFAQ;
 
