@@ -19,6 +19,8 @@ use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twofactor;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -44,6 +46,13 @@ if ($user->isLoggedIn()) {
     } else {
         $gravatarImg = '';
     }
+    
+    $tfa = new Twofactor($faqConfig);
+    $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
+    if($secret=='') {
+        $secret = $tfa->generateSecret();
+        $tfa->saveSecret($secret);
+    }
 
     $template->parse(
         'mainPageContent',
@@ -64,6 +73,14 @@ if ($user->isLoggedIn()) {
             'msgConfirm' => Translation::get('ad_user_confirm'),
             'msgSave' => Translation::get('msgSave'),
             'msgCancel' => Translation::get('msgCancel'),
+            'checked_twofactor_enabled' => (int)$user->getUserData('twofactor_enabled') === 1 ? 'checked' : '',
+            'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
+            'msgTwofactorConfig' => Translation::get('msgTwofactorConfig'),
+            'msgTwofactorConfigModelTitle' => Translation::get('msgTwofactorConfigModelTitle'),
+            'twofactor_secret' => $secret,
+            'qr_code_secret' => $tfa->getQrCode($secret),
+            'qr_code_secret_alt' => Translation::get('qr_code_secret_alt'),
+            'msgTwofactorNewSecret' => Translation::get('msgTwofactorNewSecret'),
         ]
     );
 
