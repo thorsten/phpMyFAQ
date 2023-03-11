@@ -135,7 +135,7 @@ class UserData
     public function fetchAll($key, $value): array
     {
         $select = sprintf(
-            "SELECT user_id, last_modified, display_name, email, is_visible FROM %sfaquserdata WHERE %s = '%s'",
+            "SELECT user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret FROM %sfaquserdata WHERE %s = '%s'",
             Database::getTablePrefix(),
             $key,
             $this->config->getDb()->escape($value)
@@ -201,7 +201,9 @@ class UserData
                 last_modified, 
                 display_name, 
                 email,
-                is_visible
+                is_visible,
+                twofactor_enabled, 
+                secret
             FROM
                 %sfaquserdata
             WHERE
@@ -235,7 +237,9 @@ class UserData
                 last_modified = '%s',
                 display_name  = '%s',
                 email         = '%s',
-                is_visible    = %d
+                is_visible    = %d,
+                twofactor_enabled = %d,
+                secret = '%s'
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
@@ -243,6 +247,8 @@ class UserData
             $this->config->getDb()->escape($this->data['display_name']),
             $this->config->getDb()->escape($this->data['email']),
             $this->data['is_visible'],
+            $this->data['twofactor_enabled'],
+            $this->data['secret'],
             $this->userId
         );
 
@@ -274,9 +280,9 @@ class UserData
             "
             INSERT INTO
                 %sfaquserdata
-            (user_id, last_modified, is_visible)
+            (user_id, last_modified, is_visible, twofactor_enabled, secret)
                 VALUES
-            (%d, '%s', 1)",
+            (%d, '%s', 1, 0, '')",
             Database::getTablePrefix(),
             $this->userId,
             date('YmdHis', $_SERVER['REQUEST_TIME'])
