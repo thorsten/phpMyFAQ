@@ -5,6 +5,7 @@
     <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer }}</article>
 
     <p class="d-print-none">{{ writeCommentMsg }}</p>
+    <div id="pmf-comment-add-success"></div>
     <div class="d-print-none" id="comments">{{ renderComments }}</div>
   </div>
 
@@ -101,10 +102,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ msgCancel }}"></button>
       </div>
       <div class="modal-body">
-        <form id="formValues" action="#" method="post" accept-charset="utf-8">
+        <div id="pmf-add-comment-error"></div>
+
+        <form id="pmf-add-comment-form" action="#" method="post" class="needs-validation" novalidate>
           <input type="hidden" name="id" id="id" value="{{ id }}" />
           <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
           <input type="hidden" name="type" id="type" value="faq" />
+          {{ csrfInput }}
 
           <div class="row mb-2">
             <div class="col">
@@ -141,6 +145,7 @@
                 name="comment_text"
                 id="comment_text"
                 class="form-control"
+                required
                 placeholder="{{ msgYourComment }}"
               ></textarea>
             </div>
@@ -151,7 +156,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ msgCancel }}</button>
-        <button type="button" class="btn btn-primary">{{ msgNewContentSubmit }}</button>
+        <button type="button" class="btn btn-primary" id="pmf-button-save-comment">{{ msgNewContentSubmit }}</button>
       </div>
     </div>
   </div>

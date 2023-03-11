@@ -62,7 +62,6 @@ $postData = json_decode(file_get_contents('php://input'), true);
 
 $apiLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
 $currentToken = Filter::filterVar($postData['csrf'] ?? '', FILTER_UNSAFE_RAW);
-
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 
 if ($faqConfig->get('security.enableGoogleReCaptchaV2')) {
@@ -158,7 +157,7 @@ switch ($action) {
     //
     // Comments
     //
-    case 'savecomment':
+    case 'add-comment':
         if (
             !$faqConfig->get('records.allowCommentsForGuests') &&
             !$user->perm->hasPermission($user->getUserId(), 'addcomment')
@@ -170,12 +169,13 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $oComment = new Comments($faqConfig);
         $category = new Category($faqConfig);
-        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW);
-        $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
-        $newsId = Filter::filterInput(INPUT_POST, 'newsId', FILTER_VALIDATE_INT);
-        $username = Filter::filterInput(INPUT_POST, 'user', FILTER_UNSAFE_RAW);
-        $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
-        $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_UNSAFE_RAW);
+
+        $type = Filter::filterVar($postData['type'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqId = Filter::filterVar($postData['id'] ?? null, FILTER_VALIDATE_INT, 0);
+        $newsId = Filter::filterVar($postData['newsId'] ?? null, FILTER_VALIDATE_INT);
+        $username = Filter::filterVar($postData['user'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $mailer = Filter::filterVar($postData['mail'], FILTER_VALIDATE_EMAIL);
+        $comment = Filter::filterVar($postData['comment_text'], FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
             case 'news':
@@ -195,7 +195,8 @@ switch ($action) {
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
-                $message = ['error' => '-' . Translation::get('err_SaveComment')];
+                $message = ['error' => Translation::get('err_SaveComment')];
+                $faqConfig->getLogger()->error('Name and mail already used by registered user.');
                 break;
             }
         }

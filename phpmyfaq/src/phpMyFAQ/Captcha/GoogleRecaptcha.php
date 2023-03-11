@@ -33,6 +33,10 @@ class GoogleRecaptcha implements CaptchaInterface
 
     public function checkCaptchaCode(string $code): bool
     {
+        if ($this->isUserIsLoggedIn()) {
+            return true;
+        }
+
         $url = sprintf(
             'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
             $this->config->get('security.googleReCaptchaV2SecretKey'),

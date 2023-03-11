@@ -38,6 +38,7 @@ use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -396,6 +397,7 @@ $template->parse(
         'msgYourComment' => Translation::get('msgYourComment'),
         'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+        'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
         'renderComments' => $comment->getComments($recordId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
