@@ -331,7 +331,9 @@ class Sqlite3 extends Database implements Driver
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
             email VARCHAR(128) NULL,
-            is_visible INT(1) NULL DEFAULT 0)',
+            is_visible INT(1) NULL DEFAULT 0,
+            twofactor_enabled INT(1) NULL DEFAULT 0,
+            secret VARCHAR(128) NULL)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
