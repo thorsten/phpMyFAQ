@@ -1353,4 +1353,16 @@ $LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Enable Invisible 
 $LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 site key'];
 $LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 secret key'];
 
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "Two-factor-authentification";
+$PMF_LANG['msgTwofactorConfig'] = "Config two-factor-authentification";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuration two-factor-authentification";
+$PMF_LANG['qr_code_secret_alt'] = "QR-Code Secret-Key";
+$PMF_LANG['msgTwofactorNewSecret'] = "Delete current secret?";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Two-factor-authentification: Enter token:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Please enter the code from your app:";
+$PMF_LANG['msgTwofactorCheck'] = "Check";
+$PMF_LANG['msgTwofactorErrorToken'] = "You entered a wrong code!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset two-factor-authentification";
+
 return $PMF_LANG;
