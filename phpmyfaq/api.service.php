@@ -48,6 +48,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twofactor;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
@@ -797,8 +798,17 @@ switch ($action) {
         $isVisible = Filter::filterVar($postData['is_visible'], FILTER_UNSAFE_RAW);
         $password = trim(Filter::filterVar($postData['faqpassword'], FILTER_UNSAFE_RAW));
         $confirm = trim(Filter::filterVar($postData['faqpassword_confirm'], FILTER_UNSAFE_RAW));
+        $twofactorEnabled = Filter::filterInput(INPUT_POST, 'twofactor_enabled', FILTER_UNSAFE_RAW);
+        $delete_secret = Filter::filterInput(INPUT_POST, 'newsecret', FILTER_UNSAFE_RAW);
 
         $user = CurrentUser::getFromSession($faqConfig);
+        
+        if($delete_secret=='on') {
+            $secret = "";
+        }
+        else {
+            $secret = $user->getUserData('secret');
+        }
 
         if ($userId !== $user->getUserId()) {
             $http->setStatus(400);
@@ -820,7 +830,9 @@ switch ($action) {
             $userData = [
                 'display_name' => $userName,
                 'email' => $email,
-                'is_visible' => $isVisible === 'on' ? 1 : 0
+                'is_visible' => $isVisible === 'on' ? 1 : 0,
+                'twofactor_enabled' => $twofactorEnabled === 'on' ? 1 : 0,
+                'secret' => $secret
             ];
             $success = $user->setUserData($userData);
 
