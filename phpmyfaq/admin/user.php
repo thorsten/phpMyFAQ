@@ -119,11 +119,18 @@ if (
             $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_UNSAFE_RAW, $defaultUserStatus);
             $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_UNSAFE_RAW);
             $isSuperAdmin = $isSuperAdmin === 'on';
+            $deleteTwofactor = Filter::filterInput(INPUT_POST, 'overwrite_twofactor', FILTER_UNSAFE_RAW);
+            $deleteTwofactor = $deleteTwofactor === 'on';
 
             $user = new User($faqConfig);
             $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
+            
+            // reset twofactor-authentification if requires
+            if($deleteTwofactor) {
+                $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
+            }
 
             // set new password an send email if user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
@@ -363,7 +370,18 @@ if (
                                     </a>
                                 </div>
                             </div>
+                        </div>  
                         </div>
+              </div>
+              </div>
+              <div class="form-group row">
+              <div class="offset-lg-4 col-lg-8">
+              <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="overwrite_twofactor" name="overwrite_twofactor">
+              <label class="form-check-label" for="is_superadmin"><?= $PMF_LANG['ad_user_overwrite_twofactor'] ?></label>
+                  </div>
+                  </div>
+            </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-success" type="submit">
                                 <?= Translation::get('ad_gen_save') ?>
