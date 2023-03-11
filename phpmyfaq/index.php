@@ -764,7 +764,7 @@ if ($http->getStatusCode() === 404 || $action === '404') {
     $template = new Template(
         [
             'index' => '404.html',
-            'mainPageContent' => ''
+            'mainPageContent' => '',
         ],
         new TemplateHelper($faqConfig),
         $faqConfig->get('main.templateSet')

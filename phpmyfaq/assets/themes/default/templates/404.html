@@ -6,149 +6,141 @@
     <title>{{ title }}</title>
     <base href="{{ baseHref }}" />
 
-    <meta name="description" content="{{ metaDescription }}" />
-    <meta name="keywords" content="{{ metaKeywords }}" />
-    <meta name="author" content="{{ metaPublisher }}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqVersion }}" />
-    <meta name="robots" content="{{ metaRobots }}" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="apple-itunes-app" content="app-id=977896957" />
+    <meta content="{{ metaDescription }}" name="description" />
+    <meta content="{{ metaKeywords }}" name="keywords" />
+    <meta content="{{ metaPublisher }}" name="author" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="phpMyFAQ {{ phpmyfaqVersion }}" name="application-name" />
+    <meta content="{{ metaRobots }}" name="robots" />
+    <meta content="7 days" name="revisit-after" />
+    <meta content="app-id=977896957" name="apple-itunes-app" />
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ baseHref }}assets/dist/styles.css" />
+    <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" />
 
-    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" />
-    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
-    <link rel="canonical" href="{{ currentPageUrl }}" />
-
-    <script>
-      if (self === top) {
-        document.documentElement.style.display = 'block';
-      } else {
-        top.location = self.location;
-      }
-    </script>
-    <style>
-      html {
-        display: none;
-      }
-    </style>
+    <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" rel="shortcut icon" />
+    <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link href="{{ currentPageUrl }}" rel="canonical" />
   </head>
-  <body class="flex-column" dir="{{ dir }}">
-    <nav class="topbar navbar navbar-expand-lg navbar-dark bg-primary">
+  <body dir="{{ dir }}">
+    <nav class="p-3 text-bg-dark border-bottom">
       <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-          <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#pmf-navbar-toggle"
-          aria-controls="pmf-navbar-toggle"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-          <ul class="navbar-nav mr-md-12">
-            <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
-            <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
-            <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
-            <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="dropdown"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {{ msgLoginUser }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown">
-                [notLoggedIn]
-                <div>{{ msgRegisterUser }} {{ msgLoginUser }}</div>
-                [/notLoggedIn] [userloggedIn]
-                <div>
-                  {{ msgUserControlDropDown }} {{ msgUserControl }} {{ msgLogoutUser }}
-                  <div class="dropdown-divider"></div>
-                  {{ msgUserRemoval }}
-                </div>
-                [/userloggedIn]
-              </div>
-            </li>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a
+            href="{{ faqHome }}"
+            id="phpmyfaq-logo"
+            title="{{ header }}"
+            class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+          >
+            <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
+          </a>
+
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li class="nav-link px-2 text-white {{ activeAllCategories }}">{{ allCategories }}</li>
+            <li class="nav-link px-2 text-white {{ activeAddContent }}">{{ msgAddContent }}</li>
+            <li class="nav-link px-2 text-white {{ activeAddQuestion }}">{{ msgQuestion }}</li>
+            <li class="nav-link px-2 text-white {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
           </ul>
+
+          <div class="dropdown text-end">
+            <a
+              href="#"
+              class="d-block text-decoration-none dropdown-toggle text-white"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ msgLoginUser }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small">
+              [notLoggedIn] xxx
+              <li>{{ msgRegisterUser }}</li>
+              <li>{{ msgLoginUser }}</li>
+              [/notLoggedIn] [userloggedIn]
+              <li>{{ msgUserControlDropDown }}</li>
+              <li>{{ msgUserControl }}</li>
+              <li>{{ msgUserRemoval }}</li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>{{ msgLogoutUser }}</li>
+              [/userloggedIn]
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
 
     <!-- SEARCH -->
-    <section class="pmf-search-section">
-      <div class="pmf-masthead pmf-single-masthead">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-8 mx-md-auto">
-              <form role="search" id="search" action="{{ formActionUrl }}" method="post">
-                <input
-                  type="text"
-                  class="typeahead pmf-search-field"
-                  placeholder="{{ searchBox }} ..."
-                  name="search"
-                  autocomplete="off"
-                  data-provide="typeahead"
-                  value="{{ searchTerm }}"
-                />
-                <button type="submit"><i class="fa fa-search"></i></button>
-                <small class="form-text text-muted">
-                  <a class="help" href="?action=search">{{ msgAdvancedSearch }}</a>
-                </small>
-              </form>
-            </div>
+    <div class="container my-5">
+      <div class="row height d-flex justify-content-center align-items-center">
+        <div class="col-md-8">
+          <div class="search">
+            <form action="{{ formActionUrl }}" id="search" method="post" role="search">
+              <i class="fa fa-search"></i>
+              <input
+                autocomplete="off"
+                type="text"
+                class="form-control form-control-lg"
+                id="pmf-search-autocomplete"
+                name="search"
+                placeholder="{{ searchBox }} ..."
+                value="{{ searchTerm }}"
+              />
+              <button type="submit" class="btn btn-info btn-lg">{{ searchBox }}</button>
+            </form>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="container">
-      <div class="row">
-        <div class="col mt-2">
-          <h1>404 - Page not found!</h1>
+          <div>
+            <small class="form-text text-muted">
+              <a class="help" href="?action=search">{{ msgAdvancedSearch }}</a>
+            </small>
+          </div>
         </div>
       </div>
     </div>
 
-    <footer class="pmf-footer font-small pt-4">
+    <!-- MAIN CONTENT -->
+    <section class="my-3" id="wrapper">
+      <div class="container">
+        <h1>404 - Page not found!</h1>
+      </div>
+    </section>
+
+    <footer class="pt-4 text-bg-dark">
       <div class="container">
         <div class="row">
-          <div class="col-8 mb-4">
-            <ul class="pmf-footer-menu">
-              <li class="foot-menu-item">{{ faqOverview }}</li>
-              <li class="foot-menu-item">{{ showSitemap }}</li>
-              <li class="foot-menu-item">{{ msgGlossary }}</li>
-              <li class="foot-menu-item">{{ msgContact }}</li>
-              <li class="foot-menu-item">{{ privacyLink }}</li>
-            </ul>
+          <div class="col-md-8 mb-md-0 mb-4">
+            <h5 class="footer-heading">{{ writeTagCloudHeader }}</h5>
+            <p class="card-text pmf-tag-cloud">{{ writeTags }}</p>
           </div>
-          <div class="col-4 mb-4">
-            <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-              {{ switchLanguages }}
-              <input type="hidden" name="action" value="" />
+          <div class="col-md-4 mb-md-0 mb-4">
+            <h5 class="footer-heading">{{ languageBox }}</h5>
+            <form accept-charset="utf-8" action="{{ renderUri }}" method="post" class="subscribe-form">
+              <div class="form-group d-flex">
+                {{ switchLanguages }}
+                <input name="action" type="hidden" value="" />
+              </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="text-center py-3">{{ copyright }}</div>
+      <div class="w-100">
+        <div class="container">
+          <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-6 mb-0 text-white">{{ copyright }}</p>
+
+            <ul class="nav col-md-6 justify-content-end">
+              <li class="nav-item">{{ faqOverview }}</li>
+              <li class="nav-item">{{ showSitemap }}</li>
+              <li class="nav-item">{{ msgGlossary }}</li>
+              <li class="nav-item">{{ msgContact }}</li>
+              <li class="nav-item">{{ privacyLink }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       [debugMode]
-      <div class="container debug-mode">
-        <hr />
-        <h4>DEBUG INFORMATION</h4>
+      <div class="container">
+        <h5 class="border-top">⚠︎ DEBUG MODE ENABLED ⚠︎</h5>
         <div class="row">
           <div class="col-12">
-            <h5>DATABASE QUERIES</h5>
+            <h6 class="text-danger">DATABASE QUERIES</h6>
             {{ debugQueries }}
           </div>
         </div>
@@ -156,21 +148,6 @@
       [/debugMode]
     </footer>
 
-    <script src="{{ baseHref }}assets/dist/frontend.js"></script>
-    <script>
-      window.addEventListener('load', () => {
-        window.cookieconsent.initialise({
-          palette: {
-            popup: {
-              background: '#252e39',
-            },
-            button: {
-              background: '#14a7d0',
-            },
-            revokable: true,
-          },
-        });
-      });
-    </script>
+    <script src="./assets/dist/frontend.js"></script>
   </body>
 </html>
