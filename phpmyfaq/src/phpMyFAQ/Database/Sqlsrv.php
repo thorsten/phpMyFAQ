@@ -100,7 +100,6 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Fetch a result row.
      *
-     * @param mixed $result
      * @return false|mixed
      */
     public function fetchRow(mixed $result)

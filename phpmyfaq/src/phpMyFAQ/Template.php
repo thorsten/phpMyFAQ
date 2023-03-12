@@ -52,8 +52,11 @@ class Template
      * @param array<string, string> $myTemplate Templates
      * @param string                $tplSetName Active template name
      */
-    public function __construct(array $myTemplate, private TemplateHelper $tplHelper, string $tplSetName = 'default')
-    {
+    public function __construct(
+        array $myTemplate,
+        private readonly TemplateHelper $tplHelper,
+        string $tplSetName = 'default'
+    ) {
         self::$tplSetName = $tplSetName;
 
         foreach ($myTemplate as $templateName => $filename) {
@@ -115,7 +118,7 @@ class Template
                 $name = Strings::preg_replace('/[\[\[\/\]]/', '', $name);
 
                 // remove block tags from block
-                $res = str_replace('[' . $name[0] . ']', '', $tmpBlocks[0][$i]);
+                $res = str_replace('[' . $name[0] . ']', '', (string) $tmpBlocks[0][$i]);
                 $res = str_replace('[/' . $name[0] . ']', '', $res);
                 $tplBlocks[$name[0]] = $res;
 
@@ -248,8 +251,8 @@ class Template
         if (isset($tmpFilter)) {
             $filterCount = is_countable($tmpFilter[0]) ? count($tmpFilter[0]) : 0;
             for ($i = 0; $i < $filterCount; ++$i) {
-                if (str_contains($tmpFilter[0][$i], ' | meta ')) {
-                    $rawFilter = str_replace(['{{', '}}'], '', $tmpFilter[0][$i]);
+                if (str_contains((string) $tmpFilter[0][$i], ' | meta ')) {
+                    $rawFilter = str_replace(['{{', '}}'], '', (string) $tmpFilter[0][$i]);
                     [$identifier, $filter] = explode('|', $rawFilter);
                     $tplFilter[] = [trim($filter) => trim($identifier)];
                 }

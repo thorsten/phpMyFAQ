@@ -81,7 +81,7 @@ $template->parse(
     [
         'writeSourceFaqId' => $faqSource['id'],
         'writeSourceTitle' => $faqSource['title'],
-        'writeSourceContent' => strip_tags($faqSource['content']),
+        'writeSourceContent' => strip_tags((string) $faqSource['content']),
         'writeSourceKeywords' => $faqSource['keywords'],
         'categoryId' => $categoryId,
         'msgNewTranslationHeader' => Translation::get('msgNewTranslationHeader'),

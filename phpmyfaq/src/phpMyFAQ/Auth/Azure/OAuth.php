@@ -40,7 +40,7 @@ class OAuth
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config, private Session $session)
+    public function __construct(private readonly Configuration $config, private readonly Session $session)
     {
     }
 
@@ -105,7 +105,7 @@ class OAuth
 
     public function setToken(stdClass $token): OAuth
     {
-        $idToken = base64_decode(explode('.', $token->id_token)[1]);
+        $idToken = base64_decode(explode('.', (string) $token->id_token)[1]);
         $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
         $this->session->set(Session::PMF_AZURE_AD_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
         return $this;

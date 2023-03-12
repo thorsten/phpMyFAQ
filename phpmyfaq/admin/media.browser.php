@@ -98,7 +98,7 @@ if (!$auth && $error) {
             if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
                 continue;
             }
-            $path = str_replace(dirname(__DIR__) . '/', '', $file->getPath());
+            $path = str_replace(dirname(__DIR__) . '/', '', (string) $file->getPath());
             printf(
                 '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview" alt="%s">%s</div>',
                 $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),

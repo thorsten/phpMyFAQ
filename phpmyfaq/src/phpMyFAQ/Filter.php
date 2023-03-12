@@ -105,7 +105,7 @@ class Filter
             return '';
         }
 
-        parse_str($_SERVER['QUERY_STRING'], $urlData);
+        parse_str((string) $_SERVER['QUERY_STRING'], $urlData);
 
         foreach ($urlData as $key => $urlPart) {
             $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);
@@ -154,7 +154,7 @@ class Filter
         preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);
 
         foreach ($attributes[0] as $attribute) {
-            $attributeName = stristr($attribute, '=', true);
+            $attributeName = stristr((string) $attribute, '=', true);
             if (self::isAttribute($attributeName) && !in_array($attributeName, $keep)) {
                 $html = str_replace(' ' . $attribute, '', $html);
             }

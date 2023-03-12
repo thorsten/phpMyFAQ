@@ -78,9 +78,6 @@ class CategoryHelper extends Helper
 
     /**
      * Renders the start page category card decks
-     *
-     * @param array $categories
-     * @return string
      */
     public function renderStartPageCategories(array $categories): string
     {
@@ -132,10 +129,7 @@ class CategoryHelper extends Helper
     /**
      * Builds a category list
      *
-     * @param array             $tree
-     * @param int               $parentId
      * @param array<int, array> $aggregatedNumbers
-     * @return string
      */
     public function buildCategoryList(array $tree, int $parentId = 0, array $aggregatedNumbers = []): string
     {

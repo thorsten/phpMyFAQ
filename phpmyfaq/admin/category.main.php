@@ -366,7 +366,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 printf(
                     '<div href="#category-id-%d" id="%s-%d" data-id="%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center %s" %s>',
                     $cat['id'],
-                    trim(strip_tags($categoryName)),
+                    trim(strip_tags((string) $categoryName)),
                     $cat['id'],
                     $cat['id'],
                     $numSubCategories > 0 ? ' pmf-has-subcategories' : '',

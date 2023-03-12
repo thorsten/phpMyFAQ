@@ -112,7 +112,7 @@ $siteMap .= buildSiteMapNode(
 // nth entry: each faq
 foreach ($items as $item) {
     // a. We use plain PMF urls w/o any SEO schema
-    $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
+    $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', (string) $item['url']);
     // b. We use SEO PMF urls
     if (PMF_SITEMAP_GOOGLE_USE_SEO) {
         if (isset($item['thema'])) {

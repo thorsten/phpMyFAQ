@@ -29,7 +29,7 @@ class News
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
@@ -70,7 +70,7 @@ class News
                 Strings::htmlentities($item['header'])
             );
 
-            $output .= sprintf('<div class="mb-1">%s</div>', strip_tags($item['content']));
+            $output .= sprintf('<div class="mb-1">%s</div>', strip_tags((string) $item['content']));
             $output .= sprintf('<div class="small text-muted">%s</div>', $date->format($item['date']));
         }
 

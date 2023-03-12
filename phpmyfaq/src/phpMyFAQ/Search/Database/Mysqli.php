@@ -152,7 +152,7 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
      */
     public function getMatchingOrder(): string
     {
-        $list = explode(',', $this->config->get('search.relevance'));
+        $list = explode(',', (string) $this->config->get('search.relevance'));
         $count = count($list);
         $order = '';
 

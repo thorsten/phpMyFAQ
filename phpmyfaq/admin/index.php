@@ -147,7 +147,7 @@ $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RA
 // Set username via SSO
 //
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
-    $faqusername = trim($_SERVER['REMOTE_USER']);
+    $faqusername = trim((string) $_SERVER['REMOTE_USER']);
     $faqpassword = '';
 }
 
@@ -197,7 +197,7 @@ if (is_null($ajax)) {
 }
 
 // if performing AJAX operation, needs to branch before header.php
-if ($auth && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())) {
+if ($auth && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) > 0 || $user->isSuperAdmin())) {
     if (isset($action) && isset($ajax)) {
         if ('ajax' === $action) {
             switch ($ajax) {
@@ -284,7 +284,7 @@ switch ($action) {
 // Header of the admin page including the navigation
 require 'header.php';
 
-$numRights = count($user->perm->getAllUserRights($user->getUserId()));
+$numRights = is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0;
 
 // User is authenticated
 if ($auth && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())) {

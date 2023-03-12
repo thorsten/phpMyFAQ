@@ -33,7 +33,7 @@ class Client extends Instance
 {
     private ?Filesystem $fileSystem = null;
 
-    private string $clientFolder;
+    private readonly string $clientFolder;
 
     private string $clientUrl;
 

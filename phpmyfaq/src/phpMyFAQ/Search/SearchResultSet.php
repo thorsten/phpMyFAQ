@@ -64,7 +64,7 @@ class SearchResultSet
      */
     public function __construct(
         protected CurrentUser $user,
-        private FaqPermission $faqPermission,
+        private readonly FaqPermission $faqPermission,
         protected Configuration $config
     ) {
     }

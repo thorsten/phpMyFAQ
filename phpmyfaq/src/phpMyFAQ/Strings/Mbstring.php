@@ -202,7 +202,7 @@ class Mbstring extends StringsAbstract
      *
      * @return string|string[]|null
      */
-    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0)
+    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0): string|array|null
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {

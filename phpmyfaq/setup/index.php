@@ -32,8 +32,8 @@ define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 const PMF_SRC_DIR = PMF_ROOT_DIR . '/src';
 const IS_VALID_PHPMYFAQ = null;
 
-if (version_compare(PHP_VERSION, '8.0.0') < 0) {
-    die('Sorry, but you need PHP 8.0.0 or later!');
+if (version_compare(PHP_VERSION, '8.1.0') < 0) {
+    die('Sorry, but you need PHP 8.1.0 or later!');
 }
 
 set_time_limit(0);

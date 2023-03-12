@@ -43,7 +43,6 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
      *
      * @param  string $searchTerm Search term
      * @throws Exception
-     * @return mixed
      */
     public function search(string $searchTerm): mixed
     {
@@ -92,7 +91,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
     {
         $resultColumns = '';
         $config = $this->config->get('search.relevance');
-        $list = explode(',', $config);
+        $list = explode(',', (string) $config);
 
         // Set weight
         $weights = ['A', 'B', 'C', 'D'];
@@ -126,7 +125,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
      */
     public function getMatchingOrder(): string
     {
-        $list = explode(',', $this->config->get('search.relevance'));
+        $list = explode(',', (string) $this->config->get('search.relevance'));
         $order = '';
 
         foreach ($list as $field) {

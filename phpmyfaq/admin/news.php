@@ -287,7 +287,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                     <textarea id="editor" name="news" class="form-control" rows="5"><?php
                     if (isset($newsData['content'])) {
-                        echo htmlspecialchars($newsData['content'], ENT_QUOTES);
+                        echo htmlspecialchars((string) $newsData['content'], ENT_QUOTES);
                     } ?></textarea>
                 </div>
             </div>
@@ -473,7 +473,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
 
-    $newsData = ['lang' => $newsLang, 'header' => $header, 'content' => html_entity_decode($content), 'authorName' => $author, 'authorEmail' => $email, 'active' => (is_null($active)) ? 'n' : 'y', 'comment' => (is_null($comment)) ? 'n' : 'y', 'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000', 'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959', 'link' => $link, 'linkTitle' => $linkTitle, 'date' => date('YmdHis'), 'target' => (is_null($target)) ? '' : $target];
+    $newsData = ['lang' => $newsLang, 'header' => $header, 'content' => html_entity_decode((string) $content), 'authorName' => $author, 'authorEmail' => $email, 'active' => (is_null($active)) ? 'n' : 'y', 'comment' => (is_null($comment)) ? 'n' : 'y', 'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000', 'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959', 'link' => $link, 'linkTitle' => $linkTitle, 'date' => date('YmdHis'), 'target' => (is_null($target)) ? '' : $target];
 
     if ($news->addNewsEntry($newsData)) {
         echo Alert::success('ad_news_updatesuc');
@@ -513,13 +513,13 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $newsData = [
         'lang' => $newsLang,
         'header' => $header,
-        'content' => html_entity_decode($content),
+        'content' => html_entity_decode((string) $content),
         'authorName' => $author,
         'authorEmail' => $email,
         'active' => (is_null($active)) ? 'n' : 'y',
         'comment' => (is_null($comment)) ? 'n' : 'y',
-        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
-        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
+        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000',
+        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959',
         'link' => $link,
         'linkTitle' => $linkTitle,
         'date' => date('YmdHis'),

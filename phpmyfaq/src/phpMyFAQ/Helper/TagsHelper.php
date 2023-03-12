@@ -74,8 +74,6 @@ class TagsHelper extends Helper
 
     /**
      * Returns all tag IDs as array.
-     *
-     * @return array
      */
     public function getTaggingIds(): array
     {

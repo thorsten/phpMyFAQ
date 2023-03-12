@@ -28,8 +28,8 @@ const IS_VALID_PHPMYFAQ = null;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 
-if (version_compare(PHP_VERSION, '8.0.0') < 0) {
-    die('Sorry, but you need PHP 8.0.0 or later!');
+if (version_compare(PHP_VERSION, '8.1.0') < 0) {
+    die('Sorry, but you need PHP 8.1.0 or later!');
 }
 
 set_time_limit(0);
@@ -196,14 +196,12 @@ if ($step == 2) {
     $updateMessages = [];
 
     // Backup of config/database.php
-    if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-        if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php ' .
-                'could not be written. Please correct this!</p>';
-        } else {
-            $checkDatabaseSetupFile = true;
-            $updateMessages[] = 'A backup of your database configuration file has been made.';
-        }
+    if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
+        echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php ' .
+            'could not be written. Please correct this!</p>';
+    } else {
+        $checkDatabaseSetupFile = true;
+        $updateMessages[] = 'A backup of your database configuration file has been made.';
     }
 
     // Backup of config/ldap.php if exists
@@ -409,28 +407,25 @@ if ($step == 3) {
             $query[] = 'VACUUM ANALYZE;';
             break;
     }
-
     // Perform the queries for optimizing the database
-    if (isset($query)) {
-        echo '<div class="mt-5 mb-5">';
-        echo '<h6>Update Progress:</h6>';
-        echo '<div class="text-center">';
-        foreach ($query as $executeQuery) {
-            $result = $faqConfig->getDb()->query($executeQuery);
-            printf('<span title="%s">█</span>', $executeQuery);
-            if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
-                    'once again or send us a <a href="https://github.com/thorsten/phpMyFAQ/issues" target="_blank">' .
-                    'bug report</a></p>';
-                printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
-                printf('<code>%s</code>', htmlentities($executeQuery));
-                System::renderFooter();
-            }
-            usleep(10000);
+    echo '<div class="mt-5 mb-5">';
+    echo '<h6>Update Progress:</h6>';
+    echo '<div class="text-center">';
+    foreach ($query as $executeQuery) {
+        $result = $faqConfig->getDb()->query($executeQuery);
+        printf('<span title="%s">█</span>', $executeQuery);
+        if (!$result) {
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
+                'once again or send us a <a href="https://github.com/thorsten/phpMyFAQ/issues" target="_blank">' .
+                'bug report</a></p>';
+            printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
+            printf('<code>%s</code>', htmlentities($executeQuery));
+            System::renderFooter();
         }
-        echo '</div>';
-        echo '</div>';
+        usleep(10000);
     }
+    echo '</div>';
+    echo '</div>';
 
     //
     // Disable maintenance mode

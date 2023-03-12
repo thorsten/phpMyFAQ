@@ -77,7 +77,7 @@ $newsContent = $oGlossary->insertItemsIntoContent($newsContent);
 $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
 
 // Add information link if existing
-if (strlen($news['link']) > 0) {
+if (strlen((string) $news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
         Translation::get('msgInfo'),

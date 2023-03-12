@@ -121,15 +121,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             'revision_id' => $revisionId,
             'active' => $active,
             'sticky' => (!is_null($sticky) ? 1 : 0),
-            'thema' => Filter::removeAttributes(html_entity_decode($question, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-            'content' => Filter::removeAttributes(html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+            'thema' => Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+            'content' => Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
             'keywords' => $keywords,
             'author' => $author,
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
-            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', $date),
-            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
-            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
+            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', (string) $date),
+            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000'),
+            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
@@ -137,7 +137,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // Create ChangeLog entry
         $changelog = new Changelog($faqConfig);
-        $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordLang, $revisionId);
+        $changelog->addEntry($recordId, $user->getUserId(), nl2br((string) $changed), $recordLang, $revisionId);
 
         // Create the visit entry
         $visits = new Visits($faqConfig);
@@ -167,7 +167,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // Insert the tags
         if ($tags != '') {
-            $tagging->saveTags($recordId, explode(',', trim($tags)));
+            $tagging->saveTags($recordId, explode(',', trim((string) $tags)));
         } else {
             $tagging->deleteTagsFromRecordId($recordId);
         }

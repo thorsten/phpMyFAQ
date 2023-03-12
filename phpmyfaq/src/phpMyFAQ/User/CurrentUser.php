@@ -50,7 +50,7 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
  */
 class CurrentUser extends User
 {
-    private const PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
+    private const PMF_REMEMBER_ME_EXPIRED_TIME = 1_209_600; // 2 weeks
     /**
      * true if CurrentUser is logged in, otherwise false.
      */
@@ -66,7 +66,7 @@ class CurrentUser extends User
     /**
      * The Session class object
      */
-    private Session $session;
+    private readonly Session $session;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
@@ -379,8 +379,6 @@ class CurrentUser extends User
     /**
      * Saves the CurrentUser into the session. This method
      * may be called after a successful login.
-     *
-     * @return void
      */
     public function saveToSession(): void
     {
@@ -435,9 +433,6 @@ class CurrentUser extends User
     /**
      * Returns the current user object from cookie or session and true,
      * if the user is successfully authenticated.
-     *
-     * @param Configuration $faqConfig
-     * @return array
      */
     public static function getCurrentUser(Configuration $faqConfig): array
     {
@@ -460,7 +455,6 @@ class CurrentUser extends User
      * Returns the current user ID and group IDs, default values are -1
      *
      * @param CurrentUser|null $user
-     * @return array
      */
     public static function getCurrentUserGroupId(CurrentUser $user = null): array
     {
@@ -492,8 +486,6 @@ class CurrentUser extends User
      * returned. On success, a valid CurrentUser object is returned.
      *
      * @static
-     * @param Configuration $config
-     * @return null|CurrentUser
      */
     public static function getFromSession(Configuration $config): ?CurrentUser
     {

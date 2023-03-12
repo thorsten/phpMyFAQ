@@ -47,7 +47,7 @@ class Sitemap
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         if ($this->config->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
@@ -303,9 +303,11 @@ class Sitemap
                 $renderSiteMap .= '<li>' . $oLink->toHtmlAnchor() . '<br>' . "\n";
 
                 if ($this->config->get('main.enableMarkdownEditor')) {
-                    $renderSiteMap .= Utils::chopString(strip_tags($parsedown->text($row->snap)), 25) . " ...</li>\n";
+                    $renderSiteMap .= Utils::chopString(strip_tags((string) $parsedown->text($row->snap)), 25) .
+                        " ...</li>\n";
                 } else {
-                    $renderSiteMap .= Utils::chopString(strip_tags($row->snap), 25) . " ...</li>\n";
+                    $renderSiteMap .= Utils::chopString(strip_tags((string) $row->snap), 25) .
+                        " ...</li>\n";
                 }
             }
             $oldId = $row->id;

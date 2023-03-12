@@ -72,9 +72,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
-     *
-     * @param string $string
-     * @return string
      */
     public function escape(string $string): string
     {
@@ -97,8 +94,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Fetch a result row as an array.
-     *
-     * @param mixed $result
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -109,9 +104,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     *
-     * @param mixed $result
-     * @return false|mixed
      */
     public function fetchRow(mixed $result): mixed
     {
@@ -212,8 +204,6 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Number of rows in a result.
-     *
-     * @param mixed $result
      */
     public function numRows(mixed $result): int
     {

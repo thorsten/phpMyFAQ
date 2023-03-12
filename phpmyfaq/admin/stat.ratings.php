@@ -86,7 +86,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             <?php
         }
 
-        $question = Strings::htmlspecialchars(trim($data['question']));
+        $question = Strings::htmlspecialchars(trim((string) $data['question']));
         $url = sprintf(
             '../index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
             $data['category_id'],

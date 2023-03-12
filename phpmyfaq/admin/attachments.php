@@ -37,7 +37,7 @@ $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
 $pagination = new Pagination(
     [
-        'baseUrl' => $faqConfig->getDefaultUrl() . 'admin/?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+        'baseUrl' => $faqConfig->getDefaultUrl() . 'admin/?' . str_replace('&', '&amp;', (string) $_SERVER['QUERY_STRING']),
         'total' => count($allCrumbs),
         'perPage' => $itemsPerPage,
     ]

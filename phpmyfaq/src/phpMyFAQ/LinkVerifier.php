@@ -67,7 +67,7 @@ class LinkVerifier
     /**
      * Constructor.
      */
-    public function __construct(private ?Configuration $config)
+    public function __construct(private readonly ?Configuration $config)
     {
         if (!extension_loaded('openssl')) {
             $this->addIgnoreProtocol('https:', sprintf(Translation::get('ad_linkcheck_protocol_unsupported'), 'https'));
@@ -195,7 +195,7 @@ class LinkVerifier
         if ($result = $this->config->getDb()->query($query)) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $_linkState = $row->links_state;
-                if (trim($_linkState) == '') {
+                if (trim((string) $_linkState) == '') {
                     $_linkState = true;
                 }
 
@@ -501,7 +501,7 @@ class LinkVerifier
 
         // Hack: fix any unsafe space chars in any component of the path to avoid HTTP 400 status during HEAD crawling
         if ('' !== $urlParts['path']) {
-            $urlSubParts = explode('/', $urlParts['path']);
+            $urlSubParts = explode('/', (string) $urlParts['path']);
             $num = count($urlSubParts);
             for ($i = 0; $i < $num; ++$i) {
                 $urlSubParts[$i] = str_replace(' ', '%20', $urlSubParts[$i]);

@@ -105,7 +105,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        $this->category->categoryName[$faq['category_id']]['name'],
+                        (string) $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),
@@ -117,7 +117,7 @@ class Pdf extends Export
             // Bookmark for FAQs
             $this->pdf->Bookmark(
                 html_entity_decode(
-                    $faq['topic'],
+                    (string) $faq['topic'],
                     ENT_QUOTES,
                     'utf-8'
                 ),
@@ -137,9 +137,9 @@ class Pdf extends Export
             $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
 
             if ($this->config->get('main.enableMarkdownEditor')) {
-                $this->pdf->WriteHTML(trim($this->parsedown->text($faq['content'])));
+                $this->pdf->WriteHTML(trim((string) $this->parsedown->text($faq['content'])));
             } else {
-                $this->pdf->WriteHTML(trim($faq['content']));
+                $this->pdf->WriteHTML(trim((string) $faq['content']));
             }
 
             $this->pdf->Ln(10);
@@ -200,9 +200,9 @@ class Pdf extends Export
         $this->pdf->Ln();
 
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $this->pdf->WriteHTML(str_replace('../', '', $this->parsedown->text($faqData['content'])), true);
+            $this->pdf->WriteHTML(str_replace('../', '', (string) $this->parsedown->text($faqData['content'])), true);
         } else {
-            $this->pdf->WriteHTML(str_replace('../', '', $faqData['content']), true);
+            $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']), true);
         }
 
         $this->pdf->Ln(10);

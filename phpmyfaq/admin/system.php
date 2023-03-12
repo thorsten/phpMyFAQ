@@ -52,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                 $systemInformation = [
                     'phpMyFAQ Version' => $faqSystem->getVersion(),
                     'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
-                    'phpMyFAQ Installation Path' => dirname($_SERVER['SCRIPT_FILENAME'], 2),
+                    'phpMyFAQ Installation Path' => dirname((string) $_SERVER['SCRIPT_FILENAME'], 2),
                     'Web server software' => $_SERVER['SERVER_SOFTWARE'],
                     'Web server document root' => $_SERVER['DOCUMENT_ROOT'],
                     'Web server Interface' => strtoupper(PHP_SAPI),

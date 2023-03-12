@@ -165,7 +165,7 @@ class Link
      *
      * @param string $url URL
      */
-    public function __construct(public string $url, private Configuration $config)
+    public function __construct(public string $url, private readonly Configuration $config)
     {
     }
 
@@ -192,7 +192,7 @@ class Link
         // Remove any ref to standard ports 80 and 443.
         $pattern[0] = '/:80$/'; // HTTP: port 80
         $pattern[1] = '/:443$/'; // HTTPS: port 443
-        $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
+        $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', (string) $_SERVER['HTTP_HOST']);
 
         return $sysUri . self::getSystemRelativeUri($path);
     }
@@ -208,14 +208,14 @@ class Link
 
         if (!self::isIISServer()) {
             // Apache, nginx, lighttpd
-            if (isset($_SERVER['HTTPS']) && 'on' === strtolower($_SERVER['HTTPS'])) {
+            if (isset($_SERVER['HTTPS']) && 'on' === strtolower((string) $_SERVER['HTTPS'])) {
                 return 'https://';
             } else {
                 return 'http://';
             }
         } else {
             // IIS Server
-            if ('on' === strtolower($_SERVER['HTTPS'])) {
+            if ('on' === strtolower((string) $_SERVER['HTTPS'])) {
                 return 'https://';
             } else {
                 return 'http://';
@@ -239,10 +239,10 @@ class Link
     public static function getSystemRelativeUri(string $path = null): string
     {
         if (isset($path)) {
-            return str_replace($path, '', $_SERVER['SCRIPT_NAME']);
+            return str_replace($path, '', (string) $_SERVER['SCRIPT_NAME']);
         }
 
-        return str_replace('/src/Link.php', '', $_SERVER['SCRIPT_NAME']);
+        return str_replace('/src/Link.php', '', (string) $_SERVER['SCRIPT_NAME']);
     }
 
     /**
@@ -506,7 +506,7 @@ class Link
             return false;
         }
 
-        return (strpos($this->url, '#') == 0);
+        return (str_starts_with($this->url, '#'));
     }
 
     /**
@@ -546,7 +546,7 @@ class Link
             return true;
         }
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
-        return !(!str_contains($this->url, $_SERVER['HTTP_HOST']));
+        return !(!str_contains($this->url, (string) $_SERVER['HTTP_HOST']));
     }
 
     /**
@@ -572,11 +572,11 @@ class Link
         if (!empty($query)) {
             // Check fragment
             if (isset($query['fragment'])) {
-                $parameters[self::LINK_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
+                $parameters[self::LINK_FRAGMENT_SEPARATOR] = urldecode((string) $query['fragment']);
             }
 
             // Check if query string contains &amp;
-            $query['main'] = str_replace('&amp;', '&', $query['main']);
+            $query['main'] = str_replace('&amp;', '&', (string) $query['main']);
 
             $params = explode('&', $query['main']);
             foreach ($params as $param) {
@@ -715,7 +715,7 @@ class Link
     {
         $defaultUrl = $this->config->getDefaultUrl();
         $url = Filter::filterVar($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-        $parsedUrl = parse_url($url);
+        $parsedUrl = parse_url((string) $url);
 
         if (isset($parsedUrl['query'])) {
             parse_str($parsedUrl['query'], $parameters);
@@ -724,7 +724,7 @@ class Link
                 return $defaultUrl;
             }
 
-            return $defaultUrl . Strings::htmlspecialchars(substr($url, 1));
+            return $defaultUrl . Strings::htmlspecialchars(substr((string) $url, 1));
         }
 
         return $defaultUrl;

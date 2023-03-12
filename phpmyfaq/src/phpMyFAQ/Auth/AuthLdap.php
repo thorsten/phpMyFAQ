@@ -35,13 +35,13 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private ?LdapCore $ldap = null;
 
     /** @var string[] Array of LDAP servers */
-    private array $ldapServer;
+    private readonly array $ldapServer;
 
     /** @var int Active LDAP server */
     private int $activeServer = 0;
 
     /** @var bool */
-    private mixed $multipleServers;
+    private readonly mixed $multipleServers;
 
     /**
      * @inheritDoc

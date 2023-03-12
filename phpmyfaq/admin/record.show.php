@@ -456,7 +456,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       </td>
                       <td style="width: 24px;">
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>"
-                           title="<?= Translation::get('ad_user_edit') ?> '<?= str_replace('"', '´', $record['title']) ?>'">
+                           title="<?= Translation::get('ad_user_edit') ?> '<?= str_replace('"', '´', (string) $record['title']) ?>'">
                         <?= $record['solution_id'] ?>
                         </a>
                       </td>

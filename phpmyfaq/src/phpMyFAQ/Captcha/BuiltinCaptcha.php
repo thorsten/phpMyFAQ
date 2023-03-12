@@ -38,7 +38,7 @@ class BuiltinCaptcha implements CaptchaInterface
 
     private bool $userIsLoggedIn = false;
 
-    private string $font;
+    private readonly string $font;
 
     private string $code = '';
 
@@ -93,18 +93,18 @@ class BuiltinCaptcha implements CaptchaInterface
     private GdImage $img;
 
     /** @var string */
-    private mixed $userAgent;
+    private readonly mixed $userAgent;
 
     /** @var int */
-    private mixed $timestamp;
+    private readonly mixed $timestamp;
 
     /** @var string */
-    private mixed $ip;
+    private readonly mixed $ip;
 
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->ip = $_SERVER['REMOTE_ADDR'];
@@ -114,8 +114,6 @@ class BuiltinCaptcha implements CaptchaInterface
 
     /**
      * Get Fonts.
-     *
-     * @return string
      */
     private function getFont(): string
     {

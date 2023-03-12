@@ -34,13 +34,12 @@ class CategoryRelation
     /**
      * CategoryRelation constructor.
      */
-    public function __construct(private Configuration $config, private Category $category)
+    public function __construct(private readonly Configuration $config, private readonly Category $category)
     {
     }
 
     /**
      * @param int[] $groups
-     * @return $this
      */
     public function setGroups(array $groups): CategoryRelation
     {
@@ -239,13 +238,12 @@ class CategoryRelation
 
     /**
      * Calculates the aggregated numbers of FAQs for a given category
-     * @param array $categories
      * @param int   $categoryId
      * @return void
      */
     public function getAggregatedFaqNumbers(array $categories, $parentId = 0): array
     {
-        $result = array();
+        $result = [];
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {
                 $childCategories = $this->getAggregatedFaqNumbers($categories, $category['id']);

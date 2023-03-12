@@ -21,13 +21,12 @@ use phpMyFAQ\Configuration;
 
 class GoogleRecaptcha implements CaptchaInterface
 {
-    private string $sessionId;
     private bool $userIsLoggedIn;
 
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
@@ -44,7 +43,7 @@ class GoogleRecaptcha implements CaptchaInterface
         );
 
         $response = file_get_contents($url);
-        $response = json_decode($response, true);
+        $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
         if ($response['success'] === true) {
             return true;
@@ -58,7 +57,6 @@ class GoogleRecaptcha implements CaptchaInterface
      */
     public function setSessionId(string $sessionId): GoogleRecaptcha
     {
-        $this->sessionId = $sessionId;
         return $this;
     }
 

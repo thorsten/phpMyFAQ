@@ -28,12 +28,12 @@ class Rating
     /**
      * Plural form support.
      */
-    private Plurals $plr;
+    private readonly Plurals $plr;
 
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         global $plr;
         $this->plr = $plr;

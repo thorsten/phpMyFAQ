@@ -32,7 +32,7 @@ use phpMyFAQ\User\CurrentUser;
  */
 class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
 {
-    private Session $session;
+    private readonly Session $session;
 
     private string $oAuthVerifier = '';
 
@@ -47,7 +47,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $config, private OAuth $oAuth)
+    public function __construct(Configuration $config, private readonly OAuth $oAuth)
     {
         $this->config = $config;
         $this->session = new Session($config);

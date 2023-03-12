@@ -25,8 +25,6 @@ class GoogleRecaptchaHelper extends Helper implements CaptchaHelperInterface
 {
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(protected Configuration $config)
     {

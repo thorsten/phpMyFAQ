@@ -59,8 +59,6 @@ class Category
      */
     private array $catTree = [];
 
-    private array $categoryList = [];
-
     /**
      * User ID.
      */
@@ -119,7 +117,7 @@ class Category
      * @param int[] $groups Array with group IDs
      * @param bool $withPerm With or without permission check
      */
-    public function __construct(private Configuration $config, array $groups = [], bool $withPerm = true)
+    public function __construct(private readonly Configuration $config, array $groups = [], bool $withPerm = true)
     {
         $this->setGroups($groups);
         $this->setLanguage($this->config->getLanguage()->getLanguage());
@@ -237,7 +235,6 @@ class Category
             while ($row = $this->config->getDb()->fetchArray($result)) {
                 $this->categoryName[(int)$row['id']] = $row;
                 $this->categories[(int)$row['id']] = $row;
-                $this->categoryList[] = $row;
                 $this->children[(int)$row['parent_id']][(int)$row['id']] = &$this->categoryName[(int)$row['id']];
                 $this->owner[(int)$row['id']] = &$row['user_id'];
                 $this->moderators[(int)$row['id']] = &$row['group_id'];
@@ -579,9 +576,6 @@ class Category
 
     /**
      * Try to expand from the parent_id to the node $id
-     *
-     * @param int $id
-     * @return void
      */
     public function expandTo(int $id): void
     {
@@ -643,8 +637,6 @@ class Category
 
     /**
      * Expand the entire tree
-     *
-     * @return void
      */
     public function expandAll(): void
     {
@@ -987,7 +979,6 @@ class Category
      * @param array $categoryData Array of category data
      * @param int   $parentId Parent id
      * @param null  $id Entity id
-     * @return int|null
      * @deprecated will be removed in v3.3, please use Category::create()
      */
     public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
@@ -1023,8 +1014,6 @@ class Category
 
     /**
      * Creates a new category
-     * @param CategoryEntity $categoryData
-     * @return int|null
      */
     public function create(CategoryEntity $categoryData): ?int
     {

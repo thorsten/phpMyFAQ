@@ -104,7 +104,7 @@ class SearchHelper extends Helper
                     urlencode($this->searchTerm)
                 );
 
-                $question = html_entity_decode($result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
+                $question = html_entity_decode((string) $result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
                 $link = new Link($currentUrl, $this->config);
                 $link->itemTitle = $result->question;
                 $faq = new stdClass();
@@ -341,7 +341,7 @@ class SearchHelper extends Helper
                 $html .= sprintf(
                     '<a class="btn btn-primary m-1" href="?search=%s&submit=Search&action=search">%s ' .
                     '<span class="badge bg-secondary">%dx</span> </a>',
-                    urlencode($searchItem['searchterm']),
+                    urlencode((string) $searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']
                 );

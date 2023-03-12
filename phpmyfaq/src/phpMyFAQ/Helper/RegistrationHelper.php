@@ -116,7 +116,7 @@ class RegistrationHelper extends Helper
             return true;
         }
 
-        $whitelistedDomainList = explode(',', $whitelistedDomains);
+        $whitelistedDomainList = explode(',', (string) $whitelistedDomains);
         $hostnameToCheck = trim(substr(strstr($email, '@'), 1));
 
         foreach ($whitelistedDomainList as $hostname) {

@@ -17,9 +17,7 @@
 
 namespace phpMyFAQ;
 
-use ErrorException;
 use JsonException;
-use phpMyFAQ\Core\Exception;
 use stdClass;
 
 /**
@@ -36,7 +34,7 @@ class Api
     /**
      * Api constructor.
      */
-    public function __construct(private Configuration $config, private System $system)
+    public function __construct(private readonly Configuration $config, private readonly System $system)
     {
     }
 

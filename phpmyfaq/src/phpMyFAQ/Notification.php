@@ -25,14 +25,14 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class Notification
 {
-    private Mail $mail;
+    private readonly Mail $mail;
 
     /**
      * Constructor.
      *
      * @throws Core\Exception
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->mail = new Mail($this->config);
         $this->mail->setReplyTo(

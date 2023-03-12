@@ -30,7 +30,7 @@ class Glossary
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
@@ -135,7 +135,7 @@ class Glossary
 
         foreach ($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
-            $item['item'] = preg_quote($item['item'], '/');
+            $item['item'] = preg_quote((string) $item['item'], '/');
             $content = Strings::preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
@@ -149,7 +149,7 @@ class Glossary
                 // e. the glossary item could be at the end of the string as a distinct word
                 . '(\W+)(' . $item['item'] . ')$'
                 . '/mis',
-                [$this, 'setTooltip'],
+                $this->setTooltip(...),
                 $content,
                 1
             );
@@ -180,8 +180,8 @@ class Glossary
         while ($row = $this->config->getDb()->fetchObject($result)) {
             $items[] = [
                 'id' => $row->id,
-                'item' => stripslashes($row->item),
-                'definition' => stripslashes($row->definition),
+                'item' => stripslashes((string) $row->item),
+                'definition' => stripslashes((string) $row->definition),
             ];
         }
 
@@ -247,8 +247,8 @@ class Glossary
         while ($row = $this->config->getDb()->fetchObject($result)) {
             $item = [
                 'id' => $row->id,
-                'item' => stripslashes($row->item),
-                'definition' => stripslashes($row->definition),
+                'item' => stripslashes((string) $row->item),
+                'definition' => stripslashes((string) $row->definition),
             ];
         }
 

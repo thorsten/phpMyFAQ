@@ -21,7 +21,7 @@ use Exception;
 
 class Token
 {
-    public const PMF_SESSION_NAME = 'pmf-csrf-token';
+    final public const PMF_SESSION_NAME = 'pmf-csrf-token';
     private const PMF_SESSION_EXPIRY = 1800;
 
     private string $page;
@@ -41,72 +41,44 @@ class Token
     {
     }
 
-    /**
-     * @return string
-     */
     public function getPage(): string
     {
         return $this->page;
     }
 
-    /**
-     * @param string $page
-     * @return Token
-     */
     public function setPage(string $page): Token
     {
         $this->page = $page;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getExpiry(): int
     {
         return $this->expiry;
     }
 
-    /**
-     * @param int $expiry
-     * @return Token
-     */
     public function setExpiry(int $expiry): Token
     {
         $this->expiry = $expiry;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSessionToken(): string
     {
         return $this->sessionToken;
     }
 
-    /**
-     * @param string $sessionToken
-     * @return Token
-     */
     public function setSessionToken(string $sessionToken): Token
     {
         $this->sessionToken = $sessionToken;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCookieToken(): ?string
     {
         return $this->cookieToken;
     }
 
-    /**
-     * @param string $cookieToken
-     * @return Token
-     */
     public function setCookieToken(string $cookieToken): Token
     {
         $this->cookieToken = $cookieToken;
@@ -114,9 +86,6 @@ class Token
     }
 
 
-    /**
-     * @return Token
-     */
     public static function getInstance(): Token
     {
         if (!(self::$instance instanceof Token)) {
@@ -127,9 +96,6 @@ class Token
     }
 
     /**
-     * @param string $page
-     * @param int    $expiry
-     * @return string
      * @throws Exception
      */
     public function getTokenInput(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
@@ -145,9 +111,6 @@ class Token
     }
 
     /**
-     * @param string $page
-     * @param int    $expiry
-     * @return string
      * @throws Exception
      */
     public function getTokenString(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
@@ -158,16 +121,13 @@ class Token
     }
 
     /**
-     * @param string      $page
      * @param string|null $requestToken
-     * @param bool        $removeToken
-     * @return bool
      * @throws Exception
      */
     public function verifyToken(string $page, string $requestToken = null, bool $removeToken = false): bool
     {
         // if the request token has not been passed, check POST
-        $requestToken = ($requestToken ?? $_POST[self::PMF_SESSION_NAME] ?? null);
+        $requestToken ??= $_POST[self::PMF_SESSION_NAME] ?? null;
         if (is_null($requestToken)) {
             throw new Exception('Token is missing.');
         }
@@ -198,8 +158,6 @@ class Token
     }
 
     /**
-     * @param string $page
-     * @return bool
      * @throws Exception
      */
     public function removeToken(string $page): bool
@@ -209,10 +167,6 @@ class Token
         return true;
     }
 
-    /**
-     * @param string $page
-     * @return Token|null
-     */
     private function getSession(string $page): ?Token
     {
         return !empty($_SESSION[self::PMF_SESSION_NAME][$page]) ? $_SESSION[self::PMF_SESSION_NAME][$page] : null;
@@ -224,9 +178,6 @@ class Token
     }
 
     /**
-     * @param string $page
-     * @param int    $expiry
-     * @return Token
      * @throws Exception
      */
     private function setSession(string $page, int $expiry): Token
@@ -237,15 +188,11 @@ class Token
             ->setSessionToken(base64_encode(random_bytes(32)))
             ->setCookieToken(md5(base64_encode(random_bytes(32))));
 
-        setcookie($this->getCookieName($page), $this->getCookieToken(), $this->getExpiry());
+        setcookie($this->getCookieName($page), $this->getCookieToken(), ['expires' => $this->getExpiry()]);
 
         return $_SESSION[self::PMF_SESSION_NAME][$page] = $this;
     }
 
-    /**
-     * @param string $page
-     * @return string
-     */
     private function getCookieName(string $page): string
     {
         return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(md5($page), 0, 10));

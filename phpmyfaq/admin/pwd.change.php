@@ -50,7 +50,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
         $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
 
-        if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
+        if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             printf(
                 '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
                 Translation::get('ad_passwd_fail')

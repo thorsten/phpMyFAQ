@@ -122,7 +122,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
             <td><?= $loggingValue['ip'] ?></td>
             <td><small><?php
             $text = $loggingValue['text'];
-            $text = str_replace('Loginerror', Translation::get('ad_log_lger'), $text);
+            $text = str_replace('Loginerror', Translation::get('ad_log_lger'), (string) $text);
             $text = str_replace('Session expired', Translation::get('ad_log_sess'), $text);
             $text = str_replace('Useredit, ', Translation::get('ad_log_edit'), $text);
             $text = str_replace('admin-save-new-faq', Translation::get('ad_log_crsa'), $text);

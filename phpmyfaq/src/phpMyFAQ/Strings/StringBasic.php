@@ -31,7 +31,7 @@ class StringBasic extends StringsAbstract
      *
      * @var string
      */
-    public const DEFAULT_ENCODING = 'utf-8';
+    final public const DEFAULT_ENCODING = 'utf-8';
     /**
      * Instance.
      */
@@ -217,7 +217,7 @@ class StringBasic extends StringsAbstract
      *
      * @return string|string[]|null
      */
-    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0) // phpcs:ignore
+    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0): string|array|null // phpcs:ignore
     {
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

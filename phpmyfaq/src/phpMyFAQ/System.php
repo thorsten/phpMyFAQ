@@ -60,7 +60,7 @@ class System
     /**
      * Minimum required PHP version.
      */
-    public const VERSION_MINIMUM_PHP = '8.0.0';
+    final public const VERSION_MINIMUM_PHP = '8.1.0';
 
     /**
      * Array of required PHP extensions.
@@ -360,12 +360,12 @@ class System
         try {
             foreach ($files as $file) {
                 if (
-                    'php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) && !preg_match(
+                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION) && !preg_match(
                         '#/tests/#',
-                        $file->getPath()
+                        (string) $file->getPath()
                     )
                 ) {
-                    $current = str_replace(PMF_ROOT_DIR, '', $file->getPathname());
+                    $current = str_replace(PMF_ROOT_DIR, '', (string) $file->getPathname());
 
                     if (isset($ignoredFiles[$current])) {
                         continue;
