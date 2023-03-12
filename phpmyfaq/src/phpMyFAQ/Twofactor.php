@@ -71,7 +71,7 @@ class Twofactor
             return false;
         }
     }
-   
+
   // Returns a QR-Code to a given secret for transmitting the secret to the Authentificator-App
     public function getQrCode($secret): string
     {
