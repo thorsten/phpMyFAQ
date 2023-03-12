@@ -41,7 +41,7 @@ if (!empty($_SESSION['access_token'])) {
     $content = $connection->get('account/verify_credentials');
 }
 
-$configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_UNSAFE_RAW, 'main');
+$configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_SPECIAL_CHARS, 'main');
 
 /**
  * @param mixed  $key

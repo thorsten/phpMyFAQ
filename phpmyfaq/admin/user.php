@@ -58,7 +58,7 @@ if (
 
     // what shall we do?
     // actions defined by url: user_action=
-    $userAction = Filter::filterInput(INPUT_GET, 'user_action', FILTER_UNSAFE_RAW, $defaultUserAction);
+    $userAction = Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_SPECIAL_CHARS, $defaultUserAction);
 
     $currentUser = new CurrentUser($faqConfig);
 
@@ -76,7 +76,7 @@ if (
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance()->verifyToken('user', $csrfToken)) {
             $csrfOkay = false;
         }
@@ -113,13 +113,13 @@ if (
             $message .= Alert::danger('ad_user_error_noId');
         } else {
             $userData = [];
-            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_UNSAFE_RAW);
+            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_SPECIAL_CHARS);
             $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_UNSAFE_RAW);
-            $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_UNSAFE_RAW, $defaultUserStatus);
-            $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_UNSAFE_RAW);
+            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_SPECIAL_CHARS);
+            $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_SPECIAL_CHARS, $defaultUserStatus);
+            $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_SANITIZE_SPECIAL_CHARS);
             $isSuperAdmin = $isSuperAdmin === 'on';
-            $deleteTwofactor = Filter::filterInput(INPUT_POST, 'overwrite_twofactor', FILTER_UNSAFE_RAW);
+            $deleteTwofactor = Filter::filterInput(INPUT_POST, 'overwrite_twofactor', FILTER_SANITIZE_SPECIAL_CHARS);
             $deleteTwofactor = $deleteTwofactor === 'on';
 
             $user = new User($faqConfig);
@@ -213,7 +213,7 @@ if (
         $user = new User($faqConfig);
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
         $userAction = $defaultUserAction;
 
         if (!Token::getInstance()->verifyToken('user', $csrfToken)) {

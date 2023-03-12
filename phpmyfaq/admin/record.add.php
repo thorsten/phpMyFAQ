@@ -46,9 +46,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $faqPermission = new FaqPermission($faqConfig);
 
     // FAQ data
-    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
-    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-    $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
+    $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
     $categories = Filter::filterInputArray(
         INPUT_POST,
         [
@@ -58,21 +58,21 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             ],
         ]
     );
-    $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
-    $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_UNSAFE_RAW);
-    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
-    $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_UNSAFE_RAW);
+    $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+    $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_SPECIAL_CHARS);
+    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
+    $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_SPECIAL_CHARS);
     $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
-    $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_UNSAFE_RAW);
-    $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
+    $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_SPECIAL_CHARS);
+    $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_SPECIAL_CHARS);
     $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
     $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $solutionId = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
     $revisionId = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
-    $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_UNSAFE_RAW);
-    $date = Filter::filterInput(INPUT_POST, 'date', FILTER_UNSAFE_RAW);
-    $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_UNSAFE_RAW);
+    $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_SPECIAL_CHARS);
+    $date = Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
+    $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // Permissions
     $permissions = $faqPermission->createPermissionArray();
@@ -173,7 +173,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 // notify the user who added the question
                 try {
                     $notifyEmail = Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
-                    $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_UNSAFE_RAW);
+                    $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_SANITIZE_SPECIAL_CHARS);
                     $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception $e) {
                     printf('<p class="alert alert-warning">%s</p>', $e->getMessage());

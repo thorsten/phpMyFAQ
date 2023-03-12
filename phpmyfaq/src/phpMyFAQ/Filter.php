@@ -37,7 +37,7 @@ class Filter
     {
         $return = filter_input($type, $variableName, $filter);
 
-        if ($filter === FILTER_UNSAFE_RAW) {
+        if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
             $return = filter_input(
                 $type,
                 $variableName,
@@ -71,7 +71,7 @@ class Filter
     {
         $return = filter_var($variable, $filter);
 
-        if ($filter === FILTER_UNSAFE_RAW) {
+        if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
             $return = filter_var(
                 $variable,
                 FILTER_CALLBACK,

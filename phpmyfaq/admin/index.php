@@ -119,9 +119,9 @@ $faq = new Faq($faqConfig);
 //
 // Get user action
 //
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 if (is_null($action)) {
-    $action = Filter::filterInput(INPUT_POST, 'action', FILTER_UNSAFE_RAW);
+    $action = Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 }
 if (!is_null($action)) {
     $action = Strings::htmlentities($action);
@@ -140,11 +140,11 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
 //
 $auth = false;
 $error = '';
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
-$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_SPECIAL_CHARS);
 
-$token = Filter::filterInput(INPUT_POST, 'token', FILTER_UNSAFE_RAW);
+$token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
 $userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
 
 // 
@@ -209,7 +209,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 // Logout
 //
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken) && $action === 'logout' && $auth) {
     $user->deleteFromSession(true);
     $auth = false;
@@ -226,9 +226,9 @@ if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken) && $ac
 //
 // Get action from _GET and _POST first
 //
-$ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_UNSAFE_RAW);
+$ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_SPECIAL_CHARS);
 if (is_null($ajax)) {
-    $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_UNSAFE_RAW);
+    $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
 // if performing AJAX operation, needs to branch before header.php

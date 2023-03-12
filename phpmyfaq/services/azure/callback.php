@@ -34,8 +34,8 @@ const IS_VALID_PHPMYFAQ = null;
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 require PMF_CONFIG_DIR . '/azure.php';
 
-$code = Filter::filterInput(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
-$error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_UNSAFE_RAW);
+$code = Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_SPECIAL_CHARS);
+$error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);

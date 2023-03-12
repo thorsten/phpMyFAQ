@@ -46,7 +46,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         $category->categoryName[$id]['name']
     );
 
-    $selectedLanguage = Filter::filterInput(INPUT_GET, 'trlang', FILTER_UNSAFE_RAW, $faqLangCode);
+    $selectedLanguage = Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_SPECIAL_CHARS, $faqLangCode);
     if ($selectedLanguage !== $faqLangCode) {
         $action = 'showcategory';
         $showcat = 'yes';

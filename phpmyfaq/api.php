@@ -63,14 +63,14 @@ $http->addHeader();
 //
 $auth = false;
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
-$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW, 'en');
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS, 'en');
 $categoryId = Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 $tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
-$faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
-$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 //
 // Get language (default: english)
@@ -137,7 +137,7 @@ switch ($action) {
         $faqPermission = new FaqPermission($faqConfig);
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
-        $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
+        $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_SPECIAL_CHARS);
         try {
             $searchResults = $search->search($searchString, false);
             $faqSearchResult->reviewResultSet($searchResults);
@@ -331,7 +331,7 @@ switch ($action) {
 
 
     case 'faqs':
-        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_UNSAFE_RAW);
+        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS);
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
@@ -391,7 +391,7 @@ switch ($action) {
         //
         // GET
         //
-        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_UNSAFE_RAW);
+        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS);
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
@@ -500,7 +500,7 @@ switch ($action) {
     case 'login':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
         $faqUsername = Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
+        $faqPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_SPECIAL_CHARS);
 
         $user = new CurrentUser($faqConfig);
         $userAuth = new UserAuthentication($faqConfig, $user);
@@ -532,10 +532,10 @@ switch ($action) {
 
         $registration = new RegistrationHelper($faqConfig);
 
-        $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
-        $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_UNSAFE_RAW);
+        $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+        $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_UNSAFE_RAW);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_SANITIZE_SPECIAL_CHARS);
         $isVisible = $isVisible === 'true';
 
         if (!$registration->isDomainWhitelisted($email)) {
@@ -570,11 +570,11 @@ switch ($action) {
             break;
         }
 
-        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW);
+        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_UNSAFE_RAW);
-        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_UNSAFE_RAW);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_UNSAFE_RAW);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($faqConfig->get('records.enableVisibilityQuestions')) {
             $visibility = 'Y';

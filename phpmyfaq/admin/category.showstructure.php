@@ -51,17 +51,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $currentLanguage = LanguageCodes::get($faqLangCode);
     $allLanguages = [];
     $all_lang = [];
-    $showCategory = Filter::filterInput(INPUT_POST, 'showCategory', FILTER_UNSAFE_RAW);
+    $showCategory = Filter::filterInput(INPUT_POST, 'showCategory', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // translate an existing category
     if ($showCategory === 'yes') {
         $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryData = [
             'id' => Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
-            'lang' => Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW),
+            'lang' => Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS),
             'parent_id' => $parentId,
-            'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW),
-            'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_UNSAFE_RAW),
+            'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS),
+            'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS),
             'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT)
         ];
 

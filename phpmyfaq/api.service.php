@@ -60,14 +60,14 @@ require 'src/Bootstrap.php';
 
 $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-$apiLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
-$currentToken = Filter::filterVar($postData['csrf'] ?? '', FILTER_UNSAFE_RAW);
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
+$apiLanguage = Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS);
+$currentToken = Filter::filterVar($postData['csrf'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if ($faqConfig->get('security.enableGoogleReCaptchaV2')) {
-    $code = Filter::filterVar($postData['g-recaptcha-response'] ?? '', FILTER_UNSAFE_RAW);
+    $code = Filter::filterVar($postData['g-recaptcha-response'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 } else {
-    $code = Filter::filterVar($postData['captcha'] ?? '', FILTER_UNSAFE_RAW);
+    $code = Filter::filterVar($postData['captcha'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
 $Language = new Language($faqConfig);
@@ -336,20 +336,20 @@ switch ($action) {
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-        $author = trim((string) Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
-        $question = Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW);
+        $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
         $question = trim(strip_tags((string) $question));
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = trim(html_entity_decode((string) $answer));
         } else {
-            $answer = Filter::filterVar($postData['answer'], FILTER_UNSAFE_RAW);
+            $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = strip_tags((string) $answer);
             $answer = trim(nl2br($answer));
         }
         $contentLink = Filter::filterVar($postData['contentlink'], FILTER_VALIDATE_URL);
-        $keywords = Filter::filterVar($postData['keywords'], FILTER_UNSAFE_RAW);
+        $keywords = Filter::filterVar($postData['keywords'], FILTER_SANITIZE_SPECIAL_CHARS);
         if (isset($postData['rubrik[]'])) {
             if (is_string($postData['rubrik[]'])) {
                 $postData['rubrik[]'] = [ $postData['rubrik[]'] ];
@@ -362,8 +362,8 @@ switch ($action) {
         // Check on translation
         if (isset($postData['faqid']) && isset($postData['lang']) && isset($postData['translated_answer'])) {
             $faqId = Filter::filterVar($postData['faqid'], FILTER_VALIDATE_INT);
-            $faqLanguage = Filter::filterVar($postData['lang'], FILTER_UNSAFE_RAW);
-            $answer = trim((string) Filter::filterVar($postData['translated_answer'], FILTER_UNSAFE_RAW));
+            $faqLanguage = Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $answer = trim((string) Filter::filterVar($postData['translated_answer'], FILTER_SANITIZE_SPECIAL_CHARS));
         }
 
         if (
@@ -489,10 +489,10 @@ switch ($action) {
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-        $author = trim((string) Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
         $ucategory = Filter::filterVar($postData['category'], FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW);
+        $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
         $question = trim(strip_tags((string) $question));
         $save = Filter::filterVar($postData['save'] ?? 0, FILTER_VALIDATE_INT);
 
@@ -616,10 +616,10 @@ switch ($action) {
     case 'saveregistration':
         $registration = new RegistrationHelper($faqConfig);
 
-        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_UNSAFE_RAW);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_SPECIAL_CHARS);
+        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_UNSAFE_RAW) ?? false;
+        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
 
         if (!$registration->isDomainWhitelisted($email)) {
             $message = ['error' => 'The domain is not whitelisted.'];
@@ -640,7 +640,7 @@ switch ($action) {
     case 'savevoting':
         $faq = new Faq($faqConfig);
         $rating = new Rating($faqConfig);
-        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_UNSAFE_RAW, 'faq');
+        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_SPECIAL_CHARS, 'faq');
         $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $vote = Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
         $userIp = Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
@@ -691,9 +691,9 @@ switch ($action) {
     case 'submit-contact':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-        $author = trim((string) Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
+        $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
-        $question = trim((string) Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW));
+        $question = trim((string) Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS));
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
@@ -729,10 +729,10 @@ switch ($action) {
 
     // Send mails to friends
     case 'sendtofriends':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-        $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_UNSAFE_RAW);
+        $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_SPECIAL_CHARS);
         $mailto = Filter::filterInputArray(
             INPUT_POST,
             [
@@ -795,11 +795,11 @@ switch ($action) {
         $userId = Filter::filterVar($postData['userid'], FILTER_VALIDATE_INT);
         $userName = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterVar($postData['is_visible'], FILTER_UNSAFE_RAW);
-        $password = trim((string) Filter::filterVar($postData['faqpassword'], FILTER_UNSAFE_RAW));
-        $confirm = trim((string) Filter::filterVar($postData['faqpassword_confirm'], FILTER_UNSAFE_RAW));
-        $twofactorEnabled = Filter::filterInput(INPUT_POST, 'twofactor_enabled', FILTER_UNSAFE_RAW);
-        $delete_secret = Filter::filterInput(INPUT_POST, 'newsecret', FILTER_UNSAFE_RAW);
+        $isVisible = Filter::filterVar($postData['is_visible'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = trim((string) Filter::filterVar($postData['faqpassword'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $confirm = trim((string) Filter::filterVar($postData['faqpassword_confirm'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $twofactorEnabled = Filter::filterInput(INPUT_POST, 'twofactor_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
+        $delete_secret = Filter::filterInput(INPUT_POST, 'newsecret', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $user = CurrentUser::getFromSession($faqConfig);
         
@@ -864,7 +864,7 @@ switch ($action) {
     //
     case 'change-password':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-        $username = trim((string) Filter::filterVar($postData['username'], FILTER_UNSAFE_RAW));
+        $username = trim((string) Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
 
         if (!empty($username) && !empty($email)) {
@@ -921,16 +921,16 @@ switch ($action) {
     case 'submit-request-removal':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-        $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_UNSAFE_RAW);
+        $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance()->verifyToken('request-removal', $csrfToken)) {
             $message = ['error' => 'TOKEN' . Translation::get('ad_msg_noauth')];
             break;
         }
 
-        $author = trim((string) Filter::filterVar($postData['name'], FILTER_UNSAFE_RAW));
-        $loginName = trim((string) Filter::filterVar($postData['loginname'], FILTER_UNSAFE_RAW));
+        $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $loginName = trim((string) Filter::filterVar($postData['loginname'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
-        $question = trim((string) Filter::filterVar($postData['question'], FILTER_UNSAFE_RAW));
+        $question = trim((string) Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS));
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {

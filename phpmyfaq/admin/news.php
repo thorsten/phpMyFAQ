@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $news = new News($faqConfig);
 
-$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) { ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -460,18 +460,18 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="row">
             <div class="col-12">
     <?php
-    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
-    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
     $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
     $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_UNSAFE_RAW);
+    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_SPECIAL_CHARS);
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
-    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
-    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
+    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
     $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
     $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
-    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
-    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
+    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_SPECIAL_CHARS);
+    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $newsData = ['lang' => $newsLang, 'header' => $header, 'content' => html_entity_decode((string) $content), 'authorName' => $author, 'authorEmail' => $email, 'active' => (is_null($active)) ? 'n' : 'y', 'comment' => (is_null($comment)) ? 'n' : 'y', 'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000', 'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959', 'link' => $link, 'linkTitle' => $linkTitle, 'date' => date('YmdHis'), 'target' => (is_null($target)) ? '' : $target];
 
@@ -497,18 +497,18 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="row">
             <div class="col-12">
     <?php
-    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
-    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_UNSAFE_RAW);
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
     $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_UNSAFE_RAW);
+    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_SPECIAL_CHARS);
     $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
-    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_UNSAFE_RAW);
-    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_UNSAFE_RAW);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_UNSAFE_RAW);
-    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_UNSAFE_RAW);
-    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_UNSAFE_RAW);
+    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
+    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_SPECIAL_CHARS);
+    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $newsData = [
         'lang' => $newsLang,
@@ -549,7 +549,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="row">
             <div class="col-12">
     <?php
-    $precheck = Filter::filterInput(INPUT_POST, 'really', FILTER_UNSAFE_RAW, 'no');
+    $precheck = Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
     $deleteId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     if ('no' == $precheck) {

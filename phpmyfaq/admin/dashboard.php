@@ -201,7 +201,7 @@ $faqSession = new Session($faqConfig);
             </h5>
             <div class="card-body">
                 <?php
-                $version = Filter::filterInput(INPUT_POST, 'param', FILTER_UNSAFE_RAW);
+                $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
                 if ($faqConfig->get('main.enableAutoUpdateHint') || (!is_null($version) && $version == 'version')) {
                     $api = new Api($faqConfig, new System());
                     try {
@@ -242,7 +242,7 @@ $faqSession = new Session($faqConfig);
             </h5>
             <div class="card-body">
                 <?php
-                $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_UNSAFE_RAW);
+                $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_SPECIAL_CHARS);
                 if ('verify' === $getJson) {
                     $api = new Api($faqConfig, new System());
                     try {

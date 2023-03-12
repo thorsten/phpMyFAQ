@@ -46,17 +46,17 @@ $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
 // Get possible user input
-$inputLanguage = Filter::filterInput(INPUT_GET, 'pmf-all-languages', FILTER_UNSAFE_RAW);
+$inputLanguage = Filter::filterInput(INPUT_GET, 'pmf-all-languages', FILTER_SANITIZE_SPECIAL_CHARS);
 $inputCategory = Filter::filterInput(INPUT_GET, 'pmf-search-category', FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
-$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW);
+$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!is_null($inputTag)) {
     $inputTag = str_replace(' ', '', (string) $inputTag);
     $inputTag = str_replace(',,', ',', $inputTag);
 }
 
-$searchTerm = Filter::filterInput(INPUT_POST, 'search', FILTER_UNSAFE_RAW);
+$searchTerm = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
 $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)

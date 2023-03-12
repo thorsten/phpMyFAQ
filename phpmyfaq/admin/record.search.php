@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\LinkVerifier;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -37,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
     $searchCategory = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_UNSAFE_RAW);
+    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

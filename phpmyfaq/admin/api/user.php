@@ -33,10 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
 $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
-$userSearch = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+$userSearch = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Send headers
 $http = new HttpHelper();
@@ -137,12 +137,12 @@ if (
 
             $postData = json_decode(file_get_contents('php://input'), true);
 
-            $userName = Filter::filterVar($postData['userName'], FILTER_UNSAFE_RAW);
-            $userRealName = Filter::filterVar($postData['realName'], FILTER_UNSAFE_RAW);
+            $userName = Filter::filterVar($postData['userName'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $userRealName = Filter::filterVar($postData['realName'], FILTER_SANITIZE_SPECIAL_CHARS);
             $userEmail = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
             $automaticPassword = Filter::filterVar($postData['automaticPassword'], FILTER_VALIDATE_BOOLEAN);
-            $userPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
-            $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_UNSAFE_RAW);
+            $userPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_SANITIZE_SPECIAL_CHARS);
             $userIsSuperAdmin = Filter::filterVar($postData['isSuperAdmin'], FILTER_VALIDATE_BOOLEAN);
 
             $newUser = new User($faqConfig);
@@ -229,8 +229,8 @@ if (
             $postData = json_decode($json);
 
             $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
-            $newPassword = Filter::filterVar($postData->newPassword, FILTER_UNSAFE_RAW);
-            $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_UNSAFE_RAW);
+            $newPassword = Filter::filterVar($postData->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
+            $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
             var_dump($csrfToken);
 

@@ -52,7 +52,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
       <form method="post">
         <?= Token::getInstance()->getTokenInput('category') ?>
         <?php
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
         //
         // Image upload
@@ -71,7 +71,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $category->setGroups($currentAdminGroups);
                 $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
                 $categoryId = $faqConfig->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
-                $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
+                $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
                 $categoryData = [
                     'lang' => $categoryLang,
                     'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS),
@@ -84,7 +84,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 ];
 
                 $permissions = [];
-                if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_UNSAFE_RAW)) {
+                if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
                     $permissions += [
                     'restricted_user' => [
                         -1,
@@ -98,7 +98,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     ];
                 }
 
-                if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_UNSAFE_RAW)) {
+                if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
                     $permissions += [
                     'restricted_groups' => [
                         -1,
@@ -140,7 +140,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     }
 
                     // All the other translations
-                    $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_UNSAFE_RAW);
+                    $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_SPECIAL_CHARS);
                     echo Alert::success('ad_categ_added');
                 } else {
                     echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
@@ -155,8 +155,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                 $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
                 $categoryId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-                $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_UNSAFE_RAW);
-                $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_UNSAFE_RAW);
+                $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_SPECIAL_CHARS);
+                $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_SPECIAL_CHARS);
                 $image = count($uploadedFile) ? $categoryImage->getFileName(
                     $categoryId,
                     $categoryLang
@@ -166,8 +166,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     'id' => $categoryId,
                     'lang' => $categoryLang,
                     'parent_id' => $parentId,
-                    'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_UNSAFE_RAW),
-                    'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_UNSAFE_RAW),
+                    'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS),
+                    'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS),
                     'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
                     'group_id' => Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
                     'active' => Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
@@ -176,7 +176,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 ];
 
                 $permissions = [];
-                if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_UNSAFE_RAW)) {
+                if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
                     $permissions += [
                     'restricted_user' => [
                         -1,
@@ -190,7 +190,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     ];
                 }
 
-                if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_UNSAFE_RAW)) {
+                if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
                     $permissions += [
                     'restricted_groups' => [
                         -1,
@@ -256,7 +256,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                 // All the other translations
-                $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_UNSAFE_RAW);
+                $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_SPECIAL_CHARS);
             }
 
             // Deletes an existing category
@@ -265,7 +265,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 Token::getInstance()->verifyToken('remove-category', $csrfToken)
             ) {
                 $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-                $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
+                $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
 
                 $category = new Category($faqConfig, [], false);
                 $category->setUser($currentAdminUser);
@@ -307,7 +307,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
 
             // Lists all categories
-            $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW, $faqLangCode);
+            $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS, $faqLangCode);
 
             // If we changed the category tree, unset the object
             if (isset($category)) {

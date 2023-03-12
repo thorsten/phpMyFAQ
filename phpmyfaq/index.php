@@ -65,7 +65,7 @@ $http->setContentType('text/html');
 $http->addHeader();
 $http->startCompression();
 
-$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_UNSAFE_RAW);
+$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_SPECIAL_CHARS);
 
 //
 // Get language (default: english)
@@ -114,7 +114,7 @@ AttachmentFactory::init(
 //
 // Get user action
 //
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 
 //
 // Authenticate current user
@@ -122,11 +122,11 @@ $action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
 $auth = $error = null;
 $loginVisibility = 'hidden';
 
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
-$faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_UNSAFE_RAW);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_SPECIAL_CHARS);
 $rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_VALIDATE_BOOLEAN);
-$token = Filter::filterInput(INPUT_POST, 'token', FILTER_UNSAFE_RAW);
+$token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
 $userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
 
 //
@@ -140,11 +140,11 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 //
 // Get CSRF Token
 //
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
-    $csrfChecked = false;
-} else {
     $csrfChecked = true;
+} else {
+    $csrfChecked = false;
 }
 
 // Validating token from 2fa if given; else: returns error message
@@ -194,7 +194,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 // Logout
 //
-if ($csrfChecked && 'logout' === $action && isset($auth)) {
+if ($csrfChecked && 'logout' === $action && $auth) {
     $user->deleteFromSession(true);
     $auth = null;
     $action = 'main';
@@ -277,9 +277,9 @@ if ($faqConfig->get('main.enableUserTracking')) {
 //
 // Found an article language?
 //
-$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_UNSAFE_RAW);
+$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
 if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
+    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
     if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
         $lang = $faqLangCode;
     }
@@ -295,7 +295,7 @@ if (!Language::isASupportedLanguage($lang)) {
 //
 // Found a search string?
 //
-$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW, '');
+$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
 //
 // Create a new FAQ object
@@ -390,7 +390,7 @@ if (!is_null($tag_id)) {
 //
 // Handle the SiteMap
 //
-$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_UNSAFE_RAW);
+$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $title = ' - ' . $letter . '...';
     $keywords = $letter;

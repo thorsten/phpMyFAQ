@@ -132,7 +132,7 @@ class FaqPermission
     {
         $permissions = [];
 
-        if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_UNSAFE_RAW)) {
+        if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_user' => [-1],
             ];
@@ -144,7 +144,7 @@ class FaqPermission
             ];
         }
 
-        if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_UNSAFE_RAW)) {
+        if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_groups' => [-1],
             ];

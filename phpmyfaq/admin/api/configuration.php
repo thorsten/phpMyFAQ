@@ -39,12 +39,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
 $instanceId = Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
 $stopwordId = Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword = Filter::filterInput(INPUT_GET, 'stopword', FILTER_UNSAFE_RAW);
-$stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_UNSAFE_RAW);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+$stopword = Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_SPECIAL_CHARS);
+$stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $http = new HttpHelper();
 $stopWords = new StopWords($faqConfig);
@@ -59,12 +59,12 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        $url = Filter::filterVar($postData->url, FILTER_UNSAFE_RAW);
-        $instance = Filter::filterVar($postData->instance, FILTER_UNSAFE_RAW);
-        $comment = Filter::filterVar($postData->comment, FILTER_UNSAFE_RAW);
+        $url = Filter::filterVar($postData->url, FILTER_SANITIZE_SPECIAL_CHARS);
+        $instance = Filter::filterVar($postData->instance, FILTER_SANITIZE_SPECIAL_CHARS);
+        $comment = Filter::filterVar($postData->comment, FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($postData->email, FILTER_VALIDATE_EMAIL);
-        $admin = Filter::filterVar($postData->admin, FILTER_UNSAFE_RAW);
-        $password = Filter::filterVar($postData->password, FILTER_UNSAFE_RAW);
+        $admin = Filter::filterVar($postData->admin, FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = Filter::filterVar($postData->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
             $http->setStatus(400);
@@ -160,7 +160,7 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        $instanceId = Filter::filterVar($postData->instanceId, FILTER_UNSAFE_RAW);
+        $instanceId = Filter::filterVar($postData->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (null !== $instanceId) {
             $client = new Client($faqConfig);
@@ -193,7 +193,7 @@ switch ($ajaxAction) {
         $deleteData = json_decode(file_get_contents('php://input', true));
 
         $stopWordId = Filter::filterVar($deleteData->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($deleteData->stopWordsLang, FILTER_UNSAFE_RAW);
+        $stopWordsLang = Filter::filterVar($deleteData->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('stopwords', $deleteData->csrf)) {
             $http->setStatus(400);
@@ -215,8 +215,8 @@ switch ($ajaxAction) {
         $postData = json_decode(file_get_contents('php://input', true));
 
         $stopWordId = Filter::filterVar($postData->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($postData->stopWordsLang, FILTER_UNSAFE_RAW);
-        $stopWord = Filter::filterVar($postData->stopWord, FILTER_UNSAFE_RAW);
+        $stopWordsLang = Filter::filterVar($postData->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $stopWord = Filter::filterVar($postData->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('stopwords', $postData->csrf)) {
             $http->setStatus(400);
@@ -252,8 +252,8 @@ switch ($ajaxAction) {
         $entity = new TemplateMetaDataEntity();
 
         $entity
-            ->setPageId(Filter::filterVar($postData->pageId, FILTER_UNSAFE_RAW))
-            ->setType(Filter::filterVar($postData->type, FILTER_UNSAFE_RAW))
+            ->setPageId(Filter::filterVar($postData->pageId, FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setType(Filter::filterVar($postData->type, FILTER_SANITIZE_SPECIAL_CHARS))
             ->setContent(Filter::filterVar($postData->content, FILTER_SANITIZE_SPECIAL_CHARS));
 
         $metaId = $meta->add($entity);
@@ -279,7 +279,7 @@ switch ($ajaxAction) {
         }
 
         $meta = new TemplateMetaData($faqConfig);
-        $metaId = Filter::filterVar($deleteData->metaId, FILTER_UNSAFE_RAW);
+        $metaId = Filter::filterVar($deleteData->metaId, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($meta->delete((int)$metaId)) {
             $payload = ['deleted' => $metaId];

@@ -20,11 +20,11 @@ class FilterTest extends TestCase
         $this->assertEquals(null, Filter::filterVar('test#phpmyfaq.de', FILTER_VALIDATE_EMAIL));
 
         // Test with callback
-        $this->assertEquals('test', Filter::filterVar('test', FILTER_UNSAFE_RAW));
-        $this->assertEquals('&lt;b&gt;foo&lt;/b&gt;', Filter::filterVar('<b>foo</b>', FILTER_UNSAFE_RAW));
+        $this->assertEquals('test', Filter::filterVar('test', FILTER_SANITIZE_SPECIAL_CHARS));
+        $this->assertEquals('&lt;b&gt;foo&lt;/b&gt;', Filter::filterVar('<b>foo</b>', FILTER_SANITIZE_SPECIAL_CHARS));
         $this->assertEquals(
             '&lt;script onload=&quot;alert(1)&quot; /&gt;foo',
-            Filter::filterVar('<script onload="alert(1)" />foo', FILTER_UNSAFE_RAW)
+            Filter::filterVar('<script onload="alert(1)" />foo', FILTER_SANITIZE_SPECIAL_CHARS)
         );
     }
 

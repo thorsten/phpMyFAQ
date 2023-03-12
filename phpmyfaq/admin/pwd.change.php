@@ -36,8 +36,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     // If we have to save a new password, do that first
-    $save = Filter::filterInput(INPUT_POST, 'save', FILTER_UNSAFE_RAW);
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+    $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_SPECIAL_CHARS);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     if (!is_null($save) && Token::getInstance()->verifyToken('password', $csrfToken)) {
         // Define the (Local/Current) Authentication Source
@@ -46,9 +46,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
-        $oldPassword = Filter::filterInput(INPUT_POST, 'opass', FILTER_UNSAFE_RAW);
-        $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_UNSAFE_RAW);
-        $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_UNSAFE_RAW);
+        $oldPassword = Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_SPECIAL_CHARS);
+        $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_SPECIAL_CHARS);
+        $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             printf(

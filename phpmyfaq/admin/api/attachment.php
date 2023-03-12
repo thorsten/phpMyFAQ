@@ -31,11 +31,11 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
 $attId = Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
-$recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_UNSAFE_RAW);
-$recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_UNSAFE_RAW);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+$recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_SANITIZE_SPECIAL_CHARS);
+$recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 try {
     $attachment = AttachmentFactory::create($attId);

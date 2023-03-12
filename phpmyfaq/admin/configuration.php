@@ -27,13 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
-    $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_UNSAFE_RAW, 'listConfig');
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+    $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_SPECIAL_CHARS, 'listConfig');
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // Save the configuration
     if ('saveConfig' === $userAction && Token::getInstance()->verifyToken('configuration', $csrfToken)) {
         $checks = [
-            'filter' => FILTER_UNSAFE_RAW,
+            'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
             'flags' => FILTER_REQUIRE_ARRAY,
         ];
         $editData = Filter::filterInputArray(INPUT_POST, ['edit' => $checks]);

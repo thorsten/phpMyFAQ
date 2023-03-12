@@ -45,7 +45,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           $category->setGroups($currentAdminGroups);
           $date = new Date($faqConfig);
           $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
           if ($csrfToken && Token::getInstance()->verifyToken('toggle-question-visibility', $csrfToken)) {
               $csrfChecked = true;
@@ -53,7 +53,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
               $csrfChecked = false;
           }
 
-          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_UNSAFE_RAW);
+          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS);
           if ($csrfChecked && $toggle === 'toggle') {
               $isVisible = $question->getVisibility($questionId);
               $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));

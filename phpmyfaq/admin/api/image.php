@@ -28,12 +28,12 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
 $upload = Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
 $uploadedFile = $_FILES['upload'] ?? '';
 
 $csrfOkay = true;
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!Token::getInstance()->verifyToken('edit-faq', $csrfToken)) {
     $csrfOkay = false;

@@ -47,7 +47,7 @@ if ($linkVerifier->isReady() === false) {
 }
 
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
+$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!(isset($id) && isset($lang))) {
     $http->setStatus(401);

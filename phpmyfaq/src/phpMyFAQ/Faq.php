@@ -1832,7 +1832,7 @@ class Faq
                 }
 
                 $data['visits'] = (int)$row->visits;
-                $data['question'] = Filter::filterVar($row->question, FILTER_UNSAFE_RAW);
+                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->answer;
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
                 $data['last_visit'] = date('c', $row->last_visit);
@@ -2059,7 +2059,7 @@ class Faq
                 }
 
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
-                $data['question'] = Filter::filterVar($row->question, FILTER_UNSAFE_RAW);
+                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->content;
                 $data['visits'] = (int)$row->visits;
 

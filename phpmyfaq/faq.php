@@ -117,7 +117,7 @@ $answer = $glossary->insertItemsIntoContent($answer);
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
-$highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_UNSAFE_RAW);
+$highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_SPECIAL_CHARS);
 if (
     !is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen(
         $highlight

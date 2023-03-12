@@ -52,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $perPage = 10;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
-    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $search = new Search($faqConfig);
 

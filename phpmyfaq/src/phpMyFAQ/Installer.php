@@ -664,14 +664,14 @@ class Installer
         $query = $uninstall = $dbSetup = [];
 
         // Check table prefix
-        $dbSetup['dbPrefix'] = Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_UNSAFE_RAW, '');
+        $dbSetup['dbPrefix'] = Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ('' !== $dbSetup['dbPrefix']) {
             Database::setTablePrefix($dbSetup['dbPrefix']);
         }
 
         // Check database entries
         if (!isset($setup['dbType'])) {
-            $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_UNSAFE_RAW);
+            $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $dbSetup['dbType'] = $setup['dbType'];
         }
@@ -689,7 +689,7 @@ class Installer
             System::renderFooter(true);
         }
 
-        $dbSetup['dbServer'] = Filter::filterInput(INPUT_POST, 'sql_server', FILTER_UNSAFE_RAW, '');
+        $dbSetup['dbServer'] = Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (is_null($dbSetup['dbServer']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database server.</p>\n";
             System::renderFooter(true);
@@ -706,13 +706,13 @@ class Installer
             System::renderFooter(true);
         }
 
-        $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_UNSAFE_RAW, '');
+        $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (is_null($dbSetup['dbUser']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";
             System::renderFooter(true);
         }
 
-        $dbSetup['dbPassword'] = Filter::filterInput(INPUT_POST, 'sql_password', FILTER_UNSAFE_RAW, '');
+        $dbSetup['dbPassword'] = Filter::filterInput(INPUT_POST, 'sql_password', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (is_null($dbSetup['dbPassword']) && !System::isSqlite($dbSetup['dbType'])) {
             // Password can be empty...
             $dbSetup['dbPassword'] = '';
@@ -720,7 +720,7 @@ class Installer
 
         // Check database name
         if (!isset($setup['dbType'])) {
-            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_UNSAFE_RAW);
+            $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
         }
@@ -733,7 +733,7 @@ class Installer
             $dbSetup['dbServer'] = Filter::filterInput(
                 INPUT_POST,
                 'sql_sqlitefile',
-                FILTER_UNSAFE_RAW,
+                FILTER_SANITIZE_SPECIAL_CHARS,
                 $setup['dbServer']
             );
             if (is_null($dbSetup['dbServer'])) {
@@ -764,12 +764,12 @@ class Installer
         //
         // Check LDAP if enabled
         //
-        $ldapEnabled = Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_UNSAFE_RAW);
+        $ldapEnabled = Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
             $ldapSetup = [];
 
             // check LDAP entries
-            $ldapSetup['ldapServer'] = Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_UNSAFE_RAW);
+            $ldapSetup['ldapServer'] = Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($ldapSetup['ldapServer'])) {
                 echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
                 System::renderFooter(true);
@@ -781,15 +781,19 @@ class Installer
                 System::renderFooter(true);
             }
 
-            $ldapSetup['ldapBase'] = Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_UNSAFE_RAW);
+            $ldapSetup['ldapBase'] = Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($ldapSetup['ldapBase'])) {
                 echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
                 System::renderFooter(true);
             }
 
             // LDAP User and LDAP password are optional
-            $ldapSetup['ldapUser'] = Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_UNSAFE_RAW);
-            $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_UNSAFE_RAW);
+            $ldapSetup['ldapUser'] = Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_SPECIAL_CHARS);
+            $ldapSetup['ldapPassword'] = Filter::filterInput(
+                INPUT_POST,
+                'ldap_password',
+                FILTER_SANITIZE_SPECIAL_CHARS
+            );
 
             // set LDAP Config to prevent DB query
             foreach ($this->mainConfig as $configKey => $configValue) {
@@ -816,12 +820,12 @@ class Installer
         //
         // Check Elasticsearch if enabled
         //
-        $esEnabled = Filter::filterInput(INPUT_POST, 'elasticsearch_enabled', FILTER_UNSAFE_RAW);
+        $esEnabled = Filter::filterInput(INPUT_POST, 'elasticsearch_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!is_null($esEnabled)) {
             $esSetup = [];
             $esHostFilter = [
                 'elasticsearch_server' => [
-                    'filter' => FILTER_UNSAFE_RAW,
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
                     'flags' => FILTER_REQUIRE_ARRAY
                 ]
             ];
@@ -837,7 +841,7 @@ class Installer
             $esSetup['hosts'] = $esHosts['elasticsearch_server'];
 
             // ES Index name
-            $esSetup['index'] = Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_UNSAFE_RAW);
+            $esSetup['index'] = Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($esSetup['index'])) {
                 echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add an Elasticsearch index " .
                     "name.</p>\n";
@@ -866,7 +870,7 @@ class Installer
 
         // check login name
         if (!isset($setup['loginname'])) {
-            $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_UNSAFE_RAW);
+            $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $loginName = $setup['loginname'];
         }
@@ -877,7 +881,7 @@ class Installer
 
         // check user entries
         if (!isset($setup['password'])) {
-            $password = Filter::filterInput(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
+            $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $password = $setup['password'];
         }
@@ -887,7 +891,7 @@ class Installer
         }
 
         if (!isset($setup['password_retyped'])) {
-            $passwordRetyped = Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_UNSAFE_RAW);
+            $passwordRetyped = Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $passwordRetyped = $setup['password_retyped'];
         }
@@ -909,10 +913,10 @@ class Installer
             System::renderFooter(true);
         }
 
-        $language = Filter::filterInput(INPUT_POST, 'language', FILTER_UNSAFE_RAW, 'en');
-        $realname = Filter::filterInput(INPUT_POST, 'realname', FILTER_UNSAFE_RAW, '');
+        $language = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS, 'en');
+        $realname = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
-        $permLevel = Filter::filterInput(INPUT_POST, 'permLevel', FILTER_UNSAFE_RAW, 'basic');
+        $permLevel = Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_SPECIAL_CHARS, 'basic');
 
         $rootDir = $setup['rootDir'] ?? PMF_ROOT_DIR;
 

@@ -53,7 +53,7 @@ try {
 
 $cat = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$faqLanguage = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
+$faqLanguage = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $send2friendLink = sprintf(
     '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',

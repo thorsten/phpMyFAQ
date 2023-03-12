@@ -36,7 +36,7 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_UNSAFE_RAW);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 
 [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 

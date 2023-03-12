@@ -44,9 +44,9 @@ $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'),
 $faqConfig->setLanguage($Language);
 
 // Found an article language?
-$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_UNSAFE_RAW);
+$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
 if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_UNSAFE_RAW);
+    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
     if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
         $lang = $faqLangCode;
     }

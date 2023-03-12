@@ -42,7 +42,7 @@ require PMF_ROOT_DIR . '/lang/language_en.php';
 //
 // Get language (default: english)
 //
-$language = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
+$language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($language) && Language::isASupportedLanguage($language)) {
     require PMF_ROOT_DIR . '/lang/language_' . $language . '.php';
 }

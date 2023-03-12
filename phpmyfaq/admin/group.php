@@ -57,7 +57,7 @@ $groupActionList = [
 
 // what shall we do?
 // actions defined by url: group_action=
-$groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_UNSAFE_RAW, $defaultGroupAction);
+$groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_SANITIZE_SPECIAL_CHARS, $defaultGroupAction);
 
 $currentUser = new CurrentUser($faqConfig);
 
@@ -137,7 +137,7 @@ if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
         foreach ($dataFields as $field) {
-            $groupData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_UNSAFE_RAW, '');
+            $groupData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_SPECIAL_CHARS, '');
         }
         $user = new User($faqConfig);
         $perm = $user->perm;
@@ -201,7 +201,7 @@ if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), '
     $user = new User($faqConfig);
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
     if (!Token::getInstance()->verifyToken('delete-group', $csrfToken)) {
         $csrfOkay = false;
     }
@@ -225,11 +225,11 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
-    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_UNSAFE_RAW, '');
-    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_UNSAFE_RAW, '');
-    $groupAutoJoin = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_UNSAFE_RAW, '');
+    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_SPECIAL_CHARS, '');
+    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_SPECIAL_CHARS, '');
+    $groupAutoJoin = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_SPECIAL_CHARS, '');
     $csrfOkay = true;
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_UNSAFE_RAW);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     if (!Token::getInstance()->verifyToken('add-group', $csrfToken)) {
         $csrfOkay = false;

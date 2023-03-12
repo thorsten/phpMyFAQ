@@ -72,9 +72,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
 
         // Collect updated data for database
         $updatedData = new InstanceEntity();
-        $updatedData->setUrl(Filter::filterInput(INPUT_POST, 'url', FILTER_UNSAFE_RAW));
-        $updatedData->setInstance(Filter::filterInput(INPUT_POST, 'instance', FILTER_UNSAFE_RAW));
-        $updatedData->setComment(Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW));
+        $updatedData->setUrl(Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_SPECIAL_CHARS));
+        $updatedData->setInstance(Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_SPECIAL_CHARS));
+        $updatedData->setComment(Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Original data
         $originalData = $currentClient->getInstanceById($instanceId);

@@ -53,7 +53,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 </div>
 
     <?php
-    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_UNSAFE_RAW);
+    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     if ($csrfToken && !Token::getInstance()->verifyToken('clear-statistics', $csrfToken)) {
         $clearStatistics = false;

@@ -309,6 +309,7 @@ class Link
         if ($this->config->get('main.enableRewriteRules')) {
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();
+
                 if (isset($getParams[self::LINK_GET_ACTION])) {
                     // Get the part of the url 'till the '/' just before the pattern
                     $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1);
@@ -577,7 +578,7 @@ class Link
             }
 
             // Check if query string contains &amp;
-            $query['main'] = str_replace('&amp;', '&', (string) $query['main']);
+            $query['main'] = str_replace(['&amp;', '#38;', 'amp;'], '&', (string) $query['main']);
 
             $params = explode('&', $query['main']);
             foreach ($params as $param) {
@@ -602,10 +603,10 @@ class Link
             $parsed = parse_url($this->url);
 
             if (isset($parsed['query'])) {
-                $query['main'] = filter_var($parsed['query'], FILTER_UNSAFE_RAW);
+                $query['main'] = filter_var($parsed['query'], FILTER_SANITIZE_SPECIAL_CHARS);
             }
             if (isset($parsed['fragment'])) {
-                $query['fragment'] = filter_var($parsed['fragment'], FILTER_UNSAFE_RAW);
+                $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_SPECIAL_CHARS);
             }
         }
 

@@ -32,13 +32,13 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_UNSAFE_RAW);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $oTag = new Tags($faqConfig);
 
 switch ($ajaxAction) {
     case 'list':
-        $autoCompleteValue = Filter::filterInput(INPUT_GET, 'q', FILTER_UNSAFE_RAW);
+        $autoCompleteValue = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($autoCompleteValue)) {
             if (strpos($autoCompleteValue, ',')) {
@@ -76,7 +76,7 @@ switch ($ajaxAction) {
         }
 
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
-        $newTag = Filter::filterVar($postData->tag, FILTER_UNSAFE_RAW);
+        $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $entity = new TagEntity();
         $entity->setId($id);
