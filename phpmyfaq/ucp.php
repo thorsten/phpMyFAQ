@@ -21,6 +21,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
+use RobThree\Auth\TwoFactorAuthException;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -49,8 +50,12 @@ if ($user->isLoggedIn()) {
     
     $tfa = new TwoFactor($faqConfig);
     $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
-    if($secret=='') {
-        $secret = $tfa->generateSecret();
+    if ($secret === '') {
+        try {
+            $secret = $tfa->generateSecret();
+        } catch (TwoFactorAuthException $e) {
+            $faqConfig->getLogger()->error('Cannot generate 2FA secret.');
+        }
         $tfa->saveSecret($secret);
     }
 

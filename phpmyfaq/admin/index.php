@@ -161,7 +161,7 @@ if (!is_null($token) && !is_null($userid)) {
             $action = 'twofactor';
         } else {
             $auth = true;
-            $user->twofactorSuccess();
+            $user->twoFactorSuccess();
             require 'header.php';
             require 'dashboard.php';
             exit();

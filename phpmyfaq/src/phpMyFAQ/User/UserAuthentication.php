@@ -56,8 +56,8 @@ class UserAuthentication
 
         // Local
         if ($this->user->login($username, $password)) {
-            if ($user->getUserData('twofactor_enabled') == 1 && (is_null($token)) === true) {
-                $action = 'twofactor';
+            if ($this->user->getUserData('twofactor_enabled') == 1 && (is_null($token)) === true) {
+                $this->user->setTwoFactorAuthentication(true);
             } else {
                 if ($this->user->getStatus() !== 'blocked') {
                     $this->user->setLoggedIn(true);
