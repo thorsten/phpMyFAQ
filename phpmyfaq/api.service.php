@@ -798,15 +798,14 @@ switch ($action) {
         $isVisible = Filter::filterVar($postData['is_visible'], FILTER_SANITIZE_SPECIAL_CHARS);
         $password = trim((string) Filter::filterVar($postData['faqpassword'], FILTER_SANITIZE_SPECIAL_CHARS));
         $confirm = trim((string) Filter::filterVar($postData['faqpassword_confirm'], FILTER_SANITIZE_SPECIAL_CHARS));
-        $twofactorEnabled = Filter::filterInput(INPUT_POST, 'twofactor_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
-        $delete_secret = Filter::filterInput(INPUT_POST, 'newsecret', FILTER_SANITIZE_SPECIAL_CHARS);
+        $twoFactorEnabled = Filter::filterVar($postData['twofactor_enabled'] ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
+        $deleteSecret = Filter::filterVar($postData['newsecret'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $user = CurrentUser::getFromSession($faqConfig);
         
-        if($delete_secret=='on') {
-            $secret = "";
-        }
-        else {
+        if ($deleteSecret === 'on') {
+            $secret = '';
+        } else {
             $secret = $user->getUserData('secret');
         }
 
@@ -831,9 +830,10 @@ switch ($action) {
                 'display_name' => $userName,
                 'email' => $email,
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
-                'twofactor_enabled' => $twofactorEnabled === 'on' ? 1 : 0,
+                'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
                 'secret' => $secret
             ];
+
             $success = $user->setUserData($userData);
 
             foreach ($user->getAuthContainer() as $auth) {
