@@ -31,8 +31,8 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Translation;
-use phpMyFAQ\Twofactor;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -154,7 +154,7 @@ if (!is_null($token) && !is_null($userid)) {
     $user = new CurrentUser($faqConfig);
     $user->getUserById($userid);
     if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
-        $tfa = new Twofactor($faqConfig);
+        $tfa = new TwoFactor($faqConfig);
         $res = $tfa->validateToken($token, $userid);
         if (!$res) {
             $error = $PMF_LANG['msgTwofactorErrorToken'];

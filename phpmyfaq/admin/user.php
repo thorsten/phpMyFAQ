@@ -127,12 +127,12 @@ if (
 
             $stats = $user->getStatus();
             
-            // reset twofactor-authentification if requires
+            // reset twofactor-authentication if required
             if($deleteTwofactor) {
                 $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
             }
 
-            // set new password an send email if user is switched to active
+            // set new password a send email if user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
                 if (!$user->activateUser()) {
                     $userStatus = 'invalid_status';
@@ -370,18 +370,18 @@ if (
                                     </a>
                                 </div>
                             </div>
-                        </div>  
+
+                            <div class="row mb-2">
+                                <div class="offset-lg-4 col-lg-8">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="overwrite_twofactor" name="overwrite_twofactor">
+                                        <label class="form-check-label" for="overwrite_twofactor">
+                                            <?= Translation::get('ad_user_overwrite_twofactor') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-              </div>
-              </div>
-              <div class="form-group row">
-              <div class="offset-lg-4 col-lg-8">
-              <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="overwrite_twofactor" name="overwrite_twofactor">
-              <label class="form-check-label" for="is_superadmin"><?= $PMF_LANG['ad_user_overwrite_twofactor'] ?></label>
-                  </div>
-                  </div>
-            </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-success" type="submit">
                                 <?= Translation::get('ad_gen_save') ?>

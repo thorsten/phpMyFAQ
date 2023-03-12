@@ -331,6 +331,7 @@ if ($step == 3) {
     if (version_compare($version, '3.2.0-alpha', '<')) {
         // Azure AD support and twofactor-authentification-support
         $faqConfig->add('security.enableSignInWithMicrosoft', false);
+
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser 
                 ADD COLUMN refresh_token TEXT NULL DEFAULT NULL,

@@ -16,6 +16,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed PostgreSQL requirement to 10.0 or later (Thorsten)
 - changed MS SQL Server requirement to 2016 or later (Thorsten)
 - added support for PHP 8.2 (Thorsten)
+- added 2FA (Two Factor Authentication) (Jan Harms)
 - added experimental Azure AD login (Thorsten)
 - added option to use Google ReCaptcha (Thorsten)
 - added REST API v2.2 to fetch groups and add categories (Thorsten)

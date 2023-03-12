@@ -19,8 +19,8 @@ use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\Twofactor;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -47,7 +47,7 @@ if ($user->isLoggedIn()) {
         $gravatarImg = '';
     }
     
-    $tfa = new Twofactor($faqConfig);
+    $tfa = new TwoFactor($faqConfig);
     $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
     if($secret=='') {
         $secret = $tfa->generateSecret();
