@@ -18,6 +18,7 @@
 use phpMyFAQ\Backup;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
+use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Translation;
@@ -78,7 +79,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
         case 'backup_content':
             $backupQueries = $backup->generateBackupQueries($tableNames);
             try {
-                $backupFileName = $backup->createBackup(Backup::BACKUP_TYPE_DATA, $backupQueries);
+                $backupFileName = $backup->createBackup(BackupType::BACKUP_TYPE_DATA->value, $backupQueries);
                 $header = sprintf('Content-Disposition: attachment; filename=%s', urlencode($backupFileName));
                 $httpHelper->addExtraHeader($header);
 
@@ -90,7 +91,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
         case 'backup_logs':
             $backupQueries = $backup->generateBackupQueries($tableNames);
             try {
-                $backupFileName = $backup->createBackup(Backup::BACKUP_TYPE_LOGS, $backupQueries);
+                $backupFileName = $backup->createBackup(BackupType::BACKUP_TYPE_LOGS->value, $backupQueries);
                 $header = sprintf('Content-Disposition: attachment; filename=%s', urlencode($backupFileName));
                 $httpHelper->addExtraHeader($header);
 

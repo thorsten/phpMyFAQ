@@ -27,9 +27,6 @@ use SodiumException;
  */
 class Backup
 {
-    final public const BACKUP_TYPE_DATA = 'data';
-    final public const BACKUP_TYPE_LOGS = 'logs';
-
     /**
      * Constructor.
      */

@@ -20,6 +20,7 @@ namespace phpMyFAQ\Attachment;
 use phpMyFAQ\Attachment;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\AttachmentStorageType;
 use phpMyFAQ\Language;
 
 /**
@@ -54,7 +55,7 @@ class AttachmentFactory
     public static function create(int $id = null, string $key = null): File
     {
         $return = match (self::$storageType) {
-            Attachment::STORAGE_TYPE_FILESYSTEM => new File($id),
+            AttachmentStorageType::FILESYSTEM->value => new File($id),
             default => throw new AttachmentException('Unknown attachment storage type'),
         };
 

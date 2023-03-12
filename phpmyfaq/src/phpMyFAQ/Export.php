@@ -39,14 +39,19 @@ class Export
     /**
      * Factory.
      *
-     * @param Faq           $faq FaqHelper object
-     * @param Category      $category Entity object
-     * @param Configuration $config Configuration object
-     * @param string        $mode Export
-     * @throws \Exception
+     * @param Faq           $faq
+     * @param Category      $category
+     * @param Configuration $config
+     * @param string        $mode
+     * @return Pdf|Html5|Json
+     * @throws Exception
      */
-    public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf'): mixed
-    {
+    public static function create(
+        Faq $faq,
+        Category $category,
+        Configuration $config,
+        string $mode = 'pdf'
+    ): Pdf|Html5|Json {
         return match ($mode) {
             'json' => new Json($faq, $category, $config),
             'pdf' => new Pdf($faq, $category, $config),

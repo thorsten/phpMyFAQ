@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Export;
 
-use Exception;
 use ParsedownExtra;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
@@ -52,7 +51,6 @@ class Pdf extends Export
      * @param  Faq           $faq      FaqHelper object
      * @param  Category      $category Entity object
      * @param  Configuration $config   Configuration
-     * @throws Exception
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
