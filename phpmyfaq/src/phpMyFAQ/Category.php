@@ -822,7 +822,7 @@ class Category
                 $oLink = new Link($url, $this->config);
                 $oLink->text = sprintf('<span>%s</span>', Strings::htmlentities($category));
                 $oLink->itemTitle = Strings::htmlentities($category);
-                $oLink->tooltip = Strings::htmlentities($description[$key]);
+                $oLink->tooltip = Strings::htmlentities($description[$key] ?? '');
                 if (0 === $key) {
                     $oLink->setRelation('index');
                 }

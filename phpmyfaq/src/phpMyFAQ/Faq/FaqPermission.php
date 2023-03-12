@@ -28,15 +28,15 @@ use phpMyFAQ\Filter;
 class FaqPermission
 {
     /** @var string */
-    public const USER = 'user';
+    final public const USER = 'user';
 
     /** @var string */
-    public const GROUP = 'group';
+    final public const GROUP = 'group';
 
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 

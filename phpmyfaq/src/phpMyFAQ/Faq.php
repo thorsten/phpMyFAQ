@@ -73,7 +73,7 @@ class Faq
     /**
      * Plural form support.
      */
-    private Plurals $plurals;
+    private readonly Plurals $plurals;
 
     /**
      * Users.
@@ -95,7 +95,7 @@ class Faq
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         global $plr;
 
@@ -454,7 +454,7 @@ class Faq
                 $renderedItems[$row->id] .= sprintf(
                     '<div class="ms-2 me-auto"><div class="fw-bold">%s</div><div class="small">%s</div></div>',
                     $oLink->toHtmlAnchor(),
-                    Utils::chopString(strip_tags($row->answer), 20)
+                    Utils::chopString(strip_tags((string) $row->answer), 20)
                 );
                 $renderedItems[$row->id] .= sprintf(
                     '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span></li>',
@@ -709,7 +709,7 @@ class Faq
         }
 
         if ($row = $this->config->getDb()->fetchObject($result)) {
-            $question = nl2br($row->thema);
+            $question = nl2br((string) $row->thema);
             $answer = $row->content;
             $active = ('yes' === $row->active);
             $expired = (date('YmdHis') > $row->date_end);
@@ -1343,7 +1343,7 @@ class Faq
         $result = $this->config->getDb()->query($query);
 
         if ($row = $this->config->getDb()->fetchObject($result)) {
-            $question = nl2br($row->thema);
+            $question = nl2br((string) $row->thema);
             $content = $row->content;
             $active = ('yes' == $row->active);
             $expired = (date('YmdHis') > $row->date_end);
@@ -1660,7 +1660,7 @@ class Faq
 
         if ($this->config->getDb()->numRows($result) > 0) {
             $row = $this->config->getDb()->fetchObject($result);
-            $answerPreview = strip_tags($row->answer);
+            $answerPreview = strip_tags((string) $row->answer);
         } else {
             $answerPreview = $this->config->get('main.metaDescription');
         }
