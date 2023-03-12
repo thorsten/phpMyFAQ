@@ -95,9 +95,6 @@ class Token
         return self::$instance;
     }
 
-    /**
-     * @throws Exception
-     */
     public function getTokenInput(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
@@ -110,9 +107,6 @@ class Token
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function getTokenString(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
@@ -122,14 +116,14 @@ class Token
 
     /**
      * @param string|null $requestToken
-     * @throws Exception
      */
     public function verifyToken(string $page, string $requestToken = null, bool $removeToken = false): bool
     {
         // if the request token has not been passed, check POST
         $requestToken ??= $_POST[self::PMF_SESSION_NAME] ?? null;
+
         if (is_null($requestToken)) {
-            throw new Exception('Token is missing.');
+            return false;
         }
 
         $token = $this->getSession($page);
@@ -157,9 +151,6 @@ class Token
         return false;
     }
 
-    /**
-     * @throws Exception
-     */
     public function removeToken(string $page): bool
     {
         unset($_COOKIE[$this->getCookie($page)], $_SESSION[self::PMF_SESSION_NAME][$page]);
@@ -185,7 +176,7 @@ class Token
         $this
             ->setPage($page)
             ->setExpiry(time() + $expiry)
-            ->setSessionToken(base64_encode(random_bytes(32)))
+            ->setSessionToken(md5(base64_encode(random_bytes(32))))
             ->setCookieToken(md5(base64_encode(random_bytes(32))));
 
         setcookie($this->getCookieName($page), $this->getCookieToken(), ['expires' => $this->getExpiry()]);
