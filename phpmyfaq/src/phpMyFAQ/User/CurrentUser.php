@@ -239,9 +239,9 @@ class CurrentUser extends User
     {
         return $this->loggedIn;
     }
-    
+
     // Sets loggedIn to true if the 2fa-auth was successfull and saves the login to session. Returns true.
-    public function twofactorSuccess(): bool 
+    public function twofactorSuccess(): bool
     {
         $this->loggedIn = true;
         $this->updateSessionId(true);
