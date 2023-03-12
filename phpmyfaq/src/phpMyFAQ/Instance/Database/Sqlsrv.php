@@ -331,7 +331,9 @@ class Sqlsrv extends Database implements Driver
             last_modified NVARCHAR(14) NULL,
             display_name NVARCHAR(128) NULL,
             email NVARCHAR(128) NULL,
-            is_visible INTEGER NULL DEFAULT 0)',
+            is_visible INTEGER NULL DEFAULT 0,
+            twofactor_enabled INTEGER NULL DEFAULT 0,
+            secret NVARCHAR(128) NULL)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login NVARCHAR(128) NOT NULL,

@@ -187,9 +187,13 @@ class CurrentUser extends User
 
             // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
-            $this->setLoggedIn(true);
-            $this->updateSessionId(true);
-            $this->saveToSession();
+            // only save this succesfull login to session when 2fa-auth is not enabled
+            if ($this->getUserData('twofactor_enabled') != 1) {
+                $this->loggedIn = true;
+                $this->updateSessionId(true);
+                $this->saveToSession();
+                $this->saveCrsfTokenToSession();
+            }
 
             // save remember me cookie if set
             if ($this->rememberMe) {
@@ -208,9 +212,10 @@ class CurrentUser extends User
                 return false;
             }
 
-            // Login successful
-            $this->setSuccess(true);
-            return true;
+            // Login successful if 2fa is not enabled
+            if ($this->getUserData('twofactor_enabled') != 1) {
+                $this->setSuccess(true);
+            }
         }
 
         // raise errors and return false
@@ -233,6 +238,17 @@ class CurrentUser extends User
     public function isLoggedIn(): bool
     {
         return $this->loggedIn;
+    }
+
+    // Sets loggedIn to true if the 2fa-auth was successfull and saves the login to session. Returns true.
+    public function twofactorSuccess(): bool
+    {
+        $this->loggedIn = true;
+        $this->updateSessionId(true);
+        $this->saveToSession();
+        $this->saveCrsfTokenToSession();
+        $this->setSuccess(true);
+        return true;
     }
 
     public function setLoggedIn(bool $loggedIn): void

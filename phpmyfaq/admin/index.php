@@ -31,6 +31,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twofactor;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserAuthentication;
 
@@ -143,6 +144,38 @@ $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_UNSAFE_RAW)
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_UNSAFE_RAW, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_UNSAFE_RAW);
 
+$token = Filter::filterInput(INPUT_POST, 'token', FILTER_UNSAFE_RAW);
+$userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+
+// 
+// Loging user in if twofactor is enabled and token is given and validated, if not: returns error message
+//
+if (!is_null($token) && !is_null($userid)) {
+    $user = new CurrentUser($faqConfig);
+    $user->getUserById($userid);
+    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
+        $tfa = new Twofactor($faqConfig);
+        $res = $tfa->validateToken($token, $userid);
+        if (!$res) {
+            $error = $PMF_LANG['msgTwofactorErrorToken'];
+            $action = 'twofactor';
+        } else {
+            $auth = true;
+            $user->twofactorSuccess();
+            require 'header.php';
+            require 'dashboard.php';
+            exit();
+        }
+    } else {
+        $error = $PMF_LANG['msgTwofactorErrorToken'];
+        $action = 'twofactor';
+    }
+}
+
+if(!isset($user)) {
+    $user = new CurrentUser($faqConfig);
+}
+
 //
 // Set username via SSO
 //
@@ -155,7 +188,6 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 // Login via local DB or LDAP or SSO
 //
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    $user = new CurrentUser($faqConfig);
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($faqremember ?? false);
     try {
@@ -169,6 +201,9 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 } else {
     // Try to authenticate with cookie information
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+    if(!$user->isLoggedIn()) {
+        $auth = null;
+    }
 }
 
 //
@@ -283,6 +318,14 @@ switch ($action) {
 
 // Header of the admin page including the navigation
 require 'header.php';
+
+
+if($action==='twofactor') {
+    $user->getUserById($userid);
+    $userid = $user->getUserId();
+    require 'twofactor.php';
+    exit();
+}
 
 $numRights = is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0;
 

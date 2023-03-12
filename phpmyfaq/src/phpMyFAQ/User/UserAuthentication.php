@@ -56,11 +56,15 @@ class UserAuthentication
 
         // Local
         if ($this->user->login($username, $password)) {
-            if ($this->user->getStatus() !== 'blocked') {
-                $this->user->setLoggedIn(true);
+            if ($user->getUserData('twofactor_enabled') == 1 && (is_null($token)) === true) {
+                $action = 'twofactor';
             } else {
-                $this->user->setLoggedIn(false);
-                throw new Exception(Translation::get('ad_auth_fail') . ' (' . $username . ')');
+                if ($this->user->getStatus() !== 'blocked') {
+                    $this->user->setLoggedIn(true);
+                } else {
+                    $this->user->setLoggedIn(false);
+                    throw new Exception(Translation::get('ad_auth_fail') . ' (' . $username . ')');
+                }
             }
         } else {
             throw new Exception(Translation::get('ad_auth_fail'));

@@ -35,7 +35,8 @@
     "ext-xmlwriter": "*",
     "symfony/mailer": "^5.4",
     "guzzlehttp/guzzle": "^7.5",
-    "league/flysystem": "^2.5"
+    "league/flysystem": "^2.5",
+    "robthree/twofactorauth": "1.8.2"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",

@@ -96,6 +96,41 @@
           </div>
         </div>
       </div>
+      
+              <div class="form-group row">
+            <div class="offset-4 col-lg-8">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#twofactor_config">{{ msgTwofactorConfig }}</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-4 col-lg-8">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="newsecret" name="newsecret">
+                    <label class="form-check-label" for="newsecret"> {{ msgTwofactorNewSecret }} </label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="twofactor_config" tabindex="-1" role="dialog" aria-labelledby="twofactor_configLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100" id="twofactor_configLabel">{{ msgTwofactorConfigModelTitle }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <center><img class="align-self-center mr-3" src="{{ qr_code_secret }}" width="200" height="200" alt="{{ qr_code_secret_alt }}" ></center><br/>
+                        <center><p>Secret-Key: {{ twofactor_secret }}<br/></p></center>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ msgSave }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
       <div class="row mb-2">
         <div class="col-lg-12 text-right">

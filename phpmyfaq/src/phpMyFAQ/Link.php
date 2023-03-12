@@ -113,6 +113,7 @@ class Link
         'sitemap' => 1,
         'thankyou' => 1,
         'translate' => 1,
+        'twofactor' => 1,
         'ucp' => 1,
         'writecomment' => 1,
         '404' => 1
