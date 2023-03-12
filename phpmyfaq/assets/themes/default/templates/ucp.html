@@ -97,6 +97,15 @@
         </div>
       </div>
       
+      <div class="row mb-2">
+        <div class="offset-4 col-lg-8">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="twofactor_enabled" name="twofactor_enabled" {{ checked_twofactor_enabled }} />
+            <label class="form-check-label" for="twofactor_enabled"> {{ msgTwofactorEnabled }} </label>
+          </div>
+        </div>
+      </div>
+      
               <div class="form-group row">
             <div class="offset-4 col-lg-8">
                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#twofactor_config">{{ msgTwofactorConfig }}</button>

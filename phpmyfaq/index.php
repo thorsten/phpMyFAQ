@@ -159,7 +159,7 @@ if (!is_null($token) && !is_null($userid)) {
             $action = 'twofactor';
         } else {
             $auth = true;
-            $user->twofactorSuccess();
+            $user->twoFactorSuccess();
         }
     } else {
         $error = $PMF_LANG['msgTwofactorErrorToken'];
