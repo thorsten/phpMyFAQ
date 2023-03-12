@@ -7,7 +7,7 @@
 ## What is phpMyFAQ?
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP
-8+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
+8.1+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
 WYSIWYG editor and a media manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
 supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
@@ -16,7 +16,7 @@ systems, Microsoft/Azure Active Directory and OpenLDAP support, and an easy-to-u
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 8 and up, you need a database as well. Supported databases are MySQL, MariaDB,
+phpMyFAQ is only supported on PHP 8.1 and up, you need a database as well. Supported databases are MySQL, MariaDB,
 Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as main search
 engine, you need Elasticsearch 6.x or later. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
@@ -159,9 +159,9 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
-## REST API v2.1
+## REST API v2.2
 
-The REST API v2.1 documentation is located [here in this repository](API.md) and on
+The REST API v2.2 documentation is located [here in this repository](API.md) and on
 [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
 ## License
