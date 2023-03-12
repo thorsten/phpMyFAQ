@@ -35,7 +35,7 @@ class Html5 extends Export
     /**
      * XMLWriter object.
      */
-    private XMLWriter $xml;
+    private readonly XMLWriter $xml;
 
     /**
      * Constructor.
@@ -101,10 +101,10 @@ class Html5 extends Export
 
                 $this->xml->startElement('h2');
                 $this->xml->writeAttribute('id', "entry-" . $data['solution_id']);
-                $this->xml->text(strip_tags($data['topic']));
+                $this->xml->text(strip_tags((string) $data['topic']));
                 $this->xml->endElement();
                 $this->xml->startElement('p');
-                $this->xml->writeCdata(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
+                $this->xml->writeCdata(html_entity_decode((string) $data['content'], ENT_QUOTES, 'UTF-8'));
                 $this->xml->endElement();
                 $this->xml->writeElement('p', Translation::get('msgAuthor') . ': ' . $data['author_email']);
                 $this->xml->writeElement(

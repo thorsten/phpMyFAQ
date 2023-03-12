@@ -32,116 +32,84 @@ class Pagination
 
     /**
      * Base url used for links.
-     *
-     * @var string
      */
     protected string $baseUrl = '';
 
     /**
      * Total items count.
-     *
-     * @var int
      */
     protected int $total = 0;
 
     /**
      * Items per page count.
-     *
-     * @var int
      */
     protected int $perPage = 0;
 
     /**
      * Number of adjacent links.
-     *
-     * @var int
      */
     protected int $adjacent = 4;
 
     /**
      * Default link template.
      * Possible variables are {LINK}, {TITLE}, {TEXT}.
-     *
-     * @var string
      */
     protected string $linkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Current page link template.
-     *
-     * @var string
      */
     protected string $currentPageLinkTpl =
         '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Next page link template.
-     *
-     * @var string
      */
     protected string $nextPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>';
 
     /**
      * Previous page link template.
-     *
-     * @var string
      */
     protected string $prevPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>';
 
     /**
      * First page link template.
-     *
-     * @var string
      */
     protected string $firstPageLinkTpl =
         '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
 
     /**
      * Last page link template.
-     *
-     * @var string
      */
     protected string $lastPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>';
 
     /**
      * Layout template.
-     *
-     * @var string
      */
     protected string $layoutTpl = '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>';
 
     /**
      * Current page index.
-     *
-     * @var int
      */
     protected int $currentPage = 0;
 
     /**
      * Param name to associate the page numbers to.
-     *
-     * @var string
      */
     protected string $pageParamName = 'page';
 
     /**
      * SEO name.
-     *
-     * @var string
      */
     protected string $seoName = '';
 
     /**
      * Use rewritten URLs without GET variables.
-     *
-     * @var bool
      */
     protected bool $useRewrite = false;
 
     /**
      * Rewritten URL format for page param.
-     *
-     * @var string
      */
     protected string $rewriteUrl = '';
 
@@ -315,7 +283,6 @@ class Pagination
      *
      * @param string $url url
      * @param int    $page page number
-     * @return string
      */
     protected function renderUrl(string $url, int $page): string
     {

@@ -36,7 +36,6 @@ class Sqlite3 extends SearchDatabase implements DatabaseInterface
      *
      * @param  string $searchTerm Search ter
      * @throws Exception
-     * @return mixed
      */
     public function search(string $searchTerm): mixed
     {

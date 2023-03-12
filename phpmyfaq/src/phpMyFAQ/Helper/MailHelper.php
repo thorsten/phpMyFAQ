@@ -32,12 +32,12 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 class MailHelper
 {
-    private Mail $mail;
+    private readonly Mail $mail;
 
     /**
      * MailHelper constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->mail = new Mail($this->config);
     }

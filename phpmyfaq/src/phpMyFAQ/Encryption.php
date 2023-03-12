@@ -60,10 +60,6 @@ class Encryption
      * If the given encryption-type is not supported, selectEnc() will return an
      * object without database access and with an error message. See the
      * of the error() method for further details.
-     *
-     * @param string        $encType
-     * @param Configuration $config
-     * @return Encryption
      */
     public static function selectEnc(string $encType, Configuration $config): Encryption
     {

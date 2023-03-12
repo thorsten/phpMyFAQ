@@ -89,7 +89,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $up = sprintf('<i class="fa fa-level-up" aria-hidden="true"></i> %s', $link->toHtmlAnchor());
     }
 
-    if (!is_null($categoryData->getImage()) && strlen($categoryData->getImage()) > 0) {
+    if (!is_null($categoryData->getImage()) && strlen((string) $categoryData->getImage()) > 0) {
         $template->parseBlock(
             'mainPageContent',
             'categoryImage',

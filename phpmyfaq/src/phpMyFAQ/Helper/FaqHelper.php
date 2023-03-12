@@ -136,7 +136,7 @@ class FaqHelper extends Helper
     {
         if ($this->config->get('main.enableMarkdownEditor')) {
             $parseDown = new ParsedownExtra();
-            return Utils::chopString(strip_tags($parseDown->text($answer)), $numWords);
+            return Utils::chopString(strip_tags((string) $parseDown->text($answer)), $numWords);
         } else {
             return Utils::chopString(strip_tags($answer), $numWords);
         }
@@ -145,7 +145,6 @@ class FaqHelper extends Helper
     /**
      * Creates an overview with all categories with their FAQs.
      *
-     * @param string $language
      * @throws Exception
      */
     public function createOverview(Category $category, Faq $faq, string $language = ''): string

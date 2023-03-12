@@ -142,7 +142,7 @@ if (
         $faqData['changed'] = Filter::filterInput(INPUT_POST, 'changed', FILTER_UNSAFE_RAW);
         $faqData['dateStart'] = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_UNSAFE_RAW);
         $faqData['dateEnd'] = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_UNSAFE_RAW);
-        $faqData['content'] = html_entity_decode($faqData['content']);
+        $faqData['content'] = html_entity_decode((string) $faqData['content']);
     } elseif ('editentry' === $action) {
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
@@ -377,7 +377,7 @@ if (
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
-                                           value="<?= htmlspecialchars($faqData['title']) ?>">
+                                           value="<?= htmlspecialchars((string) $faqData['title']) ?>">
                                 </div>
 
                                 <!-- Answer -->
@@ -466,7 +466,7 @@ if (
                                                     );
                                                     if ($user->perm->hasPermission($currentUserId, 'delattachment')) {
                                                         printf(
-                                                            '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
+                                                            '<a class="badge bg-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
                                                             $faqData['id'],
                                                             $att->getId(),
                                                             $faqData['lang']

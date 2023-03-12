@@ -26,7 +26,7 @@ $httpHelper = new HttpHelper();
 
 $privacyUrl = $faqConfig->get('main.privacyURL');
 
-if (strlen($privacyUrl) > 0) {
+if (strlen((string) $privacyUrl) > 0) {
     $redirectUrl = $privacyUrl;
 } else {
     $redirectUrl = $faqConfig->get('main.referenceURL');

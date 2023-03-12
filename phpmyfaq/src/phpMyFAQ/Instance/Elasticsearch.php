@@ -166,7 +166,6 @@ class Elasticsearch
     /**
      * Returns the current mapping.
      *
-     * @return \Elastic\Elasticsearch\Response\Elasticsearch|Promise
      * @throws Exception
      */
     public function getMapping(): \Elastic\Elasticsearch\Response\Elasticsearch|Promise
@@ -181,7 +180,6 @@ class Elasticsearch
     /**
      * Deletes the Elasticsearch index.
      *
-     * @return object
      * @throws Exception
      */
     public function dropIndex(): object
@@ -197,7 +195,6 @@ class Elasticsearch
      * Indexing of a FAQ
      *
      * @param string[] $faq
-     * @return object
      */
     public function index(array $faq): object
     {
@@ -216,7 +213,7 @@ class Elasticsearch
 
         try {
             return $this->client->index($params)->asObject();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException) {
             //return ['error' => $e->getMessage()];
         }
     }
@@ -249,7 +246,7 @@ class Elasticsearch
                 'id' => $faq['id'],
                 'lang' => $faq['lang'],
                 'question' => $faq['title'],
-                'answer' => strip_tags($faq['content']),
+                'answer' => strip_tags((string) $faq['content']),
                 'keywords' => $faq['keywords'],
                 'category_id' => $faq['category_id']
             ];

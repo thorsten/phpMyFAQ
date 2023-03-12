@@ -52,7 +52,7 @@ $inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_UNSAFE_RAW);
 $inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_UNSAFE_RAW);
 
 if (!is_null($inputTag)) {
-    $inputTag = str_replace(' ', '', $inputTag);
+    $inputTag = str_replace(' ', '', (string) $inputTag);
     $inputTag = str_replace(',,', ',', $inputTag);
 }
 
@@ -148,10 +148,10 @@ if (!is_null($inputTag) && '' !== $inputTag) {
 //
 if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     if (!is_null($inputSearchTerm)) {
-        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($inputSearchTerm));
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $inputSearchTerm));
     }
     if (!is_null($searchTerm)) {
-        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($searchTerm));
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $searchTerm));
     }
 
     $faqSearch->setCategory($category);
@@ -172,7 +172,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
 
     $faqSearchResult->reviewResultSet($searchResults);
 
-    $inputSearchTerm = stripslashes($inputSearchTerm);
+    $inputSearchTerm = stripslashes((string) $inputSearchTerm);
     try {
         $faqSearch->logSearchTerm($inputSearchTerm);
     } catch (Exception $exception) {

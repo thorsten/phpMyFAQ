@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (!$faqConfig->get('security.enableRegistration')) {
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname((string) $_SERVER['SCRIPT_NAME']));
     exit();
 }
 

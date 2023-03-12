@@ -109,9 +109,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
-     *
-     * @param string $string
-     * @return string
      */
     public function escape(string $string): string
     {
@@ -121,9 +118,6 @@ class Mysqli implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      * This function fetches a result as an associative array.
-     *
-     * @param mixed $result
-     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -132,9 +126,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     *
-     * @param mixed $result
-     * @return false|mixed
      */
     public function fetchRow(mixed $result): mixed
     {
@@ -166,8 +157,6 @@ class Mysqli implements DatabaseDriver
      * Fetch a result row as an object.
      * This function fetches a result row as an object.
      *
-     * @param mixed $result
-     * @return mixed
      * @throws Exception
      */
     public function fetchObject(mixed $result): mixed
@@ -177,8 +166,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Number of rows in a result.
-     *
-     * @param mixed $result
      */
     public function numRows(mixed $result): int
     {

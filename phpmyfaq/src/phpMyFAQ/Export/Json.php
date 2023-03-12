@@ -69,7 +69,7 @@ class Json extends Export
                         'language' => $data['lang'],
                         'category' => $this->category->getPath($data['category_id'], ' >> '),
                         'keywords' => $data['keywords'],
-                        'question' => strip_tags($data['topic']),
+                        'question' => strip_tags((string) $data['topic']),
                         'answer' => Strings::htmlspecialchars($data['content']),
                         'author' => $data['author_name'],
                         'last_modified' => Date::createIsoDate($data['lastmodified'])

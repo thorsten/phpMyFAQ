@@ -41,7 +41,7 @@ class CategoryImage
      *
      * @param Configuration $config Configuration object
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 

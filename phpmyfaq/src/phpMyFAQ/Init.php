@@ -45,7 +45,7 @@ class Init
     public static function cleanRequest(): void
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
+            $_SERVER['HTTP_USER_AGENT'] = urlencode((string) $_SERVER['HTTP_USER_AGENT']);
         }
 
         // clean external variables
@@ -75,7 +75,6 @@ class Init
      * Removes XSS from an array.
      *
      * @param  array $data Array of data
-     * @return array
      */
     private static function removeXSSGPC(array $data): array
     {
@@ -104,7 +103,6 @@ class Init
      * Cleans a html string from some xss issues.
      *
      * @param string $string String
-     * @return string
      */
     private static function basicXSSClean(string $string): string
     {
@@ -223,7 +221,6 @@ class Init
      * Clean up a filename: if anything goes wrong, an empty string will be returned.
      *
      * @param string $filename Filename
-     * @return string
      */
     private static function basicFilenameClean(string $filename): string
     {

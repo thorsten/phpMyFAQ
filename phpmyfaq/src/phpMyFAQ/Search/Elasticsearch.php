@@ -30,10 +30,10 @@ use stdClass;
  */
 class Elasticsearch extends AbstractSearch implements SearchInterface
 {
-    private Client $client;
+    private readonly Client $client;
 
     /** @var string[] */
-    private array $esConfig;
+    private readonly array $esConfig;
 
     private string $language = '';
 
@@ -88,7 +88,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         try {
             $result = $this->client->search($searchParams)->asArray();
-        } catch (ClientResponseException | ServerResponseException $e) {
+        } catch (ClientResponseException | ServerResponseException) {
             $this->resultSet = [];
         }
 
@@ -172,7 +172,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         try {
             $result = $this->client->search($searchParams)->asArray();
-        } catch (ClientResponseException | ServerResponseException $e) {
+        } catch (ClientResponseException | ServerResponseException) {
             return [];
         }
 

@@ -236,7 +236,7 @@ class Strings
      * @param int $count
      * @return string|string[]|null
      */
-    public static function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, $limit = -1, &$count = 0)
+    public static function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, $limit = -1, &$count = 0): string|array|null
     {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

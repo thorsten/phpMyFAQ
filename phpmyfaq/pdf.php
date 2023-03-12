@@ -132,7 +132,7 @@ if (true === $getAll && $user->perm->hasPermission($user->getUserId(), 'export')
     $pdfFile = $pdf->generateFile($faq->faqRecord, $filename);
 }
 
-if (preg_match('/MSIE/i', $_SERVER['HTTP_USER_AGENT'])) {
+if (preg_match('/MSIE/i', (string) $_SERVER['HTTP_USER_AGENT'])) {
     $headers[] = 'Content-type: application/pdf';
     $headers[] = 'Content-Transfer-Encoding: binary';
     $headers[] = 'Content-Disposition: attachment; filename=' . $filename;

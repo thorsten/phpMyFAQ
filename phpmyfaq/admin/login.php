@@ -19,7 +19,7 @@
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Translation;
 
-if (isset($error) && 0 < strlen($error)) {
+if (isset($error) && 0 < strlen((string) $error)) {
     $message = sprintf(
         '<div class="alert alert-danger alert-dismissible fade show" role="alert">%s' .
         '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' .
@@ -32,7 +32,7 @@ if (isset($error) && 0 < strlen($error)) {
 if ($action === 'logout') {
     $message = Alert::success('ad_logout');
 }
-if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get(
+if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON') || !$faqConfig->get(
         'security.useSslForLogins'
     )) {
     ?>

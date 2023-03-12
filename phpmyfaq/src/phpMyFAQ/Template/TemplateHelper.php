@@ -27,12 +27,12 @@ use phpMyFAQ\Configuration;
  */
 class TemplateHelper
 {
-    private TemplateMetaData $meta;
+    private readonly TemplateMetaData $meta;
 
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->meta = new TemplateMetaData($this->config);
     }

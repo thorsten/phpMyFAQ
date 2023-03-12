@@ -31,7 +31,6 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 class Configuration
 {
-    /** @var array */
     public array $config = [];
 
     public Logger $logger;
@@ -83,7 +82,7 @@ class Configuration
             "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
             Database::getTablePrefix(),
             $this->tableName,
-            $this->getDb()->escape(trim($value)),
+            $this->getDb()->escape(trim((string) $value)),
             $this->getDb()->escape(trim($key))
         );
 
@@ -135,7 +134,7 @@ class Configuration
      */
     public function getDefaultLanguage(): string
     {
-        return str_replace(['language_', '.php'], '', $this->config['main.language']);
+        return str_replace(['language_', '.php'], '', (string) $this->config['main.language']);
     }
 
     /**
@@ -169,7 +168,7 @@ class Configuration
     {
         $defaultUrl = $this->get('main.referenceURL');
 
-        if (!str_ends_with($defaultUrl, '/')) {
+        if (!str_ends_with((string) $defaultUrl, '/')) {
             return $defaultUrl . '/';
         } else {
             return $defaultUrl;
@@ -361,7 +360,7 @@ class Configuration
             Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($name)),
-            $this->getDb()->escape(trim($value))
+            $this->getDb()->escape(trim((string) $value))
         );
 
         return $this->getDb()->query($insert);

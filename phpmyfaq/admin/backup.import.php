@@ -61,7 +61,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
         $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
         $backupData = fgets($handle, 65536);
         $versionFound = Strings::substr($backupData, 0, 9);
-        $versionExpected = '-- pmf' . substr($faqConfig->getVersion(), 0, 3);
+        $versionExpected = '-- pmf' . substr((string) $faqConfig->getVersion(), 0, 3);
         $queries = [];
 
         $fileName = $_FILES['userfile']['name'];

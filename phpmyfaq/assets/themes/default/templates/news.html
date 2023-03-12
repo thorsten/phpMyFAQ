@@ -1,87 +1,91 @@
-<section class="col-12">
-  <article>
-    <header>
-      <h3>{{ writeHeader }}</h3>
-    </header>
-    {{ mainPageContent }}
-  </article>
+<div class="row g-5">
+  <div class="col-md-8">
+    <h2 class="pb-4 mb-4 border-bottom">{{ newsHeader }}</h2>
 
-  <ul id="tab" class="nav nav-tabs">
-    <li><a href="#authorInfo" data-bs-toggle="tab">{{ msgAboutThisNews }}</a></li>
-  </ul>
+    <article class="pmf-news-body pb-4 mb-4 border-bottom">{{ mainPageContent }}</article>
 
-  <div class="tab-content">
-    <div class="tab-pane active" id="authorInfo">
-      {{ writeDateMsg }}<br />{{ writeAuthor }}<br />{{ editThisEntry }}
+    <p class="d-print-none">{{ writeCommentMsg }}</p>
+    <div id="pmf-comment-add-success"></div>
+    <div class="d-print-none" id="comments">{{ renderComments }}</div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="position-sticky" style="top: 2rem">
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">{{ writeDateMsg }}</li>
+          <li class="list-group-item">{{ writeAuthor }}</li>
+          <li class="list-group-item">{{ editThisEntry }}</li>
+        </ul>
+      </div>
     </div>
   </div>
+</div>
 
-  <p>{{ writeCommentMsg }}</p>
-
-  <!-- Comment Form -->
-  <a name="comment"></a>
-  <div id="commentForm" class="d-none mb-2">
-    <form id="formValues" action="#" method="post" accept-charset="utf-8">
-      <input type="hidden" name="newsId" id="newsId" value="{{ newsId }}" />
-      <input type="hidden" name="lang" id="lang" value="{{ newsLang }}" />
-      <input type="hidden" name="type" id="type" value="news" />
-
-      <div class="form-row">
-        <div class="col">
-          <label class="sr-only" for="user">{{ msgNewContentName }}</label>
-          <input
-            type="text"
-            name="user"
-            id="user"
-            class="form-control"
-            required
-            placeholder="{{ msgNewContentName }}"
-            value="{{ defaultContentName }}"
-          />
-        </div>
-        <div class="col">
-          <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
-          <input
-            type="email"
-            name="mail"
-            id="mail"
-            class="form-control"
-            required
-            placeholder="{{ msgNewContentMail }}"
-            value="{{ defaultContentMail }}"
-          />
-        </div>
+<div class="modal fade" id="pmf-modal-add-comment" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="commentModalLabel">{{ msgCommentHeader }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ msgCancel }}"></button>
       </div>
-      <div class="form-row">
-        <div class="col">
-          <textarea
-            rows="10"
-            name="comment_text"
-            id="comment_text"
-            class="form-control"
-            placeholder="{{ msgYourComment }}"
-          ></textarea>
-        </div>
-      </div>
+      <div class="modal-body">
+        <div id="pmf-add-comment-error"></div>
 
-      {{ captchaFieldset }}
+        <form id="pmf-add-comment-form" action="#" method="post" class="needs-validation" novalidate>
+          <input type="hidden" name="newsId" id="newsId" value="{{ newsId }}" />
+          <input type="hidden" name="lang" id="lang" value="{{ newsLang }}" />
+          <input type="hidden" name="type" id="type" value="news" />
+          {{ csrfInput }}
 
-      <div class="text-right">
-        <button class="btn btn-primary" id="submitcomment" type="submit">{{ msgNewContentSubmit }}</button>
+          <div class="row mb-2">
+            <div class="col">
+              <label class="sr-only" for="user">{{ msgNewContentName }}</label>
+              <input
+                type="text"
+                name="user"
+                id="user"
+                class="form-control"
+                required
+                placeholder="{{ msgNewContentName }}"
+                value="{{ defaultContentName }}"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
+              <input
+                type="email"
+                name="mail"
+                id="mail"
+                class="form-control"
+                required
+                placeholder="{{ msgNewContentMail }}"
+                value="{{ defaultContentMail }}"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <textarea
+                rows="10"
+                name="comment_text"
+                id="comment_text"
+                class="form-control"
+                required
+                placeholder="{{ msgYourComment }}"
+              ></textarea>
+            </div>
+          </div>
+
+          {{ captchaFieldset }}
+        </form>
       </div>
-    </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ msgCancel }}</button>
+        <button type="button" class="btn btn-primary" id="pmf-button-save-comment">{{ msgNewContentSubmit }}</button>
+      </div>
+    </div>
   </div>
-  <!-- /Comment Form -->
-
-  <div id="loader"></div>
-  <div class="d-print-none" id="comments">{{ renderComments }}</div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      $('.show-comment-form').on('click', (event) => {
-        event.preventDefault();
-        $('#commentForm').removeClass('d-none');
-      });
-    });
-  </script>
-</section>
+</div>

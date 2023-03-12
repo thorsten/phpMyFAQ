@@ -38,7 +38,7 @@ $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
     try {
         $captcha->drawCaptchaImage();
-    } catch (Exception $e) {
+    } catch (Exception) {
     }
     exit;
 }

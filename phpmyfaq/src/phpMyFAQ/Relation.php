@@ -30,7 +30,7 @@ class Relation
     /**
      * Relation constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 

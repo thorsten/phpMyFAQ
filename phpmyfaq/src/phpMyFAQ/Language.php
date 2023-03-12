@@ -43,7 +43,7 @@ class Language
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
@@ -140,7 +140,7 @@ class Language
         }
         // Get the language from the session
         if (isset($_SESSION['lang']) && self::isASupportedLanguage($_SESSION['lang'])) {
-            $detectedLang['session'] = trim($_SESSION['lang']);
+            $detectedLang['session'] = trim((string) $_SESSION['lang']);
         }
         // Get the language from the config
         $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
@@ -202,7 +202,7 @@ class Language
             // Simplified language syntax detection: xx[-yy]
             preg_match_all(
                 '/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i',
-                $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+                (string) $_SERVER['HTTP_ACCEPT_LANGUAGE'],
                 $matches
             );
 

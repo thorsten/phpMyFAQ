@@ -143,7 +143,7 @@ class Mail
     /**
      * Mailer string.
      */
-    private string $mailer;
+    private readonly string $mailer;
 
     /**
      * Recipient of the optional notification.
@@ -170,7 +170,7 @@ class Mail
      */
     private mixed $to = [];
 
-    private Configuration $config;
+    private readonly Configuration $config;
 
     /*
      * Default constructor.

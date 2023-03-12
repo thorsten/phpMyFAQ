@@ -27,13 +27,13 @@ use SodiumException;
  */
 class Backup
 {
-    public const BACKUP_TYPE_DATA = 'data';
-    public const BACKUP_TYPE_LOGS = 'logs';
+    final public const BACKUP_TYPE_DATA = 'data';
+    final public const BACKUP_TYPE_LOGS = 'logs';
 
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config, private DatabaseHelper $databaseHelper)
+    public function __construct(private readonly Configuration $config, private readonly DatabaseHelper $databaseHelper)
     {
     }
 
@@ -82,9 +82,9 @@ class Backup
             $row = $this->config->getDb()->fetchObject($result);
 
             return sodium_crypto_auth_verify(
-                sodium_hex2bin($row->authcode),
+                sodium_hex2bin((string) $row->authcode),
                 $backup,
-                sodium_hex2bin($row->authkey)
+                sodium_hex2bin((string) $row->authkey)
             );
         }
 

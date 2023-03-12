@@ -536,9 +536,6 @@ class Installer
 
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
-     *
-     * @param string $databaseType
-     * @return void
      */
     public function checkPreUpgrade(string $databaseType): void
     {
@@ -679,7 +676,7 @@ class Installer
             $dbSetup['dbType'] = $setup['dbType'];
         }
         if (!is_null($dbSetup['dbType'])) {
-            $dbSetup['dbType'] = trim($dbSetup['dbType']);
+            $dbSetup['dbType'] = trim((string) $dbSetup['dbType']);
             if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
                 printf(
                     '<p class="alert alert-danger"><strong>Error:</strong> Invalid server type: %s</p>',
@@ -900,7 +897,7 @@ class Installer
             System::renderFooter(true);
         }
 
-        if (strlen($password) <= 7 || strlen($passwordRetyped) <= 7) {
+        if (strlen((string) $password) <= 7 || strlen((string) $passwordRetyped) <= 7) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
                 'short. Please set your password and your retyped password with a minimum of 8 characters.</p>';
             System::renderFooter(true);

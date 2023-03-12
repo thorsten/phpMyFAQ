@@ -76,9 +76,6 @@ class CategoryEntity
         return $this->groupId;
     }
 
-    /**
-     * @param int $groupId
-     */
     public function setGroupId(int $groupId): CategoryEntity
     {
         $this->groupId = $groupId;
@@ -91,9 +88,6 @@ class CategoryEntity
         return (int)$this->id;
     }
 
-    /**
-     * @param int $id
-     */
     public function setId(int $id): CategoryEntity
     {
         $this->id = $id;

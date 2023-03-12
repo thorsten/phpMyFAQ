@@ -74,6 +74,22 @@ $faqSession = new Session($faqConfig);
   </section>
 <?php endif; ?>
 
+<section class="row">
+    <div class="col">
+        <div class="alert alert-danger" role="alert">
+            <h5 class="alert-heading">
+                Attention!
+            </h5>
+            <p>
+                phpMyFAQ is currently in development (<?= System::getVersion() ?>) and therefore not yet ready for
+                production. Please report any bugs here:
+                <a target="_blank" href="https://github.com/thorsten/phpMyFAQ/issues" class="alert-link">Report issues on Github</a>.
+                Thank you!
+            </p>
+        </div>
+    </div>
+</section>
+
 <section class="row masonry-grid">
     <div class="col-sm-6 col-lg-3 mb-4">
       <div class="card mb-4">

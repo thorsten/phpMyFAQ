@@ -29,12 +29,14 @@ class News
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
     /**
      * Function for generating the HTML5 code for the current news.
+     *
+     * @todo move method to a helper class
      *
      * @param bool $showArchive Show archived news
      * @param bool $active Show active news
@@ -61,26 +63,15 @@ class News
             }
 
             $output .= sprintf(
-                '<h6%s><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
-                ' class="pmf-news-heading"',
+                '<h5%s><a id="news_%d" href="%s">%s</a> <i aria-hidden="true" class="fa fa-caret-right"></i></h6>',
+                ' class="mt-3 pmf-news-heading"',
                 $item['id'],
                 Strings::htmlentities($oLink->toString()),
                 Strings::htmlentities($item['header'])
             );
 
-            $output .= sprintf('%s', $item['content']);
-
-            if (strlen($item['link']) > 1) {
-                $output .= sprintf(
-                    '<br>%s <a href="%s" target="_%s">%s</a>',
-                    Translation::get('msgInfo'),
-                    Strings::htmlentities($item['link']),
-                    $item['target'],
-                    $item['linkTitle']
-                );
-            }
-
-            $output .= sprintf('<small class="text-muted">%s</small>', $date->format($item['date']));
+            $output .= sprintf('<div class="mb-1">%s</div>', strip_tags((string) $item['content']));
+            $output .= sprintf('<div class="small text-muted">%s</div>', $date->format($item['date']));
         }
 
         return ('' == $output) ? Translation::get('msgNoNews') : $output;
@@ -101,8 +92,7 @@ class News
         $now = date('YmdHis');
 
         $query = sprintf(
-            "
-            SELECT
+            "SELECT
                 *
             FROM
                 %sfaqnews
@@ -212,18 +202,16 @@ class News
      * @param bool $admin Is admin
      * @return array<mixed>
      */
-    public function getNewsEntry($id, $admin = false): array
+    public function getNewsEntry(int $id, bool $admin = false): array
     {
         $news = [];
 
-        $query = sprintf("SELECT
-                *
-            FROM
-                %sfaqnews
-            WHERE
-                id = %d
-            AND
-                lang = '%s'", Database::getTablePrefix(), $id, $this->config->getLanguage()->getLanguage());
+        $query = sprintf(
+            "SELECT * FROM %sfaqnews WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $id,
+            $this->config->getDb()->escape($this->config->getLanguage()->getLanguage())
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -364,17 +352,13 @@ class News
      */
     public function deleteNews(int $id): bool
     {
-        $query = sprintf("DELETE FROM
-                %sfaqnews
-            WHERE
-                id = %d
-            AND
-                lang = '%s'", Database::getTablePrefix(), $id, $this->config->getLanguage()->getLanguage());
+        $query = sprintf(
+            "DELETE FROM %sfaqnews WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $id,
+            $this->config->getDb()->escape($this->config->getLanguage()->getLanguage())
+        );
 
-        if (!$this->config->getDb()->query($query)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->config->getDb()->query($query);
     }
 }

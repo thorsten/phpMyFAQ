@@ -41,28 +41,28 @@ class HttpStreamer
      *
      * @var string
      */
-    public const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
+    final public const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
 
     /**
      * HTTP content disposition inline constant.
      *
      * @var string
      */
-    public const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
+    final public const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
 
     /**
      * Disposition attachment constant.
      *
      * @var string
      */
-    public const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
+    final public const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
 
     /**
      * Disposition inline constant.
      *
      * @var string
      */
-    public const EXPORT_DISPOSITION_INLINE = 'inline';
+    final public const EXPORT_DISPOSITION_INLINE = 'inline';
 
     /**
      * HTTP Content Disposition.
@@ -72,7 +72,7 @@ class HttpStreamer
     /**
      * HTTP streaming data length.
      */
-    private int $size;
+    private readonly int $size;
 
     /**
      * Constructor.
@@ -80,7 +80,7 @@ class HttpStreamer
      * @param string $type Type
      * @param string $content Content
      */
-    public function __construct(private string $type, private string $content)
+    public function __construct(private readonly string $type, private readonly string $content)
     {
         $this->size = strlen($this->content);
     }
@@ -162,7 +162,7 @@ class HttpStreamer
         header('Content-Type: ' . $mimeType);
         if (
             ($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT)
-            && isset($_SERVER['HTTP_USER_AGENT']) && !(!str_contains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
+            && isset($_SERVER['HTTP_USER_AGENT']) && !(!str_contains((string) $_SERVER['HTTP_USER_AGENT'], 'MSIE'))
         ) {
             header('Content-Type: application/force-download');
         }

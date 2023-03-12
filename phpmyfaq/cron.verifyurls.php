@@ -103,7 +103,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
             '%0' . strlen((string)$tot) . 'd',
             $i
         ) . '/' . $tot . '. Checking ' . $_r['solution_id'] . ' (' . Utils::makeShorterText(
-            strip_tags($_r['title']),
+            strip_tags((string) $_r['title']),
             8
         ) . '):';
         $start = microtime(true);

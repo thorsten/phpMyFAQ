@@ -222,7 +222,7 @@ $faqSession->setCurrentUser($user);
 // Note: do not track internal calls
 $internal = false;
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    $internal = (str_starts_with($_SERVER['HTTP_USER_AGENT'], 'phpMyFAQ%2F'));
+    $internal = (str_starts_with((string) $_SERVER['HTTP_USER_AGENT'], 'phpMyFAQ%2F'));
 }
 if (!$internal) {
     if (is_null($sidGet) && is_null($sidCookie)) {
@@ -349,7 +349,7 @@ if (!is_null($id)) {
     $id = '';
     $title = ' - ' . System::getPoweredByString();
     $keywords = '';
-    $metaDescription = str_replace('"', '', $faqConfig->get('main.metaDescription'));
+    $metaDescription = str_replace('"', '', (string) $faqConfig->get('main.metaDescription'));
 }
 
 //
@@ -360,24 +360,22 @@ if (!is_null($solutionId)) {
     $title = ' - ' . System::getPoweredByString();
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
-    if (is_array($faqData)) {
-        $id = $faqData['id'];
-        $lang = $faqData['lang'];
-        $title = ' - ' . $faq->getRecordTitle($id);
-        $keywords = ',' . $faq->getRecordKeywords($id);
-        $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags($faqData['content']), 12));
-        $url = sprintf(
-            '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
-            Strings::htmlentities($faqConfig->getDefaultUrl()),
-            $sids,
-            $faqData['category_id'],
-            $id,
-            $lang
-        );
-        $faqLink = new Link($url, $faqConfig);
-        $faqLink->itemTitle = Strings::htmlentities($faqData['question']);
-        $currentPageUrl = $faqLink->toString(true);
-    }
+    $id = $faqData['id'];
+    $lang = $faqData['lang'];
+    $title = ' - ' . $faq->getRecordTitle($id);
+    $keywords = ',' . $faq->getRecordKeywords($id);
+    $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags((string) $faqData['content']), 12));
+    $url = sprintf(
+        '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+        Strings::htmlentities($faqConfig->getDefaultUrl()),
+        $sids,
+        $faqData['category_id'],
+        $id,
+        $lang
+    );
+    $faqLink = new Link($url, $faqConfig);
+    $faqLink->itemTitle = Strings::htmlentities($faqData['question']);
+    $currentPageUrl = $faqLink->toString(true);
 }
 
 //
@@ -498,7 +496,7 @@ $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
 $categoryHelper->setCategoryRelation($categoryRelation);
 
-$keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
+$keywordsArray = array_merge(explode(',', (string) $keywords), explode(',', (string) $faqConfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
@@ -537,7 +535,7 @@ $tplMainPage = [
     'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),
     'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
     'version' => $faqConfig->getVersion(),
-    'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
+    'header' => Strings::htmlentities(str_replace('"', '', (string) $faqConfig->getTitle())),
     'metaTitle' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle() . $title)),
     'metaDescription' => Strings::htmlentities($metaDescription ?? ''),
     'metaKeywords' => Strings::htmlentities($keywords),

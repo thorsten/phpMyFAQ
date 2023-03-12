@@ -148,7 +148,6 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
      * @return mixed
      */
     public function fetchObject(mixed $result)
@@ -159,7 +158,6 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row.
      *
-     * @param mixed $result
      * @return false|mixed
      */
     public function fetchRow(mixed $result)

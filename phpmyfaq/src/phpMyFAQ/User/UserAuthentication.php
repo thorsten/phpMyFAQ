@@ -12,21 +12,15 @@ class UserAuthentication
 {
     private bool $rememberMe = false;
 
-    public function __construct(private Configuration $configuration, private CurrentUser $user)
+    public function __construct(private readonly Configuration $configuration, private readonly CurrentUser $user)
     {
     }
 
-    /**
-     * @return bool
-     */
     public function isRememberMe(): bool
     {
         return $this->rememberMe;
     }
 
-    /**
-     * @param bool $rememberMe
-     */
     public function setRememberMe(bool $rememberMe): void
     {
         $this->rememberMe = $rememberMe;
@@ -36,9 +30,6 @@ class UserAuthentication
      * Authenticates a user with a given username and password against
      * LDAP, SSO or local database.
      *
-     * @param string $username
-     * @param string $password
-     * @return array
      * @throws Exception
      */
     public function authenticate(string $username, string $password): array

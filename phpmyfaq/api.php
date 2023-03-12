@@ -144,7 +144,7 @@ switch ($action) {
             if ($faqSearchResult->getNumberOfResults() > 0) {
                 $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
                 foreach ($faqSearchResult->getResultSet() as $data) {
-                    $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+                    $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, 'utf-8');
                     $data->answer = Utils::makeShorterText($data->answer, 12);
                     $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
                     $result[] = $data;
@@ -188,7 +188,7 @@ switch ($action) {
             break;
         }
 
-        $postData = json_decode(file_get_contents('php://input'), true);
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($postData['parent-id'], FILTER_VALIDATE_INT);
@@ -433,7 +433,7 @@ switch ($action) {
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $postData = json_decode(file_get_contents('php://input'), true);
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
@@ -498,7 +498,7 @@ switch ($action) {
         break;
 
     case 'login':
-        $postData = json_decode(file_get_contents('php://input'), true);
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
         $faqUsername = Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS);
         $faqPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
 

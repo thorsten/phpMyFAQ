@@ -130,7 +130,6 @@ class Translation
 
     /**
      * Use mbstring extension if available and when possible
-     * @return void
      */
     public function setMultiByteLanguage(): void
     {

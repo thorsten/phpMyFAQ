@@ -25,6 +25,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\News;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -76,7 +77,7 @@ $newsContent = $oGlossary->insertItemsIntoContent($newsContent);
 $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
 
 // Add information link if existing
-if (strlen($news['link']) > 0) {
+if (strlen((string) $news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
         Translation::get('msgInfo'),
@@ -106,7 +107,10 @@ if (
 ) {
     $commentMessage = Translation::get('msgWriteNoComment');
 } else {
-    $commentMessage = sprintf('<a href="#" class="show-comment-form">%s</a>', Translation::get('newsWriteComment'));
+    $commentMessage = sprintf(
+        '<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
+        Translation::get('newsWriteComment')
+    );
 }
 
 // date of news entry
@@ -127,8 +131,8 @@ $template->parse(
     'mainPageContent',
     [
         'writeNewsHeader' => $newsMainHeader,
-        'writeHeader' => Strings::htmlentities($newsHeader),
-        'mainPageContent' => Strings::htmlentities($newsContent),
+        'newsHeader' => Strings::htmlentities($newsHeader),
+        'mainPageContent' => $newsContent,
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
         'writeAuthor' => ($news['active'] && (!$expired)) ? Translation::get('msgAuthor') . ': ' .
@@ -144,16 +148,10 @@ $template->parse(
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment' => Translation::get('msgYourComment'),
+        'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
+        'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
         'renderComments' => $comment->getComments($newsId, CommentType::NEWS),
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $newsMainHeader
     ]
 );

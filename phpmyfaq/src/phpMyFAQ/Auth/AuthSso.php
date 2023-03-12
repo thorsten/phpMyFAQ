@@ -89,11 +89,11 @@ class AuthSso extends Auth implements AuthDriverInterface
             return false;
         } else {
             // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
-            $remoteUser = explode('\\', $_SERVER['REMOTE_USER']);
+            $remoteUser = explode('\\', (string) $_SERVER['REMOTE_USER']);
             if (is_array($remoteUser) && count($remoteUser) > 1) {
                 $user = $remoteUser[1];
             } else {
-                $remoteUser = explode('@', $_SERVER['REMOTE_USER']);
+                $remoteUser = explode('@', (string) $_SERVER['REMOTE_USER']);
                 if (is_array($remoteUser) && count($remoteUser) > 1) {
                     $user = $remoteUser[0];
                 } else {

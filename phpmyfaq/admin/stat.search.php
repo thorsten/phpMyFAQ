@@ -108,7 +108,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             <tbody>
     <?php
     $counter = $displayedCounter = 0;
-    $self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
+    $self = substr(__FILE__, strlen((string) $_SERVER['DOCUMENT_ROOT']));
 
     foreach ($searchesList as $searchItem) {
         if ($displayedCounter >= $perPage) {

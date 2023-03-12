@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       render: (item, value) => {
         const regex = new RegExp(value, 'gi');
         return addElement('div', {
-          classList: 'pmf-user-list-result',
+          classList: 'pmf-user-list-result border',
           innerHTML: item.label.replace(regex, function (match) {
             return `<strong>${match}</strong>`;
           }),

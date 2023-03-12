@@ -34,8 +34,6 @@ class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
     public function __construct(protected Configuration $config)
     {
@@ -45,10 +43,6 @@ class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
      * Renders the captcha check.
      *
      * @param BuiltinCaptcha $captcha
-     * @param string         $action
-     * @param string         $label
-     * @param bool           $auth
-     * @return string
      */
     public function renderCaptcha(
         CaptchaInterface $captcha,

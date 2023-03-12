@@ -12,6 +12,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-23
  */
+import { addElement } from '../../../../assets/src/utils';
 
 export const fetchUsers = async (userName) => {
   return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_list&q=${userName}`, {
@@ -24,13 +25,17 @@ export const fetchUsers = async (userName) => {
     referrerPolicy: 'no-referrer',
   })
     .then(async (response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
-      throw new Error('Network response was not ok.');
+      throw new Error('Network response was not ok: ', { cause: { response } });
     })
     .then((response) => {
       return response;
+    })
+    .catch(async (error) => {
+      const errorMessage = await error.cause.response.json();
+      console.error(errorMessage.error);
     });
 };
 

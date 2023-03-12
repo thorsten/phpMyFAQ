@@ -29,28 +29,28 @@ use stdClass;
 class Session
 {
     /** @var string Name of the "remember me" cookie */
-    public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
+    final public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
 
     /** @var string Name of the session cookie */
-    public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
+    final public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
     /** @var string Name of the session GET parameter */
-    public const PMF_GET_KEY_NAME_SESSIONID = 'sid';
+    final public const PMF_GET_KEY_NAME_SESSIONID = 'sid';
 
     /** @var string Azure AD session key */
-    public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
+    final public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
 
     /** @var string */
-    public const PMF_AZURE_AD_OAUTH_VERIFIER = 'phpmyfaq_azure_ad_oauth_verifier';
+    final public const PMF_AZURE_AD_OAUTH_VERIFIER = 'phpmyfaq_azure_ad_oauth_verifier';
 
     /** @var string */
-    public const PMF_AZURE_AD_JWT = 'phpmyfaq_azure_ad_jwt';
+    final public const PMF_AZURE_AD_JWT = 'phpmyfaq_azure_ad_jwt';
 
     private ?int $currentSessionId = null;
 
     private string $currentSessionKey;
 
-    private string $currentToken;
+    private readonly string $currentToken;
 
     private CurrentUser $currentUser;
 
@@ -78,7 +78,7 @@ class Session
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
@@ -331,7 +331,7 @@ class Session
             }
 
             // clean up as well
-            $remoteAddress = preg_replace('([^0-9a-z:\.]+)i', '', $remoteAddress);
+            $remoteAddress = preg_replace('([^0-9a-z:\.]+)i', '', (string) $remoteAddress);
 
             // Anonymize IP address
             $remoteAddress = $network->anonymizeIp($remoteAddress);
@@ -369,7 +369,7 @@ class Session
                     $remoteAddress . ';' .
                     str_replace(';', ',', $_SERVER['QUERY_STRING'] ?? '') . ';' .
                     str_replace(';', ',', $_SERVER['HTTP_REFERER'] ?? '') . ';' .
-                    str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
+                    str_replace(';', ',', urldecode((string) $_SERVER['HTTP_USER_AGENT'])) . ';' .
                     $_SERVER['REQUEST_TIME'] . ";\n";
 
                 $file = PMF_ROOT_DIR . '/data/tracking' . date('dmY');
@@ -398,7 +398,7 @@ class Session
     public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600): bool
     {
         $secure = false;
-        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
+        if (isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON') {
             $secure = true;
         }
 
@@ -407,7 +407,7 @@ class Session
             $sessionId,
             [
                 'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
-                'path' => dirname($_SERVER['SCRIPT_NAME']),
+                'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
                 'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => 'strict',
                 'secure' => $secure,

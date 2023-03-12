@@ -38,6 +38,7 @@ use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -122,7 +123,7 @@ if (
         $highlight
     ) > 3
 ) {
-    $highlight = str_replace("'", '´', $highlight);
+    $highlight = str_replace("'", '´', (string) $highlight);
     $highlight = str_replace(['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'], '', $highlight);
     $highlight = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
@@ -139,15 +140,15 @@ $linkVerifier = new LinkVerifier($faqConfig);
 $linkArray = $linkVerifier->getUrlPool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
-        $xpos = strpos($_url, 'index.php?action=faq');
+        $xpos = strpos((string) $_url, 'index.php?action=faq');
         if (!($xpos === false)) {
             // Get the FaqHelper link title
             $matches = [];
-            preg_match('/id=([\d]+)/ism', $_url, $matches);
+            preg_match('/id=([\d]+)/ism', (string) $_url, $matches);
             $_id = $matches[1];
             $_title = $faq->getRecordTitle($_id);
-            $_link = substr($_url, $xpos + 9);
-            if (!str_contains($_url, '&amp;')) {
+            $_link = substr((string) $_url, $xpos + 9);
+            if (!str_contains((string) $_url, '&amp;')) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
             $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
@@ -174,7 +175,7 @@ $multiCategories = $category->getCategoriesFromFaq($recordId);
 if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
     foreach ($multiCategories as $multiCat) {
         $path = $category->getPath($multiCat['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
-        if ('' === trim($path)) {
+        if ('' === trim((string) $path)) {
             continue;
         }
         $htmlAllCategories .= $path;
@@ -222,7 +223,7 @@ if (
     $commentMessage = Translation::get('msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
-        '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment" >%s</a>',
+        '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
         Translation::get('msgYouCan'),
         Translation::get('msgWriteComment')
     );
@@ -370,7 +371,7 @@ $template->parse(
             str_replace(
                 '%',
                 '%%',
-                $faqConfig->getDefaultUrl()
+                (string) $faqConfig->getDefaultUrl()
             ) . 'index.php?%saction=savevoting',
             $sids
         ),
@@ -396,6 +397,7 @@ $template->parse(
         'msgYourComment' => Translation::get('msgYourComment'),
         'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+        'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
         'renderComments' => $comment->getComments($recordId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),

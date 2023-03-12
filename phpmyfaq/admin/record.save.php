@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-23
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-23
  */
 
 use phpMyFAQ\Category;
@@ -26,6 +26,7 @@ use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -94,11 +95,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         if ($active === 'yes') {
             $logging->logAdmin($user, 'admin-publish-existing-faq ' . $recordId);
         }
+        ?>
 
-        printf(
-            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
-            Translation::get('ad_entry_aor')
-        );
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">
+                <i aria-hidden="true" class="fa fa-edit"></i>
+                <?= Translation::get('ad_entry_edit_1') ?>
+                <?= Translation::get('ad_entry_edit_2') ?>
+            </h1>
+        </div>
+
+        <?php
 
         $tagging = new Tags($faqConfig);
 
@@ -114,15 +121,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             'revision_id' => $revisionId,
             'active' => $active,
             'sticky' => (!is_null($sticky) ? 1 : 0),
-            'thema' => Filter::removeAttributes(html_entity_decode($question, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-            'content' => Filter::removeAttributes(html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+            'thema' => Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+            'content' => Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
             'keywords' => $keywords,
             'author' => $author,
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
-            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', $date),
-            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
-            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
+            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', (string) $date),
+            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000'),
+            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
@@ -130,7 +137,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // Create ChangeLog entry
         $changelog = new Changelog($faqConfig);
-        $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordLang, $revisionId);
+        $changelog->addEntry($recordId, $user->getUserId(), nl2br((string) $changed), $recordLang, $revisionId);
 
         // Create the visit entry
         $visits = new Visits($faqConfig);
@@ -160,7 +167,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // Insert the tags
         if ($tags != '') {
-            $tagging->saveTags($recordId, explode(',', trim($tags)));
+            $tagging->saveTags($recordId, explode(',', trim((string) $tags)));
         } else {
             $tagging->deleteTagsFromRecordId($recordId);
         }

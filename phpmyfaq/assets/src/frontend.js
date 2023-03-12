@@ -17,6 +17,7 @@ import 'bootstrap';
 import Masonry from 'masonry-layout';
 
 import { saveFormData } from './api';
+import { handleComments, handleSaveComment } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/cookie-consent';
@@ -42,6 +43,12 @@ const faqBody = document.querySelector('.pmf-faq-body');
 if (faqBody !== null) {
   calculateReadingTime();
 }
+
+//
+// Handle comments
+//
+handleSaveComment();
+handleComments();
 
 //
 // Masonry on startpage

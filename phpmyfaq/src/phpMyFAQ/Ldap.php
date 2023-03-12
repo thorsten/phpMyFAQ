@@ -37,7 +37,7 @@ class Ldap
      */
     public ?int $errno = null;
 
-    private array $ldapConfig;
+    private readonly array $ldapConfig;
 
     /**
      * An LDAP link identifier, returned by ldap_connect()
@@ -54,7 +54,7 @@ class Ldap
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->ldapConfig = $this->config->getLdapConfig();
     }

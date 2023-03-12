@@ -39,14 +39,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
   }
-
-  //
-  // Save comments
-  //
-  $('form#formValues').on('submit', function (e) {
-    e.preventDefault();
-    saveFormValues('savecomment', 'comment');
-    return false;
-  });
   */
 });

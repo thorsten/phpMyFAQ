@@ -36,12 +36,12 @@ class Search
 
     private ?\phpMyFAQ\Category $category = null;
 
-    private string $table;
+    private readonly string $table;
 
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->table = Database::getTablePrefix() . 'faqsearches';
     }
@@ -72,7 +72,6 @@ class Search
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
      * @throws Exception
-     * @return array
      */
     public function search(string $searchTerm, bool $allLanguages = true): array
     {

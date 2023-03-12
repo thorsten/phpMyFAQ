@@ -53,11 +53,11 @@ class Utils
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $dateToTest = $date;
         // Suppress first occurrences of '%'
-        if (substr($dateToTest, 0, 1) == '%') {
+        if (str_starts_with($dateToTest, '%')) {
             $dateToTest = substr($dateToTest, 1);
         }
         // Suppress last occurrences of '%'
-        if (substr($dateToTest, -1, 1) == '%') {
+        if (str_ends_with($dateToTest, '%')) {
             $dateToTest = substr($dateToTest, 0, strlen($dateToTest) - 1);
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss

@@ -50,7 +50,6 @@ class Database
      * Database factory.
      *
      * @param string $type Database management system type
-     * @return DatabaseDriver|null
      * @throws Exception
      */
     public static function factory(string $type): ?DatabaseDriver

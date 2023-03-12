@@ -58,17 +58,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
         foreach ($editData['edit'] as $key => $value) {
             // Remove forbidden characters
-            $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
+            $newConfigValues[$key] = str_replace($forbiddenValues, '', (string) $value);
             // Escape some values
             if (isset($escapeValues[$key])) {
                 $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
             }
-            $keyArray = array_values(explode('.', $key));
+            $keyArray = array_values(explode('.', (string) $key));
             $newConfigClass = array_shift($keyArray);
         }
 
         foreach ($oldConfigValues as $key => $value) {
-            $keyArray = array_values(explode('.', $key));
+            $keyArray = array_values(explode('.', (string) $key));
             $oldConfigClass = array_shift($keyArray);
             if (isset($newConfigValues[$key])) {
                 continue;
@@ -81,9 +81,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             }
         }
 
-        if (!is_null($editData)) {
-            $faqConfig->update($newConfigValues);
-        }
+        $faqConfig->update($newConfigValues);
 
         $faqConfig->getAll();
     }

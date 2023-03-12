@@ -34,7 +34,6 @@ class Sqlsrv extends SearchDatabase implements DatabaseInterface
      *
      * @param  string $searchTerm Search term
      * @throws \Exception
-     * @return mixed
      */
     public function search(string $searchTerm): mixed
     {

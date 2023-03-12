@@ -52,24 +52,19 @@ interface DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
-     *
-     * @param string $string
      */
     public function escape(string $string): string;
 
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
      *
-     * @return mixed
      */
     public function fetchObject(mixed $result): mixed;
 
     /**
      * Fetch a result row as an array.
      *
-     * @param mixed $result
      *
      * @return array
      */
@@ -77,8 +72,6 @@ interface DatabaseDriver
 
     /**
      * Fetch a result row.
-     * @param mixed $result
-     * @return false|mixed
      */
     public function fetchRow(mixed $result): mixed;
 
@@ -93,8 +86,6 @@ interface DatabaseDriver
 
     /**
      * Number of rows in a result.
-     *
-     * @param mixed $result
      */
     public function numRows(mixed $result): int;
 

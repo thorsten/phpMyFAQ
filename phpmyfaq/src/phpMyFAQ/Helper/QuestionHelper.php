@@ -35,7 +35,7 @@ class QuestionHelper
     /**
      * QuestionHelper constructor.
      */
-    public function __construct(private Configuration $config, private Category $category)
+    public function __construct(private readonly Configuration $config, private readonly Category $category)
     {
     }
 
@@ -51,7 +51,7 @@ class QuestionHelper
         $questionMail = 'User: ' . $questionData['username'] .
             ', mailto:' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
             ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
-            wordwrap($questionData['question'], 72) . "\n\n" .
+            wordwrap((string) $questionData['question'], 72) . "\n\n" .
             $this->config->getDefaultUrl() . 'admin/';
 
         $userId = $this->category->getOwner($questionData['category_id']);

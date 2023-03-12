@@ -32,7 +32,7 @@ class Network
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
     }
 
@@ -45,7 +45,7 @@ class Network
      */
     public function checkIp(string $ip): bool
     {
-        $bannedIps = explode(' ', $this->config->get('security.bannedIPs'));
+        $bannedIps = explode(' ', (string) $this->config->get('security.bannedIPs'));
 
         foreach ($bannedIps as $ipAddress) {
             if (0 === strlen($ipAddress)) {

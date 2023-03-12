@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
               '">' +
               attachment.fileName +
               '</a>' +
-              '<a class="badge badge-danger" href="?action=delatt&amp;record_id=' +
+              '<a class="badge bg-danger" href="?action=delatt&amp;record_id=' +
               attachment.faqId +
               '&amp;id=' +
               attachment.attachmentId +

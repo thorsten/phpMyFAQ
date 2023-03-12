@@ -330,11 +330,22 @@ class Wrapper extends TCPDF
         $this->SetFont($this->currentFont, 'B', 18);
 
         if (0 < Strings::strlen($this->customHeader)) {
-            $this->writeHTMLCell(0, 0, '', '', $this->customHeader);
+            $this->writeHTMLCell(0, 0, 0, 0, $this->customHeader);
             $this->Ln();
-            $this->writeHTMLCell(0, 0, '', '', html_entity_decode($title, ENT_QUOTES, 'utf-8'), 0, 0, false, true, 'C');
+            $this->writeHTMLCell(
+                0,
+                0,
+                0,
+                0,
+                html_entity_decode((string) $title, ENT_QUOTES, 'utf-8'),
+                0,
+                0,
+                false,
+                true,
+                'C'
+            );
         } else {
-            $this->MultiCell(0, 10, html_entity_decode($title, ENT_QUOTES, 'utf-8'), 0, 'C', 0);
+            $this->MultiCell(0, 10, html_entity_decode((string) $title, ENT_QUOTES, 'utf-8'), 0, 'C');
             $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
         }
     }
@@ -342,9 +353,13 @@ class Wrapper extends TCPDF
     /**
      * Sets custom header.
      */
-    public function setCustomHeader()
+    public function setCustomHeader(): void
     {
-        $this->customHeader = html_entity_decode($this->config->get('main.customPdfHeader'), ENT_QUOTES, 'utf-8');
+        $this->customHeader = html_entity_decode(
+            (string) $this->config->get('main.customPdfHeader'),
+            ENT_QUOTES,
+            'utf-8'
+        );
     }
 
     /**
