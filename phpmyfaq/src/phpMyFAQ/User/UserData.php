@@ -135,7 +135,12 @@ class UserData
     public function fetchAll($key, $value): array
     {
         $select = sprintf(
-            "SELECT user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret FROM %sfaquserdata WHERE %s = '%s'",
+            "SELECT user_id,
+            last_modified,
+            display_name, email,
+            is_visible,
+            twofactor_enabled,
+            secret FROM %sfaquserdata WHERE %s = '%s'",
             Database::getTablePrefix(),
             $key,
             $this->config->getDb()->escape($value)
