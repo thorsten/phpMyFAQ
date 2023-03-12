@@ -64,11 +64,14 @@ if (
 
         case 'get_user_data':
             $user->getUserById($userId, true);
-            $userdata = [];
             $userdata = $user->userdata->get('*');
-            $userdata['status'] = $user->getStatus();
-            $userdata['login'] = Strings::htmlentities($user->getLogin());
-            $userdata['is_superadmin'] = $user->isSuperAdmin();
+            if (is_array($userdata)) {
+                $userdata['status'] = $user->getStatus();
+                $userdata['login'] = Strings::htmlentities($user->getLogin());
+                $userdata['is_superadmin'] = $user->isSuperAdmin();
+            } else {
+                $userdata = [];
+            }
             $http->sendJsonWithHeaders($userdata);
             break;
 
