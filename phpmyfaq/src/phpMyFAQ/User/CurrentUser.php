@@ -91,6 +91,8 @@ class CurrentUser extends User
      */
     private int $lockoutTime = 600;
 
+    private bool $twoFactorAuthentication;
+
     /**
      * Constructor.
      */
@@ -187,12 +189,11 @@ class CurrentUser extends User
 
             // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
-            // only save this succesfull login to session when 2fa-auth is not enabled
-            if ($this->getUserData('twofactor_enabled') != 1) {
-                $this->loggedIn = true;
+            // only save this successful login to session when 2fa-auth is not enabled
+            if ($this->getUserData('twofactor_enabled') !== 1) {
+                $this->setLoggedIn(true);
                 $this->updateSessionId(true);
                 $this->saveToSession();
-                $this->saveCrsfTokenToSession();
             }
 
             // save remember me cookie if set
@@ -216,6 +217,8 @@ class CurrentUser extends User
             if ($this->getUserData('twofactor_enabled') != 1) {
                 $this->setSuccess(true);
             }
+
+            return true;
         }
 
         // raise errors and return false
@@ -240,14 +243,33 @@ class CurrentUser extends User
         return $this->loggedIn;
     }
 
-    // Sets loggedIn to true if the 2fa-auth was successfull and saves the login to session. Returns true.
-    public function twofactorSuccess(): bool
+    /**
+     * @return bool
+     */
+    public function hasTwoFactorAuthentication(): bool
     {
-        $this->loggedIn = true;
+        return $this->twoFactorAuthentication;
+    }
+
+    /**
+     * @param bool $twoFactorAuthentication
+     */
+    public function setTwoFactorAuthentication(bool $twoFactorAuthentication): void
+    {
+        $this->twoFactorAuthentication = $twoFactorAuthentication;
+    }
+
+    /**
+     * Sets loggedIn to true if the 2FA-auth was successfully and saves the login to session.
+     * @return bool
+     */
+    public function twoFactorSuccess(): bool
+    {
+        $this->setLoggedIn(true);
         $this->updateSessionId(true);
         $this->saveToSession();
-        $this->saveCrsfTokenToSession();
         $this->setSuccess(true);
+
         return true;
     }
 
