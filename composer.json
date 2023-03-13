@@ -33,7 +33,7 @@
     "ext-xml": "*",
     "ext-zip": "*",
     "ext-xmlwriter": "*",
-    "symfony/mailer": "^5.4",
+    "symfony/mailer": "^6.2",
     "guzzlehttp/guzzle": "^7.5",
     "league/flysystem": "^2.5",
     "robthree/twofactorauth": "^1.8.2"
