@@ -21,7 +21,7 @@
     "erusev/parsedown-extra": "~0.8.1",
     "tecnickcom/tcpdf": "~6.0",
     "elasticsearch/elasticsearch": "8.*",
-    "monolog/monolog": "^2.2",
+    "monolog/monolog": "^3.3",
     "abraham/twitteroauth": "^5.0.0",
     "myclabs/deep-copy": "~1.0",
     "ext-curl": "*",
