@@ -24,12 +24,13 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added option to disable questions and notifications (Thorsten)
 - added new mobile first, touch-friendly default layout (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
-- added Monolog v2 as logging solution (Thorsten)
+- added Monolog v3 as logging solution (Thorsten)
 - removed experimental large permissions support with sections (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - migrated codebase to use PHP 8.1 language features
 - updated to Bootstrap v5.3 (Thorsten)
 - updated to TinyMCE v6.3 (Thorsten)
+- updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 
 ### phpMyFAQ v3.1.11 - 2023-02-12
