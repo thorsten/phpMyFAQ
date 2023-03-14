@@ -142,7 +142,7 @@ class CategoryRelation
             );
         }
 
-        $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id";
+        $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description";
 
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
