@@ -55,6 +55,7 @@ node_modules/*
 backup/*
 
 # PHPUnit
+.phpunit.cache/test-results
 .phpunit.result.cache
 tests/test.db
 tests/test.db-journal
