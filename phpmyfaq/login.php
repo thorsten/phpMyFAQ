@@ -36,9 +36,6 @@ try {
 }
 
 if ($faqConfig->get('security.enableRegistration')) {
-
-
-
     $template->parseBlock(
         'mainPageContent',
         'enableRegistration',
@@ -68,6 +65,7 @@ $template->parse(
         'username' => Translation::get('ad_auth_user'),
         'password' => Translation::get('ad_auth_passwd'),
         'rememberMe' => Translation::get('rememberMe'),
+        'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
         'msgTwofactorTokenModelTitle' => Translation::get('msgTwofactorTokenModelTitle'),
         'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
         'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),

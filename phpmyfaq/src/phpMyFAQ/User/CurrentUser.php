@@ -91,8 +91,6 @@ class CurrentUser extends User
      */
     private int $lockoutTime = 600;
 
-    private bool $twoFactorAuthentication;
-
     /**
      * Constructor.
      */
@@ -241,22 +239,6 @@ class CurrentUser extends User
     public function isLoggedIn(): bool
     {
         return $this->loggedIn;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasTwoFactorAuthentication(): bool
-    {
-        return $this->twoFactorAuthentication;
-    }
-
-    /**
-     * @param bool $twoFactorAuthentication
-     */
-    public function setTwoFactorAuthentication(bool $twoFactorAuthentication): void
-    {
-        $this->twoFactorAuthentication = $twoFactorAuthentication;
     }
 
     /**
