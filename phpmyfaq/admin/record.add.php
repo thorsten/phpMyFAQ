@@ -35,6 +35,7 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Services\Twitter;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
