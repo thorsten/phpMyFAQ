@@ -69,7 +69,7 @@ class UserAuthentication
         if ($this->user->login($username, $password)) {
             if ($this->user->getUserData('twofactor_enabled') == 1) {
                 $this->setTwoFactorAuthentication(true);
-                $this->user->setLoggedIn(true);
+                $this->user->setLoggedIn(false);
             } else {
                 if ($this->user->getStatus() !== 'blocked') {
                     $this->user->setLoggedIn(true);

@@ -26,7 +26,7 @@ if (isset($error) && 0 < strlen($error)) {
         $error
     );
 } else {
-    $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
+    $message = '';
 }
 if ($action == 'logout') {
     $message = sprintf(
@@ -56,7 +56,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                 <input type="hidden" name="userid" id="userid" value="<?= $userid ?>">
                 <input type="hidden" name="redirect-action" value="<?= $action ?>">
                 <div class="form-group">
-                  <label for="faqusername"><?= $PMF_LANG['msgEnterTwofactorToken'] ?></label>
+                  <label for="token"><?= $PMF_LANG['msgEnterTwofactorToken'] ?></label>
                   <input type="text" class="form-control form-control-lg rounded-0" name="token" id="token"
                          required>
                 </div>
