@@ -192,6 +192,10 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     $userAuth->setRememberMe($faqremember ?? false);
     try {
         [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+        $userid = $user->getUserId();
+        if($userAuth->hasTwoFactorAuthentication()) {
+            $action = 'twofactor';
+        }
     } catch (Exception $e) {
         $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'Login-error\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
@@ -321,8 +325,6 @@ require 'header.php';
 
 
 if($action==='twofactor') {
-    $user->getUserById($userid);
-    $userid = $user->getUserId();
     require 'twofactor.php';
     exit();
 }
