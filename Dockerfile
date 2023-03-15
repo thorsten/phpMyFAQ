@@ -2,7 +2,7 @@
 # This image uses a php:8.1-apache base image and do not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
-
+# escape=`
 #####################################
 #=== Unique stage without payload ===
 #####################################
