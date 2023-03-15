@@ -147,18 +147,39 @@ if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
     $csrfChecked = false;
 }
 
+//
+// Validating token from 2FA if given; else: returns error message
+//
+if (!is_null($token) && !is_null($userid)) {
+    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
+        $user = new CurrentUser($faqConfig);
+        $user->getUserById($userid);
+        $tfa = new TwoFactor($faqConfig);
+        $res = $tfa->validateToken($token, $userid);
+        if (!$res) {
+            $error = Translation::get('msgTwofactorErrorToken');
+            $action = 'twofactor';
+        } else {
+            $auth = true;
+            $user->twoFactorSuccess();
+        }
+    } else {
+        $error = Translation::get('msgTwofactorErrorToken');
+        $action = 'twofactor';
+    }
+}
+
 if (!isset($user)) {
     $user = new CurrentUser($faqConfig);
 }
 
-$userAuth = new UserAuthentication($faqConfig, $user);
-
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    $user = new CurrentUser($faqConfig);
+    $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($rememberMe ?? false);
     try {
         [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+        $userid = $user->getUserId();
     } catch (Exception $e) {
         $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
         $action = 'login';
@@ -172,23 +193,12 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 }
 
-//
-// Validating token from 2FA if given; else: returns error message
-//
-if ($userAuth->hasTwoFactorAuthentication()) {
-    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
-        $tfa = new TwoFactor($faqConfig);
-        $res = $tfa->validateToken($token, $userid);
-        if (!$res) {
-            $error = Translation::get('msgTwofactorErrorToken');
+if(isset($userAuth)) {
+    if($userAuth instanceof UserAuthentication) {
+        if($userAuth->hasTwoFactorAuthentication() === true) {
             $action = 'twofactor';
-        } else {
-            $auth = true;
-            $user->twoFactorSuccess();
+            $auth = null;
         }
-    } else {
-        $error = Translation::get('msgTwofactorErrorToken');
-        $action = 'twofactor';
     }
 }
 
@@ -679,7 +689,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 //
 // Show login box or logged-in user information
 //
-if ($user->getUserId() > 0) {
+if ($user->getUserId() > 0 && $auth === true) {
     if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',
@@ -775,7 +785,6 @@ if ('artikel' === $action) {
 }
 
 if ('twofactor' === $action) {
-    $userid = $user->getUserId();
     $includePhp = 'login.php';
 }
 
