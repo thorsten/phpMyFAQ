@@ -82,6 +82,6 @@ class UserAuthentication
             throw new Exception(Translation::get('ad_auth_fail'));
         }
 
-        return [ $this->user, $this->user->isLoggedIn(), $this->hasTwoFactorAuthentication ];
+        return [ $this->user, $this->user->isLoggedIn() ];
     }
 }
