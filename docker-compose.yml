@@ -18,25 +18,25 @@ services:
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
 
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_DB=phpmyfaq
-      - POSTGRES_USER=phpmyfaq
-      - POSTGRES_PASSWORD=phpmyfaq
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data
+  # postgres:
+  #   image: postgres:latest
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_DB=phpmyfaq
+  #     - POSTGRES_USER=phpmyfaq
+  #     - POSTGRES_PASSWORD=phpmyfaq
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #     - ./volumes/postgres:/var/lib/postgresql/data
 
-  sqlserver:
-    image: microsoft/mssql-server-linux:2017-latest
-    ports:
-      - 1433:1433
-    environment:
-      SA_PASSWORD: 'phpMyFAQ-3.1'
-      ACCEPT_EULA: 'Y'
+  # sqlserver:
+  #   image: microsoft/mssql-server-linux:2017-latest
+  #   ports:
+  #     - 1433:1433
+  #   environment:
+  #     SA_PASSWORD: 'phpMyFAQ-3.1'
+  #     ACCEPT_EULA: 'Y'
 
   phpmyfaq:
     build: .
@@ -55,7 +55,7 @@ services:
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED & E_STRICT" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
     links:
       - mariadb:db
-      - postgres
+      # - postgres
       - elasticsearch
     ports:
       - '8080:80'
@@ -96,17 +96,17 @@ services:
     volumes:
       - ./volumes/sessions:/sessions
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@phpmyfaq.de
-      PGADMIN_DEFAULT_PASSWORD: postgres
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - ./volumes/pgadmin:/root/.pgadmin
-    ports:
-      - '8008:80'
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: postgres@phpmyfaq.de
+  #     PGADMIN_DEFAULT_PASSWORD: postgres
+  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #   volumes:
+  #     - ./volumes/pgadmin:/root/.pgadmin
+  #   ports:
+  #     - '8008:80'
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
