@@ -69,5 +69,6 @@ $template->parse(
         'msgTwofactorTokenModelTitle' => Translation::get('msgTwofactorTokenModelTitle'),
         'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
         'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),
+        'userid' => $userid,
     ]
 );
