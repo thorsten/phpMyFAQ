@@ -193,7 +193,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     try {
         [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
         $userid = $user->getUserId();
-        if($userAuth->hasTwoFactorAuthentication()) {
+        if ($userAuth->hasTwoFactorAuthentication()) {
             $action = 'twofactor';
         }
     } catch (Exception $e) {
@@ -324,7 +324,7 @@ switch ($action) {
 require 'header.php';
 
 
-if($action==='twofactor') {
+if ($action === 'twofactor') {
     require 'twofactor.php';
     exit();
 }

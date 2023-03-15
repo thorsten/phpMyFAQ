@@ -193,8 +193,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 }
 
-if(isset($userAuth)) {
-    if($userAuth instanceof UserAuthentication) {
+if (isset($userAuth)) {
+    if ($userAuth instanceof UserAuthentication) {
         if($userAuth->hasTwoFactorAuthentication() === true) {
             $action = 'twofactor';
             $auth = null;
@@ -689,7 +689,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 //
 // Show login box or logged-in user information
 //
-if ($user->getUserId() > 0 && $auth === true) {
+if ($user->getUserId() > 0 && $auth) {
     if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',

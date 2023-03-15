@@ -187,8 +187,9 @@ class CurrentUser extends User
 
             // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
+
             // only save this successful login to session when 2fa-auth is not enabled
-            if ($this->getUserData('twofactor_enabled') != 1) {
+            if ($this->getUserData('twofactor_enabled') !== 1) {
                 $this->setLoggedIn(true);
                 $this->updateSessionId(true);
                 $this->saveToSession();
