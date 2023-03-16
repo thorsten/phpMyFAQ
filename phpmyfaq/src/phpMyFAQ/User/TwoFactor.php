@@ -29,13 +29,10 @@ use RobThree\Auth\TwoFactorAuthException;
 class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
-    
-    private readonly Configuration $config;
 
-    public function __construct($faqConfig)
+    public function __construct(private Configuration $config)
     {
         $this->twoFactorAuth = new TwoFactorAuth();
-        $this->config = $faqConfig;
     }
 
     /**
