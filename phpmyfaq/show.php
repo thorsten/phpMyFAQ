@@ -40,7 +40,9 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     } catch (Exception $e) {
         // @todo handle the exception
     }
-
+	// Set the path of the current category and don't make last name a link (because it's myself)
+    $path = $category->getPath($selectedCategoryId, ' &raquo; ', true, 'breadcrumb-related-categories',true);
+	
     $categoryData = $category->getCategoryData($selectedCategoryId);
     $records = $faq->renderRecordsByCategoryId(
         $selectedCategoryId,
@@ -56,7 +58,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             ->setConfiguration($faqConfig)
             ->setCategory($subCategory);
         if (empty($records)) {
-            $records = $categoryHelper->renderCategoryTree();
+            $records = "No FAQs here yet";
         }
         if (count($category->getChildNodes((int) $selectedCategoryId))) {
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
@@ -94,6 +96,13 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             ]
         );
     }
+	$template->parseBlock(
+		'index',
+		'breadcrumb',
+		[
+			'breadcrumbHeadline' => $path,
+		]
+	);
 
     $template->parse(
         'mainPageContent',
@@ -103,7 +112,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
-            'categoryLevelUp' => $up
+            'categoryLevelUp' => ''
         ]
     );
 } else {

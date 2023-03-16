@@ -289,7 +289,7 @@ class CategoryHelper extends Helper
      *
      * @return string
      */
-    public function renderOptions($categoryId): string
+    public function renderOptions($categoryId, int $currCatId = null): string
     {
         $categories = '';
 
@@ -305,7 +305,19 @@ class CategoryHelper extends Helper
         }
 
         $i = 0;
+		$skipCats = [];
+		if ( $currCatId !== null ) {
+			$skipCats[] = $currCatId;
+		}
         foreach ($this->Category->getCategoryTree() as $cat) {
+			if ( $cat['id'] == $currCatId )
+				continue;
+
+			if ( in_array( $cat['parent_id'], $skipCats) ) {
+				$skipCats[] = $cat['id'];
+				continue;
+			}
+			
             $indent = '';
             for ($j = 0; $j < $cat['indent']; ++$j) {
                 $indent .= '....';

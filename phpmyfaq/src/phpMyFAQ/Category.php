@@ -333,23 +333,29 @@ class Category
 
         if (true === $parentId) {
             $query .= 'parent_id = 0';
-        }
-        foreach (explode(',', $categories) as $cats) {
-            $_query .= ' OR parent_id = ' . $cats;
-        }
-        if (false === $parentId && 0 < Strings::strlen($_query)) {
-            $query .= Strings::substr($_query, 4);
-        }
+        } else {
+			foreach (explode(',', $categories) as $cats) {
+				$_query .= ' OR parent_id = ' . $cats;
+			}
+			if (false === $parentId && 0 < Strings::strlen($_query)) {
+				$query .= Strings::substr($_query, 4);
+			}
+		}
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '" . $this->config->getDb()->escape($this->language) . "'";
         }
+		
+		
         $query .= ' ORDER BY id';
         $result = $this->config->getDb()->query($query);
+		
+		$cats = [];
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $this->categories[$row['id']] = $row;
+			$cats[$row['id']] = $row; 
+//            $this->categories[$row['id']] = $row;
         }
 
-        return $this->categories;
+        return $cats;
     }
 
     /**
@@ -855,11 +861,31 @@ class Category
         int $id,
         string $separator = ' / ',
         bool $renderAsHtml = false,
-        string $useCssClass = 'breadcrumb'
+        string $useCssClass = 'breadcrumb',
+		bool $isCatView = false
     ): string {
         global $sids;
 
         $ids = $this->getNodes($id);
+		$isTopLevel = (count($ids) == 1 && $ids[0] == 0) ? true : false;
+		
+		if ( $isTopLevel && $renderAsHtml ) {
+			$options = "";
+			$url = sprintf(
+				'%sindex.php',
+				$this->config->getDefaultUrl()
+			);
+			
+			foreach ($this->getCategories(0, true) as $topLevelCat){
+				$options .= sprintf(
+					'<option class="%s" value="%s"'.($id == $topLevelCat['id']?' selected':'').'>%s</option>'."\n",
+					$useCssClass,
+					$topLevelCat['id'],
+					$topLevelCat['name']
+				);
+			}
+			return '<form method="GET" action="'.$url.'"><input type="hidden" name="action" value="show"><select onChange="this.form.submit()" name="cat">'.$options.'</select></form>';
+		}
 
         $num = count($ids);
 
@@ -898,7 +924,7 @@ class Category
 
                 $breadcrumb[] = sprintf(
                     '<li>%s</li>',
-                    $oLink->toHtmlAnchor()
+                    ($isCatView && $id == $categoryId[$key])?$oLink->text:$oLink->toHtmlAnchor()
                 );
             }
 
@@ -1086,8 +1112,9 @@ class Category
     public function checkIfCategoryExists(array $categoryData): int
     {
         $query = sprintf(
-            "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s'",
+            "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s' AND parent_id = '%s'",
             Database::getTablePrefix(),
+            $this->config->getDb()->escape($categoryData['parentId']),
             $this->config->getDb()->escape($categoryData['name']),
             $this->config->getDb()->escape($categoryData['lang'])
         );
@@ -1186,7 +1213,7 @@ class Category
      */
     public function updateParentCategory(int $categoryId, int $parentId): bool
     {
-        if ($categoryId !== $parentId) {
+        if ($categoryId == $parentId) {
             return false;
         }
 

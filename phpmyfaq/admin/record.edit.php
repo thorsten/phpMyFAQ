@@ -414,25 +414,15 @@ if (
                                 <?php endif; ?>
                             </div>
                             <div class="tab-pane" id="tab-meta-data">
-                                <!-- Categories -->
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label" for="phpmyfaq-categories">
-                                        <?= $PMF_LANG['ad_entry_category'] ?>
-                                    </label>
-                                    <div class="col-lg-10">
-                                        <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple
-                                                class="form-control">
-                                            <?= $categoryHelper->renderOptions($categories) ?>
-                                        </select>
-                                    </div>
-                                </div>
+							<div class="row">
+							<div class="col-lg-6">
 
                                 <!-- Language -->
                                 <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label" for="lang">
+                                    <label class="col-lg-4 col-form-label" for="lang">
                                         <?= $PMF_LANG['ad_entry_locale'] ?>:
                                     </label>
-                                    <div class="col-lg-10">
+                                    <div class="col-lg-8">
                                         <?= LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang') ?>
                                     </div>
                                 </div>
@@ -440,10 +430,10 @@ if (
                                 <!-- Attachments -->
                                 <?php if ($user->perm->hasPermission($currentUserId, 'addattachment')) : ?>
                                     <div class="form-group row">
-                                        <label class="col-lg-2 col-form-label">
+                                        <label class="col-lg-4 col-form-label">
                                             <?= $PMF_LANG['ad_menu_attachments'] ?>:
                                         </label>
-                                        <div class="col-lg-10">
+                                        <div class="col-lg-8">
                                             <ul class="list-unstyled adminAttachments">
                                                 <?php
                                                 $attList = AttachmentFactory::fetchByRecordId(
@@ -480,10 +470,10 @@ if (
 
                                 <!-- Tags -->
                                 <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label" for="tags">
+                                    <label class="col-lg-4 col-form-label" for="tags">
                                         <?= $PMF_LANG['ad_entry_tags'] ?>:
                                     </label>
-                                    <div class="col-lg-10">
+                                    <div class="col-lg-8">
                                         <input type="text" name="tags" id="tags" value="<?= $faqData['tags'] ?>"
                                                autocomplete="off"
                                                class="form-control pmf-tags-autocomplete"
@@ -495,10 +485,10 @@ if (
 
                                 <!-- Keywords -->
                                 <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label" for="keywords">
+                                    <label class="col-lg-4 col-form-label" for="keywords">
                                         <?= $PMF_LANG['ad_entry_keywords'] ?>:
                                     </label>
-                                    <div class="col-lg-10">
+                                    <div class="col-lg-8">
                                         <input type="text" name="keywords" id="keywords" maxlength="255"
                                                class="form-control"
                                                value="<?= $faqData['keywords'] ?>">
@@ -509,10 +499,10 @@ if (
 
                                 <!-- Author -->
                                 <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label" for="author">
+                                    <label class="col-lg-4 col-form-label" for="author">
                                         <?= $PMF_LANG['ad_entry_author'] ?>
                                     </label>
-                                    <div class="col-lg-10">
+                                    <div class="col-lg-8">
                                         <input type="text" name="author" id="author" value="<?= $faqData['author'] ?>"
                                                class="form-control">
                                     </div>
@@ -520,14 +510,30 @@ if (
 
                                 <!-- E-Mail -->
                                 <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label" for="email">
+                                    <label class="col-lg-4 col-form-label" for="email">
                                         <?= $PMF_LANG['ad_entry_email'] ?>
                                     </label>
-                                    <div class="col-lg-10">
+                                    <div class="col-lg-8">
                                         <input type="email" name="email" id="email" value="<?= $faqData['email'] ?>"
                                                class="form-control">
                                     </div>
                                 </div>
+							</div>
+							<div class="offset-lg-1 col-lg-5">
+								<!-- Categories -->
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-form-label" for="phpmyfaq-categories">
+                                        <?= $PMF_LANG['ad_entry_category'] ?>
+                                    </label>
+                                    <div class="col-lg-8">
+                                        <select name="rubrik[]" id="phpmyfaq-categories" size="15" multiple
+                                                class="form-control">
+                                            <?= $categoryHelper->renderOptions($categories) ?>
+                                        </select>
+                                    </div>
+                                </div>
+							</div>
+							</div>	
                             </div>
 
                             <div class="tab-pane" id="tab-permissions">

@@ -79,6 +79,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryId = $faqConfig->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
                 $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_UNSAFE_RAW);
                 $categoryData = [
+					'parentId' => $parentId,
                     'lang' => $categoryLang,
                     'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS),
                     'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS),
@@ -227,6 +228,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     }
                 } else {
                     if ($category->updateCategory($categoryData)) {
+
+						$category->updateParentCategory($categoryId, $parentId);
+
                         $categoryPermission->delete(CategoryPermission::USER, [$categoryData['id']]);
                         $categoryPermission->delete(CategoryPermission::GROUP, [$categoryData['id']]);
                         $categoryPermission->add(

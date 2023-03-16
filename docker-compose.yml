@@ -49,7 +49,7 @@ services:
       - PMF_DB_USER=phpmyfaq
       - PMF_DB_PASS=phpmyfaq
       - PMF_DISABLE_HTACCESS=""
-      - PMF_TIMEZONE="Europe/Berlin"
+      - PMF_TIMEZONE="America/Los_Angeles"
       - PMF_ENABLE_UPLOADS="On"
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
@@ -57,7 +57,7 @@ services:
     links:
       - mariadb:db
       # - postgres
-      - elasticsearch
+  #    - elasticsearch
     ports:
       - '8080:80'
     volumes:

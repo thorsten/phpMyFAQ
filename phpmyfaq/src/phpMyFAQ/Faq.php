@@ -294,7 +294,7 @@ class Faq
                 );
             } else {
                 return sprintf(
-                    'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )',
+                    'AND ( fdg.group_id IN (%s) OR fdu.user_id = %d  )',
                     implode(', ', $this->groups),
                     $this->user,
                     implode(', ', $this->groups)

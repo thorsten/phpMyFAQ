@@ -14,12 +14,12 @@
  * @link https://www.phpmyfaq.de
  * @since 2003-03-10
  */
-
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Category\CategoryRelation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -35,11 +35,20 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 
+    $category->buildCategoryTree();
+
+    $categoryRelation = new CategoryRelation($faqConfig);
+
+    $categoryHelper = new CategoryHelper();
+    $categoryHelper->setCategory($category);
+
+
     $categoryPermission = new CategoryPermission($faqConfig);
 
     $userHelper = new UserHelper($user);
 
     $categoryData = $category->getCategoryData($categoryId);
+	
     $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
 
     if ($userPermission[0] == -1) {
@@ -69,7 +78,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         </div>
 
         <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-6">
           <form enctype="multipart/form-data" action="?action=updatecategory" method="post">
             <input type="hidden" name="id" value="<?= $categoryId ?>">
             <input type="hidden" id="catlang" name="catlang" value="<?= $categoryData->getLang() ?>">
@@ -78,28 +87,30 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             <input type="hidden" name="existing_image" value="<?= $categoryData->getImage() ?>"
                    id="pmf-category-existing-image">
 
+
             <div class="form-group row">
-              <label class="col-lg-2 col-form-label">
+              <label class="col-lg-3 col-form-label">
                   <?= $PMF_LANG['ad_categ_titel'] ?>:
               </label>
-              <div class="col-lg-4">
-                <input type="text" id="name" name="name" value="<?= Strings::htmlentities($categoryData->getName()) ?>"
+              <div class="col-lg-8">
+                <input type="text" id="name" name="name" value="<?= $categoryData->getName() ?>"
                        class="form-control">
               </div>
+
             </div>
 
             <div class="form-group row">
-              <label class="col-lg-2 col-form-label">
+              <label class="col-lg-3 col-form-label">
                   <?= $PMF_LANG['ad_categ_desc'] ?>:
               </label>
-              <div class="col-lg-4">
+              <div class="col-lg-8">
                 <textarea id="description" name="description" rows="3"
                           class="form-control"><?= Strings::htmlentities($categoryData->getDescription()) ?></textarea>
               </div>
             </div>
 
             <div class="form-group row">
-              <div class="offset-lg-2 col-lg-4">
+              <div class="offset-lg-3 col-lg-8">
                 <div class="checkbox">
                   <label>
                     <input type="checkbox" name="active" value="1"
@@ -111,7 +122,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </div>
 
             <div class="form-group row">
-              <div class="offset-lg-2 col-lg-4">
+              <div class="offset-lg-3 col-lg-8">
                 <div class="checkbox">
                   <label>
                     <input type="checkbox" name="show_home" value="1"
@@ -124,10 +135,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
 
 
             <div class="form-group row">
-              <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
+              <label class="col-lg-3 col-form-label" for="pmf-category-image-upload">
                   <?= $PMF_LANG['ad_category_image'] ?>
               </label>
-              <div class="col-lg-4">
+              <div class="col-lg-8">
                 <div class="form-group">
                   <div class="custom-file">
                     <input type="file" class="custom-file-input" name="image" id="pmf-category-image-upload"
@@ -146,10 +157,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </div>
 
             <div class="form-group row">
-              <label class="col-lg-2 col-form-label" for="user_id">
+              <label class="col-lg-3 col-form-label" for="user_id">
                   <?= $PMF_LANG['ad_categ_owner'] ?>
               </label>
-              <div class="col-lg-4">
+              <div class="col-lg-8">
                 <select id="user_id" name="user_id" class="form-control">
                     <?= $userHelper->getAllUserOptions($categoryData->getUserId()) ?>
                 </select>
@@ -157,8 +168,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </div>
               <?php if ($faqConfig->get('security.permLevel') != 'basic') { ?>
                 <div class="form-group row">
-                  <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>:</label>
-                  <div class="col-lg-4">
+                  <label class="col-lg-3 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>:</label>
+                  <div class="col-lg-8">
                     <select name="group_id" id="group_id" class="form-control">
                         <?= $user->perm->getAllGroupsOptions([$categoryData->getGroupId()], $user) ?>
                     </select>
@@ -166,10 +177,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 </div>
 
                 <div class="form-group row">
-                  <label class="col-lg-2 col-form-label" for="grouppermission">
+                  <label class="col-lg-3 col-form-label" for="grouppermission">
                       <?= $PMF_LANG['ad_entry_grouppermission'] ?>
                   </label>
-                  <div class="col-lg-4">
+                  <div class="col-lg-8">
                     <div class="radio">
                       <input type="radio" id="grouppermission" name="grouppermission" value="all"
                           <?php echo($allGroups ? 'checked' : '') ?>>
@@ -189,10 +200,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 <input type="hidden" name="grouppermission" value="all">
               <?php } ?>
             <div class="form-group row">
-              <label class="col-lg-2 col-form-label">
+              <label class="col-lg-3 col-form-label">
                   <?= $PMF_LANG['ad_entry_userpermission'] ?>
               </label>
-              <div class="col-lg-4">
+              <div class="col-lg-8">
                 <div class="radio">
                   <input type="radio" name="userpermission" value="all"
                       <?= ($allUsers ? 'checked' : '') ?>>
@@ -210,7 +221,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </div>
 
             <div class="form-group row">
-              <div class="offset-lg-2 col-lg-4">
+              <div class="offset-lg-3 col-lg-8">
                 <button class="btn btn-primary" type="submit" name="submit">
                     <?= $PMF_LANG['ad_categ_updatecateg'] ?>
                 </button>
@@ -218,6 +229,20 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             </div>
           </form>
           </div>
+		  <div class="col-lg-6">
+				<label class="col-lg-8 col-form-label">
+					Current <?= $PMF_LANG['ad_entry_category'] ?>: <strong><? print_r($category->categories[$categoryData->getParentId()]["name"]); ?></strong>
+				</label>
+				<label class="col-lg-8 col-form-label" for="phpmyfaq-categories">
+					Select new <?= $PMF_LANG['ad_entry_category'] ?>
+				</label>
+				<div class="col-lg-8">
+				<select name="parent_id" id="phpmyfaq-categories" size="25" 
+							class="form-control">
+						<?= $categoryHelper->renderOptions($categoryData->getParentId(), $categoryId) ?>
+					</select>
+				</div>
+		  </div>
         </div>
         <script>
           document.addEventListener('DOMContentLoaded', () => {
