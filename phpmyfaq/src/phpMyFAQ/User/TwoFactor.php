@@ -29,10 +29,13 @@ use RobThree\Auth\TwoFactorAuthException;
 class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
+    
+    private readonly Configuration $config;
 
-    public function __construct(private readonly Configuration $config)
+    public function __construct($faqConfig)
     {
         $this->twoFactorAuth = new TwoFactorAuth();
+        $this->config = $faqConfig;
     }
 
     /**
@@ -92,6 +95,6 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        return $this->twoFactorAuth->getQRCodeImageAsDataUri('phpMyFAQ', $secret);
+        return $this->twoFactorAuth->getQRCodeImageAsDataUri($this->config->getTitle(), $secret);
     }
 }
