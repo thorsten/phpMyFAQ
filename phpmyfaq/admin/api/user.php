@@ -127,7 +127,7 @@ if (
 
         case 'add_user':
             if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
-                $http->setStatus(400);
+                $http->setStatus(401);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }

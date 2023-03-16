@@ -58,7 +58,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                 <div class="form-group">
                   <label for="token"><?= $PMF_LANG['msgEnterTwofactorToken'] ?></label>
                   <input type="text" class="form-control form-control-lg rounded-0" name="token" id="token"
-                         required>
+                         autocomplete="off" required>
                 </div>
                 <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
                     <?= $PMF_LANG['msgTwofactorCheck'] ?>

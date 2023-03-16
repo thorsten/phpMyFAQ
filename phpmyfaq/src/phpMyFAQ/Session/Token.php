@@ -95,6 +95,9 @@ class Token
         return self::$instance;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getTokenInput(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
@@ -107,6 +110,9 @@ class Token
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function getTokenString(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
@@ -173,15 +179,16 @@ class Token
      */
     private function setSession(string $page, int $expiry): Token
     {
-        $this
+        $token = new self();
+        $token
             ->setPage($page)
             ->setExpiry(time() + $expiry)
             ->setSessionToken(md5(base64_encode(random_bytes(32))))
             ->setCookieToken(md5(base64_encode(random_bytes(32))));
 
-        setcookie($this->getCookieName($page), $this->getCookieToken(), ['expires' => $this->getExpiry()]);
+        setcookie($token->getCookieName($page), $token->getCookieToken(), ['expires' => $token->getExpiry()]);
 
-        return $_SESSION[self::PMF_SESSION_NAME][$page] = $this;
+        return $_SESSION[self::PMF_SESSION_NAME][$page] = $token;
     }
 
     private function getCookieName(string $page): string
