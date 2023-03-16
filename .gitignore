@@ -55,6 +55,7 @@ node_modules/*
 backup/*
 
 # PHPUnit
+.phpunit.cache/code-coverage
 .phpunit.cache/test-results
 .phpunit.result.cache
 tests/test.db

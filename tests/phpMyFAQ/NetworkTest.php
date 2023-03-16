@@ -36,7 +36,7 @@ class NetworkTest extends TestCase
     /**
      * @return string[]
      */
-    public function ipAddressDataProvider(): array
+    public static function ipAddressDataProvider(): array
     {
         return [
             [ '207.142.131.005', '207.142.131.xxx'],
