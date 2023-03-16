@@ -8,10 +8,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * @testdox A Network has
  */
-class NetworkTest extends TestCase
+final class NetworkTest extends TestCase
 {
     /** @var Network */
-    private $network;
+    private Network $network;
 
     protected function setUp(): void
     {
