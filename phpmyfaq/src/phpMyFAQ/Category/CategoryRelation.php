@@ -238,14 +238,16 @@ class CategoryRelation
 
     /**
      * Calculates the aggregated numbers of FAQs for a given category
-     * @param int   $categoryId
-     * @return void
+     *
+     * @param array $categories
+     * @param int   $parentId
+     * @return array
      */
-    public function getAggregatedFaqNumbers(array $categories, $parentId = 0): array
+    public function getAggregatedFaqNumbers(array $categories, int $parentId = 0): array
     {
         $result = [];
         foreach ($categories as $category) {
-            if ($category['parent_id'] == $parentId) {
+            if ($category['parent_id'] === $parentId) {
                 $childCategories = $this->getAggregatedFaqNumbers($categories, $category['id']);
                 $result[$category['id']] = [
                     'id' => $category['id'],
