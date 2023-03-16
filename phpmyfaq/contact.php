@@ -60,6 +60,7 @@ $template->parse(
         'msgMessage' => Translation::get('msgMessage'),
         'msgS2FButton' => Translation::get('msgS2FButton'),
         'version' => $faqConfig->getVersion(),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $auth),
+        'captchaFieldset' =>
+            $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
     ]
 );

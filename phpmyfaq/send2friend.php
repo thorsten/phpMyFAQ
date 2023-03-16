@@ -85,7 +85,7 @@ $template->parse(
             $captcha,
             'send2friend',
             Translation::get('msgCaptcha'),
-            $auth
+            $user->isLoggedIn()
         ),
         'msgS2FButton' => Translation::get('msgS2FButton'),
     ]

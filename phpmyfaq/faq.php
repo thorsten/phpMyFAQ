@@ -398,7 +398,8 @@ $template->parse(
         'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
         'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
+        'captchaFieldset' =>
+            $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $user->isLoggedIn()),
         'renderComments' => $comment->getComments($recordId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
     ]

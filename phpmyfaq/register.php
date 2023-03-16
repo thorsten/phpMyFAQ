@@ -59,6 +59,7 @@ $template->parse(
         'email' => Translation::get('ad_entry_email'),
         'is_visible' => Translation::get('ad_user_data_is_visible'),
         'submitRegister' => Translation::get('submitRegister'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'register', Translation::get('msgCaptcha'), $auth),
+        'captchaFieldset' =>
+            $captchaHelper->renderCaptcha($captcha, 'register', Translation::get('msgCaptcha'), $user->isLoggedIn()),
     ]
 );

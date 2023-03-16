@@ -206,7 +206,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     // Try to authenticate with cookie information
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
     if(!$user->isLoggedIn()) {
-        $auth = null;
+        $auth = false;
     }
 }
 

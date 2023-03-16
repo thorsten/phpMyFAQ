@@ -109,7 +109,8 @@ $template->parse(
         'msgNewContentArticle' => Translation::get('msgNewContentArticle'),
         'msgNewContentKeywords' => Translation::get('msgNewContentKeywords'),
         'msgNewContentLink' => Translation::get('msgNewContentLink'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', Translation::get('msgCaptcha'), $auth),
+        'captchaFieldset' =>
+            $captchaHelper->renderCaptcha($captcha, 'add', Translation::get('msgCaptcha'), $user->isLoggedIn()),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     ]
 );

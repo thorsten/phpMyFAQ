@@ -151,7 +151,12 @@ $template->parse(
         'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
         'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
+        'captchaFieldset' => $captchaHelper->renderCaptcha(
+            $captcha,
+            'writecomment',
+            Translation::get('msgCaptcha'),
+            $user->isLoggedIn()
+        ),
         'renderComments' => $comment->getComments($newsId, CommentType::NEWS),
     ]
 );

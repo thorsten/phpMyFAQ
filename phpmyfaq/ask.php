@@ -75,7 +75,8 @@ $template->parse(
         'msgAskCategory' => Translation::get('msgAskCategory'),
         'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
         'msgAskYourQuestion' => Translation::get('msgAskYourQuestion'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $auth),
+        'captchaFieldset' =>
+            $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $user->isLoggedIn()),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     ]
 );

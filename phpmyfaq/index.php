@@ -119,7 +119,8 @@ $action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS
 //
 // Authenticate current user
 //
-$auth = $error = null;
+$auth = false;
+$error = null;
 $loginVisibility = 'hidden';
 
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -188,8 +189,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 } else {
     // Try to authenticate with cookie information
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
-    if(!$user->isLoggedIn()) {
-        $auth = null;
+    if (!$user->isLoggedIn()) {
+        $auth = false;
     }
 }
 
@@ -197,7 +198,7 @@ if (isset($userAuth)) {
     if ($userAuth instanceof UserAuthentication) {
         if($userAuth->hasTwoFactorAuthentication() === true) {
             $action = 'twofactor';
-            $auth = null;
+            $auth = false;
         }
     }
 }
@@ -207,7 +208,7 @@ if (isset($userAuth)) {
 //
 if ($csrfChecked && 'logout' === $action && $auth) {
     $user->deleteFromSession(true);
-    $auth = null;
+    $auth = false;
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
