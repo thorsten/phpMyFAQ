@@ -68,8 +68,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         $restrictedGroups = true;
     }
 
-    $header = $PMF_LANG['ad_categ_edit_1'] . ' "' . Strings::htmlentities($categoryData->getName()) .
-        '" ' . $PMF_LANG['ad_categ_edit_2'];
+    $header = $PMF_LANG['ad_categ_edit_1'] . ' "' . $categoryData->getName() . '" ' . $PMF_LANG['ad_categ_edit_2'];
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -105,7 +104,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               </label>
               <div class="col-lg-8">
                 <textarea id="description" name="description" rows="3"
-                          class="form-control"><?= Strings::htmlentities($categoryData->getDescription()) ?></textarea>
+                          class="form-control"><?= $categoryData->getDescription() ?></textarea>
               </div>
             </div>
 

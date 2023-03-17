@@ -334,12 +334,12 @@ class Category
         if (true === $parentId) {
             $query .= 'parent_id = 0';
         } else {
-			foreach (explode(',', $categories) as $cats) {
-				$_query .= ' OR parent_id = ' . $cats;
-			}
-			if (false === $parentId && 0 < Strings::strlen($_query)) {
-				$query .= Strings::substr($_query, 4);
-			}
+        foreach (explode(',', $categories) as $cats) {
+            $_query .= ' OR parent_id = ' . $cats;
+        }
+        if (false === $parentId && 0 < Strings::strlen($_query)) {
+            $query .= Strings::substr($_query, 4);
+        }
 		}
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '" . $this->config->getDb()->escape($this->language) . "'";
