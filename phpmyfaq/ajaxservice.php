@@ -183,7 +183,7 @@ switch ($action) {
                 break;
             }
         }
-
+        
         if (
             !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord($comment) &&
             !$faq->commentDisabled($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
@@ -774,7 +774,10 @@ switch ($action) {
             break;
         }
 
-        if (strlen($password) <= 7 || strlen($confirm) <= 7) {
+		$skipPW =(strlen($password.$confirm) == 0) ? 1 : 0;
+
+			
+        if ( $skipPW == 0 && (strlen($password) <= 7 || strlen($confirm) <= 7) ) {
             $message = ['error' => $PMF_LANG['ad_passwd_fail']];
             break;
         } else {
@@ -785,6 +788,8 @@ switch ($action) {
             ];
             $success = $user->setUserData($userData);
 
+
+			if ( $skipPW == 0 ) {
             foreach ($user->getAuthContainer() as $author => $auth) {
                 if ($auth->setReadOnly()) {
                     continue;
@@ -796,6 +801,7 @@ switch ($action) {
                     $success = true;
                 }
             }
+			}
         }
 
         if ($success) {
