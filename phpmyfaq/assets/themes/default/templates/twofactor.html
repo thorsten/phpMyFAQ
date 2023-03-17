@@ -15,7 +15,7 @@
                   <div class="row mb-2">
                     <label for="token">{{ msgEnterTwofactorToken }}</label>
                     <input type="text" class="form-control rounded-0" name="token" id="token" autocomplete="off"
-                           required>
+                           maxlength="6" autofocus required>
                   </div>
                   <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
                     {{ msgTwofactorCheck }}
