@@ -55,7 +55,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         parent::__construct($this->config);
 
-        if (0 === count($this->ldapServer)) {
+        if (0 === (is_countable($this->ldapServer) ? count($this->ldapServer) : 0)) {
             throw new Exception('An error occurred while contacting LDAP: No configuration found.');
         }
 
@@ -106,7 +106,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     public function checkCredentials($login, $password, array $optionalData = null): bool
     {
-        if ('' === trim($password)) {
+        if ('' === trim((string) $password)) {
             $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
             return false;
         }
@@ -139,14 +139,14 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$this->activeServer]['ldap_port'],
             $this->ldapServer[$this->activeServer]['ldap_base'],
             $bindLogin,
-            htmlspecialchars_decode($password)
+            htmlspecialchars_decode((string) $password)
         );
 
-        if (!$this->ldap->bind($bindLogin, htmlspecialchars_decode($password))) {
+        if (!$this->ldap->bind($bindLogin, htmlspecialchars_decode((string) $password))) {
             $this->errors[] = $this->ldap->error;
             return false;
         } else {
-            $this->create($login, htmlspecialchars_decode($password));
+            $this->create($login, htmlspecialchars_decode((string) $password));
             return true;
         }
     }
@@ -168,7 +168,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         $this->connect($this->activeServer);
 
-        return strlen($this->ldap->getCompleteName($login));
+        return strlen((string) $this->ldap->getCompleteName($login));
     }
 
     private function connect(int $activeServer = 0): void

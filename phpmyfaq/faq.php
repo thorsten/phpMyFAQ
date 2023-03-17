@@ -154,7 +154,7 @@ if (isset($linkArray['href'])) {
             $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
-            $answer = str_replace($_url, $newFaqPath, $answer);
+            $answer = str_replace($_url, $newFaqPath, (string) $answer);
         }
     }
 }
@@ -244,7 +244,7 @@ $translationUrl = sprintf(
     str_replace(
         '%',
         '%%',
-        Link::getSystemRelativeUri('index.php')
+        (string) Link::getSystemRelativeUri('index.php')
     ) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
     $sids,
     $currentCategory,

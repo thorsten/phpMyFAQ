@@ -1223,8 +1223,8 @@ class Category
         $existcatlang = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
 
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
-            if (!in_array(strtolower($lang), $existcatlang)) {
-                $output .= "\t<option value=\"" . strtolower($lang) . '"';
+            if (!in_array(strtolower((string) $lang), $existcatlang)) {
+                $output .= "\t<option value=\"" . strtolower((string) $lang) . '"';
                 if ($lang == $selectedLanguage) {
                     $output .= ' selected="selected"';
                 }

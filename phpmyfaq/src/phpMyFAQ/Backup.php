@@ -111,7 +111,7 @@ class Backup
     private function getBackupHeader(string $tableNames): array
     {
         return [
-            sprintf('-- pmf%s: %s', substr($this->config->getVersion(), 0, 3), $tableNames),
+            sprintf('-- pmf%s: %s', substr((string) $this->config->getVersion(), 0, 3), $tableNames),
             '-- DO NOT REMOVE THE FIRST LINE!',
             '-- pmftableprefix: ' . Database::getTablePrefix(),
             '-- DO NOT REMOVE THE LINES ABOVE!',

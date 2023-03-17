@@ -61,14 +61,14 @@ function buildSiteMapNode(string $location, string $lastModified = null): string
     if (empty($lastModified)) {
         $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
-    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', $lastModified)) {
+    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', (string) $lastModified)) {
         $lastModified .= 'T' . date('H:i:sO');
     }
-    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', $lastModified)) {
+    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', (string) $lastModified)) {
         $lastModified .= 'T' . date('H:i:sP');
-    } elseif (preg_match('/([\+|\-][0-9]{2})([0-9]{2})$/', $lastModified, $arrayFind)) {
+    } elseif (preg_match('/([\+|\-][0-9]{2})([0-9]{2})$/', (string) $lastModified, $arrayFind)) {
         if (isset($arrayFind[1]) && isset($arrayFind[2])) {
-            $lastModified = str_replace($arrayFind[0], $arrayFind[1] . ':' . $arrayFind[2], $lastModified);
+            $lastModified = str_replace($arrayFind[0], $arrayFind[1] . ':' . $arrayFind[2], (string) $lastModified);
         }
     }
     return '<url>'
@@ -91,9 +91,9 @@ $oFaq = new Faq($faqConfig);
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
 $visitMin = 0;
-if (count($items) > 0) {
+if ((is_countable($items) ? count($items) : 0) > 0) {
     $visitsMax = $items[0]['visits'];
-    $visitMin = $items[count($items) - 1]['visits'];
+    $visitMin = $items[(is_countable($items) ? count($items) : 0) - 1]['visits'];
 }
 
 // Sitemap header

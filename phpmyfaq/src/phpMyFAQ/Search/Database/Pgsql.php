@@ -101,7 +101,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
         }
 
         foreach ($this->matchingColumns as $matchColumn) {
-            $columnName = substr(strstr($matchColumn, '.'), 1);
+            $columnName = substr(strstr((string) $matchColumn, '.'), 1);
 
             if (isset($weight[$columnName])) {
                 $column = sprintf(

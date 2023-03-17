@@ -34,7 +34,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $category->setGroups($currentAdminGroups);
     $ratings = new Rating($faqConfig);
     $ratingdata = $ratings->getAllRatings();
-    $numratings = count($ratingdata);
+    $numratings = is_countable($ratingdata) ? count($ratingdata) : 0;
     $oldcategory = 0;
 ?>
 

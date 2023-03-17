@@ -17,7 +17,7 @@
  * @since 2023-03-11
  */
 
-if (isset($error) && 0 < strlen($error)) {
+if (isset($error) && 0 < strlen((string) $error)) {
     $message = sprintf(
         '<p class="alert alert-danger alert-dismissible fade show mt-3">%s%s</p>',
         '<button type="button" class="close" data-dismiss="alert">' .
@@ -37,7 +37,7 @@ if ($action == 'logout') {
         $PMF_LANG['ad_logout']
     );
 }
-if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
+if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
 <div class="container py-5">

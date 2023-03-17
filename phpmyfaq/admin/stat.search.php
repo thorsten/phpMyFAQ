@@ -68,7 +68,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
     if (is_null($pages)) {
-        $pages = round((count($searchesList) + ($perPage / 3)) / $perPage, 0);
+        $pages = round(((is_countable($searchesList) ? count($searchesList) : 0) + ($perPage / 3)) / $perPage, 0);
     }
 
     $start = ($page - 1) * $perPage;
@@ -83,7 +83,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     // Pagination options
     $options = [
         'baseUrl' => $baseUrl,
-        'total' => count($searchesList),
+        'total' => is_countable($searchesList) ? count($searchesList) : 0,
         'perPage' => $perPage,
         'pageParamName' => 'page',
     ];

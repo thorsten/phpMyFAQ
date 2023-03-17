@@ -45,7 +45,7 @@ class TemplateHelper
         $metaData = $this->meta->getByPageId($key);
 
         if ($metaData->getType() === 'html') {
-            return html_entity_decode($metaData->getContent());
+            return html_entity_decode((string) $metaData->getContent());
         } else {
             return $metaData->getContent();
         }

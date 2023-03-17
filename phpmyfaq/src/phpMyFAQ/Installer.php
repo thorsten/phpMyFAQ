@@ -1019,7 +1019,7 @@ class Installer
         }
 
         $configuration->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
-        $configuration->add('security.salt', md5($configuration->getDefaultUrl()));
+        $configuration->add('security.salt', md5((string) $configuration->getDefaultUrl()));
 
         // add admin account and rights
         $admin = new User($configuration);

@@ -249,12 +249,12 @@ class System
         $mainUrl = $faqConfig->getDefaultUrl();
 
         if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
-            if (!str_contains($mainUrl, 'https')) {
-                $mainUrl = str_replace('http://', 'https://', $mainUrl);
+            if (!str_contains((string) $mainUrl, 'https')) {
+                $mainUrl = str_replace('http://', 'https://', (string) $mainUrl);
             }
         }
 
-        if (!str_ends_with($mainUrl, '/')) {
+        if (!str_ends_with((string) $mainUrl, '/')) {
             $mainUrl .= '/';
         }
 

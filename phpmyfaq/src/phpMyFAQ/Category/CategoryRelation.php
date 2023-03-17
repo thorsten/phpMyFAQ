@@ -135,7 +135,7 @@ class CategoryRelation
             }
         }
 
-        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
+        if (strlen((string) $this->config->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s'",
                 $this->config->getLanguage()->getLanguage()
@@ -217,7 +217,7 @@ class CategoryRelation
             );
         }
 
-        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
+        if (strlen((string) $this->config->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s'",
                 $this->config->getLanguage()->getLanguage()
@@ -238,10 +238,6 @@ class CategoryRelation
 
     /**
      * Calculates the aggregated numbers of FAQs for a given category
-     *
-     * @param array $categories
-     * @param int   $parentId
-     * @return array
      */
     public function getAggregatedFaqNumbers(array $categories, int $parentId = 0): array
     {

@@ -38,7 +38,7 @@ $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 $pagination = new Pagination(
     [
         'baseUrl' => $faqConfig->getDefaultUrl() . 'admin/?' . str_replace('&', '&amp;', (string) $_SERVER['QUERY_STRING']),
-        'total' => count($allCrumbs),
+        'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
         'perPage' => $itemsPerPage,
     ]
 );

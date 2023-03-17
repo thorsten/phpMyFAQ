@@ -138,26 +138,26 @@ class CurrentUser extends User
         ) {
             // If LDAP configuration and ldap_use_domain_prefix is true
             // and LDAP credentials are provided (password is not empty)
-            if (($pos = strpos($login, '\\')) !== false) {
+            if (($pos = strpos((string) $login, '\\')) !== false) {
                 if ($pos !== 0) {
-                    $optData['domain'] = substr($login, 0, $pos);
+                    $optData['domain'] = substr((string) $login, 0, $pos);
                 }
 
-                $login = substr($login, $pos + 1);
+                $login = substr((string) $login, $pos + 1);
             }
         }
 
         // Additional code for SSO
         if ($this->config->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
             // if SSO configuration is enabled, REMOTE_USER is provided, and we try to log in using SSO (no password)
-            if (($pos = strpos($login, '@')) !== false) {
+            if (($pos = strpos((string) $login, '@')) !== false) {
                 if ($pos !== 0) {
-                    $login = substr($login, 0, $pos);
+                    $login = substr((string) $login, 0, $pos);
                 }
             }
-            if (($pos = strpos($login, '\\')) !== false) {
+            if (($pos = strpos((string) $login, '\\')) !== false) {
                 if ($pos !== 0) {
-                    $login = substr($login, $pos + 1);
+                    $login = substr((string) $login, $pos + 1);
                 }
             }
         }
@@ -244,7 +244,6 @@ class CurrentUser extends User
 
     /**
      * Sets loggedIn to true if the 2FA-auth was successfully and saves the login to session.
-     * @return bool
      */
     public function twoFactorSuccess(): bool
     {

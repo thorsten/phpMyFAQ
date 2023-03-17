@@ -30,14 +30,13 @@ class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
 
-    public function __construct(private Configuration $config)
+    public function __construct(private readonly Configuration $config)
     {
         $this->twoFactorAuth = new TwoFactorAuth();
     }
 
     /**
      * Generates and returns a new secret without saving
-     * @return string
      * @throws TwoFactorAuthException
      */
     public function generateSecret(): string
@@ -48,7 +47,6 @@ class TwoFactor
     /**
      * Saves a given secret to the current user from the session.
      *
-     * @param string $secret
      * @return true
      */
     public function saveSecret(string $secret): bool
@@ -60,9 +58,6 @@ class TwoFactor
 
     /**
      * Returns the secret of the current user
-     *
-     * @param CurrentUser $user
-     * @return string
      */
     public function getSecret(CurrentUser $user): string
     {
@@ -71,9 +66,6 @@ class TwoFactor
 
     /**
      * Validates a given token. Returns true if the token is correct.
-     * @param string $token
-     * @param int    $userid
-     * @return bool
      */
     public function validateToken(string $token, int $userid): bool
     {
@@ -86,8 +78,6 @@ class TwoFactor
 
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authentificator-App
-     * @param string $secret
-     * @return string
      * @throws TwoFactorAuthException
      */
     public function getQrCode(string $secret): string
