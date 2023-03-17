@@ -183,7 +183,7 @@ switch ($action) {
                 break;
             }
         }
-        
+
         if (
             !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord($comment) &&
             !$faq->commentDisabled($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
@@ -801,7 +801,7 @@ switch ($action) {
                     $success = true;
                 }
             }
-			}
+        }
         }
 
         if ($success) {
