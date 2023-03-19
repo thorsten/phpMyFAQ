@@ -25,3 +25,36 @@ export const handlePasswordToggle = () => {
     });
   }
 };
+
+export const handlePasswordStrength = () => {
+  const password = document.querySelector('#faqpassword');
+
+  if (password) {
+    password.addEventListener('keyup', () => {
+      document.getElementById('strength').style.width = (passwordStrength(password.value) * 25).toString() + '%';
+    });
+  }
+};
+
+/**
+ * Rules for the password strength calculation:
+ *  - at least 8 characters
+ *  - bonus if longer
+ *  - a lower letter
+ *  - an upper letter
+ *  - a digit
+ *  -a special character
+ *
+ * @param password
+ * @returns {number}
+ */
+const passwordStrength = (password) => {
+  return (
+    /.{8,}/.test(password) * // at least 8 characters
+    (/.{12,}/.test(password) + // bonus if longer
+      /[a-z]/.test(password) + // a lower letter
+      /[A-Z]/.test(password) + // an upper letter
+      /\d/.test(password) + // a digit
+      /[^A-Za-z0-9]/.test(password)) // a special character
+  );
+};

@@ -46,9 +46,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
-        $oldPassword = Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_SPECIAL_CHARS);
-        $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_SPECIAL_CHARS);
-        $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_SPECIAL_CHARS);
+        $oldPassword = Filter::filterInput(INPUT_POST, 'faqpassword_old', FILTER_SANITIZE_SPECIAL_CHARS);
+        $newPassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS);
+        $retypedPassword = Filter::filterInput(INPUT_POST, 'faqpassword_confirm', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             printf(
@@ -70,48 +70,58 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         }
     }
     ?>
-  <div class="row">
-    <div class="col-lg-12">
+
       <form action="?action=passwd" method="post" accept-charset="utf-8">
         <input type="hidden" name="save" value="newpassword">
         <?= Token::getInstance()->getTokenInput('password') ?>
-        <div class="row">
-          <label class="col-lg-2 col-form-label" for="opass">
+
+        <div class="row mb-2">
+          <label class="col-2 col-form-label" for="faqpassword_old">
               <?= Translation::get('ad_passwd_old') ?>
           </label>
-          <div class="col-lg-3">
-            <input type="password" autocomplete="off" name="opass" id="opass" class="form-control" required>
+          <div class="col-4">
+            <input type="password" autocomplete="off" name="faqpassword_old" id="faqpassword_old" class="form-control"
+                   required>
           </div>
         </div>
 
-        <div class="row">
-          <label class="col-lg-2 col-form-label" for="npass">
+        <div class="row mb-2">
+          <label class="col-2 col-form-label" for="faqpassword">
               <?= Translation::get('ad_passwd_new') ?>
           </label>
-          <div class="col-lg-3">
-            <input type="password" autocomplete="off" name="npass" id="npass" class="form-control" required>
+          <div class="col-4 input-group w-auto">
+            <input type="password" autocomplete="off" name="faqpassword" id="faqpassword" class="form-control" required>
+            <span class="input-group-text">
+              <i class="fa" id="togglePassword"></i>
+            </span>
+          </div>
+          <div class="offset-2 col-lg-83">
+            <div class="progress mt-2 w-25">
+              <div class="progress-bar progress-bar-striped" id="strength"></div>
+            </div>
           </div>
         </div>
 
-        <div class="row">
-          <label class="col-lg-2 col-form-label" for="bpass">
+        <div class="row mb-2">
+          <label class="col-2 col-form-label" for="faqpassword_confirm">
               <?= Translation::get('ad_passwd_con') ?>
           </label>
-          <div class="col-lg-3">
-            <input type="password" autocomplete="off" name="bpass" id="bpass" class="form-control" required>
+          <div class="col-4">
+            <input type="password" autocomplete="off" name="faqpassword_confirm" id="faqpassword_confirm"
+                   class="form-control" required>
           </div>
         </div>
 
-        <div class="row">
-          <div class="offset-lg-2 col-lg-3">
+        <div class="row mb-2">
+          <div class="offset-lg-2 col-4">
             <button class="btn btn-primary" type="submit">
                 <?= Translation::get('ad_passwd_change') ?>
             </button>
           </div>
         </div>
+
       </form>
-    </div>
-  </div>
+
     <?php
 } else {
     echo Translation::get('err_NotAuth');

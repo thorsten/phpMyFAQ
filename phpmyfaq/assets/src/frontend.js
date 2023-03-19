@@ -19,7 +19,7 @@ import Masonry from 'masonry-layout';
 import { saveFormData } from './api';
 import { handleComments, handleSaveComment } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
-import { calculateReadingTime, handlePasswordToggle, handleReloadCaptcha } from './utils';
+import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/cookie-consent';
 import './utils/tooltip';
 
@@ -32,9 +32,10 @@ if (reloadButton !== null) {
 }
 
 //
-// Toggle password visibility
+// Password helpers
 //
 handlePasswordToggle();
+handlePasswordStrength();
 
 //
 // Calculate reading time

@@ -34,13 +34,14 @@ import {
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
-import { handlePasswordToggle } from '../../../assets/src/utils';
+import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
 
   // Login
   handlePasswordToggle();
+  handlePasswordStrength();
 
   // Sidebar
   sidebarToggle();
