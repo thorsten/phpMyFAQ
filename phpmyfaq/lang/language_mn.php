@@ -485,29 +485,29 @@ $PMF_LANG["msgLangaugeSubmit"] = "Хэл солих";
 $PMF_LANG["ad_attach_4"] = "Хавсаргасан файл %s байтаас бага байх ёстой.";
 $PMF_LANG["ad_menu_export"] = "Таны FAQ экспортлох";
 
-$PMF_LANG["rightsLanguage"]['add_user'] = "Хэрэглэгч нэмэх";
-$PMF_LANG["rightsLanguage"]['edit_user'] = "Хэрэглэгч засах";
-$PMF_LANG["rightsLanguage"]['delete_user'] = "Хэрэглэгч устгах";
-$PMF_LANG["rightsLanguage"]['add_faq'] = "Бичлэг нэмэх";
-$PMF_LANG["rightsLanguage"]['edit_faq'] = "Бичлэг засварлах";
-$PMF_LANG["rightsLanguage"]['delete_faq'] = "Бичлэг устгах";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "View logs";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "View admin log";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "Сэтгэгдэл устгах";
-$PMF_LANG["rightsLanguage"]['addnews'] = "Мэдээ нэмэх";
-$PMF_LANG["rightsLanguage"]['editnews'] = "Мэдээ засах";
-$PMF_LANG["rightsLanguage"]['delnews'] = "Мэдээ устгах";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "Ангилал нэмэх";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "Ангилал засах";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "Ангилал устгах";
-$PMF_LANG["rightsLanguage"]['passwd'] = "Нууц үг өөрчлөх";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "Тохиргоо засах";
-$PMF_LANG["rightsLanguage"]['addatt'] = "Хавсралт нэмэх";
-$PMF_LANG["rightsLanguage"]['delatt'] = "Хавсралт устгах";
-$PMF_LANG["rightsLanguage"]['backup'] = "Нөөц үүсгэх";
-$PMF_LANG["rightsLanguage"]['restore'] = "Нөөц сэргээх";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "Нээлттэй асуултыг устгах";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "Үзлэг засварлах";
+$PMF_LANG['rightsLanguage::add_user'] = "Хэрэглэгч нэмэх";
+$PMF_LANG['rightsLanguage::edit_user'] = "Хэрэглэгч засах";
+$PMF_LANG['rightsLanguage::delete_user'] = "Хэрэглэгч устгах";
+$PMF_LANG['rightsLanguage::add_faq'] = "Бичлэг нэмэх";
+$PMF_LANG['rightsLanguage::edit_faq'] = "Бичлэг засварлах";
+$PMF_LANG['rightsLanguage::delete_faq'] = "Бичлэг устгах";
+$PMF_LANG['rightsLanguage::viewlog'] = "View logs";
+$PMF_LANG['rightsLanguage::adminlog'] = "View admin log";
+$PMF_LANG['rightsLanguage::delcomment'] = "Сэтгэгдэл устгах";
+$PMF_LANG['rightsLanguage::addnews'] = "Мэдээ нэмэх";
+$PMF_LANG['rightsLanguage::editnews'] = "Мэдээ засах";
+$PMF_LANG['rightsLanguage::delnews'] = "Мэдээ устгах";
+$PMF_LANG['rightsLanguage::addcateg'] = "Ангилал нэмэх";
+$PMF_LANG['rightsLanguage::editcateg'] = "Ангилал засах";
+$PMF_LANG['rightsLanguage::delcateg'] = "Ангилал устгах";
+$PMF_LANG['rightsLanguage::passwd'] = "Нууц үг өөрчлөх";
+$PMF_LANG['rightsLanguage::editconfig'] = "Тохиргоо засах";
+$PMF_LANG['rightsLanguage::addatt'] = "Хавсралт нэмэх";
+$PMF_LANG['rightsLanguage::delatt'] = "Хавсралт устгах";
+$PMF_LANG['rightsLanguage::backup'] = "Нөөц үүсгэх";
+$PMF_LANG['rightsLanguage::restore'] = "Нөөц сэргээх";
+$PMF_LANG['rightsLanguage::delquestion'] = "Нээлттэй асуултыг устгах";
+$PMF_LANG['rightsLanguage::changebtrevs'] = "Үзлэг засварлах";
 
 $PMF_LANG["msgAttachedFiles"] = "Хавсаргасан файлууд:";
 
@@ -658,9 +658,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Хэрэглэгч устгах";
 $PMF_LANG['ad_user_status'] = "Статус:";
 $PMF_LANG['ad_user_lastModified'] = "сүүлд засварласан:";
 $PMF_LANG['ad_gen_cancel'] = "Болих";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "нэгж нэр томьёо нэмэх";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "нэгж нэр томьёо засах";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "нэгж нэр томьёо устгах";
+$PMF_LANG['rightsLanguage::addglossary'] = "нэгж нэр томьёо нэмэх";
+$PMF_LANG['rightsLanguage::editglossary'] = "нэгж нэр томьёо засах";
+$PMF_LANG['rightsLanguage::delglossary'] = "нэгж нэр томьёо устгах";
 $PMF_LANG["ad_menu_group_administration"] = "Бүлгүүд";
 $PMF_LANG['ad_user_loggedin'] = 'Нэвтэрсэн ';
 
@@ -808,9 +808,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Орчуулж эхлэх...';
 $PMF_LANG['msgNewTranslationThanks'] = "Орчуулах санал илгээсэнд баярлалаа!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "бүлгийн бүртгэл нэмэх";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "бүлгийн бүртгэл засварлах";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "бүлгийн бүртгэл устгах";
+$PMF_LANG['rightsLanguage::addgroup'] = "бүлгийн бүртгэл нэмэх";
+$PMF_LANG['rightsLanguage::editgroup'] = "бүлгийн бүртгэл засварлах";
+$PMF_LANG['rightsLanguage::delgroup'] = "бүлгийн бүртгэл устгах";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Холбоосыг үндсэн цонхонд нээх';
@@ -977,10 +977,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG["rightsLanguage"]['addtranslation'] = "орчуулга нэмэх";
-$PMF_LANG["rightsLanguage"]['edittranslation'] = "орчуулга засварлах";
-$PMF_LANG["rightsLanguage"]['deltranslation'] = "орчуулга устгах";
-$PMF_LANG["rightsLanguage"]['approverec'] = "бичлэгийг батлах";
+$PMF_LANG['rightsLanguage::addtranslation'] = "орчуулга нэмэх";
+$PMF_LANG['rightsLanguage::edittranslation'] = "орчуулга засварлах";
+$PMF_LANG['rightsLanguage::deltranslation'] = "орчуулга устгах";
+$PMF_LANG['rightsLanguage::approverec'] = "бичлэгийг батлах";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array(

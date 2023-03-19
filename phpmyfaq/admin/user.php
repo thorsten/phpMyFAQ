@@ -417,9 +417,9 @@ if (
                                            class="form-check-input permission">
                                     <label class="form-check-label" for="user_right_<?= $right['right_id'] ?>">
                                         <?php
-                                        if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                                            echo $PMF_LANG['rightsLanguage'][$right['name']];
-                                        } else {
+                                        try {
+                                            echo Translation::get('rightsLanguage::' . $right['name']);
+                                        } catch (ErrorException $e) {
                                             echo $right['description'];
                                         }
                                         ?>

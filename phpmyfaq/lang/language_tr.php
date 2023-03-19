@@ -487,29 +487,29 @@ $PMF_LANG["msgLanguageSubmit"] = "Dil değiştir";
 $PMF_LANG["ad_attach_4"] = "Eklenti en fazla %s Byte olmalıdır.";
 $PMF_LANG["ad_menu_export"] = "Soruları dışa aktar";
 
-$PMF_LANG["rightsLanguage"]['add_user'] = "Kullanıcı ekle";
-$PMF_LANG["rightsLanguage"]['edit_user'] = "Kullanıcı düzenle";
-$PMF_LANG["rightsLanguage"]['delete_user'] = "Kullanıcı sil";
-$PMF_LANG["rightsLanguage"]['add_faq'] = "Kayıt ekle";
-$PMF_LANG["rightsLanguage"]['edit_faq'] = "Kayıt düzenle";
-$PMF_LANG["rightsLanguage"]['delete_faq'] = "Kayıt sil";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "Günlüğü görüntüle";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "Yönetici günlüğünü görüntüle";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "Yorumu silDelete comment";
-$PMF_LANG["rightsLanguage"]['addnews'] = "Duyuru ekle";
-$PMF_LANG["rightsLanguage"]['editnews'] = "Duyuru düzenle";
-$PMF_LANG["rightsLanguage"]['delnews'] = "Duyuru sil";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "Kategori ekle";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "Kategori düzenle";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "Kategori sil";
-$PMF_LANG["rightsLanguage"]['passwd'] = "Şifre değiştir";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "Yapılandırmayı düzenle";
-$PMF_LANG["rightsLanguage"]['addatt'] = "Eklenti ekle";
-$PMF_LANG["rightsLanguage"]['delatt'] = "Eklenti sil";
-$PMF_LANG["rightsLanguage"]['backup'] = "Yedek oluştur";
-$PMF_LANG["rightsLanguage"]['restore'] = "Yedeği geri yükle";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "Yanıtsız soruları sil";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "Sürümleri düzenle";
+$PMF_LANG['rightsLanguage::add_user'] = "Kullanıcı ekle";
+$PMF_LANG['rightsLanguage::edit_user'] = "Kullanıcı düzenle";
+$PMF_LANG['rightsLanguage::delete_user'] = "Kullanıcı sil";
+$PMF_LANG['rightsLanguage::add_faq'] = "Kayıt ekle";
+$PMF_LANG['rightsLanguage::edit_faq'] = "Kayıt düzenle";
+$PMF_LANG['rightsLanguage::delete_faq'] = "Kayıt sil";
+$PMF_LANG['rightsLanguage::viewlog'] = "Günlüğü görüntüle";
+$PMF_LANG['rightsLanguage::adminlog'] = "Yönetici günlüğünü görüntüle";
+$PMF_LANG['rightsLanguage::delcomment'] = "Yorumu silDelete comment";
+$PMF_LANG['rightsLanguage::addnews'] = "Duyuru ekle";
+$PMF_LANG['rightsLanguage::editnews'] = "Duyuru düzenle";
+$PMF_LANG['rightsLanguage::delnews'] = "Duyuru sil";
+$PMF_LANG['rightsLanguage::addcateg'] = "Kategori ekle";
+$PMF_LANG['rightsLanguage::editcateg'] = "Kategori düzenle";
+$PMF_LANG['rightsLanguage::delcateg'] = "Kategori sil";
+$PMF_LANG['rightsLanguage::passwd'] = "Şifre değiştir";
+$PMF_LANG['rightsLanguage::editconfig'] = "Yapılandırmayı düzenle";
+$PMF_LANG['rightsLanguage::addatt'] = "Eklenti ekle";
+$PMF_LANG['rightsLanguage::delatt'] = "Eklenti sil";
+$PMF_LANG['rightsLanguage::backup'] = "Yedek oluştur";
+$PMF_LANG['rightsLanguage::restore'] = "Yedeği geri yükle";
+$PMF_LANG['rightsLanguage::delquestion'] = "Yanıtsız soruları sil";
+$PMF_LANG['rightsLanguage::changebtrevs'] = "Sürümleri düzenle";
 
 $PMF_LANG["msgAttachedFiles"] = "Ekli dosyalar";
 
@@ -655,9 +655,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Kullanıcı Sil";
 $PMF_LANG['ad_user_status'] = "Durum";
 $PMF_LANG['ad_user_lastModified'] = "Son değişiklik";
 $PMF_LANG['ad_gen_cancel'] = "İptal";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "Sözlük girdisi ekle";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "Sözlük girdisi düzenle";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "Sözlük girdisi sil";
+$PMF_LANG['rightsLanguage::addglossary'] = "Sözlük girdisi ekle";
+$PMF_LANG['rightsLanguage::editglossary'] = "Sözlük girdisi düzenle";
+$PMF_LANG['rightsLanguage::delglossary'] = "Sözlük girdisi sil";
 $PMF_LANG["ad_menu_group_administration"] = "Gruplar";
 $PMF_LANG['ad_user_loggedin'] = "Giriş yapan kullanıcı ";
 $PMF_LANG['ad_group_details'] = "Grup Ayrıntıları";
@@ -804,9 +804,9 @@ $PMF_LANG['msgTranslateSubmit'] = "Çeviriye başla...";
 $PMF_LANG['msgNewTranslationThanks'] = "Çeviriye katkıda bulunduğunuz için teşekkürler!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "Grup hesabı ekle";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "Grup hesaplarını düzenle";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "Grup hesaplarını sil";
+$PMF_LANG['rightsLanguage::addgroup'] = "Grup hesabı ekle";
+$PMF_LANG['rightsLanguage::editgroup'] = "Grup hesaplarını düzenle";
+$PMF_LANG['rightsLanguage::delgroup'] = "Grup hesaplarını sil";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = "Bağlantı yeni sekmede açılır";
@@ -962,10 +962,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d Soru";
 $PMF_LANG["plmsgEntries"][1] = "%d Soru";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG["rightsLanguage"]['addtranslation'] = "çeviri ekle";
-$PMF_LANG["rightsLanguage"]['edittranslation'] = "çeviri düzenle";
-$PMF_LANG["rightsLanguage"]['deltranslation'] = "çeviri sil";
-$PMF_LANG["rightsLanguage"]['approverec'] = "kayıt onayla";
+$PMF_LANG['rightsLanguage::addtranslation'] = "çeviri ekle";
+$PMF_LANG['rightsLanguage::edittranslation'] = "çeviri düzenle";
+$PMF_LANG['rightsLanguage::deltranslation'] = "çeviri sil";
+$PMF_LANG['rightsLanguage::approverec'] = "kayıt onayla";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
@@ -1255,15 +1255,15 @@ $PMF_LANG['ad_quick_entry'] = "Bu kategoriye soru ekle";
 $PMF_LANG['ad_user_is_superadmin'] = "Super-Yönetici";
 $PMF_LANG['ad_user_overwrite_passwd'] = "Şifrenin üzerine yaz";
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Versioning of all FAQ changes'];
-$PMF_LANG['rightsLanguage']['view_faqs'] = "Soruları görüntüle";
-$PMF_LANG['rightsLanguage']['view_categories'] = "Kategorileri görüntüle";
-$PMF_LANG['rightsLanguage']['view_sections'] = "Bölümleri görüntüle";
-$PMF_LANG['rightsLanguage']['view_news'] = "Duyuruları görüntüle";
-$PMF_LANG['rightsLanguage']['add_section'] = "Bölüm ekle";
-$PMF_LANG['rightsLanguage']['edit_section'] = "Bölüm düzenle";
-$PMF_LANG['rightsLanguage']['delete_section'] = "Bölüm sil";
-$PMF_LANG['rightsLanguage']['administrate_sections'] = "Bölüm yönet";
-$PMF_LANG['rightsLanguage']['administrate_groups'] = "Grupları yönet";
+$PMF_LANG['rightsLanguage::view_faqs'] = "Soruları görüntüle";
+$PMF_LANG['rightsLanguage::view_categories'] = "Kategorileri görüntüle";
+$PMF_LANG['rightsLanguage::view_sections'] = "Bölümleri görüntüle";
+$PMF_LANG['rightsLanguage::view_news'] = "Duyuruları görüntüle";
+$PMF_LANG['rightsLanguage::add_section'] = "Bölüm ekle";
+$PMF_LANG['rightsLanguage::edit_section'] = "Bölüm düzenle";
+$PMF_LANG['rightsLanguage::delete_section'] = "Bölüm sil";
+$PMF_LANG['rightsLanguage::administrate_sections'] = "Bölüm yönet";
+$PMF_LANG['rightsLanguage::administrate_groups'] = "Grupları yönet";
 $PMF_LANG['ad_group_rights'] = "Grup izinleri";
 $PMF_LANG['ad_menu_meta'] = "Meta verisi";
 $PMF_LANG['ad_meta_add'] = "meta verisi ekle";
@@ -1289,6 +1289,6 @@ $PMF_LANG['ad_section_error_delete'] = "Bölüm silinemedi.";
 $PMF_LANG['ad_section_error_noName'] = "Lütfen bir bölüm adı girin.";
 $PMF_LANG['ad_section_suc'] = "Bölüm <strong>başarıyla</strong> eklendi.";
 $PMF_LANG['ad_section_deleted'] = "Bölüm başarıyla silindi.";
-$PMF_LANG['rightsLanguage']['viewadminlink'] = "Yönetici bağlantısını görüntüle";
+$PMF_LANG['rightsLanguage::viewadminlink'] = "Yönetici bağlantısını görüntüle";
 
 return $PMF_LANG;
