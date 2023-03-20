@@ -1,0 +1,6 @@
+site_name: phpMyFAQ v3.2
+theme:
+  name: readthedocs
+  highlightjs: true
+plugins:
+  - search
