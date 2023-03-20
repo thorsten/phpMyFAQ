@@ -15,6 +15,9 @@
  * @since     2013-01-02
  */
 
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -30,7 +33,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $esConfig = $faqConfig->getElasticsearchConfig();
 
     if ($faqConfig->get('search.enableElasticsearch')) {
-        $esFullInformation = $faqConfig->getElasticsearch()->info();
+        try {
+            $esFullInformation = $faqConfig->getElasticsearch()->info();
+        } catch (ClientResponseException|ServerResponseException $e) {
+            echo Alert::danger('ad_entryins_fail');
+        }
         $esInformation = $esFullInformation['version']['number'];
     } else {
         $esInformation = 'n/a';
@@ -39,7 +46,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-wrench"></i>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
             <?= Translation::get('ad_system_info') ?>
         </h1>
     </div>
@@ -56,13 +63,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                     'Web server software' => $_SERVER['SERVER_SOFTWARE'],
                     'Web server document root' => $_SERVER['DOCUMENT_ROOT'],
                     'Web server Interface' => strtoupper(PHP_SAPI),
-                    'PHP version' => PHP_VERSION,
-                    'PHP extensions' => implode(', ', get_loaded_extensions()),
-                    'PHP session path' => session_save_path(),
-                    'Database server' => Database::getType(),
-                    'Database server version' => $faqConfig->getDb()->serverVersion(),
-                    'Database client version' => $faqConfig->getDb()->clientVersion(),
-                    'Elasticsearch version' => $esInformation
+                    'PHP Version' => PHP_VERSION,
+                    'PHP Extensions' => implode(', ', get_loaded_extensions()),
+                    'PHP Session path' => session_save_path(),
+                    'Database Server' => Database::getType(),
+                    'Database Server Version' => $faqConfig->getDb()->serverVersion(),
+                    'Database Client Version' => $faqConfig->getDb()->clientVersion(),
+                    'Elasticsearch Version' => $esInformation
                 ];
                 foreach ($systemInformation as $name => $info) : ?>
                     <tr>
