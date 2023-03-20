@@ -22,6 +22,7 @@ import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/cookie-consent';
 import './utils/tooltip';
+import { handleUserVoting } from './faq/voting';
 
 //
 // Reload Captchas
@@ -44,6 +45,11 @@ const faqBody = document.querySelector('.pmf-faq-body');
 if (faqBody !== null) {
   calculateReadingTime();
 }
+
+//
+// Handle votings
+//
+handleUserVoting();
 
 //
 // Handle comments
