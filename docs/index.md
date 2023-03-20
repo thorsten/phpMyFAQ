@@ -1,6 +1,4 @@
-# phpMyFAQ v3.2
-
-## Introduction
+# Introduction
 
 phpMyFAQ is a multilingual, completely database-driven FAQ system. It supports various databases to store all data,
 PHP 8.1+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
