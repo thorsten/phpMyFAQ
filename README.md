@@ -3,6 +3,7 @@
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/thorsten/phpMyFAQ)
+[![Documentation Status](https://readthedocs.org/projects/phpmyfaq/badge/?version=latest)](https://phpmyfaq.readthedocs.io/en/latest/?badge=latest)
 
 ## What is phpMyFAQ?
 
@@ -157,7 +158,7 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 ## Documentation
 
-You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
+You can find the full documentation on [https://phpmyfaq.readthedocs.io](https://phpmyfaq.readthedocs.io/en/latest/).
 
 ## REST API v2.2
 

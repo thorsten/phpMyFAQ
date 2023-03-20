@@ -4,7 +4,7 @@
 
 phpMyFAQ is a multilingual, completely database-driven FAQ system. It supports various databases to store all data,
 PHP 8.1+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
-WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user  
+WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking,
 40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates with support for
 own text and HTML snippets, PDF-support, a backup-system, a dynamic sitemap, related FAQs, tagging, built-in spam
