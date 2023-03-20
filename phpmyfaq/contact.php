@@ -50,7 +50,7 @@ $template->parse(
         'msgContactOwnText' => nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformations'))),
         'msgContactEMail' => Translation::get('msgContactEMail'),
         'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
-        'privacyURL' => $faqConfig->get('main.privacyURL'),
+        'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
         'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),

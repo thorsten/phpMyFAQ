@@ -217,7 +217,8 @@ if (
 
     // Set data for forms
     $faqData['title'] = (isset($faqData['title']) ? Strings::htmlspecialchars($faqData['title']) : '');
-    $faqData['content'] = (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'])) : '');
+    $faqData['content'] =
+        (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)) : '');
     $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlspecialchars($faqData['tags']) : '');
     $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlspecialchars($faqData['keywords']) : '');
     $faqData['author'] = (isset($faqData['author']) ? Strings::htmlspecialchars(
@@ -664,7 +665,7 @@ if (
                                                     );
                                                     ?>
                                                     <br>
-                                                    <?= $entry['changelog'] ?>
+                                                    <?= Strings::htmlentities($entry['changelog'] ?? '') ?>
                                                 </li>
                                             <?php } ?>
                                         </ul>
@@ -685,9 +686,11 @@ if (
                                 <button class="btn btn-lg btn-info" type="reset">
                                     <?= Translation::get('ad_gen_reset') ?>
                                 </button>
+
                                 <button class="btn btn-lg btn-primary" type="submit">
                                     <?= Translation::get('ad_entry_save') ?>
                                 </button>
+
                             <?php endif ?>
 
                         </div>

@@ -20,6 +20,7 @@
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -170,7 +171,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
         <div class="col-lg-12">
           <h2 class="page-header">
             <i aria-hidden="true" class="fa fa-users fa-fw"></i>
-              <?= Translation::get('ad_group_deleteGroup') ?> "<?= $groupData['name'] ?>"
+              <?= Translation::get('ad_group_deleteGroup') ?> "<?= Strings::htmlentities($groupData['name']) ?>"
           </h2>
         </div>
       </header>

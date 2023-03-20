@@ -635,7 +635,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
             '<a class="nav-link px-1 " target="_blank" href="%s">%s</a>',
-            $faqConfig->get('main.privacyURL'),
+            Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
         'faqOverview' => '<a class="nav-link px-1 " href="./overview.html">' . Translation::get('faqOverview') . '</a>',
@@ -669,7 +669,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
             '<a target="_blank" href="%s">%s</a>',
-            $faqConfig->get('main.privacyURL'),
+            Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
         'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . Translation::get('faqOverview') . '</a>',

@@ -153,7 +153,7 @@ class StopWords
 
         if ($wordsOnly) {
             while (($row = $this->config->getDb()->fetchObject($result)) == true) {
-                $stopWords[] = $row->stopword;
+                $stopWords[] = Strings::htmlentities($row->stopword);
             }
         } else {
             return $this->config->getDb()->fetchAll($result);

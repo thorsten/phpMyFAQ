@@ -132,7 +132,7 @@ $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
     'savevoting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
-    'submit-request-removal' !== $action && !$captcha->checkCaptchaCode($code)
+    'submit-request-removal' !== $action && !$captcha->checkCaptchaCode($code ?? '')
 ) {
     $message = ['error' => Translation::get('msgCaptcha')];
 }
@@ -181,7 +181,7 @@ switch ($action) {
             case 'news':
                 $id = $newsId;
                 break;
-            case 'faq';
+            case 'faq':
                 $id = $faqId;
                 break;
         }
@@ -191,7 +191,7 @@ switch ($action) {
             $mailer = $faqConfig->getAdminEmail();
         }
 
-        // Check display name and e-mail address for not logged in users
+        // Check display name and e-mail address for not logged-in users
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
@@ -202,13 +202,8 @@ switch ($action) {
         }
 
         if (
-            !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
-                $comment
-            ) && !$faq->commentDisabled(
-                $id,
-                $languageCode,
-                $type
-            )
+            !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord($comment) &&
+            !$faq->commentDisabled($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
         ) {
             try {
                 $faqSession->userTracking('save_comment', $id);
@@ -222,7 +217,7 @@ switch ($action) {
                 ->setType($type)
                 ->setUsername($username)
                 ->setEmail($mailer)
-                ->setComment(nl2br((string) $comment))
+                ->setComment(nl2br(strip_tags((string) $comment)))
                 ->setDate($_SERVER['REQUEST_TIME']);
 
             if ($oComment->addComment($commentEntity)) {
@@ -802,7 +797,7 @@ switch ($action) {
         $deleteSecret = Filter::filterVar($postData['newsecret'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $user = CurrentUser::getFromSession($faqConfig);
-        
+
         if ($deleteSecret === 'on') {
             $secret = '';
         } else {

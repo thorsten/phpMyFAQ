@@ -109,7 +109,7 @@ if (
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-        if ($userId == 0) {
+        if ($userId === 0) {
             $message .= Alert::danger('ad_user_error_noId');
         } else {
             $userData = [];
@@ -126,7 +126,7 @@ if (
             $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
-            
+
             // reset twofactor-authentication if required
             if($deleteTwofactor) {
                 $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
@@ -692,6 +692,7 @@ if (
                             </div>
                         </div>
 
+                        <?php if ($user->isSuperAdmin()) { ?>
                         <div class="row mb-2">
                             <div class="col-lg-4"></div>
                             <div class="col-lg-8">
@@ -704,6 +705,7 @@ if (
                                 </div>
                             </div>
                         </div>
+                        <?php } ?>
 
                     </form>
                 </div>

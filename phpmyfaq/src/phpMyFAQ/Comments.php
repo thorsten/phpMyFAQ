@@ -65,7 +65,7 @@ class Comments
             $output .= sprintf(
                 '<strong><a href="mailto:%s">%s</a></strong>',
                 $mail->safeEmail($item->getEmail()),
-                $item->getUsername()
+                Strings::htmlentities($item->getUsername())
             );
             $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item->getDate()));
             $output .= '     </div>';
@@ -137,7 +137,7 @@ class Comments
 
         $comment = '';
         foreach ($words as $word) {
-            $comment .= $word . ' ';
+            $comment .= Strings::htmlentities($word . ' ');
             if (15 === $numWords) {
                 $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
                     '<a href="#" data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
