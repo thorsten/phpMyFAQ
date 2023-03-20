@@ -75,7 +75,7 @@ class News
             if (strlen($item['link']) > 1) {
                 $output .= sprintf(
                     '<br>%s <a href="%s" target="_%s">%s</a>',
-                    $this->pmfLang['msgInfo'],
+                    Translation::get('msgInfo'),
                     Strings::htmlentities($item['link']),
                     $item['target'],
                     Strings::htmlentities($item['linkTitle'])

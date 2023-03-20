@@ -8,7 +8,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2023 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-01-26
  */
@@ -28,10 +28,11 @@ export const handlePasswordToggle = () => {
 
 export const handlePasswordStrength = () => {
   const password = document.querySelector('#faqpassword');
+  const strength = document.getElementById('strength');
 
-  if (password) {
+  if (password && strength) {
     password.addEventListener('keyup', () => {
-      document.getElementById('strength').style.width = (passwordStrength(password.value) * 25).toString() + '%';
+      strength.style.width = (passwordStrength(password.value) * 25).toString() + '%';
     });
   }
 };
