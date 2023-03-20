@@ -60,3 +60,4 @@ coverage.txt
 tests/test.db
 tests/test.db-journal
 tests/config/database.php
+tests/fixtures/path-to-delete/foo.bar.baz
