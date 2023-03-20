@@ -12,6 +12,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-20
  */
+import { addElement } from '../utils';
 
 export const handleUserVoting = () => {
   const votingForm = document.querySelector('.pmf-voting-form');
@@ -36,7 +37,6 @@ export const handleUserVoting = () => {
       'submit',
       (event) => {
         event.preventDefault();
-        event.stopPropagation();
 
         const selectedButton = document.activeElement;
         if (!selectedButton) {
@@ -60,6 +60,51 @@ export const handleUserVoting = () => {
         }
 
         selectedButton.setAttribute('aria-pressed', true);
+
+        // Save to backend
+        const votingId = document.getElementById('voting-id').value;
+        const votingLanguage = document.getElementById('voting-language').value;
+        fetch(`api.service.php?action=add-voting`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: votingId,
+            lang: votingLanguage,
+            value: selectedIndex,
+          }),
+        })
+          .then(async (response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok: ', { cause: { response } });
+          })
+          .then((response) => {
+            if (response.success) {
+              const message = document.getElementById('pmf-voting-result');
+              message.insertAdjacentElement(
+                'afterend',
+                addElement('div', { classList: 'alert alert-success', innerText: response.success })
+              );
+            } else {
+              const element = document.getElementById('pmf-voting-result');
+              element.insertAdjacentElement(
+                'afterend',
+                addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+              );
+            }
+          })
+          .catch(async (error) => {
+            const element = document.getElementById('pmf-voting-result');
+            const errorMessage = await error.cause.response.json();
+            element.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+            );
+          });
       },
       false
     );

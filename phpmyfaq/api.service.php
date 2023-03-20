@@ -632,46 +632,46 @@ switch ($action) {
         }
         break;
 
-    case 'savevoting':
+    case 'add-voting':
         $faq = new Faq($faqConfig);
         $rating = new Rating($faqConfig);
-        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_SPECIAL_CHARS, 'faq');
-        $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
-        $vote = Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
+
+        $faqId = Filter::filterVar($postData['id'] ?? null, FILTER_VALIDATE_INT, 0);
+        $vote = Filter::filterVar($postData['value'], FILTER_VALIDATE_INT);
         $userIp = Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
-        if (isset($vote) && $rating->check($recordId, $userIp) && $vote > 0 && $vote < 6) {
+        if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
             try {
-                $faqSession->userTracking('save_voting', $recordId);
+                $faqSession->userTracking('save_voting', $faqId);
             } catch (Exception) {
                 // @todo handle the exception
             }
 
             $votingData = [
-                'record_id' => $recordId,
+                'record_id' => $faqId,
                 'vote' => $vote,
                 'user_ip' => $userIp,
             ];
 
-            if (!$rating->getNumberOfVotings($recordId)) {
+            if (!$rating->getNumberOfVotings($faqId)) {
                 $rating->addVoting($votingData);
             } else {
                 $rating->update($votingData);
             }
             $message = [
                 'success' => Translation::get('msgVoteThanks'),
-                'rating' => $rating->getVotingResult($recordId),
+                'rating' => $rating->getVotingResult($faqId),
             ];
-        } elseif (!$rating->check($recordId, $userIp)) {
+        } elseif (!$rating->check($faqId, $userIp)) {
             try {
-                $faqSession->userTracking('error_save_voting', $recordId);
+                $faqSession->userTracking('error_save_voting', $faqId);
             } catch (Exception $exception) {
                 $message = ['error' => $exception->getMessage()];
             }
             $message = ['error' => Translation::get('err_VoteTooMuch')];
         } else {
             try {
-                $faqSession->userTracking('error_save_voting', $recordId);
+                $faqSession->userTracking('error_save_voting', $faqId);
             } catch (Exception $exception) {
                 $message = ['error' => $exception->getMessage()];
             }

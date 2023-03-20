@@ -367,19 +367,9 @@ $template->parse(
             'translation'
         ),
         'msgTranslateSubmit' => Translation::get('msgTranslateSubmit'),
-        'saveVotingPATH' => sprintf(
-            str_replace(
-                '%',
-                '%%',
-                (string) $faqConfig->getDefaultUrl()
-            ) . 'index.php?%saction=savevoting',
-            $sids
-        ),
         'saveVotingID' => $recordId,
-        'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
         'msgAverageVote' => Translation::get('msgAverageVote'),
-        'renderVotingStars' => '',
-        'printVotings' => $rating->getVotingResult($recordId),
+        'renderVotingResult' => $rating->getVotingResult($recordId),
         'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
         'msgVoteUsability' => Translation::get('msgVoteUsability'),
         'msgVoteBad' => Translation::get('msgVoteBad'),
