@@ -1329,11 +1329,11 @@ class Category
     /**
      * Returns the user id of the category owner
      *
-     * @param int $categoryId
+     * @param int|null $categoryId
      * @return int
      */
-    public function getOwner(int $categoryId): int
+    public function getOwner(int $categoryId = null): int
     {
-        return isset($this->owner[$categoryId]) ? (int)$this->owner[$categoryId] : 1;
+        return $this->owner[$categoryId] ?? 1;
     }
 }
