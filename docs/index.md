@@ -1,4 +1,4 @@
-# Introduction
+# phpMyFAQ Manual
 
 phpMyFAQ is a multilingual, completely database-driven FAQ system. It supports various databases to store all data,
 PHP 8.1+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
@@ -9,7 +9,7 @@ own text and HTML snippets, PDF-support, a backup-system, a dynamic sitemap, rel
 protection systems, OpenLDAP, Microsoft Active Directory, and Microsoft Azure AD support, and an easy-to-use
 installation script. You can run phpMyFAQ on almost every web hosting provider or in the cloud in a Docker container.
 
-This documentation should help you with installing, administrating and using phpMyFAQ.
+This documentation should help you with installing, updating, using and administrating phpMyFAQ.
 
 ### Copyright
 
@@ -20,13 +20,15 @@ The only restrictions apply to the copyright, which remains at all times at Thor
 modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program, that may only be accessing
 certain functions of phpMyFAQ is not affected by these restrictions and may be distributed under any type of license.
 
-A commercial usage or commercially distribution of phpMyFAQ, e.g. on CD-ROMs, is allowed, as long as the conditions
-mentioned above are met.
+A commercial usage or commercially distribution of phpMyFAQ, is allowed, as long as the conditions mentioned above are
+met.
 
 We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between the
 protection of the openness and free distribution on the one hand and the interaction with other software regardless of
 its licensing model. When compared to other licensing models its text is short and easily comprehensible, even for
 newcomers.
+
+This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 
 ### Support
 

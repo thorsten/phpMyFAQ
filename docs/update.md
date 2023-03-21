@@ -1,4 +1,4 @@
-# Update
+# 3. Update
 
 First, please download the latest package of phpMyFAQ. Upgrading to phpMyFAQ 3.2.x is possible from the following
 versions:

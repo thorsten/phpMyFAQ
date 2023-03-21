@@ -1,4 +1,4 @@
-# Installation
+# 2. Installation
 
 ## Requirements for phpMyFAQ
 

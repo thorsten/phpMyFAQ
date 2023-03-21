@@ -4,3 +4,8 @@ theme:
   highlightjs: true
 plugins:
   - search
+nav:
+  - 1. Introduction: 'index.md'
+  - 2. Installation: 'installation.md'
+  - 3. Update: 'update.md'
+  - 4. Use phpMyFAQ: 'usage.md'
