@@ -123,11 +123,9 @@ class CategoryRelation
                 );
             } else {
                 $query .= sprintf(
-                    'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )
-                    AND ( fcg.group_id IN (%s) OR (fcu.user_id = %d OR fcg.group_id IN (%s)) )',
-                    implode(', ', $this->category->getGroups()),
+                    'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )
+                    AND ( fcu.user_id = %d OR fcg.group_id IN (%s) )',
                     $this->category->getUser(),
-                    implode(', ', $this->category->getGroups()),
                     implode(', ', $this->category->getGroups()),
                     $this->category->getUser(),
                     implode(', ', $this->category->getGroups())
@@ -135,7 +133,7 @@ class CategoryRelation
             }
         }
 
-        if (strlen((string) $this->config->getLanguage()->getLanguage()) > 0) {
+        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s'",
                 $this->config->getLanguage()->getLanguage()
@@ -237,7 +235,7 @@ class CategoryRelation
     }
 
     /**
-     * Calculates the aggregated numbers of FAQs for a given category
+     * Calculates the aggregated numbers of FAQs
      */
     public function getAggregatedFaqNumbers(array $categories, int $parentId = 0): array
     {

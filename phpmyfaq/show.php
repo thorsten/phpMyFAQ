@@ -112,6 +112,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         ]
     );
 } else {
+    $selectedCategoryId = 0;
     try {
         $faqSession->userTracking('show_all_categories', 0);
     } catch (Exception) {
@@ -129,7 +130,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'categoryDescription' => '',
             'categoryFaqsHeader' => '',
             'categorySubsHeader' => '',
-            'categoryContent' => $categoryHelper->renderCategoryTree(),
+            'categoryContent' => $categoryHelper->renderCategoryTree($selectedCategoryId),
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => '',
         ]

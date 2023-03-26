@@ -118,7 +118,7 @@ class CategoryHelper extends Helper
         $categoryRelation = new CategoryRelation($this->config, $this->Category);
         $categoryRelation->setGroups($this->Category->getGroups());
         $categoriesWithNumbers = $categoryRelation->getCategoryTree();
-        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($categoriesWithNumbers);
+        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($categoriesWithNumbers, $parentId);
 
         return sprintf(
             '<ul class="pmf-category-overview">%s</ul>',
