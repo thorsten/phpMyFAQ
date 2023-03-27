@@ -145,7 +145,7 @@ $PMF_LANG["msgLatestArticles"] = "Latest FAQs";
 
 // Email notification
 $PMF_LANG["msgMailThanks"] = "Thank you for your proposal to the FAQ!";
-$PMF_LANG["msgMailCheck"] = "There's a new entry in the FAQ! Please check the admin section.";
+$PMF_LANG["msgMailCheck"] = "There's a new entry in the FAQ! Please check it here or in the admin section.";
 $PMF_LANG["msgMailContact"] = "Your message has been sent to the administrator.";
 
 // Error messages
