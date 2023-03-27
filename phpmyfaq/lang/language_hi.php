@@ -506,29 +506,29 @@ $PMF_LANG["ad_menu_export"] = "अपनी सहायता केंद्�
 $PMF_LANG["ad_export_file"] = "एरर: फाइल नहीं लिखी जा सकी.";
 $PMF_LANG["ad_export_pdf"] = "PDF-सभी रिकॉर्ड निर्यात करें";
 
-$PMF_LANG["rightsLanguage"]['add_user'] = "प्रयोगकर्ता जोडें";
-$PMF_LANG["rightsLanguage"]['edit_user'] = "प्रयोगकर्ता का सम्पादन करेंr";
-$PMF_LANG["rightsLanguage"]['delete_user'] = "प्रयोगकर्ता को मिटायें";
-$PMF_LANG["rightsLanguage"]['add_faq'] = "नया रिकॉर्ड जोडें";
-$PMF_LANG["rightsLanguage"]['edit_faq'] = "रिकॉर्ड का सम्पादन करें";
-$PMF_LANG["rightsLanguage"]['delete_faq'] = "रिकॉर्ड को मिटा दें";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "लॉग देखें";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "प्रबंधक लॉग देखें";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "टिप्पणी मिटायें";
-$PMF_LANG["rightsLanguage"]['addnews'] = "समाचार जोडें";
-$PMF_LANG["rightsLanguage"]['editnews'] = "समाचार का सम्पादन करें";
-$PMF_LANG["rightsLanguage"]['delnews'] = "समाचार मिटायें";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "वर्ग जोडें";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "वर्ग का सम्पादन करें";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "वर्ग को मिटा दें";
-$PMF_LANG["rightsLanguage"]['passwd'] = "संकेतक शब्द बदलें";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "सरंचना (config) बदलें";
-$PMF_LANG["rightsLanguage"]['addatt'] = "फाइल जोडें";
-$PMF_LANG["rightsLanguage"]['delatt'] = "फाइल मिटायें";
-$PMF_LANG["rightsLanguage"]['backup'] = "बेकप बनाएं";
-$PMF_LANG["rightsLanguage"]['restore'] = "बेकप रेस्टोर करें ";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "अनसुलझे प्रश्न मिटायें";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "पुनवलोकन का सम्पादन करें";
+$PMF_LANG['rightsLanguage::add_user'] = "प्रयोगकर्ता जोडें";
+$PMF_LANG['rightsLanguage::edit_user'] = "प्रयोगकर्ता का सम्पादन करेंr";
+$PMF_LANG['rightsLanguage::delete_user'] = "प्रयोगकर्ता को मिटायें";
+$PMF_LANG['rightsLanguage::add_faq'] = "नया रिकॉर्ड जोडें";
+$PMF_LANG['rightsLanguage::edit_faq'] = "रिकॉर्ड का सम्पादन करें";
+$PMF_LANG['rightsLanguage::delete_faq'] = "रिकॉर्ड को मिटा दें";
+$PMF_LANG['rightsLanguage::viewlog'] = "लॉग देखें";
+$PMF_LANG['rightsLanguage::adminlog'] = "प्रबंधक लॉग देखें";
+$PMF_LANG['rightsLanguage::delcomment'] = "टिप्पणी मिटायें";
+$PMF_LANG['rightsLanguage::addnews'] = "समाचार जोडें";
+$PMF_LANG['rightsLanguage::editnews'] = "समाचार का सम्पादन करें";
+$PMF_LANG['rightsLanguage::delnews'] = "समाचार मिटायें";
+$PMF_LANG['rightsLanguage::addcateg'] = "वर्ग जोडें";
+$PMF_LANG['rightsLanguage::editcateg'] = "वर्ग का सम्पादन करें";
+$PMF_LANG['rightsLanguage::delcateg'] = "वर्ग को मिटा दें";
+$PMF_LANG['rightsLanguage::passwd'] = "संकेतक शब्द बदलें";
+$PMF_LANG['rightsLanguage::editconfig'] = "सरंचना (config) बदलें";
+$PMF_LANG['rightsLanguage::addatt'] = "फाइल जोडें";
+$PMF_LANG['rightsLanguage::delatt'] = "फाइल मिटायें";
+$PMF_LANG['rightsLanguage::backup'] = "बेकप बनाएं";
+$PMF_LANG['rightsLanguage::restore'] = "बेकप रेस्टोर करें ";
+$PMF_LANG['rightsLanguage::delquestion'] = "अनसुलझे प्रश्न मिटायें";
+$PMF_LANG['rightsLanguage::changebtrevs'] = "पुनवलोकन का सम्पादन करें";
 
 $PMF_LANG["msgAttachedFiles"] = "जुडी हुई फाइलें";
 
@@ -677,9 +677,9 @@ $PMF_LANG['ad_user_deleteUser'] = "प्रयोगकर्ता के ख�
 $PMF_LANG['ad_user_status'] = "स्तिथि";
 $PMF_LANG['ad_user_lastModified'] = "आखिरी बार बदला गया";
 $PMF_LANG['ad_gen_cancel'] = "रद्द करें";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "शब्दसंग्रह जोड़े";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "शब्दसंग्रह सम्पादन";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "शब्दसंग्रह मिटाना";
+$PMF_LANG['rightsLanguage::addglossary'] = "शब्दसंग्रह जोड़े";
+$PMF_LANG['rightsLanguage::editglossary'] = "शब्दसंग्रह सम्पादन";
+$PMF_LANG['rightsLanguage::delglossary'] = "शब्दसंग्रह मिटाना";
 $PMF_LANG["ad_menu_group_administration"] = "दल";
 $PMF_LANG['ad_user_loggedin'] = 'आपका सत्र इस नाम से चल रहा है ';
 
@@ -828,9 +828,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'अनुवाद आरम्भ करे�
 $PMF_LANG['msgNewTranslationThanks'] = "अनुवाद के प्रस्ताव के लिए आपका धन्यवाद!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "दल का खाता जोडें";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "दल के खाते का सम्पादन करें";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "दल का खाता मिटा दें";
+$PMF_LANG['rightsLanguage::addgroup'] = "दल का खाता जोडें";
+$PMF_LANG['rightsLanguage::editgroup'] = "दल के खाते का सम्पादन करें";
+$PMF_LANG['rightsLanguage::delgroup'] = "दल का खाता मिटा दें";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'कड़ी उसी विण्डो में खुलती है';

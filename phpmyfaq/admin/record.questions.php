@@ -63,7 +63,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             $openQuestions = $question->getAllOpenQuestions();
 
-            if (count($openQuestions) > 0) {
+            if ((is_countable($openQuestions) ? count($openQuestions) : 0) > 0) {
                 ?>
             <form id="phpmyfaq-open-questions" name="phpmyfaq-open-questions" method="post" accept-charset="utf-8">
               <?= Token::getInstance()->getTokenInput('delete-questions') ?>

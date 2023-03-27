@@ -23,7 +23,7 @@ export const handleAutoComplete = () => {
   if (autoCompleteInput) {
     autocomplete({
       debounceWaitMs: 200,
-      preventSubmit: true,
+      preventSubmit: false,
       disableAutoSelect: false,
       input: autoCompleteInput,
       container: addElement('ul', { classList: 'list-group bg-dark' }),

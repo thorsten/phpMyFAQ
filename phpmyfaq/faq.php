@@ -18,9 +18,7 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Captcha\Captcha;
-use phpMyFAQ\Captcha\Helper\BuiltinCaptchaHelper;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
@@ -56,7 +54,7 @@ $tagging = new Tags($faqConfig);
 $relation = new Relation($faqConfig);
 $rating = new Rating($faqConfig);
 $comment = new Comments($faqConfig);
-$markDown = new \ParsedownExtra();
+$markDown = new ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
 $faqPermission = new FaqPermission($faqConfig);
 $attachmentHelper = new AttachmentHelper();
@@ -76,30 +74,30 @@ if (!is_null($showCaptcha)) {
 
 $currentCategory = $cat;
 
-$recordId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$faqId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 
 // Get all data from the FAQ record
 if (0 === (int)$solutionId) {
-    $faq->getRecord($recordId);
+    $faq->getRecord($faqId);
 } else {
     $faq->getRecordBySolutionId($solutionId);
 }
 
 if (isset($faq->faqRecord['id'])) {
-    $recordId = $faq->faqRecord['id'];
+    $faqId = $faq->faqRecord['id'];
 }
 
 try {
-    $faqSession->userTracking('article_view', $recordId);
+    $faqSession->userTracking('article_view', $faqId);
 } catch (Exception) {
     // @todo handle the exception
 }
 
 $faqVisits = new Visits($faqConfig);
-$faqVisits->logViews((int) $recordId);
+$faqVisits->logViews((int) $faqId);
 
-$question = $faq->getRecordTitle($recordId);
+$question = $faq->getRecordTitle($faqId);
 $question = Strings::htmlentities($question);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
@@ -154,7 +152,7 @@ if (isset($linkArray['href'])) {
             $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
-            $answer = str_replace($_url, $newFaqPath, $answer);
+            $answer = str_replace($_url, $newFaqPath, (string) $answer);
         }
     }
 }
@@ -162,7 +160,7 @@ if (isset($linkArray['href'])) {
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
-        $attList = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+        $attList = AttachmentFactory::fetchByRecordId($faqConfig, $faqId);
         $answer .= $attachmentHelper->renderAttachmentList($attList);
     } catch (AttachmentException) {
         // handle exception
@@ -170,15 +168,15 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
 }
 
 // List all categories for this faq
-$htmlAllCategories = '';
-$multiCategories = $category->getCategoriesFromFaq($recordId);
+$renderedCategoryPath = '';
+$multiCategories = $category->getCategoriesFromFaq($faqId);
 if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
     foreach ($multiCategories as $multiCat) {
         $path = $category->getPath($multiCat['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
-        if ('' === trim((string) $path)) {
+        if ('' === trim($path)) {
             continue;
         }
-        $htmlAllCategories .= $path;
+        $renderedCategoryPath .= $path;
     }
 }
 
@@ -195,7 +193,7 @@ try {
 }
 
 $searchHelper = new SearchHelper($faqConfig);
-$relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
+$relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
 
 // Show link to edit the faq?
 $editThisEntry = '';
@@ -203,7 +201,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     $editThisEntry = sprintf(
         '<i aria-hidden="true" class="fa fa-pencil"></i> ' .
         '<a class="text-decoration-none" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
-        $recordId,
+        $faqId,
         $lang,
         Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2')
     );
@@ -231,11 +229,7 @@ if (
         'mainPageContent',
         'enableComments',
         [
-            'numberOfComments' => sprintf(
-                '%d %s',
-                $numComments[$recordId] ?? 0,
-                Translation::get('ad_start_comments')
-            ),
+            'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('ad_start_comments')),
         ]
     );
 }
@@ -248,7 +242,7 @@ $translationUrl = sprintf(
     ) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
     $sids,
     $currentCategory,
-    $recordId,
+    $faqId,
     $lang
 );
 
@@ -288,24 +282,24 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') && !empty($faq->f
     );
 }
 
-if ('-' !== $tagging->getAllLinkTagsById($recordId)) {
+if ('-' !== $tagging->getAllLinkTagsById($faqId)) {
     $template->parseBlock(
         'mainPageContent',
         'tagsAvailable',
         [
             'renderTagsHeader' => Translation::get('msg_tags'),
-            'renderTags' =>  $tagging->getAllLinkTagsById($recordId),
+            'renderTags' =>  $tagging->getAllLinkTagsById($faqId),
         ]
     );
 }
 
-if ('' !== $htmlAllCategories) {
+if ('' !== $renderedCategoryPath) {
     $template->parseBlock(
         'mainPageContent',
         'relatedCategories',
         [
             'renderRelatedCategoriesHeader' => Translation::get('msgArticleCategories'),
-            'renderRelatedCategories' => $htmlAllCategories,
+            'renderRelatedCategories' => $renderedCategoryPath,
         ]
     );
 }
@@ -332,7 +326,7 @@ $faqServices->setLanguage($lang);
 $faqServices->setQuestion($faq->getRecordTitle($id));
 
 // Check if category ID and FAQ ID are linked together
-if (!$category->categoryHasLinkToFaq($recordId, $currentCategory)) {
+if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
     $http->setStatus(404);
 }
 
@@ -367,19 +361,9 @@ $template->parse(
             'translation'
         ),
         'msgTranslateSubmit' => Translation::get('msgTranslateSubmit'),
-        'saveVotingPATH' => sprintf(
-            str_replace(
-                '%',
-                '%%',
-                (string) $faqConfig->getDefaultUrl()
-            ) . 'index.php?%saction=savevoting',
-            $sids
-        ),
-        'saveVotingID' => $recordId,
-        'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
+        'saveVotingID' => $faqId,
         'msgAverageVote' => Translation::get('msgAverageVote'),
-        'renderVotingStars' => '',
-        'printVotings' => $rating->getVotingResult($recordId),
+        'renderVotingResult' => $rating->getVotingResult($faqId),
         'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
         'msgVoteUsability' => Translation::get('msgVoteUsability'),
         'msgVoteBad' => Translation::get('msgVoteBad'),
@@ -387,7 +371,7 @@ $template->parse(
         'msgVoteSubmit' => Translation::get('msgVoteSubmit'),
         'writeCommentMsg' => $commentMessage,
         'msgWriteComment' => Translation::get('msgWriteComment'),
-        'id' => $recordId,
+        'id' => $faqId,
         'lang' => $lang,
         'msgCommentHeader' => Translation::get('msgCommentHeader'),
         'msgNewContentName' => Translation::get('msgNewContentName'),
@@ -398,8 +382,9 @@ $template->parse(
         'msgCancel' => Translation::get('ad_gen_cancel'),
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
         'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $auth),
-        'renderComments' => $comment->getComments($recordId, CommentType::FAQ),
+        'captchaFieldset' =>
+            $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+        'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
     ]
 );

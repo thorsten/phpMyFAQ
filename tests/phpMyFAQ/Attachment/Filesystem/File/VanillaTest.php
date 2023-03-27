@@ -14,6 +14,8 @@ class VanillaTest extends TestCase
 
     /**
      * Prepares the environment before running a test.
+     *
+     * @throws FileException
      */
     protected function setUp(): void
     {

@@ -63,6 +63,11 @@
             <i class="fa" id="togglePassword"></i>
           </span>
         </div>
+        <div class="offset-4 col-lg-8">
+          <div class="progress mt-2 w-50">
+            <div class="progress-bar progress-bar-striped" id="strength"></div>
+          </div>
+        </div>
       </div>
 
       <div class="row mb-2">
@@ -145,8 +150,7 @@
               <p class="text-center">Secret-Key: {{ twofactor_secret }}</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">{{ msgSave }}</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ msgSave }}</button>
             </div>
           </div>
         </div>

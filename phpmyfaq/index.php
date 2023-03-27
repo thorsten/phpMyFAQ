@@ -119,7 +119,8 @@ $action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS
 //
 // Authenticate current user
 //
-$auth = $error = null;
+$auth = false;
+$error = null;
 $loginVisibility = 'hidden';
 
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -147,36 +148,13 @@ if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
     $csrfChecked = false;
 }
 
-if (!isset($user)) {
-    $user = new CurrentUser($faqConfig);
-}
-
-$userAuth = new UserAuthentication($faqConfig, $user);
-
-// Login via local DB or LDAP or SSO
-if (!is_null($faqusername) && !is_null($faqpassword)) {
-    $user = new CurrentUser($faqConfig);
-    $userAuth->setRememberMe($rememberMe ?? false);
-    try {
-        [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
-    } catch (Exception $e) {
-        $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
-        $action = 'login';
-        $error = $e->getMessage();
-    }
-} else {
-    // Try to authenticate with cookie information
-    [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
-    if(!$user->isLoggedIn()) {
-        $auth = null;
-    }
-}
-
 //
 // Validating token from 2FA if given; else: returns error message
 //
-if ($userAuth->hasTwoFactorAuthentication()) {
+if (!is_null($token) && !is_null($userid)) {
     if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
+        $user = new CurrentUser($faqConfig);
+        $user->getUserById($userid);
         $tfa = new TwoFactor($faqConfig);
         $res = $tfa->validateToken($token, $userid);
         if (!$res) {
@@ -192,12 +170,45 @@ if ($userAuth->hasTwoFactorAuthentication()) {
     }
 }
 
+if (!isset($user)) {
+    $user = new CurrentUser($faqConfig);
+}
+
+// Login via local DB or LDAP or SSO
+if (!is_null($faqusername) && !is_null($faqpassword)) {
+    $userAuth = new UserAuthentication($faqConfig, $user);
+    $userAuth->setRememberMe($rememberMe ?? false);
+    try {
+        [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+        $userid = $user->getUserId();
+    } catch (Exception $e) {
+        $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
+        $action = 'login';
+        $error = $e->getMessage();
+    }
+} else {
+    // Try to authenticate with cookie information
+    [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+    if (!$user->isLoggedIn()) {
+        $auth = false;
+    }
+}
+
+if (isset($userAuth)) {
+    if ($userAuth instanceof UserAuthentication) {
+        if($userAuth->hasTwoFactorAuthentication() === true) {
+            $action = 'twofactor';
+            $auth = false;
+        }
+    }
+}
+
 //
 // Logout
 //
 if ($csrfChecked && 'logout' === $action && $auth) {
     $user->deleteFromSession(true);
-    $auth = null;
+    $auth = false;
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
@@ -624,7 +635,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
             '<a class="nav-link px-1 " target="_blank" href="%s">%s</a>',
-            $faqConfig->get('main.privacyURL'),
+            Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
         'faqOverview' => '<a class="nav-link px-1 " href="./overview.html">' . Translation::get('faqOverview') . '</a>',
@@ -658,7 +669,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
             '<a target="_blank" href="%s">%s</a>',
-            $faqConfig->get('main.privacyURL'),
+            Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
         'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . Translation::get('faqOverview') . '</a>',
@@ -679,7 +690,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 //
 // Show login box or logged-in user information
 //
-if ($user->getUserId() > 0) {
+if ($user->getUserId() > 0 && $auth) {
     if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',
@@ -775,7 +786,6 @@ if ('artikel' === $action) {
 }
 
 if ('twofactor' === $action) {
-    $userid = $user->getUserId();
     $includePhp = 'login.php';
 }
 

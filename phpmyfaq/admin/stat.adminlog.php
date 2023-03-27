@@ -38,7 +38,7 @@ if ($csrfToken && !Token::getInstance()->verifyToken('delete-adminlog', $csrfTok
     $deleteLog = true;
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
+if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' === $action) {
     $date = new Date($faqConfig);
     $perpage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -121,7 +121,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
             <td><?= Strings::htmlentities($user->getLogin()) ?></td>
             <td><?= $loggingValue['ip'] ?></td>
             <td><small><?php
-            $text = $loggingValue['text'];
+            $text = Strings::htmlentities($loggingValue['text']);
             $text = str_replace('Loginerror', Translation::get('ad_log_lger'), (string) $text);
             $text = str_replace('Session expired', Translation::get('ad_log_sess'), $text);
             $text = str_replace('Useredit, ', Translation::get('ad_log_edit'), $text);
@@ -142,7 +142,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' == 
     </table>
 
     <?php
-} elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
+} elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' === $action && $deleteLog) {
     if ($logging->delete()) {
         echo Alert::success('ad_adminlog_delete_success');
     } else {

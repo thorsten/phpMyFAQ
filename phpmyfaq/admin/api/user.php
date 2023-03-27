@@ -127,7 +127,7 @@ if (
 
         case 'add_user':
             if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
-                $http->setStatus(400);
+                $http->setStatus(401);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }
@@ -163,6 +163,8 @@ if (
                 if (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7) {
                     $errorMessage[] = Translation::get('ad_passwd_fail');
                 }
+            } else {
+                $userPassword = ''; // set password to empty, so a new one is created
             }
 
             if (count($errorMessage) === 0) {

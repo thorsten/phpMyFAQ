@@ -31,14 +31,6 @@ class AuthSso extends Auth implements AuthDriverInterface
 {
     /**
      * @inheritDoc
-     */
-    public function __construct(Configuration $config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
-     * @inheritDoc
      * @throws Exception
      */
     public function create(string $login, string $password, string $domain = ''): bool

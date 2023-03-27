@@ -24,6 +24,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -326,9 +327,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             foreach ($category->getCategoryTree() as $cat) {
                 // CategoryHelper translated in this language?
                 if ($cat['lang'] == $lang) {
-                    $categoryName = $cat['name'];
+                    $categoryName = Strings::htmlentities($cat['name']);
                 } else {
-                    $categoryName = $cat['name'] . ' (' . LanguageCodes::get($cat['lang']) . ')';
+                    $categoryName = Strings::htmlentities($cat['name']) . ' (' . LanguageCodes::get($cat['lang']) . ')';
                 }
 
 

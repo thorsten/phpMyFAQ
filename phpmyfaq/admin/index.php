@@ -192,6 +192,10 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     $userAuth->setRememberMe($faqremember ?? false);
     try {
         [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+        $userid = $user->getUserId();
+        if ($userAuth->hasTwoFactorAuthentication()) {
+            $action = 'twofactor';
+        }
     } catch (Exception $e) {
         $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'Login-error\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
@@ -202,7 +206,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     // Try to authenticate with cookie information
     [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
     if(!$user->isLoggedIn()) {
-        $auth = null;
+        $auth = false;
     }
 }
 
@@ -320,9 +324,7 @@ switch ($action) {
 require 'header.php';
 
 
-if($action==='twofactor') {
-    $user->getUserById($userid);
-    $userid = $user->getUserId();
+if ($action === 'twofactor') {
     require 'twofactor.php';
     exit();
 }

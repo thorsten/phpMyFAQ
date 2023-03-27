@@ -511,29 +511,29 @@ $PMF_LANG["ad_export_latest"] = "5 paskutinių įrašų sklaidos kanalas";
 $PMF_LANG["ad_export_pdf"] = "Visų įrašų PDF eksportas";
 $PMF_LANG["ad_export_generate"] = "sukurti sklaidos kanalą";
 
-$PMF_LANG["rightsLanguage"]['add_user'] = "pridėti naudotoją";
-$PMF_LANG["rightsLanguage"]['edit_user'] = "redaguoti naudotoją";
-$PMF_LANG["rightsLanguage"]['delete_user'] = "šalinti naudotoją";
-$PMF_LANG["rightsLanguage"]['add_faq'] = "pridėti įrašą";
-$PMF_LANG["rightsLanguage"]['edit_faq'] = "redaguoti įrašą";
-$PMF_LANG["rightsLanguage"]['delete_faq'] = "šalinti įrašą";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "peržiūrėti žurnalą";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "peržiūrėti administravimo žurnalą";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "šalinti komentarą";
-$PMF_LANG["rightsLanguage"]['addnews'] = "pridėti naujieną";
-$PMF_LANG["rightsLanguage"]['editnews'] = "redaguoti naujieną";
-$PMF_LANG["rightsLanguage"]['delnews'] = "šalinti naujieną";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "pridėti grupę";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "redaguoti grupę";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "šalinti grupę";
-$PMF_LANG["rightsLanguage"]['passwd'] = "keisti slaptažodį";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "redaguoti konfigūraciją";
-$PMF_LANG["rightsLanguage"]['addatt'] = "pridėti priedą";
-$PMF_LANG["rightsLanguage"]['delatt'] = "šalinti priedą";
-$PMF_LANG["rightsLanguage"]['backup'] = "sukurti atsarginę kopiją";
-$PMF_LANG["rightsLanguage"]['restore'] = "atkurti iš atsarginės kopijos";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "šalinti atvirus klausimus";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "redaguoti pataisas";
+$PMF_LANG['rightsLanguage::add_user'] = "pridėti naudotoją";
+$PMF_LANG['rightsLanguage::edit_user'] = "redaguoti naudotoją";
+$PMF_LANG['rightsLanguage::delete_user'] = "šalinti naudotoją";
+$PMF_LANG['rightsLanguage::add_faq'] = "pridėti įrašą";
+$PMF_LANG['rightsLanguage::edit_faq'] = "redaguoti įrašą";
+$PMF_LANG['rightsLanguage::delete_faq'] = "šalinti įrašą";
+$PMF_LANG['rightsLanguage::viewlog'] = "peržiūrėti žurnalą";
+$PMF_LANG['rightsLanguage::adminlog'] = "peržiūrėti administravimo žurnalą";
+$PMF_LANG['rightsLanguage::delcomment'] = "šalinti komentarą";
+$PMF_LANG['rightsLanguage::addnews'] = "pridėti naujieną";
+$PMF_LANG['rightsLanguage::editnews'] = "redaguoti naujieną";
+$PMF_LANG['rightsLanguage::delnews'] = "šalinti naujieną";
+$PMF_LANG['rightsLanguage::addcateg'] = "pridėti grupę";
+$PMF_LANG['rightsLanguage::editcateg'] = "redaguoti grupę";
+$PMF_LANG['rightsLanguage::delcateg'] = "šalinti grupę";
+$PMF_LANG['rightsLanguage::passwd'] = "keisti slaptažodį";
+$PMF_LANG['rightsLanguage::editconfig'] = "redaguoti konfigūraciją";
+$PMF_LANG['rightsLanguage::addatt'] = "pridėti priedą";
+$PMF_LANG['rightsLanguage::delatt'] = "šalinti priedą";
+$PMF_LANG['rightsLanguage::backup'] = "sukurti atsarginę kopiją";
+$PMF_LANG['rightsLanguage::restore'] = "atkurti iš atsarginės kopijos";
+$PMF_LANG['rightsLanguage::delquestion'] = "šalinti atvirus klausimus";
+$PMF_LANG['rightsLanguage::changebtrevs'] = "redaguoti pataisas";
 
 $PMF_LANG["msgAttachedFiles"] = "pridėti failai";
 
@@ -682,9 +682,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Šalinti naudotoją";
 $PMF_LANG['ad_user_status'] = "Būsena";
 $PMF_LANG['ad_user_lastModified'] = "paskutinių keitimų data";
 $PMF_LANG['ad_gen_cancel'] = "Atsisakyti";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "pridėti specialių terminų žodyno įrašą";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "redaguoti specialių terminų žodyno įrašą";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "šalinti specialių terminų žodyno įrašą";
+$PMF_LANG['rightsLanguage::addglossary'] = "pridėti specialių terminų žodyno įrašą";
+$PMF_LANG['rightsLanguage::editglossary'] = "redaguoti specialių terminų žodyno įrašą";
+$PMF_LANG['rightsLanguage::delglossary'] = "šalinti specialių terminų žodyno įrašą";
 $PMF_LANG["ad_menu_group_administration"] = "Naudotojų grupės";
 $PMF_LANG['ad_user_loggedin'] = 'Prisijungęs kaip ';
 
@@ -833,9 +833,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Pradėti vertimą...';
 $PMF_LANG['msgNewTranslationThanks'] = "Ačiū už jūsų vertimo pasiūlymą!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "pridėti naudotojų grupių paskyras";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "redaguoti naudotojų grupių paskyras";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "šalinti naudotojų grupių paskyras";
+$PMF_LANG['rightsLanguage::addgroup'] = "pridėti naudotojų grupių paskyras";
+$PMF_LANG['rightsLanguage::editgroup'] = "redaguoti naudotojų grupių paskyras";
+$PMF_LANG['rightsLanguage::delgroup'] = "šalinti naudotojų grupių paskyras";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Saitas atveriamas pagrindiniame lange';
@@ -997,10 +997,10 @@ $PMF_LANG["plmsgEntries"][1] = "%d DUK";
 $PMF_LANG["plmsgEntries"][2] = "%d DUK";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG["rightsLanguage"]['addtranslation'] = "pridėti vertimą";
-$PMF_LANG["rightsLanguage"]['edittranslation'] = "redaguoti vertimą";
-$PMF_LANG["rightsLanguage"]['deltranslation'] = "šalinti vertimą";
-$PMF_LANG["rightsLanguage"]['approverec'] = "patvirtinti įrašus";
+$PMF_LANG['rightsLanguage::addtranslation'] = "pridėti vertimą";
+$PMF_LANG['rightsLanguage::edittranslation'] = "redaguoti vertimą";
+$PMF_LANG['rightsLanguage::deltranslation'] = "šalinti vertimą";
+$PMF_LANG['rightsLanguage::approverec'] = "patvirtinti įrašus";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");

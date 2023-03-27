@@ -186,7 +186,7 @@ switch ($ajaxAction) {
                     $questionIds = [$questionIds];
                 }
                 foreach ($questionIds as $questionId) {
-                    #$question->deleteQuestion((int)$questionId);
+                    $question->deleteQuestion((int)$questionId);
                 }
 
                 $http->setStatus(200);

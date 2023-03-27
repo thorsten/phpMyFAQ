@@ -55,8 +55,9 @@ node_modules/*
 backup/*
 
 # PHPUnit
-.phpunit.cache/test-results
-.phpunit.result.cache
+.phpunit.cache
+coverage.txt
 tests/test.db
 tests/test.db-journal
 tests/config/database.php
+tests/fixtures/path-to-delete/foo.bar.baz

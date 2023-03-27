@@ -67,7 +67,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $add = $this->db->query($add);
         $error = $this->db->error();
 
-        if (strlen($error) > 0) {
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . 'error(): ' . $error;
             $this->config->logger->error(User::ERROR_USER_ADD . 'error(): ' . $error);
 
@@ -98,7 +98,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $change = $this->db->query($change);
         $error = $this->db->error();
 
-        if (strlen($error) > 0) {
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
             $this->config->logger->error(User::ERROR_USER_CHANGE . 'error(): ' . $error);
 
@@ -128,7 +128,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $delete = $this->db->query($delete);
         $error = $this->db->error();
 
-        if (strlen($error) > 0) {
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_DELETE . 'error(): ' . $error;
             $this->config->logger->error(User::ERROR_USER_DELETE . 'error(): ' . $error);
 
@@ -158,7 +158,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $check = $this->db->query($check);
         $error = $this->db->error();
 
-        if (strlen($error) > 0) {
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
             $this->config->logger->error(User::ERROR_USER_NOT_FOUND . 'error(): ' . $error);
 
@@ -205,7 +205,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $check = $this->db->query($check);
         $error = $this->db->error();
 
-        if (strlen($error) > 0) {
+        if (strlen((string) $error) > 0) {
             $this->errors[] = $error;
             $this->config->logger->error($error);
 

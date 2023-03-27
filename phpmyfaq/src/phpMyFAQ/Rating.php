@@ -2,6 +2,7 @@
 
 /**
  * The main Rating class.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -136,19 +137,11 @@ class Rating
 
     /**
      * Calculates the rating of the user voting.
-     *
-     *
      */
     public function getVotingResult(int $id): string
     {
         $query = sprintf(
-            '
-            SELECT
-                (vote/usr) as voting, usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d',
+            'SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d',
             Database::getTablePrefix(),
             $id
         );
@@ -176,12 +169,7 @@ class Rating
     {
         $check = $_SERVER['REQUEST_TIME'] - 300;
         $query = sprintf(
-            "SELECT
-                id
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d AND (ip = '%s' AND datum > '%s')",
+            "SELECT id FROM %sfaqvoting WHERE artikel = %d AND (ip = '%s' AND datum > '%s')",
             Database::getTablePrefix(),
             $id,
             $ip,
@@ -197,18 +185,11 @@ class Rating
 
     /**
      * Returns the number of users from the table "faqvotings".
-     *
-     *
      */
     public function getNumberOfVotings(int $recordId): int
     {
         $query = sprintf(
-            'SELECT
-                usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d',
+            'SELECT usr FROM %sfaqvoting WHERE artikel = %d',
             Database::getTablePrefix(),
             $recordId
         );
@@ -229,10 +210,7 @@ class Rating
     public function addVoting(array $votingData): bool
     {
         $query = sprintf(
-            "INSERT INTO
-                %sfaqvoting
-            VALUES
-                (%d, %d, %d, 1, %d, '%s')",
+            "INSERT INTO %sfaqvoting VALUES (%d, %d, %d, 1, %d, '%s')",
             Database::getTablePrefix(),
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
             $votingData['record_id'],
@@ -253,15 +231,7 @@ class Rating
     public function update(array $votingData): bool
     {
         $query = sprintf(
-            "UPDATE
-                %sfaqvoting
-            SET
-                vote = vote + %d,
-                usr = usr + 1,
-                datum = %d,
-                ip = '%s'
-            WHERE
-                artikel = %d",
+            "UPDATE %sfaqvoting SET vote = vote + %d, usr = usr + 1, datum = %d, ip = '%s' WHERE artikel = %d",
             Database::getTablePrefix(),
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],

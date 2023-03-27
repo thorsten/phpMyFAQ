@@ -39,11 +39,7 @@ class Export
     /**
      * Factory.
      *
-     * @param Faq           $faq
-     * @param Category      $category
      * @param Configuration $config
-     * @param string        $mode
-     * @return Pdf|Html5|Json
      * @throws Exception
      */
     public static function create(

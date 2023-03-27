@@ -279,8 +279,7 @@ class Faq
                 );
             } else {
                 return sprintf(
-                    'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )',
-                    implode(', ', $this->groups),
+                    'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
                     $this->user,
                     implode(', ', $this->groups)
                 );
@@ -1269,6 +1268,39 @@ class Faq
         return false;
     }
 
+    public function isActive(int $recordId, string $recordLang, string $commentType = 'faq'): bool
+    {
+        if ('news' === $commentType) {
+            $table = 'faqnews';
+        } else {
+            $table = 'faqdata';
+        }
+
+        $query = sprintf(
+            "
+            SELECT
+                active
+            FROM
+                %s%s
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            Database::getTablePrefix(),
+            $table,
+            $recordId,
+            $this->config->getDb()->escape($recordLang)
+        );
+
+        $result = $this->config->getDb()->query($query);
+
+        if ($row = $this->config->getDb()->fetchObject($result)) {
+            return !(($row->active === 'y' || $row->active === 'yes'));
+        } else {
+            return true;
+        }
+    }
+
     /**
      * Checks, if comments are disabled for the FAQ record.
      *
@@ -1279,7 +1311,7 @@ class Faq
      */
     public function commentDisabled(int $recordId, string $recordLang, string $commentType = 'faq'): bool
     {
-        if ('news' == $commentType) {
+        if ('news' === $commentType) {
             $table = 'faqnews';
         } else {
             $table = 'faqdata';

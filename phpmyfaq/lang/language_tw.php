@@ -486,29 +486,29 @@ $PMF_LANG["msgLanguageSubmit"] = "變更語言";
 $PMF_LANG["ad_attach_4"] = "上傳附加檔案必須小於 %s Bytes。 (The attached file must be smaller than %s Bytes.)";
 $PMF_LANG["ad_menu_export"] = "匯出您的 FAQ ";
 
-$PMF_LANG["rightsLanguage"]['add_user'] = "新增使用者";
-$PMF_LANG["rightsLanguage"]['edit_user'] = "編輯使用者";
-$PMF_LANG["rightsLanguage"]['delete_user'] = "刪除使用者";
-$PMF_LANG["rightsLanguage"]['add_faq'] = "新增記錄";
-$PMF_LANG["rightsLanguage"]['edit_faq'] = "編輯記錄";
-$PMF_LANG["rightsLanguage"]['delete_faq'] = "刪除記錄";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "檢視記錄黨";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "檢視管理記錄檔 (View admin log)";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "刪除評論 (Delete comment)";
-$PMF_LANG["rightsLanguage"]['addnews'] = "新增新聞 (Add news)";
-$PMF_LANG["rightsLanguage"]['editnews'] = "編輯新聞";
-$PMF_LANG["rightsLanguage"]['delnews'] = "刪除新聞";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "新增類別";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "編輯類別";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "刪除類別";
-$PMF_LANG["rightsLanguage"]['passwd'] = "變更密碼";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "編輯設定";
-$PMF_LANG["rightsLanguage"]['addatt'] = "新增附加檔案";
-$PMF_LANG["rightsLanguage"]['delatt'] = "刪除附加檔案";
-$PMF_LANG["rightsLanguage"]['backup'] = "建立備份";
-$PMF_LANG["rightsLanguage"]['restore'] = "還原備份";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "刪除已開啟的問題 (delete opened question)";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "編輯版次 (Edit revisions)";
+$PMF_LANG['rightsLanguage::add_user'] = "新增使用者";
+$PMF_LANG['rightsLanguage::edit_user'] = "編輯使用者";
+$PMF_LANG['rightsLanguage::delete_user'] = "刪除使用者";
+$PMF_LANG['rightsLanguage::add_faq'] = "新增記錄";
+$PMF_LANG['rightsLanguage::edit_faq'] = "編輯記錄";
+$PMF_LANG['rightsLanguage::delete_faq'] = "刪除記錄";
+$PMF_LANG['rightsLanguage::viewlog'] = "檢視記錄黨";
+$PMF_LANG['rightsLanguage::adminlog'] = "檢視管理記錄檔 (View admin log)";
+$PMF_LANG['rightsLanguage::delcomment'] = "刪除評論 (Delete comment)";
+$PMF_LANG['rightsLanguage::addnews'] = "新增新聞 (Add news)";
+$PMF_LANG['rightsLanguage::editnews'] = "編輯新聞";
+$PMF_LANG['rightsLanguage::delnews'] = "刪除新聞";
+$PMF_LANG['rightsLanguage::addcateg'] = "新增類別";
+$PMF_LANG['rightsLanguage::editcateg'] = "編輯類別";
+$PMF_LANG['rightsLanguage::delcateg'] = "刪除類別";
+$PMF_LANG['rightsLanguage::passwd'] = "變更密碼";
+$PMF_LANG['rightsLanguage::editconfig'] = "編輯設定";
+$PMF_LANG['rightsLanguage::addatt'] = "新增附加檔案";
+$PMF_LANG['rightsLanguage::delatt'] = "刪除附加檔案";
+$PMF_LANG['rightsLanguage::backup'] = "建立備份";
+$PMF_LANG['rightsLanguage::restore'] = "還原備份";
+$PMF_LANG['rightsLanguage::delquestion'] = "刪除已開啟的問題 (delete opened question)";
+$PMF_LANG['rightsLanguage::changebtrevs'] = "編輯版次 (Edit revisions)";
 
 $PMF_LANG["msgAttachedFiles"] = "附加檔案";
 
@@ -653,9 +653,9 @@ $PMF_LANG['ad_user_deleteUser'] = "刪除使用者 (Delete User)";
 $PMF_LANG['ad_user_status'] = "狀態: (Status:)";
 $PMF_LANG['ad_user_lastModified'] = "最後一次修改: (last modified:)";
 $PMF_LANG['ad_gen_cancel'] = "取消";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "增加辭典項目 (add glossary item)";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "編輯辭典項目 (edit glossary item)";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "刪除辭典項目 (delete glossary item)";
+$PMF_LANG['rightsLanguage::addglossary'] = "增加辭典項目 (add glossary item)";
+$PMF_LANG['rightsLanguage::editglossary'] = "編輯辭典項目 (edit glossary item)";
+$PMF_LANG['rightsLanguage::delglossary'] = "刪除辭典項目 (delete glossary item)";
 $PMF_LANG["ad_menu_group_administration"] = "群組 Groups";
 $PMF_LANG['ad_user_loggedin'] = "登入為 (Logged in as) ";
 
@@ -803,9 +803,9 @@ $PMF_LANG['msgTranslateSubmit'] = "開始翻譯工作...<br>Start translation...
 $PMF_LANG['msgNewTranslationThanks'] = "感謝您的翻譯建議!<br>Thank you for your translation proposal!";
 
 // added v2.0.0 - 2007-02-27 by Matteo 開發者
-$PMF_LANG["rightsLanguage"]['addgroup'] = "新增群組帳號 add group accounts";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "編輯群組帳號 edit group accounts";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "刪除群組帳號 delete group accounts";
+$PMF_LANG['rightsLanguage::addgroup'] = "新增群組帳號 add group accounts";
+$PMF_LANG['rightsLanguage::editgroup'] = "編輯群組帳號 edit group accounts";
+$PMF_LANG['rightsLanguage::delgroup'] = "刪除群組帳號 delete group accounts";
 
 // added v2.0.0 - 2007-02-27 by Thorsten 開發者
 $PMF_LANG['ad_news_link_parent'] = "連結以現有視窗開啟 Link opens in parent window";
@@ -961,10 +961,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fi禳eras 開發者
-$PMF_LANG["rightsLanguage"]['addtranslation'] = "新增翻譯";
-$PMF_LANG["rightsLanguage"]['edittranslation'] = "編輯翻譯";
-$PMF_LANG["rightsLanguage"]['deltranslation'] = "刪除翻譯";
-$PMF_LANG["rightsLanguage"]['approverec'] = "通過審核的記錄 (approve records)";
+$PMF_LANG['rightsLanguage::addtranslation'] = "新增翻譯";
+$PMF_LANG['rightsLanguage::edittranslation'] = "編輯翻譯";
+$PMF_LANG['rightsLanguage::deltranslation'] = "刪除翻譯";
+$PMF_LANG['rightsLanguage::approverec'] = "通過審核的記錄 (approve records)";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky 開發者
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "啟用附加檔案加密 <br><small>若是上傳附加檔案設定是關閉的，此選項會被忽略。</small><br>Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");

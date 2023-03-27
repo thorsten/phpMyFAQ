@@ -70,8 +70,19 @@ class News
                 Strings::htmlentities($item['header'])
             );
 
-            $output .= sprintf('<div class="mb-1">%s</div>', strip_tags((string) $item['content']));
-            $output .= sprintf('<div class="small text-muted">%s</div>', $date->format($item['date']));
+            $output .= sprintf('%s', $item['content']);
+
+            if (strlen($item['link']) > 1) {
+                $output .= sprintf(
+                    '<br>%s <a href="%s" target="_%s">%s</a>',
+                    Translation::get('msgInfo'),
+                    Strings::htmlentities($item['link']),
+                    $item['target'],
+                    Strings::htmlentities($item['linkTitle'])
+                );
+            }
+
+            $output .= sprintf('<small class="text-muted">%s</small>', $date->format($item['date']));
         }
 
         return ('' == $output) ? Translation::get('msgNoNews') : $output;

@@ -67,7 +67,7 @@ $send2friendLink = sprintf(
 $template->parse(
     'mainPageContent',
     [
-        'lang' => $faqLanguage,
+        'lang' => Strings::htmlentities($faqLanguage),
         'msgSend2Friend' => Translation::get('msgSend2Friend'),
         'msgS2FReferrer' => 'link',
         'msgS2FName' => Translation::get('msgS2FName'),
@@ -85,7 +85,7 @@ $template->parse(
             $captcha,
             'send2friend',
             Translation::get('msgCaptcha'),
-            $auth
+            $user->isLoggedIn()
         ),
         'msgS2FButton' => Translation::get('msgS2FButton'),
     ]

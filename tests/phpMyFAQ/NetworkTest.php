@@ -8,10 +8,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * @testdox A Network has
  */
-class NetworkTest extends TestCase
+final class NetworkTest extends TestCase
 {
     /** @var Network */
-    private $network;
+    private Network $network;
 
     protected function setUp(): void
     {
@@ -36,7 +36,7 @@ class NetworkTest extends TestCase
     /**
      * @return string[]
      */
-    public function ipAddressDataProvider(): array
+    public static function ipAddressDataProvider(): array
     {
         return [
             [ '207.142.131.005', '207.142.131.xxx'],

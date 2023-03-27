@@ -374,7 +374,7 @@ switch ($action) {
                     <!-- Exports -->
                     <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file-archive-o"></i></div>
                         <?= Translation::get('admin_mainmenu_exports'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
@@ -387,7 +387,7 @@ switch ($action) {
                     <!-- BackupAdmin -->
                     <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-cloud-download"></i></div>
                         <?= Translation::get('admin_mainmenu_backup'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
@@ -401,7 +401,7 @@ switch ($action) {
                     <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#"
                        data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
                        aria-controls="collapseConfigAdmin">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-wrench"></i></div>
                         <?= Translation::get('admin_mainmenu_configuration'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>

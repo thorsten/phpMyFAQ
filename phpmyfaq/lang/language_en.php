@@ -104,7 +104,7 @@ $PMF_LANG["msgSearchWord"] = "Keyword";
 $PMF_LANG["msgSearchFind"] = "Search result for ";
 $PMF_LANG["msgSearchAmount"] = " search result";
 $PMF_LANG["msgSearchAmounts"] = " search results";
-$PMF_LANG["msgSearchCategory"] = "Entity: ";
+$PMF_LANG["msgSearchCategory"] = "Category: ";
 $PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
@@ -112,7 +112,7 @@ $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
 $PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate any keywords with commas only.";
 $PMF_LANG["msgNewContentName"] = "Your name";
 $PMF_LANG["msgNewContentMail"] = "Your email address";
-$PMF_LANG["msgNewContentCategory"] = "Entity";
+$PMF_LANG["msgNewContentCategory"] = "Category";
 $PMF_LANG["msgNewContentTheme"] = "Your question";
 $PMF_LANG["msgNewContentArticle"] = "Your answer";
 $PMF_LANG["msgNewContentKeywords"] = "Keywords";
@@ -123,7 +123,7 @@ $PMF_LANG["msgNewContentThanks"] = "Thank you for your suggestion!";
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Ask your question below";
-$PMF_LANG["msgAskCategory"] = "Entity";
+$PMF_LANG["msgAskCategory"] = "Category";
 $PMF_LANG["msgAskYourQuestion"] = "Your question";
 $PMF_LANG["msgAskThx4Mail"] = "Thank you for your question!";
 $PMF_LANG["msgDate_User"] = "Date / User";
@@ -233,7 +233,7 @@ $PMF_LANG["ad_entry_theme"] = "Question";
 $PMF_LANG["ad_entry_content"] = "Answer";
 $PMF_LANG["ad_entry_keywords"] = "Keywords";
 $PMF_LANG["ad_entry_author"] = "Author";
-$PMF_LANG["ad_entry_category"] = "Entity";
+$PMF_LANG["ad_entry_category"] = "Category";
 $PMF_LANG["ad_entry_active"] = "Visible";
 $PMF_LANG["ad_entry_date"] = "Date";
 $PMF_LANG["ad_entry_status"] = "FAQ status";
@@ -282,30 +282,30 @@ $PMF_LANG["ad_news_updatenews"] = "News entry updated.";
 
 // Category management
 $PMF_LANG["ad_categ_new"] = "Add new category";
-$PMF_LANG["ad_categ_catnum"] = "Entity number";
+$PMF_LANG["ad_categ_catnum"] = "Category number";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory number";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Entity title";
+$PMF_LANG["ad_categ_titel"] = "Category title";
 $PMF_LANG["ad_categ_add"] = "Add category";
 $PMF_LANG["ad_categ_existing"] = "Existing categories";
 $PMF_LANG["ad_categ_id"] = "#";
-$PMF_LANG["ad_categ_categ"] = "Entity";
+$PMF_LANG["ad_categ_categ"] = "Category";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
-$PMF_LANG["ad_categ_titel"] = "Entity title";
+$PMF_LANG["ad_categ_titel"] = "Category title";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
-$PMF_LANG["ad_categ_updatecateg"] = "Update Entity";
+$PMF_LANG["ad_categ_updatecateg"] = "Update Category";
 $PMF_LANG["ad_categ_nodata"] = "No data found in database";
 $PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore if you delete the category. You must either assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
-$PMF_LANG["ad_categ_edit_2"] = "Entity";
+$PMF_LANG["ad_categ_edit_2"] = "Category";
 $PMF_LANG["ad_categ_added"] = "The category was added.";
 $PMF_LANG["ad_categ_updated"] = "The category was updated.";
 $PMF_LANG["ad_categ_del_yes"] = "yes, delete!";
 $PMF_LANG["ad_categ_del_no"] = "no!";
 $PMF_LANG["ad_categ_deletesure"] = "Are you sure you want to delete this category?";
-$PMF_LANG["ad_categ_deleted"] = "Entity deleted.";
+$PMF_LANG["ad_categ_deleted"] = "Category deleted.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was <strong>successfully</strong> set.";
@@ -357,7 +357,7 @@ $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
 $PMF_LANG["ad_sess_referer"] = "Referer";
 $PMF_LANG["ad_sess_browser"] = "Browser";
-$PMF_LANG["ad_sess_ai_rubrik"] = "Entity";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Category";
 $PMF_LANG["ad_sess_ai_artikel"] = "Record";
 $PMF_LANG["ad_sess_ai_sb"] = "Search strings";
 $PMF_LANG["ad_sess_ai_sid"] = "Session ID";
@@ -500,29 +500,29 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 
-$PMF_LANG["rightsLanguage"]['add_user'] = "Add user";
-$PMF_LANG["rightsLanguage"]['edit_user'] = "Edit user";
-$PMF_LANG["rightsLanguage"]['delete_user'] = "Delete user";
-$PMF_LANG["rightsLanguage"]['add_faq'] = "Add record";
-$PMF_LANG["rightsLanguage"]['edit_faq'] = "Edit record";
-$PMF_LANG["rightsLanguage"]['delete_faq'] = "Delete record";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "View logs";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "View admin log";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "Delete comment";
-$PMF_LANG["rightsLanguage"]['addnews'] = "Add news";
-$PMF_LANG["rightsLanguage"]['editnews'] = "Edit news";
-$PMF_LANG["rightsLanguage"]['delnews'] = "Delete news";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "Add category";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "Edit category";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "Delete category";
-$PMF_LANG["rightsLanguage"]['passwd'] = "Change passwords";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "Edit configuration";
-$PMF_LANG["rightsLanguage"]['addatt'] = "Add attachments";
-$PMF_LANG["rightsLanguage"]['delatt'] = "Delete attachments";
-$PMF_LANG["rightsLanguage"]['backup'] = "Create backups";
-$PMF_LANG["rightsLanguage"]['restore'] = "Restore backups";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "Delete open questions";
-$PMF_LANG["rightsLanguage"]['changebtrevs'] = "Edit revisions";
+$PMF_LANG['rightsLanguage::add_user'] = "Add user";
+$PMF_LANG['rightsLanguage::edit_user'] = "Edit user";
+$PMF_LANG['rightsLanguage::delete_user'] = "Delete user";
+$PMF_LANG['rightsLanguage::add_faq'] = "Add record";
+$PMF_LANG['rightsLanguage::edit_faq'] = "Edit record";
+$PMF_LANG['rightsLanguage::delete_faq'] = "Delete record";
+$PMF_LANG['rightsLanguage::viewlog'] = "View logs";
+$PMF_LANG['rightsLanguage::adminlog'] = "View admin log";
+$PMF_LANG['rightsLanguage::delcomment'] = "Delete comment";
+$PMF_LANG['rightsLanguage::addnews'] = "Add news";
+$PMF_LANG['rightsLanguage::editnews'] = "Edit news";
+$PMF_LANG['rightsLanguage::delnews'] = "Delete news";
+$PMF_LANG['rightsLanguage::addcateg'] = "Add category";
+$PMF_LANG['rightsLanguage::editcateg'] = "Edit category";
+$PMF_LANG['rightsLanguage::delcateg'] = "Delete category";
+$PMF_LANG['rightsLanguage::passwd'] = "Change passwords";
+$PMF_LANG['rightsLanguage::editconfig'] = "Edit configuration";
+$PMF_LANG['rightsLanguage::addatt'] = "Add attachments";
+$PMF_LANG['rightsLanguage::delatt'] = "Delete attachments";
+$PMF_LANG['rightsLanguage::backup'] = "Create backups";
+$PMF_LANG['rightsLanguage::restore'] = "Restore backups";
+$PMF_LANG['rightsLanguage::delquestion'] = "Delete open questions";
+$PMF_LANG['rightsLanguage::changebtrevs'] = "Edit revisions";
 
 $PMF_LANG["msgAttachedFiles"] = "Attached files";
 
@@ -668,9 +668,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Delete user";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "last modified";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
+$PMF_LANG['rightsLanguage::addglossary'] = "add glossary item";
+$PMF_LANG['rightsLanguage::editglossary'] = "edit glossary item";
+$PMF_LANG['rightsLanguage::delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
 $PMF_LANG['ad_user_loggedin'] = 'Logged in as ';
 $PMF_LANG['ad_group_details'] = "Group details";
@@ -730,7 +730,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Entity owner';
+$PMF_LANG["ad_categ_owner"] = 'Category owner';
 $PMF_LANG['adminSection'] = 'Administration';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
 $PMF_LANG['err_expiredNews'] = 'This news entry is expired and can not be displayed';
@@ -758,8 +758,8 @@ $LANG_CONF['records.numberOfRelatedArticles'] = ["input", "Number of related ent
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Translate';
-$PMF_LANG['ad_categ_trans_2'] = 'Entity';
-$PMF_LANG['ad_categ_translatecateg'] = 'Translate Entity';
+$PMF_LANG['ad_categ_trans_2'] = 'Category';
+$PMF_LANG['ad_categ_translatecateg'] = 'Translate Category';
 $PMF_LANG['ad_categ_translate'] = 'Translate';
 $PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
@@ -767,8 +767,8 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
 $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Entity overview";
-$PMF_LANG['ad_menu_categ_structure'] = "Entity Overview including its languages";
+$PMF_LANG["ad_categ_show"] = "Category overview";
+$PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
@@ -817,9 +817,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
 $PMF_LANG['msgNewTranslationThanks'] = "Thank you for your translation proposal!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "add group accounts";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "edit group accounts";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "delete group accounts";
+$PMF_LANG['rightsLanguage::addgroup'] = "add group accounts";
+$PMF_LANG['rightsLanguage::editgroup'] = "edit group accounts";
+$PMF_LANG['rightsLanguage::delgroup'] = "delete group accounts";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';
@@ -974,10 +974,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG["rightsLanguage"]['addtranslation'] = "add translation";
-$PMF_LANG["rightsLanguage"]['edittranslation'] = "edit translation";
-$PMF_LANG["rightsLanguage"]['deltranslation'] = "delete translation";
-$PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
+$PMF_LANG['rightsLanguage::addtranslation'] = "add translation";
+$PMF_LANG['rightsLanguage::edittranslation'] = "edit translation";
+$PMF_LANG['rightsLanguage::deltranslation'] = "delete translation";
+$PMF_LANG['rightsLanguage::approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>"];
@@ -1052,7 +1052,7 @@ $PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> d
 // added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Reports';
 $PMF_LANG["ad_stat_report_fields"] = "Fields";
-$PMF_LANG["ad_stat_report_category"] = "Entity";
+$PMF_LANG["ad_stat_report_category"] = "Category";
 $PMF_LANG["ad_stat_report_sub_category"] = "Subcategory";
 $PMF_LANG["ad_stat_report_translations"] = "Translations";
 $PMF_LANG["ad_stat_report_language"] = "Language";
@@ -1126,18 +1126,18 @@ $PMF_LANG['msgQuestionAnswered'] = "Question answered";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Your question at %s was answered. Please check it here";
 
 // added v2.8.0-alpha3 - 2012-11-03 by Thorsten
-$PMF_LANG['rightsLanguage']['addattachment'] = "Add attachments";
-$PMF_LANG['rightsLanguage']['editattachment'] = "Edit attachments";
-$PMF_LANG['rightsLanguage']['delattachment'] = "Delete attachments";
-$PMF_LANG['rightsLanguage']['dlattachment'] = "Download attachments";
-$PMF_LANG['rightsLanguage']['reports'] = "Generate reports";
-$PMF_LANG['rightsLanguage']['addfaq'] = "Add FAQs in the frontend";
-$PMF_LANG['rightsLanguage']['addquestion'] = "Add questions in the frontend";
-$PMF_LANG['rightsLanguage']['addcomment'] = "Add comments in the frontend";
-$PMF_LANG['rightsLanguage']['editinstances'] = "Edit Multisites";
-$PMF_LANG['rightsLanguage']['addinstances'] = "Add Multisites";
-$PMF_LANG['rightsLanguage']['delinstances'] = "Delete Multisites";
-$PMF_LANG['rightsLanguage']['export'] = "Export FAQs";
+$PMF_LANG['rightsLanguage::addattachment'] = "Add attachments";
+$PMF_LANG['rightsLanguage::editattachment'] = "Edit attachments";
+$PMF_LANG['rightsLanguage::delattachment'] = "Delete attachments";
+$PMF_LANG['rightsLanguage::dlattachment'] = "Download attachments";
+$PMF_LANG['rightsLanguage::reports'] = "Generate reports";
+$PMF_LANG['rightsLanguage::addfaq'] = "Add FAQs in the frontend";
+$PMF_LANG['rightsLanguage::addquestion'] = "Add questions in the frontend";
+$PMF_LANG['rightsLanguage::addcomment'] = "Add comments in the frontend";
+$PMF_LANG['rightsLanguage::editinstances'] = "Edit Multisites";
+$PMF_LANG['rightsLanguage::addinstances'] = "Add Multisites";
+$PMF_LANG['rightsLanguage::delinstances'] = "Delete Multisites";
+$PMF_LANG['rightsLanguage::export'] = "Export FAQs";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
 $LANG_CONF["records.randomSort"] = ["checkbox", "Sort FAQs randomly"];
@@ -1260,7 +1260,7 @@ $LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Enable anonymous LDA
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Enable LDAP dynamic user binding'];
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP attribute for dynamic user binding, "uid" when using an ADS'];
 $LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Enable XML sitemap'];
-$PMF_LANG['ad_category_image'] = 'Entity image';
+$PMF_LANG['ad_category_image'] = 'Category image';
 $PMF_LANG["ad_user_show_home"] = "Show on startpage";
 
 // added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
@@ -1281,15 +1281,15 @@ $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatic check for new 
 $PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
 $PMF_LANG['ad_user_overwrite_passwd'] = 'Overwrite password';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Versioning of all FAQ changes'];
-$PMF_LANG['rightsLanguage']['view_faqs'] = 'View FAQs';
-$PMF_LANG['rightsLanguage']['view_categories'] = 'View categories';
-$PMF_LANG['rightsLanguage']['view_sections'] = 'View sections';
-$PMF_LANG['rightsLanguage']['view_news'] = 'View news';
-$PMF_LANG['rightsLanguage']['add_section'] = 'Add sections';
-$PMF_LANG['rightsLanguage']['edit_section'] = 'Edit sections';
-$PMF_LANG['rightsLanguage']['delete_section'] = 'Delete sections';
-$PMF_LANG['rightsLanguage']['administrate_sections'] = 'Administrate sections';
-$PMF_LANG['rightsLanguage']['administrate_groups'] = 'Administrate groups';
+$PMF_LANG['rightsLanguage::view_faqs'] = 'View FAQs';
+$PMF_LANG['rightsLanguage::view_categories'] = 'View categories';
+$PMF_LANG['rightsLanguage::view_sections'] = 'View sections';
+$PMF_LANG['rightsLanguage::view_news'] = 'View news';
+$PMF_LANG['rightsLanguage::add_section'] = 'Add sections';
+$PMF_LANG['rightsLanguage::edit_section'] = 'Edit sections';
+$PMF_LANG['rightsLanguage::delete_section'] = 'Delete sections';
+$PMF_LANG['rightsLanguage::administrate_sections'] = 'Administrate sections';
+$PMF_LANG['rightsLanguage::administrate_groups'] = 'Administrate groups';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
 $PMF_LANG['ad_menu_meta'] = 'Template meta data';
 $PMF_LANG['ad_meta_add'] = 'Add template meta data';
@@ -1316,7 +1316,7 @@ $PMF_LANG['ad_section_error_delete'] = "The section could not be deleted. ";
 $PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
 $PMF_LANG['ad_section_suc'] = "The section was <strong>successfully</strong> added.";
 $PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
-$PMF_LANG['rightsLanguage']['viewadminlink'] = 'View admin link';
+$PMF_LANG['rightsLanguage::viewadminlink'] = 'View admin link';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP server port'];
@@ -1354,15 +1354,15 @@ $LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2
 $LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 secret key'];
 
 // added v3.2.0-alpha - 2023-03-11 by Jan
-$PMF_LANG['msgTwofactorEnabled'] = "Two-factor-authentification";
-$PMF_LANG['msgTwofactorConfig'] = "Config two-factor-authentification";
-$PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuration two-factor-authentification";
+$PMF_LANG['msgTwofactorEnabled'] = "Two Factor Authentication";
+$PMF_LANG['msgTwofactorConfig'] = "Config Two Factor Authentication";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuration Two Factor Authentication";
 $PMF_LANG['qr_code_secret_alt'] = "QR-Code Secret-Key";
 $PMF_LANG['msgTwofactorNewSecret'] = "Delete current secret?";
-$PMF_LANG['msgTwofactorTokenModelTitle'] = "Two-factor-authentification: Enter token:";
-$PMF_LANG['msgEnterTwofactorToken'] = "Please enter the code from your app:";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Two Factor Authentication - Enter token:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Enter 6-digits code from your authenticator app.";
 $PMF_LANG['msgTwofactorCheck'] = "Check";
 $PMF_LANG['msgTwofactorErrorToken'] = "You entered a wrong code!";
-$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset two-factor-authentification";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset two-factor-authentication";
 
 return $PMF_LANG;

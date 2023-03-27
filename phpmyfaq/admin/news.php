@@ -218,7 +218,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
     $newsHeader = $news->getNewsHeader();
     $date = new Date($faqConfig);
-    if (count($newsHeader)) {
+    if (is_countable($newsHeader) ? count($newsHeader) : 0) {
         foreach ($newsHeader as $newsItem) {
             ?>
             <tr>
@@ -262,7 +262,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
 <div class="row">
     <div class="col-12">
-        <form id="faqEditor" action="?action=update-news" method="post" accept-charset="utf-8"
+        <form id="faqEditor" action="?action=update-news" method="post" accept-charset="utf-8" class="needs-validation"
               data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
               data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($newsData['lang']) ? $newsData['lang'] : 'en') ?>"
               data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
@@ -426,7 +426,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $oComment = new Comments($faqConfig);
     $comments = $oComment->getCommentsData($newsId, CommentType::NEWS);
-    if (count($comments) > 0) {
+    if ((is_countable($comments) ? count($comments) : 0) > 0) {
         ?>
         <div class="row"><strong><?= Translation::get('ad_entry_comment') ?></strong></div>
         <?php

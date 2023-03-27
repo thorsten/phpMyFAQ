@@ -33,9 +33,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $ratings = new Rating($faqConfig);
-    $ratingdata = $ratings->getAllRatings();
-    $numratings = count($ratingdata);
-    $oldcategory = 0;
+    $ratingData = $ratings->getAllRatings();
+    $numberOfRatings = is_countable($ratingData) ? count($ratingData) : 0;
+    $currentCategory = 0;
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -72,15 +72,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-striped align-middle">
+                <table class="table">
                     <tbody>
     <?php
-    foreach ($ratingdata as $data) {
-        if ($data['category_id'] != $oldcategory) {
+    foreach ($ratingData as $data) {
+        if ($data['category_id'] != $currentCategory) {
             ?>
                     <tr>
-                        <th colspan="6" style="text-align: left;">
-                            <h4><?= $category->categoryName[$data['category_id']]['name'] ?></h4>
+                        <th colspan="6" class="bg-secondary-subtle">
+                            <h4 class="mt-2"><?= $category->categoryName[$data['category_id']]['name'] ?></h4>
                         </th>
                     </tr>
             <?php
@@ -95,62 +95,57 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         );
         ?>
                     <tr>
-                        <td><?= $data['id'];
-                        ?></td>
-                        <td><?= $data['lang'];
-                        ?></td>
+                        <td><?= $data['id'] ?></td>
+                        <td><?= $data['lang'] ?></td>
                         <td>
-                            <a href="<?= $url ?>" title="<?= $question;
-                            ?>">
-                                <?= Utils::makeShorterText($question, 14);
-                                ?>
+                            <a href="<?= $url ?>" title="<?= $question ?>">
+                                <?= Utils::makeShorterText($question, 14) ?>
                             </a>
                         </td>
-                        <td><?= $data['usr'];
-                        ?></td>
-                        <td>
+                        <td><?= $data['usr'] ?>x</td>
+                        <td class="w-25">
                             <?php
                             if (round($data['num'] * 20) > 75) {
                                 $progressBar = 'success';
                             } elseif (round($data['num'] * 20) < 25) {
                                 $progressBar = 'danger';
                             } else {
-                                $progressBar = 'info';
+                                $progressBar = 'primary';
                             }
                             ?>
-                            <meter value="<?= round($data['num'] * 20);
-                            ?>" max="100" min="0" low="25" optimum="75"></meter>
+                            <div class="progress" role="progressbar" aria-label="Success example"
+                                 aria-valuenow="<?= round($data['num'] * 20) ?>" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-<?= $progressBar ?>"
+                                     style="width: <?= round($data['num'] * 20) ?>%"></div>
+                            </div>
+
                         </td>
                         <td><?= round($data['num'] * 20);
                         ?>%</td>
                     </tr>
         <?php
-        $oldcategory = $data['category_id'];
+        $currentCategory = $data['category_id'];
     }
     ?>
                     </tbody>
-    <?php if ($numratings > 0) { ?>
+    <?php if ($numberOfRatings > 0) { ?>
                     <tfoot>
-                        <tr>
-                            <td colspan="6">
-                                <small>
-                                <span style="color: green; font-weight: bold;">
-                                    <?= Translation::get('ad_rs_green') ?>
-                                </span>
-                                <?= Translation::get('ad_rs_ahtf') ?>,
-                                <span style="color: red; font-weight: bold;">
-                                    <?= Translation::get('ad_rs_red') ?>
-                                </span>
-                                <?= Translation::get('ad_rs_altt') ?>
-                                </small>
-                            </td>
-                        </tr>
+                      <tr>
+                        <td colspan="6">
+                          <small>
+                            <span class="bg-success text-white fw-bold"><?= Translation::get('ad_rs_green') ?></span>
+                            <?= Translation::get('ad_rs_ahtf') ?>,
+                            <span class="bg-danger text-white fw-bold"><?= Translation::get('ad_rs_red') ?></span>
+                            <?= Translation::get('ad_rs_altt') ?>
+                          </small>
+                        </td>
+                      </tr>
                     </tfoot>
     <?php } else { ?>
                     <tfoot>
-                        <tr>
-                            <td colspan="6"><?= Translation::get('ad_rs_no') ?></td>
-                        </tr>
+                      <tr>
+                        <td colspan="6"><?= Translation::get('ad_rs_no') ?></td>
+                      </tr>
                     </tfoot>
     <?php } ?>
                 </table>

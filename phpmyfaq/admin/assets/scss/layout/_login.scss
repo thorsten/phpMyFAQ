@@ -22,19 +22,19 @@
     min-width: 0;
     flex-grow: 1;
   }
+}
 
-  #togglePassword {
-    cursor: pointer;
+#togglePassword {
+  cursor: pointer;
 
-    &:before {
-      font-family: 'ForkAwesome';
-      content: '\f070';
-      font-style: normal;
-    }
+  &:before {
+    font-family: 'ForkAwesome';
+    content: '\f070';
+    font-style: normal;
+  }
 
-    &.is-active:before {
-      font-family: 'ForkAwesome';
-      content: '\f06e';
-    }
+  &.is-active:before {
+    font-family: 'ForkAwesome';
+    content: '\f06e';
   }
 }
