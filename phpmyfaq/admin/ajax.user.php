@@ -123,7 +123,7 @@ if (
             $automaticPassword = Filter::filterVar($postData['automaticPassword'], FILTER_VALIDATE_BOOLEAN);
             $userPassword = Filter::filterVar($postData['password'], FILTER_UNSAFE_RAW);
             $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_UNSAFE_RAW);
-            $userIsSuperAdmin = Filter::filterVar($postData['isSuperAdmin'], FILTER_VALIDATE_BOOLEAN);
+            $userIsSuperAdmin = Filter::filterVar($postData['isSuperAdmin'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
             $newUser = new User($faqConfig);
 
@@ -153,7 +153,7 @@ if (
                 } else {
                     $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
                     $newUser->setStatus('active');
-                    $newUser->setSuperAdmin(!is_null($userIsSuperAdmin));
+                    $newUser->setSuperAdmin($userIsSuperAdmin);
                     $mailHelper = new MailHelper($faqConfig);
                     try {
                         $mailHelper->sendMailToNewUser($newUser, $userPassword);
