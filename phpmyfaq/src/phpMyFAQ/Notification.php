@@ -17,7 +17,6 @@
 namespace phpMyFAQ;
 
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use phpMyFAQ\Faq;
 
 /**
  * Class Notification
@@ -81,13 +80,23 @@ class Notification
             }
             $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
             $this->faq->getRecord($faqId, null, true);
-            $link = $this->config->getDefaultUrl() . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
+
+            $url = sprintf(
+                '%sadmin/?action=editentry&id=%d&lang=%s',
+                $this->config->getDefaultUrl(),
+                $faqId,
+                $faqLanguage
+            );
+            $link = new Link($url, $this->config);
+            $link->itemTitle = $this->faq->getRecordTitle($faqId);
+
             $this->mail->message = html_entity_decode(
                 Translation::get('msgMailCheck')
-            ) . "<p><strong>Frage:</strong> " . $this->faq->getRecordTitle($faqId) . "</p>"
+            ) . "<p><strong>" . Translation::get('msgAskYourQuestion') . "</strong> "
+              .  $this->faq->getRecordTitle($faqId) . "</p>"
               . $this->faq->faqRecord['content']
               . "<br />" . $this->config->getTitle()
-              . ': <a href="' . $link . '">' . $link . "</a>";
+              . ': ' . $link->toString();
 
             $this->mail->setHTMLMessage($this->mail->message);
             $this->mail->contentType = 'text/html';
