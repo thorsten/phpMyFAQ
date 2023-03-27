@@ -34,7 +34,7 @@ const generateUUID = () => {
 const handleSendTestMail = () => {
   const button = document.getElementById('btn-phpmyfaq-mail-sendTestEmail');
   if (button) {
-    const csrf = document.querySelector('#csrf').value;
+    const csrf = document.querySelector('#pmf-csrf-token').value;
 
     fetch('index.php?action=ajax&ajax=config&ajaxaction=send-test-mail', {
       method: 'POST',
@@ -47,10 +47,10 @@ const handleSendTestMail = () => {
       }),
     })
       .then(async (response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return response.json();
         }
-        throw new Error('Network response was not ok.');
+        throw new Error('Network response was not ok: ', { cause: { response } });
       })
       .then((response) => {
         if (response.success === 1) {
@@ -62,6 +62,12 @@ const handleSendTestMail = () => {
           element.textContent = '👎 ' + response.error;
           button.append(element);
         }
+      })
+      .catch(async (error) => {
+        const element = document.createElement('span');
+        const errorMessage = await error.cause.response.json();
+        element.textContent = '👎 ' + errorMessage;
+        button.append(element);
       });
   }
 };

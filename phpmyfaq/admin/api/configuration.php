@@ -242,7 +242,7 @@ switch ($ajaxAction) {
     case 'add-template-metadata':
         $postData = json_decode(file_get_contents('php://input', true));
 
-        if (!Token::getInstance()->getTokenString('add-metadata', $postData->csrf)) {
+        if (!Token::getInstance()->verifyToken('add-metadata', $postData->csrf)) {
             $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
@@ -272,7 +272,7 @@ switch ($ajaxAction) {
         $json = file_get_contents('php://input', true);
         $deleteData = json_decode($json);
 
-        if (!Token::getInstance()->getTokenString('delete-meta-data', $deleteData->csrf)) {
+        if (!Token::getInstance()->verifyToken('delete-meta-data', $deleteData->csrf)) {
             $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
@@ -295,7 +295,7 @@ switch ($ajaxAction) {
         $json = file_get_contents('php://input', true);
         $postData = json_decode($json);
 
-        if (!Token::getInstance()->getTokenString('configuration', $postData->csrf)) {
+        if (!Token::getInstance()->verifyToken('configuration', $postData->csrf)) {
             $http->setStatus(401);
             $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
             exit(1);
