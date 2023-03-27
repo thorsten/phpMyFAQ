@@ -164,7 +164,7 @@ if (
                     $errorMessage[] = Translation::get('ad_passwd_fail');
                 }
             } else {
-                $userPassword = ''; // set password to empty, so a new one is created
+                $userPassword = $newUser->createPassword();
             }
 
             if (count($errorMessage) === 0) {
@@ -195,8 +195,8 @@ if (
         case 'delete_user':
             $deleteData = json_decode(file_get_contents('php://input', true));
 
-            if (!Token::getInstance()->verifyToken('user', $deleteData->csrfToken)) {
-                $http->setStatus(400);
+            if (!Token::getInstance()->verifyToken('delete-user', $deleteData->csrfToken)) {
+                $http->setStatus(401);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
                 exit(1);
             }

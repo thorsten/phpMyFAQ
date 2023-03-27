@@ -110,7 +110,13 @@ export const handleUsers = async () => {
       const email = document.getElementById('add_user_email').value;
       const password = document.getElementById('add_user_password').value;
       const passwordConfirm = document.getElementById('add_user_password_confirm').value;
-      const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
+      let isSuperAdmin = document.querySelector('#add_user_is_superadmin');
+
+      if (isSuperAdmin) {
+        isSuperAdmin = isSuperAdmin.value;
+      } else {
+        isSuperAdmin = false;
+      }
 
       addUserForm.classList.add('was-validated');
 

@@ -435,7 +435,7 @@ class User
         }
 
         // create authentication entry
-        if ($pass === '') {
+        if (strlen($pass) === 0) {
             $pass = $this->createPassword();
         }
         $success = false;

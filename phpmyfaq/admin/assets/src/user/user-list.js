@@ -65,10 +65,10 @@ const deleteUser = (userId, csrfToken) => {
     }),
   })
     .then(async (response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
-      throw new Error('Network response was not ok.');
+      throw new Error('Network response was not ok: ', { cause: { response } });
     })
     .then((response) => {
       message.insertAdjacentElement('afterend', addElement('div', { innerHTML: response }));
@@ -76,10 +76,11 @@ const deleteUser = (userId, csrfToken) => {
       row.addEventListener('click', () => (row.style.opacity = '0'));
       row.addEventListener('transitionend', () => row.remove());
     })
-    .catch((error) => {
+    .catch(async (error) => {
+      const errorMessage = await error.cause.response.json();
       message.insertAdjacentElement(
         'afterend',
-        addElement('div', { classList: 'alert alert-danger', innerText: error })
+        addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
       );
     });
 };
