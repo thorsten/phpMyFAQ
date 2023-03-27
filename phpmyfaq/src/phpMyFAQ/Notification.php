@@ -27,7 +27,7 @@ use phpMyFAQ\Faq;
 class Notification
 {
     private readonly Mail $mail;
-    
+
     private readonly Faq $faq;
 
     /**
@@ -84,7 +84,9 @@ class Notification
             $link = $this->config->getDefaultUrl() . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
             $this->mail->message = html_entity_decode(
                 Translation::get('msgMailCheck')
-            ) . "<p><strong>Frage:</strong> " . $this->faq->getRecordTitle($faqId) . "</p>" . $this->faq->faqRecord['content'] . "<br />" . $this->config->getTitle()
+            ) . "<p><strong>Frage:</strong> " . $this->faq->getRecordTitle($faqId) . "</p>"
+              . $this->faq->faqRecord['content']
+              . "<br />" . $this->config->getTitle()
               . ': <a href="' . $link . '">' . $link . "</a>";
 
             $this->mail->setHTMLMessage($this->mail->message);
