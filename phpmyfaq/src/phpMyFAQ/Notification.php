@@ -17,6 +17,7 @@
 namespace phpMyFAQ;
 
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use phpMyFAQ\Faq;
 
 /**
  * Class Notification
@@ -27,6 +28,8 @@ class Notification
 {
     private readonly Mail $mail;
 
+    private readonly Faq $faq;
+
     /**
      * Constructor.
      *
@@ -35,6 +38,7 @@ class Notification
     public function __construct(private readonly Configuration $config)
     {
         $this->mail = new Mail($this->config);
+        $this->faq = new Faq($this->config);
         $this->mail->setReplyTo(
             $this->config->getAdminEmail(),
             $this->config->getTitle()
@@ -76,10 +80,17 @@ class Notification
                 $this->mail->addCc($email);
             }
             $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
+            $this->faq->getRecord($faqId, null, true);
+            $link = $this->config->getDefaultUrl() . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
             $this->mail->message = html_entity_decode(
                 Translation::get('msgMailCheck')
-            ) . "\n\n" . $this->config->getTitle() . ': ' . $this->config->getDefaultUrl(
-            ) . 'admin/?action=editentry&id=' . $faqId . '&lang=' . $faqLanguage;
+            ) . "<p><strong>Frage:</strong> " . $this->faq->getRecordTitle($faqId) . "</p>"
+              . $this->faq->faqRecord['content']
+              . "<br />" . $this->config->getTitle()
+              . ': <a href="' . $link . '">' . $link . "</a>";
+
+            $this->mail->setHTMLMessage($this->mail->message);
+            $this->mail->contentType = 'text/html';
 
             $this->mail->send();
         }
