@@ -114,6 +114,7 @@ $http->setContentType('application/json');
 $faqSession = new Session($faqConfig);
 $network = new Network($faqConfig);
 $stopWords = new StopWords($faqConfig);
+$faqHelper = new FaqHelper($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = ['error' => Translation::get('err_bannedIP')];
@@ -450,12 +451,13 @@ switch ($action) {
             try {
                 $notification = new Notification($faqConfig);
                 $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
-            } catch (Exception) {
+            } catch (Exception | TransportExceptionInterface $e) {
                 // @todo handle exception in v3.2
             }
 
             $message = [
                 'success' => ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
+                'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0])
             ];
         } else {
             $message = [
@@ -553,7 +555,6 @@ switch ($action) {
 
                     $response .= '<ul>';
 
-                    $faqHelper = new FaqHelper($faqConfig);
                     foreach ($faqSearchResult->getResultSet() as $result) {
                         $url = sprintf(
                             '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',

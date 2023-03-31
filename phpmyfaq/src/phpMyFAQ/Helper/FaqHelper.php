@@ -22,6 +22,7 @@ use ParsedownExtra;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
@@ -206,5 +207,22 @@ class FaqHelper extends Helper
         }
 
         return $output;
+    }
+
+    /**
+     * Returns the URL for a given FAQ Entity and category ID.
+     * @param FaqEntity $faqEntity
+     * @param int       $categoryId
+     * @return string
+     */
+    public function createFaqUrl(FaqEntity $faqEntity, int $categoryId): string
+    {
+        return sprintf(
+            '%s?action=faq&cat=%d&id=%d&artlang=%s',
+            $this->config->getDefaultUrl() . 'index.php',
+            $categoryId,
+            $faqEntity->getId(),
+            $faqEntity->getLanguage()
+        );
     }
 }
