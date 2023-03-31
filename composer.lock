@@ -341,16 +341,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v8.6.2",
+            "version": "v8.7.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:elastic/elasticsearch-php.git",
-                "reference": "71c023ae89d4ce3ee6230e158c2368ae4b4b957b"
+                "reference": "a4563130aa3ab608621ba22717d61c91b418454f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/71c023ae89d4ce3ee6230e158c2368ae4b4b957b",
-                "reference": "71c023ae89d4ce3ee6230e158c2368ae4b4b957b",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/a4563130aa3ab608621ba22717d61c91b418454f",
+                "reference": "a4563130aa3ab608621ba22717d61c91b418454f",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +389,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2023-02-13T08:24:59+00:00"
+            "time": "2023-03-27T08:05:35+00:00"
         },
         {
             "name": "erusev/parsedown",
