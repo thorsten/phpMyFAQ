@@ -12,8 +12,8 @@ updating an old FAQ from the 1.x or 2.x series, [please email us](thorsten_AT_ph
 
 ## Upgrading from phpMyFAQ 3.0.x
 
-**Upgrading from 3.0.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to
-delete all files **except\*\*:
+**Upgrading from 3.0.x is a major upgrade. Please make a full backup before you run the upgrade! First, log in as admin
+into the admin section and enable the maintenance mode. Second you have to delete all files **except\*\*:
 
 - in the directory config/
   - keep the file **database.php**
@@ -32,7 +32,8 @@ updated.
 
 ## Upgrading from phpMyFAQ 3.1.x
 
-Updating an existing phpMyFAQ 3.1.x installation is fairly simple. First you have to delete all files **except**:
+Updating an existing phpMyFAQ 3.1.x installation is fairly simple. First, log in as admin into the admin section and
+enable the maintenance mode. Second you have to delete all files **except**:
 
 - all files in the directory **config/**
 - the directory **attachments/**
@@ -49,7 +50,8 @@ updated.
 
 ## Upgrading from phpMyFAQ 3.2.x
 
-Updating an existing phpMyFAQ 3.2.x installation is fairly simple. First you have to delete all files **except**:
+Updating an existing phpMyFAQ 3.2.x installation is fairly simple. First, log in as admin into the admin section and
+enable the maintenance mode. Second you have to delete all files **except**:
 
 - all files in the directory **config/**
 - all files in the directory **assets/themes/**

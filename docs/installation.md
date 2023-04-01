@@ -143,7 +143,7 @@ To configure phpMyFAQ point your browser to
 
 `http://www.example.com/faq/admin/index.php`
 
-Use the username **admin** and your selected password for your first login into the admin section.
+Please use your chosen username and your password for your first login into the admin section.
 
 Some variables that does not change regularly, they can be edited in the file _config/constants.php_. You can change
 the
@@ -165,16 +165,16 @@ the
 - The boolean full-text search will only work with MySQL and if there are some entries in the database (5 or more).
   The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be
   excluded from search. This is not a bug, but rather a feature of MySQL.
-- The search on other databases are using currently the LIKE operator.
-- To improve the search functionality you should use Elasticsearch.
+- The search on other databases is using the LIKE operator currently.
+- To improve the search functionality you should consider using Elasticsearch.
 
-## Automatic content negotiation
+## Automatic user language detection
 
 To set the default language in your browser you have to set a variable that gets passed to the web server. How this is
 done depends on the browser you are using.
 
 - Mozilla Firefox: Tools -> Options -> Content -> Languages
-- Google Chrome / Microsoft Edge / Opera\_ Settings -> Details -> Language settings
+- Google Chrome / Microsoft Edge / Opera: Settings -> Details -> Language settings
 - Safari uses the macOS system preferences to determine your preferred language: System preferences -> International
   -> Language
 
@@ -190,14 +190,14 @@ done depends on the browser you are using.
 
 ## Enabling support for SEO-friendly URLs
 
-_Apache Web server_
+### Apache Web server
 
 If you want to enable the search engine optimization you have to activate the mod_rewrite support in the admin backend
 in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ
 on root directory "/" you should set in `RewriteBase /` Please check, if `AllowOverride All` is set correctly in your
 httpd.conf file so that the .htaccess rules work.
 
-_nginx Web server_
+### nginx Web server
 
 If you want to enable the search engine optimization you have to copy the rewrite rules in the file nginx.conf to your
 nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
