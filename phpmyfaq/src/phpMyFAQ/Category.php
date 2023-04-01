@@ -33,20 +33,19 @@ class Category
 {
     /**
      * The categories as an array.
-     *
      * @var array<int>
      */
     public array $categories = [];
 
     /**
      * The category names as an array.
-     *
      * @var array<string>
      */
     public array $categoryName = [];
 
     /**
      * The image as an array.
+     * @var array<string>
      */
     public array $image = [];
 
@@ -66,7 +65,6 @@ class Category
 
     /**
      * Groups.
-     *
      * @var int[]
      */
     private array $groups = [-1];
@@ -94,21 +92,6 @@ class Category
      * @var array<int, int>>
      */
     private array $moderators = [];
-
-    /**
-     * Symbol for each item
-     * NOTE: We do not use this currently.
-     *
-     * @var string[]
-     */
-    private array $symbols = [
-        'vertical' => '|',
-        'plus' => '+',
-        'minus' => '-',
-        'space' => '&nbsp;',
-        'angle' => '-',
-        'medium' => '|-'
-    ];
 
     /**
      * Constructor.
@@ -269,47 +252,6 @@ class Category
     {
         $this->user = $userId;
         return $this;
-    }
-
-    /**
-     * Gets the main categories and write them in an array.
-     *
-     * @param string $categories String of parent category ids
-     * @param bool $parentId Only top level categories?
-     */
-    public function getCategories(string $categories, bool $parentId = true): array
-    {
-        $_query = '';
-        $query = sprintf(
-            '
-            SELECT
-                id, lang, parent_id, name, description, user_id, group_id, active, image, show_home
-            FROM
-                %sfaqcategories
-            WHERE ',
-            Database::getTablePrefix()
-        );
-
-        if (true === $parentId) {
-            $query .= 'parent_id = 0';
-        }
-        foreach (explode(',', $categories) as $cats) {
-            $_query .= ' OR parent_id = ' . $cats;
-        }
-        if (false === $parentId && 0 < Strings::strlen($_query)) {
-            $query .= Strings::substr($_query, 4);
-        }
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " AND lang = '" . $this->config->getDb()->escape($this->language) . "'";
-        }
-        $query .= ' ORDER BY id';
-
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchArray($result)) {
-            $this->categories[$row['id']] = $row;
-        }
-
-        return $this->categories;
     }
 
     /**
@@ -636,109 +578,11 @@ class Category
     }
 
     /**
-     * Expand the entire tree
-     */
-    public function expandAll(): void
-    {
-        $numTreeTab = count($this->treeTab);
-        for ($i = 0; $i < $numTreeTab; ++$i) {
-            if ($this->treeTab[$i]['symbol'] == 'plus') {
-                $this->treeTab[$i]['symbol'] = 'minus';
-            }
-        }
-    }
-
-    /**
      * Total height of the expanded tree.
      */
     public function height(): int
     {
         return count($this->treeTab);
-    }
-
-    /**
-     * Gets the next line in the array treeTab, depending on the
-     * collapse/expand node.
-     *
-     * @param int $line Current line
-     */
-    public function getNextLineTree(int $line): int
-    {
-        if ($this->treeTab[$line]['symbol'] !== 'plus') {
-            return $line + 1;
-        } else {
-            for ($i = $line + 1; $i < $this->height(); ++$i) {
-                if ($this->treeTab[$i]['level'] <= $this->treeTab[$line]['level']) {
-                    return $i;
-                }
-            }
-        }
-
-        return $this->height();
-    }
-
-    /**
-     * Returns the four parts of a line to display: category name, the ID of
-     * the root node, the description and if the category is active
-     */
-    public function getLineDisplay(int $node): array
-    {
-        return [
-            $this->symbols[$this->treeTab[$node]['symbol']],
-            $this->treeTab[$node]['name'],
-            $this->treeTab[$node]['id'],
-            $this->treeTab[$node]['description'],
-            $this->treeTab[$node]['active'],
-            $this->treeTab[$node]['image']
-        ];
-    }
-
-    /**
-     * Creates a category link.
-     *
-     * @deprecated has to be moved to the category helper class
-     *
-     * @param string      $sids Session id
-     * @param int         $categoryId Parent category
-     * @param string      $categoryName Entity name
-     * @param string|null $description Description
-     * @param bool        $hasChildren Child categories available
-     * @param bool        $isActive Sets a link active via CSS
-     */
-    public function addCategoryLink(
-        string $sids,
-        int $categoryId,
-        string $categoryName,
-        string $description = null,
-        bool $hasChildren = false,
-        bool $isActive = false
-    ): string {
-        $url = sprintf(
-            '%sindex.php?%saction=show&amp;cat=%d',
-            $this->config->getDefaultUrl(),
-            $sids,
-            $categoryId
-        );
-
-        $oLink = new Link($url, $this->config);
-        $oLink->id = 'category_' . $categoryId;
-        $oLink->itemTitle = Strings::htmlentities($categoryName);
-        $oLink->text = Strings::htmlentities($categoryName);
-
-        if ($hasChildren) {
-            $oLink->text .= sprintf(
-                '<i aria-hidden="true" class="fa fa-caret-right" title="%s"></i>',
-                Strings::htmlentities($categoryName)
-            );
-        }
-
-        if ($isActive) {
-            $oLink->class = 'active';
-        }
-
-        $oLink->tooltip = $description;
-
-        return $oLink->toHtmlAnchor();
     }
 
     /**
@@ -1182,7 +1026,7 @@ class Category
      */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
-        $existcatlang = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
+        $existcatlang = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         $translated = [];
 
         foreach ($existcatlang as $language) {
@@ -1220,10 +1064,10 @@ class Category
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
     {
         $output = '';
-        $existcatlang = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
+        $existingCategoryLanguage = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
 
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
-            if (!in_array(strtolower((string) $lang), $existcatlang)) {
+            if (!in_array(strtolower((string) $lang), $existingCategoryLanguage)) {
                 $output .= "\t<option value=\"" . strtolower((string) $lang) . '"';
                 if ($lang == $selectedLanguage) {
                     $output .= ' selected="selected"';

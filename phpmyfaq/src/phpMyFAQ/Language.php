@@ -73,35 +73,28 @@ class Language
      * @param int    $id    ID
      * @param string $table Specifies table
      */
-    public function languageAvailable(int $id, string $table = 'faqdata'): array
+    public function isLanguageAvailable(int $id, string $table = 'faqdata'): array
     {
-        $distinct = null;
-        $where = null;
-        $query = null;
-        $result = null;
         $output = [];
-        if ($id == 0) {
-            // get languages for all ids
+
+        if ($id === 0) {
             $distinct = ' DISTINCT ';
             $where = '';
         } else {
-            // get languages for specified id
             $distinct = '';
             $where = ' WHERE id = ' . $id;
         }
+
         $query = sprintf(
-            '
-                SELECT %s
-                    lang
-                FROM
-                    %s%s
-                %s',
+            'SELECT %s lang FROM %s%s %s',
             $distinct,
             Database::getTablePrefix(),
             $table,
             $where
         );
+
         $result = $this->config->getDb()->query($query);
+
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $output[] = $row->lang;

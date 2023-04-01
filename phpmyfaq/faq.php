@@ -246,7 +246,7 @@ $translationUrl = sprintf(
     $lang
 );
 
-$availableLanguages = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
+$availableLanguages = $faqConfig->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
 
 if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
     $template->parseBlock(

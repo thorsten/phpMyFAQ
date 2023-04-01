@@ -225,7 +225,7 @@ class CategoryHelper extends Helper
     public function renderAvailableTranslationsOptions(int $categoryId): string
     {
         $options = '';
-        $availableTranslations = $this->config->getLanguage()->languageAvailable($categoryId, 'faqcategories');
+        $availableTranslations = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         $availableLanguages = LanguageHelper::getAvailableLanguages();
 
         foreach ($availableTranslations as $language) {

@@ -110,7 +110,7 @@ class FaqHelper extends Helper
 
         $oLink = new Link($this->config->getDefaultUrl() . $faqUrl, $this->config);
         $oLink->itemTitle = $faq->faqRecord['title'];
-        $availableLanguages = $this->config->getLanguage()->languageAvailable($faq->faqRecord['id']);
+        $availableLanguages = $this->config->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
 
         if ((is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
             $html = '<form method="post">';
@@ -191,7 +191,7 @@ class FaqHelper extends Helper
     {
         $output = '';
 
-        $availableLanguages = $this->config->getLanguage()->languageAvailable(0, 'faqcategories');
+        $availableLanguages = $this->config->getLanguage()->isLanguageAvailable(0, 'faqcategories');
         foreach ($availableLanguages as $languageCode) {
             if ($languageCode !== $faqLang) {
                 $output .= sprintf(

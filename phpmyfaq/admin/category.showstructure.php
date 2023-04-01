@@ -82,7 +82,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                 <th><?= $currentLanguage ?></th>
                 <?php
                 // get languages in use for all categories
-                $allLanguages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');
+                $allLanguages = $faqConfig->getLanguage()->isLanguageAvailable(0, $table = 'faqcategories');
                 foreach ($allLanguages as $lang) {
                     $all_lang[$lang] = LanguageCodes::get($lang);
                 }
