@@ -118,12 +118,18 @@ class CategoryHelper extends Helper
         $categoryRelation = new CategoryRelation($this->config, $this->Category);
         $categoryRelation->setGroups($this->Category->getGroups());
         $categoriesWithNumbers = $categoryRelation->getCategoryTree();
+        $allCategories = $this->Category->getAllCategories();
         $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($categoriesWithNumbers, $parentId);
 
-        return sprintf(
-            '<ul class="pmf-category-overview">%s</ul>',
-            $this->buildCategoryList($this->Category->getAllCategories(), $parentId, $aggregatedNumbers)
-        );
+        if (count($allCategories) > 0) {
+            return sprintf(
+                '<ul class="pmf-category-overview">%s</ul>',
+                $this->buildCategoryList($allCategories, $parentId, $aggregatedNumbers)
+            );
+        } else {
+            $this->config->getLogger()->info('No categories in this language.');
+            return '';
+        }
     }
 
     /**
@@ -170,7 +176,7 @@ class CategoryHelper extends Helper
                     $plr->getMsg('plmsgEntries', $number),
                     $node['description']
                 );
-                $html .= '<ul>' . $this->buildCategoryList($tree, $node['id'], $aggregatedNumbers) . '</ul>';
+                $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList($tree, $node['id'], $aggregatedNumbers));
                 $html .= '</li>';
             }
         }

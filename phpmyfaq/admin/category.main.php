@@ -228,7 +228,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
                     }
                 } else {
-                    if ($category->updateCategory($categoryData)) {
+                    if ($category->update($categoryData)) {
                         $categoryPermission->delete(CategoryPermission::USER, [$categoryData['id']]);
                         $categoryPermission->delete(CategoryPermission::GROUP, [$categoryData['id']]);
                         $categoryPermission->add(

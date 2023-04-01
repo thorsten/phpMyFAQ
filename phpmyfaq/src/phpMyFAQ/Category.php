@@ -256,6 +256,7 @@ class Category
 
     /**
      * Gets all categories and write them in an array.
+     * @return array<int,string>
      */
     public function getAllCategories(): array
     {
@@ -911,7 +912,7 @@ class Category
      *
      * @param string[] $categoryData Array of category data
      */
-    public function updateCategory(array $categoryData): bool
+    public function update(array $categoryData): bool
     {
         $query = sprintf(
             "
