@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use Exception;
 use JsonException;
 use stdClass;
 
@@ -81,7 +82,7 @@ class Api
 
     /**
      * @throws JsonException
-     * @throws \Exception
+     * @throws Exception
      */
     public function getVerificationIssues(): array
     {

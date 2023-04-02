@@ -28,7 +28,6 @@ class ApiTest extends TestCase
 
     /**
      * @testdox return the available versions
-     * @throws Core\Exception
      */
     public function testGetVersions(): void
     {
@@ -52,7 +51,6 @@ class ApiTest extends TestCase
 
     /**
      * @testdox return the current verification hashes
-     * @throws Core\Exception
      */
     public function testGetVerificationIssues(): void
     {

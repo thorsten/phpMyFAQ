@@ -57,6 +57,7 @@ backup/*
 # PHPUnit
 .phpunit.cache
 coverage.txt
+tests/logs
 tests/test.db
 tests/test.db-journal
 tests/config/database.php

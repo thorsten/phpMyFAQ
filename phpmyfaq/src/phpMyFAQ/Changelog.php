@@ -34,7 +34,7 @@ class Changelog
     /**
      * Adds a new changelog entry in the table "faqchanges".
      */
-    public function addEntry(int $id, int $userId, string $text, string $lang, int $revisionId = 0): bool
+    public function add(int $id, int $userId, string $text, string $lang, int $revisionId = 0): bool
     {
         $query = sprintf(
             "INSERT INTO
@@ -58,7 +58,7 @@ class Changelog
     /**
      * Returns the changelog of a FAQ record.
      */
-    public function getChangeEntries(int $recordId): array
+    public function getByFaqId(int $recordId): array
     {
         $entries = [];
 

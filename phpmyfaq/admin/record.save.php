@@ -137,7 +137,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // Create ChangeLog entry
         $changelog = new Changelog($faqConfig);
-        $changelog->addEntry($recordId, $user->getUserId(), nl2br((string) $changed), $recordLang, $revisionId);
+        $changelog->add($recordId, $user->getUserId(), nl2br((string) $changed), $recordLang, $revisionId);
 
         // Create the visit entry
         $visits = new Visits($faqConfig);

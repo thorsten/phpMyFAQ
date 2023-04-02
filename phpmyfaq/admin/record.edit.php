@@ -651,7 +651,7 @@ if (
                                     </div>
                                     <div class="col-lg-10">
                                         <ul>
-                                            <?php foreach ($changelog->getChangeEntries($faqData['id']) as $entry) {
+                                            <?php foreach ($changelog->getByFaqId($faqData['id']) as $entry) {
                                                 $entryUser = new User($faqConfig);
                                                 $entryUser->getUserById($entry['user']);
                                                 ?>
