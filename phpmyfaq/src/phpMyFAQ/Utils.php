@@ -18,14 +18,6 @@
 
 namespace phpMyFAQ;
 
-define('HTTP_PARAMS_GET_CATID', 'catid');
-define('HTTP_PARAMS_GET_CURRENTDAY', 'today');
-define('HTTP_PARAMS_GET_DISPOSITION', 'dispos');
-define('HTTP_PARAMS_GET_GIVENDATE', 'givendate');
-define('HTTP_PARAMS_GET_LANG', 'lang');
-define('HTTP_PARAMS_GET_DOWNWARDS', 'downwards');
-define('HTTP_PARAMS_GET_TYPE', 'type');
-
 /**
  * Class Utils
  *
