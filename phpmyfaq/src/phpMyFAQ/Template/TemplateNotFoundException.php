@@ -24,6 +24,6 @@ use phpMyFAQ\Core\Exception;
  *
  * @package phpMyFAQ\Template
  */
-class FileNotFoundException extends Exception
+class TemplateNotFoundException extends Exception
 {
 }
