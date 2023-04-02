@@ -33,9 +33,10 @@ class Seo
     }
 
     /**
-     * @return mixed
+     * @param string $action
+     * @return string
      */
-    public function getMetaRobots(string $action)
+    public function getMetaRobots(string $action): string
     {
         return match ($action) {
             'main' => $this->config->get('seo.metaTagsHome'),
