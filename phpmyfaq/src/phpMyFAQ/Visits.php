@@ -52,7 +52,7 @@ class Visits
             $row = $this->config->getDb()->fetchObject($result);
             $nVisits = $row->visits;
         }
-        if ($nVisits == 0) {
+        if ($nVisits === 0) {
             $this->add($id);
         } else {
             $this->update($id);
@@ -128,7 +128,7 @@ class Visits
      */
     public function resetAll(): bool
     {
-        return $this->config->getDb()->query(
+        return (bool) $this->config->getDb()->query(
             sprintf(
                 'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
                 Database::getTablePrefix(),
