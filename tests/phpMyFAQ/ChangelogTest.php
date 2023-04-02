@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
-use function _PHPStan_53d0d2174\Symfony\Component\String\u;
-
 class ChangelogTest extends TestCase
 {
     protected Configuration $configuration;
