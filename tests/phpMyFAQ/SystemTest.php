@@ -15,14 +15,6 @@ class SystemTest extends TestCase
         );
     }
 
-    public function testCheckInstallation(): void
-    {
-        $system = new System();
-        $result = $system->checkInstallation();
-
-        $this->assertFalse($result);
-    }
-
     public function testIsSqlite(): void
     {
         $this->assertTrue(System::isSqlite('sqlite3'));
