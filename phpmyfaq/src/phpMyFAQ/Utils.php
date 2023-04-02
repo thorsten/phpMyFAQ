@@ -94,7 +94,7 @@ class Utils
     /**
      * Resolves the PMF markers like e.g. %sitename%.
      *
-     * @param string        $text Text contains PMF markers
+     * @param string $text Text contains PMF markers
      */
     public static function resolveMarkers(string $text, Configuration $config): string
     {
@@ -192,9 +192,7 @@ class Utils
     }
 
     /**
-     * Tries to detect if a string could be a HTML element
-     *
-     *
+     * Tries to detect if a string could be an HTML element
      */
     public static function isForbiddenElement(string $string): bool
     {
@@ -203,7 +201,7 @@ class Utils
         ];
 
         foreach ($forbiddenElements as $element) {
-            if (strpos($element, $string)) {
+            if (str_starts_with($element, $string)) {
                 return true;
             }
         }
@@ -238,16 +236,15 @@ class Utils
      */
     public static function parseUrl(string $string): string
     {
-        $protocols = ['http://', 'https://', 'ftp://'];
+        $protocols = ['http://', 'https://'];
 
         $string = str_replace($protocols, '', $string);
-        $string = str_replace('www.', 'http://www.', $string);
-        $string = preg_replace('|http://([a-zA-Z0-9-\./]+)|', '<a href="http://$1">$1</a>', $string);
-        return preg_replace(
-            '/(([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6})/',
-            '<a href="mailto:$1">$1</a>',
-            $string
-        );
+        $string = str_replace('www.', 'https://www.', $string);
+
+        $pattern = '/(https?:\/\/[^\s]+)/i';
+        $replacement = '<a href="$1">$1</a>';
+
+        return preg_replace($pattern, $replacement, $string);
     }
 
     /**

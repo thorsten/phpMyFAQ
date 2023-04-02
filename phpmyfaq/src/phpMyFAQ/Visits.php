@@ -37,7 +37,7 @@ class Visits
      * @param int $id FAQ record ID
      * @return void
      */
-    public function logViews(int $id)
+    public function logViews(int $id): void
     {
         $nVisits = 0;
         $query = sprintf(
