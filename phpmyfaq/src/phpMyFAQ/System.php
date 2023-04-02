@@ -121,22 +121,11 @@ class System
      */
     public static function getVersion(): string
     {
-        if (null !== self::VERSION_PRE_RELEASE) {
-            return sprintf(
-                '%d.%d.%d-%s',
-                self::VERSION_MAJOR,
-                self::VERSION_MINOR,
-                self::VERSION_PATCH_LEVEL,
-                self::VERSION_PRE_RELEASE
-            );
-        } else { // @phpstan-ignore-line
-            return sprintf(
-                '%d.%d.%d',
-                self::VERSION_MAJOR,
-                self::VERSION_MINOR,
-                self::VERSION_PATCH_LEVEL
-            );
+        $version = sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_PATCH_LEVEL);
+        if (self::VERSION_PRE_RELEASE !== null) {
+            $version .= '-' . self::VERSION_PRE_RELEASE;
         }
+        return $version;
     }
 
     /**
@@ -166,7 +155,7 @@ class System
     /**
      * Print out the HTML5 Footer.
      */
-    public static function renderFooter(bool $onePageBack = false): void
+    public static function renderFooter(bool $onePageBack = false): never
     {
         if (true === $onePageBack) {
             printf(
@@ -179,12 +168,14 @@ class System
             '</body></html>',
             '&copy; 2001-2023 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
         );
-        exit(-1);
+        exit();
     }
 
-    /**
-     * Sets the database handler.
-     */
+    public function getDatabase(): ?DatabaseDriver
+    {
+        return $this->database;
+    }
+
     public function setDatabase(DatabaseDriver $database): System
     {
         $this->database = $database;
