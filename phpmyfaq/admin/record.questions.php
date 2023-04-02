@@ -89,12 +89,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <td>
                         <?= $date->format(Date::createIsoDate($openQuestion->getCreated())) ?>
                       <br>
-                      <a href="mailto:<?= $openQuestion->getEmail() ?>">
+                      <a href="mailto:<?= Strings::htmlentities($openQuestion->getEmail()) ?>">
                           <?= Strings::htmlentities($openQuestion->getUsername()) ?>
                       </a>
                     </td>
                     <td>
-                      <strong><?= $category->categoryName[$openQuestion->getCategoryId()]['name'] ?></strong>
+                      <strong>
+                          <?= Strings::htmlentities($category->categoryName[$openQuestion->getCategoryId()]['name']) ?>
+                      </strong>
                       <br>
                         <?= Strings::htmlentities($openQuestion->getQuestion()) ?>
                     </td>
