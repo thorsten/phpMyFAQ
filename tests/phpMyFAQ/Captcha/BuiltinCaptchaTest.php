@@ -1,10 +1,11 @@
 <?php
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Captcha;
 
 use Exception;
-use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  * @testdox Captcha should
  * @package phpMyFAQ
  */
-class CaptchaTest extends TestCase
+class BuiltinCaptchaTest extends TestCase
 {
     /** @var BuiltinCaptcha */
     protected BuiltinCaptcha $captcha;
