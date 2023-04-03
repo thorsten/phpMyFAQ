@@ -811,6 +811,7 @@ class Installer
                 $ldapSetup['ldapUser'],
                 $ldapSetup['ldapPassword']
             );
+
             if (!$ldap) {
                 echo '<p class="alert alert-danger"><strong>LDAP Error:</strong> ' . $ldap->error() . "</p>\n";
                 System::renderFooter(true);

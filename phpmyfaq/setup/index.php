@@ -411,8 +411,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <div class="col-sm">
                 <p class="alert alert-info text-center mt-4">
                   <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
-                  Your password will be saved with a <strong>salted <?= PMF_ENCRYPTION_TYPE ?></strong>. You can
-                  change the encryption type for passwords in <em>config/constants.php</em>.
+                  After clicking the "Submit" button, all necessary tables will be created and filled with your data.
+                  Depending on your system, this may take some time. Stay tuned.
                 </p>
               </div>
             </div>
