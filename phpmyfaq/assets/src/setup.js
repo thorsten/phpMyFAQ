@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
       i,
       valid = true;
     currentStep = document.getElementsByClassName('step');
-    y = currentStep[currentTab].getElementsByTagName('input');
+    y = currentStep[currentTab].querySelectorAll('input,select');
 
     for (i = 0; i < y.length; i++) {
       if (y[i].value === '' && y[i].hasAttribute('required')) {

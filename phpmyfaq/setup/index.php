@@ -144,8 +144,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
                 <div class="col-sm-9">
-                  <select name="sql_type" id="sql_type" class="form-select">
-                    <option value="">Please select your preferred database</option>
+                  <select name="sql_type" id="sql_type" class="form-select" required>
+                    <option selected disabled value="">Please choose your preferred database ...</option>
                     <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                   </select>
                   <small class="form-text text-muted">Please select your preferred database type.</small>
@@ -179,7 +179,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   </div>
                 </div>
                 <div class="row mb-2">
-                  <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
+                  <label class="col-sm-3 col-form-label" for="faqpassword">Password:</label>
                   <div class="col-sm-9">
                     <div class="input-group">
                       <input name="sql_password" type="password" autocomplete="off" id="faqpassword"
@@ -278,7 +278,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </div>
               </div>
               <p class="alert alert-info m-4">
-                You can add additional LDAP configuration in the admin configuration panel.
+                You can add additional LDAP configurations later in the admin configuration panel.
               </p>
             <?php endif; ?>
           </div>
