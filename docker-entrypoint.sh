@@ -69,7 +69,7 @@ fi
 
 #=== Configure php.ini ===
 {
-  echo "# php settings:"
+  echo "# PHP settings:"
   echo "register_globals = Off"
   echo "safe_mode = Off"
   echo "log_errors = $PHP_LOG_ERRORS"
@@ -84,13 +84,17 @@ fi
 #=== Set recommended opcache settings ===
 # see https://secure.php.net/manual/en/opcache.installation.php
 {
-  echo "opcache.memory_consumption=128"
-  echo "opcache.interned_strings_buffer=8"
-  echo "opcache.max_accelerated_files=4000"
-  echo "opcache.revalidate_freq=2"
+  echo "# OPCache settings:"
+  echo "opcache.enable=1"
+  echo "; 0 means it will check on every request"
+  echo "; 0 is irrelevant if opcache.validate_timestamps=0 which is desirable in production"
+  echo "opcache.revalidate_freq=0"
+  echo "opcache.validate_timestamps=1"
+  echo "opcache.max_accelerated_files=10000"
+  echo "opcache.memory_consumption=192"
+  echo "opcache.max_wasted_percentage=10"
+  echo "opcache.interned_strings_buffer=16"
   echo "opcache.fast_shutdown=1"
-  echo "opcache.enable_cli=1"
-  echo "opcache.enable=0" # disable cache for development
 } | tee $PHP_INI_DIR/conf.d/opcache-recommended.ini
 
 docker-php-entrypoint "$@"
