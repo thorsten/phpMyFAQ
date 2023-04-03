@@ -117,14 +117,16 @@ class CategoryHelper extends Helper
     {
         $categoryRelation = new CategoryRelation($this->config, $this->Category);
         $categoryRelation->setGroups($this->Category->getGroups());
-        $categoriesWithNumbers = $categoryRelation->getCategoryTree();
-        $allCategories = $this->Category->getAllCategories();
-        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($categoriesWithNumbers, $parentId);
 
-        if (count($allCategories) > 0) {
+        $categoryTree = $this->Category->getAllCategories();
+        $categoryNumbers = $categoryRelation->getCategoryWithFaqs();
+        $normalizedCategoryNumbers = $this->normalizeCategoryTree($categoryTree, $categoryNumbers);
+        $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);
+
+        if (count($categoryTree) > 0) {
             return sprintf(
                 '<ul class="pmf-category-overview">%s</ul>',
-                $this->buildCategoryList($allCategories, $parentId, $aggregatedNumbers)
+                $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
             );
         } else {
             $this->config->getLogger()->info('No categories in this language.');
@@ -135,24 +137,32 @@ class CategoryHelper extends Helper
     /**
      * Builds a category list
      *
+     * @param array<int, array> $categoryTree
+     * @param int               $parentId
      * @param array<int, array> $aggregatedNumbers
+     * @param array<int, array> $categoryNumbers
+     * @return string
      */
-    public function buildCategoryList(array $tree, int $parentId = 0, array $aggregatedNumbers = []): string
-    {
+    public function buildCategoryList(
+        array $categoryTree,
+        int $parentId = 0,
+        array $aggregatedNumbers = [],
+        array $categoryNumbers = []
+    ): string {
         global $sids, $plr;
 
         $html = '';
-        foreach ($tree as $node) {
+        foreach ($categoryTree as $categoryId => $node) {
             if ($node['parent_id'] === $parentId) {
                 $number = 0;
-                foreach ($aggregatedNumbers as $aggregated) {
-                    if ($aggregated['id'] === $node['id']) {
-                        $number = $aggregated['faqs'];
+                foreach ($aggregatedNumbers as $key => $numFaqs) {
+                    if ($key === $node['id']) {
+                        $number = $numFaqs;
                         break;
                     }
                 }
 
-                if ($number > 0) {
+                if ($categoryNumbers[$categoryId]['faqs'] > 0) {
                     $url = sprintf(
                         '%sindex.php?%saction=show&amp;cat=%d',
                         $this->config->getDefaultUrl(),
@@ -176,13 +186,39 @@ class CategoryHelper extends Helper
                     $plr->getMsg('plmsgEntries', $number),
                     $node['description']
                 );
-                $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList($tree, $node['id'], $aggregatedNumbers));
+                $html .= sprintf(
+                    '<ul>%s</ul>',
+                    $this->buildCategoryList($categoryTree, $node['id'], $aggregatedNumbers, $categoryNumbers)
+                );
                 $html .= '</li>';
             }
         }
         return $html;
     }
 
+    /**
+     * Normalizes the category tree with the number of FAQs per category
+     *
+     * @param array<int, array> $categoryTree
+     * @param array<int, array> $categoryNumbers
+     * @return array<int, array>
+     */
+    public function normalizeCategoryTree(array $categoryTree, array $categoryNumbers): array
+    {
+        $normalizedCategoryTree = [];
+
+        foreach ($categoryTree as $categoryId => $category) {
+            $normalizedCategoryTree[$category['id']] = [
+                'category_id' => (int) $categoryId,
+                'parent_id' => (int) $category['parent_id'],
+                'name' => $category['name'],
+                'description' => $category['description'],
+                'faqs' => $categoryNumbers[$categoryId]['faqs'] ?? 0
+            ];
+        }
+
+        return $normalizedCategoryTree;
+    }
 
     /**
      * Returns an array with all moderators for the given categories.

@@ -256,7 +256,7 @@ class Category
 
     /**
      * Gets all categories and write them in an array.
-     * @return array<int,string>
+     * @return array<int, array>
      */
     public function getAllCategories(): array
     {

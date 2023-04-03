@@ -83,7 +83,7 @@ class CategoryRelation
         return $matrix;
     }
 
-    public function getCategoryTree(): array
+    public function getCategoryWithFaqs(): array
     {
         $categoryTree = [];
 
@@ -146,7 +146,7 @@ class CategoryRelation
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($category = $this->config->getDb()->fetchObject($result)) {
                 $categoryTree[(int) $category->id] = [
-                    'id' => (int) $category->id,
+                    'category_id' => (int) $category->id,
                     'parent_id' => (int) $category->parent_id,
                     'name' => $category->category_name,
                     'description' => $category->description,
@@ -237,21 +237,31 @@ class CategoryRelation
     /**
      * Calculates the aggregated numbers of FAQs
      */
-    public function getAggregatedFaqNumbers(array $categories, int $parentId = 0): array
+    public function getAggregatedFaqNumbers(array $categories): array
     {
-        $result = [];
+        $aggregatedFaqs = [];
+
         foreach ($categories as $category) {
-            if ($category['parent_id'] === $parentId) {
-                $childCategories = $this->getAggregatedFaqNumbers($categories, $category['id']);
-                $result[$category['id']] = [
-                    'id' => $category['id'],
-                    'parent_id' => $category['parent_id'],
-                    'faqs' => $category['faqs'] + array_sum(array_column($childCategories, 'faqs'))
-                ];
-                $result = array_merge($result, $childCategories);
+            $categoryId = $category['category_id'];
+            $parentId = $category['parent_id'];
+            $numFaqs = $category['faqs'];
+
+            if ($parentId !== 0) {
+                if (!isset($aggregatedFaqs[$parentId])) {
+                    $aggregatedFaqs[$parentId] = $numFaqs;
+                } else {
+                    $aggregatedFaqs[$parentId] += $numFaqs;
+                }
+            }
+
+            if (!isset($aggregatedFaqs[$categoryId])) {
+                $aggregatedFaqs[$categoryId] = $numFaqs;
+            } else {
+                $aggregatedFaqs[$categoryId] += $numFaqs;
             }
         }
-        return $result;
+
+        return $aggregatedFaqs;
     }
 
     /**
