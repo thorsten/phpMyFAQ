@@ -209,7 +209,7 @@ class CategoryHelper extends Helper
 
         foreach ($categoryTree as $categoryId => $category) {
             $normalizedCategoryTree[$category['id']] = [
-                'category_id' => (int) $categoryId,
+                'category_id' => $categoryId,
                 'parent_id' => (int) $category['parent_id'],
                 'name' => $category['name'],
                 'description' => $category['description'],
