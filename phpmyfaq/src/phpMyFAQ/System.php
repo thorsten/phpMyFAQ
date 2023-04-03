@@ -305,8 +305,7 @@ class System
     }
 
     /**
-     * Checks for an installed phpMyFAQ version.
-     * config/database.php -> phpMyFAQ 2.6 and later
+     * Checks for an installed phpMyFAQ version
      */
     public function checkInstallation(): bool
     {

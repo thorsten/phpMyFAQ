@@ -426,30 +426,29 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
           <!-- end previous / next buttons -->
 
       </form>
-      </div>
+    </div>
 
-    <?php
-} else {
-    try {
-        $installer->startInstall();
-    } catch (Exception $e) {
-        echo $e->getMessage();
-    }
-    ?>
-  <div class="row" id="done">
-    <div class="col-12">
-      <h3 class="mb-3"> Step 2: Admin user setup</h3>
+    <?php } else { ?>
+    <div class="row" id="done">
+        <div class="col-12">
+          <h3 class="mb-3">Installation</h3>
+            <?php
+            try {
+                $installer->startInstall();
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            ?>
+          <p class="alert alert-success">
+            Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
+          </p>
 
-      <p class="alert alert-success">
-        Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
-      </p>
-
-      <p>
-        You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
-        <a href="../admin/index.php">admin section</a>.
-       </p>
-     </div>
-   </div>
+          <p>
+            You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+            <a href="../admin/index.php">admin section</a>.
+           </p>
+         </div>
+    </div>
     <?php
 }
 
