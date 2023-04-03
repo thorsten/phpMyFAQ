@@ -18,7 +18,7 @@
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Logging;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$logging = new Logging($faqConfig);
+$logging = new AdminLog($faqConfig);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if ($csrfToken && !Token::getInstance()->verifyToken('delete-adminlog', $csrfToken)) {

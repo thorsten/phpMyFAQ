@@ -25,7 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Logging;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
@@ -149,8 +149,8 @@ switch ($ajaxAction) {
             $recordId = Filter::filterVar($deleteData->record_id, FILTER_VALIDATE_INT);
             $recordLang = Filter::filterVar($deleteData->record_lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $logging = new Logging($faqConfig);
-            $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
+            $logging = new AdminLog($faqConfig);
+            $logging->log($user, 'Deleted FAQ ID ' . $recordId);
 
             try {
                 $faq->deleteRecord($recordId, $recordLang);

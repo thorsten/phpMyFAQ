@@ -25,7 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Logging;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -197,8 +197,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $action = 'twofactor';
         }
     } catch (Exception $e) {
-        $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'Login-error\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
+        $logging = new AdminLog($faqConfig);
+        $logging->log($user, 'Login-error\nLogin: ' . $faqusername . '\nErrors: ' . implode(', ', $user->errors));
         $action = 'login';
         $error = $e->getMessage();
     }

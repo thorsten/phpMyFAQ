@@ -29,7 +29,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
-use phpMyFAQ\Logging;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Question;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Session\Token;
@@ -154,8 +154,8 @@ if (
         }
 
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
-            $logging = new Logging($faqConfig);
-            $logging->logAdmin($user, 'admin-edit-faq, ' . $id);
+            $logging = new AdminLog($faqConfig);
+            $logging->log($user, 'admin-edit-faq, ' . $id);
 
             $categories = $categoryRelation->getCategories($id, $lang);
 
@@ -179,8 +179,8 @@ if (
         $faqData = $faq->faqRecord;
         $queryString = 'insertentry';
     } else {
-        $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'admin-add-faq');
+        $logging = new AdminLog($faqConfig);
+        $logging->log($user, 'admin-add-faq');
         $queryString = 'insertentry';
         if (!is_array($categories)) {
             $categories = [];

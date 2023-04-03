@@ -29,7 +29,7 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
-use phpMyFAQ\Logging;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Services\Twitter;
@@ -84,8 +84,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
 
     if (!is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
-        $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'admin-save-new-faq');
+        $logging = new AdminLog($faqConfig);
+        $logging->log($user, 'admin-save-new-faq');
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header">%s</h2></div></header>',
             Translation::get('ad_entry_aor')

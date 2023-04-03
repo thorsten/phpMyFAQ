@@ -23,7 +23,7 @@ use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
-use phpMyFAQ\Logging;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -90,10 +90,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
     if (!is_null($question) && !is_null($categories)) {
         // Save entry
-        $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'admin-save-existing-faq ' . $recordId);
+        $logging = new AdminLog($faqConfig);
+        $logging->log($user, 'admin-save-existing-faq ' . $recordId);
         if ($active === 'yes') {
-            $logging->logAdmin($user, 'admin-publish-existing-faq ' . $recordId);
+            $logging->log($user, 'admin-publish-existing-faq ' . $recordId);
         }
         ?>
 

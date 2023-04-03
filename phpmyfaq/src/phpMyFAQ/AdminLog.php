@@ -22,7 +22,7 @@ namespace phpMyFAQ;
  *
  * @package phpMyFAQ
  */
-class Logging
+class AdminLog
 {
     /**
      * Constructor.
@@ -75,25 +75,20 @@ class Logging
      * @param User   $user    User object
      * @param string $logText Logged string
      */
-    public function logAdmin(User $user, string $logText = ''): bool
+    public function log(User $user, string $logText = ''): bool
     {
         if ($this->config->get('main.enableAdminLog')) {
             $query = sprintf(
-                "
-                INSERT INTO
-                    %sfaqadminlog
-                (id, time, usr, text, ip)
-                    VALUES 
-                (%d, %d, %d, '%s', '%s')",
+                "INSERT INTO %sfaqadminlog (id, time, usr, text, ip) VALUES (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
                 $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
                 $this->config->getDb()->escape($_SERVER['REQUEST_TIME']),
-                $user->userdata->get('user_id'),
+                $user->getUserId(),
                 $this->config->getDb()->escape(nl2br($logText)),
                 $this->config->getDb()->escape($_SERVER['REMOTE_ADDR'])
             );
 
-            return $this->config->getDb()->query($query);
+            return (bool) $this->config->getDb()->query($query);
         } else {
             return false;
         }
