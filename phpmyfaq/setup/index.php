@@ -372,21 +372,22 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="realname">Your name:</label>
               <div class="col-sm-9">
-                <input type="text" name="realname" id="realname" class="form-control" required>
+                <input name="realname" id="realname" type="text" class="form-control" placeholder="Your name" required>
                 <small class="form-text text-muted">Please enter your real name.</small>
               </div>
             </div>
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
               <div class="col-sm-9">
-                <input type="email" name="email" id="email" class="form-control" required>
+                <input name="email" id="email" type="email" class="form-control" placeholder="Your email" required>
                 <small class="form-text text-muted">Please enter your email address.</small>
               </div>
             </div>
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="loginname">Your login name:</label>
               <div class="col-sm-9">
-                <input type="text" name="loginname" id="loginname" class="form-control" required>
+                <input type="text" name="loginname" id="loginname" class="form-control" placeholder="Your login name"
+                       required>
                 <small class="form-text text-muted">Please enter your login name.</small>
               </div>
             </div>
@@ -394,7 +395,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password" id="password" class="form-control"
-                       minlength="8" required>
+                       placeholder="Your password with at least 8 characters" minlength="8" required>
                 <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
               </div>
             </div>
@@ -402,7 +403,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
-                       minlength="8" class="form-control" required>
+                       placeholder="Retype the password" minlength="8" class="form-control" required>
                 <small class="form-text text-muted">Please retype your password.</small>
               </div>
             </div>
