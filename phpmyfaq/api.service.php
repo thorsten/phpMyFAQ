@@ -132,7 +132,7 @@ $captcha = Captcha::getInstance($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
 if (
-    'savevoting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
+    'add-voting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
     'submit-request-removal' !== $action && !$captcha->checkCaptchaCode($code ?? '')
 ) {
     $message = ['error' => Translation::get('msgCaptcha')];
