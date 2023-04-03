@@ -394,7 +394,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password" id="password" class="form-control" required>
-                <small class="form-text text-muted">Please enter your password.</small>
+                <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
               </div>
             </div>
             <div class="row mb-2">
