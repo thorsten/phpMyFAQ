@@ -393,7 +393,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
-                <input type="password" autocomplete="off" name="password" id="password" class="form-control" required>
+                <input type="password" autocomplete="off" name="password" id="password" class="form-control"
+                       minlength="8" required>
                 <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
               </div>
             </div>
@@ -401,7 +402,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
               <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
               <div class="col-sm-9">
                 <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
-                       class="form-control" required>
+                       minlength="8" class="form-control" required>
                 <small class="form-text text-muted">Please retype your password.</small>
               </div>
             </div>
@@ -426,14 +427,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
       </form>
       </div>
 
-<?php
+    <?php
 } else {
     try {
         $installer->startInstall();
     } catch (Exception $e) {
         echo $e->getMessage();
     }
-?>
+    ?>
   <div class="row" id="done">
     <div class="col-12">
       <h3 class="mb-3"> Step 2: Admin user setup</h3>
@@ -448,7 +449,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
        </p>
      </div>
    </div>
-<?php
+    <?php
 }
 
 System::renderFooter();
