@@ -7,8 +7,12 @@ versions:
 - phpMyFAQ 3.1.x
 - phpMyFAQ 3.2.x
 
-If you're running an older version of phpMyFAQ we recommend a new and fresh installation. If you need support for
-updating an old FAQ from the 1.x or 2.x series, [please email us](thorsten_AT_phpmyfaq_DOT_de).
+If you're running an older version of phpMyFAQ than listed above we recommend a new and fresh installation. If you need
+support for updating an old FAQ from the 1.x or 2.x series, [please email us](thorsten_AT_phpmyfaq_DOT_de).
+
+## Before you upgrade
+
+Please make sure that you're running at least PHP 8.1, otherwise the upgrade won't work.
 
 ## Upgrading from phpMyFAQ 3.0.x
 
