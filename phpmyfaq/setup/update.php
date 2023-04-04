@@ -19,8 +19,9 @@
 
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Setup\Installer;
+use phpMyFAQ\Setup\Update;
 use phpMyFAQ\System;
 
 const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
@@ -107,9 +108,19 @@ require PMF_ROOT_DIR . '/config/database.php';
 <?php
 
 $version = $faqConfig->getVersion();
-$installer = new Installer();
+try {
+    $installer = new Installer(new System());
+    $update = new Update(new System());
+} catch (Exception $e) {
+    // @todo Add exception handling
+}
 $installer->checkPreUpgrade($DB['type']);
 $installer->checkAvailableDatabaseTables($db);
+
+
+if ($update->isConfigTableAvailable($db)) {
+    // @todo Add handling if "faqconfig" is missing
+}
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) { ?>

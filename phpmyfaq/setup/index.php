@@ -23,8 +23,8 @@
 
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Installer;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 

@@ -15,19 +15,27 @@
  * @since     2012-08-27
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Setup;
 
 use Composer\Autoload\ClassLoader;
 use Elastic\Elasticsearch\ClientBuilder;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Instance\Master;
 use phpMyFAQ\Instance\Setup;
+use phpMyFAQ\Ldap;
+use phpMyFAQ\Link;
+use phpMyFAQ\System;
+use phpMyFAQ\User;
 
 /**
  * Class Installer
@@ -37,12 +45,8 @@ use phpMyFAQ\Instance\Setup;
 class Installer
 {
     /**
-     * System object.
-     */
-    protected System $system;
-
-    /**
      * Array with user rights.
+     * @var array<array>
      */
     protected array $mainRights = [
         [
@@ -459,11 +463,11 @@ class Installer
     /**
      * Constructor.
      *
+     * @param System $system
      * @throws \Exception
      */
-    public function __construct()
+    public function __construct(protected System $system)
     {
-        $this->system = new System();
         $dynMainConfig = [
             'main.currentVersion' => System::getVersion(),
             'main.currentApiVersion' => System::getApiVersion(),
@@ -548,7 +552,7 @@ class Installer
             System::renderFooter();
         }
 
-        if (!is_readable(PMF_ROOT_DIR . '/inc/data.php') && !is_readable(PMF_ROOT_DIR . '/config/database.php')) {
+        if (!is_readable(PMF_ROOT_DIR . '/config/database.php')) {
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>' .
                 'Please use the <a href="index.php">install script</a>.</p>';
             System::renderFooter();
@@ -635,6 +639,7 @@ class Installer
 
     /**
      * Checks if phpMyFAQ database tables are available
+     * @deprecated moved to class Update
      */
     public function checkAvailableDatabaseTables(DatabaseDriver $database): void
     {

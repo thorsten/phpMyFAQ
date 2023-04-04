@@ -16,7 +16,8 @@
  */
 
 use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Installer;
+use phpMyFAQ\Setup\Installer;
+use phpMyFAQ\System;
 
 date_default_timezone_set('Europe/Berlin');
 ini_set('display_errors', 1);
@@ -75,11 +76,12 @@ $setup = [
     'rootDir' => PMF_TEST_DIR
 ];
 
-$installer = new Installer();
+
 try {
+    $installer = new Installer(new System());
     $installer->startInstall($setup);
-} catch (\phpMyFAQ\Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
-}
+} 
 
 require PMF_TEST_DIR . '/config/database.php';
