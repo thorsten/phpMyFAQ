@@ -215,14 +215,14 @@ class CategoryRelation
             );
         }
 
-        if (strlen((string) $this->config->getLanguage()->getLanguage()) > 0) {
+        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s'",
                 $this->config->getLanguage()->getLanguage()
             );
         }
 
-        $query .= " GROUP BY fcr.category_id";
+        $query .= " GROUP BY fcr.category_id, fc.parent_id";
 
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
