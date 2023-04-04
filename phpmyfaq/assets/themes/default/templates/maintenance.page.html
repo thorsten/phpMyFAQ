@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 <html lang="{{ metaLanguage }}">
-  <head>
-    <meta charset="utf-8" />
+<head>
+  <meta charset="utf-8" />
 
-    <title>{{ title }}</title>
-    <base href="{{ baseHref }}" />
+  <title>{{ title }}</title>
+  <base href="{{ baseHref }}" />
 
-    <meta name="description" content="{{ metaDescription }}" />
-    <meta name="keywords" content="{{ metaKeywords }}" />
-    <meta name="author" content="{{ metaPublisher }}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqVersion }}" />
-    <meta name="robots" content="noindex,nofollow" />
-    <meta name="revisit-after" content="7 days" />
+  <meta content="{{ metaDescription }}" name="description" />
+  <meta content="{{ metaKeywords }}" name="keywords" />
+  <meta content="{{ metaPublisher }}" name="author" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="phpMyFAQ {{ phpmyfaqVersion }}" name="application-name" />
+  <meta content="{{ metaRobots }}" name="robots" />
+  <meta content="7 days" name="revisit-after" />
+  <meta content="app-id=977896957" name="apple-itunes-app" />
 
-    <link rel="stylesheet" href="{{ baseHref }}assets/dist/styles.css" />
+  <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" />
 
-    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" />
-    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
-    <link rel="canonical" href="{{ currentPageUrl }}" />
-  </head>
-  <body dir="{{ dir }}">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-          <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#pmf-navbar-toggle"
-          aria-controls="pmf-navbar-toggle"
+  <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" rel="shortcut icon" />
+  <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <link href="{{ currentPageUrl }}" rel="canonical" />
+</head>
+
+<body dir="{{ dir }}">
+<nav class="p-3 text-bg-dark border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a
+        href="{{ faqHome }}"
+        id="phpmyfaq-logo"
+        title="{{ header }}"
+        class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+      >
+        <img alt="phpMyFAQ" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" />
+      </a>
+
+      <div class="dropdown align-items-end">
+        <a
+          href="#"
+          class="d-block text-decoration-none dropdown-toggle text-white"
+          data-bs-toggle="dropdown"
           aria-expanded="false"
-          aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-          <ul class="navbar-nav mr-md-12">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="dropdown"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {{ msgLoginUser }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown">
-                [notLoggedIn] {{ msgLoginUser }} [/notLoggedIn] [userloggedIn] {{ msgUserControl }} {{ msgLogoutUser }}
-                [/userloggedIn]
-              </div>
-            </li>
-          </ul>
-        </div>
+          {{ msgLoginUser }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small">
+          [notLoggedIn]
+          <li>{{ msgRegisterUser }}</li>
+          <li>{{ msgLoginUser }}</li>
+          [/notLoggedIn] [userloggedIn]
+          <li>{{ msgUserControlDropDown }}</li>
+          <li>{{ msgUserControl }}</li>
+          <li>{{ msgUserRemoval }}</li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>{{ msgLogoutUser }}</li>
+          [/userloggedIn]
+        </ul>
       </div>
-    </nav>
+    </div>
+  </div>
+</nav>
 
     <div class="pmf-wrapper pmf-main">
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <div class="jumbotron text-center mt-5">
+            <div class="jumbotron text-center m-5">
               <h3>We are performing scheduled maintenance operations. Please visit us later.</h3>
             </div>
           </div>
@@ -72,31 +73,23 @@
       </div>
     </div>
 
-    <footer class="pmf-footer font-small pt-4">
-      <div class="container">
-        <div class="row">
-          <div class="col-8 mb-4">
-            <ul class="pmf-footer-menu">
-              <li class="foot-menu-item">{{ msgContact }}</li>
-              <li class="foot-menu-item">{{ privacyLink }}</li>
+    <footer class="pt-4 text-bg-dark">
+      <div class="w-100">
+        <div class="container">
+          <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4">
+            <p class="col-md-6 mb-0 text-white">{{ copyright }}</p>
+            <ul class="nav col-md-6 justify-content-end">
+              <li class="nav-item">{{ privacyLink }}</li>
             </ul>
-          </div>
-          <div class="col-4 mb-4">
-            <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-              {{ switchLanguages }}
-              <input type="hidden" name="action" value="" />
-            </form>
           </div>
         </div>
       </div>
-      <div class="text-center py-3">{{ copyright }}</div>
       [debugMode]
-      <div class="container debug-mode">
-        <hr />
-        <h4>DEBUG INFORMATION</h4>
+      <div class="container">
+        <h5 class="border-top">⚠︎ DEBUG MODE ENABLED ⚠︎</h5>
         <div class="row">
           <div class="col-12">
-            <h5>DATABASE QUERIES</h5>
+            <h6 class="text-danger">DATABASE QUERIES</h6>
             {{ debugQueries }}
           </div>
         </div>
@@ -104,6 +97,7 @@
       [/debugMode]
     </footer>
 
-    <script src="{{ baseHref }}assets/dist/frontend.js"></script>
+    <script src="./assets/dist/frontend.js"></script>
   </body>
 </html>
+
