@@ -494,7 +494,7 @@ if (
 
         <div id="pmf-user-message"><?= $message ?></div>
 
-        <table class="table table-striped align-middle">
+        <table class="table table-striped align-middle" id="pmf-admin-user-table">
             <thead class="thead-dark">
             <tr>
                 <th><?= Translation::get('ad_entry_id') ?></th>
@@ -662,7 +662,7 @@ if (
                             <div class="col-lg-8">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="add_user_automatic_password"
-                                           name="add_user_automatic_password">
+                                           name="add_user_automatic_password" value="">
                                     <label class="form-check-label" for="add_user_automatic_password">
                                         <?= Translation::get('ad_add_user_change_password') ?>
                                     </label>

@@ -106,7 +106,7 @@ export const handleUsers = async () => {
       const csrf = document.getElementById('add_user_csrf').value;
       const userName = document.getElementById('add_user_name').value;
       const realName = document.getElementById('add_user_realname').value;
-      const automaticPassword = document.getElementById('add_user_automatic_password').value;
+      const automaticPassword = document.getElementById('add_user_automatic_password')?.checked;
       const email = document.getElementById('add_user_email').value;
       const password = document.getElementById('add_user_password').value;
       const passwordConfirm = document.getElementById('add_user_password_confirm').value;
@@ -132,28 +132,54 @@ export const handleUsers = async () => {
 
       postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
         .then(async (response) => {
-          if (response.status !== 201) {
-            const errors = await response.json();
-            let errorMessage = '';
-
-            errors.forEach((error) => {
-              errorMessage += `${error}<br>`;
-            });
-
-            addUserError.classList.remove('d-none');
-            addUserError.innerHTML = errorMessage;
-          } else {
-            const result = await response.json();
-
-            addUserMessage.innerHTML = `<p class="alert alert-success">${result.data}</p>`;
-
-            modal.style.display = 'none';
-            modal.classList.remove('show');
-            modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+          if (response.ok) {
+            return response.json();
           }
+          throw new Error('Network response was not ok: ', { cause: { response } });
         })
-        .catch((error) => {
-          console.log('Final Request failure: ', error);
+        .then((response) => {
+          addUserMessage.innerHTML = `<p class="alert alert-success">${response.success}</p>`;
+
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+          modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+
+          const tableBody = document.querySelector('#pmf-admin-user-table tbody');
+          const row = addElement('tr', { id: `row_user_id_${response.id}` }, [
+            addElement('td', { innerText: response.id }),
+            addElement('td', { className: 'text-center' }, [
+              addElement('i', { className: response.status ? 'fa fa-check-circle-o' : 'fa fa-ban' }),
+            ]),
+            addElement('td', { className: 'text-center' }, [
+              addElement('i', { className: response.isSuperAdmin ? 'fa fa-user-secret' : 'fa fa-user-times' }),
+            ]),
+            addElement('td', { className: 'text-center' }, [
+              addElement('i', { className: response.isVisible ? 'fa fa-user' : 'fa fa-user-o' }),
+            ]),
+            addElement('td', { innerText: response.realName }),
+            addElement('td', { innerText: response.userName }),
+            addElement('td', {}, [addElement('a', { href: 'mailto:' + response.email, innerText: response.email })]),
+            addElement('td', {}, [
+              addElement('a', { className: 'btn btn-sm btn-info', href: `?action=user&user_id=${response.id}` }, [
+                addElement('i', { className: 'fa fa-pencil' }),
+                addElement('span', { innerText: ' ' + response.editTranslationString }),
+              ]),
+            ]),
+            addElement('td', {}),
+            addElement('td', {}),
+          ]);
+          tableBody.appendChild(row);
+        })
+        .catch(async (error) => {
+          const errors = await error.cause.response.json();
+          let errorMessage = '';
+
+          errors.forEach((error) => {
+            errorMessage += `${error}<br>`;
+          });
+
+          addUserError.classList.remove('d-none');
+          addUserError.innerHTML = errorMessage;
         });
     });
   }

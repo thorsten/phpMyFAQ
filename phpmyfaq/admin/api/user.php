@@ -164,7 +164,7 @@ if (
                     $errorMessage[] = Translation::get('ad_passwd_fail');
                 }
             } else {
-                $userPassword = $newUser->createPassword();
+                $userPassword = $newUser->createPassword(8, false);
             }
 
             if (count($errorMessage) === 0) {
@@ -180,10 +180,20 @@ if (
                     } catch (Exception $e) {
                         // @todo catch exception
                     }
-                    $successMessage = [ 'data' => Translation::get('ad_adus_suc') ];
+                    $successMessage = [
+                        'success' => Translation::get('ad_adus_suc'),
+                        'id' => $newUser->getUserId(),
+                        'status' => $newUser->getStatus(),
+                        'isSuperAdmin' => (bool)$userIsSuperAdmin,
+                        'isVisible' => (bool) $newUser->userdata->get('is_visible'),
+                        'realName' => $userRealName,
+                        'userName' => $userName,
+                        'email' => $userEmail,
+                        'editTranslationString' => Translation::get('ad_user_edit')
+                    ];
                 }
 
-                $http->setStatus(201);
+                $http->setStatus(200);
                 $http->sendJsonWithHeaders($successMessage);
                 exit(1);
             }
