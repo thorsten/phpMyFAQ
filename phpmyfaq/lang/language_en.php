@@ -1354,7 +1354,7 @@ $LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2
 $LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 secret key'];
 
 // added v3.2.0-alpha - 2023-03-11 by Jan
-$PMF_LANG['msgTwofactorEnabled'] = "Two Factor Authentication";
+$PMF_LANG['msgTwofactorEnabled'] = "Two Factor Authentication enabled";
 $PMF_LANG['msgTwofactorConfig'] = "Config Two Factor Authentication";
 $PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuration Two Factor Authentication";
 $PMF_LANG['qr_code_secret_alt'] = "QR-Code Secret-Key";
