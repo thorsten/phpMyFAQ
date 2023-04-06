@@ -1365,4 +1365,7 @@ $PMF_LANG['msgTwofactorCheck'] = "Check";
 $PMF_LANG['msgTwofactorErrorToken'] = "You entered a wrong code!";
 $PMF_LANG['ad_user_overwrite_twofactor'] = "Reset two-factor-authentication";
 
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = "You will be automatically redirected in 5 seconds.";
+
 return $PMF_LANG;

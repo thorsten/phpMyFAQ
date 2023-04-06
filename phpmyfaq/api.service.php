@@ -452,12 +452,22 @@ switch ($action) {
                 $notification = new Notification($faqConfig);
                 $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
             } catch (Exception | TransportExceptionInterface $e) {
-                // @todo handle exception in v3.2
+                $faqConfig->getLogger()->info('Notification could not be sent: ', [ $e->getMessage() ]);
+            }
+
+            if ($faqConfig->get('records.defaultActivation')) {
+                $link = [
+                    'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
+                    'info' => Translation::get('msgRedirect')
+                ];
+            } else {
+                $link = [];
             }
 
             $message = [
-                'success' => ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
-                'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0])
+                'success' =>
+                    ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
+                ... $link
             ];
         } else {
             $message = [

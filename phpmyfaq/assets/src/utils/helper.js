@@ -113,3 +113,11 @@ export const serialize = (data) => {
 
   return obj;
 };
+
+/**
+ * Redirects the user to the given URL.
+ * @param url
+ */
+export const redirect = (url) => {
+  document.location.href = url;
+};

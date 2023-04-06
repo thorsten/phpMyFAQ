@@ -13,7 +13,7 @@
  * @since     2023-01-06
  */
 
-import { addElement, serialize } from '../utils';
+import { addElement, redirect, serialize } from '../utils';
 
 export const saveFormData = (action) => {
   const form = document.querySelector('#formValues');
@@ -38,11 +38,20 @@ export const saveFormData = (action) => {
     .then((response) => {
       loader.classList.add('d-none');
       const message = document.getElementById('faqs');
-      const successMessage = response.success;
       message.insertAdjacentElement(
         'afterend',
-        addElement('div', { classList: 'alert alert-success', innerText: successMessage })
+        addElement('div', { classList: 'alert alert-success', innerText: response.success })
       );
+
+      if (response.link) {
+        message.insertAdjacentElement(
+          'afterend',
+          addElement('div', { classList: 'alert alert-info', innerText: response.info })
+        );
+        window.setTimeout(() => {
+          redirect(response.link);
+        }, 5000);
+      }
     })
     .catch(async (error) => {
       loader.classList.add('d-none');
