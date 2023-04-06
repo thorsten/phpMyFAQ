@@ -252,4 +252,9 @@ class LanguageCodes
 
         return null;
     }
+
+    public static function getKey(string $value): ?string
+    {
+        return array_search($value, static::$languageCodes);
+    }
 }

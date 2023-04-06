@@ -1027,24 +1027,17 @@ class Category
      */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
-        $existcatlang = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $existingCategoryLanguages = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         $translated = [];
 
-        foreach ($existcatlang as $language) {
+        foreach ($existingCategoryLanguages as $language) {
             $query = sprintf(
-                "
-               SELECT
-                  name, description
-               FROM
-                   %sfaqcategories
-               WHERE
-                   id = %d
-               AND
-                   lang = '%s'",
+                "SELECT name, description FROM %sfaqcategories WHERE %s lang = '%s'",
                 Database::getTablePrefix(),
-                $categoryId,
+                $categoryId === 0 ? '' : 'id = ' . $categoryId . ' AND ',
                 $this->config->getDb()->escape($language)
             );
+
             $result = $this->config->getDb()->query($query);
             if ($row = $this->config->getDb()->fetchArray($result)) {
                 $translated[LanguageCodes::get($language)] =

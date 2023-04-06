@@ -19,6 +19,7 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Helper;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -129,8 +130,12 @@ class CategoryHelper extends Helper
                 $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
             );
         } else {
-            $this->config->getLogger()->info('No categories in this language.');
-            return '';
+            $languagesAvailable = $this->Category->getCategoryLanguagesTranslated($parentId);
+            return sprintf(
+                '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
+                Translation::get('msgCategoryMissingButTranslationAvailable'),
+                $this->buildAvailableCategoryTranslationsList($languagesAvailable)
+            );
         }
     }
 
@@ -193,6 +198,36 @@ class CategoryHelper extends Helper
                 $html .= '</li>';
             }
         }
+        return $html;
+    }
+
+    /**
+     * Returns a list of items with linked translated categories
+     *
+     * @param array<string, string> $availableCategoryTranslations
+     * @return string
+     */
+    public function buildAvailableCategoryTranslationsList(array $availableCategoryTranslations): string
+    {
+        $html = '';
+
+        foreach ($availableCategoryTranslations as $language => $category) {
+            $url = sprintf(
+                '%sindex.php?action=show&amp;lang=%s',
+                $this->config->getDefaultUrl(),
+                LanguageCodes::getKey($language)
+            );
+            $link = new Link($url, $this->config);
+            $link->itemTitle = Strings::htmlentities($category);
+            $link->text = Strings::htmlentities($category);
+            $name = $link->toHtmlAnchor();
+            $html .= sprintf(
+                '<li><strong>%s</strong>: %s</li>',
+                $language,
+                $name
+            );
+        }
+
         return $html;
     }
 
