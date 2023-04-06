@@ -448,7 +448,7 @@ class Faq
 
                 $renderedItems[$row->id] = sprintf(
                     '<li class="list-group-item d-flex justify-content-between align-items-start %s">',
-                    ($row->sticky) ? 'sticky-faqs' : ''
+                    ($row->sticky) ? 'list-group-item-primary rounded mb-3' : ''
                 );
                 $renderedItems[$row->id] .= sprintf(
                     '<div class="ms-2 me-auto"><div class="fw-bold">%s</div><div class="small">%s</div></div>',

@@ -1368,5 +1368,7 @@ $PMF_LANG['ad_user_overwrite_twofactor'] = "Reset two-factor-authentication";
 // added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
 $PMF_LANG['msgRedirect'] = 'You will be automatically redirected in 5 seconds.';
 $PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'No category was found in the selected language, but you can select the following languages:';
+$PMF_LANG['msgCategoryDescription'] = 'Here you will find an overview of all categories with the number of FAQs.';
+$PMF_LANG['msgSubCategoryContent'] = 'Select a main category.';
 
 return $PMF_LANG;

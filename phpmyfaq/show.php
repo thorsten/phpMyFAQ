@@ -103,8 +103,8 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         'mainPageContent',
         [
             'categoryHeader' => Translation::get('msgEntriesIn') . $categoryData->getName(),
-            'categoryDescription' => $categoryData->getDescription(),
             'categoryFaqsHeader' => $categoryData->getName(),
+            'categoryDescription' => $categoryData->getDescription(),
             'categorySubsHeader' => Translation::get('msgSubCategories'),
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
@@ -127,11 +127,11 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         'mainPageContent',
         [
             'categoryHeader' => Translation::get('msgFullCategories'),
-            'categoryDescription' => '',
-            'categoryFaqsHeader' => '',
-            'categorySubsHeader' => '',
+            'categoryFaqsHeader' => Translation::get('msgShowAllCategories'),
+            'categoryDescription' => Translation::get('msgCategoryDescription'),
+            'categorySubsHeader' => Translation::get('msgSubCategories'),
             'categoryContent' => $categoryHelper->renderCategoryTree($selectedCategoryId),
-            'subCategoryContent' => $subCategoryContent,
+            'subCategoryContent' => Translation::get('msgSubCategoryContent'),
             'categoryLevelUp' => '',
         ]
     );

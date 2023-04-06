@@ -1367,5 +1367,7 @@ $PMF_LANG['ad_user_overwrite_twofactor'] = "2-Faktor-Authentifizierung überschr
 // added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
 $PMF_LANG['msgRedirect'] = 'Du wirst in 5 Sekunden automatisch weitergeleitet.';
 $PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Es wurde keine Kategorie in der gewählten Sprache gefunden, aber du kannst folgende Sprachen auswählen:';
+$PMF_LANG['msgCategoryDescription'] = 'Hier findest du eine Übersicht aller Kategorien mit der Anzahl der FAQs.';
+$PMF_LANG['msgSubCategoryContent'] = 'Wähle eine Hauptkategorie aus.';
 
 return $PMF_LANG;
