@@ -213,15 +213,15 @@ if (
     }
 
     // Set data for forms
-    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlspecialchars($faqData['title']) : '');
+    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities($faqData['title']) : '');
     $faqData['content'] =
         (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)) : '');
-    $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlspecialchars($faqData['tags']) : '');
-    $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlspecialchars($faqData['keywords']) : '');
-    $faqData['author'] = (isset($faqData['author']) ? Strings::htmlspecialchars(
+    $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlentities($faqData['tags']) : '');
+    $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlentities($faqData['keywords']) : '');
+    $faqData['author'] = (isset($faqData['author']) ? Strings::htmlentities(
         $faqData['author']
     ) : $user->getUserData('display_name'));
-    $faqData['email'] = (isset($faqData['email']) ? Strings::htmlspecialchars($faqData['email']) : $user->getUserData(
+    $faqData['email'] = (isset($faqData['email']) ? Strings::htmlentities($faqData['email']) : $user->getUserData(
         'email'
     ));
     $faqData['isoDate'] = ($faqData['date'] ?? date('Y-m-d H:i'));
@@ -362,8 +362,10 @@ if (
                                 <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
                                 <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                                 <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
-                                <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
-                                <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
+                                <input type="hidden" name="notifyUser" id="notifyUser"
+                                       value="<?= Strings::htmlentities($notifyUser) ?>">
+                                <input type="hidden" name="notifyEmail" id="notifyEmail"
+                                       value="<?= Strings::htmlentities($notifyEmail) ?>">
 
                                 <!-- Question -->
                                 <div class="form-group">
