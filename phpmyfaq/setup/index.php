@@ -128,7 +128,7 @@ $loader->register();
 //
 Strings::init();
 $system = new System();
-$installer = new Installer();
+$installer = new Installer($system);
 $installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
 
