@@ -58,7 +58,7 @@ class UserData
      * @param mixed $field Field(s)
      * @return mixed
      */
-    public function get(mixed $field)
+    public function get(mixed $field): mixed
     {
         $singleReturn = false;
         if (!is_array($field)) {
@@ -96,11 +96,11 @@ class UserData
     /**
      * Returns the first result of the given key.
      *
-     * @param  string $key
-     * @param  string $value
+     * @param string $key
+     * @param string $value
      * @return string|null
      */
-    public function fetch($key, $value)
+    public function fetch(string $key, string $value): ?string
     {
         $select = sprintf(
             "
@@ -132,7 +132,7 @@ class UserData
      * @param string $value
      * @return array<string, int>
      */
-    public function fetchAll($key, $value): array
+    public function fetchAll(string $key, string $value): array
     {
         $select = sprintf(
             "SELECT user_id,
@@ -163,7 +163,7 @@ class UserData
      *
      * @return bool
      */
-    public function set(mixed $field, mixed $value = null)
+    public function set(mixed $field, mixed $value = null): bool
     {
         // check input
         if (!is_array($field)) {
@@ -189,12 +189,10 @@ class UserData
      * associative array with the fields and values.
      *
      * @param int $userId User ID
-     *
      * @return bool
      */
-    public function load($userId)
+    public function load(int $userId): bool
     {
-        $userId = (int)$userId;
         if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
@@ -218,7 +216,7 @@ class UserData
         );
 
         $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        if ($this->config->getDb()->numRows($res) !== 1) {
             return false;
         }
         $this->data = $this->config->getDb()->fetchArray($res);
@@ -232,7 +230,7 @@ class UserData
      *
      * @return bool
      */
-    public function save()
+    public function save(): bool
     {
         $update = sprintf(
             "
@@ -240,9 +238,9 @@ class UserData
                 %sfaquserdata
             SET
                 last_modified = '%s',
-                display_name  = '%s',
-                email         = '%s',
-                is_visible    = %d,
+                display_name = '%s',
+                email = '%s',
+                is_visible = %d,
                 twofactor_enabled = %d,
                 secret = '%s'
             WHERE
@@ -270,12 +268,10 @@ class UserData
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     *
      * @return bool
      */
-    public function add($userId)
+    public function add(int $userId): bool
     {
-        $userId = (int)$userId;
         if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
@@ -306,12 +302,10 @@ class UserData
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     *
      * @return bool
      */
-    public function delete($userId)
+    public function delete(int $userId): bool
     {
-        $userId = (int)$userId;
         if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
