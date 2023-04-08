@@ -34,14 +34,6 @@ $httpHeader = new HttpHelper();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$secLevelEntries = [
-    'user' => '',
-    'content' => '',
-    'statistics' => '',
-    'exports' => '',
-    'backup' => '',
-    'config' => '',
-];
 $dashboardPage = true;
 $contentPage = false;
 $userPage = false;
@@ -75,16 +67,15 @@ $secLevelEntries['content'] = $adminHelper->addMenuEntry(
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_entry_add', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit', $action);
-/*
-if (DEBUG) {
-    $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-        'edit_faq+delete_faq',
-        'faqs-overview',
-        'ad_menu_entry_edit',
-        $action
-    );
-}
-*/
+//if (DEBUG) {
+//    $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+//        'edit_faq+delete_faq',
+//        'faqs-overview',
+//        'ad_menu_entry_edit',
+//        $action
+//    );
+//}
+
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'searchfaqs',
@@ -123,7 +114,7 @@ $secLevelEntries['exports'] = $adminHelper->addMenuEntry('export', 'export', 'ad
 
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
 
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+$secLevelEntries['config'] = $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action, false);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editinstances+addinstances+delinstances',
@@ -386,7 +377,7 @@ switch ($action) {
                             <?= $secLevelEntries['exports']; ?>
                         </nav>
                     </div>
-                    <!-- BackupAdmin -->
+                    <!-- Backup -->
                     <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-cloud-download"></i></div>
@@ -399,7 +390,7 @@ switch ($action) {
                             <?= $secLevelEntries['backup']; ?>
                         </nav>
                     </div>
-                    <!-- ConfigAdmin -->
+                    <!-- Config -->
                     <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#"
                        data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
                        aria-controls="collapseConfigAdmin">
