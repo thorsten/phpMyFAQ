@@ -48,7 +48,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <div class="col-12">
         <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate
               data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
-              data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($faqConfig->getDefaultLanguage()) ? $faqConfig->getDefaultLanguage() : 'en') ?>"
+              data-pmf-editor-language="en"
               data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
             <?= Token::getInstance()->getTokenInput('save-news') ?>
 
@@ -264,7 +264,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <div class="col-12">
         <form id="faqEditor" action="?action=update-news" method="post" accept-charset="utf-8" class="needs-validation"
               data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
-              data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($newsData['lang']) ? $newsData['lang'] : 'en') ?>"
+              data-pmf-editor-language="en"
               data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
             <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
             <?= Token::getInstance()->getTokenInput('update-news') ?>

@@ -365,7 +365,7 @@ if (
 
                               <form id="faqEditor" action="?action=<?= $queryString ?>" method="post"
                                     data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
-                                    data-pmf-editor-language="<?= (Language::isASupportedTinyMCELanguage($faqData['lang']) ? $faqData['lang'] : 'en') ?>"
+                                    data-pmf-editor-language="en"
                                     data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
                                 <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
                                 <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">

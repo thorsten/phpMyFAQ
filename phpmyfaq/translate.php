@@ -104,7 +104,7 @@ $template->parse(
             $auth
         ),
         'msgNewTranslationSubmit' => Translation::get('msgNewTranslationSubmit'),
-        'tinyMCELanguage' => (Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en')]
+        'tinyMCELanguage' => 'en']
 );
 
 $template->parseBlock(

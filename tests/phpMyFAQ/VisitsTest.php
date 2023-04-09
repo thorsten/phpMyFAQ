@@ -79,7 +79,7 @@ class VisitsTest extends TestCase
             [
                 [
                     'id' => $id,
-                    'lang' => '',
+                    'lang' => 'en',
                     'visits' => 2,
                     'last_visit' => $_SERVER['REQUEST_TIME'],
                 ]
@@ -104,7 +104,7 @@ class VisitsTest extends TestCase
             [
                 [
                     'id' => $id,
-                    'lang' => '',
+                    'lang' => 'en',
                     'visits' => 1,
                     'last_visit' => $_SERVER['REQUEST_TIME'],
                 ]

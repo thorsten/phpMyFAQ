@@ -230,6 +230,55 @@ class LanguageCodes
     ];
 
     /**
+     * phpMyFAQ supported language code list, this is a representation of phpMyFAQ translations
+     *
+     * @var array|string[]
+     */
+    protected static array $supportedLanguageCodes = [
+        'ar' => 'Arabic',
+        'eu' => 'Basque',
+        'bn' => 'Bengali',
+        'zh' => 'Chinese',
+        'cs' => 'Czech',
+        'da' => 'Danish',
+        'nl' => 'Dutch',
+        'en' => 'English',
+        'fa' => 'Farsi',
+        'fi' => 'Finnish',
+        'fr' => 'French',
+        'fr-ca' => 'French (Canada)',
+        'de' => 'German',
+        'el' => 'Greek',
+        'he' => 'Hebrew',
+        'hi' => 'Hindi',
+        'hu' => 'Hungarian',
+        'id' => 'Indonesian',
+        'it' => 'Italian',
+        'ja' => 'Japanese',
+        'ko' => 'Korean',
+        'lv' => 'Latvian',
+        'lt' => 'Lithuanian',
+        'ms' => 'Malay',
+        'mn' => 'Mongolian',
+        'pl' => 'Polish',
+        'pt' => 'Portuguese',
+        'pt-br' => 'Portuguese (Brazil)',
+        'ro' => 'Romanian',
+        'ru' => 'Russian',
+        'sr' => 'Serbian',
+        'sk' => 'Slovak',
+        'sl' => 'Slovenian',
+        'es' => 'Spanish',
+        'sv' => 'Swedish',
+        'th' => 'Thai',
+        'tr' => 'Turkish',
+        'tw' => 'Twi',
+        'uk' => 'Ukrainian',
+        'vi' => 'Vietnamese',
+        'cy' => 'Welsh'
+    ];
+
+    /**
      * Returns all language codes.
      *
      * @return array<string, string>
@@ -248,6 +297,20 @@ class LanguageCodes
     {
         if (isset(static::$languageCodes[strtolower($key)])) {
             return static::$languageCodes[strtolower($key)];
+        }
+
+        return null;
+    }
+
+    /**
+     * Return language name from a phpMyFAQ supported language code.
+     *
+     * @return string|null → language code or null
+     */
+    public static function getSupported(string $key): ?string
+    {
+        if (isset(static::$supportedLanguageCodes[strtolower($key)])) {
+            return static::$supportedLanguageCodes[strtolower($key)];
         }
 
         return null;

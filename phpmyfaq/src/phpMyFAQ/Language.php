@@ -48,30 +48,12 @@ class Language
     }
 
     /**
-     * True if the language is supported by the bundled TinyMCE editor.
-     *
-     * TinyMCE Language is supported if there is a language file present in
-     * ROOT/admin/editor/langs/$langcode.js
-     *
-     * TinyMCE language packs can be downloaded from
-     * https://tinymce.moxiecode.com/download_i18n.php
-     * and extracted to ROOT/admin/editor
-     *
-     * @param string $langCode Language code
-     */
-    public static function isASupportedTinyMCELanguage(string $langCode): bool
-    {
-        return file_exists(
-            PMF_ROOT_DIR . '/admin/assets/js/editor/langs/' . $langCode . '.js'
-        );
-    }
-
-    /**
      * Returns an array of country codes for a specific FAQ record ID,
      * specific category ID or all languages used by FAQ records , categories.
      *
      * @param int    $id    ID
      * @param string $table Specifies table
+     * @return string[]
      */
     public function isLanguageAvailable(int $id, string $table = 'faqdata'): array
     {
@@ -186,7 +168,7 @@ class Language
      * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
      * it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
      */
-    private function getUserAgentLanguage()
+    private function getUserAgentLanguage(): void
     {
         $matches = $languages = [];
 
@@ -236,7 +218,7 @@ class Language
      */
     public static function isASupportedLanguage(?string $langCode): bool
     {
-        return !($langCode === null) && LanguageCodes::get($langCode) !== null;
+        return !($langCode === null) && LanguageCodes::getSupported($langCode) !== null;
     }
 
     /**
