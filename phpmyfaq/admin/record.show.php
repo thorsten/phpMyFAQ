@@ -321,7 +321,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             if (isset($numRecordsByCat[$cid])) {
                 $catInfo .= sprintf(
-                    '<span class="badge bg-info" id="category_%d_item_count">%d %s</span> ',
+                    '<span class="badge bg-primary" id="category_%d_item_count">%d %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid],
                     Translation::get('msgEntries')
@@ -339,7 +339,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
                 $catInfo .= sprintf(
-                    '<span class="badge bg-primary">%d %s</span>',
+                    '<span class="badge bg-secondary">%d %s</span>',
                     $numCommentsByCat[$cid],
                     Translation::get('ad_start_comments')
                 );
@@ -354,11 +354,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 }
                 ?>
           <div class="card card-default mb-1">
-            <div class="card-header bg-light-subtle" role="tab" id="category-heading-<?= $cid ?>">
+            <div class="card-header bg-light" role="tab" id="category-heading-<?= $cid ?>">
               <span class="float-right"><?= $catInfo ?></span>
               <h5>
                 <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
-                   aria-expanded="true" aria-controls="collapseOne">
+                   aria-expanded="true" aria-controls="collapseOne" class="text-decoration-none">
                   <i class="icon fa fa-chevron-circle-right "></i>
                 <?= $category->getPath($cid) ?>
                 </a>
@@ -410,6 +410,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     <th style="width: 120px; vertical-align: middle;">
                       <label>
                         <input type="checkbox" id="sticky_category_block_<?= $cid ?>"
+                               class="form-check-input pmf-admin-faqs-all-sticky"
+                               data-pmf-category-id="<?= $cid ?>" data-pmf-csrf="<?= $csrfToken ?>"
                                onclick="saveStatusForCategory(<?= $cid ?>, 'sticky', '<?= $csrfToken ?>')"/>
                       <?= Translation::get('ad_record_sticky') ?>
                       </label>
@@ -418,6 +420,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
+                                   class="form-check-input pmf-admin-faqs-all-active" data-pmf-category-id="<?= $cid ?>"
+                                   data-pmf-csrf="<?= $csrfToken ?>"
                                    onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $csrfToken ?>')"
                                 <?php
                                 if (
@@ -498,6 +502,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <td style="width: 56px;">
                         <label>
                           <input type="checkbox" lang="<?= $record['lang'] ?>"
+                                 class="form-check-input pmf-admin-sticky-faq"
+                                 data-pmf-category-id="<?= $cid ?>" data-pmf-faq-id="<?= $record['id'] ?>"
+                                 data-pmf-csrf="<?= $csrfToken ?>"
                                  onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?= $csrfToken ?>');"
                                  id="sticky_record_<?= $cid . '_' . $record['id'] ?>"
                           <?= $record['sticky'] ? 'checked' : '    ' ?>>
@@ -506,7 +513,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <td>
                       <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                             <label>
-                              <input type="checkbox" lang="<?= $record['lang'] ?>" class="active-records-category-<?= $cid ?>"
+                              <input type="checkbox" lang="<?= $record['lang'] ?>"
+                                     class="form-check-input pmf-admin-active-faq"
+                                     data-pmf-category-id="<?= $cid ?>" data-pmf-faq-id="<?= $record['id'] ?>"
+                                     data-pmf-csrf="<?= $csrfToken ?>"
                                      onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $csrfToken ?>');"
                                      id="active_record_<?= $cid . '_' . $record['id'] ?>"
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
@@ -556,7 +566,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
      * @param id
      * @param type
      * @param csrf
-     *
+     * @deprecated
      * @return void
      */
     function saveStatusForCategory(id, type, csrf) {
@@ -584,7 +594,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
      * @param ids  ids
      * @param type status type
      * @param csrf CSRF Token
-     *
+     * @deprecated
      * @return void
      */
     function saveStatus(cid, ids, type, csrf) {
