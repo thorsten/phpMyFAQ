@@ -495,7 +495,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                                title="<?= Translation::get('msgTransToolAddNewTranslation') ?>"></i>
                           </a>
                           <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
-                          <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
+                          <?= $faqHelper->createFaqTranslationLinkList($record['id'], $cid, $record['lang']) ?>
                           </div>
                         </div>
                       </td>

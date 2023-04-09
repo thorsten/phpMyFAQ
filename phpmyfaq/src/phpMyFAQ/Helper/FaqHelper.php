@@ -187,16 +187,17 @@ class FaqHelper extends Helper
      * Creates a list of links with available languages to edit a FAQ
      * in the admin backend.
      */
-    public function createFaqTranslationLinkList(int $faqId, string $faqLang): string
+    public function createFaqTranslationLinkList(int $faqId, int $categoryId, string $faqLang): string
     {
         $output = '';
 
-        $availableLanguages = $this->config->getLanguage()->isLanguageAvailable(0, 'faqcategories');
+        $availableLanguages = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         foreach ($availableLanguages as $languageCode) {
             if ($languageCode !== $faqLang) {
                 $output .= sprintf(
-                    '<a class="dropdown-item" href="?action=editentry&id=%d&translateTo=%s">%s %s</a>',
+                    '<a class="dropdown-item" href="?action=editentry&id=%d&cat=%d&translateTo=%s">%s %s</a>',
                     $faqId,
+                    $categoryId,
                     $languageCode,
                     'Translate to',
                     LanguageCodes::get($languageCode)

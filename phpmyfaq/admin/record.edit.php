@@ -151,6 +151,7 @@ if (
 
         if (!is_null($translateTo)) {
             $faqData['lang'] = $lang = $translateTo;
+            $selectedCategory = $categoryId;
         }
 
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
@@ -158,10 +159,20 @@ if (
             $logging->log($user, 'admin-edit-faq, ' . $id);
 
             $categories = $categoryRelation->getCategories($id, $lang);
+            if (count($categories) === 0) {
+                $categories = [
+                    'category_id' => $selectedCategory,
+                    'category_lang' => $faqData['lang'],
+                ];
+            }
 
             $faq->getRecord($id, null, true);
             $faqData = $faq->faqRecord;
+            if (!is_null($translateTo)) {
+                $faqData['lang'] = $translateTo; // once again
+            }
             $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
+
             $queryString = 'saveentry&amp;id=' . $faqData['id'];
         } else {
             $queryString = 'insertentry';
@@ -242,16 +253,18 @@ if (
     // Header
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf('%s 1.%d', Translation::get('ad_entry_revision'), $selectedRevisionId);
+
         $faqUrl = sprintf(
             '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
             $faqConfig->getDefaultUrl(),
-            array_values($categories)[0]['category_id'],
+            $category->getCategoryIdFromFaq($faqData['id']),
             $faqData['id'],
             $faqData['lang']
         );
 
         $link = new Link($faqUrl, $faqConfig);
         $link->itemTitle = $faqData['title'];
+
         ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
