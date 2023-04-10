@@ -105,8 +105,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <div class="offset-lg-2 col-lg-4">
                     <p><?= Translation::get('ad_export_download_view') ?></p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>"
+                        <input class="form-check-input" type="radio" name="disposition"
                                id="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>"
                                value="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>" checked>
                         <label class="form-check-label" for="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>">
@@ -114,8 +113,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio"
-                               name="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
+                        <input class="form-check-input" type="radio" name="disposition"
                                id="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
                                value="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
                         <label class="form-check-label" for="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
