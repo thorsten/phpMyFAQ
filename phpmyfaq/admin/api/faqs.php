@@ -190,7 +190,7 @@ switch ($ajaxAction) {
                 }
 
                 $http->setStatus(200);
-                $http->sendJsonWithHeaders(['success' => Translation::get('ad_entry_delsuc')]);
+                $http->sendJsonWithHeaders(['success' => Translation::get('ad_open_question_deleted')]);
             } else {
                 $http->setStatus(401);
                 $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);

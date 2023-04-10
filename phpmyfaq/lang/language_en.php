@@ -1370,5 +1370,6 @@ $PMF_LANG['msgRedirect'] = 'You will be automatically redirected in 5 seconds.';
 $PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'No category was found in the selected language, but you can select the following languages:';
 $PMF_LANG['msgCategoryDescription'] = 'Here you will find an overview of all categories with the number of FAQs.';
 $PMF_LANG['msgSubCategoryContent'] = 'Select a main category.';
+$PMF_LANG['ad_open_question_deleted'] = 'The question was successfully deleted.';
 
 return $PMF_LANG;
