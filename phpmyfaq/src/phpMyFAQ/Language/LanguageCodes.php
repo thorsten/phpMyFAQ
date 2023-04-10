@@ -212,7 +212,6 @@ class LanguageCodes
         'tw' => 'Twi',
         'uk' => 'Ukrainian',
         'ur' => 'Urdu',
-        'us' => 'English',
         'uz' => 'Uzbek',
         'vi' => 'Vietnamese',
         'vo' => 'Volapuk',
