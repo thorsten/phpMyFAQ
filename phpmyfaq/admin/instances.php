@@ -65,7 +65,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
     }
 
     // Update client instance
-    if ('updateinstance' === $action && is_integer($instanceId)) {
+    if ('update-instance' === $action && is_integer($instanceId)) {
         $system = new System();
         $updatedClient = new Client($faqConfig);
         $moveInstance = false;
