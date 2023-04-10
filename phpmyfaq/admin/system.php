@@ -17,6 +17,7 @@
 
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Elastic\Transport\Exception\NoNodeAvailableException;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\System;
@@ -35,7 +36,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     if ($faqConfig->get('search.enableElasticsearch')) {
         try {
             $esFullInformation = $faqConfig->getElasticsearch()->info();
-        } catch (ClientResponseException|ServerResponseException $e) {
+        } catch (ClientResponseException|ServerResponseException|NoNodeAvailableException $e) {
+            $faqConfig->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
             echo Alert::danger('ad_entryins_fail');
         }
         $esInformation = $esFullInformation['version']['number'];
