@@ -66,7 +66,7 @@ const handleSendTestMail = () => {
       .catch(async (error) => {
         const element = document.createElement('span');
         const errorMessage = await error.cause.response.json();
-        element.textContent = '👎 ' + errorMessage;
+        element.textContent = '👎 ' + errorMessage.error;
         button.append(element);
       });
   }
