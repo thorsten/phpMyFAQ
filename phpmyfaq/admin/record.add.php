@@ -37,6 +37,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -189,7 +190,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
                     ->setConfiguration($faqConfig);
                 $moderators = $categoryHelper->getModerators($categories['rubrik']);
                 $notification->sendNewFaqAdded($moderators, $recordId, $recordLang);
-            } catch (Exception $e) {
+            } catch (Exception | TransportExceptionInterface $e) {
                 printf('<p class="alert alert-warning">%s</p>', $e->getMessage());
             }
 
