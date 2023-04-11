@@ -48,7 +48,7 @@ class Comment
     public string $date;
 
     /** @var bool|null */
-    public ?bool $helped;
+    public ?bool $helped = null;
 
     public function getId(): int
     {
