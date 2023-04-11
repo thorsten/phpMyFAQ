@@ -405,6 +405,13 @@ if ($step == 3) {
     }
 
     //
+    // UPDATES FROM 3.2.0-alpha
+    //
+    if (version_compare($version, '3.2.0-alpha.2', '<')) {
+        $faqConfig->add('mail.remoteSMTPDisableTLSPeerVerification', false);
+    }
+
+    //
     // Always the last step: Update version number
     //
     if (version_compare($version, System::getVersion(), '<')) {

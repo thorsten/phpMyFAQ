@@ -304,7 +304,7 @@ function renderInputForm(mixed $key, string $type): void
 
         case 'button':
             printf(
-                '<button type="button" class="btn btn-primary" id="btn-phpmyfaq-%s" onclick="handleSendTestMail()">%s</button>',
+                '<button type="button" class="btn btn-primary" id="btn-phpmyfaq-%s" onclick="handleSendTestMail()">%s</button></div>',
                 str_replace('.', '-', $key),
                 Translation::get($key)
             );

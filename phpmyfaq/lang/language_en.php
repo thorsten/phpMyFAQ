@@ -1346,7 +1346,7 @@ $PMF_LANG['msgSignInWithMicrosoft'] = 'Sign in with Microsoft';
 $LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Enable Sign in with Microsoft (Azure AD)'];
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Enable "Ask question"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Enable notifications'];
-$LANG_CONF['mail.sendTestEmail'] = ['button', 'Send test email to the administrator'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Send test email to the administrator via SMTP'];
 $PMF_LANG['mail.sendTestEmail'] = 'Send test email to the administrator';
 $PMF_LANG['msgGoToCategory'] = 'Go to category';
 $LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Enable Invisible Google ReCAPTCHA v2'];
@@ -1371,5 +1371,6 @@ $PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'No category was found 
 $PMF_LANG['msgCategoryDescription'] = 'Here you will find an overview of all categories with the number of FAQs.';
 $PMF_LANG['msgSubCategoryContent'] = 'Select a main category.';
 $PMF_LANG['ad_open_question_deleted'] = 'The question was successfully deleted.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Disable SMTP TLS peer verification (not recommended)'];
 
 return $PMF_LANG;

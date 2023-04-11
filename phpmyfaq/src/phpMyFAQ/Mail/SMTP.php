@@ -32,9 +32,18 @@ class SMTP implements MailUserAgentInterface
 
     private MailerInterface $mailer;
 
-    public function setAuthConfig(string $server, string $user, string $password, int $port = 25): void
-    {
+    public function setAuthConfig(
+        string $server,
+        string $user,
+        string $password,
+        int $port = 25,
+        bool $disableTlsPeerVerification = false
+    ): void {
         $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, $password, $server, $port);
+
+        if ($disableTlsPeerVerification) {
+            $dsn .= '?verify_peer=0';
+        }
 
         $this->mailer = new Mailer(Transport::fromDsn($dsn));
     }
