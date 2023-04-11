@@ -48,18 +48,22 @@ class Elasticsearch
         ],
         'properties' => [
             'question' => [
+                'type' => 'text',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
             'answer' => [
+                'type' => 'text',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
             'keywords' => [
+                'type' => 'text',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
             'categories' => [
+                'type' => 'text',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ]
