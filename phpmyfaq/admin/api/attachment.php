@@ -43,13 +43,16 @@ try {
     switch ($ajaxAction) {
         case 'delete':
             if (!Token::getInstance()->verifyToken('delete-attachment', $csrfToken)) {
+                $http->setStatus(401);
                 echo Translation::get('err_NotAuth');
                 exit(1);
             }
 
             if ($attachment->delete()) {
+                $http->setStatus(200);
                 echo Translation::get('msgAttachmentsDeleted');
             } else {
+                $http->setStatus(400);
                 echo Translation::get('ad_att_delfail');
             }
             break;
@@ -94,9 +97,10 @@ try {
 
             $http->setStatus(200);
             $http->sendJsonWithHeaders($uploadedFiles);
-
             break;
     }
 } catch (AttachmentException $e) {
+    // handle exception
+} catch (JsonException $e) {
     // handle exception
 }

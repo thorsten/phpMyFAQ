@@ -493,7 +493,7 @@ if (
                                             </ul>
                                             <?php
                                             printf(
-                                                '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attachmentModal">%s</button>',
+                                                '<button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#attachmentModal">%s</button>',
                                                 Translation::get('ad_att_add')
                                             );
                                             ?>
@@ -874,23 +874,19 @@ if (
               <input type="hidden" name="save" value="true">
               <?= Token::getInstance()->getTokenInput('upload-attachment') ?>
 
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload" multiple>
-                <label class="custom-file-label" for="filesToUpload">
-                    <?= Translation::get('ad_att_att') ?>
+              <div class="mb-2">
+                <label class="form-label" for="filesToUpload">
+                  <?= Translation::get('ad_att_att') ?>
                 </label>
+                <input type="file" class="form-control" name="filesToUpload[]" id="filesToUpload" multiple>
                 <div class="invalid-feedback">
                   The file is too big.
                 </div>
               </div>
 
-              <div class="pmf-attachment-upload-files invisible">
-                  <?= Translation::get('msgAttachmentsFilesize') ?>:
+              <div class="pmf-attachment-upload-files invisible mb-2">
+                <?= Translation::get('msgAttachmentsFilesize') ?>:
                 <output id="filesize"></output>
-              </div>
-              <div class="progress invisible">
-                <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
-                     role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </fieldset>
           </form>
