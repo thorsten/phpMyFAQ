@@ -48,22 +48,22 @@ class Elasticsearch
         ],
         'properties' => [
             'question' => [
-                'type' => 'text',
+                'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
             'answer' => [
-                'type' => 'text',
+                'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
             'keywords' => [
-                'type' => 'text',
+                'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ],
             'categories' => [
-                'type' => 'text',
+                'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
                 'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
             ]
