@@ -33,49 +33,49 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @var string
      */
-    protected $table = '';
+    protected string $table = '';
 
     /**
      * Joined searching database table.
      *
      * @var string
      */
-    protected $joinedTable = '';
+    protected string $joinedTable = '';
 
     /**
      * Columns for the result set.
      *
      * @var string[]
      */
-    protected $resultColumns = [];
+    protected array $resultColumns = [];
 
     /**
      * Columns for the joined table.
      *
      * @var string[]
      */
-    protected $joinedColumns = [];
+    protected array $joinedColumns = [];
 
     /**
      * Matching columns for the search.
      *
      * @var string[]
      */
-    protected $matchingColumns = [];
+    protected array $matchingColumns = [];
 
     /**
      * Conditions columns with their values.
      *
      * @var array<string, array<int>|string>
      */
-    protected $conditions = [];
+    protected array $conditions = [];
 
     /**
      * Flag if database supports search relevance.
      *
      * @var bool
      */
-    protected $relevanceSupport = false;
+    protected bool $relevanceSupport = false;
 
     /**
      * Prepares the search and executes it.
@@ -83,7 +83,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * @param string $searchTerm Search term
      * @return mixed
      */
-    public function search(string $searchTerm)
+    public function search(string $searchTerm): mixed
     {
         $query = sprintf(
             '
@@ -100,6 +100,8 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $this->getMatchingColumns(),
             $searchTerm
         );
+
+        var_dump($query);
 
         $this->resultSet = $this->config->getDb()->query($query);
 
@@ -149,7 +151,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param string $table Table where search should be performed
      */
-    public function setTable($table): SearchDatabase
+    public function setTable(string $table): SearchDatabase
     {
         $this->table = $table;
 
@@ -173,7 +175,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param string $joinedTable Joined table where search should be performed
      */
-    public function setJoinedTable($joinedTable = ''): SearchDatabase
+    public function setJoinedTable(string $joinedTable = ''): SearchDatabase
     {
         $this->joinedTable = $joinedTable;
 
@@ -263,7 +265,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param string $searchTerm Search term
      */
-    public function getMatchClause($searchTerm = ''): string
+    public function getMatchClause(string $searchTerm = ''): string
     {
         $keys = Strings::preg_split("/\s+/", $searchTerm);
         $numKeys = is_countable($keys) ? count($keys) : 0;
