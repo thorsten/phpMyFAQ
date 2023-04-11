@@ -39,26 +39,30 @@ class LanguageHelper
         array $excludedLanguages = [],
         string $id = 'language'
     ): string {
-
-        $onChange = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
-        $output = '<select class="form-select text-bg-dark" name="' . $id . '" id="' . $id . '"' . $onChange . ">\n";
+        $output = sprintf(
+            '<select class="form-select" name="%s" id="%s" %s>',
+            $id,
+            $id,
+            $submitOnChange ? ' onchange="this.form.submit();"' : ''
+        );
         $languages = self::getAvailableLanguages();
 
         if (count($languages) > 0) {
             foreach ($languages as $lang => $value) {
                 if (!in_array($lang, $excludedLanguages)) {
-                    $output .= "\t" . '<option value="' . $lang . '"';
-                    if ($lang == $default) {
-                        $output .= ' selected';
-                    }
-                    $output .= '>' . $value . "</option>\n";
+                    $output .= sprintf(
+                        '<option value="%s" %s>%s</option>',
+                        $lang,
+                        $lang === $default ? 'selected' : '',
+                        $value
+                    );
                 }
             }
         } else {
-            $output .= "\t<option value=\"en\">" . LanguageCodes::get('en') . '</option>';
+            $output .= sprintf('<option value="en">%s</option>', LanguageCodes::get('en'));
         }
 
-        return $output . "</select>\n";
+        return $output . '</select>';
     }
 
     /**
