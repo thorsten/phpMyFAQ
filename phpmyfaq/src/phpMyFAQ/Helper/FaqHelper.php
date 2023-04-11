@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use DOMDocument;
 use Exception;
 use ParsedownExtra;
 use phpMyFAQ\Category;
@@ -225,5 +226,25 @@ class FaqHelper extends Helper
             $faqEntity->getId(),
             $faqEntity->getLanguage()
         );
+    }
+
+    /**
+     * Remove <script> tags, we don't need them
+     *
+     * @param string $content
+     * @return string
+     */
+    public function cleanUpContent(string $content): string
+    {
+        $document = new DOMDocument();
+        $document->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $scriptTags = $document->getElementsByTagName('script');
+
+        for ($i = 0; $i < $scriptTags->length; $i++) {
+            $scriptTags->item($i)->parentNode->removeChild($scriptTags->item($i));
+        }
+
+        return preg_replace(['/\r/', '/\n/'], '', $document->saveHTML());
     }
 }

@@ -59,4 +59,14 @@ class FaqHelperTest extends TestCase
             $this->faqHelper->createFaqUrl($faqEntity, 1)
         );
     }
+
+    public function testCleanUpContent(): void
+    {
+        $content = '<p>Some text <script>alert("Hello, world!");</script></p>';
+        $expectedOutput = '<p>Some text </p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
 }

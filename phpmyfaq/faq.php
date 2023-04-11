@@ -105,6 +105,8 @@ if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
 }
 
+$answer = $faqHelper->cleanUpContent($answer);
+
 // Rewrite URL fragments
 $currentUrl = htmlspecialchars("//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", ENT_QUOTES, 'UTF-8');
 $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
