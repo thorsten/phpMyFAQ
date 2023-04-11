@@ -200,7 +200,9 @@ class CategoryRelation
                     fc.parent_id as parent_id,
                     COUNT(fcr.record_id) AS number
                 FROM
-                    %sfaqcategoryrelations fcr, %sfaqdata fd
+                    %sfaqcategoryrelations fcr
+                LEFT JOIN
+                    %sfaqdata fd on fcr.record_id = fd.id
                 LEFT JOIN 
                     %sfaqcategories fc ON fc.id = fcr.category_id
                 WHERE

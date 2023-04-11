@@ -190,9 +190,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $comment = new Comments($faqConfig);
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numCommentsByCat = [];
-    $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory(
-        $faqConfig->get('main.enableCategoryRestrictions')
-    );
+    $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory();
+
     $numActiveByCat = [];
 
     $csrfToken = Token::getInstance()->getTokenString('faq-overview');
@@ -200,7 +199,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $matrix = $categoryRelation->getCategoryFaqsMatrix();
     foreach ($matrix as $categoryKey => $value) {
         $numCommentsByCat[$categoryKey] = 0;
-        foreach ($value as $faqKey => $value) {
+        foreach ($value as $faqKey => $innerValue) {
             if (isset($numCommentsByFaq[$faqKey])) {
                 $numCommentsByCat[$categoryKey] += $numCommentsByFaq[$faqKey];
             }
