@@ -277,11 +277,11 @@ class Elasticsearch
             }
         }
 
-        if (isset($responses) && (is_countable($responses) ? count($responses) : 0)) {
+        if (isset($responses) && $responses->getStatusCode() === 200) {
             return ['success' => $responses];
         }
 
-        return ['error' => ''];
+        return ['error' => 'Unknown error.'];
     }
 
     /**

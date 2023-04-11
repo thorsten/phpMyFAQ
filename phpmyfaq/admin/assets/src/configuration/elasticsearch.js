@@ -14,6 +14,7 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
+import { formatBytes } from '../utils';
 export const handleElasticsearch = () => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
 
@@ -66,8 +67,8 @@ export const handleElasticsearch = () => {
             const count = stats?.indices?.phpmyfaq?.total?.docs?.count;
             const sizeInBytes = stats?.indices?.phpmyfaq?.total?.store?.size_in_bytes;
             let html = '<dl class="row">';
-            html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count}</dd>`;
-            html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${sizeInBytes}</dd>`;
+            html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count ?? 0}</dd>`;
+            html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(sizeInBytes ?? 0)}</dd>`;
             html += '</dl>';
             div.innerHTML = html;
           })

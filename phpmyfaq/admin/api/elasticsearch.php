@@ -53,7 +53,6 @@ switch ($ajaxAction) {
         break;
 
     case 'drop':
-
         try {
             $esResult = $elasticsearch->dropIndex();
             $http->setStatus(200);
