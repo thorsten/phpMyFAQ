@@ -488,7 +488,7 @@ class Mail
         // Send the email adopting to the given MUA
         $mua = self::getMUA($this->agent);
 
-        if (is_object($mua) && method_exists($mua, 'setAuthConfig')) {
+        if (method_exists($mua, 'setAuthConfig')) {
             $mua->setAuthConfig(
                 $this->config->get('mail.remoteSMTPServer'),
                 $this->config->get('mail.remoteSMTPUsername'),
