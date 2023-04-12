@@ -2522,7 +2522,7 @@ class Faq
                 $output .= sprintf(
                     '<td><strong>%s:</strong><br>%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ?
-                        $category->categoryName[$row->category_id]['name'] :
+                        Strings::htmlentities($category->categoryName[$row->category_id]['name']) :
                         '',
                     Strings::htmlentities($row->question)
                 );
