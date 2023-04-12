@@ -394,19 +394,18 @@ if ($step == 3) {
         $query[] = 'DROP TABLE ' . $prefix . 'faqsection_category';
         $query[] = 'DROP TABLE ' . $prefix . 'faqsection_group';
         $query[] = 'DROP TABLE ' . $prefix . 'faqsection_news';
-
-        if ('sqlserv' === $DB['type']) {
-            // queries to update VARCHAR -> NVARCHAR on MS SQL Server
-            // @todo ALTER TABLE [TableName] ALTER COLUMN [ColumnName] nvarchar(N) null
-            $query[] = 'DBCC CLEANTABLE';
-        }
     }
 
     //
-    // UPDATES FROM 3.2.0-alpha
+    // UPDATES FROM 3.2.0-alpha.2
     //
     if (version_compare($version, '3.2.0-alpha.2', '<')) {
         $faqConfig->add('mail.remoteSMTPDisableTLSPeerVerification', false);
+        $faqConfig->delete('main.enableLinkVerification');
+
+        // Delete link verification columns
+        $query[] = 'ALTER TABLE ' . $prefix . 'faqdata DROP COLUMN links_state, DROP COLUMN links_check_date';
+        $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date';
     }
 
     //

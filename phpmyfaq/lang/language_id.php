@@ -633,26 +633,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'Entri istilah tidak bisa diperbarui kar
 $PMF_LANG['ad_glossary_delete'] = 'Hapus entri';
 $PMF_LANG['ad_glossary_delete_success'] = 'Entri istilah berhasil dihapus!';
 $PMF_LANG['ad_glossary_delete_error'] = 'Entri istilah tidak bisa dihapus karena terjadi kesalahan.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Verifikasi link otomatis tidak diaktifkan (URL dasar untuk verifikasi link belum disetel)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Verifikasi link otomatis tidak diaktifkan (opsi allow_url_fopen pada PHP tidak diaktifkan)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'hasil Verifikasi link otomatis';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Gagal';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Alasan gagal:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Tidak ada URL yang kompitabel dengan fitur verifikasi link yang ada.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Hanya dengan link yang tidak benar';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Informasi Tambahan:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Ditemukan dalam pengujian <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier belum siap.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Melebihi pengalihan maksimal <strong>%d</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'URL tersebut kosong.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> lambat atau tidak merespon.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Resolusi DNS untuk host <strong>%s</strong> lambat atau gagal karena masalah DNS, bisa lokal atau remote.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL dialihkan ke <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Diterima status HTTP yang ambigu <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Metode <em>HEAD</em> tidak didukung oleh host <strong>%s</strong>, metode yang didukung: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Halaman tidak ditemukan dalam host <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Protokol %s tidak didukung oleh verifikasi link otomatis.';
 $PMF_LANG['msgNewQuestionVisible'] = 'Pertanyaan akan ditinjau dulu sebelum diterbitkan.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Menunggu aktivasi oleh pengelola: ';
 $PMF_LANG['ad_entry_visibility'] = 'Terbitkan?';
@@ -742,19 +722,6 @@ $PMF_LANG['err_inactiveNews'] = 'Berita ini sedang direvisi sehingga tidak bisa 
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cari di semua bahasa:';
 $PMF_LANG['ad_entry_tags'] = 'Tag';
 $PMF_LANG['msg_tags'] = 'Tag';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Memeriksa...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Memeriksa...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Memeriksa...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Memeriksa...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Non-aktif';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Link Tidak Benar';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Link OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Tidak ada Akses';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Tidak ada AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Tidak ada Link';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Tidak ada Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Entri terkait';

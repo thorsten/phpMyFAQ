@@ -618,26 +618,6 @@ $PMF_LANG['ad_glossary_update_error'] = "Terim güncellenirken bir hata oluştu.
 $PMF_LANG['ad_glossary_delete'] = "Terimi sil";
 $PMF_LANG['ad_glossary_delete_success'] = "Terim başarıyla silindi!";
 $PMF_LANG['ad_glossary_delete_error'] = "Terim silinirken bir hata oluştu.";
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = "Otomatik link doğrulama devredışı (temel doğrulama URL adresi tanımlanmamış)";
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = "Otomatik link doğrulama devredışı (PHP allow_url_fopen desteği etkin değil)";
-$PMF_LANG['ad_linkcheck_checkResult'] = "Otomatik link doğrulama sonucu";
-$PMF_LANG['ad_linkcheck_checkSuccess'] = "Başarılı";
-$PMF_LANG['ad_linkcheck_checkFailed'] = "başarısız";
-$PMF_LANG['ad_linkcheck_failReason'] = "Hata açıklaması";
-$PMF_LANG['ad_linkcheck_noLinksFound'] = "Link doğrulama aracıyla uyumlu bağlantı bulunamadı.";
-$PMF_LANG['ad_linkcheck_searchbadonly'] = "Yalnızca kırık bağlantılarla";
-$PMF_LANG['ad_linkcheck_infoReason'] = "Ekstra bilgi";
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = "<strong>%s</strong> test edilirken bulundu: ";
-$PMF_LANG['ad_linkcheck_openurl_notready'] = "Link doğrulama aracı hazır değil.";
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = "Maksimum yönlendirme limiti <strong>%d</strong> aşıldı.";
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = "Boş bir adreste sonuçlanıyor.";
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = "Host <strong>%s</strong> çok yavaş ya da yanıt vermiyor.";
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = "host <strong>%s</strong> DNS çözümlemesi çok yavaş ya da başarısız. Bunun sebebi yerel ya da uzak DNS yapılandırması olabilir. ";
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = "Bağlantı şu adrese yönlendirilmiş <strong>%s</strong>.";
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = "Geçerçsiz HTTP durumu <strong>%s</strong> saptandı.";
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = "The <em>HEAD</em> metodu  host <strong>%s</strong> tarafından desteklenmiyor, desteklenen metodlar: <strong>%s</strong>.";
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = "Host üzerindeki <strong>%s</strong> üzerindeki kaynağa erişilemedi.";
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = "%s protokolü otomatik link doğrulama aracı tarafından desteklenmiyor.";
 $PMF_LANG['msgNewQuestionVisible'] = "Soru yayınlanmadan önce editör onayından geçmelidir.";
 $PMF_LANG['msgQuestionsWaiting'] = "Yönetici tarafından yayına alınması beklenen: ";
 $PMF_LANG['ad_entry_visibility'] = "Yayında?";
@@ -725,19 +705,6 @@ $PMF_LANG['err_inactiveNews'] = "Bu duyuru taslak halinde olduğundan görüntü
 $PMF_LANG['msgSearchOnAllLanguages'] = "tüm dillerde ara";
 $PMF_LANG['ad_entry_tags'] = "Etiketler";
 $PMF_LANG['msg_tags'] = "Etiketler";
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = "Kontrol ediliyor...";
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = "Kontrol ediliyor.";
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = "Kontrol ediliyor...";
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = "Kontrol ediliyor...";
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = "Devredışı";
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = "Links KO";
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = "Links OK";
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = "Erişim yok";
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = "AJAX yok";
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = "Link yok";
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = "Script yok";
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = "İlişkili gönderiler";
@@ -1176,7 +1143,6 @@ $LANG_CONF["seo.metaTagsPages"] = array("select", "Meta Tags static pages");
 $LANG_CONF["seo.metaTagsAdmin"] = array("select", "Meta Tags Admin");
 $PMF_LANG["msgMatchingQuestions"] = "Sorunuzla ilgili olabilecek sonuçlar şunlardır";
 $PMF_LANG["msgFinishSubmission"] = "Eğer gösterilecek sonuçlar aradığınız cevabı içermiyorsa, sorunuzu hemen bize iletebilirsiniz!";
-$LANG_CONF["main.enableLinkVerification"] = array("checkbox", "Enable automatic link verification");
 $LANG_CONF['spam.manualActivation'] = array('checkbox', 'Manually activate new users (default: activated)');
 
 // added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )

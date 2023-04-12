@@ -506,26 +506,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'لا يمكن التعديل بسبب �
 $PMF_LANG['ad_glossary_delete'] = 'حذف';
 $PMF_LANG['ad_glossary_delete_success'] = 'تم حذف الأرشيف بنجاح';
 $PMF_LANG['ad_glossary_delete_error'] = 'لا يمكن إتمام عمليه الحذف بسبب حدوث خطا ما';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = ' الإختبار التلقائي للوصلات معطل(base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'الإختبار التلقائي للوصلات معطل(PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'نتيجة إختبارات الوصلات التلقائية :';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'موافق';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'فشلت العملية';
-$PMF_LANG['ad_linkcheck_failReason'] = 'أسباب الفشل :';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'لا توجد وصلات متوافقة مع خاصية مختبر الوصلات';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'فقط مع الوصلات العاطلة';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'معلومات إضافية :';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = ' :<strong>%s</strong> وجد أثناء الإختبار ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'مختبر الوصلات غير جاهز .';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = ' تم تعدى أقصى رقم للتحويلات <strong>%d</strong> exceeded.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'بطىء أو لا يستجيب <strong>%s</strong>الجهاز ';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = '   بطىء أو فشل نتيجة مشاكل فى ال DNS <strong>%s</strong> الحصول على عنوان الDNS للجهاز ';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = '<strong>%s</strong>الوصلة تم تحويلها إلى';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = ' <strong>%s</strong>غير موجودة على الجهاز ';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'البرتوكول غير مدعوم بخاصية إختبار الوصلات تلقائياً %s ';
 $PMF_LANG['msgNewQuestionVisible'] = 'السؤال يجب أن تتم مراجعتةأولاً قبل أن ينشر .';
 $PMF_LANG['msgQuestionsWaiting'] = 'انتظار النشر بواسطة المشرفين :';
 $PMF_LANG['ad_entry_visibility'] = 'انشر ؟';
@@ -604,17 +584,6 @@ $PMF_LANG['err_inactiveNews'] = 'هذة الأخبار مازالت تحت ال�
 $PMF_LANG['msgSearchOnAllLanguages'] = 'البحث بجميع اللغات :';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'فحص ...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'فحص ...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'فحص ...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'فحص ...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'معطلة';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'الروابط تمام';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'الروابط تمام';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'لا يوجد دخول';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'لا توجد روابط';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'لا يوجد إسكربتات';
 $PMF_LANG['msg_related_articles'] = 'مداخلات ذات صلة';
 $LANG_CONF['records.numberOfRelatedArticles'] = array("input", "عدد المداخلات ذات الصلة");
 $PMF_LANG['ad_categ_trans_1'] = 'ترجم';

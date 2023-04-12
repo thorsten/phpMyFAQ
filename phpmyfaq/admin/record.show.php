@@ -26,7 +26,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Search\SearchFactory;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -63,102 +62,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
     $faqHelper = new FaqHelper($faqConfig);
 
-
-    $linkVerifier = new LinkVerifier($faqConfig);
-    if ($linkVerifier->isReady()) {
-        ?>
-    <script>
-        // @deprecated
-        function getImageElement(id, lang) {
-            return $('#imgurl_' + lang + '_' + id);
-        }
-
-        function getSpanElement(id, lang) {
-            return $('#spanurl_' + lang + '_' + id);
-        }
-
-        function getDivElement(id, lang) {
-            return $('#divurl_' + lang + '_' + id);
-        }
-
-        function onDemandVerifyURL(id, lang, target) {
-            const widthPx = 780,
-                heightPx = 450,
-                leftPx   = (screen.width  - widthPx) / 2,
-                topPx    = (screen.height - heightPx) / 2,
-                pmfWindow = window.open('index.php?action=ajax&ajax=onDemandURL&id=' + id + '&artlang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heightPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
-                pmfWindow.focus();
-
-            verifyEntryURL(id, lang);
-        }
-
-        function verifyEntryURL(id, lang) {
-            const target = getSpanElement(id, lang);
-
-            // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
-            getImageElement(id, lang).onload = '';
-
-            //target.src = "images/url-checking.png";
-            getDivElement(id, lang).className = "url-checking";
-            target.innerHTML = "<?= Translation::get('ad_linkcheck_feedback_url-checking') ?>";
-
-            const url = 'index.php';
-            const pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
-            const myAjax = new jQuery.ajax({url: url,
-                type: 'get',
-                data: pars,
-                complete: verifyEntryURL_success,
-                error: verifyEntryURL_failure});
-
-            function verifyEntryURL_success(XmlRequest)
-            {
-                let allResponses = new [];
-                allResponses['batch1'] = "<?= Translation::get('ad_linkcheck_feedback_url-batch1') ?>";
-                allResponses['batch2'] = "<?= Translation::get('ad_linkcheck_feedback_url-batch2') ?>";
-                allResponses['batch3'] = "<?= Translation::get('ad_linkcheck_feedback_url-batch3') ?>";
-                allResponses['checking'] = "<?= Translation::get('ad_linkcheck_feedback_url-checking') ?>";
-                allResponses['disabled'] = "<?= Translation::get('ad_linkcheck_feedback_url-disabled') ?>";
-                allResponses['linkbad'] = "<?= Translation::get('ad_linkcheck_feedback_url-linkbad') ?>";
-                allResponses['linkok'] = "<?= Translation::get('ad_linkcheck_feedback_url-linkok') ?>";
-                allResponses['noaccess'] = "<?= Translation::get('ad_linkcheck_feedback_url-noaccess') ?>";
-                allResponses['noajax'] = "<?= Translation::get('ad_linkcheck_feedback_url-noajax') ?>";
-                allResponses['nolinks'] = "<?= Translation::get('ad_linkcheck_feedback_url-nolinks') ?>";
-                allResponses['noscript'] = "<?= Translation::get('ad_linkcheck_feedback_url-noscript') ?>";
-                getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
-                if (typeof(allResponses[XmlRequest.responseText]) === "undefined") {
-                    getDivElement(id, lang).className = "url-noajax ";
-                    target.html(allResponses['noajax']);
-                } else {
-                    target.html(allResponses[XmlRequest.responseText]);
-                }
-            }
-
-            function verifyEntryURL_failure(XmlRequest)
-            {
-                getDivElement(id, lang).className = "url-noaccess";
-                target.html("<?= Translation::get('ad_linkcheck_feedback_url-noaccess') ?>");
-            }
-
-        }
-    </script>
-        <?php
-    }
-
     $faq = new Faq($faqConfig);
     $faq->setUser($currentAdminUser);
     $faq->setGroups($currentAdminGroups);
     $date = new Date($faqConfig);
 
     $internalSearch = '';
-    $linkState = Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_SPECIAL_CHARS);
     $searchCat = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
     $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if (!is_null($linkState)) {
-        $cond[Database::getTablePrefix() . 'faqdata.links_state'] = 'linkbad';
-        $linkState = ' checked ';
-        $internalSearch .= '&linkstate=linkbad';
-    }
     if (!is_null($searchCat)) {
         $internalSearch .= '&searchcat=' . $searchCat;
         $cond[Database::getTablePrefix() . 'faqcategoryrelations.category_id'] = array_merge(
@@ -402,10 +314,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                         </a>
                       </div>
                     </th>
-                    <th colspan="2">
+                    <th>
                       &nbsp;
                     </th>
-
                     <th style="width: 120px; vertical-align: middle;">
                       <label>
                         <input type="checkbox" id="sticky_category_block_<?= $cid ?>"
@@ -480,10 +391,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             }
             ?></td>
                       <td>
-                      <?= $date->format($record['updated']) ?>
-                      </td>
-                      <td style="width: 96px;">
-                      <?= $linkVerifier->getEntryStateHTML($record['id'], $record['lang']) ?>
+                        <small><?= $date->format($record['updated']) ?></small>
                       </td>
                       <td>
                         <div class="dropdown">

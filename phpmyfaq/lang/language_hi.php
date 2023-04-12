@@ -640,26 +640,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'किसी खराबी की व
 $PMF_LANG['ad_glossary_delete'] = 'इसे मिटा दें';
 $PMF_LANG['ad_glossary_delete_success'] = 'शब्दसंग्रह सफलतापूर्वक मिटा दिया गया है!';
 $PMF_LANG['ad_glossary_delete_error'] = 'किसी खराबी की वज़ह से शब्दसंग्रह नहीं मिट सका है.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'स्वतः कड़ी सत्यापन सक्रिय नहीं है (कड़ी सत्यापन के लिए आधार URL नहीं बताया गया है)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'स्वतः कड़ी सत्यापन सक्रिय नहीं है (PHP का allow_url_fopen विकल्प सक्रिय नहीं है)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'स्वतः कड़ी सत्यापन परिणाम';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'हाँ';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'असफल';
-$PMF_LANG['ad_linkcheck_failReason'] = 'असफलता के कारण:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'कोई भी URL कड़ी सत्यापन सुविधा के अनुकूल नहीं पाया गया.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'सिर्फ खराब कड़ियाँ ही मौजूद हैं';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'अतिरिक्त जानकारी:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'जांच के समय पायी गयी <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'कड़ी सत्यापन सुविधा तयार नहीं है.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'अधिकतम अनुप्रेषित करने की सीमा <strong>%d</strong> पार हो गयी है.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'कड़ी खाली है.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'होस्ट <strong>%s</strong> या तो धीमा है या जवाब नहीं दे रहा है.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'होस्ट का DNS जवाब <strong>%s</strong> या तो धीमा है या DNS के विव्वाद के कारण असफल हो गया है , स्थानीय या दूरवर्ती.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL इस पर  <strong>%s</strong> अनुप्रेषित हुआ.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'द्वयार्थी HTTP स्टेटस <strong>%s</strong> मिला.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'होस्ट <strong>%s</strong> के द्वारा <em>HEAD</em> तरीके के प्रयोग के लिए अनुमति नहीं है , अनुमातिप्रदान तरीके: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'यह युक्ति होस्ट <strong>%s</strong> पर नहीं पाई गयी.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s प्रोटोकॉल को स्वतः कड़ी जांच सुविधा की अनुमति नहीं है.';
 $PMF_LANG['msgNewQuestionVisible'] = 'सवाल को सार्वजनिक करने से पहले उसका अवलोकन करना जरूरी है.';
 $PMF_LANG['msgQuestionsWaiting'] = 'छपने के लिए प्रबंधक की अनुमति का इंतज़ार हो रहा है: ';
 $PMF_LANG['ad_entry_visibility'] = 'छापे?';
@@ -749,19 +729,6 @@ $PMF_LANG['err_inactiveNews'] = 'इस समाचार का पुनव�
 $PMF_LANG['msgSearchOnAllLanguages'] = 'सभी भाषाओं में खोजें:';
 $PMF_LANG['ad_entry_tags'] = 'टैग';
 $PMF_LANG['msg_tags'] = 'टैग';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'जांच हो रही है...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'जांच हो रही है...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'जांच हो रही है...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'जांच हो रही है...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'असक्रिय';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'कड़ी KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'कड़ी ठीक है';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'प्रवेश निषेध है';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'AJAX नहीं है';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'कोई कड़ी नहीं है';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'स्क्रिप्ट मौजूद नहीं है';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'सम्बंधित लेख';

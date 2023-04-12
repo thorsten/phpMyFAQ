@@ -44,8 +44,6 @@ Accept-Language: [language code]
   "date": "2019-10-10 17:54",
   "dateStart": "00000000000000",
   "dateEnd": "99991231235959",
-  "linkState": "",
-  "linkCheckDate": "0",
   "created": "2019-09-03T21:30:17+02:00"
 }
 ```

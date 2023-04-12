@@ -621,26 +621,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated be
 $PMF_LANG['ad_glossary_delete'] = 'Бичлэг устгах';
 $PMF_LANG['ad_glossary_delete_success'] = 'Нэр томьёо устгагдлаа!';
 $PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occurred.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Холбоос автоматаар баталгаажуулалт хаалттай (base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Холбоос автоматаар баталгаажуулалт хаалттай (PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Холбоос автоматаар баталгжуулалтын үр дүн';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Алдаа';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Зөвхөн алдаатай (муу) холбоосууд';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Нэмэлт мэдээлэл:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Холбоос баталгаажуулалт бэлэн биш.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Өөр тийш шилжүүлэх тоо <strong>%d</strong> хэтэрсэн.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Хоосон URL хаяг засагдсан.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Хоост <strong>%s</strong> их удаан байна, эсвэл холбогдохгүй байна.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL дараах хаяг руу чиглүүлэгдсэн <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
 $PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Удирдагчид нийтлэхийг хүлээлгэсэн: ';
 $PMF_LANG['ad_entry_visibility'] = 'Нийтлэх үү?';
@@ -729,19 +709,6 @@ $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be display
 $PMF_LANG['msgSearchOnAllLanguages'] = 'бүх хэлнээс хайх';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Шалгаж байна...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Шалгаж байна...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Шалгаж байна...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Шалгаж байна...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Идэвхгүй';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Холбоос KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Холбоос OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Хандах боломжгүй';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'AJAX байхгүй';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Холбоосгүй';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Скриптгүй';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Хамааралтай өгөгдөл';

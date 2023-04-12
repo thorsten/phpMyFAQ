@@ -738,8 +738,6 @@ class Faq
                 'date' => Date::createIsoDate($row->updated),
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
-                'linkState' => $row->links_state,
-                'linkCheckDate' => $row->links_check_date,
                 'notes' => $row->notes,
                 'created' => $row->created,
             ];
@@ -760,8 +758,6 @@ class Faq
                 'date' => Date::createIsoDate(date('YmdHis')),
                 'dateStart' => '',
                 'dateEnd' => '',
-                'linkState' => '',
-                'linkCheckDate' => '',
                 'notes' => '',
                 'created' => date('c'),
             ];
@@ -782,8 +778,8 @@ class Faq
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
-                 thema, content, author, email, comment, updated, links_state,
-                 links_check_date, date_start, date_end, created, notes
+                 thema, content, author, email, comment, updated, date_start, 
+                 date_end, created, notes
             FROM
                 %s%s fd
             LEFT JOIN
@@ -1038,8 +1034,6 @@ class Faq
                 email = '%s',
                 comment = '%s',
                 updated = '%s',
-                links_state = '%s',
-                links_check_date = %d,
                 date_start = '%s',
                 date_end = '%s',
                 notes = '%s'
@@ -1058,8 +1052,6 @@ class Faq
             $data['email'],
             $data['comment'],
             $data['date'],
-            $data['linkState'],
-            $data['linkDateCheck'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['notes'],
@@ -1090,8 +1082,6 @@ class Faq
                 email = '%s',
                 comment = '%s',
                 updated = '%s',
-                links_state = '%s',
-                links_check_date = %d,
                 date_start = '%s',
                 date_end = '%s',
                 notes = '%s'
@@ -1110,8 +1100,6 @@ class Faq
             $faq->getEmail(),
             $faq->isComment(),
             $faq->getUpdatedDate()->format('YmdHis'),
-            $faq->getLinkState(),
-            $faq->getLinksCheckedDate()->format('YmdHis'),
             $faq->getValidFrom()->format('YmdHis'),
             $faq->getValidTo()->format('YmdHis'),
             $faq->getNotes(),
@@ -1403,8 +1391,6 @@ class Faq
                 'date' => Date::createIsoDate($row->updated),
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
-                'linkState' => $row->links_state,
-                'linkCheckDate' => $row->links_check_date,
                 'notes' => $row->notes
             ];
         }
@@ -1501,7 +1487,7 @@ class Faq
 
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
         $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,' .
-            'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,' .
+            'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,' .
             'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
         $query = sprintf(
             '
@@ -1520,8 +1506,6 @@ class Faq
                 fd.email AS email,
                 fd.comment AS comment,
                 fd.updated AS updated,
-                fd.links_state AS links_state,
-                fd.links_check_date AS links_check_date,
                 fd.date_start AS date_start,
                 fd.date_end AS date_end,
                 fd.sticky AS sticky,

@@ -645,26 +645,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'Nepavyko atnaujinti specialių terminų
 $PMF_LANG['ad_glossary_delete'] = 'Pašalinti įrašą';
 $PMF_LANG['ad_glossary_delete_success'] = 'Specialių terminų žodyno įrašas sėkmingai pašalintas!';
 $PMF_LANG['ad_glossary_delete_error'] = 'Nepavyko pašalinti specialių terminų žodyno įrašo, nes įvyko klaida.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatinis saitų tikrinimas išjungtas (bazinis URL saitų tikrinimui nenustatytas)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatinis saitų tikrinimas išjungtas (PHP parametras „allow_url_fopen“ neįjungtas)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatinio saitų tikrinimo rezultatas';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'Gerai';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Nesėkmė';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Nesėkmės priežastys:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Nerastas URL suderintas su saitų tikrinimo funkcija.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Tik su blogais saitais';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Papildoma informacija:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Rasta testuojant <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Saitų tikrintuvė neparuošta.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Viršytas didžiausias peradresavimų skaičius (<strong>%d</strong>).';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Nustatyta į tuščią URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Serveris <strong>%s</strong> yra lėtas arba neatsako.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS susiejimas serveriui <strong>%s</strong> yra lėtas ar nepavyko dėl DNS problemų, vietinių ar nutolusių.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL buvo nukreiptas į <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Nevienareikšmė HTTP būsena <strong>%s</strong> grąžinta.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = '<em>HEAD</em> metodas yra nepalaikomas serverio <strong>%s</strong>, leidžiami metodai: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Šis išteklius negali būti rastas serveryje <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protokolas nepalaikomas automatinio saitų tikrintuvės.';
 $PMF_LANG['msgNewQuestionVisible'] = 'Klausimas turi būti peržiūrėtas prieš pateikiamas viešai.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Laukiama administratorių publikavimo: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publikuoti';
@@ -754,19 +734,6 @@ $PMF_LANG['err_inactiveNews'] = 'Ši naujiena turi pataisą ir negali būti paro
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Ieškoti visomis kalbomis:';
 $PMF_LANG['ad_entry_tags'] = 'Gairės';
 $PMF_LANG['msg_tags'] = 'Gairės';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Tikrinama...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Tikrinama...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Tikrinama...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Tikrinama...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Išjungta';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Saitai negeri';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Saitai geri';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Nėra prieigos';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Nėra AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Nėra saitų';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Nėra scenarijų';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Susiję įrašai';

@@ -629,26 +629,6 @@ $PMF_LANG['ad_glossary_update_error'] = "Der Glossar-Eintrag wurde nicht aktuali
 $PMF_LANG['ad_glossary_delete'] = "Eintrag löschen";
 $PMF_LANG['ad_glossary_delete_success'] = "Der Glossar-Eintrag wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_glossary_delete_error'] = "Der Glossar-Eintrag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = "Automatische Linküberprüfung deaktiviert (Basis-URL ist nicht gesetzt)";
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = "Automatische Linküberprüfung deaktiviert (PHP Option allow_url_fopen ist nicht aktiviert)";
-$PMF_LANG['ad_linkcheck_checkResult'] = "Ergebnis der automatischen Linküberprüfung";
-$PMF_LANG['ad_linkcheck_checkSuccess'] = "OK";
-$PMF_LANG['ad_linkcheck_checkFailed'] = "Fehlgeschlagen";
-$PMF_LANG['ad_linkcheck_failReason'] = "Gründe";
-$PMF_LANG['ad_linkcheck_noLinksFound'] = "Keine URLs zum Überprüfen gefunden.";
-$PMF_LANG['ad_linkcheck_searchbadonly'] = "Nur mit nicht erreichbaren Links";
-$PMF_LANG['ad_linkcheck_infoReason'] = "Weitere Informationen";
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = "Found while testing %s: ";
-$PMF_LANG['ad_linkcheck_openurl_notready'] = "Die Linküberprüfung ist nicht bereit.";
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = "Maximale Anzahl von %d Weiterleitungen überschritten.";
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = "Leere URL aufgelöst.";
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = "Der Host %s ist langsam oder antwortet nicht.";
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = "Der Host %s ist langsam oder hat keinen DNS-Eintrag.";
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = "Die URL wurde auf %s weitergeleitet.";
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = "Unklarer HTTP Status %s gefunden.";
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Die Methode <em>HEAD</em> wird vom Host nicht unterstützt %s, erlaubte Methoden: %s.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Diese Ressource ist nicht auf dem Host zu finden %s.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = "Das Protokoll %s wird nicht für die automatische Linküberprüfung unterstützt.";
 $PMF_LANG['msgNewQuestionVisible'] = "Dazu muss der Administrator allerdings diese erst freigeben.";
 $PMF_LANG['msgQuestionsWaiting'] = "Wartend auf die Freigabe durch den Administrator";
 $PMF_LANG['ad_entry_visibility'] = "veröffentlicht";
@@ -737,19 +717,6 @@ $PMF_LANG['err_inactiveNews'] = "Diese Nachricht werden überarbeitet und kann n
 $PMF_LANG['msgSearchOnAllLanguages'] = "alle Sprachen durchsuchen";
 $PMF_LANG['ad_entry_tags'] = "Tags";
 $PMF_LANG['msg_tags'] = "Tags";
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = "überprüfe ...";
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = "überprüfe ...";
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = "überprüfe ...";
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = "überprüfe ...";
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = "deaktiviert";
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = "Links nicht okay";
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = "Links okay";
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = "Kein Zugriff möglich!";
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = "Keine AJAX-Unterstützung verfügbar";
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = "Keine Links gefunden";
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = "Keine Skript-Unterstützung verfügbar";
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = "Verwandte Artikel";
@@ -1198,7 +1165,6 @@ $LANG_CONF['seo.metaTagsPages'] = ["select", "HTML Meta Tags für statische Seit
 $LANG_CONF['seo.metaTagsAdmin'] = ["select", "HTML Meta Tags für Admin-Seiten"];
 $PMF_LANG['msgMatchingQuestions'] = "Die folgenden Ergebnisse könnten Ihre Frage beantworten";
 $PMF_LANG['msgFinishSubmission'] = "Wenn keine der Vorschläge übereinstimmt, können Sie nun die Frage absenden.";
-$LANG_CONF['main.enableLinkVerification'] = ["checkbox", "Aktiviere automatischen Linkcheck"];
 $LANG_CONF['spam.manualActivation'] = ['checkbox', 'Aktiviere Nutzer manuell'];
 
 // added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )

@@ -26,7 +26,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
-use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
 use phpMyFAQ\AdminLog;
@@ -193,9 +192,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
             } catch (Exception | TransportExceptionInterface $e) {
                 printf('<p class="alert alert-warning">%s</p>', $e->getMessage());
             }
-
-            // Call Link Verification
-            LinkVerifierHelper::linkOndemandJavascript($recordId, $recordData['lang']);
 
             // If Elasticsearch is enabled, index new FAQ document
             if ($faqConfig->get('search.enableElasticsearch')) {

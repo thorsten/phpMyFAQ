@@ -630,26 +630,6 @@ $PMF_LANG["ad_glossary_update_error"] = "Une erreur est survenue pendant la mise
 $PMF_LANG["ad_glossary_delete"] = "Supprimer l'entrée";
 $PMF_LANG["ad_glossary_delete_success"] = "L'entrée du glossaire à été supprimée avec succès !";
 $PMF_LANG["ad_glossary_delete_error"] = "Une erreur est survenue pendant la suppression !";
-$PMF_LANG["ad_linkcheck_noReferenceURL"] = "Vérification automatique de lien désactivée (URL de base pour la liaison de vérification non défini)";
-$PMF_LANG["ad_linkcheck_noAllowUrlOpen"] = "Vérification automatique de lien désactivée (option PHP allow_url_fopen désactivée)";
-$PMF_LANG["ad_linkcheck_checkResult"] = "Résultat de la vérification automatique de lien";
-$PMF_LANG["ad_linkcheck_checkSuccess"] = "OK";
-$PMF_LANG["ad_linkcheck_checkFailed"] = "Échec";
-$PMF_LANG["ad_linkcheck_failReason"] = "Raison(s) de l'échec :";
-$PMF_LANG["ad_linkcheck_noLinksFound"] = "Aucune URL compatible avec la fonctionnalité vérification de lien trouvée.";
-$PMF_LANG["ad_linkcheck_searchbadonly"] = "Seulement avec des liens hypertextes incorrects";
-$PMF_LANG["ad_linkcheck_infoReason"] = "Informations supplémentaires :";
-$PMF_LANG["ad_linkcheck_openurl_infoprefix"] = "Trouvé lors de tests <strong>%s</strong>: ";
-$PMF_LANG["ad_linkcheck_openurl_notready"] = "Vérificateur d'URL pas prêt.";
-$PMF_LANG["ad_linkcheck_openurl_maxredirect"] = "Nombre maximum de redirections <strong>%d</strong> dépassé.";
-$PMF_LANG["ad_linkcheck_openurl_urlisblank"] = "Redirigé vers un lien vide.";
-$PMF_LANG["ad_linkcheck_openurl_tooslow"] = "L'hôte <strong>%s</strong> est trop lent ou ne répond pas.";
-$PMF_LANG["ad_linkcheck_openurl_nodns"] = "La résolution DNS de l'hôte <strong>%s</strong> est lente ou a échoué à cause d'un problème de DNS local ou distant.";
-$PMF_LANG["ad_linkcheck_openurl_redirected"] = "Le lien a été redirigé vers <strong>%s</strong>.";
-$PMF_LANG["ad_linkcheck_openurl_ambiguous"] = "État HTTP ambiguë <strong>%s</strong> retourné.";
-$PMF_LANG["ad_linkcheck_openurl_not_allowed"] = "La méthode <em>HEAD</em> n'est pas supportée par l'hôte <strong>%s</strong>, les méthodes autorisées sont : <strong>%s</strong>.";
-$PMF_LANG["ad_linkcheck_openurl_not_found"] = "Cette ressource ne peut pas être trouvée sur l'hôte <strong>%s</strong>.";
-$PMF_LANG["ad_linkcheck_protocol_unsupported"] = "Le protocole %s n'est pas supporté par le système automatique de vérification de liens.";
 $PMF_LANG["msgNewQuestionVisible"] = "La question doit d'abord être examinée avant de devenir public.";
 $PMF_LANG["msgQuestionsWaiting"] = "En attente de publication par les administrateurs :";
 $PMF_LANG["ad_entry_visibility"] = "Publié";
@@ -738,19 +718,6 @@ $PMF_LANG["err_inactiveNews"] = "Cette news est en cours de révision et ne peut
 $PMF_LANG["msgSearchOnAllLanguages"] = "Chercher dans toutes les langues";
 $PMF_LANG["ad_entry_tags"] = "Tags ";
 $PMF_LANG["msg_tags"] = "Tags";
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG["ad_linkcheck_feedback_url-batch1"] = "Vérification...";
-$PMF_LANG["ad_linkcheck_feedback_url-batch2"] = "Vérification...";
-$PMF_LANG["ad_linkcheck_feedback_url-batch3"] = "Vérification...";
-$PMF_LANG["ad_linkcheck_feedback_url-checking"] = "Vérification...";
-$PMF_LANG["ad_linkcheck_feedback_url-disabled"] = "Désactivé";
-$PMF_LANG["ad_linkcheck_feedback_url-linkbad"] = "Liens KO";
-$PMF_LANG["ad_linkcheck_feedback_url-linkok"] = "Liens OK";
-$PMF_LANG["ad_linkcheck_feedback_url-noaccess"] = "Aucun accès";
-$PMF_LANG["ad_linkcheck_feedback_url-noajax"] = "Pas d'AJAX";
-$PMF_LANG["ad_linkcheck_feedback_url-nolinks"] = "Pas de liens";
-$PMF_LANG["ad_linkcheck_feedback_url-noscript"] = "Pas de script";
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG["msg_related_articles"] = "FAQs associées";
@@ -1200,7 +1167,6 @@ $LANG_CONF["seo.metaTagsPages"] = ["select", "Metadonnées des pages statiques"]
 $LANG_CONF["seo.metaTagsAdmin"] = ["select", "Metadonnées de l'administration"];
 $PMF_LANG["msgMatchingQuestions"] = "Les résultats suivants s'approchent de votre question";
 $PMF_LANG["msgFinishSubmission"] = "Si aucune des suggestions au-dessus ne correspondent à votre question, alors cliquez sur le bouton ci-dessous pour soumettre votre question.";
-$LANG_CONF["main.enableLinkVerification"] = ["checkbox", "Activer la vérification de liens automatique"];
 $LANG_CONF["spam.manualActivation"] = ["checkbox", "Activation manuelle des nouveaux utilisateurs (défaut: activé)"];
 
 // added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )

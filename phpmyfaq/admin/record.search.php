@@ -18,7 +18,6 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Filter;
-use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -51,7 +50,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
     $category->buildCategoryTree();
 
-    $linkVerifier = new LinkVerifier($faqConfig);
     ?>
 
                 <form action="?action=view" method="post"  accept-charset="utf-8">
@@ -64,17 +62,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
                         </div>
                     </div>
-
-                    <?php if ($linkVerifier->isReady() === true) : ?>
-                    <div class="row">
-                        <div class="offset-lg-2 col-lg-4 checkbox">
-                            <label>
-                                <input type="checkbox" name="linkstate" value="linkbad">
-                                <?= Translation::get('ad_linkcheck_searchbadonly') ?>
-                            </label>
-                        </div>
-                    </div>
-                    <?php endif; ?>
 
                     <div class="row">
                         <label class="col-lg-2 col-form-label"><?= Translation::get('msgCategory') ?>:</label>

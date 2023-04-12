@@ -633,26 +633,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated be
 $PMF_LANG['ad_glossary_delete'] = 'Delete entry';
 $PMF_LANG['ad_glossary_delete_success'] = 'Glossary entry successfully deleted!';
 $PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occurred.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
 $PMF_LANG['msgNewQuestionVisible'] = 'প্রশ্নটি রিভিউ করার পর প্রকাশিত হবে।';
 $PMF_LANG['msgQuestionsWaiting'] = 'প্রকাশিত হওয়ার অপেক্ষায়: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
@@ -742,19 +722,6 @@ $PMF_LANG['err_inactiveNews'] = 'এই লেখাটি সম্পাদন
 $PMF_LANG['msgSearchOnAllLanguages'] = 'সব ভাষায় খুঁজুন:';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'ট্যাগ সমূহ';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Disabled';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'No access';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'No Links';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'সম্পর্কিত লেখা';

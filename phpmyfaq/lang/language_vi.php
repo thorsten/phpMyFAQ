@@ -626,26 +626,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'Nội dung thuật ngữ không đượ
 $PMF_LANG['ad_glossary_delete'] = 'Xóa nội dung';
 $PMF_LANG['ad_glossary_delete_success'] = 'Nội dung đã được xóa!';
 $PMF_LANG['ad_glossary_delete_error'] = 'Nội dung không được xóa vì có lỗi xảy ra.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Chức năng Tự động kiểm tra đường dẫn không được kích hoạt (tham chiếu URL để kiểm tra đường dẫn chưa được thiết lập)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Chức năng Tự động kiểm tra đường dẫn đã bị vô hiệu (PHP option allow_url_fopen không được kích hoạt)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Kết quả Tự động kiểm tra đường dẫn';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Không thành công';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Lý do không thành công:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Không có URL tương thích.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Chỉ có các đường dẫn không hợp lệ';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Thông tin bổ sung:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Tìm thấy trong khi kiểm tra <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier chưa sẵn sàng.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
 $PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
@@ -739,19 +719,6 @@ $PMF_LANG['err_inactiveNews'] = 'Nội dung này đang được hiệu đính v�
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Tìm kiếm trong tất cả các ngôn ngữ:';
 $PMF_LANG['ad_entry_tags'] = 'Tag';
 $PMF_LANG['msg_tags'] = 'Tag';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Đang kiểm tra...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Đang kiểm tra...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Đang kiểm tra...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Đang kiểm tra...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Đã bị vô hiệu hóa';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Đường dẫn KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Đường dẫn OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Không có quyền truy cập';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Không AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Không có đường dẫn';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Không có Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG["msg_related_articles"] = 'Những nội dung liên quan';

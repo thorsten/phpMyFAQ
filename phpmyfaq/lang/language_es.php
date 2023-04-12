@@ -627,26 +627,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'La entrada del glosario no se actualiz�
 $PMF_LANG['ad_glossary_delete'] = 'Eliminar entrada';
 $PMF_LANG['ad_glossary_delete_success'] = 'La entrada del glosario fue eliminada con éxito.';
 $PMF_LANG['ad_glossary_delete_error'] = 'La entrada del glosario no fue eliminada porque se produjo un error.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Comprobación automática de enlaces desactivada (la URL base no está configurada)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Comprobación automática de enlace desactivada (la opción de PHP allow_url_fopen no está activada)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Resultado de la comprobación automática del enlace';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Falló';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Razones';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No se han encontrado URLs para su verificación';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Sólo con vínculos inaccesibles';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Más información';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Encontrado durante el testeo <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'La comprobación del enlace no está lista.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Número máximo de redirecciones <strong>%d</strong> excedido.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'URL vacía resuelta.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'El servidor <strong>%s</strong> es lento o no responde.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'El servidor <strong>%s</strong> es lento o no tiene registro DNS.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'La URL fue redirigida a <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Estado HTTP poco claro <strong>%s</strong> encontrado.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'El método <em>HEAD</em> no está soportado por el servidor <strong>%s</strong>, métodos permitidos: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Este recurso no se puede encontrar en el servidor <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'El protocolo %s no está soportado para la comprobación automática de enlaces.';
 $PMF_LANG['msgNewQuestionVisible'] = 'Sin embargo, el administrador debe liberarlos primero.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Esperando la aprobación del administrador';
 $PMF_LANG['ad_entry_visibility'] = 'visible';
@@ -735,19 +715,6 @@ $PMF_LANG['err_inactiveNews'] = 'Este mensaje está siendo revisado y no puede s
 $PMF_LANG['msgSearchOnAllLanguages'] = 'buscar en todos los idiomas';
 $PMF_LANG['ad_entry_tags'] = 'Etiquetas';
 $PMF_LANG['msg_tags'] = 'Etiquetas';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'comprobando...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'comprobando...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'comprobando...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'comprobando...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'deshabilitado';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Los enlaces no están bien';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Enlaces OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = '¡No hay acceso posible!';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No hay soporte AJAX disponible';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'No se han encontrado enlaces';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No hay soporte para el script disponible';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Artículos relacionados';
@@ -1199,7 +1166,6 @@ $LANG_CONF['seo.metaTagsPages'] = ["select", "Meta Tags HTML para páginas está
 $LANG_CONF['seo.metaTagsAdmin'] = ["select", "Meta Tags HTML para páginas de admin"];
 $PMF_LANG['msgMatchingQuestions'] = "Los siguientes resultados pueden responder a tu pregunta";
 $PMF_LANG['msgFinishSubmission'] = "Si ninguna de las sugerencias coincide, puedes enviar la pregunta.";
-$LANG_CONF['main.enableLinkVerification'] = ["checkbox", "Activar verificación automática de enlaces"];
 $LANG_CONF['spam.manualActivación'] = ['checkbox', 'Activar usuarios manualmente'];
 
 // añadido v2.9.0-alpha2 - 2014-10-13 por Christopher Andrews ( Chris--A )

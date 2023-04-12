@@ -339,7 +339,6 @@ class Installer extends Setup
         'main.maintenanceMode' => 'false',
         'main.enableGravatarSupport' => 'false',
         'main.enableGzipCompression' => 'true',
-        'main.enableLinkVerification' => 'true',
         'main.customPdfHeader' => '',
         'main.customPdfFooter' => '',
         'main.enableSmartAnswering' => 'true',

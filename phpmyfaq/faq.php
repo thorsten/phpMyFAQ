@@ -31,7 +31,6 @@ use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Link;
-use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
@@ -132,29 +131,6 @@ if (
         if (Strings::strlen($item) > 2) {
             $question = Utils::setHighlightedString($question, $item);
             $answer = Utils::setHighlightedString($answer, $item);
-        }
-    }
-}
-
-$linkVerifier = new LinkVerifier($faqConfig);
-$linkArray = $linkVerifier->getUrlPool();
-if (isset($linkArray['href'])) {
-    foreach (array_unique($linkArray['href']) as $_url) {
-        $xpos = strpos((string) $_url, 'index.php?action=faq');
-        if (!($xpos === false)) {
-            // Get the FaqHelper link title
-            $matches = [];
-            preg_match('/id=([\d]+)/ism', (string) $_url, $matches);
-            $_id = $matches[1];
-            $_title = $faq->getRecordTitle($_id);
-            $_link = substr((string) $_url, $xpos + 9);
-            if (!str_contains((string) $_url, '&amp;')) {
-                $_link = str_replace('&', '&amp;', $_link);
-            }
-            $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
-            $oLink->itemTitle = $oLink->tooltip = $_title;
-            $newFaqPath = $oLink->toString();
-            $answer = str_replace($_url, $newFaqPath, (string) $answer);
         }
     }
 }

@@ -21,7 +21,6 @@ use phpMyFAQ\Changelog;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\AdminLog;
 use phpMyFAQ\Revision;
@@ -152,7 +151,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         if ($recordId) {
             echo Alert::success('ad_entry_savedsuc');
-            LinkVerifierHelper::linkOndemandJavascript($recordId, $recordLang);
         } else {
             echo Alert::danger('ad_entry_savedfail', $faqConfig->getDb()->error());
         }

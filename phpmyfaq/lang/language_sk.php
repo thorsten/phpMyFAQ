@@ -633,26 +633,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'Vyskytla sa chyba. Položka sa neaktual
 $PMF_LANG['ad_glossary_delete'] = 'Vymazať položku';
 $PMF_LANG['ad_glossary_delete_success'] = 'Položka zo slovníka úspešne vymazaná!';
 $PMF_LANG['ad_glossary_delete_error'] = 'Vyskytla sa chyba. Položka zo slovníka nemohla byť vymazaná.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatická kontrola odkazov nepovolená (URL kontrola odkazov nenastavená)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatická kontrola odkazov nepovolená (PHP voľba allow_url_fopen nepovolená)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Výsledky automatickej kontroly odkazov';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Chyba';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Dôvod(y) zlyhania:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Žiadne URL kompatibilné s výslednou kontrolou odkazov.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Iba s nesprávnymi odkazmi';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Ďalšie informácie:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Nájdené počas testovania <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Kontrola odkazov nedokončená.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximálny počet presmerovaní <strong>%d</strong> prekročený.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> je pomalý alebo neodpovedá.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS riešenie hostu <strong>%s</strong> je pomalé alebo zlyhalo.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL bola  presmerovaná na <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Dvojznačný HTTP status <strong>%s</strong> vrátený.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Metóda<em>HEAD</em> nie je podporovaná host-om <strong>%s</strong>, povolené metódy: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Tento zdroj sa na host nenašiel <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protokol nepodporovaný automatickou kontrolou odkazov.';
 $PMF_LANG['msgNewQuestionVisible'] = 'Otázka musí byť pred publikovaním preskúmaná.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Čakajte na publikovanie administrátorom: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publikovať?';
@@ -742,19 +722,6 @@ $PMF_LANG['err_inactiveNews'] = 'Táto novinka sa upravuje a nemôže byť vymaz
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Hľadať vo všetkých jazykoch:';
 $PMF_LANG['ad_entry_tags'] = 'Tagy';
 $PMF_LANG['msg_tags'] = 'Tagy';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Overovanie...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Overovanie...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Overovanie...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Overovanie...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Vypnuté';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Odkazy KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Odkazy OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Bez prístupu';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Žiadne AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Žiadne odkazy';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Žiadny script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Súvisiace položky';

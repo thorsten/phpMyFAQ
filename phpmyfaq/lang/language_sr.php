@@ -631,26 +631,6 @@ $PMF_LANG['ad_glossary_update_error'] = 'Pojam nije sa&#269;uvan zbog gre&scaron
 $PMF_LANG['ad_glossary_delete'] = 'Obri&scaron;i unos';
 $PMF_LANG['ad_glossary_delete_success'] = 'Pojam obrisan!';
 $PMF_LANG['ad_glossary_delete_error'] = 'Pojam nije obrisan zbog gre&scaron;ke.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatska provera linka isklju&#269;ena (URL za verifikaciju nije pode&scaron;en)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatska provera linka isklju&#269;ena (PHP opcija allow_url_fopen nije uklju&#269;ena)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Rezultat automatske provere linka';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Neuspe&scaron;no';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Razlozi neuspeha:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Nema odgovaraju&#263;ih URLa za proveru.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Samo sa lo&scaron;im linkovima';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Dodatne informacije:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Nadjeno dok je testirano <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Proverava&#269;Linkova nije spreman.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maksimalni broj preusmerenja <strong>%d</strong> pre&#273;en.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Izgleda da je prazan URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> je spor ili ne odgovara.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS prevod hosta <strong>%s</strong> je spor ili onemogu&#263;en zbog DNS problema, lokalnih ili udaljenih.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL je preusmeren na <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'HTTP status <strong>%s</strong> vra&#263;en.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = '<em>HEAD</em> metod nije podr&#382;an od strane hosta <strong>%s</strong>, dozvoljeni metodi: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Ne mo&#382;e biti na&#273;eno na hostu <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protokol nije podr&#382;an verifikacijom linka.';
 $PMF_LANG['msgNewQuestionVisible'] = 'Pitanje mora prvo da se proveri pre nego &scaron;to postane javno.';
 $PMF_LANG['msgQuestionsWaiting'] = '&#268;eka na potvrdu administratora: ';
 $PMF_LANG['ad_entry_visibility'] = 'Objavi?';
@@ -740,19 +720,6 @@ $PMF_LANG['err_inactiveNews'] = 'Ove vesti su u reviziji i ne mogu biti prikazan
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Tra&#382;i u svim jezicima:';
 $PMF_LANG['ad_entry_tags'] = 'Oznake';
 $PMF_LANG['msg_tags'] = 'Oznake';
-
-// added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Provera...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Provera...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Provera...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Provera...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Isklju&#269;eno';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Linkovi KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Linkovi OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Nema pristupa';
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Nema AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Nema Linkova';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Nema Skripti';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Srodne teme';

@@ -616,26 +616,6 @@ $PMF_LANG['ad_glossary_update_error'] = "辭典項目無法更新，因為有錯
 $PMF_LANG['ad_glossary_delete'] = "刪除項目 (Delete entry)";
 $PMF_LANG['ad_glossary_delete_success'] = "辭典項目已刪除成功! (Glossary entry successfully deleted!)";
 $PMF_LANG['ad_glossary_delete_error'] = "辭典項目無法刪除，因為有錯誤發生。 (The glossary entry could not deleted because an error occurred.)";
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = "Automatic link verification disabled (base URL for link verify not set)";
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = "Automatic link verification disabled (PHP option allow_url_fopen not Enabled)";
-$PMF_LANG['ad_linkcheck_checkResult'] = "自動連結確認結果 (Automatic link verification result)";
-$PMF_LANG['ad_linkcheck_checkSuccess'] = "確認 OK";
-$PMF_LANG['ad_linkcheck_checkFailed'] = "失敗 (Failed)";
-$PMF_LANG['ad_linkcheck_failReason'] = "失敗原因: (Reason(s) failed:)";
-$PMF_LANG['ad_linkcheck_noLinksFound'] = "No URLs compatible with link verifier feature found.";
-$PMF_LANG['ad_linkcheck_searchbadonly'] = "只有與壞的連結 (Only with bad links)";
-$PMF_LANG['ad_linkcheck_infoReason'] = "額外資訊: (Additional Information:)";
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = "測試時找到 <strong>%s</strong>: (Found while testing <strong>%s</strong>: )";
-$PMF_LANG['ad_linkcheck_openurl_notready'] = "LinkVerifier not ready.";
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = "Maximum redirect count <strong>%d</strong> exceeded.";
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = " 修復空白連結 (Resolved to blank URL.)";
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = "Host <strong>%s</strong> is slow or not responding.";
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = "DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.";
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = "URL was redirected to <strong>%s</strong>.";
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = "Ambiguous HTTP status <strong>%s</strong> returned.";
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = "The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.";
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = "This resource cannot be found at host <strong>%s</strong>.";
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = "%s protocol unsupported by Automatic link verification.";
 $PMF_LANG['msgNewQuestionVisible'] = "The question have to be reviewed first before getting public.";
 $PMF_LANG['msgQuestionsWaiting'] = "等待管理員開放公開: (Waiting for publishing by the administrators: )";
 $PMF_LANG['ad_entry_visibility'] = "公開發佈? (Publish?)";
@@ -724,19 +704,6 @@ $PMF_LANG['err_inactiveNews'] = "這條新聞是在所有的修改版本內，�
 $PMF_LANG['msgSearchOnAllLanguages'] = "搜尋所有的語言 search in all languages";
 $PMF_LANG['ad_entry_tags'] = "標籤 Tags";
 $PMF_LANG['msg_tags'] = "標籤 Tags";
-
-// added v2.0.0 - 2006-09-03 by Matteo 開發者
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = "檢查中 Checking...";
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = "檢查中 Checking...";
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = "檢查中 Checking...";
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = "檢查中 Checking...";
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = "已停用 Disabled";
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = "壞的連結 Links KO";
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = "連結沒問題 Links OK";
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = "不能被存取 No access";
-$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = "沒有 No AJAX";
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = "沒有連結 No Links";
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = "沒有程式腳本 No Script";
 
 // added v2.0.0 - 2006-09-02 by Thomas 開發者
 $PMF_LANG['msg_related_articles'] = "相關 Related entries";
