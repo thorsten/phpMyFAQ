@@ -1,4 +1,4 @@
-import { fetchAllGroups, fetchAllMembers, fetchAllUsers, fetchGroup, fetchGroupRights } from './api';
+import { fetchAllGroups, fetchAllMembers, fetchAllUsersForGroups, fetchGroup, fetchGroupRights } from '../api';
 import { selectAllCheckboxes, unSelectAllCheckboxes } from '../utils';
 
 export const handleGroups = async () => {
@@ -147,7 +147,7 @@ const clearUserList = () => {
 
 const getUserList = async () => {
   const groupUserList = document.querySelector('#group_user_list');
-  const allUsers = await fetchAllUsers();
+  const allUsers = await fetchAllUsersForGroups();
 
   groupUserList.textContent = '';
   allUsers.forEach((user) => {

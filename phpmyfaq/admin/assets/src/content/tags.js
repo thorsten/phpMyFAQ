@@ -12,11 +12,15 @@
  * @link      https://www.phpmyfaq.de
  * @since     2014-08-16
  */
+
+import autocomplete from 'autocompleter';
 import { addElement } from '../../../../assets/src/utils';
+import { fetchTags } from '../api';
 
 export const handleTags = () => {
   const editTagButtons = document.querySelectorAll('.btn-edit');
   const tagForm = document.getElementById('tag-form');
+  const tagsAutocomplete = document.querySelector('.pmf-tags-autocomplete');
 
   if (editTagButtons) {
     editTagButtons.forEach((element) => {
@@ -98,6 +102,42 @@ export const handleTags = () => {
             addElement('div', { classList: 'alert alert-danger', innerText: error })
           );
         });
+    });
+  }
+
+  if (tagsAutocomplete) {
+    autocomplete({
+      input: tagsAutocomplete,
+      minLength: 1,
+      onSelect: async (item, input) => {
+        let currentTags = input.getAttribute('data-tag-list');
+        if (currentTags.length === 0) {
+          currentTags = item.tagName;
+        } else {
+          currentTags = currentTags + ', ' + item.tagName;
+        }
+        input.value = currentTags;
+        input.setAttribute('data-tag-list', currentTags);
+      },
+      fetch: async (text, callback) => {
+        let match = text.toLowerCase();
+        const tags = await fetchTags(match);
+        callback(
+          tags.filter((tag) => {
+            const lastCommaIndex = match.lastIndexOf(',');
+            match = match.substring(lastCommaIndex + 1);
+            return tag.tagName.toLowerCase().indexOf(match) !== -1;
+          })
+        );
+      },
+      render: (item, value) => {
+        const regex = new RegExp(value, 'gi');
+        return addElement('div', {
+          classList: 'pmf-tag-list-result border',
+          innerHTML: item.tagName,
+        });
+      },
+      emptyMsg: 'No tags found.',
     });
   }
 };

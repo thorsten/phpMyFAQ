@@ -15,7 +15,7 @@
 
 import autocomplete from 'autocompleter';
 import { updateUser } from './users';
-import { fetchUsers } from './api';
+import { fetchUsers } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
 document.addEventListener('DOMContentLoaded', () => {

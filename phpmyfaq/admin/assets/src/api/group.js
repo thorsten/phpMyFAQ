@@ -1,5 +1,5 @@
 /**
- * Fetch data for user management
+ * Fetch data for group management
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -7,40 +7,14 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2022-2023 phpMyFAQ Team
+ * @copyright 2023 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2022-03-23
+ * @since     2023-01-02
  */
-import { addElement } from '../../../../assets/src/utils';
 
-export const fetchUsers = async (userName) => {
-  return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_list&q=${userName}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok: ', { cause: { response } });
-    })
-    .then((response) => {
-      return response;
-    })
-    .catch(async (error) => {
-      const errorMessage = await error.cause.response.json();
-      console.error(errorMessage.error);
-    });
-};
-
-export const fetchUserData = async (userId) => {
-  return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_data&user_id=${userId}`, {
+export const fetchAllGroups = async () => {
+  return await fetch('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -60,8 +34,8 @@ export const fetchUserData = async (userId) => {
     });
 };
 
-export const fetchUserRights = async (userId) => {
-  return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=${userId}`, {
+export const fetchAllUsersForGroups = async () => {
+  return await fetch('index.php?action=ajax&ajax=group&ajaxaction=get_all_users', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -81,8 +55,8 @@ export const fetchUserRights = async (userId) => {
     });
 };
 
-export const fetchAllUsers = async () => {
-  return await fetch('index.php?action=ajax&ajax=user&ajaxaction=get_all_user_data', {
+export const fetchAllMembers = async (groupId) => {
+  return await fetch(`index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -102,15 +76,44 @@ export const fetchAllUsers = async () => {
     });
 };
 
-export const postUserData = async (url = '', data = {}) => {
-  return await fetch(url, {
-    method: 'POST',
+export const fetchGroup = async (groupId) => {
+  return await fetch(`index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=${groupId}`, {
+    method: 'GET',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data),
-  });
+  })
+    .then(async (response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then((response) => {
+      return response;
+    });
+};
+
+export const fetchGroupRights = async (groupId) => {
+  return await fetch(`index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=${groupId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  })
+    .then(async (response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then((response) => {
+      return response;
+    });
 };

@@ -16,7 +16,7 @@
  */
 
 import { Modal } from 'bootstrap';
-import { fetchAllUsers, fetchUserData, fetchUserRights, postUserData } from './api';
+import { fetchAllUsers, fetchUserData, fetchUserRights, postUserData } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
 /**
