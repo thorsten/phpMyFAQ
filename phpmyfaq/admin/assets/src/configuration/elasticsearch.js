@@ -15,6 +15,7 @@
 
 import { addElement } from '../../../../assets/src/utils';
 import { formatBytes } from '../utils';
+
 export const handleElasticsearch = () => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
 
@@ -45,9 +46,9 @@ export const handleElasticsearch = () => {
             setInterval(elasticsearchStats, 5000);
           })
           .catch(async (error) => {
-            const stats = document.getElementById('pmf-elasticsearch-result');
+            const result = document.getElementById('pmf-elasticsearch-result');
             const errorMessage = await error.cause.response.json();
-            stats.insertAdjacentElement(
+            result.insertAdjacentElement(
               'afterend',
               addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
             );
@@ -60,20 +61,30 @@ export const handleElasticsearch = () => {
       if (div) {
         div.innerHTML = '';
         fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=stats`)
-          .then((response) => {
-            return response.json();
+          .then(async (response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok: ', { cause: { response } });
           })
-          .then((stats) => {
-            const count = stats?.indices?.phpmyfaq?.total?.docs?.count;
-            const sizeInBytes = stats?.indices?.phpmyfaq?.total?.store?.size_in_bytes;
+          .then((response) => {
+            const indexName = response.index;
+            const stats = response.stats;
+            const count = stats['indices'][indexName]['total']['docs'].count;
+            const sizeInBytes = stats['indices'][indexName]['total']['store'].size_in_bytes;
             let html = '<dl class="row">';
             html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count ?? 0}</dd>`;
             html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(sizeInBytes ?? 0)}</dd>`;
             html += '</dl>';
             div.innerHTML = html;
           })
-          .catch((error) => {
-            console.error(error);
+          .catch(async (error) => {
+            const result = document.getElementById('pmf-elasticsearch-result');
+            const errorMessage = await error.cause.response.json();
+            result.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+            );
           });
       }
     };

@@ -76,9 +76,13 @@ switch ($ajaxAction) {
         break;
 
     case 'stats':
+        $indexName = $esConfigData['index'];
         try {
             $http->setStatus(200);
-            $result = $faqConfig->getElasticsearch()->indices()->stats(['index' => $esConfigData['index']])->asObject();
+            $result = [
+                'index' => $indexName,
+                'stats' => $faqConfig->getElasticsearch()->indices()->stats(['index' => $indexName])->asArray()
+            ];
         } catch (ClientResponseException | ServerResponseException $e) {
             $result = ['error' => $e->getMessage()];
         }
