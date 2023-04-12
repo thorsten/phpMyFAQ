@@ -108,15 +108,13 @@ require PMF_ROOT_DIR . '/config/database.php';
 <?php
 
 $version = $faqConfig->getVersion();
-try {
-    $installer = new Installer(new System());
-    $update = new Update(new System());
-} catch (Exception $e) {
-    // @todo Add exception handling
-}
+$system = new System();
+
+$installer = new Installer($system);
+$update = new Update($system);
+
 $installer->checkPreUpgrade($DB['type']);
 $installer->checkAvailableDatabaseTables($db);
-
 
 if ($update->isConfigTableAvailable($db)) {
     // @todo Add handling if "faqconfig" is missing

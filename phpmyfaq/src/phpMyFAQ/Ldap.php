@@ -150,9 +150,9 @@ class Ldap
      * Returns the user's email address from LDAP.
      *
      * @param string $username Username
-     * @return string
+     * @return bool|string
      */
-    public function getMail(string $username)
+    public function getMail(string $username): bool|string
     {
         return $this->getLdapData($username, 'mail');
     }
@@ -247,9 +247,9 @@ class Ldap
      * Returns the user's DN.
      *
      * @param string $username Username
-     * @return string
+     * @return bool|string
      */
-    public function getDn(string $username)
+    public function getDn(string $username): bool|string
     {
         return $this->getLdapDn($username);
     }
@@ -304,9 +304,9 @@ class Ldap
      * Returns the user's full name from LDAP.
      *
      * @param string $username Username
-     * @return string
+     * @return bool|string
      */
-    public function getCompleteName(string $username)
+    public function getCompleteName(string $username): bool|string
     {
         return $this->getLdapData($username, 'name');
     }

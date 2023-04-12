@@ -428,7 +428,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
       </form>
     </div>
 
-    <?php } else { ?>
+<?php } else { ?>
     <div class="row" id="done">
         <div class="col-12">
           <h3 class="mb-3">Installation</h3>
@@ -452,4 +452,4 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
     <?php
 }
 
-System::renderFooter();
+    System::renderFooter();

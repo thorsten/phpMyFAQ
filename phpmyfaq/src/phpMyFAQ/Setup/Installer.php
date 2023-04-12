@@ -19,6 +19,7 @@ namespace phpMyFAQ\Setup;
 
 use Composer\Autoload\ClassLoader;
 use Elastic\Elasticsearch\ClientBuilder;
+use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -42,7 +43,7 @@ use phpMyFAQ\User;
  *
  * @package phpMyFAQ
  */
-class Installer
+class Installer extends Setup
 {
     /**
      * Array with user rights.
@@ -469,6 +470,8 @@ class Installer
      */
     public function __construct(protected System $system)
     {
+        parent::__construct();
+
         $dynMainConfig = [
             'main.currentVersion' => System::getVersion(),
             'main.currentApiVersion' => System::getApiVersion(),
@@ -584,7 +587,7 @@ class Installer
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
-        $dirs = ['/attachments', '/config', '/data', '/images'];
+        $dirs = ['/attachments', '/config', '/data', '/images', '/logs'];
         $failedDirs = $instanceSetup->checkDirs($dirs);
         $numDirs = sizeof($failedDirs);
 
@@ -660,7 +663,7 @@ class Installer
      * Starts the installation.
      *
      * @param array|null $setup
-     * @throws Exception
+     * @throws Exception|AuthenticationException
      */
     public function startInstall(array $setup = null): void
     {

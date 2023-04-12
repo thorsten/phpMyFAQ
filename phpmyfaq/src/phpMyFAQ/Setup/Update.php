@@ -29,6 +29,7 @@ class Update extends Setup
 
     public function __construct(protected System $system)
     {
+        parent::__construct($this->system);
     }
 
     /**
