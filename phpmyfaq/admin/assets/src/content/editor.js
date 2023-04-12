@@ -39,7 +39,6 @@ import 'tinymce/plugins/insertdatetime';
 import 'tinymce/plugins/media';
 import 'tinymce/plugins/nonbreaking';
 import 'tinymce/plugins/table';
-import 'tinymce/plugins/template';
 import 'tinymce/plugins/help';
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/visualblocks';
@@ -111,7 +110,7 @@ export const renderEditor = () => {
       plugins:
         'advlist autolink link image lists charmap preview anchor pagebreak ' +
         'searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking ' +
-        'save table directionality template help emoticons phpmyfaq',
+        'save table directionality help emoticons phpmyfaq',
 
       emoticons_database: 'emojis',
 

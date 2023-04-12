@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Media browser backend for TinyMCE v4
+ * Media browser backend for TinyMCE v6
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -113,32 +114,31 @@ if (!$auth && $error) {
 ?>
 <script src="../assets/dist/backend.js?<?= time(); ?>"></script>
 <script>
-    /**
-     * Search for image names
-     * @todo Needs to be refactored: drop jQuery dependency
-     *
-     * @param {string} filter
-     */
-    $('#filter').on('keyup', function () {
-        const filter = $(this).val()
-        $('div.mce-file').each(function () {
-            if ($(this).text().search(new RegExp(filter, 'i')) < 0) {
-                $(this).fadeOut()
-            } else {
-                $(this).show()
-            }
-        })
-    })
+    const filterInput = document.getElementById('filter');
+    const fileDivs = document.querySelectorAll('div.mce-file');
 
-    /**
-     * @todo Needs to be refactored: drop jQuery dependency
-     */
-    $(document).on('click', 'div.mce-file', function () {
-        window.parent.postMessage({
-            mceAction: 'phpMyFAQMediaBrowserAction',
-            url: $(this).data('src'),
-        }, '*')
-    })
+    if (filterInput) {
+        filterInput.addEventListener('keyup', function () {
+            const filter = this.value;
+            fileDivs.forEach((fileDiv) => {
+                if (fileDiv.textContent.search(new RegExp(filter, 'i')) < 0) {
+                    fileDiv.style.display = 'none';
+                } else {
+                    fileDiv.style.display = 'block';
+                }
+            });
+        });
+    }
+
+    document.addEventListener('click', (event) => {
+        if (event.target.matches('div.mce-file')) {
+            const src = event.target.getAttribute('data-src');
+            window.parent.postMessage({
+                mceAction: 'phpMyFAQMediaBrowserAction',
+                url: src,
+            }, '*');
+        }
+    });
 </script>
 
 </body>
