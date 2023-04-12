@@ -27,6 +27,7 @@ import {
   handleAttachmentUploads,
   handleCategories,
   handleDeleteAttachments,
+  handleDeleteComments,
   handleFaqForm,
   handleFaqOverview,
   handleMarkdownForm,
@@ -66,11 +67,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleFaqForm();
   handleMarkdownForm();
   handleAttachmentUploads();
-  handleDeleteAttachments();
   await handleFaqOverview();
+
+  // Content -> Comments
+  handleDeleteComments();
 
   // Content -> Open questions
   handleOpenQuestions();
+
+  // Content -> Attachments
+  handleDeleteAttachments();
 
   // Content -> Tags
   handleTags();

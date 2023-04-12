@@ -16,49 +16,45 @@
  */
 
 use phpMyFAQ\Comments;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
 $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ('delete' === $ajaxAction && $user->perm->hasPermission($user->getUserId(), 'delcomment')) {
+$deleteData = json_decode(file_get_contents('php://input', true));
+
+if ('delete' === $deleteData->data->ajaxaction && $user->perm->hasPermission($user->getUserId(), 'delcomment')) {
+    if (!Token::getInstance()->verifyToken('delete-comment', $deleteData->data->{'pmf-csrf-token'})) {
+        $http->setStatus(401);
+        $result = ['error' => Translation::get('err_NotAuth')];
+        exit(1);
+    }
+
     $comment = new Comments($faqConfig);
-    $checkFaqs = [
-        'filter' => FILTER_VALIDATE_INT,
-        'flags' => FILTER_REQUIRE_ARRAY,
-    ];
-    $checkNews = [
-        'filter' => FILTER_VALIDATE_INT,
-        'flags' => FILTER_REQUIRE_ARRAY,
-    ];
     $success = false;
 
-    $faqComments = Filter::filterInputArray(INPUT_POST, ['faq_comments' => $checkFaqs]);
-    $newsComments = Filter::filterInputArray(INPUT_POST, ['news_comments' => $checkNews]);
+    $commentIds = $deleteData->data->{'comments[]'};
 
-    if (!is_null($faqComments['faq_comments'])) {
-        foreach ($faqComments['faq_comments'] as $commentId => $recordId) {
-            $success = $comment->deleteComment($recordId, $commentId);
+    if (!is_null($commentIds)) {
+        if (!is_array($commentIds)) {
+            $commentIds = [$commentIds];
         }
-    }
-
-    if (!is_null($newsComments['news_comments'])) {
-        foreach ($newsComments['news_comments'] as $commentId => $recordId) {
-            $success = $comment->deleteComment($recordId, $commentId);
+        foreach ($commentIds as $commentId) {
+            $success = $comment->delete($deleteData->type, $commentId);
         }
-    }
 
-    $http->setStatus(200);
-    $http->sendWithHeaders($success);
-} else {
-    $http->setStatus(401);
-    $http->sendWithHeaders(false);
+        $http->setStatus(200);
+        $http->sendJsonWithHeaders(['success' => $success]);
+    } else {
+        $http->setStatus(401);
+        $http->sendJsonWithHeaders(['error' => false]);
+    }
 }

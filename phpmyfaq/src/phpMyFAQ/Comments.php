@@ -183,21 +183,22 @@ class Comments
     /**
      * Deletes a comment.
      *
-     * @param int $recordId Record id
-     * @param int $commentId Comment id
+     * @param string $type
+     * @param int    $commentId Comment id
+     * @return bool
      */
-    public function deleteComment(int $recordId, int $commentId): bool
+    public function delete(string $type, int $commentId): bool
     {
         $query = sprintf(
-            '
+            "
             DELETE FROM
                 %sfaqcomments
             WHERE
-                id = %d
+                type = '%s'
             AND
-                id_comment = %d',
+                id_comment = %d",
             Database::getTablePrefix(),
-            $recordId,
+            $type,
             $commentId
         );
 

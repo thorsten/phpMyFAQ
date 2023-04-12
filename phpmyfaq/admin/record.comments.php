@@ -20,6 +20,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
@@ -53,23 +54,23 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     printf("<header><h3>%s</h3></header>\n", Translation::get('ad_comment_faqs'));
     if (count($faqComments)) {
         ?>
-      <form id="faqCommentSelection" name="faqCommentSelection" method="post" accept-charset="utf-8">
-        <input type="hidden" name="ajax" value="comment"/>
-        <input type="hidden" name="ajaxaction" value="delete"/>
+      <form id="pmf-comments-selected-faq" name="pmf-comments-selected-faq" method="post" accept-charset="utf-8">
+        <input type="hidden" name="ajax" value="comment">
+        <input type="hidden" name="ajaxaction" value="delete">
+        <?= Token::getInstance()->getTokenInput('delete-comment') ?>
         <table class="table table-striped align-middle">
             <?php
             $lastCommentId = 0;
             foreach ($faqComments as $faqComment) {
-                if ($faqComment->getId() == $lastCommentId) {
+                if ($faqComment->getId() === $lastCommentId) {
                     continue;
                 }
                 ?>
               <tr id="comments_<?= $faqComment->getId() ?>">
                 <td>
                   <label>
-                    <input id="faq_comments[<?= $faqComment->getId() ?>]"
-                           name="faq_comments[<?= $faqComment->getId() ?>]"
-                           value="<?= $faqComment->getRecordId() ?>" type="checkbox">
+                    <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
+                           value="<?= $faqComment->getId() ?>">
                   </label>
                 </td>
                 <td>
@@ -96,7 +97,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
             ?>
         </table>
         <div class="text-right">
-          <button class="btn btn-danger" id="submitFaqComments" type="submit" name="submit">
+          <button class="btn btn-danger" id="pmf-button-delete-faq-comments" type="button">
               <?= Translation::get('ad_entry_delete') ?>
           </button>
         </div>
@@ -111,18 +112,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     printf("<header><h3>%s</h3></header>\n", Translation::get('ad_comment_news'));
     if (count($newsComments)) {
         ?>
-      <form id="newsCommentSelection" name="newsCommentSelection" method="post" accept-charset="utf-8">
-        <input type="hidden" name="ajax" value="comment"/>
-        <input type="hidden" name="ajaxaction" value="delete"/>
+      <form id="pmf-comments-selected-news" name="pmf-comments-selected-news" method="post" accept-charset="utf-8">
+        <input type="hidden" name="ajax" value="comment">
+        <input type="hidden" name="ajaxaction" value="delete">
+        <?= Token::getInstance()->getTokenInput('delete-comment') ?>
         <table class="table table-striped align-middle">
             <?php
             foreach ($newsComments as $newsComment) { ?>
               <tr id="comments_<?= $newsComment->getId() ?>">
                 <td>
                   <label>
-                    <input id="news_comments[<?= $newsComment->getId() ?>]"
-                           name="news_comments[<?= $newsComment->getId() ?>]"
-                           value="<?= $newsComment->getRecordId() ?>" type="checkbox">
+                    <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
+                           value="<?= $newsComment->getId() ?>">
                   </label>
                 </td>
                 <td>
@@ -143,7 +144,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
             ?>
         </table>
         <div class="text-right">
-          <button class="btn btn-danger" id="submitNewsComments" type="submit" name="submit">
+          <button class="btn btn-danger" id="pmf-button-delete-news-comments" type="button">
               <?= Translation::get('ad_entry_delete') ?>
           </button>
         </div>
@@ -152,47 +153,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     } else {
         echo '<p><strong>n/a</strong></p>';
     }
-    ?>
-
-  <script>
-      console.log('needs to be refactored without jQuery.');
-    (() => {
-      $('#submitFaqComments').on('click', () => {
-        deleteComments('faq');
-        return false;
-      });
-      $('#submitNewsComments').on('click', () => {
-        deleteComments('news');
-        return false;
-      });
-    })();
-
-    function deleteComments(type) {
-      const savingIndicator = $('#pmf-admin-saving-data-indicator'),
-        returnMessage = $('#returnMessage'),
-        comments = $('#' + type + 'CommentSelection').serialize();
-
-      returnMessage.empty();
-      $.ajax({
-        type: 'POST',
-        url: 'index.php?action=ajax&ajax=comment',
-        data: comments,
-        success: function (msg) {
-          if (msg === 1) {
-            savingIndicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
-            $('tr td input:checked').parent().parent().parent().fadeOut('slow');
-            savingIndicator.fadeOut('slow');
-            returnMessage.html('<p class="alert alert-success"><?= Translation::get('ad_entry_commentdelsuc') ?></p>');
-          } else {
-            returnMessage.html('<p class="alert alert-danger"><?= addslashes(Translation::get('ad_entry_commentdelfail')) ?></p>');
-          }
-        }
-      });
-      return false;
-    }
-
-  </script>
-    <?php
 } else {
     echo Translation::get('err_NotAuth');
 }
