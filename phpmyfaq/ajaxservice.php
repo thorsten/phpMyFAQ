@@ -774,6 +774,11 @@ switch ($action) {
             break;
         }
 
+        if ($userId !== $user->getUserIdByEmail($email)) {
+            $message = ['error' => 'User ID / email mismatch!'];
+            break;
+        }
+
         if (strlen($password) <= 7 || strlen($confirm) <= 7) {
             $message = ['error' => $PMF_LANG['ad_passwd_fail']];
             break;

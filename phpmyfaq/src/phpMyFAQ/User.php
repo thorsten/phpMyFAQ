@@ -908,7 +908,7 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return (int)$userData['user_id'];
+        return $userData['user_id'];
     }
 
     /**
