@@ -162,7 +162,7 @@ $PMF_LANG['err_noMailAdress'] = "Die angegebene E-Mail-Adresse ist nicht korrekt
 $PMF_LANG['err_sendMail'] = "Pflichtfelder sind u.a. Name und E-Mail-Adresse!";
 
 // Hilfe zur Suche
-$PMF_LANG['help_search'] = "Antwort finden:<br>Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2 können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.Hinweis: Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.";
+$PMF_LANG['help_search'] = 'Antwort finden:<br>Mit der Eingabe "Begriff1 Begriff2" können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.Hinweis: Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.';
 
 // Menü
 $PMF_LANG['ad'] = "ADMIN-BEREICH";

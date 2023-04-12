@@ -981,7 +981,7 @@ $PMF_LANG['rightsLanguage::approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>"];
-$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>'];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><span class="text-danger">WARNING: Do not change this once set and enabled file encryption!!!</span></small>'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
