@@ -37,6 +37,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -860,7 +861,7 @@ if (
         <div class="modal-header">
           <h5 class="modal-title" id="attachmentModalLabel">
               <?= Translation::get('ad_att_addto') . ' ' . Translation::get('ad_att_addto_2') ?>
-            (max <?= round($faqConfig->get('records.maxAttachmentSize') / 1024 ** 2, 2) ?> MB)
+            (max <?= Utils::formatBytes($faqConfig->get('records.maxAttachmentSize')) ?>)
           </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>

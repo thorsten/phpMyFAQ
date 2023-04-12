@@ -1,8 +1,6 @@
 /**
  * Attachment administration stuff
  *
- * @todo needs to be refactored
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -15,29 +13,41 @@
  * @since     2022-03-22
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+export const handleDeleteAttachments = () => {
   const attachmentTable = document.getElementById('attachment-table');
 
-  attachmentTable.addEventListener('click', (event) => {
-    event.preventDefault();
-    const isButton = event.target.nodeName === 'BUTTON';
+  if (attachmentTable) {
+    attachmentTable.addEventListener('click', (event) => {
+      event.preventDefault();
 
-    if (isButton) {
-      const attachmentId = event.target.getAttribute('data-attachment-id');
-      const csrf = event.target.getAttribute('data-csrf');
+      const isButton = event.target.className.includes('btn-delete-attachment');
+      if (isButton) {
+        const attachmentId = event.target.getAttribute('data-attachment-id');
+        const csrf = event.target.getAttribute('data-csrf');
 
-      $('#pmf-admin-saving-data-indicator').html(
-        '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>'
-      );
-      $.ajax({
-        type: 'GET',
-        url: 'index.php?action=ajax&ajax=att&ajaxaction=delete',
-        data: { attId: attachmentId, csrf: csrf },
-        success: function (msg) {
-          $('.att_' + attachmentId).fadeOut('slow');
-          $('#pmf-admin-saving-data-indicator').html('<p class="alert alert-success">' + msg + '</p>');
-        },
-      });
-    }
-  });
-});
+        fetch('index.php?action=ajax&ajax=att&ajaxaction=delete', {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ attId: attachmentId, csrf: csrf }),
+        })
+          .then(async (response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok: ', { cause: { response } });
+          })
+          .then((response) => {
+            const row = document.getElementById(`attachment_${attachmentId}`);
+            row.addEventListener('click', () => (row.style.opacity = '0'));
+            row.addEventListener('transitionend', () => row.remove());
+          })
+          .catch(async (error) => {
+            console.error(await error.cause.response.json());
+          });
+      }
+    });
+  }
+};

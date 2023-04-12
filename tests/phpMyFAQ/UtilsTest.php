@@ -179,4 +179,31 @@ class UtilsTest extends TestCase
         $invalidDate = '%2022/03/01 23:59:59%';
         $this->assertFalse(Utils::isLikeOnPMFDate($invalidDate));
     }
+
+    public function testFormatBytes(): void
+    {
+        // Test with bytes less than 1KB
+        $this->assertEquals('500 B', Utils::formatBytes(500));
+        $this->assertEquals('1023 B', Utils::formatBytes(1023));
+
+        // Test with bytes between 1KB and 1MB
+        $this->assertEquals('1 KB', Utils::formatBytes(1024));
+        $this->assertEquals('2.5 KB', Utils::formatBytes(2560));
+        $this->assertEquals('1023 KB', Utils::formatBytes(1023 * 1024));
+
+        // Test with bytes between 1MB and 1GB
+        $this->assertEquals('1 MB', Utils::formatBytes(1024 * 1024));
+        $this->assertEquals('2.5 MB', Utils::formatBytes(2560 * 1024));
+        $this->assertEquals('1023 MB', Utils::formatBytes(1023 * 1024 * 1024));
+
+        // Test with bytes between 1GB and 1TB
+        $this->assertEquals('1 GB', Utils::formatBytes(1024 * 1024 * 1024));
+        $this->assertEquals('2.5 GB', Utils::formatBytes(2560 * 1024 * 1024));
+        $this->assertEquals('1023 GB', Utils::formatBytes(1023 * 1024 * 1024 * 1024));
+
+        // Test with bytes greater than 1TB
+        $this->assertEquals('1 TB', Utils::formatBytes(1024 * 1024 * 1024 * 1024));
+        $this->assertEquals('2.5 TB', Utils::formatBytes(2560 * 1024 * 1024 * 1024));
+        $this->assertEquals('1023 TB', Utils::formatBytes(1023 * 1024 * 1024 * 1024 * 1024));
+    }
 }

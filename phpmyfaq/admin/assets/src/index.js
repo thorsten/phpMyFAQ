@@ -26,6 +26,7 @@ import { handleStatistics } from './statistics';
 import {
   handleAttachmentUploads,
   handleCategories,
+  handleDeleteAttachments,
   handleFaqForm,
   handleFaqOverview,
   handleMarkdownForm,
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleFaqForm();
   handleMarkdownForm();
   handleAttachmentUploads();
+  handleDeleteAttachments();
   await handleFaqOverview();
 
   // Content -> Open questions

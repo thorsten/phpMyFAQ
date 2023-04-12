@@ -1,4 +1,5 @@
 export * from './attachment-upload';
+export * from './attachments';
 export * from './category';
 export * from './editor';
 export * from './faqs';

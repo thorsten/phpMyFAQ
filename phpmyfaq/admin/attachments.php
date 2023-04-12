@@ -20,6 +20,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -64,17 +65,18 @@ $pagination = new Pagination(
       </thead>
       <tbody id="attachment-table">
       <?php foreach ($crumbs as $item) : ?>
-        <tr class="att_<?= $item->id ?>" title="<?= $item->thema ?>">
+        <tr id="attachment_<?= $item->id ?>" title="<?= $item->thema ?>">
           <td><?= $item->id ?></td>
           <td><?= $item->filename ?></td>
           <td><?= $item->record_lang ?></td>
-          <td><?= $item->filesize ?></td>
+          <td><?= Utils::formatBytes($item->filesize) ?></td>
           <td><?= $item->mime_type ?></td>
           <td>
             <button class="btn btn-danger btn-delete-attachment" title="<?= Translation::get('ad_gen_delete') ?>"
                     data-attachment-id="<?= $item->id ?>"
                     data-csrf="<?= Token::getInstance()->getTokenString('delete-attachment') ?>">
-              <i aria-hidden="true" class="fa fa-trash"></i>
+              <i aria-hidden="true" class="fa fa-trash btn-delete-attachment" data-attachment-id="<?= $item->id ?>"
+                    data-csrf="<?= Token::getInstance()->getTokenString('delete-attachment') ?>"></i>
             </button>
           </td>
           <td>
