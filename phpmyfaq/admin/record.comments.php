@@ -132,7 +132,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                         <?= Strings::htmlentities($newsComment->getUsername()) ?>
                     </a> |
                     <?= $date->format(date('Y-m-d H:i', $newsComment->getDate())) ?> |
-                    <a href="<?php printf('../?action=news&id=%d&artlang=%s', $newsComment->getRecordId(), $faqLangCode) ?>">
+                    <a href="<?php printf('../?action=news&newsid=%d&artlang=%s', $newsComment->getRecordId(), $faqLangCode) ?>">
                         <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                     </a>
                 </span><br/>
