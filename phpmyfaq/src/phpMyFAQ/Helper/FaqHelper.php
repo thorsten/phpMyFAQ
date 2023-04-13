@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use DOMDocument;
+use DOMXPath;
 use Exception;
 use ParsedownExtra;
 use phpMyFAQ\Category;
@@ -245,6 +246,14 @@ class FaqHelper extends Helper
             $scriptTags->item($i)->parentNode->removeChild($scriptTags->item($i));
         }
 
-        return preg_replace(['/\r/', '/\n/'], '', $document->saveHTML());
+        $xpath = new DOMXPath($document);
+        $onAttributes = $xpath->query("//*/@*[starts-with(name(), 'on')]");
+        foreach ($onAttributes as $onAttribute) {
+            $onAttribute->ownerElement->removeAttributeNode($onAttribute);
+        }
+
+        $body = $xpath->query('body')->item(0);
+
+        return preg_replace(['/\r/', '/\n/'], '', $document->saveHTML($body));
     }
 }
