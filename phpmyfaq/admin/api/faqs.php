@@ -88,18 +88,29 @@ switch ($ajaxAction) {
 
     // save sticky FAQs
     case 'save_sticky_records':
-        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
-            if (!empty($items)) {
-                $faq = new Faq($faqConfig);
+        $postData = json_decode(file_get_contents('php://input', true));
 
-                foreach ($items as $item) {
-                    if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
-                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'sticky');
+        $faqIds = Filter::filterArray($postData->faqIds);
+        $faqLanguage = Filter::filterVar($postData->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
+        $checked = Filter::filterVar($postData->checked, FILTER_VALIDATE_BOOLEAN);
+
+        if (
+            $user->perm->hasPermission($user->getUserId(), 'edit_faq') &&
+            Token::getInstance()->verifyToken('faq-overview', $postData->csrf)
+        ) {
+            if (!empty($faqIds)) {
+                $faq = new Faq($faqConfig);
+                foreach ($faqIds as $faqId) {
+                    if (Language::isASupportedLanguage($faqLanguage)) {
+                        $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
                     }
                 }
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(['success' => $success]);
             }
         } else {
-            echo Translation::get('err_NotAuth');
+            $http->setStatus(401);
+            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
         }
         break;
 

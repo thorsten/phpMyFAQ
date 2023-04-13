@@ -2460,18 +2460,16 @@ class Faq
     /**
      * Set or unset a faq item flag.
      *
-     * @param int    $id   Record id
-     * @param string $lang language code which is valid with Language::isASupportedLanguage
-     * @param bool   $flag record is set to sticky or not
-     * @param string $type type of the flag to set, use the column name
+     * @param int    $faqId       FAQ id
+     * @param string $faqLanguage Language code which is valid with Language::isASupportedLanguage
+     * @param bool   $flag        FAQ is set to sticky or not
+     * @param string $type        Type of the flag to set, use the column name
      */
-    public function updateRecordFlag(int $id, string $lang, bool $flag, string $type): bool
+    public function updateRecordFlag(int $faqId, string $faqLanguage, bool $flag, string $type): bool
     {
-        $retval = false;
-
         $flag = match ($type) {
-            'sticky' => $flag === 'checked' ? 1 : 0,
-            'active' => $flag === 'checked' ? "'yes'" : "'no'",
+            'sticky' => $flag ? 1 : 0,
+            'active' => $flag ? "'yes'" : "'no'",
             default => null,
         };
 
@@ -2489,14 +2487,14 @@ class Faq
                 Database::getTablePrefix(),
                 $type,
                 $flag,
-                $id,
-                $this->config->getDb()->escape($lang)
+                $faqId,
+                $this->config->getDb()->escape($faqLanguage)
             );
 
-            $retval = (bool)$this->config->getDb()->query($update);
+            return (bool)$this->config->getDb()->query($update);
         }
 
-        return $retval;
+        return false;
     }
 
     /**

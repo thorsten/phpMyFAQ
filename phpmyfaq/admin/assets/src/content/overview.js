@@ -1,6 +1,7 @@
 export const handleFaqOverview = async () => {
   const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
-  let result;
+  const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
+  const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
 
   if (deleteFaqButtons) {
     deleteFaqButtons.forEach((element) => {
@@ -43,4 +44,79 @@ export const handleFaqOverview = async () => {
       });
     });
   }
+
+  if (toggleStickyAllFaqs) {
+    toggleStickyAllFaqs.forEach((element) => {
+      element.addEventListener('change', (event) => {
+        event.preventDefault();
+
+        const categoryId = event.target.getAttribute('data-pmf-category-id');
+        const faqIds = [];
+        const token = event.target.getAttribute('data-pmf-csrf');
+
+        const checkboxes = document.querySelectorAll('input[type=checkbox]');
+        if (checkboxes) {
+          checkboxes.forEach((checkbox) => {
+            if (checkbox.getAttribute('data-pmf-category-id-sticky') === categoryId) {
+              checkbox.checked = element.checked;
+              if (checkbox.checked === true) {
+                faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+              }
+            }
+          });
+          saveStatus(categoryId, faqIds, token, event.target.checked, 'sticky');
+        }
+      });
+    });
+  }
+
+  if (toggleStickyFaq) {
+    toggleStickyFaq.forEach((element) => {
+      element.addEventListener('change', (event) => {
+        event.preventDefault();
+
+        const categoryId = event.target.getAttribute('data-pmf-category-id-sticky');
+        const faqId = event.target.getAttribute('data-pmf-faq-id');
+        const token = event.target.getAttribute('data-pmf-csrf');
+
+        saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
+      });
+    });
+  }
+};
+
+const saveStatus = (categoryId, faqIds, token, checked, type) => {
+  const languageElement = document.getElementById(`sticky_record_${categoryId}_${faqIds[0]}`);
+  const faqLanguage = languageElement.lang;
+  fetch(`index.php?action=ajax&ajax=records&ajaxaction=save_${type}_records`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: token,
+      categoryId: categoryId,
+      faqIds: faqIds,
+      faqLanguage: faqLanguage,
+      checked: checked,
+    }),
+  })
+    .then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok: ', { cause: { response } });
+    })
+    .then((response) => {
+      const result = response;
+      if (result.success) {
+        console.error(result.success);
+      } else {
+        console.error(result.error);
+      }
+    })
+    .catch(async (error) => {
+      console.error(await error.cause.response.json());
+    });
 };

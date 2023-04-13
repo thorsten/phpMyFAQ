@@ -317,16 +317,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     <th>
                       &nbsp;
                     </th>
-                    <th style="width: 120px; vertical-align: middle;">
-                      <label>
-                        <input type="checkbox" id="sticky_category_block_<?= $cid ?>"
-                               class="form-check-input pmf-admin-faqs-all-sticky"
+                    <th class="align-middle">
+                      <div class="form-check">
+                        <input class="form-check-input pmf-admin-faqs-all-sticky" type="checkbox" value=""
                                data-pmf-category-id="<?= $cid ?>" data-pmf-csrf="<?= $csrfToken ?>"
-                               onclick="saveStatusForCategory(<?= $cid ?>, 'sticky', '<?= $csrfToken ?>')"/>
-                      <?= Translation::get('ad_record_sticky') ?>
-                      </label>
+                               id="sticky_category_block_<?= $cid ?>">
+                        <label class="form-check-label" for="sticky_category_block_<?= $cid ?>">
+                          <?= Translation::get('ad_record_sticky') ?>
+                        </label>
+                      </div>
                     </th>
-                    <th style="width: 120px; vertical-align: middle;">
+                    <th class="align-middle" style="width: 120px;">
                     <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
@@ -406,16 +407,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                           </div>
                         </div>
                       </td>
-                      <td style="width: 56px;">
-                        <label>
-                          <input type="checkbox" lang="<?= $record['lang'] ?>"
-                                 class="form-check-input pmf-admin-sticky-faq"
-                                 data-pmf-category-id="<?= $cid ?>" data-pmf-faq-id="<?= $record['id'] ?>"
-                                 data-pmf-csrf="<?= $csrfToken ?>"
-                                 onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?= $csrfToken ?>');"
-                                 id="sticky_record_<?= $cid . '_' . $record['id'] ?>"
-                          <?= $record['sticky'] ? 'checked' : '    ' ?>>
-                        </label>
+                      <td class="align-middle">
+                          <div>
+                              <input class="form-check-input pmf-admin-sticky-faq" type="checkbox"
+                                     data-pmf-category-id-sticky="<?= $cid ?>" data-pmf-faq-id="<?= $record['id'] ?>"
+                                     data-pmf-csrf="<?= $csrfToken ?>" lang="<?= $record['lang'] ?>"
+                                     id="sticky_record_<?= $cid . '_' . $record['id'] ?>"
+                                     <?= $record['sticky'] ? 'checked' : '' ?>>
+                          </div>
                       </td>
                       <td>
                       <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
