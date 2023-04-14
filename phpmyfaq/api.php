@@ -100,12 +100,14 @@ try {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
-// Load plurals support for selected language
-$plr = new Plurals();
+//
+// Initializing static string wrapper
+//
 Strings::init($currentLanguage);
 
 //
 // Set empty result
+//
 $result = [];
 
 //

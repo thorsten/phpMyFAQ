@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -28,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $news = new News($faqConfig);
 $categoryHelper = new CategoryHelper();
+$plr = new Plurals();
 $archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (!is_null($archived)) {

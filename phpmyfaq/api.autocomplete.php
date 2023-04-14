@@ -60,11 +60,6 @@ try {
 }
 
 //
-// Load plurals support for selected language
-//
-$plr = new Plurals();
-
-//
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);
@@ -106,7 +101,7 @@ if (!is_null($searchString)) {
         $faqSearchHelper = new SearchHelper($faqConfig);
         $faqSearchHelper->setSearchTerm($searchString);
         $faqSearchHelper->setCategory($category);
-        $faqSearchHelper->setPlurals($plr);
+        $faqSearchHelper->setPlurals(new Plurals());
     } catch (Exception $e) {
         $faqConfig->getLogger()->error('Search exception: ' . $e->getMessage());
     }

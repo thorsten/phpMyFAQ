@@ -18,6 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Translation;
 
@@ -34,6 +35,7 @@ if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCat
 }
 
 $categoryHelper = new CategoryHelper();
+$categoryHelper->setPlurals(new Plurals());
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {

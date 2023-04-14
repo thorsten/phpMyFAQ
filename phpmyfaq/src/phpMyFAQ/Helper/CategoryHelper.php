@@ -20,6 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -154,7 +155,7 @@ class CategoryHelper extends Helper
         array $aggregatedNumbers = [],
         array $categoryNumbers = []
     ): string {
-        global $sids, $plr;
+        global $sids;
 
         $html = '';
         foreach ($categoryTree as $categoryId => $node) {
@@ -188,7 +189,7 @@ class CategoryHelper extends Helper
                     '<li data-category-id="%d">%s <span class="badge bg-primary">%s</span><br><small>%s</small>',
                     $node['id'],
                     $name,
-                    $plr->getMsg('plmsgEntries', $number),
+                    $this->plurals->getMsg('plmsgEntries', $number),
                     $node['description']
                 );
                 $html .= sprintf(

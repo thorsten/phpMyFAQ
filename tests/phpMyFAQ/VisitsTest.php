@@ -15,8 +15,6 @@ class VisitsTest extends TestCase
 
     protected function setUp(): void
     {
-        global $plr;
-
         parent::setUp();
 
         Translation::create()
@@ -24,8 +22,6 @@ class VisitsTest extends TestCase
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
-
-        $plr = new Plurals();
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');

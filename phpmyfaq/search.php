@@ -22,6 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Helper\TagsHelper;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
@@ -248,7 +249,7 @@ $searchHelper = new SearchHelper($faqConfig);
 $searchHelper->setSearchTerm($inputSearchTerm);
 $searchHelper->setCategory($category);
 $searchHelper->setPagination($faqPagination);
-$searchHelper->setPlurals($plr);
+$searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
 if ('' == $searchResult && !is_null($inputSearchTerm)) {

@@ -7,7 +7,6 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
-use phpMyFAQ\Language\Plurals;
 use PHPUnit\Framework\TestCase;
 
 class ExportTest extends TestCase
@@ -21,8 +20,6 @@ class ExportTest extends TestCase
      */
     protected function setUp(): void
     {
-        global $plr;
-
         parent::setUp();
 
         Translation::create()
@@ -30,8 +27,6 @@ class ExportTest extends TestCase
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
-
-        $plr = new Plurals();
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');

@@ -96,11 +96,6 @@ try {
 }
 
 //
-// Load plurals support for selected language
-//
-$plr = new Plurals();
-
-//
 // Initializing static string wrapper
 //
 Strings::init($languageCode);
@@ -537,6 +532,7 @@ switch ($action) {
                 $faqSearch->setCategoryId((int) $ucategory);
                 $faqPermission = new FaqPermission($faqConfig);
                 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
+                $plr = new Plurals();
                 $searchResult = [];
                 $mergedResult = [];
 

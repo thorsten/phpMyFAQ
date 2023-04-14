@@ -72,11 +72,6 @@ try {
 }
 
 //
-// Load plurals support for selected language
-//
-$plr = new Plurals();
-
-//
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);

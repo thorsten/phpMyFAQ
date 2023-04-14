@@ -97,9 +97,7 @@ class Faq
      */
     public function __construct(private readonly Configuration $config)
     {
-        global $plr;
-
-        $this->plurals = $plr;
+        $this->plurals = new Plurals();
 
         if ($this->config->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;

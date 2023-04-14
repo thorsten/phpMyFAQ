@@ -36,8 +36,7 @@ class Rating
      */
     public function __construct(private readonly Configuration $config)
     {
-        global $plr;
-        $this->plr = $plr;
+        $this->plr = new Plurals();
     }
 
     /**
