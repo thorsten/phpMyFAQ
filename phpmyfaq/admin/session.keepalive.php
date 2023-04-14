@@ -21,8 +21,8 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
@@ -79,8 +79,8 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta content="Only Chuck Norris can divide by zero." name="description">
     <meta content="phpMyFAQ Team" name="author" >
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content="phpMyFAQ <?= $faqConfig->getVersion(); ?>" name="application-name">
-    <meta content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team" name="copyright">
+    <meta content="phpMyFAQ <?= System::getVersion(); ?>" name="application-name">
+    <meta content="© 2001-<?= date('Y') ?> phpMyFAQ Team" name="copyright">
     <meta content="phpMyFAQ Team" name="publisher">
     <?php if (isset($user) && ($refreshTime > 0)) { ?>
     <script>

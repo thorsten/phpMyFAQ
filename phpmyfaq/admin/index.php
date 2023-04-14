@@ -24,7 +24,6 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\AdminLog;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;

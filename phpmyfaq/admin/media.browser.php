@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -60,21 +59,18 @@ Strings::init($faqLangCode);
 <!DOCTYPE html>
 <html lang="<?= Translation::get('metaLanguage'); ?>">
 <head>
-    <meta charset='UTF-8'>
+    <meta charset="UTF-8">
     <title>phpMyFAQ Media Browser</title>
     <style>
         @import url('../assets/dist/admin.css');
-
-        body {
-            padding: 10px;
-        }
+        body { padding: 10px; }
     </style>
 </head>
 <body>
 
 <form action="" method="post">
     <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="<?= Translation::get('ad_media_name_search') ?>"
+        <input type="search" class="form-control" placeholder="<?= Translation::get('ad_media_name_search') ?>"
                id="filter" value="" aria-label="Recipient's username" aria-describedby="search">
         <span class="input-group-text" id="search"><i aria-hidden="true" class="fa fa-search"></i></span>
     </div>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The 2fa-form for entering the token for two-factor-authentification.
+ * The 2fa-form for entering the token for two-factor-authentication.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2023 phpMyFAQ Team
+ * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-11
