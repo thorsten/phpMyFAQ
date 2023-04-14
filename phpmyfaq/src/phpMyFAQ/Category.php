@@ -459,7 +459,6 @@ class Category
         }
     }
 
-    //
     /**
      * List in array the root, super-root, ... of the $id.
      */
