@@ -329,21 +329,22 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                     </th>
                     <th class="align-middle" style="width: 120px;">
                     <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
-                          <label>
-                            <input type="checkbox" id="active_category_block_<?= $cid ?>"
-                                   class="form-check-input pmf-admin-faqs-all-active" data-pmf-category-id="<?= $cid ?>"
-                                   data-pmf-csrf="<?= $csrfToken ?>"
-                                   onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $csrfToken ?>')"
+                        <div class="form-check">
+                            <input class="form-check-input pmf-admin-faqs-all-active" type="checkbox" value=""
+                                   data-pmf-category-id="<?= $cid ?>" data-pmf-csrf="<?= $csrfToken ?>"
+                                   id="active_category_block_<?= $cid ?>"
                                 <?php
                                 if (
                                     isset($numRecordsByCat[$cid]) && isset($numActiveByCat[$cid]) &&
-                                    $numRecordsByCat[$cid] == $numActiveByCat[$cid]
+                                    $numRecordsByCat[$cid] === $numActiveByCat[$cid]
                                 ) {
                                     echo 'checked';
                                 }
                                 ?>>
-                              <?= Translation::get('ad_record_active') ?>
-                          </label>
+                            <label class="form-check-label" for="sticky_category_block_<?= $cid ?>">
+                                <?= Translation::get('ad_record_active') ?>
+                            </label>
+                        </div>
                     <?php } else { ?>
                           <span class="fa-stack">
                               <i class="fa fa-check fa-stack-1x"></i>
@@ -418,15 +419,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       </td>
                       <td>
                       <?php if ($user->perm->hasPermission($user->getUserId(), 'approverec')) { ?>
-                            <label>
-                              <input type="checkbox" lang="<?= $record['lang'] ?>"
-                                     class="form-check-input pmf-admin-active-faq"
-                                     data-pmf-category-id="<?= $cid ?>" data-pmf-faq-id="<?= $record['id'] ?>"
-                                     data-pmf-csrf="<?= $csrfToken ?>"
-                                     onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $csrfToken ?>');"
+                          <div>
+                              <input class="form-check-input pmf-admin-active-faq" type="checkbox"
+                                     data-pmf-category-id-active="<?= $cid ?>" data-pmf-faq-id="<?= $record['id'] ?>"
+                                     data-pmf-csrf="<?= $csrfToken ?>" lang="<?= $record['lang'] ?>"
                                      id="active_record_<?= $cid . '_' . $record['id'] ?>"
-                                  <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
-                            </label>
+                                     <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
+                          </div>
                       <?php } else { ?>
                             <span class="fa-stack">
                               <i class="fa fa-check fa-stack-1x"></i>
@@ -464,91 +463,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
           </div>
         </div>
     </form>
-
-    <script>
-    /**
-     * Saves the sticky record status for the whole category
-     *
-     * @param id
-     * @param type
-     * @param csrf
-     * @deprecated
-     * @return void
-     */
-    function saveStatusForCategory(id, type, csrf) {
-      let id_map = [];
-        <?php
-        foreach ($faqIds as $categoryId => $recordIds) {
-            if ('' === $categoryId) {
-                $categoryId = 0;
-            }
-            echo '                id_map[' . $categoryId . '] = [' . implode(',', $recordIds) . "];\n";
-        }
-        ?>
-      for (let i = 0; i < id_map[id].length; i++) {
-        const status = $('#' + type + '_category_block_' + id).prop('checked');
-        $('#' + type + '_record_' + id + '_' + id_map[id][i]).prop('checked', status);
-      }
-
-      saveStatus(id, id_map[id], type, csrf);
-    }
-
-    /**
-     * Ajax call for saving the sticky record status
-     *
-     * @param cid  category id
-     * @param ids  ids
-     * @param type status type
-     * @param csrf CSRF Token
-     * @deprecated
-     * @return void
-     */
-    function saveStatus(cid, ids, type, csrf) {
-      const indicator = $('#pmf-admin-saving-data-indicator'),
-        data = {
-          action: 'ajax',
-          ajax: 'records',
-          ajaxaction: 'save_' + type + '_records',
-          csrf: csrf
-        };
-
-      indicator.html('<i class="fa fa-cog fa-spin"></i> Saving ...');
-
-      for (let i = 0; i < ids.length; i++) {
-        const statusId = '#' + type + '_record_' + cid + '_' + ids[i];
-        const status = $(statusId).attr('checked') ? '' : 'checked';
-        const langId = '#' + type + '_record_' + cid + '_' + ids[i];
-        const lang = $(langId).attr('lang');
-
-        data['items[' + i + '][]'] = [ids[i], lang, status];
-
-        // Updating the current record if it's also contained in another category
-        const sameRecords = $('input').filter(function () {
-          return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
-        });
-
-        if ('active' === type) {
-          for (let j = 0; j < sameRecords.length; j++) {
-            $('#' + sameRecords[j].id).attr('checked', status);
-            const catId = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
-            $('#js-active-records-' + catId).html($('.active-records-category-' + cid + ':not(:checked)').length);
-          }
-        } else {
-          for (let j = 0; j < sameRecords.length; j++) {
-            $('#' + sameRecords[j].id).attr('checked', status);
-            if (sameRecords[j].id.match(/active_record_(\d+)_\d+/)) {
-              const catId = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
-              $('#js-active-records-' + catId).html($('.active-records-category-' + cid + ':not(:checked)').length);
-            }
-          }
-        }
-      }
-
-      $.get('index.php', data, null);
-      indicator.html('<?= Translation::get('ad_entry_savedsuc') ?>');
-    }
-    </script>
-        <?php
+<?php
     } else {
         echo Translation::get('err_nothingFound');
     }

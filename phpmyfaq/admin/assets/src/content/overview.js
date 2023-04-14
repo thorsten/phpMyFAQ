@@ -2,6 +2,8 @@ export const handleFaqOverview = async () => {
   const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
   const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
   const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
+  const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
+  const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
 
   if (deleteFaqButtons) {
     deleteFaqButtons.forEach((element) => {
@@ -83,11 +85,54 @@ export const handleFaqOverview = async () => {
       });
     });
   }
+
+  if (toggleActiveAllFaqs) {
+    toggleActiveAllFaqs.forEach((element) => {
+      element.addEventListener('change', (event) => {
+        event.preventDefault();
+
+        console.log(event.target);
+        console.log('toggle active faqs');
+
+        const categoryId = event.target.getAttribute('data-pmf-category-id');
+        const faqIds = [];
+        const token = event.target.getAttribute('data-pmf-csrf');
+
+        const checkboxes = document.querySelectorAll('input[type=checkbox]');
+        if (checkboxes) {
+          checkboxes.forEach((checkbox) => {
+            if (checkbox.getAttribute('data-pmf-category-id-active') === categoryId) {
+              checkbox.checked = element.checked;
+              if (checkbox.checked === true) {
+                faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+              }
+            }
+          });
+          saveStatus(categoryId, faqIds, token, event.target.checked, 'active');
+        }
+      });
+    });
+  }
+
+  if (toggleActiveFaq) {
+    toggleActiveFaq.forEach((element) => {
+      element.addEventListener('change', (event) => {
+        event.preventDefault();
+
+        const categoryId = event.target.getAttribute('data-pmf-category-id-active');
+        const faqId = event.target.getAttribute('data-pmf-faq-id');
+        const token = event.target.getAttribute('data-pmf-csrf');
+
+        saveStatus(categoryId, [faqId], token, event.target.checked, 'active');
+      });
+    });
+  }
 };
 
 const saveStatus = (categoryId, faqIds, token, checked, type) => {
-  const languageElement = document.getElementById(`sticky_record_${categoryId}_${faqIds[0]}`);
-  const faqLanguage = languageElement.lang;
+  const languageElement = document.getElementById(`${type}_record_${categoryId}_${faqIds[0]}`);
+  const faqLanguage = languageElement.getAttribute('lang');
+
   fetch(`index.php?action=ajax&ajax=records&ajaxaction=save_${type}_records`, {
     method: 'POST',
     headers: {

@@ -71,15 +71,26 @@ switch ($ajaxAction) {
 
     // save active FAQs
     case 'save_active_records':
-        if ($user->perm->hasPermission($user->getUserId(), 'approverec')) {
-            if (!empty($items)) {
+        $postData = json_decode(file_get_contents('php://input', true));
+
+        $faqIds = Filter::filterArray($postData->faqIds);
+        $faqLanguage = Filter::filterVar($postData->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
+        $checked = Filter::filterVar($postData->checked, FILTER_VALIDATE_BOOLEAN);
+
+        if (
+            $user->perm->hasPermission($user->getUserId(), 'approverec') &&
+            Token::getInstance()->verifyToken('faq-overview', $postData->csrf)
+        ) {
+            if (!empty($faqIds)) {
                 $faq = new Faq($faqConfig);
 
-                foreach ($items as $item) {
-                    if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
-                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
+                foreach ($faqIds as $faqId) {
+                    if (Language::isASupportedLanguage($faqLanguage)) {
+                        $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
                     }
                 }
+                $http->setStatus(200);
+                $http->sendJsonWithHeaders(['success' => $success]);
             }
         } else {
             echo Translation::get('err_NotAuth');
