@@ -96,7 +96,7 @@ $metaData = $meta->getAll();
             <td><?= $data->getPageId() ?></td>
             <td><?= $data->getType() ?></td>
             <td><?= $data->getContent() ?></td>
-            <td class="text-right">
+            <td class="text-end">
                 <a href="?action=meta.edit&id=<?= $data->getId() ?>" class="btn btn-sm btn-success">
                     <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>

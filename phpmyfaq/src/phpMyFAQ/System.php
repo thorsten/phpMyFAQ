@@ -164,7 +164,7 @@ class System
             );
         }
         printf(
-            '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
+            '</div></section></main><footer class="setup-footer container"><p class="text-end">%s</p></footer>' .
             '</body></html>',
             '&copy; 2001-2023 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
         );

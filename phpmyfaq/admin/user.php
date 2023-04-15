@@ -429,7 +429,7 @@ if (
                             endforeach; ?>
                         </div>
                         <div class="card-footer">
-                            <div class="card-button text-right">
+                            <div class="card-button text-end">
                                 <button class="btn btn-success" type="submit">
                                     <?= Translation::get('ad_gen_save') ?>
                                 </button>

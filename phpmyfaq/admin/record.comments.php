@@ -51,104 +51,107 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     $category->buildCategoryTree();
     $faqComments = $comment->getAllComments(CommentType::FAQ);
 
-    printf("<header><h3>%s</h3></header>\n", Translation::get('ad_comment_faqs'));
     if (count($faqComments)) {
-        ?>
-      <form id="pmf-comments-selected-faq" name="pmf-comments-selected-faq" method="post" accept-charset="utf-8">
-        <input type="hidden" name="ajax" value="comment">
-        <input type="hidden" name="ajaxaction" value="delete">
-        <?= Token::getInstance()->getTokenInput('delete-comment') ?>
-        <table class="table table-striped align-middle">
-            <?php
-            $lastCommentId = 0;
-            foreach ($faqComments as $faqComment) {
-                if ($faqComment->getId() === $lastCommentId) {
-                    continue;
+?>
+      <div class="row mt-2">
+          <h4><?= Translation::get('ad_comment_faqs') ?></h4>
+          <form id="pmf-comments-selected-faq" name="pmf-comments-selected-faq" method="post" accept-charset="utf-8">
+            <input type="hidden" name="ajax" value="comment">
+            <input type="hidden" name="ajaxaction" value="delete">
+            <?= Token::getInstance()->getTokenInput('delete-comment') ?>
+            <table class="table table-striped align-middle">
+                <?php
+                $lastCommentId = 0;
+                foreach ($faqComments as $faqComment) {
+                    if ($faqComment->getId() === $lastCommentId) {
+                        continue;
+                    }
+                    ?>
+                  <tr id="comments_<?= $faqComment->getId() ?>">
+                    <td>
+                      <label>
+                        <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
+                               value="<?= $faqComment->getId() ?>">
+                      </label>
+                    </td>
+                    <td>
+                    <span style="font-weight: bold;">
+                        <a href="mailto:<?= $faqComment->getEmail() ?>">
+                            <?= Strings::htmlentities($faqComment->getUsername()) ?>
+                        </a> |
+                        <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
+                        <a href="<?php printf(
+                            '../?action=faq&cat=%d&id=%d&artlang=%s',
+                            $faqComment->getCategoryId(),
+                            $faqComment->getRecordId(),
+                            $faqLangCode
+                                 ) ?>">
+                            <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
+                        </a>
+                    </span><br>
+                        <?= Strings::htmlentities($faqComment->getComment()) ?>
+                    </td>
+                  </tr>
+                    <?php
+                    $lastCommentId = $faqComment->getId();
                 }
                 ?>
-              <tr id="comments_<?= $faqComment->getId() ?>">
-                <td>
-                  <label>
-                    <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
-                           value="<?= $faqComment->getId() ?>">
-                  </label>
-                </td>
-                <td>
-                <span style="font-weight: bold;">
-                    <a href="mailto:<?= $faqComment->getEmail() ?>">
-                        <?= Strings::htmlentities($faqComment->getUsername()) ?>
-                    </a> |
-                    <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
-                    <a href="<?php printf(
-                        '../?action=faq&cat=%d&id=%d&artlang=%s',
-                        $faqComment->getCategoryId(),
-                        $faqComment->getRecordId(),
-                        $faqLangCode
-                             ) ?>">
-                        <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
-                    </a>
-                </span><br>
-                    <?= Strings::htmlentities($faqComment->getComment()) ?>
-                </td>
-              </tr>
-                <?php
-                $lastCommentId = $faqComment->getId();
-            }
-            ?>
-        </table>
-        <div class="text-right">
-          <button class="btn btn-danger" id="pmf-button-delete-faq-comments" type="button">
-              <?= Translation::get('ad_entry_delete') ?>
-          </button>
-        </div>
-      </form>
+            </table>
+            <div class="text-end">
+              <button class="btn btn-danger" id="pmf-button-delete-faq-comments" type="button">
+                  <?= Translation::get('ad_entry_delete') ?>
+              </button>
+            </div>
+          </form>
+      </div>
         <?php
     } else {
         echo '<p><strong>n/a</strong></p>';
     }
 
     $newsComments = $comment->getAllComments(CommentType::NEWS);
-
-    printf("<header><h3>%s</h3></header>\n", Translation::get('ad_comment_news'));
     if (count($newsComments)) {
-        ?>
-      <form id="pmf-comments-selected-news" name="pmf-comments-selected-news" method="post" accept-charset="utf-8">
-        <input type="hidden" name="ajax" value="comment">
-        <input type="hidden" name="ajaxaction" value="delete">
-        <?= Token::getInstance()->getTokenInput('delete-comment') ?>
-        <table class="table table-striped align-middle">
-            <?php
-            foreach ($newsComments as $newsComment) { ?>
-              <tr id="comments_<?= $newsComment->getId() ?>">
-                <td>
-                  <label>
-                    <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
-                           value="<?= $newsComment->getId() ?>">
-                  </label>
-                </td>
-                <td>
-                <span style="font-weight: bold;">
-                    <a href="mailto:<?= $newsComment->getEmail() ?>">
-                        <?= Strings::htmlentities($newsComment->getUsername()) ?>
-                    </a> |
-                    <?= $date->format(date('Y-m-d H:i', $newsComment->getDate())) ?> |
-                    <a href="<?php printf('../?action=news&newsid=%d&artlang=%s', $newsComment->getRecordId(), $faqLangCode) ?>">
-                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
-                    </a>
-                </span><br/>
-                    <?= $newsComment->getComment() ?>
-                </td>
-              </tr>
+?>
+        <div class="row mt-2">
+            <h4><?= Translation::get('ad_comment_news') ?></h4>
+          <form id="pmf-comments-selected-news" name="pmf-comments-selected-news" method="post" accept-charset="utf-8">
+            <input type="hidden" name="ajax" value="comment">
+            <input type="hidden" name="ajaxaction" value="delete">
+            <?= Token::getInstance()->getTokenInput('delete-comment') ?>
+            <table class="table table-striped align-middle">
                 <?php
-            }
-            ?>
-        </table>
-        <div class="text-right">
-          <button class="btn btn-danger" id="pmf-button-delete-news-comments" type="button">
-              <?= Translation::get('ad_entry_delete') ?>
-          </button>
+                foreach ($newsComments as $newsComment) { ?>
+                  <tr id="comments_<?= $newsComment->getId() ?>">
+                    <td>
+                      <label>
+                        <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
+                               value="<?= $newsComment->getId() ?>">
+                      </label>
+                    </td>
+                    <td>
+                    <span style="font-weight: bold;">
+                        <a href="mailto:<?= $newsComment->getEmail() ?>">
+                            <?= Strings::htmlentities($newsComment->getUsername()) ?>
+                        </a> |
+                        <?= $date->format(date('Y-m-d H:i', $newsComment->getDate())) ?> |
+                        <a href="<?php printf('../?action=news&newsid=%d&artlang=%s', $newsComment->getRecordId(), $faqLangCode) ?>">
+                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                        </a>
+                    </span><br/>
+                        <?= $newsComment->getComment() ?>
+                    </td>
+                  </tr>
+                    <?php
+                }
+                ?>
+            </table>
+            <div class="text-end">
+              <button class="btn btn-danger" id="pmf-button-delete-news-comments" type="button">
+                  <?= Translation::get('ad_entry_delete') ?>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
         <?php
     } else {
         echo '<p><strong>n/a</strong></p>';

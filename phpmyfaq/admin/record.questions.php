@@ -121,7 +121,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 </tbody>
               </table>
 
-              <div class="text-right">
+              <div class="text-end">
                 <button class="btn btn-danger" id="pmf-delete-questions" type="button">
                     <?= Translation::get('ad_entry_delete') ?>
                 </button>

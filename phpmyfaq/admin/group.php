@@ -370,7 +370,7 @@ if ('list' === $groupAction) {
             </select>
           </div>
           <div class="card-footer">
-            <div class="card-button text-right">
+            <div class="card-button text-end">
               <button class="btn btn-danger" type="submit">
                   <?= Translation::get('ad_gen_delete') ?>
               </button>
@@ -420,7 +420,7 @@ if ('list' === $groupAction) {
             </div>
           </div>
           <div class="card-footer">
-            <div class="card-button text-right">
+            <div class="card-button text-end">
               <button class="btn btn-primary" type="submit">
                   <?= Translation::get('ad_gen_save') ?>
               </button>
@@ -500,7 +500,7 @@ if ('list' === $groupAction) {
             </div>
           </div>
           <div class="card-footer">
-            <div class="card-button text-right">
+            <div class="card-button text-end">
               <button class="btn btn-primary" onclick="javascript:selectSelectAll('group_member_list')" type="submit">
                   <?= Translation::get('ad_gen_save') ?>
               </button>
@@ -544,7 +544,7 @@ if ('list' === $groupAction) {
               <?php endforeach; ?>
           </div>
           <div class="card-footer">
-            <div class="card-button text-right">
+            <div class="card-button text-end">
               <button class="btn btn-primary" type="submit">
                   <?= Translation::get('ad_gen_save') ?>
               </button>

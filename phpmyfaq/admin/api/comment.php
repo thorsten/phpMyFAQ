@@ -41,7 +41,7 @@ if ('delete' === $deleteData->data->ajaxaction && $user->perm->hasPermission($us
     $comment = new Comments($faqConfig);
     $success = false;
 
-    $commentIds = $deleteData->data->{'comments[]'};
+    $commentIds = $deleteData->data->{'comments[]'} ?? [];
 
     if (!is_null($commentIds)) {
         if (!is_array($commentIds)) {

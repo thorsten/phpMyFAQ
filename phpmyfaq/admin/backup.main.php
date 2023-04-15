@@ -66,7 +66,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
             </div>
           </div>
           <div class="form-row row">
-            <div class="text-right">
+            <div class="text-end">
               <button class="btn btn-primary" type="submit">
                 <i aria-hidden="true" class="fa fa-upload"></i> <?= Translation::get('ad_csv_ok') ?>
               </button>

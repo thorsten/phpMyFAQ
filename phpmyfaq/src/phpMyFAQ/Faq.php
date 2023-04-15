@@ -2435,7 +2435,7 @@ class Faq
                     );
                 } else {
                     $output .= sprintf(
-                        '<td class="text-right">' .
+                        '<td class="text-end">' .
                         '<a class="btn btn-primary" href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
                         $sids,
                         $row->id,
