@@ -7,17 +7,16 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2011-09-29
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2011-09-29
  */
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Helper\CategoryHelper;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -36,50 +35,46 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->hasPermission($user->getUserId(), 'delete_faq')) {
-    $searchCategory = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_SPECIAL_CHARS);
-
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
-
-    // Set the CategoryHelper for the helper class
-    $categoryHelper = new CategoryHelper();
-    $categoryHelper->setCategory($category);
-
     $category->buildCategoryTree();
 
-    ?>
-
+    $categoryHelper = new CategoryHelper();
+    $categoryHelper->setCategory($category);
+?>
                 <form action="?action=view" method="post"  accept-charset="utf-8">
 
-                    <div class="row">
-                        <label class="col-lg-2 col-form-label"><?= Translation::get('msgSearchWord') ?>:</label>
+                    <div class="row mb-2">
+                        <label class="col-lg-2 col-form-label" for="searchterm">
+                            <?= Translation::get('msgSearchWord') ?>:
+                        </label>
                         <div class="col-lg-4">
-                            <input class="form-control" type="search" name="searchterm" autofocus
-                                   value="<?= $searchTerm ?>">
-
+                            <input class="form-control" type="search" name="searchterm" id="searchterm" autofocus>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <label class="col-lg-2 col-form-label"><?= Translation::get('msgCategory') ?>:</label>
+                    <div class="row mb-2">
+                        <label class="col-lg-2 col-form-label" for="searchcat">
+                            <?= Translation::get('msgCategory') ?>:
+                        </label>
                         <div class="col-lg-4">
-                            <select name="searchcat" class="form-control">
+                            <select name="searchcat" id="searchcat" class="form-select">
                                 <option value="0"><?= Translation::get('msgShowAllCategories') ?></option>
-                                <?= $categoryHelper->renderOptions($searchCategory ?? 0) ?>
+                                <?= $categoryHelper->renderOptions(0) ?>
                             </select>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="offset-lg-2 col-lg-4">
+                    <div class="row mb-2">
+                        <div class="offset-lg-2 col-lg-4 text-end">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?= Translation::get('msgSearch') ?>
                             </button>
                         </div>
                     </div>
+
                 </form>
     <?php
 } else {
