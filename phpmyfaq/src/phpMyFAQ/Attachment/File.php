@@ -166,10 +166,10 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
         if ($headers) {
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
-            header('Content-Type: ' . $this->mimeType, true);
-            header('Content-Length: ' . $this->filesize, true);
-            header("Content-Disposition: $disposition; filename=\"" . rawurlencode($this->filename) . "\"", true);
-            header("Content-MD5: {$this->realHash}", true);
+            header('Content-Type: ' . $this->mimeType);
+            header('Content-Length: ' . $this->filesize);
+            header("Content-Disposition: $disposition; filename=\"" . rawurlencode($this->filename) . "\"");
+            header("Content-MD5: {$this->realHash}");
         }
 
         while (!$file->eof()) {
