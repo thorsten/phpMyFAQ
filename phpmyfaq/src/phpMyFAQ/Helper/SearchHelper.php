@@ -78,9 +78,9 @@ class SearchHelper extends Helper
      * Renders the results for Typehead.
      *
      * @param SearchResultSet $resultSet Result set object
-     * @throws \JsonException
+     * @return array
      */
-    public function renderInstantResponseResult(SearchResultSet $resultSet): string
+    public function createAutoCompleteResult(SearchResultSet $resultSet): array
     {
         $results = [];
         $maxResults = $this->config->get('records.numberOfRecordsPerPage');
@@ -116,7 +116,7 @@ class SearchHelper extends Helper
             }
         }
 
-        return json_encode($results, JSON_THROW_ON_ERROR);
+        return $results;
     }
 
     /**

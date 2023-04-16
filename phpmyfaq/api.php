@@ -29,10 +29,8 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Question;
@@ -45,6 +43,9 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\Utils;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 //
 // Bootstrapping
@@ -52,25 +53,28 @@ use phpMyFAQ\Utils;
 require 'src/Bootstrap.php';
 
 //
-// Send headers
+// Create Request & Response
 //
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->fetchAllHeaders();
-$http->addHeader();
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
 //
 // Set user permissions
 //
 $auth = false;
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
-$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS, 'en');
-$categoryId = Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
-$recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
-$tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
+$action = Filter::filterVar($request->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
+$lang = Filter::filterVar($request->get('lang'), FILTER_SANITIZE_SPECIAL_CHARS, 'en');
+$categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+$recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
+$tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
 
-$faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
-$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqUsername = Filter::filterVar($request->request->get('username'), FILTER_SANITIZE_SPECIAL_CHARS);
+$faqPassword = Filter::filterVar(
+    $request->request->get('password'),
+    FILTER_SANITIZE_SPECIAL_CHARS,
+    FILTER_FLAG_NO_ENCODE_QUOTES
+);
 
 //
 // Get language (default: english)
@@ -97,7 +101,8 @@ try {
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($currentLanguage);
 } catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData(['error' => $e->getMessage()]);
 }
 
 //
@@ -124,11 +129,13 @@ switch ($action) {
     // v2.2
     //
     case 'version':
-        $result = $faqConfig->getVersion();
+        $response->setData($faqConfig->getVersion());
+        $response->setStatusCode(Response::HTTP_OK);
         break;
 
     case 'language':
-        $result = $faqConfig->getLanguage()->getLanguage();
+        $response->setData($faqConfig->getLanguage()->getLanguage());
+        $response->setStatusCode(Response::HTTP_OK);
         break;
 
     case 'search':
@@ -139,7 +146,7 @@ switch ($action) {
         $faqPermission = new FaqPermission($faqConfig);
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
-        $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
         try {
             $searchResults = $search->search($searchString, false);
             $faqSearchResult->reviewResultSet($searchResults);
@@ -151,11 +158,12 @@ switch ($action) {
                     $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
                     $result[] = $data;
                 }
+                $response->setData($result);
             } else {
-                $http->setStatus(404);
+                $response->setStatusCode(Response::HTTP_NOT_FOUND);
             }
         } catch (Exception) {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         }
         break;
 
@@ -166,8 +174,11 @@ switch ($action) {
         $category->setLanguage($currentLanguage);
         $result = array_values($category->getAllCategories());
         if (count($result) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        } else {
+            $response->setStatusCode(Response::HTTP_OK);
         }
+        $response->setData($result);
         break;
 
     case 'category':
@@ -181,8 +192,8 @@ switch ($action) {
         //
         // POST
         //
-        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
-            $http->setStatus(401);
+        if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $result = [
                 'stored' => false,
                 'error' => 'X_PMF_Token not valid.'
@@ -223,7 +234,7 @@ switch ($action) {
         if (!is_null($parentCategoryName)) {
             $parentCategoryIdFound = $category->getCategoryIdFromName($parentCategoryName);
             if ($parentCategoryIdFound === false) {
-                $http->setStatus(409);
+                $response->setStatusCode(Response::HTTP_CONFLICT);
                 $result = [
                     'stored' => false,
                     'error' => 'The given parent category name was not found.'
@@ -252,57 +263,63 @@ switch ($action) {
             $categoryPermission->add(CategoryPermission::USER, [$categoryId], [-1]);
             $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], [-1]);
 
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $result = [
                 'stored' => true
             ];
         } else {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'stored' => false,
                 'error' => 'Cannot add category'
             ];
         }
+        $response->setData($result);
         break;
 
     case 'groups':
         $groupPermission = new MediumPermission($faqConfig);
         $result = $groupPermission->getAllGroups($user);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
     case 'tags':
         $tags = new Tags($faqConfig);
         $result = $tags->getPopularTagsAsArray(16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
     case 'open-questions':
         $questions = new Question($faqConfig);
         $result = $questions->getAllOpenQuestions();
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
     case 'searches':
         $search = new Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
     case 'comments':
         $comment = new Comments($faqConfig);
         $result = $comment->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
     case 'attachments':
@@ -319,18 +336,19 @@ switch ($action) {
             ];
         }
         if (count($result) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
     case 'news':
         $news = new News($faqConfig);
         $result = $news->getLatestData(false, true, true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
-
 
     case 'faqs':
         $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -347,7 +365,7 @@ switch ($action) {
                     $result = $faq->getAllFaqsByCategoryId($categoryId);
                 }
             } catch (Exception) {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             }
         }
 
@@ -358,7 +376,7 @@ switch ($action) {
             try {
                 $result = $faq->getRecordsByIds($recordIds);
             } catch (Exception) {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             }
         }
 
@@ -384,8 +402,9 @@ switch ($action) {
         }
 
         if (count($result) === 0) {
-            $http->setStatus(404);
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+        $response->setData($result);
         break;
 
 
@@ -404,7 +423,7 @@ switch ($action) {
 
             if (count($result) === 0 || $result['solution_id'] === 42) {
                 $result = new stdClass();
-                $http->setStatus(404);
+                $response->setStatusCode(Response::HTTP_NOT_FOUND);
             }
 
             if ('pdf' === $filter) {
@@ -415,18 +434,20 @@ switch ($action) {
 
                 $result = $service->getPdfApiLink();
             }
+            $response->setData($result);
             break;
         }
 
         //
         // POST
         //
-        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
-            $http->setStatus(401);
+        if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $result = [
                 'stored' => false,
                 'error' => 'X_PMF_Token not valid.'
             ];
+            $response->setData($result);
             break;
         }
 
@@ -456,11 +477,12 @@ switch ($action) {
         if (!is_null($categoryName)) {
             $categoryIdFound = $category->getCategoryIdFromName($categoryName);
             if ($categoryIdFound === false) {
-                $http->setStatus(409);
+                $response->setStatusCode(Response::HTTP_CONFLICT);
                 $result = [
                     'stored' => false,
                     'error' => 'The given category name was not found.'
                 ];
+                $response->setData($result);
                 break;
             }
 
@@ -497,6 +519,7 @@ switch ($action) {
         $result = [
             'stored' => true
         ];
+        $response->setData($result);
         break;
 
     case 'login':
@@ -508,27 +531,29 @@ switch ($action) {
         $userAuth = new UserAuthentication($faqConfig, $user);
         try {
             [ $user, $auth ] = $userAuth->authenticate($faqUsername, $faqPassword);
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $result = [
                 'loggedin' => true
             ];
         } catch (Exception $e) {
             $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'loggedin' => false,
                 'error' => Translation::get('ad_auth_fail')
             ];
         }
+        $response->setData($result);
         break;
 
     case 'register':
-        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
-            $http->setStatus(401);
+        if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $result = [
                 'registered' => false,
                 'error' => 'X_PMF_Token not valid.'
             ];
+            $response->setData($result);
             break;
         }
 
@@ -541,34 +566,35 @@ switch ($action) {
         $isVisible = $isVisible === 'true';
 
         if (!$registration->isDomainWhitelisted($email)) {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'registered' => false,
                 'error' => 'The domain is not whitelisted.'
             ];
+            $response->setData($result);
             break;
         }
 
         if (!is_null($userName) && !is_null($fullName) && !is_null($email)) {
             $result = $registration->createUser($userName, $fullName, $email, $isVisible);
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
         } else {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'registered' => false,
                 'error' => Translation::get('err_sendMail')
             ];
         }
-
+        $response->setData($result);
         break;
 
     case 'question':
-        if ($faqConfig->get('api.apiClientToken') !== $http->getClientApiToken()) {
-            $http->setStatus(401);
-            $result = [
+        if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData([
                 'stored' => false,
                 'error' => 'X_PMF_Token not valid.'
-            ];
+            ]);
             break;
         }
 
@@ -595,9 +621,7 @@ switch ($action) {
         $questionObject = new Question($this->config);
         $questionObject->addQuestion($questionData);
 
-        $result = [
-            'stored' => true
-        ];
+        $response->setData(['stored' => true]);
         break;
 }
 
@@ -605,9 +629,9 @@ switch ($action) {
 // Check if FAQ should be secured
 //
 if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
-    $http->setStatus(403);
-    $http->sendJsonWithHeaders([ 'error' => 'You are not allowed to view this content.' ]);
+    $response->setStatusCode(403);
+    $response->setData([ 'error' => 'You are not allowed to view this content.' ]);
     exit();
 }
 
-$http->sendJsonWithHeaders($result);
+$response->send();

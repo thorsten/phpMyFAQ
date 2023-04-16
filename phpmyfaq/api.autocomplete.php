@@ -22,12 +22,14 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 const IS_VALID_PHPMYFAQ = null;
 
@@ -36,9 +38,15 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require 'src/Bootstrap.php';
 
-$searchString = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
-$ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_SPECIAL_CHARS, 'en');
-$categoryId = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
+$searchString = Filter::filterVar($request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+$categoryId = Filter::filterVar($request->get('searchcategory'), FILTER_VALIDATE_INT, '%');
+$ajaxLanguage = Filter::filterVar($request->request->get('ajaxlanguage'), FILTER_SANITIZE_SPECIAL_CHARS, 'en');
 
 //
 // Get language (default: english)
@@ -56,7 +64,8 @@ try {
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode);
 } catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData(['error' => $e->getMessage()]);
 }
 
 //
@@ -102,13 +111,12 @@ if (!is_null($searchString)) {
         $faqSearchHelper->setSearchTerm($searchString);
         $faqSearchHelper->setCategory($category);
         $faqSearchHelper->setPlurals(new Plurals());
+        $response->setData(Response::HTTP_OK);
+        $response->setData($faqSearchHelper->createAutoCompleteResult($faqSearchResult));
     } catch (Exception $e) {
+        $response->setData(Response::HTTP_BAD_REQUEST);
         $faqConfig->getLogger()->error('Search exception: ' . $e->getMessage());
     }
 
-    try {
-        $http->sendWithHeaders($faqSearchHelper->renderInstantResponseResult($faqSearchResult));
-    } catch (JsonException $e) {
-        $faqConfig->getLogger()->error('Search exception: ' . $e->getMessage());
-    }
+    $response->send();
 }

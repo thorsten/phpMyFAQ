@@ -25,6 +25,7 @@ use phpMyFAQ\Helper;
  * Class HttpHelper
  *
  * @package phpMyFAQ\Helper
+ * @deprecated
  */
 class HttpHelper extends Helper
 {
@@ -71,16 +72,6 @@ class HttpHelper extends Helper
     }
 
     /**
-     * Adds the STS header.
-     */
-    public function setSecurityHeaders(): void
-    {
-        header('strict-transport-security: max-age=600');
-        header('Content-Security-Policy: default-src \'self\'');
-        header('Referrer-Policy: no-referrer');
-    }
-
-    /**
      * Starts Gzip compression.
      */
     public function startCompression(): void
@@ -99,31 +90,11 @@ class HttpHelper extends Helper
     }
 
     /**
-     * Fetch all HTTP request headers.
-     */
-    public function fetchAllHeaders(): void
-    {
-        foreach ($_SERVER as $name => $value) {
-            if (str_starts_with($name, 'HTTP_')) {
-                $this->headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($name, 5))))] = $value;
-            }
-        }
-    }
-
-    /**
      * Returns the HTTP status code
      */
     public function getStatusCode(): int
     {
         return $this->statusCode;
-    }
-
-    /**
-     * Returns the HTTP header value for "X-PMF-Token"
-     */
-    public function getClientApiToken(): string
-    {
-        return $this->headers['x-pmf-token'] ?? '';
     }
 
     /**
