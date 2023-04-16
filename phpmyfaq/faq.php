@@ -212,18 +212,6 @@ if (
     );
 }
 
-$translationUrl = sprintf(
-    str_replace(
-        '%',
-        '%%',
-        Link::getSystemRelativeUri('index.php')
-    ) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
-    $sids,
-    $currentCategory,
-    $faqId,
-    $lang
-);
-
 $availableLanguages = $faqConfig->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
 
 if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
@@ -232,19 +220,6 @@ if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($a
         'switchLanguage',
         [
             'msgChangeLanguage' => Translation::get('msgLanguageSubmit'),
-        ]
-    );
-}
-
-if (
-    $user->perm->hasPermission($user->getUserId(), 'addtranslation') &&
-    !empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1
-) {
-    $template->parseBlock(
-        'mainPageContent',
-        'addTranslation',
-        [
-            'msgTranslate' => Translation::get('msgTranslate'),
         ]
     );
 }
@@ -331,14 +306,6 @@ $template->parse(
         'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
         'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
         'linkToPdf' => $faqServices->getPdfLink(),
-        'translationUrl' => $translationUrl,
-        'languageSelection' => LanguageHelper::renderSelectLanguage(
-            $faqLangCode,
-            false,
-            $availableLanguages,
-            'translation'
-        ),
-        'msgTranslateSubmit' => Translation::get('msgTranslateSubmit'),
         'saveVotingID' => $faqId,
         'msgAverageVote' => Translation::get('msgAverageVote'),
         'renderVotingResult' => $rating->getVotingResult($faqId),
