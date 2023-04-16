@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Ajax Service Layer.
+ * The API Service Layer.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -29,7 +29,6 @@ use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
@@ -51,6 +50,9 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 //
@@ -58,11 +60,17 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 //
 require 'src/Bootstrap.php';
 
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
 $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
 $apiLanguage = Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS);
 $currentToken = Filter::filterVar($postData['csrf'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+$action = Filter::filterVar($request->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 if ($faqConfig->get('security.enableGoogleReCaptchaV2')) {
     $code = Filter::filterVar($postData['g-recaptcha-response'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -92,7 +100,8 @@ try {
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($languageCode);
 } catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData(['error' => $e->getMessage()]);
 }
 
 //
@@ -100,19 +109,14 @@ try {
 //
 Strings::init($languageCode);
 
-//
-// Send headers
-//
-$http = new HttpHelper();
-$http->setContentType('application/json');
-
 $faqSession = new Session($faqConfig);
 $network = new Network($faqConfig);
 $stopWords = new StopWords($faqConfig);
 $faqHelper = new FaqHelper($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
-    $message = ['error' => Translation::get('err_bannedIP')];
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData(['error' => Translation::get('err_bannedIP')]);
 }
 
 //
@@ -126,11 +130,15 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setUserIsLoggedIn($isLoggedIn);
 
+$fatalError = false;
+
 if (
     'add-voting' !== $action && 'submit-user-data' !== $action && 'change-password' !== $action &&
     'submit-request-removal' !== $action && !$captcha->checkCaptchaCode($code ?? '')
 ) {
-    $message = ['error' => Translation::get('msgCaptcha')];
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData(['error' => Translation::get('msgCaptcha')]);
+    $fatalError = true;
 }
 
 //
@@ -140,11 +148,13 @@ if (
     !$isLoggedIn && $faqConfig->get('security.enableLoginOnly') && 'submit-request-removal' !== $action &&
     'change-password' !== $action && 'saveregistration' !== $action
 ) {
-    $message = ['error' => Translation::get('ad_msg_noauth')];
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData(['error' => Translation::get('ad_msg_noauth')]);
+    $fatalError = true;
 }
 
-if (isset($message['error'])) {
-    $http->sendJsonWithHeaders($message);
+if ($fatalError) {
+    $response->send();
     exit();
 }
 
@@ -158,7 +168,8 @@ switch ($action) {
             !$faqConfig->get('records.allowCommentsForGuests') &&
             !$user->perm->hasPermission($user->getUserId(), 'addcomment')
         ) {
-            $message = ['error' => Translation::get('err_NotAuth')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
             break;
         }
 
@@ -191,7 +202,8 @@ switch ($action) {
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
-                $message = ['error' => Translation::get('err_SaveComment')];
+                $response->setStatusCode(Response::HTTP_CONFLICT);
+                $response->setData(['error' => Translation::get('err_SaveComment')]);
                 $faqConfig->getLogger()->error('Name and mail already used by registered user.');
                 break;
             }
@@ -298,17 +310,20 @@ switch ($action) {
                 $result = $mailer->send();
                 unset($mailer);
 
-                $message = ['success' => Translation::get('msgCommentThanks')];
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('msgCommentThanks')]);
             } else {
                 try {
                     $faqSession->userTracking('error_save_comment', $id);
                 } catch (Exception) {
                     // @todo handle the exception
                 }
-                $message = ['error' => Translation::get('err_SaveComment')];
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => Translation::get('err_SaveComment')]);
             }
         } else {
-            $message = ['error' => 'Please add your name, your e-mail address and a comment!'];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'Please add your name, your e-mail address and a comment!']);
         }
         break;
 
@@ -317,7 +332,8 @@ switch ($action) {
             !$faqConfig->get('records.allowNewFaqsForGuests') &&
             !$user->perm->hasPermission($user->getUserId(), 'addfaq')
         ) {
-            $message = ['error' => Translation::get('err_NotAuth')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
             break;
         }
 
@@ -409,7 +425,6 @@ switch ($action) {
                 ->setAuthor($author)
                 ->setEmail($email)
                 ->setComment(true)
-                ->setLinkState('')
                 ->setNotes('');
 
             if (!$isNew && isset($faqId)) {
@@ -459,15 +474,15 @@ switch ($action) {
                 $link = [];
             }
 
-            $message = [
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData([
                 'success' =>
                     ($isNew ? Translation::get('msgNewContentThanks') : Translation::get('msgNewTranslationThanks')),
                 ... $link
-            ];
+            ]);
         } else {
-            $message = [
-                'error' => Translation::get('err_SaveEntries')
-            ];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_SaveEntries')]);
         }
 
         break;
@@ -481,8 +496,8 @@ switch ($action) {
             !$faqConfig->get('main.enableAskQuestions') &&
             !$user->perm->hasPermission($user->getUserId(), 'addquestion')
         ) {
-            $http->setStatus(401);
-            $message = ['error' => Translation::get('err_NotAuth')];
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
             break;
         }
         $faq = new Faq($faqConfig);
@@ -585,32 +600,32 @@ switch ($action) {
                     }
                     $response .= '</ul>';
 
-                    $message = ['result' => $response];
+                    $response->setData(['result' => $response]);
                 } else {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     try {
                         $questionHelper->sendSuccessMail($questionData, $categories);
                     } catch (Exception | TransportExceptionInterface $exception) {
-                        $http->setStatus(400);
-                        $message = ['error' => $exception->getMessage()];
+                        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                        $response->setData(['error' => $exception->getMessage()]);
                     }
-                    $http->setStatus(200);
-                    $message = ['success' => Translation::get('msgAskThx4Mail')];
+                    $response->setStatusCode(Response::HTTP_OK);
+                    $response->setData(['success' => Translation::get('msgAskThx4Mail')]);
                 }
             } else {
                 $questionHelper = new QuestionHelper($faqConfig, $cat);
                 try {
                     $questionHelper->sendSuccessMail($questionData, $categories);
                 } catch (Exception | TransportExceptionInterface $exception) {
-                    $http->setStatus(400);
-                    $message = ['error' => $exception->getMessage()];
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $exception->getMessage()]);
                 }
-                $http->setStatus(200);
-                $message = ['success' => Translation::get('msgAskThx4Mail')];
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('msgAskThx4Mail')]);
             }
         } else {
-            $http->setStatus(400);
-            $message = ['error' => Translation::get('err_SaveQuestion')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_SaveQuestion')]);
         }
 
         break;
@@ -624,18 +639,21 @@ switch ($action) {
         $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
 
         if (!$registration->isDomainWhitelisted($email)) {
-            $message = ['error' => 'The domain is not whitelisted.'];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'The domain is not whitelisted.']);
             break;
         }
 
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
             try {
-                $message = $registration->createUser($userName, $fullName, $email, $isVisible);
+                $response->setData(['success' => $registration->createUser($userName, $fullName, $email, $isVisible)]);
             } catch (Exception | TransportExceptionInterface $exception) {
-                $message = ['error' => $exception->getMessage()];
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $exception->getMessage()]);
             }
         } else {
-            $message = ['error' => Translation::get('err_sendMail')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_sendMail')]);
         }
         break;
 
@@ -665,24 +683,29 @@ switch ($action) {
             } else {
                 $rating->update($votingData);
             }
-            $message = [
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData([
                 'success' => Translation::get('msgVoteThanks'),
                 'rating' => $rating->getVotingResult($faqId),
-            ];
+            ]);
         } elseif (!$rating->check($faqId, $userIp)) {
             try {
                 $faqSession->userTracking('error_save_voting', $faqId);
             } catch (Exception $exception) {
-                $message = ['error' => $exception->getMessage()];
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $exception->getMessage()]);
             }
-            $message = ['error' => Translation::get('err_VoteTooMuch')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_VoteTooMuch')]);
         } else {
             try {
                 $faqSession->userTracking('error_save_voting', $faqId);
             } catch (Exception $exception) {
-                $message = ['error' => $exception->getMessage()];
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $exception->getMessage()]);
             }
-            $message = ['error' => Translation::get('err_noVote')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_noVote')]);
         }
 
         break;
@@ -720,12 +743,16 @@ switch ($action) {
                 $mailer->message = $question;
                 $mailer->send();
                 unset($mailer);
-                $message = ['success' => Translation::get('msgMailContact')];
+
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('msgMailContact')]);
             } catch (Exception | TransportExceptionInterface $e) {
-                $message = ['error' => $e->getMessage()];
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $e->getMessage()]);
             }
         } else {
-            $message = ['error' => Translation::get('err_sendMail')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_sendMail')]);
         }
         break;
 
@@ -757,7 +784,8 @@ switch ($action) {
                         $mailer->setReplyTo($email, $author);
                         $mailer->addTo($recipient);
                     } catch (Exception $exception) {
-                        $message = ['error' => $exception->getMessage()];
+                        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                        $response->setData(['error' => $exception->getMessage()]);
                     }
                     $mailer->subject = Translation::get('msgS2FMailSubject') . $author;
                     $mailer->message = sprintf(
@@ -775,9 +803,11 @@ switch ($action) {
                 }
             }
 
-            $message = ['success' => Translation::get('msgS2FThx')];
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('msgS2FThx')]);
         } else {
-            $message = ['error' => Translation::get('err_sendMail')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_sendMail')]);
         }
         break;
 
@@ -790,7 +820,8 @@ switch ($action) {
         $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('ucp', $csrfToken)) {
-            $message = ['error' => Translation::get('ad_msg_noauth')];
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('ad_msg_noauth')]);
             break;
         }
 
@@ -812,20 +843,20 @@ switch ($action) {
         }
 
         if ($userId !== $user->getUserId()) {
-            $http->setStatus(400);
-            $message = ['error' => 'User ID mismatch!'];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'User ID mismatch!']);
             break;
         }
 
         if ($password !== $confirm) {
-            $http->setStatus(409);
-            $message = ['error' => Translation::get('ad_user_error_passwordsDontMatch')];
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['error' => Translation::get('ad_user_error_passwordsDontMatch')]);
             break;
         }
 
         if (strlen($password) <= 7 || strlen($confirm) <= 7) {
-            $http->setStatus(409);
-            $message = ['error' => Translation::get('ad_passwd_fail')];
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['error' => Translation::get('ad_passwd_fail')]);
             break;
         } else {
             $userData = [
@@ -843,8 +874,8 @@ switch ($action) {
                     continue;
                 }
                 if (!$auth->update($user->getLogin(), $password)) {
-                    $http->setStatus(400);
-                    $message = ['error' => $auth->error()];
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $auth->error()]);
                     $success = false;
                 } else {
                     $success = true;
@@ -853,11 +884,11 @@ switch ($action) {
         }
 
         if ($success) {
-            $http->setStatus(200);
-            $message = ['success' => Translation::get('ad_entry_savedsuc')];
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_entry_savedsuc')]);
         } else {
-            $http->setStatus(400);
-            $message = ['error' => Translation::get('ad_entry_savedfail')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('ad_entry_savedfail')]);
         }
         break;
 
@@ -877,14 +908,14 @@ switch ($action) {
                 try {
                     $newPassword = $user->createPassword();
                 } catch (Exception $exception) {
-                    $http->setStatus(400);
-                    $message = ['error' => $exception->getMessage()];
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $exception->getMessage()]);
                 }
                 try {
                     $user->changePassword($newPassword);
                 } catch (Exception $exception) {
-                    $http->setStatus(400);
-                    $message = ['error' => $exception->getMessage()];
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $exception->getMessage()]);
                 }
                 $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .
                     $newPassword . "\n\n" . Translation::get('lostpwd_text_2');
@@ -893,27 +924,28 @@ switch ($action) {
                 try {
                     $mailer->addTo($email);
                 } catch (Exception $exception) {
-                    $http->setStatus(400);
-                    $message = ['error' => $exception->getMessage()];
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $exception->getMessage()]);
                 }
                 $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $faqConfig);
                 $mailer->message = $text;
                 try {
                     $result = $mailer->send();
                 } catch (Exception | TransportExceptionInterface $exception) {
-                    $http->setStatus(400);
-                    $message = ['error' => $exception->getMessage()];
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $exception->getMessage()]);
                 }
                 unset($mailer);
                 // Trust that the email has been sent
-                $message = ['success' => Translation::get('lostpwd_mail_okay')];
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('lostpwd_mail_okay')]);
             } else {
-                $http->setStatus(409);
-                $message = ['error' => Translation::get('lostpwd_err_1')];
+                $response->setStatusCode(Response::HTTP_CONFLICT);
+                $response->setData(['error' => Translation::get('lostpwd_err_1')]);
             }
         } else {
-            $http->setStatus(409);
-            $message = ['error' => Translation::get('lostpwd_err_2')];
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['error' => Translation::get('lostpwd_err_2')]);
         }
         break;
 
@@ -925,7 +957,8 @@ switch ($action) {
 
         $csrfToken = Filter::filterVar($postData[Token::PMF_SESSION_NAME], FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance()->verifyToken('request-removal', $csrfToken)) {
-            $message = ['error' => 'TOKEN' . Translation::get('ad_msg_noauth')];
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('ad_msg_noauth')]);
             break;
         }
 
@@ -960,21 +993,17 @@ switch ($action) {
                 $result = $mailer->send();
                 unset($mailer);
 
-                $http->setStatus(200);
-                $message = ['success' => Translation::get('msgMailContact')];
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('msgMailContact')]);
             } catch (Exception | TransportExceptionInterface $exception) {
-                $http->setStatus(400);
-                $message = ['error' => $exception->getMessage()];
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $exception->getMessage()]);
             }
         } else {
-            $http->setStatus(400);
-            $message = ['error' => Translation::get('err_sendMail')];
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_sendMail')]);
         }
         break;
 }
 
-try {
-    $http->sendJsonWithHeaders($message);
-} catch (JsonException) {
-}
-exit();
+$response->send();

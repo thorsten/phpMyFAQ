@@ -51,17 +51,13 @@ class FaqEntity
 
     private ?string $notes = null;
 
-    private ?string $linkState = null;
+    private ?DateTime $validFrom = null;
 
-    private ?\DateTime $linksCheckedDate = null;
+    private ?DateTime $validTo = null;
 
-    private ?\DateTime $validFrom = null;
+    private ?DateTime $createdDate = null;
 
-    private ?\DateTime $validTo = null;
-
-    private ?\DateTime $createdDate = null;
-
-    private ?\DateTime $updatedDate = null;
+    private ?DateTime $updatedDate = null;
 
     public function getId(): ?int
     {
@@ -203,32 +199,6 @@ class FaqEntity
     public function setNotes(string $notes): FaqEntity
     {
         $this->notes = $notes;
-        return $this;
-    }
-
-    public function getLinkState(): string
-    {
-        return $this->linkState;
-    }
-
-    public function setLinkState(string $linkState): FaqEntity
-    {
-        $this->linkState = $linkState;
-        return $this;
-    }
-
-    public function getLinksCheckedDate(): DateTime
-    {
-        if ($this->linksCheckedDate instanceof DateTime) {
-            return $this->linksCheckedDate;
-        } else {
-            return $this->linksCheckedDate = new DateTime();
-        }
-    }
-
-    public function setLinksCheckedDate(DateTime $linksCheckedDate): FaqEntity
-    {
-        $this->linksCheckedDate = $linksCheckedDate;
         return $this;
     }
 

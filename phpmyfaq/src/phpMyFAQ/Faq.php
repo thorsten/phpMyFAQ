@@ -956,7 +956,7 @@ class Faq
 
         $query = sprintf(
             "INSERT INTO %sfaqdata VALUES
-            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
+            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $faq->getId(),
             $this->config->getDb()->escape($faq->getLanguage()),
@@ -971,8 +971,6 @@ class Faq
             $faq->getEmail(),
             $faq->isComment() ? 'y' : 'n',
             $faq->getUpdatedDate()->format('YmdHis'),
-            $faq->getLinkState(),
-            $faq->getLinksCheckedDate()->format(DateTimeInterface::ATOM),
             '00000000000000',
             '99991231235959',
             date('Y-m-d H:i:s'),

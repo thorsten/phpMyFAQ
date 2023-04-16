@@ -504,7 +504,6 @@ switch ($action) {
             ->setActive($isActive)
             ->setSticky($isSticky)
             ->setComment(false)
-            ->setLinkState('')
             ->setNotes('');
 
         $faqId = $faq->create($faqData);
