@@ -917,7 +917,7 @@ class Faq
         // Add new entry
         $query = sprintf(
             "INSERT INTO %sfaqdata VALUES
-            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
+            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $recordId,
             $this->config->getDb()->escape($data['lang']),
@@ -932,8 +932,6 @@ class Faq
             $data['email'],
             $data['comment'],
             $data['date'],
-            $data['linkState'],
-            $data['linkDateCheck'],
             $data['dateStart'],
             $data['dateEnd'],
             date('Y-m-d H:i:s'),

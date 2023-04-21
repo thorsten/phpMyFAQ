@@ -114,8 +114,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
             'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', (string) $date),
             'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000'),
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959'),
-            'linkState' => '',
-            'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
         ];
 
