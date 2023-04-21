@@ -120,7 +120,7 @@ class CategoryHelper extends Helper
         $categoryRelation = new CategoryRelation($this->config, $this->Category);
         $categoryRelation->setGroups($this->Category->getGroups());
 
-        $categoryTree = $this->Category->getAllCategories();
+        $categoryTree = $this->Category->getOrderedCategories();
         $categoryNumbers = $categoryRelation->getCategoryWithFaqs();
         $normalizedCategoryNumbers = $this->normalizeCategoryTree($categoryTree, $categoryNumbers);
         $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);

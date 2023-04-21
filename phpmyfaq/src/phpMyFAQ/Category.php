@@ -145,8 +145,9 @@ class Category
      *
      * @param bool $withPermission With or without permission check
      */
-    private function getOrderedCategories(bool $withPermission = true): void
+    public function getOrderedCategories(bool $withPermission = true): array
     {
+        $categories = [];
         $where = '';
 
         if ($withPermission) {
@@ -221,8 +222,24 @@ class Category
                 $this->children[(int)$row['parent_id']][(int)$row['id']] = &$this->categoryName[(int)$row['id']];
                 $this->owner[(int)$row['id']] = &$row['user_id'];
                 $this->moderators[(int)$row['id']] = &$row['group_id'];
+
+                $categories[(int)$row['id']] = [
+                    'id' => (int)$row['id'],
+                    'lang' => $row['lang'],
+                    'parent_id' => (int)$row['parent_id'],
+                    'name' => $row['name'],
+                    'description' => $row['description'],
+                    'user_id' => (int)$row['user_id'],
+                    'group_id' => (int)$row['group_id'],
+                    'active' => (int)$row['active'],
+                    'show_home' => (int)$row['show_home'],
+                    'image' => $row['image'],
+                    'level' => $this->getLevelOf($row['id'])
+                ];
             }
         }
+
+        return $categories;
     }
 
     /**
@@ -301,19 +318,30 @@ class Category
     {
         $categories = [];
         $query = sprintf(
-            '
-            SELECT
-                id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
+            'SELECT
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
+                fc.show_home, fco.position
             FROM
-                %sfaqcategories
+                %sfaqcategories fc
+            LEFT JOIN
+                %sfaqcategory_order fco
+            ON
+                fco.category_id = fc.id
             WHERE 
-                show_home = 1',
-            Database::getTablePrefix()
+                fc.show_home = 1
+                %s
+            GROUP BY
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
+                fc.show_home, fco.position
+            ORDER BY
+                fco.position',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            isset($this->language) ? " AND fc.lang = '" . $this->language . "'" : ''
         );
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " AND lang = '" . $this->language . "'";
-        }
+
         $result = $this->config->getDb()->query($query);
+
         while ($row = $this->config->getDb()->fetchArray($result)) {
             $url = sprintf('%sindex.php?action=show&cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
