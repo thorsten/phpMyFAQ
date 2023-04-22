@@ -64,6 +64,7 @@ switch ($ajaxAction) {
                 'group' => $categoryPermission->get(CategoryPermission::GROUP, $categories)
             ]
         );
+        $response->send();
         break;
 
     case 'update-order':
