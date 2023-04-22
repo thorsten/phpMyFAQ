@@ -230,6 +230,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             $catInfo = '';
             $cid = $record['category_id'];
 
+            if (is_null($cid)) {
+                $cid = 0;
+            }
+
             if (isset($numRecordsByCat[$cid])) {
                 $catInfo .= sprintf(
                     '<span class="badge bg-primary" id="category_%d_item_count">%d %s</span> ',
