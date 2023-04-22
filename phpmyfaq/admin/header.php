@@ -16,7 +16,6 @@
  */
 
 use phpMyFAQ\Helper\AdministrationHelper;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
@@ -29,10 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
-
-$httpHeader = new HttpHelper();
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
 
 $dashboardPage = true;
 $contentPage = false;

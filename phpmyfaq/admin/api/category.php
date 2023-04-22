@@ -19,21 +19,25 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 switch ($ajaxAction) {
     case 'getpermissions':
@@ -54,7 +58,7 @@ switch ($ajaxAction) {
             $categories = explode(',', (int)$ajaxData['categories']);
         }
 
-        $http->sendJsonWithHeaders(
+        $response->setData(
             [
                 'user' => $categoryPermission->get(CategoryPermission::USER, $categories),
                 'group' => $categoryPermission->get(CategoryPermission::GROUP, $categories)
@@ -66,9 +70,10 @@ switch ($ajaxAction) {
         $postData = json_decode(file_get_contents('php://input', true));
 
         if (!Token::getInstance()->verifyToken('category', $postData->csrf)) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         $category = new Category($faqConfig, [], false);
@@ -101,9 +106,9 @@ switch ($ajaxAction) {
             $order++;
         }
 
-        $http->sendJsonWithHeaders(
+        $response->setData(
             ['success' => Translation::get('ad_categ_save_order')]
         );
-
+        $response->send();
         break;
 }

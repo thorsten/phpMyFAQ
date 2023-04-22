@@ -27,10 +27,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
-use phpMyFAQ\Helper\HttpHelper as HelperHttp;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session;
@@ -45,6 +43,9 @@ use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
 use phpMyFAQ\Utils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 //
 // Define the named constant used as a check by any included PHP file
@@ -57,15 +58,17 @@ const IS_VALID_PHPMYFAQ = null;
 require __DIR__ . '/src/Bootstrap.php';
 
 //
+// Create Request
+//
+$request = Request::createFromGlobals();
+
+//
 // Send headers and print template
 //
-$http = new HelperHttp();
-$http->setConfiguration($faqConfig);
-$http->setContentType('text/html');
-$http->addHeader();
-$http->startCompression();
+$response = new Response();
+$response->headers->set('Content-Type', 'text/html');
 
-$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_SPECIAL_CHARS);
+$showCaptcha = Filter::filterVar($request->query->get('gen'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 //
 // Get language (default: english)
@@ -77,7 +80,6 @@ $faqConfig->setLanguage($Language);
 if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
     $faqLangCode = 'en';
 }
-
 
 //
 // Set translation class
@@ -109,7 +111,7 @@ AttachmentFactory::init(
 //
 // Get user action
 //
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+$action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 //
 // Authenticate current user
@@ -118,12 +120,12 @@ $auth = false;
 $error = null;
 $loginVisibility = 'hidden';
 
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
-$faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_SPECIAL_CHARS);
-$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_VALIDATE_BOOLEAN);
-$token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
-$userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+$faqusername = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+$faqpassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqaction = Filter::filterVar($request->request->get('faqloginaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
+$token = Filter::filterVar($request->request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
+$userid = Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_INT);
 
 //
 // Set username via SSO
@@ -136,8 +138,8 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 //
 // Get CSRF Token
 //
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
+$csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)) {
     $csrfChecked = true;
 } else {
     $csrfChecked = false;
@@ -146,7 +148,7 @@ if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken)) {
 //
 // Validating token from 2FA if given; else: returns error message
 //
-if (!is_null($token) && !is_null($userid)) {
+if ($token !== '' && $userid !== '') {
     if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userid);
@@ -170,7 +172,7 @@ if (!isset($user)) {
 }
 
 // Login via local DB or LDAP or SSO
-if (!is_null($faqusername) && !is_null($faqpassword)) {
+if ($faqusername !== '' && $faqpassword !== '') {
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($rememberMe ?? false);
     try {
@@ -221,8 +223,8 @@ if ($csrfChecked && 'logout' === $action && $auth) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sidGet = Filter::filterInput(INPUT_GET, Session::PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sidGet = Filter::filterVar($request->query->get(Session::PMF_GET_KEY_NAME_SESSIONID), FILTER_VALIDATE_INT);
+$sidCookie = Filter::filterVar($request->cookies->get(Session::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);
 
@@ -284,10 +286,10 @@ if ($faqConfig->get('main.enableUserTracking')) {
 //
 // Found an article language?
 //
-$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
-if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
-    if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
+$lang = Filter::filterVar($request->request->get('artlang'), FILTER_SANITIZE_SPECIAL_CHARS);
+if ($lang !== '' && !Language::isASupportedLanguage($lang)) {
+    $lang = Filter::filterVar($request->query->get('artlang'), FILTER_SANITIZE_SPECIAL_CHARS);
+    if ($lang !== '' && !Language::isASupportedLanguage($lang)) {
         $lang = $faqLangCode;
     }
 }
@@ -302,7 +304,7 @@ if (!Language::isASupportedLanguage($lang)) {
 //
 // Found a search string?
 //
-$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS, '');
+$searchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
 //
 // Create a new FAQ object
@@ -335,7 +337,7 @@ $currentPageUrl = Strings::htmlentities($faqLink->getCurrentUrl());
 //
 // Found a record ID?
 //
-$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 if (!is_null($id)) {
     $faq->getRecord($id);
     $title = ' - ' . $faq->faqRecord['title'];
@@ -362,8 +364,8 @@ if (!is_null($id)) {
 //
 // found a solution ID?
 //
-$solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
-if (!is_null($solutionId)) {
+$solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
+if ($solutionId) {
     $title = ' - ' . System::getPoweredByString();
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
@@ -388,16 +390,16 @@ if (!is_null($solutionId)) {
 //
 // Handle the Tagging ID
 //
-$tag_id = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
-if (!is_null($tag_id)) {
-    $title = ' - ' . $oTag->getTagNameById($tag_id);
+$taggingId = Filter::filterVar($request->query->get('tagging_id'), FILTER_VALIDATE_INT);
+if (!is_null($taggingId)) {
+    $title = ' - ' . $oTag->getTagNameById($taggingId);
     $keywords = '';
 }
 
 //
 // Handle the SiteMap
 //
-$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_SPECIAL_CHARS);
+$letter = Filter::filterVar($request->query->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $title = ' - ' . $letter . '...';
     $keywords = $letter;
@@ -406,7 +408,7 @@ if (!is_null($letter) && (1 == Strings::strlen($letter))) {
 //
 // Found a category ID?
 //
-$cat = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+$cat = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, 0);
 $categoryFromId = -1;
 if (is_numeric($id) && $id > 0) {
     $categoryFromId = $category->getCategoryIdFromFaq($id);
@@ -775,8 +777,11 @@ if ('artikel' === $action) {
         $lang
     );
     $link = new Link($url, $faqConfig);
-    $http->setStatus(301);
-    $http->redirect($link->toString());
+    $link->itemTitle = $faq->getRecordTitle($id);
+    $response = new RedirectResponse($link->toString());
+    $response->setStatusCode(Response::HTTP_MOVED_PERMANENTLY);
+    $response->isRedirect($link->toString());
+    $response->send();
     exit();
 }
 
@@ -799,7 +804,7 @@ $template->merge('mainPageContent', 'index');
 //
 // Check for 404 HTTP status code
 //
-if ($http->getStatusCode() === 404 || $action === '404') {
+if ($response->getStatusCode() === 404 || $action === '404') {
     $template = new Template(
         [
             'index' => '404.html',
@@ -811,6 +816,7 @@ if ($http->getStatusCode() === 404 || $action === '404') {
     $template->parse('index', array_merge($tplMainPage, $tplNavigation));
 }
 
-$template->render();
+$response->setContent($template->render());
+$response->send();
 
 $faqConfig->getDb()->close();

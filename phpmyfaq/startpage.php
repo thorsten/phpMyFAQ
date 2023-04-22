@@ -21,6 +21,7 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,7 +31,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new News($faqConfig);
 $categoryHelper = new CategoryHelper();
 $plr = new Plurals();
-$archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
+
+$request = Request::createFromGlobals();
+$archived = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
 
 if (!is_null($archived)) {
     $writeNewsHeader = Translation::get('newsArchive');

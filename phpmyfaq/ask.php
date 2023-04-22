@@ -21,6 +21,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,14 +33,12 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGue
     header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
 }
 
+$request = Request::createFromGlobals();
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
-if (!is_null($showCaptcha)) {
-    try {
-        $captcha->drawCaptchaImage();
-    } catch (Exception) {
-    }
+if ($showCaptcha !== '') {
+    $captcha->drawCaptchaImage();
     exit;
 }
 
@@ -51,7 +50,7 @@ try {
 
 $category->buildCategoryTree();
 
-$categoryId = Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT, 0);
+$categoryId = Filter::filterVar($request->query->get('category_id'), FILTER_VALIDATE_INT, 0);
 
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);

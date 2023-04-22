@@ -17,9 +17,9 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
-use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,7 +32,8 @@ try {
     // @todo handle the exception
 }
 
-$page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+$request = Request::createFromGlobals();
+$page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 
 $glossary = new Glossary($faqConfig);
 $glossaryItems = $glossary->getAllGlossaryItems();

@@ -16,24 +16,28 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Session\Token;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
-$upload = Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$upload = Filter::filterVar($request->query->get('image'), FILTER_VALIDATE_INT);
 $uploadedFile = $_FILES['upload'] ?? '';
 
 $csrfOkay = true;
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!Token::getInstance()->verifyToken('edit-faq', $csrfToken)) {
     $csrfOkay = false;
@@ -49,19 +53,19 @@ if ($ajaxAction === 'upload') {
         if (is_uploaded_file($temp['tmp_name'])) {
             if (isset($_SERVER['HTTP_ORIGIN'])) {
                 if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
-                    $http->sendCorsHeader();
+                    $response->headers->set('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN']);
                 }
             }
 
             // Sanitize input
             if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 return;
             }
 
             // Verify extension
             if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 return;
             }
 
@@ -70,11 +74,14 @@ if ($ajaxAction === 'upload') {
             move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
 
             // Respond to the successful upload with JSON with the full URL of the uploaded image.
-            $http->sendJsonWithHeaders(['location' => $faqConfig->getDefaultUrl() . 'images/' . $fileName]);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['location' => $faqConfig->getDefaultUrl() . 'images/' . $fileName]);
         } else {
-            $http->setStatus(500);
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     } else {
-        $http->setStatus(401);
+        $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
     }
+
+    $response->send();
 }

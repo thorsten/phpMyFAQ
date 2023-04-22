@@ -16,27 +16,29 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Session;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
-// Send headers
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-switch ($ajaxAction) {
-    case 'user-visits-last-30-days':
-        if ($faqConfig->get('main.enableUserTracking')) {
-            $session = new Session($faqConfig);
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders($session->getLast30DaysVisits());
-        }
-        break;
+if ($ajaxAction === 'user-visits-last-30-days') {
+    if ($faqConfig->get('main.enableUserTracking')) {
+        $session = new Session($faqConfig);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($session->getLast30DaysVisits());
+        $response->send();
+    }
 }

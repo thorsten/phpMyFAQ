@@ -16,29 +16,32 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Entity\TagEntity as TagEntity;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-// Send headers
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 $oTag = new Tags($faqConfig);
 
 switch ($ajaxAction) {
     case 'list':
-        $autoCompleteValue = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+        $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($autoCompleteValue)) {
             if (strpos($autoCompleteValue, ',')) {
@@ -62,16 +65,18 @@ switch ($ajaxAction) {
                 }
             }
 
-            $http->sendJsonWithHeaders($tagNames);
+            $response->setData($tagNames);
         }
+        $response->send();
         break;
 
     case 'update':
         $postData = json_decode(file_get_contents('php://input', true));
 
         if (!Token::getInstance()->verifyToken('tags', $postData->csrf)) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
             exit(1);
         }
 
@@ -83,11 +88,12 @@ switch ($ajaxAction) {
         $entity->setName($newTag);
 
         if ($oTag->updateTag($entity)) {
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders(['updated' => Translation::get('ad_entryins_suc')]);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['updated' => Translation::get('ad_entryins_suc')]);
         } else {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => Translation::get('ad_entryins_fail')]);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('ad_entryins_fail')]);
         }
+        $response->send();
         break;
 }

@@ -20,9 +20,11 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
@@ -36,7 +38,12 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
-$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$request = Request::createFromGlobals();
+
+$action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 
@@ -46,10 +53,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
 
     $dbHelper = new DatabaseHelper($faqConfig);
     $backup = new Backup($faqConfig, $dbHelper);
-
-    $httpHelper = new HttpHelper();
-    $httpHelper->addHeader();
-    $httpHelper->addExtraHeader('Content-Type: application/octet-stream');
 
     switch ($action) {
         case 'backup_content':
@@ -80,10 +83,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
             $backupQueries = $backup->generateBackupQueries($tableNames);
             try {
                 $backupFileName = $backup->createBackup(BackupType::BACKUP_TYPE_DATA->value, $backupQueries);
-                $header = sprintf('Content-Disposition: attachment; filename=%s', urlencode($backupFileName));
-                $httpHelper->addExtraHeader($header);
 
-                echo $backupQueries;
+                $response = new Response($backupQueries);
+
+                $disposition = HeaderUtils::makeDisposition(
+                    HeaderUtils::DISPOSITION_ATTACHMENT,
+                    urlencode($backupFileName)
+                );
+
+                $response->headers->set('Content-Type', 'application/octet-stream');
+                $response->headers->set('Content-Disposition', $disposition);
+
+                $response->send();
             } catch (SodiumException) {
                 // Handle exception
             }
@@ -92,10 +103,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
             $backupQueries = $backup->generateBackupQueries($tableNames);
             try {
                 $backupFileName = $backup->createBackup(BackupType::BACKUP_TYPE_LOGS->value, $backupQueries);
-                $header = sprintf('Content-Disposition: attachment; filename=%s', urlencode($backupFileName));
-                $httpHelper->addExtraHeader($header);
 
-                echo $backupQueries;
+                $response = new Response($backupQueries);
+
+                $disposition = HeaderUtils::makeDisposition(
+                    HeaderUtils::DISPOSITION_ATTACHMENT,
+                    urlencode($backupFileName)
+                );
+
+                $response->headers->set('Content-Type', 'application/octet-stream');
+                $response->headers->set('Content-Disposition', $disposition);
+
+                $response->send();
             } catch (SodiumException) {
                 // Handle exception
             }

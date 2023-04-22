@@ -27,9 +27,10 @@
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 const PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
 const PMF_SITEMAP_GOOGLE_GET_GZIP = 'gz';
@@ -126,7 +127,8 @@ foreach ($items as $item) {
 
 $siteMap .= '</urlset>';
 
-$getGzip = Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
+$request = Request::createFromGlobals();
+$getGzip = Filter::filterVar($request->query->get(PMF_SITEMAP_GOOGLE_GET_GZIP), FILTER_VALIDATE_INT);
 if ((1 === $getGzip)) {
     if (function_exists('gzencode')) {
         $sitemapGz = gzencode($siteMap);
@@ -135,8 +137,10 @@ if ((1 === $getGzip)) {
         header('Content-Length: ' . strlen($sitemapGz));
         echo $sitemapGz;
     } else {
-        $http = new HttpHelper();
-        $http->setStatus(404);
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $response->send();
+        exit();
     }
 } else {
     header('Content-Type: text/xml');

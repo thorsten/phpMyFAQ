@@ -18,7 +18,6 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
@@ -88,13 +87,6 @@ $category->buildCategoryTree();
 $faqPermission = new FaqPermission($faqConfig);
 $faqSearch = new Search($faqConfig);
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
-
-//
-// Send headers
-//
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
 
 //
 // Handle the search requests

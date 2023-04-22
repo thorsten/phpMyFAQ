@@ -21,17 +21,21 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$selectedCategoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$request = Request::createFromGlobals();
+$selectedCategoryId = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
 $subCategoryContent = '';
 
 if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCategoryId])) {
-    $http->setStatus(404);
+    $response = new Response();
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 
 $categoryHelper = new CategoryHelper();

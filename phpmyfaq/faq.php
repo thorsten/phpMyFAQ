@@ -28,7 +28,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\AttachmentHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
-use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Rating;
@@ -42,6 +41,8 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -66,15 +67,17 @@ $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
-if (!is_null($showCaptcha)) {
+if ($showCaptcha !== '') {
     $captcha->drawCaptchaImage();
     exit;
 }
 
 $currentCategory = $cat;
 
-$faqId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
+$request = Request::createFromGlobals();
+$faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
+$solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
+$highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Get all data from the FAQ record
 if (0 === (int)$solutionId) {
@@ -116,7 +119,6 @@ $answer = $glossary->insertItemsIntoContent($answer);
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
-$highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_SPECIAL_CHARS);
 if (
     !is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen(
         $highlight
@@ -280,7 +282,8 @@ $faqServices->setQuestion($faq->getRecordTitle($id));
 
 // Check if category ID and FAQ ID are linked together
 if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
-    $http->setStatus(404);
+    $response = new Response();
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 
 // Check if author name should be visible according to GDPR option

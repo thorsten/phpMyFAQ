@@ -24,6 +24,7 @@ use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -41,7 +42,8 @@ if (!empty($_SESSION['access_token'])) {
     $content = $connection->get('account/verify_credentials');
 }
 
-$configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_SPECIAL_CHARS, 'main');
+$request = Request::createFromGlobals();
+$configMode = Filter::filterVar($request->query->get('conf'), FILTER_SANITIZE_SPECIAL_CHARS, 'main');
 
 /**
  * @param mixed  $key

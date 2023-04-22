@@ -18,55 +18,59 @@
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
-$attId = Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
-$recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_SANITIZE_SPECIAL_CHARS);
-$recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_SPECIAL_CHARS);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$attId = Filter::filterVar($request->query->get('attId'), FILTER_VALIDATE_INT);
+$recordId = Filter::filterVar($request->request->get('record_id'), FILTER_SANITIZE_SPECIAL_CHARS);
+$recordLang = Filter::filterVar($request->request->get('record_lang'), FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 switch ($ajaxAction) {
     case 'delete':
         $deleteData = json_decode(file_get_contents('php://input', true));
         try {
-            $attachment = AttachmentFactory::create($deleteData->attId);
-
             if (!Token::getInstance()->verifyToken('delete-attachment', $deleteData->csrf)) {
-                $http->setStatus(401);
-                $result = ['error' => Translation::get('err_NotAuth')];
-                exit(1);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
+                $response->send();
+                exit();
             }
 
+            $attachment = AttachmentFactory::create($deleteData->attId);
             if ($attachment->delete()) {
-                $http->setStatus(200);
+                $response->setStatusCode(Response::HTTP_OK);
                 $result = ['success' => Translation::get('msgAttachmentsDeleted')];
             } else {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = ['error' => Translation::get('ad_att_delfail')];
             }
-            $http->sendJsonWithHeaders($result);
-        } catch (AttachmentException | JsonException $e) {
-            $http->setStatus(500);
+        } catch (AttachmentException $e) {
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
             $result = ['error' => $e->getMessage()];
         }
+        $response->setData($result);
+        $response->send();
         break;
 
     case 'upload':
         if (!isset($_FILES['filesToUpload'])) {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             return;
         }
 
@@ -96,13 +100,15 @@ switch ($ajaxAction) {
                     'faqLanguage' => $recordLang
                 ];
             } else {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders('The image is too large.');
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData('The image is too large.');
+                $response->send();
                 return;
             }
         }
 
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($uploadedFiles);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($uploadedFiles);
+        $response->send();
         break;
 }

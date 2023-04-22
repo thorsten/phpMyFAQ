@@ -22,7 +22,6 @@ use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -46,7 +45,7 @@ $captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
 
-if (!is_null($showCaptcha)) {
+if ($showCaptcha !== '') {
     $captcha->drawCaptchaImage();
     exit;
 }

@@ -22,6 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -36,10 +37,12 @@ if (headers_sent()) {
 
 $attachmentErrors = [];
 
+$request = Request::createFromGlobals();
+
 // authenticate with session information
 [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
 
-$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 
 $faqPermission = new FaqPermission($faqConfig);
 

@@ -16,19 +16,24 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Permission\MediumPermission;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
-$groupId = Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$groupId = Filter::filterVar($request->query->get('group_id'), FILTER_VALIDATE_INT);
 
 if (
     $user->perm->hasPermission($user->getUserId(), 'add_user') ||
@@ -50,20 +55,20 @@ if (
                 'name' => $data['name'],
             ];
         }
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($groups);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($groups);
     }
 
     // Return the group data
     if ('get_group_data' == $ajaxAction) {
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($user->perm->getGroupData($groupId));
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($user->perm->getGroupData($groupId));
     }
 
     // Return the group rights
     if ('get_group_rights' == $ajaxAction) {
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($user->perm->getGroupRights($groupId));
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($user->perm->getGroupRights($groupId));
     }
 
     // Return all users
@@ -76,8 +81,8 @@ if (
                 'login' => $user->getLogin(),
             ];
         }
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($users);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($users);
     }
 
     // Returns all group members
@@ -91,7 +96,9 @@ if (
                 'login' => $user->getLogin(),
             ];
         }
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($members);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($members);
     }
+
+    $response->send();
 }

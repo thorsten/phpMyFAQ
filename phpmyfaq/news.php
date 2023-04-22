@@ -29,6 +29,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -40,21 +41,15 @@ $captcha->setSessionId($sids);
 
 $comment = new Comments($faqConfig);
 
-if (!is_null($showCaptcha)) {
-    try {
-        $captcha->drawCaptchaImage();
-    } catch (Exception) {
-        // handle exception
-    }
+if ($showCaptcha !== '') {
+    $captcha->drawCaptchaImage();
     exit;
 }
 
-$oNews = new News($faqConfig);
-$newsId = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
+$request = Request::createFromGlobals();
+$newsId = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
 
-if (is_null($newsId)) {
-    $http->setStatus(404);
-}
+$oNews = new News($faqConfig);
 
 try {
     $faqSession->userTracking('news_view', $newsId);

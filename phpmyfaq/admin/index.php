@@ -7,22 +7,21 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Bastian Poettner <bastian@poettner.net>
- * @author Meikel Katzengreis <meikel@katzengreis.com>
- * @author Minoru TODA <todam@netjapan.co.jp>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Bastian Poettner <bastian@poettner.net>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-09-16
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-09-16
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\AdminLog;
 use phpMyFAQ\Session\Token;
@@ -33,6 +32,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use Symfony\Component\HttpFoundation\Response;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
@@ -101,9 +101,9 @@ AttachmentFactory::init(
 $faqSystem = new System();
 
 //
-// Create a new HTTP Helper
+// Create a new Reponse
 //
-$http = new HttpHelper();
+$response = new Response();
 
 //
 // Create a new FAQ object
@@ -213,7 +213,9 @@ if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken) && $ac
     $auth = false;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
-        $http->redirect($ssoLogout);
+        $response->isRedirect($ssoLogout);
+        $response->send();
+        exit();
     }
 }
 //

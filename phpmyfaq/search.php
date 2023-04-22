@@ -30,6 +30,8 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -47,21 +49,22 @@ $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
 // Get possible user input
-$inputLanguage = Filter::filterInput(INPUT_GET, 'pmf-all-languages', FILTER_SANITIZE_SPECIAL_CHARS);
-$inputCategory = Filter::filterInput(INPUT_GET, 'pmf-search-category', FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
-$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_SANITIZE_SPECIAL_CHARS);
+$request = Request::createFromGlobals();
+$inputLanguage = Filter::filterVar($request->query->get('pmf-all-languages'), FILTER_SANITIZE_SPECIAL_CHARS);
+$inputCategory = Filter::filterVar($request->query->get('pmf-search-category'), FILTER_VALIDATE_INT, '%');
+$inputSearchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+$inputTag = Filter::filterVar($request->query->get('tagging_id'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!is_null($inputTag)) {
     $inputTag = str_replace(' ', '', (string) $inputTag);
     $inputTag = str_replace(',,', ',', $inputTag);
 }
 
-$searchTerm = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
-$page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+$searchTerm = Filter::filterVar($request->request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+$page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
-if (!is_null($inputLanguage)) {
+if ($inputLanguage !== '') {
     $allLanguages = true;
     $languages = '&amp;langs=all';
 } else {
@@ -92,7 +95,7 @@ $tagSearch = false;
 //
 // Handle the Tagging ID
 //
-if (!is_null($inputTag) && '' !== $inputTag) {
+if ('' !== $inputTag) {
     $tagSearch = true;
     $tags = [];
     $tagIds = explode(',', $inputTag);
@@ -147,11 +150,11 @@ if (!is_null($inputTag) && '' !== $inputTag) {
 //
 // Handle the full text search stuff
 //
-if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
-    if (!is_null($inputSearchTerm)) {
+if ($inputSearchTerm !== '' || $searchTerm !== '') {
+    if ($inputSearchTerm !== '') {
         $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $inputSearchTerm));
     }
-    if (!is_null($searchTerm)) {
+    if ($searchTerm !== '') {
         $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $searchTerm));
     }
 
@@ -198,11 +201,13 @@ if (
     ) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 0 < $faqSearchResult->getNumberOfResults(
     ) && $faqConfig->get('search.searchForSolutionId')
 ) {
+    $response = new Response();
     if ($faqConfig->get('main.enableRewriteRules')) {
-        $http->redirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
+        $response->isRedirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     } else {
-        $http->redirect($faqConfig->getDefaultUrl() . 'index.php?solution_id=' . $inputSearchTerm);
+        $response->isRedirect($faqConfig->getDefaultUrl() . 'index.php?solution_id=' . $inputSearchTerm);
     }
+    $response->send();
     exit();
 }
 

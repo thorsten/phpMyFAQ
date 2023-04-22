@@ -17,7 +17,8 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -26,12 +27,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $postData = json_decode(file_get_contents('php://input', true));
 
-$answer = Filter::filterVar($postData->text, FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Response
+//
+$response = new JsonResponse();
 
-$http = new HttpHelper();
-$http->addHeader();
+$answer = Filter::filterVar($postData->text, FILTER_SANITIZE_SPECIAL_CHARS);
 
 $parseDown = new ParsedownExtra();
 
-$http->setStatus(200);
-$http->sendJsonWithHeaders(['success' => $parseDown->text($answer)]);
+$response->setStatusCode(Response::HTTP_OK);
+$response->setData(['success' => $parseDown->text($answer)]);
+$response->send();

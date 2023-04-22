@@ -20,6 +20,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,7 +33,8 @@ try {
     // @todo handle the exception
 }
 
-$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_SPECIAL_CHARS);
+$request = Request::createFromGlobals();
+$letter = Filter::filterVar($request->query->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $currentLetter = strtoupper(Strings::substr($letter, 0, 1));
 } else {

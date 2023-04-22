@@ -16,39 +16,46 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 $search = new Search($faqConfig);
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
 
 if ($ajaxAction === 'delete_searchterm') {
     $deleteData = json_decode(file_get_contents('php://input', true));
 
     if (!Token::getInstance()->verifyToken('delete-searchterms', $deleteData->csrf)) {
-        $http->setStatus(400);
-        $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $response->setData(['error' => Translation::get('err_NotAuth')]);
+        $response->send();
         exit(1);
     }
 
     $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
 
     if ($search->deleteSearchTermById($searchId)) {
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders(['deleted' => $searchId]);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(['deleted' => $searchId]);
     } else {
-        $http->setStatus(400);
-        $http->sendJsonWithHeaders(['error' => $searchId]);
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $response->setData(['error' => $searchId]);
     }
+    $response->send();
 }

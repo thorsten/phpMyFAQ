@@ -22,7 +22,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\AdminLog;
@@ -31,21 +30,26 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 $csrfTokenPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 $csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
-
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
 
 $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : [];
 
@@ -60,13 +64,14 @@ switch ($ajaxAction) {
 
         $faqPermission = new FaqPermission($faqConfig);
 
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders(
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(
             [
                 'user' => $faqPermission->get(FaqPermission::USER, $faqId),
                 'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
             ]
         );
+        $response->send();
         break;
 
     // save active FAQs
@@ -89,12 +94,14 @@ switch ($ajaxAction) {
                         $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
                     }
                 }
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(['success' => $success]);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => $success]);
             }
         } else {
-            echo Translation::get('err_NotAuth');
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
         }
+        $response->send();
         break;
 
     // save sticky FAQs
@@ -116,13 +123,14 @@ switch ($ajaxAction) {
                         $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
                     }
                 }
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(['success' => $success]);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => $success]);
             }
         } else {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
         }
+        $response->send();
         break;
 
     // search FAQs for suggestions
@@ -149,15 +157,16 @@ switch ($ajaxAction) {
                 $searchHelper = new SearchHelper($faqConfig);
                 $searchHelper->setSearchTerm($searchString);
 
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(
                     ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult) ]
                 );
             }
         } else {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
         }
+        $response->send();
         break;
 
     // delete FAQs
@@ -177,15 +186,17 @@ switch ($ajaxAction) {
             try {
                 $faq->deleteRecord($recordId, $recordLang);
             } catch (FileException | AttachmentException $e) {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $e->getMessage()]);
+                $response->send();
             }
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders(['success' => Translation::get('ad_entry_delsuc') ]);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_entry_delsuc') ]);
         } else {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
         }
+        $response->send();
         break;
 
     // delete open questions
@@ -193,15 +204,14 @@ switch ($ajaxAction) {
         $deleteData = json_decode(file_get_contents('php://input', true));
 
         if (!Token::getInstance()->verifyToken('delete-questions', $deleteData->data->{'pmf-csrf-token'})) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
             exit(1);
         }
 
         if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
             $questionIds = $deleteData->data->{'questions[]'};
             $question = new Question($faqConfig);
-
 
             if (!is_null($questionIds)) {
                 if (!is_array($questionIds)) {
@@ -211,12 +221,13 @@ switch ($ajaxAction) {
                     $question->deleteQuestion((int)$questionId);
                 }
 
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(['success' => Translation::get('ad_open_question_deleted')]);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('ad_open_question_deleted')]);
             } else {
-                $http->setStatus(401);
-                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
             }
+            $response->send();
         }
         break;
 }

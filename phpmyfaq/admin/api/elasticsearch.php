@@ -19,24 +19,28 @@ use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 $elasticsearch = new Elasticsearch($faqConfig);
 
 $esConfigData = $faqConfig->getElasticsearchConfig();
-
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
 
 $result = [];
 
@@ -44,10 +48,10 @@ switch ($ajaxAction) {
     case 'create':
         try {
             $esResult = $elasticsearch->createIndex();
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $result = ['success' => Translation::get('ad_es_create_index_success')];
         } catch (Exception $e) {
-            $http->setStatus(409);
+            $response->setStatusCode(Response::HTTP_CONFLICT);
             $result = ['error' => $e->getMessage()];
         }
         break;
@@ -55,10 +59,10 @@ switch ($ajaxAction) {
     case 'drop':
         try {
             $esResult = $elasticsearch->dropIndex();
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $result = ['success' => Translation::get('ad_es_drop_index_success')];
         } catch (Exception $e) {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = ['error' => $e->getMessage()];
         }
         break;
@@ -68,9 +72,10 @@ switch ($ajaxAction) {
         $faq->getAllRecords();
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
         if (isset($bulkIndexResult['success'])) {
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $result = ['success' => Translation::get('ad_es_create_import_success')];
         } else {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = ['error' => $bulkIndexResult];
         }
         break;
@@ -78,15 +83,17 @@ switch ($ajaxAction) {
     case 'stats':
         $indexName = $esConfigData['index'];
         try {
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $result = [
                 'index' => $indexName,
                 'stats' => $faqConfig->getElasticsearch()->indices()->stats(['index' => $indexName])->asArray()
             ];
         } catch (ClientResponseException | ServerResponseException $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = ['error' => $e->getMessage()];
         }
         break;
 }
 
-$http->sendJsonWithHeaders($result);
+$response->setData($result);
+$response->send();

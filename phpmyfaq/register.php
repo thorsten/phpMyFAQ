@@ -39,7 +39,7 @@ try {
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
-if (!is_null($showCaptcha)) {
+if ($showCaptcha !== '') {
     $captcha->drawCaptchaImage();
     exit;
 }

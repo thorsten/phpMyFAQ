@@ -23,13 +23,13 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Export\Pdf;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 const IS_VALID_PHPMYFAQ = null;
 
@@ -82,9 +82,10 @@ Strings::init($faqLangCode);
 // Get current user and group id - default: -1
 [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-$currentCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$getAll = Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
+$request = Request::createFromGlobals();
+$currentCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
+$id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
+$getAll = Filter::filterVar($request->query->get('getAll'), FILTER_VALIDATE_BOOLEAN, false);
 
 $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
@@ -98,25 +99,24 @@ try {
 } catch (Exception) {
     // handle exception
 }
-$http = new HttpHelper();
+
+$response = new Response();
 
 if (true === $getAll) {
     $category->buildCategoryTree();
 }
+
 $tags = new Tags($faqConfig);
 
-$headers = [
-    'Pragma: no-cache',
-    'Expires: 0',
-    'Cache-Control: no-store',
-];
+$response->setExpires(new DateTime());
 
 if (true === $getAll && $user->perm->hasPermission($user->getUserId(), 'export')) {
     $filename = 'FAQs.pdf';
     $pdfFile = $pdf->generate(0, true, $lang);
 } else {
     if (is_null($currentCategory) || is_null($id)) {
-        $http->redirect($faqConfig->getDefaultUrl());
+        $response->isRedirect($faqConfig->getDefaultUrl());
+        $response->send();
         exit();
     }
 
@@ -127,12 +127,6 @@ if (true === $getAll && $user->perm->hasPermission($user->getUserId(), 'export')
     $pdfFile = $pdf->generateFile($faq->faqRecord, $filename);
 }
 
-if (preg_match('/MSIE/i', (string) $_SERVER['HTTP_USER_AGENT'])) {
-    $headers[] = 'Content-type: application/pdf';
-    $headers[] = 'Content-Transfer-Encoding: binary';
-    $headers[] = 'Content-Disposition: attachment; filename=' . $filename;
-} else {
-    $headers[] = 'Content-Type: application/pdf';
-}
-
-$http->sendWithHeaders($pdfFile, $headers);
+$response->headers->set('Content-Type', 'application/pdf');
+$response->setContent($pdfFile);
+$response->send();

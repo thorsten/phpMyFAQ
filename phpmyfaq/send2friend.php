@@ -18,29 +18,31 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$http = new HttpHelper();
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 if (!$faqConfig->get('main.enableSendToFriend')) {
-    $http->setStatus(403);
-    $http->redirect($faqConfig->getDefaultUrl());
+    $response = new Response();
+    $response->setStatusCode(Response::HTTP_FORBIDDEN);
+    $response->isRedirect($faqConfig->getDefaultUrl());
+    $response->send();
+    exit();
 }
 
-
-if (!is_null($showCaptcha)) {
+if ($showCaptcha !== '') {
     $captcha->drawCaptchaImage();
     exit;
 }
@@ -51,16 +53,17 @@ try {
     // @todo handle the exception
 }
 
-$cat = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$faqLanguage = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
+$request = Request::createFromGlobals();
+$faqCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
+$faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
+$faqLanguage = Filter::filterVar($request->query->get('artlang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 $send2friendLink = sprintf(
     '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
     $faqConfig->getDefaultUrl(),
-    (int)$cat,
-    (int)$id,
-    urlencode((string) $faqLanguage)
+    $faqCategory,
+    $faqId,
+    urlencode($faqLanguage)
 );
 
 

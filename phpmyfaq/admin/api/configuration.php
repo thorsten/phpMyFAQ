@@ -21,7 +21,6 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Entity\TemplateMetaDataEntity;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
@@ -32,6 +31,9 @@ use phpMyFAQ\Template\TemplateMetaData;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -39,14 +41,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
-$instanceId = Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
-$stopwordId = Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword = Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_SPECIAL_CHARS);
-$stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_SPECIAL_CHARS);
-$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
-$http = new HttpHelper();
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$instanceId = Filter::filterVar($request->query->get('instanceId'), FILTER_VALIDATE_INT);
+$stopwordId = Filter::filterVar($request->query->get('stopword_id'), FILTER_VALIDATE_INT);
+$stopword = Filter::filterVar($request->query->get('stopword'), FILTER_SANITIZE_SPECIAL_CHARS);
+$stopwordsLang = Filter::filterVar($request->query->get('stopwords_lang'), FILTER_SANITIZE_SPECIAL_CHARS);
+$csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+
 $stopWords = new StopWords($faqConfig);
 
 switch ($ajaxAction) {
@@ -54,9 +61,10 @@ switch ($ajaxAction) {
         $postData = json_decode(file_get_contents('php://input', true));
 
         if (!Token::getInstance()->verifyToken('add-instance', $postData->csrf)) {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         $url = Filter::filterVar($postData->url, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -67,8 +75,9 @@ switch ($ajaxAction) {
         $password = Filter::filterVar($postData->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => 'Cannot create instance.']);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'Cannot create instance.']);
+            $response->send();
             exit(1);
         }
 
@@ -95,8 +104,9 @@ switch ($ajaxAction) {
             try {
                 $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
             } catch (Exception $e) {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $e->getMessage()]);
+                $response->send();
                 exit(1);
             }
 
@@ -131,33 +141,35 @@ switch ($ajaxAction) {
             try {
                 $clientSetup->createAnonymousUser($faqConfig);
             } catch (Exception $e) {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $payload = ['error' => $e->getMessage()];
             }
 
             Database::setTablePrefix($DB['prefix']);
         } else {
             $faqInstance->removeInstance($instanceId);
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $payload = ['error' => 'Cannot create instance.'];
         }
         if (0 !== $instanceId) {
-            $http->setStatus(200);
+            $response->setStatusCode(Response::HTTP_OK);
             $payload = ['added' => $instanceId, 'url' => $data->getUrl()];
         } else {
-            $http->setStatus(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $payload = ['error' => $instanceId];
         }
-        $http->sendJsonWithHeaders($payload);
+        $response->setData($payload);
+        $response->send();
         break;
 
     case 'delete-instance':
         $postData = json_decode(file_get_contents('php://input', true));
 
         if (!Token::getInstance()->verifyToken('delete-instance', $postData->csrf)) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         $instanceId = Filter::filterVar($postData->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -170,22 +182,23 @@ switch ($ajaxAction) {
                 $client->deleteClientFolder($clientData->url) &&
                 $client->removeInstance($instanceId)
             ) {
-                $http->setStatus(200);
+                $response->setStatusCode(Response::HTTP_OK);
                 $payload = ['deleted' => $instanceId];
             } else {
-                $http->setStatus(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $payload = ['error' => $instanceId];
             }
-            $http->sendJsonWithHeaders($payload);
+            $response->setData($payload);
+            $response->send();
         }
         break;
 
     case 'load_stop_words_by_lang':
         if (Language::isASupportedLanguage($stopwordsLang)) {
             $stopWordsList = $stopWords->getByLang($stopwordsLang);
-
-            $payload = $stopWordsList;
-            $http->sendJsonWithHeaders($payload);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData($stopWordsList);
+            $response->send();
         }
         break;
 
@@ -196,19 +209,20 @@ switch ($ajaxAction) {
         $stopWordsLang = Filter::filterVar($deleteData->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('stopwords', $deleteData->csrf)) {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
             $stopWords
                 ->setLanguage($stopWordsLang)
                 ->remove((int)$stopWordId);
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders(['deleted' => $stopWordId ]);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['deleted' => $stopWordId ]);
+            $response->send();
         }
-
         break;
 
     case 'save_stop_word':
@@ -219,9 +233,10 @@ switch ($ajaxAction) {
         $stopWord = Filter::filterVar($postData->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('stopwords', $postData->csrf)) {
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         if (null != $stopWord && Language::isASupportedLanguage($stopWordsLang)) {
@@ -229,13 +244,14 @@ switch ($ajaxAction) {
 
             if (null !== $stopWordId && -1 < $stopWordId) {
                 $stopWords->update((int)$stopWordId, $stopWord);
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(['updated' => $stopWordId ]);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['updated' => $stopWordId ]);
             } elseif (!$stopWords->match($stopWord)) {
                 $stopWordId = $stopWords->add($stopWord);
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(['added' => $stopWordId ]);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['added' => $stopWordId ]);
             }
+            $response->send();
         }
         break;
 
@@ -243,9 +259,10 @@ switch ($ajaxAction) {
         $postData = json_decode(file_get_contents('php://input', true));
 
         if (!Token::getInstance()->verifyToken('add-metadata', $postData->csrf)) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         $meta = new TemplateMetaData($faqConfig);
@@ -261,11 +278,12 @@ switch ($ajaxAction) {
         if (0 !== $metaId) {
             $payload = ['added' => $metaId];
         } else {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $payload = ['error' => $metaId];
         }
 
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($payload);
+        $response->setData($payload);
+        $response->send();
         break;
 
     case 'delete-template-metadata':
@@ -273,9 +291,10 @@ switch ($ajaxAction) {
         $deleteData = json_decode($json);
 
         if (!Token::getInstance()->verifyToken('delete-meta-data', $deleteData->csrf)) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
         $meta = new TemplateMetaData($faqConfig);
@@ -284,11 +303,12 @@ switch ($ajaxAction) {
         if ($meta->delete((int)$metaId)) {
             $payload = ['deleted' => $metaId];
         } else {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $payload = ['error' => $metaId];
         }
 
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders($payload);
+        $response->setData($payload);
+        $response->send();
         break;
 
     case 'send-test-mail':
@@ -296,24 +316,27 @@ switch ($ajaxAction) {
         $postData = json_decode($json);
 
         if (!Token::getInstance()->verifyToken('configuration', $postData->csrf)) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
-            exit(1);
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
         }
 
-        $mailer = new Mail($faqConfig);
         try {
+            $mailer = new Mail($faqConfig);
             $mailer->setReplyTo($faqConfig->getAdminEmail());
             $mailer->addTo($faqConfig->getAdminEmail());
             $mailer->subject = $faqConfig->getTitle() . ': Mail test successful.';
             $mailer->message = 'It works on my machine. 🚀';
             $result = $mailer->send();
 
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders(['success' => $result]);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => $result]);
         } catch (Exception | TransportExceptionInterface $e) {
-            $http->setStatus(401);
-            $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => $e->getMessage()]);
         }
+
+        $response->send();
         break;
 }

@@ -16,26 +16,31 @@
  */
 
 use phpMyFAQ\Comments;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
 
 $deleteData = json_decode(file_get_contents('php://input', true));
 
 if ('delete' === $deleteData->data->ajaxaction && $user->perm->hasPermission($user->getUserId(), 'delcomment')) {
     if (!Token::getInstance()->verifyToken('delete-comment', $deleteData->data->{'pmf-csrf-token'})) {
-        $http->setStatus(401);
-        $result = ['error' => Translation::get('err_NotAuth')];
-        exit(1);
+        $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+        $response->setData(['error' => Translation::get('err_NotAuth')]);
+        $response->send();
+        exit();
     }
 
     $comment = new Comments($faqConfig);
@@ -51,10 +56,11 @@ if ('delete' === $deleteData->data->ajaxaction && $user->perm->hasPermission($us
             $success = $comment->delete($deleteData->type, $commentId);
         }
 
-        $http->setStatus(200);
-        $http->sendJsonWithHeaders(['success' => $success]);
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(['success' => $success]);
     } else {
-        $http->setStatus(401);
-        $http->sendJsonWithHeaders(['error' => false]);
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $response->setData(['error' => false]);
     }
+    $response->send();
 }

@@ -20,28 +20,32 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Create Request & Response
+//
+$response = new JsonResponse();
+$request = Request::createFromGlobals();
+
+$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 $userSearch = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_SPECIAL_CHARS);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-
-// Send headers
-$http = new HttpHelper();
-$http->setContentType('application/json');
-$http->addHeader();
 
 if (
     $user->perm->hasPermission($user->getUserId(), 'add_user') ||
@@ -59,7 +63,9 @@ if (
                 $users->value = (int)$singleUser['user_id'];
                 $allUsers[] = $users;
             }
-            $http->sendJsonWithHeaders($allUsers);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData($allUsers);
+            $response->send();
             break;
 
         case 'get_user_data':
@@ -72,7 +78,9 @@ if (
             } else {
                 $userdata = [];
             }
-            $http->sendJsonWithHeaders($userdata);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData($userdata);
+            $response->send();
             break;
 
         case 'get_all_user_data':
@@ -90,21 +98,23 @@ if (
                 $userObject->email = $user->getUserData('email');
                 $userData[] = $userObject;
             }
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders($userData);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData($userData);
+            $response->send();
             break;
 
         case 'get_user_rights':
             $user->getUserById($userId, true);
-            $http->sendJsonWithHeaders($user->perm->getUserRights($userId));
+            $response->setData($user->perm->getUserRights($userId));
             break;
 
         case 'activate_user':
             $postData = json_decode(file_get_contents('php://input', true));
 
             if (!Token::getInstance()->verifyToken('user', $postData->csrfToken)) {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
+                $response->send();
                 exit(1);
             }
 
@@ -113,22 +123,24 @@ if (
             $user->getUserById($userId, true);
             try {
                 if ($user->activateUser()) {
-                    $http->setStatus(200);
-                    $http->sendJsonWithHeaders(['success' => $user->getStatus()]);
+                    $response->setStatusCode(Response::HTTP_OK);
+                    $response->setData(['success' => $user->getStatus()]);
                 } else {
-                    $http->setStatus(400);
-                    $http->sendJsonWithHeaders(['error' => $user->getStatus()]);
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => $user->getStatus()]);
                 }
-            } catch (Exception $e) {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => $e->getMessage()]);
+            } catch (TransportExceptionInterface $e) {
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => $e->getMessage()]);
             }
+            $response->send();
             break;
 
         case 'add_user':
             if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
-                $http->setStatus(401);
-                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
+                $response->send();
                 exit(1);
             }
 
@@ -193,21 +205,24 @@ if (
                     ];
                 }
 
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders($successMessage);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData($successMessage);
+                $response->send();
                 exit(1);
             }
 
-            $http->setStatus(400);
-            $http->sendJsonWithHeaders($errorMessage);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData($errorMessage);
+            $response->send();
             break;
 
         case 'delete_user':
             $deleteData = json_decode(file_get_contents('php://input', true));
 
             if (!Token::getInstance()->verifyToken('delete-user', $deleteData->csrfToken)) {
-                $http->setStatus(401);
-                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
+                $response->send();
                 exit(1);
             }
 
@@ -232,49 +247,51 @@ if (
                     $message = Alert::success('ad_user_deleted');
                 }
             }
-            $http->setStatus(200);
-            $http->sendJsonWithHeaders($message);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData($message);
+            $response->send();
             break;
 
         case 'overwrite_password':
-            $json = file_get_contents('php://input', true);
-            $postData = json_decode($json);
+            $postData = json_decode(file_get_contents('php://input', true));
 
             $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
             $newPassword = Filter::filterVar($postData->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
             $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
-            var_dump($csrfToken);
-
             if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => Translation::get('err_NotAuth')]);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
+                $response->send();
                 exit(1);
             }
 
             if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => Translation::get('ad_passwd_fail')]);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => Translation::get('ad_passwd_fail')]);
+                $response->send();
                 exit(1);
             }
 
             $user->getUserById($userId, true);
+
             $auth = new Auth($faqConfig);
             $authSource = $auth->selectAuth($user->getAuthSource('name'));
             $authSource->selectEncType($user->getAuthData('encType'));
 
             if ($newPassword === $retypedPassword) {
                 if (!$user->changePassword($newPassword)) {
-                    $http->setStatus(400);
-                    $http->sendJsonWithHeaders(['error' => Translation::get('ad_passwd_fail')]);
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $response->setData(['error' => Translation::get('ad_passwd_fail')]);
+                    $response->send();
                 }
-                $http->setStatus(200);
-                $http->sendJsonWithHeaders(['success' => Translation::get('ad_passwdsuc')]);
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('ad_passwdsuc')]);
             } else {
-                $http->setStatus(400);
-                $http->sendJsonWithHeaders(['error' => Translation::get('ad_passwd_fail')]);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => Translation::get('ad_passwd_fail')]);
             }
-
+            $response->send();
             break;
     }
 }
