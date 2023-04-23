@@ -149,7 +149,7 @@ $PMF_LANG['msgMailContact'] = "Die Anfrage wurde an den Administrator versendet!
 
 // Fehlermeldungen
 $PMF_LANG['err_noDatabase'] = "Keine Datenbankverbindung möglich!";
-$PMF_LANG['err_noHeaders'] = "Keine Kategorie gefunden!";
+$PMF_LANG['err_noHeaders'] = "Keine Kategorie gefunden";
 $PMF_LANG['err_noArticles'] = "Es gibt noch keine Einträge.";
 $PMF_LANG['err_badID'] = "Fehlerhafte ID!";
 $PMF_LANG['err_noTopTen'] = "Derzeit sind keine beliebten FAQs verfügbar.";

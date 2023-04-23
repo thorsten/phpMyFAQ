@@ -217,7 +217,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     }
 
     if (count($faq->faqRecords) > 0) {
-        $old = 0;
+        $old = -1;
         $faqIds = [];
 
         $visits = new Visits($faqConfig);
@@ -261,9 +261,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             }
             $catInfo .= '';
 
-            if ($cid != $old) {
-                if ($old == 0) {
-                    printf('<a name="cat_%d"></a>', $cid);
+            if ($cid !== $old) {
+                if ($old === -1) {
+                    printf('<a id="cat_%d"></a>', $cid);
                 } else {
                     echo '</tbody></table></div></div></div>';
                 }
@@ -275,7 +275,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
                    aria-expanded="true" aria-controls="collapseOne" class="text-decoration-none">
                   <i class="icon fa fa-chevron-circle-right "></i>
-                <?= $category->getPath($cid) ?>
+                <?= $cid > 0 ? $category->getPath($cid) : Translation::get('err_noHeaders') ?>
                 </a>
               </h5>
             </div>
@@ -319,7 +319,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       </div>
                     </th>
                     <th>
-                      &nbsp;
                     </th>
                     <th class="align-middle">
                       <div class="form-check">
