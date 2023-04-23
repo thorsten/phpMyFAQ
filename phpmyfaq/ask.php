@@ -19,6 +19,7 @@ use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,8 +70,9 @@ $template->parse(
         'lang' => $Language->getLanguage(),
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+        'defaultContentName' =>
+            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgAskCategory' => Translation::get('msgAskCategory'),
         'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
         'msgAskYourQuestion' => Translation::get('msgAskYourQuestion'),

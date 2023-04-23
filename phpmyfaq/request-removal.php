@@ -47,10 +47,10 @@ $template->parse(
         'ad_user_loginname' => Translation::get('ad_user_loginname'),
         'csrf' => Token::getInstance()->getTokenInput('request-removal'),
         'lang' => $Language->getLanguage(),
-        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
         'defaultContentName' =>
-            ($user instanceof CurrentUser) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-        'defaultLoginName' => ($user instanceof CurrentUser) ? Strings::htmlentities($user->getLogin()) : '',
+            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
+        'defaultLoginName' => ($user->getUserId() > 0) ? Strings::htmlentities($user->getLogin()) : '',
         'msgMessage' => Translation::get('msgMessage'),
         'msgS2FButton' => Translation::get('msgS2FButton')
     ]

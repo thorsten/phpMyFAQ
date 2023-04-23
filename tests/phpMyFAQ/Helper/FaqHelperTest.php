@@ -63,7 +63,7 @@ class FaqHelperTest extends TestCase
     public function testCleanUpContent(): void
     {
         $content = '<p>Some text <script>alert("Hello, world!");</script><img src=foo onerror=alert(document.cookie)></p>';
-        $expectedOutput = '<p>Some text <img src="foo"></p>';
+        $expectedOutput = '<p>Some text <img /></p>';
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 

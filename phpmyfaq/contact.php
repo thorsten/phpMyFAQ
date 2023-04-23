@@ -55,8 +55,9 @@ $template->parse(
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'lang' => $Language->getLanguage(),
-        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+        'defaultContentName' =>
+            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgMessage' => Translation::get('msgMessage'),
         'msgS2FButton' => Translation::get('msgS2FButton'),
         'version' => $faqConfig->getVersion(),

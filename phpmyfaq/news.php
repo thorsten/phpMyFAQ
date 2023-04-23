@@ -140,8 +140,9 @@ $template->parse(
         'msgCommentHeader' => Translation::get('msgCommentHeader'),
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+        'defaultContentName' =>
+            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgYourComment' => Translation::get('msgYourComment'),
         'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
         'msgCancel' => Translation::get('ad_gen_cancel'),

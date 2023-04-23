@@ -17,8 +17,6 @@
 
 namespace phpMyFAQ\Helper;
 
-use DOMDocument;
-use DOMXPath;
 use Exception;
 use ParsedownExtra;
 use phpMyFAQ\Category;
@@ -32,6 +30,8 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 /**
  * Class FaqHelper
@@ -164,12 +164,14 @@ class FaqHelper extends Helper
         if (count($faq->faqRecords)) {
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
-                if ($data['category_id'] !== $lastCategory) {
+                if (!is_null($data['category_id']) && $data['category_id'] !== $lastCategory) {
                     $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
                 }
 
                 $output .= sprintf('<h4>%s</h4>', Strings::htmlentities($data['title']));
-                $output .= sprintf('<article>%s</article>', $data['content']);
+                if (!empty($data['content'])) {
+                    $output .= sprintf('<article>%s</article>', $this->cleanUpContent($data['content']));
+                }
                 $output .= sprintf(
                     '<p>%s: %s<br>%s',
                     Translation::get('msgAuthor'),
@@ -237,23 +239,10 @@ class FaqHelper extends Helper
      */
     public function cleanUpContent(string $content): string
     {
-        $document = new DOMDocument();
-        $document->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $htmlSanitizer = new HtmlSanitizer(
+            (new HtmlSanitizerConfig())->allowSafeElements()
+        );
 
-        $scriptTags = $document->getElementsByTagName('script');
-
-        for ($i = 0; $i < $scriptTags->length; $i++) {
-            $scriptTags->item($i)->parentNode->removeChild($scriptTags->item($i));
-        }
-
-        $xpath = new DOMXPath($document);
-        $onAttributes = $xpath->query("//*/@*[starts-with(name(), 'on')]");
-        foreach ($onAttributes as $onAttribute) {
-            $onAttribute->ownerElement->removeAttributeNode($onAttribute);
-        }
-
-        $body = $xpath->query('body')->item(0);
-
-        return preg_replace(['/\r/', '/\n/'], '', $document->saveHTML($body));
+        return $htmlSanitizer->sanitize($content);
     }
 }

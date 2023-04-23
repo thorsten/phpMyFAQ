@@ -75,8 +75,9 @@ $template->parse(
         'msgS2FReferrer' => 'link',
         'msgS2FName' => Translation::get('msgS2FName'),
         'msgS2FEMail' => Translation::get('msgS2FEMail'),
-        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+        'defaultContentName' =>
+            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgS2FFriends' => Translation::get('msgS2FFriends'),
         'msgS2FEMails' => Translation::get('msgS2FEMails'),
         'msgS2FText' => Translation::get('msgS2FText'),

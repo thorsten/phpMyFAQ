@@ -100,7 +100,8 @@ $template->parse(
         'lang' => $Language->getLanguage(),
         'openQuestionID' => $selectedQuestion,
         'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
+        'defaultContentName' =>
+            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
         'msgNewContentCategory' => Translation::get('msgNewContentCategory'),
