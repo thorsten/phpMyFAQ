@@ -1127,7 +1127,7 @@ class Category
     /**
      * Returns the user id of the category owner
      */
-    public function getOwner(int $categoryId): int
+    public function getOwner(int $categoryId = null): int
     {
         return $this->owner[$categoryId] ?? 1;
     }

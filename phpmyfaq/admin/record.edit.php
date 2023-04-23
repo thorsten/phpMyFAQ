@@ -228,15 +228,15 @@ if (
     }
 
     // Set data for forms
-    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlspecialchars($faqData['title']) : '');
+    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities($faqData['title']) : '');
     $faqData['content'] =
         (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)) : '');
-    $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlspecialchars($faqData['tags']) : '');
-    $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlspecialchars($faqData['keywords']) : '');
-    $faqData['author'] = (isset($faqData['author']) ? Strings::htmlspecialchars(
+    $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlentities($faqData['tags']) : '');
+    $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlentities($faqData['keywords']) : '');
+    $faqData['author'] = (isset($faqData['author']) ? Strings::htmlentities(
         $faqData['author']
     ) : $user->getUserData('display_name'));
-    $faqData['email'] = (isset($faqData['email']) ? Strings::htmlspecialchars($faqData['email']) : $user->getUserData(
+    $faqData['email'] = (isset($faqData['email']) ? Strings::htmlentities($faqData['email']) : $user->getUserData(
         'email'
     ));
     $faqData['isoDate'] = ($faqData['date'] ?? date('Y-m-d H:i'));
@@ -384,9 +384,12 @@ if (
                                 <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
                                 <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
                                 <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
-                                <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
-                                <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
+                                  <input type="hidden" name="notifyUser" id="notifyUser"
+                                         value="<?= Strings::htmlentities($notifyUser) ?>">
+                                  <input type="hidden" name="notifyEmail" id="notifyEmail"
+                                         value="<?= Strings::htmlentities($notifyEmail) ?>">
                                 <?= Token::getInstance()->getTokenInput('edit-faq') ?>
+
 
                                 <!-- Question -->
                                 <div class="form-group mb-2">
@@ -612,7 +615,7 @@ if (
                                                 <label class="form-check-label" for="restrictedusers">
                                                     <?= Translation::get('ad_entry_restricted_users') ?>
                                                 </label>
-                                                <select name="restricted_users" id="selected-user" class="form-control">
+                                                <select name="restricted_users" id="selected-user" class="form-select">
                                                     <?= $userHelper->getAllUserOptions($userPermission[0], false) ?>
                                                 </select>
                                             </div>

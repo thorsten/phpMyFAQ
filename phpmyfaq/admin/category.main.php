@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryImage;
+use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Component\Alert;
@@ -139,6 +140,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                             echo Alert::warning('ad_adus_dberr', $exception->getMessage());
                         }
                     }
+
+                    // Category Order entry
+                    $categoryOrder = new CategoryOrder($faqConfig);
+                    $categoryOrder->add($categoryId);
 
                     // All the other translations
                     $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_SPECIAL_CHARS);

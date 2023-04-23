@@ -50,11 +50,11 @@ class Tags
         $tagListing = '';
 
         foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
-            $title = Strings::htmlspecialchars($taggingName, ENT_QUOTES);
+            $title = Strings::htmlentities($taggingName);
             $url = sprintf('%sindex.php?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $taggingId);
             $oLink = new Link($url, $this->config);
-            $oLink->itemTitle = $taggingName;
-            $oLink->text = $taggingName;
+            $oLink->itemTitle = $title;
+            $oLink->text = $title;
             $oLink->tooltip = $title;
             $oLink->class = 'badge bg-primary text-decoration-none';
             $tagListing .= $oLink->toHtmlAnchor() . ' ';

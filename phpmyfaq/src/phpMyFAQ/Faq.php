@@ -2418,7 +2418,9 @@ class Faq
                 );
                 $output .= sprintf(
                     '<td><strong>%s:</strong><br>%s</td>',
-                    $category->categoryName[$row->category_id]['name'] ?? '',
+                    isset($category->categoryName[$row->category_id]['name']) ?
+                        Strings::htmlentities($category->categoryName[$row->category_id]['name']) :
+                        '',
                     Strings::htmlentities($row->question)
                 );
                 if ($this->config->get('records.enableCloseQuestion') && $row->answer_id) {

@@ -34,9 +34,27 @@ class CategoryOrder
     }
 
     /**
+     * Adds a given category ID to the last position.
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    public function add(int $categoryId): bool
+    {
+        $query = sprintf(
+            'INSERT INTO %sfaqcategory_order (category_id, position) VALUES (%d, %d)',
+            Database::getTablePrefix(),
+            $categoryId,
+            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position')
+        );
+
+        return (bool) $this->config->getDb()->query($query);
+    }
+
+    /**
      * Returns the current position for the given category ID
      *
-     * @return mixed
+     * @return bool
      */
     public function getPositionById(int $categoryId)
     {
@@ -47,15 +65,17 @@ class CategoryOrder
         );
         $result = $this->config->getDb()->query($query);
 
-        return $this->config->getDb()->fetchRow($result);
+        return (bool) $this->config->getDb()->fetchRow($result);
     }
 
     /**
      * Inserts the position for the given category ID
      *
-     * @return mixed
+     * @param int $categoryId
+     * @param int $position
+     * @return bool
      */
-    public function setPositionById(int $categoryId, int $position)
+    public function setPositionById(int $categoryId, int $position): bool
     {
         $query = sprintf(
             'INSERT INTO %sfaqcategory_order (category_id, position) VALUES (%d, %d)',
@@ -64,15 +84,15 @@ class CategoryOrder
             $position
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**
      * Updates the position for the given category ID
      *
-     * @return mixed
+     * @return bool
      */
-    public function updatePositionById(int $categoryId, int $position)
+    public function updatePositionById(int $categoryId, int $position): bool
     {
         $query = sprintf(
             'UPDATE %sfaqcategory_order SET position = %d WHERE category_id = %d',
@@ -81,6 +101,6 @@ class CategoryOrder
             $categoryId
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 }

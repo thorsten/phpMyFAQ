@@ -41,7 +41,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         $oldConfigValues = $faqConfig->config;
 
         // Set the new values
-        $forbiddenValues = ['{', '}', '$'];
+        $forbiddenValues = ['{', '}'];
         $newConfigValues = [];
         $escapeValues = [
             'main.contactInformations',
