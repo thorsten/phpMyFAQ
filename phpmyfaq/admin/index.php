@@ -32,6 +32,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -45,6 +46,12 @@ const IS_VALID_PHPMYFAQ = null;
 // Bootstrapping
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
+
+//
+// Create Response & Request
+//
+$response = new Response();
+$request = Request::createFromGlobals();
 
 // get language (default: english)
 $Language = new Language($faqConfig);
@@ -99,11 +106,6 @@ AttachmentFactory::init(
 // Create a new phpMyFAQ system object
 //
 $faqSystem = new System();
-
-//
-// Create a new Reponse
-//
-$response = new Response();
 
 //
 // Create a new FAQ object
@@ -173,8 +175,8 @@ if(!isset($user)) {
 //
 // Set username via SSO
 //
-if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
-    $faqusername = trim((string) $_SERVER['REMOTE_USER']);
+if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
+    $faqusername = trim($request->server->get('REMOTE_USER'));
     $faqpassword = '';
 }
 

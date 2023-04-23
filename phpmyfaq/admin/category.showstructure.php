@@ -22,11 +22,15 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$request = Request::createFromGlobals();
+
 ?>
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -47,7 +51,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $currentLink = $_SERVER['SCRIPT_NAME'];
     $currentLanguage = LanguageCodes::get($faqLangCode);
     $allLanguages = [];
     $all_lang = [];
@@ -110,7 +113,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             // translate category
             printf(
                 '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-globe"></span></a></a>',
-                $currentLink,
+                $request->getBasePath(),
                 $cat['id'],
                 $faqLangCode,
                 Translation::get('ad_categ_translate'),
@@ -147,7 +150,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             } else {
                 printf(
                     '<td class="text-center"><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
-                    $currentLink,
+                    $request->getBasePath(),
                     $cat['id'],
                     $lang,
                     Translation::get('ad_categ_translate')

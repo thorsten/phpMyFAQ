@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $request = Request::createFromGlobals();
 
 if (!$faqConfig->get('security.enableRegistration')) {
-    header('Location: ' . $request->getScheme() . '://' . $request->getHost() . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location:' . $faqSystem->getSystemUri($faqConfig));
     exit();
 }
 

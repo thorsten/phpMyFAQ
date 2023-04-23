@@ -31,11 +31,13 @@ if (isset($error) && 0 < strlen((string) $error)) {
     $message = sprintf('<p>%s</p>', Translation::get('ad_auth_insert'));
 }
 
-if ($action === 'logout') {
+$request = Request::createFromGlobals();
+
+if ($request->query->get('action') === 'logout') {
     $message = Alert::success('ad_logout');
 }
 
-if (Request::createFromGlobals()->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
+if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
     <div id="pmf-admin-login">
@@ -51,9 +53,9 @@ if (Request::createFromGlobals()->isSecure() || !$faqConfig->get('security.useSs
                                 </div>
                                 <div class="card-body">
                                     <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php"
-                                          method="post"
-                                          accept-charset="utf-8" role="form">
-                                        <input type="hidden" name="redirect-action" value="<?= $action ?>">
+                                          method="post" accept-charset="utf-8" role="form">
+                                        <input type="hidden" name="redirect-action"
+                                               value="<?= $request->query->get('action') ?>">
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="faqusername" name="faqusername" type="text"
                                                    placeholder="<?= Translation::get('ad_auth_user') ?>" />
@@ -64,7 +66,9 @@ if (Request::createFromGlobals()->isSecure() || !$faqConfig->get('security.useSs
                                                 <input class="form-control" id="faqpassword" name="faqpassword"
                                                        type="password" autocomplete="off"
                                                        placeholder="<?= Translation::get('ad_auth_passwd') ?>" />
-                                                <label for="faqpassword"><?= Translation::get('ad_auth_passwd') ?></label>
+                                                <label for="faqpassword">
+                                                    <?= Translation::get('ad_auth_passwd') ?>
+                                                </label>
                                             </div>
                                             <span class="input-group-text">
                                                 <i class="fa" id="togglePassword"></i>
@@ -79,8 +83,9 @@ if (Request::createFromGlobals()->isSecure() || !$faqConfig->get('security.useSs
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                             <a class="small"
                                                href="../?action=password"><?= Translation::get('lostPassword') ?></a>
-                                            <button type="submit"
-                                                    class="btn btn-primary"><?= Translation::get('msgLoginUser') ?></button>
+                                            <button type="submit" class="btn btn-primary">
+                                                <?= Translation::get('msgLoginUser') ?>
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -113,8 +118,8 @@ if (Request::createFromGlobals()->isSecure() || !$faqConfig->get('security.useSs
 } else {
     printf(
         '<p><a href="https://%s%s">%s</a></p>',
-        $_SERVER['HTTP_HOST'],
-        $_SERVER['REQUEST_URI'],
+        $request->getHost(),
+        $request->getRequestUri(),
         Translation::get('msgSecureSwitch')
     );
 }

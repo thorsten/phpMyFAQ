@@ -24,11 +24,15 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$request = Request::createFromGlobals();
+
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
@@ -50,13 +54,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $perPage = 10;
-    $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
-    $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
-    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+    $pages = Filter::filterVar($request->query->get('pages'), FILTER_VALIDATE_INT);
+    $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
+    $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
     $search = new Search($faqConfig);
 
-    if ($csrfToken && Token::getInstance()->verifyToken('truncate-seaerchterms', $csrfToken) && 'truncatesearchterms' === $action) {
+    if (
+        $csrfToken &&
+        Token::getInstance()->verifyToken('truncate-seaerchterms', $csrfToken) &&
+        'truncatesearchterms' === $action
+    ) {
         if ($search->deleteAllSearchTerms()) {
             echo Alert::success('ad_searchterm_del_suc');
         } else {
@@ -82,7 +90,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 
     // Pagination options
     $options = [
-        'baseUrl' => $baseUrl,
+        'baseUrl' => $faqConfig->getDefaultUrl() . $request->getRequestUri(),
         'total' => is_countable($searchesList) ? count($searchesList) : 0,
         'perPage' => $perPage,
         'pageParamName' => 'page',
@@ -108,8 +116,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
             <tbody>
     <?php
     $counter = $displayedCounter = 0;
-    $self = substr(__FILE__, strlen((string) $_SERVER['DOCUMENT_ROOT']));
-
     foreach ($searchesList as $searchItem) {
         if ($displayedCounter >= $perPage) {
             ++$displayedCounter;

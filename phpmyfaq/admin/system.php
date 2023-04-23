@@ -22,11 +22,14 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$request = Request::createFromGlobals();
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $faqSystem = new System();
@@ -36,11 +39,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     if ($faqConfig->get('search.enableElasticsearch')) {
         try {
             $esFullInformation = $faqConfig->getElasticsearch()->info();
+            $esInformation = $esFullInformation['version']['number'];
         } catch (ClientResponseException|ServerResponseException|NoNodeAvailableException $e) {
             $faqConfig->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
             echo Alert::danger('ad_entryins_fail');
         }
-        $esInformation = $esFullInformation['version']['number'];
     } else {
         $esInformation = 'n/a';
     }
@@ -58,12 +61,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             <table class="table table-striped align-middle">
                 <tbody>
                 <?php
+
                 $systemInformation = [
                     'phpMyFAQ Version' => $faqSystem->getVersion(),
                     'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
-                    'phpMyFAQ Installation Path' => dirname((string) $_SERVER['SCRIPT_FILENAME'], 2),
-                    'Web server software' => $_SERVER['SERVER_SOFTWARE'],
-                    'Web server document root' => $_SERVER['DOCUMENT_ROOT'],
+                    'phpMyFAQ Installation Path' => dirname($request->server->get('SCRIPT_FILENAME'), 2),
+                    'Web server software' => $request->server->get('SERVER_SOFTWARE'),
+                    'Web server document root' => $request->server->get('DOCUMENT_ROOT'),
                     'Web server Interface' => strtoupper(PHP_SAPI),
                     'PHP Version' => PHP_VERSION,
                     'PHP Extensions' => implode(', ', get_loaded_extensions()),

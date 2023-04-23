@@ -22,11 +22,15 @@ use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$request = Request::createFromGlobals();
+
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -50,16 +54,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             $session = new Session($faqConfig);
             $date = new Date($faqConfig);
             $visits = new Visits($faqConfig);
-            $statdelete = Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_SPECIAL_CHARS);
-            $month = Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_SPECIAL_CHARS);
-            $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-            $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if ($csrfToken && !Token::getInstance()->verifyToken('sessions', $csrfTokenFromPost)) {
+            $statdelete = Filter::filterVar($request->request->get('statdelete'), FILTER_SANITIZE_SPECIAL_CHARS);
+            $month = Filter::filterVar($request->request->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
+            $csrfTokenFromPost = Filter::filterVar($request->request->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+            $csrfTokenFromGet = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+            if ($csrfTokenFromPost && !Token::getInstance()->verifyToken('sessions', $csrfTokenFromPost)) {
                 $statdelete = null;
             }
 
-            if ($csrfToken && !Token::getInstance()->verifyToken('clear-visits', $csrfTokenFromGet)) {
+            if ($csrfTokenFromGet && !Token::getInstance()->verifyToken('clear-visits', $csrfTokenFromGet)) {
                 $clearVisits = false;
             } else {
                 $clearVisits = true;
@@ -152,7 +157,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 if (is_file(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $first))) {
                     $fp = @fopen(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $first), 'r');
                     while (($data = fgetcsv($fp, 1024, ';')) !== false) {
-                        $qstamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $_SERVER['REQUEST_TIME'];
+                        $qstamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $request->server->get('REQUEST_TIME');
                     }
                     fclose($fp);
                     echo $date->format(date('Y-m-d H:i', $qstamp));
@@ -170,12 +175,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     $fp = fopen(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $last), 'r');
 
                     while (($data = fgetcsv($fp, 1024, ';')) !== false) {
-                        $stamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $_SERVER['REQUEST_TIME'];
+                        $stamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $request->server->get('REQUEST_TIME');
                     }
                     fclose($fp);
 
                     if (empty($stamp)) {
-                        $stamp = $_SERVER['REQUEST_TIME'];
+                        $stamp = $request->server->get('REQUEST_TIME');
                     }
 
                     echo $date->format(date('Y-m-d H:i', $stamp)) . '<br>';
@@ -206,7 +211,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                       <?php
                         foreach ($trackingDates as $trackingDate) {
                             printf('<option value="%d"', $trackingDate);
-                            if (date('Y-m-d', $trackingDate) == date('Y-m-d', $_SERVER['REQUEST_TIME'])) {
+                            if (date('Y-m-d', $trackingDate) == date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
                                 echo ' selected="selected"';
                             }
                             echo '>';
@@ -224,10 +229,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           </tr>
         </table>
 
-
-            <h4>
-                <?= Translation::get('ad_stat_management') ?>
-            </h4>
+        <h4>
+            <?= Translation::get('ad_stat_management') ?>
+        </h4>
 
         <form action="?action=viewsessions" method="post"
               class="row row-cols-lg-auto g-3 align-items-center">

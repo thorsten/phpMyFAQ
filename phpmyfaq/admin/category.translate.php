@@ -89,7 +89,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="catlang"><?= Translation::get('ad_categ_lang') ?>:</label>
                 <div class="col-lg-4">
-                  <select name="catlang" id="catlang" class="form-control">
+                  <select name="catlang" id="catlang" class="form-select">
                       <?= $category->getCategoryLanguagesToTranslate($id, $selectedLanguage) ?>
                   </select>
                 </div>

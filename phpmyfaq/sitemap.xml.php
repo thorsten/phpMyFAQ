@@ -45,6 +45,8 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require __DIR__ . '/src/Bootstrap.php';
 
+$request = Request::createFromGlobals();
+
 //
 // Initializing static string wrapper
 //
@@ -60,7 +62,7 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 function buildSiteMapNode(string $location, string $lastModified = null): string
 {
     if (empty($lastModified)) {
-        $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
+        $lastModified = Date::createIsoDate(Request::createFromGlobals()->server->get('REQUEST_TIME'), DATE_W3C, false);
     }
     if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', (string) $lastModified)) {
         $lastModified .= 'T' . date('H:i:sO');
@@ -100,14 +102,11 @@ if ((is_countable($items) ? count($items) : 0) > 0) {
 // Sitemap header
 $siteMap =
     '<?xml version="1.0" encoding="UTF-8"?>'
-    . '<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
-    . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-    . ' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
-    . ' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
+    . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 // 1st entry: the faq server itself
 $siteMap .= buildSiteMapNode(
     $faqConfig->getDefaultUrl(),
-    Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false)
+    Date::createIsoDate($request->server->get('REQUEST_TIME'), DateTimeInterface::ATOM, false)
 );
 
 // nth entry: each faq

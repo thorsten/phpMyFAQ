@@ -25,6 +25,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -163,7 +164,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                   </div>
                   <input class="form-control mb-2" type="text" name="url" id="url" required>
                   <div class="input-group-append">
-                    <div class="input-group-text">.<?= $_SERVER['SERVER_NAME'] ?></div>
+                    <div class="input-group-text">.<?= Request::createFromGlobals()->getHost() ?></div>
                   </div>
                 </div>
               </div>

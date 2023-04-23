@@ -21,14 +21,17 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
-$page = 1 > $page ? 1 : $page;
+$request = Request::createFromGlobals();
+
+$page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
+$page = max(1, $page);
 
 $attachmentCollection = new AttachmentCollection($faqConfig);
 $itemsPerPage = 24;
@@ -38,7 +41,7 @@ $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
 $pagination = new Pagination(
     [
-        'baseUrl' => $faqConfig->getDefaultUrl() . 'admin/?' . str_replace('&', '&amp;', (string) $_SERVER['QUERY_STRING']),
+        'baseUrl' => $faqConfig->getDefaultUrl() . $request->getRequestUri(),
         'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
         'perPage' => $itemsPerPage,
     ]

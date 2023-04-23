@@ -290,7 +290,7 @@ function renderInputForm(mixed $key, string $type): void
             if ('security.useSslOnly' === $key && !Request::createFromGlobals()->isSecure()) {
                 echo ' disabled';
             }
-            if ('security.ssoSupport' === $key && empty($_SERVER['REMOTE_USER'])) {
+            if ('security.ssoSupport' === $key && !Request::createFromGlobals()->server->get('REMOTE_USER')) {
                 echo ' disabled';
             }
             echo '></div></div>';

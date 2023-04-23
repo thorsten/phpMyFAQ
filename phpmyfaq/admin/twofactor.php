@@ -17,6 +17,9 @@
  */
 
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::createFromGlobals();
 
 if (isset($error) && 0 < strlen((string) $error)) {
     $message = sprintf(
@@ -30,7 +33,7 @@ if (isset($error) && 0 < strlen((string) $error)) {
     $message = '';
 }
 
-if ($action === 'logout') {
+if ($request->query->get('action') === 'logout') {
     $message = sprintf(
         '<p class="alert alert-success alert-dismissible fade show mt-3">%s%s</p>',
         '<button type="button" class="close" data-dismiss="alert">' .
@@ -39,8 +42,9 @@ if ($action === 'logout') {
         Translation::get('ad_logout')
     );
 }
-if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
-    ?>
+
+if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
+?>
 
 <div class="container py-5">
   <div class="row">
@@ -86,8 +90,8 @@ if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON'
 } else {
     printf(
         '<p><a href="https://%s%s">%s</a></p>',
-        $_SERVER['HTTP_HOST'],
-        $_SERVER['REQUEST_URI'],
+        $request->getHost(),
+        $request->getRequestUri(),
         Translation::get('msgSecureSwitch')
     );
 }
