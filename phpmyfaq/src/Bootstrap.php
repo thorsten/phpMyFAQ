@@ -212,18 +212,3 @@ if (!isset($_SERVER['HTTP_HOST'])) {
         $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
     }
 }
-
-//
-// Fix undefined server variables in Windows IIS & CGI mode
-//
-if (!isset($_SERVER['SCRIPT_NAME'])) {
-    if (isset($_SERVER['SCRIPT_FILENAME'])) {
-        $_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_FILENAME'];
-    } elseif (isset($_SERVER['PATH_TRANSLATED'])) {
-        $_SERVER['SCRIPT_NAME'] = $_SERVER['PATH_TRANSLATED'];
-    } elseif (isset($_SERVER['PATH_INFO'])) {
-        $_SERVER['SCRIPT_NAME'] = $_SERVER['PATH_INFO'];
-    } elseif (isset($_SERVER['SCRIPT_URL'])) {
-        $_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_URL'];
-    }
-}
