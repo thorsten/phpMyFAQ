@@ -2,12 +2,12 @@
 
 /**
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
- * language, gets and sets all cookie, post and get information and includes
+ * language, gets and sets all cookies, post and get information and includes
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * v. 2.0. If a copy of the MPL wasn't distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
@@ -58,13 +58,9 @@ const IS_VALID_PHPMYFAQ = null;
 require __DIR__ . '/src/Bootstrap.php';
 
 //
-// Create Request
+// Create Request + Response
 //
 $request = Request::createFromGlobals();
-
-//
-// Send headers and print template
-//
 $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
 
@@ -193,7 +189,7 @@ if ($faqusername !== '' && $faqpassword !== '') {
 
 if (isset($userAuth)) {
     if ($userAuth instanceof UserAuthentication) {
-        if($userAuth->hasTwoFactorAuthentication() === true) {
+        if ($userAuth->hasTwoFactorAuthentication() === true) {
             $action = 'twofactor';
             $auth = false;
         }
@@ -560,7 +556,7 @@ $tplMainPage = [
     'dir' => Translation::get('dir'),
     'formActionUrl' => '?' . $sids . 'action=search',
     'searchBox' => Translation::get('msgSearch'),
-    'searchTerm' =>Strings::htmlentities($searchTerm, ENT_QUOTES),
+    'searchTerm' => Strings::htmlentities($searchTerm, ENT_QUOTES),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => Translation::get('msgFullCategories'),
     'msgCategory' => Translation::get('msgCategory'),
@@ -782,7 +778,6 @@ if ('artikel' === $action) {
     $link->itemTitle = $faq->getRecordTitle($id);
     $response = new RedirectResponse($link->toString());
     $response->setStatusCode(Response::HTTP_MOVED_PERMANENTLY);
-    $response->isRedirect($link->toString());
     $response->send();
     exit();
 }
@@ -797,7 +792,7 @@ if ('twofactor' === $action) {
 require $includePhp;
 
 //
-// Get main template, set main variables
+// Get the main template, set main variables
 //
 $template->parse('index', array_merge($tplMainPage, $tplNavigation));
 $template->merge('sidebar', 'index');
@@ -819,6 +814,21 @@ if ($response->getStatusCode() === 404 || $action === '404') {
 }
 
 $response->setContent($template->render());
+$response->setCache([
+    'must_revalidate'  => false,
+    'no_cache'         => false,
+    'no_store'         => false,
+    'no_transform'     => false,
+    'public'           => true,
+    'private'          => false,
+    'proxy_revalidate' => false,
+    'max_age'          => 600,
+    's_maxage'         => 600,
+    'stale_if_error'   => 86400,
+    'stale_while_revalidate' => 60,
+    'immutable'        => true,
+    'last_modified'    => new \DateTime()
+]);
 $response->send();
 
 $faqConfig->getDb()->close();
