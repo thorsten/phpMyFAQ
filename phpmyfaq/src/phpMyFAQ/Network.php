@@ -20,7 +20,7 @@
 
 namespace phpMyFAQ;
 
-use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
  * Class Network
@@ -41,108 +41,11 @@ class Network
      *
      * @param string $ip IPv4 or IPv6 address
      *
-     * @return bool true, if not banned
+     * @return bool false, if not banned
      */
-    public function checkIp(string $ip): bool
+    public function isBanned(string $ip): bool
     {
         $bannedIps = explode(' ', (string) $this->config->get('security.bannedIPs'));
-
-        foreach ($bannedIps as $ipAddress) {
-            if (0 === strlen($ipAddress)) {
-                continue;
-            }
-
-            if (
-                false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
-                && false === filter_var($ipAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
-            ) {
-                // Handle IPv4
-                if ($this->checkForAddrMatchIpv4($ip, $ipAddress)) {
-                    return false;
-                }
-            } else {
-                // Handle IPv6
-                try {
-                    return $this->checkForAddrMatchIpv6($ip, $ipAddress);
-                } catch (InvalidArgumentException) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks for an address match (IPv4 or Network).
-     *
-     * @param string $ip      IPv4 Address
-     * @param string $network Network Address or IPv4 Address
-     * @return bool true if IP matched
-     */
-    public function checkForAddrMatchIpv4(string $ip, string $network): bool
-    {
-        // See also ip2long PHP online manual: Kenneth Shaw
-        // coded a network matching function called net_match.
-        // We use here his way of doing bit-by-bit network comparison
-
-        // Start applying the discovering of the network mask
-        $ip_arr = explode('/', $network);
-
-        $network_long = ip2long($ip_arr[0]);
-        $ip_long = ip2long($ip);
-
-        if (!isset($ip_arr[1])) {
-            // $network seems to be a simple ip address, instead of a network address
-            $matched = ($network_long == $ip_long);
-        } else {
-            // $network seems to be a real network address
-            $x = ip2long($ip_arr[1]);
-            // Evaluate the netmask: <Network Mask> or <CIDR>
-            $mask = (long2ip($x) == $ip_arr[1] ? $x : 0xffffffff << (32 - $ip_arr[1])); // @phpstan-ignore-line
-            $matched = (($ip_long & $mask) == ($network_long & $mask));
-        }
-
-        return $matched;
-    }
-
-    /**
-     * Checks for an address match (IPv6 or Network).
-     *
-     * @param string $ip IPv6 Address
-     * @param string $network Network Address or IPv6 Address
-     * @return bool true if IP matched
-     * @throws InvalidArgumentException
-     */
-    public function checkForAddrMatchIpv6(string $ip, string $network): bool
-    {
-        if (!str_contains($network, '/')) {
-            throw new InvalidArgumentException('Not a valid IPv6 subnet.');
-        }
-
-        [$addr, $preflen] = explode('/', $network);
-        if (!is_numeric($preflen)) {
-            throw new InvalidArgumentException('Not a valid IPv6 preflen.');
-        }
-
-        if (!filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            throw new InvalidArgumentException('Not a valid IPv6 subnet.');
-        }
-
-        $bytes_addr = unpack('n*', inet_pton($addr));
-        $bytes_test = unpack('n*', inet_pton($ip));
-
-        for ($i = 1; $i <= ceil($preflen / 16); ++$i) {
-            $left = $preflen - 16 * ($i - 1);
-            if ($left > 16) {
-                $left = 16;
-            }
-            $mask = ~(0xffff >> $left) & 0xffff;
-            if (($bytes_addr[$i] & $mask) != ($bytes_test[$i] & $mask)) {
-                return false;
-            }
-        }
-
-        return true;
+        return IpUtils::checkIp($ip, $bannedIps);
     }
 }

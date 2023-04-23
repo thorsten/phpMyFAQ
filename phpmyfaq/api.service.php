@@ -114,7 +114,7 @@ $network = new Network($faqConfig);
 $stopWords = new StopWords($faqConfig);
 $faqHelper = new FaqHelper($faqConfig);
 
-if (!$network->checkIp($request->server->get('REMOTE_ADDR'))) {
+if ($network->isBanned($request->server->get('REMOTE_ADDR'))) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
     $response->setData(['error' => Translation::get('err_bannedIP')]);
 }

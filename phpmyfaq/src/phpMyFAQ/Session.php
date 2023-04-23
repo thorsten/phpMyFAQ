@@ -321,8 +321,6 @@ class Session
                 }
             }
 
-            $network = new Network($this->config);
-
             // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
             $remoteAddress = Request::createFromGlobals()->getClientIp();
             $localAddresses = ['127.0.0.1', '::1'];
@@ -337,7 +335,8 @@ class Session
             // Anonymize IP address
             $remoteAddress = IpUtils::anonymize($remoteAddress);
 
-            if (!$network->checkIp($remoteAddress)) {
+            $network = new Network($this->config);
+            if ($network->isBanned($remoteAddress)) {
                 $banned = true;
             }
 
@@ -347,7 +346,7 @@ class Session
                         Database::getTablePrefix() . 'faqsessions',
                         'sid'
                     );
-                    // Sanity check: force the session cookie to contains the current $sid
+                    // Check: force the session cookie to contains the current $sid
                     if (!is_null($cookieId) && (!$cookieId != $this->getCurrentSessionId())) {
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $this->getCurrentSessionId());
                     }
