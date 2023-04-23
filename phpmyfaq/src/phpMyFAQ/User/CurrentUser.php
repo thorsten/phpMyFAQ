@@ -32,6 +32,7 @@ use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use stdClass;
+use Symfony\Component\HttpFoundation\Request;
 
 /* user defined constants */
 define('SESSION_CURRENT_USER', 'CURRENT_USER');
@@ -382,7 +383,7 @@ class CurrentUser extends User
             session_id(),
             $_SERVER['REQUEST_TIME'],
             $updateLastLogin ? "last_login = '" . date('YmdHis', $_SERVER['REQUEST_TIME']) . "'," : '',
-            $_SERVER['REMOTE_ADDR'],
+            Request::createFromGlobals()->getClientIp(),
             $this->getUserId()
         );
 
@@ -532,7 +533,7 @@ class CurrentUser extends User
             return null;
         }
         // check ip
-        if ($config->get('security.ipCheck') && $sessionInfo['ip'] != $_SERVER['REMOTE_ADDR']) {
+        if ($config->get('security.ipCheck') && $sessionInfo['ip'] != Request::createFromGlobals()->getClientIp()) {
             return null;
         }
         // session-id needs to be updated
@@ -702,7 +703,7 @@ class CurrentUser extends User
                 user_id = %d",
             Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
-            $_SERVER['REMOTE_ADDR'],
+            Request::createFromGlobals()->getClientIp(),
             $this->getUserId()
         );
 
@@ -737,7 +738,7 @@ class CurrentUser extends User
             $this->getUserId(),
             $_SERVER['REQUEST_TIME'],
             $this->lockoutTime,
-            $_SERVER['REMOTE_ADDR']
+            Request::createFromGlobals()->getClientIp()
         );
 
         $result = $this->config->getDb()->query($select);

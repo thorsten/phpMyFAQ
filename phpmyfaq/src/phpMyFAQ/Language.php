@@ -20,6 +20,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Language\LanguageCodes;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Language
@@ -33,7 +34,7 @@ class Language
      *
      * @var string
      */
-    public static $language = '';
+    public static string $language = '';
 
     /**
      * The accepted language of the user agent.
@@ -94,7 +95,6 @@ class Language
      */
     public function setLanguage(bool $configDetection, string $configLanguage): string
     {
-        $confLangCode = null;
         $detectedLang = [];
         self::getUserAgentLanguage();
 
@@ -170,42 +170,22 @@ class Language
      */
     private function getUserAgentLanguage(): void
     {
-        $matches = $languages = [];
+        $languages = Request::createFromGlobals()->getLanguages();
 
-        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            // ISO Language Codes, 2-letters: ISO 639-1, <Country tag>[-<Country subtag>]
-            // Simplified language syntax detection: xx[-yy]
-            preg_match_all(
-                '/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i',
-                (string) $_SERVER['HTTP_ACCEPT_LANGUAGE'],
-                $matches
-            );
-
-            if (is_countable($matches[1]) ? count($matches[1]) : 0) {
-                $languages = array_combine($matches[1], $matches[4]);
-                foreach ($languages as $lang => $val) {
-                    if ($val === '') {
-                        $languages[$lang] = 1;
-                    }
-                }
-                arsort($languages, SORT_NUMERIC);
+        foreach ($languages as $language) {
+            if (self::isASupportedLanguage(strtoupper($language))) {
+                $this->acceptLanguage = $language;
+                break;
             }
+        }
 
-            foreach ($languages as $lang => $val) {
-                if (self::isASupportedLanguage(strtoupper($lang))) {
-                    $this->acceptLanguage = $lang;
+        // If the browser e.g. sends "en-us", we want to get "en" only.
+        if ('' === $this->acceptLanguage) {
+            foreach ($languages as $language) {
+                $language = substr($language, 0, 2);
+                if (self::isASupportedLanguage(strtoupper($language))) {
+                    $this->acceptLanguage = $language;
                     break;
-                }
-            }
-
-            // If the browser e.g. sends "en-us", we want to get "en" only.
-            if ('' === $this->acceptLanguage) {
-                foreach ($languages as $lang => $val) {
-                    $lang = substr($lang, 0, 2);
-                    if (self::isASupportedLanguage(strtoupper($lang))) {
-                        $this->acceptLanguage = $lang;
-                        break;
-                    }
                 }
             }
         }

@@ -20,6 +20,8 @@ namespace phpMyFAQ;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
+use Symfony\Component\HttpFoundation\IpUtils;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Session
@@ -297,15 +299,14 @@ class Session
     public function userTracking(string $action, int|string $data = null): void
     {
         if ($this->config->get('main.enableUserTracking')) {
+            $request = Request::createFromGlobals();
             $bots = 0;
             $banned = false;
-            $agent = $_SERVER['HTTP_USER_AGENT'];
-            $this->currentSessionId = Filter::filterInput(
-                INPUT_GET,
-                self::PMF_GET_KEY_NAME_SESSIONID,
+            $this->currentSessionId = Filter::filterVar(
+                $request->query->get(self::PMF_GET_KEY_NAME_SESSIONID),
                 FILTER_VALIDATE_INT
             );
-            $cookieId = Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $cookieId = Filter::filterVar($request->query->get(self::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
 
             if (!is_null($cookieId)) {
                 $this->setCurrentSessionId($cookieId);
@@ -315,7 +316,7 @@ class Session
             }
 
             foreach ($this->botIgnoreList as $bot) {
-                if (Strings::strstr($agent, $bot)) {
+                if (Strings::strstr($request->headers->get('user-agent'), $bot)) {
                     ++$bots;
                 }
             }
@@ -323,7 +324,7 @@ class Session
             $network = new Network($this->config);
 
             // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
-            $remoteAddress = $_SERVER['REMOTE_ADDR'];
+            $remoteAddress = Request::createFromGlobals()->getClientIp();
             $localAddresses = ['127.0.0.1', '::1'];
 
             if (in_array($remoteAddress, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -334,7 +335,7 @@ class Session
             $remoteAddress = preg_replace('([^0-9a-z:\.]+)i', '', (string) $remoteAddress);
 
             // Anonymize IP address
-            $remoteAddress = $network->anonymizeIp($remoteAddress);
+            $remoteAddress = IpUtils::anonymize($remoteAddress);
 
             if (!$network->checkIp($remoteAddress)) {
                 $banned = true;

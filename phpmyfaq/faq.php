@@ -110,7 +110,7 @@ if ($faqConfig->get('main.enableMarkdownEditor')) {
 $answer = $faqHelper->cleanUpContent($answer);
 
 // Rewrite URL fragments
-$currentUrl = htmlspecialchars("//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", ENT_QUOTES, 'UTF-8');
+$currentUrl = htmlspecialchars("//{$request->getHost()}{$request->getRequestUri()}", ENT_QUOTES, 'UTF-8');
 $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
 
 // Add Glossary entries for answers only

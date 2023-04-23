@@ -51,9 +51,9 @@ if ($ajaxAction === 'upload') {
         reset($_FILES);
         $temp = current($_FILES);
         if (is_uploaded_file($temp['tmp_name'])) {
-            if (isset($_SERVER['HTTP_ORIGIN'])) {
-                if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
-                    $response->headers->set('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN']);
+            if ($request->server->get('HTTP_ORIGIN') !== null) {
+                if ($request->server->get('HTTP_ORIGIN') . '/' === $faqConfig->getDefaultUrl()) {
+                    $response->headers->set('Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN'));
                 }
             }
 

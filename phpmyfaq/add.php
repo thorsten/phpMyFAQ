@@ -22,11 +22,14 @@ use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$request = Request::createFromGlobals();
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
@@ -57,8 +60,8 @@ try {
 }
 
 // Get possible user input
-$selectedQuestion = Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
-$selectedCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, -1);
+$selectedQuestion = Filter::filterVar($request->query->get('question'), FILTER_VALIDATE_INT);
+$selectedCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, -1);
 
 $question = $readonly = '';
 if (!is_null($selectedQuestion)) {
@@ -82,7 +85,7 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
         'mainPageContent',
         'enableWysiwygEditor',
         [
-            'currentTimestamp' => $_SERVER['REQUEST_TIME'],
+            'currentTimestamp' => $request->server->get('REQUEST_TIME'),
         ]
     );
 }

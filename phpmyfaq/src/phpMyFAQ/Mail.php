@@ -21,6 +21,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SMTP;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -595,9 +596,7 @@ class Mail
         }
 
         // X-Originating-IP
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $this->headers['X-Originating-IP'] = $_SERVER['REMOTE_ADDR'];
-        }
+        $this->headers['X-Originating-IP'] = Request::createFromGlobals()->getClientIp();
 
         // X-Priority
         $this->headers['X-Priority'] = $this->priority;

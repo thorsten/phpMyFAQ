@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (isset($error) && 0 < strlen((string) $error)) {
     $message = sprintf(
@@ -29,12 +30,12 @@ if (isset($error) && 0 < strlen((string) $error)) {
 } else {
     $message = sprintf('<p>%s</p>', Translation::get('ad_auth_insert'));
 }
+
 if ($action === 'logout') {
     $message = Alert::success('ad_logout');
 }
-if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON') || !$faqConfig->get(
-        'security.useSslForLogins'
-    )) {
+
+if (Request::createFromGlobals()->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
     <div id="pmf-admin-login">
@@ -85,7 +86,6 @@ if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON'
                                 </div>
                                 <?php
                                 if ($faqConfig->get('security.enableRegistration')) { ?>
-
                                     <div class="card-footer text-center py-3">
                                         <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3"
                                            href="../?action=register">
@@ -99,7 +99,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON'
                                         </a>
                                         <?php } ?>
                                     </div>
-                                <?php
+                                    <?php
                                 } ?>
                             </div>
                         </div>

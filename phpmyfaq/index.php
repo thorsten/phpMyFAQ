@@ -130,8 +130,8 @@ $userid = Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_IN
 //
 // Set username via SSO
 //
-if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
-    $faqusername = trim(Strings::htmlentities($_SERVER['REMOTE_USER']));
+if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
+    $faqusername = trim(Strings::htmlentities($request->server->get('REMOTE_USER')));
     $faqpassword = '';
 }
 
@@ -230,9 +230,11 @@ $faqSession->setCurrentUser($user);
 
 // Note: do not track internal calls
 $internal = false;
-if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    $internal = (str_starts_with((string) $_SERVER['HTTP_USER_AGENT'], 'phpMyFAQ%2F'));
+
+if ($request->headers->get('user-agent') !== null) {
+    $internal = (str_starts_with($request->headers->get('user-agent'), 'phpMyFAQ%2F'));
 }
+
 if (!$internal) {
     if (is_null($sidGet) && is_null($sidCookie)) {
         // Create a per-site unique SID
@@ -243,13 +245,13 @@ if (!$internal) {
         }
     } elseif (!is_null($sidCookie)) {
         try {
-            $faqSession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
+            $faqSession->checkSessionId($sidCookie, $request->getClientIp());
         } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();
         }
     } else {
         try {
-            $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
+            $faqSession->checkSessionId($sidGet, $request->getClientIp());
         } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();
         }
@@ -277,7 +279,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     !$faqSession->setCookie(
         Session::PMF_COOKIE_NAME_SESSIONID,
         $faqSession->getCurrentSessionId(),
-        $_SERVER['REQUEST_TIME'] + 3600
+        $request->server->get('REQUEST_TIME') + 3600
     )
 ) {
     $sids = sprintf('lang=%s&amp;', $faqLangCode);

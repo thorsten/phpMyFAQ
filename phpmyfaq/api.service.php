@@ -114,7 +114,7 @@ $network = new Network($faqConfig);
 $stopWords = new StopWords($faqConfig);
 $faqHelper = new FaqHelper($faqConfig);
 
-if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
+if (!$network->checkIp($request->server->get('REMOTE_ADDR'))) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
     $response->setData(['error' => Translation::get('err_bannedIP')]);
 }
@@ -226,7 +226,7 @@ switch ($action) {
                 ->setUsername($username)
                 ->setEmail($mailer)
                 ->setComment(nl2br(strip_tags((string) $comment)))
-                ->setDate($_SERVER['REQUEST_TIME']);
+                ->setDate($request->server->get('REQUEST_TIME'));
 
             if ($oComment->addComment($commentEntity)) {
                 $emailTo = $faqConfig->getAdminEmail();
@@ -663,7 +663,7 @@ switch ($action) {
 
         $faqId = Filter::filterVar($postData['id'] ?? null, FILTER_VALIDATE_INT, 0);
         $vote = Filter::filterVar($postData['value'], FILTER_VALIDATE_INT);
-        $userIp = Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+        $userIp = Filter::filterVar($request->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP);
 
         if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
             try {

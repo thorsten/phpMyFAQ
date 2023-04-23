@@ -24,6 +24,7 @@ use GdImage;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Strings;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Captcha
@@ -106,10 +107,11 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     public function __construct(private readonly Configuration $config)
     {
-        $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $this->ip = $_SERVER['REMOTE_ADDR'];
+        $request = Request::createFromGlobals();
+        $this->userAgent = $request->headers->get('user-agent');
+        $this->ip = $request->getClientIp();
         $this->font = $this->getFont();
-        $this->timestamp = $_SERVER['REQUEST_TIME'];
+        $this->timestamp = $request->server->get('REQUEST_TIME');
     }
 
     /**

@@ -20,6 +20,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Init;
+use Symfony\Component\HttpFoundation\Request;
 
 //
 // Debug mode:
@@ -113,6 +114,11 @@ set_error_handler('\phpMyFAQ\Core\Error::errorHandler');
 set_exception_handler('\phpMyFAQ\Core\Error::exceptionHandler');
 
 //
+// Request
+//
+$request = Request::createFromGlobals();
+
+//
 // Start output buffering
 //
 ob_start();
@@ -138,16 +144,12 @@ $faqConfig->getAll();
 //
 // We always need a valid, secure session!
 //
-$secureCookie = 'false';
-if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
-    $secureCookie = 'true';
-}
 ini_set('session.use_only_cookies', '1'); // Avoid any PHP version to move sessions on URLs
 ini_set('session.auto_start', '0'); // Prevent error to use session_start() if it's active in php.ini
 ini_set('session.use_trans_sid', '0');
 ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.cookie_httponly', 'true');
-ini_set('session.cookie_secure', $secureCookie);
+ini_set('session.cookie_secure', $request->isSecure());
 ini_set('url_rewriter.tags', '');
 
 //

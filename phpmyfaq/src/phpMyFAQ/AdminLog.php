@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class Logging
  *
@@ -85,7 +87,7 @@ class AdminLog
                 $this->config->getDb()->escape($_SERVER['REQUEST_TIME']),
                 $user->getUserId(),
                 $this->config->getDb()->escape(nl2br($logText)),
-                $this->config->getDb()->escape($_SERVER['REMOTE_ADDR'])
+                $this->config->getDb()->escape(Request::createFromGlobals()->getClientIp())
             );
 
             return (bool) $this->config->getDb()->query($query);

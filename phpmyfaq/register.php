@@ -19,14 +19,17 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$request = Request::createFromGlobals();
+
 if (!$faqConfig->get('security.enableRegistration')) {
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname((string) $_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $request->getScheme() . '://' . $request->getHost() . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

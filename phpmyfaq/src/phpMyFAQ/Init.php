@@ -40,7 +40,7 @@ class Init
      * - global variables,
      * - unescaped slashes,
      * - xss in the request string,
-     * - uncorrect filenames when file are uploaded.
+     * - uncorrected filenames when file are uploaded.
      */
     public static function cleanRequest(): void
     {
