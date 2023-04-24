@@ -54,7 +54,7 @@ class Session
 
     private readonly string $currentToken;
 
-    private CurrentUser $currentUser;
+    private ?CurrentUser $currentUser = null;
 
     /** @var string[] List of bots we don't track */
     private array $botIgnoreList = [

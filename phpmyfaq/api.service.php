@@ -109,7 +109,13 @@ try {
 //
 Strings::init($languageCode);
 
+//
+// Check, if user is logged in
+//
+[ $user, $isLoggedIn ] = CurrentUser::getCurrentUser($faqConfig);
+
 $faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 $network = new Network($faqConfig);
 $stopWords = new StopWords($faqConfig);
 $faqHelper = new FaqHelper($faqConfig);
@@ -118,11 +124,6 @@ if ($network->isBanned($request->server->get('REMOTE_ADDR'))) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
     $response->setData(['error' => Translation::get('err_bannedIP')]);
 }
-
-//
-// Check, if user is logged in
-//
-[ $user, $isLoggedIn ] = CurrentUser::getCurrentUser($faqConfig);
 
 //
 // Check captcha
