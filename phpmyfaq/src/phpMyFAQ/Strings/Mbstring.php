@@ -1,7 +1,7 @@
 <?php
 // phpcs:ignoreFile
 /**
- * The string wrapper class using mbstring extension.
+ * The string wrapper class using a mbstring extension.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -30,7 +30,7 @@ class Mbstring extends StringsAbstract
     /**
      * Instance.
      */
-    private static ?\phpMyFAQ\Strings\Mbstring $instance = null;
+    private static ?Mbstring $instance = null;
 
     /**
      * Constructor.
@@ -42,9 +42,10 @@ class Mbstring extends StringsAbstract
     /**
      * Create and return an instance.
      *
-     * @param  string $language
+     * @param string $language
+     * @return Mbstring
      */
-    public static function getInstance($language = 'en'): Mbstring
+    public static function getInstance(string $language = 'en'): Mbstring
     {
         if (!(self::$instance instanceof Mbstring)) {
             self::$instance = new self();
@@ -69,11 +70,12 @@ class Mbstring extends StringsAbstract
     /**
      * Get a part of string.
      *
-     * @param string $str String
-     * @param int $start Start
-     * @param null $length Length
+     * @param string   $str String
+     * @param int      $start Start
+     * @param int|null $length Length
+     * @return string
      */
-    public function substr(string $str, int $start, $length = null): string
+    public function substr(string $str, int $start, int $length = null): string
     {
         $length = null == $length ? mb_strlen($str) : $length;
 
@@ -85,9 +87,9 @@ class Mbstring extends StringsAbstract
      *
      * @param string $haystack Haystack
      * @param string $needle Needle
-     * @param int $offset Offset
+     * @param int    $offset Offset
      */
-    public function strpos(string $haystack, string $needle, $offset = 0): int
+    public function strpos(string $haystack, string $needle, int $offset = 0): int
     {
         return mb_strpos($haystack, $needle, $offset, $this->encoding);
     }
@@ -113,21 +115,19 @@ class Mbstring extends StringsAbstract
     }
 
     /**
-     * Get first occurrence of a string within another.
+     * Get the first occurrence of a string within another.
      *
      * @param string $haystack Haystack
      * @param string $needle Needle
      * @param bool $part Part
      */
-    public function strstr(string $haystack, string $needle, $part = false): string|false
+    public function strstr(string $haystack, string $needle, bool $part = false): string|false
     {
         return mb_strstr($haystack, $needle, $part, $this->encoding);
     }
 
     /**
      * Count substring occurrences.
-     *
-     *
      */
     public function substr_count(string $haystack, string $needle): int
     {
@@ -137,12 +137,14 @@ class Mbstring extends StringsAbstract
     /**
      * Match a regexp.
      *
-     * @param null $matches
-     * @param int $flags
-     * @param int $offset
-     *
+     * @param string $pattern
+     * @param string $subject
+     * @param        $matches
+     * @param int    $flags
+     * @param int    $offset
+     * @return int
      */
-    public function preg_match(string $pattern, string $subject, &$matches = null, $flags = 0, $offset = 0): int
+    public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0): int
     {
         return preg_match(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
@@ -202,8 +204,13 @@ class Mbstring extends StringsAbstract
      *
      * @return string|string[]|null
      */
-    public function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, int $limit = -1, int &$count = 0): string|array|null
-    {
+    public function preg_replace(
+        string|array $pattern,
+        string|array $replacement,
+        string|array $subject,
+        int $limit = -1,
+        int &$count = 0
+    ): string|array|null {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
                 $p = self::appendU($p);
@@ -216,10 +223,8 @@ class Mbstring extends StringsAbstract
     }
 
     /**
-     * Append an u to the string. The string is supposed
-     * to be a regex prepared to use with a preg_* function.
-     *
-     *
+     * Append a "u" to the string.
+     * The string is supposed to be a regex prepared to use with a preg_* function.
      */
     private static function appendU(string $str): string
     {

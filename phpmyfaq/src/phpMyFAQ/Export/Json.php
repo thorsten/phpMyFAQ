@@ -49,8 +49,9 @@ class Json extends Export
      * Generates the export.
      *
      * @param int    $categoryId Entity Id
-     * @param bool   $downwards  If true, downwards, otherwise upward ordering
-     * @param string $language   Language
+     * @param bool   $downwards If true, downwards, otherwise upward ordering
+     * @param string $language Language
+     * @throws \JsonException
      */
     public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {

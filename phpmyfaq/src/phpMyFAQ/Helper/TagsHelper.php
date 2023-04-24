@@ -28,7 +28,7 @@ use phpMyFAQ\Strings;
 class TagsHelper extends Helper
 {
     /**
-     * The array of Tag IDs
+     * @var int[] Array of Tag IDs
      */
     private ?array $taggingIds = null;
 
@@ -73,7 +73,7 @@ class TagsHelper extends Helper
     }
 
     /**
-     * Returns all tag IDs as array.
+     * Returns all tag IDs as an array.
      */
     public function getTaggingIds(): array
     {

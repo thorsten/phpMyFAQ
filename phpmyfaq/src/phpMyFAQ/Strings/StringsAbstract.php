@@ -43,14 +43,14 @@ abstract class StringsAbstract
      *
      * @var string
      */
-    protected $encoding = self::DEFAULT_ENCODING;
+    protected string $encoding = self::DEFAULT_ENCODING;
 
     /**
      * Language.
      *
      * @var string
      */
-    protected $language = self::DEFAULT_LANGUAGE;
+    protected string $language = self::DEFAULT_LANGUAGE;
 
     /**
      * Check if the string is a unicode string.

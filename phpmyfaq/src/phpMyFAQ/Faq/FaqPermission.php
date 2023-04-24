@@ -114,7 +114,7 @@ class FaqPermission
             $mode,
             Database::getTablePrefix(),
             $mode,
-            (int)$faqId
+            $faqId
         );
 
         $result = $this->config->getDb()->query($query);

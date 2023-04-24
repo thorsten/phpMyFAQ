@@ -212,7 +212,7 @@ class Wrapper extends TCPDF
     /**
      * The current category.
      */
-    public $category;
+    public int $category;
 
     /**
      * The current faq.
@@ -280,9 +280,9 @@ class Wrapper extends TCPDF
     /**
      * Setter for the category name.
      *
-     * @param string $category Entity name
+     * @param int $category Entity name
      */
-    public function setCategory($category)
+    public function setCategory(int $category): void
     {
         $this->category = $category;
     }

@@ -726,7 +726,7 @@ class Installer extends Setup
             $dbSetup['dbPassword'] = '';
         }
 
-        // Check database name
+        // Check the database name
         if (!isset($setup['dbType'])) {
             $dbSetup['dbDatabaseName'] = Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {

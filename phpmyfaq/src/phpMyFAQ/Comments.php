@@ -129,6 +129,7 @@ class Comments
 
     /**
      * Adds some fancy HTML if a comment is too long.
+     * @todo Move this code to a helper class
      */
     private function showShortComment(int $id, string $comment): string
     {

@@ -107,6 +107,6 @@ class AdminLog
             $_SERVER['REQUEST_TIME'] - 30 * 86400
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 }

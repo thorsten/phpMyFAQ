@@ -61,7 +61,7 @@ class FaqMetaData
     }
 
     /**
-     * This methods saves the category relations, the initial visits
+     * This method saves the category relations, the initial visits
      * and the permissions
      */
     public function save(): void
@@ -81,6 +81,7 @@ class FaqMetaData
 
         $faqPermission->add(FaqPermission::USER, $this->faqId, $userPermissions);
         $categoryPermission->add(CategoryPermission::USER, $this->categories, $userPermissions);
+
         if ($this->config->get('security.permLevel') !== 'basic') {
             $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $this->categories);
             $faqPermission->add(FaqPermission::GROUP, $this->faqId, $groupPermissions);

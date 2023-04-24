@@ -39,11 +39,11 @@ class Pdf extends Export
     /**
      * Wrapper object.
      */
-    private ?Wrapper $pdf = null;
+    private ?Wrapper $pdf;
 
     private ?Tags $tags = null;
 
-    private ?ParsedownExtra $parsedown = null;
+    private ?ParsedownExtra $parsedown;
 
     /**
      * Constructor.
@@ -103,7 +103,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        (string) $this->category->categoryName[$faq['category_id']]['name'],
+                        $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),
@@ -177,7 +177,7 @@ class Pdf extends Export
     {
         // Default filename: FAQ-<id>-<language>.pdf
         if (empty($filename)) {
-            $filename = 'FAQ-' . $faqData['id'] . '-' . $faqData['lang'] . '.pdf';
+            $filename = "FAQ-{$faqData['id']}-{$faqData['lang']}.pdf";
         }
 
         $this->pdf->setFaq($faqData);
@@ -198,9 +198,9 @@ class Pdf extends Export
         $this->pdf->Ln();
 
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $this->pdf->WriteHTML(str_replace('../', '', (string) $this->parsedown->text($faqData['content'])), true);
+            $this->pdf->WriteHTML(str_replace('../', '', (string) $this->parsedown->text($faqData['content'])));
         } else {
-            $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']), true);
+            $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']));
         }
 
         $this->pdf->Ln(10);
@@ -208,7 +208,7 @@ class Pdf extends Export
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 9);
         $this->pdf->Write(5, Translation::get('ad_entry_solution_id') . ': #' . $faqData['solution_id']);
 
-        // Check if author name should be visible according to GDPR option
+        // Check if the author name should be visible, according to the GDPR option
         $user = new CurrentUser($this->config);
         if ($user->getUserVisibilityByEmail($faqData['email'])) {
             $author = $faqData['author'];

@@ -41,7 +41,7 @@ class Api
 
     /**
      * Returns the installed, the current available and the next version
-     * as array.
+     * as an array.
      *
      * @throws JsonException
      */
