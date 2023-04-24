@@ -52,7 +52,7 @@ $faqSession = new Session($faqConfig);
   </div>
 </div>
 
-<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) : ?>
+<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')): ?>
   <section class="row mb-3">
     <div class="col-12 p-2">
       <div class="card bg-danger text-white shadow h-100 py-2">
@@ -74,6 +74,7 @@ $faqSession = new Session($faqConfig);
   </section>
 <?php endif; ?>
 
+<?php if (System::isDevelopmentVersion()): ?>
 <section class="row">
     <div class="col">
         <div class="alert alert-danger" role="alert">
@@ -81,14 +82,16 @@ $faqSession = new Session($faqConfig);
                 Attention!
             </h5>
             <p>
-                phpMyFAQ is currently in development (<?= System::getVersion() ?>) and therefore not yet ready for
-                production. Please report any bugs here:
-                <a target="_blank" href="https://github.com/thorsten/phpMyFAQ/issues" class="alert-link">Report issues on Github</a>.
-                Thank you!
+                phpMyFAQ is currently in development (<?= System::getVersion() ?>) And therefore not yet ready for
+                production.
+                Please <a target="_blank" href="https://github.com/thorsten/phpMyFAQ/issues" class="alert-link">
+                    report all issues on Github
+                </a>. Thank you very much!
             </p>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <section class="row masonry-grid">
     <div class="col-sm-6 col-lg-3 mb-4">
@@ -153,7 +156,6 @@ $faqSession = new Session($faqConfig);
     </div>
 
       <?php if ($faqConfig->get('main.enableUserTracking')) : ?>
-
         <div class="col-sm-12 col-lg-6 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
@@ -178,7 +180,7 @@ $faqSession = new Session($faqConfig);
                 if ((is_countable($inactiveFaqs) ? count($inactiveFaqs) : 0) > 0) {
                     foreach ($inactiveFaqs as $inactiveFaq) {
                         printf(
-                          '<li><a href="%s">%s</a></li>',
+                          '<li><i class="fa fa-question-circle"></i> <a href="%s">%s</a></li>',
                           Strings::htmlentities($inactiveFaq['url']),
                           Strings::htmlentities($inactiveFaq['question'])
                         );

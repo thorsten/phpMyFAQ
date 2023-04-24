@@ -153,6 +153,11 @@ class System
         return 'sqlite3' === $dbType;
     }
 
+    public static function isDevelopmentVersion(): bool
+    {
+        return Strings::strlen(self::VERSION_PRE_RELEASE) > 0;
+    }
+
     /**
      * Print out the HTML5 Footer.
      */
