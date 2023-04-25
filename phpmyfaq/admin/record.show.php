@@ -604,7 +604,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
 
         // Updating the current record if it's also contained in another category
         const sameRecords = $('input').filter(function () {
-          return this.id.match(new RegExp(type + '_record_(\\d+)_' + ids[i]));
+          return this.id.match(new RegExp(type + '_record_(\\d)_' + ids[i]));
         });
 
         if ('active' === type) {
