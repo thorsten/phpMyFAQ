@@ -355,7 +355,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
                    aria-expanded="true" aria-controls="collapseOne">
                   <i class="icon fa fa-chevron-circle-right "></i>
-                <?= $category->getPath($cid) ?>
+                <?= Strings::htmlentities($category->getPath($cid)) ?>
                 </a>
               </h5>
             </div>
