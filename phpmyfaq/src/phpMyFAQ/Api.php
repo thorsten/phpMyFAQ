@@ -20,6 +20,13 @@ namespace phpMyFAQ;
 use Exception;
 use JsonException;
 use stdClass;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Class Api
@@ -32,55 +39,92 @@ class Api
 
     private ?string $remoteHashes = null;
 
+    private HttpClientInterface $client;
+
     /**
      * Api constructor.
      */
     public function __construct(private readonly Configuration $config, private readonly System $system)
     {
+        $this->client = HttpClient::create([
+            'max_redirects' => 2,
+        ]);
     }
 
     /**
      * Returns the installed, the current available and the next version
      * as an array.
      *
-     * @throws JsonException
+     * @return string[]
+     * @throws Core\Exception|DecodingExceptionInterface|TransportExceptionInterface
      */
     public function getVersions(): array
     {
-        $json = $this->fetchData($this->apiUrl . 'versions');
-        $result = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
-        if ($result instanceof stdClass) {
+        $response = $this->client->request(
+            'GET',
+            $this->apiUrl . 'versions'
+        );
+
+        if ($response->getStatusCode() === 200) {
+            try {
+                $content = $response->toArray();
+                return [
+                    'installed' => $this->config->getVersion(),
+                    'current' => $content['stable'],
+                    'next' => $content['development']
+                ];
+            } catch (
+                ClientExceptionInterface |
+                RedirectionExceptionInterface |
+                ServerExceptionInterface |
+                TransportExceptionInterface $e
+            ) {
+                throw new Core\Exception('phpMyFAQ Version API is not available: ' .  $e->getMessage());
+            }
+        } else {
             return [
                 'installed' => $this->config->getVersion(),
-                'current' => $result->stable,
-                'next' => $result->development
+                'current' => 'n/a',
+                'next' => 'n/a'
             ];
         }
-
-        throw new JsonException('phpMyFAQ Version API is not available.');
     }
 
     /**
-     * Returns true, if installed version can be verified. Otherwise, false.
+     * Returns true, if an installed version can be verified. Otherwise, false.
      *
-     * @throws JsonException
+     * @throws Core\Exception|TransportExceptionInterface|JsonException
      */
     public function isVerified(): bool
     {
-        $this->remoteHashes = $this->fetchData($this->apiUrl . 'verify/' . $this->config->getVersion());
+        $response = $this->client->request(
+            'GET',
+            $this->apiUrl . 'verify/' . $this->config->getVersion()
+        );
 
-        if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
-            if (!is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
-                return false;
+        try {
+            $this->remoteHashes = $response->getContent();
+            if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
+                if (!is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
+                    return false;
+                }
+
+                return true;
             }
-
-            return true;
+        } catch (
+            ClientExceptionInterface |
+            RedirectionExceptionInterface |
+            ServerExceptionInterface |
+            TransportExceptionInterface $e
+        ) {
+            throw new Core\Exception('phpMyFAQ Verification API is not available: ' .  $e->getMessage());
         }
 
-        throw new JsonException('phpMyFAQ Verification API is not available.');
+        return false;
     }
 
     /**
+     * @return string[]
      * @throws JsonException
      * @throws Exception
      */
@@ -90,13 +134,5 @@ class Api
             json_decode($this->system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
             json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
         );
-    }
-
-    /**
-     * Return the fetched content from a given URL
-     */
-    public function fetchData(string $url): string
-    {
-        return file_get_contents($url);
     }
 }
