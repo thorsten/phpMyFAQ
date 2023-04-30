@@ -135,7 +135,7 @@ class Sqlsrv extends Database implements Driver
 
         'faqconfig' => 'CREATE TABLE %sfaqconfig (
             config_name NVARCHAR(255) NOT NULL default \'\',
-            config_value NVARCHAR(255) DEFAULT NULL,
+            config_value TEXT DEFAULT NULL,
             PRIMARY KEY (config_name))',
 
         'faqdata' => 'CREATE TABLE %sfaqdata (

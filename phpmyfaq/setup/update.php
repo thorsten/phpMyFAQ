@@ -406,6 +406,25 @@ if ($step == 3) {
         // Delete link verification columns
         $query[] = 'ALTER TABLE ' . $prefix . 'faqdata DROP COLUMN links_state, DROP COLUMN links_check_date';
         $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date';
+
+        // Configuration values in a TEXT column
+        switch ($DB['type']) {
+            case 'mysqli':
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqconfig MODIFY config_value TEXT DEFAULT NULL';
+                break;
+            case 'pgsql':
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqconfig ALTER COLUMN config_value TYPE TEXT';
+                break;
+            case 'sqlite3':
+                $query[] = 'CREATE TABLE ' . $prefix . 'faqconfig_new (config_name VARCHAR(255) NOT NULL default \'\', config_value TEXT DEFAULT NULL, PRIMARY KEY (config_name))';
+                $query[] = 'INSERT INTO ' . $prefix . 'faqconfig_new SELECT config_name, config_value FROM ' . $prefix . 'faqconfig';
+                $query[] = 'DROP TABLE ' . $prefix . 'faqconfig';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqconfig_new RENAME TO ' . $prefix . 'faqconfig';
+                break;
+            case 'sqlsrv':
+                $query[] = 'ALTER TABLE ' . $prefix . 'faqconfig ALTER COLUMN config_value TEXT';
+                break;
+        }
     }
 
     //

@@ -135,7 +135,7 @@ class Sqlite3 extends Database implements Driver
 
         'faqconfig' => 'CREATE TABLE %sfaqconfig (
             config_name VARCHAR(255) NOT NULL default \'\',
-            config_value VARCHAR(255) DEFAULT NULL,
+            config_value TEXT DEFAULT NULL,
             PRIMARY KEY (config_name))',
 
         'faqdata' => 'CREATE TABLE %sfaqdata (

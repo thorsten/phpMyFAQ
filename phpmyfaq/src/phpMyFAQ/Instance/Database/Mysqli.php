@@ -138,7 +138,7 @@ class Mysqli extends Database implements Driver
 
         'faqconfig' => 'CREATE TABLE %sfaqconfig (
             config_name VARCHAR(255) NOT NULL default \'\',
-            config_value VARCHAR(255) DEFAULT NULL,
+            config_value TEXT DEFAULT NULL,
             PRIMARY KEY (config_name)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 
         'faqdata' => 'CREATE TABLE %sfaqdata (
