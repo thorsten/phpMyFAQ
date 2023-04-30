@@ -17,6 +17,8 @@
  * @since     2002-01-10
  */
 
+use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
@@ -108,17 +110,17 @@ $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/config/database.php');
     </div>
 <?php
 
-$version = $faqConfig->getVersion();
 $system = new System();
+$faqConfig = Configuration::getConfigurationInstance();
+$version = $faqConfig->getVersion();
 
 $installer = new Installer($system);
 $update = new Update($system);
 
 $installer->checkPreUpgrade($dbConfig->getType());
-$installer->checkAvailableDatabaseTables($db);
 
-if ($update->isConfigTableAvailable($db)) {
-    // @todo Add handling if "faqconfig" is missing
+if ($update->isConfigTableAvailable($faqConfig->getDb())) {
+    echo Alert::danger('ad_entryins_fail');
 }
 
 /**************************** STEP 1 OF 3 ***************************/
@@ -164,26 +166,19 @@ if ($step === 1) { ?>
                 //
                 // We only support updates from 3.0+
                 //
-                if (version_compare($version, '3.0.0', '>')) {
-                    printf(
-                        '<div class="alert alert-success text-center" role="alert">Your current version: %s %s</div>',
-                        $version,
-                        '<i aria-hidden="true" class="fa fa-check"></i>'
-                    );
-                } else {
-                    printf(
-                        '<div class="alert alert-danger text-center" role="alert">Your current version: %s</div>',
-                        $version
-                    );
-                    echo '<p>Please update to the latest phpMyFAQ 3.0 version first.</p>';
+                if (!version_compare($version, '3.0.0', '>')) {
+                    echo '<div class="alert alert-danger" role="alert">';
+                    echo '<h4 class="alert-heading">Attention!</h4>';
+                    printf('Your current version: %s', $version);
+                    echo '<hr>Please update to the latest phpMyFAQ 3.0 version first.</div>';
                 }
 
                 //
                 // Updates only possible if maintenance mode is enabled
                 //
                 if (!$faqConfig->get('main.maintenanceMode')) {
-                    echo '<div class="alert alert-danger text-center" role="alert">Please enable the maintenance mode ' .
-                      'in the <a href="../admin">admin section</a> before running the update script.</div>';
+                    echo '<div class="alert alert-danger" role="alert">Please enable the maintenance mode ' .
+                      'in the <a href="../admin/?action=config">admin section</a> before running the update script.</div>';
                     $updateDisabled = 'disabled';
                 } else {
                     $updateDisabled = '';
