@@ -38,7 +38,7 @@ const DATETIME_TIMEZONE_DEFAULT = 'Europe/Berlin';
 date_default_timezone_set(DATETIME_TIMEZONE_DEFAULT);
 
 /**
- * Sets the current session save path if needed, by default not used
+ * Sets the current session save path if needed, by default, not used
  *
  * @var string
  */

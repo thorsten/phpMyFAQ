@@ -17,6 +17,7 @@
  * @since     2002-01-10
  */
 
+use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\BasicPermission;
@@ -46,7 +47,7 @@ if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     exit();
 }
 
-require PMF_ROOT_DIR . '/config/database.php';
+$dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/config/database.php');
 
 ?>
 <!doctype html>
@@ -113,7 +114,7 @@ $system = new System();
 $installer = new Installer($system);
 $update = new Update($system);
 
-$installer->checkPreUpgrade($DB['type']);
+$installer->checkPreUpgrade($dbConfig->getType());
 $installer->checkAvailableDatabaseTables($db);
 
 if ($update->isConfigTableAvailable($db)) {
@@ -285,7 +286,7 @@ if ($step == 3) {
     //
     if (version_compare($version, '3.1.0-alpha', '<=')) {
         // Add is_visible flag for user data
-        if ('sqlite3' === $DB['type']) {
+        if ('sqlite3' === $dbConfig->getType()) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD is_visible INTEGER DEFAULT 0';
@@ -314,7 +315,7 @@ if ($step == 3) {
     // UPDATES FROM 3.1.0-beta
     //
     if (version_compare($version, '3.1.0-beta', '<=')) {
-        $query[] = match ($DB['type']) {
+        $query[] = match ($dbConfig->getType()) {
             'mysqli' => 'CREATE TABLE ' . $prefix . 'faqcategory_order (
                     category_id int(11) NOT NULL,
                     position int(11) NOT NULL,
@@ -341,7 +342,7 @@ if ($step == 3) {
         // Azure AD support and 2FA-support
         $faqConfig->add('security.enableSignInWithMicrosoft', false);
 
-        if ('sqlite3' === $DB['type']) {
+        if ('sqlite3' === $dbConfig->getType()) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser 
                 ADD COLUMN refresh_token TEXT NULL DEFAULT NULL,
                 ADD COLUMN access_token TEXT NULL DEFAULT NULL,
@@ -373,7 +374,7 @@ if ($step == 3) {
             PRIMARY KEY (id))';
 
         // Migrate MySQL from MyISAM to InnoDB
-        if ('mysqli' === $DB['type']) {
+        if ('mysqli' === $dbConfig->getType()) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ENGINE=INNODB';
         }
 
@@ -408,7 +409,7 @@ if ($step == 3) {
         $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date';
 
         // Configuration values in a TEXT column
-        switch ($DB['type']) {
+        switch ($dbConfig->getType()) {
             case 'mysqli':
                 $query[] = 'ALTER TABLE ' . $prefix . 'faqconfig MODIFY config_value TEXT DEFAULT NULL';
                 break;
@@ -438,7 +439,7 @@ if ($step == 3) {
     //
     // Optimize tables if possible
     //
-    switch ($DB['type']) {
+    switch ($dbConfig->getType()) {
         case 'mysqli':
             // Get all table names
             $faqConfig->getDb()->getTableNames($prefix);

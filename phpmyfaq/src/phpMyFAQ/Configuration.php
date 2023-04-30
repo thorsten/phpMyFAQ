@@ -22,6 +22,8 @@ use Elastic\Elasticsearch\Client;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database\DatabaseDriver;
 
 /**
@@ -218,25 +220,25 @@ class Configuration
     /**
      * Sets the LDAP configuration.
      *
-     * @param string[] $ldapConfig
+     * @param LdapConfiguration $ldapConfig
      */
-    public function setLdapConfig(array $ldapConfig): void
+    public function setLdapConfig(LdapConfiguration $ldapConfig): void
     {
-        // Always add main LDAP server
+        // Always add the main LDAP server
         $this->config['core.ldapServer'][0] = [
-            'ldap_server' => $ldapConfig['ldap_server'],
-            'ldap_port' => $ldapConfig['ldap_port'],
-            'ldap_user' => $ldapConfig['ldap_user'],
-            'ldap_password' => $ldapConfig['ldap_password'],
-            'ldap_base' => $ldapConfig['ldap_base'],
+            'ldap_server' => $ldapConfig->getMainServer(),
+            'ldap_port' => $ldapConfig->getMainPort(),
+            'ldap_user' => $ldapConfig->getMainUser(),
+            'ldap_password' => $ldapConfig->getMainPassword(),
+            'ldap_base' => $ldapConfig->getMainBase(),
         ];
 
         // Add multiple LDAP servers if enabled
         if (true === $this->get('ldap.ldap_use_multiple_servers')) {
             $key = 1;
             while (true) {
-                if (isset($ldapConfig[$key])) {
-                    $this->config['core.ldapServer'][$key] = $ldapConfig[$key];
+                if (isset($ldapConfig->getServers()[$key])) {
+                    $this->config['core.ldapServer'][$key] = $ldapConfig->getServers()[$key];
                     ++$key;
                 } else {
                     break;
@@ -333,9 +335,9 @@ class Configuration
     /**
      * Sets the Elasticsearch configuration.
      *
-     * @param string[] $data
+     * @param ElasticsearchConfiguration $data
      */
-    public function setElasticsearchConfig(array $data): void
+    public function setElasticsearchConfig(ElasticsearchConfiguration $data): void
     {
         $this->config['core.elasticsearchConfig'] = $data;
     }
@@ -343,11 +345,11 @@ class Configuration
     /**
      * Returns the Elasticsearch configuration.
      *
-     * @return string[]
+     * @return ElasticsearchConfiguration
      */
-    public function getElasticsearchConfig(): array
+    public function getElasticsearchConfig(): ElasticsearchConfiguration
     {
-        return $this->config['core.elasticsearchConfig'] ?? [];
+        return $this->config['core.elasticsearchConfig'];
     }
 
     /**

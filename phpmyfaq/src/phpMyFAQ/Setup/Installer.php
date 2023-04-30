@@ -22,6 +22,8 @@ use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\DatabaseConfiguration;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -667,8 +669,6 @@ class Installer extends Setup
     public function startInstall(array $setup = null): void
     {
         $ldapSetup = [];
-        $DB = [];
-        $PMF_ES = [];
         $query = $uninstall = $dbSetup = [];
 
         // Check table prefix
@@ -961,7 +961,7 @@ class Installer extends Setup
         }
 
         // connect to the database using config/database.php
-        include $rootDir . '/config/database.php';
+        $dbConfig = new DatabaseConfiguration($rootDir . '/config/database.php');
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
@@ -970,12 +970,20 @@ class Installer extends Setup
             System::renderFooter(true);
         }
 
-        $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], (int)$DB['port']);
+        $db->connect(
+            $dbConfig->getServer(),
+            $dbConfig->getUser(),
+            $dbConfig->getPassword(),
+            $dbConfig->getDatabase(),
+            $dbConfig->getPort()
+        );
+
         if (!$db) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
+
         try {
             $databaseInstaller = InstanceDatabase::factory($configuration, $dbSetup['dbType']);
             $databaseInstaller->createTables($dbSetup['dbPrefix']);
@@ -1030,7 +1038,7 @@ class Installer extends Setup
         $configuration->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
         $configuration->add('security.salt', md5((string) $configuration->getDefaultUrl()));
 
-        // add admin account and rights
+        // add an admin account and rights
         $admin = new User($configuration);
         if (!$admin->createUser($loginName, $password, '', 1)) {
             printf(
@@ -1053,10 +1061,10 @@ class Installer extends Setup
             $admin->perm->grantUserRight(1, $admin->perm->addRight($right));
         }
 
-        // Add anonymous user account
+        // Add an anonymous user account
         $instanceSetup->createAnonymousUser($configuration);
 
-        // Add master instance
+        // Add primary instance
         $instanceData = new InstanceEntity();
         $instanceData
             ->setUrl($link->getSystemUri($_SERVER['SCRIPT_NAME']))
@@ -1070,11 +1078,11 @@ class Installer extends Setup
 
         // connect to Elasticsearch if enabled
         if (!is_null($esEnabled) && is_file($rootDir . '/config/elasticsearch.php')) {
-            include $rootDir . '/config/elasticsearch.php';
+            $esConfig = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
 
-            $configuration->setElasticsearchConfig($PMF_ES);
+            $configuration->setElasticsearchConfig($esConfig);
 
-            $esClient = ClientBuilder::create()->setHosts($PMF_ES['hosts'])->build();
+            $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();
 
             $configuration->setElasticsearch($esClient);
 

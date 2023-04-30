@@ -23,6 +23,7 @@ use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 
 /**
@@ -35,8 +36,7 @@ class Elasticsearch
     /** @var Client */
     protected Client $client;
 
-    /** @var array<string, mixed> */
-    protected array $esConfig;
+    protected ElasticsearchConfiguration $esConfig;
 
     /**
      * Elasticsearch mapping
@@ -102,7 +102,7 @@ class Elasticsearch
     private function getParams(): array
     {
         return [
-            'index' => $this->esConfig['index'],
+            'index' => $this->esConfig->getIndex(),
             'body' => [
                 'settings' => [
                     'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
@@ -145,15 +145,15 @@ class Elasticsearch
 
         if (
             0 === (
-            is_countable($response[$this->esConfig['index']]['mappings'])
+            is_countable($response[$this->esConfig->getIndex()]['mappings'])
                 ?
-                count($response[$this->esConfig['index']]['mappings'])
+                count($response[$this->esConfig->getIndex()]['mappings'])
                 :
                 0
             )
         ) {
             $params = [
-                'index' => $this->esConfig['index'],
+                'index' => $this->esConfig->getIndex(),
                 'body' => $this->mappings
             ];
 
@@ -189,7 +189,7 @@ class Elasticsearch
     public function dropIndex(): object
     {
         try {
-            return $this->client->indices()->delete(['index' => $this->esConfig['index']])->asObject();
+            return $this->client->indices()->delete(['index' => $this->esConfig->getIndex()])->asObject();
         } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
             throw new Exception($e->getMessage());
         }
@@ -203,7 +203,7 @@ class Elasticsearch
     public function index(array $faq): object
     {
         $params = [
-            'index' => $this->esConfig['index'],
+            'index' => $this->esConfig->getIndex(),
             'id' => $faq['solution_id'],
             'body' => [
                 'id' => $faq['id'],
@@ -241,7 +241,7 @@ class Elasticsearch
 
             $params['body'][] = [
                 'index' => [
-                    '_index' => $this->esConfig['index'],
+                    '_index' => $this->esConfig->getIndex(),
                     '_id' => $faq['solution_id'],
                 ]
             ];
@@ -293,7 +293,7 @@ class Elasticsearch
     public function update(array $faq): array
     {
         $params = [
-            'index' => $this->esConfig['index'],
+            'index' => $this->esConfig->getIndex(),
             'id' => $faq['solution_id'],
             'body' => [
                 'doc' => [
@@ -322,7 +322,7 @@ class Elasticsearch
     public function delete(int $solutionId): array
     {
         $params = [
-            'index' => $this->esConfig['index'],
+            'index' => $this->esConfig->getIndex(),
             'id' => $solutionId
         ];
 

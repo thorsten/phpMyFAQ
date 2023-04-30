@@ -3,6 +3,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
@@ -40,14 +41,18 @@ class ConfigurationTest extends TestCase
 
     public function testSetLdapConfigWithSingleServer()
     {
-        global $PMF_LDAP;
-
         // Demo data from config/ldap.php
-        $PMF_LDAP["ldap_server"] = 'localhost';
-        $PMF_LDAP["ldap_port"] = '389';
-        $PMF_LDAP["ldap_user"] = 'admin';
-        $PMF_LDAP["ldap_password"] = 'foobar';
-        $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
+        file_put_contents(
+            PMF_TEST_DIR . '/config/ldap.php',
+            "<?php\n" .
+            "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
+            "\$PMF_LDAP['ldap_port'] = '389';\n" .
+            "\$PMF_LDAP['ldap_user'] = 'admin';\n" .
+            "\$PMF_LDAP['ldap_password'] = 'foobar';\n" .
+            "\$PMF_LDAP['ldap_base'] = 'DC=foo,DC=bar,DC=baz';",
+            LOCK_EX
+        );
+
         $this->Configuration->set('ldap.ldap_use_multiple_servers', 'false');
 
         $expected = [
@@ -60,29 +65,33 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $this->Configuration->setLdapConfig($PMF_LDAP);
+        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/config/ldap.php');
+
+        $this->Configuration->setLdapConfig($ldapConfig);
 
         $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 
     public function testSetLdapConfigWithMultipleServers()
     {
-        global $PMF_LDAP;
+        // Demo data from config/ldap.php
+        file_put_contents(
+            PMF_TEST_DIR . '/config/ldap.php',
+            "<?php\n" .
+            "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
+            "\$PMF_LDAP['ldap_port'] = '389';\n" .
+            "\$PMF_LDAP['ldap_user'] = 'admin';\n" .
+            "\$PMF_LDAP['ldap_password'] = 'foobar';\n" .
+            "\$PMF_LDAP['ldap_base'] = 'DC=foo,DC=bar,DC=baz';" .
+            "\$PMF_LDAP[1]['ldap_server'] = '::1';\n" .
+            "\$PMF_LDAP[1]['ldap_port'] = '389';\n" .
+            "\$PMF_LDAP[1]['ldap_user'] = 'root';\n" .
+            "\$PMF_LDAP[1]['ldap_password'] = '42';\n" .
+            "\$PMF_LDAP[1]['ldap_base'] = 'DC=foo,DC=bar,DC=baz';",
+            LOCK_EX
+        );
 
-        // Demo data from config/ldap.php:
-        $PMF_LDAP["ldap_server"] = 'localhost';
-        $PMF_LDAP["ldap_port"] = '389';
-        $PMF_LDAP["ldap_user"] = 'admin';
-        $PMF_LDAP["ldap_password"] = 'foobar';
-        $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
         $this->Configuration->set('ldap.ldap_use_multiple_servers', 'true');
-
-        // Second server
-        $PMF_LDAP[1]["ldap_server"] = '::1';
-        $PMF_LDAP[1]["ldap_port"] = '389';
-        $PMF_LDAP[1]["ldap_user"] = 'root';
-        $PMF_LDAP[1]["ldap_password"] = '42';
-        $PMF_LDAP[1]["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
 
         $expected = [
             0 => [
@@ -93,36 +102,40 @@ class ConfigurationTest extends TestCase
                 'ldap_base' => 'DC=foo,DC=bar,DC=baz'
                 ],
             1 => [
-                'ldap_server' => '::1',
-                'ldap_port' => '389',
-                'ldap_user' => 'root',
-                'ldap_password' => '42',
-                'ldap_base' => 'DC=foo,DC=bar,DC=baz'
+                'server' => '::1',
+                'port' => '389',
+                'user' => 'root',
+                'password' => '42',
+                'base' => 'DC=foo,DC=bar,DC=baz'
             ]
         ];
 
-        $this->Configuration->setLdapConfig($PMF_LDAP);
+        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/config/ldap.php');
+        $this->Configuration->setLdapConfig($ldapConfig);
 
         $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 
     public function testSetLdapConfigWithMultipleServersButDisabled()
     {
-        global $PMF_LDAP;
+        // Demo data from config/ldap.php
+        file_put_contents(
+            PMF_TEST_DIR . '/config/ldap.php',
+            "<?php\n" .
+            "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
+            "\$PMF_LDAP['ldap_port'] = '389';\n" .
+            "\$PMF_LDAP['ldap_user'] = 'admin';\n" .
+            "\$PMF_LDAP['ldap_password'] = 'foobar';\n" .
+            "\$PMF_LDAP['ldap_base'] = 'DC=foo,DC=bar,DC=baz';" .
+            "\$PMF_LDAP[1]['ldap_server'] = '::1';\n" .
+            "\$PMF_LDAP[1]['ldap_port'] = '389';\n" .
+            "\$PMF_LDAP[1]['ldap_user'] = 'root';\n" .
+            "\$PMF_LDAP[1]['ldap_password'] = '42';\n" .
+            "\$PMF_LDAP[1]['ldap_base'] = 'DC=foo,DC=bar,DC=baz';",
+            LOCK_EX
+        );
 
-        // Demo data from config/ldap.php:
-        $PMF_LDAP["ldap_server"] = 'localhost';
-        $PMF_LDAP["ldap_port"] = '389';
-        $PMF_LDAP["ldap_user"] = 'admin';
-        $PMF_LDAP["ldap_password"] = 'foobar';
-        $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
         $this->Configuration->set('ldap.ldap_use_multiple_servers', 'false');
-        // Second server
-        $PMF_LDAP[1]["ldap_server"] = '::1';
-        $PMF_LDAP[1]["ldap_port"] = '389';
-        $PMF_LDAP[1]["ldap_user"] = 'root';
-        $PMF_LDAP[1]["ldap_password"] = '42';
-        $PMF_LDAP[1]["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
 
         $expected = [
             0 => [
@@ -134,7 +147,8 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $this->Configuration->setLdapConfig($PMF_LDAP);
+        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/config/ldap.php');
+        $this->Configuration->setLdapConfig($ldapConfig);
 
         $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }

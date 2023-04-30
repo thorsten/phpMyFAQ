@@ -16,6 +16,7 @@
  * @since     2009-04-01
  */
 
+use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
@@ -110,15 +111,15 @@ switch ($ajaxAction) {
                 exit(1);
             }
 
+            $dbConfig = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
             $dbSetup = [
-                'dbServer' => $DB['server'],
-                'dbPort' => $DB['port'],
-                'dbUser' => $DB['user'],
-                'dbPassword' => $DB['password'],
-                'dbDatabaseName' => $DB['db'],
+                'dbServer' => $dbConfig->getServer(),
+                'dbPort' => $dbConfig->getPort(),
+                'dbUser' => $dbConfig->getUser(),
+                'dbPassword' => $dbConfig->getPassword(),
+                'dbDatabaseName' => $dbConfig->getDatabase(),
                 'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
-                'dbType' => $DB['type'],
-                'dbPort' => $DB['port']
+                'dbType' => $dbConfig->getType()
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
@@ -127,7 +128,7 @@ switch ($ajaxAction) {
 
             Database::setTablePrefix($dbSetup['dbPrefix']);
 
-            // add admin account and rights
+            // add an admin account and rights
             $instanceAdmin = new User($faqConfig);
             $instanceAdmin->createUser($admin, $password, '', 1);
             $instanceAdmin->setStatus('protected');
@@ -137,7 +138,7 @@ switch ($ajaxAction) {
             ];
             $instanceAdmin->setUserData($instanceAdminData);
 
-            // Add anonymous user account
+            // Add an anonymous user account
             try {
                 $clientSetup->createAnonymousUser($faqConfig);
             } catch (Exception $e) {
@@ -145,7 +146,7 @@ switch ($ajaxAction) {
                 $payload = ['error' => $e->getMessage()];
             }
 
-            Database::setTablePrefix($DB['prefix']);
+            Database::setTablePrefix($dbConfig->getPrefix());
         } else {
             $faqInstance->removeInstance($instanceId);
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);

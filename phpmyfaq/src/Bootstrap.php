@@ -16,7 +16,11 @@
  */
 
 use Elastic\Elasticsearch\ClientBuilder;
+use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\DatabaseConfiguration;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Init;
@@ -93,11 +97,6 @@ if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
 }
 
 //
-// Get database credentials
-//
-require PMF_CONFIG_DIR . '/database.php';
-
-//
 // Get required phpMyFAQ constants
 //
 require PMF_CONFIG_DIR . '/constants.php';
@@ -127,9 +126,16 @@ ob_start();
 // Create a database connection
 //
 try {
-    Database::setTablePrefix($DB['prefix']);
-    $db = Database::factory($DB['type']);
-    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], $DB['port'] ?? null);
+    $dbConfig = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
+    Database::setTablePrefix($dbConfig->getPrefix());
+    $db = Database::factory($dbConfig->getType());
+    $db->connect(
+        $dbConfig->getServer(),
+        $dbConfig->getUser(),
+        $dbConfig->getPassword(),
+        $dbConfig->getDatabase(),
+        $dbConfig->getPort()
+    );
 } catch (Exception $exception) {
     Database::errorPage($exception->getMessage());
     exit(-1);
@@ -165,8 +171,8 @@ session_start();
 // Connect to LDAP server, when LDAP support is enabled
 //
 if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
-    require PMF_CONFIG_DIR . '/ldap.php';
-    $faqConfig->setLdapConfig($PMF_LDAP);
+    $ldapConfig = new LdapConfiguration(PMF_CONFIG_DIR . '/ldap.php');
+    $faqConfig->setLdapConfig($ldapConfig);
 } else {
     $ldap = null;
 }
@@ -174,21 +180,22 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 // Connect to Elasticsearch if enabled
 //
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
-    require PMF_CONFIG_DIR . '/elasticsearch.php';
-    require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
-
-    $esClient = ClientBuilder::create()->setHosts($PMF_ES['hosts'])->build();
-
-    $faqConfig->setElasticsearch($esClient);
-    $faqConfig->setElasticsearchConfig($PMF_ES);
+    $esConfig = new ElasticsearchConfiguration(PMF_CONFIG_DIR . '/elasticsearch.php');
+    try {
+        $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();
+        $faqConfig->setElasticsearch($esClient);
+        $faqConfig->setElasticsearchConfig($esConfig);
+    } catch (AuthenticationException $e) {
+        // @handle AuthenticationException
+    }
 }
 
 //
-// Build attachments path
+// Build an attachment path
 //
 $confAttachmentsPath = trim($faqConfig->get('records.attachmentsPath'));
 if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
-    // If we're here, some windows or unix style absolute path was detected.
+    // If we're here, some Windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
 } else {
     // otherwise, build the absolute path

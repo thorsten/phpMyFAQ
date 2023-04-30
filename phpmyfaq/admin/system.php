@@ -34,8 +34,6 @@ $request = Request::createFromGlobals();
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $faqSystem = new System();
 
-    $esConfig = $faqConfig->getElasticsearchConfig();
-
     if ($faqConfig->get('search.enableElasticsearch')) {
         try {
             $esFullInformation = $faqConfig->getElasticsearch()->info();

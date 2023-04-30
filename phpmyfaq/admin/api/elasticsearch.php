@@ -81,7 +81,7 @@ switch ($ajaxAction) {
         break;
 
     case 'stats':
-        $indexName = $esConfigData['index'];
+        $indexName = $esConfigData->getIndex();
         try {
             $response->setStatusCode(Response::HTTP_OK);
             $result = [

@@ -21,6 +21,7 @@ use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use stdClass;
 
 /**
@@ -32,8 +33,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 {
     private readonly Client $client;
 
-    /** @var string[] */
-    private readonly array $esConfig;
+    private readonly ElasticsearchConfiguration $esConfig;
 
     private string $language = '';
 
@@ -62,7 +62,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         $result = [];
         $this->resultSet = [];
         $searchParams = [
-            'index' => $this->esConfig['index'],
+            'index' => $this->esConfig->getIndex(),
             'size' => 100,
             'body' => [
                 'query' => [
@@ -144,7 +144,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         $this->resultSet = [];
 
         $searchParams = [
-            'index' => $this->esConfig['index'],
+            'index' => $this->esConfig->getIndex(),
             'size' => 100,
             'body' => [
                 'query' => [
