@@ -21,6 +21,7 @@ namespace phpMyFAQ;
 use Elastic\Elasticsearch\Client;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
@@ -33,9 +34,11 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 class Configuration
 {
-    public array $config = [];
+    private array $config = [];
 
-    public Logger $logger;
+    private Logger $logger;
+
+    private static ?Configuration $instance = null;
 
     protected string $tableName = 'faqconfig';
 
@@ -44,14 +47,20 @@ class Configuration
      */
     public function __construct(DatabaseDriver $database)
     {
-        $this->setDb($database);
+        $this->setDatabase($database);
         $this->setLogger();
+
+        if (is_null(self::$instance)) {
+            self::$instance = $this;
+        }
     }
 
-    /**
-     * Sets the phpMyFAQ\Db_Driver object.
-     */
-    public function setDb(DatabaseDriver $database): void
+    public static function getConfigurationInstance(): Configuration
+    {
+        return self::$instance;
+    }
+
+    public function setDatabase(DatabaseDriver $database): void
     {
         $this->config['core.database'] = $database;
     }
@@ -63,13 +72,10 @@ class Configuration
     public function setLogger(): void
     {
         $this->logger = new Logger('phpmyfaq');
-        $this->logger->pushHandler(new StreamHandler(PMF_LOG_DIR, DEBUG ? Logger::DEBUG : Logger::WARNING));
+        $this->logger->pushHandler(new StreamHandler(PMF_LOG_DIR, DEBUG ? Level::Debug : Level::Warning));
         $this->logger->pushHandler(new BrowserConsoleHandler());
     }
 
-    /**
-     * Returns the logger instance
-     */
     public function getLogger(): Logger
     {
         return $this->logger;

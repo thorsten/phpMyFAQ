@@ -18,7 +18,7 @@ class ChangelogTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
 
         $this->configuration = new Configuration($dbHandle);
-        $this->configuration->config['main.currentVersion'] = System::getVersion();
+        $this->configuration->set('main.currentVersion', System::getVersion());
 
         $this->changelog = new Changelog($this->configuration);
     }

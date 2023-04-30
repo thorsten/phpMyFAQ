@@ -67,7 +67,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create($login, $password, $domain = ''): bool
+    public function create(string $login, string $password, string $domain = ''): bool
     {
         $user = new User($this->config);
         $result = $user->createUser($login, '', $domain);

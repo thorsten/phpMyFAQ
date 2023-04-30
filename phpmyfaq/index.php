@@ -23,6 +23,7 @@
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
@@ -65,6 +66,8 @@ $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
 
 $showCaptcha = Filter::filterVar($request->query->get('gen'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 //
 // Get language (default: english)

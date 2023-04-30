@@ -128,7 +128,7 @@ class CurrentUser extends User
         $this->getUserByLogin($login);
         if ($this->isFailedLastLoginAttempt()) {
             $this->errors[] = parent::ERROR_USER_TOO_MANY_FAILED_LOGINS;
-            $this->config->logger->info(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
+            $this->config->getLogger()->info(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
             return false;
         }
 

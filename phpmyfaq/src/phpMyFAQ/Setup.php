@@ -4,7 +4,7 @@
  * The abstract setup class for installation and updating phpMyFAQ.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * v. 2.0. If a copy of the MPL wasn't distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
@@ -25,7 +25,7 @@ abstract class Setup
 
     /**
      * Checks the minimum required PHP version, defined in System class.
-     * Returns true, if it's okay.
+     * Returns true if it's okay.
      */
     public function checkMinimumPhpVersion(): bool
     {

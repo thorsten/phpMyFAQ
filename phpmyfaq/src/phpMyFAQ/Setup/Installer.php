@@ -806,7 +806,7 @@ class Installer extends Setup
             // set LDAP Config to prevent DB query
             foreach ($this->mainConfig as $configKey => $configValue) {
                 if (str_contains($configKey, 'ldap.')) {
-                    $configuration->config[$configKey] = $configValue;
+                    $configuration->set($configKey, $configValue);
                 }
             }
 

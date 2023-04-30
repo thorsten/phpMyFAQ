@@ -30,7 +30,7 @@ class DatabaseHelperTest extends TestCase
         $dbHandle->query("INSERT INTO faqtest (name,testvalue) VALUES ('bar','baz')");
 
         $configuration = new Configuration($dbHandle);
-        $configuration->config['main.currentVersion'] = System::getVersion();
+        $configuration->set('main.currentVersion', System::getVersion());
 
         $this->databaseHelper = new DatabaseHelper($configuration);
     }

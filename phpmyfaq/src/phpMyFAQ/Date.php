@@ -94,7 +94,7 @@ class Date
             $date = new DateTime($unformattedDate);
             return $date->format($this->config->get('main.dateFormat'));
         } catch (Exception $e) {
-            $this->config->logger->error($e->getMessage());
+            $this->config->getLogger()->error($e->getMessage());
             return '';
         }
     }

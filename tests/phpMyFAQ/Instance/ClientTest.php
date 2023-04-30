@@ -26,8 +26,10 @@ class ClientTest extends TestCase
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
         $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+
         $Configuration = new Configuration($dbHandle);
-        $Configuration->config['security.useSslOnly'] = 'true';
+        $Configuration->set('security.useSslOnly', 'true');
         $Filesystem = new Filesystem(PMF_ROOT_DIR);
 
         $Instance = new Instance($Configuration);

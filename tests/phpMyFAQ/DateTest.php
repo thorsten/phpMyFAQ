@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 class DateTest extends TestCase
 {
     private Configuration $configuration;
+
     /**
      * Prepares the environment before running a test.
      */
@@ -20,8 +21,8 @@ class DateTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
-        $this->configuration->config['main.currentVersion'] = System::getVersion();
-        $this->configuration->config['main.dateFormat'] = 'Y-m-d H:i';
+        $this->configuration->set('main.currentVersion', System::getVersion());
+        $this->configuration->set('main.dateFormat', 'Y-m-d H:i');
     }
     public function testFormat(): void
     {
