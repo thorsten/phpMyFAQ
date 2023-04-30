@@ -1,4 +1,4 @@
-# phpMyFAQ 3.2.0-alpha.2
+# phpMyFAQ 3.2.0-beta
 
 **Codename "Pontus"**
 
@@ -6,8 +6,9 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.0-alpha.2 - 2023-04-
+### phpMyFAQ v3.2.0-beta - 2023-04-30
 
+- fixed multiple security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
 - changed MariaDB / MySQL / Percona Server / Galera Cluster to InnoDB only (Thorsten)

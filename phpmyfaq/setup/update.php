@@ -395,7 +395,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.2.0-alpha.2
     //
-    if (version_compare($version, '3.2.0-alpha.2', '<')) {
+    if (version_compare($version, '3.2.0-beta', '<')) {
         $faqConfig->add('mail.remoteSMTPDisableTLSPeerVerification', false);
         $faqConfig->delete('main.enableLinkVerification');
 

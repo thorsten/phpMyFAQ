@@ -40,6 +40,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             $esInformation = $esFullInformation['version']['number'];
         } catch (ClientResponseException|ServerResponseException|NoNodeAvailableException $e) {
             $faqConfig->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
+            $esInformation = 'n/a';
             echo Alert::danger('ad_entryins_fail');
         }
     } else {
@@ -77,7 +78,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                 ];
                 foreach ($systemInformation as $name => $info) : ?>
                     <tr>
-                        <td class="col-2"><strong><?= $name ?></strong></td>
+                        <td class="col-2 align-text-top"><strong><?= $name ?></strong></td>
                         <td><?= $info ?></td>
                     </tr>
                     <?php
