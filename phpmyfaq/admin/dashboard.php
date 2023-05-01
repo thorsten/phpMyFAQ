@@ -56,7 +56,7 @@ $faqSession = new Session($faqConfig);
   </div>
 </div>
 
-<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')): ?>
+<?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) : ?>
   <section class="row mb-3">
     <div class="col-12">
       <div class="card bg-danger text-white shadow h-100 py-2">
@@ -78,7 +78,7 @@ $faqSession = new Session($faqConfig);
   </section>
 <?php endif; ?>
 
-<?php if (System::isDevelopmentVersion()): ?>
+<?php if (System::isDevelopmentVersion()) : ?>
 <section class="row">
     <div class="col">
         <div class="alert alert-danger" role="alert">
@@ -184,9 +184,9 @@ $faqSession = new Session($faqConfig);
                 if ((is_countable($inactiveFaqs) ? count($inactiveFaqs) : 0) > 0) {
                     foreach ($inactiveFaqs as $inactiveFaq) {
                         printf(
-                          '<li><i class="fa fa-question-circle"></i> <a href="%s">%s</a></li>',
-                          Strings::htmlentities($inactiveFaq['url']),
-                          Strings::htmlentities($inactiveFaq['question'])
+                            '<li><i class="fa fa-question-circle"></i> <a href="%s">%s</a></li>',
+                            Strings::htmlentities($inactiveFaq['url']),
+                            Strings::htmlentities($inactiveFaq['question'])
                         );
                     }
                 } else {
@@ -199,7 +199,6 @@ $faqSession = new Session($faqConfig);
     </div>
 
         <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) : ?>
-
     <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
@@ -222,13 +221,13 @@ $faqSession = new Session($faqConfig);
                         if (-1 == version_compare($versions['installed'], $versions['current'])) {
                             echo '<br>' . Translation::get('ad_you_should_update');
                         }
-                    } catch (DecodingExceptionInterface|TransportExceptionInterface|Exception $e) {
+                    } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                     }
                 } else {
                     ?>
-                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php" method="post"
-                        accept-charset="utf-8">
+                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php"
+                        method="post" accept-charset="utf-8">
                     <input type="hidden" name="param" value="version"/>
                     <button class="btn btn-info" type="submit">
                         <?= Translation::get('ad_xmlrpc_button') ?>
@@ -279,12 +278,11 @@ $faqSession = new Session($faqConfig);
                     }
                 } else {
                     ?>
-                  <form action="./index.php" method="post"
-                        accept-charset="utf-8">
-                    <input type="hidden" name="getJson" value="verify"/>
-                    <button class="btn btn-info" type="submit">
-                        <?= Translation::get('ad_verification_button') ?>
-                    </button>
+                  <form action="./index.php" method="post" accept-charset="utf-8">
+                      <input type="hidden" name="getJson" value="verify">
+                      <button class="btn btn-info" type="submit">
+                          <?= Translation::get('ad_verification_button') ?>
+                      </button>
                   </form>
                     <?php
                 }

@@ -19,6 +19,8 @@
 namespace phpMyFAQ\Database;
 
 use Exception;
+use PgSql\Connection;
+use PgSql\Result;
 use phpMyFAQ\Database;
 use phpMyFAQ\Utils;
 
@@ -39,14 +41,14 @@ class Pgsql implements DatabaseDriver
     /**
      * Tables.
      *
-     * @var array
+     * @var string[]
      */
-    public $tableNames = [];
+    public array $tableNames = [];
 
     /**
      * The connection resource.
      */
-    private bool|null $conn = null;
+    private Connection|null $conn = null;
 
     /**
      * Connects to the database.
@@ -86,10 +88,9 @@ class Pgsql implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     *
-     * @return mixed $result
+     * @return bool|Result $result
      */
-    public function query(string $query, int $offset = 0, int $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0): bool|Result
     {
         $this->sqllog .= Utils::debug($query);
 
@@ -117,7 +118,8 @@ class Pgsql implements DatabaseDriver
     /**
      * Escapes a string for use in a query.
      *
-     * @param string
+     * @param string $string
+     * @return string
      */
     public function escape(string $string): string
     {
@@ -128,7 +130,7 @@ class Pgsql implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Resultset
-     * @return array
+     * @return array|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array
@@ -148,9 +150,9 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     * @return mixed
+     * @return false|object
      */
-    public function fetchObject(mixed $result)
+    public function fetchObject(mixed $result): mixed
     {
         return pg_fetch_object($result);
     }
@@ -158,17 +160,16 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row.
      *
-     * @return false|mixed
+     * @param mixed $result
+     * @return array|false
      */
-    public function fetchRow(mixed $result)
+    public function fetchRow(mixed $result): array|false
     {
         return pg_fetch_row($result);
     }
 
     /**
      * Number of rows in a result.
-     *
-     *
      */
     public function numRows(mixed $result): int
     {
@@ -204,8 +205,8 @@ class Pgsql implements DatabaseDriver
     /**
      * Fetch a result row as an object.
      *
-     *
-     * @return array
+     * @param mixed $result
+     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -219,9 +220,9 @@ class Pgsql implements DatabaseDriver
     /**
      * Returns just one row.
      *
-     * @param string
+     * @param string $query
      */
-    private function getOne($query): string
+    private function getOne(string $query): string
     {
         $row = pg_fetch_row($this->query($query));
 

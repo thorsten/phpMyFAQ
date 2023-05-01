@@ -19,7 +19,6 @@ namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Utils;
-use SQLite3Result;
 
 /**
  * Class Sqlite3
@@ -29,14 +28,14 @@ use SQLite3Result;
 class Sqlite3 implements DatabaseDriver
 {
     /**
-     * Tables.
+     * @var string[] Tables.
      */
     public array $tableNames = [];
 
     /**
      * The connection object.
      *
-     * @var SQLite3|bool
+     * @var \SQLite3|bool
      */
     private \Sqlite3|bool $conn = false;
 
@@ -172,10 +171,9 @@ class Sqlite3 implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     *
-     * @return mixed $result
+     * @return \SQLite3Result|bool $result
      */
-    public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
+    public function query(string $query, int $offset = 0, int $rowcount = 0): \SQLite3Result|bool
     {
         $this->sqllog .= Utils::debug($query);
 

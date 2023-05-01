@@ -45,16 +45,15 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Connects to the database.
-     *
      * This function connects to a MySQL database
      *
-     * @param string $host A string specifying the name of the server to which a connection is being established
-     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param string $password Specifies the password associated with the User ID to be used when connecting with
+     * @param string   $host A string specifying the name of the server to which a connection is being established
+     * @param string   $user Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string   $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
-     * @param string $database Specifies the name of the database in use for the connection being established
+     * @param string   $database Specifies the name of the database in use for the connection being established
      * @param int|null $port
-     * @return bool true, if connected, otherwise false
+     * @return bool|null true, if connected, otherwise false
      */
     public function connect(
         string $host,
@@ -88,7 +87,7 @@ class Sqlsrv implements DatabaseDriver
      * Fetch a result row as an assoc array.
      *
      * @param mixed $result Resultset
-     * @return array
+     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -102,7 +101,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return false|mixed
      */
-    public function fetchRow(mixed $result)
+    public function fetchRow(mixed $result): mixed
     {
         return $this->fetchArray($result)[0];
     }
@@ -111,7 +110,7 @@ class Sqlsrv implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Resultset
-     * @return array
+     * @return array|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array
@@ -147,7 +146,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @param mixed $result Results
      */
-    public function fetchObject(mixed $result)
+    public function fetchObject(mixed $result): mixed
     {
         return sqlsrv_fetch_object($result);
     }
@@ -204,7 +203,7 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return mixed $result
      */
-    public function query(string $query, int $offset = 0, int $rowcount = 0)
+    public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
         $this->sqllog .= Utils::debug($query);
 

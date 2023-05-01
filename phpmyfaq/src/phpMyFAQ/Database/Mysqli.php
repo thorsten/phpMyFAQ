@@ -32,7 +32,7 @@ use phpMyFAQ\Utils;
 class Mysqli implements DatabaseDriver
 {
     /**
-     * Tables.
+     * @var string[] Tables.
      */
     public array $tableNames = [];
 
@@ -116,8 +116,10 @@ class Mysqli implements DatabaseDriver
     }
 
     /**
-     * Fetch a result row as an object.
-     * This function fetches a result as an associative array.
+     * Fetch a result row as an associative array.
+     *
+     * @param mixed $result
+     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -136,7 +138,7 @@ class Mysqli implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Result set
-     * @return array
+     * @return array|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array
@@ -188,6 +190,7 @@ class Mysqli implements DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
+     * @return string[]
      */
     public function getTableStatus(string $prefix = ''): array
     {
@@ -256,8 +259,9 @@ class Mysqli implements DatabaseDriver
      * Returns just one row.
      *
      * @param string $query
+     * @return string
      */
-    private function getOne($query): string
+    private function getOne(string $query): string
     {
         $row = $this->conn->query($query)->fetch_row();
 
@@ -336,19 +340,16 @@ class Mysqli implements DatabaseDriver
     /**
      * Closes the connection to the database.
      */
-    public function close()
+    public function close(): void
     {
-        if (is_resource($this->conn)) {
+        if ($this->conn) {
             $this->conn->close();
         }
     }
 
-    /**
-     * Destructor.
-     */
     public function __destruct()
     {
-        if (is_resource($this->conn)) {
+        if ($this->conn) {
             $this->conn->close();
         }
     }
