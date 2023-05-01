@@ -180,6 +180,7 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 // Connect to Elasticsearch if enabled
 //
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
+    require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
     $esConfig = new ElasticsearchConfiguration(PMF_CONFIG_DIR . '/elasticsearch.php');
     try {
         $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();
