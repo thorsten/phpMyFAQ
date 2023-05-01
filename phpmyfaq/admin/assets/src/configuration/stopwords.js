@@ -202,7 +202,7 @@ const saveStopWordHandleOnEnter = (elementId, event) => {
 const saveStopWord = (elementId) => {
   const info = parseStopWordInputElemId(elementId);
   const element = document.getElementById(elementId);
-  const csrfToken = document.getElementById('pmf-stop-words-csrf-token').value;
+  const csrfToken = document.getElementById('pmf-csrf-token').value;
 
   if (element.getAttribute('data-old-value') !== element.value) {
     fetch('index.php?action=ajax&ajax=config&ajaxaction=save_stop_word', {
@@ -263,7 +263,7 @@ const saveOldValue = (elementId) => {
 const deleteStopWord = (elementId) => {
   const info = parseStopWordInputElemId(elementId);
   const element = document.getElementById(elementId);
-  const csrfToken = document.getElementById('pmf-stop-words-csrf-token').value;
+  const csrfToken = document.getElementById('pmf-csrf-token').value;
 
   fetch('index.php?action=ajax&ajax=config&ajaxaction=delete_stop_word', {
     method: 'DELETE',
