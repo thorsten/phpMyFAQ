@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Api;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
@@ -30,6 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
 $faqTableInfo = $faqConfig->getDb()->getTableStatus(Database::getTablePrefix());
 $faqSystem = new System();
 $faqSession = new Session($faqConfig);
@@ -54,7 +56,7 @@ $faqSession = new Session($faqConfig);
 
 <?php if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')): ?>
   <section class="row mb-3">
-    <div class="col-12 p-2">
+    <div class="col-12">
       <div class="card bg-danger text-white shadow h-100 py-2">
         <div class="card-header text-uppercase">Attention!</div>
         <div class="card-body">

@@ -255,7 +255,7 @@ class System
         $mainUrl = $faqConfig->getDefaultUrl();
 
         if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
-            if (!str_contains((string) $mainUrl, 'https')) {
+            if (!str_contains($mainUrl, 'https')) {
                 $mainUrl = str_replace('http://', 'https://', (string) $mainUrl);
             }
         }
@@ -390,6 +390,8 @@ class System
 
     /**
      * Removes the database.php and the ldap.php if an installation failed.
+     *
+     * @todo have to be moved to the Installer class
      */
     public function cleanFailedInstallationFiles(): void
     {
