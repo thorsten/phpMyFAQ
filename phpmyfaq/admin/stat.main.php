@@ -16,6 +16,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
@@ -71,9 +72,9 @@ $request = Request::createFromGlobals();
             }
 
             // Delete sessions and session files
-            if (!is_null($statdelete) && !is_null($month)) {
+            if ($statdelete == 'delete' && $month !== '') {
                 $dir = opendir(PMF_ROOT_DIR . '/data');
-                $first = 9999999999999999999999999;
+                $first = 9999999999999999999;
                 $last = 0;
                 while ($trackingFile = readdir($dir)) {
                     // The filename format is: trackingDDMMYYYY
@@ -91,6 +92,7 @@ $request = Request::createFromGlobals();
                     }
                 }
                 closedir($dir);
+
                 $session->deleteSessions($first, $last);
 
                 echo Alert::success('ad_adminlog_delete_success');
@@ -233,8 +235,8 @@ $request = Request::createFromGlobals();
             <?= Translation::get('ad_stat_management') ?>
         </h4>
 
-        <form action="?action=viewsessions" method="post"
-              class="row row-cols-lg-auto g-3 align-items-center">
+        <form action="?action=viewsessions" method="post" class="row row-cols-lg-auto g-3 align-items-center">
+            <input type="hidden" name="statdelete" value="delete">
             <div class="col-12">
                 <?= Token::getInstance()->getTokenInput('sessions') ?>
 
@@ -263,7 +265,7 @@ $request = Request::createFromGlobals();
                   </select>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary" type="submit" name="statdelete">
+                <button class="btn btn-primary" type="submit">
                       <?= Translation::get('ad_stat_delete') ?>
                 </button>
             </div>
