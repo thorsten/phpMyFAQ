@@ -38,7 +38,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         ];
         $editData = Filter::filterInputArray(INPUT_POST, ['edit' => $checks]);
         $userAction = 'listConfig';
-        $oldConfigValues = $faqConfig->config;
+        $oldConfigValues = $faqConfig->getAll();
 
         // Set the new values
         $forbiddenValues = ['{', '}'];

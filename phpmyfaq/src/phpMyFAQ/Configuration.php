@@ -206,9 +206,9 @@ class Configuration
     }
 
     /**
-     * Fetches all configuration items into an array.
+     * Fetches and returns all configuration items into an array.
      */
-    public function getAll(): void
+    public function getAll(): array
     {
         $query = sprintf(
             'SELECT config_name, config_value FROM %s%s',
@@ -221,6 +221,8 @@ class Configuration
         foreach ($config as $items) {
             $this->config[$items->config_name] = $items->config_value;
         }
+
+        return $this->config;
     }
 
     /**
