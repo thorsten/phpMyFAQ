@@ -25,6 +25,8 @@ use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -206,7 +208,7 @@ $faqSession = new Session($faqConfig);
             <div class="card-body">
                 <?php
                 $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
-                if ($faqConfig->get('main.enableAutoUpdateHint') || (!is_null($version) && $version == 'version')) {
+                if ($faqConfig->get('main.enableAutoUpdateHint') || ($version == 'version')) {
                     $api = new Api($faqConfig, new System());
                     try {
                         $versions = $api->getVersions();
@@ -220,7 +222,7 @@ $faqSession = new Session($faqConfig);
                         if (-1 == version_compare($versions['installed'], $versions['current'])) {
                             echo '<br>' . Translation::get('ad_you_should_update');
                         }
-                    } catch (JsonException $e) {
+                    } catch (DecodingExceptionInterface|TransportExceptionInterface|Exception $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                     }
                 } else {
