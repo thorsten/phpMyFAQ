@@ -138,9 +138,18 @@ class System
         return self::VERSION_API;
     }
 
-    public static function getPoweredByString(): string
+    public static function getPoweredByString(bool $withLink = false): string
     {
-        return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
+        if ($withLink) {
+            return sprintf(
+                'powered with ❤️ and ☕️ by <a class="%s" target="_blank" href="%s">phpMyFAQ</a> %s',
+                'link-light text-decoration-none',
+                'https://www.phpmyfaq.de/',
+                self::getVersion()
+            );
+        } else {
+            return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
+        }
     }
 
     /**

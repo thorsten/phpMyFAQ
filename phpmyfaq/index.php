@@ -567,7 +567,7 @@ $tplMainPage = [
     'languageBox' => Translation::get('msgLanguageSubmit'),
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
-    'copyright' => System::getPoweredByString(),
+    'copyright' => System::getPoweredByString(true),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
         Translation::get('msgRegistration') . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
@@ -628,16 +628,18 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             :
             '',
         'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
-        'msgContact' => '<a class="nav-link px-1 " href="./contact.html">' . Translation::get('msgContact') . '</a>',
-        'msgGlossary' => '<a class="nav-link px-1 " href="./glossary.html">' .
+        'msgContact' => '<a class="nav-link px-2 link-light" href="./contact.html">' . Translation::get('msgContact') .
+            '</a>',
+        'msgGlossary' => '<a class="nav-link px-2 link-light" href="./glossary.html">' .
             Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
-            '<a class="nav-link px-1 " target="_blank" href="%s">%s</a>',
+            '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
             Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
-        'faqOverview' => '<a class="nav-link px-1 " href="./overview.html">' . Translation::get('faqOverview') . '</a>',
-        'showSitemap' => '<a class="nav-link px-1 " href="./sitemap/A/' . $faqLangCode . '.html">' .
+        'faqOverview' => '<a class="nav-link px-2 link-light" href="./overview.html">' .
+            Translation::get('faqOverview') . '</a>',
+        'showSitemap' => '<a class="nav-link px-2 link-light" href="./sitemap/A/' . $faqLangCode . '.html">' .
             Translation::get('msgSitemap') . '</a>',
         'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
     ];
@@ -662,16 +664,19 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             '',
         'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' .
             Translation::get('msgAdvancedSearch') . '</a>',
-        'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . Translation::get('msgContact') . '</a>',
-        'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' .
+        'msgContact' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=contact">' .
+            Translation::get('msgContact') . '</a>',
+        'msgGlossary' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=glossary">' .
             Translation::get('ad_menu_glossary') . '</a>',
         'privacyLink' => sprintf(
-            '<a target="_blank" href="%s">%s</a>',
+            '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
             Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
-        'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . Translation::get('faqOverview') . '</a>',
-        'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' .
+        'faqOverview' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=overview">' .
+            Translation::get('faqOverview') . '</a>',
+        'showSitemap' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=sitemap&amp;lang=' .
+            $faqLangCode . '">' .
             Translation::get('msgSitemap') . '</a>',
         'breadcrumbHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
     ];

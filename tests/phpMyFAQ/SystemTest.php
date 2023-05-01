@@ -15,6 +15,14 @@ class SystemTest extends TestCase
         );
     }
 
+    public function testGetPoweredByStringWithLink(): void
+    {
+        $this->assertEquals(
+            sprintf('powered with ❤️ and ☕️ by <a class="link-light text-decoration-none" target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ</a> %s', System::getVersion()),
+            System::getPoweredByString(true)
+        );
+    }
+
     public function testIsSqlite(): void
     {
         $this->assertTrue(System::isSqlite('sqlite3'));
