@@ -341,16 +341,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v8.7.0",
+            "version": "v8.7.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:elastic/elasticsearch-php.git",
-                "reference": "a4563130aa3ab608621ba22717d61c91b418454f"
+                "reference": "b499484115efc08db352c3d5c566648492b1e892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/a4563130aa3ab608621ba22717d61c91b418454f",
-                "reference": "a4563130aa3ab608621ba22717d61c91b418454f",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/b499484115efc08db352c3d5c566648492b1e892",
+                "reference": "b499484115efc08db352c3d5c566648492b1e892",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +389,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2023-03-27T08:05:35+00:00"
+            "time": "2023-03-30T09:02:44+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -1339,16 +1339,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.15.3",
+            "version": "1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "3ccd28dd9fb34b52db946abea1b538568e34eae8"
+                "reference": "bd810d15957cf165230e65d9e1a130793265e3b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/3ccd28dd9fb34b52db946abea1b538568e34eae8",
-                "reference": "3ccd28dd9fb34b52db946abea1b538568e34eae8",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/bd810d15957cf165230e65d9e1a130793265e3b7",
+                "reference": "bd810d15957cf165230e65d9e1a130793265e3b7",
                 "shasum": ""
             },
             "require": {
@@ -1356,7 +1356,8 @@
                 "php": "^7.1 || ^8.0"
             },
             "conflict": {
-                "nyholm/psr7": "<1.0"
+                "nyholm/psr7": "<1.0",
+                "zendframework/zend-diactoros": "*"
             },
             "provide": {
                 "php-http/async-client-implementation": "*",
@@ -1381,7 +1382,10 @@
             "autoload": {
                 "psr-4": {
                     "Http\\Discovery\\": "src/"
-                }
+                },
+                "exclude-from-classmap": [
+                    "src/Composer/Plugin.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1407,9 +1411,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/discovery/issues",
-                "source": "https://github.com/php-http/discovery/tree/1.15.3"
+                "source": "https://github.com/php-http/discovery/tree/1.17.0"
             },
-            "time": "2023-03-31T14:40:37+00:00"
+            "time": "2023-04-26T15:39:13+00:00"
         },
         {
             "name": "php-http/httplug",
