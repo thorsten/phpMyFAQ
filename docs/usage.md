@@ -26,18 +26,18 @@ If you would like to have WYSIWYG editor in another language, just download the 
 [language pack](https://www.tiny.cloud/get-tiny/language-packages/), extract it and upload the extracted files to
 admin/editor directory under your phpMyFAQ's installation directory on your web server.
 
-# 4.2 Find As You Type
+## 4.2 Find As You Type
 
 The Find As You Type feature is directly built into the main search bar in the top of the FAQ with direct access to the
 whole FAQ database, and the page will return results while you're typing into the input form.
 For performance reasons, only the first 10 results will be suggested.
 
-# 4.3 Advanced search
+## 4.3 Advanced search
 
 There's a link to the advanced search just below the main search, where you have more possibilities to find a FAQ.
 You can search over all languages if you want to, and it's also possible to search only in one selected category.
 
-# 4.4 Add FAQ
+## 4.4 Add FAQ
 
 On the _Add FAQ_ page it's possible for all users to add a new FAQ record.
 The users have to add a FAQ question, select a category, add an answer, and they have to insert their name and e-mail
@@ -47,7 +47,7 @@ New FAQ entries won't be displayed by default and have to be activated by an adm
 
 If a user is logged in, the name and e-mail address are filled automatically.
 
-# 4.5 Ask questions
+## 4.5 Ask questions
 
 On the _Ask question_ page it's possible for all users to add a new question without an answer.
 If the question is submitted, phpMyFAQ checks the words for the question and will do a full text search on the database
@@ -60,13 +60,13 @@ By default, new questions won't be displayed and have to be activated by an admi
 
 If a user is logged in, the name and e-mail address are filled automatically.
 
-# 4.6 Open questions
+## 4.6 Open questions
 
 This page displays all open questions, and it's possible for all users to add an answer for this question.
 The user will be directed to the [Add FAQ](#44-add-faq) page.
 If the spam protection is enabled, they have to enter the correct captcha code, too.
 
-# 4.7 Related FAQs
+## 4.7 Related FAQs
 
 For better usability, there are some helpful links below every FAQ entry.
 If the administrator added tags to the records, they will be displayed next to five (or more) related articles.
