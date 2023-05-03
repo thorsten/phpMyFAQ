@@ -32,7 +32,8 @@
     "ext-json": "*",
     "ext-xml": "*",
     "ext-zip": "*",
-    "ext-xmlwriter": "*"
+    "ext-xmlwriter": "*",
+    "tgalopin/html-sanitizer": "^1.5"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",

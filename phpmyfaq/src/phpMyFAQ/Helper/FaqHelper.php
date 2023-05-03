@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use Exception;
+use HtmlSanitizer\Sanitizer;
 use ParsedownExtra;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
@@ -235,5 +236,19 @@ class FaqHelper extends Helper
         }
 
         return $output;
+    }
+
+
+    /**
+     * Remove <script> tags, we don't need them
+     *
+     * @param string $content
+     * @return string
+     */
+    public function cleanUpContent(string $content): string
+    {
+        $htmlSanitizer = Sanitizer::create(['extensions' => ['basic']]);
+
+        return $htmlSanitizer->sanitize($content);
     }
 }
