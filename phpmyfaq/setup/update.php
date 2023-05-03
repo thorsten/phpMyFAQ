@@ -71,7 +71,7 @@ $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/config/database.php');
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li class="nav-link px-2 text-white">
-          <a href="https://www.phpmyfaq.de/documentation" class="nav-link px-2 text-white" target="_blank">
+          <a href="https://phpmyfaq.readthedocs.io/en/latest/" class="nav-link px-2 text-white" target="_blank">
             Documentation
           </a>
         </li>
