@@ -47,7 +47,9 @@ $template->parse(
     'mainPageContent',
     [
         'pageHeader' => Translation::get('msgContact'),
-        'msgContactOwnText' => nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformations'))),
+        'msgContactOwnText' => 
+        ($faqConfig->get('main.contactInformationsHTML') === true) ? html_entity_decode($faqConfig->get('main.contactInformations')) : 
+        nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformations'))),
         'msgContactEMail' => Translation::get('msgContactEMail'),
         'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
         'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
