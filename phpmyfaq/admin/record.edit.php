@@ -396,7 +396,7 @@ if (
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
-                                           value="<?= htmlspecialchars((string) $faqData['title']) ?>">
+                                           value="<?= Strings::htmlentities($faqData['title']) ?>">
                                 </div>
 
                                 <!-- Answer -->
