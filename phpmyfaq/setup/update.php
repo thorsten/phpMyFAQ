@@ -398,6 +398,9 @@ if ($step == 3) {
     if (version_compare($version, '3.2.0-beta', '<')) {
         $faqConfig->add('mail.remoteSMTPDisableTLSPeerVerification', false);
         $faqConfig->delete('main.enableLinkVerification');
+        
+        // HTML-support for contactInformations
+        $faqConfig->add('main.contactInformationsHTML', false);
 
         // Delete link verification columns
         $query[] = 'ALTER TABLE ' . $prefix . 'faqdata DROP COLUMN links_state, DROP COLUMN links_check_date';
