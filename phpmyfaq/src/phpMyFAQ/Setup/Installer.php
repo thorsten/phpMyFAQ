@@ -351,6 +351,7 @@ class Installer extends Setup
         'security.loginWithEmailAddress' => 'false',
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
+        'main.contactInformationsHTML' => 'false',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
