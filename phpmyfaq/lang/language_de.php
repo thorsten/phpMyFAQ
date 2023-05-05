@@ -1338,4 +1338,7 @@ $PMF_LANG['msgSubCategoryContent'] = 'Wähle eine Hauptkategorie aus.';
 $PMF_LANG['ad_open_question_deleted'] = 'Die Frage wurde erfolgreich gelöscht.';
 $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'SMTP TLS Peer Verifizierung deaktivieren (nicht empfohlen)'];
 
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['main.contactInformationsHTML'] = ['checkbox', 'Kontaktinformationen/Impressum als HTML?'];
+
 return $PMF_LANG;
