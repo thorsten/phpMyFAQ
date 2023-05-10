@@ -34,7 +34,7 @@ interface AuthDriverInterface
 
     /**
      * Changes the password for the account specified by login.
-     * Returns true on success, otherwise false.
+     * Returns true to success, otherwise false.
      * Error messages are added to the array errors.
      *
      * @param string $login Login name
@@ -44,7 +44,7 @@ interface AuthDriverInterface
 
     /**
      * Deletes the user account specified by login.
-     * Returns true on success, otherwise false.
+     * Returns true to success, otherwise false.
      * Error messages are added to the array errors.
      *
      * @param string $login Login name
@@ -57,7 +57,7 @@ interface AuthDriverInterface
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      * This function is only called when local authentication has failed, so
-     * we are about to create user account.
+     * we are about to create a user account.
      *
      * @param string $login Login name
      * @param string $password Password

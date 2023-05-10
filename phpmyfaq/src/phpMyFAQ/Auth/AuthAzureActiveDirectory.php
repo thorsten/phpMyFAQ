@@ -118,7 +118,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      * Method to authorize against Azure AD
      *
      */
-    public function authorize()
+    public function authorize(): void
     {
         $this->createOAuthChallenge();
         $this->session->setCurrentSessionKey();
@@ -142,7 +142,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      * Logout
      *
      */
-    public function logout()
+    public function logout(): void
     {
         // Try to authenticate with cookie information
         $user = CurrentUser::getFromCookie($this->config);
@@ -161,7 +161,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      * Method to generate code verifier and code challenge for oAuth login.
      * See RFC7636 for details.
      */
-    private function createOAuthChallenge()
+    private function createOAuthChallenge(): void
     {
         $verifier = $this->oAuthVerifier;
 
