@@ -72,6 +72,7 @@
     "lint": "./phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
     "lint-fix": "./phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
     "refactor": "./phpmyfaq/src/libs/bin/rector",
+    "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
     "test": "./phpmyfaq/src/libs/bin/phpunit --coverage-text"
   }
 }
