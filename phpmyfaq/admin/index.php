@@ -176,7 +176,7 @@ if(!isset($user)) {
 // Set username via SSO
 //
 if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
-    $faqusername = trim($request->server->get('REMOTE_USER'));
+    $faqusername = trim((string) $request->server->get('REMOTE_USER'));
     $faqpassword = '';
 }
 

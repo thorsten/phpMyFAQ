@@ -40,15 +40,11 @@ abstract class StringsAbstract
 
     /**
      * Encoding.
-     *
-     * @var string
      */
     protected string $encoding = self::DEFAULT_ENCODING;
 
     /**
      * Language.
-     *
-     * @var string
      */
     protected string $language = self::DEFAULT_LANGUAGE;
 

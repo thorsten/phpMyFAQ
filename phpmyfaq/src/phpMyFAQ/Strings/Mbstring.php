@@ -41,9 +41,6 @@ class Mbstring extends StringsAbstract
 
     /**
      * Create and return an instance.
-     *
-     * @param string $language
-     * @return Mbstring
      */
     public static function getInstance(string $language = 'en'): Mbstring
     {
@@ -73,7 +70,6 @@ class Mbstring extends StringsAbstract
      * @param string   $str String
      * @param int      $start Start
      * @param int|null $length Length
-     * @return string
      */
     public function substr(string $str, int $start, int $length = null): string
     {
@@ -137,12 +133,7 @@ class Mbstring extends StringsAbstract
     /**
      * Match a regexp.
      *
-     * @param string $pattern
-     * @param string $subject
      * @param        $matches
-     * @param int    $flags
-     * @param int    $offset
-     * @return int
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0): int
     {

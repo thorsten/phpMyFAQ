@@ -32,17 +32,11 @@ class Update extends Setup
         parent::__construct($this->system);
     }
 
-    /**
-     * @return Configuration
-     */
     public function getConfiguration(): Configuration
     {
         return $this->configuration;
     }
 
-    /**
-     * @param Configuration $configuration
-     */
     public function setConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;

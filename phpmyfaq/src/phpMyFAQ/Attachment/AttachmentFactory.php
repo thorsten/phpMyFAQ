@@ -136,7 +136,6 @@ class AttachmentFactory
      * Re-arranges the $_FILES array for multiple file uploads.
      *
      * @param $filePost
-     * @return array
      */
     public static function rearrangeUploadedFiles(&$filePost): array
     {

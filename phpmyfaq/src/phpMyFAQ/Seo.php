@@ -32,10 +32,6 @@ class Seo
     {
     }
 
-    /**
-     * @param string $action
-     * @return string
-     */
     public function getMetaRobots(string $action): string
     {
         return match ($action) {

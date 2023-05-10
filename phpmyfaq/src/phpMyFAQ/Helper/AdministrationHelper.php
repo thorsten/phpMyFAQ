@@ -82,8 +82,6 @@ class AdministrationHelper
      * - '*' stands for 'and'
      * No braces will be parsed, only simple expressions
      *
-     * @param string $restrictions
-     * @return bool
      * @example right1*right2+right3+right4*right5
      */
     private function evaluatePermission(string $restrictions): bool

@@ -5,9 +5,9 @@ namespace phpMyFAQ\Configuration;
 class ElasticsearchConfiguration
 {
     /** @var string[] */
-    private array $hosts;
+    private readonly array $hosts;
 
-    private string $index;
+    private readonly string $index;
 
     public function __construct(string $filename)
     {

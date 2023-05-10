@@ -416,7 +416,6 @@ class BuiltinCaptcha implements CaptchaInterface
      * if the captcha code spam protection has been activated from the general PMF configuration.
      *
      * @param string|null $code Captcha Code
-     * @return bool
      */
     public function checkCaptchaCode(string $code = null): bool
     {

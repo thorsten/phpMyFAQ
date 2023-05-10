@@ -10,6 +10,7 @@ class ChangelogTest extends TestCase
     protected Configuration $configuration;
 
     protected Changelog $changelog;
+
     protected function setUp(): void
     {
         parent::setUp();

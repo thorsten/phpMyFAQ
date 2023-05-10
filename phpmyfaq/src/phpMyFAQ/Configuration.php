@@ -227,8 +227,6 @@ class Configuration
 
     /**
      * Sets the LDAP configuration.
-     *
-     * @param LdapConfiguration $ldapConfig
      */
     public function setLdapConfig(LdapConfiguration $ldapConfig): void
     {
@@ -342,8 +340,6 @@ class Configuration
 
     /**
      * Sets the Elasticsearch configuration.
-     *
-     * @param ElasticsearchConfiguration $data
      */
     public function setElasticsearchConfig(ElasticsearchConfiguration $data): void
     {
@@ -352,8 +348,6 @@ class Configuration
 
     /**
      * Returns the Elasticsearch configuration.
-     *
-     * @return ElasticsearchConfiguration
      */
     public function getElasticsearchConfig(): ElasticsearchConfiguration
     {

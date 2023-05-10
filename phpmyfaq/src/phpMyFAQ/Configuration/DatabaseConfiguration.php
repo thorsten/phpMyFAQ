@@ -4,13 +4,13 @@ namespace phpMyFAQ\Configuration;
 
 class DatabaseConfiguration
 {
-    private string $server;
-    private ?int $port;
-    private string $user;
-    private string $password;
-    private string $db;
-    private string $prefix;
-    private string $type;
+    private readonly string $server;
+    private readonly ?int $port;
+    private readonly string $user;
+    private readonly string $password;
+    private readonly string $db;
+    private readonly string $prefix;
+    private readonly string $type;
 
     public function __construct(string $filename)
     {

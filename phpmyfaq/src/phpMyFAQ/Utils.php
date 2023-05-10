@@ -253,13 +253,10 @@ class Utils
 
     /**
      * Formats a given number of Bytes to kB, MB, GB, and so on.
-     * @param int $bytes
-     * @param int $precision
-     * @return string
      */
     public static function formatBytes(int $bytes, int $precision = 2): string
     {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));

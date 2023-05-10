@@ -4,12 +4,12 @@ namespace phpMyFAQ\Configuration;
 
 class LdapConfiguration
 {
-    private string $mainServer;
-    private int $mainPort;
-    private string $mainUser;
-    private string $mainPassword;
-    private string $mainBase;
-    private array $servers;
+    private readonly string $mainServer;
+    private readonly int $mainPort;
+    private readonly string $mainUser;
+    private readonly string $mainPassword;
+    private readonly string $mainBase;
+    private array $servers = [];
 
     public function __construct(string $filename)
     {
@@ -29,17 +29,15 @@ class LdapConfiguration
         $this->mainPassword = $PMF_LDAP['ldap_password'];
         $this->mainBase = $PMF_LDAP['ldap_base'];
 
-        $this->servers = [];
-
         foreach ($PMF_LDAP as $key => $server) {
             if (is_array($server)) {
-                $this->servers[$key] = array(
+                $this->servers[$key] = [
                     'server' => $server['ldap_server'],
                     'port' => $server['ldap_port'],
                     'user' => $server['ldap_user'],
                     'password' => $server['ldap_password'],
                     'base' => $server['ldap_base']
-                );
+                ];
             }
         }
     }

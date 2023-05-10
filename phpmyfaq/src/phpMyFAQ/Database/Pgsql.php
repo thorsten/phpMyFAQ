@@ -117,9 +117,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
-     *
-     * @param string $string
-     * @return string
      */
     public function escape(string $string): string
     {
@@ -130,7 +127,6 @@ class Pgsql implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Resultset
-     * @return array|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array
@@ -159,9 +155,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     *
-     * @param mixed $result
-     * @return array|false
      */
     public function fetchRow(mixed $result): array|false
     {
@@ -204,9 +197,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Fetch a result row as an object.
-     *
-     * @param mixed $result
-     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -219,8 +209,6 @@ class Pgsql implements DatabaseDriver
 
     /**
      * Returns just one row.
-     *
-     * @param string $query
      */
     private function getOne(string $query): string
     {

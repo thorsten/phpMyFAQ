@@ -535,7 +535,7 @@ if ('list' === $groupAction) {
                       <?php
                       try {
                           echo Translation::get('rightsLanguage::' . $right['name']);
-                      } catch (ErrorException $e) {
+                      } catch (ErrorException) {
                           echo $right['description'];
                       }
                       ?>

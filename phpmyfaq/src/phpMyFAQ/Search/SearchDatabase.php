@@ -30,15 +30,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 {
     /**
      * Searching database table.
-     *
-     * @var string
      */
     protected string $table = '';
 
     /**
      * Joined searching database table.
-     *
-     * @var string
      */
     protected string $joinedTable = '';
 
@@ -72,8 +68,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Flag if database supports search relevance.
-     *
-     * @var bool
      */
     protected bool $relevanceSupport = false;
 
@@ -81,7 +75,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
-     * @return mixed
      */
     public function search(string $searchTerm): mixed
     {

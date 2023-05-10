@@ -35,9 +35,6 @@ class CategoryOrder
 
     /**
      * Adds a given category ID to the last position.
-     *
-     * @param int $categoryId
-     * @return bool
      */
     public function add(int $categoryId): bool
     {
@@ -70,10 +67,6 @@ class CategoryOrder
 
     /**
      * Inserts the position for the given category ID
-     *
-     * @param int $categoryId
-     * @param int $position
-     * @return bool
      */
     public function setPositionById(int $categoryId, int $position): bool
     {
@@ -89,8 +82,6 @@ class CategoryOrder
 
     /**
      * Updates the position for the given category ID
-     *
-     * @return bool
      */
     public function updatePositionById(int $categoryId, int $position): bool
     {

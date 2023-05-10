@@ -133,12 +133,12 @@ class Search
                     $fcrTable . '.category_id' => $this->getCategoryId(),
                 ];
             }
-            $condition = array_merge($selectedCategory, $condition);
+            $condition = [...$selectedCategory, ...$condition];
         }
 
         if ((!$allLanguages) && (!is_numeric($searchTerm))) {
             $selectedLanguage = ['fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'"];
-            $condition        = array_merge($selectedLanguage, $condition);
+            $condition        = [...$selectedLanguage, ...$condition];
         }
 
         $search->setTable($fdTable)

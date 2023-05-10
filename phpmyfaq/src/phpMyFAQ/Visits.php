@@ -35,7 +35,6 @@ class Visits
      * Counting the views of a FAQ record.
      *
      * @param int $id FAQ record ID
-     * @return void
      */
     public function logViews(int $id): void
     {

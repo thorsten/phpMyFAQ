@@ -76,7 +76,6 @@ class StringBasic extends StringsAbstract
      * @param string $str String
      * @param int    $start Start
      * @param null   $length Length
-     * @return string
      */
     public function substr(string $str, int $start, $length = null): string
     {
@@ -91,7 +90,6 @@ class StringBasic extends StringsAbstract
      * @param string $haystack Haystack
      * @param string $needle   Needle
      * @param int    $offset   Offset
-     * @return int
      */
     public function strpos(string $haystack, string $needle, int $offset = 0): int
     {
@@ -102,7 +100,6 @@ class StringBasic extends StringsAbstract
      * Make a string lower case.
      *
      * @param string $str String
-     * @return string
      */
     public function strtolower(string $str): string
     {
@@ -113,7 +110,6 @@ class StringBasic extends StringsAbstract
      * Make a string upper case.
      *
      * @param string $str String
-     * @return string
      */
     public function strtoupper(string $str): string
     {
@@ -145,9 +141,6 @@ class StringBasic extends StringsAbstract
     /**
      * Find position of last occurrence of a char in a string.
      *
-     * @param string $haystack
-     * @param string $needle
-     * @param int    $offset
      * @return int
      */
     public function strrpos(string $haystack, string $needle, int $offset = 0) // phpcs:ignore
@@ -159,8 +152,6 @@ class StringBasic extends StringsAbstract
      * Match a regexp.
      *
      * @param null $matches
-     * @param int  $flags
-     * @param int  $offset
      * @return int
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0) // phpcs:ignore
@@ -171,11 +162,7 @@ class StringBasic extends StringsAbstract
     /**
      * Match a regexp globally.
      *
-     * @param string     $pattern
-     * @param string     $subject
      * @param string[][] $matches
-     * @param int        $flags
-     * @param int        $offset
      * @return int
      */
     public function preg_match_all(string $pattern, string $subject, &$matches, int $flags = 0, int $offset = 0) // phpcs:ignore
@@ -185,12 +172,6 @@ class StringBasic extends StringsAbstract
 
     /**
      * Split string by a regexp.
-     *
-     * @param string $pattern
-     * @param string $subject
-     * @param int    $limit
-     * @param int    $flags
-     * @return array|bool
      */
     public function preg_split(string $pattern, string $subject, int $limit = -1, int $flags = 0): array|bool
     {
@@ -201,10 +182,7 @@ class StringBasic extends StringsAbstract
      * Search and replace by a regexp using a callback.
      *
      * @param string|string[] $pattern
-     * @param callable        $callback
      * @param string|string[] $subject
-     * @param int             $limit
-     * @param int             $count
      * @return string|string[]
      */
     public function preg_replace_callback(

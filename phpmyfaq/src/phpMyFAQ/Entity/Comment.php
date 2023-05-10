@@ -23,31 +23,22 @@ namespace phpMyFAQ\Entity;
  */
 class Comment
 {
-    /** @var int */
     public int $id;
 
-    /** @var int */
     public int $recordId;
 
-    /** @var int */
     public int $categoryId;
 
-    /** @var string */
     public string $type;
 
-    /** @var string */
     public string $username;
 
-    /** @var string */
     public string $email;
 
-    /** @var string */
     public string $comment;
 
-    /** @var string */
     public string $date;
 
-    /** @var bool|null */
     public ?bool $helped = null;
 
     public function getId(): int
@@ -138,10 +129,7 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
-    public function hasHelped()
+    public function hasHelped(): ?bool
     {
         return $this->helped;
     }

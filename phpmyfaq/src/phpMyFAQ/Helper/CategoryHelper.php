@@ -125,7 +125,7 @@ class CategoryHelper extends Helper
         $normalizedCategoryNumbers = $this->normalizeCategoryTree($categoryTree, $categoryNumbers);
         $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);
 
-        if (count($categoryTree) > 0) {
+        if ((is_countable($categoryTree) ? count($categoryTree) : 0) > 0) {
             return sprintf(
                 '<ul class="pmf-category-overview">%s</ul>',
                 $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
@@ -144,10 +144,8 @@ class CategoryHelper extends Helper
      * Builds a category list
      *
      * @param array<int, array> $categoryTree
-     * @param int               $parentId
      * @param array<int, array> $aggregatedNumbers
      * @param array<int, array> $categoryNumbers
-     * @return string
      */
     public function buildCategoryList(
         array $categoryTree,
@@ -206,7 +204,6 @@ class CategoryHelper extends Helper
      * Returns a list of items with linked translated categories
      *
      * @param array<string, string> $availableCategoryTranslations
-     * @return string
      */
     public function buildAvailableCategoryTranslationsList(array $availableCategoryTranslations): string
     {

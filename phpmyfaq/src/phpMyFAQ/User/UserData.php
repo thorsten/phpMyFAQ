@@ -56,7 +56,6 @@ class UserData
      * array, an associative array will be returned.
      *
      * @param mixed $field Field(s)
-     * @return mixed
      */
     public function get(mixed $field): mixed
     {
@@ -95,10 +94,6 @@ class UserData
 
     /**
      * Returns the first result of the given key.
-     *
-     * @param string $key
-     * @param string $value
-     * @return string|null
      */
     public function fetch(string $key, string $value): ?string
     {
@@ -128,8 +123,6 @@ class UserData
     /**
      * Returns the data of the given key.
      *
-     * @param string $key
-     * @param string $value
      * @return array<string, int>
      */
     public function fetchAll(string $key, string $value): array
@@ -160,8 +153,6 @@ class UserData
      *
      * @param mixed $field Field(s)
      * @param mixed $value Value(s)
-     *
-     * @return bool
      */
     public function set(mixed $field, mixed $value = null): bool
     {
@@ -189,7 +180,6 @@ class UserData
      * associative array with the fields and values.
      *
      * @param int $userId User ID
-     * @return bool
      */
     public function load(int $userId): bool
     {
@@ -227,8 +217,6 @@ class UserData
     /**
      * Saves the current user-data into the database.
      * Returns true on success, otherwise false.
-     *
-     * @return bool
      */
     public function save(): bool
     {
@@ -268,7 +256,6 @@ class UserData
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     * @return bool
      */
     public function add(int $userId): bool
     {
@@ -302,7 +289,6 @@ class UserData
      * Returns true on success, otherwise false.
      *
      * @param int $userId User ID
-     * @return bool
      */
     public function delete(int $userId): bool
     {

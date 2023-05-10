@@ -31,8 +31,6 @@ class Language
 {
     /**
      * The current language.
-     *
-     * @var string
      */
     public static string $language = '';
 

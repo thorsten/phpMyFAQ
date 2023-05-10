@@ -78,7 +78,6 @@ class SearchHelper extends Helper
      * Renders the results for Typehead.
      *
      * @param SearchResultSet $resultSet Result set object
-     * @return array
      */
     public function createAutoCompleteResult(SearchResultSet $resultSet): array
     {

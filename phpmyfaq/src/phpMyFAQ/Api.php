@@ -21,6 +21,7 @@ use Exception;
 use JsonException;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -39,12 +40,12 @@ class Api
 
     private ?string $remoteHashes = null;
 
-    private HttpClientInterface $client;
+    private readonly HttpClientInterface $client;
 
     /**
      * Api constructor.
      */
-    public function __construct(private readonly Configuration $config, private readonly System $system)
+    public function __construct(private readonly Configuration $config)
     {
         $this->client = HttpClient::create([
             'max_redirects' => 2,
@@ -65,7 +66,7 @@ class Api
             $this->apiUrl . 'versions'
         );
 
-        if ($response->getStatusCode() === 200) {
+        if ($response->getStatusCode() === Response::HTTP_OK) {
             try {
                 $content = $response->toArray();
                 return [
@@ -93,7 +94,7 @@ class Api
     /**
      * Returns true, if an installed version can be verified. Otherwise, false.
      *
-     * @throws Core\Exception|TransportExceptionInterface|JsonException
+     * @throws Core\Exception|TransportExceptionInterface|\JsonException
      */
     public function isVerified(): bool
     {
@@ -130,8 +131,9 @@ class Api
      */
     public function getVerificationIssues(): array
     {
+        $system = new System();
         return array_diff(
-            json_decode($this->system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
+            json_decode($system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
             json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
         );
     }

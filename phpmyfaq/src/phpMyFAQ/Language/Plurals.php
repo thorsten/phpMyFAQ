@@ -28,22 +28,18 @@ class Plurals
 {
     /**
      * The number of plural forms for current language $lang.
-     *
-     * @var int
      */
-    private int $nPlurals;
+    private readonly int $nPlurals;
 
     /**
      * The language code of current language.
      *
      * @var string
      */
-    private mixed $lang;
+    private readonly mixed $lang;
 
     /**
      * True when there is no support for plural forms in current language $lang.
-     *
-     * @var bool
      */
     private bool $useDefaultPluralForm;
 
@@ -68,66 +64,24 @@ class Plurals
      */
     private function plural(string $lang, int $n): int
     {
-        switch ($lang) {
-            // Note: expressions in .po files are not strict C expressions, so extra braces might be
-            // needed for that expression to work here (for example see 'lt')
-            case 'ar':
-                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 :
-                    (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5))));
-            case 'bn':
-            case 'he':
-            case 'hi':
-            case 'id':
-            case 'ja':
-            case 'ko':
-            case 'th':
-            case 'tr':
-            case 'tw':
-            case 'vi':
-            case 'zh':
-                return 0;
-            case 'cy':
-                return ($n == 1) ? 0 : ($n == 2 ? 1 : (($n != 8 && $n != 11) ? 2 : 3));
-            case 'cs':
-                return ($n == 1) ? 0 : (($n >= 2 && $n <= 4) ? 1 : 2);
-            case 'da':
-            case 'de':
-            case 'el':
-            case 'en':
-            case 'es':
-            case 'eu':
-            case 'fa':
-            case 'fi':
-            case 'it':
-            case 'nb':
-            case 'nl':
-            case 'hu':
-            case 'pt':
-            case 'sv':
-                return $n != 1;
-            case 'fr':
-            case 'pt-br':
-                return $n > 1;
-            case 'lt':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ?
-                    1 : 2);
-            case 'lv':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n != 0 ? 1 : 2);
-            case 'pl':
-                return ($n == 1) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
-            case 'ro':
-                return ($n == 1) ? 0 : (($n == 0 || ($n % 100 > 0 && $n % 100 < 20)) ? 1 : 2);
-            case 'ru':
-            case 'sr':
-            case 'uk':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 &&
-                ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
-            case 'sl':
-                return ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || $n % 100 == 4 ? 2 : 3));
-            default:
-                // plural expressions can't return negative values, so use -1 to signal unsupported language
-                return -1;
-        }
+        return match ($lang) {
+            'ar' => ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 :
+                (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5)))),
+            'bn', 'he', 'hi', 'id', 'ja', 'ko', 'th', 'tr', 'tw', 'vi', 'zh' => 0,
+            'cy' => ($n == 1) ? 0 : ($n == 2 ? 1 : (($n != 8 && $n != 11) ? 2 : 3)),
+            'cs' => ($n == 1) ? 0 : (($n >= 2 && $n <= 4) ? 1 : 2),
+            'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'it', 'nb', 'nl', 'hu', 'pt', 'sv' => $n != 1,
+            'fr', 'pt-br' => $n > 1,
+            'lt' => ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ?
+                1 : 2),
+            'lv' => ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n != 0 ? 1 : 2),
+            'pl' => ($n == 1) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2),
+            'ro' => ($n == 1) ? 0 : (($n == 0 || ($n % 100 > 0 && $n % 100 < 20)) ? 1 : 2),
+            'ru', 'sr', 'uk' => ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 &&
+            ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2),
+            'sl' => ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || $n % 100 == 4 ? 2 : 3)),
+            default => -1,
+        };
     }
 
     /**

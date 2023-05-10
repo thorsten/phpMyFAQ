@@ -63,7 +63,7 @@ $send2friendLink = sprintf(
     $faqConfig->getDefaultUrl(),
     $faqCategory,
     $faqId,
-    urlencode($faqLanguage)
+    urlencode((string) $faqLanguage)
 );
 
 

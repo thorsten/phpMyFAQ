@@ -161,7 +161,7 @@ class FaqHelper extends Helper
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
         $date = new Date($this->config);
 
-        if (count($faq->faqRecords)) {
+        if (is_countable($faq->faqRecords) ? count($faq->faqRecords) : 0) {
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
                 if (!is_null($data['category_id']) && $data['category_id'] !== $lastCategory) {
@@ -217,8 +217,6 @@ class FaqHelper extends Helper
     /**
      * Returns the URL for a given FAQ Entity and category ID.
      * @param FaqEntity $faqEntity
-     * @param int       $categoryId
-     * @return string
      */
     public function createFaqUrl(FaqEntity $faqEntity, int $categoryId): string
     {
@@ -233,9 +231,6 @@ class FaqHelper extends Helper
 
     /**
      * Remove <script> tags, we don't need them
-     *
-     * @param string $content
-     * @return string
      */
     public function cleanUpContent(string $content): string
     {

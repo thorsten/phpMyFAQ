@@ -14,10 +14,10 @@ use PHPUnit\Framework\TestCase;
 class AuthTest extends TestCase
 {
     /** @var Auth */
-    protected $auth;
+    protected Auth $auth;
 
     /** @var Configuration */
-    protected $configuration;
+    protected Configuration $configuration;
 
     protected function setUp(): void
     {
@@ -32,7 +32,7 @@ class AuthTest extends TestCase
     /**
      * @testdox return the instance of the selected encryption type class
      */
-    public function testSelectEncType()
+    public function testSelectEncType(): void
     {
         $encryptionType = $this->auth->selectEncType('bcrypt');
         $this->assertInstanceOf('phpMyFAQ\EncryptionTypes\Bcrypt', $encryptionType);
@@ -41,7 +41,7 @@ class AuthTest extends TestCase
     /**
      * @testdox return an empty string if no error occurred.
      */
-    public function testErrorWithNoError()
+    public function testErrorWithNoError(): void
     {
         $this->auth->selectEncType('bcrypt');
 
@@ -51,7 +51,7 @@ class AuthTest extends TestCase
     /**
      * @testdox return an error message if an error occurred.
      */
-    public function testErrorWithError()
+    public function testErrorWithError(): void
     {
         $this->auth->selectEncType('foobar');
 
@@ -61,7 +61,7 @@ class AuthTest extends TestCase
     /**
      * @testdox be possible for databases, HTTP and SSO
      */
-    public function testSelectAuth()
+    public function testSelectAuth(): void
     {
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthDatabase', $this->auth->selectAuth('database'));
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthHttp', $this->auth->selectAuth('http'));
@@ -71,7 +71,7 @@ class AuthTest extends TestCase
     /**
      * @testdox sets the read only flag correctly
      */
-    public function testSetReadOnly()
+    public function testSetReadOnly(): void
     {
         $this->assertFalse($this->auth->setReadOnly());
         $this->assertFalse($this->auth->setReadOnly(true));
@@ -81,18 +81,12 @@ class AuthTest extends TestCase
     /**
      * @testdox returns an encrypted password hash
      */
-    public function testEncrypt()
+    public function testEncrypt(): void
     {
         $this->auth->selectEncType('bcrypt');
         $hash = $this->auth->encrypt('foobar');
 
         $this->assertIsString($hash);
         $this->assertStringNotContainsString('foobar', $hash);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->configuration = null;
-        parent::tearDown();
     }
 }

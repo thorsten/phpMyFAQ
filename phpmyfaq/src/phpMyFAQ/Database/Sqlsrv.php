@@ -87,7 +87,6 @@ class Sqlsrv implements DatabaseDriver
      * Fetch a result row as an assoc array.
      *
      * @param mixed $result Resultset
-     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -98,8 +97,6 @@ class Sqlsrv implements DatabaseDriver
 
     /**
      * Fetch a result row.
-     *
-     * @return false|mixed
      */
     public function fetchRow(mixed $result): mixed
     {
@@ -110,7 +107,6 @@ class Sqlsrv implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Resultset
-     * @return array|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array

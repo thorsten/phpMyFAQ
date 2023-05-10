@@ -425,7 +425,7 @@ class Mail
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addTo(string $address, $name = null): bool
+    public function addTo(string $address, ?string $name = null): bool
     {
         return $this->addEmailTo($this->to, 'To', $address, $name);
     }

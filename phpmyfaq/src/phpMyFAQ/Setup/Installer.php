@@ -467,7 +467,6 @@ class Installer extends Setup
     /**
      * Constructor.
      *
-     * @param System $system
      * @throws \Exception
      */
     public function __construct(protected System $system)
@@ -1037,7 +1036,7 @@ class Installer extends Setup
         }
 
         $configuration->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
-        $configuration->add('security.salt', md5((string) $configuration->getDefaultUrl()));
+        $configuration->add('security.salt', md5($configuration->getDefaultUrl()));
 
         // add an admin account and rights
         $admin = new User($configuration);

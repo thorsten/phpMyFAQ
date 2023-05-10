@@ -343,7 +343,7 @@ if (!is_null($id)) {
     $faq->getRecord($id);
     $title = ' - ' . $faq->faqRecord['title'];
     $keywords = ',' . $faq->faqRecord['keywords'];
-    $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
+    $metaDescription = str_replace('"', '', strip_tags((string) $faq->getRecordPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         Strings::htmlentities($faqConfig->getDefaultUrl()),
@@ -545,7 +545,7 @@ $tplMainPage = [
     'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),
     'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
     'version' => $faqConfig->getVersion(),
-    'header' => Strings::htmlentities(str_replace('"', '', (string) $faqConfig->getTitle())),
+    'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
     'metaTitle' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle() . $title)),
     'metaDescription' => Strings::htmlentities($metaDescription ?? ''),
     'metaKeywords' => Strings::htmlentities($keywords),
@@ -802,14 +802,14 @@ require $includePhp;
 //
 // Get the main template, set main variables
 //
-$template->parse('index', array_merge($tplMainPage, $tplNavigation));
+$template->parse('index', [...$tplMainPage, ...$tplNavigation]);
 $template->merge('sidebar', 'index');
 $template->merge('mainPageContent', 'index');
 
 //
 // Check for 404 HTTP status code
 //
-if ($response->getStatusCode() === 404 || $action === '404') {
+if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND || $action === '404') {
     $template = new Template(
         [
             'index' => '404.html',
@@ -818,7 +818,7 @@ if ($response->getStatusCode() === 404 || $action === '404') {
         new TemplateHelper($faqConfig),
         $faqConfig->get('main.templateSet')
     );
-    $template->parse('index', array_merge($tplMainPage, $tplNavigation));
+    $template->parse('index', [...$tplMainPage, ...$tplNavigation]);
 }
 
 $response->setContent($template->render());

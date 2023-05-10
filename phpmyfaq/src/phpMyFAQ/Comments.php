@@ -184,9 +184,7 @@ class Comments
     /**
      * Deletes a comment.
      *
-     * @param string $type
      * @param int    $commentId Comment id
-     * @return bool
      */
     public function delete(string $type, int $commentId): bool
     {

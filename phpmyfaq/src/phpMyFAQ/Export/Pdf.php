@@ -39,11 +39,11 @@ class Pdf extends Export
     /**
      * Wrapper object.
      */
-    private ?Wrapper $pdf;
+    private readonly ?Wrapper $pdf;
 
     private ?Tags $tags = null;
 
-    private ?ParsedownExtra $parsedown;
+    private readonly ?ParsedownExtra $parsedown;
 
     /**
      * Constructor.
@@ -103,7 +103,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        $this->category->categoryName[$faq['category_id']]['name'],
+                        (string) $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),

@@ -72,7 +72,7 @@ class News
 
             $output .= sprintf('%s', $item['content']);
 
-            if (strlen($item['link']) > 1) {
+            if (strlen((string) $item['link']) > 1) {
                 $output .= sprintf(
                     '<br>%s <a href="%s" target="_%s">%s</a>',
                     Translation::get('msgInfo'),

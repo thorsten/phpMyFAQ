@@ -208,7 +208,7 @@ $faqSession = new Session($faqConfig);
                 <?php
                 $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
                 if ($faqConfig->get('main.enableAutoUpdateHint') || ($version == 'version')) {
-                    $api = new Api($faqConfig, new System());
+                    $api = new Api($faqConfig);
                     try {
                         $versions = $api->getVersions();
                         printf(
@@ -249,7 +249,7 @@ $faqSession = new Session($faqConfig);
                 <?php
                 $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_SPECIAL_CHARS);
                 if ('verify' === $getJson) {
-                    $api = new Api($faqConfig, new System());
+                    $api = new Api($faqConfig);
                     try {
                         if (!$api->isVerified()) {
                             echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';

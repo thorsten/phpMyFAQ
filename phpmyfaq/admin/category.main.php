@@ -282,7 +282,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryImage = new CategoryImage($faqConfig);
                 $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
 
-                if (count($category->getCategoryLanguagesTranslated($categoryId)) === 1) {
+                if ((is_countable($category->getCategoryLanguagesTranslated($categoryId)) ? count($category->getCategoryLanguagesTranslated($categoryId)) : 0) === 1) {
                     $categoryPermission->delete(CategoryPermission::USER, [$categoryId]);
                     $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]);
                     $categoryImage->delete();
@@ -358,7 +358,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
                 // Any sub-categories?
                 $subCategories = $category->getChildren($cat['id']);
-                $numSubCategories = count($subCategories);
+                $numSubCategories = is_countable($subCategories) ? count($subCategories) : 0;
 
                 $hasParent = (bool) $cat['parent_id'];
 
@@ -372,7 +372,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 printf(
                     '<div href="#category-id-%d" id="%s-%d" data-id="%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center %s" %s>',
                     $cat['id'],
-                    trim(strip_tags((string) $categoryName)),
+                    trim(strip_tags($categoryName)),
                     $cat['id'],
                     $cat['id'],
                     $numSubCategories > 0 ? ' pmf-has-subcategories' : '',
@@ -419,7 +419,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 );
 
                 // delete (sub) category (if current language)
-                if (count($category->getChildren($cat['id'])) == 0 && $cat['lang'] == $lang) {
+                if ((is_countable($category->getChildren($cat['id'])) ? count($category->getChildren($cat['id'])) : 0) == 0 && $cat['lang'] == $lang) {
                     printf(
                         '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><i aria-hidden="true" class="fa fa-trash" title="%s"></i></a> ',
                         $cat['id'],

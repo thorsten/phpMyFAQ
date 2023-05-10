@@ -22,6 +22,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
@@ -51,6 +52,8 @@ use Symfony\Component\HttpFoundation\Response;
 // Bootstrapping
 //
 require 'src/Bootstrap.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 //
 // Create Request & Response
@@ -230,7 +233,7 @@ switch ($action) {
         $active = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
         $showOnHome = Filter::filterVar($postData['show-on-homepage'], FILTER_VALIDATE_BOOLEAN);
 
-        // Check if parent category name can be mapped
+        // Check if the parent category name can be mapped
         if (!is_null($parentCategoryName)) {
             $parentCategoryIdFound = $category->getCategoryIdFromName($parentCategoryName);
             if ($parentCategoryIdFound === false) {
@@ -401,7 +404,7 @@ switch ($action) {
             $result = $faq->faqRecords;
         }
 
-        if (count($result) === 0) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
         $response->setData($result);
@@ -421,7 +424,7 @@ switch ($action) {
             $faq->getRecord($recordId);
             $result = $faq->faqRecord;
 
-            if (count($result) === 0 || $result['solution_id'] === 42) {
+            if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
                 $result = new stdClass();
                 $response->setStatusCode(Response::HTTP_NOT_FOUND);
             }
@@ -625,12 +628,11 @@ switch ($action) {
 }
 
 //
-// Check if FAQ should be secured
+// Check if the FAQ should be secured
 //
 if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
-    $response->setStatusCode(403);
+    $response->setStatusCode(Response::HTTP_FORBIDDEN);
     $response->setData([ 'error' => 'You are not allowed to view this content.' ]);
-    exit();
 }
 
 $response->send();

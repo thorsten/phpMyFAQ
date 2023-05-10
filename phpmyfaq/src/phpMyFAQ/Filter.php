@@ -20,9 +20,9 @@ namespace phpMyFAQ;
 /**
  * Class Filter
  *
- * @testdox Filter should
  * @package phpMyFAQ
  */
+#[\PHPUnit\Framework\Attributes\TestDox('Filter should')]
 class Filter
 {
     /**

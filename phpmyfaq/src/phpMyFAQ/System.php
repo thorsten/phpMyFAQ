@@ -123,10 +123,7 @@ class System
     public static function getVersion(): string
     {
         $version = sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_PATCH_LEVEL);
-        if (self::VERSION_PRE_RELEASE !== null) {
-            $version .= '-' . self::VERSION_PRE_RELEASE;
-        }
-        return $version;
+        return $version . ('-' . self::VERSION_PRE_RELEASE);
     }
 
     /**
@@ -256,11 +253,11 @@ class System
 
         if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
             if (!str_contains($mainUrl, 'https')) {
-                $mainUrl = str_replace('http://', 'https://', (string) $mainUrl);
+                $mainUrl = str_replace('http://', 'https://', $mainUrl);
             }
         }
 
-        if (!str_ends_with((string) $mainUrl, '/')) {
+        if (!str_ends_with($mainUrl, '/')) {
             $mainUrl .= '/';
         }
 

@@ -117,9 +117,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Fetch a result row as an associative array.
-     *
-     * @param mixed $result
-     * @return array|null
      */
     public function fetchArray(mixed $result): ?array
     {
@@ -138,7 +135,6 @@ class Mysqli implements DatabaseDriver
      * Fetches a complete result as an object.
      *
      * @param mixed $result Result set
-     * @return array|null
      * @throws Exception
      */
     public function fetchAll(mixed $result): ?array
@@ -257,9 +253,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * Returns just one row.
-     *
-     * @param string $query
-     * @return string
      */
     private function getOne(string $query): string
     {

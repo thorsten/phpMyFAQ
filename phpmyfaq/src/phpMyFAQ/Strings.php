@@ -86,7 +86,7 @@ class Strings
      * @param int $start Start
      * @param int|null $length Length
      */
-    public static function substr(string $string, int $start, $length = 0): string
+    public static function substr(string $string, int $start, ?int $length = 0): string
     {
         return self::$instance->substr($string, $start, $length);
     }
