@@ -142,8 +142,8 @@ $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_
 $token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
 $userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
 
-// 
-// Loging user in if twofactor is enabled and token is given and validated, if not: returns error message
+//
+// Logging user in if twofactor is enabled and token is given and validated, if not: returns error message
 //
 if (!is_null($token) && !is_null($userid)) {
     $user = new CurrentUser($faqConfig);
@@ -166,7 +166,7 @@ if (!is_null($token) && !is_null($userid)) {
     }
 }
 
-if(!isset($user)) {
+if (!isset($user)) {
     $user = new CurrentUser($faqConfig);
 }
 
@@ -249,13 +249,6 @@ if (
                 case 'dashboard':
                     require 'api/dashboard.php';
                     break;
-                // Link verification
-                case 'verifyURL':
-                    require 'api/verify-url.php';
-                    break;
-                case 'onDemandURL':
-                    require 'api/ondemand-url.php';
-                    break;
                 // Categories
                 case 'categories':
                     require 'api/category.php';
@@ -296,10 +289,6 @@ if (
                 // Groups
                 case 'group':
                     require 'api/group.php';
-                    break;
-                // Sections
-                case 'section':
-                    require 'api/section.php';
                     break;
                 // Image upload
                 case 'image':
