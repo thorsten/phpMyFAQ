@@ -61,7 +61,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
         $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
         $backupData = fgets($handle, 65536);
         $versionFound = Strings::substr($backupData, 0, 9);
-        $versionExpected = '-- pmf' . substr((string) $faqConfig->getVersion(), 0, 3);
+        $versionExpected = '-- pmf' . substr($faqConfig->getVersion(), 0, 3);
         $queries = [];
 
         $fileName = $_FILES['userfile']['name'];
@@ -71,6 +71,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
             if ($verification) {
                 $ok = 1;
             } else {
+                echo 'This file is not a verified backup file.<br>';
                 $ok = 0;
             }
         } catch (SodiumException) {
@@ -86,7 +87,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
                 $versionExpected
             );
             $ok = 0;
-        } else {
+        }
+
+        if ($ok === 1) {
             // @todo: Start transaction for better recovery if something really bad happens
             $backupData = trim(Strings::substr($backupData, 11));
             $tables = explode(' ', $backupData);
@@ -97,7 +100,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
             $ok = 1;
         }
 
-        if ($ok == 1) {
+        if ($ok === 1) {
             $tablePrefix = '';
             printf("<p>%s</p>\n", Translation::get('ad_csv_prepare'));
             while ($backupData = fgets($handle, 65536)) {
@@ -147,6 +150,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
                 $numTables,
                 Translation::get('ad_csv_suc')
             );
+        } else {
+            echo Alert::danger('ad_csv_no', 'Import not possible.');
         }
     } else {
         $errorMessage = match ($_FILES['userfile']['error']) {
