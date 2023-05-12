@@ -76,10 +76,11 @@ if (
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance()->verifyToken('user', $csrfToken)) {
+        $csrfToken = Filter::filterInput(INPUT_POST, 'pmf-csrf-token', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance()->verifyToken('update-user-rights', $csrfToken)) {
             $csrfOkay = false;
         }
+
         if (0 === (int)$userId || !$csrfOkay) {
             $message .= Alert::danger('ad_user_error_noId');
         } else {
@@ -127,12 +128,12 @@ if (
 
             $stats = $user->getStatus();
 
-            // reset twofactor-authentication if required
-            if($deleteTwofactor) {
+            // reset two-factor authentication if required
+            if ($deleteTwofactor) {
                 $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
             }
 
-            // set new password a send email if user is switched to active
+            // set new password and sent email if a user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
                 if (!$user->activateUser()) {
                     $userStatus = 'invalid_status';
