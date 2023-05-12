@@ -106,6 +106,7 @@ if (
         case 'get_user_rights':
             $user->getUserById($userId, true);
             $response->setData($user->perm->getUserRights($userId));
+            $response->send();
             break;
 
         case 'activate_user':
