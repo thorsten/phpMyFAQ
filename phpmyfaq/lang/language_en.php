@@ -546,7 +546,7 @@ $LANG_CONF["main.metaDescription"] = ["input", "Description"];
 $LANG_CONF["main.metaKeywords"] = ["input", "Keywords for Spiders"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Name of the Publisher"];
 $LANG_CONF['main.administrationMail'] = ["input", "Email address of the Admin"];
-$LANG_CONF["main.contactInformations"] = ["area", "Contact information"];
+$LANG_CONF["main.contactInformation"] = ["area", "Contact information"];
 $LANG_CONF["main.send2friendText"] = ["area", "Text for the send to friend page"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maximum size for attachments in bytes (max. %s bytes)"];
 $LANG_CONF["records.disableAttachments"] = ["checkbox", "Enable visibility of attachments"];
@@ -1340,6 +1340,6 @@ $PMF_LANG['ad_open_question_deleted'] = 'The question was successfully deleted.'
 $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Disable SMTP TLS peer verification (not recommended)'];
 
 // added v3.2.0-beta.2 - 2023-05-03 by Jan
-$LANG_CONF['main.contactInformationsHTML'] = ['checkbox', 'Contact information as HTML?'];
+$LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Contact information as HTML?'];
 
 return $PMF_LANG;

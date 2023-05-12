@@ -322,7 +322,7 @@ class Installer extends Setup
         'main.phpMyFAQToken' => null,
         'main.referenceURL' => '__PHPMYFAQ_REFERENCE_URL__',
         'main.administrationMail' => 'webmaster@example.org',
-        'main.contactInformations' => '',
+        'main.contactInformation' => '',
         'main.enableAdminLog' => 'true',
         'main.enableRewriteRules' => 'false',
         'main.enableUserTracking' => 'true',
@@ -351,7 +351,7 @@ class Installer extends Setup
         'security.loginWithEmailAddress' => 'false',
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
-        'main.contactInformationsHTML' => 'false',
+        'main.contactInformationHTML' => 'false',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',

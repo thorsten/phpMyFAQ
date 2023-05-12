@@ -44,7 +44,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         $forbiddenValues = ['{', '}'];
         $newConfigValues = [];
         $escapeValues = [
-            'main.contactInformations',
+            'main.contactInformation',
             'main.customPdfHeader',
             'main.customPdfFooter',
             'main.titleFAQ',

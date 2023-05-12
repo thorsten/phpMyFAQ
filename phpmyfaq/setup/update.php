@@ -235,7 +235,7 @@ if ($step == 2) {
         $checkElasticsearchSetupFile = true;
     }
 
-    // is everything is okay?
+    // is everything being okay?
     if ($checkDatabaseSetupFile && $checkLdapSetupFile && $checkElasticsearchSetupFile) {
         ?>
       <form action="update.php?step=3" method="post">
@@ -290,11 +290,11 @@ if ($step == 3) {
         // Remove RSS support
         $faqConfig->delete('main.enableRssFeeds');
 
-        // Add API related configuration
+        // Add API-related configuration
         $faqConfig->add('api.enableAccess', true);
         $faqConfig->add('api.apiClientToken', '');
 
-        // Add whitelist for domains
+        // Add passlist for domains
         $faqConfig->add('security.domainWhiteListForRegistrations', '');
     }
 
@@ -354,7 +354,7 @@ if ($step == 3) {
                 ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
                 ADD jwt TEXT NULL DEFAULT NULL;';
 
-            $query[] = 'ALTER TABLE '. $prefix . 'faquserdata
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata
                 ADD twofactor_enabled INT(1) NULL DEFAULT 0,
                 ADD secret VARCHAR(128) NULL';
         }
@@ -398,9 +398,6 @@ if ($step == 3) {
     if (version_compare($version, '3.2.0-beta', '<')) {
         $faqConfig->add('mail.remoteSMTPDisableTLSPeerVerification', false);
         $faqConfig->delete('main.enableLinkVerification');
-        
-        // HTML-support for contactInformations
-        $faqConfig->add('main.contactInformationsHTML', false);
 
         // Delete link verification columns
         $query[] = 'ALTER TABLE ' . $prefix . 'faqdata DROP COLUMN links_state, DROP COLUMN links_check_date';
@@ -424,6 +421,15 @@ if ($step == 3) {
                 $query[] = 'ALTER TABLE ' . $prefix . 'faqconfig ALTER COLUMN config_value TEXT';
                 break;
         }
+    }
+
+    //
+    // UPDATES FROM 3.2.0-beta.2
+    //
+    if (version_compare($version, '3.2.0-beta.2', '<')) {
+        // HTML-support for contactInformation
+        $faqConfig->add('main.contactInformationHTML', false);
+        $faqConfig->rename('main.contactInformations', 'main.contactInformation');
     }
 
     //

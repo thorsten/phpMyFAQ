@@ -545,7 +545,7 @@ $LANG_CONF['main.metaDescription'] = ["input", "Beschreibung der Seite"];
 $LANG_CONF['main.metaKeywords'] = ["input", "Keywords für Suchmaschinen"];
 $LANG_CONF['main.metaPublisher'] = ["input", "Name des Veröffentlichers"];
 $LANG_CONF['main.administrationMail'] = ["input", "E-Mailadresse des Administrators"];
-$LANG_CONF['main.contactInformations'] = ["area", "Kontaktdaten / Impressum"];
+$LANG_CONF['main.contactInformation'] = ["area", "Kontaktdaten / Impressum"];
 $LANG_CONF['main.send2friendText'] = ["area", "Text für die Empfehlungs-Seite"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maximalgröße von Anhängen in Bytes (max. %sByte)"];
 $LANG_CONF['records.disableAttachments'] = ["checkbox", "Anhänge unter den Beiträgen anzeigen"];
@@ -1339,6 +1339,6 @@ $PMF_LANG['ad_open_question_deleted'] = 'Die Frage wurde erfolgreich gelöscht.'
 $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'SMTP TLS Peer Verifizierung deaktivieren (nicht empfohlen)'];
 
 // added v3.2.0-beta.2 - 2023-05-03 by Jan
-$LANG_CONF['main.contactInformationsHTML'] = ['checkbox', 'Kontaktinformationen/Impressum als HTML?'];
+$LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Kontaktinformationen/Impressum als HTML?'];
 
 return $PMF_LANG;
