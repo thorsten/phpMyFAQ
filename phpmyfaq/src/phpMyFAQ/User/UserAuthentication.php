@@ -43,7 +43,7 @@ class UserAuthentication
      *
      * @throws Exception
      */
-    public function authenticate(string $username, string $password): array
+    public function authenticate(string $username, string $password): CurrentUser
     {
         if ($this->isRememberMe()) {
             $this->user->enableRememberMe();
@@ -82,6 +82,6 @@ class UserAuthentication
             throw new Exception(Translation::get('ad_auth_fail'));
         }
 
-        return [ $this->user, $this->user->isLoggedIn() ];
+        return $this->user;
     }
 }

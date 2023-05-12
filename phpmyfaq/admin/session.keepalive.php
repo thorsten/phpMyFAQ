@@ -65,7 +65,7 @@ try {
 //
 Strings::init($language);
 
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
@@ -82,7 +82,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta content="phpMyFAQ <?= System::getVersion(); ?>" name="application-name">
     <meta content="© 2001-<?= date('Y') ?> phpMyFAQ Team" name="copyright">
     <meta content="phpMyFAQ Team" name="publisher">
-    <?php if (isset($user) && ($refreshTime > 0)) { ?>
+    <?php if ($user->isLoggedIn() && ($refreshTime > 0)) { ?>
     <script>
         const sessionTimeoutWarning = () => {
           if (window.confirm('<?php printf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING); ?>')) {

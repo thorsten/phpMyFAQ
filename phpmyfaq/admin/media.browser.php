@@ -54,7 +54,7 @@ try {
 //
 Strings::init($faqLangCode);
 
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 ?>
 <!DOCTYPE html>
 <html lang="<?= Translation::get('metaLanguage'); ?>">
@@ -79,7 +79,7 @@ Strings::init($faqLangCode);
 <?php
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', 'wmv', 'avi', 'webm'];
 
-if (!$auth && $error) {
+if (!$user->isLoggedIn() && $error) {
     Alert::danger('err_NotAuth');
 } else {
     if (!is_dir(PMF_ROOT_DIR . '/images')) {

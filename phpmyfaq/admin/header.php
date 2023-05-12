@@ -240,7 +240,7 @@ switch ($action) {
 <nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-dark">
     <a class="navbar-brand ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
 
-    <?php if ($auth && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
+    <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
         <i class="fa fa-bars"></i>
     </button>
@@ -265,7 +265,7 @@ switch ($action) {
         <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
     </form>
 
-    <?php if ($auth && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
+    <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
@@ -308,7 +308,7 @@ switch ($action) {
 
 <div id="pmf-admin-layout-sidenav">
 
-    <?php if ($auth && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())) : ?>
+    <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())) : ?>
     <!-- phpMyFAQ Admin Side Navigation -->
     <div id="pmf-admin-layout-sidenav_nav">
         <nav class="pmf-admin-sidenav accordion pmf-admin-sidenav-dark" id="sidenavAccordion">

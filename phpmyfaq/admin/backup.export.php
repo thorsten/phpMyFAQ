@@ -45,7 +45,7 @@ $request = Request::createFromGlobals();
 
 $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
     $tables = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());

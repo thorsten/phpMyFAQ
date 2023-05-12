@@ -77,7 +77,7 @@ try {
 Strings::init($faqLangCode);
 
 // authenticate with session information
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 // Get current user and group id - default: -1
 [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);

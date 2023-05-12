@@ -115,7 +115,6 @@ $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPEC
 //
 // Authenticate current user
 //
-$auth = false;
 $error = null;
 $loginVisibility = 'hidden';
 
@@ -157,7 +156,6 @@ if ($token !== '' && $userid !== '') {
             $error = Translation::get('msgTwofactorErrorToken');
             $action = 'twofactor';
         } else {
-            $auth = true;
             $user->twoFactorSuccess();
         }
     } else {
@@ -175,7 +173,7 @@ if ($faqusername !== '' && $faqpassword !== '') {
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($rememberMe ?? false);
     try {
-        [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+        $user = $userAuth->authenticate($faqusername, $faqpassword);
         $userid = $user->getUserId();
     } catch (Exception $e) {
         $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
@@ -184,17 +182,13 @@ if ($faqusername !== '' && $faqpassword !== '') {
     }
 } else {
     // Try to authenticate with cookie information
-    [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
-    if (!$user->isLoggedIn()) {
-        $auth = false;
-    }
+    $user = CurrentUser::getCurrentUser($faqConfig);
 }
 
 if (isset($userAuth)) {
     if ($userAuth instanceof UserAuthentication) {
         if ($userAuth->hasTwoFactorAuthentication() === true) {
             $action = 'twofactor';
-            $auth = false;
         }
     }
 }
@@ -202,9 +196,8 @@ if (isset($userAuth)) {
 //
 // Logout
 //
-if ($csrfChecked && 'logout' === $action && $auth) {
+if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $user->deleteFromSession(true);
-    $auth = false;
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
@@ -463,10 +456,10 @@ if (($action === 'faq') || ($action === 'show') || ($action === 'main')) {
 }
 
 //
-// Check if FAQ should be secured
+// Check if the FAQ should be secured
 //
 if ($faqConfig->get('security.enableLoginOnly')) {
-    if ($auth) {
+    if ($user->isLoggedIn()) {
         $indexSet = 'index.html';
     } else {
         $indexSet = match ($action) {
@@ -693,7 +686,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 //
 // Show login box or logged-in user information
 //
-if ($user->getUserId() > 0 && $auth) {
+if ($user->isLoggedIn() && $user->getUserId() > 0) {
     if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',

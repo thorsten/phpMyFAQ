@@ -112,7 +112,7 @@ Strings::init($languageCode);
 //
 // Check, if user is logged in
 //
-[ $user, $isLoggedIn ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

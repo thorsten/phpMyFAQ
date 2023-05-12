@@ -61,11 +61,6 @@ $faqConfig = Configuration::getConfigurationInstance();
 $response = new JsonResponse();
 $request = Request::createFromGlobals();
 
-//
-// Set user permissions
-//
-$auth = false;
-
 $action = Filter::filterVar($request->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 $lang = Filter::filterVar($request->get('lang'), FILTER_SANITIZE_SPECIAL_CHARS, 'en');
 $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
@@ -121,7 +116,7 @@ $result = [];
 //
 // Check if user is already authenticated
 //
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 //
@@ -532,7 +527,7 @@ switch ($action) {
         $user = new CurrentUser($faqConfig);
         $userAuth = new UserAuthentication($faqConfig, $user);
         try {
-            [ $user, $auth ] = $userAuth->authenticate($faqUsername, $faqPassword);
+            $user = $userAuth->authenticate($faqUsername, $faqPassword);
             $response->setStatusCode(Response::HTTP_OK);
             $result = [
                 'loggedin' => true
@@ -630,7 +625,7 @@ switch ($action) {
 //
 // Check if the FAQ should be secured
 //
-if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
+if (!$user->isLoggedIn() && $faqConfig->get('security.enableLoginOnly')) {
     $response->setStatusCode(Response::HTTP_FORBIDDEN);
     $response->setData([ 'error' => 'You are not allowed to view this content.' ]);
 }

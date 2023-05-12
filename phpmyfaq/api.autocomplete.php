@@ -75,7 +75,7 @@ Strings::init($faqLangCode);
 //
 // Get current user and group id - default: -1
 //
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 $category = new Category($faqConfig, $currentGroups);

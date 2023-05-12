@@ -452,30 +452,29 @@ class CurrentUser extends User
     }
 
     /**
-     * Returns the current user object from cookie or session and true,
-     * if the user is successfully authenticated.
+     * Returns the current user object from cookie or session
      */
-    public static function getCurrentUser(Configuration $faqConfig): array
+    public static function getCurrentUser(Configuration $faqConfig): CurrentUser
     {
-        $auth = false;
         $user = self::getFromCookie($faqConfig);
 
         if (!$user instanceof CurrentUser) {
             $user = self::getFromSession($faqConfig);
         }
         if ($user instanceof CurrentUser) {
-            $auth = true;
+            $user->setLoggedIn(true);
         } else {
             $user = new CurrentUser($faqConfig);
         }
 
-        return [ $user, $auth ];
+        return $user;
     }
 
     /**
      * Returns the current user ID and group IDs, default values are -1
      *
      * @param CurrentUser|null $user
+     * @return array<int, int>
      */
     public static function getCurrentUserGroupId(CurrentUser $user = null): array
     {

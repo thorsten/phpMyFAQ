@@ -90,7 +90,7 @@ if (DEBUG) {
     printf('<hr><div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
 }
 
-if (isset($auth)) {
+if ($user->isLoggedIn()) {
     ?>
   <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;"></iframe>

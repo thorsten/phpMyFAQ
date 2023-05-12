@@ -40,7 +40,7 @@ $attachmentErrors = [];
 $request = Request::createFromGlobals();
 
 // authenticate with session information
-[ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 
@@ -82,7 +82,7 @@ if (in_array($user->getUserId(), $userPermission)) {
 
 // get user rights
 $permission = [];
-if (isset($auth)) {
+if ($user->isLoggedIn()) {
     // read all rights, set false
     $allRights = $user->perm->getAllRightsData();
     foreach ($allRights as $right) {

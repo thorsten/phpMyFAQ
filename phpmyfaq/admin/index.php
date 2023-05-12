@@ -134,7 +134,6 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
 //
 // Authenticate current user
 //
-$auth = false;
 $error = '';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -156,7 +155,6 @@ if (!is_null($token) && !is_null($userid)) {
             $error = $PMF_LANG['msgTwofactorErrorToken'];
             $action = 'twofactor';
         } else {
-            $auth = true;
             $user->twoFactorSuccess();
             require 'header.php';
             require 'dashboard.php';
@@ -187,7 +185,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($faqremember ?? false);
     try {
-        [ $user, $auth ] = $userAuth->authenticate($faqusername, $faqpassword);
+        $user = $userAuth->authenticate($faqusername, $faqpassword);
         $userid = $user->getUserId();
         if ($userAuth->hasTwoFactorAuthentication()) {
             $action = 'twofactor';
@@ -200,19 +198,20 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // Try to authenticate with cookie information
-    [ $user, $auth ] = CurrentUser::getCurrentUser($faqConfig);
-    if(!$user->isLoggedIn()) {
-        $auth = false;
-    }
+    $user = CurrentUser::getCurrentUser($faqConfig);
 }
 
 //
 // Logout
 //
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-if ($csrfToken && Token::getInstance()->verifyToken('logout', $csrfToken) && $action === 'logout' && $auth) {
+if (
+    $csrfToken &&
+    Token::getInstance()->verifyToken('logout', $csrfToken) &&
+    $action === 'logout' &&
+    $user->isLoggedIn()
+) {
     $user->deleteFromSession(true);
-    $auth = false;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         $response->isRedirect($ssoLogout);
@@ -234,7 +233,11 @@ if (is_null($ajax)) {
 }
 
 // if performing AJAX operation, needs to branch before header.php
-if ($auth && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) > 0 || $user->isSuperAdmin())) {
+if (
+    $user->isLoggedIn() &&
+    ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) > 0 ||
+        $user->isSuperAdmin())
+) {
     if (isset($action) && isset($ajax)) {
         if ('ajax' === $action) {
             switch ($ajax) {
@@ -330,7 +333,7 @@ if ($action === 'twofactor') {
 $numRights = is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0;
 
 // User is authenticated
-if ($auth && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())) {
+if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())) {
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {
@@ -520,8 +523,8 @@ if ($auth && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())
     } else {
         require 'dashboard.php';
     }
-// User is authenticated, but has no rights
-} elseif ($auth && $numRights === 0) {
+// User is authenticated but has no rights
+} elseif ($user->isLoggedIn() && $numRights === 0) {
     require 'noperm.php';
 // User is NOT authenticated
 } else {
