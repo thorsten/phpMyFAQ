@@ -20,7 +20,6 @@ use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -43,13 +42,17 @@ if ($showCaptcha !== '') {
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
+if ($faqConfig->get('main.contactInformationHTML')) {
+    $contactText = html_entity_decode((string) $faqConfig->get('main.contactInformation'));
+} else {
+    $contactText = nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformation')));
+}
+
 $template->parse(
     'mainPageContent',
     [
         'pageHeader' => Translation::get('msgContact'),
-        'msgContactOwnText' => 
-        ($faqConfig->get('main.contactInformationHTML') === true) ? html_entity_decode((string) $faqConfig->get('main.contactInformation')) :
-        nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformation'))),
+        'msgContactOwnText' => $contactText,
         'msgContactEMail' => Translation::get('msgContactEMail'),
         'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
         'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
