@@ -290,17 +290,20 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
       <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
         <?= Token::getInstance()->getTokenInput('add-group') ?>
 
-        <div class="row">
-          <label class="col-lg-2 col-form-label" for="group_name"><?= Translation::get('ad_group_name') ?></label>
+        <div class="row mb-2">
+          <label class="col-lg-3 col-form-label" for="group_name">
+              <?= Translation::get('ad_group_name') ?>
+          </label>
           <div class="col-lg-3">
             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
                    value="<?= ($groupName ?? '') ?>" tabindex="1">
           </div>
         </div>
 
-        <div class="row">
-          <label class="col-lg-2 col-form-label"
-                 for="group_description"><?= Translation::get('ad_group_description') ?></label>
+        <div class="row mb-2">
+          <label class="col-lg-3 col-form-label" for="group_description">
+              <?= Translation::get('ad_group_description') ?>
+          </label>
           <div class="col-lg-3">
             <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
                       rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
@@ -308,8 +311,10 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
           </div>
         </div>
 
-        <div class="row">
-          <label class="col-lg-2 col-form-label" for="group_auto_join"><?= Translation::get('ad_group_autoJoin') ?></label>
+        <div class="row mb-2">
+          <label class="col-lg-3 col-form-label" for="group_auto_join">
+              <?= Translation::get('ad_group_autoJoin') ?>
+          </label>
           <div class="col-lg-3">
             <div class="form-check">
               <label>
@@ -386,35 +391,35 @@ if ('list' === $groupAction) {
         <form action="?action=group&group_action=update_data" method="post">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
           <div class="card-body">
-            <div class="row">
-              <label class="col-lg-3 col-form-label" for="update_group_name">
+            <div class="row mb-2">
+              <label class="col-4 col-form-label" for="update_group_name">
                   <?= Translation::get('ad_group_name') ?>
               </label>
-              <div class="col-lg-9">
+              <div class="col-8">
                 <input id="update_group_name" type="text" name="name" class="form-control"
                        tabindex="1" value="<?= ($groupName ?? '') ?>">
               </div>
             </div>
-            <div class="row">
-              <label class="col-lg-3 col-form-label" for="update_group_description">
+            <div class="row mb-2">
+              <label class="col-4 col-form-label" for="update_group_description">
                   <?= Translation::get('ad_group_description') ?>
               </label>
-              <div class="col-lg-9">
+              <div class="col-8">
                 <textarea id="update_group_description" name="description" class="form-control"
                           rows="<?= $descriptionRows ?>"
                           tabindex="2"><?php
                             echo($groupDescription ?? '') ?></textarea>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-offset-3 col-lg-9">
+            <div class="row mb-2">
+              <div class="offset-4">
                 <div class="form-check">
-                  <label>
                     <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
-                           tabindex="3"<?php
+                           class="form-check-input" tabindex="3"<?php
                             echo((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
-                      <?= Translation::get('ad_group_autoJoin') ?>
-                  </label>
+                    <label class="form-check-label" for="update_group_auto_join">
+                        <?= Translation::get('ad_group_autoJoin') ?>
+                    </label>
                 </div>
               </div>
             </div>
