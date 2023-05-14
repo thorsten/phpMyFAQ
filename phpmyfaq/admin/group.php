@@ -39,10 +39,6 @@ if (
 }
 
 // set some parameters
-$groupSelectSize = 10;
-$memberSelectSize = 7;
-$descriptionRows = 3;
-$descriptionCols = 15;
 $defaultGroupAction = 'list';
 $groupActionList = [
     'update_members',
@@ -305,8 +301,8 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
               <?= Translation::get('ad_group_description') ?>
           </label>
           <div class="col-lg-3">
-            <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
-                      rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
+            <textarea name="group_description" id="group_description" cols="15" rows="3" tabindex="2"
+                      class="form-control"
             ><?= ($groupDescription ?? '') ?></textarea>
           </div>
         </div>
@@ -371,7 +367,7 @@ if ('list' === $groupAction) {
           </h5>
           <div class="card-body">
             <select name="group_list_select" id="group_list_select" class="form-select"
-                    size="<?= $groupSelectSize ?>" tabindex="1">
+                    size="10" tabindex="1">
             </select>
           </div>
           <div class="card-footer">
@@ -405,10 +401,8 @@ if ('list' === $groupAction) {
                   <?= Translation::get('ad_group_description') ?>
               </label>
               <div class="col-8">
-                <textarea id="update_group_description" name="description" class="form-control"
-                          rows="<?= $descriptionRows ?>"
-                          tabindex="2"><?php
-                            echo($groupDescription ?? '') ?></textarea>
+                <textarea id="update_group_description" name="description" class="form-control" rows="3" tabindex="2"
+                ><?= $groupDescription ?? '' ?></textarea>
               </div>
             </div>
             <div class="row mb-2">
@@ -460,7 +454,7 @@ if ('list' === $groupAction) {
             </div>
 
             <div class="row">
-              <select id="group_user_list" class="form-control" size="<?= $memberSelectSize ?>"
+              <select id="group_user_list" class="form-control" size="7"
                       multiple>
                 <option value="0">...user list...</option>
               </select>
@@ -498,8 +492,7 @@ if ('list' === $groupAction) {
             </div>
 
             <div class="row">
-              <select id="group_member_list" name="group_members[]" class="form-control" multiple
-                      size="<?= $memberSelectSize ?>">
+              <select id="group_member_list" name="group_members[]" class="form-control" multiple size="7">
                 <option value="0">...member list...</option>
               </select>
             </div>

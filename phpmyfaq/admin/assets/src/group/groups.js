@@ -129,9 +129,9 @@ const getGroupRights = async (groupId) => {
   const groupRights = await fetchGroupRights(groupId);
 
   if (groupRights) {
+    document.getElementById('rights_group_id').value = groupId;
     groupRights.forEach((right) => {
       document.getElementById(`group_right_${right}`).checked = true;
-      document.getElementById('rights_group_id').value = groupId;
     });
   }
 };
