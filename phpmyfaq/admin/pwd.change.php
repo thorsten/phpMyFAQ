@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Form to change password of the current user.
+ * Form to change the password of the current user.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -52,8 +52,9 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             printf(
-                '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
-                Translation::get('ad_passwd_fail')
+                '<p class="alert alert-danger alert-dismissible fade show">%s%s</p>',
+                Translation::get('ad_passwd_fail'),
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
             );
         } else {
             if (($authSource->checkCredentials(
@@ -95,7 +96,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
               <i class="fa" id="togglePassword"></i>
             </span>
           </div>
-          <div class="offset-2 col-lg-83">
+          <div class="offset-2 col-lg-8">
             <div class="progress mt-2 w-25">
               <div class="progress-bar progress-bar-striped" id="strength"></div>
             </div>
