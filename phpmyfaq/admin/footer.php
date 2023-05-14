@@ -18,6 +18,7 @@
 
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -89,6 +90,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if (DEBUG) {
     printf('<hr><div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
 }
+
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->isLoggedIn()) {
     ?>
