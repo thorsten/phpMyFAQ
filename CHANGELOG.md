@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.0-beta-2 - 2023-05-
+### phpMyFAQ v3.2.0-beta-2 - 2023-05-14
 
 - fixed multiple security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
@@ -31,7 +31,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed broken link verification (Thorsten)
 - removed translation frontend for users (Thorsten)
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
-- migrated codebase to use PHP 8.1 language features
+- migrated codebase to use PHP 8.1 language features (Thorsten)
 - updated to Bootstrap v5.3 (Thorsten)
 - updated to TinyMCE v6.4 (Thorsten)
 - updated to PHPUnit v10 (Thorsten)
