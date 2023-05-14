@@ -10,20 +10,14 @@
         <div class="row">
           <div class="col-6">
             <label class="sr-only" for="searchfield">{{ msgSearch }}</label>
-            <input
-              id="searchfield"
-              type="search"
-              name="search"
-              value="{{ searchString }}"
-              class="form-control form-control-lg mb-2"
-              placeholder="{{ msgSearch }}"
-            />
+            <input id="searchfield" type="search" name="search" value="{{ searchString }}"
+              class="form-control form-control-lg mb-2" placeholder="{{ msgSearch }}">
           </div>
 
           <div class="col-4">
             <label class="sr-only" for="pmf-search-category">{{ selectCategories }}</label>
             <select class="form-select form-select-lg mb-2" name="pmf-search-category" id="pmf-search-category">
-              <option value="%" selected="selected">{{ allCategories }}</option>
+              <option value="%" selected>{{ allCategories }}</option>
               {{ renderCategoryOptions }}
             </select>
           </div>
@@ -37,16 +31,8 @@
 
         <div class="row">
           <div class="col">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              {{
-              checkedAllLanguages
-              }}
-              name="pmf-all-languages"
-              id="pmf-all-languages"
-              value="all"
-            />
+            <input class="form-check-input" type="checkbox" name="pmf-all-languages" id="pmf-all-languages" value="all"
+                   {{ checkedAllLanguages }}>
             <label class="form-check-label" for="pmf-all-languages"> {{ searchOnAllLanguages }} </label>
           </div>
         </div>

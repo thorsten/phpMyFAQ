@@ -1141,7 +1141,7 @@ $PMF_LANG['msgSeeFAQinFrontend'] = 'Zur FAQ im Frontend';
 
 // added v.2.9.0-alpha - 2013-12-26 by Thorsten
 $PMF_LANG['msgRelatedTags'] = 'Suchwort hinzufügen';
-$PMF_LANG['msgPopularTags'] = 'Beliebte Suchwörter';
+$PMF_LANG['msgPopularTags'] = 'Beliebte Tags';
 $LANG_CONF['search.enableHighlighting'] = ["checkbox", "Gefundene Wörter hervorheben"];
 $LANG_CONF['records.allowCommentsForGuests'] = ["checkbox", "Erlaube Kommentare von Gästen "];
 $LANG_CONF['records.allowQuestionsForGuests'] = ["checkbox", "Erlaube Fragen von Gästen "];
