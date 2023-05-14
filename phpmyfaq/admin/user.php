@@ -444,7 +444,7 @@ if (
         <?php
     }
 
-    // show list of all users
+    // show a list of all users
     if ($userAction == 'listallusers' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
         $allUsers = $user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
@@ -606,6 +606,8 @@ if (
         </table>
         <?php
     }
+
+    $user = CurrentUser::getCurrentUser($faqConfig);
     ?>
 
     <!-- Modal to add a new user -->
@@ -723,7 +725,6 @@ if (
     </div>
 
     <!-- Modal to overwrite password -->
-
     <div class="modal fade" id="pmf-modal-user-password-overwrite">
         <div class="modal-dialog">
             <div class="modal-content">
