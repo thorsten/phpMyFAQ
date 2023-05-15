@@ -3,9 +3,8 @@
 /**
  * Link management
  *
- * This class wrap the needs for managing an HTML anchor
- * taking into account also the HTML anchor creation
- * with specific handling for mod_rewrite PMF native support
+ * This class wraps the needs for managing an HTML anchor taking into account the HTML anchor creation with specific
+ * handling for mod_rewrite phpMyFAQs native support
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -29,7 +28,6 @@ namespace phpMyFAQ;
  */
 class Link
 {
-    /** Class constants. */
     private const LINK_AMPERSAND = '&amp;';
     private const LINK_CATEGORY = 'category/';
     private const LINK_CONTENT = 'content/';
@@ -133,7 +131,7 @@ class Link
      *
      * @var string|null
      */
-    public $tooltip = '';
+    public ?string $tooltip = '';
 
     /**
      * Target.
@@ -541,8 +539,8 @@ class Link
      */
     protected function isSystemLink(): bool
     {
-        // a. Is the url relative, starting with '/'?
-        // b. Is the url related to the current running PMF system?
+        // 1. Is the url relative, starting with '/'?
+        // 2. Is the url related to the current running phpMyFAQ installation?
         if ($this->isRelativeSystemLink()) {
             return true;
         }
@@ -564,6 +562,7 @@ class Link
 
     /**
      * Returns the HTTP GET parameters.
+     * @return array<string, string>
      */
     protected function getHttpGetParameters(): array
     {
@@ -592,7 +591,8 @@ class Link
     }
 
     /**
-     * Returns the query of an URL.
+     * Returns the query of a URL.
+     * @return array<string, string>
      */
     protected function getQuery(): array
     {
@@ -629,7 +629,7 @@ class Link
         // 2. improving the reading.
         $itemTitle = str_replace(['-', "'", '/', '&#39'], '_', $itemTitle);
         // 1. Remove any CR LF sequence
-        // 2. Use a '-' for the words separation
+        // 2. Use a '-' for the word separation
         $itemTitle = Strings::preg_replace('/\s/m', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(
@@ -696,7 +696,7 @@ class Link
      * Appends the session id.
      *
      * @param string $url URL
-     * @param int $sids Session Id
+     * @param int $sids Session ID
      */
     private function appendSids(string $url, int $sids): string
     {
