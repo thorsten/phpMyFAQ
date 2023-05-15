@@ -63,3 +63,6 @@ tests/test.db-journal
 tests/config/database.php
 tests/config/ldap.php
 tests/fixtures/path-to-delete/foo.bar.baz
+
+# Jest related stuff
+coverage/*

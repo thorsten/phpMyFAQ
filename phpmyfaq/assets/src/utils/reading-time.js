@@ -18,10 +18,12 @@ export const calculateReadingTime = () => {
   const answer = document.getElementsByClassName('pmf-faq-body');
   let result = '';
 
-  let textLength = answer[0].innerText.split(' ').length;
-  if (textLength > 0) {
+  let textLength = answer[0].innerHTML.split(' ').length;
+  if (textLength > 1) {
     let value = Math.ceil(textLength / wordsPerMinute);
     result = `~${value} min`;
+  } else {
+    result = '0 min';
   }
 
   document.getElementById('pmf-reading-time-minutes').innerText = result;
