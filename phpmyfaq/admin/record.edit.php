@@ -27,7 +27,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
-use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\AdminLog;
 use phpMyFAQ\Question;
@@ -396,7 +395,7 @@ if (
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
-                                           value="<?= Strings::htmlentities($faqData['title']) ?>">
+                                           value="<?= Strings::htmlentities($faqData['title'], ENT_COMPAT) ?>">
                                 </div>
 
                                 <!-- Answer -->

@@ -900,50 +900,6 @@ class Faq
     }
 
     /**
-     * Adds a new record.
-     *
-     * @param array $data      Array of FAQ data
-     * @param bool  $newRecord Do not create a new ID if false
-     * @deprecated will be removed in v3.2
-     */
-    public function addRecord(array $data, bool $newRecord = true): int
-    {
-        if ($newRecord) {
-            $recordId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id');
-        } else {
-            $recordId = $data['id'];
-        }
-
-        // Add new entry
-        $query = sprintf(
-            "INSERT INTO %sfaqdata VALUES
-            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $recordId,
-            $this->config->getDb()->escape($data['lang']),
-            $this->getNextSolutionId(),
-            0,
-            $data['active'],
-            $data['sticky'],
-            $this->config->getDb()->escape($data['keywords']),
-            $this->config->getDb()->escape($data['thema']),
-            $this->config->getDb()->escape($data['content']),
-            $this->config->getDb()->escape($data['author']),
-            $data['email'],
-            $data['comment'],
-            $data['date'],
-            $data['dateStart'],
-            $data['dateEnd'],
-            date('Y-m-d H:i:s'),
-            $data['notes']
-        );
-
-        $this->config->getDb()->query($query);
-
-        return $recordId;
-    }
-
-    /**
      * Creates a new FAQ.
      */
     public function create(FaqEntity $faq): int
@@ -1004,66 +960,10 @@ class Faq
         return $nextSolutionId;
     }
 
-    /**
-     * Updates a record.
-     *
-     * @param array $data Array of FAQ data
-     * @deprecated will be removed in v3.2
-     */
-    public function updateRecord(array $data): bool
-    {
-        // Update entry
-        $query = sprintf(
-            "
-            UPDATE
-                %sfaqdata
-            SET
-                revision_id = %d,
-                active = '%s',
-                sticky = %d,
-                keywords = '%s',
-                thema = '%s',
-                content = '%s',
-                author = '%s',
-                email = '%s',
-                comment = '%s',
-                updated = '%s',
-                date_start = '%s',
-                date_end = '%s',
-                notes = '%s'
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $data['revision_id'],
-            $data['active'],
-            $data['sticky'],
-            $this->config->getDb()->escape($data['keywords']),
-            $this->config->getDb()->escape($data['thema']),
-            $this->config->getDb()->escape($data['content']),
-            $this->config->getDb()->escape($data['author']),
-            $data['email'],
-            $data['comment'],
-            $data['date'],
-            $data['dateStart'],
-            $data['dateEnd'],
-            $data['notes'],
-            $data['id'],
-            $data['lang']
-        );
-
-        $this->config->getDb()->query($query);
-
-        return true;
-    }
-
     public function update(FaqEntity $faq): bool
     {
-        // Update entry
         $query = sprintf(
-            "
-            UPDATE
+            "UPDATE
                 %sfaqdata
             SET
                 revision_id = %d,

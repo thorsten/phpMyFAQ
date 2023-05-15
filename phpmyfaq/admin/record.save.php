@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -114,25 +115,25 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             ++$revisionId;
         }
 
-        $recordData = [
-            'id' => $recordId,
-            'lang' => $recordLang,
-            'revision_id' => $revisionId,
-            'active' => $active,
-            'sticky' => (!is_null($sticky) ? 1 : 0),
-            'thema' => Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-            'content' => Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-            'keywords' => $keywords,
-            'author' => $author,
-            'email' => $email,
-            'comment' => (!is_null($comment) ? 'y' : 'n'),
-            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', (string) $date),
-            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000'),
-            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959'),
-            'linkState' => '',
-            'linkDateCheck' => 0,
-            'notes' => Filter::removeAttributes($notes)
-        ];
+        $faqData = new FaqEntity();
+        $faqData
+            ->setId($recordId)
+            ->setLanguage($recordLang)
+            ->setRevisionId($revisionId)
+            ->setActive($active === 'yes')
+            ->setSticky(!is_null($sticky))
+            ->setQuestion(
+                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            )
+            ->setAnswer(
+                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            )
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setComment(!is_null($comment))
+            ->setCreatedDate(new DateTime())
+            ->setNotes(Filter::removeAttributes($notes));
 
         // Create ChangeLog entry
         $changelog = new Changelog($faqConfig);
@@ -144,13 +145,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
 
         // save or update the FAQ record
         if ($faq->hasTranslation($recordId, $recordLang)) {
-            $faq->updateRecord($recordData);
+            $faq->update($faqData);
         } else {
-            $recordId = $faq->addRecord($recordData, false);
+            $recordId = $faq->create($faqData);
         }
 
         if ($recordId) {
             echo Alert::success('ad_entry_savedsuc');
+            echo '<div class="d-flex justify-content-center">
+                    <div class="spinner-grow" role="status">
+                      <span class="visually-hidden">Saving ...</span>
+                    </div>
+                  </div>';
         } else {
             echo Alert::danger('ad_entry_savedfail', $faqConfig->getDb()->error());
         }
@@ -179,7 +185,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
         }
 
-        // If Elasticsearch is enabled, update active or delete inactive FAQ document
+        // If Elasticsearch is enabled, update an active or delete inactive FAQ document
         if ($faqConfig->get('search.enableElasticsearch')) {
             $esInstance = new Elasticsearch($faqConfig);
                 if ('yes' === $active) {
@@ -188,8 +194,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
                             'id' => $recordId,
                             'lang' => $recordLang,
                             'solution_id' => $solutionId,
-                            'question' => $recordData['thema'],
-                            'answer' => $recordData['content'],
+                            'question' => $faqData->getQuestion(),
+                            'answer' => $faqData->getAnswer(),
                             'keywords' => $keywords,
                             'category_id' => $categories['rubrik'][0]
                         ]
@@ -203,7 +209,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
       <script>
         (() => {
           setTimeout(() => {
-            window.location = "index.php?action=editentry&id=<?= $recordId ?>&lang=<?= $recordData['lang'] ?>";
+            window.location = "index.php?action=editentry&id=<?= $recordId ?>&lang=<?= $faqData->getLanguage() ?>";
           }, 5000);
         })();
       </script>
