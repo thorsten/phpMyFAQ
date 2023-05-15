@@ -177,8 +177,9 @@ if ($step === 1) { ?>
                 // Updates only possible if maintenance mode is enabled
                 //
                 if (!$faqConfig->get('main.maintenanceMode')) {
-                    echo '<div class="alert alert-danger" role="alert">Please enable the maintenance mode ' .
-                      'in the <a href="../admin/?action=config">admin section</a> before running the update script.</div>';
+                    echo '<div class="alert alert-danger" role="alert"><h4 class="alert-heading">Heads up!</h4>' .
+                        'Please enable the maintenance mode in the <a href="../admin/?action=config">admin section</a>' .
+                        ' before running the update script.</div>';
                     $updateDisabled = 'disabled';
                 } else {
                     $updateDisabled = '';
