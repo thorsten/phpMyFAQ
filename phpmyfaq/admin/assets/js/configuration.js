@@ -3,7 +3,7 @@
  * configuration data from the server:
  *
  * - Code to generate the API Token
- * - Code to send a test mail to the admin
+ * - Code to send test mail to the admin
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

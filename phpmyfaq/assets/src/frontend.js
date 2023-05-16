@@ -17,12 +17,11 @@ import 'bootstrap';
 import Masonry from 'masonry-layout';
 
 import { saveFormData } from './api';
-import { handleComments, handleSaveComment } from './faq';
+import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/cookie-consent';
 import './utils/tooltip';
-import { handleUserVoting } from './faq/voting';
 
 //
 // Reload Captchas

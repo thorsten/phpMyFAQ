@@ -49,7 +49,7 @@ export const handlePasswordStrength = () => {
  * @param password
  * @returns {number}
  */
-const passwordStrength = (password) => {
+export const passwordStrength = (password) => {
   return (
     /.{8,}/.test(password) * // at least 8 characters
     (/.{12,}/.test(password) + // bonus if longer

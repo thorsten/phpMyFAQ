@@ -52,39 +52,11 @@ export const escape = (text) => {
 };
 
 /**
- * Capitalize the first letter of a string
- * @param str
- * @returns {string}
- */
-export const capitalize = (str) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
-
-/**
- * Convert a string to a number explicitly
- * @param str
- * @returns {number}
- */
-export const toNumber = (str) => Number(str);
-
-/**
- * Check if an array contains any items
- * @param arr
- * @returns {boolean}
- */
-export const isNotEmpty = (arr) => Array.isArray(arr) && arr.length > 0;
-
-/**
  * Sort an array containing numbers
  * @param arr
  * @returns {*}
  */
 export const sort = (arr) => arr.sort((a, b) => a - b);
-
-/**
- * Get the value of a specified cookie
- * @param name
- * @returns {string}
- */
-export const cookie = (name) => `; ${document.cookie}`.split(`; ${name}=`).pop().split(';').shift();
 
 /**
  * Check if the current tab is in view / focus
