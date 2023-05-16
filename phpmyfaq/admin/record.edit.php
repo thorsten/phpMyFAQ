@@ -156,7 +156,7 @@ if (
 
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new AdminLog($faqConfig);
-            $logging->log($user, 'admin-edit-faq, ' . $id);
+            $logging->log($user, 'admin-edit-faq ' . $id);
 
             $categories = $categoryRelation->getCategories($id, $lang);
             if (count($categories) === 0) {

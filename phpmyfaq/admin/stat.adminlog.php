@@ -124,13 +124,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' ===
             $text = Strings::htmlentities($loggingValue['text']);
             $text = str_replace('Loginerror', Translation::get('ad_log_lger'), $text);
             $text = str_replace('Session expired', Translation::get('ad_log_sess'), $text);
-            $text = str_replace('Useredit, ', Translation::get('ad_log_edit'), $text);
+            $text = str_replace('Useredit', Translation::get('ad_log_edit'), $text);
             $text = str_replace('admin-save-new-faq', Translation::get('ad_log_crsa'), $text);
             $text = str_replace('admin-add-faq', Translation::get('ad_log_crea'), $text);
-            $text = str_replace('Usersave, ', Translation::get('ad_log_ussa'), $text);
-            $text = str_replace('Userdel, ', Translation::get('ad_log_usde'), $text);
-            $text = str_replace('admin-edit-faq, ', Translation::get('ad_log_beed'), $text);
-            $text = str_replace('Beitragdel, ', Translation::get('ad_log_bede'), $text);
+            $text = str_replace('Usersave', Translation::get('ad_log_ussa'), $text);
+            $text = str_replace('Userdel', Translation::get('ad_log_usde'), $text);
+            $text = str_replace('admin-edit-faq', Translation::get('ad_log_beed'), $text);
+            $text = str_replace('Beitragdel', Translation::get('ad_log_bede'), $text);
             echo $text;
             ?></small>
             </td>
