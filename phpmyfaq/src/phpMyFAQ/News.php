@@ -70,7 +70,7 @@ class News
                 Strings::htmlentities($item['header'])
             );
 
-            $output .= sprintf('%s', $item['content']);
+            $output .= sprintf('%s', strip_tags($item['content']));
 
             if (strlen((string) $item['link']) > 1) {
                 $output .= sprintf(
@@ -96,7 +96,7 @@ class News
      * @param bool $forceConfLimit Force to limit in configuration
      * @return array<int, array<mixed>>
      */
-    public function getLatestData($showArchive = false, $active = true, $forceConfLimit = false): array
+    public function getLatestData(bool $showArchive = false, bool $active = true, bool $forceConfLimit = false): array
     {
         $news = [];
         $counter = 0;

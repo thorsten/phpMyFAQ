@@ -275,7 +275,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#category-<?= $cid ?>"
                    aria-expanded="true" aria-controls="collapseOne" class="text-decoration-none">
                   <i class="icon fa fa-chevron-circle-right "></i>
-                <?= $cid > 0 ? $category->getPath($cid) : Translation::get('err_noHeaders') ?>
+                <?= $cid > 0 ? Strings::htmlentities($category->getPath($cid)) : Translation::get('err_noHeaders') ?>
                 </a>
               </h5>
             </div>
