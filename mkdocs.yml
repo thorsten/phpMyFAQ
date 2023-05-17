@@ -9,3 +9,6 @@ nav:
   - 2. Installation: 'installation.md'
   - 3. Update: 'update.md'
   - 4. Use phpMyFAQ: 'usage.md'
+  - 5. Manage phpMyFAQ: 'administration.md'
+  - 6. Developer: 'development.md'
+  - 7. Thank you!: 'thank-you.md'
