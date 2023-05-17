@@ -60,7 +60,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         Proudly <?= System::getPoweredByString() ?>
                     </div>
                     <div>
-                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/documentation">
+                        <a target="_blank" rel="noopener" href="<?= System::getDocumentationUrl() ?>">
                             Documentation
                         </a>
                         &middot;
@@ -77,7 +77,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                         </a>
                         &middot;
                         &copy; 2001 - <?= date('Y') ?>
-                        <a target="_blank" rel="noopener" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
+                        <a target="_blank" rel="noopener" href="<?= System::PHPMYFAQ_URL ?>">
+                            phpMyFAQ Team
+                        </a>
                     </div>
                 </div>
             </div>

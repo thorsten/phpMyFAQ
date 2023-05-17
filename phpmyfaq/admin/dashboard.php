@@ -212,9 +212,10 @@ $faqSession = new Session($faqConfig);
                     try {
                         $versions = $api->getVersions();
                         printf(
-                            '<p class="alert alert-%s">%s <a href="https://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                            '<p class="alert alert-%s">%s <a href="%s" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
                             (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'info',
                             Translation::get('ad_xmlrpc_latest'),
+                            System::PHPMYFAQ_URL
                             $versions['current']
                         );
                         // Installed phpMyFAQ version is outdated

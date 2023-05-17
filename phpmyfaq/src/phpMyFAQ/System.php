@@ -64,6 +64,11 @@ class System
     final public const VERSION_MINIMUM_PHP = '8.1.0';
 
     /**
+     * phpMyFAQ homepage URL
+     */
+    final public const PHPMYFAQ_URL = 'https://www.phpmyfaq.de/';
+
+    /**
      * Array of required PHP extensions.
      *
      * @var array<string>
@@ -141,12 +146,21 @@ class System
             return sprintf(
                 'powered with ❤️ and ☕️ by <a class="%s" target="_blank" href="%s">phpMyFAQ</a> %s',
                 'link-light text-decoration-none',
-                'https://www.phpmyfaq.de/',
+                self::PHPMYFAQ_URL,
                 self::getVersion()
             );
         } else {
             return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
         }
+    }
+
+    /**
+     * Returns the URL of the documentation
+     * @return string
+     */
+    public static function getDocumentationUrl(): string
+    {
+        return sprintf('%sdocs/%s', self::PHPMYFAQ_URL, substr(self::getVersion(), 0, 3));
     }
 
     /**
