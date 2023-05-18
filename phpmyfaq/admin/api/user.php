@@ -73,7 +73,7 @@ if (
             $userdata = $user->userdata->get('*');
             if (is_array($userdata)) {
                 $userdata['status'] = $user->getStatus();
-                $userdata['login'] = Strings::htmlentities($user->getLogin());
+                $userdata['login'] = Strings::htmlentities($user->getLogin(), ENT_COMPAT);
                 $userdata['is_superadmin'] = $user->isSuperAdmin();
             } else {
                 $userdata = [];
