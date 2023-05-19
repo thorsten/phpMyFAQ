@@ -25,6 +25,7 @@ use phpMyFAQ\Template\TemplateHelper;
  * Class Template
  *
  * @package phpMyFAQ
+ * @deprecated will be removed with phpMyFAQ 3.4
  */
 class Template
 {
