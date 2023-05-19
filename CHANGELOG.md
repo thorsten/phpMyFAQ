@@ -1,10 +1,12 @@
-# phpMyFAQ 3.2.0-RC
+# phpMyFAQ 3.3.0-dev
 
-**Codename "Pontus"**
+**Codename "Pallas"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.3.0-dev - 2023-
 
 ### phpMyFAQ v3.2.0-RC - 2023-06
 
