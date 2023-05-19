@@ -25,13 +25,11 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
-use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
 /* user defined constants */
@@ -51,10 +49,8 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
  */
 class CurrentUser extends User
 {
-    private const PMF_REMEMBER_ME_EXPIRED_TIME = 1_209_600; // 2 weeks
-    /**
-     * true if CurrentUser is logged in, otherwise false.
-     */
+    private const PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
+
     private bool $loggedIn = false;
 
     /**
@@ -108,7 +104,7 @@ class CurrentUser extends User
      * labeled as logged in. The name of the successful auth container will
      * be stored in the user table. A new auth object may be added by using
      * addAuth() method. The given password must not be encrypted, since the
-     * auth object takes care about the encryption method.
+     * auth object takes care of the encryption method.
      *
      * @param string $login Login name
      * @param string $password Password
@@ -137,28 +133,28 @@ class CurrentUser extends User
             $this->config->isLdapActive() && $this->config->get('ldap.ldap_use_domain_prefix')
             && '' !== $password
         ) {
-            // If LDAP configuration and ldap_use_domain_prefix is true
+            // If LDAP configuration and ldap_use_domain_prefix are true,
             // and LDAP credentials are provided (password is not empty)
-            if (($pos = strpos((string) $login, '\\')) !== false) {
+            if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos !== 0) {
-                    $optData['domain'] = substr((string) $login, 0, $pos);
+                    $optData['domain'] = substr($login, 0, $pos);
                 }
 
-                $login = substr((string) $login, $pos + 1);
+                $login = substr($login, $pos + 1);
             }
         }
 
         // Additional code for SSO
         if ($this->config->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
             // if SSO configuration is enabled, REMOTE_USER is provided, and we try to log in using SSO (no password)
-            if (($pos = strpos((string) $login, '@')) !== false) {
+            if (($pos = strpos($login, '@')) !== false) {
                 if ($pos !== 0) {
-                    $login = substr((string) $login, 0, $pos);
+                    $login = substr($login, 0, $pos);
                 }
             }
-            if (($pos = strpos((string) $login, '\\')) !== false) {
+            if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos !== 0) {
-                    $login = substr((string) $login, $pos + 1);
+                    $login = substr($login, $pos + 1);
                 }
             }
         }
@@ -182,14 +178,14 @@ class CurrentUser extends User
             // $login exists, but $pass is incorrect, so stop!
             if (!$auth->checkCredentials($login, $password, $optData)) {
                 ++$passwordError;
-                // Don't stop, as other auth method could work
+                // Don't stop, as another auth method could work
                 continue;
             }
 
-            // but hey, this must be a valid match, so get user object
+            // but hey, this must be a valid match, so get a user object
             $this->getUserByLogin($login);
 
-            // only save this successful login to session when 2fa-auth is not enabled
+            // only save this successful login to session when 2FA is not enabled
             if ($this->getUserData('twofactor_enabled') !== 1) {
                 $this->setLoggedIn(true);
                 $this->updateSessionId(true);
@@ -213,8 +209,8 @@ class CurrentUser extends User
                 return false;
             }
 
-            // Login successful if 2fa is not enabled
-            if ($this->getUserData('twofactor_enabled') != 1) {
+            // Login successful if 2FA is not enabled
+            if ($this->getUserData('twofactor_enabled') !== 1) {
                 $this->setSuccess(true);
             }
 
@@ -344,10 +340,10 @@ class CurrentUser extends User
 
     /**
      * Updates the session-ID, does not care about time-outs.
-     * Stores session information in the user table: session_id,
+     * Store session information in the user table: session_id,
      * session_timestamp and ip.
-     * Optionally it should update the 'last login' time.
-     * Returns true on success, otherwise false.
+     * Optionally, it should update the 'last login' time.
+     * Returns true to success, otherwise false.
      *
      * @param bool $updateLastLogin Update the last login time?
      */
@@ -408,7 +404,7 @@ class CurrentUser extends User
 
     /**
      * Deletes the CurrentUser from the session. The user
-     * will be logged out. Return true on success, otherwise false.
+     * will be logged out. Return true to success, otherwise false.
      */
     public function deleteFromSession(bool $deleteCookie = false): bool
     {
@@ -499,7 +495,7 @@ class CurrentUser extends User
     /**
      * This static method returns a valid CurrentUser object if there is one
      * in the session that is not timed out. The session-ID is updated if
-     * necessary. The CurrentUser will be removed from the session, if it is
+     * necessary. The CurrentUser will be removed from the session if it is
      * timed out. If there is no valid CurrentUser in the session or the
      * session is timed out, null will be returned. If the session data is
      * correct, but there is no user found in the user table, false will be
@@ -550,7 +546,7 @@ class CurrentUser extends User
     /**
      * This static method returns a valid CurrentUser object if there is one
      * in the cookie that is not timed out. The session-ID is updated then.
-     * The CurrentUser will be removed from the session, if it is
+     * The CurrentUser will be removed from the session if it is
      * timed out. If there is no valid CurrentUser in the cookie or the
      * cookie is timed out, null will be returned. If the cookie is correct,
      * but there is no user found in the user table, false will be returned.
@@ -657,6 +653,11 @@ class CurrentUser extends User
         return (bool) $this->config->getDb()->query($update);
     }
 
+    /**
+     * @param array<string> $token
+     * @return bool
+     * @throws \JsonException
+     */
     public function setTokenData(array $token): bool
     {
         $update = sprintf(
@@ -682,7 +683,7 @@ class CurrentUser extends User
     }
 
     /**
-     * Sets IP and session timestamp plus lockout time, success flag to
+     * Sets IP and session timestamp plus lockout time, a success flag to
      * false.
      */
     protected function setLoginAttempt(): mixed
@@ -710,7 +711,7 @@ class CurrentUser extends User
     }
 
     /**
-     * Checks if the last login attempt from current user failed.
+     * Checks if the last login attempt from the current user failed.
      */
     protected function isFailedLastLoginAttempt(): bool
     {

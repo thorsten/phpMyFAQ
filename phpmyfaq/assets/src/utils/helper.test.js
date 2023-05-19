@@ -1,4 +1,4 @@
-import { addElement, escape, sort, serialize } from './helper';
+import { addElement, capitalize, escape, sort, serialize } from './helper';
 
 describe('addElement', () => {
   test('should add element with tag, properties, and children', () => {
@@ -127,5 +127,31 @@ describe('serialize', () => {
     const result = serialize(data);
 
     expect(result).toEqual({});
+  });
+});
+
+describe('capitalize', () => {
+  test('should capitalize the first letter of a string', () => {
+    const input = 'hello';
+    const expectedOutput = 'Hello';
+
+    const result = capitalize(input);
+    expect(result).toEqual(expectedOutput);
+  });
+
+  test('should not change the capitalization of already capitalized words', () => {
+    const input = 'World';
+    const expectedOutput = 'World';
+
+    const result = capitalize(input);
+    expect(result).toEqual(expectedOutput);
+  });
+
+  test('should return an empty string if the input is an empty string', () => {
+    const input = '';
+    const expectedOutput = '';
+
+    const result = capitalize(input);
+    expect(result).toEqual(expectedOutput);
   });
 });

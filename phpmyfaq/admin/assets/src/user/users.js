@@ -17,7 +17,7 @@
 
 import { Modal } from 'bootstrap';
 import { fetchAllUsers, fetchUserData, fetchUserRights, postUserData } from '../api';
-import { addElement } from '../../../../assets/src/utils';
+import { addElement, capitalize } from '../../../../assets/src/utils';
 
 /**
  * Updates the current loaded user
@@ -39,6 +39,7 @@ const setUserData = async (userId) => {
   updateInput('pmf-user-list-autocomplete', userData.login);
   updateInput('last_modified', userData.last_modified);
   updateInput('update_user_id', userData.user_id);
+  updateInput('auth_source', capitalize(userData.auth_source));
   updateInput('user_status', userData.status);
   updateInput('display_name', userData.display_name);
   updateInput('email', userData.email);

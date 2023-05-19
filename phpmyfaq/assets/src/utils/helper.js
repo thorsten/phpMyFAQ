@@ -93,3 +93,7 @@ export const serialize = (data) => {
 export const redirect = (url) => {
   document.location.href = url;
 };
+
+export const capitalize = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

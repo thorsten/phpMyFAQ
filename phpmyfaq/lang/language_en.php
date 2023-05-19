@@ -1342,4 +1342,6 @@ $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Disable 
 // added v3.2.0-beta.2 - 2023-05-03 by Jan
 $LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Contact information as HTML?'];
 
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Authentication service';
 return $PMF_LANG;

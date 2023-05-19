@@ -75,6 +75,7 @@ if (
                 $userdata['status'] = $user->getStatus();
                 $userdata['login'] = Strings::htmlentities($user->getLogin(), ENT_COMPAT);
                 $userdata['is_superadmin'] = $user->isSuperAdmin();
+                $userdata['auth_source'] = $user->getUserAuthSource();
             } else {
                 $userdata = [];
             }
@@ -96,6 +97,7 @@ if (
                 $userObject->displayName = $user->getUserData('display_name');
                 $userObject->userName = $user->getLogin();
                 $userObject->email = $user->getUserData('email');
+                $userObject->authSource = $user->getUserAuthSource();
                 $userData[] = $userObject;
             }
             $response->setStatusCode(Response::HTTP_OK);

@@ -319,6 +319,16 @@ if (
                             <?= Token::getInstance()->getTokenInput('update-user-data') ?>
 
                             <div class="row mb-2">
+                                <label for="auth_source" class="col-lg-4 col-form-label">
+                                    <?= Translation::get('msgAuthenticationSource') ?>
+                                </label>
+                                <div class="col-lg-8">
+                                    <input id="auth_source" class="form-control-plaintext" type="text" value=""
+                                           readonly>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
                                 <label for="user_status" class="col-lg-4 col-form-label">
                                     <?= Translation::get('ad_user_status') ?>
                                 </label>
@@ -382,6 +392,7 @@ if (
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-success" type="submit">

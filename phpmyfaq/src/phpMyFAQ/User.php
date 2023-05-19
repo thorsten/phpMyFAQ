@@ -138,6 +138,9 @@ class User
      */
     private bool $isSuperAdmin = false;
 
+    /** @var string $authSource Authentication, e.g. local, ldap, azure, sso, ... */
+    private string $authSource = 'local';
+
     /**
      * array of allowed values for status.
      *
@@ -204,6 +207,11 @@ class User
             return $this->authData['authSource'][$key];
         }
         return null;
+    }
+
+    public function getUserAuthSource(): string
+    {
+        return $this->authSource;
     }
 
     /**
@@ -279,7 +287,7 @@ class User
         }
         $user = $this->config->getDb()->fetchArray($res);
 
-        // Don't ever login via anonymous user
+        // Don't ever log in via anonymous user
         if (-1 === $user['user_id']) {
             return false;
         }
@@ -302,9 +310,10 @@ class User
      */
     public function getUserId(): int
     {
-        if (isset($this->userId) && is_int($this->userId)) {
+        if (isset($this->userId)) {
             return $this->userId;
         }
+
         $this->userId = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
 
@@ -736,7 +745,8 @@ class User
                 user_id,
                 login,
                 account_status,
-                is_superadmin
+                is_superadmin,
+                auth_source
             FROM
                 %sfaquser
             WHERE
@@ -758,6 +768,7 @@ class User
         $this->login = (string) $user['login'];
         $this->status = (string) $user['account_status'];
         $this->isSuperAdmin = (bool) $user['is_superadmin'];
+        $this->authSource = (string) $user['auth_source'];
 
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
