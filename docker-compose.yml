@@ -35,7 +35,7 @@ services:
     ports:
       - 1433:1433
     environment:
-      SA_PASSWORD: 'phpMyFAQ-3.2'
+      SA_PASSWORD: 'phpMyFAQ-3.3'
       ACCEPT_EULA: 'Y'
 
   phpmyfaq:
@@ -66,7 +66,7 @@ services:
       - yarn
 
   yarn:
-    image: node:18
+    image: node:20
     restart: 'no'
     command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app
@@ -111,7 +111,7 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
-    container_name: phpmyfaq-32_elasticsearch-v8
+    container_name: phpmyfaq-33_elasticsearch-v8
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
