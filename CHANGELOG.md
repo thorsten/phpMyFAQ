@@ -8,6 +8,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v3.3.0-dev - 2023-
 
+- added Twig as new template engine (Thorsten)
+
 ### phpMyFAQ v3.2.0-RC - 2023-06
 
 - fixed multiple security vulnerabilities (Thorsten)

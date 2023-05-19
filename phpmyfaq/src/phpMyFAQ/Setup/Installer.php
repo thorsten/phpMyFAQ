@@ -330,7 +330,7 @@ class Installer extends Setup
         'main.metaKeywords' => '',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
         'main.send2friendText' => '',
-        'main.titleFAQ' => 'phpMyFAQ Codename Pontus',
+        'main.titleFAQ' => 'phpMyFAQ Codename Pallas',
         'main.urlValidateInterval' => '86400',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
