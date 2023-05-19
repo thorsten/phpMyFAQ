@@ -39,10 +39,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $loader = new FilesystemLoader('./assets/templates');
-$twig = new Environment($loader, [
-    'cache' => './assets/cache',
-    'debug' => DEBUG,
-]);
+$twig = new Environment($loader);
 $template = $twig->load('system.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
