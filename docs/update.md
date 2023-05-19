@@ -7,7 +7,7 @@ versions:
 - phpMyFAQ 3.1.x
 - phpMyFAQ 3.2.x
 
-If you're running an older version of phpMyFAQ than listed above we recommend a new and fresh installation. If you need
+If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
 support for updating an old FAQ from the 1.x or 2.x series, [please email us](thorsten_AT_phpmyfaq_DOT_de).
 
 ## Before you upgrade
@@ -37,7 +37,7 @@ updated.
 ## Upgrading from phpMyFAQ 3.1.x
 
 Updating an existing phpMyFAQ 3.1.x installation is fairly simple. First, log in as admin into the admin section and
-enable the maintenance mode. Second you have to delete all files **except**:
+enable the maintenance mode. Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
 - the directory **attachments/**
@@ -55,7 +55,7 @@ updated.
 ## Upgrading from phpMyFAQ 3.2.x
 
 Updating an existing phpMyFAQ 3.2.x installation is fairly simple. First, log in as admin into the admin section and
-enable the maintenance mode. Second you have to delete all files **except**:
+enable the maintenance mode. Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
 - all files in the directory **assets/themes/**
@@ -77,10 +77,10 @@ We recommend you'll take a look at the main [Bootstrap documentation](https://ge
 that the style sheets are written with [SCSS](https://sass-lang.com/). You have to compile the SCSS files into CSS using
 a SCSS compiler with Node.js.
 
-If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/) or visit
+If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/) or visit
 our [new theme page](https://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage
-and release them as open source on our [GitHub page](https://github.com/phpMyFAQ/).
+and release them as an open source on our [GitHub page](https://github.com/phpMyFAQ/).
 
-Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you
+Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts, you
 have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with
 \r\n.
