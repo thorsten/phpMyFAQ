@@ -1,0 +1,22 @@
+<div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+        {{ adminHeaderSystemInfo }}
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped align-middle">
+            <tbody>
+            {% for key, info in systemInformation %}
+            <tr>
+                <td class="col-2 align-text-top"><strong>{{ key }}</strong></td>
+                <td>{{ info }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
