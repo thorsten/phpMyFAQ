@@ -24,6 +24,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class AuthAzureActiveDirectory
@@ -117,6 +118,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     /**
      * Method to authorize against Azure AD
      *
+     * @throws \Exception
      */
     public function authorize(): void
     {
@@ -135,7 +137,8 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             self::AAD_CHALLENGE_METHOD
         );
 
-        header('Location: ' . $oAuthURL);
+        $response = new RedirectResponse($oAuthURL);
+        $response->send();
     }
 
     /**
@@ -154,12 +157,16 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
 
         $user->getUserByLogin($user->getLogin());
         $user->deleteFromSession(true);
-        header('Location: ' . self::AAD_LOGOUT_URL);
+
+        $response = new RedirectResponse(self::AAD_LOGOUT_URL);
+        $response->send();
     }
 
     /**
      * Method to generate code verifier and code challenge for oAuth login.
      * See RFC7636 for details.
+     *
+     * @throws \Exception
      */
     private function createOAuthChallenge(): void
     {

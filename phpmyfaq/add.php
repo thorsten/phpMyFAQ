@@ -21,7 +21,9 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,17 +32,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $request = Request::createFromGlobals();
+$faqSystem = new System();
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
-    exit;
+    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $response->send();
 }
 
 // Check permission to add new faqs
 if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), 'addfaq')) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig));
-    exit;
+    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
+    $response->send();
 }
 
 $captcha = Captcha::getInstance($faqConfig);

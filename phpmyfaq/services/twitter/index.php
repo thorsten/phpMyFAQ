@@ -18,6 +18,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Abraham\TwitterOAuth\TwitterOAuthException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -35,7 +36,8 @@ if (
     empty($_SESSION['access_token']['oauth_token']) ||
     empty($_SESSION['access_token']['oauth_token_secret'])
 ) {
-    header('Location: ./clearsessions.php');
+    $response = new RedirectResponse('./clearsessions.php');
+    $response->send();
 }
 
 $accessToken = $_SESSION['access_token'];
@@ -55,5 +57,6 @@ try {
 $content = $connection->get('account/verify_credentials');
 
 if (isset($content->screen_name)) {
-    header('Location: ../../admin/index.php');
+    $response = new RedirectResponse('../../admin/index.php');
+    $response->send();
 }

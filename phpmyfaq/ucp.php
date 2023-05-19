@@ -22,6 +22,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -97,7 +98,7 @@ if ($user->isLoggedIn()) {
         ]
     );
 } else {
-    // Redirect to login
-    header('Location: ' . $faqConfig->getDefaultUrl());
-    exit();
+    // Redirect to log in
+    $response = new RedirectResponse($faqConfig->getDefaultUrl());
+    $response->send();
 }

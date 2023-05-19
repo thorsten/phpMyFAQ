@@ -15,10 +15,13 @@
  * @since 2010-09-18
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 //
 // Prepend and start the PHP session
 //
 define('PMF_ROOT_DIR', dirname(__DIR__, 2));
+
 const IS_VALID_PHPMYFAQ = null;
 
 //
@@ -28,4 +31,5 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 session_destroy();
 
-header('Location: ./connect.php');
+$response = new RedirectResponse('./connect.php');
+$response->send();

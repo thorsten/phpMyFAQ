@@ -21,11 +21,13 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
 //
 define('PMF_ROOT_DIR', dirname(__DIR__, 2));
+
 const IS_VALID_PHPMYFAQ = null;
 
 //
@@ -74,15 +76,14 @@ if ($session->getCurrentSessionKey()) {
         $user->setSuccess(true);
 
         // @todo -> redirect to where the user came from
-        header('Location: ' . $faqConfig->getDefaultUrl());
-
+        $response = new RedirectResponse($faqConfig->getDefaultUrl());
+        $response->send();
     } catch (GuzzleException $e) {
         echo $e->getMessage();
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 } else {
-    header('Location: ' . $faqConfig->getDefaultUrl());
+    $response = new RedirectResponse($faqConfig->getDefaultUrl());
+    $response->send();
 }
-
-

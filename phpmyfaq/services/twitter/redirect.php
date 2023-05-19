@@ -17,6 +17,7 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -45,7 +46,8 @@ $_SESSION['oauth_token_secret'] = $requestToken['oauth_token_secret'];
 switch ($connection->getLastHttpCode()) {
     case 200:
         $url = $connection->url('oauth/authorize', ['oauth_token' => $requestToken['oauth_token']]);
-        header('Location: ' . $url);
+        $response = new RedirectResponse($url);
+        $response->send();
         break;
     default:
         echo 'Could not connect to Twitter. Refresh the page or try again later.';

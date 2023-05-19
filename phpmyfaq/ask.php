@@ -21,7 +21,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,7 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGuests'))) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $response->send();
 }
 
 $request = Request::createFromGlobals();
