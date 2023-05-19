@@ -41,7 +41,7 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 2;
+    private const VERSION_MINOR = 3;
 
     /**
      * Patch level.
@@ -51,7 +51,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'RC';
+    private const VERSION_PRE_RELEASE = 'dev';
 
     /**
      * API version.
