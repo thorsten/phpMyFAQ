@@ -333,9 +333,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'group':
                 require 'group.php';
                 break;
-            case 'section':
-                require 'section.php';
-                break;
             // functions for content administration
             case 'faqs-overview':
                 require 'faqs.overview.php';

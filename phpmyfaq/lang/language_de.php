@@ -1262,25 +1262,6 @@ $PMF_LANG['ad_meta_page_id'] = 'Seitentyp';
 $PMF_LANG['ad_meta_type'] = 'Inhaltstyp';
 $PMF_LANG['ad_meta_content'] = 'Inhalt';
 $PMF_LANG['ad_meta_copy_snippet'] = 'Code-Snippet für Templates kopieren';
-
-// added v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG['ad_menu_section_administration'] = "Bereichsverwaltung";
-$PMF_LANG['ad_section_add'] = "Bereich hinzufügen";
-$PMF_LANG['ad_section_add_link'] = "Bereich hinzufügen";
-$PMF_LANG['ad_sections'] = 'Bereiche';
-$PMF_LANG['ad_section_details'] = "Details des Bereichs";
-$PMF_LANG['ad_section_name'] = "Name";
-$PMF_LANG['ad_section_description'] = "Beschreibung";
-$PMF_LANG['ad_section_membership'] = "Bereichszuordnung";
-$PMF_LANG['ad_section_members'] = "Zuordnungen";
-$PMF_LANG['ad_section_addMember'] = "+";
-$PMF_LANG['ad_section_removeMember'] = "-";
-$PMF_LANG['ad_section_deleteSection'] = "Lösche Bereich";
-$PMF_LANG['ad_section_deleteQuestion'] = "Sind Sie sicher, dass Sie diesen Bereich löschen wollen?";
-$PMF_LANG['ad_section_error_delete'] = "Der Bereich konnte nicht gelöscht werden.";
-$PMF_LANG['ad_section_error_noName'] = "Bitte geben Sie einen Namen für den Bereich ein.";
-$PMF_LANG['ad_section_suc'] = "Der Bereich wurde erfolgreich hinzugefügt.";
-$PMF_LANG['ad_section_deleted'] = "Der Bereich wurde erfolgreich gelöscht.";
 $PMF_LANG['rightsLanguage::viewadminlink'] = 'Link zur Administration sichtbar';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
