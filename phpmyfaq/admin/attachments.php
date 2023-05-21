@@ -16,12 +16,15 @@
  */
 
 use phpMyFAQ\Attachment\AttachmentCollection;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\FormatBytesTwigExtension;
 use phpMyFAQ\Translation;
-use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -29,6 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $request = Request::createFromGlobals();
+$faqConfig = Configuration::getConfigurationInstance();
 
 $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
 $page = max(1, $page);
@@ -46,57 +50,24 @@ $pagination = new Pagination(
         'perPage' => $itemsPerPage,
     ]
 );
-?>
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-paperclip"></i>
-      <?= Translation::get('ad_menu_attachment_admin') ?>
-  </h1>
-</div>
 
-<div class="row">
-  <div class="col-lg-12">
-    <table class="table table-striped align-middle">
-      <thead>
-      <tr>
-        <th>#</th>
-        <th><?= Translation::get('msgAttachmentsFilename') ?></th>
-        <th><?= Translation::get('msgTransToolLanguage') ?></th>
-        <th><?= Translation::get('msgAttachmentsFilesize') ?></th>
-        <th colspan="3"><?= Translation::get('msgAttachmentsMimeType') ?></th>
-      </tr>
-      </thead>
-      <tbody id="attachment-table">
-      <?php foreach ($crumbs as $item) : ?>
-        <tr id="attachment_<?= $item->id ?>" title="<?= $item->thema ?>">
-          <td><?= $item->id ?></td>
-          <td><?= $item->filename ?></td>
-          <td><?= $item->record_lang ?></td>
-          <td><?= Utils::formatBytes($item->filesize) ?></td>
-          <td><?= $item->mime_type ?></td>
-          <td>
-            <button class="btn btn-danger btn-delete-attachment" title="<?= Translation::get('ad_gen_delete') ?>"
-                    data-attachment-id="<?= $item->id ?>"
-                    data-csrf="<?= Token::getInstance()->getTokenString('delete-attachment') ?>">
-              <i aria-hidden="true" class="fa fa-trash btn-delete-attachment" data-attachment-id="<?= $item->id ?>"
-                    data-csrf="<?= Token::getInstance()->getTokenString('delete-attachment') ?>"></i>
-            </button>
-          </td>
-          <td>
-            <a title="<?= Translation::get('ad_entry_faq_record') ?>" class="btn btn-info"
-               href="../index.php?action=faq&id=<?= $item->record_id ?>&lang=<?= $item->record_lang ?>">
-              <i aria-hidden="true" class="fa fa-link"></i>
-            </a>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-      </tbody>
-      <tfoot>
-      <tr>
-        <td colspan="5"><?= $pagination->render(); ?></td>
-      </tr>
-      </tfoot>
-    </table>
-  </div>
-</div>
+$loader = new FilesystemLoader('./assets/templates');
+$twig = new Environment($loader);
+$twig->addExtension(new FormatBytesTwigExtension());
+$template = $twig->load('./content/attachments.twig');
 
+
+$templateVars = [
+    'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),
+    'adminMsgAttachmentsFilename' => Translation::get('msgAttachmentsFilename'),
+    'adminMsgTransToolLanguage' => Translation::get('msgTransToolLanguage'),
+    'adminMsgAttachmentsFilesize' => Translation::get('msgAttachmentsFilesize'),
+    'adminMsgAttachmentsMimeType' => Translation::get('msgAttachmentsMimeType'),
+    'csrfToken' => Token::getInstance()->getTokenString('delete-attachment'),
+    'attachments' => $crumbs,
+    'adminMsgButtonDelete' => Translation::get('ad_gen_delete'),
+    'adminMsgFaqTitle' => Translation::get('ad_entry_faq_record'),
+    'adminAttachmentPagination' => $pagination->render()
+];
+
+echo $template->render($templateVars);

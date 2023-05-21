@@ -34,7 +34,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 $loader = new FilesystemLoader('./assets/templates');
 $twig = new Environment($loader);
-$template = $twig->load('./user/password.twig');
+$template = $twig->load('./user/password.change.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     // If we have to save a new password, do that first
@@ -76,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         'adminHeaderPasswordChange' => Translation::get('ad_passwd_cop'),
         'successMessage' => $successMessage,
         'errorMessage' => $errorMessage,
-        'inputCsrfToken' => Token::getInstance()->getTokenString('password'),
+        'csrfToken' => Token::getInstance()->getTokenString('password'),
         'adminMsgOldPassword' => Translation::get('ad_passwd_old'),
         'adminMsgNewPassword' => Translation::get('ad_passwd_new'),
         'adminMsgNewPasswordRepeat' => Translation::get('ad_passwd_con'),
