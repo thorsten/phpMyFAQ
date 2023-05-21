@@ -40,7 +40,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 $loader = new FilesystemLoader('./assets/templates');
 $twig = new Environment($loader);
-$template = $twig->load('system.twig');
+$template = $twig->load('./configuration/system.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $faqSystem = new System();

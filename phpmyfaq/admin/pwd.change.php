@@ -16,28 +16,31 @@
  */
 
 use phpMyFAQ\Auth;
-use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-?>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-lock"></i>
-        <?= Translation::get('ad_passwd_cop') ?>
-    </h1>
-  </div>
-<?php
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
+$loader = new FilesystemLoader('./assets/templates');
+$twig = new Environment($loader);
+$template = $twig->load('./user/password.twig');
+
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     // If we have to save a new password, do that first
     $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_SPECIAL_CHARS);
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+    $successMessage = $errorMessage = '';
 
     if (!is_null($save) && Token::getInstance()->verifyToken('password', $csrfToken)) {
         // Define the (Local/Current) Authentication Source
@@ -51,79 +54,36 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         $retypedPassword = Filter::filterInput(INPUT_POST, 'faqpassword_confirm', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
-            printf(
-                '<p class="alert alert-danger alert-dismissible fade show">%s%s</p>',
-                Translation::get('ad_passwd_fail'),
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-            );
+            $errorMessage = Translation::get('ad_passwd_fail');
         } else {
-            if (($authSource->checkCredentials(
+            if (
+                ($authSource->checkCredentials(
                     $user->getLogin(),
                     $oldPassword
-                )) && ($newPassword == $retypedPassword)) {
+                )) && ($newPassword == $retypedPassword)
+            ) {
                 if (!$user->changePassword($newPassword)) {
-                    echo Alert::danger('ad_passwd_fail');
+                    $errorMessage = Translation::get('ad_passwd_fail');
                 }
-                echo Alert::success('ad_passwdsuc');
+                $successMessage = Translation::get('ad_passwdsuc');
             } else {
-                echo Alert::danger('ad_passwd_fail');
+                $errorMessage = Translation::get('ad_passwd_fail');
             }
         }
     }
-    ?>
 
-      <form action="?action=passwd" method="post" accept-charset="utf-8">
-        <input type="hidden" name="save" value="newpassword">
-        <?= Token::getInstance()->getTokenInput('password') ?>
+    $templateVars = [
+        'adminHeaderPasswordChange' => Translation::get('ad_passwd_cop'),
+        'successMessage' => $successMessage,
+        'errorMessage' => $errorMessage,
+        'inputCsrfToken' => Token::getInstance()->getTokenString('password'),
+        'adminMsgOldPassword' => Translation::get('ad_passwd_old'),
+        'adminMsgNewPassword' => Translation::get('ad_passwd_new'),
+        'adminMsgNewPasswordRepeat' => Translation::get('ad_passwd_con'),
+        'adminMsgButtonNewPassword' => Translation::get('ad_passwd_change')
+    ];
 
-        <div class="row mb-2">
-          <label class="col-2 col-form-label" for="faqpassword_old">
-              <?= Translation::get('ad_passwd_old') ?>
-          </label>
-          <div class="col-4">
-            <input type="password" autocomplete="off" name="faqpassword_old" id="faqpassword_old" class="form-control"
-                   required>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label class="col-2 col-form-label" for="faqpassword">
-              <?= Translation::get('ad_passwd_new') ?>
-          </label>
-          <div class="col-4 input-group w-auto">
-            <input type="password" autocomplete="off" name="faqpassword" id="faqpassword" class="form-control" required>
-            <span class="input-group-text">
-              <i class="fa" id="togglePassword"></i>
-            </span>
-          </div>
-          <div class="offset-2 col-lg-8">
-            <div class="progress mt-2 w-25">
-              <div class="progress-bar progress-bar-striped" id="strength"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label class="col-2 col-form-label" for="faqpassword_confirm">
-              <?= Translation::get('ad_passwd_con') ?>
-          </label>
-          <div class="col-4">
-            <input type="password" autocomplete="off" name="faqpassword_confirm" id="faqpassword_confirm"
-                   class="form-control" required>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <div class="offset-lg-2 col-4">
-            <button class="btn btn-primary" type="submit">
-                <?= Translation::get('ad_passwd_change') ?>
-            </button>
-          </div>
-        </div>
-
-      </form>
-
-    <?php
+    echo $template->render($templateVars);
 } else {
     echo Translation::get('err_NotAuth');
 }
