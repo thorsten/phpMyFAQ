@@ -321,6 +321,7 @@ switch ($action) {
                     </a>
 
                     <!-- User -->
+                    <?php if ($secLevelEntries['user'] !== '') : ?>
                     <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-user"></i></div>
@@ -333,7 +334,9 @@ switch ($action) {
                             <?= $secLevelEntries['user']; ?>
                         </nav>
                     </div>
+                    <?php endif; ?>
                     <!-- Content -->
+                    <?php if ($secLevelEntries['content'] !== '') : ?>
                     <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-edit"></i></div>
@@ -346,7 +349,9 @@ switch ($action) {
                             <?= $secLevelEntries['content']; ?>
                         </nav>
                     </div>
+                    <?php endif; ?>
                     <!-- Statistics -->
+                    <?php if ($secLevelEntries['statistics'] !== '') : ?>
                     <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-tasks"></i></div>
@@ -359,7 +364,9 @@ switch ($action) {
                             <?= $secLevelEntries['statistics']; ?>
                         </nav>
                     </div>
+                    <?php endif; ?>
                     <!-- Exports -->
+                    <?php if ($secLevelEntries['exports'] !== '') : ?>
                     <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file-archive-o"></i></div>
@@ -372,7 +379,9 @@ switch ($action) {
                             <?= $secLevelEntries['exports']; ?>
                         </nav>
                     </div>
+                    <?php endif; ?>
                     <!-- Backup -->
+                    <?php if ($secLevelEntries['backup'] !== '') : ?>
                     <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
                         <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-cloud-download"></i></div>
@@ -385,7 +394,9 @@ switch ($action) {
                             <?= $secLevelEntries['backup']; ?>
                         </nav>
                     </div>
+                    <?php endif; ?>
                     <!-- Config -->
+                    <?php if ($secLevelEntries['config'] !== '') : ?>
                     <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#"
                        data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
                        aria-controls="collapseConfigAdmin">
@@ -399,6 +410,7 @@ switch ($action) {
                             <?= $secLevelEntries['config']; ?>
                         </nav>
                     </div>
+                    <?php endif; ?>
 
                 </div>
             </div>
