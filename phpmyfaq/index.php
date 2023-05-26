@@ -832,5 +832,3 @@ $response->setCache([
     'last_modified'    => new \DateTime()
 ]);
 $response->send();
-
-$faqConfig->getDb()->close();

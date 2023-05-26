@@ -37,7 +37,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
 $page = max(1, $page);
 
-$attachmentCollection = new AttachmentCollection($faqConfig);
+$attachmentCollection = new AttachmentCollection($faqConfig);   
 $itemsPerPage = 24;
 $allCrumbs = $attachmentCollection->getBreadcrumbs();
 
