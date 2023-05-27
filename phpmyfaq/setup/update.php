@@ -438,7 +438,7 @@ if ($step == 3) {
     //
     if (version_compare($version, '3.2.0-RC', '<')) {
         // HTML-support for contactInformation
-        $faqConfig->add('spam.mailAdressInExport', true);
+        $faqConfig->add('spam.mailAddressInExport', true);
     }
 
     //
