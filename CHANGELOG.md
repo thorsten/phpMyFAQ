@@ -23,6 +23,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added REST API v2.2 to fetch groups and add categories (Thorsten)
 - added verification of backup files (Thorsten)
 - added option to disable questions and notifications (Thorsten)
+- added new options for more flexibility (Jan Harms)
 - added new mobile first, touch-friendly default layout (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - added Symfony HttpFoundation (Thorsten)
