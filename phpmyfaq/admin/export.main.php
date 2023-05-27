@@ -81,7 +81,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <div class="offset-lg-2 col-lg-8">
                     <p><?= Translation::get('ad_export_type_choose') ?></p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="export-type" id="json" value="json">
+                        <input class="form-check-input" type="radio" name="export-type" id="json" value="json" checked>
                         <label class="form-check-label" for="json">
                             <?= Translation::get('ad_export_generate_json') ?>
                         </label>
