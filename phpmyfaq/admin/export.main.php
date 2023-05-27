@@ -128,7 +128,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <button class="btn btn-secondary" type="reset" name="resetExport">
                         <?= Translation::get('ad_config_reset'); ?>
                     </button>
-                    <button class="btn btn-primary" type="submit" name="submitExport">
+                    <button class="btn btn-primary" type="submit" name="submitExport" formtarget="_blank">
                         <?= Translation::get('ad_menu_export'); ?>
                     </button>
                 </div>
