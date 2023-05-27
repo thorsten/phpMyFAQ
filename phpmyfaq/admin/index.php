@@ -406,9 +406,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'cutcategory':
                 require 'category.cut.php';
                 break;
-            case 'movecategory':
-                require 'category.move.php';
-                break;
             case 'showcategory':
                 require 'category.showstructure.php';
                 break;
@@ -427,7 +424,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             // functions for password administration
             case 'passwd':
-                require 'pwd.change.php';
+                require 'password.change.php';
                 break;
             // functions for session administration
             case 'adminlog':

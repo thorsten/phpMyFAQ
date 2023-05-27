@@ -19,10 +19,9 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,9 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-$loader = new FilesystemLoader('./assets/templates');
-$twig = new Environment($loader);
-$template = $twig->load('./user/password.change.twig');
+$twig = new TwigWrapper('./assets/templates');
+$template = $twig->loadTemplate('./user/password.change.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     // If we have to save a new password, do that first

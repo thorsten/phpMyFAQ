@@ -21,10 +21,9 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\FormatBytesTwigExtension;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -37,7 +36,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
 $page = max(1, $page);
 
-$attachmentCollection = new AttachmentCollection($faqConfig);   
+$attachmentCollection = new AttachmentCollection($faqConfig);
 $itemsPerPage = 24;
 $allCrumbs = $attachmentCollection->getBreadcrumbs();
 
@@ -51,11 +50,9 @@ $pagination = new Pagination(
     ]
 );
 
-$loader = new FilesystemLoader('./assets/templates');
-$twig = new Environment($loader);
+$twig = new TwigWrapper('./assets/templates');
 $twig->addExtension(new FormatBytesTwigExtension());
-$template = $twig->load('./content/attachments.twig');
-
+$template = $twig->loadTemplate('./content/attachments.twig');
 
 $templateVars = [
     'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),

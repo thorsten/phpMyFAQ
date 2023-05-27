@@ -23,11 +23,10 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\System;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -38,9 +37,8 @@ $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-$loader = new FilesystemLoader('./assets/templates');
-$twig = new Environment($loader);
-$template = $twig->load('./configuration/system.twig');
+$twig = new TwigWrapper('./assets/templates');
+$template = $twig->loadTemplate('./configuration/system.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $faqSystem = new System();
