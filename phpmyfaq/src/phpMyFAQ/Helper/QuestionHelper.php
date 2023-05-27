@@ -48,9 +48,11 @@ class QuestionHelper
         $questionObject = new Question($this->config);
         $questionObject->addQuestion($questionData);
 
-        $questionMail = 'User: ' . $questionData['username'] .
-            ', mailto:' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
+        $questionMail = Translation::get('msgNewQuestionAdded') . "\n\n User: " .
+            $questionData['username'] .
+            ', ' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
             ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
+            Translation::get('msgAskYourQuestion') . ': ' . 
             wordwrap((string) $questionData['question'], 72) . "\n\n" .
             $this->config->getDefaultUrl() . 'admin/';
 
