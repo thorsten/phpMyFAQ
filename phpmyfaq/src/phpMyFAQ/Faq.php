@@ -2010,7 +2010,8 @@ class Faq
     ): array {
         $faqs = [];
 
-        $result = $this->config->getDb()->query($this->getSQLQuery($queryType, $nCatid, $bDownwards, $lang, $date));
+        $query = $this->getSQLQuery($queryType, $nCatid, $bDownwards, $lang, $date);
+        $result = $this->config->getDb()->query($query);
 
         if ($this->config->getDb()->numRows($result) > 0) {
             $i = 0;
@@ -2052,7 +2053,6 @@ class Faq
         string $date,
         int $faqId = 0
     ): string {
-        $now = date('YmdHis');
         $query = sprintf(
             "
             SELECT
@@ -2081,16 +2081,10 @@ class Faq
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
-            AND
-                fd.date_start <= '%s'
-            AND
-                fd.date_end   >= '%s'
             AND ",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $now,
-            $now
+            Database::getTablePrefix()
         );
         // faqvisits data selection
         if (!empty($faqId)) {
