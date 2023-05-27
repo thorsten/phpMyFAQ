@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Backup;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
@@ -42,6 +43,7 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 // Create Request & Response
 //
 $request = Request::createFromGlobals();
+$faqConfig = Configuration::getConfigurationInstance();
 
 $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 

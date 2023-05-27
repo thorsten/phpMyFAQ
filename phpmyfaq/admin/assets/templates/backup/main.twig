@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-download"></i>
+        {{ adminHeaderBackup }}
+    </h1>
+</div>
+
+<div class="card-deck">
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            {{ adminBackupCardHeader }}
+        </div>
+        <div class="card-body">
+            <p>{{ adminBackupCardBody }}</p>
+            <p>
+                <a class="btn btn-primary" href="backup.export.php?action=backup_content">
+                    <i aria-hidden="true" class="fa fa-download"></i> {{ adminBackupLinkData }}
+                </a>
+            </p>
+            <p>
+                <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
+                    <i aria-hidden="true" class="fa fa-download"></i> {{ adminBackupLinkLogs }}
+                </a>
+            </p>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <form method="post" action="?action=restore&csrf={{ csrfToken }}"
+              enctype="multipart/form-data">
+            <div class="card-header py-3">
+                {{ adminRestoreCardHeader }}
+            </div>
+            <div class="card-body">
+                <p>{{ adminRestoreCardBody }}</p>
+                <div class="row">
+                    <label class="col-lg-4 col-form-label">{{ adminRestoreLabel }}:</label>
+                    <div class="col-lg-8">
+                        <input type="file" name="userfile">
+                    </div>
+                </div>
+                <div class="form-row row">
+                    <div class="text-end">
+                        <button class="btn btn-primary" type="submit">
+                            <i aria-hidden="true" class="fa fa-upload"></i> {{ adminRestoreButton }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
