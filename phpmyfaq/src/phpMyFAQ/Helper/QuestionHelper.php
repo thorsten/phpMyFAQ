@@ -52,7 +52,7 @@ class QuestionHelper
             $questionData['username'] .
             ', ' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
             ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
-            Translation::get('msgAskYourQuestion') . ': ' . 
+            Translation::get('msgAskYourQuestion') . ': ' .
             wordwrap((string) $questionData['question'], 72) . "\n\n" .
             $this->config->getDefaultUrl() . 'admin/';
 
