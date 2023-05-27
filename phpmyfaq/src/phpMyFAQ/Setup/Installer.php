@@ -407,6 +407,7 @@ class Installer extends Setup
         'spam.enableCaptchaCode' => null,
         'spam.enableSafeEmail' => 'true',
         'spam.manualActivation' => 'true',
+        'spam.mailAddressInExport' => 'true',
 
         'socialnetworks.enableTwitterSupport' => 'false',
         'socialnetworks.twitterConsumerKey' => '',
