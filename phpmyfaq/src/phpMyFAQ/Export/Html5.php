@@ -111,7 +111,9 @@ class Html5 extends Export
                 $this->xml->startElement('p');
                 $this->xml->writeCdata(html_entity_decode((string) $data['content'], ENT_HTML5, 'UTF-8'));
                 $this->xml->endElement();
-                $this->xml->writeElement('p', Translation::get('msgAuthor') . ': ' . $data['author_email']);
+                if ($this->config->get('spam.mailAdressInExport')) {
+                    $this->xml->writeElement('p', Translation::get('msgAuthor') . ': ' . $data['author_email']);
+                }
                 $this->xml->writeElement(
                     'p',
                     Translation::get('msgLastUpdateArticle') . Date::createIsoDate($data['lastmodified'])
