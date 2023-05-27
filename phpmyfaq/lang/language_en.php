@@ -1344,4 +1344,8 @@ $LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Contact information as
 
 // added v3.2.0-RC - 2023-05-18 by Thorsten
 $PMF_LANG['msgAuthenticationSource'] = 'Authentication service';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAdressInExport'] = ['checkbox', 'Show e-mail-address in export'];
+
 return $PMF_LANG;
