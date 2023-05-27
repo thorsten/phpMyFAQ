@@ -152,7 +152,7 @@ if (!is_null($token) && !is_null($userid)) {
         $tfa = new TwoFactor($faqConfig);
         $res = $tfa->validateToken($token, $userid);
         if (!$res) {
-            $error = $PMF_LANG['msgTwofactorErrorToken'];
+            $error = Translation::get('msgTwofactorErrorToken');
             $action = 'twofactor';
         } else {
             $user->twoFactorSuccess();
@@ -161,7 +161,7 @@ if (!is_null($token) && !is_null($userid)) {
             exit();
         }
     } else {
-        $error = $PMF_LANG['msgTwofactorErrorToken'];
+        $error = Translation::get('msgTwofactorErrorToken');
         $action = 'twofactor';
     }
 }
