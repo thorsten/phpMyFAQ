@@ -374,10 +374,10 @@ class Wrapper extends TCPDF
         $date = new Date($this->config);
 
         $footer = sprintf(
-            '© %d %s <%s> | %s',
+            $this->config->get('spam.mailAdressInExport') ? '© %d %s <%s> | %s' : '© %d %s %s| %s',
             date('Y'),
             $this->config->get('main.metaPublisher'),
-            $this->config->getAdminEmail(),
+            $this->config->get('spam.mailAdressInExport') ? $this->config->getAdminEmail() : '',
             $date->format(date('Y-m-d H:i'))
         );
 
