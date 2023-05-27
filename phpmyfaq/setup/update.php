@@ -432,6 +432,14 @@ if ($step == 3) {
         $faqConfig->add('main.contactInformationHTML', false);
         $faqConfig->rename('main.contactInformations', 'main.contactInformation');
     }
+    
+    //
+    // UPDATES FROM 3.2.0-RC
+    //
+    if (version_compare($version, '3.2.0-RC', '<')) {
+        // HTML-support for contactInformation
+        $faqConfig->add('spam.mailAdressInExport', true);
+    }
 
     //
     // Always the last step: Update version number
