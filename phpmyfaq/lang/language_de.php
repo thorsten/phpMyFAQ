@@ -1327,5 +1327,6 @@ $PMF_LANG['msgAuthenticationSource'] = 'Auth-Dienst';
 
 // added v3.2.0-RC - 2023-05-27 by Jan
 $LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'E-Mail-Adresse im Export anzeigen'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Es wurde eine neue Frage hinzugefügt. Sie können diese hier oder im Adminbereich überprüfen:';
 
 return $PMF_LANG;
