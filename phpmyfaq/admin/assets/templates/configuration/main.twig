@@ -1,0 +1,105 @@
+
+<form id="configuration-list" name="configuration-list" method="post"
+      action="?action=config&amp;config_action=saveConfig">
+    <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
+
+    <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="fa fa-wrench"></i>
+            {{ adminHeaderConfiguration }}
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-warning" type="reset">
+                    {{ adminConfigurationButtonReset }}
+                </button>
+                <button class="btn btn-sm btn-success" type="submit">
+                    {{ adminConfigurationButtonSave }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="nav-item">
+                    <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
+                        <i aria-hidden="true" class="fa fa-home"></i>
+                        {{ adminConfigurationMainTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#records" aria-controls="records" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-th-list"></i>
+                        {{ adminConfigurationFaqsTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#search" aria-controls="search" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-search"></i>
+                        {{ adminConfigurationSearchTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#security" aria-controls="security" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-warning"></i>
+                        {{ adminConfigurationSecurityTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#spam" aria-controls="spam" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-thumbs-down"></i>
+                        {{ adminConfigurationSpamTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-search"></i>
+                        {{ adminConfigurationSeoTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#social" aria-controls="social" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-retweet"></i>
+                        {{ adminConfigurationSocialNetworkTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-inbox"></i>
+                        {{ adminConfigurationMailTab }}
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-sitemap"></i>
+                        LDAP
+                    </a>
+                </li>
+                <li role="presentation" class="nav-item">
+                    <a href="#api" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
+                        <i aria-hidden="true" class="fa fa-gears"></i>
+                        API
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content p-2 pt-4 pmf-configuration-panel">
+                <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
+                <div role="tabpanel" class="tab-pane fade" id="records"></div>
+                <div role="tabpanel" class="tab-pane fade" id="search"></div>
+                <div role="tabpanel" class="tab-pane fade" id="security"></div>
+                <div role="tabpanel" class="tab-pane fade" id="spam"></div>
+                <div role="tabpanel" class="tab-pane fade" id="seo"></div>
+                <div role="tabpanel" class="tab-pane fade" id="social"></div>
+                <div role="tabpanel" class="tab-pane fade" id="mail"></div>
+                <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
+                <div role="tabpanel" class="tab-pane fade" id="api"></div>
+            </div>
+        </div>
+    </div>
+
+</form>
