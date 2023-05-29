@@ -10,9 +10,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - added Twig as new template engine (Thorsten)
 
-### phpMyFAQ v3.2.0-RC - 2023-06
+### phpMyFAQ v3.2.0-RC - 2023-05-29
 
-- fixed multiple security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
 - changed MariaDB / MySQL / Percona Server / Galera Cluster to InnoDB only (Thorsten)
