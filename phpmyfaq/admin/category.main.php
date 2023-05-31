@@ -123,7 +123,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     exit();
                 }
 
-                $categoryId = $category->addCategory($categoryData, $parentId);
+                $categoryId = $category->addCategory($categoryData, $parentId, $categoryId);
 
                 if ($categoryId) {
                     $categoryPermission->add(CategoryPermission::USER, [$categoryId], $permissions['restricted_user']);
