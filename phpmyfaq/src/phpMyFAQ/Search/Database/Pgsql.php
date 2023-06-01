@@ -32,8 +32,9 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(Configuration $config)
     {
+        parent::__construct($config);
         $this->relevanceSupport = true;
     }
 
