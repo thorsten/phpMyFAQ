@@ -94,8 +94,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $searchTerm
         );
 
-        var_dump($query);
-
         $this->resultSet = $this->config->getDb()->query($query);
 
         return $this->resultSet;
