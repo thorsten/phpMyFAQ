@@ -103,7 +103,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
         $faqData = new FaqEntity();
         $faqData
             ->setLanguage($recordLang)
-            ->setActive($active)
+            ->setActive($active === 'yes')
             ->setSticky(!is_null($sticky))
             ->setQuestion(
                 Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
