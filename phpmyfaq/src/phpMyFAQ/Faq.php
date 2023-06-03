@@ -985,7 +985,7 @@ class Faq
                 lang = '%s'",
             Database::getTablePrefix(),
             $faq->getRevisionId(),
-            $faq->isActive(),
+            $faq->isActive() ? 'yes' : 'no',
             $faq->isSticky(),
             $this->config->getDb()->escape($faq->getKeywords()),
             $this->config->getDb()->escape($faq->getQuestion()),
