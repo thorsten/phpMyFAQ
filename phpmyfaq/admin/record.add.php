@@ -244,7 +244,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
             (() => {
               setTimeout(() => {
                 window.location = "index.php?action=editentry&id=<?= $recordId;
-                    ?>&lang=<?= $recordData['lang'] ?>";
+                    ?>&lang=<?= $faqData->getLanguage() ?>";
               }, 5000);
             })();
             </script>
