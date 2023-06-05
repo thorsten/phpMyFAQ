@@ -222,7 +222,7 @@ class FaqEntity
         if ($this->validTo instanceof DateTime) {
             return $this->validTo;
         } else {
-            return $this->validTo = new DateTime();
+            return $this->validTo = new DateTime('99991231235959');
         }
     }
 
