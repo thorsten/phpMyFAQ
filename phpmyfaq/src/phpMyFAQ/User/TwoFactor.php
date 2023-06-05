@@ -30,7 +30,7 @@ use RobThree\Auth\Algorithm;
 class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
-    
+
     private readonly EndroidQrCodeProvider $QrCodeProvider;
 
     public function __construct(private readonly Configuration $config)
@@ -88,8 +88,8 @@ class TwoFactor
     {
         $user = CurrentUser::getFromSession($this->config);
         $label = $this->config->getTitle() . ':' . $user->getUserData('email');
-        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret); . $this->config->getDefaultUrl() . 'assets/themes/' . Template::getTplSetName() . '/img/favicon.ico';
-        
+        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) . $this->config->getDefaultUrl() . 'assets/themes/' . Template::getTplSetName() . '/img/favicon.ico';
+
         return 'data:'
             . $this->QrCodeProvider->getMimeType()
             . ';base64,'
