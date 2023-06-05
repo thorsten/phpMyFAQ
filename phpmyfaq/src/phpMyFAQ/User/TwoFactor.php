@@ -25,14 +25,18 @@ namespace phpMyFAQ\User;
 use phpMyFAQ\Configuration;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
+use RobThree\Auth\Algorithm;
 
 class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
+    
+    private readonly EndroidQrCodeProvider $QrCodeProvider;
 
     public function __construct(private readonly Configuration $config)
     {
-        $this->twoFactorAuth = new TwoFactorAuth();
+        $this->QrCodeProvider = new EndroidQrCodeProvider();
+        $this->twoFactorAuth = new TwoFactorAuth(null, 6, 30, Algorithm::Sha1, $this->QrCodeProvider);
     }
 
     /**
