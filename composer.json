@@ -39,7 +39,8 @@
     "symfony/http-foundation": "^6.2",
     "symfony/mailer": "^6.2",
     "tecnickcom/tcpdf": "~6.0",
-    "twig/twig": "^3.6"
+    "twig/twig": "^3.6",
+    "endroid/qr-code": "^4.8"
   },
   "require-dev": {
     "doctrine/instantiator": "2.*",
