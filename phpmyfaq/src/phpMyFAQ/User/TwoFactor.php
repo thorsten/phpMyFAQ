@@ -86,6 +86,13 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        return $this->twoFactorAuth->getQRCodeImageAsDataUri($this->config->getTitle(), $secret);
+        $user = CurrentUser::getFromSession($this->config);
+        $label = $this->config->getTitle() . ':' . $user->getUserData('email');
+        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret); . $this->config->getDefaultUrl() . 'assets/themes/' . Template::getTplSetName() . '/img/favicon.ico';
+        
+        return 'data:'
+            . $this->QrCodeProvider->getMimeType()
+            . ';base64,'
+            . base64_encode($this->QrCodeProvider->getQRCodeImage($qrCodeText, 200));
     }
 }
