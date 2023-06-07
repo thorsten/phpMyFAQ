@@ -615,7 +615,7 @@ switch ($action) {
             'is_visible' => $visibility
         ];
 
-        $questionObject = new Question($this->config);
+        $questionObject = new Question($faqConfig);
         $questionObject->addQuestion($questionData);
 
         $response->setData(['stored' => true]);
