@@ -218,7 +218,7 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 // Set base URL scheme
 if ($faqConfig->get('main.enableRewriteRules')) {
     $baseUrl = sprintf(
-        '%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d',
+        '%ssearch.html?search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
         $faqConfig->getDefaultUrl(),
         urlencode($inputSearchTerm),
         $page,
@@ -227,7 +227,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
     );
 } else {
     $baseUrl = sprintf(
-        '%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
+        '%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
         $faqConfig->getDefaultUrl(),
         empty($sids) ? '' : 'sids=' . $sids . '&amp;',
         urlencode($inputSearchTerm),
