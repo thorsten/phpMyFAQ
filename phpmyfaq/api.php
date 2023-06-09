@@ -131,6 +131,11 @@ switch ($action) {
         $response->setStatusCode(Response::HTTP_OK);
         break;
 
+    case 'title':
+        $response->setData($faqConfig->getTitle());
+        $response->setStatusCode(Response::HTTP_OK);
+        break;
+
     case 'language':
         $response->setData($faqConfig->getLanguage()->getLanguage());
         $response->setStatusCode(Response::HTTP_OK);
