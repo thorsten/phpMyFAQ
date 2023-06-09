@@ -179,6 +179,7 @@ RewriteRule api/v2.1/register                      api.php?action=register [L,QS
 # REST API v2.2
 # * http://[...]/api/v2.2/<ACTION>
 RewriteRule api/v2.2/version                       api.php?action=version [L,QSA]
+RewriteRule api/v2.2/title                         api.php?action=title [L,QSA]
 RewriteRule api/v2.2/language                      api.php?action=language [L,QSA]
 RewriteRule api/v2.2/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
