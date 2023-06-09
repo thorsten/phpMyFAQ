@@ -11,6 +11,7 @@ Public endpoints require no Authentication.
 ### General APIs
 
 - [Version](api-docs/version.md): `GET /api/v2.2/version`
+- [Title](api-docs/title.md): `GET /api/v2.2/title`
 - [Language](api-docs/language.md): `GET /api/v2.2/language`
 - [News](api-docs/news.md): `GET /api/v2.2/news`
 - [Categories](api-docs/categories.md): `GET /api/v2.2/categories`
