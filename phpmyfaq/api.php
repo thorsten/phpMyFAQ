@@ -623,6 +623,13 @@ switch ($action) {
         $questionObject = new Question($faqConfig);
         $questionObject->addQuestion($questionData);
 
+        $categoryObject = new Category($faqConfig);
+        $categoryObject->getCategoryData($categoryId);
+        $categories = $categoryObject->getAllCategories();
+
+        $questionHelper = new QuestionHelper($faqConfig, $categoryObject);
+        $questionHelper->sendSuccessMail($questionData, $categories);
+
         $response->setData(['stored' => true]);
         break;
 }
