@@ -247,7 +247,18 @@ class FaqHelper extends Helper
      */
     public function cleanUpContent(string $content): string
     {
-        $htmlSanitizer = Sanitizer::create(['extensions' => ['basic']]);
+        $htmlSanitizer = Sanitizer::create(
+            [
+                'extensions' => [
+                    'basic', 'code', 'image', 'list', 'table', 'iframe', 'details', 'extra'
+                ],
+                'tags' => [
+                    'img' => [
+                        'allowed_attributes' => ['src', 'alt', 'title', 'class', 'width', 'height'],
+                    ],
+                ]
+            ]
+        );
 
         return $htmlSanitizer->sanitize($content);
     }
