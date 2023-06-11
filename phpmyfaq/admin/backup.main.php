@@ -48,5 +48,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
 
     echo $template->render($templateVars);
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

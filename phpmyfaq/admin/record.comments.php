@@ -157,5 +157,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
         echo '<p><strong>n/a</strong></p>';
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

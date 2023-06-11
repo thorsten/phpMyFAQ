@@ -508,12 +508,10 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
     }
 // User is authenticated but has no rights
 } elseif ($user->isLoggedIn() && $numRights === 0) {
-    require 'noperm.php';
+    require 'no-permission.php';
 // User is NOT authenticated
 } else {
     require 'login.php';
 }
 
 require 'footer.php';
-
-$faqConfig->getDb()->close();

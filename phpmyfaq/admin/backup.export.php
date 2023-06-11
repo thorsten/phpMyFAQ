@@ -123,5 +123,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
             break;
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

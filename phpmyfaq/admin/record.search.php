@@ -78,7 +78,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 </form>
     <?php
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }
 ?>
             </div>

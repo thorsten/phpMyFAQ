@@ -272,7 +272,7 @@ $request = Request::createFromGlobals();
         </form>
             <?php
         } else {
-            print Translation::get('err_NotAuth');
+            require 'no-permission.php';
         }
         ?>
   </div>

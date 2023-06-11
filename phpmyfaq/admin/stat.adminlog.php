@@ -149,5 +149,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' ===
         echo Alert::danger('ad_adminlog_delete_failure');
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

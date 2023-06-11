@@ -917,7 +917,7 @@ if (
     </script>
     <?php
 } elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && !Database::checkOnEmptyTable('faqcategories')) {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 } elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
     echo Translation::get('no_cats');
 }

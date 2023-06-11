@@ -782,5 +782,5 @@ if (
 
     <?php
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

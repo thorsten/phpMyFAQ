@@ -226,5 +226,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
             </div>
     <?php
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

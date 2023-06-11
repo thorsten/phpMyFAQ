@@ -216,5 +216,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         <?php
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

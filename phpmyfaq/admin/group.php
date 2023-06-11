@@ -35,7 +35,7 @@ if (
     !$user->perm->hasPermission($user->getUserId(), 'delgroup') &&
     !$user->perm->hasPermission($user->getUserId(), 'addgroup')
 ) {
-    exit();
+    require 'no-permission.php';
 }
 
 // set some parameters

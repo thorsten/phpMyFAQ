@@ -38,7 +38,7 @@ if ($request->query->get('action') === 'logout') {
 }
 
 if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
-    ?>
+?>
 
     <div id="pmf-admin-login">
         <div id="pmf-admin-login-content">

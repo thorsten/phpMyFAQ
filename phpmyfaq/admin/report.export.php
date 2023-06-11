@@ -133,5 +133,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         echo $e->getMessage();
     }
 } else {
-    echo Translation::get('err_noArticles');
+    require 'no-permission.php';
 }
