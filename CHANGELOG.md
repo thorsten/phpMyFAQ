@@ -36,6 +36,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to TinyMCE v6.4 (Thorsten)
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
+- updated Dutch translation (Bob Coret)
 
 ### phpMyFAQ v3.1.14 - 2023-05-17
 
