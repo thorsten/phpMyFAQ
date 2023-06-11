@@ -129,7 +129,7 @@ if ($network->isBanned($request->server->get('REMOTE_ADDR'))) {
 // Check captcha
 //
 $captcha = Captcha::getInstance($faqConfig);
-$captcha->setUserIsLoggedIn($isLoggedIn);
+$captcha->setUserIsLoggedIn($user->isLoggedIn());
 
 $fatalError = false;
 
@@ -146,7 +146,7 @@ if (
 // Check if the user is logged in when FAQ is completely secured
 //
 if (
-    !$isLoggedIn && $faqConfig->get('security.enableLoginOnly') && 'submit-request-removal' !== $action &&
+    !$user->isLoggedIn() && $faqConfig->get('security.enableLoginOnly') && 'submit-request-removal' !== $action &&
     'change-password' !== $action && 'saveregistration' !== $action
 ) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -200,7 +200,7 @@ switch ($action) {
         }
 
         // Check display name and e-mail address for not logged-in users
-        if (false === $isLoggedIn) {
+        if (!$user->isLoggedIn()) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
                 $response->setStatusCode(Response::HTTP_CONFLICT);
