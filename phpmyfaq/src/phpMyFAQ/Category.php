@@ -399,19 +399,65 @@ class Category
     public function getHomeCategories(): array
     {
         $categories = [];
+        $where = '';
+
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $where = "AND fc.lang = '" . $this->config->getDb()->escape($this->language) . "'";
+        }
+
         $query = sprintf(
             '
             SELECT
-                id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
+                fc.id AS id,
+                fc.lang AS lang,
+                fc.parent_id AS parent_id,
+                fc.name AS name,
+                fc.description AS description,
+                fc.user_id AS user_id,
+                fc.group_id AS group_id,
+                fc.active AS active,
+                fc.image AS image,
+                fc.show_home AS show_home
             FROM
-                %sfaqcategories
+                %sfaqcategories fc
+            LEFT JOIN
+                %sfaqcategory_group fg
+            ON
+                fc.id = fg.category_id
+            LEFT JOIN
+                %sfaqcategory_order fco
+            ON
+                fc.id = fco.category_id
+            LEFT JOIN
+                %sfaqcategory_user fu
+            ON
+                fc.id = fu.category_id
             WHERE 
-                show_home = 1',
-            Database::getTablePrefix()
+                ( fg.group_id IN (%s)
+            OR
+                (fu.user_id = %d AND fg.group_id IN (%s)))
+            AND
+                fc.active = 1
+            AND
+                fc.show_home = 1
+                %s
+            GROUP BY
+                fc.id, fc.lang, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
+                fc.show_home, fco.position
+            ORDER BY
+                fco.position, fc.id ASC
+                
+                ',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            implode(', ', $this->groups),
+            $this->user,
+            implode(', ', $this->groups),
+            $where
         );
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " AND lang = '" . $this->language . "'";
-        }
+
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
             $url = sprintf('%sindex.php?action=show&cat=%d', $this->config->getDefaultUrl(), $row['id']);
