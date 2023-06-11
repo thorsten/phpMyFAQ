@@ -23,6 +23,8 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Template;
+use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
 use RobThree\Auth\Algorithm;
@@ -33,6 +35,9 @@ class TwoFactor
 
     private readonly EndroidQrCodeProvider $QrCodeProvider;
 
+    /**
+     * @throws TwoFactorAuthException
+     */
     public function __construct(private readonly Configuration $config)
     {
         $this->QrCodeProvider = new EndroidQrCodeProvider();
@@ -81,8 +86,7 @@ class TwoFactor
     }
 
     /**
-     * Returns a QR-Code to a given secret for transmitting the secret to the Authentificator-App
-     * @throws TwoFactorAuthException
+     * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
      */
     public function getQrCode(string $secret): string
     {
