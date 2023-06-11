@@ -569,7 +569,7 @@ $PMF_LANG['err_inactiveNews'] = 'Dit nieuws wordt bewerkt en kan niet getoond wo
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Alle talen doorzoeken:';
 $PMF_LANG['ad_entry_tags'] = 'Labels';
 $PMF_LANG['msg_tags'] = 'Labels';
-$PMF_LANG['msg_related_articles'] = 'verwante artikelen';
+$PMF_LANG['msg_related_articles'] = 'Verwante artikelen';
 $PMF_LANG['ad_categ_trans_1'] = 'Vertaal';
 $PMF_LANG['ad_categ_trans_2'] = 'Categorie';
 $PMF_LANG['ad_categ_translatecateg'] = 'Vertaal categorie';
@@ -925,5 +925,6 @@ $PMF_LANG['ad_export_generate_json'] = 'Maak JSON bestand aan';
 $PMF_LANG['ad_media_name_search'] = 'Zoeken op medianaam';
 $PMF_LANG['ad_admin_notes'] = 'Persoonlijke notities';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (alleen zichtbaar voor auteurs)';
+$PMF_LANG['msgGoToCategory'] = 'Ga naar categorie';
 
 return $PMF_LANG;
