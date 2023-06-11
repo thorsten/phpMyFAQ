@@ -235,7 +235,11 @@ class FaqHelper extends Helper
     public function cleanUpContent(string $content): string
     {
         $htmlSanitizer = new HtmlSanitizer(
-            (new HtmlSanitizerConfig())->allowSafeElements()
+            (new HtmlSanitizerConfig())
+                ->allowSafeElements()
+                ->allowStaticElements()
+                ->allowRelativeLinks()
+                ->allowRelativeMedias()
         );
 
         return $htmlSanitizer->sanitize($content);
