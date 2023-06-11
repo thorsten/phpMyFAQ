@@ -189,29 +189,37 @@ export const renderEditor = () => {
       },
 
       // override default upload handler to simulate successful upload
-      images_upload_handler: (blobInfo, success, failure) => {
-        const csrf = document.getElementById('pmf-csrf-token').value;
-        const formData = new FormData();
-        formData.append('file', blobInfo.blob(), blobInfo.filename());
+      images_upload_handler: (blobInfo) =>
+        new Promise((resolve, reject) => {
+          const csrf = document.getElementById('pmf-csrf-token').value;
+          const formData = new FormData();
+          formData.append('file', blobInfo.blob(), blobInfo.filename());
 
-        fetch(`index.php?action=ajax&ajax=image&ajaxaction=upload&csrf=${csrf}`, {
-          method: 'POST',
-          body: formData,
-        })
-          .then(async (response) => {
-            if (response.status === 200) {
-              return response.json();
-            }
-            failure('HTTP Error: ' + response.status);
+          fetch(`index.php?action=ajax&ajax=image&ajaxaction=upload&csrf=${csrf}`, {
+            method: 'POST',
+            body: formData,
+            //credentials: 'omit'
           })
-          .then((response) => {
-            if (!response || typeof response.location !== 'string') {
-              failure('Invalid JSON: ' + response.responseText);
-              return;
-            }
-            success(response.location);
-          });
-      },
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('HTTP Error: ' + response.status);
+              }
+              return response.json();
+            })
+            .then((json) => {
+              if (!json || typeof json.location != 'string') {
+                throw new Error('Invalid JSON: ' + JSON.stringify(json));
+              }
+              resolve(json.location);
+            })
+            .catch((error) => {
+              if (error instanceof TypeError) {
+                reject('Image upload failed due to a Fetch error: ' + error.message);
+              } else {
+                reject(error.message);
+              }
+            });
+        }),
 
       // Custom params
       csrf: document.getElementById('pmf-csrf-token').value,

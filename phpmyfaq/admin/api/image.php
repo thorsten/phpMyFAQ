@@ -70,7 +70,7 @@ if ($ajaxAction === 'upload') {
             }
 
             // Accept upload if there was no origin, or if it is an accepted origin
-            $fileName = $timestamp . $temp['name'];
+            $fileName = $timestamp . '_' . $temp['name'];
             move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
 
             // Respond to the successful upload with JSON with the full URL of the uploaded image.
