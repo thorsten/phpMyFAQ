@@ -33,6 +33,10 @@ $request = Request::createFromGlobals();
 $selectedCategoryId = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
 $subCategoryContent = '';
 
+if ($selectedCategoryId === 0) {
+    $selectedCategoryId = null;
+}
+
 if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCategoryId])) {
     $response = new Response();
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
