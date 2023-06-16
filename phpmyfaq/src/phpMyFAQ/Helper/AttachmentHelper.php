@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Attachment\AttachmentAbstract;
 use phpMyFAQ\Translation;
 
 /**
@@ -26,7 +27,10 @@ use phpMyFAQ\Translation;
 class AttachmentHelper
 {
     /**
-     * Returns a HTML list of attached files.
+     * Returns an HTML list of attached files.
+     *
+     * @param AttachmentAbstract[] $attachmentList
+     * @return string
      */
     public function renderAttachmentList(array $attachmentList): string
     {

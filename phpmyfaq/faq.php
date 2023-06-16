@@ -300,7 +300,7 @@ $template->parse(
         'solutionId' => $faq->faqRecord['solution_id'],
         'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
         'question' => $question,
-        'answer' => $faqHelper->cleanUpContent($answer),
+        'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => Strings::htmlentities($author),
         'editThisEntry' => $editThisEntry,
