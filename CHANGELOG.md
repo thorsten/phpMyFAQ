@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.1.15 - 2023-06-
+### phpMyFAQ v3.1.15 - 2023-06-17
 
 - fixed minor bugs (Thorsten)
 
