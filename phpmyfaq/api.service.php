@@ -96,7 +96,7 @@ if (Language::isASupportedLanguage($apiLanguage)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($languageCode);
 } catch (Exception $e) {

@@ -42,7 +42,7 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode);
 } catch (Exception $e) {

@@ -47,8 +47,8 @@ define('PMF_SRC_DIR', dirname(__DIR__) . '/phpmyfaq/src');
 //
 // The directory where the translations reside
 //
-define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/translations');
-require PMF_LANGUAGE_DIR . '/language_en.php';
+define('PMF_TRANSLATION_DIR', dirname(__DIR__) . '/phpmyfaq/translations');
+require PMF_TRANSLATION_DIR . '/language_en.php';
 
 //
 // Setting up autoloader

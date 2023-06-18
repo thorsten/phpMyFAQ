@@ -84,9 +84,9 @@ $currentLanguage = $language->setLanguageByAcceptLanguage();
 // Set language
 //
 if (Language::isASupportedLanguage($currentLanguage)) {
-    require PMF_LANGUAGE_DIR . '/language_' . $currentLanguage . '.php';
+    require PMF_TRANSLATION_DIR . '/language_' . $currentLanguage . '.php';
 } else {
-    require PMF_LANGUAGE_DIR . '/language_en.php';
+    require PMF_TRANSLATION_DIR . '/language_en.php';
 }
 $faqConfig->setLanguage($language);
 
@@ -95,7 +95,7 @@ $faqConfig->setLanguage($language);
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($currentLanguage);
 } catch (Exception $e) {

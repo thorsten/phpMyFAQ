@@ -53,7 +53,7 @@ if (!is_null($language) && Language::isASupportedLanguage($language)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($language);
 } catch (Exception $e) {

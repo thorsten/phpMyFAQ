@@ -85,7 +85,7 @@ if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode)
         ->setMultiByteLanguage();

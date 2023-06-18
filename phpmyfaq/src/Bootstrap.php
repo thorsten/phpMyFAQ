@@ -105,7 +105,7 @@ require PMF_CONFIG_DIR . '/constants.php';
 //
 // The directory where the translations reside
 //
-define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/translations');
+define('PMF_TRANSLATION_DIR', dirname(__DIR__) . '/translations');
 
 //
 // Set the error handler and the exception handler
