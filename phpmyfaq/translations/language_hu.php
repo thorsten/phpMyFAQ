@@ -674,7 +674,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Tiltott szó hozzáadása';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'No, there is still no adequate answer (will send the mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the results above?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Please choose the language for translation';
-$PMF_LANG['msgLangDirIsntWritable'] = 'The folder <strong>/lang</strong> for the translation files isn\'t writable.';
 $PMF_LANG['ad_menu_translations'] = 'Interface Translation';
 $PMF_LANG['ad_start_notactive'] = 'Aktiválásra vár';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Új fordítás hozzáadása';

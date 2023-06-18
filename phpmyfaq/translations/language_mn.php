@@ -860,7 +860,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the r
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Орчуулах хэлээ сонгон уу';
-$PMF_LANG['msgLangDirIsntWritable'] = ' <strong>/lang</strong> хавтсанд бичих эрх алга.';
 $PMF_LANG['ad_menu_translations'] = 'Интерфейсийн орчуулга';
 $PMF_LANG['ad_start_notactive'] = 'Идэвхжүүлэлт хүлээгдэж байна';
 

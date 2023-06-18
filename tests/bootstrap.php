@@ -47,7 +47,7 @@ define('PMF_SRC_DIR', dirname(__DIR__) . '/phpmyfaq/src');
 //
 // The directory where the translations reside
 //
-define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/translations');
 require PMF_LANGUAGE_DIR . '/language_en.php';
 
 //

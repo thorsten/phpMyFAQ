@@ -748,7 +748,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Ajouter un nouveau mot banni';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Non, il n\'y a toujours pas de réponse adéquate (envoi d\'un courriel)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Est-ce que la réponse recherchée se trouve dans les résultats énumérés ci-dessus ?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Veuillez choisir la langue de traduction';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Le dossier <strong>/lang</strong> contenant les fichiers de langues n\'a pas la permission d\'écriture';
 $PMF_LANG['ad_menu_translations'] = 'Traduction de l\'interface';
 $PMF_LANG['ad_start_notactive'] = 'Attente d\'activation';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Ajouter une nouvelle traduction';

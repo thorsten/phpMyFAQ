@@ -702,7 +702,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Lisää ohitettava sana';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Ei, sopivaa vastausta ei löydy (lähetetään sähköposti)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Löytyykö haluttu vastaus ylläolevista tuloksista?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Valitse käännettävä kieli';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Hakemisto <strong>/lang</strong> ei ole kirjoitettavissa.';
 $PMF_LANG['ad_menu_translations'] = 'Kielet / Käännökset';
 $PMF_LANG['ad_start_notactive'] = 'Odotetaan aktivointia';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Lisää uusi käännös';

@@ -695,7 +695,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Aggiungi una nuova parola comune (stop 
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Non c\'&grave; ancora una risposta adeguata (sar&grave; inviata una email)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'La risposta desiderata &grave; indicata nella lista di cui sopra?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Scegli la lingua da tradurre';
-$PMF_LANG['msgLangDirIsntWritable'] = 'La cartella per le localizzazioni (/lang) non è scrivibile!';
 $PMF_LANG['ad_menu_translations'] = 'Interfaccia per le traduzioni';
 $PMF_LANG['ad_start_notactive'] = 'In attesa di attivazione';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Aggiungi nuova traduzione';

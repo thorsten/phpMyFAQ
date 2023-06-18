@@ -848,7 +848,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = "Aradığınız cevap arama sonuçlar
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = "Lütfen tercüme için bir dil seçin";
-$PMF_LANG['msgLangDirIsntWritable'] = "<strong>/lang</strong> dizini yazılabilir değil.";
 $PMF_LANG['ad_menu_translations'] = "Arayüz Çevirisi";
 $PMF_LANG['ad_start_notactive'] = "Etkinleştirme bekleniyor";
 

@@ -748,7 +748,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Lägg till nytt spärrat ord';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Nej det finns inget bra svar. (E-post-meddelandet kommer att skickas.)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Finns svaret du söker i listan nedan? ';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Välj språk för översättning.';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Språkkatalogen vid namn lang/ är inte skrivbar';
 $PMF_LANG['ad_menu_translations'] = 'Översättning av gränssnitt';
 $PMF_LANG['ad_start_notactive'] = 'Väntar på aktivering';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Lägg till ny översättning';

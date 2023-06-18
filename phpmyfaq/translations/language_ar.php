@@ -784,7 +784,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Add new stop word';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'لا، لاتوجد اجابة مناسبة (سيتم ارسال الايميل)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'هل الاجابة المطلوبة ضمن النتائج المعروضة في الاعلى؟';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'فضلا اختر لغة الترجمة';
-$PMF_LANG['msgLangDirIsntWritable'] = 'The folder <strong>/lang</strong> for the translation files isn\'t writable.';
 $PMF_LANG['ad_menu_translations'] = 'ترجمة الواجهة';
 $PMF_LANG['ad_start_notactive'] = 'بانتظار التفعيل';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'اضف ترجمة جديدة';

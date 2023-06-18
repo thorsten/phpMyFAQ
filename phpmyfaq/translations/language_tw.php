@@ -847,7 +847,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = "需要的答案是否列在上方的
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten 開發者
 $PMF_LANG['msgChooseLanguageToTranslate'] = "請選擇要翻譯的語言 <br>Please choose the language for translation";
-$PMF_LANG['msgLangDirIsntWritable'] = "檔案夾 <strong>/lang</strong> 內的翻譯語言檔案不可被寫入。<br>The folder <strong>/lang</strong> for the translation files isn\'t writable.";
 $PMF_LANG['ad_menu_translations'] = "使用者介面翻譯 Interface Translation";
 $PMF_LANG['ad_start_notactive'] = "等待被啟用 Waiting for activation";
 

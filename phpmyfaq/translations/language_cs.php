@@ -696,7 +696,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Přidat nové stop slovo';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Ne, stále není adekvátní odpověď (bude zaslán email)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Je požadovaná odpověď zobrazena ve výsledcích výše?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Prosím vyberte jazyk pro překlad';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Složka <strong>/lang</strong> pro překlady není zapisovatelná.';
 $PMF_LANG['ad_menu_translations'] = 'Překlad rozhraní';
 $PMF_LANG['ad_start_notactive'] = 'Čeká na aktivaci';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Přidat nový překlad';

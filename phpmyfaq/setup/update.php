@@ -433,13 +433,21 @@ if ($step == 3) {
         $faqConfig->add('main.contactInformationHTML', false);
         $faqConfig->rename('main.contactInformations', 'main.contactInformation');
     }
-    
+
     //
     // UPDATES FROM 3.2.0-RC
     //
     if (version_compare($version, '3.2.0-RC', '<')) {
         // HTML-support for contactInformation
         $faqConfig->add('spam.mailAddressInExport', true);
+    }
+
+    //
+    // UPDATES FROM 3.3.0-alpha
+    //
+    if (version_compare($version, '3.3.0-alpha', '<')) {
+        // Move everything to the new file layout
+        // @todo write code
     }
 
     //
