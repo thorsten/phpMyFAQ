@@ -447,7 +447,7 @@ if ($step == 3) {
     //
     if (version_compare($version, '3.3.0-alpha', '<')) {
         // Move everything to the new file layout
-        // @todo write code
+        // @todo move attachments in filesystem and database
     }
 
     //

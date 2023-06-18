@@ -364,7 +364,7 @@ class Installer extends Setup
         'records.orderingPopularFaqs' => 'visits',
         'records.disableAttachments' => 'true',
         'records.maxAttachmentSize' => '100000',
-        'records.attachmentsPath' => 'attachments',
+        'records.attachmentsPath' => 'content/user/attachments',
         'records.attachmentsStorageType' => '0',
         'records.enableAttachmentEncryption' => 'false',
         'records.defaultAttachmentEncKey' => '',
