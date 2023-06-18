@@ -16,20 +16,20 @@ build/*
 # Docker persistent data
 volumes/*
 
-# phpMyFAQ generated folders
-phpmyfaq/config/database.php
-phpmyfaq/config/database.bak.php
-phpmyfaq/config/ldap.php
-phpmyfaq/config/ldap.bak.php
-phpmyfaq/config/elasticsearch.php
-phpmyfaq/config/elasticsearch.bak.php
-phpmyfaq/config/azure.php
-phpmyfaq/config/azure.bak.php
-phpmyfaq/config/index.html
-phpmyfaq/data/*
-phpmyfaq/logs/*
-phpmyfaq/images/*
-phpmyfaq/attachments/*
+# phpMyFAQ content folders
+phpmyfaq/content/core/config/database.php
+phpmyfaq/content/core/config/database.bak.php
+phpmyfaq/content/core/config/ldap.php
+phpmyfaq/content/core/config/ldap.bak.php
+phpmyfaq/content/core/config/elasticsearch.php
+phpmyfaq/content/core/config/elasticsearch.bak.php
+phpmyfaq/content/core/config/azure.php
+phpmyfaq/content/core/config/azure.bak.php
+phpmyfaq/content/core/config/index.html
+phpmyfaq/content/core/data/*
+phpmyfaq/content/core/logs/*
+phpmyfaq/content/user/images/*
+phpmyfaq/content/user/attachments/*
 
 # Third party PHP libraries
 phpmyfaq/src/libs

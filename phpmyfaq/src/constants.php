@@ -33,5 +33,5 @@ if (!defined('PMF_SRC_DIR')) {
 // The path to the logs
 //
 if (!defined('PMF_LOG_DIR')) {
-    define('PMF_LOG_DIR', dirname(__DIR__) . '/logs/phpmyfaq.log');
+    define('PMF_LOG_DIR', dirname(__DIR__) . '/content/core/logs/phpmyfaq.log');
 }

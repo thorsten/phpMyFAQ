@@ -84,7 +84,7 @@ if (file_exists(PMF_ROOT_DIR . '/multisite/multisite.php') && 'cli' !== PHP_SAPI
 // Read configuration and constants
 //
 if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/config'); // Single instance configuration
+    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/content/core/config'); // Single instance configuration
 } else {
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR); // Multi instance configuration
 }
@@ -181,7 +181,7 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 // Connect to Elasticsearch if enabled
 //
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
-    require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
+    require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
     $esConfig = new ElasticsearchConfiguration(PMF_CONFIG_DIR . '/elasticsearch.php');
     try {
         $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();

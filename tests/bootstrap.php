@@ -28,7 +28,7 @@ error_reporting(E_ALL | E_STRICT);
 // The root directory
 //
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
-define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/config');
+define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/content/core/config');
 
 const PMF_LOG_DIR = __DIR__ . '/logs';
 const PMF_TEST_DIR = __DIR__;
@@ -82,6 +82,6 @@ try {
     $installer->startInstall($setup);
 } catch (Exception $e) {
     echo $e->getMessage();
-} 
+}
 
 require PMF_TEST_DIR . '/config/database.php';
