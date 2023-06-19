@@ -2571,11 +2571,11 @@ class Faq
 
         switch ($type) {
             case 'sticky':
-                $flag = ($flag === 'checked' ? 1 : 0);
+                $flag = $flag ? 1 : 0;
                 break;
 
             case 'active':
-                $flag = ($flag === 'checked' ? "'yes'" : "'no'");
+                $flag = $flag ? "'yes'" : "'no'";
                 break;
 
             default:
