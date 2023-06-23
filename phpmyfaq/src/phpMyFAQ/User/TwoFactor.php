@@ -23,25 +23,16 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Template;
-use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
-use RobThree\Auth\Algorithm;
 
 class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
 
-    private readonly EndroidQrCodeProvider $QrCodeProvider;
-
-    /**
-     * @throws TwoFactorAuthException
-     */
     public function __construct(private readonly Configuration $config)
     {
-        $this->QrCodeProvider = new EndroidQrCodeProvider();
-        $this->twoFactorAuth = new TwoFactorAuth(null, 6, 30, Algorithm::Sha1, $this->QrCodeProvider);
+        $this->twoFactorAuth = new TwoFactorAuth();
     }
 
     /**
@@ -90,14 +81,6 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        $user = CurrentUser::getFromSession($this->config);
-        $label = $this->config->getTitle() . ':' . $user->getUserData('email');
-        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) . $this->config->getDefaultUrl() .
-        'assets/themes/' . Template::getTplSetName() . '/img/favicon.ico';
-
-        return 'data:'
-            . $this->QrCodeProvider->getMimeType()
-            . ';base64,'
-            . base64_encode($this->QrCodeProvider->getQRCodeImage($qrCodeText, 200));
+        return $this->twoFactorAuth->getQRCodeImageAsDataUri($this->config->getTitle(), $secret);
     }
 }
