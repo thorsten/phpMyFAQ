@@ -21,6 +21,7 @@ use DateTime;
 use DirectoryIterator;
 use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Strings;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +52,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'RC.2';
+    private const VERSION_PRE_RELEASE = '';
 
     /**
      * API version.
@@ -128,7 +129,7 @@ class System
     public static function getVersion(): string
     {
         $version = sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_PATCH_LEVEL);
-        return $version . ('-' . self::VERSION_PRE_RELEASE);
+        return $version . (self::isDevelopmentVersion() ? '-' . self::VERSION_PRE_RELEASE : '');
     }
 
     /**

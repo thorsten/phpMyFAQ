@@ -25,6 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Setup\Update;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
@@ -39,6 +40,8 @@ if (version_compare(PHP_VERSION, '8.1.0') < 0) {
 set_time_limit(0);
 
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
+
+Strings::init();
 
 $step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -432,7 +435,7 @@ if ($step == 3) {
         $faqConfig->add('main.contactInformationHTML', false);
         $faqConfig->rename('main.contactInformations', 'main.contactInformation');
     }
-    
+
     //
     // UPDATES FROM 3.2.0-RC
     //

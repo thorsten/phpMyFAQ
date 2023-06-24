@@ -4,10 +4,10 @@
 /**
  * The main string wrapper class.
  *
- * The class uses mbstring extension if available. It's strongly recommended
- * to use and extend this class instead of using direct string functions. Doing so
- * you guarantees your code is upwards compatible with UTF-8 improvements. All
- * the string methods behaviour is identical to that of the same named
+ * The class uses the mbstring extension if available. It's strongly recommended
+ * to use and extend this class instead of using direct string functions. Doing so,
+ * you guarantee your code is upwards compatible with UTF-8 improvements. All
+ * the string methods behavior is identical to that of the same named
  * single byte string functions.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -36,7 +36,7 @@ class Strings
     /**
      * Instance.
      */
-    private static null|\phpMyFAQ\Strings\Mbstring|\phpMyFAQ\Strings\StringBasic $instance = null;
+    private static null|Mbstring|StringBasic $instance = null;
 
     /**
      * Constructor.
