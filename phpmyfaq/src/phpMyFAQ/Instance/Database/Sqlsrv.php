@@ -329,7 +329,7 @@ class Sqlsrv extends Database implements Driver
             email NVARCHAR(128) NULL,
             is_visible INTEGER NULL DEFAULT 0,
             twofactor_enabled INTEGER NULL DEFAULT 0,
-            secret NVARCHAR(128) NULL)',
+            secret NVARCHAR(128) NULL DEFAULT NULL)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login NVARCHAR(128) NOT NULL,
