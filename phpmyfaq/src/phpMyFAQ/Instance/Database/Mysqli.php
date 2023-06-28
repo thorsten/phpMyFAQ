@@ -335,7 +335,7 @@ class Mysqli extends Database implements Driver
             email VARCHAR(128) NULL,
             is_visible INT(1) NULL DEFAULT 0,
             twofactor_enabled INT(1) NULL DEFAULT 0,
-            secret VARCHAR(128) NULL DEFAULT NULL',
+            secret VARCHAR(128) NULL DEFAULT NULL)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
