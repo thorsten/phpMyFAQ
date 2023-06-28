@@ -330,7 +330,7 @@ class Pgsql extends Database implements Driver
             email VARCHAR(128) NULL,
             is_visible SMALLINT NULL DEFAULT 0,
             twofactor_enabled SMALLINT NULL DEFAULT 0,
-            secret VARCHAR(128) NULL)',
+            secret VARCHAR(128) NULL DEFAULT NULL)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
