@@ -360,7 +360,7 @@ if ($step == 3) {
 
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata
                 ADD twofactor_enabled INT(1) NULL DEFAULT 0,
-                ADD secret VARCHAR(128) NULL';
+                ADD secret VARCHAR(128) NULL DEFAULT NULL';
         }
 
         // New backup
