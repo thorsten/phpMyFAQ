@@ -348,9 +348,9 @@ if ($step == 3) {
                 ADD COLUMN code_verifier VARCHAR(255) NULL DEFAULT NULL,
                 ADD COLUMN jwt TEXT NULL DEFAULT NULL;';
 
-            $query[] = 'ALTER TABLE ' . $prefix . "faquserdata
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata
                 ADD COLUMN twofactor_enabled INT(1) NULL DEFAULT 0,
-                ADD COLUMN secret VARCHAR(128) '' DEFAULT ''";
+                ADD COLUMN secret VARCHAR(128) NULL DEFAULT NULL';
         } else {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser 
                 ADD refresh_token TEXT NULL DEFAULT NULL,
@@ -358,9 +358,9 @@ if ($step == 3) {
                 ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
                 ADD jwt TEXT NULL DEFAULT NULL;';
 
-            $query[] = 'ALTER TABLE ' . $prefix . "faquserdata
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata
                 ADD twofactor_enabled INT(1) NULL DEFAULT 0,
-                ADD secret VARCHAR(128) DEFAULT ''";
+                ADD secret VARCHAR(128) NULL';
         }
 
         // New backup
