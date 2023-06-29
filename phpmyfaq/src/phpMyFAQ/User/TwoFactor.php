@@ -59,7 +59,7 @@ class TwoFactor
     /**
      * Returns the secret of the current user
      */
-    public function getSecret(CurrentUser $user): string
+    public function getSecret(CurrentUser $user): string|null
     {
         return $user->getUserData('secret');
     }
