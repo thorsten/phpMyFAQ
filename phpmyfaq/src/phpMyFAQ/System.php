@@ -21,7 +21,6 @@ use DateTime;
 use DirectoryIterator;
 use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
-use phpMyFAQ\Strings;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\Request;
@@ -176,7 +175,7 @@ class System
 
     public static function isDevelopmentVersion(): bool
     {
-        return Strings::strlen(self::VERSION_PRE_RELEASE) > 0;
+        return strlen(self::VERSION_PRE_RELEASE) > 0;
     }
 
     /**
