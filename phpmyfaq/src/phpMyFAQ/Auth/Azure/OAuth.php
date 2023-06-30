@@ -56,6 +56,7 @@ class OAuth
      * Returns the Authorization Code from Azure AD.
      *
      * @throws GuzzleException
+     * @throws \JsonException
      */
     public function getOAuthToken(string $code): stdClass
     {
@@ -78,7 +79,7 @@ class OAuth
     }
 
     /**
-     * @throws GuzzleException
+     * @throws GuzzleException|\JsonException
      */
     public function refreshToken()
     {
@@ -103,6 +104,9 @@ class OAuth
         return $this->token;
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function setToken(stdClass $token): OAuth
     {
         $idToken = base64_decode(explode('.', (string) $token->id_token)[1]);
