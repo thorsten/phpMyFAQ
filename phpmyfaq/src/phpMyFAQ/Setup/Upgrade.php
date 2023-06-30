@@ -17,15 +17,21 @@
 
 namespace phpMyFAQ\Setup;
 
+use Monolog\Level;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Upgrade extends Setup
 {
-    private Configuration $configuration;
+    private const DOWNLOAD_URL = 'https://download.phpmyfaq.de/';
 
-    public function __construct(protected System $system)
+    public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
     }
@@ -39,11 +45,36 @@ class Upgrade extends Setup
     }
 
     /**
-     * Method to download a phpMyFAQ package
-     * @return void
+     * Method to download a phpMyFAQ package, returns false if it doesn't work
+     *
+     * @todo handle possible proxy servers
+     *
+     * @param string $version
+     * @return string|bool
      */
-    public function downloadPackage()
+    public function downloadPackage(string $version): string|bool
     {
+        $url = self::DOWNLOAD_URL . 'phpMyFAQ-' . $version . '.zip';
+
+        $client = HttpClient::create();
+
+        try {
+            $response = $client->request('GET', $url);
+
+            if ($response->getStatusCode() !== 200) {
+                return false;
+            }
+
+            return $response->getContent();
+        } catch (
+            TransportExceptionInterface |
+            ClientExceptionInterface |
+            RedirectionExceptionInterface |
+            ServerExceptionInterface $e
+        ) {
+            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
+            return false;
+        }
     }
 
     /**
