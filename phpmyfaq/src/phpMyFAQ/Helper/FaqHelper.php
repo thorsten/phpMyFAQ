@@ -254,9 +254,22 @@ class FaqHelper extends Helper
                 ],
                 'tags' => [
                     'img' => [
-                        'allowed_attributes' => ['src', 'alt', 'title', 'class', 'width', 'height', 'style'],
+                        'allowed_attributes' => ['alt', 'class', 'height', 'src', 'style', 'title', 'width'],
+                    ],
+                    'div' => [
+                        'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'li' => [
+                        'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'p' => [
+                        'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'span' => [
+                        'allowed_attributes' => ['class', 'style'],
                     ]
-                ]
+                ],
+
             ]
         );
 
