@@ -47,10 +47,10 @@ if ($user->isLoggedIn()) {
     } else {
         $gravatarImg = '';
     }
-    
+
     $tfa = new TwoFactor($faqConfig);
     $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
-    if (is_null($secret) {
+    if (is_null($secret)) {
         try {
             $secret = $tfa->generateSecret();
         } catch (TwoFactorAuthException $e) {
