@@ -216,7 +216,10 @@ class FaqHelper extends Helper
 
     /**
      * Returns the URL for a given FAQ Entity and category ID.
+     *
      * @param FaqEntity $faqEntity
+     * @param int       $categoryId
+     * @return string
      */
     public function createFaqUrl(FaqEntity $faqEntity, int $categoryId): string
     {
@@ -240,6 +243,10 @@ class FaqHelper extends Helper
                 ->allowStaticElements()
                 ->allowRelativeLinks()
                 ->allowRelativeMedias()
+                ->forceHttpsUrls()
+                ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
+                ->allowMediaSchemes(['https', 'http'])
+                ->allowMediaHosts(['www.youtube.com'])
         );
 
         return $htmlSanitizer->sanitize($content);

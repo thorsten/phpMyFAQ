@@ -69,4 +69,14 @@ class FaqHelperTest extends TestCase
 
         $this->assertEquals($expectedOutput, $actualOutput);
     }
+
+    public function testCleanUpContentWithYoutubeContent(): void
+    {
+        $content = '<iframe title="YouTube video player" src="https://www.youtube.com/embed/WaFetxHpCbE" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>';
+        $expectedOutput = '<iframe title="YouTube video player" src="https://www.youtube.com/embed/WaFetxHpCbE" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
 }
