@@ -28,7 +28,7 @@ class Report
     /**
      * @var Configuration
      */
-    private $config;
+    private Configuration $config;
 
     /**
      * Constructor.
@@ -146,5 +146,19 @@ class Report
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
         return str_replace($toBeRemoved, '', $outputString);
+    }
+
+    /**
+     * Sanitizes input to avoid CSV injection.
+     * @param string|int $value
+     * @return string
+     */
+    public static function sanitize($value): string
+    {
+        if (preg_match('/[=\+\-\@\|]/', $value)) {
+            $value = '"' . str_replace('"', '""', $value) . '"';
+        }
+
+        return $value;
     }
 }
