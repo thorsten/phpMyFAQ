@@ -113,7 +113,7 @@ const PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE = 20;
  *
  * - hash (default)
  * - bcrypt
- * - crypt (not recommended)
+ * - crypt (not recommended, marked as deprecated, will be removed with v3.3)
  *
  * WARNING: DO NOT CHANGE THIS VALUE AFTER YOUR INITIAL INSTALLATION!
  * OTHERWISE, ALL YOUR REGISTERED USERS HAVE TO REQUEST A NEW PASSWORD.
