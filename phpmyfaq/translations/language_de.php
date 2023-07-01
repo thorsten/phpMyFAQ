@@ -950,7 +950,7 @@ $LANG_CONF['records.enableAttachmentEncryption'] = ["checkbox", "Verschlüsselun
 $LANG_CONF['records.defaultAttachmentEncKey'] = ["input", "Standardschlüssel für Verschlüsselung<br/><small style=\"color: red\">Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!</small>"];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = "Aktualisieren";
+$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Update";
 $PMF_LANG['ad_you_shouldnt_update'] = "Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.";
 $LANG_CONF['security.useSslForLogins'] = ["checkbox", "Logins nur über SSL/TLS erlauben? "];
 $PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";

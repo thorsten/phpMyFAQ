@@ -124,6 +124,7 @@ $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     $action
 );
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'meta', 'ad_menu_meta', $action);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
 if ($faqConfig->get('search.enableElasticsearch')) {
     $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
         'editconfig',
@@ -202,6 +203,7 @@ switch ($action) {
     case 'system':
     case 'elasticsearch':
     case 'meta':
+    case' upgrade':
         $configurationPage = true;
         break;
     default:

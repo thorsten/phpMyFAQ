@@ -941,7 +941,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachme
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = "Yükselt";
+$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Yükselt";
 $PMF_LANG['ad_you_shouldnt_update'] = "Şu an phpMyFAQ yazılımının son sürümünü kullanıyorsunuz. Yükseltme işlemi gerekli değil.";
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Only allow logins over SSL connection?");
 $PMF_LANG['msgSecureSwitch'] = "Giriş yapabilmek için güvenli moda geçin!";

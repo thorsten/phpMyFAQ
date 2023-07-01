@@ -977,7 +977,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Numatytasis prie
 //$PMF_LANG['att_storage_type'][1] = 'Duomenų bazė';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'Atnaujinti';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Atnaujinti';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Jūs turite naujausią phpMyFAQ versiją. Jums nereikia atnaujinti.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
 $PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";

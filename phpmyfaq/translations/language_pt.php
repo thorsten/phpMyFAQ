@@ -745,7 +745,7 @@ $PMF_LANG['rightsLanguage::deltranslation'] = 'apagar traduções';
 $PMF_LANG['rightsLanguage::approverec'] = 'aprovar registos';
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'Ativar a cifragem (encriptação) de anexos<br><small>(não será usada caso a opção de anexação de ficheiros se encontrar desativada)</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Chave pré-definida para cifragem (encriptação) dos anexos <br><small>(não será usada caso a opção de encriptação de anexos se encontrar desativada).</small><br><small style="color: red"><strong>Atenção</strong>: <strong>Não alterar</strong> depois da chave ter sido definida e a opção de encriptação de anexos ter sido ativada.</small>');
-$PMF_LANG['ad_menu_upgrade'] = 'Atualizar';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Atualizar';
 $PMF_LANG['ad_you_shouldnt_update'] = 'A versão mais recente do phpMyFAQ já se encontra instalada: não necessita de ser atualizada.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Permitir a validação <small>(<em>login</em> )</small> apenas no modo seguro? - <small>HTTPS</small> <small>(pré-definição: desativada)</small>');
 $PMF_LANG['msgSecureSwitch'] = 'Para se validar tem que utilizar uma ligação segura (via <small>HTTPS</small>).';

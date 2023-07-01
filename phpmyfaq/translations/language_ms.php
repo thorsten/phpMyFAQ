@@ -758,7 +758,7 @@ $PMF_LANG['rightsLanguage::deltranslation'] = 'padam terjemahan';
 $PMF_LANG['rightsLanguage::approverec'] = 'luluskan rekod';
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Benarkan penyulitan lampiran <br><small>Abaikan jika lampiran dilumpuhkan</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Kunci penyulitan lalai lampiran <br><small>Abaikan jika penyulitan lampiran dilumpuhkan</small><br><small><font color="red">AMARAN: Jangan diubah apabila penyulitan fail telah ditetapkan dan dihidupkan!!!</font></small>');
-$PMF_LANG['ad_menu_upgrade'] = 'Naik taraf';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Naik taraf';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Anda mempunyai versi phpMyFAQ terkini. Anda tidak perlu menaik taraf.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Hanya benarkan log masuk melalui sambungan selamat? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = 'Tukar ke mod selamat untuk log masuk!';

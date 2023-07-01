@@ -962,7 +962,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Та phpMyFAQ -н сүүлийн хувилбарыг хэрэглэж байна. Та шинэчлэлт хийх шаардлагагүй.';
 $LANG_CONF['security.useSslForLogins'] = array(
     'checkbox',

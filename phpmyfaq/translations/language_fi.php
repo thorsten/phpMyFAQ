@@ -768,7 +768,7 @@ $PMF_LANG['rightsLanguage::deltranslation'] = 'poista käännös';
 $PMF_LANG['rightsLanguage::approverec'] = 'hyväksy tietueet';
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'Salaa liitteet<br><small>Ei huomioida, jos liitetiedostot eivät ole käytössä.</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Liitteen oletussalausavain <br><small>Ohitetaan ellei salaus ole käytössä</small><br><small><font color="red">VAROITUS: Älä muuta avainta sen jälkeen kun se on asetettu ja salasu otettu käyttöön!!!</font></small>');
-$PMF_LANG['ad_menu_upgrade'] = 'Päivitä';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Päivitä';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Sinulla on uusin phpMyFAQ:n versio. Et tarvitse päivitystä.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Salli kirjautuminen vain SSL-yhteyden yli? (oletus: ei valittu)');
 $PMF_LANG['msgSecureSwitch'] = 'Käytä turvamoodia kirjautumiseen!';

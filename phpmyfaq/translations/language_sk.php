@@ -958,7 +958,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Predvolený šif
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Máte najnovšiu verziu phpMyFAQ. Teraz nepotrebujete upgrade.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Povoliť iba prihlásenia cez zabezpečené pripojenie? (prednastavené: nepovoliť)");
 $PMF_LANG['msgSecureSwitch'] = "Prepnúť na bezpečný mód pre prihlásenie!";

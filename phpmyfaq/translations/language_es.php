@@ -951,7 +951,7 @@ $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Clave predetermi
 //$PMF_LANG['att_storage_type'][1] = "Database";
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'Actualizar';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Actualizar';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Estás usando la versión actual de phpMyFAQ. No es necesaria una actualización.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "¿Permitir los inicios de sesión sólo vía SSL/TLS?");
 $PMF_LANG['msgSecureSwitch'] = 'Cambiar a modo seguro de inicio de sesión';

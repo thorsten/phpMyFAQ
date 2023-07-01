@@ -762,7 +762,7 @@ $PMF_LANG['rightsLanguage::deltranslation'] = 'smazat překlad';
 $PMF_LANG['rightsLanguage::approverec'] = 'schválit překlad';
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Povolit šifrování příloh <br><small>Ignorováno pokud jsou přílohy vypnuty</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Výchozí klíč pro šifrování příloh <br><small>Ignorováno pokud je šifrování příloh vypnuto</small><br><small><font color="red">Upozornění: Neměňte pokud ste již šifrování zapli a použili!!!</font></small>');
-$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Máte poslední verzi programu. Upgrade není potřebný.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Povolit přihlášení pouze pomocí SSL připojení? (výchozí: vypnuto)");
 $PMF_LANG['msgSecureSwitch'] = 'Přepnout do zabezpečeného módu přihlášení!';

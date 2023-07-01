@@ -950,7 +950,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Activer les pi�
 $LANG_CONF["records.defaultAttachmentEncKey"] = ["input", "Clé de cryptage par défaut<br/><small>Ignoré si le cryptage des pièces-jointes est désactivé</small><br/><small><font color='red'>ATTENTION : Ne pas modifier une fois que le cryptage des fichiers a été activé !!!</font></small>"];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG["ad_menu_upgrade"] = "Mise à jour";
+$PMF_LANG["ad_menu_upgrade"] = "phpMyFAQ Mise à jour";
 $PMF_LANG["ad_you_shouldnt_update"] = "Vous avez la dernière version de phpMyFAQ. Inutile de faire une mise à jour.";
 $LANG_CONF["security.useSslForLogins"] = ["checkbox", "Autoriser uniquement les connexions à travers une connexion SSL ?"];
 $PMF_LANG["msgSecureSwitch"] = "Passez en mode sécurisé pour la connexion !";

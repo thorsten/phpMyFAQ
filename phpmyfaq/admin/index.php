@@ -483,6 +483,9 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'meta.edit':
                 require 'template-metadata.edit.php';
                 break;
+            case 'upgrade':
+                require 'upgrade.php';
+                break;
             // functions for backup administration
             case 'backup':
                 require 'backup.main.php';

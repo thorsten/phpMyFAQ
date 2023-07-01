@@ -759,7 +759,7 @@ $PMF_LANG['rightsLanguage::deltranslation'] = '翻訳の削除';
 $PMF_LANG['rightsLanguage::approverec'] = 'レコードの承認';
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "添付の暗号化を有効にする <br><small>添付が無効のときは無視</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", "標準の添付暗号化鍵 <br><small>添付の暗号化が無効の場合は無視</small><br><small><font color=&quot;red&quot;>警告: 一度設定しファイルが暗号化されている場合、既存設定の変更はしないでください!!!</font></small>");
-$PMF_LANG['ad_menu_upgrade'] = 'アップグレード';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ アップグレード';
 $PMF_LANG['ad_you_shouldnt_update'] = 'phpMyFAQ のバージョンは最新です。アップグレードの必要はありません。';
 $LANG_CONF['security.useSslForLogins'] = array("checkbox", "セキュア接続のログインのみ許可しますか? (初期値: 無効)");
 $PMF_LANG['msgSecureSwitch'] = 'セキュア モードのログインに切り替えます!';

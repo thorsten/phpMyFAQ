@@ -950,7 +950,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachme
 $LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><span class="text-danger">WARNING: Do not change this once set and enabled file encryption!!!</span></small>'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
 $LANG_CONF['security.useSslForLogins'] = ['checkbox', "Only allow logins over SSL connection?"];
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";

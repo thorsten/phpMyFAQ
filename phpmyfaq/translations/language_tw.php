@@ -940,7 +940,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", '預設附加檔�
 //$PMF_LANG['att_storage_type'][1] = "資料庫 (Database)";
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten 開發者
-$PMF_LANG['ad_menu_upgrade'] = "升級 Upgrade";
+$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Upgrade";
 $PMF_LANG['ad_you_shouldnt_update'] = "您已是最新的 phpMyFAQ 版本，無需升級。(You have the latest version of phpMyFAQ. You do not need to upgrade.)";
 $LANG_CONF['security.useSslForLogins'] = array("checkbox", "只允許以 SSL 安全性連線登入嘛? (預設: 關閉) <br>Only allow logins over SSL connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "切換到安全模式來登入! (Switch to secure mode to login!)";
