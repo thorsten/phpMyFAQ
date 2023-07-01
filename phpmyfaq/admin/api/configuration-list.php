@@ -17,6 +17,7 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -51,7 +52,7 @@ $configMode = Filter::filterVar($request->query->get('conf'), FILTER_SANITIZE_SP
  */
 function renderInputForm(mixed $key, string $type): void
 {
-    global $faqConfig;
+    $faqConfig = Configuration::getConfigurationInstance();
 
     switch ($type) {
         case 'area':
@@ -368,7 +369,7 @@ foreach ($LANG_CONF as $key => $value) {
         ?>
       </label>
       <div class="col-lg-9">
-          <?php renderInputForm($key, $value[0]) ?>
+          <?php renderInputForm($key, $value[0]); ?>
       </div>
         <?php
     }

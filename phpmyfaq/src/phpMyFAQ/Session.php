@@ -113,7 +113,7 @@ class Session
     /**
      * Returns the current UUID session key
      */
-    public function getCurrentSessionKey(): string
+    public function getCurrentSessionKey(): ?string
     {
         return $this->currentSessionKey ?? $_SESSION[self::PMF_AZURE_AD_SESSIONKEY];
     }
@@ -144,12 +144,12 @@ class Session
         $this->currentSessionKey = $this->uuid();
     }
 
-    public function set(string $key, string $value)
+    public function set(string $key, string $value): void
     {
         $_SESSION[$key] = $value;
     }
 
-    public function get(string $key)
+    public function get(string $key): string
     {
         return $_SESSION[$key];
     }

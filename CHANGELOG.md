@@ -10,7 +10,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - added Twig as new template engine (Thorsten)
 
-### phpMyFAQ v3.2.0-RC - 2023-05-29
+### phpMyFAQ v3.2.0 - 2023-07-
 
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
@@ -42,7 +42,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
 
-### phpMyFAQ v3.1.15 - 2023-06-
+### phpMyFAQ v3.1.15 - 2023-06-17
 
 - fixed minor bugs (Thorsten)
 

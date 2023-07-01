@@ -128,7 +128,7 @@ class System
     public static function getVersion(): string
     {
         $version = sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_PATCH_LEVEL);
-        return $version . ('-' . self::VERSION_PRE_RELEASE);
+        return $version . (self::isDevelopmentVersion() ? '-' . self::VERSION_PRE_RELEASE : '');
     }
 
     /**
@@ -175,7 +175,7 @@ class System
 
     public static function isDevelopmentVersion(): bool
     {
-        return Strings::strlen(self::VERSION_PRE_RELEASE) > 0;
+        return strlen(self::VERSION_PRE_RELEASE) > 0;
     }
 
     /**

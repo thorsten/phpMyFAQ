@@ -57,7 +57,7 @@ class Pgsql extends Database implements Driver
             PRIMARY KEY (virtual_hash))',
 
         'faqbackup' => 'CREATE TABLE %sfaqbackup (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             filename VARCHAR(255) NOT NULL,
             authkey VARCHAR(255) NOT NULL,
             authcode VARCHAR(255) NOT NULL,
@@ -330,7 +330,7 @@ class Pgsql extends Database implements Driver
             email VARCHAR(128) NULL,
             is_visible SMALLINT NULL DEFAULT 0,
             twofactor_enabled SMALLINT NULL DEFAULT 0,
-            secret VARCHAR(128) NULL)',
+            secret VARCHAR(128) NULL DEFAULT NULL)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,

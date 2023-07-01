@@ -17,6 +17,7 @@
 
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Setup\Installer;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
 date_default_timezone_set('Europe/Berlin');
@@ -76,6 +77,7 @@ $setup = [
     'rootDir' => PMF_TEST_DIR
 ];
 
+Strings::init();
 
 try {
     $installer = new Installer(new System());
