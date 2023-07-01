@@ -200,8 +200,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
                         'id' => $recordId,
                         'lang' => $recordLang,
                         'solution_id' => $solutionId,
-                        'question' => $recordData['thema'],
-                        'answer' => $recordData['content'],
+                        'question' => $faqData->getQuestion(),
+                        'answer' => $faqData->getAnswer(),
                         'keywords' => $keywords,
                         'category_id' => $categories['rubrik'][0]
                     ]
