@@ -54,7 +54,8 @@ class Upgrade extends Setup
      */
     public function downloadPackage(string $version): string|bool
     {
-        $url = self::DOWNLOAD_URL . 'phpMyFAQ-' . $version . '.zip';
+        $zipFile = 'phpMyFAQ-' . $version . '.zip';
+        $url = self::DOWNLOAD_URL . $zipFile;
 
         $client = HttpClient::create();
 
@@ -65,7 +66,11 @@ class Upgrade extends Setup
                 return false;
             }
 
-            return $response->getContent();
+            $package = $response->getContent();
+
+            file_put_contents(PMF_CONTENT_DIR . '/upgrades/' . $zipFile, $package);
+
+            return PMF_CONTENT_DIR . '/upgrades/' . $zipFile;
         } catch (
             TransportExceptionInterface |
             ClientExceptionInterface |

@@ -30,6 +30,13 @@ if (!defined('PMF_SRC_DIR')) {
 }
 
 //
+// The path to the content directory
+//
+if (!defined('PMF_CONTENT_DIR')) {
+    define('PMF_CONTENT_DIR', dirname(__DIR__) . '/content');
+}
+
+//
 // The path to the logs
 //
 if (!defined('PMF_LOG_DIR')) {

@@ -30,6 +30,7 @@ error_reporting(E_ALL | E_STRICT);
 //
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/content/core/config');
+define('PMF_CONTENT_DIR', dirname(__DIR__) . '/phpmyfaq/content');
 
 const PMF_LOG_DIR = __DIR__ . '/logs';
 const PMF_TEST_DIR = __DIR__;

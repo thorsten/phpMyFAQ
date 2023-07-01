@@ -16,6 +16,8 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Setup\Upgrade;
+use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -37,6 +39,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $templateVars = [
         'adminHeaderUpgrade' => Translation::get('ad_menu_upgrade')
     ];
+
+    $upgrade = new Upgrade(new System(), $faqConfig);
 
     echo $template->render($templateVars);
 } else {
