@@ -57,7 +57,7 @@ class Pgsql extends Database implements Driver
             PRIMARY KEY (virtual_hash))',
 
         'faqbackup' => 'CREATE TABLE %sfaqbackup (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             filename VARCHAR(255) NOT NULL,
             authkey VARCHAR(255) NOT NULL,
             authcode VARCHAR(255) NOT NULL,
