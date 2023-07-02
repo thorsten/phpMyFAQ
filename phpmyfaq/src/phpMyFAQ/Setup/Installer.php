@@ -965,7 +965,7 @@ class Installer extends Setup
         }
 
         // connect to the database using config/database.php
-        $dbConfig = new DatabaseConfiguration($rootDir . '/config/database.php');
+        $dbConfig = new DatabaseConfiguration($rootDir . '/content/core/config/database.php');
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {

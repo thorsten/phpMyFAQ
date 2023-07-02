@@ -29,8 +29,8 @@ error_reporting(E_ALL | E_STRICT);
 // The root directory
 //
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
-define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/content/core/config');
-define('PMF_CONTENT_DIR', dirname(__DIR__) . '/phpmyfaq/content');
+define('PMF_CONFIG_DIR', dirname(__DIR__) . '/tests/content/core/config');
+define('PMF_CONTENT_DIR', dirname(__DIR__) . '/tests/content');
 
 const PMF_LOG_DIR = __DIR__ . '/logs';
 const PMF_TEST_DIR = __DIR__;
@@ -39,7 +39,7 @@ const DEBUG = true;
 
 $_SERVER['HTTP_HOST'] = 'https://localhost/';
 
-require PMF_CONFIG_DIR . '/constants.php';
+require PMF_ROOT_DIR . '/content/core/config/constants.php';
 
 //
 // The include directory
@@ -87,4 +87,4 @@ try {
     echo $e->getMessage();
 }
 
-require PMF_TEST_DIR . '/config/database.php';
+require PMF_TEST_DIR . '/content/core/config/database.php';

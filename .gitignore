@@ -60,8 +60,9 @@ coverage.txt
 tests/logs
 tests/test.db
 tests/test.db-journal
-tests/config/database.php
-tests/config/ldap.php
+tests/content/core/config/database.php
+tests/content/core/config/ldap.php
+tests/content/upgrades
 tests/fixtures/path-to-delete/foo.bar.baz
 
 # Jest related stuff
