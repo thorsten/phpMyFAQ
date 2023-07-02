@@ -352,6 +352,7 @@ class Installer extends Setup
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
         'main.contactInformationHTML' => 'false',
+        'main.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
@@ -479,7 +480,9 @@ class Installer extends Setup
             'main.currentApiVersion' => System::getApiVersion(),
             'main.phpMyFAQToken' => bin2hex(random_bytes(16)),
             'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
+            'main.releaseEnvironment' => System::isDevelopmentVersion() ? 'development' : 'production'
         ];
+
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);
     }
 

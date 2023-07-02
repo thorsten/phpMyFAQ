@@ -1,7 +1,7 @@
 <?php
+
 /**
- * This script executes all necessary database changes to update
- * to update phpMyFAQ to a certain version.
+ * This script executes all necessary database changes to update phpMyFAQ to a certain version.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -184,5 +184,5 @@ if (version_compare($version, '3.3.0-alpha', '<')) {
     // @todo move attachments in filesystem and database
 
     // Automatic updates
-    $faqConfig->add('main.releaseStage', 'development');
+    $faqConfig->add('main.releaseEnvironment', 'development');
 }
