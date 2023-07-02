@@ -28,6 +28,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;
+use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
@@ -352,7 +353,6 @@ class Installer extends Setup
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
         'main.contactInformationHTML' => 'false',
-        'main.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
@@ -464,6 +464,9 @@ class Installer extends Setup
 
         'api.enableAccess' => 'true',
         'api.apiClientToken' => '',
+
+        'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
+        'upgrade.dateLastChecked' => ''
     ];
 
     /**
@@ -480,7 +483,8 @@ class Installer extends Setup
             'main.currentApiVersion' => System::getApiVersion(),
             'main.phpMyFAQToken' => bin2hex(random_bytes(16)),
             'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
-            'main.releaseEnvironment' => System::isDevelopmentVersion() ? 'development' : 'production'
+            'upgrade.releaseEnvironment' =>
+                System::isDevelopmentVersion() ? ReleaseType::DEVELOPMENT->value : ReleaseType::RELEASE->value
         ];
 
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);

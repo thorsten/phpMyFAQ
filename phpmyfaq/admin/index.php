@@ -294,6 +294,10 @@ if (
                 case 'image':
                     require 'api/image.php';
                     break;
+                // Upgrade
+                case 'upgrade':
+                    require 'api/upgrade.php';
+                    break;
             }
             exit();
         }

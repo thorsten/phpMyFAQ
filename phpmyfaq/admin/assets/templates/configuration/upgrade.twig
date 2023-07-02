@@ -15,5 +15,17 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
+<div class="row">
+    <div class="col-12">
 
-Release-Environment: {{ releaseEnvironment }}
+        <p>
+            Last check for updates: <output>{{ dateLastChecked }}</output>
+            <button type="button" class="btn btn-sm btn-primary">Check for new version</button>
+        </p>
+
+        <p>
+            Release-Environment: {{ releaseEnvironment }}
+        </p>
+
+    </div>
+</div>

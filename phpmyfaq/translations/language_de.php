@@ -1330,6 +1330,8 @@ $LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'E-Mail-Adresse im Export 
 $PMF_LANG['msgNewQuestionAdded'] = 'Es wurde eine neue Frage hinzugefügt. Sie können diese hier oder im Adminbereich überprüfen:';
 
 // added v3.3.0-alpha - 2023-07-02 by Thorsten
-$LANG_CONF['main.releaseEnvironment'] = ['select', 'Release-Umgebung'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Release-Umgebung'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Letzte Überprüfung nach Updates'];
+$PMF_LANG['upgradeControlCenter'] = 'Online Update';
 
 return $PMF_LANG;

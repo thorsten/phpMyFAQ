@@ -112,6 +112,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         'adminConfigurationSeoTab' => Translation::get('seoCenter'),
         'adminConfigurationSocialNetworkTab' => Translation::get('socialNetworksControlCenter'),
         'adminConfigurationMailTab' => Translation::get('mailControlCenter'),
+        'adminConfigurationUpgradeTab' => Translation::get('upgradeControlCenter'),
     ];
 
     echo $template->render($templateVars);

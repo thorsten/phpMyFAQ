@@ -18,6 +18,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -270,14 +271,16 @@ function renderInputForm(mixed $key, string $type): void
                     echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
 
-                case 'main.releaseEnvironment':
+                case 'upgrade.releaseEnvironment':
                     printf(
-                        '<option value="development" %s>Development</option>',
-                        ('development' == $faqConfig->get($key)) ? 'selected' : ''
+                        '<option value="%s" %s>Development</option>',
+                        ReleaseType::DEVELOPMENT->value,
+                        (ReleaseType::DEVELOPMENT->value == $faqConfig->get($key)) ? 'selected' : ''
                     );
                     printf(
-                        '<option value="production" %s>Production</option>',
-                        ('production' == $faqConfig->get($key)) ? 'selected' : ''
+                        '<option value="%s" %s>Release</option>',
+                        ReleaseType::RELEASE->value,
+                        (ReleaseType::RELEASE->value == $faqConfig->get($key)) ? 'selected' : ''
                     );
                     break;
             }
@@ -312,7 +315,7 @@ function renderInputForm(mixed $key, string $type): void
             printf(
                 '<input type="text" readonly name="edit[%s]" class="form-control-plaintext" value="%s"></div>',
                 $key,
-                str_replace('"', '&quot;', $faqConfig->get($key))
+                str_replace('"', '&quot;', $faqConfig->get($key) ?? '')
             );
             break;
 
