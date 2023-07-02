@@ -57,10 +57,10 @@ cd "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/ || exit
 printf "\n 🚀 Add PHP dependencies\n";
 composer install --no-dev --prefer-dist
 
-printf "\n 🚀 Add JS dependencies\n";
+printf "\n 🚀 Install JS dependencies\n";
 yarn install
 
-printf "\n 🚀 Build JS\n";
+printf "\n 🚀 Run \"yarn build\" to build frontend production build\n";
 yarn build
 
 printf "\n 🚀 Remove fonts from TCPDF\n"
