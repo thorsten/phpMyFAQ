@@ -269,6 +269,17 @@ function renderInputForm(mixed $key, string $type): void
                     $adminHelper = new AdministrationHelper();
                     echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
+
+                case 'main.releaseEnvironment':
+                    printf(
+                        '<option value="development" %s>Development</option>',
+                        ('development' == $faqConfig->get($key)) ? 'selected' : ''
+                    );
+                    printf(
+                        '<option value="production" %s>Production</option>',
+                        ('production' == $faqConfig->get($key)) ? 'selected' : ''
+                    );
+                    break;
             }
 
             echo "</select>\n</div>\n";

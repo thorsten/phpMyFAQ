@@ -182,4 +182,7 @@ if (version_compare($version, '3.2.0-RC', '<')) {
 if (version_compare($version, '3.3.0-alpha', '<')) {
     // Move everything to the new file layout
     // @todo move attachments in filesystem and database
+
+    // Automatic updates
+    $faqConfig->add('main.releaseStage', 'development');
 }

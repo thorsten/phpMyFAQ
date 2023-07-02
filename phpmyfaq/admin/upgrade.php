@@ -37,7 +37,8 @@ $template = $twig->loadTemplate('./configuration/upgrade.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $templateVars = [
-        'adminHeaderUpgrade' => Translation::get('ad_menu_upgrade')
+        'adminHeaderUpgrade' => Translation::get('ad_menu_upgrade'),
+        'releaseEnvironment' => $faqConfig->get('main.releaseEnvironment')
     ];
 
     $upgrade = new Upgrade(new System(), $faqConfig);

@@ -29,7 +29,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Upgrade extends Setup
 {
-    private const DOWNLOAD_URL = 'https://download.phpmyfaq.de/';
+    private const DOWNLOAD_URL_PRODUCTION = 'https://download.phpmyfaq.de/';
+
+    private const DOWNLOAD_URL_DEVELOPMENT = 'https://github.com/thorsten/phpMyFAQ/releases/tag/';
 
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
@@ -55,7 +57,7 @@ class Upgrade extends Setup
     public function downloadPackage(string $version): string|bool
     {
         $zipFile = 'phpMyFAQ-' . $version . '.zip';
-        $url = self::DOWNLOAD_URL . $zipFile;
+        $url = self::DOWNLOAD_URL_PRODUCTION . $zipFile;
 
         $client = HttpClient::create();
 
