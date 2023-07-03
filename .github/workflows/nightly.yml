@@ -73,7 +73,7 @@ jobs:
           cmd: build
 
       - name: Create release artifact
-        uses: montudor/action-zip@v0.1.0
+        uses: montudor/action-zip@v1.0.0
         with:
           args: zip -X -r phpMyFAQ-${{ env.release_name }}.zip phpmyfaq -x "phpmyfaq/src/libs/tecnickcom/tcpdf/fonts/*"
 
