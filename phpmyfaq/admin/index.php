@@ -239,7 +239,7 @@ if (
         $user->isSuperAdmin())
 ) {
     if (isset($action) && isset($ajax)) {
-        if ('ajax' === $action) {
+        if ('ajax' === $action ) {
             switch ($ajax) {
                 // Attachments
                 case 'att':
@@ -295,8 +295,8 @@ if (
                     require 'api/image.php';
                     break;
                 // Upgrade
-                case 'upgrade':
-                    require 'api/upgrade.php';
+                case 'updates':
+                    require 'api/updates.php';
                     break;
             }
             exit();
