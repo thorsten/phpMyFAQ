@@ -324,7 +324,7 @@ class System
      */
     public function checkInstallation(): bool
     {
-        return !is_file(PMF_ROOT_DIR . '/config/database.php');
+        return !is_file(PMF_ROOT_DIR . '/content/core/config/database.php');
     }
 
     /**
@@ -407,12 +407,12 @@ class System
     public function cleanFailedInstallationFiles(): void
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-            unlink(PMF_ROOT_DIR . '/config/database.php');
+        if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
+            unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
         }
         // Remove './config/ldap.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
-            unlink(PMF_ROOT_DIR . '/config/ldap.php');
+        if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
+            unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');
         }
     }
 }
