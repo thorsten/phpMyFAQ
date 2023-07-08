@@ -27,9 +27,13 @@ phpmyfaq/content/core/config/azure.php
 phpmyfaq/content/core/config/azure.bak.php
 phpmyfaq/content/core/config/index.html
 phpmyfaq/content/core/data/*
+!phpmyfaq/content/core/data/.gitkeep
 phpmyfaq/content/core/logs/*
+!phpmyfaq/content/core/logs/.gitkeep
 phpmyfaq/content/user/images/*
+!phpmyfaq/content/user/images/.gitkeep
 phpmyfaq/content/user/attachments/*
+!phpmyfaq/content/user/attachments/.gitkeep
 
 # Third party PHP libraries
 phpmyfaq/src/libs

@@ -76,10 +76,11 @@ It might help to set chmod 775 to the whole phpMyFAQ directory to avoid problems
 running a very restrictive mod_php installation you should keep the chmod 775 for the following files and directories
 even after the successful installation:
 
-- the directory **attachments/**
-- the directory **config/**
-- the directory **data/**
-- the directory **images/**
+- the directory **content/core/config/**
+- the directory **content/core/data/**
+- the directory **content/core/logs/**
+- the directory **content/user/attachments/**
+- the directory **content/user/images/**
 
 All other directories shouldn't be world-writable for your own security.
 
