@@ -553,6 +553,8 @@ class Installer extends Setup
 
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
+     *
+     * @todo this method should be in the the Update class
      */
     public function checkPreUpgrade(string $databaseType): void
     {
@@ -565,7 +567,7 @@ class Installer extends Setup
             System::renderFooter();
         }
 
-        if (!is_readable(PMF_ROOT_DIR . '/config/database.php')) {
+        if (!is_readable(PMF_ROOT_DIR . '/content/core/config/database.php')) {
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>' .
                 'Please use the <a href="index.php">install script</a>.</p>';
             System::renderFooter();
@@ -596,7 +598,13 @@ class Installer extends Setup
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
-        $dirs = ['/attachments', '/config', '/data', '/images', '/logs'];
+        $dirs = [
+            '/content/core/config',
+            '/content/core/data',
+            '/content/core/logs',
+            '/content/user/images',
+            '/content/user/attachments',
+        ];
         $failedDirs = $instanceSetup->checkDirs($dirs);
         $numDirs = sizeof($failedDirs);
 
