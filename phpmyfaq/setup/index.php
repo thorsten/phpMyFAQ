@@ -53,8 +53,8 @@ session_start();
 
 require PMF_ROOT_DIR . '/src/libs/autoload.php';
 require PMF_ROOT_DIR . '/src/constants.php';
-require PMF_ROOT_DIR . '/config/constants.php';
-require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
+require PMF_ROOT_DIR . '/content/core/config/constants.php';
+require PMF_ROOT_DIR . '/content/core/config/constants_elasticsearch.php';
 
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
@@ -332,7 +332,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <div class="col-sm-9">
                   <select name="language" id="language" class="form-control">
                   <?php
-                    if ($dir = opendir(PMF_ROOT_DIR . '/lang')) {
+                    if ($dir = opendir(PMF_ROOT_DIR . '/translations')) {
                         $options = [];
                         while ($dat = readdir($dir)) {
                             $option = '';
