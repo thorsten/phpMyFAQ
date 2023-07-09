@@ -126,7 +126,7 @@ $request = Request::createFromGlobals();
                 $danz = 0;
                 $first = 9999999999999999999999999;
                 $last = 0;
-                $dir = opendir(PMF_ROOT_DIR . '/data');
+                $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
                 while ($dat = readdir($dir)) {
                     if ($dat != '.' && $dat != '..') {
                         ++$danz;
