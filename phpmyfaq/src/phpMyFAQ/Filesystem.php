@@ -31,12 +31,7 @@ class Filesystem
     private string $path;
 
     /**
-     * @var string[]
-     */
-    private array $folders = [];
-
-    /**
-     * Constructor, sets the root path of the master phpMyFAQ installation.
+     * Constructor, sets the root path of the primary phpMyFAQ installation.
      */
     public function __construct(string $rootPath = '')
     {
@@ -50,22 +45,6 @@ class Filesystem
     public function getRootPath(): string
     {
         return $this->rootPath;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getFolders(): array
-    {
-        return $this->folders;
-    }
-
-    /**
-     * @param string[] $folders
-     */
-    public function setFolders(array $folders): void
-    {
-        $this->folders = $folders;
     }
 
     public function getPath(): string
