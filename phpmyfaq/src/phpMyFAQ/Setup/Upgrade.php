@@ -99,18 +99,19 @@ class Upgrade extends Setup
         );
         try {
             $remoteHashes = $response->getContent();
-            if(json_decode($remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof \stdClass){
-                if(!is_array(json_decode($remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
+            if (json_decode($remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof \stdClass) {
+                if (!is_array(json_decode($remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
                     return false;
                 }
-            return true;
+                return true;
             }
-        } catch (Exception |
-                 TransportExceptionInterface |
-                 ClientExceptionInterface |
-                 RedirectExceptionInterface |
-                 ServerExceptionInterface |
-                 \JsonException $e
+        } catch (
+            Exception |
+            TransportExceptionInterface |
+            ClientExceptionInterface |
+            RedirectExceptionInterface |
+            ServerExceptionInterface |
+            \JsonException $e
         ) {
             $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
             return false;
@@ -127,8 +128,7 @@ class Upgrade extends Setup
         if (!$zip->open($path)) {
             $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
             return false;
-        } 
-        else {
+        } else {
             if (!$zip->extractTo(PMF_CONTENT_DIR . '/upgrades/')) {
                 $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
                 return false;
