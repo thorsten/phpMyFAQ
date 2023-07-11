@@ -234,7 +234,6 @@ switch ($action) {
 
   <script src="../assets/dist/backend.js?<?= time(); ?>"></script>
   <script src="assets/js/configuration.js"></script>
-  <script src="assets/js/upgrade.js"></script>
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">
 </head>
 <body dir="<?= Translation::get('dir'); ?>" id="page-top">

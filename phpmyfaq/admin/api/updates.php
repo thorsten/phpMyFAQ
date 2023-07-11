@@ -52,23 +52,7 @@ $ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANIT
  */
 
 switch ($ajaxAction) {
-    // GET /updates: Returns a list of available updates.
-    default:
-        $client = HttpClient::create();
-        try {
-            $versions = $client->request(
-                'GET',
-                'https://api.phpmyfaq.de/versions'
-            );
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent($versions->getContent());
-            $response->send();
-        } catch (TransportExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData($e->getMessage());
-            $response->send();
-        }
-        break;
+
     case 'check-updates':
         $json = file_get_contents('php://input', true);
         $postData = json_decode($json);
@@ -89,5 +73,21 @@ switch ($ajaxAction) {
 
         $response->send();
         break;
-}
+    // GET /updates: Returns a list of available updates.
+    default:
+        $client = HttpClient::create();
+        try {
+            $versions = $client->request(
+                'GET',
+                'https://api.phpmyfaq.de/versions'
+            );
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setContent($versions->getContent());
+            $response->send();
+        } catch (TransportExceptionInterface $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData($e->getMessage());
+            $response->send();
+        }
+        break;
 }
