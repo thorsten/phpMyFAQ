@@ -86,18 +86,56 @@ class Upgrade extends Setup
 
     /**
      * Method to verify the downloaded phpMyFAQ package
-     * @return void
+     * @var string $version Version to verify
+     * @return bool
+     * @throws Exception|TransportExceptionInterface|ClientExceptionInterface|RedirectExceptionInterface|ServerExceptionInterface|JsonException
      */
-    public function verifyPackage()
+    public function verifyPackage(string $version): bool
     {
+        $client = HttpClient::create();
+        $response = $client->request(
+            'GET',
+            $this->apiUrl . 'verify/' . $version
+        );
+        try {
+            $remoteHashes = $response->getContent();
+            if(json_decode($remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof \stdClass){
+                if(!is_array(json_decode($remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
+                    return false;
+                }
+            return true;
+            }
+        } catch (Exception |
+                 TransportExceptionInterface |
+                 ClientExceptionInterface |
+                 RedirectExceptionInterface |
+                 ServerExceptionInterface |
+                 \JsonException $e
+        ) {
+            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
+            return false;
+        }
     }
-
     /**
      * Method to unpack the downloaded phpMyFAQ package
-     * @return void
+     * @var string $path Path of the package
+     * @return bool
      */
-    public function unpackPackage()
+    public function unpackPackage(string $path): bool
     {
+        $zip = new \ZipArchive();
+        if (!$zip->open($path)) {
+            $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
+            return false;
+        } 
+        else {
+            if (!$zip->extractTo(PMF_CONTENT_DIR . '/upgrades/')) {
+                $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
+                return false;
+            }
+            $zip->close();
+            return true;
+        }
     }
 
     /**
