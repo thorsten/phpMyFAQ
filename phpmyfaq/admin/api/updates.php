@@ -9,6 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jan Harms <model_railroader@gmx-topmail.de>
  * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
@@ -16,6 +17,8 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Api;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,4 +69,25 @@ switch ($ajaxAction) {
             $response->send();
         }
         break;
+    case 'check-updates':
+        $json = file_get_contents('php://input', true);
+        $postData = json_decode($json);
+
+        try {
+            $api = new Api($faqConfig);
+            $versions = $api->getVersions();
+            $response->setStatusCode(Response::HTTP_OK);
+            if (version_compare($versions['installed'], $versions['current'], '<')) {
+                $response->setData(['version' => $versions['current'], 'message' => Translation::get('currentVersion') . $versions['current']]);
+            } else {
+                $response->setData(['version' => 'current', 'message' => Translation::get('versionIsUpToDate')]);
+            }
+        } catch (Exception | TransportExceptionInterface $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => $e->getMessage()]);
+        }
+
+        $response->send();
+        break;
+}
 }
