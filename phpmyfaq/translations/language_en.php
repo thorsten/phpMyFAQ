@@ -1348,10 +1348,12 @@ $PMF_LANG['msgAuthenticationSource'] = 'Authentication service';
 $LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Show email address in exports'];
 $PMF_LANG['msgNewQuestionAdded'] = 'A new question was added. You can check them here or in the admin section:';
 
-// added v3.3.0-alpha - 2023-07-02 by Thorsten and Jan
+// added v3.3.0-alpha - 2023-07-02 by Thorsten
 $LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Release Environment'];
 $LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Last check for updates'];
 $PMF_LANG['upgradeControlCenter'] = 'Online Update';
+
+// added v3.3.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['versionIsUpToDate'] = '✅ Your installed version is up-to-date!';
 $PMF_LANG['currentVersion'] = 'Current Version: ';
 
