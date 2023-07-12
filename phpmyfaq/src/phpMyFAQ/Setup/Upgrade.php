@@ -40,10 +40,45 @@ class Upgrade extends Setup
 
     /**
      * Method to check if the filesystem is ready for the upgrade
-     * @return void
+     * @return bool
      */
     public function checkFilesystem()
     {
+        if (!is_dir(PMF_CONTENT_DIR . '\upgrades')) {
+            if (!mkdir(PMF_CONTENT_DIR . '\upgrades')) {
+                return false;
+            }
+        }
+        if (
+            is_dir(PMF_CONTENT_DIR . '\user\attachments') && is_dir(PMF_CONTENT_DIR . '\user\images') &&
+            is_dir(PMF_CONTENT_DIR . '\core\data') && is_dir(PMF_ROOT_DIR . '\assets\themes')
+        ) {
+            if (
+                is_file(PMF_CONTENT_DIR . '\core\config\constants.php') &&
+                is_file(PMF_CONTENT_DIR . '\core\config\database.php')
+            ) {
+                if ($this->configuration->isElasticsearchActive()) {
+                    if (!is_file(PMF_CONTENT_DIR . '\core\config\elasticsearch.php')) {
+                        return false;
+                    }
+                }
+                if ($this->configuration->isLdapActive()) {
+                    if (!is_file(PMF_CONTENT_DIR . '\core\config\ldap.php')) {
+                        return false;
+                    }
+                }
+                if ($this->configuration->isSignInWithMicrosoftActive()) {
+                    if (!is_file(PMF_CONTENT_DIR . '\core\config\azure.php')) {
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
