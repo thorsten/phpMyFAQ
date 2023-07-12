@@ -93,7 +93,7 @@ class Upgrade extends Setup
      * @return bool
      * @throws Exception|TransportExceptionInterface|ClientExceptionInterface|RedirectExceptionInterface|ServerExceptionInterface|JsonException
      */
-    public function verifyPackage(string $path, string $version): bool 
+    public function verifyPackage(string $path, string $version): bool
     {
         $client = HttpClient::create();
         $response = $client->request(
