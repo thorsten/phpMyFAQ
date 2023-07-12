@@ -33,8 +33,6 @@ class Upgrade extends Setup
 
     private const DOWNLOAD_URL_DEVELOPMENT = 'https://github.com/thorsten/phpMyFAQ/releases/tag/';
 
-    private string $downloadUrl = 'https://download.phpmyfaq.de/';
-
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
@@ -98,7 +96,7 @@ class Upgrade extends Setup
         $client = HttpClient::create();
         $response = $client->request(
             'GET',
-            $this->downloadUrl . 'info/' . $version
+            DOWNLOAD_URL_PRODUCTION . 'info/' . $version
         );
 
         try {
