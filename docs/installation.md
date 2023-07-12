@@ -2,36 +2,48 @@
 
 ## 2.1 Requirements for phpMyFAQ
 
-phpMyFAQ addresses a database system via PHP. In order to install it locally you will need a web server that meets the
-following requirements:
+phpMyFAQ addresses a database system via PHP.
+In order to install it, you will need a web server that meets the following requirements:
 
-- **[PHP](http://www.php.net)**
-  - version 8.1 or later
-  - memory_limit = 128M (the more the better)
-  - cURL support
-  - GD support
-  - XMLWriter support
-  - JSON support
-  - Filter support
-  - SPL support
-  - FileInfo support
-- **Web server** ([Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 1.0+)
-- **Database server**
-  - [MySQL](http://www.mysql.com) (via MySQLi extension)
-  - [PostgreSQL](http://www.postgresql.org)
-  - [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
-  - [SQLite](http://www.sqlite.org)
-  - [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension)
-  - [Percona Server](http://www.percona.com) (via MySQLi extension)
-- **Search engines** (optional)
-  - [Elasticsearch](https://www.elastic.co/products/elasticsearch) 6.x or later
+### PHP requirements
+
+- version 8.1 or later
+- memory_limit = 128M (the more the better)
+- cURL support
+- GD support
+- XMLWriter support
+- JSON support
+- Filter support
+- SPL support
+- FileInfo support
+
+### Apache requirements
+
+- mod_rewrite
+- mod_ssl (if you wish to run phpMyFAQ under SSL)
+
+You should also ensure you have `AllowOverride All` set in the `<Directory>` and/or `<VirtualHost>` blocks so
+that the `.htaccess` file processes correctly, and rewrite rules take effect.
+
+### Database requirements
+
+- [MySQL](http://www.mysql.com) (via MySQLi extension)
+- [PostgreSQL](http://www.postgresql.org)
+- [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
+- [SQLite](http://www.sqlite.org)
+- [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension)
+- [Percona Server](http://www.percona.com) (via MySQLi extension)
+
+### Optional Search engine
+
+- [Elasticsearch](https://www.elastic.co/products/elasticsearch) 6.x or later
+
+### Additional requirements
+
 - correctly set: access permissions, owner, group
 - **Docker** (optional)
 
-You can only run phpMyFAQ successfully with constraints affect the directives open_basedir and disable_functions, which
-can be set in the central php.ini or the httpd.conf respectively.
-
-In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The
+In case PHP runs as a module of the Apache, you will have to be able to do a chown on the files before installation. The
 files and directories must be owned by the web server's user.
 
 You can determine which versions your web server is running by creating a file called **info.php** with the following
@@ -40,13 +52,13 @@ content: `<?php phpinfo(); ?>`
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you're running PHP before 8.1 you cannot use phpMyFAQ.
+In case you're running PHP before 8.1, you cannot use phpMyFAQ.
 
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are the latest Mozilla Firefox
 (Windows/macOS/Linux), the latest Safari (macOS/iOS), the latest Chrome (Windows/macOS/Linux), the latest Opera
 (Windows/macOS/Linux) and Microsoft Edge (Windows/macOS/Linux).
 
-We recommend to use always the latest version of Firefox, Chrome, Safari, Opera or Microsoft Edge.
+We recommend using the latest version of Firefox, Chrome, Safari, Opera or Microsoft Edge.
 
 ## 2.2 Preparations
 
