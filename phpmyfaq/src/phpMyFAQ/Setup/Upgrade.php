@@ -33,6 +33,8 @@ class Upgrade extends Setup
 
     private const DOWNLOAD_URL_DEVELOPMENT = 'https://github.com/thorsten/phpMyFAQ/releases/tag/';
 
+    private string $downloadUrl = 'https://download.phpmyfaq.de/';
+
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
@@ -86,37 +88,36 @@ class Upgrade extends Setup
 
     /**
      * Method to verify the downloaded phpMyFAQ package
-     * @var string $version Version to verify
+     * @var string $path    | Path to zip file
+     * @var string $version | Version to verify
      * @return bool
      * @throws Exception|TransportExceptionInterface|ClientExceptionInterface|RedirectExceptionInterface|ServerExceptionInterface|JsonException
      */
-    public function verifyPackage(string $version): bool
-    {
+    public function verifyPackage(string $path, string $version): bool {
         $client = HttpClient::create();
         $response = $client->request(
-            'GET',
-            $this->apiUrl . 'verify/' . $version
+                'GET',
+                $this->downloadUrl . 'info/' . $version
         );
+
         try {
-            $remoteHashes = $response->getContent();
-            if (json_decode($remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof \stdClass) {
-                if (!is_array(json_decode($remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
-                    return false;
-                }
+            $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            if (hash_file('md5', $path) === $responseContent['zip']['md5']) {
                 return true;
+            } else {
+                return false;
             }
         } catch (
-            Exception |
-            TransportExceptionInterface |
-            ClientExceptionInterface |
-            RedirectExceptionInterface |
-            ServerExceptionInterface |
-            \JsonException $e
+                TransportExceptionInterface |
+                ClientExceptionInterface |
+                RedirectionExceptionInterface |
+                ServerExceptionInterface $e
         ) {
             $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
             return false;
         }
     }
+
     /**
      * Method to unpack the downloaded phpMyFAQ package
      * @var string $path Path of the package
