@@ -2,7 +2,6 @@
 
 /**
  * The Upgrade class used for upgrading/installing phpMyFAQ from a ZIP file.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -17,6 +16,7 @@
 
 namespace phpMyFAQ\Setup;
 
+use JsonException;
 use Monolog\Level;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Setup;
@@ -26,6 +26,7 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use ZipArchive;
 
 class Upgrade extends Setup
 {
@@ -40,9 +41,10 @@ class Upgrade extends Setup
 
     /**
      * Method to check if the filesystem is ready for the upgrade
+     *
      * @return bool
      */
-    public function checkFilesystem()
+    public function checkFilesystem(): bool
     {
         if (!is_dir(PMF_CONTENT_DIR . '\upgrades')) {
             if (!mkdir(PMF_CONTENT_DIR . '\upgrades')) {
@@ -50,12 +52,14 @@ class Upgrade extends Setup
             }
         }
         if (
-            is_dir(PMF_CONTENT_DIR . '\user\attachments') && is_dir(PMF_CONTENT_DIR . '\user\images') &&
-            is_dir(PMF_CONTENT_DIR . '\core\data') && is_dir(PMF_ROOT_DIR . '\assets\themes')
+            is_dir(PMF_CONTENT_DIR . '\user\attachments') && is_dir(PMF_CONTENT_DIR . '\user\images') && is_dir(
+                PMF_CONTENT_DIR . '\core\data'
+            ) && is_dir(PMF_ROOT_DIR . '\assets\themes')
         ) {
             if (
-                is_file(PMF_CONTENT_DIR . '\core\config\constants.php') &&
-                is_file(PMF_CONTENT_DIR . '\core\config\database.php')
+                is_file(PMF_CONTENT_DIR . '\core\config\constants.php') && is_file(
+                    PMF_CONTENT_DIR . '\core\config\database.php'
+                )
             ) {
                 if ($this->configuration->isElasticsearchActive()) {
                     if (!is_file(PMF_CONTENT_DIR . '\core\config\elasticsearch.php')) {
@@ -72,6 +76,7 @@ class Upgrade extends Setup
                         return false;
                     }
                 }
+
                 return true;
             } else {
                 return false;
@@ -84,10 +89,9 @@ class Upgrade extends Setup
     /**
      * Method to download a phpMyFAQ package, returns false if it doesn't work
      *
-     * @todo handle possible proxy servers
-     *
      * @param string $version
      * @return string|bool
+     * @todo handle possible proxy servers
      */
     public function downloadPackage(string $version): string|bool
     {
@@ -115,23 +119,25 @@ class Upgrade extends Setup
             ServerExceptionInterface $e
         ) {
             $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
+
             return false;
         }
     }
 
     /**
      * Method to verify the downloaded phpMyFAQ package
-     * @var string $path    | Path to zip file
-     * @var string $version | Version to verify
+     *
      * @return bool
-     * @throws Exception|TransportExceptionInterface|ClientExceptionInterface|RedirectExceptionInterface|ServerExceptionInterface|JsonException
+     * @throws TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|JsonException
+     * @var string $path | Path to zip file
+     * @var string $version | Version to verify
      */
     public function verifyPackage(string $path, string $version): bool
     {
         $client = HttpClient::create();
         $response = $client->request(
             'GET',
-            DOWNLOAD_URL_PRODUCTION . 'info/' . $version
+            self::DOWNLOAD_URL_PRODUCTION . 'info/' . $version
         );
 
         try {
@@ -142,39 +148,45 @@ class Upgrade extends Setup
                 return false;
             }
         } catch (
-                TransportExceptionInterface |
-                ClientExceptionInterface |
-                RedirectionExceptionInterface |
-                ServerExceptionInterface $e
+            TransportExceptionInterface |
+            ClientExceptionInterface |
+            RedirectionExceptionInterface |
+            ServerExceptionInterface $e
         ) {
             $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
+
             return false;
         }
     }
 
     /**
      * Method to unpack the downloaded phpMyFAQ package
-     * @var string $path Path of the package
+     *
      * @return bool
+     * @var string $path Path of the package
      */
     public function unpackPackage(string $path): bool
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         if (!$zip->open($path)) {
             $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
+
             return false;
         } else {
             if (!$zip->extractTo(PMF_CONTENT_DIR . '/upgrades/')) {
                 $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
+
                 return false;
             }
             $zip->close();
+
             return true;
         }
     }
 
     /**
      * Method to create a temporary backup of the current files
+     *
      * @return void
      */
     public function createTemporaryBackup()
@@ -183,6 +195,7 @@ class Upgrade extends Setup
 
     /**
      * Method to restore from the temporary backup
+     *
      * @return void
      */
     public function restoreTemporaryBackup()
@@ -191,6 +204,7 @@ class Upgrade extends Setup
 
     /**
      * Method to install the package
+     *
      * @return void
      */
     public function installPackage()
