@@ -51,7 +51,7 @@ class Mysqli extends SearchDatabase
     public function search(string $searchTerm)
     {
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
-            parent::search($searchTerm);
+            return parent::search($searchTerm);
         } else {
             $relevance = $this->config->get('search.enableRelevance');
             $columns = $this->getResultColumns();
