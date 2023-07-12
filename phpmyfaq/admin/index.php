@@ -19,11 +19,11 @@
  * @since     2002-09-16
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;

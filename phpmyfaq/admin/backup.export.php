@@ -15,13 +15,12 @@
  * @since     2009-08-18
  */
 
-use phpMyFAQ\Backup;
+use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;

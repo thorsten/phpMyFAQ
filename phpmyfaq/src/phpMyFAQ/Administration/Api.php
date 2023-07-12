@@ -15,10 +15,13 @@
  * @since     2018-03-27
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
 use Exception;
 use JsonException;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Core;
+use phpMyFAQ\System;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;

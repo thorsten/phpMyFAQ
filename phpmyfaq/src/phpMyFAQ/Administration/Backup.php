@@ -15,8 +15,10 @@
  * @since     2022-10-08
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use SodiumException;
 

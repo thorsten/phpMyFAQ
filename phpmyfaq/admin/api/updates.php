@@ -16,19 +16,20 @@
  * @since     2023-07-02
  */
 
-use phpMyFAQ\Filter;
-use phpMyFAQ\Api;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    http_response_code(400);
-    exit();
-}
+require '../../src/Bootstrap.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 //
 // Create Request & Response
@@ -36,58 +37,45 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $response = new JsonResponse();
 $request = Request::createFromGlobals();
 
-$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage('en') // currently hardcoded
+        ->setMultiByteLanguage();
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
+}
 
-/*
- * API
- * Retrieve Available Updates
- *  - GET /updates: Returns a list of available updates.
- *  - GET /updates/{version}: Retrieves information about a specific update.
- *
- * Apply Updates
- *  - POST /updates/{version}/apply: Applies a specific update identified by its ID.
- *
- * Progress
- *  - GET /updates/{version}/progress: Retrieves information about the progress of the update
- */
+$routes = new RouteCollection();
 
-switch ($ajaxAction) {
+require '../../src/routes.php';
 
-    case 'check-updates':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
+$context = new RequestContext();
+$context->fromRequest($request);
+$matcher = new UrlMatcher($routes, $context);
 
-        try {
-            $api = new Api($faqConfig);
-            $versions = $api->getVersions();
-            $response->setStatusCode(Response::HTTP_OK);
-            if (version_compare($versions['installed'], $versions['current'], '<')) {
-                $response->setData(['version' => $versions['current'], 'message' => Translation::get('currentVersion') . $versions['current']]);
-            } else {
-                $response->setData(['version' => 'current', 'message' => Translation::get('versionIsUpToDate')]);
-            }
-        } catch (Exception | TransportExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $e->getMessage()]);
-        }
+$requestUri = $request->getPathInfo();
 
-        $response->send();
-        break;
-    // GET /updates: Returns a list of available updates.
-    default:
-        $client = HttpClient::create();
-        try {
-            $versions = $client->request(
-                'GET',
-                'https://api.phpmyfaq.de/versions'
-            );
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent($versions->getContent());
-            $response->send();
-        } catch (TransportExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData($e->getMessage());
-            $response->send();
-        }
-        break;
+$generator = new UrlGenerator($routes, $context);
+
+$parameters = $matcher->match($requestUri);
+
+try {
+    $parameters = $matcher->match($requestUri);
+    list($controllerClass, $controllerMethod) = explode('::', $parameters['_class_and_method']);
+
+    $action = new $controllerClass($faqConfig);
+    $action->$controllerMethod(['request' => $request, 'generator' => $generator, 'parameters' => $parameters]);
+} catch (ResourceNotFoundException $e) {
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
+    $response->setData($e->getMessage());
+    $response->send();
+} catch (Exception $e) {
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->setData($e->getMessage());
+    $response->send();
 }

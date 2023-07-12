@@ -38,7 +38,7 @@ RewriteEngine On
 RewriteBase /
 
 # Error pages
-ErrorDocument 404 /index.php?action=404
+#ErrorDocument 404 /index.php?action=404
 
 # show all categories
 RewriteCond %{REQUEST_URI}          /show-categories\.html$ [NC]
@@ -131,6 +131,10 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?ac
 # PMF tags page
 # * http://[...]/tags/<ID>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
+
+# Administration API
+RewriteRule admin/api/updates                      admin/api/updates.php
+RewriteRule admin/api/update-check                 admin/api/updates.php
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>

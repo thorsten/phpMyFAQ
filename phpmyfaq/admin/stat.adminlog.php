@@ -15,10 +15,10 @@
  * @since     2003-02-23
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;

@@ -15,7 +15,7 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Backup;
+use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;

@@ -11,6 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed Apache mod_rewrite to mandatory requirement (Thorsten)
 - (WIP) added Twig as new template engine (Thorsten)
 - (WIP) added experimental online update feature (Jan Harms, Thorsten)
+- added Symfony Routing (Thorsten)
 - (planned) added support for PHP 8.3 (Thorsten)
 
 ### phpMyFAQ v3.2.0 - 2023-07-

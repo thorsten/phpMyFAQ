@@ -803,7 +803,7 @@ $template->merge('mainPageContent', 'index');
 //
 // Check for 404 HTTP status code
 //
-if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND || $action === '404') {
+if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404') {
     $template = new Template(
         [
             'index' => '404.html',

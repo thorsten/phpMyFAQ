@@ -17,6 +17,7 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
@@ -29,7 +30,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Services\Twitter;

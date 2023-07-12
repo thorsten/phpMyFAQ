@@ -39,6 +39,7 @@
     "symfony/http-client": "^6.2",
     "symfony/http-foundation": "^6.2",
     "symfony/mailer": "^6.2",
+    "symfony/routing": "^6.3",
     "tecnickcom/tcpdf": "~6.0",
     "twig/twig": "^3.6"
   },
