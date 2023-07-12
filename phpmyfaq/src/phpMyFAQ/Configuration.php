@@ -317,6 +317,11 @@ class Configuration
         return (bool) $this->get('ldap.ldapSupport');
     }
 
+    public function isElasticsearchActive(): bool 
+    {
+        return (bool) $this->get('search.enableElasticsearch');
+    }
+
     public function isSignInWithMicrosoftActive(): bool
     {
         return $this->get('security.enableSignInWithMicrosoft');
