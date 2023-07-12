@@ -317,7 +317,7 @@ class Configuration
         return (bool) $this->get('ldap.ldapSupport');
     }
 
-    public function isElasticsearchActive(): bool 
+    public function isElasticsearchActive(): bool
     {
         return (bool) $this->get('search.enableElasticsearch');
     }
