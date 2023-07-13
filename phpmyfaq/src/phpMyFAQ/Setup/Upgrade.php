@@ -16,7 +16,6 @@
 
 namespace phpMyFAQ\Setup;
 
-use JsonException;
 use Monolog\Level;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Setup;
@@ -26,7 +25,8 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use ZipArchive;
+use PhpZip\ZipFile;
+use PhpZip\Exception\ZipException;
 
 class Upgrade extends Setup
 {
@@ -129,8 +129,8 @@ class Upgrade extends Setup
      *
      * @return bool
      * @throws TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|JsonException
-     * @var string $path | Path to zip file
-     * @var string $version | Version to verify
+     * @param string $path | Path to zip file
+     * @param string $version | Version to verify
      */
     public function verifyPackage(string $path, string $version): bool
     {
@@ -163,7 +163,7 @@ class Upgrade extends Setup
      * Method to unpack the downloaded phpMyFAQ package
      *
      * @return bool
-     * @var string $path Path of the package
+     * @param string $path Path of the package
      */
     public function unpackPackage(string $path): bool
     {
@@ -187,10 +187,43 @@ class Upgrade extends Setup
     /**
      * Method to create a temporary backup of the current files
      *
-     * @return void
+     * @param string $backupName | Name of the created backup
+     * @return bool
+     * @throws ZipException
      */
-    public function createTemporaryBackup()
+    public function createTemporaryBackup(string $backupName): bool
     {
+        try {
+            $zip = new ZipFile();
+            if (!is_file(PMF_CONTENT_DIR . '/upgrades/' . $backupName)) {
+                $zip->addDirRecursive(PMF_ROOT_DIR);
+                $zip->saveAsFile(PMF_CONTENT_DIR . '/upgrades/' . $backupName);
+                $zip->close();
+                return true;
+            } else {
+                return false;
+            }
+        } catch (ZipException $e) {
+            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
+
+            return false;
+        }
+    }
+
+     /**
+     * Method to delete the temporary created backup.
+     *
+     * @param string $backupName | Name of the created backup
+     * @return bool
+     */
+    public function deleteTemporaryBackup(string $backupName): bool
+    {
+        if(is_file(PMF_CONTENT_DIR . '/upgrades/' . $backupName)) {
+            return unlink(PMF_CONTENT_DIR . '/upgrades/' . $backupName);
+        }
+        else {
+            return false;
+        }
     }
 
     /**
