@@ -163,24 +163,25 @@ class Upgrade extends Setup
      * Method to unpack the downloaded phpMyFAQ package
      *
      * @return bool
-     * @param string $path Path of the package
+     * @param string $path | Path of the package
+     * @throws ZipException
      */
     public function unpackPackage(string $path): bool
     {
-        $zip = new ZipArchive();
-        if (!$zip->open($path)) {
-            $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
+        $zip = new ZipFile();
+        try {
+            if (!is_file($path)) {
+                return false;
+            } else {
+                $zip->openFile($path);
+                $zip->extractTo(PMF_CONTENT_DIR . '/upgrades/');
+                $zip->close();
+                return true;
+            }
+        } catch (ZipException $e) {
+            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
 
             return false;
-        } else {
-            if (!$zip->extractTo(PMF_CONTENT_DIR . '/upgrades/')) {
-                $this->configuration->getLogger()->log(Level::Error, $zip->getStatusString());
-
-                return false;
-            }
-            $zip->close();
-
-            return true;
         }
     }
 
