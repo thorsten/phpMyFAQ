@@ -219,10 +219,9 @@ class Upgrade extends Setup
      */
     public function deleteTemporaryBackup(string $backupName): bool
     {
-        if(is_file(PMF_CONTENT_DIR . '/upgrades/' . $backupName)) {
+        if (is_file(PMF_CONTENT_DIR . '/upgrades/' . $backupName)) {
             return unlink(PMF_CONTENT_DIR . '/upgrades/' . $backupName);
-        }
-        else {
+        } else {
             return false;
         }
     }
