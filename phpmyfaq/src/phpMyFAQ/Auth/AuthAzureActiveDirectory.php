@@ -24,6 +24,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class AuthAzureActiveDirectory
@@ -135,7 +136,8 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             self::AAD_CHALLENGE_METHOD
         );
 
-        header('Location: ' . $oAuthURL);
+        $response = new RedirectResponse($oAuthURL);
+        $response->send();
     }
 
     /**
