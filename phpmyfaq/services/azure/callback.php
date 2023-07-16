@@ -17,11 +17,15 @@
 
 use GuzzleHttp\Exception\GuzzleException;
 use phpMyFAQ\Auth\AuthAzureActiveDirectory;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
+session_start();
+session_regenerate_id(true);
 
 //
 // Prepend and start the PHP session
@@ -36,12 +40,16 @@ const IS_VALID_PHPMYFAQ = null;
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 require PMF_CONFIG_DIR . '/azure.php';
 
+$faqConfig = Configuration::getConfigurationInstance();
+
 $code = Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_SPECIAL_CHARS);
 $error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
 $auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
+
+$redirect = new RedirectResponse($faqConfig->getDefaultUrl());
 
 if ($session->getCurrentSessionKey()) {
     try {
@@ -76,14 +84,14 @@ if ($session->getCurrentSessionKey()) {
         $user->setSuccess(true);
 
         // @todo -> redirect to where the user came from
-        $response = new RedirectResponse($faqConfig->getDefaultUrl());
-        $response->send();
+        $redirect->send();
     } catch (GuzzleException $e) {
         echo $e->getMessage();
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 } else {
-    $response = new RedirectResponse($faqConfig->getDefaultUrl());
-    $response->send();
+    $redirect->send();
 }
+
+

@@ -17,6 +17,7 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
@@ -29,6 +30,8 @@ const IS_VALID_PHPMYFAQ = null;
 // Bootstrapping
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerKey'),

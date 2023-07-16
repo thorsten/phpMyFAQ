@@ -19,6 +19,8 @@
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Abraham\TwitterOAuth\TwitterOAuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use phpMyFAQ\Configuration;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -30,6 +32,8 @@ const IS_VALID_PHPMYFAQ = null;
 // Bootstrapping
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 if (
     empty($_SESSION['access_token']) ||

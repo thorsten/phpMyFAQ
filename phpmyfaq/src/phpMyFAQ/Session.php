@@ -404,7 +404,7 @@ class Session
 
         return setcookie(
             $name,
-            $sessionId,
+            $sessionId ?? '',
             [
                 'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
                 'path' => dirname((string) $_SERVER['SCRIPT_NAME']),

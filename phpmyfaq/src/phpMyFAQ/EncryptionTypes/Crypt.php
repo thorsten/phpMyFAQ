@@ -23,6 +23,7 @@ use phpMyFAQ\Encryption;
  * Class Crypt
  *
  * @package phpMyFAQ\EncryptionTypes
+ * @deprecated will be removed with v3.3
  */
 class Crypt extends Encryption
 {

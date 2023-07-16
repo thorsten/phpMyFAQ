@@ -262,11 +262,11 @@ class Link
         }
 
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= sprintf(' title="%s"', addslashes($this->tooltip));
+            $htmlAnchor .= sprintf(' title="%s"', Strings::htmlentities($this->tooltip));
         }
 
         if (!empty($this->name)) {
-            $htmlAnchor .= sprintf(' name="%s"', $this->name);
+            $htmlAnchor .= sprintf(' name="%s"', Strings::htmlentities($this->name));
         } else {
             if (!empty($this->url)) {
                 $htmlAnchor .= sprintf(' href="%s"', $url);
@@ -280,10 +280,10 @@ class Link
         }
         $htmlAnchor .= '>';
         if (('0' == $this->text) || (!empty($this->text))) {
-            $htmlAnchor .= $this->text;
+            $htmlAnchor .= Strings::htmlentities($this->text);
         } else {
             if (!empty($this->name)) {
-                $htmlAnchor .= $this->name;
+                $htmlAnchor .= Strings::htmlentities($this->name);
             } else {
                 $htmlAnchor .= $url;
             }

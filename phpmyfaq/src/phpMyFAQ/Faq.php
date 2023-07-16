@@ -909,7 +909,10 @@ class Faq
         }
 
         $query = sprintf(
-            "INSERT INTO %sfaqdata VALUES
+            "INSERT INTO %sfaqdata 
+            (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, 
+            updated, date_start, date_end, created, notes)
+            VALUES
             (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $faq->getId(),
