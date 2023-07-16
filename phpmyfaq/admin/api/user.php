@@ -22,6 +22,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Report;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -94,8 +95,8 @@ if (
                 $userObject->status = $user->getStatus();
                 $userObject->isSuperAdmin = $user->isSuperAdmin();
                 $userObject->isVisible = $user->getUserData('is_visible');
-                $userObject->displayName = $user->getUserData('display_name');
-                $userObject->userName = $user->getLogin();
+                $userObject->displayName = Report::sanitize($user->getUserData('display_name'));
+                $userObject->userName = Report::sanitize($user->getLogin());
                 $userObject->email = $user->getUserData('email');
                 $userObject->authSource = $user->getUserAuthSource();
                 $userData[] = $userObject;

@@ -119,7 +119,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
 
     $content = '';
     foreach ($text as $row) {
-        $content .= implode(';', $row);
+        $csvRow = array_map(['phpMyFAQ\Report', 'sanitize'], $row);
+        $content .= implode(';', $csvRow);
         $content .= "\r\n";
     }
 
