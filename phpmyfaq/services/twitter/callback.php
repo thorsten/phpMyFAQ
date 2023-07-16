@@ -18,6 +18,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Filter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -42,8 +43,8 @@ if (isset($_REQUEST['denied'])) {
 
 if (isset($oAuthToken) && $requestToken['oauth_token'] !== $oAuthToken) {
     $_SESSION['oauth_status'] = 'oldtoken';
-    header('Location: ./clearsessions.php');
-    exit;
+    $redirect = new RedirectResponse('./clearsessions.php');
+    $redirect->send();
 }
 
 $connection = new TwitterOAuth(
@@ -61,7 +62,9 @@ if (200 === $connection->getLastHttpCode()) {
     $_SESSION['access_token'] = $accessToken;
     $_SESSION['status'] = 'verified';
 
-    header('Location: ./index.php');
+    $redirect = new RedirectResponse('./index.php');
+    $redirect->send();
 } else {
-    header('Location: ./clearsessions.php');
+    $redirect = new RedirectResponse('./clearsessions.php');
+    $redirect->send();
 }

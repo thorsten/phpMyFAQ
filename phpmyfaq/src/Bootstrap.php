@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Init;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 //
@@ -92,8 +93,8 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
-    header('Location: ./setup/index.php');
-    exit();
+    $redirect = new RedirectResponse('./setup/index.php');
+    $redirect->send();
 }
 
 //

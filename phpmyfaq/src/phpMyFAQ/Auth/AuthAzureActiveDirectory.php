@@ -118,6 +118,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     /**
      * Method to authorize against Azure AD
      *
+     * @throws \Exception
      */
     public function authorize(): void
     {
@@ -156,12 +157,16 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
 
         $user->getUserByLogin($user->getLogin());
         $user->deleteFromSession(true);
-        header('Location: ' . self::AAD_LOGOUT_URL);
+
+        $redirect = new RedirectResponse(self::AAD_LOGOUT_URL);
+        $redirect->send();
     }
 
     /**
      * Method to generate code verifier and code challenge for oAuth login.
      * See RFC7636 for details.
+     *
+     * @throws \Exception
      */
     private function createOAuthChallenge(): void
     {

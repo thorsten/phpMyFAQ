@@ -15,6 +15,7 @@
  * @since     2012-01-12
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -22,11 +23,14 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 if ($user->isLoggedIn()) {
     try {
@@ -97,7 +101,7 @@ if ($user->isLoggedIn()) {
         ]
     );
 } else {
-    // Redirect to login
-    header('Location: ' . $faqConfig->getDefaultUrl());
-    exit();
+    // Redirect to login page
+    $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+    $redirect->send();
 }

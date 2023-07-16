@@ -7,13 +7,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2023 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-09-18
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-09-18
  */
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -27,5 +29,7 @@ const IS_VALID_PHPMYFAQ = null;
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 session_destroy();
+session_start();
 
-header('Location: ./connect.php');
+$redirect = new RedirectResponse('./connect.php');
+$redirect->send();

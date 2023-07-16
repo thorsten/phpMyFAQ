@@ -18,6 +18,8 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Abraham\TwitterOAuth\TwitterOAuthException;
+use phpMyFAQ\Configuration;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -30,12 +32,15 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
+$faqConfig = Configuration::getConfigurationInstance();
+
 if (
     empty($_SESSION['access_token']) ||
     empty($_SESSION['access_token']['oauth_token']) ||
     empty($_SESSION['access_token']['oauth_token_secret'])
 ) {
-    header('Location: ./clearsessions.php');
+    $redirect = new RedirectResponse('./clearsessions.php');
+    $redirect->send();
 }
 
 $accessToken = $_SESSION['access_token'];
@@ -55,5 +60,6 @@ try {
 $content = $connection->get('account/verify_credentials');
 
 if (isset($content->screen_name)) {
-    header('Location: ../../admin/index.php');
+    $redirect = new RedirectResponse('../../admin/index.php');
+    $redirect->send();
 }

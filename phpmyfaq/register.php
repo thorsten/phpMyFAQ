@@ -19,6 +19,7 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -29,8 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $request = Request::createFromGlobals();
 
 if (!$faqConfig->get('security.enableRegistration')) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig));
-    exit();
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
+    $redirect->send();
 }
 
 try {

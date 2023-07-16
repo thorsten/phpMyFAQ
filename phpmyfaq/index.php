@@ -201,10 +201,11 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
-        header('Location: ' . $ssoLogout);
+        $redirect = new RedirectResponse($ssoLogout);
     } else {
-        header('Location: ' . $faqConfig->getDefaultUrl());
+        $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
     }
+    $redirect->send();
 }
 
 //

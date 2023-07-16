@@ -17,6 +17,8 @@
  */
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use phpMyFAQ\Configuration;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //
 // Prepend and start the PHP session
@@ -28,6 +30,8 @@ const IS_VALID_PHPMYFAQ = null;
 // Bootstrapping
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerKey'),
@@ -45,7 +49,8 @@ $_SESSION['oauth_token_secret'] = $requestToken['oauth_token_secret'];
 switch ($connection->getLastHttpCode()) {
     case 200:
         $url = $connection->url('oauth/authorize', ['oauth_token' => $requestToken['oauth_token']]);
-        header('Location: ' . $url);
+        $redirect = new RedirectResponse($url);
+        $redirect->send();
         break;
     default:
         echo 'Could not connect to Twitter. Refresh the page or try again later.';

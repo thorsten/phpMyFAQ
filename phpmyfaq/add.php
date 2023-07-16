@@ -22,6 +22,7 @@ use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,14 +34,14 @@ $request = Request::createFromGlobals();
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
-    exit;
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $redirect->send();
 }
 
 // Check permission to add new faqs
 if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), 'addfaq')) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig));
-    exit;
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
+    $redirect->send();
 }
 
 $captcha = Captcha::getInstance($faqConfig);

@@ -27,6 +27,7 @@ use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
 const IS_VALID_PHPMYFAQ = null;
@@ -48,8 +49,8 @@ $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_SPECIAL_CH
 $query = [];
 
 if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-    header('Location: index.php');
-    exit();
+    $redirect = new RedirectResponse('./index.php');
+    $redirect->send();
 }
 
 $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/config/database.php');
