@@ -33,7 +33,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - migrated codebase to use PHP 8.1 language features (Thorsten)
 - updated to Bootstrap v5.3 (Thorsten)
-- updated to TinyMCE v6.4 (Thorsten)
+- updated to TinyMCE v6.6 (Thorsten)
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
