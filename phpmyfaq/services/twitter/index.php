@@ -18,7 +18,6 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Abraham\TwitterOAuth\TwitterOAuthException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
