@@ -66,7 +66,7 @@ class Mysqli extends Database implements Driver
         'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
             userid INT(11) DEFAULT NULL,
             faqid INT(11) DEFAULT NULL',
- 
+
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
             useragent VARCHAR(255) NOT NULL,
