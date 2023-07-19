@@ -352,7 +352,7 @@ $template->parse(
             $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $user->isLoggedIn()),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
-        'bookmarkIcon' => ($bookmark->isFaqBookmark($faqId)===true) ? 'fa fa-book' : 'fa fa-bookmark-o',
+        'bookmarkIcon' => ($bookmark->isFaqBookmark($faqId)===true) ? 'fa fa-bookmark' : 'fa fa-bookmark-o',
         'bookmarkLink' => ($bookmark->isFaqBookmark($faqId)===true) ? sprintf('index.php?action=faq&bookmark_action=remove&id=%s', $faqId) : sprintf('index.php?action=faq&bookmark_action=add&id=%s', $faqId),
         'msgAddBookmark' => ($bookmark->isFaqBookmark($faqId)===true) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
         'alert' => (isset($alertMessage)) ? $alertMessage : '',
