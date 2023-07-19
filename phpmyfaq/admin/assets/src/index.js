@@ -21,6 +21,7 @@ import {
   handleStopWords,
   handleTemplateMetaData,
   handleElasticsearch,
+  handleCheckForUpdates,
 } from './configuration';
 import { handleStatistics } from './statistics';
 import {
@@ -95,6 +96,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Configuration -> Template Meta data
   handleTemplateMetaData();
+
+  // Configuration -> Online Update
+  handleCheckForUpdates();
 
   // Configuration -> Elasticsearch configuration
   handleElasticsearch();

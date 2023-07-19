@@ -15,8 +15,11 @@
  * @since     2006-08-15
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
+use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

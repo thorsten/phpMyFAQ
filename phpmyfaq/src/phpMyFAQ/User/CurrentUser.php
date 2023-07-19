@@ -443,6 +443,7 @@ class CurrentUser extends User
         }
 
         session_destroy();
+        session_start();
 
         return true;
     }

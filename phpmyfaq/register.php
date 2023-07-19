@@ -30,8 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $request = Request::createFromGlobals();
 
 if (!$faqConfig->get('security.enableRegistration')) {
-    $response = new RedirectResponse('$faqSystem->getSystemUri($faqConfig)');
-    $response->send();
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
+    $redirect->send();
 }
 
 try {

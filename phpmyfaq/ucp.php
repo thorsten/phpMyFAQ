@@ -15,6 +15,7 @@
  * @since     2012-01-12
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -28,6 +29,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 if ($user->isLoggedIn()) {
     try {

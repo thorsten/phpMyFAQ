@@ -8,7 +8,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v3.3.0-dev - 2023-
 
-- added Twig as new template engine (Thorsten)
+- changed Apache mod_rewrite to mandatory requirement (Thorsten)
+- (WIP) added Twig as new template engine (Thorsten)
+- (WIP) added experimental online update feature (Jan Harms, Thorsten)
+- added Symfony Routing (Thorsten)
+- (planned) added support for PHP 8.3 (Thorsten)
 
 ### phpMyFAQ v3.2.0 - 2023-07-
 
@@ -37,10 +41,15 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - migrated codebase to use PHP 8.1 language features (Thorsten)
 - updated to Bootstrap v5.3 (Thorsten)
-- updated to TinyMCE v6.4 (Thorsten)
+- updated to TinyMCE v6.6 (Thorsten)
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
+
+### phpMyFAQ v3.1.16 - 2023-07-16
+
+- fixed multiple security vulnerabilities (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.15 - 2023-06-17
 

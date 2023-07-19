@@ -1,10 +1,12 @@
 <?php
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\BackupType;
+use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 use SodiumException;
 

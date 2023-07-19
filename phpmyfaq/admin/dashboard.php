@@ -16,7 +16,7 @@
  * @since     2013-02-05
  */
 
-use phpMyFAQ\Api;
+use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

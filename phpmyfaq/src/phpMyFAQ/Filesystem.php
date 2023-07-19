@@ -110,8 +110,6 @@ class Filesystem
 
     /**
      * Moves given directory.
-     *
-     *
      */
     public function moveDirectory(string $sourcePath, string $destinationPath): bool
     {
@@ -148,21 +146,21 @@ class Filesystem
     }
 
     /**
-     * Copies the source file to the destination.
+     * Copies the source file to the destination file.
      *
      * @throws Exception
      */
-    public function copy(string $source, string $dest): bool
+    public function copy(string $sourceFileName, string $destinationFileName): bool
     {
-        if (!is_readable($source)) {
-            throw new Exception($source . ' is not readable.');
+        if (!is_readable($sourceFileName)) {
+            throw new Exception($sourceFileName . ' is not readable.');
         }
 
-        if (!is_writable(dirname($dest))) {
-            throw new Exception($dest . ' is not writeable.');
+        if (!is_writable(dirname($destinationFileName))) {
+            throw new Exception($destinationFileName . ' is not writeable.');
         }
 
-        if (!copy($source, $dest)) {
+        if (copy($sourceFileName, $destinationFileName) === false) {
             $error = error_get_last();
             throw new Exception($error['message']);
         }
