@@ -25,8 +25,8 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ
  */
-class Bookmark {
-
+class Bookmark
+{
     /**
      * CurrenUser object
      *
@@ -39,7 +39,8 @@ class Bookmark {
      *
      * @param Configuration $config Configuration object
      */
-    public function __construct(private Configuration $config) {
+    public function __construct(private Configuration $config)
+    {
         $this->user = CurrentUser::getFromSession($this->config);
     }
 
@@ -50,7 +51,8 @@ class Bookmark {
      * @param int $faqId Id of the Faq
      * @return bool
      */
-    public function isFaqBookmark(int $faqId): bool {
+    public function isFaqBookmark(int $faqId): bool
+    {
         $bookmarks = $this->getAllBookmarks();
         $success = false;
         foreach ($bookmarks as $object => $key) {
@@ -70,12 +72,13 @@ class Bookmark {
      *
      * @param int $faqId Id of the Faq
      */
-    public function saveFaqAsBookmarkById(int $faqId) {
+    public function saveFaqAsBookmarkById(int $faqId)
+    {
         $query = sprintf(
-                "INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%s, %s)",
-                Database::getTablePrefix(),
-                (string) $this->user->getUserId(),
-                (string) $faqId
+            "INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%s, %s)",
+            Database::getTablePrefix(),
+            (string) $this->user->getUserId(),
+            (string) $faqId
         );
         return $this->config->getDb()->query($query);
     }
@@ -83,11 +86,12 @@ class Bookmark {
     /**
      * Gets all bookmarks from the current user.
      */
-    public function getAllBookmarks() {
+    public function getAllBookmarks()
+    {
         $query = sprintf(
-                'SELECT faqid FROM %sfaqbookmarks WHERE userid=%s',
-                Database::getTablePrefix(),
-                (string) $this->user->getUserId()
+            'SELECT faqid FROM %sfaqbookmarks WHERE userid=%s',
+            Database::getTablePrefix(),
+            (string) $this->user->getUserId()
         );
         $result = $this->config->getDb()->query($query);
         return $this->config->getDb()->fetchAll($result);
@@ -98,12 +102,13 @@ class Bookmark {
      *
      * @param int $faqId Id of the Faq
      */
-    public function removeBookmark(int $faqId) {
+    public function removeBookmark(int $faqId)
+    {
         $query = sprintf(
-                'DELETE FROM %sfaqbookmarks WHERE userid=%s AND faqid=%s',
-                Database::getTablePrefix(),
-                (string) $this->user->getUserId(),
-                (string) $faqId
+            'DELETE FROM %sfaqbookmarks WHERE userid=%s AND faqid=%s',
+            Database::getTablePrefix(),
+            (string) $this->user->getUserId(),
+            (string) $faqId
         );
         return $this->config->getDb()->query($query);
     }
