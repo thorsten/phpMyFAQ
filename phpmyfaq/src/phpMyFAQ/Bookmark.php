@@ -112,5 +112,4 @@ class Bookmark
         );
         return $this->config->getDb()->query($query);
     }
-
 }
