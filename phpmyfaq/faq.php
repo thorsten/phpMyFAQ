@@ -83,7 +83,7 @@ $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZ
 $bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Handle bookmarks
-$bookmark = new Bookmark($faqConfig);
+$bookmark = new Bookmark($faqConfig, $user);
 if ($bookmarkAction === 'add' && isset($faqId)) {
     $bookmark->saveFaqAsBookmarkById($faqId);
     $alert = new Alert();
