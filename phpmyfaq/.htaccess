@@ -91,6 +91,10 @@ RewriteRule ^index.html$            index.php [PT]
 RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
 RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
 
+# the bookmarks page
+RewriteCond %{REQUEST_URI}          /bookmarks\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=bookmarks [L,QSA]
+
 # PMF faq record page
 # * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
 # * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.html

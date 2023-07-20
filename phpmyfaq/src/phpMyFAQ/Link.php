@@ -67,6 +67,7 @@ class Link
     private const LINK_GET_ACTION_SEARCH = 'search';
     private const LINK_GET_ACTION_SITEMAP = 'sitemap';
     private const LINK_GET_ACTION_SHOW = 'show';
+    private const LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
     private const LINK_HTML_EXTENSION = '.html';
 
     private const LINK_HTML_ADDCONTENT = 'addcontent.html';
@@ -78,6 +79,7 @@ class Link
     private const LINK_HTML_OPEN = 'open-questions.html';
     private const LINK_HTML_SEARCH = 'search.html';
     private const LINK_HTML_SHOWCAT = 'show-categories.html';
+    private const LINK_HTML_BOOKMARKS = 'bookmarks.html';
 
     /**
      * @var int[] List of allowed action parameters
@@ -361,6 +363,10 @@ class Link
 
                         case self::LINK_GET_ACTION_LOGIN:
                             $url .= self::LINK_HTML_LOGIN;
+                            break;
+
+                        case self::LINK_GET_ACTION_BOOKMARKS:
+                            $url .= self::LINK_HTML_BOOKMARKS;
                             break;
 
                         case self::LINK_GET_ACTION_SEARCH:

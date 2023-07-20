@@ -90,7 +90,7 @@ if ($bookmarkAction === 'add' && isset($faqId)) {
     $bookmarkAlert = $alert->success('msgBookmarkAdded');
 }
 if ($bookmarkAction === 'remove' && isset($faqId)) {
-    $bookmark->removeBookmark($faqId);
+    $bookmark->remove($faqId);
     $alert = new Alert();
     $bookmarkAlert = $alert->success('msgBookmarkRemoved');
 }
@@ -303,7 +303,7 @@ if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 
-// Check if author name should be visible according to GDPR option
+// Check if the author name should be visible, according to the GDPR option
 if ($user->getUserVisibilityByEmail($faq->faqRecord['email'])) {
     $author = $faq->faqRecord['author'];
 } else {
@@ -349,12 +349,23 @@ $template->parse(
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
         'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
         'captchaFieldset' =>
-            $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+            $captchaHelper->renderCaptcha(
+                $captcha,
+                'writecomment',
+                Translation::get('msgCaptcha'),
+                $user->isLoggedIn()
+            ),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
-        'bookmarkIcon' => ($bookmark->isFaqBookmark($faqId)===true) ? 'fa fa-bookmark' : 'fa fa-bookmark-o',
-        'bookmarkLink' => ($bookmark->isFaqBookmark($faqId)===true) ? sprintf('index.php?action=faq&bookmark_action=remove&id=%s', $faqId) : sprintf('index.php?action=faq&bookmark_action=add&id=%s', $faqId),
-        'msgAddBookmark' => ($bookmark->isFaqBookmark($faqId)===true) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
+        'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'fa fa-bookmark' : 'fa fa-bookmark-o',
+        'bookmarkLink' =>
+            $bookmark->isFaqBookmark($faqId)
+                ?
+                sprintf('index.php?action=faq&bookmark_action=remove&id=%d', $faqId)
+                :
+                sprintf('index.php?action=faq&bookmark_action=add&id=%d', $faqId),
+        'msgAddBookmark' =>
+            $bookmark->isFaqBookmark($faqId) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
         'alert' => (isset($bookmarkAlert)) ? $bookmarkAlert : '',
     ]
 );

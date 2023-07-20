@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2004-2023 phpMyFAQ Team
+ * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-19
@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Configuration;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -33,7 +33,7 @@ class Bookmark
      * @param Configuration $config Configuration object
      * @param CurrentUser   $user   CurrentUser object
      */
-    public function __construct(private Configuration $config, private CurrentUser $user)
+    public function __construct(private readonly Configuration $config, private readonly CurrentUser $user)
     {
     }
 
@@ -59,7 +59,7 @@ class Bookmark
     /**
      * Saves a given Faq to the bookmark collection of the current user.
      *
-     * @param int $faqId Id of the Faq
+     * @param int $faqId ID of the Faq
      */
     public function saveFaqAsBookmarkById(int $faqId)
     {
@@ -78,7 +78,7 @@ class Bookmark
     public function getAll()
     {
         $query = sprintf(
-            'SELECT faqid FROM %sfaqbookmarks WHERE userid=%d',
+            'SELECT faqid FROM %sfaqbookmarks WHERE userid = %d',
             Database::getTablePrefix(),
             $this->user->getUserId()
         );
@@ -89,21 +89,22 @@ class Bookmark
     /**
      * Removes a bookmark from the current user.
      *
-     * @param int $faqId Id of the Faq
+     * @param int $faqId ID of the Faq
      */
-    public function removeBookmark(int $faqId)
+    public function remove(int $faqId): bool
     {
         $query = sprintf(
-            'DELETE FROM %sfaqbookmarks WHERE userid=%d AND faqid=%d',
+            'DELETE FROM %sfaqbookmarks WHERE userid = %d AND faqid = %d',
             Database::getTablePrefix(),
             $this->user->getUserId(),
             $faqId
         );
-        return $this->config->getDb()->query($query);
+
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**
-     * Renders the bookmark tree for the personally bookmark list.
+     * Renders the bookmark tree for the personal bookmark list.
      *
      * @return string
      */
@@ -122,7 +123,8 @@ class Bookmark
      */
     public function buildBookmarkList(): string
     {
-        $bookmarks = $this->getAllBookmarks();
+        $bookmarks = $this->getAll();
+        $plurals = new Plurals();
         $html = '';
         foreach ($bookmarks as $object => $key) {
             $faq = new Faq($this->config);
@@ -139,7 +141,7 @@ class Bookmark
             $link->itemTitle = $faqData['title'];
             $link->tooltip = $faqData['title'];
 
-            $plurals = new Plurals();
+
             $visits = new Visits($this->config);
             foreach ($visits->getAllData() as $item) {
                 if ((string) $key->faqid === $item['id']) {

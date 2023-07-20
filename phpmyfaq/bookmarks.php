@@ -16,16 +16,18 @@
  * @since     2023-07-20
  */
 
-use Symfony\Component\HttpFoundation\Request;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Bookmark;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$request = Request::createFromGlobals();
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $bookmark = new Bookmark($faqConfig, $user);
 
