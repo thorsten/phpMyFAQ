@@ -80,16 +80,16 @@ $request = Request::createFromGlobals();
 $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
-$bookmark_action = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
+$bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Handle bookmarks
 $bookmark = new Bookmark($faqConfig);
-if ($bookmark_action === 'add' && isset($faqId)) {
+if ($bookmarkAction === 'add' && isset($faqId)) {
     $bookmark->saveFaqAsBookmarkById($faqId);
     $alert = new Alert();
     $alertMessage = $alert->success('msgBookmarkAdded');
 }
-if ($bookmark_action === 'remove' && isset($faqId)) {
+if ($bookmarkAction === 'remove' && isset($faqId)) {
     $bookmark->removeBookmark($faqId);
     $alert = new Alert();
     $alertMessage = $alert->success('msgBookmarkRemoved');
