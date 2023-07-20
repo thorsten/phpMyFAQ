@@ -64,7 +64,7 @@ class Sqlite3 extends Database implements Driver
 
         'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
             userid INT(11) DEFAULT NULL,
-            faqid INT(11) DEFAULT NULL',
+            faqid INT(11) DEFAULT NULL)',
 
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
