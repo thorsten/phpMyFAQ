@@ -721,6 +721,8 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
                 '<a class="dropdown-item" href="?action=logout&csrf=%s">%s</a>',
                 Token::getInstance()->getTokenString('logout'),
                 Translation::get('ad_menu_logout'),
+            'msgBookmarks' => sprintf('<a class="dropdown-item" href="?action=bookmarks">%s</a>',
+                Translation::get('msgBookmarks'))
             )
         ]
     );

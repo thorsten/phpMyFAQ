@@ -1353,8 +1353,22 @@ $LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Release Environment'];
 $LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Last check for updates'];
 $PMF_LANG['upgradeControlCenter'] = 'Online Update';
 
+// added v3.3.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Add bookmark';
+$PMF_LANG['removeBookmark'] = 'Remove bookmark';
+$PMF_LANG['msgBookmarkAdded'] = 'Bookmark successfully added!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
+
 // added v3.3.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['versionIsUpToDate'] = '✅ Your installed version is up-to-date!';
 $PMF_LANG['currentVersion'] = 'Current Version: ';
+
+// added v3.3.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Add bookmark';
+$PMF_LANG['removeBookmark'] = 'Remove bookmark';
+$PMF_LANG['msgBookmarkAdded'] = 'Bookmark added successfully!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark removed successfully!';
+$PMF_LANG['msgBookmarks'] = 'Bookmarks';
+$PMF_LANG['msgMyBookmarks'] = 'My Bookmarks';
 
 return $PMF_LANG;
