@@ -22,7 +22,7 @@ export const handleCheckForUpdates = () => {
   if (button) {
     button.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch('/admin/api/update-check', {
+      fetch(window.location.pathname + 'api/update-check', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
