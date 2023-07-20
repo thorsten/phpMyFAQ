@@ -109,9 +109,10 @@ class Bookmark
      */
     public function renderBookmarkTree(): string
     {
-        return sprintf('<ul class="list-group list-group-flush mb-4">%s</ul>',
-                $this->buildBookmarkList()
-                );
+        return sprintf(
+            '<ul class="list-group list-group-flush mb-4">%s</ul>',
+            $this->buildBookmarkList()
+            );
     }
 
     /**
@@ -129,9 +130,9 @@ class Bookmark
             $faqData = $faq->faqRecord;
 
             $url = sprintf(
-                    '%sindex.php?action=faq&amp;id=%d',
-                    $this->config->getDefaultUrl(),
-                    $key->faqid
+                '%sindex.php?action=faq&amp;id=%d',
+                $this->config->getDefaultUrl(),
+                $key->faqid
             );
             $link = new Link($url, $this->config);
             $link->text = $faqData['title'];
@@ -145,16 +146,17 @@ class Bookmark
                     $visitsFaq = $item['visits'];
                 }
             }
-            $html .= sprintf('<li class="list-group-item d-flex justify-content-between align-items-start">'
-                    . '<div class="ms-2 me-auto">'
-                    . '<div class="fw-bold">%s</div>'
-                    . '<div class="small">%s</div>'
-                    . '</div>'
-                    . '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span>'
-                    . '</li>',
-                    $link->toHtmlAnchor(),
-                    strip_tags($faqData['content']),
-                    $plurals->getMsg('plmsgViews', $visitsFaq)
+            $html .= sprintf(
+                '<li class="list-group-item d-flex justify-content-between align-items-start">'
+                . '<div class="ms-2 me-auto">'
+                . '<div class="fw-bold">%s</div>'
+                . '<div class="small">%s</div>'
+                . '</div>'
+                . '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span>'
+                . '</li>',
+                $link->toHtmlAnchor(),
+                strip_tags($faqData['content']),
+                $plurals->getMsg('plmsgViews', $visitsFaq)
             );
         }
         return $html;
