@@ -186,4 +186,14 @@ if (version_compare($version, '3.3.0-alpha', '<')) {
     // Automatic updates
     $faqConfig->add('upgrade.releaseEnvironment', 'development');
     $faqConfig->add('upgrade.dateLastChecked', '');
+
+    // Bookmarks support
+    $query[] = match ($dbConfig->getType()) {
+        'mysqli' => 'CREATE TABLE ' . $prefix . 'faqbookmarks (
+                    userid int(11) DEFAULT NULL,
+                    faqid int(11) DEFAULT NULL',
+        'pgsql', 'sqlite3', 'sqlsrv' => 'CREATE TABLE ' . $prefix . 'faqbookmarks (
+                    userid INTEGER DEFAULT NULL,
+                    faqid INTEGER DEFAULT NULL',
+    };
 }

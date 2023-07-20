@@ -16,8 +16,10 @@
  * @since     2002-08-27
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
@@ -78,6 +80,20 @@ $request = Request::createFromGlobals();
 $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
+$bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+// Handle bookmarks
+$bookmark = new Bookmark($faqConfig, $user);
+if ($bookmarkAction === 'add' && isset($faqId)) {
+    $bookmark->saveFaqAsBookmarkById($faqId);
+    $alert = new Alert();
+    $bookmarkAlert = $alert->success('msgBookmarkAdded');
+}
+if ($bookmarkAction === 'remove' && isset($faqId)) {
+    $bookmark->removeBookmark($faqId);
+    $alert = new Alert();
+    $bookmarkAlert = $alert->success('msgBookmarkRemoved');
+}
 
 // Get all data from the FAQ record
 if (0 === (int)$solutionId) {
@@ -336,6 +352,10 @@ $template->parse(
             $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $user->isLoggedIn()),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
+        'bookmarkIcon' => ($bookmark->isFaqBookmark($faqId)===true) ? 'fa fa-bookmark' : 'fa fa-bookmark-o',
+        'bookmarkLink' => ($bookmark->isFaqBookmark($faqId)===true) ? sprintf('index.php?action=faq&bookmark_action=remove&id=%s', $faqId) : sprintf('index.php?action=faq&bookmark_action=add&id=%s', $faqId),
+        'msgAddBookmark' => ($bookmark->isFaqBookmark($faqId)===true) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
+        'alert' => (isset($bookmarkAlert)) ? $bookmarkAlert : '',
     ]
 );
 
