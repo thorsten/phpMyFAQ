@@ -112,7 +112,7 @@ class Bookmark
         return sprintf(
             '<ul class="list-group list-group-flush mb-4">%s</ul>',
             $this->buildBookmarkList()
-            );
+        );
     }
 
     /**
