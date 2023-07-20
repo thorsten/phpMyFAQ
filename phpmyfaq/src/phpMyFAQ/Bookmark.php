@@ -101,4 +101,62 @@ class Bookmark
         );
         return $this->config->getDb()->query($query);
     }
+
+    /**
+     * Renders the bookmark tree for the personally bookmark list.
+     *
+     * @return string
+     */
+    public function renderBookmarkTree(): string
+    {
+        return sprintf('<ul class="list-group list-group-flush mb-4">%s</ul>',
+                $this->buildBookmarkList()
+                );
+    }
+
+    /**
+     * Builds the list of bookmarks for the bookmark tree.
+     *
+     * @return string
+     */
+    public function buildBookmarkList(): string
+    {
+        $bookmarks = $this->getAllBookmarks();
+        $html = '';
+        foreach ($bookmarks as $object => $key) {
+            $faq = new Faq($this->config);
+            $faq->getRecord((int) $key->faqid);
+            $faqData = $faq->faqRecord;
+
+            $url = sprintf(
+                    '%sindex.php?action=faq&amp;id=%d',
+                    $this->config->getDefaultUrl(),
+                    $key->faqid
+            );
+            $link = new Link($url, $this->config);
+            $link->text = $faqData['title'];
+            $link->itemTitle = $faqData['title'];
+            $link->tooltip = $faqData['title'];
+
+            $plurals = new Plurals();
+            $visits = new Visits($this->config);
+            foreach ($visits->getAllData() as $item) {
+                if ((string) $key->faqid === $item['id']) {
+                    $visitsFaq = $item['visits'];
+                }
+            }
+            $html .= sprintf('<li class="list-group-item d-flex justify-content-between align-items-start">'
+                    . '<div class="ms-2 me-auto">'
+                    . '<div class="fw-bold">%s</div>'
+                    . '<div class="small">%s</div>'
+                    . '</div>'
+                    . '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span>'
+                    . '</li>',
+                    $link->toHtmlAnchor(),
+                    strip_tags($faqData['content']),
+                    $plurals->getMsg('plmsgViews', $visitsFaq)
+            );
+        }
+        return $html;
+    }
 }
