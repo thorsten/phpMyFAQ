@@ -1338,4 +1338,12 @@ $PMF_LANG['upgradeControlCenter'] = 'Online Update';
 $PMF_LANG['versionIsUpToDate'] = '✅ Deine installierte Version ist aktuell.';
 $PMF_LANG['currentVersion'] = 'Aktuelle Version: ';
 
+// added v3.3.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Lesezeichen hinzufügen';
+$PMF_LANG['removeBookmark'] = 'Lesezeichen entfernen';
+$PMF_LANG['msgBookmarkAdded'] = 'Lesezeichen erfolgreich hinzugefügt!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
+$PMF_LANG['msgBookmarks'] = 'Lesezeichen';
+$PMF_LANG['msgMyBookmarks'] = 'Meine Lesezeichen';
+
 return $PMF_LANG;
