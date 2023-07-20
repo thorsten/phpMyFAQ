@@ -33,8 +33,7 @@ class Bookmark
      * @param Configuration $config Configuration object
      * @param CurrentUser   $user   CurrentUser object
      */
-    public function __construct(private Configuration $config, private CurrentUser $user)
-    {}
+    public function __construct(private Configuration $config, private CurrentUser $user){}
 
     /**
      * Returns true if a given Faq-Id is a bookmark of the current User.
