@@ -27,7 +27,7 @@ set the following code in src/Bootstrap.php:
 
 `const DEBUG = true;`
 
-## 6.2 HTML Structure
+## 6.2 Templating
 
 The default layout of phpMyFAQ is saved in the **assets/themes/default/templates/index.html** file. This is a normal
 HTML5 file including some variables in double curly brackets like Twig or Handlebars, serving as placeholders for
@@ -37,7 +37,8 @@ Example:
 
 `<span class="useronline">{{ userOnline }}</span>`
 
-The template engine of the FAQ converts the placeholder _{{ userOnline }}_ to the actual number of visitors online.
+The current template engine of the FAQ converts the placeholder _{{ userOnline }}_ to the actual number of visitors
+online.
 
 You can change the template as you wish, but you may want to keep the original template in case something goes wrong.
 
