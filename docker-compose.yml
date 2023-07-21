@@ -66,9 +66,9 @@ services:
       - yarn
 
   yarn:
-    image: node:20
+    image: node:18
     restart: 'no'
-    command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
+    command: sh -c "npm install node-sass -g --unsafe-perm && corepack enable && corepack prepare yarn@stable --activate && yarn build"
     working_dir: /app
     stdin_open: true
     tty: true

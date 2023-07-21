@@ -71,3 +71,6 @@ tests/fixtures/path-to-delete/foo.bar.baz
 
 # Jest related stuff
 coverage/*
+
+# Yarn related stuff
+.yarn

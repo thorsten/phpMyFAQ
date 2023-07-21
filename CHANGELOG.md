@@ -13,6 +13,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - (WIP) added experimental online update feature (Jan Harms, Thorsten)
 - added Symfony Routing (Thorsten)
 - (planned) added support for PHP 8.3 (Thorsten)
+- updated to Yarn v3 (Thorsten)
 
 ### phpMyFAQ v3.2.0 - 2023-07-
 
