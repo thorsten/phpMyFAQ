@@ -1,4 +1,4 @@
-# phpMyFAQ 3.2.0
+# phpMyFAQ 3.2.0-RC.3
 
 **Codename "Pontus"**
 
@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.0 - 2023-07-
+### phpMyFAQ v3.2.0-RC.3 - 2023-07-21
 
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
