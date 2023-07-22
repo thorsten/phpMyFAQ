@@ -935,9 +935,9 @@ class Category
                     $categoryId[$key]
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->text = sprintf('<span>%s</span>', Strings::htmlentities($category));
+                $oLink->text = Strings::htmlentities($category);
                 $oLink->itemTitle = Strings::htmlentities($category);
-                $oLink->tooltip = Strings::htmlentities($description[$key]);
+                $oLink->tooltip = !is_null($description[$key]) ? Strings::htmlentities($description[$key]) : '';
                 if (0 === $key) {
                     $oLink->setRelation('index');
                 }
