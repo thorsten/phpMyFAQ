@@ -1019,58 +1019,75 @@ class Faq
     {
         $solutionId = $this->getSolutionIdFromId($recordId, $recordLang);
 
-        $queries = [sprintf(
-            "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $recordId,
-            $this->config->getDb()->escape($recordLang)
-        ), sprintf(
-            "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
-            Database::getTablePrefix(),
-            $recordId,
-            $this->config->getDb()->escape($recordLang)
-        ), sprintf(
-            "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $recordId,
-            $this->config->getDb()->escape($recordLang)
-        ), sprintf(
-            "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $recordId,
-            $this->config->getDb()->escape($recordLang)
-        ), sprintf(
-            "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $recordId,
-            $this->config->getDb()->escape($recordLang)
-        ), sprintf(
-            'DELETE FROM %sfaqdata_user WHERE record_id = %d',
-            Database::getTablePrefix(),
-            $recordId
-        ), sprintf(
-            'DELETE FROM %sfaqdata_group WHERE record_id = %d',
-            Database::getTablePrefix(),
-            $recordId
-        ), sprintf(
-            'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
-            Database::getTablePrefix(),
-            $recordId
-        ), sprintf(
-            'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix()
-        ), sprintf(
-            'DELETE FROM %sfaqcomments WHERE id = %d',
-            Database::getTablePrefix(),
-            $recordId
-        ), sprintf(
-            'DELETE FROM %sfaqvoting WHERE artikel = %d',
-            Database::getTablePrefix(),
-            $recordId
-        )];
+        $queries = [
+            sprintf(
+                'DELETE FROM %sfaqbookmarks WHERE faqid = %d',
+                Database::getTablePrefix(),
+                $recordId
+            ),
+            sprintf(
+                "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
+                Database::getTablePrefix(),
+                $recordId,
+                $this->config->getDb()->escape($recordLang)
+            ),
+            sprintf(
+                "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
+                Database::getTablePrefix(),
+                $recordId,
+                $this->config->getDb()->escape($recordLang)
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
+                Database::getTablePrefix(),
+                $recordId,
+                $this->config->getDb()->escape($recordLang)
+            ),
+            sprintf(
+                "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
+                Database::getTablePrefix(),
+                $recordId,
+                $this->config->getDb()->escape($recordLang)
+            ),
+            sprintf(
+                "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
+                Database::getTablePrefix(),
+                $recordId,
+                $this->config->getDb()->escape($recordLang)
+            ),
+            sprintf(
+                'DELETE FROM %sfaqdata_user WHERE record_id = %d',
+                Database::getTablePrefix(),
+                $recordId
+            ),
+            sprintf(
+                'DELETE FROM %sfaqdata_group WHERE record_id = %d',
+                Database::getTablePrefix(),
+                $recordId
+            ),
+            sprintf(
+                'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
+                Database::getTablePrefix(),
+                $recordId
+            ),
+            sprintf(
+                'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix()
+            ),
+            sprintf(
+                'DELETE FROM %sfaqcomments WHERE id = %d',
+                Database::getTablePrefix(),
+                $recordId
+            ),
+            sprintf(
+                'DELETE FROM %sfaqvoting WHERE artikel = %d',
+                Database::getTablePrefix(),
+                $recordId
+            )
+        ];
 
         foreach ($queries as $query) {
             $this->config->getDb()->query($query);
@@ -1098,15 +1115,7 @@ class Faq
     public function getSolutionIdFromId(int $faqId, string $faqLang): int
     {
         $query = sprintf(
-            "
-            SELECT
-                solution_id
-            FROM
-                %sfaqdata
-            WHERE
-                id = %d
-                AND
-                lang = '%s'",
+            "SELECT solution_id FROM %sfaqdata WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
             $this->config->getDb()->escape($faqLang)
