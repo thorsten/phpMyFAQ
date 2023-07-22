@@ -267,6 +267,18 @@ class FaqHelper extends Helper
                     ],
                     'span' => [
                         'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'table' => [
+                        'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'tr' => [
+                        'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'th' => [
+                        'allowed_attributes' => ['class', 'style'],
+                    ],
+                    'td' => [
+                        'allowed_attributes' => ['class', 'style'],
                     ]
                 ],
 
