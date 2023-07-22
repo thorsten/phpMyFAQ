@@ -694,7 +694,7 @@ class Faq
      * @param int|null $faqRevisionId Revision ID
      * @param bool     $isAdmin Must be true if it is called by an admin/author context
      */
-    public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false)
+    public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false): void
     {
         $currentLanguage = $this->config->getLanguage()->getLanguage();
         $defaultLanguage = $this->config->getDefaultLanguage();

@@ -125,22 +125,25 @@ class Bookmark
     {
         $bookmarks = $this->getAll();
         $plurals = new Plurals();
+        $faq = new Faq($this->config);
+        $category = new Category($this->config);
         $html = '';
         foreach ($bookmarks as $object => $key) {
-            $faq = new Faq($this->config);
             $faq->getRecord((int) $key->faqid);
             $faqData = $faq->faqRecord;
 
             $url = sprintf(
-                '%sindex.php?action=faq&amp;id=%d',
+                '%sindex.php?action=faq&amp;id=%d&cat=%d&artlang=%s',
                 $this->config->getDefaultUrl(),
-                $key->faqid
+                $faqData['id'],
+                $category->getCategoryIdFromFaq($faqData['id']),
+                $faqData['lang']
             );
+
             $link = new Link($url, $this->config);
             $link->text = $faqData['title'];
             $link->itemTitle = $faqData['title'];
             $link->tooltip = $faqData['title'];
-
 
             $visits = new Visits($this->config);
             foreach ($visits->getAllData() as $item) {
