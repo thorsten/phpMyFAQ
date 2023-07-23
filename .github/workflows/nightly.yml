@@ -69,7 +69,7 @@ jobs:
         run: yarn set version stable
 
       - name: Install Node.js dependencies
-        run: yarn install --immutable --immutable-cache --check-cache
+        run: yarn install
 
       - name: Run "yarn build" to build frontend production build
         run: yarn build
