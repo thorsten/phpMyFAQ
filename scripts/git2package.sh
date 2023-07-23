@@ -63,8 +63,9 @@ yarn install
 printf "\n 🚀 Run \"yarn build\" to build frontend production build\n";
 yarn build
 
-printf "\n 🚀 Remove fonts from TCPDF\n"
+printf "\n 🚀 Remove fonts and examples from TCPDF\n"
 rm -rf "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/phpmyfaq/src/libs/tecnickcom/tcpdf/fonts
+rm -rf "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/phpmyfaq/src/libs/tecnickcom/tcpdf/examples
 
 printf "\n 🚀 Create md5 hashes for file verification\n"
 php scripts/createHashes.php > "$cwd"/hashes-"${PMF_VERSION}".json
