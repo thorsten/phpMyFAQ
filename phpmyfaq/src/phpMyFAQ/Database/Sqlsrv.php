@@ -255,10 +255,9 @@ class Sqlsrv implements DatabaseDriver
      *
      * @param string $table the name of the table
      * @param string $id    the name of the ID column
-     *
      * @return int
      */
-    public function nextId($table, $id): int
+    public function nextId(string $table, string $id): int
     {
         $select = sprintf(
             '

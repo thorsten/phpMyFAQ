@@ -328,7 +328,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return int
      */
-    public function nextId($table, $id): int
+    public function nextId(string $table, string $id): int
     {
         $result = (int)$this->conn->querySingle(
             sprintf(

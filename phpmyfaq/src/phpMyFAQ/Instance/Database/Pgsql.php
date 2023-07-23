@@ -30,9 +30,7 @@ class Pgsql extends Database implements Driver
     /**
      * @var array
      */
-    private $createTableStatements = [
-        'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
-
+    private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id SERIAL NOT NULL,
             time INTEGER NOT NULL,
@@ -43,7 +41,7 @@ class Pgsql extends Database implements Driver
 
         'faqattachment' => 'CREATE TABLE %sfaqattachment (
             id SERIAL NOT NULL,
-            record_id SERIAL NOT NULL,
+            record_id INTEGER NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
             real_hash CHAR(32) NOT NULL,
             virtual_hash CHAR(32) NOT NULL,
@@ -104,6 +102,8 @@ class Pgsql extends Database implements Driver
             category_id INTEGER NOT NULL,
             position INTEGER NOT NULL,
             PRIMARY KEY (category_id))',
+
+        'faqcategory_order_position_seq' => 'CREATE SEQUENCE %sfaqcategory_order_position_seq START WITH 1',
 
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INTEGER NOT NULL,
@@ -338,6 +338,8 @@ class Pgsql extends Database implements Driver
             is_superadmin SMALLINT NULL DEFAULT 0,
             login_attempts SMALLINT NULL DEFAULT 0,
             PRIMARY KEY (user_id))',
+
+        'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
             user_id SERIAL NOT NULL,
