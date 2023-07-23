@@ -73,4 +73,4 @@ tests/fixtures/path-to-delete/foo.bar.baz
 coverage/*
 
 # Yarn related stuff
-.yarn
+.yarn/cache
