@@ -62,15 +62,17 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Install JS dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
+      - name: Install latest Yarn
+        run: corepack prepare yarn@stable --activate
+
+      - name: Activate latest Yarn
+        run: yarn set version stable
+
+      - name: Install Node.js dependencies
+        run: yarn install --immutable --immutable-cache --check-cache
 
       - name: Run "yarn build" to build frontend production build
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
+        run: yarn build
 
       - name: Create release artifact
         uses: montudor/action-zip@v1.0.0
