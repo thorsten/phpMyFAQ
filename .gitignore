@@ -54,6 +54,8 @@ phpmyfaq/admin/assets/cache/
 
 # Node.js modules for development
 node_modules/*
+.pnpm-store
+
 
 # Backup folder
 backup/*
@@ -71,6 +73,3 @@ tests/fixtures/path-to-delete/foo.bar.baz
 
 # Jest related stuff
 coverage/*
-
-# Yarn related stuff
-.yarn/cache

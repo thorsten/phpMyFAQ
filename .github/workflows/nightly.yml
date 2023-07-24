@@ -62,17 +62,17 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Install latest Yarn
-        run: corepack prepare yarn@stable --activate
+      - name: Install latest PNPM
+        run: corepack prepare pnpm@latest --activate
 
-      - name: Activate latest Yarn
-        run: yarn set version stable
+      - name: Activate latest PNPM
+        run: pnpm set version latest
 
       - name: Install Node.js dependencies
-        run: yarn install
+        run: pnpm install
 
-      - name: Run "yarn build" to build frontend production build
-        run: yarn build
+      - name: Run "pnpm build" to build frontend production build
+        run: pnpm build
 
       - name: Create release artifact
         uses: montudor/action-zip@v1.0.0

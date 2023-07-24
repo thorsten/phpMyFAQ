@@ -63,12 +63,12 @@ services:
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
-      - yarn
+      - pnpm
 
-  yarn:
+  pnpm:
     image: node:18
     restart: 'no'
-    command: sh -c "npm install node-sass -g --unsafe-perm && corepack enable && corepack prepare yarn@stable --activate && yarn build"
+    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build"
     working_dir: /app
     stdin_open: true
     tty: true

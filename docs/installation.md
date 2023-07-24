@@ -73,9 +73,9 @@ If you want to use Git, please run the following commands on your shell:
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ curl -o- -L https://yarnpkg.com/install.sh | bash
-    $ yarn install
-    $ yarn build
+    $ curl -fsSL https://get.pnpm.io/install.sh | sh -
+    $ pnpm install
+    $ pnpm build
 
 You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found [here](). Copy
 all unzipped files to your web server in a directory using FTP. A good choice would be the directory **faq/**.

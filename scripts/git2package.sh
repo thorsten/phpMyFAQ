@@ -58,10 +58,10 @@ printf "\n 🚀 Add PHP dependencies\n";
 composer install --no-dev --prefer-dist
 
 printf "\n 🚀 Install JS dependencies\n";
-yarn install
+pnpm install
 
-printf "\n 🚀 Run \"yarn build\" to build frontend production build\n";
-yarn build
+printf "\n 🚀 Run \"pnpm build\" to build frontend production build\n";
+pnpm build
 
 printf "\n 🚀 Remove fonts and examples from TCPDF\n"
 rm -rf "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/phpmyfaq/src/libs/tecnickcom/tcpdf/fonts

@@ -47,7 +47,7 @@ The command above starts 8 containers for multi database development as followin
 _Specific images started once to prepare the project:_
 
 - **composer**: update composer dependencies
-- **yarn**: update yarn dependencies
+- **pnpm**: update pnpm dependencies
 
 _Running using named volumes:_
 
@@ -114,9 +114,9 @@ To run phpMyFAQ locally you need at least a running web server with PHP support 
     $ git checkout main
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ curl -o- -L https://yarnpkg.com/install.sh | bash
-    $ yarn install
-    $ yarn build
+    $ curl -fsSL https://get.pnpm.io/install.sh | sh -
+    $ pnpm install
+    $ pnpm build
 
 Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 

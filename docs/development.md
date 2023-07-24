@@ -78,7 +78,7 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 - PHPUnit 10.x
 - Composer
 - Node.js v18+
-- Yarn v3
+- PNPM
 - Docker
 
 ### 6.4.3 Configure your Git installation
@@ -101,7 +101,7 @@ Add the upstream repository as remote:
     $ git remote add upstream git://github.com/thorsten/phpMyFAQ.git
 
 Please check our [coding standards](https://www.phpmyfaq.de/docs/standards) before sending patches or pull requests.
-Every PR on Github will check the coding standards and tests as well.
+Every PR on GitHub will check the coding standards and tests as well.
 
 ### 6.4.5 Run Docker Compose
 
@@ -109,7 +109,7 @@ The Dockerfile provided in the phpMyFAQ repository only builds an environment
 to run any release for development purpose.
 It does not contain any code as the phpmyfaq folder is meant to be mount as the /var/www/html folder in the container.
 
-For development purposes you can start a full stack to run your current phpMyFAQ source code from your local repository.
+For development purposes, you can start a full stack to run your current phpMyFAQ source code from your local repository.
 
     $ docker-compose up
 
@@ -117,8 +117,8 @@ The command above starts 9 containers for multi database development as followin
 
 _Specific images started once to prepare the project:_
 
-- **composer**: update composer dependencies
-- **yarn**: update yarn dependencies
+- **composer**: update Composer dependencies
+- **pnpm**: update PNPM dependencies
 
 _Running using named volumes:_
 
@@ -146,18 +146,18 @@ After cloning your forked repository, you have to fetch the 3rd party libraries 
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ yarn install
-    $ yarn build
+    $ pnpm install
+    $ pnpm build
 
 Then just start a normal, local phpMyFAQ installation.
 
-If you change some JavaScript code, you have to re-build the .js files into one with the following yarn task:
+If you change some JavaScript code, you have to re-build the .js files into one with the following PNPM task:
 
-    $ yarn build
+    $ pnpm build
 
 During development, you can use the watch mode:
 
-    $ yarn build:watch
+    $ pnpm build:watch
 
 To run the PHPUnit based tests, you can use the following command:
 
@@ -165,7 +165,7 @@ To run the PHPUnit based tests, you can use the following command:
 
 To run the Jest based tests, you can use the following command:
 
-    $ yarn test
+    $ pnpm test
 
 ### 6.4.7 Rebase your Patch
 
