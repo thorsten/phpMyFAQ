@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6c9a123694ddd05b27a735986c04e45",
+    "content-hash": "35c7c89ae96e8c03e96430bacfbcfcf6",
     "packages": [
         {
             "name": "abraham/twitteroauth",
-            "version": "5.0.0",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abraham/twitteroauth.git",
-                "reference": "6a68a5e53f72fbb31d4d304dc4752d3adefe0d10"
+                "reference": "233bd808121dc6b747cf7cedbf105cf90715d3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/6a68a5e53f72fbb31d4d304dc4752d3adefe0d10",
-                "reference": "6a68a5e53f72fbb31d4d304dc4752d3adefe0d10",
+                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/233bd808121dc6b747cf7cedbf105cf90715d3b4",
+                "reference": "233bd808121dc6b747cf7cedbf105cf90715d3b4",
                 "shasum": ""
             },
             "require": {
@@ -30,7 +30,7 @@
                 "php-vcr/phpunit-testlistener-vcr": "dev-php8",
                 "phpmd/phpmd": "^2",
                 "phpunit/phpunit": "^9",
-                "rector/rector": "^0.14.0",
+                "rector/rector": "^0.15.7",
                 "squizlabs/php_codesniffer": "^3"
             },
             "type": "library",
@@ -66,7 +66,7 @@
                 "issues": "https://github.com/abraham/twitteroauth/issues",
                 "source": "https://github.com/abraham/twitteroauth"
             },
-            "time": "2023-01-17T01:10:54+00:00"
+            "time": "2023-07-24T04:08:48+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
