@@ -187,11 +187,16 @@ class FaqHelper extends Helper
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
                 if ($data['category_id'] !== $lastCategory) {
-                    $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
+                    $output .= sprintf(
+                        '<h3>%s</h3>',
+                        $this->cleanUpContent(
+                            $this->cleanUpContent($category->getPath($data['category_id'], ' &raquo; '))
+                        )
+                    );
                 }
 
                 $output .= sprintf('<h4>%s</h4>', Strings::htmlentities($data['title']));
-                $output .= sprintf('<article>%s</article>', $data['content']);
+                $output .= sprintf('<article>%s</article>', $this->cleanUpContent($data['content']));
                 $output .= sprintf(
                     '<p>%s: %s<br>%s',
                     $PMF_LANG['msgAuthor'],

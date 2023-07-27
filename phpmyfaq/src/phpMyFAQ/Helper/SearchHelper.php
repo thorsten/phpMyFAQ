@@ -258,14 +258,14 @@ class SearchHelper extends Helper
                 );
 
                 $oLink = new Link($currentUrl, $this->config);
-                $oLink->text = $question;
-                $oLink->itemTitle = $oLink->tooltip = $result->question;
+                $oLink->text = Strings::htmlentities($question);
+                $oLink->itemTitle = $oLink->tooltip = Strings::htmlentities($result->question);
 
                 $html .= '<li>';
                 $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf(
                     '<strong>%s</strong>: %s<br>',
-                    $categoryInfo[0]['name'],
+                    Strings::htmlentities($categoryInfo[0]['name']),
                     $oLink->toHtmlAnchor()
                 );
                 $html .= sprintf(
