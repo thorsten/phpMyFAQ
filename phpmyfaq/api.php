@@ -30,6 +30,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
