@@ -29,9 +29,11 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AutoCompleteController
 {
+    #[Route('api/autocomplete')]
     public function search(Request $request): JsonResponse
     {
         $response = new JsonResponse();

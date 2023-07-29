@@ -461,7 +461,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Do you want the IP to be che
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Antal viste indlæg pr. side");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Antal nyhedsartikler");
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Aktiver underst&oslash;ttelse af mod_rewrite? (standard: sl&aring;et fra)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Aktiver underst&oslash;ttelse af LDAP? (standard: sl&aring;et fra)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'as new main category';
 $PMF_LANG['ad_categ_paste_error'] = 'Moving this category isn\'t possible.';

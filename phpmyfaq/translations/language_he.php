@@ -457,7 +457,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "האם הנך רוצה שהI
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "מספר ערכים מוצגים בכל עמוד");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "מספר קטעי חדשות");
 $LANG_CONF['security.bannedIPs'] = array("area", "חסום את IP זה");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "הפעל mod_rewrite? (ברירת מחדל: לא פעיל)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "הפעל LDAP? (ברירת מחדל: לא פעיל)");
 $LANG_CONF['main.referenceURL'] = array("input", "URL בסיסי לאימות קישורים (דוגמה: https://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array("input", "מרווח בין אימות קישורים (בשניות)");

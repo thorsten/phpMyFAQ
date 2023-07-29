@@ -462,7 +462,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Haluatko, että admin.php:ss
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'Näytettyjen tietueiden määrä per sivu');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Uutisten määrä');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Estä käyttö näistä IP-osoitteista');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'Käytä mod_rewrite:a? (oletus: ei käytössä)');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'LDAP-tuki päälle? (oletus: ei käytössä)');
 $PMF_LANG['ad_categ_new_main_cat'] = 'uutena pääkategoriana';
 $PMF_LANG['ad_categ_paste_error'] = 'Tämän kategorian siirto ei ole mahdollista.';

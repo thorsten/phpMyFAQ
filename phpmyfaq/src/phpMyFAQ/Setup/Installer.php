@@ -325,7 +325,6 @@ class Installer extends Setup
         'main.administrationMail' => 'webmaster@example.org',
         'main.contactInformation' => '',
         'main.enableAdminLog' => 'true',
-        'main.enableRewriteRules' => 'false',
         'main.enableUserTracking' => 'true',
         'main.metaDescription' => 'phpMyFAQ should be the answer for all questions in life',
         'main.metaKeywords' => '',

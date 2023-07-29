@@ -463,7 +463,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Vuoi controllare l'IP quando
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Numero di elementi visualizzati per pagina");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF['security.bannedIPs'] = array("area", "Vieta l'accesso a questi indirizzi IP");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Attivare il supporto a <em>mod_rewrite</em>? (predefinito: disabilitato)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Attivare il supporto LDAP? (predefinito: disabilitato)");
 $LANG_CONF['main.referenceURL'] = array("input", "<em>Base URL</em> dell'installazione di phpMyFAQ, es: https://www.example.org/faq/ (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF['main.urlValidateInterval'] = array("input", "Intervallo della verifica asincrona dei links (in secondi)");

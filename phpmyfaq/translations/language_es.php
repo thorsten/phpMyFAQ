@@ -554,7 +554,6 @@ $LANG_CONF['security.ipCheck'] = ["checkbox", "¿Debería usarse la IP para el c
 $LANG_CONF['records.numberOfRecordsPerPage'] = ["input", "Número de FAQs por página"];
 $LANG_CONF['records.numberOfShownNewsEntries'] = ["input", "Número de noticias mostradas"];
 $LANG_CONF['security.bannedIPs'] = ["area", "IPs bloqueadas (sepárelas con espacios)"];
-$LANG_CONF['main.enableRewriteRules'] = ["checkbox", "Activar URLs amigables para SEO"];
 $LANG_CONF['ldap.ldapSupport'] = ["checkbox", "Activar soporte LDAP"];
 $LANG_CONF['main.referenceURL'] = ["input", "URL de la FAQ (p.ej. https://www.example.org/faq/)"];
 $LANG_CONF['main.urlValidateInterval'] = ["input", "Tiempo entre las comprobaciones de enlace de Ajax (en segundos)"];

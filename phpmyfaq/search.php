@@ -202,11 +202,7 @@ if (
     ) && $faqConfig->get('search.searchForSolutionId')
 ) {
     $response = new Response();
-    if ($faqConfig->get('main.enableRewriteRules')) {
-        $response->isRedirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
-    } else {
-        $response->isRedirect($faqConfig->getDefaultUrl() . 'index.php?solution_id=' . $inputSearchTerm);
-    }
+    $response->isRedirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     $response->send();
     exit();
 }
@@ -216,26 +212,14 @@ $category->buildCategoryTree();
 $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('search.numberSearchTerms'));
 
 // Set base URL scheme
-if ($faqConfig->get('main.enableRewriteRules')) {
-    $baseUrl = sprintf(
-        '%ssearch.html?search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
-        $faqConfig->getDefaultUrl(),
-        urlencode($inputSearchTerm),
-        $page,
-        $languages,
-        $inputCategory
-    );
-} else {
-    $baseUrl = sprintf(
-        '%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
-        $faqConfig->getDefaultUrl(),
-        empty($sids) ? '' : 'sids=' . $sids . '&amp;',
-        urlencode($inputSearchTerm),
-        $page,
-        $languages,
-        $inputCategory
-    );
-}
+$baseUrl = sprintf(
+    '%ssearch.html?search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
+    $faqConfig->getDefaultUrl(),
+    urlencode($inputSearchTerm),
+    $page,
+    $languages,
+    $inputCategory
+);
 
 // Pagination options
 $options = [

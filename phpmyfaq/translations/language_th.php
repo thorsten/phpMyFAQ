@@ -460,7 +460,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "เปิดใช้ระ�
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "จำนวนเรื่องที่แสดงในหนึ่งหน้า");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "จำนวนประกาศข่าว");
 $LANG_CONF['security.bannedIPs'] = array("area", "ห้ามการใช้งานจากหมายเลขที่อยู่ไอพี");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "เปิดใช้งาน mod_rewrite (ค่าเริ่มต้น: ปิด)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "เปิดใช้งาน LDAP (ค่าเริ่มต้น: ปิด)");
 $LANG_CONF['main.referenceURL'] = array("input", "URL หลักสำหรับการตรวจสอบลิงค์ (ตัวอย่าง: https://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array("input", "ช่วงเวลาสำหรับการตรวจลิงค์ของ AJAX  (หน่วยเป็นวินาที)");

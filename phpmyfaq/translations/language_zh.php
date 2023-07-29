@@ -715,7 +715,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "你希望admin.php在检查U
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "每页显示主题数目");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "新内容数据");
 $LANG_CONF['security.bannedIPs'] = array("area", "禁止这些IP地址访问");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "启用mod_rewrite吗?(默认:禁止)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "启用LDAP支持吗? (默认:禁止)");
 $LANG_CONF['main.referenceURL'] = array("input", "链接验启用的基本 URL 网址 (设置为首页 URL 网址)");
 $LANG_CONF['main.urlValidateInterval'] = array("input", "AJAX 连接验证间隔时间 (单位：秒)");

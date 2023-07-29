@@ -461,7 +461,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Chcete kontrolovat IP adresu
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'Počet zobrazených topiců na stránce');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Počet záznamů novinek');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Zakázat IP adresy');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'Aktivovat podporu mod_rewrite? (výchozí: vypnuto)');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Chcete aktivovat podporu LDAP? (výchozí: vypnuto)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Base URL pro verifikaci odkazu (např.: https://www.domena.cz/faq)');
 $LANG_CONF['main.urlValidateInterval'] = array('input', 'Interval mezi AJAX ověřením odkazu (v sekundách)');

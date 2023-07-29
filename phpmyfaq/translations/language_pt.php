@@ -447,7 +447,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Conferir o IP no modo de Ad
 $LANG_CONF['main.numberOfRecordsPerPage'] = array('input', 'Número de tópicos mostrados por página');
 $LANG_CONF['main.numberOfShownNewsEntries'] = array('input', 'Número de notícias');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Barrar estes IPs');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'Ativar o suporte de <em>mod_rewrite</em> ? <small>(pré-definição: desativado)</small>');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
 $LANG_CONF['main.referenceURL'] = array('input', 'URL-base para verificação de <em>links</em> <small>( ex.: https://www.example.org/faq/ )</small>');
 $LANG_CONF['main.urlValidateInterval'] = array('input', 'Intervalo entre verificações de <em>links</em> pelo AJAX <small>(segundos)</small>');

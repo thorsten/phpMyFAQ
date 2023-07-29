@@ -460,7 +460,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'admin.php で UIN のチェ�
 $LANG_CONF['main.numberOfRecordsPerPage'] = array("input", "ページ毎に表示するトピック数");
 $LANG_CONF['main.numberOfShownNewsEntries'] = array("input", "お知らせの表示数");
 $LANG_CONF['security.bannedIPs'] = array('area', '拒否する IP アドレス');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'mod_rewrite のサポートを使用しますか? (初期値: 無効)');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'LDAP のサポートを有効にしますか? (初期値: 無効)');
 $LANG_CONF['main.referenceURL'] = array('input', 'リンク確認の基準 URL (例: https://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array('input', 'AJAX リンクの確認間隔 (秒単位)');

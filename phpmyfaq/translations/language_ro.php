@@ -459,7 +459,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Vrei sa fie verificat IP-ul 
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Numarul topicurilor afisate per pagina");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Numarul stirilor per pagina");
 $LANG_CONF['security.bannedIPs'] = array("area", "Restrictioneaza urmatoarele IP-uri");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Activezi suportul mod_rewrite? (normal:dezactivat)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Vrei sa activezi suportul LDAP ? (normal:dezactivat)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'ca si o noua categorie principala';
 $PMF_LANG['ad_categ_paste_error'] = 'Nu poti sa muti aceasta categorie.';

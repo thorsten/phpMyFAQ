@@ -454,7 +454,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Do you want the IP to be che
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "عدد المواضيع المعروضة بالصفحة الواحدة");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "عدد مقالات الأخبار");
 $LANG_CONF['security.bannedIPs'] = array("area", "حجب ومنع هذة العناوين");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "? mod_rewrite هل تريد تشغيل خاصية ال  (default: disabled)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "هل تريد ان تشغل خاصية ال  LDAP? (default: disabled)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'كتصنيف رئيسي جديد';
 $PMF_LANG['ad_categ_paste_error'] = 'نقل هذا التصنيف غير ممكن';

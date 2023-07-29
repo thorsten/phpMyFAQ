@@ -187,6 +187,9 @@ if (version_compare($version, '3.3.0-alpha', '<')) {
     $faqConfig->add('upgrade.releaseEnvironment', 'development');
     $faqConfig->add('upgrade.dateLastChecked', '');
 
+    // Rewrite rules are now mandatory
+    $faqConfig->delete('main.enableRewriteRules');
+
     // Bookmarks support
     $query[] = match ($dbConfig->getType()) {
         'mysqli' => 'CREATE TABLE ' . $prefix . 'faqbookmarks (

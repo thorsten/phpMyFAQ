@@ -459,7 +459,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Θέλετε να γίνετ
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Αριθμός εμφανιζόμενων άρθρων ανά σελίδα");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Αριθμός ειδήσεων");
 $LANG_CONF['security.bannedIPs'] = array("area", "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'ως νέα κύρια κατηγορία';
 $PMF_LANG['ad_categ_paste_error'] = 'Δεν ήταν δυνατή η μετακίνηση αυτής της κατηγορίας.';

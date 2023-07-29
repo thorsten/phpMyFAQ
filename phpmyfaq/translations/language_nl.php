@@ -713,7 +713,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Wilt u dat het IP-adres word
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'Aantal weergegeven onderwerpen per pagina');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Aantal nieuws artikelen');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Blokkeer deze IP adressen');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)');
 $LANG_CONF['security.ldapSupport'] = array('checkbox', 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Basis URL voor link verificatie (bijv.: https://www.voorbeeld.nl/faq)');
 $LANG_CONF['main.urlValidateInterval'] = array('input', 'Interval tussen AJAX link verificaties (in seconds)');

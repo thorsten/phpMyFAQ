@@ -461,7 +461,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Sprawdzać IP podczas kontro
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Liczba wyswietlanych tematów na stronę");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Liczba newsów");
 $LANG_CONF['security.bannedIPs'] = array("area", "Zbanuj te adresy IP");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Użyć wsparcia dla mod_rewrite? (domyślnie wyłączone)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Użyć wsparcia dla LDAP? (domyślnie wyłączone)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'jako nową główną kategorię';
 $PMF_LANG['ad_categ_paste_error'] = 'Przesunięcie tej kategorii nie jest możliwe.';

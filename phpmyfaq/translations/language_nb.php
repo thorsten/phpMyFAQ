@@ -716,7 +716,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Vil du at IP-en skal sjekkes
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'Antall oppføringer per side');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Antall nyhetsartikler');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Steng ute disse IP-ene');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'Aktiver mod_rewrite støtte? (Standard: deaktivert)');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Vil du aktivere LDAP-støtte? (Standard: deaktivert)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Basis url for verifikasjon av link (f.eks.: https://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array('input', 'Intervall for AJAX linksjekk (i sekunder)');

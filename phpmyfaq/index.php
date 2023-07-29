@@ -603,78 +603,40 @@ if ('main' == $action || 'show' == $action) {
     );
 }
 
-if ($faqConfig->get('main.enableRewriteRules')) {
-    $tplNavigation = [
-        'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
-        'allCategories' => '<a class="nav-link px-2 text-white" href="./show-categories.html">' .
-            Translation::get('msgShowAllCategories') . '</a>',
-        'msgAddContent' => '<a class="nav-link px-2 text-white" href="./addcontent.html">' .
-            Translation::get('msgAddContent') . '</a>',
-        'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
-            ?
-            '<a class="nav-link px-2 text-white" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
-            :
-            '',
-        'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
-            ?
-            '<a class="nav-link px-2 text-white" href="./open-questions.html">' .
-            Translation::get('msgOpenQuestions') . '</a>'
-            :
-            '',
-        'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
-        'msgContact' => '<a class="nav-link px-2 link-light" href="./contact.html">' . Translation::get('msgContact') .
-            '</a>',
-        'msgGlossary' => '<a class="nav-link px-2 link-light" href="./glossary.html">' .
-            Translation::get('ad_menu_glossary') . '</a>',
-        'privacyLink' => sprintf(
-            '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
-            Strings::htmlentities($faqConfig->get('main.privacyURL')),
-            Translation::get('msgPrivacyNote')
-        ),
-        'faqOverview' => '<a class="nav-link px-2 link-light" href="./overview.html">' .
-            Translation::get('faqOverview') . '</a>',
-        'showSitemap' => '<a class="nav-link px-2 link-light" href="./sitemap/A/' . $faqLangCode . '.html">' .
-            Translation::get('msgSitemap') . '</a>',
-        'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
-    ];
-} else {
-    $tplNavigation = [
-        'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
-        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' .
-            Translation::get('msgShowAllCategories') . '</a>',
-        'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
-            Translation::get('msgAddContent') . '</a>',
-        'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
-            ?
-            '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
-            Translation::get('msgQuestion') . '</a>'
-            :
-            '',
-        'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
-            ?
-            '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' .
-            Translation::get('msgOpenQuestions') . '</a>'
-            :
-            '',
-        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' .
-            Translation::get('msgAdvancedSearch') . '</a>',
-        'msgContact' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=contact">' .
-            Translation::get('msgContact') . '</a>',
-        'msgGlossary' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=glossary">' .
-            Translation::get('ad_menu_glossary') . '</a>',
-        'privacyLink' => sprintf(
-            '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
-            Strings::htmlentities($faqConfig->get('main.privacyURL')),
-            Translation::get('msgPrivacyNote')
-        ),
-        'faqOverview' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=overview">' .
-            Translation::get('faqOverview') . '</a>',
-        'showSitemap' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=sitemap&amp;lang=' .
-            $faqLangCode . '">' .
-            Translation::get('msgSitemap') . '</a>',
-        'breadcrumbHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
-    ];
-}
+$tplNavigation = [
+    'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
+    'allCategories' => '<a class="nav-link px-2 text-white" href="./show-categories.html">' .
+        Translation::get('msgShowAllCategories') . '</a>',
+    'msgAddContent' => '<a class="nav-link px-2 text-white" href="./addcontent.html">' .
+        Translation::get('msgAddContent') . '</a>',
+    'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
+        ?
+        '<a class="nav-link px-2 text-white" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+        :
+        '',
+    'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
+        ?
+        '<a class="nav-link px-2 text-white" href="./open-questions.html">' .
+        Translation::get('msgOpenQuestions') . '</a>'
+        :
+        '',
+    'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
+    'msgContact' => '<a class="nav-link px-2 link-light" href="./contact.html">' . Translation::get('msgContact') .
+        '</a>',
+    'msgGlossary' => '<a class="nav-link px-2 link-light" href="./glossary.html">' .
+        Translation::get('ad_menu_glossary') . '</a>',
+    'privacyLink' => sprintf(
+        '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
+        Strings::htmlentities($faqConfig->get('main.privacyURL')),
+        Translation::get('msgPrivacyNote')
+    ),
+    'faqOverview' => '<a class="nav-link px-2 link-light" href="./overview.html">' .
+        Translation::get('faqOverview') . '</a>',
+    'showSitemap' => '<a class="nav-link px-2 link-light" href="./sitemap/A/' . $faqLangCode . '.html">' .
+        Translation::get('msgSitemap') . '</a>',
+    'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
+];
+
 
 $tplNavigation['faqHome'] = Strings::htmlentities($faqConfig->getDefaultUrl());
 $tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';

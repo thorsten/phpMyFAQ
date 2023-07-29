@@ -459,7 +459,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Do you want the IP to be che
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'Téma / oldal');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Új cikkek száma');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Büntetett IP címek:');
-$LANG_CONF['main.enableRewriteRules'] = array('checkbox', 'mod_rewrite bekapcsolva (alapértelmezett: disabled)');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'LDAP támogatás (alapértelmezett: disabled)');
 $PMF_LANG['ad_categ_new_main_cat'] = 'mint új főkategória';
 $PMF_LANG['ad_categ_paste_error'] = 'A kategória mozgatása nem lehetséges.';

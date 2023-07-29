@@ -806,7 +806,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Активировать п�
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Количество статей на страницу");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Количество новостных статей");
 $LANG_CONF['security.bannedIPs'] = array("area", "Заблокировать эти IP-Адреса");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Активировать mod_rewrite? (по умолчанию отключено)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Активировать LDAP? (по умолчанию отключено)");
 $LANG_CONF['main.referenceURL'] = array("input", "Базовый URL для проверки ссылок (например https://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array("input", "Интервал между AJAX-проверками ссылок (в секундах)");

@@ -459,7 +459,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Anda mahu IP disemak apabila
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Bilangan topik dipaparkan setiap laman");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Bilangan artikel berita");
 $LANG_CONF['security.bannedIPs'] = array("area", "Senarai hitamkan IP ini");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Aktifkan sokongan mod_rewrite? (lalai: dilumpuhkan)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Anda mahu membenarkan sokongan terhadap LDAP? (lalai: dilumpuhkan)");
 $LANG_CONF['main.referenceURL'] = array("input", "UL asas untuk pengesahan link (cth.: https://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array("input", "Selang diantara pengesahan link AJX (dalam saat)");

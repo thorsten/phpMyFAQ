@@ -461,7 +461,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "Kolla IP-adressen när UIN k
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "Antal visade rubriker per sida");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Antal nyhetsartiklar");
 $LANG_CONF['security.bannedIPs'] = array("area", "Blockera följande IP-adresser");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "Aktivera stöd för mod_rewrite? (förvalt: inaktivt)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Vill du aktivera stöd för LDAP? (förvalt: inaktivt)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'Som ny huvudkategori';
 $PMF_LANG['ad_categ_paste_error'] = 'Att flytta denna kategori är inte möjligt.';

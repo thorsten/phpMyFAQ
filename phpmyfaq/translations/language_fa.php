@@ -462,7 +462,6 @@ $LANG_CONF['security.ipCheck'] = array("checkbox", "آیا مایلید هنگا
 $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "تعداد عناوین نمایش داده شده در صفحه");
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "تعداد مقالات جدید");
 $LANG_CONF['security.bannedIPs'] = array("area", "قدغن کردن این آی‌پی‌ها");
-$LANG_CONF['main.enableRewriteRules'] = array("checkbox", "پشتیبانی از mod_rewrite فعال شود؟ (پیش‌فرض: غیرفعال)");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "پشتیبانی از LDAP فعال شود؟ (پیش‌فرض: غیرفعال)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'به عنوان موضوع اصلی';
 $PMF_LANG['ad_categ_paste_error'] = 'انتقال این موضوع ممکن نیست.';

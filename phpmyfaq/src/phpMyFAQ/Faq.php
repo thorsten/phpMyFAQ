@@ -471,20 +471,15 @@ class Faq
         }
 
         if ($pages > 1) {
-            // Set rewrite URL, if needed
-            if ($this->config->get('main.enableRewriteRules')) {
-                $link = new Link($this->config->getDefaultUrl(), $this->config);
-                $useRewrite = true;
-                $rewriteUrl = sprintf(
-                    '%scategory/%d/%%d/%s.html',
-                    $this->config->getDefaultUrl(),
-                    $categoryId,
-                    $link->getSEOItemTitle($title)
-                );
-            } else {
-                $useRewrite = false;
-                $rewriteUrl = '';
-            }
+            $link = new Link($this->config->getDefaultUrl(), $this->config);
+            $useRewrite = true;
+            $rewriteUrl = sprintf(
+                '%scategory/%d/%%d/%s.html',
+                $this->config->getDefaultUrl(),
+                $categoryId,
+                $link->getSEOItemTitle($title)
+            );
+
             $baseUrl = sprintf(
                 '%sindex.php?%saction=show&amp;cat=%d&amp;seite=%d',
                 $this->config->getDefaultUrl(),
