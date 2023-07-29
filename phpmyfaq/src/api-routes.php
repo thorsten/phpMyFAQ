@@ -15,8 +15,12 @@
  * @since     2023-07-29
  */
 
+use phpMyFAQ\Api\Controller\CategoryController;
+use phpMyFAQ\Api\Controller\GroupController;
 use phpMyFAQ\Api\Controller\LanguageController;
+use phpMyFAQ\Api\Controller\OpenQuestionController;
 use phpMyFAQ\Api\Controller\SearchController;
+use phpMyFAQ\Api\Controller\TagController;
 use phpMyFAQ\Api\Controller\TitleController;
 use phpMyFAQ\Api\Controller\VersionController;
 use phpMyFAQ\Controller\AutoCompleteController;
@@ -28,13 +32,34 @@ $apiVersion = System::getApiVersion();
 
 $routes = new RouteCollection();
 
+// Public REST API
+$routes->add(
+    'api.categories',
+    new Route("v{$apiVersion}/categories", ['_controller' => [CategoryController::class, 'list']])
+);
+$routes->add(
+    'api.groups',
+    new Route("v{$apiVersion}/groups", ['_controller' => [GroupController::class, 'list']])
+);
 $routes->add(
     'api.language',
     new Route("v{$apiVersion}/language", ['_controller' => [LanguageController::class, 'index']])
 );
 $routes->add(
+    'api.open-questions',
+    new Route("v{$apiVersion}/open-questions", ['_controller' => [OpenQuestionController::class, 'list']])
+);
+$routes->add(
     'api.search',
     new Route("v{$apiVersion}/search", ['_controller' => [SearchController::class, 'search']])
+);
+$routes->add(
+    'api.search.popular',
+    new Route("v{$apiVersion}/searches/popular", ['_controller' => [SearchController::class, 'popular']])
+);
+$routes->add(
+    'api.tags',
+    new Route("v{$apiVersion}/tags", ['_controller' => [TagController::class, 'list']])
 );
 $routes->add(
     'api.title',
@@ -45,6 +70,7 @@ $routes->add(
     new Route("v$apiVersion/version", ['_controller' => [VersionController::class, 'index']])
 );
 
+// Private REST API
 $routes->add(
     'api.autocomplete',
     new Route('autocomplete', ['_controller' => [AutoCompleteController::class, 'search']])

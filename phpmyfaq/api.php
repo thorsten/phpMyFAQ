@@ -28,7 +28,6 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
-use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
@@ -37,14 +36,12 @@ use phpMyFAQ\News;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
-use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserAuthentication;
-use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -128,20 +125,6 @@ switch ($action) {
     //
     // v2.3
     //
-    case 'categories':
-        $category = new Category($faqConfig, $currentGroups, true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
-        $category->setLanguage($currentLanguage);
-        $result = array_values($category->getAllCategories());
-        if (count($result) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        } else {
-            $response->setStatusCode(Response::HTTP_OK);
-        }
-        $response->setData($result);
-        break;
-
     case 'category':
         $category = new Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);
@@ -234,42 +217,6 @@ switch ($action) {
                 'stored' => false,
                 'error' => 'Cannot add category'
             ];
-        }
-        $response->setData($result);
-        break;
-
-    case 'groups':
-        $groupPermission = new MediumPermission($faqConfig);
-        $result = $groupPermission->getAllGroups($user);
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
-        break;
-
-    case 'tags':
-        $tags = new Tags($faqConfig);
-        $result = $tags->getPopularTagsAsArray(16);
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
-        break;
-
-    case 'open-questions':
-        $questions = new Question($faqConfig);
-        $result = $questions->getAllOpenQuestions();
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
-        break;
-
-    case 'searches':
-        $search = new Search($faqConfig);
-        $result = $search->getMostPopularSearches(7, true);
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
         $response->setData($result);
         break;

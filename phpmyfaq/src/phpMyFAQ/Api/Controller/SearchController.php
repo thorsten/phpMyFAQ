@@ -66,4 +66,19 @@ class SearchController
 
         return $response;
     }
+
+    public function popular(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $faqConfig = Configuration::getConfigurationInstance();
+
+        $search = new Search($faqConfig);
+        $result = $search->getMostPopularSearches(7, true);
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+
+        return $response;
+    }
 }
