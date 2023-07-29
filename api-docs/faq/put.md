@@ -1,6 +1,6 @@
-# Add a FAQ
+# Update a FAQ
 
-Used to add a new FAQ in one existing category.
+Used to update a FAQ in one existing category.
 
 **URL** : `/api/v2.1/faq`
 
@@ -20,9 +20,9 @@ Content-Type: application/json
 
 ```json
 {
+  "faq-id": "[faq id as integer value, required value]",
   "language": "[language code, required value]",
   "category-id": "[category id as integer value, required value]",
-  "category-name": "[category name in plain text, optional value]",
   "question": "[question in plain text, required value]",
   "answer": "[question in plain text, required value]",
   "keywords": "[keywords in comma separated plain text or empty string, required value]",
@@ -33,16 +33,13 @@ Content-Type: application/json
 }
 ```
 
-The category ID is a required value, the category name is optional. If the category name is present and the ID can be
-mapped, the category ID from the name will be used. If the category name cannot be mapped, a 409 error is thrown
-
 **Data example**
 
 ```json
 {
+  "faq-id": 1,
   "language": "de",
   "category-id": 1,
-  "category-name": "Queen Songs",
   "question": "Is this the world we created?",
   "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today",
   "keywords": "phpMyFAQ, FAQ, Foo, Bar",
@@ -55,7 +52,7 @@ mapped, the category ID from the name will be used. If the category name cannot 
 
 ## Success Response
 
-**Condition** : If all posted data is correct.
+**Condition** : If all putted data is correct.
 
 **Code** : `200 OK`
 
@@ -69,9 +66,9 @@ mapped, the category ID from the name will be used. If the category name cannot 
 
 ## Error Responses
 
-**Condition** : If category name cannot be mapped to a valid ID
+**Condition** : If FAQ ID or category id cannot be mapped to valid IDs
 
-**Code** : `409 Conflict`
+**Code** : `404 Not Found`
 
 **Content** :
 

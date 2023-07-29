@@ -52,6 +52,7 @@ be acquired from the admin configuration.
 ### FAQ related APIs
 
 - [Add FAQ](api-docs/faq/post.md): `POST /api/v2.2/faq`
+- [Update FAQ](api-docs/faq/put.md): `PUT /api/v2.2/faq/:categoryId/:faqId`
 - [Add question](api-docs/question/post.md): `POST /api/v2.2/question`
 
 ### Groups related APIs

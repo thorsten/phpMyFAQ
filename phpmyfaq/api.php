@@ -421,7 +421,7 @@ switch ($action) {
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        if ($recordId > 0) {
+        if ($request->getMethod() === 'GET' && $recordId > 0) {
             $faq->getRecord($recordId);
             $result = $faq->faqRecord;
 
@@ -443,7 +443,7 @@ switch ($action) {
         }
 
         //
-        // POST
+        // POST or PUT
         //
         if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
@@ -462,6 +462,11 @@ switch ($action) {
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
+        if (isset($postData['faq-id'])) {
+            $faqId = Filter::filterVar($postData['faq-id'], FILTER_VALIDATE_INT);
+        } else {
+            $faqId = null;
+        }
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
         if (isset($postData['category-name'])) {
@@ -510,14 +515,18 @@ switch ($action) {
             ->setComment(false)
             ->setNotes('');
 
-        $faqId = $faq->create($faqData);
+        if (is_null($faqId)) {
+            $faqId = $faq->create($faqData);
+        } else {
+            $faqData->setId($faqId);
+            $faqData->setRevisionId(0);
+            $faq->update($faqData);
+        }
 
-        $faqMetaData = new FaqMetaData($faqConfig);
-        $faqMetaData
-            ->setFaqId($faqId)
-            ->setFaqLanguage($languageCode)
-            ->setCategories($categories)
-            ->save();
+        if ($request->getMethod() !== 'PUT') {
+            $faqMetaData = new FaqMetaData($faqConfig);
+            $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
+        }
 
         $result = [
             'stored' => true
