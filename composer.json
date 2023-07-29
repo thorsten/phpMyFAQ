@@ -39,6 +39,7 @@
     "symfony/html-sanitizer": "^6.2",
     "symfony/http-client": "^6.2",
     "symfony/http-foundation": "^6.2",
+    "symfony/http-kernel": "^6.3",
     "symfony/mailer": "^6.2",
     "symfony/routing": "^6.3",
     "tecnickcom/tcpdf": "~6.0",

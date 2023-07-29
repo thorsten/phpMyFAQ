@@ -30,6 +30,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
@@ -47,6 +48,7 @@ use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 //
 // Bootstrapping
@@ -124,23 +126,8 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 //
 switch ($action) {
     //
-    // v2.2
+    // v2.3
     //
-    case 'version':
-        $response->setData($faqConfig->getVersion());
-        $response->setStatusCode(Response::HTTP_OK);
-        break;
-
-    case 'title':
-        $response->setData($faqConfig->getTitle());
-        $response->setStatusCode(Response::HTTP_OK);
-        break;
-
-    case 'language':
-        $response->setData($faqConfig->getLanguage()->getLanguage());
-        $response->setStatusCode(Response::HTTP_OK);
-        break;
-
     case 'search':
         $user = new CurrentUser($faqConfig);
         $search = new Search($faqConfig);
@@ -628,7 +615,12 @@ switch ($action) {
         $categories = $categoryObject->getAllCategories();
 
         $questionHelper = new QuestionHelper($faqConfig, $categoryObject);
-        $questionHelper->sendSuccessMail($questionData, $categories);
+        try {
+            $questionHelper->sendSuccessMail($questionData, $categories);
+        } catch (TransportExceptionInterface | Exception $e) {
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(['error' => $e->getMessage() ]);
+        }
 
         $response->setData(['stored' => true]);
         break;

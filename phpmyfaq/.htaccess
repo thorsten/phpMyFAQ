@@ -142,8 +142,8 @@ RewriteRule admin/api/update-check                 admin/api/updates.php
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>
-RewriteRule api/v2.0/version                       api.php?action=version [L,QSA]
-RewriteRule api/v2.0/language                      api.php?action=language [L,QSA]
+RewriteRule api/v2.0/version                       api/index.php
+RewriteRule api/v2.0/language                      api/index.php
 RewriteRule api/v2.0/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.0/searches/popular              api.php?action=searches&filter=popular [L,QSA]
 RewriteRule api/v2.0/search                        api.php?action=search [L,QSA]
@@ -163,8 +163,8 @@ RewriteRule api/v2.0/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId
 
 # REST API v2.1
 # * http://[...]/api/v2.1/<ACTION>
-RewriteRule api/v2.1/version                       api.php?action=version [L,QSA]
-RewriteRule api/v2.1/language                      api.php?action=language [L,QSA]
+RewriteRule api/v2.1/version                       api/index.php
+RewriteRule api/v2.1/language                      api/index.php
 RewriteRule api/v2.1/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.1/searches/popular              api.php?action=searches&filter=popular [L,QSA]
 RewriteRule api/v2.1/search                        api.php?action=search [L,QSA]
@@ -187,9 +187,9 @@ RewriteRule api/v2.1/question                      api.php?action=question [L,QS
 
 # REST API v2.2
 # * http://[...]/api/v2.2/<ACTION>
-RewriteRule api/v2.2/version                       api.php?action=version [L,QSA]
-RewriteRule api/v2.2/title                         api.php?action=title [L,QSA]
-RewriteRule api/v2.2/language                      api.php?action=language [L,QSA]
+RewriteRule api/v2.2/version                       api/index.php
+RewriteRule api/v2.2/title                         api/index.php
+RewriteRule api/v2.2/language                      api/index.php
 RewriteRule api/v2.2/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
 RewriteRule api/v2.2/groups                        api.php?action=groups [L,QSA]
@@ -210,3 +210,9 @@ RewriteRule api/v2.2/faqs                          api.php?action=faqs [L,QSA]
 RewriteRule api/v2.2/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId=$1&recordId=$2 [L,QSA]
 RewriteRule api/v2.2/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.2/register                      api.php?action=register [L,QSA]
+
+# REST API v2.3
+# * http://[...]/api/v2.3/<ACTION>
+RewriteRule api/v2.3/version                       api/index.php
+RewriteRule api/v2.3/language                      api/index.php
+RewriteRule api/v2.3/title                         api/index.php

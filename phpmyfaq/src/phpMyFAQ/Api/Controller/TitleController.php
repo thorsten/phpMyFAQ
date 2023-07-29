@@ -1,7 +1,7 @@
 <?php
 
 /**
- * phpMyFAQ routes
+ * The Title Controller for the REST API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,17 +12,21 @@
  * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-07-08
+ * @since     2023-07-29
  */
 
-use Symfony\Component\Routing\Route;
+namespace phpMyFAQ\Api\Controller;
 
-$routes->add(
-    'admin.api.updates',
-    new Route('/updates', ['_class_and_method' => 'phpMyFAQ\Administration\Api\UpdateApi::updates'])
-);
+use phpMyFAQ\Configuration;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-$routes->add(
-    'admin.api.update-check',
-    new Route('/update-check', ['_class_and_method' => 'phpMyFAQ\Administration\Api\UpdateApi::updateCheck'])
-);
+class TitleController
+{
+    public function index(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $response->setData(Configuration::getConfigurationInstance()->getTitle());
+
+        return $response;
+    }
+}

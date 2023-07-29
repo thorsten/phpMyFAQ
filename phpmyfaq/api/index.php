@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Private phpMyFAQ Admin API: everything for the online update
+ * phpMyFAQ REST API: api/v2.3/version
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,27 +9,43 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Jan Harms <model_railroader@gmx-topmail.de>
  * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-07-02
+ * @since     2023-07-28
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
 
-require '../../src/Bootstrap.php';
+require '../src/Bootstrap.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
+
+//
+// Get language (default: english)
+//
+$language = new Language($faqConfig);
+$currentLanguage = $language->setLanguageByAcceptLanguage();
+
+//
+// Set language
+//
+if (Language::isASupportedLanguage($currentLanguage)) {
+    require PMF_TRANSLATION_DIR . '/language_' . $currentLanguage . '.php';
+} else {
+    require PMF_TRANSLATION_DIR . '/language_en.php';
+}
+$faqConfig->setLanguage($language);
 
 //
 // Create Request & Response
@@ -50,32 +66,29 @@ try {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
-$routes = new RouteCollection();
+$request = Request::createFromGlobals();
 
-require '../../src/admin-routes.php';
+$routes = include __DIR__ . '/../src/api-routes.php';
 
 $context = new RequestContext();
 $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
 
-$requestUri = $request->getPathInfo();
-
-$generator = new UrlGenerator($routes, $context);
-
-$parameters = $matcher->match($requestUri);
+$controllerResolver = new ControllerResolver();
+$argumentResolver = new ArgumentResolver();
 
 try {
-    $parameters = $matcher->match($requestUri);
-    list($controllerClass, $controllerMethod) = explode('::', $parameters['_class_and_method']);
+    $request->attributes->add($matcher->match($request->getPathInfo()));
 
-    $action = new $controllerClass($faqConfig);
-    $action->$controllerMethod(['request' => $request, 'generator' => $generator, 'parameters' => $parameters]);
-} catch (ResourceNotFoundException $e) {
-    $response->setStatusCode(Response::HTTP_NOT_FOUND);
-    $response->setData($e->getMessage());
-    $response->send();
-} catch (Exception $e) {
-    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-    $response->setData($e->getMessage());
-    $response->send();
+    $controller = $controllerResolver->getController($request);
+    $arguments = $argumentResolver->getArguments($request, $controller);
+
+    $response->setStatusCode(Response::HTTP_OK);
+    $response = call_user_func_array($controller, $arguments);
+} catch (ResourceNotFoundException $exception) {
+    $response = new Response('Not Found', 404);
+} catch (Exception $exception) {
+    $response = new Response('An error occurred: ' . $exception->getMessage(), 500);
 }
+
+$response->send();
