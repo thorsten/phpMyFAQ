@@ -140,6 +140,9 @@ RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?ac
 RewriteRule admin/api/updates                      admin/api/updates.php
 RewriteRule admin/api/update-check                 admin/api/updates.php
 
+# Autocomplete API
+RewriteRule api/autocomplete                       api/index.php
+
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>
 RewriteRule api/v2.0/version                       api/index.php
@@ -213,6 +216,6 @@ RewriteRule api/v2.2/register                      api.php?action=register [L,QS
 
 # REST API v2.3
 # * http://[...]/api/v2.3/<ACTION>
-RewriteRule api/v2.3/version                       api/index.php
 RewriteRule api/v2.3/language                      api/index.php
 RewriteRule api/v2.3/title                         api/index.php
+RewriteRule api/v2.3/version                       api/index.php

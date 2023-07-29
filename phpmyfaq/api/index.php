@@ -17,7 +17,9 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +67,11 @@ try {
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
+
+//
+// Initializing static string wrapper
+//
+Strings::init($currentLanguage);
 
 $request = Request::createFromGlobals();
 

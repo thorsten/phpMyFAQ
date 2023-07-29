@@ -15,6 +15,7 @@
  * @since     2023-07-29
  */
 
+use phpMyFAQ\Api\Controller\AutoCompleteController;
 use phpMyFAQ\Api\Controller\LanguageController;
 use phpMyFAQ\Api\Controller\TitleController;
 use phpMyFAQ\Api\Controller\VersionController;
@@ -36,6 +37,12 @@ $routes->add(
 $routes->add(
     'api.title',
     new Route("v{$apiVersion}/title", ['_controller' => [TitleController::class, 'index']])
+);
+
+
+$routes->add(
+    'api.autocomplete',
+    new Route('autocomplete', ['_controller' => [AutoCompleteController::class, 'search']])
 );
 
 return $routes;
