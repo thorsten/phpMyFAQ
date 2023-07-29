@@ -128,35 +128,6 @@ switch ($action) {
     //
     // v2.3
     //
-    case 'search':
-        $user = new CurrentUser($faqConfig);
-        $search = new Search($faqConfig);
-        $search->setCategory(new Category($faqConfig));
-
-        $faqPermission = new FaqPermission($faqConfig);
-        $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
-
-        $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
-        try {
-            $searchResults = $search->search($searchString, false);
-            $faqSearchResult->reviewResultSet($searchResults);
-            if ($faqSearchResult->getNumberOfResults() > 0) {
-                $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
-                foreach ($faqSearchResult->getResultSet() as $data) {
-                    $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, 'utf-8');
-                    $data->answer = Utils::makeShorterText($data->answer, 12);
-                    $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
-                    $result[] = $data;
-                }
-                $response->setData($result);
-            } else {
-                $response->setStatusCode(Response::HTTP_NOT_FOUND);
-            }
-        } catch (Exception) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        }
-        break;
-
     case 'categories':
         $category = new Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);

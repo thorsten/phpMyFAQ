@@ -149,7 +149,7 @@ RewriteRule api/v2.0/version                       api/index.php
 RewriteRule api/v2.0/language                      api/index.php
 RewriteRule api/v2.0/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.0/searches/popular              api.php?action=searches&filter=popular [L,QSA]
-RewriteRule api/v2.0/search                        api.php?action=search [L,QSA]
+RewriteRule api/v2.0/search                        api/index.php
 RewriteRule api/v2.0/tags                          api.php?action=tags [L,QSA]
 RewriteRule api/v2.0/open-questions                api.php?action=open-questions [L,QSA]
 RewriteRule api/v2.0/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
@@ -170,7 +170,7 @@ RewriteRule api/v2.1/version                       api/index.php
 RewriteRule api/v2.1/language                      api/index.php
 RewriteRule api/v2.1/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.1/searches/popular              api.php?action=searches&filter=popular [L,QSA]
-RewriteRule api/v2.1/search                        api.php?action=search [L,QSA]
+RewriteRule api/v2.1/search                        api/index.php
 RewriteRule api/v2.1/tags                          api.php?action=tags [L,QSA]
 RewriteRule api/v2.1/open-questions                api.php?action=open-questions [L,QSA]
 RewriteRule api/v2.1/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
@@ -197,7 +197,7 @@ RewriteRule api/v2.2/categories                    api.php?action=categories [L,
 RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
 RewriteRule api/v2.2/groups                        api.php?action=groups [L,QSA]
 RewriteRule api/v2.2/searches/popular              api.php?action=searches&filter=popular [L,QSA]
-RewriteRule api/v2.2/search                        api.php?action=search [L,QSA]
+RewriteRule api/v2.2/search                        api/index.php
 RewriteRule api/v2.2/tags                          api.php?action=tags [L,QSA]
 RewriteRule api/v2.2/open-questions                api.php?action=open-questions [L,QSA]
 RewriteRule api/v2.2/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
@@ -219,3 +219,4 @@ RewriteRule api/v2.2/register                      api.php?action=register [L,QS
 RewriteRule api/v2.3/language                      api/index.php
 RewriteRule api/v2.3/title                         api/index.php
 RewriteRule api/v2.3/version                       api/index.php
+RewriteRule api/v2.3/search                        api/index.php

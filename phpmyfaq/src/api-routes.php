@@ -15,10 +15,11 @@
  * @since     2023-07-29
  */
 
-use phpMyFAQ\Api\Controller\AutoCompleteController;
 use phpMyFAQ\Api\Controller\LanguageController;
+use phpMyFAQ\Api\Controller\SearchController;
 use phpMyFAQ\Api\Controller\TitleController;
 use phpMyFAQ\Api\Controller\VersionController;
+use phpMyFAQ\Controller\AutoCompleteController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -26,19 +27,23 @@ use Symfony\Component\Routing\RouteCollection;
 $apiVersion = System::getApiVersion();
 
 $routes = new RouteCollection();
-$routes->add(
-    'api.version',
-    new Route("v$apiVersion/version", ['_controller' => [VersionController::class, 'index']])
-);
+
 $routes->add(
     'api.language',
     new Route("v{$apiVersion}/language", ['_controller' => [LanguageController::class, 'index']])
 );
 $routes->add(
+    'api.search',
+    new Route("v{$apiVersion}/search", ['_controller' => [SearchController::class, 'search']])
+);
+$routes->add(
     'api.title',
     new Route("v{$apiVersion}/title", ['_controller' => [TitleController::class, 'index']])
 );
-
+$routes->add(
+    'api.version',
+    new Route("v$apiVersion/version", ['_controller' => [VersionController::class, 'index']])
+);
 
 $routes->add(
     'api.autocomplete',

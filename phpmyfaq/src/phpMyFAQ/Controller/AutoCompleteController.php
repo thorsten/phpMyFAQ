@@ -15,7 +15,7 @@
  * @since     2023-07-29
  */
 
-namespace phpMyFAQ\Api\Controller;
+namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
