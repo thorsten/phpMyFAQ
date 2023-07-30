@@ -20,6 +20,7 @@ use phpMyFAQ\Api\Controller\CategoryController;
 use phpMyFAQ\Api\Controller\CommentController;
 use phpMyFAQ\Api\Controller\GroupController;
 use phpMyFAQ\Api\Controller\LanguageController;
+use phpMyFAQ\Api\Controller\LoginController;
 use phpMyFAQ\Api\Controller\NewsController;
 use phpMyFAQ\Api\Controller\OpenQuestionController;
 use phpMyFAQ\Api\Controller\SearchController;
@@ -55,6 +56,10 @@ $routes->add(
 $routes->add(
     'api.language',
     new Route("v{$apiVersion}/language", ['_controller' => [LanguageController::class, 'index']])
+);
+$routes->add(
+    'api.login',
+    new Route("v{$apiVersion}/login", ['_controller' => [LoginController::class, 'login'], '_methods' => 'POST'])
 );
 $routes->add(
     'api.news',

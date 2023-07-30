@@ -60,10 +60,6 @@ RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
 RewriteCond %{REQUEST_URI}          /open-questions\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=open-questions [L,QSA]
 
-# the help page
-RewriteCond %{REQUEST_URI}          /help\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
-
 # the contact page
 RewriteCond %{REQUEST_URI}          /contact\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
@@ -155,7 +151,7 @@ RewriteRule api/v2.0/open-questions                api/index.php
 RewriteRule api/v2.0/comments/([0-9]+)             api/index.php
 RewriteRule api/v2.0/attachments/([0-9]+)          api/index.php
 RewriteRule api/v2.0/news                          api/index.php
-RewriteRule api/v2.0/login                         api.php?action=login [L,QSA]
+RewriteRule api/v2.0/login                         api/index.php
 RewriteRule api/v2.0/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.0/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.0/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -176,7 +172,7 @@ RewriteRule api/v2.1/open-questions                api/index.php
 RewriteRule api/v2.1/comments/([0-9]+)             api/index.php
 RewriteRule api/v2.1/attachments/([0-9]+)          api/index.php
 RewriteRule api/v2.1/news                          api/index.php
-RewriteRule api/v2.1/login                         api.php?action=login [L,QSA]
+RewriteRule api/v2.1/login                         api/index.php
 RewriteRule api/v2.1/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.1/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.1/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -203,7 +199,7 @@ RewriteRule api/v2.2/open-questions                api/index.php
 RewriteRule api/v2.2/comments/([0-9]+)             api/index.php
 RewriteRule api/v2.2/attachments/([0-9]+)          api/index.php
 RewriteRule api/v2.2/news                          api/index.php
-RewriteRule api/v2.2/login                         api.php?action=login [L,QSA]
+RewriteRule api/v2.2/login                         api/index.php
 RewriteRule api/v2.2/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.2/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.2/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -221,6 +217,8 @@ RewriteRule api/v2.3/categories                    api/index.php
 RewriteRule api/v2.3/comments/([0-9]+)             api/index.php
 RewriteRule api/v2.3/groups                        api/index.php
 RewriteRule api/v2.3/language                      api/index.php
+RewriteRule api/v2.3/login                         api/index.php
+RewriteRule api/v2.3/news                          api/index.php
 RewriteRule api/v2.3/open-questions                api/index.php
 RewriteRule api/v2.3/search                        api/index.php
 RewriteRule api/v2.3/searches/popular              api/index.php

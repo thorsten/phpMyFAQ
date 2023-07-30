@@ -221,15 +221,6 @@ switch ($action) {
         $response->setData($result);
         break;
 
-    case 'news':
-        $news = new News($faqConfig);
-        $result = $news->getLatestData(false, true, true);
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
-        break;
-
     case 'faqs':
         $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS);
         $faq = new Faq($faqConfig);
@@ -398,30 +389,6 @@ switch ($action) {
         $result = [
             'stored' => true
         ];
-        $response->setData($result);
-        break;
-
-    case 'login':
-        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-        $faqUsername = Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $user = new CurrentUser($faqConfig);
-        $userAuth = new UserAuthentication($faqConfig, $user);
-        try {
-            $user = $userAuth->authenticate($faqUsername, $faqPassword);
-            $response->setStatusCode(Response::HTTP_OK);
-            $result = [
-                'loggedin' => true
-            ];
-        } catch (Exception $e) {
-            $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $result = [
-                'loggedin' => false,
-                'error' => Translation::get('ad_auth_fail')
-            ];
-        }
         $response->setData($result);
         break;
 
