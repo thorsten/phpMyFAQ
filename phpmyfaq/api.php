@@ -221,34 +221,6 @@ switch ($action) {
         $response->setData($result);
         break;
 
-    case 'comments':
-        $comment = new Comments($faqConfig);
-        $result = $comment->getCommentsData($recordId, CommentType::FAQ);
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
-        break;
-
-    case 'attachments':
-        $attachments = $result = [];
-        try {
-            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
-        } catch (AttachmentException) {
-            $result = [];
-        }
-        foreach ($attachments as $attachment) {
-            $result[] = [
-                'filename' => $attachment->getFilename(),
-                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
-            ];
-        }
-        if (count($result) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
-        break;
-
     case 'news':
         $news = new News($faqConfig);
         $result = $news->getLatestData(false, true, true);

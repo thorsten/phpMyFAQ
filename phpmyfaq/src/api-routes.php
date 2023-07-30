@@ -15,9 +15,12 @@
  * @since     2023-07-29
  */
 
+use phpMyFAQ\Api\Controller\AttachmentController;
 use phpMyFAQ\Api\Controller\CategoryController;
+use phpMyFAQ\Api\Controller\CommentController;
 use phpMyFAQ\Api\Controller\GroupController;
 use phpMyFAQ\Api\Controller\LanguageController;
+use phpMyFAQ\Api\Controller\NewsController;
 use phpMyFAQ\Api\Controller\OpenQuestionController;
 use phpMyFAQ\Api\Controller\SearchController;
 use phpMyFAQ\Api\Controller\TagController;
@@ -34,8 +37,16 @@ $routes = new RouteCollection();
 
 // Public REST API
 $routes->add(
+    'api.attachments',
+    new Route("v{$apiVersion}/attachments/{recordId}", ['_controller' => [AttachmentController::class, 'list']])
+);
+$routes->add(
     'api.categories',
     new Route("v{$apiVersion}/categories", ['_controller' => [CategoryController::class, 'list']])
+);
+$routes->add(
+    'api.comments',
+    new Route("v{$apiVersion}/comments/{recordId}", ['_controller' => [CommentController::class, 'list']])
 );
 $routes->add(
     'api.groups',
@@ -44,6 +55,10 @@ $routes->add(
 $routes->add(
     'api.language',
     new Route("v{$apiVersion}/language", ['_controller' => [LanguageController::class, 'index']])
+);
+$routes->add(
+    'api.news',
+    new Route("v{$apiVersion}/news", ['_controller' => [NewsController::class, 'list']])
 );
 $routes->add(
     'api.open-questions',

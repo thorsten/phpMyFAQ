@@ -152,9 +152,9 @@ RewriteRule api/v2.0/searches/popular              api/index.php
 RewriteRule api/v2.0/search                        api/index.php
 RewriteRule api/v2.0/tags                          api/index.php
 RewriteRule api/v2.0/open-questions                api/index.php
-RewriteRule api/v2.0/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
-RewriteRule api/v2.0/attachments/([0-9]+)          api.php?action=attachments&recordId=$1 [L,QSA]
-RewriteRule api/v2.0/news                          api.php?action=news [L,QSA]
+RewriteRule api/v2.0/comments/([0-9]+)             api/index.php
+RewriteRule api/v2.0/attachments/([0-9]+)          api/index.php
+RewriteRule api/v2.0/news                          api/index.php
 RewriteRule api/v2.0/login                         api.php?action=login [L,QSA]
 RewriteRule api/v2.0/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.0/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
@@ -173,9 +173,9 @@ RewriteRule api/v2.1/searches/popular              api/index.php
 RewriteRule api/v2.1/search                        api/index.php
 RewriteRule api/v2.1/tags                          api/index.php
 RewriteRule api/v2.1/open-questions                api/index.php
-RewriteRule api/v2.1/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
-RewriteRule api/v2.1/attachments/([0-9]+)          api.php?action=attachments&recordId=$1 [L,QSA]
-RewriteRule api/v2.1/news                          api.php?action=news [L,QSA]
+RewriteRule api/v2.1/comments/([0-9]+)             api/index.php
+RewriteRule api/v2.1/attachments/([0-9]+)          api/index.php
+RewriteRule api/v2.1/news                          api/index.php
 RewriteRule api/v2.1/login                         api.php?action=login [L,QSA]
 RewriteRule api/v2.1/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.1/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
@@ -200,9 +200,9 @@ RewriteRule api/v2.2/searches/popular              api/index.php
 RewriteRule api/v2.2/search                        api/index.php
 RewriteRule api/v2.2/tags                          api/index.php
 RewriteRule api/v2.2/open-questions                api/index.php
-RewriteRule api/v2.2/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
-RewriteRule api/v2.2/attachments/([0-9]+)          api.php?action=attachments&recordId=$1 [L,QSA]
-RewriteRule api/v2.2/news                          api.php?action=news [L,QSA]
+RewriteRule api/v2.2/comments/([0-9]+)             api/index.php
+RewriteRule api/v2.2/attachments/([0-9]+)          api/index.php
+RewriteRule api/v2.2/news                          api/index.php
 RewriteRule api/v2.2/login                         api.php?action=login [L,QSA]
 RewriteRule api/v2.2/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.2/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
@@ -216,7 +216,9 @@ RewriteRule api/v2.2/register                      api.php?action=register [L,QS
 
 # REST API v2.3
 # * http://[...]/api/v2.3/<ACTION>
+RewriteRule api/v2.3/attachments/([0-9]+)          api/index.php
 RewriteRule api/v2.3/categories                    api/index.php
+RewriteRule api/v2.3/comments/([0-9]+)             api/index.php
 RewriteRule api/v2.3/groups                        api/index.php
 RewriteRule api/v2.3/language                      api/index.php
 RewriteRule api/v2.3/open-questions                api/index.php
