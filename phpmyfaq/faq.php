@@ -75,7 +75,7 @@ if ($showCaptcha !== '') {
 $currentCategory = $cat;
 
 $request = Request::createFromGlobals();
-$faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
+$faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
 
