@@ -103,7 +103,7 @@ if ('' !== $inputTag) {
     $tagHelper->setTaggingIds($tagIds);
 
     foreach ($tagIds as $tagId) {
-        if (!isset($tags[$tagId])) {
+        if (!isset($tags[$tagId]) && is_numeric($tagId)) {
             $tags[$tagId] = $tagging->getTagNameById($tagId);
         }
     }
