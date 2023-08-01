@@ -164,7 +164,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                 ]
             );
 
-        if (is_numeric($searchTerm)) {
+        if (is_numeric($searchTerm) && $faqConfig->get('search.searchForSolutionId')) {
             $search->setMatchingColumns([$fdTable . '.solution_id']);
         } else {
             $search->setMatchingColumns([$fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords']);
