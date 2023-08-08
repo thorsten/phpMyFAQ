@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "abraham/twitteroauth",
-            "version": "6.0.0",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abraham/twitteroauth.git",
-                "reference": "233bd808121dc6b747cf7cedbf105cf90715d3b4"
+                "reference": "20efddf17cd5105dfbf19282048432aa28bc414c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/233bd808121dc6b747cf7cedbf105cf90715d3b4",
-                "reference": "233bd808121dc6b747cf7cedbf105cf90715d3b4",
+                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/20efddf17cd5105dfbf19282048432aa28bc414c",
+                "reference": "20efddf17cd5105dfbf19282048432aa28bc414c",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
                 "issues": "https://github.com/abraham/twitteroauth/issues",
                 "source": "https://github.com/abraham/twitteroauth"
             },
-            "time": "2023-07-24T04:08:48+00:00"
+            "time": "2023-08-08T03:20:20+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
