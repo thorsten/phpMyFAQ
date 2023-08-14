@@ -75,7 +75,7 @@ if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
                                             </span>
                                         </div>
                                         <div class="form-check mb-3">
-                                            <input class="form-check-input" id="faqrememberme" type="checkbox"
+                                            <input class="form-check-input" id="faqrememberme" name="faqrememberme" type="checkbox"
                                                    value="rememberMe" />
                                             <label class="form-check-label"
                                                    for="faqrememberme"><?= Translation::get('rememberMe') ?></label>
