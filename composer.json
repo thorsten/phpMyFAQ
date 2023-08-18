@@ -50,7 +50,7 @@
     "phpdocumentor/reflection-docblock": "5.*",
     "phpstan/phpstan": "^1.0.0",
     "phpunit/phpunit": "10.*",
-    "rector/rector": "^0.17.0",
+    "rector/rector": "^0.18.0",
     "squizlabs/php_codesniffer": "*",
     "symfony/yaml": "6.*"
   },
