@@ -188,6 +188,7 @@ if (
         $faq->getRecord($faqData['id'], null, true);
 
         $faqData = $faq->faqRecord;
+        $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
         $queryString = 'insertentry';
     } else {
         $logging = new AdminLog($faqConfig);
