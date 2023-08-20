@@ -330,7 +330,7 @@ if (
                             <div class="tab-pane active" id="tab-question-answer">
                                 <!-- Revision -->
                                 <?php
-                                if ($user->perm->hasPermission($currentUserId, 'changebtrevs')) {
+                                if ($user->perm->hasPermission($currentUserId, 'changebtrevs') && $action === 'editentry') {
                                     $faqRevision = new Revision($faqConfig);
                                     $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
                                     if (count($revisions)) { ?>
