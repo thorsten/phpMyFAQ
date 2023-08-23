@@ -452,7 +452,7 @@ class Faq
                 );
 
                 $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
+                $oLink->itemTitle = $oLink->text = $oLink->tooltip = Strings::htmlentities($title);
 
                 // If random FAQs are activated, we don't need sticky FAQs
                 if (true === $this->config->get('records.randomSort')) {
@@ -2620,8 +2620,8 @@ class Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-                $output['title'][] = Utils::makeShorterText($row['question'], 8);
-                $output['preview'][] = $row['question'];
+                $output['title'][] = Utils::makeShorterText(Strings::htmlentities($row['question']), 8);
+                $output['preview'][] = Strings::htmlentities($row['question']);
                 $output['url'][] = Strings::htmlentities($row['url']);
             }
         } else {

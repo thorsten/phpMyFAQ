@@ -333,10 +333,10 @@ class Link
         }
         $htmlAnchor .= '>';
         if (('0' == $this->text) || (!empty($this->text))) {
-            $htmlAnchor .= Strings::htmlentities($this->text);
+            $htmlAnchor .= $this->text;
         } else {
             if (!empty($this->name)) {
-                $htmlAnchor .= Strings::htmlentities($this->name);
+                $htmlAnchor .= $this->name;
             } else {
                 $htmlAnchor .= $url;
             }

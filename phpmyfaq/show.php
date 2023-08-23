@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -99,7 +100,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         'mainPageContent',
         [
             'categoryHeader' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName(),
-            'categoryDescription' => $categoryData->getDescription(),
+            'categoryDescription' => Strings::htmlentities($categoryData->getDescription()),
             'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
