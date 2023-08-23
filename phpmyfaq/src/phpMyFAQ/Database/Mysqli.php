@@ -84,7 +84,7 @@ class Mysqli implements DatabaseDriver
         }
 
         // change character set to UTF-8
-        if (!$this->conn->set_charset('utf8')) {
+        if (!$this->conn->set_charset('utf8mb4')) {
             Database::errorPage($this->error());
         }
 
