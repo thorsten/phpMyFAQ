@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       span.replaceWith('<input name="tag" class="form-control" data-tag-id="' + id + '" value="' + span.html() + '">');
     } else {
       const input = $('input[data-tag-id="' + id + '"]');
-      input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
+      input.replaceWith('<span data-tag-id="' + id + '">' + escape(input.val().replace(/\//g, '&#x2F;')) + '</span>');
     }
   });
 
@@ -35,10 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = input.data('tag-id');
     const tag = input.val();
     const csrf = $('input[name=csrf]').val();
-
-    const escape = (unsafe) => {
-      return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
-    }
 
     $.ajax({
       url: 'index.php?action=ajax&ajax=tags&ajaxaction=update',
@@ -59,4 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return false;
   });
+
+  const escape = (unsafe) => {
+    return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+  }
 });

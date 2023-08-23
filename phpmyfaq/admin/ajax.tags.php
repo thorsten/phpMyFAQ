@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Entity\TagEntity as TagEntity;
 
@@ -55,7 +56,7 @@ switch ($ajaxAction) {
                 ++$i;
                 if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
                     $currentTag = new stdClass();
-                    $currentTag->tagName = $tagName;
+                    $currentTag->tagName = Strings::htmlentities($tagName);
                     $tagNames[] = $currentTag;
                 }
             }
