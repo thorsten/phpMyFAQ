@@ -513,8 +513,7 @@ if (
                                     <div class="col-lg-10">
                                         <input type="text" name="tags" id="tags" value="<?= $faqData['tags'] ?>"
                                                autocomplete="off"
-                                               class="form-control pmf-tags-autocomplete"
-                                               data-tag-list="<?= $faqData['tags'] ?>">
+                                               class="form-control pmf-tags-autocomplete">
                                         <small id="tagsHelp"
                                                class="form-text visually-hidden"><?= Translation::get('msgShowHelp') ?></small>
                                     </div>
