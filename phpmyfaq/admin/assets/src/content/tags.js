@@ -110,14 +110,15 @@ export const handleTags = () => {
       input: tagsAutocomplete,
       minLength: 1,
       onSelect: async (item, input) => {
-        let currentTags = input.getAttribute('data-tag-list');
+        let currentTags = input.value;
+        let currentTagsArray = currentTags.split(',');
         if (currentTags.length === 0) {
           currentTags = item.tagName;
         } else {
-          currentTags = currentTags + ', ' + item.tagName;
+          currentTagsArray[currentTagsArray.length-1] = item.tagName;
+          currentTags = currentTagsArray.join(',');
         }
         input.value = currentTags;
-        input.setAttribute('data-tag-list', currentTags);
       },
       fetch: async (text, callback) => {
         let match = text.toLowerCase();
