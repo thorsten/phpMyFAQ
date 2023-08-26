@@ -275,7 +275,7 @@ class FaqHelper extends Helper
                         'allowed_attributes' => ['class', 'style'],
                     ],
                     'table' => [
-                        'allowed_attributes' => ['class', 'style'],
+                        'allowed_attributes' => ['class', 'style', 'border'],
                     ],
                     'tr' => [
                         'allowed_attributes' => ['class', 'style'],
