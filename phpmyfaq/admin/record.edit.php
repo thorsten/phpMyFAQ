@@ -228,7 +228,7 @@ if (
     }
 
     // Set data for forms
-    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities($faqData['title']) : '');
+    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities($faqData['title'], ENT_HTML5 | ENT_COMPAT) : '');
     $faqData['content'] =
         (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)) : '');
     $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlentities($faqData['tags']) : '');
@@ -396,7 +396,7 @@ if (
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
-                                           value="<?= Strings::htmlentities($faqData['title'], ENT_COMPAT) ?>">
+                                           value="<?= $faqData['title'] ?>">
                                 </div>
 
                                 <!-- Answer -->
