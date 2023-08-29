@@ -261,6 +261,7 @@ class FaqHelper extends Helper
                 'tags' => [
                     'img' => [
                         'allowed_attributes' => ['alt', 'class', 'height', 'src', 'style', 'title', 'width'],
+                        'allow_data_uri' => true
                     ],
                     'div' => [
                         'allowed_attributes' => ['class', 'style'],
