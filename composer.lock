@@ -498,16 +498,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "4.8.3",
+            "version": "4.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "e1b5482a225ee0bd842a5b2e5043a4540b2846ad"
+                "reference": "a122b85d4a5a3257d471257a43ac3e5676a27ffe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/e1b5482a225ee0bd842a5b2e5043a4540b2846ad",
-                "reference": "e1b5482a225ee0bd842a5b2e5043a4540b2846ad",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/a122b85d4a5a3257d471257a43ac3e5676a27ffe",
+                "reference": "a122b85d4a5a3257d471257a43ac3e5676a27ffe",
                 "shasum": ""
             },
             "require": {
@@ -561,7 +561,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/4.8.3"
+                "source": "https://github.com/endroid/qr-code/tree/4.8.4"
             },
             "funding": [
                 {
@@ -569,7 +569,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-25T12:30:03+00:00"
+            "time": "2023-08-28T18:12:07+00:00"
         },
         {
             "name": "erusev/parsedown",
