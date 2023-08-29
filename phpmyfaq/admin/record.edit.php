@@ -188,6 +188,7 @@ if (
         $faq->getRecord($faqData['id'], null, true);
 
         $faqData = $faq->faqRecord;
+        $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
         $queryString = 'insertentry';
     } else {
         $logging = new AdminLog($faqConfig);
@@ -227,7 +228,7 @@ if (
     }
 
     // Set data for forms
-    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities($faqData['title']) : '');
+    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities($faqData['title'], ENT_HTML5 | ENT_COMPAT) : '');
     $faqData['content'] =
         (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)) : '');
     $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlentities($faqData['tags']) : '');
@@ -329,7 +330,7 @@ if (
                             <div class="tab-pane active" id="tab-question-answer">
                                 <!-- Revision -->
                                 <?php
-                                if ($user->perm->hasPermission($currentUserId, 'changebtrevs')) {
+                                if ($user->perm->hasPermission($currentUserId, 'changebtrevs') && $action === 'editentry') {
                                     $faqRevision = new Revision($faqConfig);
                                     $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
                                     if (count($revisions)) { ?>
@@ -395,7 +396,7 @@ if (
                                     <input type="text" name="question" id="question"
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
-                                           value="<?= Strings::htmlentities($faqData['title'], ENT_COMPAT) ?>">
+                                           value="<?= $faqData['title'] ?>">
                                 </div>
 
                                 <!-- Answer -->
@@ -512,8 +513,7 @@ if (
                                     <div class="col-lg-10">
                                         <input type="text" name="tags" id="tags" value="<?= $faqData['tags'] ?>"
                                                autocomplete="off"
-                                               class="form-control pmf-tags-autocomplete"
-                                               data-tag-list="<?= $faqData['tags'] ?>">
+                                               class="form-control pmf-tags-autocomplete">
                                         <small id="tagsHelp"
                                                class="form-text visually-hidden"><?= Translation::get('msgShowHelp') ?></small>
                                     </div>

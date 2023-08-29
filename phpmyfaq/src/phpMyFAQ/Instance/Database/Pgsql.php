@@ -40,7 +40,7 @@ class Pgsql extends Database implements Driver
 
         'faqattachment' => 'CREATE TABLE %sfaqattachment (
             id SERIAL NOT NULL,
-            record_id SERIAL NOT NULL,
+            record_id INTEGER NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
             real_hash CHAR(32) NOT NULL,
             virtual_hash CHAR(32) NOT NULL,
@@ -113,6 +113,8 @@ class Pgsql extends Database implements Driver
             category_id INTEGER NOT NULL,
             position INTEGER NOT NULL,
             PRIMARY KEY (category_id))',
+
+        'faqcategory_order_position_seq' => 'CREATE SEQUENCE %sfaqcategory_order_position_seq START WITH 1',
 
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INTEGER NOT NULL,
@@ -327,6 +329,8 @@ class Pgsql extends Database implements Driver
             jwt TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id))',
 
+        'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
+
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
             user_id SERIAL NOT NULL,
             last_modified VARCHAR(14) NULL,
@@ -372,7 +376,7 @@ class Pgsql extends Database implements Driver
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -385,7 +389,7 @@ class Pgsql extends Database implements Driver
      *
      * @return bool
      */
-    public function createTables(string $prefix = '')
+    public function createTables(string $prefix = ''): bool
     {
         foreach ($this->createTableStatements as $key => $stmt) {
             if ($key == 'idx_records' || $key == 'faqsessions_idx') {

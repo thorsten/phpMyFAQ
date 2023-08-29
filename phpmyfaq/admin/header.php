@@ -110,7 +110,7 @@ $secLevelEntries['exports'] = $adminHelper->addMenuEntry('export', 'export', 'ad
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
 
 $secLevelEntries['config'] = $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action, false);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editinstances+addinstances+delinstances',
     'instances',

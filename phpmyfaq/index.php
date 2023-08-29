@@ -332,8 +332,8 @@ $currentPageUrl = Strings::htmlentities($faqLink->getCurrentUrl());
 //
 // Found a record ID?
 //
-$id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
-if (!is_null($id)) {
+$id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
+if ($id !== 0) {
     $faq->getRecord($id);
     $title = ' - ' . $faq->faqRecord['title'];
     $keywords = ',' . $faq->faqRecord['keywords'];
@@ -350,7 +350,6 @@ if (!is_null($id)) {
     $faqLink->itemTitle = $faq->faqRecord['title'];
     $currentPageUrl = $faqLink->toString(true);
 } else {
-    $id = '';
     $title = ' - ' . System::getPoweredByString();
     $keywords = '';
     $metaDescription = str_replace('"', '', (string) $faqConfig->get('main.metaDescription'));

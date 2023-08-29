@@ -207,7 +207,7 @@ class SearchHelper extends Helper
 
                 $categoryInfo = $this->Category->getCategoriesFromFaq($result->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
-                $question = Utils::chopString($result->question, 15);
+                $question = Utils::chopString(Strings::htmlentities($result->question), 15);
                 $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 20);
 
                 $searchTerm = str_replace(
@@ -246,7 +246,7 @@ class SearchHelper extends Helper
                 $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf(
                     '<strong>%s</strong><br><i class="fa fa-question-circle-o"></i> %s<br>',
-                    $this->Category->getPath($categoryInfo[0]['id']),
+                    Strings::htmlentities($this->Category->getPath($categoryInfo[0]['id'])),
                     $oLink->toHtmlAnchor()
                 );
                 $html .= sprintf(

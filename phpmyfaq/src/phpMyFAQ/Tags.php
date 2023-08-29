@@ -110,6 +110,7 @@ class Tags
     public function saveTags(int $recordId, array $tags): bool
     {
         $currentTags = $this->getAllTags();
+        $registeredTags = [];
 
         // Delete all tag references for the faq record
         if (count($tags) > 0) {
@@ -119,7 +120,7 @@ class Tags
         // Store tags and references for the faq record
         foreach ($tags as $tagName) {
             $tagName = trim($tagName);
-            if (Strings::strlen($tagName) > 0) {
+            if (Strings::strlen($tagName) > 0 && !in_array($tagName, $registeredTags, true)) {
                 if (
                     !in_array(
                         Strings::strtolower($tagName),
@@ -156,6 +157,7 @@ class Tags
                     );
                 }
                 $this->config->getDb()->query($query);
+                $registeredTags[] = $tagName;
             }
         }
 

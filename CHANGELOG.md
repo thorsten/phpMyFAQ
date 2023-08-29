@@ -15,7 +15,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for PHP 8.3 (Thorsten)
 - updated to PNPM (Thorsten)
 
-### phpMyFAQ v3.2.0 - 2023-07-
+### phpMyFAQ v3.2.0-RC.4 - 2023-08-
 
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
@@ -28,7 +28,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added 2FA (Two-Factor Authentication) (Jan Harms)
 - added experimental Azure AD login (Thorsten)
 - added option to use Google ReCaptcha (Thorsten)
-- added REST API v2.2 to fetch groups and add categories (Thorsten)
+- added REST API v2.2 to fetch groups, add categories, and update FAQs (Thorsten)
 - added verification of backup files (Thorsten)
 - added option to disable questions and notifications (Thorsten)
 - added new options for more flexibility (Jan Harms)
@@ -46,6 +46,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
+
+### phpMyFAQ v3.1.17 - 2023-08-27
+
+- fixed multiple security vulnerabilities (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.16 - 2023-07-16
 

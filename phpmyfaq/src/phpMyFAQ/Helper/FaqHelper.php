@@ -165,7 +165,10 @@ class FaqHelper extends Helper
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
                 if (!is_null($data['category_id']) && $data['category_id'] !== $lastCategory) {
-                    $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
+                    $output .= sprintf(
+                        '<h3>%s</h3>',
+                        $this->cleanUpContent($category->getPath($data['category_id'], ' &raquo; '))
+                    );
                 }
 
                 $output .= sprintf('<h4>%s</h4>', Strings::htmlentities($data['title']));
@@ -239,6 +242,7 @@ class FaqHelper extends Helper
     {
         $htmlSanitizer = new HtmlSanitizer(
             (new HtmlSanitizerConfig())
+                ->withMaxInputLength(40000)
                 ->allowSafeElements()
                 ->allowStaticElements()
                 ->allowRelativeLinks()

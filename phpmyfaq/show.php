@@ -20,6 +20,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,7 +115,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         [
             'categoryHeader' => Translation::get('msgEntriesIn') . $categoryData->getName(),
             'categoryFaqsHeader' => $categoryData->getName(),
-            'categoryDescription' => $categoryData->getDescription(),
+            'categoryDescription' => Strings::htmlentities($categoryData->getDescription()),
             'categorySubsHeader' => Translation::get('msgSubCategories'),
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
