@@ -254,7 +254,7 @@ class FaqHelper extends Helper
     {
         $htmlSanitizer = Sanitizer::create(
             [
-                'max_input_length' => 40000,
+                'max_input_length' => 100000,
                 'extensions' => [
                     'basic', 'code', 'image', 'list', 'table', 'iframe', 'details', 'extra'
                 ],
