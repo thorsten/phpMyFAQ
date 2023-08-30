@@ -89,8 +89,8 @@ function renderInputForm(mixed $key, string $type): void
                     $type = 'url';
                     break;
                 default:
-                  $type = 'text';
-                  break;
+                    $type = 'text';
+                    break;
             }
 
             printf(
