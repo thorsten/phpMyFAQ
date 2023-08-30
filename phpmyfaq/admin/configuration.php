@@ -58,6 +58,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             unset($editData['edit']['main.currentVersion']); // don't update the version number
         }
 
+        if (
+            isset($editData['edit']['main.referenceURL']) &&
+            is_null(Filter::filterVar($editData['edit']['main.referenceURL'], FILTER_VALIDATE_URL))
+        ) {
+            unset($editData['edit']['main.referenceURL']);
+        }
+
         foreach ($editData['edit'] as $key => $value) {
             // Remove forbidden characters
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);

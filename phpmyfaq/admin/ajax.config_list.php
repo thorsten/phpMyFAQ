@@ -86,8 +86,8 @@ function renderInputForm($key, $type)
                     $type = 'url';
                     break;
                 default:
-                  $type = 'text';
-                  break;
+                    $type = 'text';
+                    break;
             }
 
             printf(
