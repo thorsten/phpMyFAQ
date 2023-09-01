@@ -104,6 +104,19 @@ class CategoryImage
     }
 
     /**
+     * Checks for valid image MIME types, returns true if valid
+     * @param string $file
+     * @return bool
+     */
+    private function isValidMimeType(string $file): bool
+    {
+        $types = ['image/jpeg','image/gif','image/png'];
+        $type = mime_content_type($file);
+
+        return in_array($type, $types);
+    }
+
+    /**
      * Uploads the current file and moves it into the images/ folder.
      *
      * @throws Exception
@@ -117,11 +130,16 @@ class CategoryImage
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {
                 throw new Exception('Cannot detect image size');
             }
+
+            if (!$this->isValidMimeType($this->uploadedFile['tmp_name'])) {
+                throw new Exception('Image MIME type validation failed.');
+            }
+
             if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
-                return true;
-            } else {
                 throw new Exception('Cannot move uploaded image');
             }
+
+            return true;
         } else {
             throw new Exception('Uploaded image is too big');
         }

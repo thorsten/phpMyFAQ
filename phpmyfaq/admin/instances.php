@@ -73,7 +73,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
 
         // Collect updated data for database
         $updatedData = new InstanceEntity();
-        $updatedData->setUrl(Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_SPECIAL_CHARS));
+        $updatedData->setUrl(Filter::filterInput(INPUT_POST, 'url', FILTER_VALIDATE_URL));
         $updatedData->setInstance(Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_SPECIAL_CHARS));
         $updatedData->setComment(Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS));
 
@@ -84,7 +84,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             $moveInstance = true;
         }
 
-        if ($updatedClient->updateInstance($instanceId, $updatedData)) {
+        if (is_null($updatedData->getUrl())) {
+            echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
+        } else {
+          if ($updatedClient->updateInstance($instanceId, $updatedData)) {
             if ($moveInstance) {
                 $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
                 $updatedClient->deleteClientFolder($originalData->url);
