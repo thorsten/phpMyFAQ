@@ -64,7 +64,8 @@ class SMTP implements MailUserAgentInterface
             ->from(empty($sender) ? $this->user : $sender)
             ->to($recipients)
             ->subject($headers['Subject'])
-            ->text($body);
+            ->text($body)
+            ->html($body);
 
         if (isset($headers['CC'])) {
             $email->cc($headers['CC']);
