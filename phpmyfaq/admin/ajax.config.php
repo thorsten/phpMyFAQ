@@ -64,6 +64,13 @@ switch ($ajaxAction) {
             exit(1);
         }
 
+        $url = 'https://' . $url . '.' . $_SERVER['SERVER_NAME'];
+        if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
+            $http->setStatus(400);
+            $http->sendJsonWithHeaders(['error' => 'Cannot create instance: wrong URL']);
+            exit(1);
+        }
+
         $data = [
             'url' => 'https://' . $url . '.' . $_SERVER['SERVER_NAME'],
             'instance' => $instance,

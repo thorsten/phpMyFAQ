@@ -70,7 +70,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
 
         // Collect updated data for database
         $updatedData = [];
-        $updatedData['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_UNSAFE_RAW);
+        $updatedData['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_VALIDATE_URL);
         $updatedData['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_UNSAFE_RAW);
         $updatedData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_UNSAFE_RAW);
 
@@ -81,27 +81,36 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             $moveInstance = true;
         }
 
-        if ($updatedClient->updateInstance($instanceId, $updatedData)) {
+        if (is_null($updatedData['url'])) {
+            printf(
+                '<p class="alert alert-danger">%s%s<br/>%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                $PMF_LANG['ad_entryins_fail'],
+                 $faqConfig->getDb()->error()
+            );
+        } else {
+          if ($updatedClient->updateInstance($instanceId, $updatedData)) {
             if ($moveInstance) {
-                try {
-                    $updatedClient->moveClientFolder($originalData->url, $updatedData['url']);
-                    $updatedClient->deleteClientFolder($originalData->url);
-                } catch (Exception $e) {
-                    // handle exception
-                }
+              try {
+                $updatedClient->moveClientFolder($originalData->url, $updatedData['url']);
+                $updatedClient->deleteClientFolder($originalData->url);
+              } catch (Exception $e) {
+                // handle exception
+              }
             }
             printf(
                 '<p class="alert alert-success">%s%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
                 $PMF_LANG['ad_config_saved']
             );
-        } else {
+          } else {
             printf(
                 '<p class="alert alert-danger">%s%s<br/>%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
                 $PMF_LANG['ad_entryins_fail'],
                 $faqConfig->getDb()->error()
             );
+          }
         }
     }
     ?>
