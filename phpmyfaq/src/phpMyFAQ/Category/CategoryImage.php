@@ -130,6 +130,19 @@ class CategoryImage
     }
 
     /**
+     * Checks for valid image MIME types, returns true if valid
+     * @param string $file
+     * @return bool
+     */
+    private function isValidMimeType(string $file): bool
+    {
+        $types = ['image/jpeg','image/gif','image/png'];
+        $type = mime_content_type($file);
+
+        return in_array($type, $types);
+    }
+
+    /**
      * Uploads the current file and moves it into the images/ folder.
      *
      * @return bool
@@ -140,14 +153,19 @@ class CategoryImage
             $this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name'])
             && $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')
         ) {
-            if (false === getimagesize($this->uploadedFile['tmp_name'])) {
+            if (!getimagesize($this->uploadedFile['tmp_name'])) {
                 return false;
             }
-            if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
-                return true;
-            } else {
+
+            if (!$this->isValidMimeType($this->uploadedFile['tmp_name'])) {
                 return false;
             }
+
+            if (!move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
+                return false;
+            }
+
+            return true;
         } else {
             return false;
         }
