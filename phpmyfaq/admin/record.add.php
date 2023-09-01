@@ -67,7 +67,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
     $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_SPECIAL_CHARS);
     $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_SPECIAL_CHARS);
-    $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
     $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $solutionId = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
