@@ -75,7 +75,7 @@ class FaqHelper extends Helper
 
         return sprintf(
             '<i aria-hidden="true" class="fa fa-twitter"></i>' .
-            '<a rel="nofollow" href="%s" target="_blank" class="text-decoration-none">Twitter</a>',
+            '<a rel="nofollow" href="%s" target="_blank" class="text-decoration-none">X (Twitter)</a>',
             $url
         );
     }

@@ -33,8 +33,8 @@ This documentation is licensed under a [Creative Commons License](http://creativ
 ### Support
 
 If you should run into any problems using phpMyFAQ check out our support forums at
-[forum.phpmyfaq.de](https://forum.phpmyfaq.de/). You can also use our Twitter account
-[@phpMyFAQ](https://twitter.com/phpMyFAQ) to ask us short question if they fit into 280 characters. There is no free
+[forum.phpmyfaq.de](https://forum.phpmyfaq.de/). You can also use our X account
+[@phpMyFAQ](https://x.com/phpMyFAQ) to ask us short question if they fit into 280 characters. There is no free
 support by phone or email, please refrain from calling or mailing us.
 
 The phpMyFAQ team offers the following paid services:

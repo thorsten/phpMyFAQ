@@ -989,13 +989,13 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = "關鍵字 - 問題 - 答
 // added 2.7.0-alpha - 2010-09-13 by Thorsten 開發者
 $PMF_LANG['msgLoginUser'] = "登入 Login";
 $PMF_LANG['socialNetworksControlCenter'] = "社群網路設定 (Social networks configuration)";
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array("checkbox", "Twitter 支援 (預設: 關閉) Twitter support (default: deactivated)");
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array("input", "Twitter 客戶鑰匙 Twitter Consumer Key");
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array("input", "Twitter 客戶秘密問題 Twitter Consumer Secret");
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = array("checkbox", "X (Twitter) 支援 (預設: 關閉) X (Twitter) support (default: deactivated)");
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = array("input", "X (Twitter) 客戶鑰匙 X (Twitter) Consumer Key");
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array("input", "X (Twitter) 客戶秘密問題 X (Twitter) Consumer Secret");
 
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml 開發者
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array("input", "Twitter 存取金鑰 Twitter Access Token Key");
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array("input", "Twitter 秘密存取金鑰 Twitter Access Token Secret");
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array("input", "X (Twitter) 存取金鑰 X (Twitter) Access Token Key");
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array("input", "X (Twitter) 秘密存取金鑰 X (Twitter) Access Token Secret");
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky 開發者
 $PMF_LANG["ad_menu_attachments"] = "FAQ 附加檔案 (Attachments)";

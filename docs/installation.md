@@ -276,12 +276,12 @@ Please be aware:
   etc), so there is no way to asses a file directly using the name it was uploaded under.
 - Download continuation isn't supported.
 
-## 2.15 Twitter support
+## 2.15 X (Twitter) support
 
-phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ
-as a Twitter application on [Twitter](https://dev.twitter.com/apps/new), all new FAQ additions in the administration
-backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag
-"phpMyFAQ" will be converted to "#phpmyfaq".
+phpMyFAQ supports X (Twitter) via OAuth. If you enable X (Twitter) support in the social network configuration and add
+phpMyFAQ as a X (Twitter) application on [X (Twitter)](https://dev.twitter.com/apps/new), all new FAQ additions in the
+administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to X
+(Twitter), e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
 
 ## 2.16 Server side recommendations
 

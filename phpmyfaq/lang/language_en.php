@@ -999,13 +999,13 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - An
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Login';
 $PMF_LANG['socialNetworksControlCenter'] = 'Social networks';
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = ['checkbox', 'Twitter support'];
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = ['input', 'Twitter Consumer Key'];
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = ['input', 'Twitter Consumer Secret'];
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = ['checkbox', 'X (Twitter) support'];
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = ['input', 'X (Twitter) Consumer Key'];
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = ['input', 'X (Twitter) Consumer Secret'];
 
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = ['input', 'Twitter Access Token Key'];
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = ['input', 'Twitter Access Token Secret'];
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = ['input', 'X (Twitter) Access Token Key'];
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = ['input', 'X (Twitter) Access Token Secret'];
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG["ad_menu_attachments"] = "FAQ Attachments";

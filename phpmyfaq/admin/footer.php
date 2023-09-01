@@ -68,8 +68,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                             Buy us a coffee
                         </a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">
-                            Twitter
+                        <a target="_blank" rel="noopener" href="https://x.com/phpMyFAQ">
+                            X
                         </a>
                         &middot;
                         <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">

@@ -999,9 +999,9 @@ $PMF_LANG["search.relevance.keywords-thema-content"] = "Mots-clés - Question - 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG["msgLoginUser"] = "Connexion";
 $PMF_LANG["socialNetworksControlCenter"] = "Réseaux sociaux";
-$LANG_CONF["socialnetworks.enableTwitterSupport"] = ["checkbox", "Support Twitter"];
-$LANG_CONF["socialnetworks.twitterConsumerKey"] = ["input", "Twitter Consumer Key"];
-$LANG_CONF["socialnetworks.twitterConsumerSecret"] = ["input", "Twitter Consumer Secret"];
+$LANG_CONF["socialnetworks.enableTwitterSupport"] = ["checkbox", "Support X (Twitter)"];
+$LANG_CONF["socialnetworks.twitterConsumerKey"] = ["input", "X (Twitter) Consumer Key"];
+$LANG_CONF["socialnetworks.twitterConsumerSecret"] = ["input", "X (Twitter) Consumer Secret"];
 
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
 $LANG_CONF["socialnetworks.twitterAccessTokenKey"] = ["input", "Twitter Access Token Key"];
