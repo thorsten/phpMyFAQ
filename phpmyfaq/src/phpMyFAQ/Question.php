@@ -58,6 +58,7 @@ class Question
             $questionData['is_visible'],
             0
         );
+
         $this->config->getDb()->query($query);
 
         return true;

@@ -2,7 +2,7 @@
 
 Used to add a new FAQ in one existing category.
 
-**URL** : `/api/v2.1/question`
+**URL** : `/api/v2.2/question`
 
 **HTTP Header** :
 

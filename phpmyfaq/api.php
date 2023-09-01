@@ -610,11 +610,12 @@ switch ($action) {
             break;
         }
 
-        $languageCode = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS);
-        $categoryId = Filter::filterInput(INPUT_POST, 'category-id', FILTER_VALIDATE_INT);
-        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
+        $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
+        $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($postData['author'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($postData['email'], FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($faqConfig->get('records.enableVisibilityQuestions')) {
             $visibility = 'Y';
