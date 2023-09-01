@@ -87,14 +87,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         if (is_null($updatedData->getUrl())) {
             echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
         } else {
-          if ($updatedClient->updateInstance($instanceId, $updatedData)) {
-            if ($moveInstance) {
-                $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
-                $updatedClient->deleteClientFolder($originalData->url);
+            if ($updatedClient->updateInstance($instanceId, $updatedData)) {
+                if ($moveInstance) {
+                    $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
+                    $updatedClient->deleteClientFolder($originalData->url);
+                }
+                echo Alert::success('ad_config_saved');
+            } else {
+                echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
             }
-            echo Alert::success('ad_config_saved');
-        } else {
-            echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
         }
     }
     ?>
