@@ -99,7 +99,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $template->parse(
         'mainPageContent',
         [
-            'categoryHeader' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName(),
+            'categoryHeader' => $PMF_LANG['msgEntriesIn'] . Strings::htmlentities($categoryData->getName()),
             'categoryDescription' => Strings::htmlentities($categoryData->getDescription()),
             'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
             'categoryContent' => $records,
