@@ -75,6 +75,7 @@ if (
             if (is_array($userdata)) {
                 $userdata['status'] = $user->getStatus();
                 $userdata['login'] = Strings::htmlentities($user->getLogin(), ENT_COMPAT);
+                $userdata['display_name'] = Strings::htmlentities($userdata['display_name'], ENT_COMPAT);
                 $userdata['is_superadmin'] = $user->isSuperAdmin();
                 $userdata['auth_source'] = $user->getUserAuthSource();
             } else {
