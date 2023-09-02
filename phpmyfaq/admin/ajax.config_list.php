@@ -22,6 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Utils;
 
@@ -95,7 +96,7 @@ function renderInputForm($key, $type)
                 is_numeric($value) ? 'number' : $type,
                 $key,
                 $key,
-                $value
+                Strings::htmlentities($value)
             );
             if ('api.apiClientToken' === $key) {
                 echo '<div class="input-group-append">';
@@ -143,7 +144,7 @@ function renderInputForm($key, $type)
             printf(
                 '<input class="form-control" type="password" autocomplete="off" name="edit[%s]" value="%s">',
                 $key,
-                $faqConfig->get($key)
+                Strings::htmlentities($faqConfig->get($key))
             );
             echo "</div>\n";
             break;
