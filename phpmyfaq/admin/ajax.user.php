@@ -66,6 +66,7 @@ if (
             $userdata = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
             $userdata['login'] = Strings::htmlentities($user->getLogin());
+            $userdata['display_name'] = Strings::htmlentities($userdata['display_name']);
             $userdata['is_superadmin'] = $user->isSuperAdmin();
             $http->sendJsonWithHeaders($userdata);
             break;
