@@ -25,6 +25,7 @@ use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
+use stdClass;
 
 /**
  * Class Elasticsearch
@@ -200,7 +201,7 @@ class Elasticsearch
      *
      * @param string[] $faq
      */
-    public function index(array $faq): object
+    public function index(array $faq): ?object
     {
         $params = [
             'index' => $this->esConfig->getIndex(),
@@ -217,8 +218,8 @@ class Elasticsearch
 
         try {
             return $this->client->index($params)->asObject();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException) {
-            //return ['error' => $e->getMessage()];
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+            $this->config->getLogger()->error('Index error.', [$e->getMessage()]);
         }
     }
 

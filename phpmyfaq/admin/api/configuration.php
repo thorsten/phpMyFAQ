@@ -82,9 +82,17 @@ switch ($ajaxAction) {
             exit(1);
         }
 
+        $url = 'https://' . $url . '.' . $_SERVER['SERVER_NAME'];
+        if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'Cannot create instance: wrong URL']);
+            $response->send();
+            exit(1);
+        }
+
         $data = new InstanceEntity();
         $data
-            ->setUrl('https://' . $url . '.' . $_SERVER['SERVER_NAME'])
+            ->setUrl($url)
             ->setInstance($instance)
             ->setComment($comment);
 

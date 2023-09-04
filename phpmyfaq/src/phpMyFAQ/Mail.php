@@ -73,7 +73,7 @@ class Mail
     public string $contentTransferEncoding = '8bit';
 
     /**
-     * The one and only valid End Of Line sequence as per RFC 2822:
+     * The one and only valid EOL sequence as per RFC 2822:
      * carriage-return followed by line-feed.
      */
     public string $eol = "\r\n";
@@ -176,7 +176,7 @@ class Mail
     /*
      * Default constructor.
      * Note: any email will be sent from the PMF administrator, use unsetFrom
-     *       before using setFrom.
+     * before using setFrom.
      *
      * @param Configuration $config
      */
@@ -278,7 +278,7 @@ class Mail
      */
     private function addEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
     {
-        // Sanity check
+        // Check
         if (!self::validateEmail($address)) {
             throw new Exception('"' . $address . '" is not a valid email address!');
         }
@@ -356,7 +356,7 @@ class Mail
         string $cid = ''
     ): bool {
         if (!file_exists($path)) {
-            // File not found
+            // File isn't found
             return false;
         } elseif (('inline' == $disposition) && empty($cid)) {
             // Content ID is required
@@ -379,19 +379,6 @@ class Mail
     }
 
     /**
-     * Add a recipient as <BCC>.
-     *
-     * @param string      $address User e-mail address.
-     * @param string|null $name Username (optional).
-     * @return bool True if successful, false otherwise.
-     * @throws Exception
-     */
-    public function addBcc(string $address, string $name = null): bool
-    {
-        return $this->addEmailTo($this->bcc, 'Bcc', $address, $name);
-    }
-
-    /**
      * Add a recipient as <CC>.
      *
      * @param string      $address User e-mail address.
@@ -402,19 +389,6 @@ class Mail
     public function addCc(string $address, string $name = null): bool
     {
         return $this->addEmailTo($this->cc, 'Cc', $address, $name);
-    }
-
-    /**
-     * Add an address to send a notification to.
-     *
-     * @param string      $address User e-mail address.
-     * @param string|null $name Username (optional).
-     * @return bool True if successful, false otherwise.
-     * @throws Exception
-     */
-    public function addNotificationTo(string $address, string $name = null): bool
-    {
-        return $this->addEmailTo($this->notifyTo, 'Disposition-Notification-To', $address, $name);
     }
 
     /**
@@ -785,58 +759,6 @@ class Mail
     }
 
     /**
-     * Set an HTML message providing also a plain text alternative message,
-     * if not already set using the $messageAlt property.
-     * Besides, it is possible to put resources as inline attachments.
-     *
-     * @param string $message HTML message.
-     * @param bool   $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
-     * @param bool   $inline Add images as inline attachments. Defaults to false.
-     */
-    public function setHTMLMessage(string $message, bool $sanitize = false, bool $inline = false): void
-    {
-        // No Javascript at all
-        // 1/2. <script blahblahblah>blahblahblah</tag>
-        $message = Strings::preg_replace(
-            '/(<script[^>]*>.*<\/script>)|<script[^\/]*\/>|<script[^\/]*>/is',
-            '',
-            $message
-        );
-
-        // Cleanup potentially dangerous HTML tags:
-        if ($sanitize && !is_null($message)) {
-            // 1/2. <tag blahblahblah>blahblahblah</tag>
-            $message = Strings::preg_replace(
-                '/<(applet|embed|head|meta|object|style|title)[^>]*>.*<\/\\1>/is',
-                '',
-                $message
-            );
-            // 2/2. <tag blahblahblah />
-            $message = Strings::preg_replace(
-                '/<(applet|embed|head|meta|object|style|title)[^\/]*\/>/is',
-                '',
-                $message
-            );
-        }
-
-        if ($inline) {
-            trigger_error(
-                '<strong>Mail Class</strong>: inline option is not implemented yet.',
-                E_USER_ERROR
-            );
-        }
-
-        // Set the HTML text as the main message
-        $this->message = trim($message);
-
-        // If no alternative text has been provided yet, use just
-        // the HTML message stripping any HTML tag
-        if (empty($this->messageAlt)) {
-            $this->messageAlt = trim(strip_tags($this->message));
-        }
-    }
-
-    /**
      * Set the "Reply-to" address.
      *
      * @param string      $address User e-mail address.
@@ -847,43 +769,6 @@ class Mail
     public function setReplyTo(string $address, string $name = null): bool
     {
         return $this->setEmailTo($this->replyTo, 'Reply-To', $address, $name);
-    }
-
-    /**
-     * Set the "Return-Path" address.
-     *
-     * @param string $address User e-mail address.
-     * @return bool True if successful, false otherwise.
-     * @throws Exception
-     */
-    public function setReturnPath(string $address): bool
-    {
-        return $this->setEmailTo($this->returnPath, 'Return-Path', $address);
-    }
-
-    /**
-     * Set the "Sender" address.
-     *
-     * @param string $address User e-mail address.
-     * @param null   $name Username (optional).
-     * @return bool True if successful, false otherwise.
-     * @throws Exception
-     */
-    public function setSender(string $address, $name = null): bool
-    {
-        return $this->setEmailTo($this->sender, 'Sender', $address, $name);
-    }
-
-    /**
-     * Remove any previous "From" address.
-     *
-     * @return bool True if successful, false otherwise.
-     */
-    public function unsetFrom(): bool
-    {
-        $this->from = [];
-
-        return true;
     }
 
     /**

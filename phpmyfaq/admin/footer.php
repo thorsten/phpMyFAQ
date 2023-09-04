@@ -57,7 +57,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
                     <div class="text-muted">
-                        Proudly <?= System::getPoweredByString() ?>
+                        Proudly <?= System::getPoweredByString() ?> |
+                        <a target="_blank" class="text-decoration-none" href="https://en.isupportukraine.eu/trombinoscope">
+                            #StandWithUkraine
+                        </a>
                     </div>
                     <div>
                         <a target="_blank" rel="noopener" href="<?= System::getDocumentationUrl() ?>">
@@ -68,8 +71,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                             Buy us a coffee
                         </a>
                         &middot;
-                        <a target="_blank" rel="noopener" href="https://twitter.com/phpMyFAQ">
-                            Twitter
+                        <a target="_blank" rel="noopener" href="https://x.com/phpMyFAQ">
+                            X
                         </a>
                         &middot;
                         <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">

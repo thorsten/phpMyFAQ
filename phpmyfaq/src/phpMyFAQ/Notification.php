@@ -90,15 +90,15 @@ class Notification
             $link = new Link($url, $this->config);
             $link->itemTitle = $this->faq->getRecordTitle($faqId);
 
-            $this->mail->message = html_entity_decode(
-                Translation::get('msgMailCheck')
-            ) . "<p><strong>" . Translation::get('msgAskYourQuestion') . "</strong> "
-              .  $this->faq->getRecordTitle($faqId) . "</p>"
-              . $this->faq->faqRecord['content']
-              . "<br />" . $this->config->getTitle()
-              . ': ' . $link->toString();
+            $this->mail->message = html_entity_decode(Translation::get('msgMailCheck')) .
+                "<p><strong>" . Translation::get('msgAskYourQuestion') . ":</strong> " .
+                $this->faq->getRecordTitle($faqId) . "</p>" .
+                "<p><strong>" . Translation::get('msgNewContentArticle') . ":</strong> " .
+                $this->faq->faqRecord['content'] . "</p>" .
+                "<hr>" .
+                $this->config->getTitle() .
+                ': <a target="_blank" href="' . $link->toString() . '">' . $link->toString() . '</a>';
 
-            $this->mail->setHTMLMessage($this->mail->message);
             $this->mail->contentType = 'text/html';
 
             $this->mail->send();

@@ -95,10 +95,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     </td>
                     <td>
                       <strong>
-                          <?= Strings::htmlentities($category->categoryName[$openQuestion->getCategoryId()]['name']) ?>
+                      <?= Strings::htmlentities($category->categoryName[$openQuestion->getCategoryId()]['name'] ?? '') ?>
                       </strong>
                       <br>
-                        <?= Strings::htmlentities($openQuestion->getQuestion()) ?>
+                      <?= Strings::htmlentities($openQuestion->getQuestion()) ?>
                     </td>
                     <td>
                       <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle&csrf=<?= Token::getInstance()->getTokenString('toggle-question-visibility') ?>"

@@ -45,9 +45,6 @@ class QuestionHelper
      */
     public function sendSuccessMail(array $questionData, array $categories): void
     {
-        $questionObject = new Question($this->config);
-        $questionObject->addQuestion($questionData);
-
         $questionMail = Translation::get('msgNewQuestionAdded') . "\n\n User: " .
             $questionData['username'] .
             ', ' . $questionData['email'] . "\n" . Translation::get('msgCategory') .

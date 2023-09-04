@@ -113,7 +113,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $template->parse(
         'mainPageContent',
         [
-            'categoryHeader' => Translation::get('msgEntriesIn') . $categoryData->getName(),
+            'categoryHeader' => Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName()),
             'categoryFaqsHeader' => $categoryData->getName(),
             'categoryDescription' => Strings::htmlentities($categoryData->getDescription()),
             'categorySubsHeader' => Translation::get('msgSubCategories'),

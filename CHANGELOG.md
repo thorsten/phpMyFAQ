@@ -16,7 +16,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
 
-### phpMyFAQ v3.2.0-RC.4 - 2023-08-
+### phpMyFAQ v3.2.0 - 2023-09-04
 
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
 - changed to HTTPS as new default (Thorsten)
@@ -43,7 +43,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from SwiftMailer to Symfony Mailer (Thorsten)
 - migrated codebase to use PHP 8.1 language features (Thorsten)
 - updated to Bootstrap v5.3 (Thorsten)
-- updated to TinyMCE v6.6 (Thorsten)
+- updated to TinyMCE v6.7 (Thorsten)
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
