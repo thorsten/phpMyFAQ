@@ -1013,14 +1013,6 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Түлхүүр үгс - 
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Нэвтрэх';
-$PMF_LANG['socialNetworksControlCenter'] = 'Нийгмийн сүлжээний тохиргоо';
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter support (default: deactivated)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Consumer Key');
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'Twitter Consumer Secret');
-
-// added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'Twitter Access Token Key');
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', 'Twitter Access Token Secret');
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG["ad_menu_attachments"] = "FAQ Хавсралтууд";

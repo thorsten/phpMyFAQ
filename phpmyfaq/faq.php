@@ -324,7 +324,6 @@ $template->parse(
         'msgPdf' => Translation::get('msgPDF'),
         'msgPrintFaq' => Translation::get('msgPrintArticle'),
         'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
-        'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
         'linkToPdf' => $faqServices->getPdfLink(),
         'saveVotingID' => $faqId,
         'msgAverageVote' => Translation::get('msgAverageVote'),

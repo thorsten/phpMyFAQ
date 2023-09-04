@@ -812,9 +812,6 @@ $PMF_LANG['msgRegistration'] = '注册';
 $PMF_LANG['msgRegistrationCredentials'] = '请输入你的名字进行注册，你的登录名和一个正确的电子邮件地址!';
 $PMF_LANG['msgRegistrationNote'] = '注册成功之后，管理员通过你的注册，你会很快收到一个答复。';
 $PMF_LANG['ad_entry_changelog_history'] = '更新日志历史';
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', '推特客户密码');
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', '推特准入令牌');
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', '推特准入令牌密码');
 $LANG_CONF['security.ssoSupport'] = array('checkbox', '单点登录支持 (默认: 不激活)');
 $PMF_LANG['searchControlCenter'] = '搜索';
 $PMF_LANG['search.relevance.thema-content-keywords'] = '问题 - 答案 - 关键字';
@@ -827,7 +824,5 @@ $PMF_LANG['msgLoginUser'] = '登陆';
 $PMF_LANG['socialNetworksControlCenter'] = '社会化网络设置';
 $LANG_CONF['search.relevance'] = array('select', '相关性排序');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', '激活相关性支持? (默认: 不启用)');
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', '推特支持 (默认: 不激活)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', '推特客户密钥');
 
 return $PMF_LANG;

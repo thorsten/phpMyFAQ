@@ -854,7 +854,6 @@ $PMF_LANG['msgRegistration'] = 'Registrering';
 $PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg, vennligst oppgi ditt navn, ønsket brukernavn og en gyldig epost adresse!';
 $PMF_LANG['msgRegistrationNote'] = 'Etter en vellykket registrering vil du snarlig motta en epost med påloggingsdata. Dette skjer såsnart administrator har autorisert registreringen din.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Endringslogg historikk';
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', 'Twitter Hemmelig Token for aksess');
 $LANG_CONF['security.ssoSupport'] = array('checkbox', 'Single Sign On Support (Standard: deaktivert)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array('input', 'Single Sign On utlogging videresendingsservice URL');
 $LANG_CONF['main.dateFormat'] = array('input', 'Dato format (Standard: Y-m-d H:i)');
@@ -866,13 +865,8 @@ $PMF_LANG['search.relevance.content-keywords-thema'] = 'Svar - Nøkkelord - Spø
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Nøkkelord - Svar - Spørsmål';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Nøkkelord - Spørsmål - Svar';
 $PMF_LANG['msgLoginUser'] = 'Logg inn';
-$PMF_LANG['socialNetworksControlCenter'] = 'Sosiale nettverk konfigurasjon';
 $LANG_CONF['search.relevance'] = array('select', 'Sorter etter relevanse');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Aktiver support for relevanse? (Standard: deaktivert)');
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter support (Standard: deaktivert)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Forbruker Nøkkel');
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'Twitter Forbruker Hemmelig kode');
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'Twitter Aksess Token nøkkel');
 
 // added v2.7.0-alpha2 - 2019-10-25 Henrik Werkström, Erik Paulsen
 $PMF_LANG['msgRegistration'] = "Registrer ny bruker";

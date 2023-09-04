@@ -834,9 +834,6 @@ $PMF_LANG['msgRegistration'] = 'Rejestracja';
 $PMF_LANG['msgRegistrationCredentials'] = 'Aby się zarejestrować, wpisz swoje imię, login i aktywny adres e-mail.';
 $PMF_LANG['msgRegistrationNote'] = 'Po udanej rejestracji otrzymasz wiadomość, jak tylko administrator aktywuje Twoje konto.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Historia zmian';
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'Twitter Consumer Secret');
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'Twitter Access Token Key');
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', 'Twitter Access Token Secret');
 $LANG_CONF['security.ssoSupport'] = array('checkbox', 'Single Sign On Support (default: deactivated)');
 $PMF_LANG['searchControlCenter'] = 'Szukaj';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Pytanie - Odpowiedź - Słowa kluczowe';
@@ -846,10 +843,7 @@ $PMF_LANG['search.relevance.content-keywords-thema'] = 'Odpowiedź - Słowa kluc
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Słowa kluczowe - Odpowiedź - Pytanie';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Słowa kluczowe - Pytanie - Odpowiedź';
 $PMF_LANG['msgLoginUser'] = 'Login';
-$PMF_LANG['socialNetworksControlCenter'] = 'Ustawienia społecznościowe';
 $LANG_CONF['search.relevance'] = array('select', 'Sort by relevance');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Activate relevance support? (default: disabled)');
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter support (default: deactivated)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Consumer Key');
 
 return $PMF_LANG;

@@ -844,7 +844,6 @@ $PMF_LANG['msgRegistration'] = 'Registrazione';
 $PMF_LANG['msgRegistrationCredentials'] = 'Per registrarti inserisci il tuo nome, il tuo username e un indirizzo email!';
 $PMF_LANG['msgRegistrationNote'] = 'Dopo la registrazione riceverete una risposta appena un amministratore la renderà attiva.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Storico Changelog';
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array('input', 'Twitter Token Segreto di Accesso');
 $LANG_CONF['security.ssoSupport'] = array('checkbox', 'Supporto Single Sign On (default: disattivato)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array('input', 'Single Sign On logout redirect service URL');
 $LANG_CONF['main.dateFormat'] = array('input', 'Formato Data (default: Y-m-d H:i)');
@@ -869,16 +868,11 @@ $PMF_LANG['search.relevance.content-keywords-thema'] = 'Risposta - Keywords - Do
 $PMF_LANG['search.relevance.keywords-content-thema'] = 'Keywords - Risposta - Domanda';
 $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Domanda - Risposta';
 $PMF_LANG['msgLoginUser'] = 'Accedi';
-$PMF_LANG['socialNetworksControlCenter'] = 'Configurazione Social Network';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Numero di termini di ricerca inseriti');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top FAQ');
 $LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Campo email obbligatorio (default: disattivato)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Risposta Istantanea su pagina iniziale (default: disattivato)');
 $LANG_CONF['search.relevance'] = array('select', 'Ordina per importanza');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Attivare supporto importanza? (default: disattivo)');
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array('checkbox', 'Twitter support (default: deactivated)');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array('input', 'Twitter Consumer Key');
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array('input', 'Twitter Consumer Secret');
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array('input', 'Twitter Access Token Key');
 
 return $PMF_LANG;

@@ -996,14 +996,6 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = "Schlüsselwörter - Frag
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = "Einloggen";
-$PMF_LANG['socialNetworksControlCenter'] = "Social Networks";
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = ["checkbox", "Twitter Unterstützung "];
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = ["input", "Twitter Consumer Key"];
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = ["input", "Twitter Consumer Secret"];
-
-// added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = ["input", "Twitter Access Token Key"];
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = ["input", "Twitter Access Token Secret"];
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG['ad_menu_attachments'] = "Anhänge";
@@ -1150,7 +1142,6 @@ $PMF_LANG["ad_searchterm_del_suc"] = 'Erfolgreiche Löschung aller Suchbegriffe.
 $PMF_LANG["ad_searchterm_del_err"] = 'Konnte nicht alle Suchbegriffe löschen.';
 $LANG_CONF['records.hideEmptyCategories'] = ["checkbox", "Leere Kategorien verbergen "];
 $LANG_CONF['search.searchForSolutionId'] = ["checkbox", "Suche nach Solution ID "];
-$LANG_CONF['socialnetworks.disableAll'] = ["checkbox", "Social Network Unterstützung deaktivieren "];
 $LANG_CONF['main.enableGzipCompression'] = ["checkbox", "Aktiviere GZIP Kompression"];
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten

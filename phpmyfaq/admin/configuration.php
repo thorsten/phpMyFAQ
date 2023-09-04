@@ -110,7 +110,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         'adminConfigurationSecurityTab' => Translation::get('securityControlCenter'),
         'adminConfigurationSpamTab' => Translation::get('spamControlCenter'),
         'adminConfigurationSeoTab' => Translation::get('seoCenter'),
-        'adminConfigurationSocialNetworkTab' => Translation::get('socialNetworksControlCenter'),
         'adminConfigurationMailTab' => Translation::get('mailControlCenter'),
         'adminConfigurationUpgradeTab' => Translation::get('upgradeControlCenter'),
     ];

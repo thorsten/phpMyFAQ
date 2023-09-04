@@ -187,8 +187,14 @@ if (version_compare($version, '3.3.0-alpha', '<')) {
     $faqConfig->add('upgrade.releaseEnvironment', 'development');
     $faqConfig->add('upgrade.dateLastChecked', '');
 
-    // Rewrite rules are now mandatory
+    // Rewrite rules are now mandatory, social network support removed
     $faqConfig->delete('main.enableRewriteRules');
+    $faqConfig->delete('socialnetworks.enableTwitterSupport');
+    $faqConfig->delete('socialnetworks.twitterConsumerKey');
+    $faqConfig->delete('socialnetworks.twitterConsumerSecret');
+    $faqConfig->delete('socialnetworks.twitterAccessTokenKey');
+    $faqConfig->delete('socialnetworks.twitterAccessTokenSecret');
+    $faqConfig->delete('socialnetworks.disableAll');
 
     // Bookmarks support
     $query[] = match ($dbConfig->getType()) {

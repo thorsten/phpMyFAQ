@@ -409,13 +409,6 @@ class Installer extends Setup
         'spam.manualActivation' => 'true',
         'spam.mailAddressInExport' => 'true',
 
-        'socialnetworks.enableTwitterSupport' => 'false',
-        'socialnetworks.twitterConsumerKey' => '',
-        'socialnetworks.twitterConsumerSecret' => '',
-        'socialnetworks.twitterAccessTokenKey' => '',
-        'socialnetworks.twitterAccessTokenSecret' => '',
-        'socialnetworks.disableAll' => 'false',
-
         'seo.metaTagsHome' => 'index, follow',
         'seo.metaTagsFaqs' => 'index, follow',
         'seo.metaTagsCategories' => 'index, follow',
@@ -648,7 +641,7 @@ class Installer extends Setup
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
             echo '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
                 'installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t ' .
-                'use the Twitter support and/or Elasticsearch.</p>';
+                'use Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
             echo '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP installation. ' .

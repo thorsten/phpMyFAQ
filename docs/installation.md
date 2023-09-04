@@ -289,14 +289,7 @@ Please be aware:
   etc), so there is no way to asses a file directly using the name it was uploaded under.
 - Download continuation isn't supported.
 
-## 2.15 Twitter support
-
-phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ
-as a Twitter application on [Twitter](https://dev.twitter.com/apps/new), all new FAQ additions in the administration
-backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag
-"phpMyFAQ" will be converted to "#phpmyfaq".
-
-## 2.16 Server side recommendations
+## 2.15 Server side recommendations
 
 **_MySQL / Percona Server / MariaDB_**
 
@@ -304,7 +297,7 @@ backend will also post the question of the FAQ, the URL of the FAQ and all tags 
     wait_timeout = 120
     max_allowed_packet = 64M
 
-## 2.17 Syntax Highlighting
+## 2.16 Syntax Highlighting
 
 The bundled [highlight.js](https://highlightjs.org/) syntax highlighting component will find and highlight code inside
 of &lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn't work for
@@ -319,7 +312,7 @@ To disable highlighting altogether use the "nohighlight" class:
 
     <pre><code class="nohighlight">...</code></pre>
 
-## 2.18 Elasticsearch Support
+## 2.17 Elasticsearch Support
 
 To improve the search performance and quality of search results it's possible to use Elasticsearch. You need a
 running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST. You can add the IP(s)/Domain(s) and port(s)

@@ -25,7 +25,6 @@
     "ext-xml": "*",
     "ext-xmlwriter": "*",
     "ext-zip": "*",
-    "abraham/twitteroauth": "^6.0.0",
     "elasticsearch/elasticsearch": "8.*",
     "endroid/qr-code": "^4.8",
     "erusev/parsedown": "~1.0",

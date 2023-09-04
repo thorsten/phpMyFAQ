@@ -14,6 +14,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Symfony Routing (Thorsten)
 - added experimental support for PHP 8.3 (Thorsten)
 - updated to PNPM (Thorsten)
+- removed X/Twitter support (Thorsten)
 
 ### phpMyFAQ v3.2.0-RC.4 - 2023-08-
 

@@ -65,22 +65,6 @@ class FaqHelper extends Helper
     }
 
     /**
-     * Renders a Share on Twitter link.
-     */
-    public function renderTwitterShareLink(string $url): string
-    {
-        if (empty($url) || $this->config->get('socialnetworks.disableAll')) {
-            return '';
-        }
-
-        return sprintf(
-            '<i aria-hidden="true" class="fa fa-twitter"></i>' .
-            '<a rel="nofollow" href="%s" target="_blank" class="text-decoration-none">Twitter</a>',
-            $url
-        );
-    }
-
-    /**
      * Renders a "Send to friend" HTML snippet.
      */
     public function renderSendToFriend(string $url): string
