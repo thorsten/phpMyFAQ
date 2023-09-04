@@ -54,20 +54,14 @@ function renderInputForm(mixed $key, string $type): void
             break;
 
         case 'input':
+            $value = str_replace('"', '&quot;', $faqConfig->get($key) ?? '');
             echo '<div class="input-group">';
 
-            switch ($key) {
-                case 'main.administrationMail':
-                    $type = 'email';
-                    break;
-                case 'main.referenceURL':
-                case 'main.privacyURL':
-                    $type = 'url';
-                    break;
-                default:
-                    $type = 'text';
-                    break;
-            }
+            $type = match ($key) {
+                'main.administrationMail' => 'email',
+                'main.referenceURL', 'main.privacyURL' => 'url',
+                default => 'text',
+            };
 
             printf(
                 '<input class="form-control" type="%s" name="edit[%s]" id="edit[%s]" value="%s" step="1" min="0">',
