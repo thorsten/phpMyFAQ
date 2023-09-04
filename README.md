@@ -42,7 +42,7 @@ For development purposes you can start a full stack to run your current PhpMyFAQ
 
     $ docker-compose up
 
-The command above starts 8 containers for multi database development as following.
+The command above starts eight containers for multi database development as following.
 
 _Specific images started once to prepare the project:_
 
