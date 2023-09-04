@@ -559,7 +559,6 @@ $LANG_CONF["security.ipChecksecurity.ipCheck"] = array("checkbox", "Do you want 
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Number of displayed topics per page");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";

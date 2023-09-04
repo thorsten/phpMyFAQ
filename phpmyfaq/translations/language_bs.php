@@ -563,7 +563,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "Da li &#382;elite da se IP p
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Broj prikazanih tema po stranici");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Broj &#269;lanaka vesti");
 $LANG_CONF['security.bannedIPs'] = array("area", "Banuj ove IP");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";

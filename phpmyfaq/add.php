@@ -17,12 +17,14 @@
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,6 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $request = Request::createFromGlobals();
 $faqSystem = new System();
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {

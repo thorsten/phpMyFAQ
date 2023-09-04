@@ -559,7 +559,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "admin.php에서 UINs를 체�
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "페이지당 표시할 글의 수");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "공지사항 표시 개수");
 $LANG_CONF['security.bannedIPs'] = array("area", "해당 IP주소로 부터 사용 금지");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "mod_rewrite 기능을 사용하시겠습니까? (기본값: 사용안함)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";

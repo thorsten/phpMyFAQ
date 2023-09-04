@@ -555,7 +555,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "Bạn có muốn kiểm tra 
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Số lượng nội dung hiện trên mỗi trang");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Số lượng bài mới");
 $LANG_CONF['security.bannedIPs'] = array("area", "Loại bỏ các IP này");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Kích hoạt hỗ trợ mod_rewrite? (mặc định: không kích hoạt)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
 $LANG_CONF["main.referenceURL"] = array("input", "Tham chiếu URL để kiểm tra đường dẫn (vd.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");

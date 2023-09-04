@@ -568,7 +568,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "Nahi al duzu IP-ak aztertzea
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Artikulu berrien kopurua");
 $LANG_CONF['security.bannedIPs'] = array("area", "IP hauek blokeatu");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";

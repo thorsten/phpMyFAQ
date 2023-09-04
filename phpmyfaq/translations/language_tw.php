@@ -542,7 +542,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "管理區查看 IP Check the
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "每頁顯示主題數 Number of displayed topics per page");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "新聞文章數目 Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array("area", "禁止訪問 IPs 位置 Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "啟用 URL 覆寫支援? (預設: 關閉) <br> Enable URL rewrite support? (default: disabled)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "啟用 LDAP 支援? (預設: 關閉) <br> Enable LDAP support? (default: disabled)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL 網址確認 (舉例: https://www.example.org/faq/) <br>URL for link verification (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX 連結確認時間(以秒計時) <br>Interval between AJAX link verification (in seconds)");

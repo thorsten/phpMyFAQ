@@ -557,7 +557,6 @@ $LANG_CONF["security.ipCheck"] = ["checkbox", "Vérifier l'IP dans l'administrat
 $LANG_CONF["records.numberOfRecordsPerPage"] = ["input", "Nombre de sujets affichés par page"];
 $LANG_CONF["records.numberOfShownNewsEntries"] = ["input", "Nombre de nouveaux articles"];
 $LANG_CONF["security.bannedIPs"] = ["area", "Bannir ces adresses IP"];
-$LANG_CONF["main.enableRewriteRules"] = ["checkbox", "Activer le support de mod_rewrite? (défaut : désactivé)"];
 $LANG_CONF["ldap.ldapSupport"] = ["checkbox", "Activer le support de LDAP (défaut : désactivé)"];
 $LANG_CONF["main.referenceURL"] = ["input", "URL de votre FAQ (e.g. : http://www.example.org/faq/)"];
 $LANG_CONF["main.urlValidateInterval"] = ["input", "Intervalle entre la vérification des liens AJAX (en secondes)"];

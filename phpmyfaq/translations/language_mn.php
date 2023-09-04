@@ -541,7 +541,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "Check the IP in administrati
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Нэг хуудсанд хэдэн сэдвийн нэр харуулах");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Enable URL rewrite support? (үндсэн: идэвхгүй)");
 $LANG_CONF["security.ldapSupport"] = array("checkbox", "Enable LDAP support? (үндсэн: идэвхгүй)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL for link verification (e.g.: https://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");

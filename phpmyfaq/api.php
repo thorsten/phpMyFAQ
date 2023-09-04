@@ -7,6 +7,8 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
+ * @deprecated will be migrated to api/index.php
+ *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2023 phpMyFAQ Team
@@ -17,14 +19,10 @@
 
 const IS_VALID_PHPMYFAQ = null;
 
-use phpMyFAQ\Attachment\AttachmentException;
-use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
-use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\CategoryEntity;
-use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
@@ -32,16 +30,12 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\News;
-use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Question;
-use phpMyFAQ\Search;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\User\UserAuthentication;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

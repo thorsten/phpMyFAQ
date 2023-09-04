@@ -571,7 +571,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "Ar norite, kad būtų tikrin
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Puslapyje rodomų temų skaičius");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Naujienų straipsnių skaičius");
 $LANG_CONF['security.bannedIPs'] = array("area", "Drausti šiuos IP adresus");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
 $LANG_CONF["main.referenceURL"] = array("input", "Bazinis URL saitų tikrinimui (pvz., https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");

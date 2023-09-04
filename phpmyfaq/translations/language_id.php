@@ -559,7 +559,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "Apakah anda ingin alamat IP 
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Jumlah topik yang ditampilkan per halaman");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Jumlah artikel berita");
 $LANG_CONF['security.bannedIPs'] = array("area", "Blokir IP ini");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL dasar untuk verifikasi link (mis.: https://www.situsanda.com/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval antara verifikasi link AJAX (dalam detik)");

@@ -563,7 +563,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", " Ydych chi am ir IP gael e
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", " Nifer y pynciau a ddangosir fesul tudalen");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", " Nifer yr erthyglau newyddion");
 $LANG_CONF['security.bannedIPs'] = array("area", " Gwahardd yr Ips hyn");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", " Actifadu mod_ailysgrifennur gefnogaeth? (diofyn: analluogi)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";

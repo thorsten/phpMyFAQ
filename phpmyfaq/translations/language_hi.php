@@ -566,7 +566,6 @@ $LANG_CONF["security.ipCheck"] = array("checkbox", "admin.php में UINs द
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "एक पृष्ठ पर कितने विषय दिखायें");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "समाचार लेखों की संख्या");
 $LANG_CONF['security.bannedIPs'] = array("area", "इन IPs को प्रतिबंधित करें");
-$LANG_CONF["main.enableRewriteRules"] = array("checkbox", "mod_rewrite को सक्रिय करें? (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF["main.referenceURL"] = array("input", "कड़ी सत्यापन के लिए आधार URL (e.g.: https://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX कड़ी सत्यापन के मध्य समय अवधि (in seconds)");
