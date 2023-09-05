@@ -639,23 +639,23 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 } else {
     $tplNavigation = [
         'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
-        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' .
+        'allCategories' => '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=show">' .
             Translation::get('msgShowAllCategories') . '</a>',
-        'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
+        'msgAddContent' => '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
             Translation::get('msgAddContent') . '</a>',
         'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
             ?
-            '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
+            '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
             Translation::get('msgQuestion') . '</a>'
             :
             '',
         'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
             ?
-            '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' .
+            '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=open-questions">' .
             Translation::get('msgOpenQuestions') . '</a>'
             :
             '',
-        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' .
+        'msgSearch' => '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=search">' .
             Translation::get('msgAdvancedSearch') . '</a>',
         'msgContact' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=contact">' .
             Translation::get('msgContact') . '</a>',
