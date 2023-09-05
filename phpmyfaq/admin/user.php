@@ -214,13 +214,13 @@ if (
         $user = new User($faqConfig);
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'pmf-csrf-token', FILTER_SANITIZE_SPECIAL_CHARS);
         $userAction = $defaultUserAction;
 
-        if (!Token::getInstance()->verifyToken('user', $csrfToken)) {
+        if (!Token::getInstance()->verifyToken('delete-user', $csrfToken)) {
             $csrfOkay = false;
         }
-        $userAction = $defaultUserAction;
+
         if (0 === (int)$userId || !$csrfOkay) {
             $message .= Alert::danger('ad_user_error_noId');
         } else {
@@ -230,7 +230,7 @@ if (
             if (!$user->deleteUser()) {
                 $message .= Alert::danger('ad_user_error_delete');
             } else {
-                // Move the categories ownership to admin (id == 1)
+                // Move the category ownership to admin (id == 1)
                 $oCat = new Category($faqConfig, [], false);
                 $oCat->setUser($currentAdminUser);
                 $oCat->setGroups($currentAdminGroups);
@@ -255,7 +255,7 @@ if (
         $message = '';
     }
 
-    // show list of users
+    // show a list of users
     if ($userAction === 'list') { ?>
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -395,6 +395,11 @@ if (
 
                         </div>
                         <div class="card-footer text-end">
+                            <?php if ($userId > 0): ?>
+                            <a class="btn btn-danger" href="?action=user&amp;user_action=delete_confirm&user_delete_id=<?= $userId ?>">
+                                <?= Translation::get('ad_user_delete') ?>
+                            </a>
+                            <?php endif; ?>
                             <button class="btn btn-success" type="submit">
                                 <?= Translation::get('ad_gen_save') ?>
                             </button>
