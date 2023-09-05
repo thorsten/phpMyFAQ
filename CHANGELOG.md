@@ -16,6 +16,10 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
 
+### phpMyFAQ v3.2.1 - 2023-10
+
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.0 - 2023-09-04
 
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
