@@ -1,10 +1,14 @@
-# phpMyFAQ 3.2.0
+# phpMyFAQ 3.2
 
 **Codename "Pontus"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.2.1 - 2023-10
+
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.2.0 - 2023-09-04
 
