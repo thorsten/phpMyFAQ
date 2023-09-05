@@ -49,8 +49,9 @@ class MailHelper
     public function sendMailToNewUser(User $user, string $password): bool
     {
         $text = sprintf(
-            "You have been registered as a new user:" .
-            "\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" . 'Check it out here: %s',
+            '<p>You have been registered as a new user:</p>' .
+            '<p>Name: %s<br>Login name: %s<br>Password: %s</p>' .
+            '<p><a href="%s">Check it out here</a></p>',
             $user->getUserData('display_name'),
             $user->getLogin(),
             $password,
