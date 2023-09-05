@@ -229,7 +229,53 @@ it to **config/ldap.php** you can use the LDAP features as well after you enable
 
 ## 2.10 Using Microsoft Azure Active Directory
 
-tbd.
+You can use our experimental Microsoft Azure Active Directory support for user authentication as well.
+App Registrations in Azure are used to integrate applications with Microsoft Azure services,
+allowing them to authenticate and access resources securely.
+Follow these steps to create an App Registration in Microsoft Azure:
+
+**Prerequisites:**
+
+- Azure account with appropriate permissions.
+
+**Step 1: Sign in to Azure Portal**
+
+1. Open your web browser and navigate to the [Azure Portal](https://portal.azure.com/).
+2. Sign in with your Azure account credentials.
+
+**Step 2: Create a New App Registration**
+
+1. In the Azure Portal, click on "Azure Active Directory" in the left-hand navigation pane.
+2. Under "Azure Active Directory," click on "App registrations."
+
+**Step 3: Register a New App**
+
+1. Click the "+ New registration" button.
+
+**Step 4: Configure the App Registration**
+
+1. In the "Name" field, provide a name for your App Registration, e.g. "phpMyFAQ".
+2. Choose the supported account types that your application will authenticate: "Accounts in this organizational directory only"
+3. In the "Redirect URI" section, specify the redirect URI where Azure AD will send authentication responses: `http://www.example.com/faq/services/azure/callback.php`
+4. Click the "Register" button to create the App Registration.
+
+**Step 5: Configure Authentication**
+
+1. After the registration is created, go to the "Authentication" tab in the App Registration settings.
+2. Under "Platform configurations," select the appropriate redirect URI type: Web
+3. Configure the Redirect URIs as needed for your application.
+4. Save the changes.
+
+**Step 6: Note Application Details**
+
+1. Make note of the "Application (client) ID." This is your application's unique identifier.
+2. If your application requires client secrets, go to the "Certificates & secrets" tab to create and manage client secrets.
+
+**Step 7: Create Azure config file**
+
+1. Copy the file `./config/azure.php.original` and name it `./config/azure.php`
+2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
+3. Then, activate Microsoft Azure AD support in the administration under "Security"
 
 ## 2.11 PDF export
 
