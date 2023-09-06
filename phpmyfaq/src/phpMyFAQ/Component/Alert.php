@@ -39,9 +39,9 @@ class Alert
     public static function danger(string $translationKey, ?string $errorMessage = null): string
     {
         return sprintf(
-            '<div class="alert alert-danger alert-dismissible fade show">%s%s%s</div>',
-            Translation::get($translationKey),
-            $errorMessage !== null ? '<br>' . Translation::get('ad_adus_dberr') . '<br>' . $errorMessage : '',
+            '<div class="alert alert-danger alert-dismissible fade show mt-2">%s%s%s</div>',
+            '<h4 class="alert-heading">' . Translation::get($translationKey) . '</h4>',
+            $errorMessage !== null ? '<p>' . $errorMessage . '</p>' : '',
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
         );
     }

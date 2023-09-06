@@ -30,7 +30,7 @@ class AlertTest extends TestCase
     public function testDangerWithoutError(): void
     {
         $this->assertEquals(
-            '<div class="alert alert-danger alert-dismissible fade show">Hilfe' .
+            '<div class="alert alert-danger alert-dismissible fade show mt-2"><h4 class="alert-heading">Hilfe</h4>' .
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
             Alert::danger('msgHelp')
         );
@@ -42,8 +42,8 @@ class AlertTest extends TestCase
     public function testDangerWithError(): void
     {
         $this->assertEquals(
-            '<div class="alert alert-danger alert-dismissible fade show">Hilfe' .
-            '<br>Datenbankfehler!<br>FooBarError!' .
+            '<div class="alert alert-danger alert-dismissible fade show mt-2"><h4 class="alert-heading">Hilfe</h4>' .
+            '<p>FooBarError!</p>' .
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
             Alert::danger('msgHelp', 'FooBarError!')
         );

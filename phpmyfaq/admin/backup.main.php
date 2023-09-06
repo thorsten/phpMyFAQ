@@ -15,6 +15,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 
@@ -24,13 +25,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
-    ?>
+?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-download"></i>
         <?= Translation::get('ad_csv_backup') ?>
     </h1>
   </div>
+
+    <?php
+    if (!in_array('sodium', get_loaded_extensions())) {
+        echo Alert::danger('ad_entryins_fail', 'The libsodium extension is missing.');
+    } else {
+    ?>
 
   <div class="card-deck">
     <div class="card mb-4">
@@ -79,6 +86,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
   </div>
 
     <?php
+    }
 } else {
     echo Translation::get('err_NotAuth');
 }
