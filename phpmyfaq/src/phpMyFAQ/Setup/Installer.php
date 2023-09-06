@@ -641,23 +641,10 @@ class Installer extends Setup
                 'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
                 'functionality.</p>';
         }
-    }
-
-    /**
-     * Checks if phpMyFAQ database tables are available
-     * @deprecated moved to class Update
-     */
-    public function checkAvailableDatabaseTables(DatabaseDriver $database): void
-    {
-        $query = sprintf(
-            'SELECT * FROM %s%s',
-            Database::getTablePrefix(),
-            'faqconfig'
-        );
-        $result = $database->query($query);
-        if ($database->numRows($result) === 0) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Table faqconfig not found.</p>\n";
-            System::renderFooter(true);
+        if (!extension_loaded('sodium')) {
+            echo '<p class="alert alert-warning">You don\'t have Sodium support enabled in your PHP installation. ' .
+                'Please enable Sodium support in your php.ini file otherwise you can\'t use our backup/restore ' .
+                'functionality.</p>';
         }
     }
 
