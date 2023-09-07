@@ -135,7 +135,7 @@ class CategoryImage
                 throw new Exception('Image MIME type validation failed.');
             }
 
-            if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
+            if (!move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
                 throw new Exception('Cannot move uploaded image');
             }
 

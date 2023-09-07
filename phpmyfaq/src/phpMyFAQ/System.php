@@ -79,8 +79,9 @@ class System
         'filter',
         'gd',
         'json',
+        'sodium',
+        'xml',
         'zip',
-        'xml'
     ];
 
     /**
