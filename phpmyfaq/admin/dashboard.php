@@ -66,9 +66,10 @@ $faqSession = new Session($faqConfig);
             <div class="col mr-2">
               <div class="mb-0 font-weight-bold text-gray-800">
                 The phpMyFAQ version number stored in your database (<?= $faqConfig->getVersion() ?>) is lower
-                than the version number of the installed application (<?= System::getVersion() ?>), please update
-                <a href="../setup/update.php" class="text-white-50">your installation here</a> to avoid an unintended
-                behaviour.
+                than the version number of the installed application (<?= System::getVersion() ?>), please activate the
+                <a href="?action=config" class="text-white-50">maintenance mode in the configuration</a> and then run
+                the script to update <a href="../setup/update.php" class="text-white-50">your installation here</a> to
+                avoid an unintended behaviour.
               </div>
             </div>
           </div>
