@@ -25,6 +25,9 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Core\Exception;
+
 /**
  * Class Auth
  *
@@ -101,18 +104,18 @@ class Auth
      * of the error() method for further details.
      *
      * @param string $method Authentication access methods
+     * @throws Exception
      */
-    public function selectAuth(string $method): Auth
+    public function selectAuth(string $method): AuthDriverInterface
     {
-        // verify selected database
+        // verify selected authentication
         $method = ucfirst(strtolower($method));
-
         $authClass = '\phpMyFAQ\\Auth\\Auth' . $method;
 
         if (!class_exists($authClass)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;
 
-            return $this;
+            throw new Exception(self::PMF_ERROR_USER_NO_AUTH_TYPE);
         }
 
         return new $authClass($this->config);
