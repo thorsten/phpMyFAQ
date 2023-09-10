@@ -74,7 +74,7 @@ $request = Request::createFromGlobals();
             // Delete sessions and session files
             if ($statdelete == 'delete' && $month !== '') {
                 $dir = opendir(PMF_ROOT_DIR . '/data');
-                $first = 9999999999999999999;
+                $first = PHP_INT_MAX;
                 $last = 0;
                 while ($trackingFile = readdir($dir)) {
                     // The filename format is: trackingDDMMYYYY
@@ -124,7 +124,7 @@ $request = Request::createFromGlobals();
             <td>
                 <?php
                 $danz = 0;
-                $first = 9999999999999999999999999;
+                $first = PHP_INT_MAX;
                 $last = 0;
                 $dir = opendir(PMF_ROOT_DIR . '/data');
                 while ($dat = readdir($dir)) {
