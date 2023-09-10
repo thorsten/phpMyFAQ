@@ -481,7 +481,6 @@ if (
             'baseUrl' => $baseUrl,
             'total' => $numUsers,
             'perPage' => $perPage,
-            'useRewrite' => false,
             'pageParamName' => 'page',
         ];
         $pagination = new Pagination($options);

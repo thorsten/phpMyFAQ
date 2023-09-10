@@ -201,21 +201,7 @@ done depends on the browser you are using.
         memory_limit = 128M
         file_upload = on
 
-## 2.8 Enabling support for SEO-friendly URLs
-
-### Apache Web server
-
-If you want to enable the search engine optimization you have to activate the mod_rewrite support in the admin backend
-in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ
-on root directory "/" you should set in `RewriteBase /` Please check, if `AllowOverride All` is set correctly in your
-httpd.conf file so that the .htaccess rules work.
-
-### nginx Web server
-
-If you want to enable the search engine optimization you have to copy the rewrite rules in the file nginx.conf to your
-nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
-
-## 2.9 Enabling LDAP or Microsoft Active Directory support
+## 2.8 Enabling LDAP or Microsoft Active Directory support
 
 If you're entered the correct LDAP or Microsoft Active Directory information during the installation you have to enable
 the LDAP or Microsoft Active Directory support in the configuration in the admin backend. Now your user can authenticate
@@ -227,7 +213,7 @@ configuration panel.
 If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template and if you rename
 it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
 
-## 2.10 Using Microsoft Azure Active Directory
+## 2.9 Using Microsoft Azure Active Directory
 
 You can use our experimental Microsoft Azure Active Directory support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,
@@ -277,7 +263,7 @@ Follow these steps to create an App Registration in Microsoft Azure:
 2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
 3. Then, activate Microsoft Azure AD support in the administration under "Security"
 
-## 2.11 PDF export
+## 2.10 PDF export
 
 Main features of the PDF export:
 
@@ -293,7 +279,7 @@ Main features of the PDF export:
 - supports automatic line break and text justification;
 - supports JPEG and PNG images natively, all images supported by GD (GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM)
 
-## 2.12 Static solution ID
+## 2.11 Static solution ID
 
 phpMyFAQ features a static solution ID which never changes. This ID is visible next to the question on a FAQ record
 page. You may think why do you need such an ID? If you have a record ID _1042_ it is now possible to enter only the ID
@@ -301,7 +287,7 @@ _1042_ in the input field of the full-text search box, and you'll be automatical
 ID _1042_. By default, the numbers start at ID **1000**, but you can change this value in the file _inc/constants.php_.
 You can also change the value of the incrementation of the static IDs.
 
-## 2.13 Spam protection
+## 2.12 Spam protection
 
 phpMyFAQ performs these three checks on public forms:
 
@@ -317,7 +303,7 @@ By default, phpMyFAQ uses the builtin captcha functionality. If you want to use 
 support for Google Recaptcha by adding your site and secret key. You can get the keys from
 [Google](https://developers.google.com/recaptcha).
 
-## 2.14 Attachments
+## 2.13 Attachments
 
 phpMyFAQ supports encrypted attachments. The encryption uses the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
 algorithm implemented in mcrypt extension (if available) or with native PHP Rijndael implementation. The key size vary
@@ -335,7 +321,7 @@ Please be aware:
   etc), so there is no way to asses a file directly using the name it was uploaded under.
 - Download continuation isn't supported.
 
-## 2.15 Server side recommendations
+## 2.14 Server side recommendations
 
 **_MySQL / Percona Server / MariaDB_**
 
@@ -343,7 +329,7 @@ Please be aware:
     wait_timeout = 120
     max_allowed_packet = 64M
 
-## 2.16 Syntax Highlighting
+## 2.15 Syntax Highlighting
 
 The bundled [highlight.js](https://highlightjs.org/) syntax highlighting component will find and highlight code inside
 of &lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn't work for
@@ -358,7 +344,7 @@ To disable highlighting altogether use the "nohighlight" class:
 
     <pre><code class="nohighlight">...</code></pre>
 
-## 2.17 Elasticsearch Support
+## 2.16 Elasticsearch Support
 
 To improve the search performance and quality of search results it's possible to use Elasticsearch. You need a
 running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST. You can add the IP(s)/Domain(s) and port(s)

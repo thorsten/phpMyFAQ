@@ -104,11 +104,6 @@ class Pagination
     protected string $seoName = '';
 
     /**
-     * Use rewritten URLs without GET variables.
-     */
-    protected bool $useRewrite = false;
-
-    /**
      * Rewritten URL format for page param.
      */
     protected string $rewriteUrl = '';
@@ -129,8 +124,7 @@ class Pagination
      *                               firstPageLinkTpl -
      *                               lastPageLinkTpl -
      *                               layoutTpl -
-     *                               pageParamName (default
-     *                               "page") - useRewrite
+     *                               pageParamName (default "page")
      */
     public function __construct(array $options = null)
     {
@@ -182,8 +176,7 @@ class Pagination
             $this->seoName = $options['seoName'];
         }
 
-        if (isset($options['useRewrite']) && isset($options['rewriteUrl'])) {
-            $this->useRewrite = $options['useRewrite'];
+        if (isset($options['rewriteUrl'])) {
             $this->rewriteUrl = $options['rewriteUrl'];
         }
 
@@ -217,16 +210,16 @@ class Pagination
     {
         $content = [];
         $pages = ceil($this->total / $this->perPage);
-        $adjacents = max(floor($this->adjacent / 2), 1);
+        $adjacent = max(floor($this->adjacent / 2), 1);
 
         for ($page = 1; $page <= $pages; ++$page) {
-            if ($page > $this->adjacent && $page < $this->currentPage - $adjacents) {
+            if ($page > $this->adjacent && $page < $this->currentPage - $adjacent) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
-                $page = $this->currentPage - $adjacents - 1;
+                $page = $this->currentPage - $adjacent - 1;
                 continue;
             }
 
-            if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacent) {
+            if ($page > $this->currentPage + $adjacent && $page <= $pages - $this->adjacent) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page = $pages - $this->adjacent;
                 continue;
@@ -286,14 +279,7 @@ class Pagination
      */
     protected function renderUrl(string $url, int $page): string
     {
-        if ($this->useRewrite) {
-            $url = sprintf($this->rewriteUrl, $page);
-        } else {
-            $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
-            $url = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
-        }
-
-        return $url;
+        return sprintf($this->rewriteUrl, $page);
     }
 
     /**

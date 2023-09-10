@@ -26,7 +26,7 @@ Header always append X-Frame-Options SAMEORIGIN
 </filesMatch>
 
 
-# if you want to use mod_rewrite, set this 'On'
+# This has to be 'On'
 RewriteEngine On
 
 <IfModule mod_fcgid.c>

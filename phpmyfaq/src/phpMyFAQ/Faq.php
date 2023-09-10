@@ -472,7 +472,6 @@ class Faq
 
         if ($pages > 1) {
             $link = new Link($this->config->getDefaultUrl(), $this->config);
-            $useRewrite = true;
             $rewriteUrl = sprintf(
                 '%scategory/%d/%%d/%s.html',
                 $this->config->getDefaultUrl(),
@@ -492,7 +491,6 @@ class Faq
                 'baseUrl' => $baseUrl,
                 'total' => $num,
                 'perPage' => $this->config->get('records.numberOfRecordsPerPage'),
-                'useRewrite' => $useRewrite,
                 'rewriteUrl' => $rewriteUrl,
                 'pageParamName' => 'seite'
             ];
