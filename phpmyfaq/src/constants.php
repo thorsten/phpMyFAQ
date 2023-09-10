@@ -42,3 +42,10 @@ if (!defined('PMF_CONTENT_DIR')) {
 if (!defined('PMF_LOG_DIR')) {
     define('PMF_LOG_DIR', dirname(__DIR__) . '/content/core/logs/phpmyfaq.log');
 }
+
+//
+// The path to the translations
+//
+if (!defined('PMF_LANGUAGE_DIR')) {
+    define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/translations');
+}
