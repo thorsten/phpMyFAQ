@@ -18,6 +18,8 @@
 namespace phpMyFAQ\Session;
 
 use Exception;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\System;
 
 class Token
 {
@@ -186,7 +188,18 @@ class Token
             ->setSessionToken(md5(base64_encode(random_bytes(32))))
             ->setCookieToken(md5(base64_encode(random_bytes(32))));
 
-        setcookie($token->getCookieName($page), $token->getCookieToken(), ['expires' => $token->getExpiry()]);
+        setcookie(
+            $token->getCookieName($page),
+            $token->getCookieToken(),
+            [
+                'expires' => $token->getExpiry(),
+                'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
+                'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
+                'samesite' => 'strict',
+                'secure' => $this->isSecure(),
+                'httponly' => true,
+            ]
+        );
 
         return $_SESSION[self::PMF_SESSION_NAME][$page] = $token;
     }
@@ -194,5 +207,10 @@ class Token
     private function getCookieName(string $page): string
     {
         return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(md5($page), 0, 10));
+    }
+
+    private function isSecure(): bool
+    {
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
     }
 }

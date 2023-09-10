@@ -17,9 +17,10 @@ Please make sure that you're running at least PHP 8.1, otherwise the upgrade won
 
 ## Upgrading from phpMyFAQ 3.0.x
 
+Upgrading from 3.0.x is a major upgrade.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
-Second you have to delete all files \*\*except\*\*:
+Second, you have to delete all files **except**:
 
 - in the directory config/
   - keep the file **database.php**
@@ -93,9 +94,9 @@ updated.
 
 ## Modifying templates for phpMyFAQ 3.2
 
-We recommend you'll take a look at the main [Bootstrap documentation](https://getbootstrap.com/). Please don't forget
-that the style sheets are written with [SCSS](https://sass-lang.com/). You have to compile the SCSS files into CSS using
-a SCSS compiler with Node.js.
+We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).
+Please don't forget that the style sheets are written with [SCSS](https://sass-lang.com/).
+You have to compile the SCSS files into CSS using a SCSS compiler with Node.js.
 
 If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/) or visit
 our [new theme page](https://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage

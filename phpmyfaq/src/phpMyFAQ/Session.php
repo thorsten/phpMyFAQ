@@ -397,10 +397,7 @@ class Session
      */
     public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600): bool
     {
-        $secure = false;
-        if (isset($_SERVER['HTTPS']) && strtoupper((string) $_SERVER['HTTPS']) === 'ON') {
-            $secure = true;
-        }
+        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
 
         return setcookie(
             $name,

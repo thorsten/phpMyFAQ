@@ -25,7 +25,6 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
-use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -70,9 +69,9 @@ class User
     /**
      * Permission container.
      *
-     * @var BasicPermission|MediumPermission
+     * @var Permission
      */
-    public MediumPermission|BasicPermission $perm;
+    public Permission $perm;
 
     /**
      * User-data storage container.
@@ -154,11 +153,12 @@ class User
 
     /**
      * Constructor.
+     *
+     * @throws Core\Exception
      */
     public function __construct(protected ?Configuration $config)
     {
         $perm = Permission::selectPerm($this->config->get('security.permLevel'), $this->config);
-        /** @phpstan-ignore-next-line */
         if (!$this->addPerm($perm)) {
             return;
         }
@@ -167,11 +167,11 @@ class User
         $this->authContainer = [];
         $auth = new Auth($this->config);
 
-        $authLocal = $auth->selectAuth($this->getAuthSource('name'));
-        $authLocal->selectEncType($this->getAuthData('encType'));
-        $authLocal->setReadOnly($this->getAuthData('readOnly'));
+        $selectedAuth = $auth->selectAuth($this->getAuthSource('name'));
+        $selectedAuth->selectEncType($this->getAuthData('encType'));
+        $selectedAuth->setReadOnly($this->getAuthData('readOnly'));
 
-        if (!$this->addAuth($authLocal, $this->getAuthSource('type'))) {
+        if (!$this->addAuth($selectedAuth, $this->getAuthSource('type'))) {
             return;
         }
 
@@ -190,9 +190,9 @@ class User
     /**
      * Adds a permission object to the user.
      *
-     * @param BasicPermission|MediumPermission $perm Permission object
+     * @param Permission $perm Permission object
      */
-    public function addPerm(BasicPermission|MediumPermission $perm): bool
+    public function addPerm(Permission $perm): bool
     {
         $this->perm = $perm;
         return true;
