@@ -132,6 +132,12 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?ac
 # * http://[...]/tags/<ID>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
 
+# User pages
+RewriteRule user/ucp                               index.php?action=ucp [L,QSA]
+RewriteRule user/bookmarks                         index.php?action=bookmarks [L,QSA]
+RewriteRule user/request-removal                   index.php?action=request-removal [L,QSA]
+RewriteRule user/logout                            index.php?action=logout [L,QSA]
+
 # Administration API
 RewriteRule admin/api/updates                      admin/api/updates.php
 RewriteRule admin/api/update-check                 admin/api/updates.php

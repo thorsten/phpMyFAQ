@@ -674,16 +674,20 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'activeUserControl' => ('ucp' == $action) ? 'active' : '',
-            'msgUserControlDropDown' => '<a class="dropdown-item" href="?action=ucp">' .
-                Translation::get('headerUserControlPanel') . '</a>',
+            'msgUserControlDropDown' => sprintf(
+                '<a class="dropdown-item" href="user/ucp">%s</a>',
+                Translation::get('headerUserControlPanel')
+            ),
             'msgBookmarks' => sprintf(
-                '<a class="dropdown-item" href="?action=bookmarks">%s</a>',
+                '<a class="dropdown-item" href="user/bookmarks">%s</a>',
                 Translation::get('msgBookmarks')
             ),
-            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
-                Translation::get('ad_menu_RequestRemove') . '</a>',
+            'msgUserRemoval' => sprintf(
+                '<a class="dropdown-item" href="user/request-removal">%s</a>',
+                Translation::get('ad_menu_RequestRemove')
+            ),
             'msgLogoutUser' => sprintf(
-                '<a class="dropdown-item" href="?action=logout&csrf=%s">%s</a>',
+                '<a class="dropdown-item" href="user/logout?csrf=%s">%s</a>',
                 Token::getInstance()->getTokenString('logout'),
                 Translation::get('ad_menu_logout'),
             )
