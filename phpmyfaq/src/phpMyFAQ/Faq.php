@@ -2407,7 +2407,7 @@ class Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 $output['title'][] = Utils::makeShorterText(Strings::htmlentities($row['question']), 8);
-                $output['preview'][] = Strings::htmlentities(Strings::htmlentities($row['question']));
+                $output['preview'][] = Strings::htmlentities($row['question']);
                 $output['url'][] = Strings::htmlentities($row['url']);
             }
         } else {
