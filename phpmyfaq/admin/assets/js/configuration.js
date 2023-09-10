@@ -80,3 +80,14 @@ function generateApiToken() {
     inputConfigurationApiToken.value = generateUUID();
   }
 }
+
+function handlePasswordToggleSMTP() {
+  const togglePassword = document.getElementById('togglePassword');
+  const password = document.getElementById('edit[mail.remoteSMTPPassword]');
+
+  if (togglePassword) {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      togglePassword.classList.toggle('is-active');
+  }
+}
