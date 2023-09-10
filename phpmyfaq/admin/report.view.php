@@ -16,6 +16,7 @@
  * @since     2011-01-12
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Report;
@@ -78,11 +79,17 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     <?php
 
     $report = new Report($faqConfig);
+    $category = new Category($faqConfig);
+    $allCategories = $category->getAllCategories();
 
     foreach ($report->getReportingData() as $data) {
         echo '<tr>';
         if ($useCategory) {
-            printf('<td>%s</td>', Strings::htmlentities($data['category_name'] ?? ''));
+            if (0 != $data['category_parent']) {
+                printf('<td>%s</td>', Strings::htmlentities($allCategories[$data['category_parent']]['name'] ?? ''));
+            } else {
+                printf('<td>%s</td>', Strings::htmlentities($data['category_name'] ?? ''));
+            }
         }
         if ($useSubcategory) {
             if (0 != $data['category_parent']) {
