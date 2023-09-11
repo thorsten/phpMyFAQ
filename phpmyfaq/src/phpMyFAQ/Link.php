@@ -79,7 +79,7 @@ class Link
     private const LINK_HTML_OPEN = 'open-questions.html';
     private const LINK_HTML_SEARCH = 'search.html';
     private const LINK_HTML_SHOWCAT = 'show-categories.html';
-    private const LINK_HTML_BOOKMARKS = 'bookmarks.html';
+    private const LINK_HTML_BOOKMARKS = 'user/bookmarks';
 
     /**
      * @var int[] List of allowed action parameters
