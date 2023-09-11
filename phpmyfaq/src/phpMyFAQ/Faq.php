@@ -2553,4 +2553,9 @@ class Faq
 
         return $inactive;
     }
+
+    public function hasTitleAHash(string $title): bool
+    {
+        return strpos($title, '#');
+    }
 }

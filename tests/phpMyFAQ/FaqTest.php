@@ -47,4 +47,10 @@ class FaqTest extends TestCase
     {
         $this->assertInstanceOf(Faq::class, $this->faq->setUser(-1));
     }
+
+    public function testHasTitleAHash(): void
+    {
+        $this->assertTrue($this->faq->hasTitleAHash('H#llo World!'));
+        $this->assertFalse($this->faq->hasTitleAHash('Hallo World!'));
+    }
 }
