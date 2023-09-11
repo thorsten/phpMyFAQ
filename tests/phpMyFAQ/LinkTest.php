@@ -278,6 +278,12 @@ class LinkTest extends TestCase
             $this->link->toString()
         );
 
+        $this->link = new Link('http://faq.example.org/my-test-faq/index.php?action=bookmarks', $this->configuration);
+        $this->assertEquals(
+            'http://faq.example.org/my-test-faq/user/bookmarks',
+            $this->link->toString()
+        );
+
         $this->link = new Link(
             'http://faq.example.org/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
             $this->configuration
