@@ -101,7 +101,7 @@ if ($user->isLoggedIn()) {
         ]
     );
 } else {
-    // Redirect to log in
-    $response = new RedirectResponse($faqConfig->getDefaultUrl());
-    $response->send();
+    // Redirect to login page
+    $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+    $redirect->send();
 }

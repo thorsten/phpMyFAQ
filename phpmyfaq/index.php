@@ -602,40 +602,78 @@ if ('main' == $action || 'show' == $action) {
     );
 }
 
-
-$tplNavigation = [
-    'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
-    'allCategories' => '<a class="nav-link px-2 text-white" href="./show-categories.html">' .
-        Translation::get('msgShowAllCategories') . '</a>',
-    'msgAddContent' => '<a class="nav-link px-2 text-white" href="./addcontent.html">' .
-        Translation::get('msgAddContent') . '</a>',
-    'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
-        ?
-        '<a class="nav-link px-2 text-white" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
-        :
-        '',
-    'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
-        ?
-        '<a class="nav-link px-2 text-white" href="./open-questions.html">' .
-        Translation::get('msgOpenQuestions') . '</a>'
-        :
-        '',
-    'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
-    'msgContact' => '<a class="nav-link px-2 link-light" href="./contact.html">' . Translation::get('msgContact') .
-        '</a>',
-    'msgGlossary' => '<a class="nav-link px-2 link-light" href="./glossary.html">' .
-        Translation::get('ad_menu_glossary') . '</a>',
-    'privacyLink' => sprintf(
-        '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
-        Strings::htmlentities($faqConfig->get('main.privacyURL')),
-        Translation::get('msgPrivacyNote')
-    ),
-    'faqOverview' => '<a class="nav-link px-2 link-light" href="./overview.html">' .
-        Translation::get('faqOverview') . '</a>',
-    'showSitemap' => '<a class="nav-link px-2 link-light" href="./sitemap/A/' . $faqLangCode . '.html">' .
-        Translation::get('msgSitemap') . '</a>',
-    'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
-];
+if ($faqConfig->get('main.enableRewriteRules')) {
+    $tplNavigation = [
+        'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
+        'allCategories' => '<a class="nav-link px-2 text-white" href="./show-categories.html">' .
+            Translation::get('msgShowAllCategories') . '</a>',
+        'msgAddContent' => '<a class="nav-link px-2 text-white" href="./addcontent.html">' .
+            Translation::get('msgAddContent') . '</a>',
+        'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link px-2 text-white" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+            :
+            '',
+        'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link px-2 text-white" href="./open-questions.html">' .
+            Translation::get('msgOpenQuestions') . '</a>'
+            :
+            '',
+        'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
+        'msgContact' => '<a class="nav-link px-2 link-light" href="./contact.html">' . Translation::get('msgContact') .
+            '</a>',
+        'msgGlossary' => '<a class="nav-link px-2 link-light" href="./glossary.html">' .
+            Translation::get('ad_menu_glossary') . '</a>',
+        'privacyLink' => sprintf(
+            '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
+            Strings::htmlentities($faqConfig->get('main.privacyURL')),
+            Translation::get('msgPrivacyNote')
+        ),
+        'faqOverview' => '<a class="nav-link px-2 link-light" href="./overview.html">' .
+            Translation::get('faqOverview') . '</a>',
+        'showSitemap' => '<a class="nav-link px-2 link-light" href="./sitemap/A/' . $faqLangCode . '.html">' .
+            Translation::get('msgSitemap') . '</a>',
+        'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
+    ];
+} else {
+    $tplNavigation = [
+        'backToHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
+        'allCategories' => '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=show">' .
+            Translation::get('msgShowAllCategories') . '</a>',
+        'msgAddContent' => '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' .
+            Translation::get('msgAddContent') . '</a>',
+        'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' .
+            Translation::get('msgQuestion') . '</a>'
+            :
+            '',
+        'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
+            ?
+            '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=open-questions">' .
+            Translation::get('msgOpenQuestions') . '</a>'
+            :
+            '',
+        'msgSearch' => '<a class="nav-link px-2 text-white" href="index.php?' . $sids . 'action=search">' .
+            Translation::get('msgAdvancedSearch') . '</a>',
+        'msgContact' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=contact">' .
+            Translation::get('msgContact') . '</a>',
+        'msgGlossary' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=glossary">' .
+            Translation::get('ad_menu_glossary') . '</a>',
+        'privacyLink' => sprintf(
+            '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
+            Strings::htmlentities($faqConfig->get('main.privacyURL')),
+            Translation::get('msgPrivacyNote')
+        ),
+        'faqOverview' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=overview">' .
+            Translation::get('faqOverview') . '</a>',
+        'showSitemap' => '<a class="nav-link px-2 link-light" href="index.php?' . $sids . 'action=sitemap&amp;lang=' .
+            $faqLangCode . '">' .
+            Translation::get('msgSitemap') . '</a>',
+        'breadcrumbHome' => '<a href="index.php?' . $sids . '">' . Translation::get('msgHome') . '</a>',
+    ];
+}
 
 $tplNavigation['faqHome'] = Strings::htmlentities($faqConfig->getDefaultUrl());
 $tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';
@@ -674,20 +712,12 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'activeUserControl' => ('ucp' == $action) ? 'active' : '',
-            'msgUserControlDropDown' => sprintf(
-                '<a class="dropdown-item" href="user/ucp">%s</a>',
-                Translation::get('headerUserControlPanel')
-            ),
-            'msgBookmarks' => sprintf(
-                '<a class="dropdown-item" href="user/bookmarks">%s</a>',
-                Translation::get('msgBookmarks')
-            ),
-            'msgUserRemoval' => sprintf(
-                '<a class="dropdown-item" href="user/request-removal">%s</a>',
-                Translation::get('ad_menu_RequestRemove')
-            ),
+            'msgUserControlDropDown' => '<a class="dropdown-item" href="?action=ucp">' .
+                Translation::get('headerUserControlPanel') . '</a>',
+            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' .
+                Translation::get('ad_menu_RequestRemove') . '</a>',
             'msgLogoutUser' => sprintf(
-                '<a class="dropdown-item" href="user/logout?csrf=%s">%s</a>',
+                '<a class="dropdown-item" href="?action=logout&csrf=%s">%s</a>',
                 Token::getInstance()->getTokenString('logout'),
                 Translation::get('ad_menu_logout'),
             )

@@ -3,7 +3,6 @@
 namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
@@ -33,6 +32,7 @@ class ClientTest extends TestCase
         $Configuration->set('security.useSslOnly', 'true');
         $Filesystem = new Filesystem(PMF_ROOT_DIR);
 
+        $Instance = new Instance($Configuration);
         $this->Client = new Client($Configuration);
 
         $this->Client->setFileSystem($Filesystem);
@@ -55,9 +55,6 @@ class ClientTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCopyConstantsFile(): void
     {
         $return = $this->Client->copyConstantsFile(PMF_TEST_DIR . '/constants.test.php');
@@ -66,9 +63,6 @@ class ClientTest extends TestCase
         $this->assertFileExists(PMF_TEST_DIR . '/constants.test.php');
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCopyTemplateFolder(): void
     {
         $this->Client->copyTemplateFolder(PMF_TEST_DIR);

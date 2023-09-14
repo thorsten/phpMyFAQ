@@ -4,7 +4,7 @@
 set -e
 
 #=== Set folder permissions ===
-folders="content/core/config content/core/data content/core/logs content/user/attachments content/user/images"
+folders="attachments data images config"
 
 mkdir -vp $folders
 

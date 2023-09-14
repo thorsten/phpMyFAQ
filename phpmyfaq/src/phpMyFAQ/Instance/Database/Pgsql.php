@@ -64,10 +64,6 @@ class Pgsql extends Database implements Driver
             created timestamp NOT NULL,
             PRIMARY KEY (id))',
 
-        'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
-            userid INTEGER DEFAULT NULL,
-            faqid INTEGER DEFAULT NULL)',
-
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
             useragent VARCHAR(255) NOT NULL,

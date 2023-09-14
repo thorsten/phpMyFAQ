@@ -29,10 +29,10 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
-require_once PMF_ROOT_DIR . '/translations/language_en.php';
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
 if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
-    require_once PMF_ROOT_DIR . '/translations/language_' . $faqLangCode . '.php';
+    require_once PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
 }
@@ -42,7 +42,7 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode);
 } catch (Exception $e) {

@@ -52,5 +52,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
         Translation::get('ad_entry_back')
     );
 } else {
-    require 'no-permission.php';
+    print Translation::get('err_NotAuth');
 }

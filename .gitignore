@@ -16,24 +16,20 @@ build/*
 # Docker persistent data
 volumes/*
 
-# phpMyFAQ content folders
-phpmyfaq/content/core/config/database.php
-phpmyfaq/content/core/config/database.bak.php
-phpmyfaq/content/core/config/ldap.php
-phpmyfaq/content/core/config/ldap.bak.php
-phpmyfaq/content/core/config/elasticsearch.php
-phpmyfaq/content/core/config/elasticsearch.bak.php
-phpmyfaq/content/core/config/azure.php
-phpmyfaq/content/core/config/azure.bak.php
-phpmyfaq/content/core/config/index.html
-phpmyfaq/content/core/data/*
-!phpmyfaq/content/core/data/.gitkeep
-phpmyfaq/content/core/logs/*
-!phpmyfaq/content/core/logs/.gitkeep
-phpmyfaq/content/user/images/*
-!phpmyfaq/content/user/images/.gitkeep
-phpmyfaq/content/user/attachments/*
-!phpmyfaq/content/user/attachments/.gitkeep
+# phpMyFAQ generated folders
+phpmyfaq/config/database.php
+phpmyfaq/config/database.bak.php
+phpmyfaq/config/ldap.php
+phpmyfaq/config/ldap.bak.php
+phpmyfaq/config/elasticsearch.php
+phpmyfaq/config/elasticsearch.bak.php
+phpmyfaq/config/azure.php
+phpmyfaq/config/azure.bak.php
+phpmyfaq/config/index.html
+phpmyfaq/data/*
+phpmyfaq/logs/*
+phpmyfaq/images/*
+phpmyfaq/attachments/*
 
 # Third party PHP libraries
 phpmyfaq/src/libs
@@ -49,13 +45,11 @@ phpmyfaq/assets/themes/default/css/*.css
 phpmyfaq/assets/themes/default/css/*.map
 phpmyfaq/assets/themes/default/js/*
 
-# Twig caches
-phpmyfaq/admin/assets/cache/
+# Composer related stuff
+vendor/*
 
-# Node.js modules for development
+# node.js modules for development
 node_modules/*
-.pnpm-store
-
 
 # Backup folder
 backup/*
@@ -66,9 +60,8 @@ coverage.txt
 tests/logs
 tests/test.db
 tests/test.db-journal
-tests/content/core/config/database.php
-tests/content/core/config/ldap.php
-tests/content/upgrades
+tests/config/database.php
+tests/config/ldap.php
 tests/fixtures/path-to-delete/foo.bar.baz
 
 # Jest related stuff

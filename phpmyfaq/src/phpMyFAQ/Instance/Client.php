@@ -83,12 +83,12 @@ class Client extends Instance
     }
 
     /**
-     * Creates all tables with the given table prefix from the primary tables.
+     * Creates all tables with the given table prefix from the master tables.
      *
      * @param string $prefix SQL table prefix
      * @return void
      */
-    public function createClientTables(string $prefix): void
+    public function createClientTables(string $prefix)
     {
         try {
             // First, create the client tables
@@ -137,7 +137,7 @@ class Client extends Instance
     public function copyConstantsFile(string $destination): bool
     {
         return $this->fileSystem->copy(
-            $this->fileSystem->getRootPath() . '/content/core/config/constants.php',
+            $this->fileSystem->getRootPath() . '/config/constants.php',
             $destination
         );
     }
@@ -151,7 +151,7 @@ class Client extends Instance
      * @return void
      * @throws Exception
      */
-    public function copyTemplateFolder(string $destination, string $templateDir = 'default'): void
+    public function copyTemplateFolder(string $destination, string $templateDir = 'default')
     {
         $sourceTpl = $this->fileSystem->getRootPath() . '/assets/themes/' . $templateDir;
         $destTpl = $destination . '/assets/themes/';

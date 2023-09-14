@@ -57,15 +57,14 @@ cd "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/ || exit
 printf "\n 🚀 Add PHP dependencies\n";
 composer install --no-dev --prefer-dist
 
-printf "\n 🚀 Install JS dependencies\n";
-pnpm install
+printf "\n 🚀 Add JS dependencies\n";
+yarn install
 
-printf "\n 🚀 Run \"pnpm build\" to build frontend production build\n";
-pnpm build
+printf "\n 🚀 Build JS\n";
+yarn build
 
-printf "\n 🚀 Remove fonts and examples from TCPDF\n"
+printf "\n 🚀 Remove fonts from TCPDF\n"
 rm -rf "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/phpmyfaq/src/libs/tecnickcom/tcpdf/fonts
-rm -rf "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/phpmyfaq/src/libs/tecnickcom/tcpdf/examples
 
 printf "\n 🚀 Create md5 hashes for file verification\n"
 php scripts/createHashes.php > "$cwd"/hashes-"${PMF_VERSION}".json

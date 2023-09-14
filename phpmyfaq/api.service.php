@@ -80,15 +80,15 @@ if ($faqConfig->get('security.enableGoogleReCaptchaV2')) {
 
 $Language = new Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-require_once 'translations/language_en.php';
+require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
 if (Language::isASupportedLanguage($apiLanguage)) {
     $languageCode = trim((string) $apiLanguage);
-    require_once 'translations/language_' . $languageCode . '.php';
+    require_once 'lang/language_' . $languageCode . '.php';
 } else {
     $languageCode = 'en';
-    require_once 'translations/language_en.php';
+    require_once 'lang/language_en.php';
 }
 
 //
@@ -96,7 +96,7 @@ if (Language::isASupportedLanguage($apiLanguage)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($languageCode);
 } catch (Exception $e) {

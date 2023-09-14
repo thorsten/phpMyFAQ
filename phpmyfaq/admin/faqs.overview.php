@@ -141,7 +141,7 @@ if (
         <?php
     }
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }
 ?>
     </div>

@@ -26,7 +26,7 @@ Header always append X-Frame-Options SAMEORIGIN
 </filesMatch>
 
 
-# This has to be 'On'
+# if you want to use mod_rewrite, set this 'On'
 RewriteEngine On
 
 <IfModule mod_fcgid.c>
@@ -38,7 +38,7 @@ RewriteEngine On
 RewriteBase /
 
 # Error pages
-#ErrorDocument 404 /index.php?action=404
+ErrorDocument 404 /index.php?action=404
 
 # show all categories
 RewriteCond %{REQUEST_URI}          /show-categories\.html$ [NC]
@@ -59,6 +59,10 @@ RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
 # the open questions page
 RewriteCond %{REQUEST_URI}          /open-questions\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=open-questions [L,QSA]
+
+# the help page
+RewriteCond %{REQUEST_URI}          /help\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
 
 # the contact page
 RewriteCond %{REQUEST_URI}          /contact\.html$ [NC]
@@ -86,10 +90,6 @@ RewriteRule ^index.html$            index.php [PT]
 # a solution id page
 RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
 RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
-
-# the bookmarks page
-RewriteCond %{REQUEST_URI}          /bookmarks\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=bookmarks [L,QSA]
 
 # PMF faq record page
 # * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
@@ -132,32 +132,19 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?ac
 # * http://[...]/tags/<ID>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
 
-# User pages
-RewriteRule user/ucp                               index.php?action=ucp [L,QSA]
-RewriteRule user/bookmarks                         index.php?action=bookmarks [L,QSA]
-RewriteRule user/request-removal                   index.php?action=request-removal [L,QSA]
-RewriteRule user/logout                            index.php?action=logout [L,QSA]
-
-# Administration API
-RewriteRule admin/api/updates                      admin/api/updates.php
-RewriteRule admin/api/update-check                 admin/api/updates.php
-
-# Autocomplete API
-RewriteRule api/autocomplete                       api/index.php
-
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>
-RewriteRule api/v2.0/version                       api/index.php
-RewriteRule api/v2.0/language                      api/index.php
-RewriteRule api/v2.0/categories                    api/index.php
-RewriteRule api/v2.0/searches/popular              api/index.php
-RewriteRule api/v2.0/search                        api/index.php
-RewriteRule api/v2.0/tags                          api/index.php
-RewriteRule api/v2.0/open-questions                api/index.php
-RewriteRule api/v2.0/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.0/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.0/news                          api/index.php
-RewriteRule api/v2.0/login                         api/index.php
+RewriteRule api/v2.0/version                       api.php?action=version [L,QSA]
+RewriteRule api/v2.0/language                      api.php?action=language [L,QSA]
+RewriteRule api/v2.0/categories                    api.php?action=categories [L,QSA]
+RewriteRule api/v2.0/searches/popular              api.php?action=searches&filter=popular [L,QSA]
+RewriteRule api/v2.0/search                        api.php?action=search [L,QSA]
+RewriteRule api/v2.0/tags                          api.php?action=tags [L,QSA]
+RewriteRule api/v2.0/open-questions                api.php?action=open-questions [L,QSA]
+RewriteRule api/v2.0/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
+RewriteRule api/v2.0/attachments/([0-9]+)          api.php?action=attachments&recordId=$1 [L,QSA]
+RewriteRule api/v2.0/news                          api.php?action=news [L,QSA]
+RewriteRule api/v2.0/login                         api.php?action=login [L,QSA]
 RewriteRule api/v2.0/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.0/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.0/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -168,17 +155,17 @@ RewriteRule api/v2.0/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId
 
 # REST API v2.1
 # * http://[...]/api/v2.1/<ACTION>
-RewriteRule api/v2.1/version                       api/index.php
-RewriteRule api/v2.1/language                      api/index.php
-RewriteRule api/v2.1/categories                    api/index.php
-RewriteRule api/v2.1/searches/popular              api/index.php
-RewriteRule api/v2.1/search                        api/index.php
-RewriteRule api/v2.1/tags                          api/index.php
-RewriteRule api/v2.1/open-questions                api/index.php
-RewriteRule api/v2.1/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.1/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.1/news                          api/index.php
-RewriteRule api/v2.1/login                         api/index.php
+RewriteRule api/v2.1/version                       api.php?action=version [L,QSA]
+RewriteRule api/v2.1/language                      api.php?action=language [L,QSA]
+RewriteRule api/v2.1/categories                    api.php?action=categories [L,QSA]
+RewriteRule api/v2.1/searches/popular              api.php?action=searches&filter=popular [L,QSA]
+RewriteRule api/v2.1/search                        api.php?action=search [L,QSA]
+RewriteRule api/v2.1/tags                          api.php?action=tags [L,QSA]
+RewriteRule api/v2.1/open-questions                api.php?action=open-questions [L,QSA]
+RewriteRule api/v2.1/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
+RewriteRule api/v2.1/attachments/([0-9]+)          api.php?action=attachments&recordId=$1 [L,QSA]
+RewriteRule api/v2.1/news                          api.php?action=news [L,QSA]
+RewriteRule api/v2.1/login                         api.php?action=login [L,QSA]
 RewriteRule api/v2.1/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.1/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.1/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -192,20 +179,20 @@ RewriteRule api/v2.1/question                      api.php?action=question [L,QS
 
 # REST API v2.2
 # * http://[...]/api/v2.2/<ACTION>
-RewriteRule api/v2.2/version                       api/index.php
-RewriteRule api/v2.2/title                         api/index.php
-RewriteRule api/v2.2/language                      api/index.php
-RewriteRule api/v2.2/categories                    api/index.php
+RewriteRule api/v2.2/version                       api.php?action=version [L,QSA]
+RewriteRule api/v2.2/title                         api.php?action=title [L,QSA]
+RewriteRule api/v2.2/language                      api.php?action=language [L,QSA]
+RewriteRule api/v2.2/categories                    api.php?action=categories [L,QSA]
 RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
-RewriteRule api/v2.2/groups                        api/index.php
-RewriteRule api/v2.2/searches/popular              api/index.php
-RewriteRule api/v2.2/search                        api/index.php
-RewriteRule api/v2.2/tags                          api/index.php
-RewriteRule api/v2.2/open-questions                api/index.php
-RewriteRule api/v2.2/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.2/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.2/news                          api/index.php
-RewriteRule api/v2.2/login                         api/index.php
+RewriteRule api/v2.2/groups                        api.php?action=groups [L,QSA]
+RewriteRule api/v2.2/searches/popular              api.php?action=searches&filter=popular [L,QSA]
+RewriteRule api/v2.2/search                        api.php?action=search [L,QSA]
+RewriteRule api/v2.2/tags                          api.php?action=tags [L,QSA]
+RewriteRule api/v2.2/open-questions                api.php?action=open-questions [L,QSA]
+RewriteRule api/v2.2/comments/([0-9]+)             api.php?action=comments&recordId=$1 [L,QSA]
+RewriteRule api/v2.2/attachments/([0-9]+)          api.php?action=attachments&recordId=$1 [L,QSA]
+RewriteRule api/v2.2/news                          api.php?action=news [L,QSA]
+RewriteRule api/v2.2/login                         api.php?action=login [L,QSA]
 RewriteRule api/v2.2/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.2/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.2/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -216,19 +203,3 @@ RewriteRule api/v2.2/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId
 RewriteRule api/v2.2/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.2/register                      api.php?action=register [L,QSA]
 RewriteRule api/v2.2/question                      api.php?action=question [L,QSA]
-
-# REST API v2.3
-# * http://[...]/api/v2.3/<ACTION>
-RewriteRule api/v2.3/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.3/categories                    api/index.php
-RewriteRule api/v2.3/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.3/groups                        api/index.php
-RewriteRule api/v2.3/language                      api/index.php
-RewriteRule api/v2.3/login                         api/index.php
-RewriteRule api/v2.3/news                          api/index.php
-RewriteRule api/v2.3/open-questions                api/index.php
-RewriteRule api/v2.3/search                        api/index.php
-RewriteRule api/v2.3/searches/popular              api/index.php
-RewriteRule api/v2.3/tags                          api/index.php
-RewriteRule api/v2.3/title                         api/index.php
-RewriteRule api/v2.3/version                       api/index.php

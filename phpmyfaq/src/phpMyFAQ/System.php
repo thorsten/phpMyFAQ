@@ -41,7 +41,7 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 3;
+    private const VERSION_MINOR = 2;
 
     /**
      * Patch level.
@@ -51,12 +51,12 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'dev';
+    private const VERSION_PRE_RELEASE = '';
 
     /**
      * API version.
      */
-    private const VERSION_API = '2.3';
+    private const VERSION_API = '2.2';
 
     /**
      * Minimum required PHP version.
@@ -325,7 +325,7 @@ class System
      */
     public function checkInstallation(): bool
     {
-        return !is_file(PMF_ROOT_DIR . '/content/core/config/database.php');
+        return !is_file(PMF_ROOT_DIR . '/config/database.php');
     }
 
     /**
@@ -408,12 +408,12 @@ class System
     public function cleanFailedInstallationFiles(): void
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
-            unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
+        if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+            unlink(PMF_ROOT_DIR . '/config/database.php');
         }
         // Remove './config/ldap.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
-            unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');
+        if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
+            unlink(PMF_ROOT_DIR . '/config/ldap.php');
         }
     }
 }

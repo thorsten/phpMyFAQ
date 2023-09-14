@@ -456,5 +456,5 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   </div>
             <?php
         } else {
-            require 'no-permission.php';
+            echo Translation::get('err_NotAuth');
         }

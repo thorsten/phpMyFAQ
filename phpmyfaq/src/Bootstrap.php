@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 // Debug mode:
 // - false debug mode disabled
 // - true  debug mode enabled
-const DEBUG = true;
+const DEBUG = false;
 if (DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
@@ -84,7 +84,7 @@ if (file_exists(PMF_ROOT_DIR . '/multisite/multisite.php') && 'cli' !== PHP_SAPI
 // Read configuration and constants
 //
 if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/content/core/config'); // Single instance configuration
+    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/config'); // Single instance configuration
 } else {
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR); // Multi instance configuration
 }
@@ -93,8 +93,8 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 // Check if config/database.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
-    $response = new RedirectResponse('./setup/index.php');
-    $response->send();
+    $redirect = new RedirectResponse('./setup/index.php');
+    $redirect->send();
 }
 
 //
@@ -105,7 +105,7 @@ require PMF_CONFIG_DIR . '/constants.php';
 //
 // The directory where the translations reside
 //
-define('PMF_TRANSLATION_DIR', dirname(__DIR__) . '/translations');
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 
 //
 // Set the error handler and the exception handler
@@ -181,7 +181,7 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 // Connect to Elasticsearch if enabled
 //
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
-    require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
+    require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
     $esConfig = new ElasticsearchConfiguration(PMF_CONFIG_DIR . '/elasticsearch.php');
     try {
         $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();

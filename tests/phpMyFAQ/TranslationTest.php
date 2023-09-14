@@ -27,7 +27,7 @@ class TranslationTest extends TestCase
     {
         $this->assertEquals(
             $this->translation,
-            $this->translation->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+            $this->translation->setLanguagesDir(__DIR__ . '/../../phpmyfaq/lang')
         );
     }
 
@@ -50,7 +50,7 @@ class TranslationTest extends TestCase
     public function testGet(): void
     {
         Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/lang')
             ->setCurrentLanguage('de');
         $this->assertEquals('deutsch', Translation::get('language'));
     }
@@ -84,12 +84,12 @@ class TranslationTest extends TestCase
     public function testGetCurrentLanguage(): void
     {
         Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/lang')
             ->setCurrentLanguage('de');
         $this->assertEquals(
             'de',
             Translation::create()
-                ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+                ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/lang')
                 ->getCurrentLanguage()
         );
     }
@@ -101,12 +101,12 @@ class TranslationTest extends TestCase
     public function testSetDefaultLanguage(): void
     {
         Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/lang')
             ->setDefaultLanguage('fi');
         $this->assertEquals(
             'fi',
             Translation::create()
-                ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+                ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/lang')
                 ->getDefaultLanguage()
         );
     }

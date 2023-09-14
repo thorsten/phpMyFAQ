@@ -63,10 +63,6 @@ class Mysqli extends Database implements Driver
             created timestamp NOT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 
-        'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
-            userid INT(11) DEFAULT NULL,
-            faqid INT(11) DEFAULT NULL) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
-
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
             useragent VARCHAR(255) NOT NULL,

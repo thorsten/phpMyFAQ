@@ -170,5 +170,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
     <?php
     printf('<p>%s</p>', Translation::get('ad_categ_remark_overview'));
 } else {
-    require 'no-permission.php';
+    print Translation::get('err_NotAuth');
 }

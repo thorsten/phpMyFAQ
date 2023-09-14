@@ -16,7 +16,7 @@
  * @since     2003-02-23
  */
 
-use phpMyFAQ\Administration\AdminLog;
+use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
@@ -29,8 +29,10 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
+use phpMyFAQ\AdminLog;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
+use phpMyFAQ\Services\Twitter;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -206,6 +208,31 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
                 );
             }
 
+            // Callback to Twitter if enabled
+            if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
+                $connection = new TwitterOAuth(
+                    $faqConfig->get('socialnetworks.twitterConsumerKey'),
+                    $faqConfig->get('socialnetworks.twitterConsumerSecret'),
+                    $faqConfig->get('socialnetworks.twitterAccessTokenKey'),
+                    $faqConfig->get('socialnetworks.twitterAccessTokenSecret')
+                );
+
+                $link = sprintf(
+                    'index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $categories['rubrik'][0],
+                    $recordId,
+                    $recordLang
+                );
+                $oLink = new Link($faqConfig->getDefaultUrl() . $link, $faqConfig);
+                $oLink->itemTitle = $question;
+                $link = $oLink->toString();
+
+                if ($connection) {
+                    $twitter = new Twitter($connection);
+                    $twitter->addPost($question, $tags, $link);
+                }
+            }
+
             echo Alert::success('ad_entry_savedsuc');
             ?>
             <div class="d-flex justify-content-center">
@@ -269,5 +296,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
         <?php
     }
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }

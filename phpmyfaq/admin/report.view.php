@@ -162,7 +162,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
             </form>
     <?php
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }
 ?>
         </div>

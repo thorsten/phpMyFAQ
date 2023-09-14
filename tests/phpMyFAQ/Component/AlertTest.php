@@ -19,7 +19,7 @@ class AlertTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../../phpmyfaq/translations')
+            ->setLanguagesDir(__DIR__ . '/../../../phpmyfaq/lang')
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('de');
     }

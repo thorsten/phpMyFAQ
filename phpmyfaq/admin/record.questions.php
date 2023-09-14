@@ -135,7 +135,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 echo Translation::get('msgNoQuestionsAvailable');
             }
         } else {
-            require 'no-permission.php';
+            echo Translation::get('err_NotAuth');
         }
         ?>
   </div>
