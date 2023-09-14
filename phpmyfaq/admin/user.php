@@ -693,9 +693,14 @@ if (
                                 <label class="col-lg-4 col-form-label"
                                        for="add_user_password"><?= Translation::get('ad_adus_password') ?></label>
                                 <div class="col-lg-8">
-                                    <input type="password" name="add_user_password" id="add_user_password"
-                                           class="form-control" minlength="8"
-                                           autocomplete="off" tabindex="4">
+                                    <div class="input-group">
+                                        <input type="password" name="add_user_password" id="add_user_password"
+                                            class="form-control" minlength="8"
+                                            autocomplete="off" tabindex="4">
+                                        <span class="input-group-text" id="add_user_password_togglePassword">
+                                            <i class="fa togglePassword"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -703,9 +708,14 @@ if (
                                 <label class="col-lg-4 col-form-label"
                                        for="add_user_password_confirm"><?= Translation::get('ad_passwd_con') ?></label>
                                 <div class="col-lg-8">
-                                    <input type="password" name="add_user_password_confirm"
-                                           id="add_user_password_confirm" minlength="8"
-                                           class="form-control" autocomplete="off" tabindex="5">
+                                    <div class="input-group">
+                                        <input type="password" name="add_user_password_confirm"
+                                            id="add_user_password_confirm" minlength="8"
+                                            class="form-control" autocomplete="off" tabindex="5">
+                                        <span class="input-group-text" id="add_user_password_confirm_togglePassword">
+                                            <i class="fa togglePassword"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
