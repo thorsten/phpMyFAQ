@@ -62,6 +62,10 @@ class Sqlsrv extends Database implements Driver
             created timestamp NOT NULL,
             PRIMARY KEY (id))',
 
+        'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
+            userid INT(11) DEFAULT NULL,
+            faqid INT(11) DEFAULT NULL)',
+
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id NVARCHAR(6) NOT NULL,
             useragent NVARCHAR(255) NOT NULL,

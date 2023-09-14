@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-composer lint && composer validate && composer test && yarn pretty-quick --staged && yarn test
+composer lint && composer validate && composer test && pnpm pretty-quick --staged && pnpm test

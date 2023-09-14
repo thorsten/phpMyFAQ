@@ -115,7 +115,7 @@ export const handleTags = () => {
         if (currentTags.length === 0) {
           currentTags = item.tagName;
         } else {
-          currentTagsArray[currentTagsArray.length-1] = item.tagName;
+          currentTagsArray[currentTagsArray.length - 1] = item.tagName;
           currentTags = currentTagsArray.join(',');
         }
         input.value = currentTags;

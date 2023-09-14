@@ -481,7 +481,6 @@ if (
             'baseUrl' => $baseUrl,
             'total' => $numUsers,
             'perPage' => $perPage,
-            'useRewrite' => false,
             'pageParamName' => 'page',
         ];
         $pagination = new Pagination($options);
@@ -787,5 +786,5 @@ if (
 
     <?php
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

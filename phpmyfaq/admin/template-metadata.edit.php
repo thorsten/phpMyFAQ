@@ -43,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 
 if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }
 
 $meta = new TemplateMetaData($faqConfig);

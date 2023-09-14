@@ -468,10 +468,10 @@ class CurrentUser extends User
     }
 
     /**
-     * Returns the current user ID and group IDs, default values are -1
+     * Returns the current user ID and group IDs as an array, default values are -1
      *
      * @param CurrentUser|null $user
-     * @return array<int, int>
+     * @return array [int, int[]]
      */
     public static function getCurrentUserGroupId(CurrentUser $user = null): array
     {

@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Simple HTTP Streamer.
- *
+ * Simple HTTP Streamer based on Symfony HttpFoundation.
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
  *
@@ -14,7 +13,7 @@
  * - Generic file: application/octet-stream
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
- *  v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
@@ -27,7 +26,10 @@
 
 namespace phpMyFAQ;
 
+use DateTime;
 use phpMyFAQ\Core\Exception;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HttpStreamer
@@ -36,43 +38,13 @@ use phpMyFAQ\Core\Exception;
  */
 class HttpStreamer
 {
-    /**
-     * HTTP content disposition attachment constant.
-     *
-     * @var string
-     */
-    final public const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
+    /** HTTP Content Disposition. */
+    private string $disposition = HeaderUtils::DISPOSITION_INLINE;
 
-    /**
-     * HTTP content disposition inline constant.
-     *
-     * @var string
-     */
-    final public const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
-
-    /**
-     * Disposition attachment constant.
-     *
-     * @var string
-     */
-    final public const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
-
-    /**
-     * Disposition inline constant.
-     *
-     * @var string
-     */
-    final public const EXPORT_DISPOSITION_INLINE = 'inline';
-
-    /**
-     * HTTP Content Disposition.
-     */
-    private string $disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
-
-    /**
-     * HTTP streaming data length.
-     */
+    /** HTTP streaming data length. */
     private readonly int $size;
+
+    private Response $response;
 
     /**
      * Constructor.
@@ -103,14 +75,10 @@ class HttpStreamer
             throw new Exception('Error: unable to send my data: someone already sent other data!');
         }
 
-        // Manage output buffering
-        ob_start();
-        // Send the right HTTP headers
+        $this->response = new Response();
         $this->setHttpHeaders();
-        // Send the raw content
-        $this->streamContent();
-        // Manage output buffer flushing
-        ob_end_flush();
+        $this->response->setContent($this->streamContent());
+        $this->response->send();
     }
 
     /**
@@ -122,29 +90,29 @@ class HttpStreamer
         switch ($this->type) {
             case 'pdf':
                 $filename = 'phpmyfaq.pdf';
-                $description = 'phpMyFaq PDF export file';
+                $description = 'phpMyFAQ PDF export file';
                 $mimeType = 'application/pdf';
                 break;
             case 'html5':
                 $filename = 'phpmyfaq.html';
-                $description = 'phpMyFaq HTML5 export file';
+                $description = 'phpMyFAQ HTML5 export file';
                 $mimeType = 'text/html';
                 break;
             case 'csv':
                 $filename = 'phpmyfaq.csv';
-                $description = 'phpMyFaq CSV export file';
+                $description = 'phpMyFAQ CSV export file';
                 $mimeType = 'text/csv';
                 break;
             case 'json':
                 $filename = 'phpmyfaq.json';
-                $description = 'phpMyFaq JSON export file';
+                $description = 'phpMyFAQ JSON export file';
                 $mimeType = 'application/json';
                 break;
             // In this case, no default statement is required:
             // the one above is just for clean coding style
             default:
                 $filename = 'phpmyfaq.pmf';
-                $description = 'Generic file';
+                $description = 'phpMyFAQ Generic export file';
                 $mimeType = 'application/octet-stream';
                 break;
         }
@@ -153,32 +121,34 @@ class HttpStreamer
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-        header('Expires: 0');
-        header('Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: no-cache');
+        $this->response->setLastModified(new DateTime());
+        $this->response->setExpires(new DateTime());
+        $this->response->setCache([
+            'must_revalidate'  => true,
+            'no_cache'         => true,
+            'no_store'         => true,
+            'no_transform'     => false,
+            'public'           => false,
+            'private'          => true,
+        ]);
 
         // 2. Set the correct values for file streaming
-        header('Content-Type: ' . $mimeType);
-        if (
-            ($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT)
-            && isset($_SERVER['HTTP_USER_AGENT']) && !(!str_contains((string) $_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-        ) {
-            header('Content-Type: application/force-download');
-        }
-        // RFC2616, �19.5.1: $filename must be a quoted-string
-        header('Content-Disposition: ' . $this->disposition . '; filename="phpMyFAQ_' . $filename . '"');
-        header('Content-Description: ' . $description);
-        header('Content-Transfer-Encoding: binary');
-        header('Accept-Ranges: none');
-        header('Content-Length: ' . $this->size);
+        $this->response->headers->set('Content-Type', $mimeType);
+
+        // 3. RFC2616, �19.5.1: $filename must be a quoted-string
+        $disposition = HeaderUtils::makeDisposition($this->disposition, $filename);
+        $this->response->headers->set('Content-Disposition', $disposition);
+        $this->response->headers->set('Content-Description', $description);
+        $this->response->headers->set('Content-Transfer-Encoding', 'binary');
+        $this->response->headers->set('Accept-Ranges', 'none');
+        $this->response->headers->set('Content-Length', (string) $this->size);
     }
 
     /**
      * Streams the content.
      */
-    private function streamContent(): void
+    private function streamContent(): string
     {
-        echo $this->content;
+        return $this->content;
     }
 }

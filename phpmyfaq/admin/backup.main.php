@@ -15,78 +15,38 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
-?>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-download"></i>
-        <?= Translation::get('ad_csv_backup') ?>
-    </h1>
-  </div>
+    $twig = new TwigWrapper('./assets/templates');
+    $template = $twig->loadTemplate('./backup/main.twig');
 
-    <?php
-    if (!in_array('sodium', get_loaded_extensions())) {
-        echo Alert::danger('ad_entryins_fail', 'The libsodium extension is missing.');
-    } else {
-    ?>
+    $templateVars = [
+        'adminHeaderBackup' => Translation::get('ad_csv_backup'),
+        'adminBackupCardHeader' => Translation::get('ad_csv_head'),
+        'adminBackupCardBody' => Translation::get('ad_csv_make'),
+        'adminBackupLinkData' => Translation::get('ad_csv_linkdat'),
+        'adminBackupLinkLogs' => Translation::get('ad_csv_linklog'),
+        'csrfToken' => Token::getInstance()->getTokenString('restore'),
+        'adminRestoreCardHeader' => Translation::get('ad_csv_head2'),
+        'adminRestoreCardBody' => Translation::get('ad_csv_restore'),
+        'adminRestoreLabel' => Translation::get('ad_csv_file'),
+        'adminRestoreButton' => Translation::get('ad_csv_ok'),
+    ];
 
-  <div class="card-deck">
-    <div class="card mb-4">
-      <div class="card-header py-3">
-          <?= Translation::get('ad_csv_head') ?>
-      </div>
-      <div class="card-body">
-        <p><?= Translation::get('ad_csv_make') ?></p>
-        <p>
-          <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-            <i aria-hidden="true" class="fa fa-download"></i> <?= Translation::get('ad_csv_linkdat') ?>
-          </a>
-        </p>
-        <p>
-          <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-            <i aria-hidden="true" class="fa fa-download"></i> <?= Translation::get('ad_csv_linklog') ?>
-          </a>
-        </p>
-      </div>
-    </div>
-    <div class="card mb-4">
-      <form method="post" action="?action=restore&csrf=<?= Token::getInstance()->getTokenString('restore') ?>"
-            enctype="multipart/form-data">
-        <div class="card-header py-3">
-            <?= Translation::get('ad_csv_head2') ?>
-        </div>
-        <div class="card-body">
-          <p><?= Translation::get('ad_csv_restore') ?></p>
-          <div class="row">
-            <label class="col-lg-4 col-form-label"><?= Translation::get('ad_csv_file') ?>:</label>
-            <div class="col-lg-8">
-              <input type="file" name="userfile">
-            </div>
-          </div>
-          <div class="form-row row">
-            <div class="text-end">
-              <button class="btn btn-primary" type="submit">
-                <i aria-hidden="true" class="fa fa-upload"></i> <?= Translation::get('ad_csv_ok') ?>
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-
-  </div>
-
-    <?php
-    }
+    echo $template->render($templateVars);
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

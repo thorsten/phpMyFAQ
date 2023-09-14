@@ -22,7 +22,7 @@ class FaqTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_LANGUAGE_DIR)
+            ->setLanguagesDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -46,5 +46,11 @@ class FaqTest extends TestCase
     public function testSetUser(): void
     {
         $this->assertInstanceOf(Faq::class, $this->faq->setUser(-1));
+    }
+
+    public function testHasTitleAHash(): void
+    {
+        $this->assertTrue($this->faq->hasTitleAHash('H#llo World!'));
+        $this->assertFalse($this->faq->hasTitleAHash('Hallo World!'));
     }
 }

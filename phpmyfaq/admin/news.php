@@ -580,5 +580,5 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         }
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

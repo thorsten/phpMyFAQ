@@ -15,51 +15,36 @@
  * @since     2015-12-25
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
+if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
     $elasticsearch = new Elasticsearch($faqConfig);
     $esConfigData = $faqConfig->getElasticsearchConfig();
-?>
 
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-wrench"></i>
-        <?= Translation::get('ad_menu_elasticsearch') ?>
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <button class="btn btn-sm btn-primary pmf-elasticsearch" data-action="create">
-          <i aria-hidden="true" class="fa fa-searchengine"></i> <?= Translation::get('ad_es_create_index') ?>
-        </button>
+    $twig = new TwigWrapper('./assets/templates');
+    $template = $twig->loadTemplate('./configuration/elasticsearch.twig');
 
-        <button class="btn btn-sm btn-secondary pmf-elasticsearch" data-action="import">
-          <i aria-hidden="true" class="fa fa-search-plus"></i> <?= Translation::get('ad_es_bulk_index') ?>
-        </button>
+    $templateVars = [
+        'adminHeaderElasticsearch' => Translation::get('ad_menu_elasticsearch'),
+        'adminElasticsearchButtonCreate' => Translation::get('ad_es_create_index'),
+        'adminElasticsearchButtonIndex' => Translation::get('ad_es_bulk_index'),
+        'adminElasticsearchButtonDelete' => Translation::get('ad_es_drop_index'),
+        'adminElasticsearchStats' => Translation::get('ad_menu_searchstats'),
+    ];
 
-        <button class="btn btn-sm btn-danger pmf-elasticsearch" data-action="drop">
-          <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_es_drop_index') ?>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-12">
-      <div id="pmf-elasticsearch-result"></div>
-      <h5><?= Translation::get('ad_menu_searchstats') ?></h5>
-      <div id="pmf-elasticsearch-stats"></div>
-    </div>
-  </div>
-
-<?php
+    echo $template->render($templateVars);
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

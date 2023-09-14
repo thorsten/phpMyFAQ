@@ -1,10 +1,20 @@
-# phpMyFAQ 3.2
+# phpMyFAQ 3.3.0-dev
 
-**Codename "Pontus"**
+**Codename "Pallas"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v3.3.0-dev - 2023-
+
+- changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
+- (WIP) added Twig as new template engine (Thorsten)
+- (WIP) added experimental online update feature (Jan Harms, Thorsten)
+- added Symfony Routing (Thorsten)
+- added experimental support for PHP 8.3 (Thorsten)
+- updated to PNPM (Thorsten)
+- removed X/Twitter support (Thorsten)
 
 ### phpMyFAQ v3.2.1 - 2023-10
 

@@ -1,4 +1,4 @@
-# phpMyFAQ 3.2
+# phpMyFAQ 3.3
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -33,8 +33,9 @@ and open http://www.example.org/phpmyfaq/setup/index.php in your preferred brows
 
 #### Dockerfile
 
-The Dockerfile provided in this repo only build an environment to run any release it's for development purpose. It does
-not contain any code as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in the container.
+The Dockerfile provided in this repo only builds an environment to run any release for development purpose.
+It does not contain any code
+as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in the container.
 
 #### docker-compose.yml
 
@@ -42,12 +43,12 @@ For development purposes you can start a full stack to run your current PhpMyFAQ
 
     $ docker-compose up
 
-The command above starts 8 containers for multi database development as following.
+The command above starts eight containers for multi database development as following.
 
 _Specific images started once to prepare the project:_
 
 - **composer**: update composer dependencies
-- **yarn**: update yarn dependencies
+- **pnpm**: update pnpm dependencies
 
 _Running using named volumes:_
 
@@ -58,7 +59,7 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 8.2 support:_
+_Running apache web server with PHP 8.3 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
@@ -107,22 +108,22 @@ The vm.max_map_count setting must be set via docker-machine:
 
 ### phpMyFAQ local installation from Github
 
-To run phpMyFAQ locally you need at least a running web server with PHP support and a database.
+To run phpMyFAQ locally, you need at least a running web server with PHP support and a database.
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
     $ git checkout main
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ curl -o- -L https://yarnpkg.com/install.sh | bash
-    $ yarn install
-    $ yarn build
+    $ curl -fsSL https://get.pnpm.io/install.sh | sh -
+    $ pnpm install
+    $ pnpm build
 
 Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ## Testing
 
-To run our unit tests via PHPUnit v9.x, just execute this command on your CLI
+To run our unit tests via PHPUnit v10.x, just execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
@@ -160,13 +161,13 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can find the full documentation on [https://phpmyfaq.readthedocs.io](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v2.2
+## REST API v2.3
 
-The REST API v2.2 documentation is located [here in this repository](API.md) and on
+The REST API v2.3 documentation is located [here in this repository](API.md) and on
 [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
 ## License
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
-Copyright © 2001 - 2023 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001–2023 Thorsten Rinne and the phpMyFAQ Team

@@ -2,36 +2,48 @@
 
 ## 2.1 Requirements for phpMyFAQ
 
-phpMyFAQ addresses a database system via PHP. In order to install it locally you will need a web server that meets the
-following requirements:
+phpMyFAQ addresses a database system via PHP.
+In order to install it, you will need a web server that meets the following requirements:
 
-- **[PHP](http://www.php.net)**
-  - version 8.1 or later
-  - memory_limit = 128M (the more the better)
-  - cURL support
-  - GD support
-  - XMLWriter support
-  - JSON support
-  - Filter support
-  - SPL support
-  - FileInfo support
-- **Web server** ([Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 1.0+)
-- **Database server**
-  - [MySQL](http://www.mysql.com) (via MySQLi extension)
-  - [PostgreSQL](http://www.postgresql.org)
-  - [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
-  - [SQLite](http://www.sqlite.org)
-  - [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension)
-  - [Percona Server](http://www.percona.com) (via MySQLi extension)
-- **Search engines** (optional)
-  - [Elasticsearch](https://www.elastic.co/products/elasticsearch) 6.x or later
+### PHP requirements
+
+- version 8.1 or later
+- memory_limit = 128M (the more the better)
+- cURL support
+- GD support
+- XMLWriter support
+- JSON support
+- Filter support
+- SPL support
+- FileInfo support
+
+### Apache requirements
+
+- mod_rewrite
+- mod_ssl (if you wish to run phpMyFAQ under SSL)
+
+You should also ensure you have `AllowOverride All` set in the `<Directory>` and/or `<VirtualHost>` blocks so
+that the `.htaccess` file processes correctly, and rewrite rules take effect.
+
+### Database requirements
+
+- [MySQL](http://www.mysql.com) (via MySQLi extension)
+- [PostgreSQL](http://www.postgresql.org)
+- [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
+- [SQLite](http://www.sqlite.org)
+- [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension)
+- [Percona Server](http://www.percona.com) (via MySQLi extension)
+
+### Optional Search engine
+
+- [Elasticsearch](https://www.elastic.co/products/elasticsearch) 6.x or later
+
+### Additional requirements
+
 - correctly set: access permissions, owner, group
 - **Docker** (optional)
 
-You can only run phpMyFAQ successfully with constraints affect the directives open_basedir and disable_functions, which
-can be set in the central php.ini or the httpd.conf respectively.
-
-In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The
+In case PHP runs as a module of the Apache, you will have to be able to do a chown on the files before installation. The
 files and directories must be owned by the web server's user.
 
 You can determine which versions your web server is running by creating a file called **info.php** with the following
@@ -40,13 +52,13 @@ content: `<?php phpinfo(); ?>`
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you're running PHP before 8.1 you cannot use phpMyFAQ.
+In case you're running PHP before 8.1, you cannot use phpMyFAQ.
 
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are the latest Mozilla Firefox
 (Windows/macOS/Linux), the latest Safari (macOS/iOS), the latest Chrome (Windows/macOS/Linux), the latest Opera
 (Windows/macOS/Linux) and Microsoft Edge (Windows/macOS/Linux).
 
-We recommend to use always the latest version of Firefox, Chrome, Safari, Opera or Microsoft Edge.
+We recommend using the latest version of Firefox, Chrome, Safari, Opera or Microsoft Edge.
 
 ## 2.2 Preparations
 
@@ -61,9 +73,9 @@ If you want to use Git, please run the following commands on your shell:
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ curl -o- -L https://yarnpkg.com/install.sh | bash
-    $ yarn install
-    $ yarn build
+    $ curl -fsSL https://get.pnpm.io/install.sh | sh -
+    $ pnpm install
+    $ pnpm build
 
 You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found [here](). Copy
 all unzipped files to your web server in a directory using FTP. A good choice would be the directory **faq/**.
@@ -76,10 +88,11 @@ It might help to set chmod 775 to the whole phpMyFAQ directory to avoid problems
 running a very restrictive mod_php installation you should keep the chmod 775 for the following files and directories
 even after the successful installation:
 
-- the directory **attachments/**
-- the directory **config/**
-- the directory **data/**
-- the directory **images/**
+- the directory **content/core/config/**
+- the directory **content/core/data/**
+- the directory **content/core/logs/**
+- the directory **content/user/attachments/**
+- the directory **content/user/images/**
 
 All other directories shouldn't be world-writable for your own security.
 
@@ -188,21 +201,7 @@ done depends on the browser you are using.
         memory_limit = 128M
         file_upload = on
 
-## 2.8 Enabling support for SEO-friendly URLs
-
-### Apache Web server
-
-If you want to enable the search engine optimization you have to activate the mod_rewrite support in the admin backend
-in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ
-on root directory "/" you should set in `RewriteBase /` Please check, if `AllowOverride All` is set correctly in your
-httpd.conf file so that the .htaccess rules work.
-
-### nginx Web server
-
-If you want to enable the search engine optimization you have to copy the rewrite rules in the file nginx.conf to your
-nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
-
-## 2.9 Enabling LDAP or Microsoft Active Directory support
+## 2.8 Enabling LDAP or Microsoft Active Directory support
 
 If you're entered the correct LDAP or Microsoft Active Directory information during the installation you have to enable
 the LDAP or Microsoft Active Directory support in the configuration in the admin backend. Now your user can authenticate
@@ -214,7 +213,7 @@ configuration panel.
 If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template and if you rename
 it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
 
-## 2.10 Using Microsoft Azure Active Directory
+## 2.9 Using Microsoft Azure Active Directory
 
 You can use our experimental Microsoft Azure Active Directory support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,
@@ -264,7 +263,7 @@ Follow these steps to create an App Registration in Microsoft Azure:
 2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
 3. Then, activate Microsoft Azure AD support in the administration under "Security"
 
-## 2.11 PDF export
+## 2.10 PDF export
 
 Main features of the PDF export:
 
@@ -280,7 +279,7 @@ Main features of the PDF export:
 - supports automatic line break and text justification;
 - supports JPEG and PNG images natively, all images supported by GD (GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM)
 
-## 2.12 Static solution ID
+## 2.11 Static solution ID
 
 phpMyFAQ features a static solution ID which never changes. This ID is visible next to the question on a FAQ record
 page. You may think why do you need such an ID? If you have a record ID _1042_ it is now possible to enter only the ID
@@ -288,7 +287,7 @@ _1042_ in the input field of the full-text search box, and you'll be automatical
 ID _1042_. By default, the numbers start at ID **1000**, but you can change this value in the file _inc/constants.php_.
 You can also change the value of the incrementation of the static IDs.
 
-## 2.13 Spam protection
+## 2.12 Spam protection
 
 phpMyFAQ performs these three checks on public forms:
 
@@ -304,7 +303,7 @@ By default, phpMyFAQ uses the builtin captcha functionality. If you want to use 
 support for Google Recaptcha by adding your site and secret key. You can get the keys from
 [Google](https://developers.google.com/recaptcha).
 
-## 2.14 Attachments
+## 2.13 Attachments
 
 phpMyFAQ supports encrypted attachments. The encryption uses the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
 algorithm implemented in mcrypt extension (if available) or with native PHP Rijndael implementation. The key size vary
@@ -322,14 +321,7 @@ Please be aware:
   etc), so there is no way to asses a file directly using the name it was uploaded under.
 - Download continuation isn't supported.
 
-## 2.15 X (Twitter) support
-
-phpMyFAQ supports X (Twitter) via OAuth. If you enable X (Twitter) support in the social network configuration and add
-phpMyFAQ as a X (Twitter) application on [X (Twitter)](https://dev.twitter.com/apps/new), all new FAQ additions in the
-administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to X
-(Twitter), e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
-
-## 2.16 Server side recommendations
+## 2.14 Server side recommendations
 
 **_MySQL / Percona Server / MariaDB_**
 
@@ -337,7 +329,7 @@ administration backend will also post the question of the FAQ, the URL of the FA
     wait_timeout = 120
     max_allowed_packet = 64M
 
-## 2.17 Syntax Highlighting
+## 2.15 Syntax Highlighting
 
 The bundled [highlight.js](https://highlightjs.org/) syntax highlighting component will find and highlight code inside
 of &lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn't work for
@@ -352,7 +344,7 @@ To disable highlighting altogether use the "nohighlight" class:
 
     <pre><code class="nohighlight">...</code></pre>
 
-## 2.18 Elasticsearch Support
+## 2.16 Elasticsearch Support
 
 To improve the search performance and quality of search results it's possible to use Elasticsearch. You need a
 running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST. You can add the IP(s)/Domain(s) and port(s)

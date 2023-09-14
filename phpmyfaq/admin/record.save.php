@@ -15,6 +15,7 @@
  * @since     2003-02-23
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
@@ -23,7 +24,6 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Elasticsearch;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -216,5 +216,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
         <?php
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

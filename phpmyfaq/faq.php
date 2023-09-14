@@ -16,8 +16,10 @@
  * @since     2002-08-27
  */
 
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
@@ -78,6 +80,20 @@ $request = Request::createFromGlobals();
 $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
+$bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+// Handle bookmarks
+$bookmark = new Bookmark($faqConfig, $user);
+if ($bookmarkAction === 'add' && isset($faqId)) {
+    $bookmark->saveFaqAsBookmarkById($faqId);
+    $alert = new Alert();
+    $bookmarkAlert = $alert->success('msgBookmarkAdded');
+}
+if ($bookmarkAction === 'remove' && isset($faqId)) {
+    $bookmark->remove($faqId);
+    $alert = new Alert();
+    $bookmarkAlert = $alert->success('msgBookmarkRemoved');
+}
 
 // Get all data from the FAQ record
 if (0 === (int)$solutionId) {
@@ -287,7 +303,7 @@ if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 
-// Check if author name should be visible according to GDPR option
+// Check if the author name should be visible, according to the GDPR option
 if ($user->getUserVisibilityByEmail($faq->faqRecord['email'])) {
     $author = $faq->faqRecord['author'];
 } else {
@@ -308,7 +324,6 @@ $template->parse(
         'msgPdf' => Translation::get('msgPDF'),
         'msgPrintFaq' => Translation::get('msgPrintArticle'),
         'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
-        'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
         'linkToPdf' => $faqServices->getPdfLink(),
         'saveVotingID' => $faqId,
         'msgAverageVote' => Translation::get('msgAverageVote'),
@@ -333,9 +348,24 @@ $template->parse(
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
         'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
         'captchaFieldset' =>
-            $captchaHelper->renderCaptcha($captcha, 'writecomment', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+            $captchaHelper->renderCaptcha(
+                $captcha,
+                'writecomment',
+                Translation::get('msgCaptcha'),
+                $user->isLoggedIn()
+            ),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
+        'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'fa fa-bookmark' : 'fa fa-bookmark-o',
+        'bookmarkLink' =>
+            $bookmark->isFaqBookmark($faqId)
+                ?
+                sprintf('index.php?action=faq&bookmark_action=remove&id=%d', $faqId)
+                :
+                sprintf('index.php?action=faq&bookmark_action=add&id=%d', $faqId),
+        'msgAddBookmark' =>
+            $bookmark->isFaqBookmark($faqId) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
+        'alert' => (isset($bookmarkAlert)) ? $bookmarkAlert : '',
     ]
 );
 

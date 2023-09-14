@@ -15,6 +15,7 @@
  * @since     2003-02-23
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
@@ -28,7 +29,6 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Question;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Session\Token;
@@ -917,7 +917,7 @@ if (
     </script>
     <?php
 } elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && !Database::checkOnEmptyTable('faqcategories')) {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 } elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
     echo Translation::get('no_cats');
 }

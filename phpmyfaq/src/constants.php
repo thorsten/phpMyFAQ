@@ -30,8 +30,22 @@ if (!defined('PMF_SRC_DIR')) {
 }
 
 //
+// The path to the content directory
+//
+if (!defined('PMF_CONTENT_DIR')) {
+    define('PMF_CONTENT_DIR', dirname(__DIR__) . '/content');
+}
+
+//
 // The path to the logs
 //
 if (!defined('PMF_LOG_DIR')) {
-    define('PMF_LOG_DIR', dirname(__DIR__) . '/logs/phpmyfaq.log');
+    define('PMF_LOG_DIR', dirname(__DIR__) . '/content/core/logs/phpmyfaq.log');
+}
+
+//
+// The path to the translations
+//
+if (!defined('PMF_LANGUAGE_DIR')) {
+    define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/translations');
 }

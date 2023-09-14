@@ -16,12 +16,15 @@
  * @since     2011-01-12
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Report;
 use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -124,12 +127,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         $content .= "\r\n";
     }
 
-    $oHttpStreamer = new HttpStreamer('csv', $content);
+    $httpStreamer = new HttpStreamer('csv', $content);
     try {
-        $oHttpStreamer->send(HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+        $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 } else {
-    echo Translation::get('err_noArticles');
+    require 'no-permission.php';
 }

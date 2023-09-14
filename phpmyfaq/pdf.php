@@ -53,10 +53,10 @@ if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
 }
 
 if (isset($lang) && Language::isASupportedLanguage($lang)) {
-    require_once 'lang/language_' . $lang . '.php';
+    require_once 'translations/language_' . $lang . '.php';
 } else {
     $lang = 'en';
-    require_once 'lang/language_en.php';
+    require_once 'translations/language_en.php';
 }
 
 //
@@ -64,7 +64,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode);
 } catch (Exception $e) {

@@ -126,7 +126,7 @@ $request = Request::createFromGlobals();
                 $danz = 0;
                 $first = PHP_INT_MAX;
                 $last = 0;
-                $dir = opendir(PMF_ROOT_DIR . '/data');
+                $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
                 while ($dat = readdir($dir)) {
                     if ($dat != '.' && $dat != '..') {
                         ++$danz;
@@ -272,7 +272,7 @@ $request = Request::createFromGlobals();
         </form>
             <?php
         } else {
-            print Translation::get('err_NotAuth');
+            require 'no-permission.php';
         }
         ?>
   </div>

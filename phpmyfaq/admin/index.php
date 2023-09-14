@@ -19,11 +19,11 @@
  * @since     2002-09-16
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -57,15 +57,15 @@ $request = Request::createFromGlobals();
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
-require PMF_ROOT_DIR . '/lang/language_en.php';
+require PMF_ROOT_DIR . '/translations/language_en.php';
 $faqConfig->setLanguage($Language);
 
 if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     // Overwrite English strings with the ones we have in the current language
-    if (!file_exists(PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php')) {
+    if (!file_exists(PMF_ROOT_DIR . '/translations/language_' . $faqLangCode . '.php')) {
         $faqLangCode = 'en';
     }
-    require PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php';
+    require PMF_ROOT_DIR . '/translations/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
 }
@@ -75,7 +75,7 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode)
         ->setMultiByteLanguage();
@@ -239,7 +239,7 @@ if (
         $user->isSuperAdmin())
 ) {
     if (isset($action) && isset($ajax)) {
-        if ('ajax' === $action) {
+        if ('ajax' === $action ) {
             switch ($ajax) {
                 // Attachments
                 case 'att':
@@ -293,6 +293,10 @@ if (
                 // Image upload
                 case 'image':
                     require 'api/image.php';
+                    break;
+                // Upgrade
+                case 'updates':
+                    require 'api/updates.php';
                     break;
             }
             exit();
@@ -406,9 +410,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'cutcategory':
                 require 'category.cut.php';
                 break;
-            case 'movecategory':
-                require 'category.move.php';
-                break;
             case 'showcategory':
                 require 'category.showstructure.php';
                 break;
@@ -427,7 +428,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             // functions for password administration
             case 'passwd':
-                require 'pwd.change.php';
+                require 'password.change.php';
                 break;
             // functions for session administration
             case 'adminlog':
@@ -486,6 +487,9 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'meta.edit':
                 require 'template-metadata.edit.php';
                 break;
+            case 'upgrade':
+                require 'upgrade.php';
+                break;
             // functions for backup administration
             case 'backup':
                 require 'backup.main.php';
@@ -511,12 +515,10 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
     }
 // User is authenticated but has no rights
 } elseif ($user->isLoggedIn() && $numRights === 0) {
-    require 'noperm.php';
+    require 'no-permission.php';
 // User is NOT authenticated
 } else {
     require 'login.php';
 }
 
 require 'footer.php';
-
-$faqConfig->getDb()->close();

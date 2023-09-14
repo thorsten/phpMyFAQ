@@ -15,20 +15,25 @@
  * @since     2005-12-26
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
-    // actions defined by url: user_action=
     $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_SPECIAL_CHARS, 'listConfig');
-    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'pmf-csrf-token', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // Save the configuration
     if ('saveConfig' === $userAction && Token::getInstance()->verifyToken('configuration', $csrfToken)) {
@@ -66,6 +71,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             unset($editData['edit']['main.referenceURL']);
         }
 
+        $newConfigClass = [];
+
         foreach ($editData['edit'] as $key => $value) {
             // Remove forbidden characters
             $newConfigValues[$key] = str_replace($forbiddenValues, '', (string) $value);
@@ -83,10 +90,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             if (isset($newConfigValues[$key])) {
                 continue;
             } else {
-                if ($oldConfigClass === $newConfigClass && $oldConfigValues[$key] === 'true') {
+                if ($oldConfigClass === $newConfigClass && $value === 'true') {
                     $newConfigValues[$key] = 'false';
                 } else {
-                    $newConfigValues[$key] = $oldConfigValues[$key];
+                    $newConfigValues[$key] = $value;
                 }
             }
         }
@@ -95,112 +102,26 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
         $faqConfig->getAll();
     }
-    ?>
-  <form id="configuration-list" name="configuration-list" method="post"
-        action="?action=config&amp;config_action=saveConfig">
-      <?= Token::getInstance()->getTokenInput('configuration') ?>
 
-    <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2">
-        <i aria-hidden="true" class="fa fa-wrench"></i>
-          <?= Translation::get('ad_config_edit') ?>
-      </h1>
-      <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-          <button class="btn btn-sm btn-warning" type="reset">
-              <?= Translation::get('ad_config_reset') ?>
-          </button>
-          <button class="btn btn-sm btn-success" type="submit">
-              <?= Translation::get('ad_config_save') ?>
-          </button>
-        </div>
-      </div>
-    </div>
+    $twig = new TwigWrapper('./assets/templates');
+    $template = $twig->loadTemplate('./configuration/main.twig');
 
-    <div class="row">
-      <div class="col-lg-12">
+    $templateVars = [
+        'adminHeaderConfiguration' => Translation::get('ad_config_edit'),
+        'csrfToken' => Token::getInstance()->getTokenString('configuration'),
+        'adminConfigurationButtonReset' => Translation::get('ad_config_reset'),
+        'adminConfigurationButtonSave' => Translation::get('ad_config_save'),
+        'adminConfigurationMainTab' => Translation::get('mainControlCenter'),
+        'adminConfigurationFaqsTab' => Translation::get('recordsControlCenter'),
+        'adminConfigurationSearchTab' => Translation::get('searchControlCenter'),
+        'adminConfigurationSecurityTab' => Translation::get('securityControlCenter'),
+        'adminConfigurationSpamTab' => Translation::get('spamControlCenter'),
+        'adminConfigurationSeoTab' => Translation::get('seoCenter'),
+        'adminConfigurationMailTab' => Translation::get('mailControlCenter'),
+        'adminConfigurationUpgradeTab' => Translation::get('upgradeControlCenter'),
+    ];
 
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="nav-item">
-            <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
-              <i aria-hidden="true" class="fa fa-home"></i>
-                <?= Translation::get('mainControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#records" aria-controls="records" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-th-list"></i>
-                <?= Translation::get('recordsControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#search" aria-controls="search" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-search"></i>
-                <?= Translation::get('searchControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#security" aria-controls="security" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-warning"></i>
-                <?= Translation::get('securityControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#spam" aria-controls="spam" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-thumbs-down"></i>
-                <?= Translation::get('spamControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-search"></i>
-                <?= Translation::get('seoCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#social" aria-controls="social" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-retweet"></i>
-                <?= Translation::get('socialNetworksControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-inbox"></i>
-                <?= Translation::get('mailControlCenter') ?>
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-sitemap"></i>
-                LDAP
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#api" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="fa fa-gears"></i>
-                API
-            </a>
-          </li>
-        </ul>
-
-        <div class="tab-content p-2 pt-4 pmf-configuration-panel">
-          <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
-          <div role="tabpanel" class="tab-pane fade" id="records"></div>
-          <div role="tabpanel" class="tab-pane fade" id="search"></div>
-          <div role="tabpanel" class="tab-pane fade" id="security"></div>
-          <div role="tabpanel" class="tab-pane fade" id="spam"></div>
-          <div role="tabpanel" class="tab-pane fade" id="seo"></div>
-          <div role="tabpanel" class="tab-pane fade" id="social"></div>
-          <div role="tabpanel" class="tab-pane fade" id="mail"></div>
-          <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
-          <div role="tabpanel" class="tab-pane fade" id="api"></div>
-        </div>
-      </div>
-    </div>
-
-  </form>
-    <?php
+    echo $template->render($templateVars);
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

@@ -3,7 +3,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Language\Plurals;
 use PHPUnit\Framework\TestCase;
 
 class VisitsTest extends TestCase
@@ -18,7 +17,7 @@ class VisitsTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_LANGUAGE_DIR)
+            ->setLanguagesDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -29,6 +28,7 @@ class VisitsTest extends TestCase
         $this->configuration->set('main.currentVersion', System::getVersion());
 
         $language = new Language($this->configuration);
+        $language->setLanguage(false, 'en');
         $this->configuration->setLanguage($language);
 
         $this->visits = new Visits($this->configuration);

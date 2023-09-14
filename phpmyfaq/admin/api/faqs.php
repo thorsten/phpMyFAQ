@@ -16,6 +16,7 @@
  * @since     2009-03-31
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
@@ -24,7 +25,6 @@ use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;

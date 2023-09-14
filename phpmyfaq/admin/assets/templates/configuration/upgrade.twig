@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+        {{ adminHeaderUpgrade }}
+    </h1>
+</div>
+
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <h4 class="alert-heading">Heads up!</h4>
+    <p>
+        This will be the new online update administration frontend for phpMyFAQ v3.3.
+    </p>
+    <hr>
+    <p class="mb-0">Don't expect that it will work.</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div class="row">
+    <div class="col-12">
+
+        <p>
+            Last check for updates: <output>{{ dateLastChecked }}</output>
+        </p>
+        <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">Check for new version</button>
+
+        <p>
+            Release-Environment: {{ releaseEnvironment }}
+        </p>
+
+    </div>
+</div>

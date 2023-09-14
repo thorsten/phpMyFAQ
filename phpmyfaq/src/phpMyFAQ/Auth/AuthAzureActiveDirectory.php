@@ -158,8 +158,8 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
         $user->getUserByLogin($user->getLogin());
         $user->deleteFromSession(true);
 
-        $redirect = new RedirectResponse(self::AAD_LOGOUT_URL);
-        $redirect->send();
+        $response = new RedirectResponse(self::AAD_LOGOUT_URL);
+        $response->send();
     }
 
     /**

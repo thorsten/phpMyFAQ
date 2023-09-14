@@ -15,10 +15,10 @@
  * @since     2003-02-23
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
-use phpMyFAQ\AdminLog;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -149,5 +149,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' ===
         echo Alert::danger('ad_adminlog_delete_failure');
     }
 } else {
-    echo Translation::get('err_NotAuth');
+    require 'no-permission.php';
 }

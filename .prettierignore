@@ -12,6 +12,11 @@ composer.json
 composer.lock
 docker-compose.yml
 package.json
+pnpm-lock.yaml
 
 # Ignore artifacts
 phpmyfaq/assets/dist/
+
+# Ignore PNPM Cache
+.pnpm-store
+

@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Abstract class for various services, e.g. Twitter, Facebook.
+ * Abstract class for 3rd party services, e.g., Gravatar.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link  https://www.phpmyfaq.de
- * @since 2010-09-05
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-09-05
  */
 
 namespace phpMyFAQ;
@@ -115,29 +115,6 @@ class Services
     public function setLanguage($language): void
     {
         $this->language = $language;
-    }
-
-    /**
-     * Returns the current "share on Twitter" URL.
-     */
-    public function getShareOnTwitterLink(): string
-    {
-        $url = sprintf(
-            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
-            $this->config->getDefaultUrl(),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage()
-        );
-
-        $link = new Link($url, $this->config);
-        $link->itemTitle = $this->question;
-
-        return sprintf(
-            'https://twitter.com/share?url=%s&text=%s',
-            urlencode($link->toString()),
-            $this->getQuestion() . urlencode(' | ' . $link->toString())
-        );
     }
 
     public function getQuestion(): string
