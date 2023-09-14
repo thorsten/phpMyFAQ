@@ -15,12 +15,12 @@
  * @since     2009-08-18
  */
 
-use phpMyFAQ\Administration\Backup;
-use phpMyFAQ\Configuration;
+use phpMyFAQ\Backup;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +42,6 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 // Create Request & Response
 //
 $request = Request::createFromGlobals();
-$faqConfig = Configuration::getConfigurationInstance();
 
 $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -122,5 +121,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
             break;
     }
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }

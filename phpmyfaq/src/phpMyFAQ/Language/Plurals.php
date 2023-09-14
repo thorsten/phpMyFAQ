@@ -32,7 +32,7 @@ class Plurals
     private readonly int $nPlurals;
 
     /**
-     * The language code of the current language.
+     * The language code of current language.
      *
      * @var string
      */
@@ -98,7 +98,7 @@ class Plurals
 
     /**
      * Helper function that returns the translation template in the correct plural form
-     * If translation is missing message in English plural form is returned.
+     * If translation is missing, message in English plural form is returned.
      *
      * @param string $msgID Message identification
      * @param int    $n     The number used to determine the plural form

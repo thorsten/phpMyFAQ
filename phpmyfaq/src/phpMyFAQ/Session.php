@@ -372,7 +372,7 @@ class Session
                     str_replace(';', ',', urldecode((string) $_SERVER['HTTP_USER_AGENT'])) . ';' .
                     $_SERVER['REQUEST_TIME'] . ";\n";
 
-                $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
+                $file = PMF_ROOT_DIR . '/data/tracking' . date('dmY');
 
                 if (!is_file($file)) {
                     touch($file);

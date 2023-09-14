@@ -28,7 +28,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;
-use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
@@ -325,12 +324,13 @@ class Installer extends Setup
         'main.administrationMail' => 'webmaster@example.org',
         'main.contactInformation' => '',
         'main.enableAdminLog' => 'true',
+        'main.enableRewriteRules' => 'false',
         'main.enableUserTracking' => 'true',
         'main.metaDescription' => 'phpMyFAQ should be the answer for all questions in life',
         'main.metaKeywords' => '',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
         'main.send2friendText' => '',
-        'main.titleFAQ' => 'phpMyFAQ Codename Pallas',
+        'main.titleFAQ' => 'phpMyFAQ Codename Pontus',
         'main.urlValidateInterval' => '86400',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
@@ -364,7 +364,7 @@ class Installer extends Setup
         'records.orderingPopularFaqs' => 'visits',
         'records.disableAttachments' => 'true',
         'records.maxAttachmentSize' => '100000',
-        'records.attachmentsPath' => 'content/user/attachments',
+        'records.attachmentsPath' => 'attachments',
         'records.attachmentsStorageType' => '0',
         'records.enableAttachmentEncryption' => 'false',
         'records.defaultAttachmentEncKey' => '',
@@ -408,6 +408,13 @@ class Installer extends Setup
         'spam.enableSafeEmail' => 'true',
         'spam.manualActivation' => 'true',
         'spam.mailAddressInExport' => 'true',
+
+        'socialnetworks.enableTwitterSupport' => 'false',
+        'socialnetworks.twitterConsumerKey' => '',
+        'socialnetworks.twitterConsumerSecret' => '',
+        'socialnetworks.twitterAccessTokenKey' => '',
+        'socialnetworks.twitterAccessTokenSecret' => '',
+        'socialnetworks.disableAll' => 'false',
 
         'seo.metaTagsHome' => 'index, follow',
         'seo.metaTagsFaqs' => 'index, follow',
@@ -456,9 +463,6 @@ class Installer extends Setup
 
         'api.enableAccess' => 'true',
         'api.apiClientToken' => '',
-
-        'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
-        'upgrade.dateLastChecked' => ''
     ];
 
     /**
@@ -475,10 +479,7 @@ class Installer extends Setup
             'main.currentApiVersion' => System::getApiVersion(),
             'main.phpMyFAQToken' => bin2hex(random_bytes(16)),
             'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
-            'upgrade.releaseEnvironment' =>
-                System::isDevelopmentVersion() ? ReleaseType::DEVELOPMENT->value : ReleaseType::RELEASE->value
         ];
-
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);
     }
 
@@ -545,8 +546,6 @@ class Installer extends Setup
 
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
-     *
-     * @todo this method should be in the the Update class
      */
     public function checkPreUpgrade(string $databaseType): void
     {
@@ -559,7 +558,7 @@ class Installer extends Setup
             System::renderFooter();
         }
 
-        if (!is_readable(PMF_ROOT_DIR . '/content/core/config/database.php')) {
+        if (!is_readable(PMF_ROOT_DIR . '/config/database.php')) {
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>' .
                 'Please use the <a href="index.php">install script</a>.</p>';
             System::renderFooter();
@@ -590,13 +589,7 @@ class Installer extends Setup
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
-        $dirs = [
-            '/content/core/config',
-            '/content/core/data',
-            '/content/core/logs',
-            '/content/user/images',
-            '/content/user/attachments',
-        ];
+        $dirs = ['/attachments', '/config', '/data', '/images', '/logs'];
         $failedDirs = $instanceSetup->checkDirs($dirs);
         $numDirs = sizeof($failedDirs);
 
@@ -641,7 +634,7 @@ class Installer extends Setup
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
             echo '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
                 'installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t ' .
-                'use Elasticsearch.</p>';
+                'use the Twitter support and/or Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
             echo '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP installation. ' .
@@ -956,7 +949,7 @@ class Installer extends Setup
         }
 
         // connect to the database using config/database.php
-        $dbConfig = new DatabaseConfiguration($rootDir . '/content/core/config/database.php');
+        $dbConfig = new DatabaseConfiguration($rootDir . '/config/database.php');
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {

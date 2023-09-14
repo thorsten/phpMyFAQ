@@ -14,7 +14,7 @@
  */
 
 export const fetchAutoCompleteData = async (searchString) => {
-  return await fetch(`api/autocomplete?search=${searchString}`, {
+  return await fetch(`api.autocomplete.php?search=${searchString}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {

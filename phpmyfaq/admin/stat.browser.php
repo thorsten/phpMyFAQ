@@ -67,5 +67,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 </div>
     <?php
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }

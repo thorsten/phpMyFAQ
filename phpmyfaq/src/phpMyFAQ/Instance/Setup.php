@@ -75,7 +75,7 @@ class Setup
 
         foreach ($dirs as $dir) {
             if (false === is_dir($this->rootDir . $dir)) {
-                // If the folder does not exist, try to create it
+                // If the folder does not exist try to create it
                 if (false === mkdir($this->rootDir . $dir)) {
                     // If the folder creation fails
                     $failedDirs[] = 'Folder [' . $dir . '] could not be created.';
@@ -105,12 +105,12 @@ class Setup
     }
 
     /**
-     * Creates the file /content/core/config/database.php.
+     * Creates the file /config/database.php.
      *
      * @param  int[]|string[] $data   Array with database credentials
      * @param  string         $folder Folder
      */
-    public function createDatabaseFile(array $data, string $folder = '/content/core/config'): int|bool
+    public function createDatabaseFile(array $data, string $folder = '/config'): int|bool
     {
         return file_put_contents(
             $this->rootDir . $folder . '/database.php',
@@ -127,12 +127,12 @@ class Setup
     }
 
     /**
-     * Creates the file /content/core/config/ldap.php.
+     * Creates the file /config/ldap.php.
      *
      * @param  int[]|string[] $data   Array with LDAP credentials
      * @param  string         $folder Folder
      */
-    public function createLdapFile(array $data, string $folder = '/content/core/config'): int|bool
+    public function createLdapFile(array $data, string $folder = '/config'): int|bool
     {
         return file_put_contents(
             $this->rootDir . $folder . '/config/ldap.php',
@@ -147,12 +147,12 @@ class Setup
     }
 
     /**
-     * Creates the file /content/core/config/elasticsearch.php
+     * Creates the file /config/elasticsearch.php
      *
      * @param  int[]|string[] $data   Array with Elasticsearch credentials
      * @param  string         $folder Folder
      */
-    public function createElasticsearchFile(array $data, string $folder = '/content/core/config'): int|bool
+    public function createElasticsearchFile(array $data, string $folder = '/config'): int|bool
     {
         return file_put_contents(
             $this->rootDir . $folder . '/config/elasticsearch.php',

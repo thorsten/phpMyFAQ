@@ -7,8 +7,6 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @deprecated will be migrated to api/index.php
- *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2023 phpMyFAQ Team
@@ -19,27 +17,37 @@
 
 const IS_VALID_PHPMYFAQ = null;
 
+use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\CategoryEntity;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
+use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\News;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Question;
+use phpMyFAQ\Search;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserAuthentication;
+use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 //
 // Bootstrapping
@@ -77,9 +85,9 @@ $currentLanguage = $language->setLanguageByAcceptLanguage();
 // Set language
 //
 if (Language::isASupportedLanguage($currentLanguage)) {
-    require PMF_TRANSLATION_DIR . '/language_' . $currentLanguage . '.php';
+    require PMF_LANGUAGE_DIR . '/language_' . $currentLanguage . '.php';
 } else {
-    require PMF_TRANSLATION_DIR . '/language_en.php';
+    require PMF_LANGUAGE_DIR . '/language_en.php';
 }
 $faqConfig->setLanguage($language);
 
@@ -88,7 +96,7 @@ $faqConfig->setLanguage($language);
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($currentLanguage);
 } catch (Exception $e) {
@@ -117,8 +125,66 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 //
 switch ($action) {
     //
-    // v2.3
+    // v2.2
     //
+    case 'version':
+        $response->setData($faqConfig->getVersion());
+        $response->setStatusCode(Response::HTTP_OK);
+        break;
+
+    case 'title':
+        $response->setData($faqConfig->getTitle());
+        $response->setStatusCode(Response::HTTP_OK);
+        break;
+
+    case 'language':
+        $response->setData($faqConfig->getLanguage()->getLanguage());
+        $response->setStatusCode(Response::HTTP_OK);
+        break;
+
+    case 'search':
+        $user = new CurrentUser($faqConfig);
+        $search = new Search($faqConfig);
+        $search->setCategory(new Category($faqConfig));
+
+        $faqPermission = new FaqPermission($faqConfig);
+        $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
+
+        $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
+        try {
+            $searchResults = $search->search($searchString, false);
+            $faqSearchResult->reviewResultSet($searchResults);
+            if ($faqSearchResult->getNumberOfResults() > 0) {
+                $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+                foreach ($faqSearchResult->getResultSet() as $data) {
+                    $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, 'utf-8');
+                    $data->answer = Utils::makeShorterText($data->answer, 12);
+                    $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+                    $result[] = $data;
+                }
+                $response->setData($result);
+            } else {
+                $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            }
+        } catch (Exception) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        }
+        break;
+
+    case 'categories':
+        $category = new Category($faqConfig, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->setLanguage($currentLanguage);
+        $result = array_values($category->getAllCategories());
+        if (count($result) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        } else {
+            $response->setStatusCode(Response::HTTP_OK);
+        }
+        $response->setData($result);
+        break;
+
     case 'category':
         $category = new Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);
@@ -211,6 +277,79 @@ switch ($action) {
                 'stored' => false,
                 'error' => 'Cannot add category'
             ];
+        }
+        $response->setData($result);
+        break;
+
+    case 'groups':
+        $groupPermission = new MediumPermission($faqConfig);
+        $result = $groupPermission->getAllGroups($user);
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+        break;
+
+    case 'tags':
+        $tags = new Tags($faqConfig);
+        $result = $tags->getPopularTagsAsArray(16);
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+        break;
+
+    case 'open-questions':
+        $questions = new Question($faqConfig);
+        $result = $questions->getAllOpenQuestions();
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+        break;
+
+    case 'searches':
+        $search = new Search($faqConfig);
+        $result = $search->getMostPopularSearches(7, true);
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+        break;
+
+    case 'comments':
+        $comment = new Comments($faqConfig);
+        $result = $comment->getCommentsData($recordId, CommentType::FAQ);
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+        break;
+
+    case 'attachments':
+        $attachments = $result = [];
+        try {
+            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+        } catch (AttachmentException) {
+            $result = [];
+        }
+        foreach ($attachments as $attachment) {
+            $result[] = [
+                'filename' => $attachment->getFilename(),
+                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
+            ];
+        }
+        if (count($result) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+        $response->setData($result);
+        break;
+
+    case 'news':
+        $news = new News($faqConfig);
+        $result = $news->getLatestData(false, true, true);
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
         $response->setData($result);
         break;
@@ -395,6 +534,30 @@ switch ($action) {
         $response->setData($result);
         break;
 
+    case 'login':
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
+        $faqUsername = Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $user = new CurrentUser($faqConfig);
+        $userAuth = new UserAuthentication($faqConfig, $user);
+        try {
+            $user = $userAuth->authenticate($faqUsername, $faqPassword);
+            $response->setStatusCode(Response::HTTP_OK);
+            $result = [
+                'loggedin' => true
+            ];
+        } catch (Exception $e) {
+            $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $result = [
+                'loggedin' => false,
+                'error' => Translation::get('ad_auth_fail')
+            ];
+        }
+        $response->setData($result);
+        break;
+
     case 'register':
         if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
@@ -476,12 +639,7 @@ switch ($action) {
         $categories = $categoryObject->getAllCategories();
 
         $questionHelper = new QuestionHelper($faqConfig, $categoryObject);
-        try {
-            $questionHelper->sendSuccessMail($questionData, $categories);
-        } catch (TransportExceptionInterface | Exception $e) {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response->setData(['error' => $e->getMessage() ]);
-        }
+        $questionHelper->sendSuccessMail($questionData, $categories);
 
         $response->setData(['stored' => true]);
         break;

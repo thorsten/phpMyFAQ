@@ -78,7 +78,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </form>
         <?php
     } else {
-        require 'no-permission.php';
+        echo Translation::get('err_NotAuth');
     }
     ?>
     </div>

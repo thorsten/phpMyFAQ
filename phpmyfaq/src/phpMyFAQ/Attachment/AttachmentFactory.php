@@ -38,7 +38,7 @@ class AttachmentFactory
     /**
      * Storage type.
      */
-    private static ?int $storageType = 0;
+    private static ?int $storageType = null;
 
     /**
      * File encryption is enabled.
@@ -100,12 +100,12 @@ class AttachmentFactory
         );
 
         $result = $config->getDb()->fetchAll($config->getDb()->query($sql));
-
         if (!empty($result)) {
             foreach ($result as $item) {
-                $files[] = self::create((int) $item->id);
+                $files[] = self::create($item->id);
             }
         }
+        reset($files);
 
         return $files;
     }

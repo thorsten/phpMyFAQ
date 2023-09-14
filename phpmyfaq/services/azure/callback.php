@@ -31,7 +31,6 @@ session_regenerate_id(true);
 // Prepend and start the PHP session
 //
 define('PMF_ROOT_DIR', dirname(__DIR__, 2));
-
 const IS_VALID_PHPMYFAQ = null;
 
 //
@@ -85,6 +84,7 @@ if ($session->getCurrentSessionKey()) {
 
         // @todo -> redirect to where the user came from
         $redirect->send();
+
     } catch (GuzzleException $e) {
         echo $e->getMessage();
     } catch (Exception $e) {

@@ -46,9 +46,10 @@ abstract class AbstractFile extends AbstractEntry
      *
      * @param string $filepath path to file
      * @param string $mode     mode for fopen
+     *
      * @throws FileException
      */
-    public function __construct(string $filepath, protected string $mode = self::MODE_READ)
+    public function __construct($filepath, protected $mode = self::MODE_READ)
     {
         $this->path = $filepath;
 

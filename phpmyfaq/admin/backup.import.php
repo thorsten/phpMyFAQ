@@ -15,38 +15,37 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Administration\Backup;
-use phpMyFAQ\Configuration;
+use phpMyFAQ\Backup;
+use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
-$user = CurrentUser::getCurrentUser($faqConfig);
-
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
-if (
-    $user->perm->hasPermission($user->getUserId(), 'restore') &&
-    Token::getInstance()->verifyToken('restore', $csrfToken)
-) {
-    $twig = new TwigWrapper('./assets/templates');
-    $template = $twig->loadTemplate('./backup/import.twig');
+if (!Token::getInstance()->verifyToken('restore', $csrfToken)) {
+    $csrfCheck = false;
+} else {
+    $csrfCheck = true;
+}
+?>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="fa fa-download"></i>
+            <?= Translation::get('ad_csv_rest') ?>
+        </h1>
+    </div>
+<?php
 
-    $templateVars = [
-        'adminHeaderRestore' => Translation::get('ad_csv_rest')
-    ];
-
+if ($user->perm->hasPermission($user->getUserId(), 'restore') && $csrfCheck) {
     if (isset($_FILES['userfile']) && 0 === $_FILES['userfile']['error']) {
         $ok = 1;
         $fileInfo = new finfo(FILEINFO_MIME_ENCODING);
@@ -55,10 +54,7 @@ if (
         $backup = new Backup($faqConfig, $dbHelper);
 
         if ('utf-8' !== $fileInfo->file($_FILES['userfile']['tmp_name'])) {
-            $templateVars = [
-                ...$templateVars,
-                'errorMessageWrongEncoding' => 'This file is not UTF-8 encoded.'
-            ];
+            echo 'This file is not UTF-8 encoded.<br>';
             $ok = 0;
         }
 
@@ -75,30 +71,21 @@ if (
             if ($verification) {
                 $ok = 1;
             } else {
-                $templateVars = [
-                    ...$templateVars,
-                    'errorMessageNoVerification' => 'This file is not a verified backup file.'
-                ];
+                echo 'This file is not a verified backup file.<br>';
                 $ok = 0;
             }
         } catch (SodiumException) {
-            $templateVars = [
-                ...$templateVars,
-                'errorMessageNoVerification' => 'This file cannot be verified.'
-            ];
+            echo 'This file cannot be verified.<br>';
             $ok = 0;
         }
 
         if ($versionFound !== $versionExpected) {
-            $templateVars = [
-                ...$templateVars,
-                'errorMessageVersionMisMatch' => sprintf(
-                    '%s (Version check failure: "%s" found, "%s" expected)',
-                    Translation::get('ad_csv_no'),
-                    $versionFound,
-                    $versionExpected
-                )
-            ];
+            printf(
+                '%s (Version check failure: "%s" found, "%s" expected)',
+                Translation::get('ad_csv_no'),
+                $versionFound,
+                $versionExpected
+            );
             $ok = 0;
         }
 
@@ -115,10 +102,7 @@ if (
 
         if ($ok === 1) {
             $tablePrefix = '';
-            $templateVars = [
-                ...$templateVars,
-                'prepareMessage' => Translation::get('ad_csv_prepare')
-            ];
+            printf("<p>%s</p>\n", Translation::get('ad_csv_prepare'));
             while ($backupData = fgets($handle, 65536)) {
                 $backupData = trim($backupData);
                 $backupPrefixPattern = '-- pmftableprefix:';
@@ -134,10 +118,7 @@ if (
             $k = 0;
             $g = 0;
 
-            $templateVars = [
-                ...$templateVars,
-                'processMessage' => Translation::get('ad_csv_process')
-            ];
+            printf("<p>%s</p>\n", Translation::get('ad_csv_process'));
 
             $numTables = count($queries);
             $kg = '';
@@ -146,41 +127,31 @@ if (
 
                 $kg = $faqConfig->getDb()->query($queries[$i]);
                 if (!$kg) {
-                    $templateVars = [
-                        ...$templateVars,
-                        'errorMessageQueryFailed' => sprintf(
-                            '<strong>Query</strong>: "%s" failed (Reason: %s)',
-                            Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
-                            $faqConfig->getDb()->error()
-                        )
-                    ];
-
+                    printf(
+                        '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
+                        Strings::htmlspecialchars($queries[$i], ENT_QUOTES, 'utf-8'),
+                        $faqConfig->getDb()->error(),
+                        "\n"
+                    );
                     ++$k;
                 } else {
                     printf(
-                        '<!-- Query: "%s" okay</div> -->%s',
-                        Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
+                        '<!-- <div class="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
+                        Strings::htmlspecialchars($queries[$i], ENT_QUOTES, 'utf-8'),
                         "\n"
                     );
                     ++$g;
                 }
             }
-
-            $templateVars = [
-                ...$templateVars,
-                'successMessage' => sprintf(
-                    '%d %s %d %s',
-                    $g,
-                    Translation::get('ad_csv_of'),
-                    $numTables,
-                    Translation::get('ad_csv_suc')
-                )
-            ];
+            printf(
+                '<p class="alert alert-success">%d %s %d %s</p>',
+                $g,
+                Translation::get('ad_csv_of'),
+                $numTables,
+                Translation::get('ad_csv_suc')
+            );
         } else {
-            $templateVars = [
-                ...$templateVars,
-                'errorMessageImportNotPossible' => Translation::get('ad_csv_no')
-            ];
+            echo Alert::danger('ad_csv_no', 'Import not possible.');
         }
     } else {
         $errorMessage = match ($_FILES['userfile']['error']) {
@@ -193,14 +164,8 @@ if (
             8 => 'A PHP extension stopped the file upload.',
             default => 'Undefined error.',
         };
-        $templateVars = [
-            ...$templateVars,
-            'errorMessageUpload' => Translation::get('ad_csv_no'),
-            'errorMessageUploadDetails' => $errorMessage
-        ];
+        echo Alert::danger('ad_csv_no', $errorMessage);
     }
-
-    echo $template->render($templateVars);
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }

@@ -17,15 +17,12 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -50,14 +47,14 @@ if ($user->perm->hasPermission($user->getUserId(), 'export')) {
         // Stream the file content
         $httpStreamer = new HttpStreamer($type, $content);
         if ('inline' === $inlineDisposition) {
-            $httpStreamer->send(HeaderUtils::DISPOSITION_INLINE);
+            $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_INLINE);
         } else {
-            $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
+            $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
         }
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_noArticles');
 }

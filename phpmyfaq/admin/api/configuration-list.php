@@ -16,8 +16,8 @@
  * @since     2005-12-26
  */
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -31,6 +31,17 @@ use Symfony\Component\HttpFoundation\Request;
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
+}
+
+if (!empty($_SESSION['access_token'])) {
+    $connection = new TwitterOAuth(
+        $faqConfig->get('socialnetworks.twitterConsumerKey'),
+        $faqConfig->get('socialnetworks.twitterConsumerSecret'),
+        $_SESSION['access_token']['oauth_token'],
+        $_SESSION['access_token']['oauth_token_secret']
+    );
+
+    $content = $connection->get('account/verify_credentials');
 }
 
 $request = Request::createFromGlobals();
@@ -55,14 +66,33 @@ function renderInputForm(mixed $key, string $type): void
             break;
 
         case 'input':
-            $value = str_replace('"', '&quot;', $faqConfig->get($key) ?? '');
+            if (
+                '' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenKey' == $key &&
+                isset($_SESSION['access_token'])
+            ) {
+                $value = $_SESSION['access_token']['oauth_token'];
+            } elseif (
+                '' === $faqConfig->get($key) && 'socialnetworks.twitterAccessTokenSecret' == $key &&
+                isset($_SESSION['access_token'])
+            ) {
+                $value = $_SESSION['access_token']['oauth_token_secret'];
+            } else {
+                $value = str_replace('"', '&quot;', $faqConfig->get($key) ?? '');
+            }
             echo '<div class="input-group">';
 
-            $type = match ($key) {
-                'main.administrationMail' => 'email',
-                'main.referenceURL', 'main.privacyURL' => 'url',
-                default => 'text',
-            };
+            switch ($key) {
+                case 'main.administrationMail':
+                    $type = 'email';
+                    break;
+                case 'main.referenceURL':
+                case 'main.privacyURL':
+                    $type = 'url';
+                    break;
+                default:
+                    $type = 'text';
+                    break;
+            }
 
             printf(
                 '<input class="form-control" type="%s" name="edit[%s]" id="edit[%s]" value="%s" step="1" min="0">',
@@ -250,19 +280,6 @@ function renderInputForm(mixed $key, string $type): void
                     $adminHelper = new AdministrationHelper();
                     echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
-
-                case 'upgrade.releaseEnvironment':
-                    printf(
-                        '<option value="%s" %s>Development</option>',
-                        ReleaseType::DEVELOPMENT->value,
-                        (ReleaseType::DEVELOPMENT->value == $faqConfig->get($key)) ? 'selected' : ''
-                    );
-                    printf(
-                        '<option value="%s" %s>Release</option>',
-                        ReleaseType::RELEASE->value,
-                        (ReleaseType::RELEASE->value == $faqConfig->get($key)) ? 'selected' : ''
-                    );
-                    break;
             }
 
             echo "</select>\n</div>\n";
@@ -295,7 +312,7 @@ function renderInputForm(mixed $key, string $type): void
             printf(
                 '<input type="text" readonly name="edit[%s]" class="form-control-plaintext" value="%s"></div>',
                 $key,
-                str_replace('"', '&quot;', $faqConfig->get($key) ?? '')
+                str_replace('"', '&quot;', $faqConfig->get($key))
             );
             break;
 
@@ -315,6 +332,31 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
+        if ('socialnetworks.twitterConsumerKey' == $key) {
+            echo '<div class="row mb-2"><label class="col-form-label col-lg-3"></label>';
+            echo '<div class="col-lg-9">';
+            if (
+                '' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
+                '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')
+            ) {
+                echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
+                echo "<br>\n";
+                echo 'Your Callback URL is: ' . $faqConfig->getDefaultUrl() . 'services/twitter/callback.php';
+            }
+
+            if (!isset($content)) {
+                echo '<br><a target="_blank" href="../../services/twitter/redirect.php">';
+                echo '<img src="../../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
+            } else {
+                echo $content->screen_name . "<br>\n";
+                echo "<img alt=\"Twitter profile\" src='" . $content->profile_image_url_https . "'><br>\n";
+                echo 'Follower: ' . $content->followers_count . "<br>\n";
+                echo 'Status Count: ' . $content->statuses_count . "<br>\n";
+                echo 'Status: ' . $content->status->text;
+            }
+            echo '</div></div>';
+        }
+
         printf(
             '<div class="row mb-2"><label class="col-lg-3 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''

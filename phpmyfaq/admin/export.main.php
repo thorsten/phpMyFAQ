@@ -19,8 +19,8 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Database;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Translation;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -106,17 +106,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <p><?= Translation::get('ad_export_download_view') ?></p>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="disposition"
-                               id="<?= HeaderUtils::DISPOSITION_ATTACHMENT ?>"
-                               value="<?= HeaderUtils::DISPOSITION_ATTACHMENT ?>" checked>
-                        <label class="form-check-label" for="<?= HeaderUtils::DISPOSITION_ATTACHMENT ?>">
+                               id="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>"
+                               value="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>" checked>
+                        <label class="form-check-label" for="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>">
                             <?= Translation::get('ad_export_download') ?>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="disposition"
-                               id="<?= HeaderUtils::DISPOSITION_INLINE ?>"
-                               value="<?= HeaderUtils::DISPOSITION_INLINE ?>">
-                        <label class="form-check-label" for="<?= HeaderUtils::DISPOSITION_INLINE ?>">
+                               id="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
+                               value="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
+                        <label class="form-check-label" for="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
                             <?= Translation::get('ad_export_view') ?>
                         </label>
                     </div>

@@ -37,14 +37,14 @@ const IS_VALID_PHPMYFAQ = null;
 // Bootstrapping
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
-require PMF_ROOT_DIR . '/translations/language_en.php';
+require PMF_ROOT_DIR . '/lang/language_en.php';
 
 //
 // Get language (default: english)
 //
 $language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($language) && Language::isASupportedLanguage($language)) {
-    require PMF_ROOT_DIR . '/translations/language_' . $language . '.php';
+    require PMF_ROOT_DIR . '/lang/language_' . $language . '.php';
 }
 
 
@@ -53,7 +53,7 @@ if (!is_null($language) && Language::isASupportedLanguage($language)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($language);
 } catch (Exception $e) {

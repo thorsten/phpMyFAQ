@@ -77,5 +77,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
     <?php
 } else {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }

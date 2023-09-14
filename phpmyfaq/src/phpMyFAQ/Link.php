@@ -67,7 +67,6 @@ class Link
     private const LINK_GET_ACTION_SEARCH = 'search';
     private const LINK_GET_ACTION_SITEMAP = 'sitemap';
     private const LINK_GET_ACTION_SHOW = 'show';
-    private const LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
     private const LINK_HTML_EXTENSION = '.html';
 
     private const LINK_HTML_ADDCONTENT = 'addcontent.html';
@@ -79,7 +78,6 @@ class Link
     private const LINK_HTML_OPEN = 'open-questions.html';
     private const LINK_HTML_SEARCH = 'search.html';
     private const LINK_HTML_SHOWCAT = 'show-categories.html';
-    private const LINK_HTML_BOOKMARKS = 'user/bookmarks';
 
     /**
      * @var int[] List of allowed action parameters
@@ -115,8 +113,7 @@ class Link
         'twofactor' => 1,
         'ucp' => 1,
         'writecomment' => 1,
-        '404' => 1,
-        'bookmarks' => 1
+        '404' => 1
     ];
 
     /**
@@ -306,153 +303,164 @@ class Link
     {
         $url = $this->toUri();
 
-        if ($this->isHomeIndex()) {
-            $getParams = $this->getHttpGetParameters();
+        if ($this->config->get('main.enableRewriteRules')) {
+            if ($this->isHomeIndex()) {
+                $getParams = $this->getHttpGetParameters();
 
-            if (isset($getParams[self::LINK_GET_ACTION])) {
-                // Get the part of the url 'till the '/' just before the pattern
-                $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1);
+                if (isset($getParams[self::LINK_GET_ACTION])) {
+                    // Get the part of the url 'till the '/' just before the pattern
+                    $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1);
 
-                // Build the Url according to .htaccess rules
-                switch ($getParams[self::LINK_GET_ACTION]) {
-                    case self::LINK_GET_ACTION_ADD:
-                        $url .= self::LINK_HTML_ADDCONTENT;
-                        break;
+                    // Build the Url according to .htaccess rules
+                    switch ($getParams[self::LINK_GET_ACTION]) {
+                        case self::LINK_GET_ACTION_ADD:
+                            $url .= self::LINK_HTML_ADDCONTENT;
+                            break;
 
-                    case self::LINK_GET_ACTION_FAQ:
-                        $url .= self::LINK_CONTENT .
-                            $getParams[self::LINK_GET_CATEGORY] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_ID] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_ARTLANG] .
-                            self::LINK_SLASH .
-                            $this->getSEOItemTitle() .
-                            self::LINK_HTML_EXTENSION;
-                        if (isset($getParams[self::LINK_GET_HIGHLIGHT])) {
-                            $url .= self::LINK_SEARCHPART_SEPARATOR .
-                                self::LINK_GET_HIGHLIGHT . '=' .
-                                $getParams[self::LINK_GET_HIGHLIGHT];
-                        }
-                        if (isset($getParams[self::LINK_FRAGMENT_SEPARATOR])) {
-                            $url .= self::LINK_FRAGMENT_SEPARATOR .
-                                $getParams[self::LINK_FRAGMENT_SEPARATOR];
-                        }
-                        break;
-
-                    case self::LINK_GET_ACTION_ASK:
-                        $url .= self::LINK_HTML_ASK;
-                        break;
-
-                    case self::LINK_GET_ACTION_CONTACT:
-                        $url .= self::LINK_HTML_CONTACT;
-                        break;
-
-                    case self::LINK_GET_ACTION_GLOSSARY:
-                        $url .= self::LINK_HTML_GLOSSARY;
-                        break;
-
-                    case self::LINK_GET_ACTION_HELP:
-                        $url .= self::LINK_HTML_HELP;
-                        break;
-
-                    case self::LINK_GET_ACTION_OPEN:
-                        $url .= self::LINK_HTML_OPEN;
-                        break;
-
-                    case self::LINK_GET_ACTION_LOGIN:
-                        $url .= self::LINK_HTML_LOGIN;
-                        break;
-
-                    case self::LINK_GET_ACTION_BOOKMARKS:
-                        $url .= self::LINK_HTML_BOOKMARKS;
-                        break;
-
-                    case self::LINK_GET_ACTION_SEARCH:
-                        if (
-                            !isset($getParams[self::LINK_GET_ACTION_SEARCH])
-                            && isset($getParams[self::LINK_GET_TAGGING_ID])
-                        ) {
-                            $url .= self::LINK_TAGS . $getParams[self::LINK_GET_TAGGING_ID];
-                            if (isset($getParams[self::LINK_GET_PAGE])) {
-                                $url .= self::LINK_HTML_SLASH . $getParams[self::LINK_GET_PAGE];
-                            }
-                            $url .= self::LINK_SLASH .
+                        case self::LINK_GET_ACTION_FAQ:
+                            $url .= self::LINK_CONTENT .
+                                $getParams[self::LINK_GET_CATEGORY] .
+                                self::LINK_HTML_SLASH .
+                                $getParams[self::LINK_GET_ID] .
+                                self::LINK_HTML_SLASH .
+                                $getParams[self::LINK_GET_ARTLANG] .
+                                self::LINK_SLASH .
                                 $this->getSEOItemTitle() .
                                 self::LINK_HTML_EXTENSION;
-                        } elseif (isset($getParams[self::LINK_GET_ACTION_SEARCH])) {
-                            $url .= self::LINK_HTML_SEARCH;
-                            $url .= self::LINK_SEARCHPART_SEPARATOR .
-                                self::LINK_GET_ACTION_SEARCH . '=' .
-                                $getParams[self::LINK_GET_ACTION_SEARCH];
-                            if (isset($getParams[self::LINK_GET_PAGE])) {
-                                $url .= self::LINK_AMPERSAND . self::LINK_GET_PAGE . '=' .
-                                    $getParams[self::LINK_GET_PAGE];
+                            if (isset($getParams[self::LINK_GET_HIGHLIGHT])) {
+                                $url .= self::LINK_SEARCHPART_SEPARATOR .
+                                    self::LINK_GET_HIGHLIGHT . '=' .
+                                    $getParams[self::LINK_GET_HIGHLIGHT];
                             }
-                        }
-                        if (isset($getParams[self::LINK_GET_LANGS])) {
-                            $url .= self::LINK_AMPERSAND .
-                                self::LINK_GET_LANGS . '=' .
-                                $getParams[self::LINK_GET_LANGS];
-                        }
-                        break;
+                            if (isset($getParams[self::LINK_FRAGMENT_SEPARATOR])) {
+                                $url .= self::LINK_FRAGMENT_SEPARATOR .
+                                    $getParams[self::LINK_FRAGMENT_SEPARATOR];
+                            }
+                            break;
 
-                    case self::LINK_GET_ACTION_SITEMAP:
-                        if (isset($getParams[self::LINK_GET_LETTER])) {
-                            $url .= self::LINK_SITEMAP .
-                                $getParams[self::LINK_GET_LETTER] .
-                                self::LINK_HTML_SLASH .
-                                $getParams[self::LINK_GET_LANG] .
-                                self::LINK_HTML_EXTENSION;
-                        } else {
-                            $url .= self::LINK_SITEMAP . 'A' .
-                                self::LINK_HTML_SLASH .
-                                $getParams[self::LINK_GET_LANG] .
-                                self::LINK_HTML_EXTENSION;
-                        }
-                        break;
+                        case self::LINK_GET_ACTION_ASK:
+                            $url .= self::LINK_HTML_ASK;
+                            break;
 
-                    case self::LINK_GET_ACTION_SHOW:
-                        if (
-                            !isset($getParams[self::LINK_GET_CATEGORY])
-                            || (isset($getParams[self::LINK_GET_CATEGORY])
-                                && (0 == $getParams[self::LINK_GET_CATEGORY]))
-                        ) {
-                            $url .= self::LINK_HTML_SHOWCAT;
-                        } else {
-                            $url .= self::LINK_CATEGORY .
-                                $getParams[self::LINK_GET_CATEGORY];
-                            if (isset($getParams[self::LINK_GET_PAGE])) {
+                        case self::LINK_GET_ACTION_CONTACT:
+                            $url .= self::LINK_HTML_CONTACT;
+                            break;
+
+                        case self::LINK_GET_ACTION_GLOSSARY:
+                            $url .= self::LINK_HTML_GLOSSARY;
+                            break;
+
+                        case self::LINK_GET_ACTION_HELP:
+                            $url .= self::LINK_HTML_HELP;
+                            break;
+
+                        case self::LINK_GET_ACTION_OPEN:
+                            $url .= self::LINK_HTML_OPEN;
+                            break;
+
+                        case self::LINK_GET_ACTION_LOGIN:
+                            $url .= self::LINK_HTML_LOGIN;
+                            break;
+
+                        case self::LINK_GET_ACTION_SEARCH:
+                            if (
+                                !isset($getParams[self::LINK_GET_ACTION_SEARCH])
+                                && isset($getParams[self::LINK_GET_TAGGING_ID])
+                            ) {
+                                $url .= self::LINK_TAGS . $getParams[self::LINK_GET_TAGGING_ID];
+                                if (isset($getParams[self::LINK_GET_PAGE])) {
+                                    $url .= self::LINK_HTML_SLASH . $getParams[self::LINK_GET_PAGE];
+                                }
+                                $url .= self::LINK_SLASH .
+                                    $this->getSEOItemTitle() .
+                                    self::LINK_HTML_EXTENSION;
+                            } elseif (isset($getParams[self::LINK_GET_ACTION_SEARCH])) {
+                                $url .= self::LINK_HTML_SEARCH;
+                                $url .= self::LINK_SEARCHPART_SEPARATOR .
+                                    self::LINK_GET_ACTION_SEARCH . '=' .
+                                    $getParams[self::LINK_GET_ACTION_SEARCH];
+                                if (isset($getParams[self::LINK_GET_PAGE])) {
+                                    $url .= self::LINK_AMPERSAND . self::LINK_GET_PAGE . '=' .
+                                        $getParams[self::LINK_GET_PAGE];
+                                }
+                            }
+                            if (isset($getParams[self::LINK_GET_LANGS])) {
+                                $url .= self::LINK_AMPERSAND .
+                                    self::LINK_GET_LANGS . '=' .
+                                    $getParams[self::LINK_GET_LANGS];
+                            }
+                            break;
+
+                        case self::LINK_GET_ACTION_SITEMAP:
+                            if (isset($getParams[self::LINK_GET_LETTER])) {
+                                $url .= self::LINK_SITEMAP .
+                                    $getParams[self::LINK_GET_LETTER] .
+                                    self::LINK_HTML_SLASH .
+                                    $getParams[self::LINK_GET_LANG] .
+                                    self::LINK_HTML_EXTENSION;
+                            } else {
+                                $url .= self::LINK_SITEMAP . 'A' .
+                                    self::LINK_HTML_SLASH .
+                                    $getParams[self::LINK_GET_LANG] .
+                                    self::LINK_HTML_EXTENSION;
+                            }
+                            break;
+
+                        case self::LINK_GET_ACTION_SHOW:
+                            if (
+                                !isset($getParams[self::LINK_GET_CATEGORY])
+                                || (isset($getParams[self::LINK_GET_CATEGORY])
+                                    && (0 == $getParams[self::LINK_GET_CATEGORY]))
+                            ) {
+                                $url .= self::LINK_HTML_SHOWCAT;
+                            } else {
+                                $url .= self::LINK_CATEGORY .
+                                    $getParams[self::LINK_GET_CATEGORY];
+                                if (isset($getParams[self::LINK_GET_PAGE])) {
+                                    $url .= self::LINK_HTML_SLASH .
+                                        $getParams[self::LINK_GET_PAGE];
+                                }
                                 $url .= self::LINK_HTML_SLASH .
-                                    $getParams[self::LINK_GET_PAGE];
+                                    $this->getSEOItemTitle() .
+                                    self::LINK_HTML_EXTENSION;
                             }
-                            $url .= self::LINK_HTML_SLASH .
+                            break;
+
+                        case self::LINK_GET_ACTION_NEWS:
+                            $url .= self::LINK_NEWS .
+                                $getParams[self::LINK_GET_NEWS_ID] .
+                                self::LINK_HTML_SLASH .
+                                $getParams[self::LINK_GET_NEWS_LANG] .
+                                self::LINK_SLASH .
                                 $this->getSEOItemTitle() .
                                 self::LINK_HTML_EXTENSION;
+                            break;
+                    }
+
+                    if (isset($getParams[self::LINK_GET_SIDS])) {
+                        $url = $this->appendSids($url, $getParams[self::LINK_GET_SIDS]);
+                    }
+
+                    if (isset($getParams['fragment'])) {
+                        $url .= self::LINK_FRAGMENT_SEPARATOR . $getParams['fragment'];
+                    }
+
+                    if ($removeSessionFromUrl) {
+                        $url = strtok($url, '?');
+                    }
+                }
+            }
+        } else {
+            if ($removeSessionFromUrl) {
+                $getParams = $this->getHttpGetParameters();
+                if (isset($getParams[self::LINK_GET_ACTION])) {
+                    $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1) . 'index.php?';
+                    foreach ($getParams as $key => $value) {
+                        if ($key !== self::LINK_GET_SIDS) {
+                            $url .= sprintf('%s=%s&', $key, $value);
                         }
-                        break;
-
-                    case self::LINK_GET_ACTION_NEWS:
-                        $url .= self::LINK_NEWS .
-                            $getParams[self::LINK_GET_NEWS_ID] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_NEWS_LANG] .
-                            self::LINK_SLASH .
-                            $this->getSEOItemTitle() .
-                            self::LINK_HTML_EXTENSION;
-                        break;
-                }
-
-                if (isset($getParams[self::LINK_GET_SIDS])) {
-                    $url = $this->appendSids($url, $getParams[self::LINK_GET_SIDS]);
-                }
-
-                if (isset($getParams['fragment'])) {
-                    $url .= self::LINK_FRAGMENT_SEPARATOR . $getParams['fragment'];
-                }
-
-                if ($removeSessionFromUrl) {
-                    $url = strtok($url, '?');
+                    }
+                    $url = substr($url, 0, -1); // Remove last &
                 }
             }
         }

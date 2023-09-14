@@ -16,6 +16,14 @@
   ],
   "require": {
     "php": ">=8.1.0",
+    "phpseclib/phpseclib": "~3.0",
+    "erusev/parsedown": "~1.0",
+    "erusev/parsedown-extra": "~0.8.1",
+    "tecnickcom/tcpdf": "~6.0",
+    "elasticsearch/elasticsearch": "8.*",
+    "monolog/monolog": "^3.3",
+    "abraham/twitteroauth": "^5.0.0",
+    "myclabs/deep-copy": "~1.0",
     "ext-curl": "*",
     "ext-fileinfo": "*",
     "ext-filter": "*",
@@ -23,35 +31,23 @@
     "ext-json": "*",
     "ext-sodium": "*",
     "ext-xml": "*",
-    "ext-xmlwriter": "*",
     "ext-zip": "*",
-    "elasticsearch/elasticsearch": "8.*",
-    "endroid/qr-code": "^4.8",
-    "erusev/parsedown": "~1.0",
-    "erusev/parsedown-extra": "~0.8.1",
-    "guzzlehttp/guzzle": "^7.5",
-    "monolog/monolog": "^3.3",
-    "myclabs/deep-copy": "~1.0",
-    "nelexa/zip": "^4.0",
-    "phpseclib/phpseclib": "~3.0",
-    "robthree/twofactorauth": "^2.0.0",
-    "symfony/html-sanitizer": "^6.2",
-    "symfony/http-client": "^6.2",
-    "symfony/http-foundation": "^6.2",
-    "symfony/http-kernel": "^6.3",
+    "ext-xmlwriter": "*",
     "symfony/mailer": "^6.2",
-    "symfony/routing": "^6.3",
-    "tecnickcom/tcpdf": "~6.0",
-    "twig/twig": "^3.6"
+    "guzzlehttp/guzzle": "^7.5",
+    "robthree/twofactorauth": "^2.0.0",
+    "symfony/http-foundation": "^6.2",
+    "symfony/html-sanitizer": "^6.2",
+    "symfony/http-client": "^6.2"
   },
   "require-dev": {
-    "doctrine/instantiator": "2.*",
-    "phpdocumentor/reflection-docblock": "5.*",
-    "phpstan/phpstan": "^1.0.0",
     "phpunit/phpunit": "10.*",
-    "rector/rector": "^0.18.0",
+    "doctrine/instantiator": "2.*",
+    "symfony/yaml": "6.*",
+    "phpdocumentor/reflection-docblock": "5.*",
     "squizlabs/php_codesniffer": "*",
-    "symfony/yaml": "6.*"
+    "phpstan/phpstan": "^1.0.0",
+    "rector/rector": "^0.16.0"
   },
   "suggest": {
     "ext-ldap": "*",
@@ -68,8 +64,7 @@
     "bin-dir": "phpmyfaq/src/libs/bin",
     "allow-plugins": {
       "php-http/discovery": true
-    },
-    "sort-packages": true
+    }
   },
   "minimum-stability": "stable",
   "scripts": {

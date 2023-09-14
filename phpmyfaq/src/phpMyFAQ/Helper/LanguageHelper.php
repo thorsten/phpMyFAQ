@@ -75,7 +75,7 @@ class LanguageHelper
         $search = ['language_', '.php'];
         $languages = $languageFiles = [];
 
-        $dir = new DirectoryIterator(PMF_TRANSLATION_DIR);
+        $dir = new DirectoryIterator(PMF_LANGUAGE_DIR);
         foreach ($dir as $fileInfo) {
             if (!$fileInfo->isDot()) {
                 $languageFiles[] = strtoupper(

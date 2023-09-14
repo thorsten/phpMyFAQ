@@ -51,7 +51,7 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 <?php
 
 if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
-    require 'no-permission.php';
+    echo Translation::get('err_NotAuth');
 }
 
 $meta = new TemplateMetaData($faqConfig);
@@ -59,7 +59,7 @@ $meta = new TemplateMetaData($faqConfig);
 // Update meta data
 if ('meta.update' === $action && is_integer($metaId)) {
     if (!Token::getInstance()->verifyToken('template-metadata', $csrfToken)) {
-        require 'no-permission.php';
+        echo Translation::get('err_NotAuth');
     } else {
         $entity = new TemplateMetaDataEntity();
         $entity

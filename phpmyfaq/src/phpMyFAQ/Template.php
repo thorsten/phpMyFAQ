@@ -18,14 +18,13 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Template\TemplateException;
+use phpMyFAQ\Template\TemplateNotFoundException;
 use phpMyFAQ\Template\TemplateHelper;
 
 /**
  * Class Template
  *
  * @package phpMyFAQ
- * @deprecated will be removed with phpMyFAQ 3.4
  */
 class Template
 {
@@ -66,7 +65,7 @@ class Template
                     'assets/themes/' . $tplSetName . '/templates/' . $filename,
                     $templateName
                 );
-            } catch (TemplateException $e) {
+            } catch (TemplateNotFoundException $e) {
                 $this->errors[] = $e->getMessage();
             }
         }
@@ -77,7 +76,7 @@ class Template
      *
      * @param string $filename Filename
      * @param string $tplName Name of the template
-     * @throws TemplateException
+     * @throws TemplateNotFoundException
      */
     protected function readTemplateFile(string $filename, string $tplName): string
     {
@@ -88,7 +87,7 @@ class Template
             return $tplContent;
         }
 
-        throw new TemplateException('Cannot open the file ' . $filename);
+        throw new TemplateNotFoundException('Cannot open the file ' . $filename);
     }
 
     /**

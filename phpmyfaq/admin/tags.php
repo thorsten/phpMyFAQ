@@ -89,7 +89,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             echo '</tbody>';
             echo '</table>';
         } else {
-            require 'no-permission.php';
+            echo Translation::get('err_NotAuth');
         }
         ?>
     </form>

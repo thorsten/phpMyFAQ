@@ -39,11 +39,11 @@ class ConfigurationTest extends TestCase
         parent::tearDown();
     }
 
-    public function testSetLdapConfigWithSingleServer(): void
+    public function testSetLdapConfigWithSingleServer()
     {
-        // Demo data from /content/core/config/ldap.php
+        // Demo data from config/ldap.php
         file_put_contents(
-            PMF_TEST_DIR . '/content/core/config/ldap.php',
+            PMF_TEST_DIR . '/config/ldap.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
             "\$PMF_LDAP['ldap_port'] = '389';\n" .
@@ -65,18 +65,18 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/content/core/config/ldap.php');
+        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/config/ldap.php');
 
         $this->Configuration->setLdapConfig($ldapConfig);
 
         $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 
-    public function testSetLdapConfigWithMultipleServers(): void
+    public function testSetLdapConfigWithMultipleServers()
     {
-        // Demo data from /content/core/config/ldap.php
+        // Demo data from config/ldap.php
         file_put_contents(
-            PMF_TEST_DIR . '/content/core/config/ldap.php',
+            PMF_TEST_DIR . '/config/ldap.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
             "\$PMF_LDAP['ldap_port'] = '389';\n" .
@@ -110,17 +110,17 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/content/core/config/ldap.php');
+        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/config/ldap.php');
         $this->Configuration->setLdapConfig($ldapConfig);
 
         $this->assertEquals($expected, $this->Configuration->getLdapServer());
     }
 
-    public function testSetLdapConfigWithMultipleServersButDisabled(): void
+    public function testSetLdapConfigWithMultipleServersButDisabled()
     {
-        // Demo data from /content/core/config/ldap.php
+        // Demo data from config/ldap.php
         file_put_contents(
-            PMF_TEST_DIR . '/content/core/config/ldap.php',
+            PMF_TEST_DIR . '/config/ldap.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
             "\$PMF_LDAP['ldap_port'] = '389';\n" .
@@ -147,7 +147,7 @@ class ConfigurationTest extends TestCase
             ]
         ];
 
-        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/content/core/config/ldap.php');
+        $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/config/ldap.php');
         $this->Configuration->setLdapConfig($ldapConfig);
 
         $this->assertEquals($expected, $this->Configuration->getLdapServer());

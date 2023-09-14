@@ -31,8 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGuests'))) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
-    $response->send();
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $redirect->send();
 }
 
 $request = Request::createFromGlobals();

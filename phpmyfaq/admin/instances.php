@@ -231,5 +231,5 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
   </div>
     <?php
 } else {
-    require 'no-permission.php';
+    print Translation::get('err_NotAuth');
 }

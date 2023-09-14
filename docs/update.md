@@ -1,12 +1,11 @@
 # 3. Update
 
-First, please download the latest package of phpMyFAQ. Upgrading to phpMyFAQ 3.3.x is possible from the following
+First, please download the latest package of phpMyFAQ. Upgrading to phpMyFAQ 3.2.x is possible from the following
 versions:
 
 - phpMyFAQ 3.0.x
 - phpMyFAQ 3.1.x
 - phpMyFAQ 3.2.x
-- phpMyFAQ 3.3.x
 
 If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
 support for updating an old FAQ from the 1.x or 2.x series, [please email us](thorsten_AT_phpmyfaq_DOT_de).
@@ -39,9 +38,8 @@ updated.
 
 ## Upgrading from phpMyFAQ 3.1.x
 
-Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
-Second, you have to delete all files **except**:
+Updating an existing phpMyFAQ 3.1.x installation is fairly simple. First, log in as admin into the admin section and
+enable the maintenance mode. Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
 - the directory **attachments/**
@@ -58,31 +56,14 @@ updated.
 
 ## Upgrading from phpMyFAQ 3.2.x
 
-Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
-Second, you have to delete all files **except**:
+Updating an existing phpMyFAQ 3.2.x installation is fairly simple. First, log in as admin into the admin section and
+enable the maintenance mode. Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
 - all files in the directory **assets/themes/**
 - the directory **attachments/**
 - the directory **data/**
 - the directory **images/**
-
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
-URL in your browser:
-
-`http://www.example.com/faq/setup/update.php`
-
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
-updated.
-
-## Upgrading from phpMyFAQ 3.3.x
-
-Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
-Second, you have to delete all files **except**:
-
-- all files in the directory **content/**
 
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
 URL in your browser:
