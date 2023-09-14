@@ -115,12 +115,22 @@ function renderInputForm(mixed $key, string $type): void
             break;
 
         case 'password':
-            printf(
-                '<input class="form-control" type="password" autocomplete="off" name="edit[%s]" value="%s">',
-                $key,
-                Strings::htmlentities($faqConfig->get($key))
-            );
-            echo "</div>\n";
+            if ($key === 'mail.remoteSMTPPassword') { // Password visibility for SMTP password
+                printf(
+                        '<div class="col-lg-8 input-group w-auto">'
+                        . '<input class="form-control" type="password" autocomplete="off" name="edit[mail.remoteSMTPPassword]" value="%s" id="edit[mail.remoteSMTPPassword]">'
+                        . '<span class="input-group-text" onclick="handlePasswordToggleSMTP()"><i class="fa" id="togglePassword"></i></span>'
+                        . '</div>',
+                        Strings::htmlentities($faqConfig->get($key))
+                );
+                echo "</div>\n";
+            } else {
+                printf('<input class="form-control" type="password" autocomplete="off" name="edit[%s]" value="%s">',
+                        $key,
+                        Strings::htmlentities($faqConfig->get($key))
+                );
+                echo "</div>\n";
+            }
             break;
 
         case 'select':
