@@ -20,6 +20,17 @@ export const handleInstances = () => {
   const addInstance = document.querySelector('.pmf-instance-add');
   const deleteInstance = document.querySelectorAll('.pmf-instance-delete');
   const container = document.getElementById('pmf-modal-add-instance');
+  const passwordToggle = document.getElementById('instances_password_toggle');
+
+  if(passwordToggle) {
+    passwordToggle.addEventListener('click', () => {
+      const password = document.getElementById('password');
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      const icon = document.getElementById('instances_password_toggle_icon');
+      icon.classList.toggle('is-active');
+    });
+  }
 
   if (addInstance) {
     const modal = new Modal(container);
