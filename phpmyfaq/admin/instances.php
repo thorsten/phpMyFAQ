@@ -209,9 +209,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
               <label class="col-form-label col-lg-4" for="password">
                   <?= Translation::get('ad_instance_password') ?>:
               </label>
-              <div class="col-lg-8">
-                <input class="form-control mb-2" type="password" autocomplete="off" name="password" id="password" required>
-              </div>
+              <div class="input-group mb-2">
+                <input class="form-control" type="password" autocomplete="off" name="password" id="password" required>
+                <span class="input-group-text" id="instances_password_toggle">
+                    <i class="fa togglePassword" id="instances_password_toggle_icon"></i>
+                </span>
+               </div>
             </div>
           </form>
         </div>
