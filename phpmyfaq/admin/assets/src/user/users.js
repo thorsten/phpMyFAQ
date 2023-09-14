@@ -91,7 +91,8 @@ export const handleUsers = async () => {
       const addUser_password = document.getElementById('add_user_password');
       const type = addUser_password.getAttribute('type') === 'password' ? 'text' : 'password';
       addUser_password.setAttribute('type', type);
-      addUser_password_toggle.classList.toggle('is-active');
+      const icon = document.getElementById('add_user_password_togglePassword_icon');
+      icon.classList.toggle('is-active');
     });
   }
 
@@ -100,7 +101,8 @@ export const handleUsers = async () => {
       const addUser_password_confirm = document.getElementById('add_user_password_confirm');
       const type = addUser_password_confirm.getAttribute('type') === 'password' ? 'text' : 'password';
       addUser_password_confirm.setAttribute('type', type);
-      addUser_password_confirm_toggle.classList.toggle('is-active');
+      const icon = document.getElementById('add_user_password_confirm_togglePassword_icon');
+      icon.classList.toggle('is-active');
     });
   }
 
