@@ -83,6 +83,26 @@ export const handleUsers = async () => {
   const addUserMessage = document.getElementById('pmf-user-message');
   const passwordToggle = document.getElementById('add_user_automatic_password');
   const passwordInputs = document.getElementById('add_user_show_password_inputs');
+  const addUser_password_toggle = document.getElementById('add_user_password_togglePassword');
+  const addUser_password_confirm_toggle = document.getElementById('add_user_password_confirm_togglePassword');
+
+  if(addUser_password_toggle) {
+    addUser_password_toggle.addEventListener('click', () => {
+      const addUser_password = document.getElementById('add_user_password');
+      const type = addUser_password.getAttribute('type') === 'password' ? 'text' : 'password';
+      addUser_password.setAttribute('type', type);
+      addUser_password_toggle.classList.toggle('is-active');
+    });
+  }
+
+  if(addUser_password_confirm_toggle) {
+    addUser_password_confirm_toggle.addEventListener('click', () => {
+      const addUser_password_confirm = document.getElementById('add_user_password_confirm');
+      const type = addUser_password_confirm.getAttribute('type') === 'password' ? 'text' : 'password';
+      addUser_password_confirm.setAttribute('type', type);
+      addUser_password_confirm_toggle.classList.toggle('is-active');
+    });
+  }
 
   if (passwordToggle) {
     passwordToggle.addEventListener('click', () => {
