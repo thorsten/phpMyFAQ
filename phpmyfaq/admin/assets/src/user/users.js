@@ -85,6 +85,28 @@ export const handleUsers = async () => {
   const passwordInputs = document.getElementById('add_user_show_password_inputs');
   const addUser_password_toggle = document.getElementById('add_user_password_togglePassword');
   const addUser_password_confirm_toggle = document.getElementById('add_user_password_confirm_togglePassword');
+  const npass_toggle = document.getElementById('npass_togglePassword');
+  const bpass_toggle = document.getElementById('bpass_togglePassword');
+
+  if(npass_toggle) {
+    npass_toggle.addEventListener('click', () => {
+      const npass = document.getElementById('npass');
+      const type = npass.getAttribute('type') === 'password' ? 'text' : 'password';
+      npass.setAttribute('type', type);
+      const icon = document.getElementById('npass_toggle_icon');
+      icon.classList.toggle('is-active');
+    });
+  }
+
+  if(bpass_toggle) {
+    bpass_toggle.addEventListener('click', () => {
+      const bpass = document.getElementById('bpass');
+      const type = bpass.getAttribute('type') === 'password' ? 'text' : 'password';
+      bpass.setAttribute('type', type);
+      const icon = document.getElementById('bpass_toggle_icon');
+      icon.classList.toggle('is-active');
+    });
+  }
 
   if(addUser_password_toggle) {
     addUser_password_toggle.addEventListener('click', () => {
