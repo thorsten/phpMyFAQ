@@ -698,7 +698,7 @@ if (
                                             class="form-control" minlength="8"
                                             autocomplete="off" tabindex="4">
                                         <span class="input-group-text" id="add_user_password_togglePassword">
-                                            <i class="fa togglePassword"></i>
+                                            <i class="fa togglePassword" id="add_user_password_togglePassword_icon"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -713,7 +713,7 @@ if (
                                             id="add_user_password_confirm" minlength="8"
                                             class="form-control" autocomplete="off" tabindex="5">
                                         <span class="input-group-text" id="add_user_password_confirm_togglePassword">
-                                            <i class="fa togglePassword"></i>
+                                            <i class="fa togglePassword" id="add_user_password_confirm_togglePassword_icon"></i>
                                         </span>
                                     </div>
                                 </div>
