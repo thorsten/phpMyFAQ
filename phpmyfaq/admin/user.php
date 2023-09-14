@@ -768,8 +768,13 @@ if (
                                 <?= Translation::get('ad_passwd_new') ?>
                             </label>
                             <div class="col-7">
+                               <div class="input-group">
                                 <input type="password" autocomplete="off" name="npass" id="npass"
                                        class="form-control" required>
+                                <span class="input-group-text" id="npass_togglePassword">
+                                    <i class="fa togglePassword" id="npass_toggle_icon"></i>
+                                </span>
+                               </div>
                             </div>
                         </div>
 
@@ -778,8 +783,13 @@ if (
                                 <?= Translation::get('ad_passwd_con') ?>
                             </label>
                             <div class="col-7">
+                               <div class="input-group">
                                 <input type="password" autocomplete="off" name="bpass" id="bpass"
                                        class="form-control" required>
+                                <span class="input-group-text" id="bpass_togglePassword">
+                                    <i class="fa togglePassword" id="bpass_toggle_icon"></i>
+                                </span>
+                               </div>
                             </div>
                         </div>
 
