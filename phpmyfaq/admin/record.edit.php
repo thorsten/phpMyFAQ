@@ -19,6 +19,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
@@ -36,6 +37,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -43,7 +45,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$currentUserId = $user->getUserId();
+$faqConfig = Configuration::getConfigurationInstance();
+$currentUserId = CurrentUser::getCurrentUser($faqConfig)->getUserId();
 
 if (
     ($user->perm->hasPermission($currentUserId, 'edit_faq') ||
@@ -749,22 +752,25 @@ if (
                             <div class="form-group">
                                 <!-- active or not -->
                                 <?php if ($user->perm->hasPermission($currentUserId, 'approverec')) :
-                                    if (isset($faqData['active']) && $faqData['active'] == 'yes') {
-                                        $suf = ' checked';
-                                        $sul = null;
-                                    } elseif ($faqConfig->get('records.defaultActivation')) {
-                                        $suf = ' checked';
-                                        $sul = null;
+                                    if (isset($faqData['active']) && $faqData['active'] === 'yes') {
+                                        $isActive = ' checked';
+                                        $isInActive = null;
                                     } else {
-                                        $suf = null;
-                                        $sul = ' checked';
+                                        $isActive = null;
+                                        $isInActive = ' checked';
+                                    }
+
+                                    // Override value, if FAQs activated by default
+                                    if ($faqConfig->get('records.defaultActivation') && $queryString === 'insertentry') {
+                                        $isActive = ' checked';
+                                        $isInActive = null;
                                     }
                                     ?>
                                     <div class="form-check">
                                         <input type="radio" id="active" name="active" value="yes"
                                                class="form-check-input"
-                                            <?php if (isset($suf)) {
-                                                echo $suf;
+                                            <?php if (isset($isActive)) {
+                                                echo $isActive;
                                             } ?>>
                                         <label class="form-check-label" for="active">
                                             <?= Translation::get('ad_entry_visibility') ?>
@@ -773,8 +779,8 @@ if (
                                     <div class="form-check">
                                         <input type="radio" id="inactive" name="active" value="no"
                                                class="form-check-input"
-                                            <?php if (isset($sul)) {
-                                                echo $sul;
+                                            <?php if (isset($isInActive)) {
+                                                echo $isInActive;
                                             } ?>>
                                         <label class="form-check-label" for="inactive">
                                           <?= Translation::get('ad_entry_not_visibility') ?>
