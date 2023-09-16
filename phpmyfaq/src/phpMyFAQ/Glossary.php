@@ -270,7 +270,7 @@ class Glossary
             Database::getTablePrefix(),
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
             $this->config->getLanguage()->getLanguage(),
-            Strings::htmlspecialchars($item),
+            Strings::htmlspecialchars(substr($item, 0, 254)),
             Strings::htmlspecialchars($this->definition)
         );
 
@@ -296,7 +296,7 @@ class Glossary
         $query = sprintf(
             "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            Strings::htmlspecialchars($item),
+            Strings::htmlspecialchars(substr($item, 0, 254)),
             Strings::htmlspecialchars($definition),
             $id,
             $this->config->getLanguage()->getLanguage()
