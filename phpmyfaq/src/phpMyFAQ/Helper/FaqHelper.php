@@ -228,12 +228,12 @@ class FaqHelper extends Helper
             (new HtmlSanitizerConfig())
                 ->withMaxInputLength(100000)
                 ->allowSafeElements()
-                ->allowStaticElements()
                 ->allowRelativeLinks()
+                ->allowStaticElements()
                 ->allowRelativeMedias()
                 ->forceHttpsUrls()
                 ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
-                ->allowMediaSchemes(['https', 'http'])
+                ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
                 ->allowMediaHosts(['www.youtube.com'])
         );
 
