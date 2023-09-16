@@ -384,6 +384,9 @@ if ($step == 3) {
 
         // update options
         $faqConfig->rename('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
+        if ($faqConfig->get('security.permLevel') === 'large') {
+            $faqConfig->set('security.permLevel', 'medium');
+        }
 
         // Google ReCAPTCHAv3 support
         $faqConfig->add('security.enableGoogleReCaptchaV2', false);
