@@ -425,7 +425,7 @@ class Faq
                     $visits = $row->visits;
                 }
 
-                $title = $row->question;
+                $title = Strings::htmlentities($row->question);
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->config->getDefaultUrl(),
