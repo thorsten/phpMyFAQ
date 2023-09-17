@@ -17,6 +17,7 @@
 
 const IS_VALID_PHPMYFAQ = null;
 
+use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
@@ -1005,6 +1006,12 @@ switch ($action) {
             $response->setData(['error' => Translation::get('err_sendMail')]);
         }
         break;
+
+    case 'delete-bookmark':
+        $id = Filter::filterVar($postData['faqId'], FILTER_VALIDATE_INT);
+        $bookmark = new Bookmark($faqConfig, $user);
+        $status = $bookmark->remove($id);
+        $response->setData(['success' => $status]);
 }
 
 $response->send();
