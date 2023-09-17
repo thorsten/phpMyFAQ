@@ -142,8 +142,9 @@ RewriteRule user/logout                            index.php?action=logout [L,QS
 RewriteRule admin/api/updates                      admin/api/updates.php
 RewriteRule admin/api/update-check                 admin/api/updates.php
 
-# Autocomplete API
+# Private APIs
 RewriteRule api/autocomplete                       api/index.php
+RewriteRule api/bookmark                           api/index.php
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>

@@ -7,6 +7,8 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
+ * @deprecated will be migrated to api/index.php
+ *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2023 phpMyFAQ Team
@@ -1006,12 +1008,6 @@ switch ($action) {
             $response->setData(['error' => Translation::get('err_sendMail')]);
         }
         break;
-
-    case 'delete-bookmark':
-        $id = Filter::filterVar($postData['faqId'], FILTER_VALIDATE_INT);
-        $bookmark = new Bookmark($faqConfig, $user);
-        $status = $bookmark->remove($id);
-        $response->setData(['success' => $status]);
 }
 
 $response->send();

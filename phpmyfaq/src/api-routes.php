@@ -28,6 +28,7 @@ use phpMyFAQ\Api\Controller\TagController;
 use phpMyFAQ\Api\Controller\TitleController;
 use phpMyFAQ\Api\Controller\VersionController;
 use phpMyFAQ\Controller\AutoCompleteController;
+use phpMyFAQ\Controller\BookmarkController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -94,6 +95,10 @@ $routes->add(
 $routes->add(
     'api.autocomplete',
     new Route('autocomplete', ['_controller' => [AutoCompleteController::class, 'search']])
+);
+$routes->add(
+    'api.bookmark',
+    new Route('bookmark', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
 );
 
 return $routes;
