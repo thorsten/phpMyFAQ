@@ -52,7 +52,7 @@ $faq->setGroups($currentGroups);
 $request = Request::createFromGlobals();
 $inputLanguage = Filter::filterVar($request->query->get('pmf-all-languages'), FILTER_SANITIZE_SPECIAL_CHARS);
 $inputCategory = Filter::filterVar($request->query->get('pmf-search-category'), FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = mb_substr(Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS), 0, 255);
+$inputSearchTerm = Strings::substr(Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS), 0, 255);
 $inputTag = Filter::filterVar($request->query->get('tagging_id'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!is_null($inputTag)) {
@@ -60,7 +60,7 @@ if (!is_null($inputTag)) {
     $inputTag = str_replace(',,', ',', $inputTag);
 }
 
-$searchTerm = mb_substr(Filter::filterVar($request->request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS), 0, 255);
+$searchTerm = Strings::substr(Filter::filterVar($request->request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS), 0, 255);
 $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
