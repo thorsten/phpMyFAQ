@@ -17,6 +17,7 @@
 
 const IS_VALID_PHPMYFAQ = null;
 
+use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
