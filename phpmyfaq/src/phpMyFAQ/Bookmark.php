@@ -154,7 +154,8 @@ class Bookmark
             $html .= sprintf(
                 '<li class="list-group-item d-flex justify-content-between align-items-start">'
                 . '<div class="ms-2 me-auto">'
-                . '<div class="fw-bold"><span onclick="handleDeleteBookmark(%d)"><i class="fa fa-trash me-5"></i></span>%s</div>'
+                . '<div class="fw-bold"><span onclick="handleDeleteBookmark(%d)">'
+                . '<i class="fa fa-trash me-5"></i></span>%s</div>'
                 . '<div class="small">%s</div>'
                 . '</div>'
                 . '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span>'
