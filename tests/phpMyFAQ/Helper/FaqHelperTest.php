@@ -7,6 +7,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 
 class FaqHelperTest extends TestCase
 {
@@ -62,6 +63,9 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContent(): void
     {
+        $this->expectException(SuspiciousOperationException::class);
+        $this->expectExceptionMessage('Invalid Host');
+
         $content = '<p>Some text <script>alert("Hello, world!");</script><img src=foo onerror=alert(document.cookie)></p>';
         $expectedOutput = '<p>Some text <img src="foo" /></p>';
 
@@ -72,8 +76,28 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContentWithYoutubeContent(): void
     {
-        $content = '<iframe title="YouTube video player" src="https://www.youtube.com/embed/WaFetxHpCbE" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>';
-        $expectedOutput = '<iframe title="YouTube video player" src="https://www.youtube.com/embed/WaFetxHpCbE" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>';
+        $this->expectException(SuspiciousOperationException::class);
+        $this->expectExceptionMessage('Invalid Host');
+
+        $content = <<<'HTML'
+        <iframe 
+          title="YouTube video player" 
+          src="https://www.youtube.com/embed/WaFetxHpCbE" 
+          width="560" 
+          height="315" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen="allowfullscreen"></iframe>
+        HTML;
+        $expectedOutput = <<<'HTML'
+        <iframe 
+          title="YouTube video player" 
+          src="https://www.youtube.com/embed/WaFetxHpCbE" 
+          width="560" 
+          height="315" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen="allowfullscreen"></iframe>
+        HTML;
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 

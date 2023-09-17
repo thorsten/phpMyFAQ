@@ -32,6 +32,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FaqHelper
@@ -234,7 +235,12 @@ class FaqHelper extends Helper
                 ->forceHttpsUrls()
                 ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
                 ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
-                ->allowMediaHosts(['www.youtube.com'])
+                ->allowMediaHosts(
+                    [
+                        Request::createFromGlobals()->getHost(),
+                        'www.youtube.com'
+                    ]
+                )
         );
 
         return $htmlSanitizer->sanitize($content);
