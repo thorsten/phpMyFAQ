@@ -130,7 +130,7 @@ $userid = Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_IN
 //
 if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
     $faqusername = trim(Strings::htmlentities($request->server->get('REMOTE_USER')));
-    $faqpassword = '';
+    $faqpassword = null;
 }
 
 //
