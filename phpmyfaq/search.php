@@ -169,7 +169,7 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
 
     foreach ($searchResults as $faqKey => $faqValue) {
         $checkedFaq = $faq->getRecordResult($faqValue->id, $faqValue->lang);
-        if (0 === $checkedFaq->num_rows) {
+        if (0 === $faqConfig->getDb()->numRows($checkedFaq)) {
             unset($searchResults[$faqKey]);
         }
     }
