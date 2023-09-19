@@ -1,4 +1,4 @@
-# phpMyFAQ 3.3
+# phpMyFAQ 4.0
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -161,9 +161,9 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can find the full documentation on [https://phpmyfaq.readthedocs.io](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v2.3
+## REST API v3.0
 
-The REST API v2.3 documentation is located [here in this repository](API.md) and on
+The REST API v3.0 documentation is located [here in this repository](API.md) and on
 [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
 ## License

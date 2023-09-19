@@ -1,4 +1,4 @@
-# phpMyFAQ 3.3.0-dev
+# phpMyFAQ 4.0.0-dev
 
 **Codename "Pallas"**
 
@@ -6,13 +6,14 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.3.0-dev - 2023-
+### phpMyFAQ v4.4.0-dev - 2023-
 
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
+- changed folder structure (Thorsten, Jan Harms)
+- added experimental support for PHP 8.3 (Thorsten)
+- added Symfony Routing (Thorsten)
 - (WIP) added Twig as new template engine (Thorsten)
 - (WIP) added experimental online update feature (Jan Harms, Thorsten)
-- added Symfony Routing (Thorsten)
-- added experimental support for PHP 8.3 (Thorsten)
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
 

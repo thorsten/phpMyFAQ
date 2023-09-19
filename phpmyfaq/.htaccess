@@ -218,18 +218,18 @@ RewriteRule api/v2.2/faq                           api.php?action=faq [L,QSA]
 RewriteRule api/v2.2/register                      api.php?action=register [L,QSA]
 RewriteRule api/v2.2/question                      api.php?action=question [L,QSA]
 
-# REST API v2.3
-# * http://[...]/api/v2.3/<ACTION>
-RewriteRule api/v2.3/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.3/categories                    api/index.php
-RewriteRule api/v2.3/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.3/groups                        api/index.php
-RewriteRule api/v2.3/language                      api/index.php
-RewriteRule api/v2.3/login                         api/index.php
-RewriteRule api/v2.3/news                          api/index.php
-RewriteRule api/v2.3/open-questions                api/index.php
-RewriteRule api/v2.3/search                        api/index.php
-RewriteRule api/v2.3/searches/popular              api/index.php
-RewriteRule api/v2.3/tags                          api/index.php
-RewriteRule api/v2.3/title                         api/index.php
-RewriteRule api/v2.3/version                       api/index.php
+# REST API v3.0
+# * http://[...]/api/v3.0/<ACTION>
+RewriteRule api/v3.0/attachments/([0-9]+)          api/index.php
+RewriteRule api/v3.0/categories                    api/index.php
+RewriteRule api/v3.0/comments/([0-9]+)             api/index.php
+RewriteRule api/v3.0/groups                        api/index.php
+RewriteRule api/v3.0/language                      api/index.php
+RewriteRule api/v3.0/login                         api/index.php
+RewriteRule api/v3.0/news                          api/index.php
+RewriteRule api/v3.0/open-questions                api/index.php
+RewriteRule api/v3.0/search                        api/index.php
+RewriteRule api/v3.0/searches/popular              api/index.php
+RewriteRule api/v3.0/tags                          api/index.php
+RewriteRule api/v3.0/title                         api/index.php
+RewriteRule api/v3.0/version                       api/index.php

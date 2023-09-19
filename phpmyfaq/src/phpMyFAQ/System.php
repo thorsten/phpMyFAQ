@@ -36,17 +36,17 @@ class System
     /**
      * Major version.
      */
-    private const VERSION_MAJOR = 3;
+    private const VERSION_MAJOR = 4;
 
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 3;
+    private const VERSION_MINOR = 0;
 
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 1;
+    private const VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
@@ -56,7 +56,7 @@ class System
     /**
      * API version.
      */
-    private const VERSION_API = '2.3';
+    private const VERSION_API = '3.0';
 
     /**
      * Minimum required PHP version.
