@@ -144,7 +144,7 @@ RewriteRule admin/api/update-check                 admin/api/updates.php
 
 # Private APIs
 RewriteRule api/autocomplete                       api/index.php
-RewriteRule api/bookmark                           api/index.php
+RewriteRule api/bookmark/([0-9]+)                  api/index.php
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>

@@ -33,7 +33,7 @@ class BookmarkController
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
-        $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
+        $id = Filter::filterVar($request->get('bookmarkId'), FILTER_VALIDATE_INT);
 
         $currentUser = CurrentUser::getCurrentUser($faqConfig);
 

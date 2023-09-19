@@ -111,23 +111,24 @@ class Bookmark
     public function renderBookmarkTree(): string
     {
         return sprintf(
-            '<ul class="list-group list-group-flush mb-4">%s</ul>',
-            $this->buildBookmarkList()
+            '<div class="list-group mb-4">%s</div>',
+            $this->renderBookmarkList()
         );
     }
 
     /**
      * Builds the list of bookmarks for the bookmark tree.
      *
+     * @todo move this method to a new helper class
      * @return string
      */
-    public function buildBookmarkList(): string
+    public function renderBookmarkList(): string
     {
         $bookmarks = $this->getAll();
-        $plurals = new Plurals();
         $faq = new Faq($this->config);
         $category = new Category($this->config);
         $html = '';
+
         foreach ($bookmarks as $object => $key) {
             $faq->getRecord((int) $key->faqid);
             $faqData = $faq->faqRecord;
@@ -141,29 +142,19 @@ class Bookmark
             );
 
             $link = new Link($url, $this->config);
-            $link->text = $faqData['title'];
-            $link->itemTitle = $faqData['title'];
-            $link->tooltip = $faqData['title'];
+            $link->text = $link->itemTitle = $link->tooltip = Strings::htmlentities($faqData['title']);
 
-            $visits = new Visits($this->config);
-            foreach ($visits->getAllData() as $item) {
-                if ((string) $key->faqid === $item['id']) {
-                    $visitsFaq = $item['visits'];
-                }
-            }
             $html .= sprintf(
-                '<li class="list-group-item d-flex justify-content-between align-items-start">'
-                . '<div class="ms-2 me-auto">'
-                . '<div class="fw-bold"><span onclick="handleDeleteBookmark(%d)">'
-                . '<i class="fa fa-trash me-5"></i></span>%s</div>'
-                . '<div class="small">%s</div>'
-                . '</div>'
-                . '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span>'
-                . '</li>',
+                '<a href="%s" class="list-group-item list-group-item-action" id="delete-bookmark-%d">' .
+                '<div class="d-flex w-100 justify-content-between">' .
+                '<h5 class="mb-1">%s</h5>' .
+                '<i class="fa fa-trash fa-2x m-1 pmf-delete-bookmark" data-pmf-bookmark-id="%d"></i>' .
+                '</div>' .
+                '</a>',
+                $link->toString(),
                 $faqData['id'],
-                $link->toHtmlAnchor(),
                 htmlspecialchars_decode($faqData['content']),
-                $plurals->getMsg('plmsgViews', $visitsFaq)
+                $faqData['id'],
             );
         }
         return $html;

@@ -98,7 +98,7 @@ $routes->add(
 );
 $routes->add(
     'api.bookmark',
-    new Route('bookmark', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
+    new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
 );
 
 return $routes;

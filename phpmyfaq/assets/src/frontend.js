@@ -16,7 +16,7 @@
 import 'bootstrap';
 import Masonry from 'masonry-layout';
 
-import { saveFormData } from './api';
+import { handleBookmarks, saveFormData } from './api';
 import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
@@ -55,6 +55,11 @@ handleUserVoting();
 //
 handleSaveComment();
 handleComments();
+
+//
+// Handle Bookmarks
+//
+handleBookmarks();
 
 //
 // Masonry on startpage
