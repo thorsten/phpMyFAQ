@@ -1342,4 +1342,7 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
 $PMF_LANG['msgBookmarks'] = 'Lesezeichen';
 $PMF_LANG['msgMyBookmarks'] = 'Meine Lesezeichen';
 
+// added v3.3.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "Die Frage darf '#' nicht enthalten.";
+
 return $PMF_LANG;
