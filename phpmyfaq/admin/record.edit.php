@@ -400,6 +400,8 @@ if (
                                            class="form-control form-control-lg"
                                            placeholder="<?= Translation::get('ad_entry_theme') ?>"
                                            value="<?= $faqData['title'] ?>">
+                                    <small id="questionHelp"
+                                               class="form-text visually-hidden"><?= Translation::get('msgNoHashAllowed') ?></small>
                                 </div>
 
                                 <!-- Answer -->
@@ -706,7 +708,7 @@ if (
                                     <?= Translation::get('ad_gen_reset') ?>
                                 </button>
 
-                                <button class="btn btn-lg btn-primary" type="submit">
+                                <button class="btn btn-lg btn-primary" type="submit" id="faqEditorSubmit">
                                     <?= Translation::get('ad_entry_save') ?>
                                 </button>
 
