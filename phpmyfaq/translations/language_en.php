@@ -1361,4 +1361,7 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Bookmark removed successfully!';
 $PMF_LANG['msgBookmarks'] = 'Bookmarks';
 $PMF_LANG['msgMyBookmarks'] = 'My Bookmarks';
 
+// added v3.3.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "It is not allowed to use '#'.";
+
 return $PMF_LANG;
