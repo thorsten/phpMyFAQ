@@ -49,6 +49,11 @@ export const handleFaqForm = () => {
   if (faqId && faqId > 0) {
     getFaqPermissions(faqId.value);
   }
+
+  const questionInput = document.getElementById('question');
+  if(questionInput) {
+    questionInput.addEventListener('input', checkForHash);
+  }
 };
 
 const getCategoryPermissions = (categories) => {
@@ -102,4 +107,18 @@ const getFaqPermissions = (faqId) => {
     .then((permissions) => {
       setPermissions(permissions);
     });
+};
+
+const checkForHash = () => {
+  const questionInputValue = document.getElementById('question').value;
+  const questionHelp = document.getElementById('questionHelp');
+  const submitButton = document.getElementById('faqEditorSubmit');
+  if(questionInputValue.includes('#')) {
+    questionHelp.classList.remove('visually-hidden');
+    submitButton.setAttribute('disabled', 'true');
+  }
+  else {
+    questionHelp.classList.add('visually-hidden');
+    submitButton.removeAttribute('disabled');
+  }
 };
