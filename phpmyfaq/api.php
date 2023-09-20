@@ -359,6 +359,15 @@ switch ($action) {
             $categoryId = $categoryIdFound;
         }
 
+        if(str_contains($question, '#') >= 1) {
+            $result = [
+                'stored' => false,
+                'error' => 'It is not allowed, that the question title contains a hash.'
+            ];
+            $response->setData($result);
+            break;
+        }
+
         $categories = [ $categoryId ];
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
