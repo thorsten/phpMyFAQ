@@ -6,8 +6,9 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.1 - 2023-10
+### phpMyFAQ v3.2.1 - 2023-09-21
 
+- fixed multiple security vulnerabilities (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.2.0 - 2023-09-04
@@ -41,6 +42,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
+
+### phpMyFAQ v3.1.18 - 2023-09-21
+
+- fixed multiple security vulnerabilities (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.17 - 2023-08-27
 
