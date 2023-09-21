@@ -98,9 +98,7 @@ We recommend you take a look at the main [Bootstrap documentation](https://getbo
 Please don't forget that the style sheets are written with [SCSS](https://sass-lang.com/).
 You have to compile the SCSS files into CSS using a SCSS compiler with Node.js.
 
-If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/) or visit
-our [new theme page](https://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage
-and release them as an open source on our [GitHub page](https://github.com/phpMyFAQ/).
+If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/).
 
 Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts, you
 have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with

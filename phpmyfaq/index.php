@@ -605,34 +605,34 @@ if ('main' == $action || 'show' == $action) {
 
 $tplNavigation = [
     'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
-    'allCategories' => '<a class="nav-link px-2 text-white" href="./show-categories.html">' .
+    'allCategories' => '<a class="pmf-nav-link" href="./show-categories.html">' .
         Translation::get('msgShowAllCategories') . '</a>',
-    'msgAddContent' => '<a class="nav-link px-2 text-white" href="./addcontent.html">' .
+    'msgAddContent' => '<a class="pmf-nav-link" href="./addcontent.html">' .
         Translation::get('msgAddContent') . '</a>',
     'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
         ?
-        '<a class="nav-link px-2 text-white" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+        '<a class="pmf-nav-link" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
         :
         '',
     'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
         ?
-        '<a class="nav-link px-2 text-white" href="./open-questions.html">' .
+        '<a class="pmf-nav-link" href="./open-questions.html">' .
         Translation::get('msgOpenQuestions') . '</a>'
         :
         '',
     'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
-    'msgContact' => '<a class="nav-link px-2 link-light" href="./contact.html">' . Translation::get('msgContact') .
+    'msgContact' => '<a class="pmf-nav-link-footer" href="./contact.html">' . Translation::get('msgContact') .
         '</a>',
-    'msgGlossary' => '<a class="nav-link px-2 link-light" href="./glossary.html">' .
+    'msgGlossary' => '<a class="pmf-nav-link-footer" href="./glossary.html">' .
         Translation::get('ad_menu_glossary') . '</a>',
     'privacyLink' => sprintf(
-        '<a class="nav-link px-2 link-light" target="_blank" href="%s">%s</a>',
+        '<a class="pmf-nav-link-footer" target="_blank" href="%s">%s</a>',
         Strings::htmlentities($faqConfig->get('main.privacyURL')),
         Translation::get('msgPrivacyNote')
     ),
-    'faqOverview' => '<a class="nav-link px-2 link-light" href="./overview.html">' .
+    'faqOverview' => '<a class="pmf-nav-link-footer" href="./overview.html">' .
         Translation::get('faqOverview') . '</a>',
-    'showSitemap' => '<a class="nav-link px-2 link-light" href="./sitemap/A/' . $faqLangCode . '.html">' .
+    'showSitemap' => '<a class="pmf-nav-link-footer" href="./sitemap/A/' . $faqLangCode . '.html">' .
         Translation::get('msgSitemap') . '</a>',
     'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
 ];

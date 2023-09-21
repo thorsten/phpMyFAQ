@@ -1,4 +1,4 @@
-# phpMyFAQ 4.0.0-dev
+# phpMyFAQ 4.0
 
 **Codename "Pallas"**
 
@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.4.0-dev - 2023-
+### phpMyFAQ v4.0.0-dev - 2023-
 
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
@@ -17,8 +17,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
 
-### phpMyFAQ v3.2.1 - 2023-10
+### phpMyFAQ v3.2.1 - 2023-09-21
 
+- fixed multiple security vulnerabilities (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.2.0 - 2023-09-04
@@ -52,6 +53,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PHPUnit v10 (Thorsten)
 - updated Japanese translation (Advanced Bear)
 - updated Dutch translation (Bob Coret)
+
+### phpMyFAQ v3.1.18 - 2023-09-21
+
+- fixed multiple security vulnerabilities (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.1.17 - 2023-08-27
 

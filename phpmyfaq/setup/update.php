@@ -74,18 +74,18 @@ $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/config/database.php');
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li class="nav-link px-2 text-white">
-          <a href="<?= System::getDocumentationUrl() ?>" class="nav-link px-2 text-white" target="_blank">
+        <li class="pmf-nav-link">
+          <a href="<?= System::getDocumentationUrl() ?>" class="pmf-nav-link" target="_blank">
             Documentation
           </a>
         </li>
-        <li class="nav-link px-2 text-white {{ activeAddContent }}">
-          <a href="https://www.phpmyfaq.de/support" class="nav-link px-2 text-white" target="_blank">
+        <li class="pmf-nav-link {{ activeAddContent }}">
+          <a href="https://www.phpmyfaq.de/support" class="pmf-nav-link" target="_blank">
             Support
           </a>
         </li>
-        <li class="nav-link px-2 text-white {{ activeAddQuestion }}">
-          <a href="https://forum.phpmyfaq.de/" class="nav-link px-2 text-white" target="_blank">
+        <li class="pmf-nav-link {{ activeAddQuestion }}">
+          <a href="https://forum.phpmyfaq.de/" class="pmf-nav-link" target="_blank">
             Forums
           </a>
         </li>
