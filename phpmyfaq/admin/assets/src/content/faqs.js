@@ -51,7 +51,7 @@ export const handleFaqForm = () => {
   }
 
   const questionInput = document.getElementById('question');
-  if(questionInput) {
+  if (questionInput) {
     questionInput.addEventListener('input', checkForHash);
   }
 };
@@ -113,7 +113,7 @@ const checkForHash = () => {
   const questionInputValue = document.getElementById('question').value;
   const questionHelp = document.getElementById('questionHelp');
   const submitButton = document.getElementById('faqEditorSubmit');
-  if(questionInputValue.includes('#')) {
+  if (questionInputValue.includes('#')) {
     questionHelp.classList.remove('visually-hidden');
     submitButton.setAttribute('disabled', 'true');
   }
