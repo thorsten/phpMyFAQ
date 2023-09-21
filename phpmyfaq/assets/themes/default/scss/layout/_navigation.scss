@@ -1,0 +1,13 @@
+// Top header navigation links
+.pmf-nav-link {
+  @extend .nav-link;
+  @extend .px-2;
+  @extend .text-white;
+}
+
+// Footer navigation links
+.pmf-nav-link-footer {
+  @extend .nav-link;
+  @extend .px-2;
+  @extend .link-light;
+}
