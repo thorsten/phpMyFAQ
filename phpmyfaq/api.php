@@ -359,7 +359,8 @@ switch ($action) {
             $categoryId = $categoryIdFound;
         }
 
-        if(str_contains($question, '#') >= 1) {
+        if($faq->hasTitleAHash($question) {
+            $response->setStatusCode(400);
             $result = [
                 'stored' => false,
                 'error' => 'It is not allowed, that the question title contains a hash.'
