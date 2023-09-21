@@ -359,7 +359,7 @@ switch ($action) {
             $categoryId = $categoryIdFound;
         }
 
-        if($faq->hasTitleAHash($question) {
+        if ($faq->hasTitleAHash($question) {
             $response->setStatusCode(400);
             $result = [
                 'stored' => false,
