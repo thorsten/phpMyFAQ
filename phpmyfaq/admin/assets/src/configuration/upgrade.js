@@ -36,12 +36,18 @@ export const handleCheckForUpdates = () => {
           throw new Error('Network response was not ok: ', { cause: { response } });
         })
         .then((response) => {
-          if (response.version === 'current') {
-            const element = addElement('p', { innerText: response.message });
-            button.after(element);
-          } else {
-            const element = addElement('p', { innerText: response.message });
-            button.after(element);
+          const dateLastChecked = document.getElementById('dateLastChecked');
+          if (dateLastChecked) {
+            const date = new Date(response.dateLastChecked);
+            dateLastChecked.innerText = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}-${date.getUTCHours()}-${date.getUTCSeconds()}`;
+          }
+          const result = document.getElementById('result');
+          if (result) {
+            if (response.version === 'current') {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            } else {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            }
           }
         })
         .catch((error) => {

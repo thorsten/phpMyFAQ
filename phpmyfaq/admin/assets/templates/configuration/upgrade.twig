@@ -19,13 +19,27 @@
     <div class="col-12">
 
         <p>
-            Last check for updates: <output>{{ dateLastChecked }}</output>
-        </p>
-        <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">Check for new version</button>
 
-        <p>
-            Release-Environment: {{ releaseEnvironment }}
         </p>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Online Check for Updates</h5>
+                <p class="card-text">
+                    Last check for updates:
+                    <output id="dateLastChecked">
+                        {{ dateLastChecked | date('Y-m-d H:i:s') }}
+                    </output>
+                </p>
+                <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">
+                    Check for new version
+                </button>
+                <output id="result"></output>
+            </div>
+            <div class="card-footer">
+                Release-Environment: {{ releaseEnvironment }}
+            </div>
+        </div>
 
     </div>
 </div>

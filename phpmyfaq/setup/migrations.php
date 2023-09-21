@@ -184,6 +184,7 @@ if (version_compare($version, '3.3.0-alpha', '<')) {
     // @todo move attachments in filesystem and database
 
     // Automatic updates
+    $faqConfig->add('upgrade.onlineUpdateEnabled', true);
     $faqConfig->add('upgrade.releaseEnvironment', 'development');
     $faqConfig->add('upgrade.dateLastChecked', '');
 

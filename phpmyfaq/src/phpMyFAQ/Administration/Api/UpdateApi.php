@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ\Administration\Api;
 
+use DateTime;
+use DateTimeInterface;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -26,7 +28,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class UpdateApi
 {
@@ -56,22 +57,28 @@ class UpdateApi
     public function updateCheck(): void
     {
         $response = new JsonResponse();
+        $faqConfig = Configuration::getConfigurationInstance();
+        $dateTime = new DateTime();
+        $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
         try {
             $api = new Api($this->configuration);
             $versions = $api->getVersions();
             $response->setStatusCode(Response::HTTP_OK);
+            $faqConfig->set('upgrade.dateLastChecked', $dateLastChecked);
             if (version_compare($versions['installed'], $versions['current'], '<')) {
                 $response->setData(
                     [
                         'version' => $versions['current'],
-                        'message' => Translation::get('currentVersion') . $versions['current']
+                        'message' => Translation::get('currentVersion') . $versions['current'],
+                        'dateLastChecked' => $dateLastChecked,
                     ]
                 );
             } else {
                 $response->setData(
                     [
                         'version' => 'current',
-                        'message' => Translation::get('versionIsUpToDate')
+                        'message' => Translation::get('versionIsUpToDate'),
+                        'dateLastChecked' => $dateLastChecked,
                     ]
                 );
             }
