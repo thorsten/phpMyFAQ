@@ -18,7 +18,7 @@
                 </div>
                 <div class="card-body">
                   <form action="{{ writeLoginPath }}" method="post" accept-charset="utf-8" role="form">
-                    <input type="hidden" name="redirect-action" value="<?= $action ?>" />
+                    <input type="hidden" name="redirect-action" value="{{ action }}" />
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"
