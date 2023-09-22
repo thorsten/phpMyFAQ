@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Release environment enum
+ * Download host enum
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,14 +12,13 @@
  * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-07-02
+ * @since     2023-09-22
  */
 
 namespace phpMyFAQ\Enums;
 
-enum ReleaseType: string
+enum DownloadHostType: string
 {
-    case RELEASE = 'release';
-    case DEVELOPMENT = 'development';
-    case NIGHTLY = 'nightly';
+    case GITHUB = 'https://github.com/thorsten/phpMyFAQ/releases/download/';
+    case PHPMYFAQ = 'https://download.phpmyfaq.de/';
 }

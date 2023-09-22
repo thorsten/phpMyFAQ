@@ -39,9 +39,9 @@ export const handleCheckForUpdates = () => {
           const dateLastChecked = document.getElementById('dateLastChecked');
           if (dateLastChecked) {
             const date = new Date(response.dateLastChecked);
-            dateLastChecked.innerText = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}-${date.getUTCHours()}-${date.getUTCSeconds()}`;
+            dateLastChecked.innerText = `${date.toISOString()}`;
           }
-          const result = document.getElementById('result');
+          const result = document.getElementById('result-check-versions');
           if (result) {
             if (response.version === 'current') {
               result.replaceWith(addElement('p', { innerText: response.message }));

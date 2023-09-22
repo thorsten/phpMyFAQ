@@ -74,8 +74,9 @@ class Api
                 $content = $response->toArray();
                 return [
                     'installed' => $this->config->getVersion(),
-                    'current' => $content['stable'],
-                    'next' => $content['development']
+                    'stable' => $content['stable'],
+                    'development' => $content['development'],
+                    'nightly' => $content['nightly']
                 ];
             } catch (
                 ClientExceptionInterface |
@@ -88,8 +89,9 @@ class Api
         } else {
             return [
                 'installed' => $this->config->getVersion(),
-                'current' => 'n/a',
-                'next' => 'n/a'
+                'stable' => 'n/a',
+                'development' => 'n/a',
+                'nightly' => 'n/a'
             ];
         }
     }

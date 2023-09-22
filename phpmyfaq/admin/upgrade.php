@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
@@ -38,6 +39,7 @@ $template = $twig->loadTemplate('./configuration/upgrade.twig');
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $templateVars = [
         'adminHeaderUpgrade' => Translation::get('ad_menu_upgrade'),
+        'isOnNightlies' => $faqConfig->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value,
         'releaseEnvironment' => ucfirst($faqConfig->get('upgrade.releaseEnvironment')),
         'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked')
     ];

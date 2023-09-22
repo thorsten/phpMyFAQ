@@ -245,12 +245,17 @@ function renderInputForm(mixed $key, string $type): void
                     printf(
                         '<option value="%s" %s>Development</option>',
                         ReleaseType::DEVELOPMENT->value,
-                        (ReleaseType::DEVELOPMENT->value == $faqConfig->get($key)) ? 'selected' : ''
+                        (ReleaseType::DEVELOPMENT->value === $faqConfig->get($key)) ? 'selected' : ''
                     );
                     printf(
                         '<option value="%s" %s>Release</option>',
                         ReleaseType::RELEASE->value,
-                        (ReleaseType::RELEASE->value == $faqConfig->get($key)) ? 'selected' : ''
+                        (ReleaseType::RELEASE->value === $faqConfig->get($key)) ? 'selected' : ''
+                    );
+                    printf(
+                        '<option value="%s" %s>Nightly</option>',
+                        ReleaseType::NIGHTLY->value,
+                        (ReleaseType::NIGHTLY->value === $faqConfig->get($key)) ? 'selected' : ''
                     );
                     break;
             }
@@ -306,7 +311,7 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         printf(
-            '<div class="row mb-2"><label class="col-lg-3 col-form-label %s">',
+            '<div class="row my-2"><label class="col-lg-3 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
         );
 
@@ -327,7 +332,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
         ?>
       </label>
-      <div class="col-lg-9">
+      <div class="col-lg-6">
           <?php renderInputForm($key, $value[0]); ?>
       </div>
         <?php

@@ -22,6 +22,7 @@ use DateTimeInterface;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,31 +58,34 @@ class UpdateApi
     public function updateCheck(): void
     {
         $response = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
+        $branch = $this->configuration->get('upgrade.releaseEnvironment');
+
         try {
             $api = new Api($this->configuration);
             $versions = $api->getVersions();
-            $response->setStatusCode(Response::HTTP_OK);
-            $faqConfig->set('upgrade.dateLastChecked', $dateLastChecked);
-            if (version_compare($versions['installed'], $versions['current'], '<')) {
+            $this->configuration->set('upgrade.dateLastChecked', $dateLastChecked);
+
+            if (version_compare($versions['installed'], $versions[$branch], '<')) {
                 $response->setData(
                     [
-                        'version' => $versions['current'],
-                        'message' => Translation::get('currentVersion') . $versions['current'],
+                        'version' => $versions[$branch],
+                        'message' => Translation::get('currentVersion') . $versions[$branch],
                         'dateLastChecked' => $dateLastChecked,
                     ]
                 );
             } else {
                 $response->setData(
                     [
-                        'version' => 'current',
+                        'version' => $versions['installed'],
                         'message' => Translation::get('versionIsUpToDate'),
                         'dateLastChecked' => $dateLastChecked,
                     ]
                 );
             }
+
+            $response->setStatusCode(Response::HTTP_OK);
             $response->send();
         } catch (Exception | TransportExceptionInterface | DecodingExceptionInterface $e) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
