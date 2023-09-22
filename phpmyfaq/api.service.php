@@ -23,6 +23,7 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
@@ -68,6 +69,8 @@ require 'src/Bootstrap.php';
 //
 $response = new JsonResponse();
 $request = Request::createFromGlobals();
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
@@ -150,7 +153,7 @@ if (
 //
 if (
     !$user->isLoggedIn() && $faqConfig->get('security.enableLoginOnly') && 'submit-request-removal' !== $action &&
-    'change-password' !== $action && 'saveregistration' !== $action
+    'change-password' !== $action && 'save-registration' !== $action
 ) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
     $response->setData(['error' => Translation::get('ad_msg_noauth')]);
@@ -573,12 +576,12 @@ switch ($action) {
                 $faqSearchResult->reviewResultSet($mergedResult);
 
                 if (0 < $faqSearchResult->getNumberOfResults()) {
-                    $response = sprintf(
+                    $smartAnswer = sprintf(
                         '<h5>%s</h5>',
                         $plr->getMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults())
                     );
 
-                    $response .= '<ul>';
+                    $smartAnswer .= '<ul>';
 
                     foreach ($faqSearchResult->getResultSet() as $result) {
                         $url = sprintf(
@@ -593,7 +596,7 @@ switch ($action) {
                         $oLink->itemTitle = $result->question;
 
                         try {
-                            $response .= sprintf(
+                            $smartAnswer .= sprintf(
                                 '<li>%s<br><small class="pmf-search-preview">%s...</small></li>',
                                 $oLink->toHtmlAnchor(),
                                 $faqHelper->renderAnswerPreview($result->answer, 10)
@@ -602,9 +605,9 @@ switch ($action) {
                             // handle exception
                         }
                     }
-                    $response .= '</ul>';
+                    $smartAnswer .= '</ul>';
 
-                    $response->setData(['result' => $response]);
+                    $response->setData(['result' => $smartAnswer]);
                 } else {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     try {
@@ -634,15 +637,17 @@ switch ($action) {
 
         break;
 
-    case 'saveregistration':
+    case 'save-registration':
         $registration = new RegistrationHelper($faqConfig);
 
-        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_SPECIAL_CHARS);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-        if (!$registration->isDomainWhitelisted($email)) {
+        $fullName = trim((string) Filter::filterVar($postData['realname'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $userName = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
+        $isVisible = Filter::filterVar($postData['is_visible'], FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
+
+        if (!$registration->isDomainAllowed($email)) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'The domain is not whitelisted.']);
             break;
@@ -650,7 +655,7 @@ switch ($action) {
 
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
             try {
-                $response->setData(['success' => $registration->createUser($userName, $fullName, $email, $isVisible)]);
+                $response->setData($registration->createUser($userName, $fullName, $email, $isVisible));
             } catch (Exception | TransportExceptionInterface $exception) {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $response->setData(['error' => $exception->getMessage()]);
