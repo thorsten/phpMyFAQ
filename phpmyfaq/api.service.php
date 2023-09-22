@@ -20,6 +20,7 @@ const IS_VALID_PHPMYFAQ = null;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
@@ -65,6 +66,8 @@ require 'src/Bootstrap.php';
 //
 $response = new JsonResponse();
 $request = Request::createFromGlobals();
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
@@ -570,12 +573,12 @@ switch ($action) {
                 $faqSearchResult->reviewResultSet($mergedResult);
 
                 if (0 < $faqSearchResult->getNumberOfResults()) {
-                    $response = sprintf(
+                    $smartAnswer = sprintf(
                         '<h5>%s</h5>',
                         $plr->getMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults())
                     );
 
-                    $response .= '<ul>';
+                    $smartAnswer .= '<ul>';
 
                     foreach ($faqSearchResult->getResultSet() as $result) {
                         $url = sprintf(
@@ -590,7 +593,7 @@ switch ($action) {
                         $oLink->itemTitle = $result->question;
 
                         try {
-                            $response .= sprintf(
+                            $smartAnswer .= sprintf(
                                 '<li>%s<br><small class="pmf-search-preview">%s...</small></li>',
                                 $oLink->toHtmlAnchor(),
                                 $faqHelper->renderAnswerPreview($result->answer, 10)
@@ -599,9 +602,9 @@ switch ($action) {
                             // handle exception
                         }
                     }
-                    $response .= '</ul>';
+                    $smartAnswer .= '</ul>';
 
-                    $response->setData(['result' => $response]);
+                    $response->setData(['result' => $smartAnswer]);
                 } else {
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     try {
