@@ -573,8 +573,10 @@ $tplMainPage = [
     'faqloginaction' => $action,
     'login' => Translation::get('ad_auth_ok'),
     'username' => Translation::get('ad_auth_user'),
+    'realname' => Translation::get('ad_user_realname'),
     'password' => Translation::get('ad_auth_passwd'),
     'rememberMe' => Translation::get('rememberMe'),
+    'submitRegister' => Translation::get('submitRegister'),
     'headerChangePassword' => Translation::get('ad_passwd_cop'),
     'msgUsername' => Translation::get('ad_auth_user'),
     'msgEmail' => Translation::get('ad_entry_email'),
@@ -831,5 +833,3 @@ $response->setCache([
     'last_modified'    => new \DateTime()
 ]);
 $response->send();
-
-$faqConfig->getDb()->close();

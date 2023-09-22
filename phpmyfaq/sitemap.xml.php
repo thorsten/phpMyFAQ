@@ -147,5 +147,3 @@ if ((1 === $getGzip)) {
     header('Content-Length: ' . strlen($siteMap));
     echo $siteMap;
 }
-
-$faqConfig->getDb()->close();

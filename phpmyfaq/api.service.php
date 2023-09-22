@@ -150,7 +150,7 @@ if (
 //
 if (
     !$user->isLoggedIn() && $faqConfig->get('security.enableLoginOnly') && 'submit-request-removal' !== $action &&
-    'change-password' !== $action && 'saveregistration' !== $action
+    'change-password' !== $action && 'save-registration' !== $action
 ) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
     $response->setData(['error' => Translation::get('ad_msg_noauth')]);
@@ -634,15 +634,17 @@ switch ($action) {
 
         break;
 
-    case 'saveregistration':
+    case 'save-registration':
         $registration = new RegistrationHelper($faqConfig);
 
-        $fullName = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_SPECIAL_CHARS);
-        $userName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
-        if (!$registration->isDomainWhitelisted($email)) {
+        $fullName = trim((string) Filter::filterVar($postData['realname'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $userName = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
+        $isVisible = Filter::filterVar($postData['is_visible'], FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
+
+        if (!$registration->isDomainAllowed($email)) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'The domain is not whitelisted.']);
             break;
@@ -650,7 +652,7 @@ switch ($action) {
 
         if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
             try {
-                $response->setData(['success' => $registration->createUser($userName, $fullName, $email, $isVisible)]);
+                $response->setData($registration->createUser($userName, $fullName, $email, $isVisible));
             } catch (Exception | TransportExceptionInterface $exception) {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $response->setData(['error' => $exception->getMessage()]);

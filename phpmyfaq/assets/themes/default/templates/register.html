@@ -2,9 +2,16 @@
   <h1>{{ pageHeader }}</h1>
   <p>{{ msgRegistrationCredentials }} {{ msgRegistrationNote }}</p>
 
-  <div id="registrations"></div>
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="faqs"></div>
+    </div>
+  </div>
 
-  <form id="formValues" method="post" action="#" accept-charset="utf-8">
+  <form id="formValues" method="post" action="#" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
     <div class="row mb-2">
@@ -39,11 +46,11 @@
 
     {{ captchaFieldset }}
 
-    <div id="loader"></div>
-
     <div class="row mb-2">
       <div class="col-12 text-end">
-        <button class="btn btn-primary" type="submit" id="submitregistration">{{ submitRegister }}</button>
+        <button class="btn btn-primary" type="submit" id="pmf-submit-values" data-pmf-form="save-registration">
+          {{ submitRegister }}
+        </button>
       </div>
     </div>
   </form>

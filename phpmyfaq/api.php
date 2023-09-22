@@ -577,7 +577,7 @@ switch ($action) {
         $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_SANITIZE_SPECIAL_CHARS);
         $isVisible = $isVisible === 'true';
 
-        if (!$registration->isDomainWhitelisted($email)) {
+        if (!$registration->isDomainAllowed($email)) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'registered' => false,

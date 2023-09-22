@@ -44,7 +44,7 @@ class RegistrationHelper extends Helper
 
     /**
      * Creates a new user account, sends mail and returns success or
-     * error message as array.
+     * error message as an array.
      * The password will be automatically generated and sent by email
      * as soon if admin switch user to "active"
      *
@@ -81,7 +81,7 @@ class RegistrationHelper extends Helper
             }
 
             $text = sprintf(
-                "New user has been registered:\n\nName: %s\nLogin name: %s\n\n" . '%s the administration at %s.',
+                'A new user has been registered:<br><br>Name: %s<br>Login name: %s<br><br>%s the administration at %s.',
                 $fullName,
                 $userName,
                 $adminMessage,
@@ -105,10 +105,10 @@ class RegistrationHelper extends Helper
     }
 
     /**
-     * Returns true, if hostname of the given email address is whitelisted,
+     * Returns true, if the hostname of the given email address is allowed.
      * otherwise false.
      */
-    public function isDomainWhitelisted(string $email): bool
+    public function isDomainAllowed(string $email): bool
     {
         $whitelistedDomains = $this->config->get('security.domainWhiteListForRegistrations');
 
