@@ -18,7 +18,7 @@
 import { addElement } from '../../../../assets/src/utils';
 
 const activateUser = (userId, csrfToken) => {
-  fetch('index.php?action=ajax&ajax=user&ajaxaction=delete_user', {
+  fetch('index.php?action=ajax&ajax=user&ajaxaction=activate_user', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',

@@ -1037,4 +1037,19 @@ class User
 
         return false;
     }
+
+    /**
+     * Terminates the session ID of user
+     * @return bool
+     */
+    public function terminateSessionId(): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaquser SET session_id = '' WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->userId
+        );
+
+        return (bool) $this->config->getDb()->query($update);
+    }
 }
