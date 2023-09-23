@@ -20,6 +20,7 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\User;
 
 /**
@@ -44,9 +45,8 @@ class AuthSso extends Auth implements AuthDriverInterface
             $user = new User($this->config);
             $result = $user->createUser($login, '', $domain);
 
-            if ($result) {
-                $user->setStatus('active');
-            }
+            $user->setStatus('active');
+            $user->setAuthSource(AuthenticationSourceType::AUTH_SSO->value);
 
             // Set user information
             $user->setUserData([ 'display_name' => $login ]);

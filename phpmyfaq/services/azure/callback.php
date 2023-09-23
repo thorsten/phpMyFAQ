@@ -18,6 +18,7 @@
 use GuzzleHttp\Exception\GuzzleException;
 use phpMyFAQ\Auth\AuthAzureActiveDirectory;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Auth\Azure\OAuth;
@@ -71,7 +72,7 @@ if ($session->getCurrentSessionKey()) {
 
         $user->getUserByLogin($oAuth->getMail());
         $user->setLoggedIn(true);
-        $user->setAuthSource('azure');
+        $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
         $user->updateSessionId(true);
         $user->saveToSession();
         $user->setTokenData([

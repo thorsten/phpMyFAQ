@@ -21,6 +21,7 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -65,6 +66,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
         $user = new User($this->config);
         $result = $user->createUser($login, '', $domain);
         $user->setStatus('active');
+        $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
 
         // Set user information from JWT
         $user->setUserData(
@@ -147,17 +149,6 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      */
     public function logout(): void
     {
-        // Try to authenticate with cookie information
-        $user = CurrentUser::getFromCookie($this->config);
-
-        // authenticate with session information
-        if (!$user instanceof CurrentUser) {
-            $user = CurrentUser::getFromSession($this->config);
-        }
-
-        $user->getUserByLogin($user->getLogin());
-        $user->deleteFromSession(true);
-
         $redirect = new RedirectResponse(self::AAD_LOGOUT_URL);
         $redirect->send();
     }
