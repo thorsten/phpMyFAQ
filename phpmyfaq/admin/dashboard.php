@@ -102,7 +102,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         $versions = [];
         try {
             $versions = $api->getVersions();
-            if (-1 === version_compare($versions['installed'], $versions['current'])) {
+            if (-1 === version_compare($versions['installed'], $versions['stable'])) {
                 $shouldUpdate = Translation::get('ad_you_should_update');
             }
         } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
