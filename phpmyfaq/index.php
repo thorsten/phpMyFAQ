@@ -202,10 +202,11 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         $redirect = new RedirectResponse($ssoLogout);
-    } else {
-        $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+        $redirect->send();
+    } elseif ($faqConfig->isSignInWithMicrosoftActive()) {
+        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
+        $redirect->send();
     }
-    $redirect->send();
 }
 
 //

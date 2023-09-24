@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Auth\AuthAzureActiveDirectory;
 use phpMyFAQ\Auth\Azure\OAuth;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Session;
 
 //
@@ -30,6 +31,8 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 require PMF_CONFIG_DIR . '/azure.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);

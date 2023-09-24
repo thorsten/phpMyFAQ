@@ -94,7 +94,10 @@ if (
             foreach ($userRights as $rightId) {
                 $perm->grantUserRight($userId, $rightId);
             }
+
             $idUser = $user->getUserById($userId, true);
+            // Terminate session in case of different permissions after the update
+            $user->terminateSessionId();
             $message .= sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get('ad_msg_savedsuc_1'),

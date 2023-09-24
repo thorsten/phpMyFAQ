@@ -951,6 +951,21 @@ class User
     }
 
     /**
+     * Sets the auth container
+     */
+    public function setAuthSource(string $authSource): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaquser SET auth_source = '%s' WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->config->getDb()->escape($authSource),
+            $this->getUserId()
+        );
+
+        return $this->config->getDb()->query($update);
+    }
+
+    /**
      * changes the user's password. If $pass is omitted, a new
      * password is generated using the createPassword() method.
      *
@@ -1036,5 +1051,20 @@ class User
         }
 
         return false;
+    }
+
+    /**
+     * Terminates the session ID of user
+     * @return bool
+     */
+    public function terminateSessionId(): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaquser SET session_id = '' WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->userId
+        );
+
+        return (bool) $this->config->getDb()->query($update);
     }
 }

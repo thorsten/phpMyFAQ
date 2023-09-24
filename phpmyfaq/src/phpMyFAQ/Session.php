@@ -115,12 +115,12 @@ class Session
      */
     public function getCurrentSessionKey(): ?string
     {
-        return $this->currentSessionKey ?? $_SESSION[self::PMF_AZURE_AD_SESSIONKEY];
+        return $this->currentSessionKey ?? $this->get(self::PMF_AZURE_AD_SESSIONKEY);
     }
 
     public function getCurrentToken(): ?string
     {
-        return $this->currentToken ?? $_SESSION[self::PMF_AZURE_AD_JWT];
+        return $this->currentToken ?? $this->get(self::PMF_AZURE_AD_JWT);
     }
 
     /**
@@ -132,7 +132,9 @@ class Session
             $this->createCurrentSessionKey();
         }
 
-        $_SESSION[self::PMF_AZURE_AD_SESSIONKEY] = $this->getCurrentSessionKey();
+        $this->set(self::PMF_AZURE_AD_SESSIONKEY, $this->getCurrentSessionKey());
+        $this->setCookie(self::PMF_AZURE_AD_SESSIONKEY, $this->getCurrentSessionKey());
+
         return $this;
     }
 
@@ -508,6 +510,8 @@ class Session
 
     /**
      * Returns a UUID Version 4 compatible universally unique identifier.
+     *
+     * @throws \Exception
      */
     public function uuid(): string
     {

@@ -115,8 +115,7 @@ if (
 
         case 'activate_user':
             $postData = json_decode(file_get_contents('php://input', true));
-
-            if (!Token::getInstance()->verifyToken('user', $postData->csrfToken)) {
+            if (!Token::getInstance()->verifyToken('activate-user', $postData->csrfToken)) {
                 $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
                 $response->setData(['error' => Translation::get('err_NotAuth')]);
                 $response->send();

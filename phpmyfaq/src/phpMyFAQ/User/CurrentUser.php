@@ -599,7 +599,7 @@ class CurrentUser extends User
     }
 
     /**
-     * Remember the auth container for administration
+     * Sets the auth container
      */
     public function setAuthSource(string $authSource): bool
     {

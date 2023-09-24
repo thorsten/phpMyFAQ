@@ -22,6 +22,7 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\User;
 
@@ -75,10 +76,14 @@ class AuthLdap extends Auth implements AuthDriverInterface
         $this->connect($this->activeServer);
 
         $user->setStatus('active');
+        $user->setAuthSource(AuthenticationSourceType::AUTH_LDAP->value);
 
         // Set user information from LDAP
         $user->setUserData(
-            ['display_name' => $this->ldap->getCompleteName($login), 'email' => $this->ldap->getMail($login)]
+            [
+                'display_name' => $this->ldap->getCompleteName($login),
+                'email' => $this->ldap->getMail($login)
+            ]
         );
 
         return $result;

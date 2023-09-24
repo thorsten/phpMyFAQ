@@ -21,6 +21,7 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\User;
 
 /**
@@ -48,6 +49,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
         $result = $user->createUser($login);
 
         $user->setStatus('active');
+        $user->setAuthSource(AuthenticationSourceType::AUTH_HTTP->value);
         $user->setUserData(['display_name' => $login]);
 
         return $result;

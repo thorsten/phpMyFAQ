@@ -845,6 +845,8 @@ switch ($action) {
 
         $user = CurrentUser::getFromSession($faqConfig);
 
+        $isAzureAdUser = $user->getUserAuthSource() === 'azure';
+
         if ($deleteSecret === 'on') {
             $secret = '';
         } else {
@@ -857,39 +859,49 @@ switch ($action) {
             break;
         }
 
-        if ($password !== $confirm) {
-            $response->setStatusCode(Response::HTTP_CONFLICT);
-            $response->setData(['error' => Translation::get('ad_user_error_passwordsDontMatch')]);
-            break;
-        }
+        if (!$isAzureAdUser) {
+            if ($password !== $confirm) {
+                $response->setStatusCode(Response::HTTP_CONFLICT);
+                $response->setData(['error' => Translation::get('ad_user_error_passwordsDontMatch')]);
+                break;
+            }
 
-        if (strlen($password) <= 7 || strlen($confirm) <= 7) {
-            $response->setStatusCode(Response::HTTP_CONFLICT);
-            $response->setData(['error' => Translation::get('ad_passwd_fail')]);
-            break;
+            if (strlen($password) <= 7 || strlen($confirm) <= 7) {
+                $response->setStatusCode(Response::HTTP_CONFLICT);
+                $response->setData(['error' => Translation::get('ad_passwd_fail')]);
+                break;
+            } else {
+                $userData = [
+                    'display_name' => $userName,
+                    'email' => $email,
+                    'is_visible' => $isVisible === 'on' ? 1 : 0,
+                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
+                    'secret' => $secret
+                ];
+
+                $success = $user->setUserData($userData);
+
+                foreach ($user->getAuthContainer() as $auth) {
+                    if ($auth->setReadOnly()) {
+                        continue;
+                    }
+                    if (!$auth->update($user->getLogin(), $password)) {
+                        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                        $response->setData(['error' => $auth->error()]);
+                        $success = false;
+                    } else {
+                        $success = true;
+                    }
+                }
+            }
         } else {
             $userData = [
-                'display_name' => $userName,
-                'email' => $email,
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
                 'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
                 'secret' => $secret
             ];
 
             $success = $user->setUserData($userData);
-
-            foreach ($user->getAuthContainer() as $auth) {
-                if ($auth->setReadOnly()) {
-                    continue;
-                }
-                if (!$auth->update($user->getLogin(), $password)) {
-                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $response->setData(['error' => $auth->error()]);
-                    $success = false;
-                } else {
-                    $success = true;
-                }
-            }
         }
 
         if ($success) {
