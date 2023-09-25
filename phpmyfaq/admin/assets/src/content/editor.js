@@ -26,12 +26,12 @@ import 'tinymce/skins/ui/oxide/skin.min.css';
 
 // importing the plugin js.
 import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/autolink';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/image';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/charmap';
-import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/searchreplace';
 import 'tinymce/plugins/wordcount';
 import 'tinymce/plugins/code';
@@ -49,6 +49,7 @@ import 'tinymce/plugins/save';
 import 'tinymce/plugins/directionality';
 import 'tinymce/plugins/emoticons';
 import 'tinymce/plugins/emoticons/js/emojis';
+import 'tinymce/plugins/fullscreen';
 
 import contentCss from '!!raw-loader!tinymce/skins/content/default/content.min.css';
 import contentUiCss from '!!raw-loader!tinymce/skins/ui/oxide/content.min.css';
@@ -110,7 +111,7 @@ export const renderEditor = () => {
       plugins:
         'advlist autolink link image lists charmap preview anchor pagebreak ' +
         'searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking ' +
-        'save table directionality help emoticons phpmyfaq',
+        'save table directionality help emoticons fullscreen phpmyfaq',
 
       emoticons_database: 'emojis',
 
@@ -123,7 +124,7 @@ export const renderEditor = () => {
         'insertfile | cut copy codesample | bullist numlist |' +
         'link unlink anchor image media | charmap | insertdatetime | table |' +
         'forecolor backcolor emoticons | searchreplace | ' +
-        'pagebreak | code | phpmyfaq | preview',
+        'pagebreak | code | phpmyfaq | fullscreen | preview',
 
       // Formatting
       style_formats: [
