@@ -18,9 +18,12 @@
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleCheckForUpdates = () => {
-  const button = document.getElementById('pmf-button-check-updates');
-  if (button) {
-    button.addEventListener('click', (event) => {
+  const checkUpdateButton = document.getElementById('pmf-button-check-updates');
+  const downloadButton = document.getElementById('pmf-button-download-now');
+
+  // Check Update
+  if (checkUpdateButton) {
+    checkUpdateButton.addEventListener('click', (event) => {
       event.preventDefault();
       fetch(window.location.pathname + 'api/update-check', {
         method: 'POST',
@@ -42,6 +45,39 @@ export const handleCheckForUpdates = () => {
             dateLastChecked.innerText = `${date.toISOString()}`;
           }
           const result = document.getElementById('result-check-versions');
+          if (result) {
+            if (response.version === 'current') {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            } else {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  }
+
+  // Download package
+  if (downloadButton) {
+    downloadButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      fetch(window.location.pathname + 'api/download-package/3.2.1', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Network response was not ok: ', { cause: { response } });
+        })
+        .then((response) => {
+          const result = document.getElementById('result-download-nightly');
           if (result) {
             if (response.version === 'current') {
               result.replaceWith(addElement('p', { innerText: response.message }));

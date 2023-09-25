@@ -21,8 +21,9 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -58,24 +59,21 @@ $context = new RequestContext();
 $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
 
-$requestUri = $request->getPathInfo();
-
-$generator = new UrlGenerator($routes, $context);
-
-$parameters = $matcher->match($requestUri);
+$controllerResolver = new ControllerResolver();
+$argumentResolver = new ArgumentResolver();
 
 try {
-    $parameters = $matcher->match($requestUri);
-    list($controllerClass, $controllerMethod) = explode('::', $parameters['_class_and_method']);
+    $request->attributes->add($matcher->match($request->getPathInfo()));
 
-    $action = new $controllerClass($faqConfig);
-    $action->$controllerMethod(['request' => $request, 'generator' => $generator, 'parameters' => $parameters]);
-} catch (ResourceNotFoundException $e) {
-    $response->setStatusCode(Response::HTTP_NOT_FOUND);
-    $response->setData($e->getMessage());
-    $response->send();
-} catch (Exception $e) {
-    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-    $response->setData($e->getMessage());
-    $response->send();
+    $controller = $controllerResolver->getController($request);
+    $arguments = $argumentResolver->getArguments($request, $controller);
+
+    $response->setStatusCode(Response::HTTP_OK);
+    $response = call_user_func_array($controller, $arguments);
+} catch (ResourceNotFoundException $exception) {
+    $response = new Response('Not Found', 404);
+} catch (Exception $exception) {
+    $response = new Response('An error occurred: ' . $exception->getMessage(), 500);
 }
+
+$response->send();
