@@ -17,6 +17,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
 
+### phpMyFAQ v3.2.2 - 2023-10-
+
+- re-added fullscreen plugin for TinyMCE (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.1 - 2023-09-21
 
 - fixed multiple security vulnerabilities (Thorsten)
