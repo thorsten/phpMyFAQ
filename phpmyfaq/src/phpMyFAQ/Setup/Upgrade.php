@@ -18,6 +18,7 @@ namespace phpMyFAQ\Setup;
 
 use Monolog\Level;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use Symfony\Component\HttpClient\HttpClient;
@@ -30,10 +31,6 @@ use PhpZip\Exception\ZipException;
 
 class Upgrade extends Setup
 {
-    private const DOWNLOAD_URL_PRODUCTION = 'https://download.phpmyfaq.de/';
-
-    private const DOWNLOAD_URL_DEVELOPMENT = 'https://github.com/thorsten/phpMyFAQ/releases/tag/';
-
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
@@ -96,7 +93,7 @@ class Upgrade extends Setup
     public function downloadPackage(string $version): string|bool
     {
         $zipFile = 'phpMyFAQ-' . $version . '.zip';
-        $url = self::DOWNLOAD_URL_PRODUCTION . $zipFile;
+        $url = DownloadHostType::PHPMYFAQ->value . $zipFile;
 
         $client = HttpClient::create();
 
@@ -137,7 +134,7 @@ class Upgrade extends Setup
         $client = HttpClient::create();
         $response = $client->request(
             'GET',
-            self::DOWNLOAD_URL_PRODUCTION . 'info/' . $version
+            DownloadHostType::PHPMYFAQ->value . 'info/' . $version
         );
 
         try {
