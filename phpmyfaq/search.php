@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
@@ -44,6 +45,8 @@ try {
     // @todo handle the exception
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+
 $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
@@ -52,7 +55,8 @@ $faq->setGroups($currentGroups);
 $request = Request::createFromGlobals();
 $inputLanguage = Filter::filterVar($request->query->get('pmf-all-languages'), FILTER_SANITIZE_SPECIAL_CHARS);
 $inputCategory = Filter::filterVar($request->query->get('pmf-search-category'), FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = Strings::substr(Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS), 0, 255);
+$inputSearchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+$inputSearchTerm = Strings::substr($inputSearchTerm, 0, 255);
 $inputTag = Filter::filterVar($request->query->get('tagging_id'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!is_null($inputTag)) {
@@ -60,7 +64,8 @@ if (!is_null($inputTag)) {
     $inputTag = str_replace(',,', ',', $inputTag);
 }
 
-$searchTerm = Strings::substr(Filter::filterVar($request->request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS), 0, 255);
+$searchTerm = Filter::filterVar($request->request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+$searchTerm = Strings::substr($searchTerm, 0, 255);
 $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
@@ -74,7 +79,7 @@ if ($inputLanguage !== '') {
 
 // HACK: (re)evaluate the Entity object w/o passing the user language
 //       so the result set of a Search will have the Entity Path
-//       for any of the multi language faq records and the Entity list
+//       for any of the multi-language faq records and the Entity list
 //       on the left pane will not be affected
 if ($allLanguages) {
     $category = new Category($faqConfig);
@@ -151,6 +156,7 @@ if ('' !== $inputTag) {
 // Handle the full text search stuff
 //
 if ($inputSearchTerm !== '' || $searchTerm !== '') {
+    $searchResults = [];
     if ($inputSearchTerm !== '') {
         $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $inputSearchTerm));
     }
@@ -176,7 +182,7 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
 
     $faqSearchResult->reviewResultSet($searchResults);
 
-    $inputSearchTerm = stripslashes((string) $inputSearchTerm);
+    $inputSearchTerm = stripslashes($inputSearchTerm);
     try {
         $faqSearch->logSearchTerm($inputSearchTerm);
     } catch (Exception $exception) {
