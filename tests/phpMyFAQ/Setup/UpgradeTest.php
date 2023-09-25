@@ -4,6 +4,7 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 
@@ -57,5 +58,33 @@ class UpgradeTest extends TestCase
     public function testInstallPackage(): void
     {
         $this->markTestSkipped();
+    }
+    public function testGetDownloadHostForNightly(): void
+    {
+        $this->upgrade->setIsNightly(true);
+
+        $this->assertEquals(DownloadHostType::GITHUB->value, $this->upgrade->getDownloadHost());
+    }
+
+    public function testGetDownloadHostForNonNightly(): void
+    {
+        $this->upgrade->setIsNightly(false);
+
+        $this->assertEquals(DownloadHostType::PHPMYFAQ->value, $this->upgrade->getDownloadHost());
+    }
+
+    public function testGetPathForNightly(): void
+    {
+        $this->upgrade->setIsNightly(true);
+
+        $expectedPath = sprintf(Upgrade::GITHUB_PATH, date('Y-m-d', strtotime('-1 days')));
+        $this->assertEquals($expectedPath, $this->upgrade->getPath());
+    }
+
+    public function testGetPathForNonNightly(): void
+    {
+        $this->upgrade->setIsNightly(false);
+
+        $this->assertEquals('', $this->upgrade->getPath());
     }
 }

@@ -63,7 +63,7 @@ export const handleCheckForUpdates = () => {
   if (downloadButton) {
     downloadButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/download-package/3.2.1', {
+      fetch(window.location.pathname + 'api/download-package/nightly', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',

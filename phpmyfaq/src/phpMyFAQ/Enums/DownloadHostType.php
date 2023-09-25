@@ -19,6 +19,6 @@ namespace phpMyFAQ\Enums;
 
 enum DownloadHostType: string
 {
-    case GITHUB = 'https://github.com/thorsten/phpMyFAQ/releases/download/';
+    case GITHUB = 'https://github.com/';
     case PHPMYFAQ = 'https://download.phpmyfaq.de/';
 }

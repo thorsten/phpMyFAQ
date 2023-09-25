@@ -104,9 +104,15 @@ class UpdateController
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $upgrade = new Upgrade(new System(), Configuration::getConfigurationInstance());
+        $upgrade->setIsNightly(true);
         $result = $upgrade->downloadPackage($versionNumber);
 
-        $response->setData(['success' => $result]);
+        if ($result !== false) {
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => $result]);
+        } else {
+            $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
+        }
 
         return $response;
     }
