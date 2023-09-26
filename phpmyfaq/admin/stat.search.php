@@ -90,7 +90,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
 
     // Pagination options
     $options = [
-        'baseUrl' => $faqConfig->getDefaultUrl() . $request->getRequestUri(),
+        'baseUrl' => $request->getUri(),
         'total' => is_countable($searchesList) ? count($searchesList) : 0,
         'perPage' => $perPage,
         'pageParamName' => 'page',
