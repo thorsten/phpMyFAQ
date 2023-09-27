@@ -248,7 +248,7 @@ class FaqHelper extends Helper
                 ->allowRelativeLinks()
                 ->allowStaticElements()
                 ->allowRelativeMedias()
-                ->forceHttpsUrls()
+                ->forceHttpsUrls($this->config->get('security.useSslOnly'))
                 ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
                 ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
                 ->allowMediaHosts(
