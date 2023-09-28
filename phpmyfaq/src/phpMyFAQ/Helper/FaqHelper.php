@@ -243,7 +243,7 @@ class FaqHelper extends Helper
     {
         $htmlSanitizer = new HtmlSanitizer(
             (new HtmlSanitizerConfig())
-                ->withMaxInputLength(100000)
+                ->withMaxInputLength(200000)
                 ->allowSafeElements()
                 ->allowRelativeLinks()
                 ->allowStaticElements()
