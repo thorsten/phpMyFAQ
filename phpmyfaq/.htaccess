@@ -139,6 +139,7 @@ RewriteRule user/request-removal                   index.php?action=request-remo
 RewriteRule user/logout                            index.php?action=logout [L,QSA]
 
 # Administration API
+RewriteRule admin/api/health-check                 admin/api/updates.php
 RewriteRule admin/api/versions                     admin/api/updates.php
 RewriteRule admin/api/update-check                 admin/api/updates.php
 RewriteRule admin/api/download-package             admin/api/updates.php

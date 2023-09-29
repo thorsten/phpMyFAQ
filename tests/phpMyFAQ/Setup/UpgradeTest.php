@@ -6,7 +6,11 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class UpgradeTest extends TestCase
 {
@@ -28,11 +32,6 @@ class UpgradeTest extends TestCase
 
         $actual = $this->upgrade->downloadPackage('1.2.3');
         $this->assertFalse($actual);
-    }
-
-    public function testVerifyPackage(): void
-    {
-        $this->markTestSkipped();
     }
 
     public function testCreateTemporaryBackup(): void

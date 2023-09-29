@@ -248,9 +248,9 @@ function renderInputForm(mixed $key, string $type): void
                         (ReleaseType::DEVELOPMENT->value === $faqConfig->get($key)) ? 'selected' : ''
                     );
                     printf(
-                        '<option value="%s" %s>Release</option>',
-                        ReleaseType::RELEASE->value,
-                        (ReleaseType::RELEASE->value === $faqConfig->get($key)) ? 'selected' : ''
+                        '<option value="%s" %s>Stable</option>',
+                        ReleaseType::STABLE->value,
+                        (ReleaseType::STABLE->value === $faqConfig->get($key)) ? 'selected' : ''
                     );
                     printf(
                         '<option value="%s" %s>Nightly</option>',

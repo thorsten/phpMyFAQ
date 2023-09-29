@@ -19,7 +19,7 @@ namespace phpMyFAQ\Enums;
 
 enum ReleaseType: string
 {
-    case RELEASE = 'release';
+    case STABLE = 'stable';
     case DEVELOPMENT = 'development';
     case NIGHTLY = 'nightly';
 }

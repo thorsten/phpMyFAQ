@@ -22,6 +22,11 @@ use Symfony\Component\Routing\RouteCollection;
 $routes = new RouteCollection();
 
 $routes->add(
+    'admin.api.health-check',
+    new Route('/health-check', ['_controller' => [UpdateController::class, 'healthCheck']])
+);
+
+$routes->add(
     'admin.api.updates',
     new Route('/versions', ['_controller' => [UpdateController::class, 'versions']])
 );

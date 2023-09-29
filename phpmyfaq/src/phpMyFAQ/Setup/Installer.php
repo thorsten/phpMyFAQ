@@ -476,7 +476,7 @@ class Installer extends Setup
             'main.phpMyFAQToken' => bin2hex(random_bytes(16)),
             'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
             'upgrade.releaseEnvironment' =>
-                System::isDevelopmentVersion() ? ReleaseType::DEVELOPMENT->value : ReleaseType::RELEASE->value
+                System::isDevelopmentVersion() ? ReleaseType::DEVELOPMENT->value : ReleaseType::STABLE->value
         ];
 
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);

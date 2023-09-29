@@ -31,11 +31,33 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class UpdateController
 {
+    #[Route('admin/api/health-check')]
+    public function healthCheck(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $upgrade = new Upgrade(new System(), $configuration);
+
+        try {
+            $upgrade->checkFilesystem();
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => 'ok']);
+        } catch (Exception $exception) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => $exception->getMessage()]);
+        }
+
+        return $response;
+    }
+
     #[Route('admin/api/versions')]
     public function versions(): JsonResponse
     {
@@ -48,9 +70,9 @@ class UpdateController
             );
             $response->setStatusCode(Response::HTTP_OK);
             $response->setContent($versions->getContent());
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface $exception) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData($e->getMessage());
+            $response->setData($exception->getMessage());
         }
 
         return $response;
@@ -97,23 +119,42 @@ class UpdateController
         return $response;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws \JsonException
+     */
     #[Route('admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
     {
         $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $upgrade = new Upgrade(new System(), Configuration::getConfigurationInstance());
-        $upgrade->setIsNightly(true);
-        $result = $upgrade->downloadPackage($versionNumber);
+        $upgrade = new Upgrade(new System(), $configuration);
 
-        if ($result !== false) {
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => $result]);
-        } else {
+        $pathToPackage = $upgrade->downloadPackage($versionNumber);
+
+        if ($pathToPackage === false) {
             $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
+            $response->setData(['error' => 'Could not download package.']);
+            return $response;
         }
 
+        if (!$upgrade->isNightly()) {
+            $result = $upgrade->verifyPackage($pathToPackage, $versionNumber);
+            if ($result === false) {
+                $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
+                $response->setData(['error' => 'Could not verify downloaded package.']);
+                return $response;
+            }
+        }
+
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(['success' => 'Download package successful.']);
         return $response;
     }
 }

@@ -63,7 +63,7 @@ export const handleCheckForUpdates = () => {
   if (downloadButton) {
     downloadButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/download-package/nightly', {
+      fetch(window.location.pathname + 'api/download-package/3.2.1', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -80,14 +80,16 @@ export const handleCheckForUpdates = () => {
           const result = document.getElementById('result-download-nightly');
           if (result) {
             if (response.version === 'current') {
-              result.replaceWith(addElement('p', { innerText: response.message }));
+              result.replaceWith(addElement('p', { innerText: response.success }));
             } else {
-              result.replaceWith(addElement('p', { innerText: response.message }));
+              result.replaceWith(addElement('p', { innerText: response.success }));
             }
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(async (error) => {
+          const errorMessage = await error.cause.response.json();
+          const result = document.getElementById('result-download-nightly');
+          result.replaceWith(addElement('p', { innerText: errorMessage.error }));
         });
     });
   }

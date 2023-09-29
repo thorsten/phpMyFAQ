@@ -19,7 +19,9 @@ namespace phpMyFAQ\Setup;
 use JsonException;
 use Monolog\Level;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\DownloadHostType;
+use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use Symfony\Component\HttpClient\HttpClient;
@@ -35,55 +37,62 @@ class Upgrade extends Setup
     public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
     private const GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
     private const PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
-
-    private $isNightly = false;
+    private bool $isNightly;
 
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
+
+        $this->isNightly = $this->configuration->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
     }
 
     /**
      * Method to check if the filesystem is ready for the upgrade
      *
      * @return bool
+     * @throws Exception
      */
     public function checkFilesystem(): bool
     {
-        if (!is_dir(PMF_CONTENT_DIR . '\upgrades')) {
-            if (!mkdir(PMF_CONTENT_DIR . '\upgrades')) {
-                return false;
+        if (!is_dir(PMF_CONTENT_DIR . '/upgrades')) {
+            if (!mkdir(PMF_CONTENT_DIR . '/upgrades')) {
+                throw new Exception('The folder ' . PMF_CONTENT_DIR . '/upgrades is missing.');
             }
         }
         if (
-            is_dir(PMF_CONTENT_DIR . '\user\attachments') &&
-            is_dir(PMF_CONTENT_DIR . '\user\images') &&
-            is_dir(PMF_CONTENT_DIR . '\core\data') &&
-            is_dir(PMF_ROOT_DIR . '\assets\themes')
+            is_dir(PMF_CONTENT_DIR . '/user/attachments') &&
+            is_dir(PMF_CONTENT_DIR . '/user/images') &&
+            is_dir(PMF_CONTENT_DIR . '/core/data') &&
+            is_dir(PMF_ROOT_DIR . '/assets/themes')
         ) {
             if (
-                is_file(PMF_CONTENT_DIR . '\core\config\constants.php') &&
-                is_file(PMF_CONTENT_DIR . '\core\config\database.php')
+                is_file(PMF_CONTENT_DIR . '/core/config/constants.php') &&
+                is_file(PMF_CONTENT_DIR . '/core/config/database.php')
             ) {
                 if ($this->configuration->isElasticsearchActive()) {
-                    if (!is_file(PMF_CONTENT_DIR . '\core\config\elasticsearch.php')) {
-                        return false;
+                    if (!is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')) {
+                        throw new Exception(
+                            'The file ' . PMF_CONTENT_DIR . '/core/config/elasticsearch.php is missing.'
+                        );
                     }
                 }
                 if ($this->configuration->isLdapActive()) {
-                    if (!is_file(PMF_CONTENT_DIR . '\core\config\ldap.php')) {
-                        return false;
+                    if (!is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
+                        throw new Exception('The file ' . PMF_CONTENT_DIR . '/core/config/ldap.php is missing.');
                     }
                 }
                 if ($this->configuration->isSignInWithMicrosoftActive()) {
-                    if (!is_file(PMF_CONTENT_DIR . '\core\config\azure.php')) {
-                        return false;
+                    if (!is_file(PMF_CONTENT_DIR . '/core/config/azure.php')) {
+                        throw new Exception('The file ' . PMF_CONTENT_DIR . '/core/config/azure.php is missing.');
                     }
                 }
 
                 return true;
             } else {
-                return false;
+                throw new Exception(
+                    'The files ' . PMF_CONTENT_DIR . '/core/config/constant.php and ' .
+                    PMF_CONTENT_DIR . '/core/config/database.php are missing.'
+                );
             }
         } else {
             return false;
@@ -145,7 +154,8 @@ class Upgrade extends Setup
 
         try {
             $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-            if (hash_file('md5', $path) === $responseContent['zip']['md5']) {
+
+            if (md5_file($path) === $responseContent['zip']['md5']) {
                 return true;
             } else {
                 return false;

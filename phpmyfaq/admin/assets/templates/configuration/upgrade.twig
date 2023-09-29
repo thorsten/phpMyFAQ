@@ -17,7 +17,15 @@
                         You can check for new versions of phpMyFAQ, re-install or update your installation.
                     </p>
 
-                    <!-- Step 1: Check for a new version -->
+                    <!-- Step 1: Check for system health -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-between mb-5">
+                        <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-health">
+                            Check for a health
+                        </button>
+                        <output id="result-check-health"></output>
+                    </div>
+
+                    <!-- Step 2: Check for a new version -->
                     <div class="d-grid gap-2 d-md-flex justify-content-between mb-5">
                         <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">
                             Check for a new version
