@@ -307,16 +307,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v8.9.0",
+            "version": "v8.10.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:elastic/elasticsearch-php.git",
-                "reference": "cbde0731140e1d6c4453fe8c41888fcdac426ddd"
+                "reference": "4237d7e125582cfa7560d97dd8c3baee622875f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/cbde0731140e1d6c4453fe8c41888fcdac426ddd",
-                "reference": "cbde0731140e1d6c4453fe8c41888fcdac426ddd",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/4237d7e125582cfa7560d97dd8c3baee622875f1",
+                "reference": "4237d7e125582cfa7560d97dd8c3baee622875f1",
                 "shasum": ""
             },
             "require": {
@@ -356,7 +356,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2023-08-07T14:53:59+00:00"
+            "time": "2023-09-28T10:38:34+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -1857,16 +1857,16 @@
         },
         {
             "name": "psr/http-client",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-client.git",
-                "reference": "0955afe48220520692d2d09f7ab7e0f93ffd6a31"
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-client/zipball/0955afe48220520692d2d09f7ab7e0f93ffd6a31",
-                "reference": "0955afe48220520692d2d09f7ab7e0f93ffd6a31",
+                "url": "https://api.github.com/repos/php-fig/http-client/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90",
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
                 "shasum": ""
             },
             "require": {
@@ -1903,9 +1903,9 @@
                 "psr-18"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-client/tree/1.0.2"
+                "source": "https://github.com/php-fig/http-client"
             },
-            "time": "2023-04-10T20:12:12+00:00"
+            "time": "2023-09-23T14:17:50+00:00"
         },
         {
             "name": "psr/http-factory",
