@@ -18,8 +18,42 @@
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleCheckForUpdates = () => {
+  const checkHealthButton = document.getElementById('pmf-button-check-health');
   const checkUpdateButton = document.getElementById('pmf-button-check-updates');
   const downloadButton = document.getElementById('pmf-button-download-now');
+
+  // Health Check
+  if (checkHealthButton) {
+    checkHealthButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      fetch(window.location.pathname + 'api/health-check', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Network response was not ok: ', { cause: { response } });
+        })
+        .then((response) => {
+          const result = document.getElementById('result-check-health');
+          if (result) {
+            if (response.success === 'ok') {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            } else {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  }
 
   // Check Update
   if (checkUpdateButton) {
@@ -40,10 +74,17 @@ export const handleCheckForUpdates = () => {
         })
         .then((response) => {
           const dateLastChecked = document.getElementById('dateLastChecked');
+          const versionLastChecked = document.getElementById('versionLastChecked');
+
           if (dateLastChecked) {
             const date = new Date(response.dateLastChecked);
             dateLastChecked.innerText = `${date.toISOString()}`;
           }
+
+          if (versionLastChecked) {
+            versionLastChecked.innerText = response.version;
+          }
+
           const result = document.getElementById('result-check-versions');
           if (result) {
             if (response.version === 'current') {
@@ -63,7 +104,18 @@ export const handleCheckForUpdates = () => {
   if (downloadButton) {
     downloadButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/download-package/3.2.1', {
+
+      let version;
+      const versionLastChecked = document.getElementById('versionLastChecked');
+      const releaseEnvironment = document.getElementById('releaseEnvironment');
+
+      if (releaseEnvironment.innerText.toLowerCase() === 'nightly') {
+        version = 'nightly';
+      } else {
+        version = versionLastChecked;
+      }
+
+      fetch(window.location.pathname + `api/download-package/${version}`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',

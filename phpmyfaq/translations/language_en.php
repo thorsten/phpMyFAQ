@@ -1352,6 +1352,10 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
 
 // added v4.0.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['versionIsUpToDate'] = '✅ Your installed version is up-to-date!';
+$PMF_LANG['healthCheckOkay'] = '✅ Your installed version is healthy!';
+$PMF_LANG['downloadSuccessful'] = '✅ Package successfully downloaded!';
+$PMF_LANG['downloadFailure'] = '❌ Could not download download package.';
+$PMF_LANG['verificationFailure'] = '❌ Could not verify downloaded package.';
 $PMF_LANG['currentVersion'] = 'Current Version: ';
 
 // added v4.0.0-alpha - 2023-07-19 by Jan

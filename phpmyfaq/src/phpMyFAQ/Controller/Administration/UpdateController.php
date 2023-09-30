@@ -43,16 +43,28 @@ class UpdateController
     public function healthCheck(): JsonResponse
     {
         $response = new JsonResponse();
+        $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
+        $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
         $upgrade = new Upgrade(new System(), $configuration);
 
         try {
             $upgrade->checkFilesystem();
             $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => 'ok']);
+            $response->setData(
+                [
+                    'message' => Translation::get('healthCheckOkay'),
+                    'dateLastChecked' => $dateLastChecked,
+                ]
+            );
         } catch (Exception $exception) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $exception->getMessage()]);
+            $response->setData(
+                [
+                    'message' => $exception->getMessage(),
+                    'dateLastChecked' => $dateLastChecked,
+                ]
+            );
         }
 
         return $response;
@@ -70,7 +82,12 @@ class UpdateController
             );
             $response->setStatusCode(Response::HTTP_OK);
             $response->setContent($versions->getContent());
-        } catch (TransportExceptionInterface $exception) {
+        } catch (
+            TransportExceptionInterface |
+            ClientExceptionInterface |
+            ServerExceptionInterface |
+            RedirectionExceptionInterface $exception
+        ) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData($exception->getMessage());
         }
@@ -130,17 +147,16 @@ class UpdateController
     public function downloadPackage(Request $request): JsonResponse
     {
         $response = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
 
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $upgrade = new Upgrade(new System(), $configuration);
+        $upgrade = new Upgrade(new System(), Configuration::getConfigurationInstance());
 
         $pathToPackage = $upgrade->downloadPackage($versionNumber);
 
         if ($pathToPackage === false) {
             $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
-            $response->setData(['error' => 'Could not download package.']);
+            $response->setData(['error' => Translation::get('downloadFailure')]);
             return $response;
         }
 
@@ -148,13 +164,13 @@ class UpdateController
             $result = $upgrade->verifyPackage($pathToPackage, $versionNumber);
             if ($result === false) {
                 $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
-                $response->setData(['error' => 'Could not verify downloaded package.']);
+                $response->setData(['error' => Translation::get('verificationFailure')]);
                 return $response;
             }
         }
 
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => 'Download package successful.']);
+        $response->setData(['success' => Translation::get('downloadSuccessful')]);
         return $response;
     }
 }

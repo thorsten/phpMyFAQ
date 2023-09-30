@@ -57,7 +57,11 @@
                     <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
                 </span>
                 <span>
-                    Release-Environment: <strong>{{ releaseEnvironment }}</strong>
+                    Latest version available:
+                    <output id="versionLastChecked">n/a</output>
+                </span>
+                <span>
+                    Release-Environment: <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
                 </span>
             </div>
         </div>

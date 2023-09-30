@@ -1333,6 +1333,10 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
 
 // added v4.0.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['versionIsUpToDate'] = '✅ Deine installierte Version ist aktuell.';
+$PMF_LANG['healthCheckOkay'] = '✅ Deine installierte Version ist gesund.';
+$PMF_LANG['downloadSuccessful'] = '✅ Download-Paket erfolgreich heruntergeladen!';
+$PMF_LANG['downloadFailure'] = '❌ Download-Paket konnte nicht heruntergeladen werden';
+$PMF_LANG['verificationFailure'] = '❌ Download-Paket konnte nicht verifiziert werden';
 $PMF_LANG['currentVersion'] = 'Aktuelle Version: ';
 
 // added v4.0.0-alpha - 2023-07-19 by Jan
