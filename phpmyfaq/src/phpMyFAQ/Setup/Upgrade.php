@@ -24,6 +24,8 @@ use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -31,6 +33,7 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use PhpZip\ZipFile;
 use PhpZip\Exception\ZipException;
+use ZipArchive;
 
 class Upgrade extends Setup
 {
@@ -173,26 +176,31 @@ class Upgrade extends Setup
     }
 
     /**
-     * Method to unpack the downloaded phpMyFAQ package
+     * Method to extract the downloaded phpMyFAQ package
      *
      * @return bool
      * @param string $path | Path of the package
      */
-    public function unpackPackage(string $path): bool
+    public function extractPackage(string $path): bool
     {
-        $zip = new ZipFile();
-        try {
-            if (!is_file($path)) {
-                return false;
-            } else {
-                $zip->openFile($path);
-                $zip->extractTo(PMF_CONTENT_DIR . '/upgrades/');
-                $zip->close();
-                return true;
-            }
-        } catch (ZipException $e) {
-            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
+        $zip = new ZipArchive();
 
+        if (!is_file($path)) {
+            $this->configuration->getLogger()->log(Level::Error, 'Given path to download package is not valid.');
+            return false;
+        }
+
+        $zipFile = $zip->open($path);
+
+        if ($zipFile) {
+            $zip->extractTo(PMF_CONTENT_DIR . '/upgrades/');
+            $zip->registerProgressCallback(0.05, function ($r) {
+                printf("%d%%\n", $r * 100);
+            });
+            $zip->close();
+            return true;
+        } else {
+            $this->configuration->getLogger()->log(Level::Error, 'Cannot open zipped download package.');
             return false;
         }
     }
@@ -205,21 +213,38 @@ class Upgrade extends Setup
      */
     public function createTemporaryBackup(string $backupName): bool
     {
-        try {
-            $zip = new ZipFile();
-            if (!is_file(PMF_CONTENT_DIR . '/upgrades/' . $backupName)) {
-                $zip->addDirRecursive(PMF_ROOT_DIR);
-                $zip->saveAsFile(PMF_CONTENT_DIR . '/upgrades/' . $backupName);
-                $zip->close();
-                return true;
-            } else {
-                return false;
-            }
-        } catch (ZipException $e) {
-            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
-
+        $outputZipFile = PMF_CONTENT_DIR . '/upgrades/' . $backupName;
+        if (!file_exists($outputZipFile)) {
             return false;
         }
+
+        $zip = new ZipArchive();
+        if ($zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return false;
+        }
+
+        $sourceDir = rtrim(PMF_ROOT_DIR, '/\\');
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($sourceDir),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $zip->registerProgressCallback(0.05, function ($r) {
+            printf("%d%%\n", $r * 100);
+        });
+
+        foreach ($files as $file) {
+            $file = realpath($file);
+            if (is_dir($file)) {
+                $zip->addEmptyDir(str_replace($sourceDir . '/', '', $file . '/'));
+            } elseif (is_file($file)) {
+                $zip->addFile($file, str_replace($sourceDir . '/', '', $file));
+            }
+        }
+
+        $zip->close();
+
+        return file_exists($outputZipFile);
     }
 
      /**

@@ -21,6 +21,7 @@ export const handleCheckForUpdates = () => {
   const checkHealthButton = document.getElementById('pmf-button-check-health');
   const checkUpdateButton = document.getElementById('pmf-button-check-updates');
   const downloadButton = document.getElementById('pmf-button-download-now');
+  const extractButton = document.getElementById('pmf-button-extract-package');
 
   // Health Check
   if (checkHealthButton) {
@@ -130,7 +131,9 @@ export const handleCheckForUpdates = () => {
         })
         .then((response) => {
           const result = document.getElementById('result-download-nightly');
+          const divExtractPackage = document.getElementById('pmf-update-step-extract-package');
           if (result) {
+            divExtractPackage.classList.remove('d-none');
             if (response.version === 'current') {
               result.replaceWith(addElement('p', { innerText: response.success }));
             } else {
@@ -142,6 +145,39 @@ export const handleCheckForUpdates = () => {
           const errorMessage = await error.cause.response.json();
           const result = document.getElementById('result-download-nightly');
           result.replaceWith(addElement('p', { innerText: errorMessage.error }));
+        });
+    });
+  }
+
+  // Extract package
+  if (extractButton) {
+    extractButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      fetch(window.location.pathname + 'api/extract-package', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Network response was not ok: ', { cause: { response } });
+        })
+        .then((response) => {
+          const result = document.getElementById('result-extract-package');
+          if (result) {
+            if (response.success === 'ok') {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            } else {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
         });
     });
   }

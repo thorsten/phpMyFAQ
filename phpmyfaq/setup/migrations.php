@@ -15,6 +15,8 @@
 //
 // UPDATES FROM 3.1.0-alpha
 //
+use phpMyFAQ\Enums\ReleaseType;
+
 if (version_compare($version, '3.1.0-alpha', '<=')) {
     // Add is_visible flag for user data
     if ('sqlite3' === $dbConfig->getType()) {
@@ -177,16 +179,17 @@ if (version_compare($version, '3.2.0-RC', '<')) {
 }
 
 //
-// UPDATES FROM 3.3.0-alpha
+// UPDATES FROM 4.0.0-alpha
 //
-if (version_compare($version, '3.3.0-alpha', '<')) {
+if (version_compare($version, '4.0.0-alpha', '<')) {
     // Move everything to the new file layout
     // @todo move attachments in filesystem and database
 
     // Automatic updates
     $faqConfig->add('upgrade.onlineUpdateEnabled', true);
-    $faqConfig->add('upgrade.releaseEnvironment', 'development');
+    $faqConfig->add('upgrade.releaseEnvironment', ReleaseType::DEVELOPMENT->value);
     $faqConfig->add('upgrade.dateLastChecked', '');
+    $faqConfig->add('upgrade.lastDownloadedPackage', '');
 
     // Rewrite rules are now mandatory, social network support removed
     $faqConfig->delete('main.enableRewriteRules');

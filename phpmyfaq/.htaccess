@@ -147,6 +147,7 @@ RewriteRule admin/api/health-check                 admin/api/index.php
 RewriteRule admin/api/versions                     admin/api/index.php
 RewriteRule admin/api/update-check                 admin/api/index.php
 RewriteRule admin/api/download-package             admin/api/index.php
+RewriteRule admin/api/extract-package              admin/api/index.php
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>

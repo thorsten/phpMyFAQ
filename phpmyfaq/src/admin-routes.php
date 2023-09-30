@@ -23,7 +23,7 @@ $routes = new RouteCollection();
 
 $routes->add(
     'admin.api.health-check',
-    new Route('/health-check', ['_controller' => [UpdateController::class, 'healthCheck']])
+    new Route('/health-check', ['_controller' => [UpdateController::class, 'healthCheck'], '_methods' => 'POST'])
 );
 
 $routes->add(
@@ -38,7 +38,23 @@ $routes->add(
 
 $routes->add(
     'admin.api.download-package',
-    new Route('/download-package/{versionNumber}', ['_controller' => [UpdateController::class, 'downloadPackage']])
+    new Route(
+        '/download-package/{versionNumber}',
+        [
+            '_controller' => [UpdateController::class, 'downloadPackage'],
+            '_methods' => 'POST'
+        ])
+);
+
+$routes->add(
+    'admin.api.extract-package',
+    new Route(
+        '/extract-package',
+        [
+            '_controller' => [UpdateController::class, 'extractPackage'],
+            '_methods' => 'POST'
+        ]
+    )
 );
 
 return $routes;

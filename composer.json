@@ -32,7 +32,6 @@
     "guzzlehttp/guzzle": "^7.5",
     "monolog/monolog": "^3.3",
     "myclabs/deep-copy": "~1.0",
-    "nelexa/zip": "^4.0",
     "phpseclib/phpseclib": "~3.0",
     "robthree/twofactorauth": "^2.0.0",
     "symfony/html-sanitizer": "^6.2",

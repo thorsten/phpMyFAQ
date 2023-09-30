@@ -147,10 +147,11 @@ class UpdateController
     public function downloadPackage(Request $request): JsonResponse
     {
         $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
 
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $upgrade = new Upgrade(new System(), Configuration::getConfigurationInstance());
+        $upgrade = new Upgrade(new System(), $configuration);
 
         $pathToPackage = $upgrade->downloadPackage($versionNumber);
 
@@ -169,8 +170,28 @@ class UpdateController
             }
         }
 
+        $configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
+
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(['success' => Translation::get('downloadSuccessful')]);
+
+        return $response;
+    }
+
+
+    public function extractPackage(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $upgrade = new Upgrade(new System(), $configuration);
+
+        $pathToPackage = urldecode($configuration->get('upgrade.lastDownloadedPackage'));
+
+        $result = $upgrade->extractPackage($pathToPackage);
+
+        $response->setData(['result' => $result]);
+
         return $response;
     }
 }
