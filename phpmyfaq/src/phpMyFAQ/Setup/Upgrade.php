@@ -31,8 +31,6 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use PhpZip\ZipFile;
-use PhpZip\Exception\ZipException;
 use ZipArchive;
 
 class Upgrade extends Setup
