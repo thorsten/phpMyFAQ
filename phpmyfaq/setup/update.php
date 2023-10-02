@@ -360,13 +360,13 @@ if ($step == 3) {
                 ADD jwt TEXT NULL DEFAULT NULL;';
 
             $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata
-                ADD twofactor_enabled INT(1) NULL DEFAULT 0,
+                ADD twofactor_enabled INT NULL DEFAULT 0,
                 ADD secret VARCHAR(128) NULL DEFAULT NULL';
         }
 
         // New backup
         $query[] = 'CREATE TABLE ' . $prefix . 'faqbackup (
-            id INT(11) NOT NULL,
+            id INT NOT NULL,
             filename VARCHAR(255) NOT NULL,
             authkey VARCHAR(255) NOT NULL,
             authcode VARCHAR(255) NOT NULL,

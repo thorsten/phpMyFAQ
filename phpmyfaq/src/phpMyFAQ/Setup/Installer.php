@@ -439,21 +439,6 @@ class Installer extends Setup
         'ldap.ldap_use_dynamic_login' => 'false',
         'ldap.ldap_dynamic_login_attribute' => 'uid',
 
-        'ad.adSupport' => 'false',
-        'ad.ad_mapping.name' => 'cn',
-        'ad.ad_mapping.username' => 'samAccountName',
-        'ad.ad_mapping.mail' => 'mail',
-        'ad.ad_mapping.memberOf' => '',
-        'ad.ad_use_domain_prefix' => 'true',
-        'ad.ad_options.LDAP_OPT_PROTOCOL_VERSION' => '3',
-        'ad.ad_options.LDAP_OPT_REFERRALS' => '0',
-        'ad.ad_use_memberOf' => 'false',
-        'ad.ad_use_sasl' => 'false',
-        'ad.ad_use_multiple_servers' => 'false',
-        'ad.ad_use_anonymous_login' => 'false',
-        'ad.ad_use_dynamic_login' => 'false',
-        'ad.ad_dynamic_login_attribute' => 'uid',
-
         'api.enableAccess' => 'true',
         'api.apiClientToken' => '',
 
