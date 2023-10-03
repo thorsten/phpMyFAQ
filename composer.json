@@ -26,7 +26,7 @@
     "ext-xmlwriter": "*",
     "ext-zip": "*",
     "elasticsearch/elasticsearch": "8.*",
-    "endroid/qr-code": "^4.8",
+    "endroid/qr-code": "^5.0",
     "erusev/parsedown": "~1.0",
     "erusev/parsedown-extra": "~0.8.1",
     "guzzlehttp/guzzle": "^7.5",
