@@ -6,7 +6,7 @@ WYSIWYG editor and an Image Manager, real time search support with Elasticsearch
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking,
 40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates with support for
 own text and HTML snippets, PDF-support, a backup-system, a dynamic sitemap, related FAQs, tagging, built-in spam
-protection systems, OpenLDAP, Microsoft Active Directory, and Microsoft Azure AD support, and an easy-to-use
+protection systems, OpenLDAP, Microsoft Active Directory, and Microsoft Entra ID support, and an easy-to-use
 installation script. You can run phpMyFAQ on almost every web hosting provider or in the cloud in a Docker container.
 
 This documentation should help you with installing, updating, using and administrating phpMyFAQ.

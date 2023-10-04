@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Manages user authentication with Microsoft Azure Active Directory.
+ * Manages user authentication with Microsoft Entra ID.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -24,7 +24,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -118,7 +117,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     }
 
     /**
-     * Method to authorize against Azure AD
+     * Method to authorize against Entra ID
      *
      * @throws \Exception
      */
