@@ -486,7 +486,7 @@ if (
                                                     printf(
                                                         '<li><a href="../%s">%s</a> ',
                                                         $att->buildUrl(),
-                                                        $att->getFilename()
+                                                        Strings::htmlentities($att->getFilename())
                                                     );
                                                     if ($user->perm->hasPermission($currentUserId, 'delattachment')) {
                                                         printf(

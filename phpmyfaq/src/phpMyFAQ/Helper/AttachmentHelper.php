@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Attachment\AttachmentAbstract;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 /**
@@ -45,7 +46,7 @@ class AttachmentHelper
                 '<li><i class="fa fa-%s" aria-hidden="true"></i> <a href="%s">%s</a></li>',
                 $this->mapMimeTypeToIcon($attachment->getMimeType()),
                 $attachment->buildUrl(),
-                $attachment->getFilename()
+                Strings::htmlentities($attachment->getFilename())
             );
         }
 
