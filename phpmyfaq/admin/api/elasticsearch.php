@@ -17,6 +17,7 @@
 
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -35,6 +36,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 //
 $response = new JsonResponse();
 $request = Request::createFromGlobals();
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 
