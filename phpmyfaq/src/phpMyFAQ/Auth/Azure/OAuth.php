@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OAuth class for Azure Active Directory.
+ * OAuth class for Entra ID.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -53,7 +53,7 @@ class OAuth
     }
 
     /**
-     * Returns the Authorization Code from Azure AD.
+     * Returns the Authorization Code from Entra ID.
      *
      * @throws GuzzleException
      * @throws \JsonException

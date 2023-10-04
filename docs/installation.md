@@ -214,9 +214,9 @@ configuration panel.
 If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template and if you rename
 it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
 
-## 2.10 Using Microsoft Azure Active Directory
+## 2.10 Using Microsoft Entra ID
 
-You can use our experimental Microsoft Azure Active Directory support for user authentication as well.
+You can use our experimental Microsoft Entra ID support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,
 allowing them to authenticate and access resources securely.
 Follow these steps to create an App Registration in Microsoft Azure:
@@ -232,8 +232,8 @@ Follow these steps to create an App Registration in Microsoft Azure:
 
 **Step 2: Create a New App Registration**
 
-1. In the Azure Portal, click on "Azure Active Directory" in the left-hand navigation pane.
-2. Under "Azure Active Directory," click on "App registrations."
+1. In the Azure Portal, click on "Entra ID" in the left-hand navigation pane.
+2. Under "Entra ID," click on "App registrations."
 
 **Step 3: Register a New App**
 
@@ -243,7 +243,7 @@ Follow these steps to create an App Registration in Microsoft Azure:
 
 1. In the "Name" field, provide a name for your App Registration, e.g. "phpMyFAQ".
 2. Choose the supported account types that your application will authenticate: "Accounts in this organizational directory only"
-3. In the "Redirect URI" section, specify the redirect URI where Azure AD will send authentication responses: `http://www.example.com/faq/services/azure/callback.php`
+3. In the "Redirect URI" section, specify the redirect URI where Entra ID will send authentication responses: `http://www.example.com/faq/services/azure/callback.php`
 4. Click the "Register" button to create the App Registration.
 
 **Step 5: Configure Authentication**
@@ -262,7 +262,7 @@ Follow these steps to create an App Registration in Microsoft Azure:
 
 1. Copy the file `./config/azure.php.original` and name it `./config/azure.php`
 2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
-3. Then, activate Microsoft Azure AD support in the administration under "Security"
+3. Then, activate Microsoft Entra ID support in the administration under "Security"
 
 ## 2.11 PDF export
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Login handler for Microsoft Azure Active Directory
+ * Login handler for Microsoft Entra ID
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -41,5 +41,5 @@ $auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
 try {
     $auth->authorize();
 } catch (Exception $e) {
-    $faqConfig->getLogger()->info('Azure AD Login failed: ' . $e->getMessage());
+    $faqConfig->getLogger()->info('Entra ID Login failed: ' . $e->getMessage());
 }

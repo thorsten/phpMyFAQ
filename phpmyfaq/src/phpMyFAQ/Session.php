@@ -39,7 +39,7 @@ class Session
     /** @var string Name of the session GET parameter */
     final public const PMF_GET_KEY_NAME_SESSIONID = 'sid';
 
-    /** @var string Azure AD session key */
+    /** @var string Entra ID session key */
     final public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
 
     /** @var string */

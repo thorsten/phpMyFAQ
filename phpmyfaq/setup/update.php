@@ -339,7 +339,7 @@ if ($step == 3) {
     // UPDATES FROM 3.2.0-alpha
     //
     if (version_compare($version, '3.2.0-alpha', '<')) {
-        // Azure AD support and 2FA-support
+        // Entra ID support and 2FA-support
         $faqConfig->add('security.enableSignInWithMicrosoft', false);
 
         if ('sqlite3' === $dbConfig->getType()) {
