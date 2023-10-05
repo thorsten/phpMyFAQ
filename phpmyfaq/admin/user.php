@@ -436,13 +436,7 @@ if (
                                            name="user_rights[]" value="<?= $right['right_id'] ?>"
                                            class="form-check-input permission">
                                     <label class="form-check-label" for="user_right_<?= $right['right_id'] ?>">
-                                        <?php
-                                        try {
-                                            echo Translation::get('rightsLanguage::' . $right['name']);
-                                        } catch (ErrorException) {
-                                            echo $right['description'];
-                                        }
-                                        ?>
+                                        <?= Translation::get('rightsLanguage::' . $right['name']) ?>
                                     </label>
                                 </div>
                                 <?php
