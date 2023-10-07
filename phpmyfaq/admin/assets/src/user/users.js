@@ -44,11 +44,18 @@ const setUserData = async (userId) => {
   updateInput('user_status', userData.status);
   updateInput('display_name', userData.display_name);
   updateInput('email', userData.email);
+  updateInput('overwrite_twofactor', userData.twofactor_enabled);
 
   if (userData.is_superadmin) {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.setAttribute('checked', 'checked');
     superAdmin.removeAttribute('disabled');
+  }
+
+  if (userData.twofactor_enabled === '1') {
+    const twoFactorEnabled = document.getElementById('overwrite_twofactor');
+    twoFactorEnabled.setAttribute('checked', 'checked');
+    twoFactorEnabled.removeAttribute('disabled');
   }
 };
 

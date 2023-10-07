@@ -388,7 +388,8 @@ if (
                             <div class="row mb-2">
                                 <div class="offset-lg-4 col-lg-8">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="overwrite_twofactor" name="overwrite_twofactor">
+                                        <input class="form-check-input" type="checkbox" id="overwrite_twofactor"
+                                               name="overwrite_twofactor" disabled>
                                         <label class="form-check-label" for="overwrite_twofactor">
                                             <?= Translation::get('ad_user_overwrite_twofactor') ?>
                                         </label>
