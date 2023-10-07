@@ -56,9 +56,13 @@ switch ($ajaxAction) {
             $versions = $api->getVersions();
             $response->setStatusCode(Response::HTTP_OK);
             if (-1 === version_compare($versions['installed'], $versions['current'])) {
-                $response->setData(['success' => Translation::get('ad_you_should_update')]);
+                $response->setData(
+                    ['success' => Translation::get('ad_you_should_update')]
+                );
             } else {
-                $response->setData(['success' => $versions['current']]);
+                $response->setData(
+                    ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['current']]
+                );
             }
         } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
             $response->setStatusCode(Response::HTTP_BAD_GATEWAY);

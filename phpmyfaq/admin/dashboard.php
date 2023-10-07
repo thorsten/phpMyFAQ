@@ -199,7 +199,7 @@ $faqSession = new Session($faqConfig);
       </div>
     </div>
 
-        <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) : ?>
+    <?php if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) : ?>
     <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
@@ -208,34 +208,42 @@ $faqSession = new Session($faqConfig);
             <div class="card-body">
                 <?php
                 $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
-                if ($faqConfig->get('main.enableAutoUpdateHint') || ($version == 'version')) {
-                    $api = new Api($faqConfig);
-                    try {
-                        $versions = $api->getVersions();
-                        printf(
-                            '<p class="alert alert-%s">%s <a href="%s" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
-                            (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'info',
-                            Translation::get('ad_xmlrpc_latest'),
-                            System::PHPMYFAQ_URL,
-                            $versions['current']
-                        );
-                        // Installed phpMyFAQ version is outdated
-                        if (-1 == version_compare($versions['installed'], $versions['current'])) {
-                            echo '<br>' . Translation::get('ad_you_should_update');
-                        }
-                    } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
-                        printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
-                    }
-                } else {
+                if ($faqConfig->get('main.enableAutoUpdateHint')) {
                     ?>
-                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php"
-                        method="post" accept-charset="utf-8">
-                    <input type="hidden" name="param" value="version"/>
-                    <button class="btn btn-info" type="submit">
-                        <?= Translation::get('ad_xmlrpc_button') ?>
-                    </button>
-                  </form>
+                    <div id="phpmyfaq-latest-version">
+                        <div class="spinner-border text-secondary d-none" id="version-loader" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                     <?php
+                } else {
+                    if ($version === 'version') {
+                        $api = new Api($faqConfig);
+                        try {
+                            $versions = $api->getVersions();
+                            if (-1 === version_compare($versions['installed'], $versions['current'])) {
+                                printf('<p class="alert alert-info">%s</p>', Translation::get('ad_you_should_update'));
+                            } else {
+                                printf(
+                                    '<p class="alert alert-success">%s: phpMyFAQ %s</p>',
+                                    Translation::get('ad_xmlrpc_latest'),
+                                    $versions['current']
+                                );
+                            }
+                        } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
+                            printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
+                        }
+                    } else {
+                        ?>
+                  <form action="<?= Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) ?>admin/index.php"
+                        method="post">
+                      <input type="hidden" name="param" value="version">
+                      <button class="btn btn-info" type="submit">
+                        <?= Translation::get('ad_xmlrpc_button') ?>
+                      </button>
+                  </form>
+                        <?php
+                    }
                 }
                 ?>
             </div>
@@ -245,7 +253,8 @@ $faqSession = new Session($faqConfig);
     <div class="col-sm-6 col-lg-3 mb-4">
           <div class="card mb-4">
             <h5 class="card-header py-3">
-              <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= Translation::get('ad_online_verification') ?>
+              <i aria-hidden="true" class="fa fa-certificate fa-fw"></i>
+                <?= Translation::get('ad_online_verification') ?>
             </h5>
             <div class="card-body">
                 <?php

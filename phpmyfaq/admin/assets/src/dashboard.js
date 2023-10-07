@@ -15,6 +15,7 @@
 
 import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title } from 'chart.js';
 import Masonry from 'masonry-layout';
+import { addElement } from '../../../assets/src/utils';
 
 window.onload = () => {
   const masonryElement = document.querySelector('.masonry-grid');
@@ -93,5 +94,48 @@ export const renderVisitorCharts = () => {
     };
 
     getData();
+  }
+};
+
+export const getLatestVersion = () => {
+  const loader = document.getElementById('version-loader');
+  const versionText = document.getElementById('phpmyfaq-latest-version');
+
+  if (loader) {
+    loader.classList.remove('d-none');
+    fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=version', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          const version = await response.json();
+          loader.classList.add('d-none');
+          versionText.insertAdjacentElement(
+            'afterend',
+            addElement('div', {
+              classList: 'alert alert-success',
+              innerText: version.success,
+            })
+          );
+        }
+        throw new Error('Network response was not ok: ', { cause: { response } });
+      })
+      .catch(async (error) => {
+        const errorMessage = await error.cause.response.json();
+        loader.classList.add('d-none');
+        versionText.insertAdjacentElement(
+          'afterend',
+          addElement('div', {
+            classList: 'alert alert-danger',
+            innerText: errorMessage.error,
+          })
+        );
+      });
   }
 };
