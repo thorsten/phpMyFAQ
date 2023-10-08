@@ -56,7 +56,7 @@ if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
                                     <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php"
                                           method="post" accept-charset="utf-8" role="form">
                                         <input type="hidden" name="redirect-action"
-                                               value="<?= Strings::htmlentities($request->query->get('action')) ?>">
+                                               value="<?= Strings::htmlentities($request->query->get('action') ?? '') ?>">
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="faqusername" name="faqusername" type="text"
                                                    placeholder="<?= Translation::get('ad_auth_user') ?>" />

@@ -563,7 +563,7 @@ $PMF_LANG["lostpwd_text_2"] = "請重設您個個人密碼於管理員區。(Ple
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail已寄出。( E-Mail was sent.)";
 
 $PMF_LANG["ad_xmlrpc_button"] = "點選這裡來檢查您的 phpMyFAQ 安裝的版本 (Click to check version of your phpMyFAQ installation)";
-$PMF_LANG["ad_xmlrpc_latest"] = "最新版本於 (Latest version available on)";
+$PMF_LANG["ad_xmlrpc_latest"] = "最新版本於 (Latest version available)";
 
 // added v1.5.0 - 2005-07-31 by Thorsten 開發者
 $PMF_LANG['ad_categ_select'] = "選取類別語言";

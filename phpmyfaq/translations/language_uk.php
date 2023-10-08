@@ -575,7 +575,7 @@ $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin s
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyMac F.A.Q. version number by web service";
-$PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
+$PMF_LANG["ad_xmlrpc_latest"] = "Latest version available";
 
 
 // зміни Дениса - нашвидку і не уважно...

@@ -577,7 +577,7 @@ $PMF_LANG['lostpwd_text_2'] = "Bitte ein neues Passwort im Adminbereich der FAQ 
 $PMF_LANG['lostpwd_mail_okay'] = "E-Mail wurde gesendet.";
 
 $PMF_LANG['ad_xmlrpc_button'] = "Aktuelle phpMyFAQ Version online abfragen";
-$PMF_LANG['ad_xmlrpc_latest'] = "Aktuelle Version auf";
+$PMF_LANG['ad_xmlrpc_latest'] = "Aktuelle Version";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = "Sprache der Kategorie";

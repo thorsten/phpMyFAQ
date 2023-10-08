@@ -260,11 +260,12 @@ if (
             $postData = json_decode(file_get_contents('php://input', true));
 
             $userId = Filter::filterVar($postData->userId, FILTER_VALIDATE_INT);
+            $csrfToken = Filter::filterVar($postData->csrf, FILTER_SANITIZE_SPECIAL_CHARS);
             $newPassword = Filter::filterVar($postData->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
             $retypedPassword = Filter::filterVar($postData->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if (!Token::getInstance()->verifyToken('add-user', $csrfToken)) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            if (!Token::getInstance()->verifyToken('overwrite-password', $csrfToken)) {
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
                 $response->setData(['error' => Translation::get('err_NotAuth')]);
                 $response->send();
                 exit(1);

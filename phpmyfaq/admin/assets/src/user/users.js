@@ -39,15 +39,23 @@ const setUserData = async (userId) => {
   updateInput('pmf-user-list-autocomplete', userData.login);
   updateInput('last_modified', userData.last_modified);
   updateInput('update_user_id', userData.user_id);
+  updateInput('modal_user_id', userData.user_id);
   updateInput('auth_source', capitalize(userData.auth_source));
   updateInput('user_status', userData.status);
   updateInput('display_name', userData.display_name);
   updateInput('email', userData.email);
+  updateInput('overwrite_twofactor', userData.twofactor_enabled);
 
   if (userData.is_superadmin) {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.setAttribute('checked', 'checked');
     superAdmin.removeAttribute('disabled');
+  }
+
+  if (userData.twofactor_enabled === '1') {
+    const twoFactorEnabled = document.getElementById('overwrite_twofactor');
+    twoFactorEnabled.setAttribute('checked', 'checked');
+    twoFactorEnabled.removeAttribute('disabled');
   }
 };
 
