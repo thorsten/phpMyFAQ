@@ -27,7 +27,7 @@ $routes->add(
 );
 
 $routes->add(
-    'admin.api.updates',
+    'admin.api.versions',
     new Route('/versions', ['_controller' => [UpdateController::class, 'versions']])
 );
 
@@ -43,7 +43,8 @@ $routes->add(
         [
             '_controller' => [UpdateController::class, 'downloadPackage'],
             '_methods' => 'POST'
-        ])
+        ]
+    )
 );
 
 $routes->add(

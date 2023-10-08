@@ -123,17 +123,19 @@ export const getLatestVersion = () => {
               innerText: version.success,
             })
           );
+        } else {
+          throw new Error('Network response was not ok: ', { cause: { response } });
         }
-        throw new Error('Network response was not ok: ', { cause: { response } });
       })
       .catch(async (error) => {
-        const errorMessage = await error.cause.response.json();
+        const errorMessage = await error.cause.response;
+        console.log(errorMessage);
         loader.classList.add('d-none');
         versionText.insertAdjacentElement(
           'afterend',
           addElement('div', {
             classList: 'alert alert-danger',
-            innerText: errorMessage.error,
+            innerText: errorMessage,
           })
         );
       });

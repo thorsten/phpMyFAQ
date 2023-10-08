@@ -15,7 +15,7 @@
  * @since     2020-10-24
  */
 
-use phpMyFAQ\Api;
+use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
@@ -55,13 +55,13 @@ switch ($ajaxAction) {
         try {
             $versions = $api->getVersions();
             $response->setStatusCode(Response::HTTP_OK);
-            if (-1 === version_compare($versions['installed'], $versions['current'])) {
+            if (-1 === version_compare($versions['installed'], $versions['stable'])) {
                 $response->setData(
                     ['success' => Translation::get('ad_you_should_update')]
                 );
             } else {
                 $response->setData(
-                    ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['current']]
+                    ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['stable']]
                 );
             }
         } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {

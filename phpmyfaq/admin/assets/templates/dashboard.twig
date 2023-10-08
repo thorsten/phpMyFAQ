@@ -166,28 +166,11 @@
             </h5>
             <div class="card-body">
                 {% if showVersion %}
-
-                    {% if adminDashboardShouldUpdateMessage %}
-                        <div class="alert alert-danger">
-                            {{ adminDashboardLatestVersionMessage }}
-                            <a href="{{ adminDashboardHomepage }}" target="_blank">phpmyfaq.de</a>:
-                            <strong>phpMyFAQ {{ adminDashboardVersions.stable }}</strong>
-                            <hr>
-                            {{ adminDashboardShouldUpdateMessage }}
+                    <div id="phpmyfaq-latest-version">
+                        <div class="spinner-border text-secondary d-none" id="version-loader" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                    {% else %}
-                        <div class="alert alert-info">
-                            {{ adminDashboardLatestVersionMessage }}
-                            <a href="{{ adminDashboardHomepage }}" target="_blank">phpmyfaq.de</a>:
-                            <strong>phpMyFAQ {{ adminDashboardVersions.stable }}</strong>
-                        </div>
-                    {% endif %}
-
-                    {% if adminDashboardErrorMessage %}
-                        <div class="alert alert-danger">
-                            {{ adminDashboardErrorMessage }}
-                        </div>
-                    {% endif %}
+                    </div>
                 {% else %}
                     <form action="./index.php"
                           method="post" accept-charset="utf-8">
@@ -196,6 +179,20 @@
                             {{ adminDashboardButtonGetLatestVersion }}
                         </button>
                     </form>
+                    {% if adminDashboardShouldUpdateMessage %}
+                        <div class="alert alert-danger">
+                            {{ adminDashboardLatestVersionMessage }}:
+                            <strong>phpMyFAQ {{ adminDashboardVersions.stable }}</strong>
+                            <hr>
+                            {{ adminDashboardShouldUpdateMessage }}
+                        </div>
+                    {% endif %}
+
+                    {% if adminDashboardErrorMessage %}
+                        <div class="alert alert-danger">
+                            {{ adminDashboardErrorMessage }}
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

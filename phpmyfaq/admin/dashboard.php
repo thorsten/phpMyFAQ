@@ -97,25 +97,38 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $api = new Api($faqConfig);
 
     $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
-    if ($faqConfig->get('main.enableAutoUpdateHint') || ($version === 'version')) {
-        $shouldUpdate = $errorMessage = '';
-        $versions = [];
-        try {
-            $versions = $api->getVersions();
-            if (-1 === version_compare($versions['installed'], $versions['stable'])) {
-                $shouldUpdate = Translation::get('ad_you_should_update');
+    if (!$faqConfig->get('main.enableAutoUpdateHint')) {
+        if ($version === 'version') {
+            $shouldUpdate = false;
+            $errorMessage = '';
+            $versions = [];
+            try {
+                $versions = $api->getVersions();
+                if (-1 === version_compare($versions['installed'], $versions['stable'])) {
+                    $templateVars = [
+                        ...$templateVars,
+                        'adminDashboardShouldUpdateMessage' => true,
+                        'adminDashboardLatestVersionMessage' => Translation::get('ad_you_should_update'),
+                        'adminDashboardVersions' => $versions,
+
+                    ];
+                } else {
+                    $templateVars = [
+                        ...$templateVars,
+                        'adminDashboardShouldUpdateMessage' => false,
+                        'adminDashboardLatestVersionMessage' => Translation::get('ad_xmlrpc_latest'),
+                        'adminDashboardVersions' => $versions,
+
+                    ];
+                }
+            } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
+                $templateVars = [
+                    ...$templateVars,
+                    'adminDashboardErrorMessage' => $e->getMessage()
+                ];
             }
-        } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
-            $errorMessage = $e->getMessage();
+
         }
-        $templateVars = [
-            ...$templateVars,
-            'adminDashboardShouldUpdateMessage' => $shouldUpdate,
-            'adminDashboardLatestVersionMessage' => Translation::get('ad_xmlrpc_latest'),
-            'adminDashboardHomepage' => System::PHPMYFAQ_URL,
-            'adminDashboardVersions' => $versions,
-            'adminDashboardErrorMessage' => $errorMessage
-        ];
     }
 
     $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_SPECIAL_CHARS);
