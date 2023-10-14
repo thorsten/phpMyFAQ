@@ -28,7 +28,7 @@ $routes->add(
 
 $routes->add(
     'admin.api.versions',
-    new Route('/versions', ['_controller' => [UpdateController::class, 'versions']])
+    new Route('/versions', ['_controller' => [UpdateController::class, 'versions', '_methods' => 'GET']])
 );
 
 $routes->add(
@@ -53,6 +53,17 @@ $routes->add(
         '/extract-package',
         [
             '_controller' => [UpdateController::class, 'extractPackage'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
+$routes->add(
+    'admin.api.install-package',
+    new Route(
+        '/install-package',
+        [
+            '_controller' => [UpdateController::class, 'installPackage'],
             '_methods' => 'POST'
         ]
     )

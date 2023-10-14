@@ -50,8 +50,9 @@ export const handleCheckForUpdates = () => {
             }
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(async (error) => {
+          const errorMessage = await error.cause.response.json();
+          console.error(errorMessage);
         });
     });
   }

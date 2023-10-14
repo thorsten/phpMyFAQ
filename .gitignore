@@ -30,6 +30,8 @@ phpmyfaq/content/core/data/*
 !phpmyfaq/content/core/data/.gitkeep
 phpmyfaq/content/core/logs/*
 !phpmyfaq/content/core/logs/.gitkeep
+phpmyfaq/content/upgrades/*
+!phpmyfaq/content/upgrades/.gitkeep
 phpmyfaq/content/user/images/*
 !phpmyfaq/content/user/images/.gitkeep
 phpmyfaq/content/user/attachments/*

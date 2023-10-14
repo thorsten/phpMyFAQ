@@ -48,6 +48,7 @@ class UpdateController
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
         $upgrade = new Upgrade(new System(), $configuration);
 
+
         try {
             $upgrade->checkFilesystem();
             $response->setStatusCode(Response::HTTP_OK);
@@ -178,7 +179,7 @@ class UpdateController
         return $response;
     }
 
-
+    #[Route('admin/api/extract-package')]
     public function extractPackage(): JsonResponse
     {
         $response = new JsonResponse();
@@ -189,6 +190,25 @@ class UpdateController
         $pathToPackage = urldecode($configuration->get('upgrade.lastDownloadedPackage'));
 
         $result = $upgrade->extractPackage($pathToPackage);
+
+        $response->setData(['result' => $result]);
+
+        return $response;
+    }
+
+    #[Route('admin/api/install-package')]
+    public function installPackage(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $backupHash = md5(uniqid());
+
+        $upgrade = new Upgrade(new System(), $configuration);
+
+        $result = $upgrade->createTemporaryBackup($backupHash . '.zip');
+
+        //$result = $upgrade->installPackage();
 
         $response->setData(['result' => $result]);
 

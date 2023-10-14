@@ -212,7 +212,8 @@ class Upgrade extends Setup
     public function createTemporaryBackup(string $backupName): bool
     {
         $outputZipFile = PMF_CONTENT_DIR . '/upgrades/' . $backupName;
-        if (!file_exists($outputZipFile)) {
+
+        if (file_exists($outputZipFile)) {
             return false;
         }
 
@@ -221,7 +222,7 @@ class Upgrade extends Setup
             return false;
         }
 
-        $sourceDir = rtrim(PMF_ROOT_DIR, '/\\');
+        $sourceDir = PMF_ROOT_DIR;
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir),
             RecursiveIteratorIterator::SELF_FIRST
