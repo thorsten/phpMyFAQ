@@ -293,6 +293,9 @@ class Upgrade extends Setup
             RecursiveIteratorIterator::SELF_FIRST
         );
 
+        $totalFiles = iterator_count($sourceDirIterator);
+        $currentFile = 0;
+
         foreach ($sourceDirIterator as $item) {
             $source = $item->getPathName();
             $destination = $destinationDir . DIRECTORY_SEPARATOR . $sourceDirIterator->getSubPathName();
@@ -304,6 +307,10 @@ class Upgrade extends Setup
             } else {
                 copy($source, $destination);
             }
+
+            $currentFile++;
+            $progress = $totalFiles > 0 ? sprintf('%d%%', ($currentFile / $totalFiles) * 100) : 100;
+            call_user_func($progressCallback, $progress);
         }
         return true;
     }
