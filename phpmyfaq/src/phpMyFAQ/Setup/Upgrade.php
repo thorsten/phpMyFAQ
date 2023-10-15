@@ -39,6 +39,7 @@ class Upgrade extends Setup
     public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
     private const GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
     private const PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
+    private const PMF_UPGRADE_DIR = PMF_CONTENT_DIR . '/upgrades';
     private bool $isNightly;
 
     public function __construct(protected System $system, private readonly Configuration $configuration)
@@ -56,9 +57,9 @@ class Upgrade extends Setup
      */
     public function checkFilesystem(): bool
     {
-        if (!is_dir(PMF_CONTENT_DIR . '/upgrades')) {
-            if (!mkdir(PMF_CONTENT_DIR . '/upgrades')) {
-                throw new Exception('The folder ' . PMF_CONTENT_DIR . '/upgrades is missing.');
+        if (!is_dir(self::PMF_UPGRADE_DIR)) {
+            if (!mkdir(self::PMF_UPGRADE_DIR)) {
+                throw new Exception('The folder ' . self::PMF_UPGRADE_DIR . ' is missing.');
             }
         }
         if (
@@ -123,9 +124,9 @@ class Upgrade extends Setup
 
             $package = $response->getContent();
 
-            file_put_contents(PMF_CONTENT_DIR . '/upgrades/' . $this->getFilename($version), $package);
+            file_put_contents(self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $this->getFilename($version), $package);
 
-            return PMF_CONTENT_DIR . '/upgrades/' . $this->getFilename($version);
+            return self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $this->getFilename($version);
         } catch (
             TransportExceptionInterface |
             ClientExceptionInterface |
@@ -198,7 +199,7 @@ class Upgrade extends Setup
         });
 
         if ($zipFile) {
-            $zip->extractTo(PMF_CONTENT_DIR . '/upgrades/');
+            $zip->extractTo(self::PMF_UPGRADE_DIR . '/new/');
             return $zip->close();
         } else {
             throw new Exception('Cannot open zipped download package.');
@@ -215,7 +216,7 @@ class Upgrade extends Setup
      */
     public function createTemporaryBackup(string $backupName, callable $progressCallback): bool
     {
-        $outputZipFile = PMF_CONTENT_DIR . '/upgrades/' . $backupName;
+        $outputZipFile = self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $backupName;
 
         if (file_exists($outputZipFile)) {
             throw new Exception('Backup file already exists.');
@@ -239,11 +240,11 @@ class Upgrade extends Setup
 
         foreach ($files as $file) {
             $file = realpath($file);
-            if (!str_contains($file, PMF_CONTENT_DIR . '/upgrades/')) {
+            if (!str_contains($file, self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
-                    $zip->addEmptyDir(str_replace($sourceDir . '/', '', $file . '/'));
+                    $zip->addEmptyDir(str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
                 } elseif (is_file($file)) {
-                    $zip->addFile($file, str_replace($sourceDir . '/', '', $file));
+                    $zip->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file));
                 }
             }
         }
@@ -261,8 +262,8 @@ class Upgrade extends Setup
      */
     public function deleteTemporaryBackup(string $backupName): bool
     {
-        if (is_file(PMF_CONTENT_DIR . '/upgrades/' . $backupName)) {
-            return unlink(PMF_CONTENT_DIR . '/upgrades/' . $backupName);
+        if (is_file(self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $backupName)) {
+            return unlink(self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $backupName);
         } else {
             return false;
         }
@@ -285,7 +286,7 @@ class Upgrade extends Setup
      */
     public function installPackage(callable $progressCallback): bool
     {
-        $sourceDir = PMF_CONTENT_DIR . '/upgrades/';
+        $sourceDir = self::PMF_UPGRADE_DIR . '/new/phpmyfaq/';
         $destinationDir = PMF_ROOT_DIR;
 
         $sourceDirIterator = new RecursiveIteratorIterator(

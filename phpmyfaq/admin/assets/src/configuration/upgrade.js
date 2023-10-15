@@ -198,7 +198,7 @@ export const handleCheckForUpdates = () => {
   if (installButton) {
     installButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/install-package', {
+      fetch(window.location.pathname + 'api/create-temporary-backup', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
