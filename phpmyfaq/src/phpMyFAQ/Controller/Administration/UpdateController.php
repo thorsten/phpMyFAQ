@@ -183,11 +183,9 @@ class UpdateController
     public function extractPackage(): StreamedResponse
     {
         $configuration = Configuration::getConfigurationInstance();
-
         $upgrade = new Upgrade(new System(), $configuration);
 
         $pathToPackage = urldecode($configuration->get('upgrade.lastDownloadedPackage'));
-
 
         return new StreamedResponse(function () use ($upgrade, $pathToPackage) {
             $progressCallback = function ($progress) {
@@ -204,14 +202,13 @@ class UpdateController
         });
     }
 
-    #[Route('admin/api/install-package')]
-    public function installPackage(): StreamedResponse
+    #[Route('admin/api/create-temporary-backup')]
+    public function createTemporaryBackup(): StreamedResponse
     {
         $configuration = Configuration::getConfigurationInstance();
+        $upgrade = new Upgrade(new System(), $configuration);
 
         $backupHash = md5(uniqid());
-
-        $upgrade = new Upgrade(new System(), $configuration);
 
         return new StreamedResponse(function () use ($upgrade, $backupHash) {
             $progressCallback = function ($progress) {
@@ -224,6 +221,27 @@ class UpdateController
                 echo json_encode(['message' => '✅ Backup successful']);
             } else {
                 echo json_encode(['message' => 'Backup failed']);
+            }
+        });
+    }
+
+    #[Route('admin/api/extract-package')]
+    public function installPackage(): StreamedResponse
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $upgrade = new Upgrade(new System(), $configuration);
+
+        return new StreamedResponse(function () use ($upgrade) {
+            $progressCallback = function ($progress) {
+                echo json_encode(['progress' => $progress]) . "\n";
+                ob_flush();
+                flush();
+            };
+
+            if ($upgrade->installPackage($progressCallback)) {
+                echo json_encode(['message' => '✅ Package successfully installed.']);
+            } else {
+                echo json_encode(['message' => 'Install package failed']);
             }
         });
     }

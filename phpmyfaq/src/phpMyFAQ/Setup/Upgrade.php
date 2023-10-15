@@ -16,6 +16,7 @@
 
 namespace phpMyFAQ\Setup;
 
+use FilesystemIterator;
 use JsonException;
 use Monolog\Level;
 use phpMyFAQ\Configuration;
@@ -279,10 +280,32 @@ class Upgrade extends Setup
     /**
      * Method to install the package
      *
-     * @return void
+     * @param callable $progressCallback
+     * @return bool
      */
-    public function installPackage()
+    public function installPackage(callable $progressCallback): bool
     {
+        $sourceDir = PMF_CONTENT_DIR . '/upgrades/';
+        $destinationDir = PMF_ROOT_DIR;
+
+        $sourceDirIterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($sourceDirIterator as $item) {
+            $source = $item->getPathName();
+            $destination = $destinationDir . DIRECTORY_SEPARATOR . $sourceDirIterator->getSubPathName();
+
+            if ($item->isDir()) {
+                if (!is_dir($destination)) {
+                    mkdir($destination, 0755, true);
+                }
+            } else {
+                copy($source, $destination);
+            }
+        }
+        return true;
     }
 
     /**

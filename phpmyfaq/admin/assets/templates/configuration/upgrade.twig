@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-6">
 
-        <div id="pmf-update-step-health-check" class="card w-100 mb-3">
+        <div id="pmf-update-step-health-check" class="card shadow w-100 mb-3">
             <div class="card-body">
                 <h5 class="card-title">
                     1. Check for System Health
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div id="pmf-update-step-check-versions" class="card w-100 mb-3">
+        <div id="pmf-update-step-check-versions" class="card shadow w-100 mb-3">
             <div class="card-body">
                 <h5 class="card-title">
                     2. Check for Updates
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div id="pmf-update-step-download" class="card w-100 mb-3">
+        <div id="pmf-update-step-download" class="card shadow w-100 mb-3">
             <div class="card-body">
                 <h5 class="card-title">
                     3. Download of phpMyFAQ
@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <div id="pmf-update-step-extract-package" class="card w-100 mb-3 d-none">
+        <div id="pmf-update-step-extract-package" class="card shadow w-100 mb-3 d-none">
             <div class="card-body">
                 <h5 class="card-title">
                     4. Extract downloaded package
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <div id="pmf-update-step-install-package" class="card w-100 mb-3 d-none">
+        <div id="pmf-update-step-install-package" class="card shadow w-100 mb-3 d-none">
             <div class="card-body">
                 <h5 class="card-title">
                     5. Install downloaded package
@@ -110,10 +110,18 @@
                                 <li>Installation of new files <span id="pmf-installation-done"></span></li>
                             </ol>
                         </div>
-                        <div class="progress w-25" role="progressbar">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                 id="result-install-package" style="width: 0">
-                                0%
+                        <div class="w-25">
+                            <div class="progress w-100 mt-1 mb-2" role="progressbar">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                     id="result-backup-package" style="width: 0">
+                                    0%
+                                </div>
+                            </div>
+                            <div class="progress w-100" role="progressbar">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                     id="result-install-package" style="width: 0">
+                                    0%
+                                </div>
                             </div>
                         </div>
                     </div>

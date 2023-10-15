@@ -206,7 +206,7 @@ export const handleCheckForUpdates = () => {
         },
       })
         .then(async (response) => {
-          const progressBar = document.getElementById('result-install-package');
+          const progressBarBackup = document.getElementById('result-backup-package');
           const reader = response.body.getReader();
           const card = document.getElementById('pmf-update-step-install-package');
 
@@ -215,14 +215,14 @@ export const handleCheckForUpdates = () => {
               const decodedValue = new TextDecoder().decode(value);
 
               if (done) {
-                progressBar.style.width = '100%';
-                progressBar.innerText = '100%';
-                progressBar.classList.remove('progress-bar-animated');
+                progressBarBackup.style.width = '100%';
+                progressBarBackup.innerText = '100%';
+                progressBarBackup.classList.remove('progress-bar-animated');
                 card.classList.add('text-bg-success');
                 return;
               } else {
-                progressBar.style.width = JSON.parse(decodedValue).progress;
-                progressBar.innerText = JSON.parse(decodedValue).progress;
+                progressBarBackup.style.width = JSON.parse(decodedValue).progress;
+                progressBarBackup.innerText = JSON.parse(decodedValue).progress;
               }
 
               return pump();

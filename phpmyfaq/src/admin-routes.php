@@ -76,6 +76,17 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.create-temporary-backup',
+    new Route(
+        '/create-temporary-backup',
+        [
+            '_controller' => [UpdateController::class, 'createTemporaryBackup'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
+$routes->add(
     'admin.api.install-package',
     new Route(
         '/install-package',
