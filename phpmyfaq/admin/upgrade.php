@@ -37,6 +37,12 @@ $template = $twig->loadTemplate('./configuration/upgrade.twig');
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $templateVars = [
         'adminHeaderUpgrade' => Translation::get('ad_menu_upgrade'),
+        'headerCheckHealth' => Translation::get('headerCheckHealth'),
+        'msgHealthCheck' => Translation::get('msgHealthCheck'),
+        'buttonCheckHealth' => Translation::get('buttonCheckHealth'),
+        'headerCheckUpdates' => Translation::get('headerCheckUpdates'),
+        'msgUpdateCheck' => Translation::get('msgUpdateCheck'),
+        'buttonCheckUpdates' => Translation::get('buttonCheckUpdates'),
         'isOnNightlies' => $faqConfig->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value,
         'releaseEnvironment' => ucfirst($faqConfig->get('upgrade.releaseEnvironment')),
         'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked')

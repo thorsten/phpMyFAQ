@@ -225,7 +225,7 @@ class UpdateController
         });
     }
 
-    #[Route('admin/api/extract-package')]
+    #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
         $configuration = Configuration::getConfigurationInstance();

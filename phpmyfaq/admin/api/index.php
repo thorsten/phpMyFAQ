@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Private phpMyFAQ Admin API: everything for the online update
+ * Private phpMyFAQ Admin API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,13 +40,19 @@ $response = new JsonResponse();
 $request = Request::createFromGlobals();
 
 //
+// Get language (default: english)
+//
+$language = new Language($faqConfig);
+$currentLanguage = $language->setLanguageByAcceptLanguage();
+
+//
 // Set translation class
 //
 try {
     Translation::create()
         ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
-        ->setCurrentLanguage('en') // currently hardcoded
+        ->setCurrentLanguage($currentLanguage)
         ->setMultiByteLanguage();
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();

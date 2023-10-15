@@ -1332,8 +1332,14 @@ $PMF_LANG['msgBookmarkAdded'] = 'Lesezeichen erfolgreich hinzugefügt!';
 $PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
 
 // added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Systemzustand prüfen';
+$PMF_LANG['headerCheckUpdates'] = '2. Suche nach Updates';
+$PMF_LANG['msgHealthCheck'] = 'Dies überprüft die korrekten Dateiberechtigungen und die Ordnerstruktur Ihrer phpMyFAQ-Installation.';
+$PMF_LANG['msgUpdateCheck'] = 'Sie können nach neuen Versionen von phpMyFAQ suchen, neu installieren oder Ihre Installation aktualisieren.';
+$PMF_LANG['buttonCheckHealth'] = 'Systemzustand jetzt prüfen';
+$PMF_LANG['buttonCheckUpdates'] = 'Suche jetzt nach Updates';
 $PMF_LANG['versionIsUpToDate'] = '✅ Deine installierte Version ist aktuell.';
-$PMF_LANG['healthCheckOkay'] = '✅ Deine installierte Version ist gesund.';
+$PMF_LANG['healthCheckOkay'] = '✅ Deine installierte Version ist in Ordnung.';
 $PMF_LANG['downloadSuccessful'] = '✅ Download-Paket erfolgreich heruntergeladen!';
 $PMF_LANG['downloadFailure'] = '❌ Download-Paket konnte nicht heruntergeladen werden';
 $PMF_LANG['verificationFailure'] = '❌ Download-Paket konnte nicht verifiziert werden';

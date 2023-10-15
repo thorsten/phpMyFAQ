@@ -1351,6 +1351,12 @@ $PMF_LANG['msgBookmarkAdded'] = 'Bookmark successfully added!';
 $PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
 
 // added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Check for System Health';
+$PMF_LANG['headerCheckUpdates'] = '2. Check for Updates';
+$PMF_LANG['msgHealthCheck'] = 'This checks the correct file permissions and folder structure of your phpMyFAQ installation.';
+$PMF_LANG['msgUpdateCheck'] = 'You can check for new versions of phpMyFAQ, re-install or update your installation.';
+$PMF_LANG['buttonCheckHealth'] = 'Check System health now';
+$PMF_LANG['buttonCheckUpdates'] = 'Check for Updates now';
 $PMF_LANG['versionIsUpToDate'] = '✅ Your installed version is up-to-date!';
 $PMF_LANG['healthCheckOkay'] = '✅ Your installed version is healthy!';
 $PMF_LANG['downloadSuccessful'] = '✅ Package successfully downloaded!';

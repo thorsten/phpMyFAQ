@@ -11,15 +11,15 @@
         <div id="pmf-update-step-health-check" class="card shadow w-100 mb-3">
             <div class="card-body">
                 <h5 class="card-title">
-                    1. Check for System Health
+                    {{ headerCheckHealth }}
                 </h5>
                 <p class="card-text">
-                    This checks the correct file permissions and folder structure of your phpMyFAQ installation.
+                    {{ msgHealthCheck }}
                 </p>
                 <!-- Step 1: Check for system health -->
                 <div class="d-grid gap-2 d-md-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-health">
-                        System health check
+                        {{ buttonCheckHealth }}
                     </button>
                     <output id="result-check-health"></output>
                 </div>
@@ -29,15 +29,15 @@
         <div id="pmf-update-step-check-versions" class="card shadow w-100 mb-3">
             <div class="card-body">
                 <h5 class="card-title">
-                    2. Check for Updates
+                    {{ headerCheckUpdates }}
                 </h5>
                 <p class="card-text">
-                    You can check for new versions of phpMyFAQ, re-install or update your installation.
+                    {{ msgUpdateCheck    }}
                 </p>
                 <!-- Step 2: Check for a new version -->
                 <div class="d-grid gap-2 d-md-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">
-                        Check for a new version
+                        {{ buttonCheckUpdates }}
                     </button>
                     <output id="result-check-versions"></output>
                 </div>
