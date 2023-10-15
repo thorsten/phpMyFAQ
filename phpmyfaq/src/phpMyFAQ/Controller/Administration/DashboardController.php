@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Private phpMyFAQ Admin API: handling of REST calls for the dashboard
+ * The Admin Dashboard Controller
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,48 +9,33 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2020-2023 phpMyFAQ Team
+ * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2020-10-24
+ * @since     2023-10-15
  */
+
+namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Filter;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    http_response_code(400);
-    exit();
-}
+class DashboardController
+{
+    #[Route('admin/api/dashboard/versions')]
+    public function versions(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $faqConfig = Configuration::getConfigurationInstance();
 
-//
-// Create Request & Response
-//
-$response = new JsonResponse();
-$request = Request::createFromGlobals();
-
-$faqConfig = Configuration::getConfigurationInstance();
-
-$ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
-
-switch ($ajaxAction) {
-    case 'user-visits-last-30-days':
-        if ($faqConfig->get('main.enableUserTracking')) {
-            $session = new Session($faqConfig);
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($session->getLast30DaysVisits());
-        }
-        break;
-
-    case 'version':
         $api = new Api($faqConfig);
         try {
             $versions = $api->getVersions();
@@ -68,7 +53,23 @@ switch ($ajaxAction) {
             $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
             $response->setData(['error' => $e->getMessage()]);
         }
-        break;
-}
+        return $response;
+    }
 
-$response->send();
+    #[Route('admin/api/dashboard/visits')]
+    public function visits(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $faqConfig = Configuration::getConfigurationInstance();
+
+        if ($faqConfig->get('main.enableUserTracking')) {
+            $session = new Session($faqConfig);
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData($session->getLast30DaysVisits());
+
+            return $response;
+        }
+
+        return new JsonResponse(['error' => 'User tracking is disabled.'], Response::HTTP_BAD_REQUEST);
+    }
+}

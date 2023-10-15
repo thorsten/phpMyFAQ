@@ -15,12 +15,29 @@
  * @since     2023-07-08
  */
 
+use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 $routes = new RouteCollection();
 
+//
+// Dashboard API
+//
+$routes->add(
+    'admin.api.dashboard.versions',
+    new Route('/dashboard/versions', ['_controller' => [DashboardController::class, 'versions'], '_methods' => 'GET'])
+);
+
+$routes->add(
+    'admin.api.dashboard.visits',
+    new Route('/dashboard/visits', ['_controller' => [DashboardController::class, 'visits'], '_methods' => 'GET'])
+);
+
+//
+// Update API
+//
 $routes->add(
     'admin.api.health-check',
     new Route('/health-check', ['_controller' => [UpdateController::class, 'healthCheck'], '_methods' => 'POST'])

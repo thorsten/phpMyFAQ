@@ -245,10 +245,6 @@ if (
                 case 'att':
                     require 'api/attachment.php';
                     break;
-                // Dashboard
-                case 'dashboard':
-                    require 'api/dashboard.php';
-                    break;
                 // Categories
                 case 'categories':
                     require 'api/category.php';

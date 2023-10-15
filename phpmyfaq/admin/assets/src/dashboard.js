@@ -67,7 +67,7 @@ export const renderVisitorCharts = () => {
     });
 
     const getData = () => {
-      fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=user-visits-last-30-days', {
+      fetch('./api/dashboard/visits', {
         method: 'GET',
         cache: 'no-cache',
         headers: {
@@ -103,7 +103,7 @@ export const getLatestVersion = () => {
 
   if (loader) {
     loader.classList.remove('d-none');
-    fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=version', {
+    fetch('./api/dashboard/versions', {
       method: 'GET',
       cache: 'no-cache',
       headers: {

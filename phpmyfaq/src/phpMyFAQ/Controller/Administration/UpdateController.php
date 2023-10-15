@@ -49,7 +49,6 @@ class UpdateController
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
         $upgrade = new Upgrade(new System(), $configuration);
 
-
         try {
             $upgrade->checkFilesystem();
             $response->setStatusCode(Response::HTTP_OK);

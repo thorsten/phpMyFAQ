@@ -143,6 +143,8 @@ RewriteRule api/autocomplete                       api/index.php
 RewriteRule api/bookmark/([0-9]+)                  api/index.php
 
 # Administration API
+RewriteRule admin/api/dashboard/versions           admin/api/index.php
+RewriteRule admin/api/dashboard/visits             admin/api/index.php
 RewriteRule admin/api/health-check                 admin/api/index.php
 RewriteRule admin/api/versions                     admin/api/index.php
 RewriteRule admin/api/update-check                 admin/api/index.php
