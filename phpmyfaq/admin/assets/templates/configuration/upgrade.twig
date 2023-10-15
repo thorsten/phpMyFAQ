@@ -6,76 +6,133 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
 
-        <div class="card">
+        <div id="pmf-update-step-health-check" class="card w-100 mb-3">
             <div class="card-body">
-                <h5 class="card-title mb-2">Online Check for Updates</h5>
-                <div class="card-text">
+                <h5 class="card-title">
+                    1. Check for System Health
+                </h5>
+                <p class="card-text">
+                    This checks the correct file permissions and folder structure of your phpMyFAQ installation.
+                </p>
+                <!-- Step 1: Check for system health -->
+                <div class="d-grid gap-2 d-md-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-health">
+                        System health check
+                    </button>
+                    <output id="result-check-health"></output>
+                </div>
+            </div>
+        </div>
 
-                    <p>
-                        You can check for new versions of phpMyFAQ, re-install or update your installation.
-                    </p>
+        <div id="pmf-update-step-check-versions" class="card w-100 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    2. Check for Updates
+                </h5>
+                <p class="card-text">
+                    You can check for new versions of phpMyFAQ, re-install or update your installation.
+                </p>
+                <!-- Step 2: Check for a new version -->
+                <div class="d-grid gap-2 d-md-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">
+                        Check for a new version
+                    </button>
+                    <output id="result-check-versions"></output>
+                </div>
+            </div>
+        </div>
 
-                    <!-- Step 1: Check for system health -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-between mb-5">
-                        <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-health">
-                            Check for a health
-                        </button>
-                        <output id="result-check-health"></output>
-                    </div>
-
-                    <!-- Step 2: Check for a new version -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-between mb-5">
-                        <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-check-updates">
-                            Check for a new version
-                        </button>
-                        <output id="result-check-versions"></output>
-                    </div>
-
-                    <!-- Nightlies can be downloaded always if activated -->
-                    {% if isOnNightlies %}
-                    <p>
+        <div id="pmf-update-step-download" class="card w-100 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    3. Download of phpMyFAQ
+                </h5>
+                <p class="card-text">
+                    You can download new versions of phpMyFAQ.
+                </p>
+                <!-- Nightlies can be downloaded always if activated -->
+                {% if isOnNightlies %}
+                    <p class="alert alert-warning">
                         You are using a development version of phpMyFAQ.
-                        You can update to the latest nightly build automatically.
+                        You can update to the latest nightly build.
                     </p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-between mb-5">
+                    <div class="d-grid gap-2 d-md-flex justify-content-between">
                         <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-download-now">
                             Download now
                         </button>
                         <output id="result-download-nightly"></output>
                     </div>
-                    {% endif %}
-
-
-                    <!-- Step 4: Extract downloaded package -->
-                    <div id="pmf-update-step-extract-package" class="d-none">
-                        <div class="d-grid gap-2 d-md-flex justify-content-between mb-5">
-                            <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-extract-package">
-                                Extract downloaded package
-                            </button>
-                            <output id="result-extract-package"></output>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="card-footer d-grid gap-2 d-md-flex justify-content-between">
-                <span>
-                    Last check for updates:
-                    <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
-                </span>
-                <span>
-                    Latest version available:
-                    <output id="versionLastChecked">n/a</output>
-                </span>
-                <span>
-                    Release-Environment: <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
-                </span>
+                {% endif %}
             </div>
         </div>
 
+        <div id="pmf-update-step-extract-package" class="card w-100 mb-3 d-none">
+            <div class="card-body">
+                <h5 class="card-title">
+                    4. Extract downloaded package
+                </h5>
+                <p class="card-text">
+                    This extracts the downloaded package into your filesystem.
+                </p>
+                <!-- Step 4: Extract downloaded package -->
+                <div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-between">
+                        <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-extract-package">
+                            Extract downloaded package
+                        </button>
+                        <output id="result-extract-package"></output>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pmf-update-step-install-package" class="card w-100 mb-3 d-none">
+            <div class="card-body">
+                <h5 class="card-title">
+                    5. Install downloaded package
+                </h5>
+                <p class="card-text">
+                    This extracts the downloaded package into your filesystem.
+                </p>
+                <!-- Step 5: Install downloaded package -->
+                <div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-install-package">
+                                Install downloaded package
+                            </button>
+                        </div>
+                        <div>
+                            <ol>
+                                <li>Backup of current installation <span id="pmf-backup-done"></span></li>
+                                <li>Installation of new files <span id="pmf-installation-done"></span></li>
+                            </ol>
+                        </div>
+                        <div class="progress w-25" role="progressbar">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                 id="result-install-package" style="width: 0">
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-6">
+        <div>
+            Last check for updates:
+            <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
+        </div>
+        <div>
+            Latest version available:
+            <output id="versionLastChecked">n/a</output>
+        </div>
+        <div>
+            Release-Environment: <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
+        </div>
     </div>
 </div>

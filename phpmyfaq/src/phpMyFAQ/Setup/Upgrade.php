@@ -176,50 +176,53 @@ class Upgrade extends Setup
     /**
      * Method to extract the downloaded phpMyFAQ package
      *
+     * @param string   $path | Path of the package
+     * @param callable $progressCallback
      * @return bool
-     * @param string $path | Path of the package
+     * @throws Exception
      */
-    public function extractPackage(string $path): bool
+    public function extractPackage(string $path, callable $progressCallback): bool
     {
         $zip = new ZipArchive();
 
         if (!is_file($path)) {
-            $this->configuration->getLogger()->log(Level::Error, 'Given path to download package is not valid.');
-            return false;
+            throw new Exception('Given path to download package is not valid.');
         }
 
         $zipFile = $zip->open($path);
 
+        $zip->registerProgressCallback(0.05, function ($rate) use ($progressCallback) {
+            $progress = sprintf('%d%%', $rate * 100);
+            $progressCallback($progress);
+        });
+
         if ($zipFile) {
             $zip->extractTo(PMF_CONTENT_DIR . '/upgrades/');
-            $zip->registerProgressCallback(0.05, function ($r) {
-                printf("%d%%\n", $r * 100);
-            });
-            $zip->close();
-            return true;
+            return $zip->close();
         } else {
-            $this->configuration->getLogger()->log(Level::Error, 'Cannot open zipped download package.');
-            return false;
+            throw new Exception('Cannot open zipped download package.');
         }
     }
 
     /**
      * Method to create a temporary backup of the current files
      *
-     * @param string $backupName | Name of the created backup
+     * @param string   $backupName | Name of the created backup
+     * @param callable $progressCallback
      * @return bool
+     * @throws Exception
      */
-    public function createTemporaryBackup(string $backupName): bool
+    public function createTemporaryBackup(string $backupName, callable $progressCallback): bool
     {
         $outputZipFile = PMF_CONTENT_DIR . '/upgrades/' . $backupName;
 
         if (file_exists($outputZipFile)) {
-            return false;
+            throw new Exception('Backup file already exists.');
         }
 
         $zip = new ZipArchive();
         if ($zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            return false;
+            throw new Exception('Cannot create backup file.');
         }
 
         $sourceDir = PMF_ROOT_DIR;
@@ -228,16 +231,19 @@ class Upgrade extends Setup
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $zip->registerProgressCallback(0.05, function ($r) {
-            printf("%d%%\n", $r * 100);
+        $zip->registerProgressCallback(0.05, function ($rate) use ($progressCallback) {
+            $progress = sprintf('%d%%', $rate * 100);
+            $progressCallback($progress);
         });
 
         foreach ($files as $file) {
             $file = realpath($file);
-            if (is_dir($file)) {
-                $zip->addEmptyDir(str_replace($sourceDir . '/', '', $file . '/'));
-            } elseif (is_file($file)) {
-                $zip->addFile($file, str_replace($sourceDir . '/', '', $file));
+            if (!str_contains($file, PMF_CONTENT_DIR . '/upgrades/')) {
+                if (is_dir($file)) {
+                    $zip->addEmptyDir(str_replace($sourceDir . '/', '', $file . '/'));
+                } elseif (is_file($file)) {
+                    $zip->addFile($file, str_replace($sourceDir . '/', '', $file));
+                }
             }
         }
 

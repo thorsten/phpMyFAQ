@@ -30,6 +30,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -180,38 +181,51 @@ class UpdateController
     }
 
     #[Route('admin/api/extract-package')]
-    public function extractPackage(): JsonResponse
+    public function extractPackage(): StreamedResponse
     {
-        $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $upgrade = new Upgrade(new System(), $configuration);
 
         $pathToPackage = urldecode($configuration->get('upgrade.lastDownloadedPackage'));
 
-        $result = $upgrade->extractPackage($pathToPackage);
 
-        $response->setData(['result' => $result]);
+        return new StreamedResponse(function () use ($upgrade, $pathToPackage) {
+            $progressCallback = function ($progress) {
+                echo json_encode(['progress' => $progress]) . "\n";
+                ob_flush();
+                flush();
+            };
 
-        return $response;
+            if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
+                echo json_encode(['message' => '✅ Package successfully extracted.']);
+            } else {
+                echo json_encode(['message' => 'Extract package failed']);
+            }
+        });
     }
 
     #[Route('admin/api/install-package')]
-    public function installPackage(): JsonResponse
+    public function installPackage(): StreamedResponse
     {
-        $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $backupHash = md5(uniqid());
 
         $upgrade = new Upgrade(new System(), $configuration);
 
-        $result = $upgrade->createTemporaryBackup($backupHash . '.zip');
+        return new StreamedResponse(function () use ($upgrade, $backupHash) {
+            $progressCallback = function ($progress) {
+                echo json_encode(['progress' => $progress]) . "\n";
+                ob_flush();
+                flush();
+            };
 
-        //$result = $upgrade->installPackage();
-
-        $response->setData(['result' => $result]);
-
-        return $response;
+            if ($upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
+                echo json_encode(['message' => '✅ Backup successful']);
+            } else {
+                echo json_encode(['message' => 'Backup failed']);
+            }
+        });
     }
 }
