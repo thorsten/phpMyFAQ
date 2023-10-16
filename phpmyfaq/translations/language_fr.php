@@ -1277,7 +1277,6 @@ $PMF_LANG["rightsLanguage::viewadminlink"] = "Voir le lien vers l'administration
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF["mail.remoteSMTPPort"] = ["input", "Port du serveur SMTP"];
-$LANG_CONF["mail.remoteSMTPEncryption"] = ["input", "Chiffrement du serveur SMTP"];
 $PMF_LANG["ad_record_faq"] = "Question et réponse";
 $PMF_LANG["ad_record_permissions"] = "Permissions";
 $PMF_LANG["loginPageMessage"] = "Connexion à ";

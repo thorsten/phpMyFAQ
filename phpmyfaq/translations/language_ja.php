@@ -1019,7 +1019,6 @@ $PMF_LANG['rightsLanguage::viewadminlink'] = '管理リンクを表示';
 
 // added v3.0.0-beta.3
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTPサーバーのポート'];
-$LANG_CONF['mail.remoteSMTPEncryption'] = ['input', 'SMTPサーバーの暗号化'];
 $PMF_LANG['ad_record_faq'] = '質問と回答';
 $PMF_LANG['ad_record_permissions'] = '権限';
 $PMF_LANG['loginPageMessage'] = 'ログイン先: ';

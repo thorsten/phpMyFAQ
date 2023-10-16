@@ -199,6 +199,7 @@ if (version_compare($version, '4.0.0-alpha', '<')) {
     $faqConfig->delete('socialnetworks.twitterAccessTokenKey');
     $faqConfig->delete('socialnetworks.twitterAccessTokenSecret');
     $faqConfig->delete('socialnetworks.disableAll');
+    $faqConfig->delete('mail.remoteSMTPEncryption');
 
     // Bookmarks support
     $query[] = match ($dbConfig->getType()) {

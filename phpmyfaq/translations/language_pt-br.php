@@ -998,7 +998,6 @@ $PMF_LANG['ad_section_suc'] = 'A seção foi adicionada com <strong>sucesso</str
 $PMF_LANG['ad_section_deleted'] = 'A seção foi removida com sucesso.';
 $PMF_LANG['rightsLanguage::viewadminlink'] = 'Ver link de administração';
 $LANG_CONF['mail.remoteSMTPPort'] = ["input", "Porta do servidor SMTP"];
-$LANG_CONF['mail.remoteSMTPEncryption'] = ["input", "Criptografia do servidor SMTP"];
 $PMF_LANG['ad_record_faq'] = 'Pergunta e resposta';
 $PMF_LANG['ad_record_permissions'] = 'Permissões';
 $PMF_LANG['loginPageMessage'] = 'Entrar em ';

@@ -1256,7 +1256,6 @@ $PMF_LANG['rightsLanguage::viewadminlink'] = 'Link zur Administration sichtbar';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP Server Port'];
-$LANG_CONF['mail.remoteSMTPEncryption'] = ['input', 'SMTP Server Verschlüsselung'];
 $PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
 $PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
 $PMF_LANG['loginPageMessage'] = 'Login für ';
@@ -1334,6 +1333,7 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
 // added v4.0.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['headerCheckHealth'] = '1. Systemzustand prüfen';
 $PMF_LANG['headerCheckUpdates'] = '2. Suche nach Updates';
+$PMF_LANG['headerDownloadPackage'] = '3. Download von phpMyFAQ';
 $PMF_LANG['msgHealthCheck'] = 'Dies überprüft die korrekten Dateiberechtigungen und die Ordnerstruktur Ihrer phpMyFAQ-Installation.';
 $PMF_LANG['msgUpdateCheck'] = 'Sie können nach neuen Versionen von phpMyFAQ suchen, neu installieren oder Ihre Installation aktualisieren.';
 $PMF_LANG['buttonCheckHealth'] = 'Systemzustand jetzt prüfen';

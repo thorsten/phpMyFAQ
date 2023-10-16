@@ -1275,7 +1275,6 @@ $PMF_LANG['rightsLanguage::viewadminlink'] = 'View admin link';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP server port'];
-$LANG_CONF['mail.remoteSMTPEncryption'] = ['input', 'SMTP server encryption'];
 $PMF_LANG['ad_record_faq'] = 'Question and answer';
 $PMF_LANG['ad_record_permissions'] = 'Permissions';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
@@ -1353,6 +1352,7 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
 // added v4.0.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['headerCheckHealth'] = '1. Check for System Health';
 $PMF_LANG['headerCheckUpdates'] = '2. Check for Updates';
+$PMF_LANG['headerDownloadPackage'] = '3. Download of phpMyFAQ';
 $PMF_LANG['msgHealthCheck'] = 'This checks the correct file permissions and folder structure of your phpMyFAQ installation.';
 $PMF_LANG['msgUpdateCheck'] = 'You can check for new versions of phpMyFAQ, re-install or update your installation.';
 $PMF_LANG['buttonCheckHealth'] = 'Check System health now';

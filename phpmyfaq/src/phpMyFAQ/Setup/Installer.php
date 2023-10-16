@@ -421,7 +421,6 @@ class Installer extends Setup
         'mail.remoteSMTPUsername' => '',
         'mail.remoteSMTPPassword' => '',
         'mail.remoteSMTPPort' => '25',
-        'mail.remoteSMTPEncryption' => '',
         'mail.remoteSMTPDisableTLSPeerVerification' => 'false',
 
         'ldap.ldapSupport' => 'false',
