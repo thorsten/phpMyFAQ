@@ -294,8 +294,8 @@ class Mysqli implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     *
      * @return mysqli_result $result
+     * @throws Exception
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
@@ -305,7 +305,11 @@ class Mysqli implements DatabaseDriver
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
         }
 
-        $result = $this->conn->query($query);
+        try {
+            $result = $this->conn->query($query);
+        } catch (mysqli_sql_exception $exception) {
+            throw new Exception($exception->getMessage());
+        }
 
         if (false === $result) {
             $this->sqllog .= $this->conn->errno . ': ' . $this->error();

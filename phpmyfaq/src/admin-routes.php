@@ -97,4 +97,15 @@ $routes->add(
     )
 );
 
+$routes->add(
+    'admin.api.update-database',
+    new Route(
+        '/update-database',
+        [
+            '_controller' => [UpdateController::class, 'updateDatabase'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
 return $routes;

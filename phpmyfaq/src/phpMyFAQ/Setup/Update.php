@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
@@ -56,7 +57,7 @@ class Update extends Setup
         return $database->numRows($result) === 0;
     }
 
-    public function applyUpdates(callable $progressCallback): void
+    public function applyUpdates(callable $progressCallback): bool
     {
         // 3.1 updates
         $this->applyUpdates310Alpha();
@@ -81,6 +82,8 @@ class Update extends Setup
 
         // Always the last step: Update version number
         $this->updateVersion();
+
+        return true;
     }
 
     public function optimizeTables(): void
@@ -114,9 +117,13 @@ class Update extends Setup
             }
         } else {
             foreach ($this->queries as $query) {
-                $this->configuration->getDb()->query($query);
-                if ($progressCallback !== null) {
-                    $progressCallback($query);
+                try {
+                    $this->configuration->getDb()->query($query);
+                    if ($progressCallback !== null) {
+                        $progressCallback($query);
+                    }
+                } catch (Exception $exception) {
+                    throw new Exception($exception->getMessage());
                 }
             }
         }

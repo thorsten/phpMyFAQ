@@ -23,6 +23,7 @@ use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -242,6 +243,30 @@ class UpdateController
                 echo json_encode(['message' => '✅ Package successfully installed.']);
             } else {
                 echo json_encode(['message' => 'Install package failed']);
+            }
+        });
+    }
+
+    #[Route('admin/api/update-database')]
+    public function updateDatabase(): StreamedResponse
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $update = new Update(new System(), $configuration);
+        $update->setVersion(System::getVersion());
+
+        return new StreamedResponse(function () use ($update) {
+            $progressCallback = function ($progress) {
+                echo json_encode(['progress' => $progress]) . "\n";
+                ob_flush();
+                flush();
+            };
+
+            try {
+                if ($update->applyUpdates($progressCallback)) {
+                    echo json_encode(['message' => '✅ Database successfully updated.']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['message' => 'Update database failed: ' . $e->getMessage()]);
             }
         });
     }
