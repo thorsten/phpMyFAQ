@@ -39,7 +39,7 @@ class SMTP implements MailUserAgentInterface
         int $port = 25,
         bool $disableTlsPeerVerification = false
     ): void {
-        $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, $password, $server, $port);
+        $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, urlencode($password), $server, $port);
 
         if ($disableTlsPeerVerification) {
             $dsn .= '?verify_peer=0';

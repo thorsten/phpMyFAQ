@@ -767,25 +767,20 @@ switch ($action) {
 
     // Send mails to friends
     case 'sendtofriends':
-        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-        $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_SPECIAL_CHARS);
-        $mailto = Filter::filterInputArray(
-            INPUT_POST,
-            [
-                'mailto' => [
-                    'filter' => FILTER_VALIDATE_EMAIL,
-                    'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
-                ],
-            ]
-        );
+        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
+
+        $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+        $link = trim((string) Filter::filterVar($postData['link'], FILTER_VALIDATE_URL));
+        $attached = trim((string) Filter::filterVar($postData['message'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $mailto = Filter::filterArray($postData['mailto[]']);
 
         if (
-            !is_null($author) && !is_null($email) && is_array($mailto) && !empty($mailto['mailto'][0]) &&
+            !is_null($author) && !is_null($email) && is_array($mailto) &&
             $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))
         ) {
-            foreach ($mailto['mailto'] as $recipient) {
+
+            foreach ($mailto as $recipient) {
                 $recipient = trim(strip_tags((string) $recipient));
                 if (!empty($recipient)) {
                     $mailer = new Mail($faqConfig);

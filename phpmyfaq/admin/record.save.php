@@ -20,6 +20,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
@@ -27,12 +28,16 @@ use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Revision;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $category = new Category($faqConfig, [], false);
 $category->setUser($currentAdminUser);
