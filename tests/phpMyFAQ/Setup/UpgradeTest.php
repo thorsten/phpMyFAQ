@@ -25,13 +25,16 @@ class UpgradeTest extends TestCase
         $this->upgrade = new Upgrade(new System(), $configuration);
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     public function testDownloadPackage(): void
     {
         $actual = $this->upgrade->downloadPackage('3.1.15');
         $this->assertIsString($actual);
 
-        $actual = $this->upgrade->downloadPackage('1.2.3');
-        $this->assertFalse($actual);
+        $this->expectException('phpMyFAQ\Core\Exception');
+        $this->upgrade->downloadPackage('1.2.3');
     }
 
     public function testCreateTemporaryBackup(): void

@@ -82,7 +82,7 @@ export const handleCheckForUpdates = () => {
 
           if (dateLastChecked) {
             const date = new Date(response.dateLastChecked);
-            dateLastChecked.innerText = `${date.toISOString()}`;
+            dateLastChecked.innerText = `${date.toLocaleString()}`;
           }
 
           if (versionLastChecked) {

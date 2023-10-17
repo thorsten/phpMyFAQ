@@ -106,10 +106,11 @@ class Upgrade extends Setup
      * Method to download a phpMyFAQ package, returns false if it doesn't work
      *
      * @param string $version
-     * @return string|bool
+     * @return string
+     * @throws Exception
      * @todo handle possible proxy servers
      */
-    public function downloadPackage(string $version): string|bool
+    public function downloadPackage(string $version): string
     {
         $url = $this->getDownloadHost() . $this->getPath() . $this->getFilename($version);
 
@@ -119,7 +120,7 @@ class Upgrade extends Setup
             $response = $client->request('GET', $url);
 
             if ($response->getStatusCode() !== 200) {
-                return false;
+                throw new Exception('Cannot download package.');
             }
 
             $package = $response->getContent();
@@ -133,9 +134,7 @@ class Upgrade extends Setup
             RedirectionExceptionInterface |
             ServerExceptionInterface $e
         ) {
-            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
-
-            return false;
+            throw new Exception($e->getMessage());
         }
     }
 

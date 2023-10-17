@@ -39,7 +39,7 @@ class Database
     /**
      * Database type.
      */
-    private static ?string $dbType = null;
+    private static string $dbType;
 
     /**
      * Table prefix.
@@ -87,7 +87,7 @@ class Database
     /**
      * Returns the database type.
      */
-    public static function getType(): ?string
+    public static function getType(): string
     {
         return self::$dbType;
     }
