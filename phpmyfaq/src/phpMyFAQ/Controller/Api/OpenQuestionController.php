@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Category Controller for the REST API
+ * The Open Questions Controller for the REST API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,37 +15,24 @@
  * @since     2023-07-29
  */
 
-namespace phpMyFAQ\Api\Controller;
+namespace phpMyFAQ\Controller\Api;
 
-use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Language;
-use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class CategoryController
+class OpenQuestionController
 {
     public function list(): JsonResponse
     {
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
-        $language = new Language($faqConfig);
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
 
-        $user = CurrentUser::getCurrentUser($faqConfig);
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $category = new Category($faqConfig, $currentGroups, true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
-        $category->setLanguage($currentLanguage);
-        $result = array_values($category->getAllCategories());
-
-        if (count($result) === 0) {
+        $questions = new Question($faqConfig);
+        $result = $questions->getAllOpenQuestions();
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        } else {
-            $response->setStatusCode(Response::HTTP_OK);
         }
         $response->setData($result);
 

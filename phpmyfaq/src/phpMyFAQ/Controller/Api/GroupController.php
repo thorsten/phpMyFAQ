@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Tags Controller for the REST API
+ * The Group Controller for the REST API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,22 +15,24 @@
  * @since     2023-07-29
  */
 
-namespace phpMyFAQ\Api\Controller;
+namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Tags;
+use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class TagController
+class GroupController
 {
     public function list(): JsonResponse
     {
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($faqConfig);
 
-        $tags = new Tags($faqConfig);
-        $result = $tags->getPopularTagsAsArray(16);
+        $groupPermission = new MediumPermission($faqConfig);
+        $result = $groupPermission->getAllGroups($user);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }

@@ -15,20 +15,21 @@
  * @since     2023-07-29
  */
 
-use phpMyFAQ\Api\Controller\AttachmentController;
-use phpMyFAQ\Api\Controller\CategoryController;
-use phpMyFAQ\Api\Controller\CommentController;
-use phpMyFAQ\Api\Controller\GroupController;
-use phpMyFAQ\Api\Controller\LanguageController;
-use phpMyFAQ\Api\Controller\LoginController;
-use phpMyFAQ\Api\Controller\NewsController;
-use phpMyFAQ\Api\Controller\OpenQuestionController;
-use phpMyFAQ\Api\Controller\SearchController;
-use phpMyFAQ\Api\Controller\TagController;
-use phpMyFAQ\Api\Controller\TitleController;
-use phpMyFAQ\Api\Controller\VersionController;
+use phpMyFAQ\Controller\Api\AttachmentController;
+use phpMyFAQ\Controller\Api\CategoryController;
+use phpMyFAQ\Controller\Api\CommentController;
+use phpMyFAQ\Controller\Api\GroupController;
+use phpMyFAQ\Controller\Api\LanguageController;
+use phpMyFAQ\Controller\Api\LoginController;
+use phpMyFAQ\Controller\Api\NewsController;
+use phpMyFAQ\Controller\Api\OpenQuestionController;
+use phpMyFAQ\Controller\Api\SearchController;
+use phpMyFAQ\Controller\Api\TagController;
+use phpMyFAQ\Controller\Api\TitleController;
+use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\AutoCompleteController;
 use phpMyFAQ\Controller\BookmarkController;
+use phpMyFAQ\Controller\SetupController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -99,6 +100,12 @@ $routes->add(
 $routes->add(
     'api.bookmark',
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
+);
+
+// Setup REST API
+$routes->add(
+    'api.setup.update',
+    new Route('setup/update', ['_controller' => [SetupController::class, 'update'], '_methods' => 'POST'])
 );
 
 return $routes;

@@ -142,6 +142,9 @@ RewriteRule user/logout                            index.php?action=logout [L,QS
 RewriteRule api/autocomplete                       api/index.php
 RewriteRule api/bookmark/([0-9]+)                  api/index.php
 
+# Setup APIs
+RewriteRule api/setup/update                       api/index.php
+
 # Administration API
 RewriteRule admin/api/dashboard/versions           admin/api/index.php
 RewriteRule admin/api/dashboard/visits             admin/api/index.php

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Title Controller for the REST API
+ * The Version Controller for the REST API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,18 +15,15 @@
  * @since     2023-07-29
  */
 
-namespace phpMyFAQ\Api\Controller;
+namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class TitleController
+class VersionController
 {
     public function index(): JsonResponse
     {
-        $response = new JsonResponse();
-        $response->setData(Configuration::getConfigurationInstance()->getTitle());
-
-        return $response;
+        return new JsonResponse(Configuration::getConfigurationInstance()->getVersion());
     }
 }

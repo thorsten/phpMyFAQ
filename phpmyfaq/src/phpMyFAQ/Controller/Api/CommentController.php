@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The News Controller for the REST API
+ * The Comment Controller for the REST API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,22 +15,27 @@
  * @since     2023-07-30
  */
 
-namespace phpMyFAQ\Api\Controller;
+namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\News;
+use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class NewsController
+class CommentController
 {
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
-        $news = new News($faqConfig);
-        $result = $news->getLatestData(false, true, true);
+        $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
+
+        $comment = new Comments($faqConfig);
+        $result = $comment->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }

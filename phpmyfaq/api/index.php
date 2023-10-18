@@ -94,7 +94,15 @@ try {
 } catch (ResourceNotFoundException $exception) {
     $response = new Response('Not Found', 404);
 } catch (Exception $exception) {
-    $response = new Response('An error occurred: ' . $exception->getMessage(), 500);
+    $response = new Response(
+        sprintf(
+            'An error occurred: %s at line %d at %s',
+            $exception->getMessage(),
+            $exception->getLine(),
+            $exception->getFile()
+        ),
+        500
+    );
 }
 
 $response->send();
