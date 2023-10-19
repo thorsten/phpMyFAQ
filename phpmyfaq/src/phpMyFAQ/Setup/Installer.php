@@ -26,7 +26,6 @@ use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
-use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
@@ -468,63 +467,42 @@ class Installer extends Setup
 
     /**
      * Check absolutely necessary stuff and die.
+     * @throws Exception
      */
     public function checkBasicStuff(): void
     {
         if (!$this->checkMinimumPhpVersion()) {
-            Alert::danger(
-                'ad_entryins_fail',
+            throw new Exception(
                 sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP)
             );
-            System::renderFooter();
         }
 
         if (!function_exists('date_default_timezone_set')) {
-            Alert::danger(
-                'ad_entryins_fail',
+            throw new Exception(
                 'Sorry, but setting a default timezone does not work in your environment!'
             );
-            echo '<p class="alert alert-danger">Sorry, but setting a default timezone does not work in your ' .
-                'environment!</p>';
-            System::renderFooter();
         }
 
         if (!$this->system->checkDatabase()) {
-            echo '<p class="alert alert-danger">No supported database detected! Please install one of the following' .
-                ' database systems and enable the corresponding PHP extension in php.ini:</p>';
-            echo '<ul>';
-            foreach ($this->system->getSupportedDatabases() as $database) {
-                printf('    <li>%s</li>', $database[1]);
-            }
-            echo '</ul>';
-            System::renderFooter();
+            throw new Exception(
+                'No supported database detected!'
+            );
         }
 
         if (!$this->system->checkRequiredExtensions()) {
-            echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP ' .
-                'extension(s) in php.ini.</p>';
-            echo '<ul>';
-            foreach ($this->system->getMissingExtensions() as $extension) {
-                printf('    <li>ext/%s</li>', $extension);
-            }
-            echo '</ul>';
-            System::renderFooter();
+            throw new Exception(
+                sprintf(
+                    'Some required PHP extensions are missing: %s',
+                    implode(', ', $this->system->getMissingExtensions())
+                )
+            );
         }
 
         if (!$this->system->checkInstallation()) {
-            echo '<p class="alert alert-danger">The setup script found the file <code>config/database.php</code>. It ' .
-                'looks like you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update' .
-                ' script</a>.</p>';
-            System::renderFooter();
+            throw new Exception(
+                'phpMyFAQ is already installed! Please use the <a href="./update.php">update</a>.'
+            );
         }
-    }
-
-    /**
-     * Checks the minimum required PHP version, defined in System.
-     */
-    public function checkMinimumPhpVersion(): bool
-    {
-        return true;
     }
 
     /**
@@ -1068,5 +1046,14 @@ class Installer extends Setup
             $faqInstanceElasticsearch = new Elasticsearch($configuration);
             $faqInstanceElasticsearch->createIndex();
         }
+    }
+
+    /**
+     * Checks the minimum required PHP version, defined in System class.
+     * Returns true if it's okay.
+     */
+    public function checkMinimumPhpVersion(): bool
+    {
+        return version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP) > 0;
     }
 }

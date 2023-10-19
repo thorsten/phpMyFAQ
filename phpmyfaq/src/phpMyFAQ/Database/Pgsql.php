@@ -77,7 +77,7 @@ class Pgsql implements DatabaseDriver
 
         $this->conn = pg_connect($connectionString);
 
-        if (empty($database) || !$this->conn) {
+        if ($database === '' || !$this->conn) {
             Database::errorPage(pg_last_error($this->conn));
             die();
         }
@@ -238,11 +238,7 @@ class Pgsql implements DatabaseDriver
     public function clientVersion(): string
     {
         $pg_version = pg_version($this->conn);
-        if (isset($pg_version['client'])) {
-            return $pg_version['client'];
-        } else {
-            return 'n/a';
-        }
+        return $pg_version['client'] ?? 'n/a';
     }
 
     /**
@@ -251,11 +247,7 @@ class Pgsql implements DatabaseDriver
     public function serverVersion(): string
     {
         $pg_version = pg_version($this->conn);
-        if (isset($pg_version['server_version'])) {
-            return $pg_version['server_version'];
-        } else {
-            return 'n/a';
-        }
+        return $pg_version['server_version'] ?? 'n/a';
     }
 
     /**

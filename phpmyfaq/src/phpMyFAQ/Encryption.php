@@ -47,7 +47,7 @@ class Encryption
     /**
      * Constructor.
      */
-    public function __construct(protected ?Configuration $config)
+    public function __construct(protected ?Configuration $configuration)
     {
     }
 
@@ -61,19 +61,19 @@ class Encryption
      * object without database access and with an error message. See the
      * of the error() method for further details.
      */
-    public static function selectEnc(string $encType, Configuration $config): Encryption
+    public static function selectEnc(string $encType, Configuration $configuration): Encryption
     {
-        $enc = new self($config);
+        $self = new self($configuration);
         $encType = ucfirst(strtolower($encType));
 
         $encClass = 'phpMyFAQ\\EncryptionTypes\\' . $encType;
         if (!class_exists($encClass)) {
-            $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
+            $self->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
 
-            return $enc;
+            return $self;
         }
 
-        return new $encClass($config);
+        return new $encClass($configuration);
     }
 
     /**
@@ -110,7 +110,7 @@ class Encryption
      */
     public function setSalt(string $login): Encryption
     {
-        $this->salt = $this->config->get('security.salt') . $login;
+        $this->salt = $this->configuration->get('security.salt') . $login;
 
         return $this;
     }

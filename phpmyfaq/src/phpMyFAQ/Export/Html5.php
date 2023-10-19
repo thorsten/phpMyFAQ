@@ -41,17 +41,15 @@ class Html5 extends Export
     /**
      * Constructor.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category CategoryHelper object
-     * @param Configuration $config   Configuration
-     *                                return
-     *                                PMF_Export_Xhtml
+     * @param Faq           $faq           FaqHelper object
+     * @param Category      $category      CategoryHelper object
+     * @param Configuration $configuration Configuration
      */
-    public function __construct(Faq $faq, Category $category, Configuration $config)
+    public function __construct(Faq $faq, Category $category, Configuration $configuration)
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->config = $config;
+        $this->config = $configuration;
         $this->xml = new XMLWriter();
 
         $this->xml->openMemory();
@@ -90,14 +88,14 @@ class Html5 extends Export
         $this->xml->endElement();
         $this->xml->startElement('meta');
         $this->xml->writeAttribute('http-equiv', 'Content-Security-Policy');
-        $this->xml->writeAttribute('content', 'default-src \'self\'; img-src https://*; child-src \'none\';');
+        $this->xml->writeAttribute('content', "default-src 'self'; img-src https://*; child-src 'none';");
         $this->xml->endElement();
         $this->xml->endElement(); // </head>
 
         $this->xml->startElement('body');
         $this->xml->writeAttribute('dir', Translation::get('dir'));
 
-        if (is_countable($faqData) ? count($faqData) : 0) {
+        if ((is_countable($faqData) ? count($faqData) : 0) !== 0) {
             $lastCategory = 0;
             foreach ($faqData as $data) {
                 if ($data['category_id'] != $lastCategory) {

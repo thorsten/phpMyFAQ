@@ -31,7 +31,7 @@ class Date
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -74,27 +74,25 @@ class Date
             $year = Strings::substr($file, 12, 4);
 
             if (!$endOfDay) {
-                $time = mktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
-            } else {
-                $time = mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
+                return mktime(0, 0, 0, (int)$month, (int)$day, (int)$year);
             }
 
-            return $time;
-        } else {
-            return -1;
+            return mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
         }
+
+        return -1;
     }
 
     /**
-     * Returns date formatted according to user defined format.
+     * Returns date formatted according to user-defined format.
      */
     public function format(string $unformattedDate): string
     {
         try {
-            $date = new DateTime($unformattedDate);
-            return $date->format($this->config->get('main.dateFormat'));
+            $dateTime = new DateTime($unformattedDate);
+            return $dateTime->format($this->configuration->get('main.dateFormat'));
         } catch (Exception $e) {
-            $this->config->getLogger()->error($e->getMessage());
+            $this->configuration->getLogger()->error($e->getMessage());
             return '';
         }
     }

@@ -103,7 +103,7 @@ define('PDF_HEADER_LOGO', 'tcpdf_logo.jpg');
 define('PDF_HEADER_LOGO_WIDTH', 30);
 
 /*
- *  document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
+ * document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
  */
 define('PDF_UNIT', 'mm');
 
@@ -218,14 +218,17 @@ class Wrapper extends TCPDF
      * The current faq.
      */
     public array $faq = [];
+
     /**
      * Configuration.
      */
     protected ?Configuration $config = null;
+
     /**
      * Question.
      */
     private string $question = '';
+
     /**
      * Font files.
      */
@@ -292,13 +295,13 @@ class Wrapper extends TCPDF
      *
      * @param string $question Question
      */
-    public function setQuestion(string $question = '')
+    public function setQuestion(string $question = ''): void
     {
         $this->question = $question;
     }
 
     /**
-     * Setter for categories array.
+     * Setter for a category array.
      *
      * @param array $categories Categories
      */
@@ -307,9 +310,9 @@ class Wrapper extends TCPDF
         $this->categories = $categories;
     }
 
-    public function setConfig(Configuration $config): void
+    public function setConfig(Configuration $configuration): void
     {
-        $this->config = $config;
+        $this->config = $configuration;
     }
 
     /**
@@ -320,11 +323,7 @@ class Wrapper extends TCPDF
         // Set custom header and footer
         $this->setCustomHeader();
 
-        if (array_key_exists($this->category, $this->categories)) {
-            $title = $this->categories[$this->category]['name'];
-        } else {
-            $title = '';
-        }
+        $title = array_key_exists($this->category, $this->categories) ? $this->categories[$this->category]['name'] : '';
 
         $this->SetTextColor(0, 0, 0);
         $this->SetFont($this->currentFont, 'B', 18);
@@ -400,11 +399,11 @@ class Wrapper extends TCPDF
         $this->SetY(-20);
         $this->SetFont($this->currentFont, 'B', 8);
         $this->Cell(0, 10, $footer, 0, 1, 'C');
-        if ($this->enableBookmarks == false) {
+        if (!$this->enableBookmarks) {
             $this->SetY(-15);
             $this->SetFont($this->currentFont, '', 8);
             $baseUrl = 'index.php';
-            if (is_array($this->faq) && !empty($this->faq)) {
+            if ($this->faq !== []) {
                 $baseUrl .= '?action=faq&amp;';
                 if (array_key_exists($this->category, $this->categories)) {
                     $baseUrl .= 'cat=' . $this->categories[$this->category]['id'];
@@ -415,9 +414,9 @@ class Wrapper extends TCPDF
                 $baseUrl .= '&amp;artlang=' . $this->faq['lang'];
             }
             $url = $this->config->getDefaultUrl() . $baseUrl;
-            $urlObj = new Link($url, $this->config);
-            $urlObj->itemTitle = $this->question;
-            $_url = str_replace('&amp;', '&', $urlObj->toString());
+            $link = new Link($url, $this->config);
+            $link->itemTitle = $this->question;
+            $_url = str_replace('&amp;', '&', $link->toString());
             $this->Cell(0, 10, 'URL: ' . $_url, 0, 1, 'C', 0, $_url);
         }
         $this->TextColor = $currentTextColor;
@@ -426,7 +425,7 @@ class Wrapper extends TCPDF
     /**
      * Sets custom footer.
      */
-    public function setCustomFooter()
+    public function setCustomFooter(): void
     {
         $this->customFooter = $this->config->get('main.customPdfFooter');
     }
@@ -434,7 +433,7 @@ class Wrapper extends TCPDF
     /**
      * Adds a table of content for exports of the complete FAQ.
      */
-    public function addFaqToc()
+    public function addFaqToc(): void
     {
         $this->addTOCPage();
 
@@ -476,32 +475,32 @@ class Wrapper extends TCPDF
      * @param string $file Name of the file containing the image or a '@' character followed by the image data
      *                          string. To link an image without embedding it on the document, set an asterisk
      *                          character before the URL (i.e.: '*http://www.example.com/image.jpg').
-     * @param string $x Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param string $y Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param int    $w Width of the image in the page. If not specified or equal to zero, it is automatically
+     * @param float|null $x Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param float|null $y Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param float    $w Width of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param int    $h Height of the image in the page. If not specified or equal to zero, it is automatically
+     * @param float    $h Height of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param string $type Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
+     * @param string $type Image format. Possible values are (case-insensitive): JPEG and PNG (without a GD library)
      *                          and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If
      *                          not specified, the type is inferred from the file extension.
      * @param string $link URL or identifier returned by AddLink().
      * @param string $align Indicates the alignment of the pointer next to image insertion relative to image height.
-     * @param bool   $resize If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
-     *                          if false do not resize; if 2 force resize in all cases (upscaling and downscaling).
+     * @param bool   $resize If true resizes (reduce) the image to fit $w and $h (requires a GD or ImageMagick library);
+     *                          if false do not resize; if two force resize in all cases (upscaling and downscaling).
      * @param int    $dpi dot-per-inch resolution used on resize
-     * @param string $palign Allows to center or align the image on the current line.
+     * @param string $palign Allows centering or aligning the image on the current line.
      * @param bool   $ismask true if this image is a mask, false otherwise
      * @param mixed  $imgmask Image object returned by this function or false
      * @param int    $border Indicates if borders must be drawn around the cell.
-     * @param mixed  $fitbox If not false scale image dimensions proportionally to fit within the ($w, $h) box.
-     *                          $fitbox can be true or a 2 characters string indicating the image alignment inside
-     *                          the box. The first character indicate the horizontal alignment (L = left, C =
-     *                          center, R = right) the second character indicate the vertical algnment (T = top, M
+     * @param mixed  $fitbox If not, false scale image dimensions proportionally to fit within the ($w, $h) box.
+     *                          $fitbox can be true or a 2-character string indicating the image alignment inside
+     *                          the box. The first character indicates the horizontal alignment (L = left, C =
+     *                          center, R = right) the second character indicates the vertical algnment (T = top, M
      *                          = middle, B = bottom).
-     * @param bool   $hidden If true do not display the image.
-     * @param bool   $fitonpage If true the image is resized to not exceed page dimensions.
-     * @param bool   $alt If true the image will be added as alternative and not directly printed (the ID of the
+     * @param bool   $hidden If true, do not display the image.
+     * @param bool   $fitonpage If true, the image is resized to not exceed page dimensions.
+     * @param bool   $alt If true, the image will be added as alternative and not directly printed (the ID of the
      *                          image will be returned).
      * @param array  $altimgs Array of alternate images IDs. Each alternative image must be an array with two values:
      *                          an integer representing the image ID (the value returned by the Image method) and a
@@ -509,8 +508,8 @@ class Wrapper extends TCPDF
      */
     public function Image(// phpcs:ignore
         $file,
-        $x = '',
-        $y = '',
+        $x = null,
+        $y = null,
         $w = 0,
         $h = 0,
         $type = '',
@@ -528,7 +527,7 @@ class Wrapper extends TCPDF
         $alt = false,
         $altimgs = []
     ): void {
-        if (!strpos($file, 'data:image/png;base64,') === false) {
+        if (strpos($file, 'data:image/png;base64,')) {
             $file = '@' . base64_decode(
                 chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
             );

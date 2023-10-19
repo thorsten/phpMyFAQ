@@ -86,7 +86,6 @@ class Client extends Instance
      * Creates all tables with the given table prefix from the primary tables.
      *
      * @param string $prefix SQL table prefix
-     * @return void
      */
     public function createClientTables(string $prefix): void
     {
@@ -148,7 +147,6 @@ class Client extends Instance
      *
      * @param string $destination Destination folder
      * @param string $templateDir Template folder
-     * @return void
      * @throws Exception
      */
     public function copyTemplateFolder(string $destination, string $templateDir = 'default'): void

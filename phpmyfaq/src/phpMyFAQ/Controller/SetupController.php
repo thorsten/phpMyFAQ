@@ -19,29 +19,20 @@ namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\System;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SetupController
 {
-    /**
-     * @throws \JsonException
-     */
-    public function update(Request $request): StreamedResponse
+    public function update(): StreamedResponse
     {
         $update = new Update(new System(), Configuration::getConfigurationInstance());
         $update->setVersion(System::getVersion());
 
-        //$postBody = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        //$step = Filter::filterVar($postBody->step, FILTER_VALIDATE_INT);
-        $step = 1;
-
-        return new StreamedResponse(function () use ($step, $update) {
+        return new StreamedResponse(function () use ($update) {
             $progressCallback = function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo json_encode(['progress' => $progress], JSON_THROW_ON_ERROR) . "\n";
                 ob_flush();
                 flush();
             };
@@ -51,7 +42,7 @@ class SetupController
                     echo json_encode(['message' => '✅ Database successfully updated.']);
                 }
             } catch (Exception $e) {
-                echo json_encode(['message' => 'Update database failed: ' . $e->getMessage()]);
+                echo json_encode(['message' => 'Update database failed: ' . $e->getMessage()], JSON_THROW_ON_ERROR);
             }
         });
     }

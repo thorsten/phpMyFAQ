@@ -169,9 +169,9 @@ class Mysqli implements DatabaseDriver
     {
         if ($result instanceof mysqli_result) {
             return $result->num_rows;
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**
@@ -280,13 +280,9 @@ class Mysqli implements DatabaseDriver
             $table
         );
 
-        $result = $this->query($select);
+        $mysqliresult = $this->query($select);
 
-        if ($result instanceof mysqli_result) {
-            $current = $result->fetch_row();
-        } else {
-            $current = [0];
-        }
+        $current = $mysqliresult instanceof mysqli_result ? $mysqliresult->fetch_row() : [0];
 
         return $current[0] + 1;
     }

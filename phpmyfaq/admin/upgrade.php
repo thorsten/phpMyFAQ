@@ -45,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         'buttonCheckUpdates' => Translation::get('buttonCheckUpdates'),
         'headerDownloadPackage' => Translation::get('headerDownloadPackage'),
         'isOnNightlies' => $faqConfig->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value,
-        'releaseEnvironment' => ucfirst($faqConfig->get('upgrade.releaseEnvironment')),
+        'releaseEnvironment' => ucfirst((string) $faqConfig->get('upgrade.releaseEnvironment')),
         'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked')
     ];
 

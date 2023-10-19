@@ -48,10 +48,9 @@ $step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_SPECIAL_CHARS);
 $query = [];
 
-if (
-    !file_exists(PMF_ROOT_DIR . '/config/database.php') &&
-    !file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')
-) {
+$update = new Update(new System(), Configuration::getConfigurationInstance());
+
+if (!$update->checkDatabaseFile()) {
     $redirect = new RedirectResponse('./index.php');
     $redirect->send();
 }
@@ -108,7 +107,7 @@ try {
         <h1 class="display-4 fw-bold">phpMyFAQ <?= System::getVersion() ?></h1>
         <div class="col-lg-6 mx-auto">
           <p class="lead mb-4">
-            Did you already read our <a target="_blank" href="https://www.phpmyfaq.de/docs/3.2">documentation</a>
+            Did you already read our <a target="_blank" href="<?= System::getDocumentationUrl() ?>">documentation</a>
             carefully before starting the phpMyFAQ setup?
           </p>
         </div>
@@ -125,11 +124,14 @@ $system = new System();
 $faqConfig = Configuration::getConfigurationInstance();
 $version = $faqConfig->getVersion();
 
-$installer = new Installer($system);
 $update = new Update($system, $faqConfig);
 $update->setVersion(System::getVersion());
 
-$installer->checkPreUpgrade($dbConfig->getType());
+try {
+    $update->checkPreUpgrade($dbConfig->getType());
+} catch (Exception $e) {
+    echo Alert::danger('ad_entryins_fail', $e->getMessage());
+}
 
 if ($update->isConfigTableAvailable($faqConfig->getDb())) {
     echo Alert::danger('ad_entryins_fail');

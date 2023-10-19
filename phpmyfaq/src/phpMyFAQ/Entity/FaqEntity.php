@@ -206,9 +206,9 @@ class FaqEntity
     {
         if ($this->validFrom instanceof DateTime) {
             return $this->validFrom;
-        } else {
-            return $this->validFrom = new DateTime();
         }
+
+        return $this->validFrom = new DateTime();
     }
 
     public function setValidFrom(DateTime $validFrom): FaqEntity
@@ -221,14 +221,14 @@ class FaqEntity
     {
         if ($this->validTo instanceof DateTime) {
             return $this->validTo;
-        } else {
-            return $this->validTo = new DateTime('99991231235959');
         }
+
+        return $this->validTo = new DateTime('99991231235959');
     }
 
-    public function setValidTo(DateTime $validTo): FaqEntity
+    public function setValidTo(DateTime $dateTime): FaqEntity
     {
-        $this->validTo = $validTo;
+        $this->validTo = $dateTime;
         return $this;
     }
 
@@ -236,9 +236,9 @@ class FaqEntity
     {
         if ($this->createdDate instanceof DateTime) {
             return $this->createdDate;
-        } else {
-            return $this->createdDate = new DateTime();
         }
+
+        return $this->createdDate = new DateTime();
     }
 
     public function setCreatedDate(DateTime $createdDate): FaqEntity
@@ -251,9 +251,9 @@ class FaqEntity
     {
         if ($this->updatedDate instanceof DateTime) {
             return $this->updatedDate;
-        } else {
-            return $this->updatedDate = new DateTime();
         }
+
+        return $this->updatedDate = new DateTime();
     }
 
     public function setUpdatedDate(DateTime $updatedDate): FaqEntity

@@ -36,7 +36,7 @@ use ZipArchive;
 
 class Upgrade extends Setup
 {
-    public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
+    final public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
     private const GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
     private const PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
     private const PMF_UPGRADE_DIR = PMF_CONTENT_DIR . '/upgrades';
@@ -52,7 +52,6 @@ class Upgrade extends Setup
     /**
      * Method to check if the filesystem is ready for the upgrade
      *
-     * @return bool
      * @throws Exception
      */
     public function checkFilesystem(): bool
@@ -106,7 +105,6 @@ class Upgrade extends Setup
      * Method to download a phpMyFAQ package, returns false if it doesn't work
      *
      * @param string $version
-     * @return string
      * @throws Exception
      * @todo handle possible proxy servers
      */
@@ -143,7 +141,6 @@ class Upgrade extends Setup
      *
      * @param string $path | Path to zip file
      * @param string $version | Version to verify
-     * @return bool
      * @throws TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|JsonException
      */
     public function verifyPackage(string $path, string $version): bool
@@ -179,7 +176,6 @@ class Upgrade extends Setup
      *
      * @param string   $path | Path of the package
      * @param callable $progressCallback
-     * @return bool
      * @throws Exception
      */
     public function extractPackage(string $path, callable $progressCallback): bool
@@ -210,7 +206,6 @@ class Upgrade extends Setup
      *
      * @param string   $backupName | Name of the created backup
      * @param callable $progressCallback
-     * @return bool
      * @throws Exception
      */
     public function createTemporaryBackup(string $backupName, callable $progressCallback): bool
@@ -257,7 +252,6 @@ class Upgrade extends Setup
      * Method to delete the temporary created backup.
      *
      * @param string $backupName | Name of the created backup
-     * @return bool
      */
     public function deleteTemporaryBackup(string $backupName): bool
     {
@@ -270,8 +264,6 @@ class Upgrade extends Setup
 
     /**
      * Method to restore from the temporary backup
-     *
-     * @return void
      */
     public function restoreTemporaryBackup()
     {
@@ -281,7 +273,6 @@ class Upgrade extends Setup
      * Method to install the package
      *
      * @param callable $progressCallback
-     * @return bool
      */
     public function installPackage(callable $progressCallback): bool
     {
@@ -317,7 +308,6 @@ class Upgrade extends Setup
 
     /**
      * Returns the host for download packages, so either github.com or download.phpmyfaq.de
-     * @return string
      */
     public function getDownloadHost(): string
     {
@@ -330,7 +320,6 @@ class Upgrade extends Setup
 
     /**
      * Returns the path to the download package, it's an empty string for development and production releases
-     * @return string
      */
     public function getPath(): string
     {
@@ -344,7 +333,6 @@ class Upgrade extends Setup
     /**
      * Returns the filename of the download package
      * @param string $version
-     * @return string
      */
     public function getFilename(string $version): string
     {
@@ -355,9 +343,6 @@ class Upgrade extends Setup
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
     }
 
-    /**
-     * @return bool
-     */
     public function isNightly(): bool
     {
         return $this->isNightly;

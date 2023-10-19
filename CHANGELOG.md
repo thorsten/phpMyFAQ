@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.0.0-dev - 2023-
 
+- changed PHP requirement to PHP 8.2.0 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
 - added experimental support for PHP 8.3 (Thorsten)

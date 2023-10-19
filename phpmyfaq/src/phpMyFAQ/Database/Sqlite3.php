@@ -205,7 +205,10 @@ class Sqlite3 implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        !isset($result->fetchedByPMF) || !$result->fetchedByPMF || die(self::ERROR_MESSAGE);
+        if (isset($result->fetchedByPMF) && $result->fetchedByPMF) {
+            die(self::ERROR_MESSAGE);
+        }
+
         $numberOfRows = 0;
         while ($result->fetchArray(SQLITE3_NUM)) {
             ++$numberOfRows;

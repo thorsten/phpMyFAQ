@@ -27,7 +27,7 @@ use Twig\TemplateWrapper;
 
 class TwigWrapper
 {
-    private Environment $twig;
+    private readonly Environment $twig;
 
     public function __construct(string $templatePath)
     {

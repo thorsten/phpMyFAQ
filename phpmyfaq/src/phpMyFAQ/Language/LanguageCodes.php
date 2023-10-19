@@ -294,11 +294,7 @@ class LanguageCodes
      */
     public static function get(string $key): ?string
     {
-        if (isset(static::$languageCodes[strtolower($key)])) {
-            return static::$languageCodes[strtolower($key)];
-        }
-
-        return null;
+        return static::$languageCodes[strtolower($key)] ?? null;
     }
 
     /**
@@ -308,11 +304,7 @@ class LanguageCodes
      */
     public static function getSupported(string $key): ?string
     {
-        if (isset(static::$supportedLanguageCodes[strtolower($key)])) {
-            return static::$supportedLanguageCodes[strtolower($key)];
-        }
-
-        return null;
+        return static::$supportedLanguageCodes[strtolower($key)] ?? null;
     }
 
     public static function getKey(string $value): ?string

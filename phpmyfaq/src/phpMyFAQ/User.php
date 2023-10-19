@@ -203,10 +203,7 @@ class User
      */
     public function getAuthSource(string $key): ?string
     {
-        if (isset($this->authData['authSource'][$key])) {
-            return $this->authData['authSource'][$key];
-        }
-        return null;
+        return $this->authData['authSource'][$key] ?? null;
     }
 
     public function getUserAuthSource(): string
@@ -219,10 +216,7 @@ class User
      */
     public function getAuthData(string $key): mixed
     {
-        if (isset($this->authData[$key])) {
-            return $this->authData[$key];
-        }
-        return null;
+        return $this->authData[$key] ?? null;
     }
 
     /**
@@ -1055,7 +1049,6 @@ class User
 
     /**
      * Terminates the session ID of user
-     * @return bool
      */
     public function terminateSessionId(): bool
     {

@@ -43,20 +43,20 @@ class Pdf extends Export
 
     private ?Tags $tags = null;
 
-    private readonly ?ParsedownExtra $parsedown;
+    private readonly ?ParsedownExtra $parsedownExtra;
 
     /**
      * Constructor.
      *
-     * @param  Faq           $faq      FaqHelper object
-     * @param  Category      $category Entity object
-     * @param  Configuration $config   Configuration
+     * @param  Faq           $faq           FaqHelper object
+     * @param  Category      $category      Entity object
+     * @param  Configuration $configuration Configuration
      */
-    public function __construct(Faq $faq, Category $category, Configuration $config)
+    public function __construct(Faq $faq, Category $category, Configuration $configuration)
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->config = $config;
+        $this->config = $configuration;
 
         $this->pdf = new Wrapper();
         $this->pdf->setConfig($this->config);
@@ -68,7 +68,7 @@ class Pdf extends Export
         $this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-        $this->parsedown = new ParsedownExtra();
+        $this->parsedownExtra = new ParsedownExtra();
     }
 
     /**
@@ -103,7 +103,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        (string) $this->category->categoryName[$faq['category_id']]['name'],
+                        $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),
@@ -135,7 +135,7 @@ class Pdf extends Export
             $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
 
             if ($this->config->get('main.enableMarkdownEditor')) {
-                $this->pdf->WriteHTML(trim((string) $this->parsedown->text($faq['content'])));
+                $this->pdf->WriteHTML(trim((string) $this->parsedownExtra->text($faq['content'])));
             } else {
                 $this->pdf->WriteHTML(trim((string) $faq['content']));
             }
@@ -176,8 +176,8 @@ class Pdf extends Export
     public function generateFile(array $faqData, string $filename = null): string
     {
         // Default filename: FAQ-<id>-<language>.pdf
-        if (empty($filename)) {
-            $filename = "FAQ-{$faqData['id']}-{$faqData['lang']}.pdf";
+        if ($filename === null || $filename === '') {
+            $filename = sprintf('FAQ-%s-%s.pdf', $faqData['id'], $faqData['lang']);
         }
 
         $this->pdf->setFaq($faqData);
@@ -198,7 +198,7 @@ class Pdf extends Export
         $this->pdf->Ln();
 
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $this->pdf->WriteHTML(str_replace('../', '', (string) $this->parsedown->text($faqData['content'])));
+            $this->pdf->WriteHTML(str_replace('../', '', (string) $this->parsedownExtra->text($faqData['content'])));
         } else {
             $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']));
         }
@@ -209,12 +209,8 @@ class Pdf extends Export
         $this->pdf->Write(5, Translation::get('ad_entry_solution_id') . ': #' . $faqData['solution_id']);
 
         // Check if the author name should be visible, according to the GDPR option
-        $user = new CurrentUser($this->config);
-        if ($user->getUserVisibilityByEmail($faqData['email'])) {
-            $author = $faqData['author'];
-        } else {
-            $author = 'n/a';
-        }
+        $currentUser = new CurrentUser($this->config);
+        $author = $currentUser->getUserVisibilityByEmail($faqData['email']) ? $faqData['author'] : 'n/a';
 
         $this->pdf->SetAuthor($author);
         $this->pdf->Ln();

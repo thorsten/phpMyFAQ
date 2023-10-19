@@ -34,15 +34,15 @@ class Json extends Export
     /**
      * Constructor.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category Entity object
-     * @param Configuration $config   Configuration
+     * @param Faq           $faq           FaqHelper object
+     * @param Category      $category      Entity object
+     * @param Configuration $configuration Configuration
      */
-    public function __construct(Faq $faq, Category $category, Configuration $config)
+    public function __construct(Faq $faq, Category $category, Configuration $configuration)
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->config = $config;
+        $this->config = $configuration;
     }
 
     /**
@@ -62,21 +62,19 @@ class Json extends Export
 
         $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
 
-        if (count($faqData)) {
-            foreach ($faqData as $data) {
-                $generated[] = [
-                    'faq' => [
-                        'id' => $data['id'],
-                        'language' => $data['lang'],
-                        'category' => $this->category->getPath($data['category_id'], ' >> '),
-                        'keywords' => $data['keywords'],
-                        'question' => strip_tags((string) $data['topic']),
-                        'answer' => Strings::htmlspecialchars($data['content']),
-                        'author' => $data['author_name'],
-                        'last_modified' => Date::createIsoDate($data['lastmodified'])
-                    ]
-                ];
-            }
+        foreach ($faqData as $data) {
+            $generated[] = [
+                'faq' => [
+                    'id' => $data['id'],
+                    'language' => $data['lang'],
+                    'category' => $this->category->getPath($data['category_id'], ' >> '),
+                    'keywords' => $data['keywords'],
+                    'question' => strip_tags((string) $data['topic']),
+                    'answer' => Strings::htmlspecialchars($data['content']),
+                    'author' => $data['author_name'],
+                    'last_modified' => Date::createIsoDate($data['lastmodified'])
+                ]
+            ];
         }
 
         header('Content-type: application/json');

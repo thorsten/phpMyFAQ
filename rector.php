@@ -24,9 +24,14 @@ return static function (RectorConfig $rectorConfig): void {
 
     // define sets of rules
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81,
+        LevelSetList::UP_TO_PHP_82,
         SetList::DEAD_CODE,
-        SymfonySetList::SYMFONY_62,
+        SetList::CODE_QUALITY,
+        SetList::CODING_STYLE,
+        SetList::NAMING,
+        SetList::EARLY_RETURN,
+        SetList::PHP_82,
+        SymfonySetList::SYMFONY_63,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
         PHPUnitSetList::PHPUNIT_100,

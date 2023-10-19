@@ -66,9 +66,9 @@ class Database
             self::$instance = new $class();
 
             return self::$instance;
-        } else {
-            throw new Exception('Invalid Database Type: ' . $type);
         }
+
+        throw new Exception('Invalid Database Type: ' . $type);
     }
 
     /**
@@ -96,19 +96,13 @@ class Database
      * Check if a table is filled with data.
      *
      * @param string $tableName Table name
-     * @return bool true, if table is empty, otherwise false
+     * @return bool true, if the table is empty, otherwise false
      */
     public static function checkOnEmptyTable(string $tableName): bool
     {
-        if (
-            self::$instance->numRows(
-                self::$instance->query('SELECT * FROM ' . self::getTablePrefix() . $tableName)
-            ) < 1
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+        return self::$instance->numRows(
+            self::$instance->query('SELECT * FROM ' . self::getTablePrefix() . $tableName)
+        ) < 1;
     }
 
     /**

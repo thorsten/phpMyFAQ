@@ -38,22 +38,18 @@ class Export
 
     /**
      * Factory.
-     *
-     * @param Faq           $faq
-     * @param Category      $category
-     * @return Pdf|Html5|Json
      * @throws Exception
      */
     public static function create(
         Faq $faq,
         Category $category,
-        Configuration $config,
+        Configuration $configuration,
         string $mode = 'pdf'
     ): Pdf|Html5|Json {
         return match ($mode) {
-            'json' => new Json($faq, $category, $config),
-            'pdf' => new Pdf($faq, $category, $config),
-            'html5' => new Html5($faq, $category, $config),
+            'json' => new Json($faq, $category, $configuration),
+            'pdf' => new Pdf($faq, $category, $configuration),
+            'html5' => new Html5($faq, $category, $configuration),
             default => throw new Exception('Export not implemented!'),
         };
     }
