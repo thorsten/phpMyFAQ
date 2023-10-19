@@ -40,8 +40,8 @@ dependencies:
     specifier: ^1.15.0
     version: 1.15.0
   tinymce:
-    specifier: ^6.6.0
-    version: 6.6.0
+    specifier: ^6.7.1
+    version: 6.7.1
   vanilla-cookieconsent:
     specifier: ^2.9.1
     version: 2.9.1
@@ -7539,8 +7539,8 @@ packages:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
     dev: true
 
-  /tinymce@6.6.0:
-    resolution: {integrity: sha512-b9Mb7z8ryFOwLm8WCmlpwzdgOt1xD1u5Jjdh68B4QjkIyTLyHRBsfsrbiCUGonnVTymDlkexPkaP8sj24zexKQ==}
+  /tinymce@6.7.1:
+    resolution: {integrity: sha512-SIGJgWk2d/X59VbO+i81QfNx2EP1P5t+sza2/1So3OLGtmMBhEJMag7sN/Mo8sq4s0niwb65Z51yLju32jP11g==}
     dev: false
 
   /tmpl@1.0.5:
