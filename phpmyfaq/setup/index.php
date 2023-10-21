@@ -22,11 +22,13 @@
  */
 
 use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Component\Alert;use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Strings;
-use phpMyFAQ\System;use phpMyFAQ\Translation;
+use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 const PMF_SRC_DIR = PMF_ROOT_DIR . '/src';

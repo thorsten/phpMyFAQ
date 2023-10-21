@@ -31,19 +31,13 @@ use phpMyFAQ\Database\Sqlsrv;
  */
 class Database
 {
-    /**
-     * Instance.
-     */
+    /** @var DatabaseDriver|null */
     private static ?DatabaseDriver $instance = null;
 
-    /**
-     * Database type.
-     */
+    /** @var string Database type. */
     private static string $dbType;
 
-    /**
-     * Table prefix.
-     */
+    /** @var string|null Table prefix */
     private static ?string $tablePrefix = null;
 
     /**
@@ -85,7 +79,7 @@ class Database
     }
 
     /**
-     * Returns the database type.
+     * Returns the database type as string
      */
     public static function getType(): string
     {

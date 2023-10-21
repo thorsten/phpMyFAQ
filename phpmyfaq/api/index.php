@@ -72,8 +72,6 @@ try {
 //
 Strings::init($currentLanguage);
 
-$request = Request::createFromGlobals();
-
 $routes = include __DIR__ . '/../src/api-routes.php';
 
 $context = new RequestContext();

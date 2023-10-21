@@ -23,7 +23,6 @@ use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\BasicPermission;
-use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -48,7 +47,9 @@ $step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_SPECIAL_CHARS);
 $query = [];
 
-$update = new Update(new System(), Configuration::getConfigurationInstance());
+$system = new System();
+$faqConfig = Configuration::getConfigurationInstance();
+$update = new Update($system, $faqConfig);
 
 if (!$update->checkDatabaseFile()) {
     $redirect = new RedirectResponse('./index.php');
@@ -120,8 +121,6 @@ try {
     </div>
 <?php
 
-$system = new System();
-$faqConfig = Configuration::getConfigurationInstance();
 $version = $faqConfig->getVersion();
 
 $update = new Update($system, $faqConfig);
@@ -296,34 +295,16 @@ if ($step == 3) {
     // Perform the queries for optimizing the database
     echo '<div class="mt-5 mb-5">';
     echo '<h6>Update Progress:</h6>';
-    echo '<div class="text-center">';
 
     try {
         $progressCallback = function ($query) {
             echo "Executing query: $query" . PHP_EOL;
         };
         $update->applyUpdates($progressCallback);
-    } catch (ErrorException $exception) {
+    } catch (ErrorException | Exception $exception) {
         echo '<p class="alert alert-danger"><strong>Error:</strong> ' . $exception->getMessage() . '</p>';
-        System::renderFooter();
     }
 
-    /*
-    foreach ($query as $executeQuery) {
-        $result = $faqConfig->getDb()->query($executeQuery);
-        printf('<span title="%s">█</span>', $executeQuery);
-        if (!$result) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
-                'once again or send us a <a href="https://github.com/thorsten/phpMyFAQ/issues" target="_blank">' .
-                'bug report</a></p>';
-            printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
-            printf('<code>%s</code>', htmlentities($executeQuery));
-            System::renderFooter();
-        }
-        usleep(10000);
-    }
-    */
-    echo '</div>';
     echo '</div>';
 
     //

@@ -57,6 +57,9 @@ class Update extends Setup
         return $database->numRows($result) === 0;
     }
 
+    /**
+     * @throws Exception
+     */
     public function applyUpdates(callable $progressCallback): bool
     {
         // 3.1 updates
@@ -109,6 +112,9 @@ class Update extends Setup
         $this->dryRun = $dryRun;
     }
 
+    /**
+     * @throws Exception
+     */
     private function executeQueries(callable $progressCallback): void
     {
         if ($this->dryRun) {
