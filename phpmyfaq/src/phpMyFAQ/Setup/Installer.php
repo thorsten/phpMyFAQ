@@ -1054,6 +1054,6 @@ class Installer extends Setup
      */
     public function checkMinimumPhpVersion(): bool
     {
-        return version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP) > 0;
+        return version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP) >= 0;
     }
 }
