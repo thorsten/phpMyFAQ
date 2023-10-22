@@ -1,0 +1,80 @@
+<form action="#" method="post" name="phpmyfaq-update-form" id="phpmyfaq-update-form">
+  <input name="installed-version" type="hidden" value="{{ installedVersion }}">
+  <input name="next-step" id="phpmyfaq-update-next-step" type="hidden" value="2">
+
+  <div class="row">
+    <div class="col">
+      <div class="alert alert-info text-center mt-2" role="alert">
+        <strong>
+          <i aria-hidden="true" class="fa fa-info-circle"></i>
+          Please create a full backup of your database, your templates,
+          attachments and uploaded images before running this update.
+        </strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p>This update script will work <strong>only</strong> for the following versions:</p>
+      <ul>
+        <li>phpMyFAQ 3.0.x</li>
+        <li>phpMyFAQ 3.1.x</li>
+        <li>phpMyFAQ 3.2.x</li>
+      </ul>
+    </div>
+    <div class="col">
+      <p>This update script <strong>will not</strong> work for the following versions:</p>
+      <ul>
+        <li>phpMyFAQ 0.x</li>
+        <li>phpMyFAQ 1.x</li>
+        <li>phpMyFAQ 2.x</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+
+      {% if errorCheckPreUpgrade %}
+      <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Fatal error!</h4>
+        {{ errorMessagePreUpgrade }}
+      </div>
+      {% endif %}
+
+      {% if configTableNotAvailable %}
+        <div class="alert alert-danger" role="alert">
+          <h4 class="alert-heading">Fatal error!</h4>
+          Looks like there's a problem with the <code>faqconfig</code> table.
+        </div>
+      {% endif %}
+
+      {% if installedVersionTooOld %}
+        <div class="alert alert-danger" role="alert">
+          <h4 class="alert-heading">Attention</h4>
+          Your current installed version is phpMyFAQ {{ installedVersion }}.
+          Please update to the latest phpMyFAQ 3.0 version first.
+        </div>
+      {% endif %}
+
+      {% if isMaintenanceModeEnabled %}
+      <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Heads up!</h4>
+        Please enable the maintenance mode in the <a href="../admin/?action=config">admin section</a>
+        before running the update script.
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col d-flex justify-content-end">
+      <button class="btn btn-primary btn-next btn-lg {{ nextStepButtonEnabled }}" type="button"
+              id="phpmyfaq-update-next-step" {{ nextStepButtonEnabled }}>
+        Next update step
+      </button>
+    </div>
+  </div>
+</form>

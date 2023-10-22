@@ -35,7 +35,29 @@ abstract class Setup
     }
 
     /**
+     * We only support updates from 3.0.0 and later.
+     *
+     * @param string $version
+     * @return bool
+     */
+    public function checkMinimumUpdateVersion(string $version): bool
+    {
+        return version_compare($version, '3.0.0', '>');
+    }
+
+    /**
+     * Updates only possible if maintenance mode is enabled.
+     *
+     * @return bool
+     */
+    public function checkMaintenanceMode(): bool
+    {
+        return Configuration::getConfigurationInstance()->get('main.maintenanceMode');
+    }
+
+    /**
      * Checks if the database file exists.
+     *
      * @return bool
      */
     public function checkDatabaseFile(): bool

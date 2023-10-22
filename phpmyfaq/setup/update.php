@@ -17,7 +17,6 @@
  * @since     2002-01-10
  */
 
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database;
@@ -26,6 +25,7 @@ use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
@@ -43,13 +43,16 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 Strings::init();
 
-$step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
-$version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_SPECIAL_CHARS);
-$query = [];
+$step = Filter::filterInput(INPUT_GET, 'next-step', FILTER_VALIDATE_INT, 1);
+$version = Filter::filterInput(INPUT_POST, 'installed-version', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $system = new System();
 $faqConfig = Configuration::getConfigurationInstance();
+
 $update = new Update($system, $faqConfig);
+$update->setVersion(System::getVersion());
+
+$installedVersion = $faqConfig->getVersion();
 
 if (!$update->checkDatabaseFile()) {
     $redirect = new RedirectResponse('./index.php');
@@ -62,152 +65,47 @@ try {
     $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/content/core/config/database.php');
 }
 
-?>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
-  <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
-  <link rel="stylesheet" href="../assets/dist/styles.css">
-  <script src="../assets/dist/frontend.js"></script>
-  <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
-</head>
-<body>
+$twig = new TwigWrapper('../assets/templates');
+$template = $twig->loadTemplate('./setup/update.twig');
 
-<nav class="p-3 text-bg-dark border-bottom">
-  <div class="container">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li class="pmf-nav-link">
-          <a href="<?= System::getDocumentationUrl() ?>" class="pmf-nav-link" target="_blank">
-            Documentation
-          </a>
-        </li>
-        <li class="pmf-nav-link {{ activeAddContent }}">
-          <a href="https://www.phpmyfaq.de/support" class="pmf-nav-link" target="_blank">
-            Support
-          </a>
-        </li>
-        <li class="pmf-nav-link {{ activeAddQuestion }}">
-          <a href="https://forum.phpmyfaq.de/" class="pmf-nav-link" target="_blank">
-            Forums
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+$templateVars = [
+    'newVersion' => System::getVersion(),
+    'installedVersion' => $installedVersion,
+    'currentYear' => date('Y'),
+    'documentationUrl' => System::getDocumentationUrl(),
+    'configTableNotAvailable' => $update->isConfigTableAvailable($faqConfig->getDb()),
+    'nextStepButtonEnabled' => $update->checkMaintenanceMode() ? '' : 'disabled',
+];
 
-<main role="main">
-  <section id="phpmyfaq-setup-form">
-    <div class="container shadow-lg p-5 mt-5 bg-light-subtle">
-      <div class="px-4 pt-2 my-2 text-center border-bottom">
-        <h1 class="display-4 fw-bold">phpMyFAQ <?= System::getVersion() ?></h1>
-        <div class="col-lg-6 mx-auto">
-          <p class="lead mb-4">
-            Did you already read our <a target="_blank" href="<?= System::getDocumentationUrl() ?>">documentation</a>
-            carefully before starting the phpMyFAQ setup?
-          </p>
-        </div>
-      </div>
-
-      <div class="form-header d-flex mb-4">
-        <span class="stepIndicator">Update information</span>
-        <span class="stepIndicator">File backups</span>
-        <span class="stepIndicator">Database updates</span>
-    </div>
-<?php
-
-$version = $faqConfig->getVersion();
-
-$update = new Update($system, $faqConfig);
-$update->setVersion(System::getVersion());
-
+// Check hard requirements
 try {
     $update->checkPreUpgrade($dbConfig->getType());
 } catch (Exception $e) {
-    echo Alert::danger('ad_entryins_fail', $e->getMessage());
+    $templateVars = [
+        ...$templateVars,
+        'errorCheckPreUpgrade' => true,
+        'errorMessagePreUpgrade' => $e->getMessage(),
+    ];
 }
 
-if ($update->isConfigTableAvailable($faqConfig->getDb())) {
-    echo Alert::danger('ad_entryins_fail');
+
+// We only support updates from 3.0+
+if (!$update->checkMinimumUpdateVersion($installedVersion)) {
+    $templateVars = [
+        ...$templateVars,
+        'installedVersionTooOld' => true,
+    ];
 }
 
-/**************************** STEP 1 OF 3 ***************************/
-if ($step === 1) { ?>
-      <form action="update.php?step=2" method="post">
-        <input name="version" type="hidden" value="<?= $version ?>">
-
-        <div class="row">
-          <div class="col">
-            <div class="alert alert-info text-center mt-2" role="alert">
-              <strong>
-                <i aria-hidden="true" class="fa fa-info-circle"></i>
-                Please create a full backup of your database, your templates,
-                attachments and uploaded images before running this update.
-              </strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <p>This update script will work <strong>only</strong> for the following versions:</p>
-            <ul>
-              <li>phpMyFAQ 3.0.x</li>
-              <li>phpMyFAQ 3.1.x</li>
-              <li>phpMyFAQ 3.2.x</li>
-            </ul>
-          </div>
-          <div class="col">
-            <p>This update script <strong>will not</strong> work for the following versions:</p>
-            <ul>
-              <li>phpMyFAQ 0.x</li>
-              <li>phpMyFAQ 1.x</li>
-              <li>phpMyFAQ 2.x</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-              <?php
-
-                //
-                // We only support updates from 3.0+
-                //
-                if (!version_compare($version, '3.0.0', '>')) {
-                    echo '<div class="alert alert-danger" role="alert">';
-                    echo '<h4 class="alert-heading">Attention!</h4>';
-                    printf('Your current version: %s', $version);
-                    echo '<hr>Please update to the latest phpMyFAQ 3.0 version first.</div>';
-                }
-
-                //
-                // Updates only possible if maintenance mode is enabled
-                //
-                if (!$faqConfig->get('main.maintenanceMode')) {
-                    echo '<div class="alert alert-danger" role="alert"><h4 class="alert-heading">Heads up!</h4>' .
-                        'Please enable the maintenance mode in the <a href="../admin/?action=config">admin section</a>' .
-                        ' before running the update script.</div>';
-                    $updateDisabled = 'disabled';
-                } else {
-                    $updateDisabled = '';
-                }
-                ?>
-            <p>
-                <button class="btn btn-primary btn-next btn-lg pull-right <?= $updateDisabled ?>" type="submit"
-                    <?= $updateDisabled ?>>Go to step 2 of 3</button>
-            </p>
-          </div>
-        </div>
-      </form>
-    <?php
-    System::renderFooter();
+// Updates only possible if maintenance mode is enabled
+if (!$update->checkMaintenanceMode()) {
+    $templateVars = [
+        ...$templateVars,
+        'isMaintenanceModeEnabled' => true,
+    ];
 }
+
+echo $template->render($templateVars);
 
 /**************************** STEP 2 OF 3 ***************************/
 if ($step == 2) {

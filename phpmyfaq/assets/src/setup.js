@@ -13,65 +13,8 @@
  * @since     2015-12-24
  */
 
-import { insertAfter } from './utils';
 import { handlePasswordToggle } from './utils';
-
-export const selectDatabaseSetup = (event) => {
-  const database = document.getElementById('dbdatafull');
-  const databasePort = document.getElementById('sql_port');
-  const sqlite = document.getElementById('dbsqlite');
-
-  switch (event.target.value) {
-    case 'mysqli':
-      databasePort.value = 3306;
-      sqlite.className = 'd-none';
-      database.className = 'd-block';
-      break;
-    case 'pgsql':
-      databasePort.value = 5432;
-      sqlite.className = 'd-none';
-      database.className = 'd-block';
-      break;
-    case 'sqlsrv':
-      databasePort.value = 1433;
-      sqlite.className = 'd-none';
-      database.className = 'd-block';
-      break;
-    case 'sqlite3':
-      sqlite.className = 'd-block';
-      database.className = 'd-none';
-      break;
-    default:
-      sqlite.className = 'd-none';
-      database.className = 'd-block';
-      break;
-  }
-};
-
-export const addElasticsearchServerInput = () => {
-  const wrapper = document.getElementById('elasticsearch-server-wrapper');
-  const input = document.createElement('input');
-
-  // Set attributes for input
-  input.className = 'form-control';
-  input.className += ' mt-1';
-  input.type = 'text';
-  input.name = 'elasticsearch_server[]';
-  input.placeholder = `127.0.0.1:9200`;
-
-  insertAfter(wrapper, input);
-};
-
-const stepIndicator = (step) => {
-  // This function removes the "active" class of all steps...
-  let i,
-    steps = document.getElementsByClassName('stepIndicator');
-  for (i = 0; i < steps.length; i++) {
-    steps[i].className = steps[i].className.replace(' active', '');
-  }
-  //... and adds the "active" class on the current step:
-  steps[step].className += ' active';
-};
+import { addElasticsearchServerInput, selectDatabaseSetup, stepIndicator } from './configuration';
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -112,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function showTab(n) {
     const currentStep = document.getElementsByClassName('step');
 
-    currentStep[n].style.display = 'block';
+    if (currentStep) {
+      currentStep[n].style.display = 'block';
+    }
 
     const prevButton = document.getElementById('prevBtn');
     const nextButton = document.getElementById('nextBtn');
