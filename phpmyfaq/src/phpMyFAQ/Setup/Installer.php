@@ -401,7 +401,6 @@ class Installer extends Setup
         'security.googleReCaptchaV2SiteKey' => '',
         'security.googleReCaptchaV2SecretKey' => '',
 
-
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,
         'spam.enableSafeEmail' => 'true',
@@ -440,8 +439,10 @@ class Installer extends Setup
         'api.enableAccess' => 'true',
         'api.apiClientToken' => '',
 
+        'upgrade.dateLastChecked' => '',
+        'upgrade.lastDownloadedPackage' => '',
+        'upgrade.onlineUpdateEnabled' => 'false',
         'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
-        'upgrade.dateLastChecked' => ''
     ];
 
     /**
