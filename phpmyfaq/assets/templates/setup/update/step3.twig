@@ -1,0 +1,30 @@
+<form action="#" method="post" name="phpmyfaq-update-form" id="phpmyfaq-update-form">
+  <input name="installed-version" id="phpmyfaq-update-installed-version" type="hidden" value="{{ installedVersion }}">
+
+  <div class="row">
+    <div class="col mt-5">
+
+      <div class="alert alert-success d-none" id="phpmyfaq-update-database-success">
+        <h4 class="alert-heading">Hooray!</h4>
+        The database was updated successfully. Thank you very much for updating.
+      </div>
+
+      <div class="alert alert-danger d-none" id="phpmyfaq-update-database-error">
+        <h4 class="alert-heading">Oh no!</h4>
+        <p>
+          The database could not be updated. Please check the following error message(s):
+        </p>
+        <ul class="list-unstyled" id="error-messages"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col d-flex justify-content-end">
+      <a href="../index.php" class="btn btn-primary btn-next btn-lg" type="button">
+        Return to your updated phpMyFAQ installation
+      </a>
+    </div>
+  </div>
+</form>

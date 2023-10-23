@@ -1,3 +1,11 @@
-import { handleUpdateNextStepButton } from './configuration';
+import {
+  handleConfigBackup,
+  handleDatabaseUpdate,
+  handleUpdateInformation,
+  handleUpdateNextStepButton,
+} from './configuration';
 
 handleUpdateNextStepButton();
+handleUpdateInformation();
+handleConfigBackup();
+handleDatabaseUpdate();

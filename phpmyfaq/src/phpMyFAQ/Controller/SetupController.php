@@ -19,31 +19,112 @@ namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\System;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class SetupController
 {
-    public function update(): StreamedResponse
+    public function check(Request $request): JsonResponse
     {
+        $response = new JsonResponse();
+
+        $configuration = Configuration::getConfigurationInstance();
+
+        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $update = new Update(new System(), $configuration);
+        $update->setVersion($installedVersion);
+
+        if (!$update->checkMaintenanceMode()) {
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['message' => 'Maintenance mode is not enabled. Please enable it first.']);
+            return $response;
+        }
+
+        if (!$update->checkMinimumUpdateVersion($installedVersion)) {
+            $message = sprintf(
+                'Your installed version is phpMyFAQ %s. Please update to the latest phpMyFAQ 3.0 version first.',
+                $installedVersion
+            );
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['message' => $message]);
+            return $response;
+        }
+
+        // Check hard requirements
+        try {
+            $update->checkPreUpgrade(Database::getType());
+        } catch (Exception $exception) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['message' => $exception->getMessage()]);
+            return $response;
+        }
+
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(['message' => '✅ Backup successful']);
+        return $response;
+    }
+
+    public function backup(Request $request): JsonResponse
+    {
+        $response = new JsonResponse();
+
         $update = new Update(new System(), Configuration::getConfigurationInstance());
         $update->setVersion(System::getVersion());
 
-        return new StreamedResponse(function () use ($update) {
+        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $configPath = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content';
+        if (!version_compare($installedVersion, '4.0.0-dev') < 0) {
+            $configPath = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'config';
+        }
+
+        try {
+            $pathToBackup = $update->createConfigBackup($configPath);
+        } catch (Exception $exception) {
+            $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
+            $response->setData(['message' => $exception->getMessage()]);
+            return $response;
+        }
+
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(['message' => '✅ Backup successful', 'backupFile' => $pathToBackup]);
+        return $response;
+    }
+
+    public function updateDatabase(Request $request): StreamedResponse
+    {
+        $configuration = Configuration::getConfigurationInstance();
+
+        $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $update = new Update(new System(), $configuration);
+        $update->setVersion($installedVersion);
+
+        $response = new StreamedResponse();
+        $response->setCallback(function () use ($update, $configuration, $response) {
             $progressCallback = function ($progress) {
-                echo json_encode(['progress' => $progress], JSON_THROW_ON_ERROR) . "\n";
+                echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
 
             try {
                 if ($update->applyUpdates($progressCallback)) {
-                    echo json_encode(['message' => '✅ Database successfully updated.']);
+                    $configuration->set('main.maintenanceMode', false);
+                    echo json_encode(['success' => '✅ Database successfully updated.']);
                 }
             } catch (Exception $e) {
-                echo json_encode(['message' => 'Update database failed: ' . $e->getMessage()], JSON_THROW_ON_ERROR);
+                echo json_encode(['error' => 'Update database failed: ' . $e->getMessage()]);
             }
         });
+        return $response;
     }
 }

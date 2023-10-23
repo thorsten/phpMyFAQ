@@ -1,0 +1,31 @@
+<form action="#" method="post" name="phpmyfaq-update-form" id="phpmyfaq-update-form">
+  <input name="installed-version" id="phpmyfaq-update-installed-version" type="hidden" value="{{ installedVersion }}">
+  <input name="next-step" id="phpmyfaq-update-next-step" type="hidden" value="3">
+
+  <div class="row">
+    <div class="col mt-5">
+
+      <div class="alert alert-success">
+        <h4 class="alert-heading">Backup</h4>
+        <p>
+          Before we start the database update process, we created a backup of your current phpMyFAQ configuration files.
+          This is a safety measure in case something goes wrong during the update process.
+        </p>
+        <p>
+          <strong>Important:</strong> Please make sure that you have a copy of your
+          <a href="" id="phpmyfaq-update-backup-download-link">configuration.</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col d-flex justify-content-end">
+      <button class="btn btn-primary btn-next btn-lg {{ nextStepButtonEnabled }}" type="button"
+              id="phpmyfaq-update-next-step-button" {{ nextStepButtonEnabled }}>
+        Next update step
+      </button>
+    </div>
+  </div>
+</form>

@@ -24,6 +24,9 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 class Update extends Setup
 {
@@ -57,6 +60,43 @@ class Update extends Setup
         return $database->numRows($result) === 0;
     }
 
+    /**
+     * Creates a backup of the current config files
+     * @throws Exception
+     */
+    public function createConfigBackup(string $configDir): string
+    {
+        $outputZipFile = $configDir . DIRECTORY_SEPARATOR . $this->getBackupFilename();
+
+        $zip = new ZipArchive();
+        if ($zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            throw new Exception('Cannot create config backup file.');
+        }
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($configDir),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($files as $file) {
+            $file = realpath($file);
+            if (!str_contains($file, $configDir . DIRECTORY_SEPARATOR)) {
+                if (is_dir($file)) {
+                    $zip->addEmptyDir(str_replace($configDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
+                } elseif (is_file($file)) {
+                    $zip->addFile($file, str_replace($configDir . DIRECTORY_SEPARATOR, '', $file));
+                }
+            }
+        }
+
+        $zip->close();
+
+        if (!file_exists($outputZipFile)) {
+            throw new Exception('Cannot store config backup file.');
+        }
+
+        return $this->configuration->getDefaultUrl() . 'content/' . $this->getBackupFilename();
+    }
     /**
      * @throws Exception
      */
@@ -397,5 +437,10 @@ class Update extends Setup
     {
         $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
         $this->configuration->update(['main.currentVersion' => System::getVersion()]);
+    }
+
+    private function getBackupFilename(): string
+    {
+        return sprintf('phpmyfaq-config-backup.%s.zip', date('Y-m-d'));
     }
 }

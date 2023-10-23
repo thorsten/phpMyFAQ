@@ -50,11 +50,11 @@
 
           <div class="form-header d-flex my-4">
             <span class="stepIndicator">Update information</span>
-            <span class="stepIndicator">File backups</span>
+            <span class="stepIndicator">Configuration backup</span>
             <span class="stepIndicator">Database updates</span>
           </div>
 
-          {{ include('setup/update/step1.twig') }}
+          {{ include('setup/update/step' ~ currentStep ~ '.twig') }}
 
         </div>
         </section>

@@ -104,8 +104,22 @@ $routes->add(
 
 // Setup REST API
 $routes->add(
-    'api.setup.update',
-    new Route('setup/update', ['_controller' => [SetupController::class, 'update'], '_methods' => 'POST'])
+    'api.setup.check',
+    new Route('setup/check', ['_controller' => [SetupController::class, 'check'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.setup.backup',
+    new Route('setup/backup', ['_controller' => [SetupController::class, 'backup'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.setup.update-database',
+    new Route(
+        'setup/update-database',
+        [
+            '_controller' => [ SetupController::class, 'updateDatabase' ],
+            '_methods' => 'POST'
+        ]
+    )
 );
 
 return $routes;

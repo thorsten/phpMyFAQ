@@ -144,6 +144,7 @@ class UpdateController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      * @throws \JsonException
+     * @throws Exception
      */
     #[Route('admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
