@@ -198,42 +198,86 @@ export const handleCheckForUpdates = () => {
   if (installButton) {
     installButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/create-temporary-backup', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(async (response) => {
-          const progressBarBackup = document.getElementById('result-backup-package');
-          const reader = response.body.getReader();
-          const card = document.getElementById('pmf-update-step-install-package');
+      createTemporaryBackup();
+      installPackage();
+    });
+  }
+};
 
-          function pump() {
-            return reader.read().then(({ done, value }) => {
-              const decodedValue = new TextDecoder().decode(value);
+const createTemporaryBackup = () => {
+  fetch(window.location.pathname + 'api/create-temporary-backup', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(async (response) => {
+      const progressBarBackup = document.getElementById('result-backup-package');
+      const reader = response.body.getReader();
+      const card = document.getElementById('pmf-update-step-install-package');
 
-              if (done) {
-                progressBarBackup.style.width = '100%';
-                progressBarBackup.innerText = '100%';
-                progressBarBackup.classList.remove('progress-bar-animated');
-                card.classList.add('text-bg-success');
-                return;
-              } else {
-                progressBarBackup.style.width = JSON.parse(decodedValue).progress;
-                progressBarBackup.innerText = JSON.parse(decodedValue).progress;
-              }
+      function pump() {
+        return reader.read().then(({ done, value }) => {
+          const decodedValue = new TextDecoder().decode(value);
 
-              return pump();
-            });
+          if (done) {
+            progressBarBackup.style.width = '100%';
+            progressBarBackup.innerText = '100%';
+            progressBarBackup.classList.remove('progress-bar-animated');
+            card.classList.add('text-bg-success');
+            return;
+          } else {
+            progressBarBackup.style.width = JSON.parse(decodedValue).progress;
+            progressBarBackup.innerText = JSON.parse(decodedValue).progress;
           }
 
           return pump();
-        })
-        .catch((error) => {
-          console.error(error);
         });
+      }
+
+      return pump();
+    })
+    .catch((error) => {
+      console.error(error);
     });
-  }
+};
+
+const installPackage = () => {
+  fetch(window.location.pathname + 'api/install-package', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(async (response) => {
+      const progressBarInstallation = document.getElementById('result-install-package');
+      const reader = response.body.getReader();
+      const card = document.getElementById('pmf-update-step-install-package');
+
+      function pump() {
+        return reader.read().then(({ done, value }) => {
+          const decodedValue = new TextDecoder().decode(value);
+
+          if (done) {
+            progressBarInstallation.style.width = '100%';
+            progressBarInstallation.innerText = '100%';
+            progressBarInstallation.classList.remove('progress-bar-animated');
+            card.classList.add('text-bg-success');
+            return;
+          } else {
+            progressBarInstallation.style.width = JSON.parse(decodedValue).progress;
+            progressBarInstallation.innerText = JSON.parse(decodedValue).progress;
+          }
+
+          return pump();
+        });
+      }
+
+      return pump();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
