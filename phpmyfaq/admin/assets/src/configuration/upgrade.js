@@ -198,8 +198,7 @@ export const handleCheckForUpdates = () => {
   if (installButton) {
     installButton.addEventListener('click', (event) => {
       event.preventDefault();
-      createTemporaryBackup();
-      installPackage();
+      createTemporaryBackup().then(() => installPackage());
     });
   }
 };
@@ -215,7 +214,6 @@ const createTemporaryBackup = () => {
     .then(async (response) => {
       const progressBarBackup = document.getElementById('result-backup-package');
       const reader = response.body.getReader();
-      const card = document.getElementById('pmf-update-step-install-package');
 
       function pump() {
         return reader.read().then(({ done, value }) => {
@@ -225,7 +223,6 @@ const createTemporaryBackup = () => {
             progressBarBackup.style.width = '100%';
             progressBarBackup.innerText = '100%';
             progressBarBackup.classList.remove('progress-bar-animated');
-            card.classList.add('text-bg-success');
             return;
           } else {
             progressBarBackup.style.width = JSON.parse(decodedValue).progress;
@@ -241,6 +238,7 @@ const createTemporaryBackup = () => {
     .catch((error) => {
       console.error(error);
     });
+  return new Promise();
 };
 
 const installPackage = () => {
