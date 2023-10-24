@@ -16,7 +16,11 @@
  * @since     2011-02-04
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
+
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
+use phpMyFAQ\Date;
 
 /**
  * Class Report

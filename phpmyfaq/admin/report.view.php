@@ -16,10 +16,10 @@
  * @since     2011-01-12
  */
 
+use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
-use phpMyFAQ\Report;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 

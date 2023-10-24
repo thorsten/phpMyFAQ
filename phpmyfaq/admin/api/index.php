@@ -16,79 +16,18 @@
  * @since     2023-07-02
  */
 
+use phpMyFAQ\Application;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Language;
-use phpMyFAQ\Translation;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
 
 require '../../src/Bootstrap.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
 
-//
-// Create Request & Response
-//
-$response = new JsonResponse();
-$request = Request::createFromGlobals();
+$routes = include PMF_SRC_DIR  . '/admin-routes.php';
 
-//
-// Get language (default: english)
-//
-$language = new Language($faqConfig);
-$currentLanguage = $language->setLanguageByAcceptLanguage();
-
-//
-// Set translation class
-//
+$app = new Application($faqConfig);
 try {
-    Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
-        ->setDefaultLanguage('en')
-        ->setCurrentLanguage($currentLanguage)
-        ->setMultiByteLanguage();
-} catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
-}
-
-$routes = new RouteCollection();
-
-require '../../src/admin-routes.php';
-
-$context = new RequestContext();
-$context->fromRequest($request);
-$matcher = new UrlMatcher($routes, $context);
-
-$controllerResolver = new ControllerResolver();
-$argumentResolver = new ArgumentResolver();
-
-try {
-    $request->attributes->add($matcher->match($request->getPathInfo()));
-
-    $controller = $controllerResolver->getController($request);
-    $arguments = $argumentResolver->getArguments($request, $controller);
-
-    $response->setStatusCode(Response::HTTP_OK);
-    $response = call_user_func_array($controller, $arguments);
-} catch (ResourceNotFoundException $exception) {
-    $response = new Response('Not Found', 404);
+    $app->run($routes);
 } catch (Exception $exception) {
-    $response = new Response(
-        sprintf(
-            'An error occurred: %s at line %d at %s',
-            $exception->getMessage(),
-            $exception->getLine(),
-            $exception->getFile()
-        ),
-        500
-    );
+    echo $exception->getMessage();
 }
-
-$response->send();

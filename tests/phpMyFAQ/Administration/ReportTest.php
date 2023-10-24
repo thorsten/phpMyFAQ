@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +22,7 @@ class ReportTest extends TestCase
         ];
 
         foreach ($data as $row) {
-            $csvRow = array_map(['phpMyFAQ\Report', 'sanitize'], $row);
+            $csvRow = array_map(['phpMyFAQ\Administration\Report', 'sanitize'], $row);
             $actual[] = implode(',', $csvRow);
         }
 

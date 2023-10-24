@@ -127,7 +127,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
                     'adminDashboardErrorMessage' => $e->getMessage()
                 ];
             }
-
         }
     }
 

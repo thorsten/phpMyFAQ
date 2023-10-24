@@ -52,7 +52,6 @@ $installedVersion = $faqConfig->getVersion();
 $update = new Update($system, $faqConfig);
 $update->setVersion($installedVersion);
 
-
 if (!$update->checkDatabaseFile()) {
     $redirect = new RedirectResponse('./index.php');
     $redirect->send();

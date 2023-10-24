@@ -21,6 +21,7 @@ use DateTime;
 use DateTimeInterface;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
@@ -39,11 +40,13 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class UpdateController
+class UpdateController extends Controller
 {
     #[Route('admin/api/health-check')]
     public function healthCheck(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
@@ -75,6 +78,8 @@ class UpdateController
     #[Route('admin/api/versions')]
     public function versions(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $client = HttpClient::create();
         $response = new JsonResponse();
         try {
@@ -100,6 +105,8 @@ class UpdateController
     #[Route('admin/api/update-check')]
     public function updateCheck(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
@@ -149,6 +156,8 @@ class UpdateController
     #[Route('admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
@@ -184,6 +193,8 @@ class UpdateController
     #[Route('admin/api/extract-package')]
     public function extractPackage(): StreamedResponse
     {
+        $this->userIsAuthenticated();
+
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
 
@@ -207,6 +218,8 @@ class UpdateController
     #[Route('admin/api/create-temporary-backup')]
     public function createTemporaryBackup(): StreamedResponse
     {
+        $this->userIsAuthenticated();
+
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
 
@@ -230,6 +243,8 @@ class UpdateController
     #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
+        $this->userIsAuthenticated();
+
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
 
@@ -251,6 +266,8 @@ class UpdateController
     #[Route('admin/api/update-database')]
     public function updateDatabase(): StreamedResponse
     {
+        $this->userIsAuthenticated();
+
         $configuration = Configuration::getConfigurationInstance();
         $update = new Update(new System(), $configuration);
         $update->setVersion(System::getVersion());

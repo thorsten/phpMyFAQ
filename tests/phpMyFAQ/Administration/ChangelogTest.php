@@ -1,8 +1,11 @@
 <?php
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 
 class ChangelogTest extends TestCase

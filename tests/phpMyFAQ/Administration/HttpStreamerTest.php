@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;

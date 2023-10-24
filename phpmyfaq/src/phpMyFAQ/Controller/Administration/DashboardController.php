@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
@@ -28,11 +29,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class DashboardController
+class DashboardController extends Controller
 {
     #[Route('admin/api/dashboard/versions')]
     public function versions(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
@@ -40,7 +43,7 @@ class DashboardController
         try {
             $versions = $api->getVersions();
             $response->setStatusCode(Response::HTTP_OK);
-            if (-1 === version_compare($versions['installed'], $versions['stable'])) {
+            if (version_compare($versions['installed'], $versions['stable']) < 0) {
                 $response->setData(
                     ['success' => Translation::get('ad_you_should_update')]
                 );
@@ -59,6 +62,8 @@ class DashboardController
     #[Route('admin/api/dashboard/visits')]
     public function visits(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 

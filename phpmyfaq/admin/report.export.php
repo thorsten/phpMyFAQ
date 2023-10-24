@@ -16,14 +16,12 @@
  * @since     2011-01-12
  */
 
-use phpMyFAQ\Configuration;
+use phpMyFAQ\Administration\HttpStreamer;
+use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
-use phpMyFAQ\Report;
-use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -122,7 +120,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
 
     $content = '';
     foreach ($text as $row) {
-        $csvRow = array_map(['phpMyFAQ\Report', 'sanitize'], $row);
+        $csvRow = array_map(['phpMyFAQ\Administration\Report', 'sanitize'], $row);
         $content .= implode(';', $csvRow);
         $content .= "\r\n";
     }

@@ -24,10 +24,11 @@
  * @since     2005-11-02
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
 
 use DateTime;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Export;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
 

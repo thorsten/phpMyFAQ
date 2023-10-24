@@ -27,13 +27,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class SetupController
 {
     public function check(Request $request): JsonResponse
     {
         $response = new JsonResponse();
+
+        if (empty($request->getContent())) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['message' => 'No version given.']);
+            return $response;
+        }
 
         $configuration = Configuration::getConfigurationInstance();
 
@@ -68,13 +73,19 @@ class SetupController
         }
 
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['message' => '✅ Backup successful']);
+        $response->setData(['message' => '✅ Installation check successful']);
         return $response;
     }
 
     public function backup(Request $request): JsonResponse
     {
         $response = new JsonResponse();
+
+        if (empty($request->getContent())) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['message' => 'No version given.']);
+            return $response;
+        }
 
         $update = new Update(new System(), Configuration::getConfigurationInstance());
         $update->setVersion(System::getVersion());
@@ -99,9 +110,16 @@ class SetupController
         return $response;
     }
 
-    public function updateDatabase(Request $request): StreamedResponse
+    public function updateDatabase(Request $request): StreamedResponse|JsonResponse
     {
         $configuration = Configuration::getConfigurationInstance();
+
+        if (empty($request->getContent())) {
+            $response = new JsonResponse();
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['message' => 'No version given.']);
+            return $response;
+        }
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 

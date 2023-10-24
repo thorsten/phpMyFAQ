@@ -17,10 +17,10 @@
  */
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
-use phpMyFAQ\Changelog;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;

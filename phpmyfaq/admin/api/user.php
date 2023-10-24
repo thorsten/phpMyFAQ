@@ -15,6 +15,7 @@
  * @since     2009-04-04
  */
 
+use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
@@ -22,7 +23,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
-use phpMyFAQ\Report;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;

@@ -15,7 +15,10 @@
  * @since     2019-11-22
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Administration;
+
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 
 /**
  * Class Changelog

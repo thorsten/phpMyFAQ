@@ -16,10 +16,11 @@
  */
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Changelog;
+use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
-use phpMyFAQ\Changelog;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
@@ -31,7 +32,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Question;
-use phpMyFAQ\Revision;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;

@@ -15,92 +15,18 @@
  * @since     2023-07-28
  */
 
+use phpMyFAQ\Application;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Language;
-use phpMyFAQ\Strings;
-use phpMyFAQ\Translation;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
 
 require '../src/Bootstrap.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
 
-//
-// Get language (default: english)
-//
-$language = new Language($faqConfig);
-$currentLanguage = $language->setLanguageByAcceptLanguage();
+$routes = include PMF_SRC_DIR . '/api-routes.php';
 
-//
-// Set language
-//
-if (Language::isASupportedLanguage($currentLanguage)) {
-    require PMF_TRANSLATION_DIR . '/language_' . $currentLanguage . '.php';
-} else {
-    require PMF_TRANSLATION_DIR . '/language_en.php';
-}
-$faqConfig->setLanguage($language);
-
-//
-// Create Request & Response
-//
-$response = new JsonResponse();
-$request = Request::createFromGlobals();
-
-//
-// Set translation class
-//
+$app = new Application($faqConfig);
 try {
-    Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
-        ->setDefaultLanguage('en')
-        ->setCurrentLanguage('en') // currently hardcoded
-        ->setMultiByteLanguage();
-} catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
-}
-
-//
-// Initializing static string wrapper
-//
-Strings::init($currentLanguage);
-
-$routes = include __DIR__ . '/../src/api-routes.php';
-
-$context = new RequestContext();
-$context->fromRequest($request);
-$matcher = new UrlMatcher($routes, $context);
-
-$controllerResolver = new ControllerResolver();
-$argumentResolver = new ArgumentResolver();
-
-try {
-    $request->attributes->add($matcher->match($request->getPathInfo()));
-
-    $controller = $controllerResolver->getController($request);
-    $arguments = $argumentResolver->getArguments($request, $controller);
-
-    $response->setStatusCode(Response::HTTP_OK);
-    $response = call_user_func_array($controller, $arguments);
-} catch (ResourceNotFoundException $exception) {
-    $response = new Response('Not Found', 404);
+    $app->run($routes);
 } catch (Exception $exception) {
-    $response = new Response(
-        sprintf(
-            'An error occurred: %s at line %d at %s',
-            $exception->getMessage(),
-            $exception->getLine(),
-            $exception->getFile()
-        ),
-        500
-    );
+    echo $exception->getMessage();
 }
-
-$response->send();

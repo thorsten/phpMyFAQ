@@ -16,15 +16,12 @@
  * @since     2005-11-02
  */
 
+use phpMyFAQ\Administration\HttpStreamer;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\HttpStreamer;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

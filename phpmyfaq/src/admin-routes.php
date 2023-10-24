@@ -27,12 +27,12 @@ $routes = new RouteCollection();
 //
 $routes->add(
     'admin.api.dashboard.versions',
-    new Route('/dashboard/versions', ['_controller' => [DashboardController::class, 'versions'], '_methods' => 'GET'])
+    new Route('/dashboard/versions', ['_controller' => [DashboardController::class, 'versions']])
 );
 
 $routes->add(
     'admin.api.dashboard.visits',
-    new Route('/dashboard/visits', ['_controller' => [DashboardController::class, 'visits'], '_methods' => 'GET'])
+    new Route('/dashboard/visits', ['_controller' => [DashboardController::class, 'visits']])
 );
 
 //
@@ -45,7 +45,7 @@ $routes->add(
 
 $routes->add(
     'admin.api.versions',
-    new Route('/versions', ['_controller' => [UpdateController::class, 'versions', '_methods' => 'GET']])
+    new Route('/versions', ['_controller' => [UpdateController::class, 'versions']])
 );
 
 $routes->add(
