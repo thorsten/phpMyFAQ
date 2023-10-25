@@ -273,6 +273,7 @@ class Upgrade extends Setup
      * Method to install the package
      *
      * @param callable $progressCallback
+     * @return bool
      */
     public function installPackage(callable $progressCallback): bool
     {
@@ -300,8 +301,10 @@ class Upgrade extends Setup
             }
 
             $currentFile++;
-            $progress = $totalFiles > 0 ? sprintf('%d%%', ($currentFile / $totalFiles) * 100) : 100;
-            call_user_func($progressCallback, $progress);
+            if ($currentFile % 10 === 0) {
+                $progress = $totalFiles > 0 ? sprintf('%d%%', ($currentFile / $totalFiles) * 100) : 100;
+                call_user_func($progressCallback, $progress);
+            }
         }
         return true;
     }
