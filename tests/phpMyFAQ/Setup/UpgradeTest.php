@@ -3,14 +3,11 @@
 namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class UpgradeTest extends TestCase
 {
@@ -26,7 +23,7 @@ class UpgradeTest extends TestCase
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     public function testDownloadPackage(): void
     {
@@ -37,30 +34,31 @@ class UpgradeTest extends TestCase
         $this->upgrade->downloadPackage('1.2.3');
     }
 
-    public function testCreateTemporaryBackup(): void
+    /**
+     * @throws Exception
+     */
+    public function testCheckFilesystemValid(): void
     {
-        $this->markTestSkipped();
+        touch(PMF_CONTENT_DIR . '/core/config/constants.php');
+        touch(PMF_CONTENT_DIR . '/core/config/database.php');
+
+        $this->assertTrue($this->upgrade->checkFilesystem());
     }
 
-    public function testUnpackPackage(): void
+    /**
+     * @throws Exception
+     */
+    public function testCheckFilesystemMissingConfigFiles(): void
     {
-        $this->markTestSkipped();
+        unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
+        touch(PMF_CONTENT_DIR . '/core/config/database.php');
+
+        $this->expectExceptionMessage(
+            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
+        );
+        $this->upgrade->checkFilesystem();
     }
 
-    public function testRestoreTemporaryBackup(): void
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testCheckFilesystem(): void
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testInstallPackage(): void
-    {
-        $this->markTestSkipped();
-    }
     public function testGetDownloadHostForNightly(): void
     {
         $this->upgrade->setIsNightly(true);

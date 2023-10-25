@@ -74,26 +74,25 @@ class Upgrade extends Setup
                 if ($this->configuration->isElasticsearchActive()) {
                     if (!is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')) {
                         throw new Exception(
-                            'The file ' . PMF_CONTENT_DIR . '/core/config/elasticsearch.php is missing.'
+                            'The file /content/core/config/elasticsearch.php is missing.'
                         );
                     }
                 }
                 if ($this->configuration->isLdapActive()) {
                     if (!is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
-                        throw new Exception('The file ' . PMF_CONTENT_DIR . '/core/config/ldap.php is missing.');
+                        throw new Exception('The file /content/core/config/ldap.php is missing.');
                     }
                 }
                 if ($this->configuration->isSignInWithMicrosoftActive()) {
                     if (!is_file(PMF_CONTENT_DIR . '/core/config/azure.php')) {
-                        throw new Exception('The file ' . PMF_CONTENT_DIR . '/core/config/azure.php is missing.');
+                        throw new Exception('The file /content/core/config/azure.php is missing.');
                     }
                 }
 
                 return true;
             } else {
                 throw new Exception(
-                    'The files ' . PMF_CONTENT_DIR . '/core/config/constant.php and ' .
-                    PMF_CONTENT_DIR . '/core/config/database.php are missing.'
+                    'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
                 );
             }
         } else {
@@ -105,6 +104,7 @@ class Upgrade extends Setup
      * Method to download a phpMyFAQ package, returns false if it doesn't work
      *
      * @param string $version
+     * @return string
      * @throws Exception
      * @todo handle possible proxy servers
      */
@@ -207,6 +207,7 @@ class Upgrade extends Setup
      *
      * @param string   $backupName | Name of the created backup
      * @param callable $progressCallback
+     * @return bool
      * @throws Exception
      */
     public function createTemporaryBackup(string $backupName, callable $progressCallback): bool

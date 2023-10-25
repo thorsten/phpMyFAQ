@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\LdapConfiguration;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Strings;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class ConfigurationTest extends TestCase
 {
     /** @var Configuration */
-    private $Configuration;
+    private $configuration;
 
     /**
      * Prepares the environment before running a test.
@@ -27,7 +27,7 @@ class ConfigurationTest extends TestCase
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->Configuration = new Configuration($dbHandle);
+        $this->configuration = new Configuration($dbHandle);
     }
 
     /**
@@ -35,8 +35,46 @@ class ConfigurationTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->Configuration = null;
+        $this->configuration = null;
         parent::tearDown();
+    }
+
+    public function testGetConfigurationInstance(): void
+    {
+        $instance = Configuration::getConfigurationInstance();
+
+        $this->assertInstanceOf(Configuration::class, $instance);
+        $this->assertSame($instance, Configuration::getConfigurationInstance());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSetDatabase(): void
+    {
+        $database = $this->createMock(DatabaseDriver::class);
+
+        $config = new Configuration($database);
+        $config->setDatabase($database);
+
+        $this->assertSame($database, $config->get('core.database'));
+    }
+    public function testSet(): void
+    {
+        $key = 'upgrade.releaseEnvironment';
+        $value = 'test';
+
+        $result = $this->configuration->set($key, $value);
+
+        $this->assertTrue($result);
+        $this->assertEquals($value, $this->configuration->get($key));
+    }
+
+    public function testGetDb(): void
+    {
+        $db = $this->configuration->getDb();
+
+        $this->assertInstanceOf(DatabaseDriver::class, $db);
     }
 
     public function testSetLdapConfigWithSingleServer(): void
@@ -53,7 +91,7 @@ class ConfigurationTest extends TestCase
             LOCK_EX
         );
 
-        $this->Configuration->set('ldap.ldap_use_multiple_servers', 'false');
+        $this->configuration->set('ldap.ldap_use_multiple_servers', 'false');
 
         $expected = [
             0 => [
@@ -67,9 +105,9 @@ class ConfigurationTest extends TestCase
 
         $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/content/core/config/ldap.php');
 
-        $this->Configuration->setLdapConfig($ldapConfig);
+        $this->configuration->setLdapConfig($ldapConfig);
 
-        $this->assertEquals($expected, $this->Configuration->getLdapServer());
+        $this->assertEquals($expected, $this->configuration->getLdapServer());
     }
 
     public function testSetLdapConfigWithMultipleServers(): void
@@ -91,7 +129,7 @@ class ConfigurationTest extends TestCase
             LOCK_EX
         );
 
-        $this->Configuration->set('ldap.ldap_use_multiple_servers', 'true');
+        $this->configuration->set('ldap.ldap_use_multiple_servers', 'true');
 
         $expected = [
             0 => [
@@ -111,9 +149,9 @@ class ConfigurationTest extends TestCase
         ];
 
         $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/content/core/config/ldap.php');
-        $this->Configuration->setLdapConfig($ldapConfig);
+        $this->configuration->setLdapConfig($ldapConfig);
 
-        $this->assertEquals($expected, $this->Configuration->getLdapServer());
+        $this->assertEquals($expected, $this->configuration->getLdapServer());
     }
 
     public function testSetLdapConfigWithMultipleServersButDisabled(): void
@@ -135,7 +173,7 @@ class ConfigurationTest extends TestCase
             LOCK_EX
         );
 
-        $this->Configuration->set('ldap.ldap_use_multiple_servers', 'false');
+        $this->configuration->set('ldap.ldap_use_multiple_servers', 'false');
 
         $expected = [
             0 => [
@@ -148,8 +186,8 @@ class ConfigurationTest extends TestCase
         ];
 
         $ldapConfig = new LdapConfiguration(PMF_TEST_DIR . '/content/core/config/ldap.php');
-        $this->Configuration->setLdapConfig($ldapConfig);
+        $this->configuration->setLdapConfig($ldapConfig);
 
-        $this->assertEquals($expected, $this->Configuration->getLdapServer());
+        $this->assertEquals($expected, $this->configuration->getLdapServer());
     }
 }
