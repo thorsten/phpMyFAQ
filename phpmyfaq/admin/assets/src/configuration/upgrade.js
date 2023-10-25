@@ -196,15 +196,15 @@ export const handleCheckForUpdates = () => {
 
   // Install package
   if (installButton) {
-    installButton.addEventListener('click', (event) => {
+    installButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      createTemporaryBackup().then(() => installPackage());
+      await createTemporaryBackup();
     });
   }
 };
 
-const createTemporaryBackup = () => {
-  fetch(window.location.pathname + 'api/create-temporary-backup', {
+const createTemporaryBackup = async () => {
+  await fetch(window.location.pathname + 'api/create-temporary-backup', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -238,11 +238,12 @@ const createTemporaryBackup = () => {
     .catch((error) => {
       console.error(error);
     });
-  return new Promise();
+
+  await installPackage();
 };
 
-const installPackage = () => {
-  fetch(window.location.pathname + 'api/install-package', {
+const installPackage = async () => {
+  await fetch(window.location.pathname + 'api/install-package', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
