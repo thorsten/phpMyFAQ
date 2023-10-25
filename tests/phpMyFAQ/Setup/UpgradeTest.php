@@ -41,9 +41,10 @@ class UpgradeTest extends TestCase
     public function testCheckFilesystemValid(): void
     {
         touch(PMF_CONTENT_DIR . '/core/config/constants.php');
-        touch(PMF_CONTENT_DIR . '/core/config/database.php');
 
         $this->assertTrue($this->upgrade->checkFilesystem());
+
+        unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
     }
 
     /**
@@ -51,7 +52,6 @@ class UpgradeTest extends TestCase
      */
     public function testCheckFilesystemMissingConfigFiles(): void
     {
-        @unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
         touch(PMF_CONTENT_DIR . '/core/config/database.php');
 
         $this->expectException('phpMyFAQ\Core\Exception');
