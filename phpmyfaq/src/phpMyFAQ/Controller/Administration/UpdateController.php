@@ -207,9 +207,9 @@ class UpdateController extends Controller
             };
 
             if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
-                echo json_encode(['message' => '✅ Package successfully extracted.']);
+                echo json_encode(['message' => Translation::get('extractSuccessful')]);
             } else {
-                echo json_encode(['message' => 'Extract package failed']);
+                echo json_encode(['message' => Translation::get('extractFailure')]);
             }
         });
     }

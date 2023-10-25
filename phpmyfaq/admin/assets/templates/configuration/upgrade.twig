@@ -50,17 +50,16 @@
                     {{ headerDownloadPackage }}
                 </h5>
                 <p class="card-text">
-                    You can download new versions of phpMyFAQ.
+                    {{ msgDownloadPackage }}
                 </p>
                 <!-- Nightlies can be downloaded always if activated -->
                 {% if isOnNightlies %}
                     <p class="alert alert-warning">
-                        You are using a development version of phpMyFAQ.
-                        You can update to the latest nightly build.
+                      {{ alertNightlyBuild }}
                     </p>
                     <div class="d-grid gap-2 d-md-flex justify-content-between">
                         <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-download-now">
-                            Download now
+                          {{ buttonDownloadPackage }}
                         </button>
                         <output id="result-download-nightly"></output>
                     </div>
@@ -71,16 +70,16 @@
         <div id="pmf-update-step-extract-package" class="card shadow w-100 mb-3 d-none">
             <div class="card-body">
                 <h5 class="card-title">
-                    4. Extract downloaded package
+                  {{ headerExtractPackage }}
                 </h5>
                 <p class="card-text">
-                    This extracts the downloaded package into your filesystem.
+                    {{ msgExtractPackage }}
                 </p>
                 <!-- Step 4: Extract downloaded package -->
                 <div>
                     <div class="d-grid gap-2 d-md-flex justify-content-between">
                         <button type="button" class="btn btn-sm btn-primary mb-2" id="pmf-button-extract-package">
-                            Extract downloaded package
+                          {{ buttonExtractPackage }}
                         </button>
                         <output id="result-extract-package"></output>
                     </div>
@@ -132,15 +131,15 @@
     </div>
     <div class="col-6">
         <div>
-            Last check for updates:
+            {{ msgLastCheckDate }}
             <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
         </div>
         <div>
-            Latest version available:
+          {{ msgLastVersionAvailable }}
             <output id="versionLastChecked">n/a</output>
         </div>
         <div>
-            Release-Environment: <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
+          {{ msgReleaseEnvironment }} <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
         </div>
     </div>
 </div>

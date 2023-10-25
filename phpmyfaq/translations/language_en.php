@@ -1353,16 +1353,27 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
 $PMF_LANG['headerCheckHealth'] = '1. Check for System Health';
 $PMF_LANG['headerCheckUpdates'] = '2. Check for Updates';
 $PMF_LANG['headerDownloadPackage'] = '3. Download of phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. Extract downloaded package';
 $PMF_LANG['msgHealthCheck'] = 'This checks the correct file permissions and folder structure of your phpMyFAQ installation.';
 $PMF_LANG['msgUpdateCheck'] = 'You can check for new versions of phpMyFAQ, re-install or update your installation.';
+$PMF_LANG['msgDownloadPackage'] = 'Download of new phpMyFAQ versions depending on the set release environment.';
+$PMF_LANG['msgExtractPackage'] = 'This extracts the downloaded package into your filesystem, this may take a while.';
+$PMF_LANG['alertNightlyBuild'] = 'You are using a development version of phpMyFAQ. You can update to the latest nightly build.';
 $PMF_LANG['buttonCheckHealth'] = 'Check System health now';
 $PMF_LANG['buttonCheckUpdates'] = 'Check for Updates now';
+$PMF_LANG['buttonDownloadPackage'] = 'Download now';
+$PMF_LANG['buttonExtractPackage'] = 'Extract downloaded package now';
 $PMF_LANG['versionIsUpToDate'] = '✅ Your installed version is up-to-date!';
 $PMF_LANG['healthCheckOkay'] = '✅ Your installed version is healthy!';
 $PMF_LANG['downloadSuccessful'] = '✅ Package successfully downloaded!';
+$PMF_LANG['extractSuccessful'] = '✅ Package successfully extracted!';
 $PMF_LANG['downloadFailure'] = '❌ Could not download download package.';
 $PMF_LANG['verificationFailure'] = '❌ Could not verify downloaded package.';
+$PMF_LANG['extractFailure'] = '❌ Could not extract downloaded package.';
 $PMF_LANG['currentVersion'] = 'Current Version: ';
+$PMF_LANG['msgLastCheckDate'] = 'Last check for updates: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Latest version available: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Release-Environment: ';
 
 // added v4.0.0-alpha - 2023-07-19 by Jan
 $PMF_LANG['msgAddBookmark'] = 'Add bookmark';

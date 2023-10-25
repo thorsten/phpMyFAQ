@@ -44,9 +44,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         'msgUpdateCheck' => Translation::get('msgUpdateCheck'),
         'buttonCheckUpdates' => Translation::get('buttonCheckUpdates'),
         'headerDownloadPackage' => Translation::get('headerDownloadPackage'),
+        'msgDownloadPackage' => Translation::get('msgDownloadPackage'),
+        'alertNightlyBuild' => Translation::get('alertNightlyBuild'),
+        'buttonDownloadPackage' => Translation::get('buttonDownloadPackage'),
+        'headerExtractPackage' => Translation::get('headerExtractPackage'),
+        'msgExtractPackage' => Translation::get('msgExtractPackage'),
+        'buttonExtractPackage' => Translation::get('buttonExtractPackage'),
         'isOnNightlies' => $faqConfig->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value,
+        'msgReleaseEnvironment' => Translation::get('msgReleaseEnvironment'),
         'releaseEnvironment' => ucfirst((string) $faqConfig->get('upgrade.releaseEnvironment')),
-        'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked')
+        'msgLastCheckDate' => Translation::get('msgLastCheckDate'),
+        'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked'),
+        'msgLastVersionAvailable' => Translation::get('msgLastVersionAvailable'),
     ];
 
     echo $template->render($templateVars);
