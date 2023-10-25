@@ -1157,6 +1157,7 @@ class Faq
 
     public function isActive(int $recordId, string $recordLang, string $commentType = 'faq'): bool
     {
+
         if ('news' === $commentType) {
             $table = 'faqnews';
         } else {
@@ -1182,7 +1183,9 @@ class Faq
         $result = $this->config->getDb()->query($query);
 
         if ($row = $this->config->getDb()->fetchObject($result)) {
-            return !(($row->active === 'y' || $row->active === 'yes'));
+            if (($row->active === 'y') || ($row->active === 'yes')) {
+                return false;
+            }
         } else {
             return true;
         }

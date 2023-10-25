@@ -15,12 +15,21 @@
  * @since     2023-07-08
  */
 
+use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 $routes = new RouteCollection();
+
+//
+// Comment API
+//
+$routes->add(
+    'admin.api.content.comments',
+    new Route('/content/comments', ['_controller' => [CommentController::class, 'delete'], '_methods' => 'DELETE'])
+);
 
 //
 // Dashboard API

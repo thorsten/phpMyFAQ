@@ -263,10 +263,6 @@ if (
                 case 'tags':
                     require 'api/tags.php';
                     break;
-                // Comments
-                case 'comment':
-                    require 'api/comment.php';
-                    break;
                 // Records
                 case 'records':
                     require 'api/faqs.php';

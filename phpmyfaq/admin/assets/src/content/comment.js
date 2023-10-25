@@ -22,8 +22,8 @@ const deleteComments = (type) => {
   const form = document.getElementById(`pmf-comments-selected-${type}`);
   const comments = new FormData(form);
 
-  fetch('index.php?action=ajax&ajax=comment', {
-    method: 'POST',
+  fetch(window.location.pathname + 'api/content/comments', {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
