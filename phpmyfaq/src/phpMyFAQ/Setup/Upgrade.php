@@ -62,6 +62,20 @@ class Upgrade extends Setup
                 throw new Exception('The folder ' . $this->upgradeDirectory . ' is missing.');
             }
         }
+
+        if (!is_dir(PMF_CONTENT_DIR . '/user/attachments')) {
+            throw new Exception('The folder /content/user/attachments is missing.');
+        }
+        if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
+            throw new Exception('The folder /content/user/images is missing.');
+        }
+        if (!is_dir(PMF_CONTENT_DIR . '/core/data')) {
+            throw new Exception('The folder /content/core/data is missing.');
+        }
+        if (!is_dir(PMF_ROOT_DIR . '/assets/themes')) {
+            throw new Exception('The folder /phpmyfaq/assets/themes is missing.');
+        }
+
         if (
             is_dir(PMF_CONTENT_DIR . '/user/attachments') &&
             is_dir(PMF_CONTENT_DIR . '/user/images') &&
