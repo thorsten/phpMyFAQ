@@ -73,7 +73,7 @@ $request = Request::createFromGlobals();
 
             // Delete sessions and session files
             if ($statdelete == 'delete' && $month !== '') {
-                $dir = opendir(PMF_ROOT_DIR . '/data');
+                $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
                 $first = PHP_INT_MAX;
                 $last = 0;
                 while ($trackingFile = readdir($dir)) {
@@ -156,8 +156,8 @@ $request = Request::createFromGlobals();
             <td><?= Translation::get('ad_stat_fien') ?>:</td>
             <td>
                 <?php
-                if (is_file(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $first))) {
-                    $fp = @fopen(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $first), 'r');
+                if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $first))) {
+                    $fp = @fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $first), 'r');
                     while (($data = fgetcsv($fp, 1024, ';')) !== false) {
                         $qstamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $request->server->get('REQUEST_TIME');
                     }
@@ -173,8 +173,8 @@ $request = Request::createFromGlobals();
             <td><?= Translation::get('ad_stat_laen') ?>:</td>
             <td>
                 <?php
-                if (is_file(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $last))) {
-                    $fp = fopen(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $last), 'r');
+                if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $last))) {
+                    $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $last), 'r');
 
                     while (($data = fgetcsv($fp, 1024, ';')) !== false) {
                         $stamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $request->server->get('REQUEST_TIME');
@@ -190,7 +190,7 @@ $request = Request::createFromGlobals();
                     echo Translation::get('ad_sess_noentry') . '<br>';
                 }
 
-                $dir = opendir(PMF_ROOT_DIR . '/data');
+                $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
                 $trackingDates = [];
                 while (false !== ($dat = readdir($dir))) {
                     if ($dat != '.' && $dat != '..' && strlen($dat) == 16 && !is_dir($dat)) {
