@@ -20,7 +20,7 @@ class UpgradeTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
         $this->upgrade = new Upgrade(new System(), $configuration);
-        $this->upgrade->setUpgradeDirectory(PMF_CONTENT_DIR . '/upgrade');
+        $this->upgrade->setUpgradeDirectory(PMF_CONTENT_DIR . '/upgrades');
     }
 
     /**
@@ -52,8 +52,6 @@ class UpgradeTest extends TestCase
      */
     public function testCheckFilesystemMissingConfigFiles(): void
     {
-        touch(PMF_CONTENT_DIR . '/core/config/database.php');
-
         $this->expectException('phpMyFAQ\Core\Exception');
         $this->expectExceptionMessage(
             'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'

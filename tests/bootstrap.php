@@ -42,7 +42,7 @@ $_SERVER['HTTP_HOST'] = 'https://localhost/';
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 
 //
-// The include directory
+// The /src directory
 //
 define('PMF_SRC_DIR', dirname(__DIR__) . '/phpmyfaq/src');
 
