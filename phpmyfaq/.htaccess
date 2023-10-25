@@ -149,6 +149,7 @@ RewriteRule api/setup/update-database              api/index.php
 
 # Administration API
 RewriteRule admin/api/content/comments             admin/api/index.php
+RewriteRule admin/api/content/markdown             admin/api/index.php
 RewriteRule admin/api/dashboard/versions           admin/api/index.php
 RewriteRule admin/api/dashboard/visits             admin/api/index.php
 RewriteRule admin/api/health-check                 admin/api/index.php

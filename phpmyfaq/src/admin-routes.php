@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
+use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -42,6 +43,14 @@ $routes->add(
 $routes->add(
     'admin.api.dashboard.visits',
     new Route('/dashboard/visits', ['_controller' => [DashboardController::class, 'visits']])
+);
+
+//
+// Markdown API
+//
+$routes->add(
+    'admin.api.content.markdown',
+    new Route('/content/markdown', ['_controller' => [MarkdownController::class, 'render'], '_methods' => 'POST'])
 );
 
 //

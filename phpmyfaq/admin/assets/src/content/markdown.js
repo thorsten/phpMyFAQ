@@ -37,7 +37,7 @@ export const handleMarkdownForm = () => {
       const preview = document.getElementById('markdown-preview');
       preview.style.height = answer.style.height;
 
-      fetch('index.php?action=ajax&ajax=markdown', {
+      fetch(window.location.pathname + 'api/content/markdown', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',

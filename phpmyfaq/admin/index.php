@@ -267,9 +267,6 @@ if (
                 case 'records':
                     require 'api/faqs.php';
                     break;
-                case 'markdown':
-                    require 'api/markdown.php';
-                    break;
                 // Search
                 case 'search':
                     require 'api/search.php';
@@ -285,10 +282,6 @@ if (
                 // Image upload
                 case 'image':
                     require 'api/image.php';
-                    break;
-                // Upgrade
-                case 'updates':
-                    require 'api/updates.php';
                     break;
             }
             exit();
