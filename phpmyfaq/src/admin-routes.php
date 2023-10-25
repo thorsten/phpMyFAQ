@@ -108,4 +108,16 @@ $routes->add(
     )
 );
 
+
+$routes->add(
+    'admin.api.cleanup',
+    new Route(
+        '/cleanup',
+        [
+            '_controller' => [UpdateController::class, 'cleanUp'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
 return $routes;

@@ -186,7 +186,6 @@ class UpdateController extends Controller
 
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(['success' => Translation::get('downloadSuccessful')]);
-
         return $response;
     }
 
@@ -287,5 +286,26 @@ class UpdateController extends Controller
                 echo json_encode(['message' => 'Update database failed: ' . $e->getMessage()]);
             }
         });
+    }
+
+    #[Route('admin/api/cleanup')]
+    public function cleanUp(): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $update = new Upgrade(new System(), $configuration);
+
+        try {
+            $update->cleanUp();
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['message' => '✅ Cleanup successful.']);
+        } catch (Exception $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['message' => 'Cleanup failed: ' . $e->getMessage()]);
+        }
+
+        return $response;
     }
 }

@@ -158,6 +158,7 @@ RewriteRule admin/api/extract-package              admin/api/index.php
 RewriteRule admin/api/create-temporary-backup      admin/api/index.php
 RewriteRule admin/api/install-package              admin/api/index.php
 RewriteRule admin/api/update-database              admin/api/index.php
+RewriteRule admin/api/cleanup                      admin/api/index.php
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>

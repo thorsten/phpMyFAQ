@@ -176,6 +176,7 @@ class Upgrade extends Setup
      *
      * @param string   $path | Path of the package
      * @param callable $progressCallback
+     * @return bool
      * @throws Exception
      */
     public function extractPackage(string $path, callable $progressCallback): bool
@@ -310,6 +311,30 @@ class Upgrade extends Setup
     }
 
     /**
+     * Method to clean up the upgrade directory
+     * @return bool
+     */
+    public function cleanUp(): bool
+    {
+        $directoryToDelete = self::PMF_UPGRADE_DIR . '/new/phpmyfaq/';
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directoryToDelete, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+
+        return rmdir($directoryToDelete);
+    }
+
+    /**
      * Returns the host for download packages, so either github.com or download.phpmyfaq.de
      */
     public function getDownloadHost(): string
@@ -335,7 +360,9 @@ class Upgrade extends Setup
 
     /**
      * Returns the filename of the download package
+     *
      * @param string $version
+     * @return string
      */
     public function getFilename(string $version): string
     {
