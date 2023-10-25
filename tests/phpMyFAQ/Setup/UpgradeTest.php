@@ -38,6 +38,7 @@ class UpgradeTest extends TestCase
     /**
      * @throws Exception
      */
+    /*
     public function testCheckFilesystemValid(): void
     {
         touch(PMF_CONTENT_DIR . '/core/config/constants.php');
@@ -45,11 +46,11 @@ class UpgradeTest extends TestCase
 
         $this->assertTrue($this->upgrade->checkFilesystem());
     }
+    */
 
     /**
      * @throws Exception
      */
-    /*
     public function testCheckFilesystemMissingConfigFiles(): void
     {
         unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
@@ -61,7 +62,6 @@ class UpgradeTest extends TestCase
         );
         $this->upgrade->checkFilesystem();
     }
-    */
 
     public function testGetDownloadHostForNightly(): void
     {
