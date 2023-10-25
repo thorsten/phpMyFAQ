@@ -20,6 +20,7 @@ class UpgradeTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
         $this->upgrade = new Upgrade(new System(), $configuration);
+        $this->upgrade->setUpgradeDirectory(PMF_CONTENT_DIR . '/upgrade');
     }
 
     /**

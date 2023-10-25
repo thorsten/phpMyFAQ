@@ -39,7 +39,8 @@ class Upgrade extends Setup
     final public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
     private const GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
     private const PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
-    private const PMF_UPGRADE_DIR = PMF_CONTENT_DIR . '/upgrades';
+
+    public string $upgradeDirectory = PMF_CONTENT_DIR . '/upgrades';
     private bool $isNightly;
 
     public function __construct(protected System $system, private readonly Configuration $configuration)
@@ -56,9 +57,9 @@ class Upgrade extends Setup
      */
     public function checkFilesystem(): bool
     {
-        if (!is_dir(self::PMF_UPGRADE_DIR)) {
-            if (!mkdir(self::PMF_UPGRADE_DIR)) {
-                throw new Exception('The folder ' . self::PMF_UPGRADE_DIR . ' is missing.');
+        if (!is_dir($this->upgradeDirectory)) {
+            if (!mkdir($this->upgradeDirectory)) {
+                throw new Exception('The folder ' . $this->upgradeDirectory . ' is missing.');
             }
         }
         if (
@@ -123,9 +124,9 @@ class Upgrade extends Setup
 
             $package = $response->getContent();
 
-            file_put_contents(self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $this->getFilename($version), $package);
+            file_put_contents($this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version), $package);
 
-            return self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $this->getFilename($version);
+            return $this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version);
         } catch (
             TransportExceptionInterface |
             ClientExceptionInterface |
@@ -195,7 +196,7 @@ class Upgrade extends Setup
         });
 
         if ($zipFile) {
-            $zip->extractTo(self::PMF_UPGRADE_DIR . '/new/');
+            $zip->extractTo($this->upgradeDirectory . '/new/');
             return $zip->close();
         } else {
             throw new Exception('Cannot open zipped download package.');
@@ -212,7 +213,7 @@ class Upgrade extends Setup
      */
     public function createTemporaryBackup(string $backupName, callable $progressCallback): bool
     {
-        $outputZipFile = self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $backupName;
+        $outputZipFile = $this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName;
 
         if (file_exists($outputZipFile)) {
             throw new Exception('Backup file already exists.');
@@ -236,7 +237,7 @@ class Upgrade extends Setup
 
         foreach ($files as $file) {
             $file = realpath($file);
-            if (!str_contains($file, self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR)) {
+            if (!str_contains($file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
                     $zip->addEmptyDir(str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
                 } elseif (is_file($file)) {
@@ -257,8 +258,8 @@ class Upgrade extends Setup
      */
     public function deleteTemporaryBackup(string $backupName): bool
     {
-        if (is_file(self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $backupName)) {
-            return unlink(self::PMF_UPGRADE_DIR . DIRECTORY_SEPARATOR . $backupName);
+        if (is_file($this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName)) {
+            return unlink($this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName);
         } else {
             return false;
         }
@@ -279,7 +280,7 @@ class Upgrade extends Setup
      */
     public function installPackage(callable $progressCallback): bool
     {
-        $sourceDir = self::PMF_UPGRADE_DIR . '/new/phpmyfaq/';
+        $sourceDir = $this->upgradeDirectory . '/new/phpmyfaq/';
         $destinationDir = PMF_ROOT_DIR;
 
         $sourceDirIterator = new RecursiveIteratorIterator(
@@ -317,7 +318,7 @@ class Upgrade extends Setup
      */
     public function cleanUp(): bool
     {
-        $directoryToDelete = self::PMF_UPGRADE_DIR . '/new/phpmyfaq/';
+        $directoryToDelete = $this->upgradeDirectory . '/new/phpmyfaq/';
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directoryToDelete, FilesystemIterator::SKIP_DOTS),
@@ -372,6 +373,22 @@ class Upgrade extends Setup
         }
 
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpgradeDirectory(): string
+    {
+        return $this->upgradeDirectory;
+    }
+
+    /**
+     * @param string $upgradeDirectory
+     */
+    public function setUpgradeDirectory(string $upgradeDirectory): void
+    {
+        $this->upgradeDirectory = $upgradeDirectory;
     }
 
     public function isNightly(): bool
