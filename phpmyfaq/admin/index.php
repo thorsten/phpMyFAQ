@@ -241,10 +241,6 @@ if (
     if (isset($action) && isset($ajax)) {
         if ('ajax' === $action ) {
             switch ($ajax) {
-                // Attachments
-                case 'att':
-                    require 'api/attachment.php';
-                    break;
                 // Categories
                 case 'categories':
                     require 'api/category.php';
@@ -297,7 +293,6 @@ switch ($action) {
 
 // Header of the admin page including the navigation
 require 'header.php';
-
 
 if ($action === 'twofactor') {
     require 'twofactor.php';

@@ -63,7 +63,7 @@ export const handleAttachmentUploads = () => {
       formData.append('record_id', document.getElementById('attachment_record_id').value);
       formData.append('record_lang', document.getElementById('attachment_record_lang').value);
 
-      fetch('index.php?action=ajax&ajax=att&ajaxaction=upload', {
+      fetch('./api/content/attachments/upload', {
         method: 'POST',
         cache: 'no-cache',
         body: formData,

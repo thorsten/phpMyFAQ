@@ -25,7 +25,7 @@ export const handleDeleteAttachments = () => {
         const attachmentId = event.target.getAttribute('data-attachment-id');
         const csrf = event.target.getAttribute('data-csrf');
 
-        fetch('index.php?action=ajax&ajax=att&ajaxaction=delete', {
+        fetch('./api/content/attachments', {
           method: 'DELETE',
           headers: {
             Accept: 'application/json, text/plain, */*',

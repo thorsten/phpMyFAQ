@@ -15,6 +15,7 @@
  * @since     2023-07-08
  */
 
+use phpMyFAQ\Controller\Administration\AttachmentController;
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ImageController;
@@ -24,6 +25,30 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 $routes = new RouteCollection();
+
+//
+// Attachment API
+//
+$routes->add(
+    'admin.api.content.attachments',
+    new Route(
+        '/content/attachments',
+        [
+            '_controller' => [AttachmentController::class, 'delete'],
+            '_methods' => 'DELETE'
+        ]
+    )
+);
+$routes->add(
+    'admin.api.content.attachments.upload',
+    new Route(
+        '/content/attachments/upload',
+        [
+            '_controller' => [AttachmentController::class, 'upload'],
+            '_methods' => 'POST'
+        ]
+    )
+);
 
 //
 // Comment API
