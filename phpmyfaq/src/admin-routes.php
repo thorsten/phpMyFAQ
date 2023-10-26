@@ -18,6 +18,7 @@
 use phpMyFAQ\Controller\Administration\AttachmentController;
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
+use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\UpdateController;
@@ -85,6 +86,29 @@ $routes->add(
 $routes->add(
     'admin.api.dashboard.visits',
     new Route('/dashboard/visits', ['_controller' => [DashboardController::class, 'visits']])
+);
+
+//
+// Elasticsearch API
+//
+$routes->add(
+    'admin.api.elasticsearch.create',
+    new Route('/elasticsearch/create', ['_controller' => [ElasticsearchController::class, 'create']])
+);
+
+$routes->add(
+    'admin.api.elasticsearch.drop',
+    new Route('/elasticsearch/drop', ['_controller' => [ElasticsearchController::class, 'drop']])
+);
+
+$routes->add(
+    'admin.api.elasticsearch.import',
+    new Route('/elasticsearch/import', ['_controller' => [ElasticsearchController::class, 'import']])
+);
+
+$routes->add(
+    'admin.api.elasticsearch.statistics',
+    new Route('/elasticsearch/statistics', ['_controller' => [ElasticsearchController::class, 'statistics']])
 );
 
 //

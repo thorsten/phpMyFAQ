@@ -26,7 +26,7 @@ export const handleElasticsearch = () => {
 
         const action = event.target.getAttribute('data-action');
 
-        fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=${action}`)
+        fetch(`./api/elasticsearch/${action}`)
           .then(async (response) => {
             if (response.ok) {
               return response.json();
@@ -60,7 +60,7 @@ export const handleElasticsearch = () => {
       const div = document.getElementById('pmf-elasticsearch-stats');
       if (div) {
         div.innerHTML = '';
-        fetch(`index.php?action=ajax&ajax=elasticsearch&ajaxaction=stats`)
+        fetch('./api/elasticsearch/statistics')
           .then(async (response) => {
             if (response.ok) {
               return response.json();

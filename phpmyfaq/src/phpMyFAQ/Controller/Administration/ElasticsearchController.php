@@ -1,0 +1,101 @@
+<?php
+
+namespace phpMyFAQ\Controller\Administration;
+
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class ElasticsearchController extends Controller
+{
+    #[Route('./admin/api/elasticsearch/create')]
+    public function create(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
+
+        try {
+            $elasticsearch->createIndex();
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_es_create_index_success')]);
+        } catch (Exception $e) {
+            $response->setStatusCode(Response::HTTP_CONFLICT);
+            $response->setData(['error' => $e->getMessage()]);
+        }
+
+        return $response;
+    }
+
+    #[Route('./admin/api/elasticsearch/drop')]
+    public function drop(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
+
+        try {
+            $elasticsearch->dropIndex();
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_es_drop_index_success')]);
+        } catch (Exception $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => $e->getMessage()]);
+        }
+
+        return $response;
+    }
+
+    #[Route('./admin/api/elasticsearch/import')]
+    public function import(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $elasticsearch = new Elasticsearch($configuration);
+        $faq = new Faq($configuration);
+        $faq->getAllRecords();
+
+        $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
+        if (isset($bulkIndexResult['success'])) {
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_es_create_import_success')]);
+        } else {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => $bulkIndexResult]);
+        }
+
+        return $response;
+    }
+
+    #[Route('./admin/api/elasticsearch/statistics')]
+    public function statistics(): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $elasticsearchConfiguration = $configuration->getElasticsearchConfig();
+
+        $indexName = $elasticsearchConfiguration->getIndex();
+        try {
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(
+                [
+                    'index' => $indexName,
+                    'stats' => $configuration->getElasticsearch()->indices()->stats(['index' => $indexName])->asArray()
+                ]
+            );
+        } catch (ClientResponseException | ServerResponseException $e) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => $e->getMessage()]);
+        }
+
+        return $response;
+    }
+}

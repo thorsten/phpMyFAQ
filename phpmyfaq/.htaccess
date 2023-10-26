@@ -153,6 +153,10 @@ RewriteRule admin/api/content/attachments/upload   admin/api/index.php
 RewriteRule admin/api/content/comments             admin/api/index.php
 RewriteRule admin/api/content/images               admin/api/index.php
 RewriteRule admin/api/content/markdown             admin/api/index.php
+RewriteRule admin/api/elasticsearch/create         admin/api/index.php
+RewriteRule admin/api/elasticsearch/drop           admin/api/index.php
+RewriteRule admin/api/elasticsearch/import         admin/api/index.php
+RewriteRule admin/api/elasticsearch/statistics     admin/api/index.php
 RewriteRule admin/api/dashboard/versions           admin/api/index.php
 RewriteRule admin/api/dashboard/visits             admin/api/index.php
 RewriteRule admin/api/health-check                 admin/api/index.php

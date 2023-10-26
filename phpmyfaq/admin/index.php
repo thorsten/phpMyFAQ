@@ -252,9 +252,6 @@ if (
                 case 'config':
                     require 'api/configuration.php';
                     break;
-                case 'elasticsearch':
-                    require 'api/elasticsearch.php';
-                    break;
                 // Tags management
                 case 'tags':
                     require 'api/tags.php';
