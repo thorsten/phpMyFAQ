@@ -82,10 +82,10 @@ $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', '
 if (!$user->isLoggedIn() && $error) {
     Alert::danger('err_NotAuth');
 } else {
-    if (!is_dir(PMF_ROOT_DIR . '/images')) {
+    if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
         echo '<p class="alert alert-danger">' . sprintf(Translation::get('ad_dir_missing'), '/images') . '</p>';
     } else {
-        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_CONTENT_DIR . '/user/images'));
         foreach ($files as $file) {
             if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
                 continue;

@@ -279,10 +279,6 @@ if (
                 case 'group':
                     require 'api/group.php';
                     break;
-                // Image upload
-                case 'image':
-                    require 'api/image.php';
-                    break;
             }
             exit();
         }

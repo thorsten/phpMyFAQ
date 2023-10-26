@@ -196,29 +196,27 @@ export const renderEditor = () => {
           const formData = new FormData();
           formData.append('file', blobInfo.blob(), blobInfo.filename());
 
-          fetch(`index.php?action=ajax&ajax=image&ajaxaction=upload&csrf=${csrf}`, {
+          fetch(`api/content/images?csrf=${csrf}`, {
             method: 'POST',
             body: formData,
             //credentials: 'omit'
           })
             .then((response) => {
-              if (!response.ok) {
-                throw new Error('HTTP Error: ' + response.status);
+              if (response.ok) {
+                return response.json();
               }
-              return response.json();
+              throw new Error('Network response was not ok: ', { cause: { response } });
             })
             .then((json) => {
               if (!json || typeof json.location != 'string') {
+                console.log(JSON.stringify(json));
                 throw new Error('Invalid JSON: ' + JSON.stringify(json));
               }
               resolve(json.location);
             })
-            .catch((error) => {
-              if (error instanceof TypeError) {
-                reject('Image upload failed due to a Fetch error: ' + error.message);
-              } else {
-                reject(error.message);
-              }
+            .catch(async (error) => {
+              const errors = await error.cause.response.json();
+              console.log(errors);
             });
         }),
 
@@ -232,8 +230,8 @@ export const renderEditor = () => {
         { title: 'Responsive', value: 'img-fluid' },
       ],
       image_dimensions: true,
-      images_upload_url: 'index.php?action=ajax&ajax=image&ajaxaction=upload',
-      automatic_uploads: false,
+      images_upload_url: '/admin/api/content/images',
+      automatic_uploads: true,
     });
   }
 };

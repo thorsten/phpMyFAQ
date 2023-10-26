@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
+use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use Symfony\Component\Routing\Route;
@@ -33,6 +34,22 @@ $routes->add(
 );
 
 //
+// Image API
+//
+$routes->add(
+    'admin.api.content.images',
+    new Route('/content/images', ['_controller' => [ImageController::class, 'upload'], '_methods' => 'POST'])
+);
+
+//
+// Markdown API
+//
+$routes->add(
+    'admin.api.content.markdown',
+    new Route('/content/markdown', ['_controller' => [MarkdownController::class, 'render'], '_methods' => 'POST'])
+);
+
+//
 // Dashboard API
 //
 $routes->add(
@@ -43,14 +60,6 @@ $routes->add(
 $routes->add(
     'admin.api.dashboard.visits',
     new Route('/dashboard/visits', ['_controller' => [DashboardController::class, 'visits']])
-);
-
-//
-// Markdown API
-//
-$routes->add(
-    'admin.api.content.markdown',
-    new Route('/content/markdown', ['_controller' => [MarkdownController::class, 'render'], '_methods' => 'POST'])
 );
 
 //
