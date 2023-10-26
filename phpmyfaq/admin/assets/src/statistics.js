@@ -27,7 +27,7 @@ export const handleStatistics = () => {
         const csrf = event.target.getAttribute('data-csrf-token');
 
         if (confirm('Are you sure?')) {
-          fetch('index.php?action=ajax&ajax=search&ajaxaction=delete_searchterm', {
+          fetch('./api/search/term', {
             method: 'DELETE',
             headers: {
               Accept: 'application/json, text/plain, */*',
@@ -39,22 +39,19 @@ export const handleStatistics = () => {
             }),
           })
             .then(async (response) => {
-              if (response.status === 200) {
+              if (response.ok) {
                 return response.json();
               }
-              throw new Error('Network response was not ok.');
+              throw new Error('Network response was not ok: ', { cause: { response } });
             })
             .then((response) => {
               const row = document.getElementById(`row-search-id-${response.deleted}`);
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
             })
-            .catch((error) => {
-              const table = document.querySelector('.table');
-              table.insertAdjacentElement(
-                'afterend',
-                addElement('div', { classList: 'alert alert-danger', innerText: error })
-              );
+            .catch(async (error) => {
+              const errorMessage = await error.cause.response.json();
+              console.error(errorMessage.error);
             });
         }
       });

@@ -129,7 +129,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         ++$displayedCounter;
 
         $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
-        $csrfToken = Token::getInstance()->getTokenString('delete-searchterms');
+        $csrfToken = Token::getInstance()->getTokenString('delete-searchterm');
         ?>
               <tr id="row-search-id-<?= $searchItem['id'] ?>">
                   <td><?= Strings::htmlspecialchars($searchItem['searchterm']) ?></td>

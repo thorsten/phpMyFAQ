@@ -21,6 +21,7 @@ use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
+use phpMyFAQ\Controller\Administration\SearchController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -109,6 +110,14 @@ $routes->add(
 $routes->add(
     'admin.api.elasticsearch.statistics',
     new Route('/elasticsearch/statistics', ['_controller' => [ElasticsearchController::class, 'statistics']])
+);
+
+//
+// Search API
+//
+$routes->add(
+    'admin.api.search.term',
+    new Route('/search/term', ['_controller' => [SearchController::class, 'deleteTerm'], '_methods' => 'DELETE'])
 );
 
 //

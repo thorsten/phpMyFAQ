@@ -260,10 +260,6 @@ if (
                 case 'records':
                     require 'api/faqs.php';
                     break;
-                // Search
-                case 'search':
-                    require 'api/search.php';
-                    break;
                 // Users
                 case 'user':
                     require 'api/user.php';
