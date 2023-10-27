@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 // Debug mode:
 // - false debug mode disabled
 // - true  debug mode enabled
-const DEBUG = true;
+const DEBUG = false;
 if (DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
