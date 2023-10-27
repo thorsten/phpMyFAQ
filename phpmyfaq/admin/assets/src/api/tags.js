@@ -8,13 +8,13 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2023 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-04-12
  */
 
 export const fetchTags = async (searchString) => {
-  return await fetch(`index.php?action=ajax&ajax=tags&ajaxaction=list&search=${searchString}`, {
+  return await fetch(`./api/content/tags?search=${searchString}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -24,12 +24,16 @@ export const fetchTags = async (searchString) => {
     referrerPolicy: 'no-referrer',
   })
     .then(async (response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
-      throw new Error('Network response was not ok.');
+      throw new Error('Network response was not ok: ', { cause: { response } });
     })
     .then((response) => {
       return response;
+    })
+    .catch(async (error) => {
+      const errorMessage = await error.cause.response.json();
+      console.error(errorMessage);
     });
 };

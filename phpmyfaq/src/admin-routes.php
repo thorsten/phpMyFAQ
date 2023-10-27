@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\SearchController;
+use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -137,6 +138,18 @@ $routes->add(
 $routes->add(
     'admin.api.search.term',
     new Route('/search/term', ['_controller' => [SearchController::class, 'deleteTerm'], '_methods' => 'DELETE'])
+);
+
+//
+// Tag API
+//
+$routes->add(
+    'admin.api.content.tag',
+    new Route('/content/tag', ['_controller' => [TagController::class, 'update'], '_methods' => ['PUT']])
+);
+$routes->add(
+    'admin.api.content.tags',
+    new Route('/content/tags', ['_controller' => [TagController::class, 'search']])
 );
 
 //

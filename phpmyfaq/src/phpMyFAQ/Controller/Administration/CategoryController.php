@@ -13,9 +13,11 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends Controller
 {
+    #[Route('admin/api/category/permissions')]
     public function permissions(Request $request): JsonResponse
     {
         $response = new JsonResponse();
@@ -39,6 +41,7 @@ class CategoryController extends Controller
         return $response;
     }
 
+    #[Route('admin/api/category/update-order')]
     public function updateOrder(Request $request): JsonResponse
     {
         $response = new JsonResponse();

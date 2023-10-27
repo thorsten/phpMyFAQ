@@ -248,10 +248,6 @@ if (
                 case 'config':
                     require 'api/configuration.php';
                     break;
-                // Tags management
-                case 'tags':
-                    require 'api/tags.php';
-                    break;
                 // Records
                 case 'records':
                     require 'api/faqs.php';
