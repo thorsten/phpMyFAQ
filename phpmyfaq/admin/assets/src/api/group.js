@@ -14,7 +14,7 @@
  */
 
 export const fetchAllGroups = async () => {
-  return await fetch('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups', {
+  return await fetch('./api/group/groups', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -35,7 +35,7 @@ export const fetchAllGroups = async () => {
 };
 
 export const fetchAllUsersForGroups = async () => {
-  return await fetch('index.php?action=ajax&ajax=group&ajaxaction=get_all_users', {
+  return await fetch('./api/group/users', {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -56,7 +56,7 @@ export const fetchAllUsersForGroups = async () => {
 };
 
 export const fetchAllMembers = async (groupId) => {
-  return await fetch(`index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=${groupId}`, {
+  return await fetch(`./api/group/members/${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -77,7 +77,7 @@ export const fetchAllMembers = async (groupId) => {
 };
 
 export const fetchGroup = async (groupId) => {
-  return await fetch(`index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=${groupId}`, {
+  return await fetch(`./api/group/data/${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -98,7 +98,7 @@ export const fetchGroup = async (groupId) => {
 };
 
 export const fetchGroupRights = async (groupId) => {
-  return await fetch(`index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=${groupId}`, {
+  return await fetch(`./api/group/permissions/${groupId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {

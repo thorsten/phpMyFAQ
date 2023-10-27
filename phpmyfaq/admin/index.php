@@ -256,10 +256,6 @@ if (
                 case 'user':
                     require 'api/user.php';
                     break;
-                // Groups
-                case 'group':
-                    require 'api/group.php';
-                    break;
             }
             exit();
         }

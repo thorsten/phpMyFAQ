@@ -20,6 +20,7 @@ use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
+use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\SearchController;
@@ -130,6 +131,34 @@ $routes->add(
 $routes->add(
     'admin.api.elasticsearch.statistics',
     new Route('/elasticsearch/statistics', ['_controller' => [ElasticsearchController::class, 'statistics']])
+);
+
+//
+// Group API
+//
+$routes->add(
+    'admin.api.group.groups',
+    new Route('/group/groups', ['_controller' => [GroupController::class, 'listGroups']])
+);
+
+$routes->add(
+    'admin.api.group.members',
+    new Route('/group/members/{groupId}', ['_controller' => [GroupController::class, 'listMembers']])
+);
+
+$routes->add(
+    'admin.api.group.permissions',
+    new Route('/group/permissions/{groupId}', ['_controller' => [GroupController::class, 'listPermissions']])
+);
+
+$routes->add(
+    'admin.api.group.users',
+    new Route('/group/users', ['_controller' => [GroupController::class, 'listUsers']])
+);
+
+$routes->add(
+    'admin.api.group.data',
+    new Route('/group/data/{groupId}', ['_controller' => [GroupController::class, 'groupData']])
 );
 
 //

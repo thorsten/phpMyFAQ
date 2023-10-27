@@ -32,4 +32,32 @@ abstract class Controller
             throw new UnauthorizedHttpException('User is not authenticated.');
         }
     }
+
+    /**
+     * @throws UnauthorizedHttpException
+     */
+    public function userIsSuperAdmin(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        if (!CurrentUser::getCurrentUser($configuration)->isSuperAdmin()) {
+            throw new UnauthorizedHttpException('User is not super admin.');
+        }
+    }
+
+    /**
+     * @throws UnauthorizedHttpException
+     */
+    public function userHasGroupPermission(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+        if (
+            !$user->perm->hasPermission($user->getUserId(), 'add_user') ||
+            !$user->perm->hasPermission($user->getUserId(), 'edit_user') ||
+            !$user->perm->hasPermission($user->getUserId(), 'delete_user') ||
+            !$user->perm->hasPermission($user->getUserId(), 'editgroup')
+        ) {
+            throw new UnauthorizedHttpException('User has no group permission.');
+        }
+    }
 }
