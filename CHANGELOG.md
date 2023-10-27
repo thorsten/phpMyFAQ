@@ -6,9 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.2 - 2023-10-
+### phpMyFAQ v3.2.2 - 2023-10-27
 
+- fixed multiple security vulnerabilities (Thorsten)
 - re-added fullscreen plugin for TinyMCE (Thorsten)
+- updated bundled dependencies (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.2.1 - 2023-09-21
