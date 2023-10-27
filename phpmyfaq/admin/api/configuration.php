@@ -319,33 +319,4 @@ switch ($ajaxAction) {
         $response->setData($payload);
         $response->send();
         break;
-
-    case 'send-test-mail':
-        $json = file_get_contents('php://input', true);
-        $postData = json_decode($json);
-
-        if (!Token::getInstance()->verifyToken('configuration', $postData->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
-            exit();
-        }
-
-        try {
-            $mailer = new Mail($faqConfig);
-            $mailer->setReplyTo($faqConfig->getAdminEmail());
-            $mailer->addTo($faqConfig->getAdminEmail());
-            $mailer->subject = $faqConfig->getTitle() . ': Mail test successful.';
-            $mailer->message = 'It works on my machine. 🚀';
-            $result = $mailer->send();
-
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => $result]);
-        } catch (Exception | TransportExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $e->getMessage()]);
-        }
-
-        $response->send();
-        break;
 }

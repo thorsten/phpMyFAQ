@@ -36,7 +36,7 @@ const handleSendTestMail = () => {
   if (button) {
     const csrf = document.querySelector('#pmf-csrf-token').value;
 
-    fetch('index.php?action=ajax&ajax=config&ajaxaction=send-test-mail', {
+    fetch('./api/configuration/send-test-mail', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',

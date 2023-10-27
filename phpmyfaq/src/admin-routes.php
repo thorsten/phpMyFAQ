@@ -18,6 +18,7 @@
 use phpMyFAQ\Controller\Administration\AttachmentController;
 use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentController;
+use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\GroupController;
@@ -80,6 +81,20 @@ $routes->add(
 $routes->add(
     'admin.api.content.comments',
     new Route('/content/comments', ['_controller' => [CommentController::class, 'delete'], '_methods' => 'DELETE'])
+);
+
+//
+// Configuration API
+//
+$routes->add(
+    'admin.api.configuration.send-test-mail',
+    new Route(
+        '/configuration/send-test-mail',
+        [
+            '_controller' => [ConfigurationController::class, 'sendTestMail'],
+            '_methods' => 'POST'
+        ]
+    )
 );
 
 //
