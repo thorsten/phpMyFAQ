@@ -57,7 +57,7 @@ export const handleFaqForm = () => {
 };
 
 const getCategoryPermissions = (categories) => {
-  fetch(`index.php?action=ajax&ajax=categories&ajaxaction=getpermissions&categories=${categories}`)
+  fetch(`./api/category/permissions/${categories}`)
     .then((response) => {
       return response.json();
     })
@@ -116,8 +116,7 @@ const checkForHash = () => {
   if (questionInputValue.includes('#')) {
     questionHelp.classList.remove('visually-hidden');
     submitButton.setAttribute('disabled', 'true');
-  }
-  else {
+  } else {
     questionHelp.classList.add('visually-hidden');
     submitButton.removeAttribute('disabled');
   }

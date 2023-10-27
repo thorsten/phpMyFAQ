@@ -56,7 +56,7 @@ export const handleCategories = () => {
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           localStorage.setItem(sortable.options.group.name, order.join('|'));
 
-          fetch('index.php?action=ajax&ajax=categories&ajaxaction=update-order', {
+          fetch('./api/category/update-order', {
             method: 'POST',
             headers: {
               Accept: 'application/json, text/plain, */*',
@@ -68,10 +68,10 @@ export const handleCategories = () => {
             }),
           })
             .then(async (response) => {
-              if (response.status === 200) {
+              if (response.ok) {
                 return response.json();
               }
-              throw new Error('Network response was not ok.');
+              throw new Error('Network response was not ok: ', { cause: { response } });
             })
             .then((response) => {
               sortableCategories.insertAdjacentElement(
@@ -79,10 +79,11 @@ export const handleCategories = () => {
                 addElement('div', { classList: 'alert alert-success', innerText: response.success })
               );
             })
-            .catch((error) => {
+            .catch(async (error) => {
+              const errorMessage = await error.cause.response.json();
               sortableCategories.insertAdjacentElement(
                 'beforebegin',
-                addElement('div', { classList: 'alert alert-danger', innerText: error })
+                addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
               );
             });
         },

@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Controller\Administration\AttachmentController;
+use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
@@ -47,6 +48,24 @@ $routes->add(
         '/content/attachments/upload',
         [
             '_controller' => [AttachmentController::class, 'upload'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
+//
+// Category API
+//
+$routes->add(
+    'admin.api.category.permissions',
+    new Route('/category/permissions/{categories}', ['_controller' => [CategoryController::class, 'permissions']])
+);
+$routes->add(
+    'admin.api.category.update-order',
+    new Route(
+        '/category/update-order',
+        [
+            '_controller' => [CategoryController::class, 'updateOrder'],
             '_methods' => 'POST'
         ]
     )

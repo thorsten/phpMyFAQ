@@ -148,6 +148,8 @@ RewriteRule api/setup/backup                       api/index.php
 RewriteRule api/setup/update-database              api/index.php
 
 # Administration API
+RewriteRule admin/api/category/permissions         admin/api/index.php
+RewriteRule admin/api/category/update-order        admin/api/index.php
 RewriteRule admin/api/content/attachments          admin/api/index.php
 RewriteRule admin/api/content/attachments/upload   admin/api/index.php
 RewriteRule admin/api/content/comments             admin/api/index.php

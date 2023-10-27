@@ -241,10 +241,6 @@ if (
     if (isset($action) && isset($ajax)) {
         if ('ajax' === $action ) {
             switch ($ajax) {
-                // Categories
-                case 'categories':
-                    require 'api/category.php';
-                    break;
                 // Configuration management
                 case 'configuration-list':
                     require 'api/configuration-list.php';
