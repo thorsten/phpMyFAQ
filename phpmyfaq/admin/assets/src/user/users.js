@@ -130,6 +130,7 @@ export const handleUsers = async () => {
       addUserForm.classList.add('was-validated');
 
       const userData = {
+        csrf,
         userName,
         realName,
         email,
@@ -139,7 +140,7 @@ export const handleUsers = async () => {
         isSuperAdmin,
       };
 
-      postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
+      postUserData('./api/user/add', userData)
         .then(async (response) => {
           if (response.ok) {
             return response.json();
@@ -209,10 +210,15 @@ export const handleUsers = async () => {
           csv.unshift(header.join(','));
           csv = csv.join('\r\n');
 
+          window.open(encodeURI(csv));
+
           let hiddenElement = document.createElement('a');
-          hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-          hiddenElement.target = '_blank';
-          hiddenElement.download = 'phpmyfaq-users-' + new Date().toISOString().substring(0, 10) + '.csv';
+          hiddenElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURI(csv));
+          hiddenElement.setAttribute('target', '_blank');
+          hiddenElement.setAttribute(
+            'download',
+            'phpmyfaq-users-' + new Date().toISOString().substring(0, 10) + '.csv'
+          );
           hiddenElement.click();
         })
         .catch((error) => {
@@ -236,7 +242,7 @@ export const handleUsers = async () => {
       const newPassword = document.getElementById('npass').value;
       const passwordRepeat = document.getElementById('bpass').value;
 
-      fetch('index.php?action=ajax&ajax=user&ajaxaction=overwrite_password', {
+      fetch('./api/user/overwrite-password', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -250,10 +256,10 @@ export const handleUsers = async () => {
         }),
       })
         .then(async (response) => {
-          if (response.status === 200) {
+          if (response.ok) {
             return response.json();
           }
-          throw new Error('Network response was not ok.');
+          throw new Error('Network response was not ok: ', { cause: { response } });
         })
         .then((response) => {
           message.insertAdjacentElement(
@@ -262,10 +268,12 @@ export const handleUsers = async () => {
           );
           modal.hide();
         })
-        .catch((error) => {
+        .catch(async (error) => {
+          const errorMessage = await error.cause.response.json();
+          console.error(errorMessage.error);
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: error })
+            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
           );
         });
     });

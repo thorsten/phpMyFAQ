@@ -26,6 +26,7 @@ use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\SearchController;
 use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
+use phpMyFAQ\Controller\Administration\UserController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -176,6 +177,7 @@ $routes->add(
     'admin.api.content.tag',
     new Route('/content/tag', ['_controller' => [TagController::class, 'update'], '_methods' => ['PUT']])
 );
+
 $routes->add(
     'admin.api.content.tags',
     new Route('/content/tags', ['_controller' => [TagController::class, 'search']])
@@ -261,6 +263,49 @@ $routes->add(
         '/cleanup',
         [
             '_controller' => [UpdateController::class, 'cleanUp'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
+//
+// User API
+//
+$routes->add(
+    'admin.api.user.users',
+    new Route('/user/users', ['_controller' => [UserController::class, 'list']])
+);
+
+$routes->add(
+    'admin.api.user.add',
+    new Route('/user/add', ['_controller' => [UserController::class, 'addUser'], '_methods' => 'POST'])
+);
+
+$routes->add(
+    'admin.api.user.data',
+    new Route('/user/data/{userId}', ['_controller' => [UserController::class, 'userData']])
+);
+
+$routes->add(
+    'admin.api.user.delete',
+    new Route('/user/delete', ['_controller' => [UserController::class, 'deleteUser'], '_methods' => 'DELETE'])
+);
+$routes->add(
+    'admin.api.user.permissions',
+    new Route('/user/permissions/{userId}', ['_controller' => [UserController::class, 'userPermissions']])
+);
+
+$routes->add(
+    'admin.api.user.activate',
+    new Route('/user/activate', ['_controller' => [UserController::class, 'activate'], '_methods' => 'POST'])
+);
+
+$routes->add(
+    'admin.api.user.overwrite-password',
+    new Route(
+        '/user/overwrite-password',
+        [
+            '_controller' => [UserController::class, 'overwritePassword'],
             '_methods' => 'POST'
         ]
     )

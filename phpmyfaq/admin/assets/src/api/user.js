@@ -14,7 +14,7 @@
  */
 
 export const fetchUsers = async (userName) => {
-  return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_list&q=${userName}`, {
+  return await fetch(`./api/user/users?filter=${userName}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -39,7 +39,7 @@ export const fetchUsers = async (userName) => {
 };
 
 export const fetchUserData = async (userId) => {
-  return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_data&user_id=${userId}`, {
+  return await fetch(`./api/user/data/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -60,7 +60,7 @@ export const fetchUserData = async (userId) => {
 };
 
 export const fetchUserRights = async (userId) => {
-  return await fetch(`index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=${userId}`, {
+  return await fetch(`./api/user/permissions/${userId}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -81,7 +81,7 @@ export const fetchUserRights = async (userId) => {
 };
 
 export const fetchAllUsers = async () => {
-  return await fetch('index.php?action=ajax&ajax=user&ajaxaction=get_all_user_data', {
+  return await fetch('./api/user/users', {
     method: 'GET',
     cache: 'no-cache',
     headers: {

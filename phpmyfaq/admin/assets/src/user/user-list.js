@@ -18,7 +18,7 @@
 import { addElement } from '../../../../assets/src/utils';
 
 const activateUser = (userId, csrfToken) => {
-  fetch('index.php?action=ajax&ajax=user&ajaxaction=activate_user', {
+  fetch('./api/user/activate', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -53,7 +53,7 @@ const activateUser = (userId, csrfToken) => {
 
 const deleteUser = (userId, csrfToken) => {
   const message = document.getElementById('pmf-user-message');
-  fetch('index.php?action=ajax&ajax=user&ajaxaction=delete_user', {
+  fetch('./api/user/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',

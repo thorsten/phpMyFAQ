@@ -169,6 +169,13 @@ RewriteRule admin/api/group/members                admin/api/index.php
 RewriteRule admin/api/group/permissions            admin/api/index.php
 RewriteRule admin/api/group/users                  admin/api/index.php
 RewriteRule admin/api/search/term                  admin/api/index.php
+RewriteRule admin/api/user/users                   admin/api/index.php
+RewriteRule admin/api/user/activate                admin/api/index.php
+RewriteRule admin/api/user/add                     admin/api/index.php
+RewriteRule admin/api/user/data                    admin/api/index.php
+RewriteRule admin/api/user/delete                  admin/api/index.php
+RewriteRule admin/api/user/permissions             admin/api/index.php
+RewriteRule admin/api/user/overwrite-password      admin/api/index.php
 RewriteRule admin/api/health-check                 admin/api/index.php
 RewriteRule admin/api/versions                     admin/api/index.php
 RewriteRule admin/api/update-check                 admin/api/index.php

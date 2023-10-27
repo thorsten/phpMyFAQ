@@ -60,4 +60,17 @@ abstract class Controller
             throw new UnauthorizedHttpException('User has no group permission.');
         }
     }
+
+    public function userHasUserPermission(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+        if (
+            !$user->perm->hasPermission($user->getUserId(), 'add_user') ||
+            !$user->perm->hasPermission($user->getUserId(), 'edit_user') ||
+            !$user->perm->hasPermission($user->getUserId(), 'delete_user')
+        ) {
+            throw new UnauthorizedHttpException('User has no user permission.');
+        }
+    }
 }
