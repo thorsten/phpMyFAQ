@@ -1047,6 +1047,9 @@ class Installer extends Setup
             $faqInstanceElasticsearch = new Elasticsearch($configuration);
             $faqInstanceElasticsearch->createIndex();
         }
+
+        // adjust RewriteBase in .htaccess
+        $this->adjustRewriteBaseHtaccess();
     }
 
     /**
@@ -1057,4 +1060,30 @@ class Installer extends Setup
     {
         return version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP) >= 0;
     }
+
+    /**
+     * Checks the minimum required PHP version, defined in System class.
+     * Returns true if it's okay.
+     */
+    public function adjustRewriteBaseHtaccess(): bool
+    {
+        $lines = file(PMF_ROOT_DIR . '/.htaccess');
+        $lineNumber = 0;
+        foreach ($lines as $line) {
+            $lineNumber++;
+            if (strpos($line, 'RewriteBase') === 0) {
+                // extract RewriteBase from Request_URI and BaseUrl
+                $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
+                $rewriteBase = substr($requestUri, 0, strpos($requestUri, 'index.php'));
+                // write RewriteBase into .htaccess
+                $lines[$lineNumber - 1] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
+                if (file_put_contents(PMF_ROOT_DIR . '/.htaccess', implode('', $lines)) === false) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+}
 }
