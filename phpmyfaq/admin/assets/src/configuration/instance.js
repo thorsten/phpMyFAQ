@@ -25,7 +25,7 @@ export const handleInstances = () => {
     const modal = new Modal(container);
     addInstance.addEventListener('click', (event) => {
       event.preventDefault();
-      const csrf = document.querySelector('#csrf').value;
+      const csrf = document.querySelector('#pmf-csrf-token').value;
       const url = document.querySelector('#url').value;
       const instance = document.querySelector('#instance').value;
       const comment = document.querySelector('#comment').value;
@@ -33,7 +33,7 @@ export const handleInstances = () => {
       const admin = document.querySelector('#admin').value;
       const password = document.querySelector('#password').value;
 
-      fetch('index.php?action=ajax&ajax=config&ajaxaction=add-instance', {
+      fetch('./api/instance/add', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -119,7 +119,7 @@ export const handleInstances = () => {
         const csrf = event.target.getAttribute('data-csrf-token');
 
         if (confirm('Are you sure?')) {
-          fetch('index.php?action=ajax&ajax=config&ajaxaction=delete-instance', {
+          fetch('./api/instance/delete', {
             method: 'POST',
             headers: {
               Accept: 'application/json, text/plain, */*',

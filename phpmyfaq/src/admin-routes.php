@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
+use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\SearchController;
 use phpMyFAQ\Controller\Administration\TagController;
@@ -103,6 +104,19 @@ $routes->add(
 $routes->add(
     'admin.api.content.images',
     new Route('/content/images', ['_controller' => [ImageController::class, 'upload'], '_methods' => 'POST'])
+);
+
+//
+// Instance API
+//
+$routes->add(
+    'admin.api.instance.add',
+    new Route('/instance/add', ['_controller' => [InstanceController::class, 'add'], '_methods' => 'POST'])
+);
+
+$routes->add(
+    'admin.api.instance.delete',
+    new Route('/instance/delete', ['_controller' => [InstanceController::class, 'delete'], '_methods' => 'DELETE'])
 );
 
 //
