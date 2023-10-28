@@ -100,7 +100,7 @@ const setPermissions = (permissions) => {
 
 const getFaqPermissions = (faqId) => {
   const csrfToken = document.getElementById('csrf').value;
-  fetch(`index.php?action=ajax&ajax=records&ajaxaction=permissions&faq-id=${faqId}&csrf=${csrfToken}`)
+  fetch(`./api/faq/permissions/${faqId}`)
     .then((response) => {
       return response.json();
     })

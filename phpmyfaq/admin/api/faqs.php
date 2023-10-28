@@ -58,21 +58,6 @@ if (!isset($items[0][2])) {
 }
 
 switch ($ajaxAction) {
-    // Get permissions
-    case 'permissions':
-        $faqId = Filter::filterInput(INPUT_GET, 'faq-id', FILTER_VALIDATE_INT);
-
-        $faqPermission = new FaqPermission($faqConfig);
-
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(
-            [
-                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
-                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
-            ]
-        );
-        $response->send();
-        break;
 
     // save active FAQs
     case 'save_active_records':

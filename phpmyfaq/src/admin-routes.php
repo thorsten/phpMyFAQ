@@ -21,6 +21,7 @@ use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
+use phpMyFAQ\Controller\Administration\FaqController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\InstanceController;
@@ -162,6 +163,14 @@ $routes->add(
 $routes->add(
     'admin.api.elasticsearch.statistics',
     new Route('/elasticsearch/statistics', ['_controller' => [ElasticsearchController::class, 'statistics']])
+);
+
+//
+// FAQ API
+//
+$routes->add(
+    'admin.api.faq.permissions',
+    new Route('/faq/permissions/{faqId}', ['_controller' => [FaqController::class, 'listPermissions']])
 );
 
 //

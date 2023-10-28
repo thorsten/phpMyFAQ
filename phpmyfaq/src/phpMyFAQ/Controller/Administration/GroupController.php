@@ -115,6 +115,7 @@ class GroupController extends Controller
         return $response;
     }
 
+    #[Route('admin/api/group/permissions')]
     public function listPermissions(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
