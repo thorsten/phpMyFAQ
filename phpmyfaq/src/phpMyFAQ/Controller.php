@@ -73,4 +73,13 @@ abstract class Controller
             throw new UnauthorizedHttpException('User has no user permission.');
         }
     }
+
+    public function userHasPermission(string $permission): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+        if (!$user->perm->hasPermission($user->getUserId(), $permission)) {
+            throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permission));
+        }
+    }
 }

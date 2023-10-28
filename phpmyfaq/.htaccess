@@ -165,6 +165,7 @@ RewriteRule admin/api/elasticsearch/drop           admin/api/index.php
 RewriteRule admin/api/elasticsearch/import         admin/api/index.php
 RewriteRule admin/api/elasticsearch/statistics     admin/api/index.php
 RewriteRule admin/api/faq/permissions              admin/api/index.php
+RewriteRule admin/api/faq/activate                 admin/api/index.php
 RewriteRule admin/api/group/data                   admin/api/index.php
 RewriteRule admin/api/group/groups                 admin/api/index.php
 RewriteRule admin/api/group/members                admin/api/index.php

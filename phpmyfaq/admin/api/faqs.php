@@ -59,36 +59,6 @@ if (!isset($items[0][2])) {
 
 switch ($ajaxAction) {
 
-    // save active FAQs
-    case 'save_active_records':
-        $postData = json_decode(file_get_contents('php://input', true));
-
-        $faqIds = Filter::filterArray($postData->faqIds);
-        $faqLanguage = Filter::filterVar($postData->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
-        $checked = Filter::filterVar($postData->checked, FILTER_VALIDATE_BOOLEAN);
-
-        if (
-            $user->perm->hasPermission($user->getUserId(), 'approverec') &&
-            Token::getInstance()->verifyToken('faq-overview', $postData->csrf)
-        ) {
-            if (!empty($faqIds)) {
-                $faq = new Faq($faqConfig);
-
-                foreach ($faqIds as $faqId) {
-                    if (Language::isASupportedLanguage($faqLanguage)) {
-                        $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
-                    }
-                }
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => $success]);
-            }
-        } else {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-        }
-        $response->send();
-        break;
-
     // save sticky FAQs
     case 'save_sticky_records':
         $postData = json_decode(file_get_contents('php://input', true));

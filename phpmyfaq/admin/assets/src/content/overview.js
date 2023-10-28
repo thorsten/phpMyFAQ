@@ -130,10 +130,17 @@ export const handleFaqOverview = async () => {
 };
 
 const saveStatus = (categoryId, faqIds, token, checked, type) => {
+  let url;
   const languageElement = document.getElementById(`${type}_record_${categoryId}_${faqIds[0]}`);
   const faqLanguage = languageElement.getAttribute('lang');
 
-  fetch(`index.php?action=ajax&ajax=records&ajaxaction=save_${type}_records`, {
+  if ('active' === type) {
+    url = './api/faq/activate';
+  } else {
+    url = './api/faq/sticky';
+  }
+
+  fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',

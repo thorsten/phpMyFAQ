@@ -169,6 +169,11 @@ $routes->add(
 // FAQ API
 //
 $routes->add(
+    'admin.api.faq.activate',
+    new Route('/faq/activate', ['_controller' => [FaqController::class, 'activate'], '_methods' => 'POST'])
+);
+
+$routes->add(
     'admin.api.faq.permissions',
     new Route('/faq/permissions/{faqId}', ['_controller' => [FaqController::class, 'listPermissions']])
 );

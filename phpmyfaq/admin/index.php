@@ -245,16 +245,9 @@ if (
                 case 'configuration-list':
                     require 'api/configuration-list.php';
                     break;
-                case 'config':
-                    require 'api/configuration.php';
-                    break;
                 // Records
                 case 'records':
                     require 'api/faqs.php';
-                    break;
-                // Users
-                case 'user':
-                    require 'api/user.php';
                     break;
             }
             exit();
