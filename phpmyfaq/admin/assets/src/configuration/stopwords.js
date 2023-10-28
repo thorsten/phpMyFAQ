@@ -44,7 +44,7 @@ export const handleStopWords = () => {
  * @param language
  */
 const fetchStopWordsByLanguage = async (language) => {
-  fetch(`index.php?action=ajax&ajax=config&ajaxaction=load_stop_words_by_lang&stopwords_lang=${language}`, {
+  fetch(`./api/stopwords?language=${language}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -52,16 +52,17 @@ const fetchStopWordsByLanguage = async (language) => {
     },
   })
     .then(async (response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
-      throw new Error('Network response was not ok.');
+      throw new Error('Network response was not ok: ', { cause: { response } });
     })
     .then((response) => {
       setContentAndHandler(response);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(async (error) => {
+      const errorMessage = await error.cause.response.json();
+      console.error(errorMessage);
     });
 };
 
@@ -205,7 +206,7 @@ const saveStopWord = (elementId) => {
   const csrfToken = document.getElementById('pmf-csrf-token').value;
 
   if (element.getAttribute('data-old-value') !== element.value) {
-    fetch('index.php?action=ajax&ajax=config&ajaxaction=save_stop_word', {
+    fetch('./api/stopword/save', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -219,10 +220,10 @@ const saveStopWord = (elementId) => {
       }),
     })
       .then(async (response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return response.json();
         }
-        throw new Error('Network response was not ok.');
+        throw new Error('Network response was not ok: ', { cause: { response } });
       })
       .then((response) => {
         // @todo needs to be improved
@@ -233,11 +234,12 @@ const saveStopWord = (elementId) => {
         element.style.backgroundPosition = 'right calc(0.375em + 0.1875rem) center';
         element.style.backgroundSize = 'calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)';
       })
-      .catch((error) => {
+      .catch(async (error) => {
+        const errorMessage = await error.cause.response.json();
         const table = document.querySelector('.table');
         table.insertAdjacentElement(
           'beforebegin',
-          addElement('div', { classList: 'alert alert-danger', innerText: error })
+          addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
         );
       });
   } else {
@@ -248,7 +250,7 @@ const saveStopWord = (elementId) => {
 };
 
 /**
- * Save the value of the stop word input element. This is bound on onfocus.
+ * Save the value of the stop word input element. This is bound to focus.
  * @param elementId
  */
 const saveOldValue = (elementId) => {
@@ -265,7 +267,7 @@ const deleteStopWord = (elementId) => {
   const element = document.getElementById(elementId);
   const csrfToken = document.getElementById('pmf-csrf-token').value;
 
-  fetch('index.php?action=ajax&ajax=config&ajaxaction=delete_stop_word', {
+  fetch('./api/stopword/delete', {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -278,20 +280,21 @@ const deleteStopWord = (elementId) => {
     }),
   })
     .then(async (response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       }
-      throw new Error('Network response was not ok.');
+      throw new Error('Network response was not ok: ', { cause: { response } });
     })
     .then(() => {
       element.addEventListener('click', () => (element.style.opacity = '0'));
       element.addEventListener('transitionend', () => element.remove());
     })
-    .catch((error) => {
+    .catch(async (error) => {
+      const errorMessage = await error.cause.response.json();
       const table = document.querySelector('.table');
       table.insertAdjacentElement(
         'beforebegin',
-        addElement('div', { classList: 'alert alert-danger', innerText: error })
+        addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
       );
     });
 };

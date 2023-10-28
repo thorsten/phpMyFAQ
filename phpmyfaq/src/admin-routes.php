@@ -26,6 +26,7 @@ use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\SearchController;
+use phpMyFAQ\Controller\Administration\StopWordController;
 use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use phpMyFAQ\Controller\Administration\UserController;
@@ -197,6 +198,24 @@ $routes->add(
 $routes->add(
     'admin.api.search.term',
     new Route('/search/term', ['_controller' => [SearchController::class, 'deleteTerm'], '_methods' => 'DELETE'])
+);
+
+//
+// Stopword API
+//
+$routes->add(
+    'admin.api.stopwords',
+    new Route('/stopwords', ['_controller' => [StopWordController::class, 'list']])
+);
+
+$routes->add(
+    'admin.api.stopword.delete',
+    new Route('/stopword/delete', ['_controller' => [StopWordController::class, 'delete'], '_methods' => 'DELETE'])
+);
+
+$routes->add(
+    'admin.api.stopword.save',
+    new Route('/stopword/save', ['_controller' => [StopWordController::class, 'save'], '_methods' => 'POST'])
 );
 
 //

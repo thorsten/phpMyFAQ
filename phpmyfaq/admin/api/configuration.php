@@ -49,76 +49,10 @@ $response = new JsonResponse();
 $request = Request::createFromGlobals();
 
 $ajaxAction = Filter::filterVar($request->query->get('ajaxaction'), FILTER_SANITIZE_SPECIAL_CHARS);
-$stopwordId = Filter::filterVar($request->query->get('stopword_id'), FILTER_VALIDATE_INT);
-$stopword = Filter::filterVar($request->query->get('stopword'), FILTER_SANITIZE_SPECIAL_CHARS);
-$stopwordsLang = Filter::filterVar($request->query->get('stopwords_lang'), FILTER_SANITIZE_SPECIAL_CHARS);
 $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-$stopWords = new StopWords($faqConfig);
 
 switch ($ajaxAction) {
-
-    case 'load_stop_words_by_lang':
-        if (Language::isASupportedLanguage($stopwordsLang)) {
-            $stopWordsList = $stopWords->getByLang($stopwordsLang);
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($stopWordsList);
-            $response->send();
-        }
-        break;
-
-    case 'delete_stop_word':
-        $deleteData = json_decode(file_get_contents('php://input', true));
-
-        $stopWordId = Filter::filterVar($deleteData->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($deleteData->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (!Token::getInstance()->verifyToken('stopwords', $deleteData->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
-            exit();
-        }
-
-        if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
-            $stopWords
-                ->setLanguage($stopWordsLang)
-                ->remove((int)$stopWordId);
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['deleted' => $stopWordId ]);
-            $response->send();
-        }
-        break;
-
-    case 'save_stop_word':
-        $postData = json_decode(file_get_contents('php://input', true));
-
-        $stopWordId = Filter::filterVar($postData->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($postData->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $stopWord = Filter::filterVar($postData->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (!Token::getInstance()->verifyToken('stopwords', $postData->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
-            exit();
-        }
-
-        if (null != $stopWord && Language::isASupportedLanguage($stopWordsLang)) {
-            $stopWords->setLanguage($stopWordsLang);
-
-            if (null !== $stopWordId && -1 < $stopWordId) {
-                $stopWords->update((int)$stopWordId, $stopWord);
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['updated' => $stopWordId ]);
-            } elseif (!$stopWords->match($stopWord)) {
-                $stopWordId = $stopWords->add($stopWord);
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['added' => $stopWordId ]);
-            }
-            $response->send();
-        }
-        break;
 
     case 'add-template-metadata':
         $postData = json_decode(file_get_contents('php://input', true));
