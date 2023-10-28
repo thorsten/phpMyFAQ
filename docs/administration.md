@@ -282,15 +282,7 @@ We need stop words for the smart answering feature and the related answers. If a
 FAQ the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
 very low relevance like the English word "the".
 
-### 5.6.5 Template meta data
-
-If you need to add metadata to your template, you can do this in the template metadata administration. You can define a
-page type, e.g. "foobar", a content type (Text or HTML) and the content, e.g. `<marquee>Foobar</marquee>`. After saving
-the metadata entry, you can use it in your template:
-
-`{{ foobar }}`
-
-### 5.6.6 Elasticsearch configuration
+### 5.6.5 Elasticsearch configuration
 
 Here you can create and drop the Elasticsearch index, and you can run a full import of all data from your database
 into the Elasticsearch index. You can also see some Elasticsearch relevant usage data. This page is only available if

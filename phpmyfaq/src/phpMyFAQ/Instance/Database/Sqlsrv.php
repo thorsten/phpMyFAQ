@@ -233,14 +233,6 @@ class Sqlsrv extends Database implements Driver
             config_value NVARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (instance_id, config_name))',
 
-        'faqmeta' => 'CREATE TABLE %sfaqmeta (
-            id INT NOT NULL,
-            lang NVARCHAR(5) DEFAULT NULL,
-            page_id NVARCHAR(48) DEFAULT NULL,
-            type NVARCHAR(48) DEFAULT NULL,
-            content TEXT NULL,
-            PRIMARY KEY (id))',
-
         'faqnews' => 'CREATE TABLE %sfaqnews (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,

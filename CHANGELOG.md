@@ -17,6 +17,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - (WIP) added experimental online update feature (Jan Harms, Thorsten)
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
+- removed support for adding own meta content in templates (Thorsten)
 
 ### phpMyFAQ v3.2.2 - 2023-10-27
 

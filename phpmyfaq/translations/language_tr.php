@@ -1220,11 +1220,6 @@ $PMF_LANG['rightsLanguage::delete_section'] = "Bölüm sil";
 $PMF_LANG['rightsLanguage::administrate_sections'] = "Bölüm yönet";
 $PMF_LANG['rightsLanguage::administrate_groups'] = "Grupları yönet";
 $PMF_LANG['ad_group_rights'] = "Grup izinleri";
-$PMF_LANG['ad_menu_meta'] = "Meta verisi";
-$PMF_LANG['ad_meta_add'] = "meta verisi ekle";
-$PMF_LANG['ad_meta_page_id'] = "Sayfa türü";
-$PMF_LANG['ad_meta_type'] = "İçerik türü";
-$PMF_LANG['ad_meta_content'] = "İçerik";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Bölüm";

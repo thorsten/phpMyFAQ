@@ -238,14 +238,6 @@ class Mysqli extends Database implements Driver
             PRIMARY KEY (instance_id, config_name))
             DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 
-        'faqmeta' => 'CREATE TABLE %sfaqmeta (
-            id INT(11) unsigned NOT NULL,
-            lang VARCHAR(5) DEFAULT NULL,
-            page_id VARCHAR(48) DEFAULT NULL,
-            type VARCHAR(48) DEFAULT NULL,
-            content TEXT NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
-
         'faqnews' => 'CREATE TABLE %sfaqnews (
             id INT(11) NOT NULL,
             lang VARCHAR(5) NOT NULL,

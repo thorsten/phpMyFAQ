@@ -1247,12 +1247,6 @@ $PMF_LANG['rightsLanguage::delete_section'] = 'Eliminar sección';
 $PMF_LANG['rightsLanguage::administrate_sections'] = 'Administrar secciones';
 $PMF_LANG['rightsLanguage::administrate_groups'] = 'Administrar grupos';
 $PMF_LANG['ad_group_rights'] = 'Permisos de grupo';
-$PMF_LANG['ad_menu_meta'] = 'Plantilla de metadatos';
-$PMF_LANG['ad_meta_add'] = 'Añadir plantilla de metadatos';
-$PMF_LANG['ad_meta_page_id'] = 'Tipo de página';
-$PMF_LANG['ad_meta_type'] = 'Tipo de contenido';
-$PMF_LANG['ad_meta_content'] = 'Contenido';
-$PMF_LANG['ad_meta_copy_snippet'] = 'Copiar fragmento de código para plantillas';
 
 // añadido v3.0.0-alpha.3 - 2018-09-20 por Timo
 $PMF_LANG['ad_menu_section_administration'] = "Secciones";

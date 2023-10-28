@@ -110,7 +110,6 @@ $secLevelEntries['exports'] = $adminHelper->addMenuEntry('export', 'export', 'ad
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
 
 $secLevelEntries['config'] = $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editinstances+addinstances+delinstances',
     'instances',
@@ -123,7 +122,6 @@ $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'ad_menu_stopwordsconfig',
     $action
 );
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'meta', 'ad_menu_meta', $action);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
 if ($faqConfig->get('search.enableElasticsearch')) {
     $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
@@ -133,6 +131,7 @@ if ($faqConfig->get('search.enableElasticsearch')) {
         $action
     );
 }
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action);
 
 switch ($action) {
     case 'user':
@@ -202,7 +201,6 @@ switch ($action) {
     case 'instances':
     case 'system':
     case 'elasticsearch':
-    case 'meta':
     case' upgrade':
         $configurationPage = true;
         break;

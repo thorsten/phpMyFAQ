@@ -1248,12 +1248,6 @@ $PMF_LANG["rightsLanguage::delete_section"] = "Supprimer les sections";
 $PMF_LANG["rightsLanguage::administrate_sections"] = "Administrer les sections";
 $PMF_LANG["rightsLanguage::administrate_groups"] = "Administrer les groupes";
 $PMF_LANG["ad_group_rights"] = "Permissions de groupe";
-$PMF_LANG["ad_menu_meta"] = "Modèles de métadonnée";
-$PMF_LANG["ad_meta_add"] = "Ajouter un modèle de métadonnée";
-$PMF_LANG["ad_meta_page_id"] = "Page type";
-$PMF_LANG["ad_meta_type"] = "Contenu type";
-$PMF_LANG["ad_meta_content"] = "Contenu";
-$PMF_LANG["ad_meta_copy_snippet"] = "Copier l'extrait de code pour les modèles";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG["ad_menu_section_administration"] = "Sections";

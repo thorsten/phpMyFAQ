@@ -430,6 +430,9 @@ class Update extends Setup
                     Database::getTablePrefix()
                 ),
             };
+
+            // Remove template metadata tables
+            $this->queries[] = sprintf('DROP TABLE %sfaqmeta', Database::getTablePrefix());
         }
     }
 

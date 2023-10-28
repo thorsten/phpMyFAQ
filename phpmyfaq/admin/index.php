@@ -437,13 +437,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'elasticsearch':
                 require 'elasticsearch.php';
                 break;
-            case 'meta':
-            case 'meta.update':
-                require 'template-metadata.php';
-                break;
-            case 'meta.edit':
-                require 'template-metadata.edit.php';
-                break;
             case 'upgrade':
                 require 'upgrade.php';
                 break;

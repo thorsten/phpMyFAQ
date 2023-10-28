@@ -19,7 +19,6 @@ import {
   handleConfiguration,
   handleInstances,
   handleStopWords,
-  handleTemplateMetaData,
   handleElasticsearch,
   handleCheckForUpdates,
 } from './configuration';
@@ -94,9 +93,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Configuration -> Stop Words
   handleStopWords();
-
-  // Configuration -> Template Meta data
-  handleTemplateMetaData();
 
   // Configuration -> Online Update
   handleCheckForUpdates();

@@ -990,12 +990,6 @@ $PMF_LANG['rightsLanguage::delete_section'] = 'セクションを削除';
 $PMF_LANG['rightsLanguage::administrate_sections'] = 'セクション管理';
 $PMF_LANG['rightsLanguage::administrate_groups'] = 'グループ管理';
 $PMF_LANG['ad_group_rights'] = 'グループ権限';
-$PMF_LANG['ad_menu_meta'] = 'メタデータのテンプレート';
-$PMF_LANG['ad_meta_add'] = 'メタデータのテンプレートを追加';
-$PMF_LANG['ad_meta_page_id'] = 'ページ種別';
-$PMF_LANG['ad_meta_type'] = 'コンテンツ種別';
-$PMF_LANG['ad_meta_content'] = 'コンテンツ';
-$PMF_LANG['ad_meta_copy_snippet'] = 'テンプレート向けのコードスニペットをコピー';
 
 // added v3.0.0-alpha.3
 $PMF_LANG['ad_menu_section_administration'] = "セクションの管理";
