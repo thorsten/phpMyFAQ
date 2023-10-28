@@ -19,7 +19,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Template\TemplateException;
-use phpMyFAQ\Template\TemplateHelper;
 
 /**
  * Class Template
@@ -55,7 +54,6 @@ class Template
      */
     public function __construct(
         array $myTemplate,
-        private readonly TemplateHelper $tplHelper,
         string $tplSetName = 'default'
     ) {
         self::$tplSetName = $tplSetName;
@@ -176,10 +174,8 @@ class Template
      */
     public function parse(string $templateName, array $templateContent): void
     {
-        $filters = [];
         $tmp = $this->templates[$templateName];
         $rawBlocks = $this->readBlocks($tmp);
-        $filters[$templateName] = $this->readFilters($tmp);
 
         // process blocked content
         if (isset($this->blocks[$templateName])) {
@@ -208,17 +204,6 @@ class Template
             }
         }
 
-        // process filters
-        if (isset($filters[$templateName])) {
-            if (count($filters[$templateName])) {
-                foreach ($filters[$templateName] as $filter) {
-                    $filterMethod = 'render' . ucfirst(key($filter)) . 'Filter';
-                    $filteredVar = $this->tplHelper->$filterMethod(current($filter));
-                    $tmp = str_replace('{{ ' . current($filter) . ' | ' . key($filter) . ' }}', $filteredVar, $tmp);
-                }
-            }
-        }
-
         // add magic variables for each template
         $tmp = str_replace('{{ tplSetName }}', self::$tplSetName, $tmp);
 
@@ -235,32 +220,6 @@ class Template
     public function getErrors(): array
     {
         return $this->errors;
-    }
-
-    /**
-     * @return array<int, array<string, string>>
-     */
-    private function readFilters(?string $template = null): array
-    {
-        if (is_null($template)) {
-            return [];
-        }
-
-        $tmpFilter = $tplFilter = [];
-        Strings::preg_match_all('/\{\{.+?\}\}/', $template, $tmpFilter);
-
-        if (isset($tmpFilter)) {
-            $filterCount = is_countable($tmpFilter[0]) ? count($tmpFilter[0]) : 0;
-            for ($i = 0; $i < $filterCount; ++$i) {
-                if (str_contains((string) $tmpFilter[0][$i], ' | meta ')) {
-                    $rawFilter = str_replace(['{{', '}}'], '', (string) $tmpFilter[0][$i]);
-                    [$identifier, $filter] = explode('|', $rawFilter);
-                    $tplFilter[] = [trim($filter) => trim($identifier)];
-                }
-            }
-        }
-
-        return $tplFilter;
     }
 
     /**
