@@ -1062,28 +1062,31 @@ class Installer extends Setup
     }
 
     /**
-     * Checks the minimum required PHP version, defined in System class.
-     * Returns true if it's okay.
+     * Adjusts the RewriteBase in the .htaccess file for the user's environment to avoid errors with controllers.
+     * Returns true, if the file was successfully changed.
      */
     public function adjustRewriteBaseHtaccess(): bool
     {
         $lines = file(PMF_ROOT_DIR . '/.htaccess');
         $lineNumber = 0;
-        foreach ($lines as $line) {
-            $lineNumber++;
-            if (strpos($line, 'RewriteBase') === 0) {
-                // extract RewriteBase from Request_URI and BaseUrl
-                $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
-                $rewriteBase = substr($requestUri, 0, strpos($requestUri, 'index.php'));
-                // write RewriteBase into .htaccess
-                $lines[$lineNumber - 1] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
-                if (file_put_contents(PMF_ROOT_DIR . '/.htaccess', implode('', $lines)) === false) {
-                    return true;
-                } else {
-                    return false;
+        if ($lines) {
+            foreach ($lines as $line) {
+                $lineNumber++;
+                if (strpos($line, 'RewriteBase') === 0) {
+                    // extract RewriteBase from Request_URI and BaseUrl
+                    $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
+                    $rewriteBase = substr($requestUri, 0, strpos($requestUri, 'index.php'));
+                    // write RewriteBase into .htaccess
+                    $lines[$lineNumber - 1] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
+                    if (file_put_contents(PMF_ROOT_DIR . '/.htaccess', implode('', $lines)) === false) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
+        } else {
+            return false;
         }
     }
-}
 }
