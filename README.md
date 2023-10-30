@@ -1,4 +1,4 @@
-# phpMyFAQ 4.0
+# phpMyFAQ 4.0-dev
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -7,9 +7,9 @@
 
 ## What is phpMyFAQ?
 
-phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP
-8.1+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
-WYSIWYG editor and a media manager, real time search support with Elasticsearch, flexible multi-user support with user
+phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data; PHP
+8.2+ is needed to access this data. phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG
+editor and a media manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
 supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
 backup and restore system, a dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection
