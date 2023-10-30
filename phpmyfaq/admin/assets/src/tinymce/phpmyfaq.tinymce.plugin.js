@@ -18,7 +18,7 @@ tinymce.PluginManager.add('phpmyfaq', function (editor, url) {
 
   const openDialog = function (csrfToken) {
     return editor.windowManager.open({
-      title: 'phpMyFAQ TinyMCE plugin',
+      title: 'phpMyFAQ TinyMCE Plugin',
       body: {
         type: 'panel',
         items: [
@@ -43,7 +43,7 @@ tinymce.PluginManager.add('phpmyfaq', function (editor, url) {
         const list = document.getElementById('pmf-faq-list');
 
         if (data.search.length > 0) {
-          fetch(url + '?action=ajax&ajax=records&ajaxaction=search_records', {
+          fetch(url + 'api/faq/search', {
             method: 'POST',
             headers: {
               Accept: 'application/json, text/plain, */*',
@@ -66,7 +66,7 @@ tinymce.PluginManager.add('phpmyfaq', function (editor, url) {
                 const searchResults = response.success;
                 if (searchResults.length > 0) {
                   searchResults.forEach((result) => {
-                    list.innerHTML += `<label><input type="radio" name="faqURL" value="${result.url}">${result.question}</label><br>`;
+                    list.innerHTML += `<label> <input type="radio" name="faqURL" value="${result.url}">${result.question}</label><br>`;
                   });
                 }
               } else {

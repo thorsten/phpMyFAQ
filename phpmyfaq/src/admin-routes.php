@@ -174,8 +174,23 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.faq.delete',
+    new Route('/faq/delete', ['_controller' => [FaqController::class, 'delete'], '_methods' => 'DELETE'])
+);
+
+$routes->add(
     'admin.api.faq.permissions',
     new Route('/faq/permissions/{faqId}', ['_controller' => [FaqController::class, 'listPermissions']])
+);
+
+$routes->add(
+    'admin.api.faq.search',
+    new Route('/faq/search', ['_controller' => [FaqController::class, 'search'], '_methods' => 'POST'])
+);
+
+$routes->add(
+    'admin.api.faq.sticky',
+    new Route('/faq/sticky', ['_controller' => [FaqController::class, 'sticky'], '_methods' => 'POST'])
 );
 
 //

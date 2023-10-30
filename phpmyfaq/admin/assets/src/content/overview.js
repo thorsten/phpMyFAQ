@@ -1,3 +1,5 @@
+import { addElement } from '../../../../assets/src/utils';
+
 export const handleFaqOverview = async () => {
   const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
   const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
@@ -15,7 +17,7 @@ export const handleFaqOverview = async () => {
         const token = event.target.getAttribute('data-pmf-token');
 
         if (confirm('Are you sure?')) {
-          fetch('index.php?action=ajax&ajax=records&ajaxaction=delete_record', {
+          fetch('./api/faq/delete', {
             method: 'DELETE',
             headers: {
               Accept: 'application/json, text/plain, */*',
@@ -23,12 +25,12 @@ export const handleFaqOverview = async () => {
             },
             body: JSON.stringify({
               csrf: token,
-              record_id: faqId,
-              record_lang: faqLanguage,
+              faqId: faqId,
+              faqLanguage: faqLanguage,
             }),
           })
             .then(async (response) => {
-              if (response.status === 200) {
+              if (response.ok) {
                 return response.json();
               }
               throw new Error('Network response was not ok: ', { cause: { response } });
@@ -41,6 +43,10 @@ export const handleFaqOverview = async () => {
               } else {
                 console.error(result.error);
               }
+            })
+            .catch(async (error) => {
+              const errorMessage = await error.cause.response.json();
+              console.log(errorMessage);
             });
         }
       });
