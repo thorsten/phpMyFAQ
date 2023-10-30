@@ -176,6 +176,7 @@ RewriteRule admin/api/group/permissions            admin/api/index.php
 RewriteRule admin/api/group/users                  admin/api/index.php
 RewriteRule admin/api/instance/add                 admin/api/index.php
 RewriteRule admin/api/instance/delete              admin/api/index.php
+RewriteRule admin/api/question/delete              admin/api/index.php
 RewriteRule admin/api/search/term                  admin/api/index.php
 RewriteRule admin/api/stopword/delete              admin/api/index.php
 RewriteRule admin/api/stopword/save                admin/api/index.php

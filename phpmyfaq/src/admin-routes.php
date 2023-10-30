@@ -26,6 +26,7 @@ use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
+use phpMyFAQ\Controller\Administration\QuestionController;
 use phpMyFAQ\Controller\Administration\SearchController;
 use phpMyFAQ\Controller\Administration\StopWordController;
 use phpMyFAQ\Controller\Administration\TagController;
@@ -219,6 +220,14 @@ $routes->add(
 $routes->add(
     'admin.api.group.data',
     new Route('/group/data/{groupId}', ['_controller' => [GroupController::class, 'groupData']])
+);
+
+//
+// Question API
+//
+$routes->add(
+    'admin.api.question.delete',
+    new Route('/question/delete', ['_controller' => [QuestionController::class, 'delete'], '_methods' => 'DELETE'])
 );
 
 //

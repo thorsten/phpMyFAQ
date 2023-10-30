@@ -26,7 +26,7 @@ export const handleOpenQuestions = () => {
       const questions = new FormData(form);
 
       responseMessage.innerHTML = '';
-      fetch('index.php?action=ajax&ajax=records&ajaxaction=delete_question', {
+      fetch('./api/question/delete', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
