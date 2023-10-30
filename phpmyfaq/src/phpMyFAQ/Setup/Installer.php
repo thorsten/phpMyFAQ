@@ -1064,29 +1064,35 @@ class Installer extends Setup
     /**
      * Adjusts the RewriteBase in the .htaccess file for the user's environment to avoid errors with controllers.
      * Returns true, if the file was successfully changed.
-     */
+     *
+     * @throws Exception
+*/
     public function adjustRewriteBaseHtaccess(): bool
     {
-        $lines = file(PMF_ROOT_DIR . '/.htaccess');
-        $lineNumber = 0;
-        if ($lines) {
-            foreach ($lines as $line) {
-                $lineNumber++;
-                if (strpos($line, 'RewriteBase') === 0) {
-                    // extract RewriteBase from Request_URI and BaseUrl
-                    $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
-                    $rewriteBase = substr($requestUri, 0, strpos($requestUri, 'index.php'));
-                    // write RewriteBase into .htaccess
-                    $lines[$lineNumber - 1] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
-                    if (file_put_contents(PMF_ROOT_DIR . '/.htaccess', implode('', $lines)) === false) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        } else {
-            return false;
+        $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
+
+        if (!file_exists($htaccessPath)) {
+            throw new Exception('The .htaccess file does not exist!');
         }
+
+        $lines = file($htaccessPath);
+        $newLines = [];
+
+        foreach ($lines as $line) {
+            if (str_starts_with($line, 'RewriteBase')) {
+                $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
+                $rewriteBase = substr($requestUri, 0, strpos($requestUri, 'index.php'));
+                $rewriteBase = ($rewriteBase === '') ? '/' : $rewriteBase;
+                $newLines[] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
+            } else {
+                $newLines[] = $line;
+            }
+        }
+
+        if (file_put_contents($htaccessPath, implode('', $newLines)) !== false) {
+            return true;
+        }
+
+        return false;
     }
 }
