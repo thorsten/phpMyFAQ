@@ -32,7 +32,7 @@ class TwoFactor
 
     public function __construct(private readonly Configuration $config)
     {
-        $this->twoFactorAuth = new TwoFactorAuth(issuer: $this->config->get('main.metaPublisher');
+        $this->twoFactorAuth = new TwoFactorAuth(issuer: $this->config->get('main.metaPublisher'));
     }
 
     /**
