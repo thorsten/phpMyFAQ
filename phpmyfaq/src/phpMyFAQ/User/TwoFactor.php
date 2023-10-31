@@ -32,7 +32,7 @@ class TwoFactor
 
     public function __construct(private readonly Configuration $config)
     {
-        $this->twoFactorAuth = new TwoFactorAuth();
+        $this->twoFactorAuth = new TwoFactorAuth(issuer: $this->config->get('main.metaPublisher');
     }
 
     /**
@@ -81,6 +81,7 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        return $this->twoFactorAuth->getQRCodeImageAsDataUri($this->config->getTitle(), $secret);
+        $user = new CurrentUser($this->config);
+        return $this->twoFactorAuth->getQRCodeImageAsDataUri($user->getUserData('email'), $secret);
     }
 }
