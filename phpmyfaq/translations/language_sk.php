@@ -499,29 +499,29 @@ $PMF_LANG["ad_menu_export"] = "Exportovať Vašu FAQ";
 $PMF_LANG["ad_export_file"] = "Chyba: Súbor nemožno zapísať.";
 $PMF_LANG["ad_export_pdf"] = "PDF-Exportovať všetky záznamy";
 
-$PMF_LANG['rightsLanguage::add_user'] = "pridať užívateľa";
-$PMF_LANG['rightsLanguage::edit_user'] = "upraviť užívateľa";
-$PMF_LANG['rightsLanguage::delete_user'] = "vymazať užívateľa";
-$PMF_LANG['rightsLanguage::add_faq'] = "pridať záznam";
-$PMF_LANG['rightsLanguage::edit_faq'] = "upraviť záznam";
-$PMF_LANG['rightsLanguage::delete_faq'] = "vymazať záznam";
-$PMF_LANG['rightsLanguage::viewlog'] = "zobraziť log";
-$PMF_LANG['rightsLanguage::adminlog'] = "zobraziť admin log";
-$PMF_LANG['rightsLanguage::delcomment'] = "vymazať komentár";
-$PMF_LANG['rightsLanguage::addnews'] = "pridať novinky";
-$PMF_LANG['rightsLanguage::editnews'] = "upraviť novinky";
-$PMF_LANG['rightsLanguage::delnews'] = "vymazať novinky";
-$PMF_LANG['rightsLanguage::addcateg'] = "pridať kategóriu";
-$PMF_LANG['rightsLanguage::editcateg'] = "upraviť kategóriu";
-$PMF_LANG['rightsLanguage::delcateg'] = "vymazať kategóriu";
-$PMF_LANG['rightsLanguage::passwd'] = "zmeniť heslo";
-$PMF_LANG['rightsLanguage::editconfig'] = "upraviť nastavenie";
-$PMF_LANG['rightsLanguage::addatt'] = "pridať prílohu";
-$PMF_LANG['rightsLanguage::delatt'] = "vymauať prílohy";
-$PMF_LANG['rightsLanguage::backup'] = "vytvoriť zálohu";
-$PMF_LANG['rightsLanguage::restore'] = "obnoviť zálohu";
-$PMF_LANG['rightsLanguage::delquestion'] = "vymazať otvorené otázky";
-$PMF_LANG['rightsLanguage::changebtrevs'] = "upraviť zmeny";
+$PMF_LANG['permission::add_user'] = "pridať užívateľa";
+$PMF_LANG['permission::edit_user'] = "upraviť užívateľa";
+$PMF_LANG['permission::delete_user'] = "vymazať užívateľa";
+$PMF_LANG['permission::add_faq'] = "pridať záznam";
+$PMF_LANG['permission::edit_faq'] = "upraviť záznam";
+$PMF_LANG['permission::delete_faq'] = "vymazať záznam";
+$PMF_LANG['permission::viewlog'] = "zobraziť log";
+$PMF_LANG['permission::adminlog'] = "zobraziť admin log";
+$PMF_LANG['permission::delcomment'] = "vymazať komentár";
+$PMF_LANG['permission::addnews'] = "pridať novinky";
+$PMF_LANG['permission::editnews'] = "upraviť novinky";
+$PMF_LANG['permission::delnews'] = "vymazať novinky";
+$PMF_LANG['permission::addcateg'] = "pridať kategóriu";
+$PMF_LANG['permission::editcateg'] = "upraviť kategóriu";
+$PMF_LANG['permission::delcateg'] = "vymazať kategóriu";
+$PMF_LANG['permission::passwd'] = "zmeniť heslo";
+$PMF_LANG['permission::editconfig'] = "upraviť nastavenie";
+$PMF_LANG['permission::addatt'] = "pridať prílohu";
+$PMF_LANG['permission::delatt'] = "vymauať prílohy";
+$PMF_LANG['permission::backup'] = "vytvoriť zálohu";
+$PMF_LANG['permission::restore'] = "obnoviť zálohu";
+$PMF_LANG['permission::delquestion'] = "vymazať otvorené otázky";
+$PMF_LANG['permission::changebtrevs'] = "upraviť zmeny";
 
 $PMF_LANG["msgAttachedFiles"] = "priložené súbory";
 
@@ -649,9 +649,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Vymazať užívateľa";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "naposledy upravované";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
-$PMF_LANG['rightsLanguage::addglossary'] = "pridať položku slovníka";
-$PMF_LANG['rightsLanguage::editglossary'] = "upraviť položku slovníka";
-$PMF_LANG['rightsLanguage::delglossary'] = "vymazať položku slovníka";
+$PMF_LANG['permission::addglossary'] = "pridať položku slovníka";
+$PMF_LANG['permission::editglossary'] = "upraviť položku slovníka";
+$PMF_LANG['permission::delglossary'] = "vymazať položku slovníka";
 $PMF_LANG["ad_menu_group_administration"] = "Skupiny";
 $PMF_LANG['ad_user_loggedin'] = 'Prihlásiť ako ';
 
@@ -787,9 +787,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Začať prekladať...';
 $PMF_LANG['msgNewTranslationThanks'] = "Ďakujeme za Váš návrh prekladu!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG['rightsLanguage::addgroup'] = "pridať konto pre skupinu";
-$PMF_LANG['rightsLanguage::editgroup'] = "upraviť kontá pre skupiny";
-$PMF_LANG['rightsLanguage::delgroup'] = "vymazať kontá pre skupiny";
+$PMF_LANG['permission::addgroup'] = "pridať konto pre skupinu";
+$PMF_LANG['permission::editgroup'] = "upraviť kontá pre skupiny";
+$PMF_LANG['permission::delgroup'] = "vymazať kontá pre skupiny";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Odkazy otvoriť v nadradenom okne';
@@ -944,10 +944,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQ";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG['rightsLanguage::addtranslation'] = "pridať preklad";
-$PMF_LANG['rightsLanguage::edittranslation'] = "upraviť preklad";
-$PMF_LANG['rightsLanguage::deltranslation'] = "vymazať preklad";
-$PMF_LANG['rightsLanguage::approverec'] = "schváliť záznamy";
+$PMF_LANG['permission::addtranslation'] = "pridať preklad";
+$PMF_LANG['permission::edittranslation'] = "upraviť preklad";
+$PMF_LANG['permission::deltranslation'] = "vymazať preklad";
+$PMF_LANG['permission::approverec'] = "schváliť záznamy";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");

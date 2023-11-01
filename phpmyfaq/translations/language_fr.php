@@ -500,29 +500,29 @@ $PMF_LANG["msgLanguageSubmit"] = "Changer la langue";
 $PMF_LANG["ad_attach_4"] = "Le fichier attaché doit être inférieur à %s Octets.";
 $PMF_LANG["ad_menu_export"] = "Exporter votre FAQ";
 
-$PMF_LANG["rightsLanguage::add_user"] = "Ajouter des utilisateurs";
-$PMF_LANG["rightsLanguage::edit_user"] = "Modifier les utilisateurs";
-$PMF_LANG["rightsLanguage::delete_user"] = "Supprimer les utilisateurs";
-$PMF_LANG["rightsLanguage::add_faq"] = "Ajouter des FAQs";
-$PMF_LANG["rightsLanguage::edit_faq"] = "Modifier les FAQs";
-$PMF_LANG["rightsLanguage::delete_faq"] = "Supprimer les FAQs";
-$PMF_LANG["rightsLanguage::viewlog"] = "Voir les logs";
-$PMF_LANG["rightsLanguage::adminlog"] = "Accès à l'admin log";
-$PMF_LANG["rightsLanguage::delcomment"] = "Supprimer les commentaires";
-$PMF_LANG["rightsLanguage::addnews"] = "Ajouter des actualités";
-$PMF_LANG["rightsLanguage::editnews"] = "Modifier les actualités";
-$PMF_LANG["rightsLanguage::delnews"] = "Supprimer les actualités";
-$PMF_LANG["rightsLanguage::addcateg"] = "Ajouter une catégorie";
-$PMF_LANG["rightsLanguage::editcateg"] = "Modifier les catégories";
-$PMF_LANG["rightsLanguage::delcateg"] = "Supprimer les catégorie";
-$PMF_LANG["rightsLanguage::passwd"] = "Modifier les mots de passe";
-$PMF_LANG["rightsLanguage::editconfig"] = "Modifier la configuration";
-$PMF_LANG["rightsLanguage::addatt"] = "Ajouter des pièces-jointes";
-$PMF_LANG["rightsLanguage::delatt"] = "Supprimer les pièces-jointes";
-$PMF_LANG["rightsLanguage::backup"] = "Créer une sauvegarde";
-$PMF_LANG["rightsLanguage::restore"] = "Restaurer une sauvegarde";
-$PMF_LANG["rightsLanguage::delquestion"] = "Supprimer les question ouverte";
-$PMF_LANG["rightsLanguage::changebtrevs"] = "Modifier les révisions";
+$PMF_LANG["permission::add_user"] = "Ajouter des utilisateurs";
+$PMF_LANG["permission::edit_user"] = "Modifier les utilisateurs";
+$PMF_LANG["permission::delete_user"] = "Supprimer les utilisateurs";
+$PMF_LANG["permission::add_faq"] = "Ajouter des FAQs";
+$PMF_LANG["permission::edit_faq"] = "Modifier les FAQs";
+$PMF_LANG["permission::delete_faq"] = "Supprimer les FAQs";
+$PMF_LANG["permission::viewlog"] = "Voir les logs";
+$PMF_LANG["permission::adminlog"] = "Accès à l'admin log";
+$PMF_LANG["permission::delcomment"] = "Supprimer les commentaires";
+$PMF_LANG["permission::addnews"] = "Ajouter des actualités";
+$PMF_LANG["permission::editnews"] = "Modifier les actualités";
+$PMF_LANG["permission::delnews"] = "Supprimer les actualités";
+$PMF_LANG["permission::addcateg"] = "Ajouter une catégorie";
+$PMF_LANG["permission::editcateg"] = "Modifier les catégories";
+$PMF_LANG["permission::delcateg"] = "Supprimer les catégorie";
+$PMF_LANG["permission::passwd"] = "Modifier les mots de passe";
+$PMF_LANG["permission::editconfig"] = "Modifier la configuration";
+$PMF_LANG["permission::addatt"] = "Ajouter des pièces-jointes";
+$PMF_LANG["permission::delatt"] = "Supprimer les pièces-jointes";
+$PMF_LANG["permission::backup"] = "Créer une sauvegarde";
+$PMF_LANG["permission::restore"] = "Restaurer une sauvegarde";
+$PMF_LANG["permission::delquestion"] = "Supprimer les question ouverte";
+$PMF_LANG["permission::changebtrevs"] = "Modifier les révisions";
 
 $PMF_LANG["msgAttachedFiles"] = "Pièces-jointes :";
 
@@ -647,9 +647,9 @@ $PMF_LANG["ad_user_deleteUser"] = "Effacer un utilisateur";
 $PMF_LANG["ad_user_status"] = "Statut";
 $PMF_LANG["ad_user_lastModified"] = "Dernière modification";
 $PMF_LANG["ad_gen_cancel"] = "Annuler";
-$PMF_LANG["rightsLanguage::addglossary"] = "Ajouter un glossaire";
-$PMF_LANG["rightsLanguage::editglossary"] = "Modifier un glossaire";
-$PMF_LANG["rightsLanguage::delglossary"] = "Supprimer un glossaire";
+$PMF_LANG["permission::addglossary"] = "Ajouter un glossaire";
+$PMF_LANG["permission::editglossary"] = "Modifier un glossaire";
+$PMF_LANG["permission::delglossary"] = "Supprimer un glossaire";
 $PMF_LANG["ad_menu_group_administration"] = "Groupes";
 $PMF_LANG["ad_user_loggedin"] = "Connecté en tant que";
 $PMF_LANG["ad_group_details"] = "Détails du groupe";
@@ -783,9 +783,9 @@ $PMF_LANG["msgTranslateSubmit"] = "Commencer la traduction...";
 $PMF_LANG["msgNewTranslationThanks"] = "Merci pour votre proposition de traduction !";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage::addgroup"] = "Ajouter un groupe utilisateur";
-$PMF_LANG["rightsLanguage::editgroup"] = "Modifier un groupe utilisateur";
-$PMF_LANG["rightsLanguage::delgroup"] = "Supprimer un groupe utilisateur";
+$PMF_LANG["permission::addgroup"] = "Ajouter un groupe utilisateur";
+$PMF_LANG["permission::editgroup"] = "Modifier un groupe utilisateur";
+$PMF_LANG["permission::delgroup"] = "Supprimer un groupe utilisateur";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG["ad_news_link_parent"] = "Lien dans la fenêtre parent";
@@ -939,10 +939,10 @@ $PMF_LANG["plmsgEntries"]["0"] = "%d FAQ";
 $PMF_LANG["plmsgEntries"]["1"] = "%d FAQs";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG["rightsLanguage::addtranslation"] = "Ajouter une traduction";
-$PMF_LANG["rightsLanguage::edittranslation"] = "Editer une traduction";
-$PMF_LANG["rightsLanguage::deltranslation"] = "Supprimer une traduction";
-$PMF_LANG["rightsLanguage::approverec"] = "Approuver l'enregistrement";
+$PMF_LANG["permission::addtranslation"] = "Ajouter une traduction";
+$PMF_LANG["permission::edittranslation"] = "Editer une traduction";
+$PMF_LANG["permission::deltranslation"] = "Supprimer une traduction";
+$PMF_LANG["permission::approverec"] = "Approuver l'enregistrement";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Activer les pièces-jointes cryptées<br/><small>Ignoré si les pièces-jointes sont désactivés</small>"];
@@ -1084,18 +1084,18 @@ $PMF_LANG["msgQuestionAnswered"] = "Question répondue";
 $PMF_LANG["msgMessageQuestionAnswered"] = "Votre question de la FAQ %s a reçu une réponse. Vous pouvez la consulter ici";
 //PMA
 // added v2.8.0-alpha3 - 2012-11-03 by Thorsten
-$PMF_LANG["rightsLanguage::addattachment"] = "Ajouter des pièces-jointes";
-$PMF_LANG["rightsLanguage::editattachment"] = "Editer les pièces-jointes";
-$PMF_LANG["rightsLanguage::delattachment"] = "Supprimer les pièces-jointes";
-$PMF_LANG["rightsLanguage::dlattachment"] = "Télécharger les pièces-jointes";
-$PMF_LANG["rightsLanguage::reports"] = "Générer des rapports";
-$PMF_LANG["rightsLanguage::addfaq"] = "Ajouter des FAQs dans le frontend";
-$PMF_LANG["rightsLanguage::addquestion"] = "Ajouter des questions dans le frontend";
-$PMF_LANG["rightsLanguage::addcomment"] = "Ajouter des commentaires dans le frontend";
-$PMF_LANG["rightsLanguage::editinstances"] = "Éditer des instances Multisites";
-$PMF_LANG["rightsLanguage::addinstances"] = "Ajouter des instsances Multisites";
-$PMF_LANG["rightsLanguage::delinstances"] = "Supprimer les instances Multisites";
-$PMF_LANG["rightsLanguage::export"] = "Exporter les FAQs";
+$PMF_LANG["permission::addattachment"] = "Ajouter des pièces-jointes";
+$PMF_LANG["permission::editattachment"] = "Editer les pièces-jointes";
+$PMF_LANG["permission::delattachment"] = "Supprimer les pièces-jointes";
+$PMF_LANG["permission::dlattachment"] = "Télécharger les pièces-jointes";
+$PMF_LANG["permission::reports"] = "Générer des rapports";
+$PMF_LANG["permission::addfaq"] = "Ajouter des FAQs dans le frontend";
+$PMF_LANG["permission::addquestion"] = "Ajouter des questions dans le frontend";
+$PMF_LANG["permission::addcomment"] = "Ajouter des commentaires dans le frontend";
+$PMF_LANG["permission::editinstances"] = "Éditer des instances Multisites";
+$PMF_LANG["permission::addinstances"] = "Ajouter des instsances Multisites";
+$PMF_LANG["permission::delinstances"] = "Supprimer les instances Multisites";
+$PMF_LANG["permission::export"] = "Exporter les FAQs";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
 $LANG_CONF["records.randomSort"] = ["checkbox", "Trier aléatoirement les FAQs"];
@@ -1238,15 +1238,15 @@ $LANG_CONF["main.enableAutoUpdateHint"] = ["checkbox", "Vérifier automatiquemen
 $PMF_LANG["ad_user_is_superadmin"] = "Super-Admin";
 $PMF_LANG["ad_user_overwrite_passwd"] = "Écraser le mot de passe";
 $LANG_CONF["records.enableAutoRevisions"] = ["checkbox", "Créer une nouvelle révision pour tous les modifications de FAQ"];
-$PMF_LANG["rightsLanguage::view_faqs"] = "Voir les FAQs";
-$PMF_LANG["rightsLanguage::view_categories"] = "Voir les catégories";
-$PMF_LANG["rightsLanguage::view_sections"] = "Voir les sections";
-$PMF_LANG["rightsLanguage::view_news"] = "Voir les actualités";
-$PMF_LANG["rightsLanguage::add_section"] = "Ajouter des sections";
-$PMF_LANG["rightsLanguage::edit_section"] = "Editer les sections";
-$PMF_LANG["rightsLanguage::delete_section"] = "Supprimer les sections";
-$PMF_LANG["rightsLanguage::administrate_sections"] = "Administrer les sections";
-$PMF_LANG["rightsLanguage::administrate_groups"] = "Administrer les groupes";
+$PMF_LANG["permission::view_faqs"] = "Voir les FAQs";
+$PMF_LANG["permission::view_categories"] = "Voir les catégories";
+$PMF_LANG["permission::view_sections"] = "Voir les sections";
+$PMF_LANG["permission::view_news"] = "Voir les actualités";
+$PMF_LANG["permission::add_section"] = "Ajouter des sections";
+$PMF_LANG["permission::edit_section"] = "Editer les sections";
+$PMF_LANG["permission::delete_section"] = "Supprimer les sections";
+$PMF_LANG["permission::administrate_sections"] = "Administrer les sections";
+$PMF_LANG["permission::administrate_groups"] = "Administrer les groupes";
 $PMF_LANG["ad_group_rights"] = "Permissions de groupe";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
@@ -1267,7 +1267,7 @@ $PMF_LANG["ad_section_error_delete"] = "Cette section n'a pas pu être supprimé
 $PMF_LANG["ad_section_error_noName"] = "Merci de saisir un nom de section. ";
 $PMF_LANG["ad_section_suc"] = "Cette section a été ajoutée avec <strong>succès</strong>.";
 $PMF_LANG["ad_section_deleted"] = "Cette section a été ajoutée avec succès.";
-$PMF_LANG["rightsLanguage::viewadminlink"] = "Voir le lien vers l'administration";
+$PMF_LANG["permission::viewadminlink"] = "Voir le lien vers l'administration";
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF["mail.remoteSMTPPort"] = ["input", "Port du serveur SMTP"];

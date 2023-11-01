@@ -499,29 +499,29 @@ $PMF_LANG["ad_menu_export"] = "Ekspor isi materi anda";
 $PMF_LANG["ad_export_file"] = "Error: Tidak bisa membuat berkas.";
 $PMF_LANG["ad_export_pdf"] = "Ekspor semua data ke PDF";
 
-$PMF_LANG['rightsLanguage::add_user'] = "tambah pengguna";
-$PMF_LANG['rightsLanguage::edit_user'] = "edit pengguna";
-$PMF_LANG['rightsLanguage::delete_user'] = "hapus pengguna";
-$PMF_LANG['rightsLanguage::add_faq'] = "tambah data";
-$PMF_LANG['rightsLanguage::edit_faq'] = "edit data";
-$PMF_LANG['rightsLanguage::delete_faq'] = "hapus data";
-$PMF_LANG['rightsLanguage::viewlog'] = "lihat log";
-$PMF_LANG['rightsLanguage::adminlog'] = "lihat log admin";
-$PMF_LANG['rightsLanguage::delcomment'] = "hapus komentar";
-$PMF_LANG['rightsLanguage::addnews'] = "tambah berita";
-$PMF_LANG['rightsLanguage::editnews'] = "edit berita";
-$PMF_LANG['rightsLanguage::delnews'] = "hapus berita";
-$PMF_LANG['rightsLanguage::addcateg'] = "tambah kategori";
-$PMF_LANG['rightsLanguage::editcateg'] = "edit kategori";
-$PMF_LANG['rightsLanguage::delcateg'] = "hapus kategori";
-$PMF_LANG['rightsLanguage::passwd'] = "ganti kata sandi";
-$PMF_LANG['rightsLanguage::editconfig'] = "edit konfigurasi";
-$PMF_LANG['rightsLanguage::addatt'] = "tambah lampiran";
-$PMF_LANG['rightsLanguage::delatt'] = "hapus lampiran";
-$PMF_LANG['rightsLanguage::backup'] = "buat backup";
-$PMF_LANG['rightsLanguage::restore'] = "restore backup";
-$PMF_LANG['rightsLanguage::delquestion'] = "hapus pertanyaan terbuka";
-$PMF_LANG['rightsLanguage::changebtrevs'] = "edit revisi";
+$PMF_LANG['permission::add_user'] = "tambah pengguna";
+$PMF_LANG['permission::edit_user'] = "edit pengguna";
+$PMF_LANG['permission::delete_user'] = "hapus pengguna";
+$PMF_LANG['permission::add_faq'] = "tambah data";
+$PMF_LANG['permission::edit_faq'] = "edit data";
+$PMF_LANG['permission::delete_faq'] = "hapus data";
+$PMF_LANG['permission::viewlog'] = "lihat log";
+$PMF_LANG['permission::adminlog'] = "lihat log admin";
+$PMF_LANG['permission::delcomment'] = "hapus komentar";
+$PMF_LANG['permission::addnews'] = "tambah berita";
+$PMF_LANG['permission::editnews'] = "edit berita";
+$PMF_LANG['permission::delnews'] = "hapus berita";
+$PMF_LANG['permission::addcateg'] = "tambah kategori";
+$PMF_LANG['permission::editcateg'] = "edit kategori";
+$PMF_LANG['permission::delcateg'] = "hapus kategori";
+$PMF_LANG['permission::passwd'] = "ganti kata sandi";
+$PMF_LANG['permission::editconfig'] = "edit konfigurasi";
+$PMF_LANG['permission::addatt'] = "tambah lampiran";
+$PMF_LANG['permission::delatt'] = "hapus lampiran";
+$PMF_LANG['permission::backup'] = "buat backup";
+$PMF_LANG['permission::restore'] = "restore backup";
+$PMF_LANG['permission::delquestion'] = "hapus pertanyaan terbuka";
+$PMF_LANG['permission::changebtrevs'] = "edit revisi";
 
 $PMF_LANG["msgAttachedFiles"] = "attached files";
 
@@ -649,9 +649,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Hapus Pengguna";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "edit terakhir";
 $PMF_LANG['ad_gen_cancel'] = "Batalkan";
-$PMF_LANG['rightsLanguage::addglossary'] = "tambah entri istilah";
-$PMF_LANG['rightsLanguage::editglossary'] = "edit entri istilah";
-$PMF_LANG['rightsLanguage::delglossary'] = "hapus entri istilah";
+$PMF_LANG['permission::addglossary'] = "tambah entri istilah";
+$PMF_LANG['permission::editglossary'] = "edit entri istilah";
+$PMF_LANG['permission::delglossary'] = "hapus entri istilah";
 $PMF_LANG["ad_menu_group_administration"] = "Grup";
 $PMF_LANG['ad_user_loggedin'] = 'Login sebagai';
 
@@ -787,9 +787,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Mulai penerjemahan...';
 $PMF_LANG['msgNewTranslationThanks'] = "Terima kasih atas kontribusi anda!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG['rightsLanguage::addgroup'] = "tambah akun grup";
-$PMF_LANG['rightsLanguage::editgroup'] = "edit akun grup";
-$PMF_LANG['rightsLanguage::delgroup'] = "hapus akun grup";
+$PMF_LANG['permission::addgroup'] = "tambah akun grup";
+$PMF_LANG['permission::editgroup'] = "edit akun grup";
+$PMF_LANG['permission::delgroup'] = "hapus akun grup";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link membuka di jendela yang sama';

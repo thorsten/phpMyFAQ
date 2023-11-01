@@ -532,7 +532,7 @@ if ('list' === $groupAction) {
                   <label class="form-check-label" for="group_right_<?= $right['right_id'] ?>">
                       <?php
                       try {
-                          echo Translation::get('rightsLanguage::' . $right['name']);
+                          echo Translation::get('permission::' . $right['name']);
                       } catch (ErrorException) {
                           echo $right['description'];
                       }

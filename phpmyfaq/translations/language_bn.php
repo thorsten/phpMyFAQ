@@ -499,29 +499,29 @@ $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 $PMF_LANG["ad_export_file"] = "Error: Cannot write file.";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export of all records";
 
-$PMF_LANG['rightsLanguage::add_user'] = "ব্যবহারকারী যোগ";
-$PMF_LANG['rightsLanguage::edit_user'] = "ব্যবহারকারী সম্পাদনা";
-$PMF_LANG['rightsLanguage::delete_user'] = "ব্যবহারকারী মোছা";
-$PMF_LANG['rightsLanguage::add_faq'] = "add record";
-$PMF_LANG['rightsLanguage::edit_faq'] = "edit record";
-$PMF_LANG['rightsLanguage::delete_faq'] = "delete record";
-$PMF_LANG['rightsLanguage::viewlog'] = "view log";
-$PMF_LANG['rightsLanguage::adminlog'] = "view admin log";
-$PMF_LANG['rightsLanguage::delcomment'] = "delete comment";
-$PMF_LANG['rightsLanguage::addnews'] = "add news";
-$PMF_LANG['rightsLanguage::editnews'] = "edit news";
-$PMF_LANG['rightsLanguage::delnews'] = "delete news";
-$PMF_LANG['rightsLanguage::addcateg'] = "add category";
-$PMF_LANG['rightsLanguage::editcateg'] = "edit category";
-$PMF_LANG['rightsLanguage::delcateg'] = "delete category";
-$PMF_LANG['rightsLanguage::passwd'] = "change password";
-$PMF_LANG['rightsLanguage::editconfig'] = "edit configuration";
-$PMF_LANG['rightsLanguage::addatt'] = "add attachments";
-$PMF_LANG['rightsLanguage::delatt'] = "delete attachments";
-$PMF_LANG['rightsLanguage::backup'] = "create backup";
-$PMF_LANG['rightsLanguage::restore'] = "restore backup";
-$PMF_LANG['rightsLanguage::delquestion'] = "delete open questions";
-$PMF_LANG['rightsLanguage::changebtrevs'] = "edit revisions";
+$PMF_LANG['permission::add_user'] = "ব্যবহারকারী যোগ";
+$PMF_LANG['permission::edit_user'] = "ব্যবহারকারী সম্পাদনা";
+$PMF_LANG['permission::delete_user'] = "ব্যবহারকারী মোছা";
+$PMF_LANG['permission::add_faq'] = "add record";
+$PMF_LANG['permission::edit_faq'] = "edit record";
+$PMF_LANG['permission::delete_faq'] = "delete record";
+$PMF_LANG['permission::viewlog'] = "view log";
+$PMF_LANG['permission::adminlog'] = "view admin log";
+$PMF_LANG['permission::delcomment'] = "delete comment";
+$PMF_LANG['permission::addnews'] = "add news";
+$PMF_LANG['permission::editnews'] = "edit news";
+$PMF_LANG['permission::delnews'] = "delete news";
+$PMF_LANG['permission::addcateg'] = "add category";
+$PMF_LANG['permission::editcateg'] = "edit category";
+$PMF_LANG['permission::delcateg'] = "delete category";
+$PMF_LANG['permission::passwd'] = "change password";
+$PMF_LANG['permission::editconfig'] = "edit configuration";
+$PMF_LANG['permission::addatt'] = "add attachments";
+$PMF_LANG['permission::delatt'] = "delete attachments";
+$PMF_LANG['permission::backup'] = "create backup";
+$PMF_LANG['permission::restore'] = "restore backup";
+$PMF_LANG['permission::delquestion'] = "delete open questions";
+$PMF_LANG['permission::changebtrevs'] = "edit revisions";
 
 $PMF_LANG["msgAttachedFiles"] = "ফাইল যোগ করুন";
 
@@ -649,9 +649,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Delete User";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "last modified";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
-$PMF_LANG['rightsLanguage::addglossary'] = "add glossary item";
-$PMF_LANG['rightsLanguage::editglossary'] = "edit glossary item";
-$PMF_LANG['rightsLanguage::delglossary'] = "delete glossary item";
+$PMF_LANG['permission::addglossary'] = "add glossary item";
+$PMF_LANG['permission::editglossary'] = "edit glossary item";
+$PMF_LANG['permission::delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
 $PMF_LANG['ad_user_loggedin'] = 'লগইন করেছেন ';
 
@@ -787,9 +787,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'অনুবাদ শুরু...';
 $PMF_LANG['msgNewTranslationThanks'] = "আপনার অনুবাদ প্রস্তাবের জন্য ধন্যবাদ!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG['rightsLanguage::addgroup'] = "add group accounts";
-$PMF_LANG['rightsLanguage::editgroup'] = "edit group accounts";
-$PMF_LANG['rightsLanguage::delgroup'] = "delete group accounts";
+$PMF_LANG['permission::addgroup'] = "add group accounts";
+$PMF_LANG['permission::editgroup'] = "edit group accounts";
+$PMF_LANG['permission::delgroup'] = "delete group accounts";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';

@@ -437,7 +437,7 @@ if (
                                            name="user_rights[]" value="<?= $right['right_id'] ?>"
                                            class="form-check-input permission">
                                     <label class="form-check-label" for="user_right_<?= $right['right_id'] ?>">
-                                        <?= Translation::get('rightsLanguage::' . $right['name']) ?>
+                                        <?= Translation::get('permission::' . $right['name']) ?>
                                     </label>
                                 </div>
                                 <?php

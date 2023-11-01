@@ -502,28 +502,28 @@ $PMF_LANG["ad_menu_export"] = "Snimi (Export) FAQ";
 $PMF_LANG["ad_export_file"] = "Gre&#353;ka: Fajl nije mogao biti napravljen/snimljen.";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export za sve unose";
 
-$PMF_LANG['rightsLanguage::add_user'] = "dodavanja korisnika";
-$PMF_LANG['rightsLanguage::edit_user'] = "izmena korisnika";
-$PMF_LANG['rightsLanguage::delete_user'] = "brisanje korisnika";
-$PMF_LANG['rightsLanguage::add_faq'] = "dodavanje unosa";
-$PMF_LANG['rightsLanguage::edit_faq'] = "izmena unosa";
-$PMF_LANG['rightsLanguage::delete_faq'] = "brisanje unosa";
-$PMF_LANG['rightsLanguage::viewlog'] = "pregled loga";
-$PMF_LANG['rightsLanguage::adminlog'] = "pregled admin loga";
-$PMF_LANG['rightsLanguage::delcomment'] = "brisanje komentara";
-$PMF_LANG['rightsLanguage::addnews'] = "dodavanje novosti";
-$PMF_LANG['rightsLanguage::editnews'] = "izmena novosti";
-$PMF_LANG['rightsLanguage::delnews'] = "brisanje novosti";
-$PMF_LANG['rightsLanguage::addcateg'] = "dodavanje kategorija";
-$PMF_LANG['rightsLanguage::editcateg'] = "izmena kategorija";
-$PMF_LANG['rightsLanguage::delcateg'] = "brisanje kategorija";
-$PMF_LANG['rightsLanguage::passwd'] = "izmena &#353;ifre";
-$PMF_LANG['rightsLanguage::editconfig'] = "izmena konfiguracije";
-$PMF_LANG['rightsLanguage::addatt'] = "dodavanje fajlova (attachments)";
-$PMF_LANG['rightsLanguage::delatt'] = "brisanje fajlova (attachments)";
-$PMF_LANG['rightsLanguage::backup'] = "pravljenje backupa";
-$PMF_LANG['rightsLanguage::restore'] = "u&#269;itavanje (restore) backupa";
-$PMF_LANG['rightsLanguage::delquestion'] = "brisanje otvorenih pitanja";
+$PMF_LANG['permission::add_user'] = "dodavanja korisnika";
+$PMF_LANG['permission::edit_user'] = "izmena korisnika";
+$PMF_LANG['permission::delete_user'] = "brisanje korisnika";
+$PMF_LANG['permission::add_faq'] = "dodavanje unosa";
+$PMF_LANG['permission::edit_faq'] = "izmena unosa";
+$PMF_LANG['permission::delete_faq'] = "brisanje unosa";
+$PMF_LANG['permission::viewlog'] = "pregled loga";
+$PMF_LANG['permission::adminlog'] = "pregled admin loga";
+$PMF_LANG['permission::delcomment'] = "brisanje komentara";
+$PMF_LANG['permission::addnews'] = "dodavanje novosti";
+$PMF_LANG['permission::editnews'] = "izmena novosti";
+$PMF_LANG['permission::delnews'] = "brisanje novosti";
+$PMF_LANG['permission::addcateg'] = "dodavanje kategorija";
+$PMF_LANG['permission::editcateg'] = "izmena kategorija";
+$PMF_LANG['permission::delcateg'] = "brisanje kategorija";
+$PMF_LANG['permission::passwd'] = "izmena &#353;ifre";
+$PMF_LANG['permission::editconfig'] = "izmena konfiguracije";
+$PMF_LANG['permission::addatt'] = "dodavanje fajlova (attachments)";
+$PMF_LANG['permission::delatt'] = "brisanje fajlova (attachments)";
+$PMF_LANG['permission::backup'] = "pravljenje backupa";
+$PMF_LANG['permission::restore'] = "u&#269;itavanje (restore) backupa";
+$PMF_LANG['permission::delquestion'] = "brisanje otvorenih pitanja";
 
 $PMF_LANG["msgAttachedFiles"] = "zaka&#269;eni fajlovi";
 
@@ -647,9 +647,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Obri&scaron;i korisnika";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "zadnji put menjano";
 $PMF_LANG['ad_gen_cancel'] = "Odustani";
-$PMF_LANG['rightsLanguage::addglossary'] = "dodaj pojam";
-$PMF_LANG['rightsLanguage::editglossary'] = "izmeni pojam";
-$PMF_LANG['rightsLanguage::delglossary'] = "obri&scaron;i pojam";
+$PMF_LANG['permission::addglossary'] = "dodaj pojam";
+$PMF_LANG['permission::editglossary'] = "izmeni pojam";
+$PMF_LANG['permission::delglossary'] = "obri&scaron;i pojam";
 $PMF_LANG["ad_menu_group_administration"] = "Grupe";
 $PMF_LANG['ad_user_loggedin'] = 'Prijavljeni ste kao ';
 
@@ -785,9 +785,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Krenite sa prevodenjem...';
 $PMF_LANG['msgNewTranslationThanks'] = "Hvala Vam za Va predloeni predlog!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG['rightsLanguage::addgroup'] = "dodajte grupne naloge";
-$PMF_LANG['rightsLanguage::editgroup'] = "izmenite grupne naloge";
-$PMF_LANG['rightsLanguage::delgroup'] = "obriite grupne naloge";
+$PMF_LANG['permission::addgroup'] = "dodajte grupne naloge";
+$PMF_LANG['permission::editgroup'] = "izmenite grupne naloge";
+$PMF_LANG['permission::delgroup'] = "obriite grupne naloge";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link se otvara u parent prozoru';

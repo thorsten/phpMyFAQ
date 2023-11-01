@@ -50,6 +50,9 @@ class Translation
 
     /**
      * Returns the translation of a specific key from the current language
+     *
+     * @param string $languageKey
+     * @return string|array|null
      */
     public static function get(string $languageKey): string|array|null
     {
@@ -168,7 +171,7 @@ class Translation
     }
 
     /**
-     * Checks if language directory exists. If not, throws an exception.
+     * Checks if language directory exists. If not, throw an exception.
      * @throws Exception
      */
     protected function checkLanguageDirectory(): void
@@ -179,7 +182,7 @@ class Translation
     }
 
     /**
-     * Checks if default language exists. If not, throws an exception.
+     * Checks if default language exists. If not, throw an exception.
      * @throws Exception
      */
     protected function checkDefaultLanguage(): void
