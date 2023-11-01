@@ -79,9 +79,12 @@ class Session
 
     /**
      * Constructor.
+     *
+     * @throws \Exception
      */
     public function __construct(private readonly Configuration $config)
     {
+        $this->createCurrentSessionKey();
     }
 
     /**
@@ -125,6 +128,8 @@ class Session
 
     /**
      * Sets the current UUID session key
+     *
+     * @throws \Exception
      */
     public function setCurrentSessionKey(): Session
     {
@@ -132,14 +137,15 @@ class Session
             $this->createCurrentSessionKey();
         }
 
-        $this->set(self::PMF_AZURE_AD_SESSIONKEY, $this->getCurrentSessionKey());
-        $this->setCookie(self::PMF_AZURE_AD_SESSIONKEY, $this->getCurrentSessionKey());
+        $this->set(self::PMF_AZURE_AD_SESSIONKEY, $this->currentSessionKey);
 
         return $this;
     }
 
     /**
      * Creates the current UUID session key
+     *
+     * @throws \Exception
      */
     public function createCurrentSessionKey(): void
     {

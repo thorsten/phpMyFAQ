@@ -40,6 +40,12 @@ $auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
 
 try {
     $auth->authorize();
-} catch (Exception $e) {
-    $faqConfig->getLogger()->info('Entra ID Login failed: ' . $e->getMessage());
+} catch (Exception $exception) {
+    $faqConfig->getLogger()->info(
+        sprintf(
+            'Entra ID Login failed: %s at line %d at %s',
+            $exception->getMessage(),
+            $exception->getLine(),
+            $exception->getFile()
+        ));
 }
