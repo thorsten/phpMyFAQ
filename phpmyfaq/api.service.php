@@ -506,6 +506,7 @@ switch ($action) {
         }
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
+        $questionObject = new Question($faqConfig);
         $categories = $cat->getAllCategories();
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
@@ -606,6 +607,7 @@ switch ($action) {
 
                     $response->setData(['result' => $smartAnswer]);
                 } else {
+                    $questionObject->addQuestion($questionData);
                     $questionHelper = new QuestionHelper($faqConfig, $cat);
                     try {
                         $questionHelper->sendSuccessMail($questionData, $categories);
@@ -617,6 +619,7 @@ switch ($action) {
                     $response->setData(['success' => Translation::get('msgAskThx4Mail')]);
                 }
             } else {
+                $questionObject->addQuestion($questionData);
                 $questionHelper = new QuestionHelper($faqConfig, $cat);
                 try {
                     $questionHelper->sendSuccessMail($questionData, $categories);

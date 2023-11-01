@@ -18,7 +18,6 @@ import { addElement, serialize } from '../utils';
 export const handleQuestion = () => {
   const form = document.querySelector('#formValues');
   const loader = document.getElementById('loader');
-  const message = document.getElementById('answers');
   const formData = new FormData(form);
 
   loader.classList.remove('d-none');
@@ -44,6 +43,12 @@ export const handleQuestion = () => {
       if (response.result) {
         const resultMessage = response.result;
         const form = document.getElementById('formValues');
+        const hints = document.getElementsByClassName('hint-search-suggestion');
+
+        Array.from(hints).forEach((hint) => {
+          hint.classList.remove('d-none');
+        });
+
         // Add smart answers
         message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
         // Add hidden input
