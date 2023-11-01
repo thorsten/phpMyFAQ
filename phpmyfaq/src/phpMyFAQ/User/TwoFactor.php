@@ -41,7 +41,13 @@ class TwoFactor
     public function __construct(private readonly Configuration $config)
     {
         $this->QrCodeProvider = new EndroidQrCodeProvider();
-        $this->twoFactorAuth = new TwoFactorAuth(null, 6, 30, Algorithm::Sha1, $this->QrCodeProvider);
+        $this->twoFactorAuth = new TwoFactorAuth(
+            $this->config->get('main.metaPublisher'),
+            6,
+            30,
+            Algorithm::Sha1,
+            $this->QrCodeProvider
+        );
     }
 
     /**

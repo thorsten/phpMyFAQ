@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 // Debug mode:
 // - false debug mode disabled
 // - true  debug mode enabled
-const DEBUG = true;
+const DEBUG = false;
 if (DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
@@ -151,22 +151,24 @@ $faqConfig->getAll();
 //
 // We always need a valid, secure session!
 //
-ini_set('session.use_only_cookies', '1'); // Avoid any PHP version to move sessions on URLs
-ini_set('session.auto_start', '0'); // Prevent error to use session_start() if it's active in php.ini
-ini_set('session.use_trans_sid', '0');
-ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.cookie_httponly', 'true');
-ini_set('session.cookie_secure', $request->isSecure());
-ini_set('url_rewriter.tags', '');
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    ini_set('session.use_only_cookies', '1'); // Avoid any PHP version to move sessions on URLs
+    ini_set('session.auto_start', '0'); // Prevent error to use session_start() if it's active in php.ini
+    ini_set('session.use_trans_sid', '0');
+    ini_set('session.cookie_samesite', 'Strict');
+    ini_set('session.cookie_httponly', 'true');
+    ini_set('session.cookie_secure', $request->isSecure());
+    ini_set('url_rewriter.tags', '');
 
-//
-// Start the PHP session
-//
-Init::cleanRequest();
-if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
-    session_save_path(PMF_SESSION_SAVE_PATH);
+    //
+    // Start the PHP session
+    //
+    Init::cleanRequest();
+    if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
+        session_save_path(PMF_SESSION_SAVE_PATH);
+    }
+    session_start();
 }
-session_start();
 
 //
 // Connect to LDAP server, when LDAP support is enabled
