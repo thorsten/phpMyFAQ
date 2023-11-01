@@ -33,8 +33,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->
     $elasticsearch = new Elasticsearch($faqConfig);
     $esConfigData = $faqConfig->getElasticsearchConfig();
 
-    $twig = new TwigWrapper('./assets/templates');
-    $template = $twig->loadTemplate('./configuration/elasticsearch.twig');
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $template = $twig->loadTemplate('./admin/configuration/elasticsearch.twig');
 
     $templateVars = [
         'adminHeaderElasticsearch' => Translation::get('ad_menu_elasticsearch'),

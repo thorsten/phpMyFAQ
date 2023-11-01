@@ -103,8 +103,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         $faqConfig->getAll();
     }
 
-    $twig = new TwigWrapper('./assets/templates');
-    $template = $twig->loadTemplate('./configuration/main.twig');
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $template = $twig->loadTemplate('./admin/configuration/main.twig');
 
     $templateVars = [
         'adminHeaderConfiguration' => Translation::get('ad_config_edit'),

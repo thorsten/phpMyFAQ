@@ -309,7 +309,7 @@ header('Content-type: text/html; charset=utf-8');
 Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 
 foreach ($LANG_CONF as $key => $value) {
-    if (strpos($key, $configMode) === 0) {
+    if (str_starts_with($key, $configMode)) {
         printf(
             '<div class="row my-2"><label class="col-lg-3 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''

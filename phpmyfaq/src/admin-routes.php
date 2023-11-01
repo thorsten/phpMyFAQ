@@ -19,6 +19,7 @@ use phpMyFAQ\Controller\Administration\AttachmentController;
 use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
+use phpMyFAQ\Controller\Administration\ConfigurationTabController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\FaqController;
@@ -99,6 +100,11 @@ $routes->add(
             '_methods' => 'POST'
         ]
     )
+);
+
+$routes->add(
+    'admin.api.configuration.list',
+    new Route('/configuration/list/{mode}', ['_controller' => [ConfigurationTabController::class, 'list']])
 );
 
 //

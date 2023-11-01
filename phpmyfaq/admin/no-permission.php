@@ -18,8 +18,8 @@
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
-$twig = new TwigWrapper('./assets/templates');
-$template = $twig->loadTemplate('./no-permission.twig');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template = $twig->loadTemplate('./admin/no-permission.twig');
 
 echo $template->render(
     [

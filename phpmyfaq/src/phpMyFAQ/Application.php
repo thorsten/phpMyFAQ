@@ -87,7 +87,7 @@ class Application
         $matcher = new UrlMatcher($routes, $context);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
-        $response = new JsonResponse();
+        $response = new Response();
 
         try {
             $request->attributes->add($matcher->match($request->getPathInfo()));

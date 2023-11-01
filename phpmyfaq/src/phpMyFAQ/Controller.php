@@ -17,11 +17,30 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 abstract class Controller
 {
+    /**
+     * @param string $pathToTwigFile
+     * @param string[] $templateVars
+     * @return Response
+     * @throws Template\TemplateException
+     */
+    public function render(string $pathToTwigFile, array $templateVars = []): Response
+    {
+        $response = new Response();
+        $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $template = $twig->loadTemplate($pathToTwigFile);
+
+        $response->setContent($template->render($templateVars));
+
+        return $response;
+    }
+
     /**
      * @throws UnauthorizedHttpException
      */

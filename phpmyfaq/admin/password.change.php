@@ -31,8 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-$twig = new TwigWrapper('./assets/templates');
-$template = $twig->loadTemplate('./user/password.change.twig');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template = $twig->loadTemplate('./admin/user/password.change.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
     // If we have to save a new password, do that first

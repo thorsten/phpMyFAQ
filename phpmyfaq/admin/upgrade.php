@@ -31,8 +31,8 @@ $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-$twig = new TwigWrapper('./assets/templates');
-$template = $twig->loadTemplate('./configuration/upgrade.twig');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template = $twig->loadTemplate('./admin/configuration/upgrade.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $templateVars = [

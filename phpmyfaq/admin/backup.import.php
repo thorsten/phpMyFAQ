@@ -40,8 +40,8 @@ if (
     $user->perm->hasPermission($user->getUserId(), 'restore') &&
     Token::getInstance()->verifyToken('restore', $csrfToken)
 ) {
-    $twig = new TwigWrapper('./assets/templates');
-    $template = $twig->loadTemplate('./backup/import.twig');
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $template = $twig->loadTemplate('./admin/backup/import.twig');
 
     $templateVars = [
         'adminHeaderRestore' => Translation::get('ad_csv_rest')

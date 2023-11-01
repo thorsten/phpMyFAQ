@@ -63,7 +63,7 @@ try {
     $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/content/core/config/database.php');
 }
 
-$twig = new TwigWrapper('../assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./setup/update.twig');
 
 $templateVars = [

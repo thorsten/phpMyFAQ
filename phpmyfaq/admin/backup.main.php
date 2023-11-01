@@ -30,8 +30,8 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
-    $twig = new TwigWrapper('./assets/templates');
-    $template = $twig->loadTemplate('./backup/main.twig');
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $template = $twig->loadTemplate('./admin/backup/main.twig');
 
     $templateVars = [
         'adminHeaderBackup' => Translation::get('ad_csv_backup'),

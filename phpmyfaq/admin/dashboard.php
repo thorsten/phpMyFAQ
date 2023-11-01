@@ -41,9 +41,9 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 
-$twig = new TwigWrapper('./assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
-$template = $twig->loadTemplate('./dashboard.twig');
+$template = $twig->loadTemplate('./admin/dashboard.twig');
 
 $templateVars = [
     'adminHeaderDashboard' => Translation::get('admin_mainmenu_home'),

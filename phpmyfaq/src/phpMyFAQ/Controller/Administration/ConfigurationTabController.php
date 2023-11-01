@@ -17,8 +17,30 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller;
+use phpMyFAQ\Template\TemplateException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ConfigurationTabController extends Controller
 {
+    /**
+     * @throws TemplateException
+     */
+    #[Route('admin/api/configuration/list')]
+    public function list(Request $request): Response
+    {
+        $configuration = Configuration::getConfigurationInstance();
+
+        $mode = $request->get('mode');
+
+        return $this->render(
+            './admin/configuration/tab-list.twig',
+            [
+                'mode' => $mode,
+            ]
+        );
+    }
 }

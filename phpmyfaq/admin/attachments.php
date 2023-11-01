@@ -50,9 +50,9 @@ $pagination = new Pagination(
     ]
 );
 
-$twig = new TwigWrapper('./assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new FormatBytesTwigExtension());
-$template = $twig->loadTemplate('./content/attachments.twig');
+$template = $twig->loadTemplate('./admin/content/attachments.twig');
 
 $templateVars = [
     'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),
