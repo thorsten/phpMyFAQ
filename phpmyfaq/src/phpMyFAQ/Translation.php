@@ -2,7 +2,7 @@
 
 /**
  * The Translation class provides methods and functions for the
- * translation handling.
+ * translation file handling.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -23,7 +23,7 @@ use phpMyFAQ\Core\Exception;
 class Translation
 {
     /**  @var string The directory with the language files */
-    protected string $languagesDir = 'lang';
+    protected string $languagesDir = 'translations';
 
     /** @var string The default fallback language */
     protected string $defaultLanguage = 'en';
@@ -31,7 +31,7 @@ class Translation
     /** @var string The current language */
     protected string $currentLanguage = '';
 
-    /** @var array The loaded languages */
+    /** @var string[][] The loaded languages */
     protected array $loadedLanguages = [];
 
     /** @var bool Translation already initialized? */
@@ -52,7 +52,7 @@ class Translation
      * Returns the translation of a specific key from the current language
      *
      * @param string $languageKey
-     * @return string|array|null
+     * @return string|string[][]|null
      */
     public static function get(string $languageKey): string|array|null
     {
@@ -132,7 +132,7 @@ class Translation
     }
 
     /**
-     * Use mbstring extension if available and when possible
+     * Use "mbstring" extension if available and when possible
      */
     public function setMultiByteLanguage(): void
     {
