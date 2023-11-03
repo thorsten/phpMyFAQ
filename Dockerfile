@@ -6,7 +6,7 @@
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8.2-apache
+FROM php:8.3.0RC5-apache
 
 #=== Install gd PHP dependencie ===
 RUN set -x \
@@ -59,7 +59,7 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-RUN pecl install xdebug-3.2.0RC1 \
+RUN pecl install xdebug-3.3.0alpha3 \
     && docker-php-ext-enable xdebug
 
 #=== php default ===
