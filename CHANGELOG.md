@@ -19,6 +19,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed X/Twitter support (Thorsten)
 - removed support for adding own meta content in templates (Thorsten)
 
+### phpMyFAQ v3.2.3 - 2023-11
+
+- added support for PHP 8.3 (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.2 - 2023-10-27
 
 - fixed multiple security vulnerabilities (Thorsten)
