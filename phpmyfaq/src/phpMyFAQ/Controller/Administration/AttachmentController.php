@@ -21,7 +21,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AttachmentController extends Controller
+class AttachmentController extends AbstractController
 {
     #[Route('./admin/api/content/attachments')]
     public function delete(Request $request): JsonResponse

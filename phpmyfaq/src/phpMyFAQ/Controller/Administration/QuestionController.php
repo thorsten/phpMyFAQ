@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class QuestionController extends Controller
+class QuestionController extends AbstractController
 {
     #[Route('admin/api/question/delete')]
     public function delete(Request $request): JsonResponse

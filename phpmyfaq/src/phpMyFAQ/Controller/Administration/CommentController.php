@@ -19,7 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CommentController extends Controller
+class CommentController extends AbstractController
 {
     #[Route('admin/api/content/comments')]
     public function delete(Request $request): JsonResponse

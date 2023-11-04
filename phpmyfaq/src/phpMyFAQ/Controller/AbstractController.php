@@ -15,14 +15,16 @@
  * @since     2023-10-24
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Template;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-abstract class Controller
+abstract class AbstractController
 {
     /**
      * @param string $pathToTwigFile

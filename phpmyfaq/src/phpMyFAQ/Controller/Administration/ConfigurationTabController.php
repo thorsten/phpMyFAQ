@@ -18,13 +18,13 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Template\TemplateException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ConfigurationTabController extends Controller
+class ConfigurationTabController extends AbstractController
 {
     /**
      * @throws TemplateException

@@ -21,7 +21,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CategoryController extends Controller
+class CategoryController extends AbstractController
 {
     #[Route('admin/api/category/permissions')]
     public function permissions(Request $request): JsonResponse

@@ -19,7 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class DashboardController extends Controller
+class DashboardController extends AbstractController
 {
     #[Route('admin/api/dashboard/versions')]
     public function versions(): JsonResponse

@@ -22,7 +22,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
@@ -38,7 +38,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FaqController extends Controller
+class FaqController extends AbstractController
 {
     #[Route('admin/api/faq/permissions')]
     public function listPermissions(Request $request): JsonResponse

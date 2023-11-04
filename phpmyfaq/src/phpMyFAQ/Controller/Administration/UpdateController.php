@@ -21,7 +21,7 @@ use DateTime;
 use DateTimeInterface;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
@@ -40,7 +40,7 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class UpdateController extends Controller
+class UpdateController extends AbstractController
 {
     #[Route('admin/api/health-check')]
     public function healthCheck(): JsonResponse

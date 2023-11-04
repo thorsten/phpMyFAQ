@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StopWordController extends Controller
+class StopWordController extends AbstractController
 {
     #[Route('admin/api/stopwords')]
     public function list(Request $request): JsonResponse

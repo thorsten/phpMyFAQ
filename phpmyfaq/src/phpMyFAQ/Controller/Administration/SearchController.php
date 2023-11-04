@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends Controller
+class SearchController extends AbstractController
 {
     #[Route('admin/api/search/term')]
     public function deleteTerm(Request $request): JsonResponse

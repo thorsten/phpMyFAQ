@@ -15,7 +15,7 @@
  * @since     2023-09-17
  */
 
-namespace phpMyFAQ\Controller;
+namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Configuration;

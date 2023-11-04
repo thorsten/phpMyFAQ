@@ -20,7 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ElasticsearchController extends Controller
+class ElasticsearchController extends AbstractController
 {
     #[Route('./admin/api/elasticsearch/create')]
     public function create(): JsonResponse

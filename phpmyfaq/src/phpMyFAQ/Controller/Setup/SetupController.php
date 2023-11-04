@@ -15,7 +15,7 @@
  * @since     2023-10-17
  */
 
-namespace phpMyFAQ\Controller;
+namespace phpMyFAQ\Controller\Setup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;

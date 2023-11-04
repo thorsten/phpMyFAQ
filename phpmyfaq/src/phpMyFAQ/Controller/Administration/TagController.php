@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\TagEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TagController extends Controller
+class TagController extends AbstractController
 {
     #[Route('admin/api/content/tag')]
     public function update(Request $request): JsonResponse

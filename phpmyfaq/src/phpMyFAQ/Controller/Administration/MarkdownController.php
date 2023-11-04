@@ -18,14 +18,14 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use ParsedownExtra;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MarkdownController extends Controller
+class MarkdownController extends AbstractController
 {
     #[Route('admin/api/content/markdown')]
     public function render(Request $request): JsonResponse

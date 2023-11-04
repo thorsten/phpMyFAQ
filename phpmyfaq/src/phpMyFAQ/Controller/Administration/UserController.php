@@ -22,7 +22,7 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
@@ -39,7 +39,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
     #[Route('admin/api/user/users')]
     public function list(Request $request): JsonResponse

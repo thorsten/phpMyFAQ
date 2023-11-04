@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ConfigurationController extends Controller
+class ConfigurationController extends AbstractController
 {
     #[Route('admin/api/configuration/send-test-mail')]
     public function sendTestMail(Request $request): JsonResponse
