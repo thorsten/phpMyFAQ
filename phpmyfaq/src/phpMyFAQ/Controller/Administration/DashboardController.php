@@ -24,7 +24,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -36,45 +35,35 @@ class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
-
-        $api = new Api($faqConfig);
+        $api = new Api(Configuration::getConfigurationInstance());
         try {
             $versions = $api->getVersions();
-            $response->setStatusCode(Response::HTTP_OK);
             if (version_compare($versions['installed'], $versions['stable']) < 0) {
-                $response->setData(
-                    ['success' => Translation::get('ad_you_should_update')]
-                );
+                $info = ['success' => Translation::get('ad_you_should_update')];
             } else {
-                $response->setData(
-                    ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['stable']]
-                );
+                $info = ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['stable']];
             }
+            return $this->json($info);
         } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
-            $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
-            $response->setData(['error' => $e->getMessage()]);
+            return $this->json(['error' => $e->getMessage()], 400);
         }
-        return $response;
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('admin/api/dashboard/visits')]
     public function visits(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
+        $configuration = Configuration::getConfigurationInstance();
 
-        if ($faqConfig->get('main.enableUserTracking')) {
-            $session = new Session($faqConfig);
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($session->getLast30DaysVisits());
-
-            return $response;
+        if ($configuration->get('main.enableUserTracking')) {
+            $session = new Session($configuration);
+            return $this->json($session->getLast30DaysVisits());
         }
 
-        return new JsonResponse(['error' => 'User tracking is disabled.'], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => 'User tracking is disabled.'], 400);
     }
 }
