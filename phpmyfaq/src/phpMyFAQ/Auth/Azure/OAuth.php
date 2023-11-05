@@ -64,13 +64,19 @@ class OAuth
             'base_uri' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/',
         ]);
 
+        if ($this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER) !== '') {
+            $codeVerifier = $this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER);
+        } else {
+            $codeVerifier = $this->session->getCookie(Session::PMF_AZURE_AD_OAUTH_VERIFIER);
+        }
+
         $response = $client->request('POST', 'token', [
             'form_params' => [
                 'grant_type' => 'authorization_code',
                 'client_id' => AAD_OAUTH_CLIENTID,
                 'redirect_uri' => $this->config->getDefaultUrl() . 'services/azure/callback.php',
                 'code' => $code,
-                'code_verifier' => $this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER),
+                'code_verifier' => $codeVerifier,
                 'client_secret' => AAD_OAUTH_SECRET
             ]
         ]);
