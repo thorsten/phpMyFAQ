@@ -25,8 +25,10 @@ use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-session_start();
-session_regenerate_id(true);
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+    session_regenerate_id(true);
+}
 
 //
 // Prepend and start the PHP session
@@ -86,10 +88,20 @@ if ($session->getCurrentSessionKey()) {
         // @todo -> redirect to where the user came from
         $redirect->send();
 
-    } catch (GuzzleException $e) {
-        echo $e->getMessage();
-    } catch (Exception $e) {
-        echo $e->getMessage();
+    } catch (GuzzleException $exception) {
+        echo sprintf(
+            'Entra ID Login failed: %s at line %d at %s',
+            $exception->getMessage(),
+            $exception->getLine(),
+            $exception->getFile()
+        );
+    } catch (Exception $exception) {
+        echo sprintf(
+            'Entra ID Login failed: %s at line %d at %s',
+            $exception->getMessage(),
+            $exception->getLine(),
+            $exception->getFile()
+        );
     }
 } else {
     $redirect->send();

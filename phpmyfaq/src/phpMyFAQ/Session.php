@@ -159,7 +159,7 @@ class Session
 
     public function get(string $key): string
     {
-        return $_SESSION[$key];
+        return $_SESSION[$key] ?? '';
     }
 
     /**
@@ -403,7 +403,7 @@ class Session
      * @param int|string|null $sessionId Session ID
      * @param int             $timeout Cookie timeout
      */
-    public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600): bool
+    public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600, bool $strict = true): bool
     {
         $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
 
@@ -414,11 +414,21 @@ class Session
                 'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
                 'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
                 'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
-                'samesite' => 'strict',
+                'samesite' => $strict ? 'strict' : '',
                 'secure' => $secure,
                 'httponly' => true,
             ]
         );
+    }
+
+    /**
+     * Returns the value of a cookie.
+     *
+     * @param string $name Cookie name
+     */
+    public function getCookie(string $name): string
+    {
+        return $_COOKIE[$name];
     }
 
     /**

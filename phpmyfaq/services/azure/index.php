@@ -47,5 +47,6 @@ try {
             $exception->getMessage(),
             $exception->getLine(),
             $exception->getFile()
-        ));
+        )
+    );
 }
