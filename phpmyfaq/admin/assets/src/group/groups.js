@@ -1,5 +1,5 @@
 import { fetchAllGroups, fetchAllMembers, fetchAllUsersForGroups, fetchGroup, fetchGroupRights } from '../api';
-import { selectAllCheckboxes, unSelectAllCheckboxes } from '../utils';
+import { selectAll, unSelectAll } from '../utils';
 
 export const handleGroups = async () => {
   clearGroupList();
@@ -32,27 +32,29 @@ export const handleGroups = async () => {
   });
 
   selectAllUsers.addEventListener('click', () => {
-    selectAllCheckboxes('group_user_list');
+    selectAll('group_user_list');
   });
 
   unSelectAllUsers.addEventListener('click', () => {
-    unSelectAllCheckboxes('group_user_list');
+    unSelectAll('group_user_list');
   });
 
   addMember.addEventListener('click', () => {
     addGroupMembers();
+    selectAll('group_member_list');
   });
 
   removeMember.addEventListener('click', () => {
     removeGroupMembers();
+    selectAll('group_member_list');
   });
 
   selectAllMembers.addEventListener('click', () => {
-    selectAllCheckboxes('group_member_list');
+    selectAll('group_member_list');
   });
 
   unSelectAllMembers.addEventListener('click', () => {
-    unSelectAllCheckboxes('group_member_list');
+    unSelectAll('group_member_list');
   });
 };
 

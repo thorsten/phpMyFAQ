@@ -13,13 +13,13 @@
  * @since     2023-01-04
  */
 
-export const selectAllCheckboxes = (selectId) => {
+export const selectAll = (selectId) => {
   for (const options of [...document.querySelector(`#${selectId}`).options]) {
     options.selected = true;
   }
 };
 
-export const unSelectAllCheckboxes = (selectId) => {
+export const unSelectAll = (selectId) => {
   for (const options of [...document.querySelector(`#${selectId}`).options]) {
     options.selected = false;
   }
