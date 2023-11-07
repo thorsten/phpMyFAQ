@@ -461,7 +461,7 @@ if ('list' === $groupAction) {
             </div>
 
             <div class="row">
-              <div class="text-center">
+              <div class="text-center mt-2">
                 <input class="btn btn-success pmf-add-member" type="button"
                        value="<?= Translation::get('ad_group_addMember') ?>">
                 <input class="btn btn-danger pmf-remove-member" type="button"
@@ -499,7 +499,7 @@ if ('list' === $groupAction) {
           </div>
           <div class="card-footer">
             <div class="card-button text-end">
-              <button class="btn btn-primary" onclick="javascript:selectSelectAll('group_member_list')" type="submit">
+              <button class="btn btn-primary" type="submit">
                   <?= Translation::get('ad_gen_save') ?>
               </button>
             </div>
