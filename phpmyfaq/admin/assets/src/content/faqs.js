@@ -35,7 +35,6 @@ export const handleFaqForm = () => {
 
   if (categoryOptions) {
     let categories = Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
-    getCategoryPermissions(categories);
 
     // Override FAQ permissions with Category permission to avoid confused users
     categoryOptions.addEventListener('click', (event) => {
@@ -43,11 +42,6 @@ export const handleFaqForm = () => {
       let categories = Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
       getCategoryPermissions(categories);
     });
-  }
-
-  const faqId = document.getElementById('record_id');
-  if (faqId && faqId > 0) {
-    getFaqPermissions(faqId.value);
   }
 
   const questionInput = document.getElementById('question');
