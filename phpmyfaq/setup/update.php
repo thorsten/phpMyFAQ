@@ -449,6 +449,48 @@ if ($step == 3) {
     }
 
     //
+    // UPDATES FROM 3.2.3
+    //
+    if (version_compare($version, '3.2.3', '<')) {
+        switch ($dbConfig->getType()) {
+            case 'mysqli':
+                $query[] = 'ALTER TABLE ' . $prefix . 'faquser CHANGE ip ip VARCHAR(64) NULL DEFAULT NULL';
+                break;
+            case 'pgsql':
+                $query[] = 'ALTER TABLE ' . $prefix . 'faquser ALTER COLUMN ip TYPE VARCHAR(64)';
+                break;
+            case 'sqlite3':
+
+                $query[] = 'CREATE TABLE ' . $prefix . 'faquser_new (
+                    user_id INTEGER NOT NULL,
+                    login VARCHAR(128) NOT NULL,
+                    session_id VARCHAR(150) NULL,
+                    session_timestamp INTEGER NULL,
+                    ip VARCHAR(64) NULL,
+                    account_status VARCHAR(50) NULL,
+                    last_login VARCHAR(14) NULL,
+                    auth_source VARCHAR(100) NULL,
+                    member_since VARCHAR(14) NULL,
+                    remember_me VARCHAR(150) NULL,
+                    success INT(1) NULL DEFAULT 1,
+                    is_superadmin INT(1) NULL DEFAULT 0,
+                    login_attempts INT(1) NULL DEFAULT 0,
+                    refresh_token TEXT NULL DEFAULT NULL,
+                    access_token TEXT NULL DEFAULT NULL,
+                    code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                    jwt TEXT NULL DEFAULT NULL,
+                    PRIMARY KEY (user_id))';
+                $query[] = 'INSERT INTO ' . $prefix . 'faquser_new SELECT * FROM ' . $prefix . 'faquser';
+                $query[] = 'DROP TABLE ' . $prefix . 'faquser';
+                $query[] = 'ALTER TABLE ' . $prefix . 'faquser_new RENAME TO ' . $prefix . 'faquser';
+                break;
+            case 'sqlsrv':
+                $query[] = 'ALTER TABLE ' . $prefix . 'faquser ALTER COLUMN ip VARCHAR(64)';
+                break;
+        }
+    }
+
+    //
     // Always the last step: Update version number
     //
     if (version_compare($version, System::getVersion(), '<')) {
