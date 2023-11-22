@@ -303,7 +303,7 @@ class Sqlsrv extends Database implements Driver
             login NVARCHAR(128) NOT NULL,
             session_id NVARCHAR(150) NULL,
             session_timestamp INTEGER NULL,
-            ip NVARCHAR(15) NULL,
+            ip NVARCHAR(64) NULL,
             account_status NVARCHAR(50) NULL,
             last_login NVARCHAR(14) NULL,
             auth_source NVARCHAR(100) NULL,

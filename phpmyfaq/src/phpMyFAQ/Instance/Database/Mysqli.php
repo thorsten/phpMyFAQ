@@ -309,7 +309,7 @@ class Mysqli extends Database implements Driver
             login VARCHAR(128) NOT NULL,
             session_id VARCHAR(150) NULL,
             session_timestamp INT(11) NULL,
-            ip VARCHAR(15) NULL,
+            ip VARCHAR(64) NULL,
             account_status VARCHAR(50) NULL,
             last_login VARCHAR(14) NULL,
             auth_source VARCHAR(100) NULL,
