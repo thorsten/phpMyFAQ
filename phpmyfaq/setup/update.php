@@ -376,6 +376,7 @@ if ($step == 3) {
         // Migrate MySQL from MyISAM to InnoDB
         if ('mysqli' === $dbConfig->getType()) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ENGINE=INNODB';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD FULLTEXT (keywords, thema, content)';
         }
 
         // new options
