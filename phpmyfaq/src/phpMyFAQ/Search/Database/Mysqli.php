@@ -17,11 +17,8 @@
 
 namespace phpMyFAQ\Search\Database;
 
-use mysqli_result;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Search\Exception;
 use phpMyFAQ\Search\SearchDatabase;
-use stdClass;
 
 /**
  * Class Mysqli
@@ -54,8 +51,8 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
             $columns = $this->getResultColumns();
 
             if ($this->relevanceSupport && $relevance) {
-                $columns .= $this->getMatchingColumnsAsResult($searchTerm);
-                $orderBy = 'ORDER BY ' . $this->getMatchingOrder() . ' DESC';
+                $columns .= ', ' . $this->setRelevanceRanking($searchTerm);
+                $orderBy = 'ORDER BY score DESC';
             } else {
                 $orderBy = '';
             }
@@ -118,58 +115,17 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
 
             return $this->resultSet;
         }
-
-        return false;
     }
 
     /**
-     * Add the matching columns into the columns for the result set.
-     *
-     *
+     * Add the matching columns into the columns for the relevance ranking
      */
-    public function getMatchingColumnsAsResult(string $searchTerm): string
+    public function setRelevanceRanking(string $searchTerm): string
     {
-        $resultColumns = '';
-
-        foreach ($this->matchingColumns as $matchColumn) {
-            $column = sprintf(
-                "MATCH (%s) AGAINST ('*%s*' IN NATURAL LANGUAGE MODE) AS relevance_%s",
-                $matchColumn,
-                $this->config->getDb()->escape($searchTerm),
-                substr(strstr($matchColumn, '.'), 1)
-            );
-
-            $resultColumns .= ', ' . $column;
-        }
-
-        return $resultColumns;
-    }
-
-    /**
-     * Returns the part of the SQL query with the order by.
-     *
-     * The order is calculate by weight depend on the search.relevance order
-     */
-    public function getMatchingOrder(): string
-    {
-        $list = explode(',', (string) $this->config->get('search.relevance'));
-        $count = count($list);
-        $order = '';
-
-        foreach ($list as $field) {
-            $string = sprintf(
-                '(relevance_%s * %d)',
-                $field,
-                $count
-            );
-            if (empty($order)) {
-                $order .= $string;
-            } else {
-                $order .= ' + ' . $string;
-            }
-            --$count;
-        }
-
-        return '(' . $order . ')';
+        return sprintf(
+            "MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE) as score",
+            $this->getMatchingColumns(),
+            $this->config->getDb()->escape($searchTerm)
+        );
     }
 }
