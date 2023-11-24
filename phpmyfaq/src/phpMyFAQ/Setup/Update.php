@@ -113,6 +113,7 @@ class Update extends Setup
         $this->applyUpdates320Beta();
         $this->applyUpdates320Beta2();
         $this->applyUpdates320RC();
+        $this->applyUpdates323();
 
         // 4.0 updates
         $this->applyUpdates400Alpha();
@@ -396,6 +397,71 @@ class Update extends Setup
             $this->configuration->add('spam.mailAddressInExport', true);
         }
     }
+
+    private function applyUpdates323(): void
+    {
+        if (version_compare($this->version, '3.2.3', '<')) {
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaquser CHANGE ip ip VARCHAR(64) NULL DEFAULT NULL',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'pgsql':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaquser ALTER COLUMN ip TYPE VARCHAR(64)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlite3':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaquser_new (
+                        user_id INTEGER NOT NULL,
+                        login VARCHAR(128) NOT NULL,
+                        session_id VARCHAR(150) NULL,
+                        session_timestamp INTEGER NULL,
+                        ip VARCHAR(64) NULL,
+                        account_status VARCHAR(50) NULL,
+                        last_login VARCHAR(14) NULL,
+                        auth_source VARCHAR(100) NULL,
+                        member_since VARCHAR(14) NULL,
+                        remember_me VARCHAR(150) NULL,
+                        success INT(1) NULL DEFAULT 1,
+                        is_superadmin INT(1) NULL DEFAULT 0,
+                        login_attempts INT(1) NULL DEFAULT 0,
+                        refresh_token TEXT NULL DEFAULT NULL,
+                        access_token TEXT NULL DEFAULT NULL,
+                        code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                        jwt TEXT NULL DEFAULT NULL,
+                        PRIMARY KEY (user_id))',
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'INSERT INTO %sfaquser_new SELECT * FROM %sfaquser',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix(),
+                    );
+                    $this->queries[] = sprintf(
+                        'DROP TABLE %sfaquser',
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaquser_new RENAME TO %sfaquser',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix(),
+                    );
+                    break;
+                case 'sqlsrv':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaquser ALTER COLUMN ip VARCHAR(64)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+            }
+        }
+    }
+
 
     private function applyUpdates400Alpha(): void
     {
