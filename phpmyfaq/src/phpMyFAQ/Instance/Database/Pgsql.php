@@ -325,8 +325,6 @@ class Pgsql extends Database implements Driver
             jwt TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id))',
 
-        'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
-
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
             user_id SERIAL NOT NULL,
             last_modified VARCHAR(14) NULL,
