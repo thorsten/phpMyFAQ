@@ -329,6 +329,8 @@ phpMyFAQ as a X (Twitter) application on [X (Twitter)](https://dev.twitter.com/a
 administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to X
 (Twitter), e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
 
+This feature is deprecated and will be removed in phpMyFAQ 4.0.
+
 ## 2.16 Server side recommendations
 
 **_MySQL / Percona Server / MariaDB_**

@@ -256,7 +256,7 @@ Please use this information when report bugs.
 
 You can see a list of all multisite installations, and you're able to add new ones.
 
-In order to host several distinct installations (with different configs, different templates and most importantly,
+To host several distinct installations (with different configs, different templates and most importantly,
 different database credentials), but only want to update once, you need to follow these steps:
 
 - Make sure you have the _multisite/_ directory in your document root and _multisite.php_ in it
@@ -280,15 +280,17 @@ For example, if you want to use _faq.example.org_ and _beta.faq.example.org_, it
 
 We need stop words for the smart answering feature and the related answers. If a user is adding a new question to your
 FAQ the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
-very low relevance like the English word "the".
+very low relevance like the English word _the_.
 
 ### 5.6.5 Template meta data
 
 If you need to add metadata to your template, you can do this in the template metadata administration. You can define a
-page type, e.g. "foobar", a content type (Text or HTML) and the content, e.g. `<marquee>Foobar</marquee>`. After saving
+page type, e.g. _foobar_, a content type (Text or HTML) and the content, e.g. `<marquee>Foobar</marquee>`. After saving
 the metadata entry, you can use it in your template:
 
 `{{ foobar }}`
+
+This feature is deprecated and will be removed in phpMyFAQ 4.0.
 
 ### 5.6.6 Elasticsearch configuration
 
