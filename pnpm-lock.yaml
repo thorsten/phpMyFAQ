@@ -28,8 +28,8 @@ dependencies:
     specifier: ^1.2.0
     version: 1.2.0
   handlebars:
-    specifier: 4.7.7
-    version: 4.7.7
+    specifier: 4.7.8
+    version: 4.7.8
   highlight.js:
     specifier: ^11.9.0
     version: 11.9.0
@@ -1806,7 +1806,7 @@ packages:
     engines: {node: '>= 14'}
     peerDependencies:
       html-webpack-plugin: ^5.0.0
-      webpack: ^5.0.0
+      webpack: '>=5.76.0'
       webpack-sources: ^3.2.1
     dependencies:
       globby: 8.0.2
@@ -2185,7 +2185,7 @@ packages:
     resolution: {integrity: sha512-wy0mglZpDSiSS0XHrVR+BAdId2+yxPSoJW8fsna3ZpYSlufjvxnP4YbKTCBZnNIcGN4r6ZPXV55X4mYExOfLmw==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: 5.x.x
+      webpack: '>=5.76.0'
       webpack-cli: 5.x.x
     dependencies:
       webpack: 5.89.0(webpack-cli@5.1.4)
@@ -2196,7 +2196,7 @@ packages:
     resolution: {integrity: sha512-zLHQdI/Qs1UyT5UBdWNqsARasIA+AaF8t+4u2aS2nEpBQh2mWIVb8qAklq0eUENnC5mOItrIB4LiS9xMtph18A==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: 5.x.x
+      webpack: '>=5.76.0'
       webpack-cli: 5.x.x
     dependencies:
       webpack: 5.89.0(webpack-cli@5.1.4)
@@ -2207,7 +2207,7 @@ packages:
     resolution: {integrity: sha512-lqaoKnRYBdo1UgDX8uF24AfGMifWK19TxPmM5FHc2vAGxrJ/qtyUyFBWoY1tISZdelsQ5fBcOusifo5o5wSJxQ==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: 5.x.x
+      webpack: '>=5.76.0'
       webpack-cli: 5.x.x
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -2653,7 +2653,7 @@ packages:
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       '@babel/core': ^7.12.0
-      webpack: '>=5'
+      webpack: '>=5.76.0'
     dependencies:
       '@babel/core': 7.23.2
       find-cache-dir: 4.0.0
@@ -3419,7 +3419,7 @@ packages:
     resolution: {integrity: sha512-WuWE1nyTNAyW5T7oNyys2EN0cfP2fdRxhxnIQWiAp0bMabPdHhoGxM8A6YL2GhqwgrPnnaemVE7nv5XJ2Fhh2w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
-      webpack: '>=4.0.0 <6.0.0'
+      webpack: '>=5.76.0'
     dependencies:
       del: 4.1.1
       webpack: 5.89.0(webpack-cli@5.1.4)
@@ -3651,7 +3651,7 @@ packages:
     resolution: {integrity: sha512-xDAXtEVGlD0gJ07iclwWVkLoZOpEvAWaSyf6W18S2pOC//K8+qUDIx8IIT3D+HjnmkJPQeesOPv5aiUaJsCM2g==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: ^5.0.0
+      webpack: '>=5.76.0'
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.31)
       postcss: 8.4.31
@@ -4186,7 +4186,7 @@ packages:
     resolution: {integrity: sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
-      webpack: ^4.0.0 || ^5.0.0
+      webpack: '>=5.76.0'
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
@@ -4493,8 +4493,8 @@ packages:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
     dev: true
 
-  /handlebars@4.7.7:
-    resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}
+  /handlebars@4.7.8:
+    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
     engines: {node: '>=0.4.7'}
     hasBin: true
     dependencies:
@@ -4620,7 +4620,7 @@ packages:
     resolution: {integrity: sha512-6YrDKTuqaP/TquFH7h4srYWsZx+x6k6+FbsTm0ziCwGHDP78Unr1r9F/H4+sGmMbX08GQcJ+K64x55b+7VM/jg==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
-      webpack: ^5.20.0
+      webpack: '>=5.76.0'
     dependencies:
       '@types/html-minifier-terser': 6.1.0
       html-minifier-terser: 6.1.0
@@ -5953,7 +5953,7 @@ packages:
     resolution: {integrity: sha512-Qk7HcgaPkGG6eD77mLvZS1nmxlao3j+9PkrT9Uc7HAE1id3F41+DdBRYRYkbyfNRGzm8/YWtzhw7nVPmwhqTQw==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: ^5.0.0
+      webpack: '>=5.76.0'
     dependencies:
       schema-utils: 4.2.0
       webpack: 5.89.0(webpack-cli@5.1.4)
@@ -6690,7 +6690,7 @@ packages:
     resolution: {integrity: sha512-ZnScIV3ag9A4wPX/ZayxL/jZH+euYb6FcUinPcgiQW0+UBtEv0O6Q3lGd3cqJ+GHH+rksEv3Pj99oxJ3u3VIKA==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
-      webpack: ^4.0.0 || ^5.0.0
+      webpack: '>=5.76.0'
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
@@ -6979,7 +6979,7 @@ packages:
       node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
       sass: ^1.3.0
       sass-embedded: '*'
-      webpack: ^5.0.0
+      webpack: '>=5.76.0'
     peerDependenciesMeta:
       fibers:
         optional: true
@@ -7370,7 +7370,7 @@ packages:
     resolution: {integrity: sha512-53BiGLXAcll9maCYtZi2RCQZKa8NQQai5C4horqKyRmHj9H7QmcUyucrH+4KW/gBQbXM2AsB0axoEcFZPlfPcw==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: ^5.0.0
+      webpack: '>=5.76.0'
     dependencies:
       webpack: 5.89.0(webpack-cli@5.1.4)
     dev: true
@@ -7434,7 +7434,7 @@ packages:
       '@swc/core': '*'
       esbuild: '*'
       uglify-js: '*'
-      webpack: ^5.1.0
+      webpack: '>=5.76.0'
     peerDependenciesMeta:
       '@swc/core':
         optional: true
@@ -7820,7 +7820,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@webpack-cli/generators': '*'
-      webpack: 5.x.x
+      webpack: '>=5.76.0'
       webpack-bundle-analyzer: '*'
       webpack-dev-server: '*'
     peerDependenciesMeta:
