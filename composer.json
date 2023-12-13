@@ -36,7 +36,7 @@
     "robthree/twofactorauth": "^2.0.0",
     "symfony/html-sanitizer": "^6.4",
     "symfony/http-client": "^6.4",
-    "symfony/http-foundation": "^6.4",
+    "symfony/http-foundation": "^7.0",
     "symfony/http-kernel": "^6.4",
     "symfony/mailer": "^6.4",
     "symfony/routing": "^6.4",
