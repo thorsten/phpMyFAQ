@@ -461,7 +461,6 @@ if ($step == 3) {
                 $query[] = 'ALTER TABLE ' . $prefix . 'faquser ALTER COLUMN ip TYPE VARCHAR(64)';
                 break;
             case 'sqlite3':
-
                 $query[] = 'CREATE TABLE ' . $prefix . 'faquser_new (
                     user_id INTEGER NOT NULL,
                     login VARCHAR(128) NOT NULL,
