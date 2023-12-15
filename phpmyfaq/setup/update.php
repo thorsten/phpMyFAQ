@@ -384,7 +384,7 @@ if ($step == 3) {
         $faqConfig->add('main.enableNotifications', true);
 
         // update options
-        $faqConfig->rename('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
+        $faqConfig->rename('main.loginWithEmailAddress', 'security.loginWithEmailAddress');
         if ($faqConfig->get('security.permLevel') === 'large') {
             $faqConfig->set('security.permLevel', 'medium');
         }
