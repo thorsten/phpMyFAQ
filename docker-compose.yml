@@ -90,6 +90,8 @@ services:
     image: phpmyadmin/phpmyadmin
     restart: always
     stdin_open: true
+    environment:
+      UPLOAD_LIMIT: 100M
     links:
       - mariadb:db
     ports:
