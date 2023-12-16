@@ -23,6 +23,7 @@ import {
   handleCheckForUpdates,
   handleTemplates,
   handleTranslation,
+  handleFaqsOrder,
 } from './configuration';
 import { handleStatistics } from './statistics';
 import {
@@ -91,6 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await handleConfiguration();
   await handleTranslation();
   await handleTemplates();
+  await handleFaqsOrder();
 
   // Configuration -> Instance
   handleInstances();

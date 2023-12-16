@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TemplateException;
@@ -79,6 +80,7 @@ class ConfigurationTabController extends AbstractController
         }
     }
 
+    #[Route('admin/api/configuration/templates')]
     public function templates(): Response
     {
         $response = new Response();
@@ -95,5 +97,13 @@ class ConfigurationTabController extends AbstractController
         }
 
         return $response->setContent($htmlString);
+    }
+
+    #[Route('admin/api/configuration/faqs-order')]
+    public function faqsOrder(Request $request): Response
+    {
+        return new Response(
+            AdministrationHelper::sortingOptions($request->get('current'))
+        );
     }
 }

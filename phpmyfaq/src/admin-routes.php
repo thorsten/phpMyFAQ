@@ -92,6 +92,14 @@ $routes->add(
 // Configuration API
 //
 $routes->add(
+    'admin.api.configuration.faqs-order',
+    new Route(
+        '/configuration/faqs-order/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'faqsOrder']]
+    )
+);
+
+$routes->add(
     'admin.api.configuration.list',
     new Route('/configuration/list/{mode}', ['_controller' => [ConfigurationTabController::class, 'list']])
 );

@@ -150,6 +150,7 @@ RewriteRule api/setup/update-database              api/index.php
 # Administration API
 RewriteRule admin/api/category/permissions         admin/api/index.php
 RewriteRule admin/api/category/update-order        admin/api/index.php
+RewriteRule admin/api/configuration/faqs-order     admin/api/index.php
 RewriteRule admin/api/configuration/list           admin/api/index.php
 RewriteRule admin/api/configuration/send-test-mail admin/api/index.php
 RewriteRule admin/api/configuration/templates      admin/api/index.php

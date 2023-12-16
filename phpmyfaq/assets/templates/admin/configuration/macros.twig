@@ -89,7 +89,7 @@
 {% macro generateSelectBox(key, config) %}
   {% set value = config[key] | replace({'"': '&quot;'}) %}
 
-  <select name="edit[{{ key }}]" class="form-select">
+  <select name="edit[{{ key }}]" class="form-select" data-pmf-configuration-current-value="{{ value|e('html_attr') }}">
     <!-- <option value="{{ value|e('html_attr') }}">{{ value|e('html_attr') }}</option> -->
   </select>
 {% endmacro %}

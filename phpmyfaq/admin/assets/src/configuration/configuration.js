@@ -30,6 +30,9 @@ export const handleConfiguration = async () => {
             await handleTranslation();
             await handleTemplates();
             break;
+          case '#records':
+            await handleFaqsOrder();
+            break;
         }
         tabLoaded = true;
         configTabTrigger.show();
@@ -44,17 +47,27 @@ export const handleConfiguration = async () => {
 
 export const handleTranslation = async () => {
   const translationSelectBox = document.getElementsByName('edit[main.language]');
-  if (translationSelectBox) {
+  if (translationSelectBox.length > 0) {
     const options = await fetchTranslations();
     translationSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
 export const handleTemplates = async () => {
-  const translationSelectBox = document.getElementsByName('edit[main.templateSet]');
-  if (translationSelectBox) {
+  const templateSelectBox = document.getElementsByName('edit[main.templateSet]');
+  if (templateSelectBox.length > 0) {
     const options = await fetchTemplates();
-    translationSelectBox[0].insertAdjacentHTML('beforeend', options);
+    templateSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleFaqsOrder = async () => {
+  const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]');
+  if (faqsOrderSelectBox.length > 0) {
+    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
+
+    const options = await fetchFaqsOrder(currentValue);
+    faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
@@ -107,6 +120,27 @@ const fetchTranslations = async () => {
 
 const fetchTemplates = async () => {
   return await fetch(`./api/configuration/templates`)
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response.text();
+        }
+        throw new Error('Request failed!');
+      },
+      (networkError) => {
+        console.log(networkError.message);
+      }
+    )
+    .then((html) => {
+      return html;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+const fetchFaqsOrder = async (currentValue) => {
+  return await fetch(`./api/configuration/faqs-order/${currentValue}`)
     .then(
       (response) => {
         if (response.ok) {
