@@ -19,6 +19,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
+use stdClass;
 
 class Translation
 {
@@ -142,6 +143,25 @@ class Translation
             mb_language($multiByteLanguage);
             mb_internal_encoding('utf-8');
         }
+    }
+
+    /**
+     * Returns the configuration items from the current language for the given section.
+     */
+    public static function getConfigurationItems(string $section = ''): array
+    {
+        include self::$instance->filename(self::$instance->currentLanguage);
+
+        $configuration = [];
+
+        Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
+        foreach ($LANG_CONF as $key => $value) {
+            if (str_starts_with($key, $section)) {
+                $configuration[$key] = ['element' => $value[0] ?? '', 'label' => $value[1] ?? ''];
+            }
+        }
+
+        return $configuration;
     }
 
     /**

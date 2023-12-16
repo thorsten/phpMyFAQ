@@ -127,23 +127,6 @@ function renderInputForm(mixed $key, string $type): void
             printf('<select name="edit[%s]" class="form-select">', $key);
 
             switch ($key) {
-                case 'main.language':
-                    $languages = LanguageHelper::getAvailableLanguages();
-                    if (count($languages) > 0) {
-                        echo LanguageHelper::renderLanguageOptions(
-                            str_replace(
-                                [ 'language_', '.php', ],
-                                '',
-                                $faqConfig->get('main.language')
-                            ),
-                            false,
-                            true
-                        );
-                    } else {
-                        echo '<option value="language_en.php">English</option>';
-                    }
-                    break;
-
                 case 'records.orderby':
                     echo AdministrationHelper::sortingOptions($faqConfig->get($key));
                     break;
@@ -165,18 +148,6 @@ function renderInputForm(mixed $key, string $type): void
                     echo PermissionHelper::permOptions($faqConfig->get($key));
                     break;
 
-                case 'main.templateSet':
-                    $faqSystem = new System();
-                    $templates = $faqSystem->getAvailableTemplates();
-
-                    foreach ($templates as $template => $selected) {
-                        printf(
-                            '<option%s>%s</option>',
-                            ($selected === true ? ' selected' : ''),
-                            $template
-                        );
-                    }
-                    break;
 
                 case 'records.attachmentsStorageType':
                     foreach (Translation::get('att_storage_type') as $i => $item) {
@@ -306,34 +277,32 @@ function renderInputForm(mixed $key, string $type): void
 
 header('Content-type: text/html; charset=utf-8');
 
-Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
-
-foreach ($LANG_CONF as $key => $value) {
+foreach (Translation::getConfigurationItems() as $key => $value) {
     if (str_starts_with($key, $configMode)) {
         printf(
             '<div class="row my-2"><label class="col-lg-3 col-form-label %s">',
-            $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
+            $value['element'] === 'checkbox' || $value['element'] === 'radio' ? 'pt-0' : ''
         );
 
         switch ($key) {
             case 'records.maxAttachmentSize':
-                printf($value[1], ini_get('upload_max_filesize'));
+                printf($value['label'], ini_get('upload_max_filesize'));
                 break;
             case 'main.dateFormat':
                 printf(
                     '<a target="_blank" href="https://www.php.net/manual/%s/function.date.php">%s</a>',
                     $faqLangCode,
-                    $value[1]
+                    $value['label']
                 );
                 break;
             default:
-                echo $value[1];
+                echo $value['label'];
                 break;
         }
         ?>
       </label>
       <div class="col-lg-6">
-          <?php renderInputForm($key, $value[0]); ?>
+          <?php renderInputForm($key, $value['element']); ?>
       </div>
         <?php
     }

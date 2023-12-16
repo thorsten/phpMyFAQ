@@ -56,20 +56,14 @@ $request = Request::createFromGlobals();
 
 $faqConfig = Configuration::getConfigurationInstance();
 
-// get language (default: english)
+//
+// Get language (default: english)
+//
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-// Preload English strings
-require PMF_ROOT_DIR . '/translations/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (Language::isASupportedLanguage($faqLangCode)) {
-    // Overwrite English strings with the ones we have in the current language
-    if (!file_exists(PMF_ROOT_DIR . '/translations/language_' . $faqLangCode . '.php')) {
-        $faqLangCode = 'en';
-    }
-    require PMF_ROOT_DIR . '/translations/language_' . $faqLangCode . '.php';
-} else {
+if (!Language::isASupportedLanguage($faqLangCode)) {
     $faqLangCode = 'en';
 }
 

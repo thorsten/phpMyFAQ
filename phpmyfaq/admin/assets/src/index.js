@@ -21,6 +21,8 @@ import {
   handleStopWords,
   handleElasticsearch,
   handleCheckForUpdates,
+  handleTemplates,
+  handleTranslation,
 } from './configuration';
 import { handleStatistics } from './statistics';
 import {
@@ -86,7 +88,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleStatistics();
 
   // Configuration -> FAQ configuration
-  handleConfiguration();
+  await handleConfiguration();
+  await handleTranslation();
+  await handleTemplates();
 
   // Configuration -> Instance
   handleInstances();

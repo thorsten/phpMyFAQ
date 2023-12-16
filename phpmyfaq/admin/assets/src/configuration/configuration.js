@@ -15,16 +15,22 @@
 
 import { Tab } from 'bootstrap';
 
-export const handleConfiguration = () => {
+export const handleConfiguration = async () => {
   const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {
       const configTabTrigger = new Tab(element);
-      element.addEventListener('shown.bs.tab', (event) => {
+      element.addEventListener('shown.bs.tab', async (event) => {
         event.preventDefault();
         let target = event.target.getAttribute('href');
         fetchConfiguration(target);
+        switch (target) {
+          case '#main':
+            await handleTranslation();
+            await handleTemplates();
+            break;
+        }
         tabLoaded = true;
         configTabTrigger.show();
       });
@@ -36,8 +42,25 @@ export const handleConfiguration = () => {
   }
 };
 
+export const handleTranslation = async () => {
+  const translationSelectBox = document.getElementsByName('edit[main.language]');
+  if (translationSelectBox) {
+    const options = await fetchTranslations();
+    translationSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleTemplates = async () => {
+  const translationSelectBox = document.getElementsByName('edit[main.templateSet]');
+  if (translationSelectBox) {
+    const options = await fetchTemplates();
+    translationSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
 const fetchConfiguration = (target) => {
-  fetch(`index.php?action=ajax&ajax=configuration-list&conf=${target.substr(1)}`)
+  //fetch(`index.php?action=ajax&ajax=configuration-list&conf=${target.substr(1)}`)
+  fetch(`./api/configuration/list/${target.substr(1)}`)
     .then(
       (response) => {
         if (response.ok) {
@@ -55,6 +78,48 @@ const fetchConfiguration = (target) => {
         tabContent.removeChild(tabContent.firstChild);
       }
       tabContent.innerHTML = html.toString();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+const fetchTranslations = async () => {
+  return await fetch(`./api/configuration/translations`)
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response.text();
+        }
+        throw new Error('Request failed!');
+      },
+      (networkError) => {
+        console.log(networkError.message);
+      }
+    )
+    .then((html) => {
+      return html;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+const fetchTemplates = async () => {
+  return await fetch(`./api/configuration/templates`)
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response.text();
+        }
+        throw new Error('Request failed!');
+      },
+      (networkError) => {
+        console.log(networkError.message);
+      }
+    )
+    .then((html) => {
+      return html;
     })
     .catch((error) => {
       console.error(error);

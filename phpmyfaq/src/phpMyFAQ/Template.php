@@ -28,8 +28,8 @@ use phpMyFAQ\Template\TemplateException;
  */
 class Template
 {
-    /** @var string Name of active template set. */
-    private static string $tplSetName;
+    /** @var string Name of an active template set. */
+    private static string $tplSetName = '';
 
     /** @var array<string, string> The array with the templates */
     public array $templates = [];

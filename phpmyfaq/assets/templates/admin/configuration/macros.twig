@@ -1,0 +1,95 @@
+
+{# Macros #}
+
+{# input type=checkbox #}
+{% macro generateCheckbox(key, config, special) %}
+  {% set checked = config[key] == 'true' ? ' checked' : '' %}
+
+  {% set disabled = '' %}
+  {% if key == 'ldap.ldapSupport' and special.ldapSupport != 1 %}
+    {% set disabled = ' disabled' %}
+  {% elseif key in ['security.useSslForLogins', 'security.useSslOnly'] and special.useSslForLogins != 1 and special.useSslOnly != 1 %}
+    {% set disabled = ' disabled' %}
+  {% elseif key == 'security.ssoSupport' and special.ssoSupport != 1 %}
+    {% set disabled = ' disabled' %}
+  {% endif %}
+
+  <div class="form-check">
+    <h1>
+      {{ special.ssoSupport }}
+    </h1>
+    <input class="form-check-input" type="checkbox" name="edit[{{ key }}" value="true"{{ checked }}{{ disabled }}>
+  </div>
+{% endmacro %}
+
+
+
+{# input type=password #}
+{% macro generatePasswordInput(key, value) %}
+  <input class="form-control" type="password" autocomplete="off" name="edit[{{ key }}]" value="{{ value|e('html_attr') }}">
+{% endmacro %}
+
+
+
+{# input type=text, email, url #}
+{% macro generateInputGroup(key, config) %}
+  {% set value = config[key] | replace({'"': '&quot;'}) %}
+
+  {% set type = {
+    'main.administrationMail': 'email',
+    'main.referenceURL': 'url',
+    'main.privacyURL': 'url',
+    'main.urlValidateInterval': 'number',
+    'records.maxAttachmentSize': 'number',
+    'records.numberOfRecordsPerPage': 'number',
+    'records.numberOfShownNewsEntries': 'number',
+    'records.numberOfRelatedArticles': 'number',
+    'search.numberSearchTerms': 'number',
+    'mail.remoteSMTPPort': 'number',
+    'ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION': 'number',
+    'ldap.ldap_options.LDAP_OPT_REFERRALS': 'number',
+  }[key] | default('text') %}
+
+  <div class="input-group">
+    <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]" value="{{ value|e('html_attr') }}" step="1" min="0">
+
+    {% if key == 'api.apiClientToken' %}
+      <div class="input-group-append">
+        <button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">Generate API Client Token</button>
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+
+
+{# button #}
+{% macro sendTestMailButton(key) %}
+  <button type="button" class="btn btn-primary" id="btn-phpmyfaq-{{ key|replace({'.': '-'}) }}" onclick="handleSendTestMail()">{{ key }}</button>
+{% endmacro %}
+
+
+
+{# textarea #}
+{% macro generateTextarea(key, value) %}
+  <textarea name="edit[{{ key }}]" rows="4" class="form-control">{{ value|e }}</textarea>
+{% endmacro %}
+
+
+
+{# inout type=text readonly #}
+{% macro readOnlyTextInput(key, config) %}
+  {% set value = config[key] | replace({'"': '&quot;'}) %}
+
+  <input type="text" readonly name="edit[{{ key }}]" class="form-control-plaintext" value="{{ value|e('html_attr') }}">
+{% endmacro %}
+
+
+
+{% macro generateSelectBox(key, config) %}
+  {% set value = config[key] | replace({'"': '&quot;'}) %}
+
+  <select name="edit[{{ key }}]" class="form-select">
+    <!-- <option value="{{ value|e('html_attr') }}">{{ value|e('html_attr') }}</option> -->
+  </select>
+{% endmacro %}

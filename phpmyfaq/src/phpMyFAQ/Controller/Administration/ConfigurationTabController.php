@@ -19,7 +19,10 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\System;
 use phpMyFAQ\Template\TemplateException;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,11 +39,61 @@ class ConfigurationTabController extends AbstractController
 
         $mode = $request->get('mode');
 
+        $configurationList = Translation::getConfigurationItems($mode);
+
         return $this->render(
             './admin/configuration/tab-list.twig',
             [
                 'mode' => $mode,
+                'configurationList' => $configurationList,
+                'configurationData' => $configuration->getAll(),
+                'specialCases' => [
+                    'ldapSupport' => extension_loaded('ldap'),
+                    'useSslForLogins' => Request::createFromGlobals()->isSecure(),
+                    'useSslOnly' => Request::createFromGlobals()->isSecure(),
+                    'ssoSupport' => Request::createFromGlobals()->server->get('REMOTE_USER')
+                ]
             ]
         );
+    }
+
+    #[Route('admin/api/configuration/translations')]
+    public function translations(): Response
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $response = new Response();
+
+        $languages = LanguageHelper::getAvailableLanguages();
+        if (count($languages) > 0) {
+            return $response->setContent(LanguageHelper::renderLanguageOptions(
+                str_replace(
+                    [ 'language_', '.php', ],
+                    '',
+                    $configuration->get('main.language')
+                ),
+                false,
+                true
+            ));
+        } else {
+            return $response->setContent('<option value="language_en.php">English</option>');
+        }
+    }
+
+    public function templates(): Response
+    {
+        $response = new Response();
+        $faqSystem = new System();
+        $templates = $faqSystem->getAvailableTemplates();
+        $htmlString = '';
+
+        foreach ($templates as $template => $selected) {
+            $htmlString .= sprintf(
+                '<option%s>%s</option>',
+                ($selected === true ? ' selected' : ''),
+                $template
+            );
+        }
+
+        return $response->setContent($htmlString);
     }
 }

@@ -92,6 +92,11 @@ $routes->add(
 // Configuration API
 //
 $routes->add(
+    'admin.api.configuration.list',
+    new Route('/configuration/list/{mode}', ['_controller' => [ConfigurationTabController::class, 'list']])
+);
+
+$routes->add(
     'admin.api.configuration.send-test-mail',
     new Route(
         '/configuration/send-test-mail',
@@ -103,8 +108,13 @@ $routes->add(
 );
 
 $routes->add(
-    'admin.api.configuration.list',
-    new Route('/configuration/list/{mode}', ['_controller' => [ConfigurationTabController::class, 'list']])
+    'admin.api.configuration.translations',
+    new Route('/configuration/translations', ['_controller' => [ConfigurationTabController::class, 'translations']])
+);
+
+$routes->add(
+    'admin.api.configuration.templates',
+    new Route('/configuration/templates', ['_controller' => [ConfigurationTabController::class, 'templates']])
 );
 
 //

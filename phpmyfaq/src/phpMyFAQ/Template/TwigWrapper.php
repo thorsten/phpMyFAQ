@@ -24,6 +24,7 @@ use Twig\Error\SyntaxError;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\TemplateWrapper;
+use Twig\TwigFunction;
 
 class TwigWrapper
 {
@@ -50,5 +51,10 @@ class TwigWrapper
     public function addExtension(ExtensionInterface $extension): void
     {
         $this->twig->addExtension($extension);
+    }
+
+    public function addFunction(TwigFunction $function): void
+    {
+        $this->twig->addFunction($function);
     }
 }
