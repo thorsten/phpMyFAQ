@@ -99,11 +99,19 @@ class ConfigurationTabController extends AbstractController
         return $response->setContent($htmlString);
     }
 
-    #[Route('admin/api/configuration/faqs-order')]
-    public function faqsOrder(Request $request): Response
+    #[Route('admin/api/configuration/faqs-sorting-key')]
+    public function faqsSortingKey(Request $request): Response
     {
         return new Response(
-            AdministrationHelper::sortingOptions($request->get('current'))
+            AdministrationHelper::sortingKeyOptions($request->get('current'))
+        );
+    }
+
+    #[Route('admin/api/configuration/faqs-sorting-order')]
+    public function faqsSortingOrder(Request $request): Response
+    {
+        return new Response(
+            AdministrationHelper::sortingOrderOptions($request->get('current'))
         );
     }
 }

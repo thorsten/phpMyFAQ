@@ -133,36 +133,37 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?ac
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
 
 # User pages
-RewriteRule user/ucp                               index.php?action=ucp [L,QSA]
-RewriteRule user/bookmarks                         index.php?action=bookmarks [L,QSA]
-RewriteRule user/request-removal                   index.php?action=request-removal [L,QSA]
-RewriteRule user/logout                            index.php?action=logout [L,QSA]
+RewriteRule user/ucp                                        index.php?action=ucp [L,QSA]
+RewriteRule user/bookmarks                                  index.php?action=bookmarks [L,QSA]
+RewriteRule user/request-removal                            index.php?action=request-removal [L,QSA]
+RewriteRule user/logout                                     index.php?action=logout [L,QSA]
 
 # Private APIs
-RewriteRule api/autocomplete                       api/index.php
-RewriteRule api/bookmark/([0-9]+)                  api/index.php
+RewriteRule api/autocomplete                                api/index.php [L,QSA]
+RewriteRule api/bookmark/([0-9]+)                           api/index.php [L,QSA]
 
 # Setup APIs
-RewriteRule api/setup/check                        api/index.php
-RewriteRule api/setup/backup                       api/index.php
-RewriteRule api/setup/update-database              api/index.php
+RewriteRule api/setup/check                                 api/index.php [L,QSA]
+RewriteRule api/setup/backup                                api/index.php [L,QSA]
+RewriteRule api/setup/update-database                       api/index.php [L,QSA]
 
 # Administration API
-RewriteRule admin/api/category/permissions         admin/api/index.php
-RewriteRule admin/api/category/update-order        admin/api/index.php
-RewriteRule admin/api/configuration/faqs-order     admin/api/index.php
-RewriteRule admin/api/configuration/list           admin/api/index.php
-RewriteRule admin/api/configuration/send-test-mail admin/api/index.php
-RewriteRule admin/api/configuration/templates      admin/api/index.php
-RewriteRule admin/api/configuration/translations   admin/api/index.php
-RewriteRule admin/api/content/attachments          admin/api/index.php
-RewriteRule admin/api/content/attachments/upload   admin/api/index.php
-RewriteRule admin/api/content/comments             admin/api/index.php
-RewriteRule admin/api/content/images               admin/api/index.php
-RewriteRule admin/api/content/markdown             admin/api/index.php
-RewriteRule admin/api/content/tags                 admin/api/index.php
-RewriteRule admin/api/content/tag                  admin/api/index.php
-RewriteRule admin/api/dashboard/versions           admin/api/index.php
+RewriteRule admin/api/category/permissions                  admin/api/index.php [L,QSA]
+RewriteRule admin/api/category/update-order                 admin/api/index.php [L,QSA]
+RewriteRule admin/api/configuration/faqs-sorting-key        admin/api/index.php [L,QSA]
+RewriteRule admin/api/configuration/faqs-sorting-options    admin/api/index.php [L,QSA]
+RewriteRule admin/api/configuration/list                    admin/api/index.php [L,QSA]
+RewriteRule admin/api/configuration/send-test-mail          admin/api/index.php
+RewriteRule admin/api/configuration/templates               admin/api/index.php
+RewriteRule admin/api/configuration/translations            admin/api/index.php
+RewriteRule admin/api/content/attachments                   admin/api/index.php
+RewriteRule admin/api/content/attachments/upload            admin/api/index.php
+RewriteRule admin/api/content/comments                      admin/api/index.php
+RewriteRule admin/api/content/images                        admin/api/index.php
+RewriteRule admin/api/content/markdown                      admin/api/index.php
+RewriteRule admin/api/content/tags                          admin/api/index.php
+RewriteRule admin/api/content/tag                           admin/api/index.php
+RewriteRule admin/api/dashboard/versions                    admin/api/index.php
 RewriteRule admin/api/dashboard/visits             admin/api/index.php
 RewriteRule admin/api/elasticsearch/create         admin/api/index.php
 RewriteRule admin/api/elasticsearch/drop           admin/api/index.php

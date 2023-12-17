@@ -22,32 +22,38 @@ export const handleConfiguration = async () => {
     configTabList.forEach((element) => {
       const configTabTrigger = new Tab(element);
       element.addEventListener('shown.bs.tab', async (event) => {
+        console.log('tab switch');
         event.preventDefault();
         let target = event.target.getAttribute('href');
-        fetchConfiguration(target);
-        switch (target) {
-          case '#main':
-            await handleTranslation();
-            await handleTemplates();
-            break;
-          case '#records':
-            await handleFaqsOrder();
-            break;
-        }
-        tabLoaded = true;
-        configTabTrigger.show();
+        fetchConfiguration(target).then(async () => {
+          switch (target) {
+            case '#main':
+              await handleTranslation();
+              await handleTemplates();
+              break;
+            case '#records':
+              await handleFaqsSortingKeys();
+              break;
+          }
+          tabLoaded = true;
+          configTabTrigger.show();
+        });
       });
     });
 
     if (!tabLoaded) {
-      fetchConfiguration('#main');
+      fetchConfiguration('#main').then(async () => {
+        await handleTranslation();
+        await handleTemplates();
+      });
     }
   }
 };
 
 export const handleTranslation = async () => {
   const translationSelectBox = document.getElementsByName('edit[main.language]');
-  if (translationSelectBox.length > 0) {
+
+  if (translationSelectBox !== null) {
     const options = await fetchTranslations();
     translationSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
@@ -55,23 +61,23 @@ export const handleTranslation = async () => {
 
 export const handleTemplates = async () => {
   const templateSelectBox = document.getElementsByName('edit[main.templateSet]');
-  if (templateSelectBox.length > 0) {
+  if (templateSelectBox !== null) {
     const options = await fetchTemplates();
     templateSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-export const handleFaqsOrder = async () => {
+export const handleFaqsSortingKeys = async () => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]');
-  if (faqsOrderSelectBox.length > 0) {
-    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
 
-    const options = await fetchFaqsOrder(currentValue);
+  if (faqsOrderSelectBox !== null) {
+    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const options = await fetchFaqsSortingKeys(currentValue);
     faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const fetchConfiguration = (target) => {
+const fetchConfiguration = async (target) => {
   //fetch(`index.php?action=ajax&ajax=configuration-list&conf=${target.substr(1)}`)
   fetch(`./api/configuration/list/${target.substr(1)}`)
     .then(
@@ -139,8 +145,8 @@ const fetchTemplates = async () => {
     });
 };
 
-const fetchFaqsOrder = async (currentValue) => {
-  return await fetch(`./api/configuration/faqs-order/${currentValue}`)
+const fetchFaqsSortingKeys = async (currentValue) => {
+  return await fetch(`./api/configuration/faqs-sorting-key/${currentValue}`)
     .then(
       (response) => {
         if (response.ok) {

@@ -160,9 +160,9 @@ class AdministrationHelper
     }
 
     /**
-     * Returns all sorting possibilities for FAQ records.
+     * Returns all key sorting possibilities for FAQ records.
      */
-    public static function sortingOptions(string $current): string
+    public static function sortingKeyOptions(string $current): string
     {
         $options = ['id', 'thema', 'visits', 'updated', 'author'];
         $output = '';
@@ -173,6 +173,26 @@ class AdministrationHelper
                 $value,
                 ($value == $current) ? 'selected' : '',
                 Translation::get('ad_conf_order_' . $value)
+            );
+        }
+
+        return $output;
+    }
+
+    /**
+     * Returns all order sorting possibilities for FAQ records.
+     */
+    public static function sortingOrderOptions(string $current): string
+    {
+        $options = ['ASC', 'DESC'];
+        $output = '';
+
+        foreach ($options as $value) {
+            printf(
+                '<option value="%s" %s>%s</option>',
+                $value,
+                ($value == $current) ? 'selected' : '',
+                Translation::get('ad_conf_' . strtolower($value))
             );
         }
 

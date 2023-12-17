@@ -92,10 +92,18 @@ $routes->add(
 // Configuration API
 //
 $routes->add(
-    'admin.api.configuration.faqs-order',
+    'admin.api.configuration.faqs-sorting-key',
     new Route(
-        '/configuration/faqs-order/{current}',
-        ['_controller' => [ConfigurationTabController::class, 'faqsOrder']]
+        '/configuration/faqs-sorting-key/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'faqsSortingKey']]
+    )
+);
+
+$routes->add(
+    'admin.api.configuration.faqs-sorting-order',
+    new Route(
+        '/configuration/faqs-sorting-order/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'faqsSortingOrder']]
     )
 );
 
