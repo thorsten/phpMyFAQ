@@ -22,30 +22,30 @@ export const handleConfiguration = async () => {
     configTabList.forEach((element) => {
       const configTabTrigger = new Tab(element);
       element.addEventListener('shown.bs.tab', async (event) => {
-        console.log('tab switch');
         event.preventDefault();
         let target = event.target.getAttribute('href');
-        fetchConfiguration(target).then(async () => {
-          switch (target) {
-            case '#main':
-              await handleTranslation();
-              await handleTemplates();
-              break;
-            case '#records':
-              await handleFaqsSortingKeys();
-              break;
-          }
-          tabLoaded = true;
-          configTabTrigger.show();
-        });
+        await fetchConfiguration(target);
+
+        switch (target) {
+          case '#main':
+            await handleTranslation();
+            await handleTemplates();
+            break;
+          case '#records':
+            await handleFaqsSortingKeys();
+            await handleFaqsSortingOrder();
+            break;
+        }
+
+        tabLoaded = true;
+        configTabTrigger.show();
       });
     });
 
     if (!tabLoaded) {
-      fetchConfiguration('#main').then(async () => {
-        await handleTranslation();
-        await handleTemplates();
-      });
+      await fetchConfiguration('#main');
+      await handleTranslation();
+      await handleTemplates();
     }
   }
 };
@@ -69,7 +69,6 @@ export const handleTemplates = async () => {
 
 export const handleFaqsSortingKeys = async () => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]');
-
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
     const options = await fetchFaqsSortingKeys(currentValue);
@@ -77,91 +76,93 @@ export const handleFaqsSortingKeys = async () => {
   }
 };
 
+export const handleFaqsSortingOrder = async () => {
+  const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]');
+  if (faqsOrderSelectBox !== null) {
+    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const options = await fetchFaqsSortingOrder(currentValue);
+    faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
 const fetchConfiguration = async (target) => {
-  //fetch(`index.php?action=ajax&ajax=configuration-list&conf=${target.substr(1)}`)
-  fetch(`./api/configuration/list/${target.substr(1)}`)
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.text();
-        }
-        throw new Error('Request failed!');
-      },
-      (networkError) => {
-        console.log(networkError.message);
-      }
-    )
-    .then((html) => {
-      const tabContent = document.querySelector(target);
-      while (tabContent.firstChild) {
-        tabContent.removeChild(tabContent.firstChild);
-      }
-      tabContent.innerHTML = html.toString();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  try {
+    const response = await fetch(`./api/configuration/list/${target.substring(1)}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    const html = await response.text();
+    const tabContent = document.querySelector(target);
+
+    while (tabContent.firstChild) {
+      tabContent.removeChild(tabContent.firstChild);
+    }
+
+    tabContent.innerHTML = html.toString();
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const fetchTranslations = async () => {
-  return await fetch(`./api/configuration/translations`)
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.text();
-        }
-        throw new Error('Request failed!');
-      },
-      (networkError) => {
-        console.log(networkError.message);
-      }
-    )
-    .then((html) => {
-      return html;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  try {
+    const response = await fetch(`./api/configuration/translations`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const fetchTemplates = async () => {
-  return await fetch(`./api/configuration/templates`)
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.text();
-        }
-        throw new Error('Request failed!');
-      },
-      (networkError) => {
-        console.log(networkError.message);
-      }
-    )
-    .then((html) => {
-      return html;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  try {
+    const response = await fetch(`./api/configuration/templates`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const fetchFaqsSortingKeys = async (currentValue) => {
-  return await fetch(`./api/configuration/faqs-sorting-key/${currentValue}`)
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.text();
-        }
-        throw new Error('Request failed!');
-      },
-      (networkError) => {
-        console.log(networkError.message);
-      }
-    )
-    .then((html) => {
-      return html;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  try {
+    const response = await fetch(`./api/configuration/faqs-sorting-key/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const fetchFaqsSortingOrder = async (currentValue) => {
+  try {
+    const response = await fetch(`./api/configuration/faqs-sorting-order/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
 };

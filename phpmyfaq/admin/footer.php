@@ -101,5 +101,6 @@ if ($user->isLoggedIn()) {
     <?php
 }
 ?>
+<script src="../assets/dist/backend.js?<?= time(); ?>"></script>
 </body>
 </html>

@@ -230,7 +230,6 @@ switch ($action) {
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="../assets/dist/admin.css">
 
-  <script src="../assets/dist/backend.js?<?= time(); ?>"></script>
   <script src="assets/js/configuration.js"></script>
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">
 </head>
