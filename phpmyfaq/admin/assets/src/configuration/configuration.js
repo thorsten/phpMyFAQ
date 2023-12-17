@@ -35,6 +35,9 @@ export const handleConfiguration = async () => {
             await handleFaqsSortingKeys();
             await handleFaqsSortingOrder();
             break;
+          case '#security':
+            await handlePermLevel();
+            break;
         }
 
         tabLoaded = true;
@@ -80,8 +83,17 @@ export const handleFaqsSortingOrder = async () => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]');
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
-    const options = await fetchFaqsSortingOrder(currentValue);
+    const options = await fetchPermLevel(currentValue);
     faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handlePermLevel = async () => {
+  const permLevelSelectBox = document.getElementsByName('edit[security.permLevel]');
+  if (permLevelSelectBox !== null) {
+    const currentValue = permLevelSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const options = await fetchPermLevel(currentValue);
+    permLevelSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
@@ -155,6 +167,21 @@ const fetchFaqsSortingKeys = async (currentValue) => {
 const fetchFaqsSortingOrder = async (currentValue) => {
   try {
     const response = await fetch(`./api/configuration/faqs-sorting-order/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const fetchPermLevel = async (currentValue) => {
+  try {
+    const response = await fetch(`./api/configuration/perm-level/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');

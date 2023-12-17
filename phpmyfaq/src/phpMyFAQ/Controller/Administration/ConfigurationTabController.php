@@ -21,6 +21,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Translation;
@@ -112,6 +113,13 @@ class ConfigurationTabController extends AbstractController
     {
         return new Response(
             AdministrationHelper::sortingOrderOptions($request->get('current'))
+        );
+    }
+    #[Route('admin/api/configuration/perm-level')]
+    public function permLevel(Request $request): Response
+    {
+        return new Response(
+            PermissionHelper::permOptions($request->get('current'))
         );
     }
 }

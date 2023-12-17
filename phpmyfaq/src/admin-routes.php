@@ -113,6 +113,14 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.configuration.permLevel',
+    new Route(
+        '/configuration/perm-level/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'permLevel']]
+    )
+);
+
+$routes->add(
     'admin.api.configuration.send-test-mail',
     new Route(
         '/configuration/send-test-mail',

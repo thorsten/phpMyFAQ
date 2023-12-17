@@ -46,24 +46,6 @@ function renderInputForm(mixed $key, string $type): void
             printf('<select name="edit[%s]" class="form-select">', $key);
 
             switch ($key) {
-                case 'records.sortby':
-                    printf(
-                        '<option value="DESC" %s>%s</option>',
-                        ('DESC' == $faqConfig->get($key)) ? 'selected' : '',
-                        Translation::get('ad_conf_desc')
-                    );
-                    printf(
-                        '<option value="ASC" %s>%s</option>',
-                        ('ASC' == $faqConfig->get($key)) ? 'selected' : '',
-                        Translation::get('ad_conf_asc')
-                    );
-                    break;
-
-                case 'security.permLevel':
-                    echo PermissionHelper::permOptions($faqConfig->get($key));
-                    break;
-
-
                 case 'records.attachmentsStorageType':
                     foreach (Translation::get('att_storage_type') as $i => $item) {
                         $selected = (int)$faqConfig->get($key) === $i ? ' selected' : '';
@@ -147,45 +129,6 @@ function renderInputForm(mixed $key, string $type): void
             }
 
             echo "</select>\n</div>\n";
-            break;
-
-        case 'checkbox':
-            printf(
-                '<div class="form-check"><input class="form-check-input" type="checkbox" name="edit[%s]" value="true"',
-                $key
-            );
-            if ($faqConfig->get($key)) {
-                echo ' checked';
-            }
-            if ('ldap.ldapSupport' === $key && !extension_loaded('ldap')) {
-                echo ' disabled';
-            }
-            if ('security.useSslForLogins' === $key && !Request::createFromGlobals()->isSecure()) {
-                echo ' disabled';
-            }
-            if ('security.useSslOnly' === $key && !Request::createFromGlobals()->isSecure()) {
-                echo ' disabled';
-            }
-            if ('security.ssoSupport' === $key && !Request::createFromGlobals()->server->get('REMOTE_USER')) {
-                echo ' disabled';
-            }
-            echo '></div></div>';
-            break;
-
-        case 'print':
-            printf(
-                '<input type="text" readonly name="edit[%s]" class="form-control-plaintext" value="%s"></div>',
-                $key,
-                str_replace('"', '&quot;', $faqConfig->get($key) ?? '')
-            );
-            break;
-
-        case 'button':
-            printf(
-                '<button type="button" class="btn btn-primary" id="btn-phpmyfaq-%s" onclick="handleSendTestMail()">%s</button></div>',
-                str_replace('.', '-', $key),
-                Translation::get($key)
-            );
             break;
     }
 }
