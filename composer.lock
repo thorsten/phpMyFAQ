@@ -360,16 +360,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "5.0.2",
+            "version": "5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "e58d34fa0b86a62696144baba9d80ee98845f957"
+                "reference": "c4c864a401da6afa763dfef887b131bfcc78b535"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/e58d34fa0b86a62696144baba9d80ee98845f957",
-                "reference": "e58d34fa0b86a62696144baba9d80ee98845f957",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/c4c864a401da6afa763dfef887b131bfcc78b535",
+                "reference": "c4c864a401da6afa763dfef887b131bfcc78b535",
                 "shasum": ""
             },
             "require": {
@@ -380,7 +380,7 @@
                 "khanamiryan/qrcode-detector-decoder": "^1.0.6"
             },
             "require-dev": {
-                "endroid/quality": "dev-master",
+                "endroid/quality": "dev-main",
                 "ext-gd": "*",
                 "khanamiryan/qrcode-detector-decoder": "^1.0.4||^2.0.2",
                 "setasign/fpdf": "^1.8.2"
@@ -394,7 +394,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.x-dev"
+                    "dev-main": "5.x-dev"
                 }
             },
             "autoload": {
@@ -423,7 +423,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/5.0.2"
+                "source": "https://github.com/endroid/qr-code/tree/5.0.3"
             },
             "funding": [
                 {
@@ -431,7 +431,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-04T22:55:54+00:00"
+            "time": "2023-12-19T23:41:52+00:00"
         },
         {
             "name": "erusev/parsedown",
