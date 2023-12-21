@@ -168,7 +168,7 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $value) {
-            printf(
+            $output .= sprintf(
                 '<option value="%s" %s>%s</option>',
                 $value,
                 ($value == $current) ? 'selected' : '',
@@ -188,7 +188,7 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $value) {
-            printf(
+            $output .= sprintf(
                 '<option value="%s" %s>%s</option>',
                 $value,
                 ($value == $current) ? 'selected' : '',

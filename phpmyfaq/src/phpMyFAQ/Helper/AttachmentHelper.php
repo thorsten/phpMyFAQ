@@ -53,6 +53,18 @@ class AttachmentHelper
         return $html . '</ul>';
     }
 
+    public static function renderAttachmentsStorageType(string $current): string
+    {
+        $output = '';
+
+        foreach (Translation::get('att_storage_type') as $i => $item) {
+            $selected = (int)$current === $i ? ' selected' : '';
+            $output .= sprintf('<option value="%d"%s>%s</option>', $i, $selected, $item);
+        }
+
+        return $output;
+    }
+
     private function mapMimeTypeToIcon(string $mimeType): string
     {
         return match ($mimeType) {

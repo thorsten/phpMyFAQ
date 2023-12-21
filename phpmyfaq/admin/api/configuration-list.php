@@ -20,8 +20,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
-use phpMyFAQ\Helper\PermissionHelper;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 
