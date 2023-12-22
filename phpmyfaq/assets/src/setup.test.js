@@ -7,15 +7,17 @@ describe('selectDatabaseSetup', () => {
 
   beforeEach(() => {
     document.body.innerHTML = `
-      <select id="databaseSelect">
-        <option value="mysqli">MySQL</option>
-        <option value="pgsql">PostgreSQL</option>
-        <option value="sqlsrv">SQL Server</option>
-        <option value="sqlite3">SQLite</option>
-      </select>
-      <input type="text" id="dbdatafull">
-      <input type="text" id="sql_port">
-      <div id="dbsqlite"></div>
+      <form id="phpmyfaq-setup-form">
+        <select id="databaseSelect">
+          <option value="mysqli">MySQL</option>
+          <option value="pgsql">PostgreSQL</option>
+          <option value="sqlsrv">SQL Server</option>
+          <option value="sqlite3">SQLite</option>
+        </select>
+        <input type="text" id="dbdatafull">
+        <input type="text" id="sql_port">
+        <div id="dbsqlite"></div>
+      </form>
     `;
     database = document.getElementById('dbdatafull');
     databasePort = document.getElementById('sql_port');
