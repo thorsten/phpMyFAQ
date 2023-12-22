@@ -16,9 +16,23 @@
 import { insertAfter } from '../utils';
 
 export const selectDatabaseSetup = (event) => {
+  const form = document.getElementById('phpmyfaq-setup-form');
+  const inputs = form.getElementsByTagName('input');
   const database = document.getElementById('dbdatafull');
   const databasePort = document.getElementById('sql_port');
   const sqlite = document.getElementById('dbsqlite');
+
+  if (event.target.value === 'sqlite3') {
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].removeAttribute('required');
+    }
+  } else {
+    document.getElementById('sql_server')?.setAttribute('required', 'required');
+    document.getElementById('sql_port')?.setAttribute('required', 'required');
+    document.getElementById('sql_user')?.setAttribute('required', 'required');
+    document.getElementById('faqpassword')?.setAttribute('required', 'required');
+    document.getElementById('sql_db')?.setAttribute('required', 'required');
+  }
 
   switch (event.target.value) {
     case 'mysqli':

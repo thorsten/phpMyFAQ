@@ -108,6 +108,14 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.configuration.faqs-sorting-popular',
+    new Route(
+        '/configuration/faqs-sorting-popular/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'faqsSortingPopular']]
+    )
+);
+
+$routes->add(
     'admin.api.configuration.list',
     new Route('/configuration/list/{mode}', ['_controller' => [ConfigurationTabController::class, 'list']])
 );
@@ -119,7 +127,13 @@ $routes->add(
         ['_controller' => [ConfigurationTabController::class, 'permLevel']]
     )
 );
-
+$routes->add(
+    'admin.api.configuration.search-relevance',
+    new Route(
+        '/configuration/search-relevance/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'searchRelevance']]
+    )
+);
 $routes->add(
     'admin.api.configuration.send-test-mail',
     new Route(

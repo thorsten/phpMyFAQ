@@ -34,6 +34,10 @@ export const handleConfiguration = async () => {
           case '#records':
             await handleFaqsSortingKeys();
             await handleFaqsSortingOrder();
+            await handleFaqsSortingPopular();
+            break;
+          case '#search':
+            await handleSearchRelevance();
             break;
           case '#security':
             await handlePermLevel();
@@ -88,12 +92,30 @@ export const handleFaqsSortingOrder = async () => {
   }
 };
 
+export const handleFaqsSortingPopular = async () => {
+  const faqsPopularSelectBox = document.getElementsByName('edit[records.orderingPopularFaqs]');
+  if (faqsPopularSelectBox !== null) {
+    const currentValue = faqsPopularSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const options = await fetchFaqsSortingPopular(currentValue);
+    faqsPopularSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
 export const handlePermLevel = async () => {
   const permLevelSelectBox = document.getElementsByName('edit[security.permLevel]');
   if (permLevelSelectBox !== null) {
     const currentValue = permLevelSelectBox[0].dataset.pmfConfigurationCurrentValue;
     const options = await fetchPermLevel(currentValue);
     permLevelSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleSearchRelevance = async () => {
+  const searchRelevanceSelectBox = document.getElementsByName('edit[search.relevance]');
+  if (searchRelevanceSelectBox !== null) {
+    const currentValue = searchRelevanceSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const options = await fetchSearchRelevance(currentValue);
+    searchRelevanceSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
@@ -179,9 +201,39 @@ const fetchFaqsSortingOrder = async (currentValue) => {
   }
 };
 
+const fetchFaqsSortingPopular = async (currentValue) => {
+  try {
+    const response = await fetch(`./api/configuration/faqs-sorting-popular/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 const fetchPermLevel = async (currentValue) => {
   try {
     const response = await fetch(`./api/configuration/perm-level/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const fetchSearchRelevance = async (currentValue) => {
+  try {
+    const response = await fetch(`./api/configuration/search-relevance/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');

@@ -115,11 +115,27 @@ class ConfigurationTabController extends AbstractController
             AdministrationHelper::sortingOrderOptions($request->get('current'))
         );
     }
+
+    #[Route('admin/api/configuration/faqs-sorting-popular')]
+    public function faqsSortingPopular(Request $request): Response
+    {
+        return new Response(
+            AdministrationHelper::sortingPopularFaqsOptions($request->get('current'))
+        );
+    }
     #[Route('admin/api/configuration/perm-level')]
     public function permLevel(Request $request): Response
     {
         return new Response(
             PermissionHelper::permOptions($request->get('current'))
+        );
+    }
+
+    #Route('admin/api/configuration/search-relevance')
+    public function searchRelevance(Request $request): Response
+    {
+        return new Response(
+            AdministrationHelper::searchRelevanceOptions($request->get('current'))
         );
     }
 }

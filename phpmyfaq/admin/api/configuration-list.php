@@ -44,53 +44,6 @@ function renderInputForm(mixed $key, string $type): void
             printf('<select name="edit[%s]" class="form-select">', $key);
 
             switch ($key) {
-                case 'records.orderingPopularFaqs':
-                    printf(
-                        '<option value="visits"%s>%s</option>',
-                        ('visits' === $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('records.orderingPopularFaqs.visits')
-                    );
-                    printf(
-                        '<option value="voting"%s>%s</option>',
-                        ('voting' === $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('records.orderingPopularFaqs.voting')
-                    );
-                    break;
-
-                case 'search.relevance':
-                    printf(
-                        '<option value="thema,content,keywords"%s>%s</option>',
-                        ('thema,content,keywords' == $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('search.relevance.thema-content-keywords')
-                    );
-                    printf(
-                        '<option value="thema,keywords,content"%s>%s</option>',
-                        (
-                            'thema,keywords,content' == $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('search.relevance.thema-keywords-content')
-                    );
-                    printf(
-                        '<option value="content,thema,keywords"%s>%s</option>',
-                        ('content,thema,keywords' == $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('search.relevance.content-thema-keywords')
-                    );
-                    printf(
-                        '<option value="content,keywords,thema"%s>%s</option>',
-                        ('content,keywords,thema' == $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('search.relevance.content-keywords-thema')
-                    );
-                    printf(
-                        '<option value="keywords,content,thema"%s>%s</option>',
-                        ('keywords,content,thema' == $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('search.relevance.keywords-content-thema')
-                    );
-                    printf(
-                        '<option value="keywords,thema,content"%s>%s</option>',
-                        ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected' : '',
-                        Translation::get('search.relevance.keywords-thema-content')
-                    );
-                    break;
-
                 case 'seo.metaTagsHome':
                 case 'seo.metaTagsFaqs':
                 case 'seo.metaTagsCategories':

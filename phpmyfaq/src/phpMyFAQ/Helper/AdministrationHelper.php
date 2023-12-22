@@ -140,23 +140,23 @@ class AdministrationHelper
 
     public function renderMetaRobotsDropdown(string $metaRobots): string
     {
-        $html = '';
-        $values = [
+        $output = '';
+        $options = [
             'index, follow',
             'index, nofollow',
             'noindex, follow',
             'noindex, nofollow',
         ];
 
-        foreach ($values as $value) {
-            $html .= sprintf(
+        foreach ($options as $value) {
+            $output .= sprintf(
                 '<option%s>%s</option>',
                 ($value === $metaRobots) ? ' selected' : '',
                 $value
             );
         }
 
-        return $html;
+        return $output;
     }
 
     /**
@@ -168,11 +168,10 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $value) {
-            $output .= sprintf(
-                '<option value="%s" %s>%s</option>',
+            $output .= AdministrationHelper::generateOption(
+                $current,
                 $value,
-                ($value == $current) ? 'selected' : '',
-                Translation::get('ad_conf_order_' . $value)
+                'ad_conf_order_' . $value
             );
         }
 
@@ -188,14 +187,76 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $value) {
-            $output .= sprintf(
-                '<option value="%s" %s>%s</option>',
+            $output .= AdministrationHelper::generateOption(
+                $current,
                 $value,
-                ($value == $current) ? 'selected' : '',
-                Translation::get('ad_conf_' . strtolower($value))
+                'ad_conf_' . strtolower($value)
             );
         }
 
         return $output;
+    }
+
+    public static function sortingPopularFaqsOptions(string $current): string
+    {
+        $options = ['visits', 'voting'];
+        $output = '';
+
+        foreach ($options as $value) {
+            $output .= AdministrationHelper::generateOption(
+                $current,
+                $value,
+                'records.orderingPopularFaqs.' . $value
+            );
+        }
+
+        return $output;
+    }
+
+    public static function searchRelevanceOptions(string $current): string
+    {
+        $output = '';
+        $output .= AdministrationHelper::generateOption(
+            $current,
+            'thema,content,keywords',
+            'search.relevance.thema-content-keywords'
+        );
+        $output .= AdministrationHelper::generateOption(
+            $current,
+            'thema,keywords,content',
+            'search.relevance.thema-keywords-content'
+        );
+        $output .= AdministrationHelper::generateOption(
+            $current,
+            'content,thema,keywords',
+            'search.relevance.content-thema-keywords'
+        );
+        $output .= AdministrationHelper::generateOption(
+            $current,
+            'content,keywords,thema',
+            'search.relevance.content-keywords-thema'
+        );
+        $output .= AdministrationHelper::generateOption(
+            $current,
+            'keywords,content,thema',
+            'search.relevance.keywords-content-thema'
+        );
+        $output .= AdministrationHelper::generateOption(
+            $current,
+            'keywords,thema,content',
+            'search.relevance.keywords-thema-content'
+        );
+
+        return $output;
+    }
+
+    private static function generateOption(string $current, string $value, string $label): string
+    {
+        return sprintf(
+            '<option value="%s"%s>%s</option>',
+            $value,
+            ($value === $current) ? ' selected' : '',
+            Translation::get($label)
+        );
     }
 }
