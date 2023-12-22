@@ -44,13 +44,6 @@ function renderInputForm(mixed $key, string $type): void
             printf('<select name="edit[%s]" class="form-select">', $key);
 
             switch ($key) {
-                case 'records.attachmentsStorageType':
-                    foreach (Translation::get('att_storage_type') as $i => $item) {
-                        $selected = (int)$faqConfig->get($key) === $i ? ' selected' : '';
-                        printf('<option value="%d"%s>%s</option>', $i, $selected, $item);
-                    }
-                    break;
-
                 case 'records.orderingPopularFaqs':
                     printf(
                         '<option value="visits"%s>%s</option>',

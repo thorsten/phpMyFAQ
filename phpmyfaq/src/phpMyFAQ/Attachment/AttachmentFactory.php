@@ -113,16 +113,11 @@ class AttachmentFactory
     /**
      * Initializing factory with global attachment settings.
      *
-     * @param int    $storageType       Storage type
      * @param string $defaultKey        Default key
      * @param bool   $encryptionEnabled Enabled encryption?
      */
-    public static function init(int $storageType, string $defaultKey, bool $encryptionEnabled): void
+    public static function init(string $defaultKey, bool $encryptionEnabled): void
     {
-        if (null === self::$storageType) {
-            self::$storageType = $storageType;
-        }
-
         if (null === self::$defaultKey) {
             self::$defaultKey = $defaultKey;
         }

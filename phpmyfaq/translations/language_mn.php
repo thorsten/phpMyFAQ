@@ -956,9 +956,6 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(
     "input",
     'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>'
 );
-//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
-//$PMF_LANG['att_storage_type'][0] = 'Filesystem';
-//$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';

@@ -102,7 +102,6 @@ Strings::init($faqLangCode);
  * Initialize attachment factory
  */
 AttachmentFactory::init(
-    $faqConfig->get('records.attachmentsStorageType'),
     $faqConfig->get('records.defaultAttachmentEncKey'),
     $faqConfig->get('records.enableAttachmentEncryption')
 );

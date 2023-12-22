@@ -934,9 +934,6 @@ $PMF_LANG['permission::approverec'] = "通過審核的記錄 (approve records)";
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky 開發者
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "啟用附加檔案加密 <br><small>若是上傳附加檔案設定是關閉的，此選項會被忽略。</small><br>Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", '預設附加檔案加密金鑰 <br><small>附加檔案加密如果是關閉的，便會忽略。</small><br><small><font color="red">強烈注意: 開啟檔案加密之後，以後不可變更!!!</font></small><br>Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array("select", "附加檔案儲存類型 (Attachment storage type)");
-//$PMF_LANG['att_storage_type'][0] = "系統檔案類型 (Filesystem)";
-//$PMF_LANG['att_storage_type'][1] = "資料庫 (Database)";
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten 開發者
 $PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Upgrade";

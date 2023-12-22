@@ -971,9 +971,6 @@ $PMF_LANG['permission::approverec'] = "patvirtinti įrašus";
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
-//$PMF_LANG['att_storage_type'][0] = 'Failų sistema';
-//$PMF_LANG['att_storage_type'][1] = 'Duomenų bazė';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Atnaujinti';

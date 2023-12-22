@@ -952,9 +952,6 @@ $PMF_LANG['permission::approverec'] = "schváliť záznamy";
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
-//$PMF_LANG['att_storage_type'][0] = 'Filesystem';
-//$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';

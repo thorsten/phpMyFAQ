@@ -935,9 +935,6 @@ $PMF_LANG['permission::approverec'] = "kayıt onayla";
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array("select", "Attachment storage type");
-//$PMF_LANG['att_storage_type'][0] = 'Filesystem';
-//$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Yükselt";
