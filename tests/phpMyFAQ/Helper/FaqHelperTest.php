@@ -74,6 +74,20 @@ class FaqHelperTest extends TestCase
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
+
+    public function testCleanUpContentWithUmlauts(): void
+    {
+        $this->expectException(SuspiciousOperationException::class);
+        $this->expectExceptionMessage('Invalid Host');
+
+        $content = '<p>Hellö, wörld!</p>';
+        $expectedOutput = '<p>Hellö, wörld!</p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
     public function testCleanUpContentWithYoutubeContent(): void
     {
         $this->expectException(SuspiciousOperationException::class);

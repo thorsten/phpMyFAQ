@@ -1,7 +1,7 @@
 # phpMyFAQ Manual
 
 phpMyFAQ is a multilingual, completely database-driven FAQ system. It supports various databases to store all data,
-PHP 8.1+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
+PHP 8.1+ is needed to access this data. phpMyFAQ also offers a multi-language Content Management System with a
 WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking,
 40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates with support for
@@ -17,10 +17,10 @@ phpMyFAQ is published under the [Mozilla Public License Version 2.0](http://www.
 license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify and distribute phpMyFAQ.
 
 The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne and the phpMyFAQ Team. Any
-modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program, that may only be accessing
+modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program that may only be accessing
 certain functions of phpMyFAQ is not affected by these restrictions and may be distributed under any type of license.
 
-A commercial usage or commercially distribution of phpMyFAQ, is allowed, as long as the conditions mentioned above are
+A commercial usage or commercial distribution of phpMyFAQ is allowed, as long as the conditions mentioned above are
 met.
 
 We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between the
@@ -33,9 +33,10 @@ This documentation is licensed under a [Creative Commons License](http://creativ
 ### Support
 
 If you should run into any problems using phpMyFAQ check out our support forums at
-[forum.phpmyfaq.de](https://forum.phpmyfaq.de/). You can also use our X account
-[@phpMyFAQ](https://x.com/phpMyFAQ) to ask us short question if they fit into 280 characters. There is no free
-support by phone or email, please refrain from calling or mailing us.
+[forum.phpmyfaq.de](https://forum.phpmyfaq.de/).
+You can also use our BlueSky account [@phpmyfaq.bsky.social](https://bsky.app/profile/phpmyfaq.bsky.social)
+to ask us short question.
+There is no free support by phone or email, please refrain from calling or mailing us.
 
 The phpMyFAQ team offers the following paid services:
 

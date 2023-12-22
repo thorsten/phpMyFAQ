@@ -225,7 +225,7 @@ class FaqHelper extends Helper
      */
     public function cleanUpContent(string $content): string
     {
-        $contentLength = Strings::strlen($content);
+        $contentLength = strlen($content);
         $htmlSanitizer = new HtmlSanitizer(
             (new HtmlSanitizerConfig())
                 ->withMaxInputLength($contentLength + 1)
