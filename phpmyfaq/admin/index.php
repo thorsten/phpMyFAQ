@@ -220,37 +220,6 @@ if (
 //
 [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-//
-// Get action from _GET and _POST first
-//
-$ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_SPECIAL_CHARS);
-if (is_null($ajax)) {
-    $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_SPECIAL_CHARS);
-}
-
-// if performing AJAX operation, needs to branch before header.php
-if (
-    $user->isLoggedIn() &&
-    ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) > 0 ||
-        $user->isSuperAdmin())
-) {
-    if (isset($action) && isset($ajax)) {
-        if ('ajax' === $action ) {
-            switch ($ajax) {
-                // Configuration management
-                case 'configuration-list':
-                    require 'api/configuration-list.php';
-                    break;
-                // Records
-                case 'records':
-                    require 'api/faqs.php';
-                    break;
-            }
-            exit();
-        }
-    }
-}
-
 // are we running a PMF export file request?
 switch ($action) {
     case 'exportfile':
