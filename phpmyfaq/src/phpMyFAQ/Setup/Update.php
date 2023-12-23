@@ -499,6 +499,9 @@ class Update extends Setup
 
             // Remove template metadata tables
             $this->queries[] = sprintf('DROP TABLE %sfaqmeta', Database::getTablePrefix());
+
+            // Blocked statistics browsers
+            $this->configuration->add('main.blockedStatisticBrowsers', '');
         }
     }
 
