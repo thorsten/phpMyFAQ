@@ -481,6 +481,57 @@ class Session
 
         return $users;
     }
+    
+    /**
+     * Calculates the number of visits per day the last 30 days.
+     *
+     * @return array
+     */
+    private function getListOfBlockedBrowsers(): array 
+    {
+        return explode(',', $this->config->get('main.blockedStatisticBrowsers'));
+    }
+
+    /**
+     * Calculates the number of visits per day the last 30 days taking into account the blocked browsers for
+     * the visitor-statistic-chart on the dashboard.
+     *
+     * @var array $completeData    The complete data from $this->getLast30DaysVisits
+     * @return array<int, stdClass>
+     */
+    public function filterLast30DaysVisits(array $completeData) 
+    {
+        $newData = [];
+        foreach ($completeData as $data) {
+            $date = $data->date;
+            $count = $data->number;
+            $timestamp = strtotime($date);
+            if(file_exists(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp))) {
+                $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp)));
+                
+                $blockedBrowsers = $this->getListOfBlockedBrowsers();
+                foreach ($trackingData as $line) {
+                    $dataFile = explode(';', $line);
+                    foreach ($blockedBrowsers as $browser) {
+                        if($dataFile[6] === $browser) {
+                            $count = $count - 1;
+                        }
+                    }
+                }
+                $visit = new stdClass();
+                $visit->date = $date;
+                $visit->number = $count;
+                $newData[] = $visit;
+            }
+            else {
+                $visit = new stdClass();
+                $visit->date = $date;
+                $visit->number = $count;
+                $newData[] = $visit;
+            }
+        }
+        return $newData;
+    }
 
     /**
      * Calculates the number of visits per day the last 30 days.
@@ -520,8 +571,13 @@ class Session
             $visit->number = $stats[$date];
             $completeData[] = $visit;
         }
-
-        return $completeData;
+        
+        if($this->config->get('main.blockedStatisticBrowsers') === '') {
+            return $completeData;
+        }
+        else {
+            return $this->filterLast30DaysVisits($completeData);
+        }
     }
 
     /**
