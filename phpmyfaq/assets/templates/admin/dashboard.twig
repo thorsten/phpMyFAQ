@@ -57,7 +57,34 @@
 {% endif %}
 
 <section class="row masonry-grid">
-  <div class="col-sm-6 col-lg-3 mb-4">
+
+  {% if hasUserTracking %}
+    <div class="col-4 mb-4">
+      <div class="card mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
+        </h5>
+        <div class="card-body">
+          <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if hasUserTracking %}
+    <div class="col-4 mb-4">
+      <div class="card mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
+        </h5>
+        <div class="card-body">
+          <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="col-3 mb-4">
     <div class="card mb-4">
       <h5 class="card-header py-3">
         <i aria-hidden="true" class="fa fa-info-circle"></i> {{ adminDashboardInfoHeader }}
@@ -110,20 +137,7 @@
     </div>
   </div>
 
-  {% if hasUserTracking %}
-    <div class="col-sm-12 col-lg-6 mb-4">
-      <div class="card mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
-        </h5>
-        <div class="card-body">
-          <canvas id="pmf-chart-visits" width="400" height="300"></canvas>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  <div class="col-sm-6 col-lg-3 mb-4">
+  <div class="col-3 mb-4">
     <div class="card mb-4">
       <h5 class="card-header py-3">
         <i aria-hidden="true" class="fa fa-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
@@ -146,7 +160,7 @@
   </div>
 
   {% if hasPermissionEditConfig %}
-    <div class="col-sm-6 col-lg-3 mb-4">
+    <div class="col-3 mb-4">
       <div class="card mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-check"></i> {{ adminDashboardHeaderOnlineInfo }}
@@ -185,8 +199,7 @@
       </div>
     </div>
 
-
-    <div class="col-sm-6 col-lg-3 mb-4">
+    <div class="col-3 mb-4">
       <div class="card mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> {{ adminDashboardHeaderVerification }}

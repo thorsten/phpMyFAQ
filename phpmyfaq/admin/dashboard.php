@@ -53,6 +53,7 @@ $templateVars = [
     'currentVersionApp' => System::getVersion(),
     'adminDashboardInfoHeader' => Translation::get('ad_pmf_info'),
     'adminDashboardInfoVisits' => Translation::get('ad_start_visits'),
+    'adminDashboardHeaderTopTen' => Translation::get('msgTopTen'),
     'adminDashboardInfoNumVisits' => $faqSession->getNumberOfSessions(),
     'adminDashboardInfoFaqs' => Translation::get('ad_start_articles'),
     'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],

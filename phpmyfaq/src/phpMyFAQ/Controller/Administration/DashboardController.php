@@ -21,6 +21,7 @@ use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,6 +63,21 @@ class DashboardController extends AbstractController
         if ($configuration->get('main.enableUserTracking')) {
             $session = new Session($configuration);
             return $this->json($session->getLast30DaysVisits());
+        }
+
+        return $this->json(['error' => 'User tracking is disabled.'], 400);
+    }
+
+    #[Route('admin/api/dashboard/topten')]
+    public function topTen(): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        $configuration = Configuration::getConfigurationInstance();
+
+        if ($configuration->get('main.enableUserTracking')) {
+            $faq = new Faq($configuration);
+            return $this->json($faq->getTopTenData());
         }
 
         return $this->json(['error' => 'User tracking is disabled.'], 400);

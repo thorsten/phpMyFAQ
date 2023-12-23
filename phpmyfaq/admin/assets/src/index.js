@@ -13,7 +13,7 @@
  * @since     2019-12-20
  */
 
-import { getLatestVersion, renderVisitorCharts } from './dashboard';
+import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
 import { sidebarToggle } from './sidebar';
 import {
   handleConfiguration,
@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   sidebarToggle();
 
   // Dashboard
-  renderVisitorCharts();
+  await renderVisitorCharts();
+  await renderTopTenCharts();
   getLatestVersion();
 
   // User -> User Management

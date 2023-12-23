@@ -169,6 +169,7 @@ RewriteRule admin/api/content/images                        admin/api/index.php
 RewriteRule admin/api/content/markdown                      admin/api/index.php
 RewriteRule admin/api/content/tags                          admin/api/index.php
 RewriteRule admin/api/content/tag                           admin/api/index.php
+RewriteRule admin/api/dashboard/topten                      admin/api/index.php
 RewriteRule admin/api/dashboard/versions                    admin/api/index.php
 RewriteRule admin/api/dashboard/visits                      admin/api/index.php
 RewriteRule admin/api/elasticsearch/create                  admin/api/index.php

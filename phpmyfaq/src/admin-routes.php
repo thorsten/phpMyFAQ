@@ -218,6 +218,10 @@ $routes->add(
 // Dashboard API
 //
 $routes->add(
+    'admin.api.dashboard.topten',
+    new Route('/dashboard/topten', ['_controller' => [DashboardController::class, 'topTen']])
+);
+$routes->add(
     'admin.api.dashboard.versions',
     new Route('/dashboard/versions', ['_controller' => [DashboardController::class, 'versions']])
 );

@@ -13,7 +13,7 @@
  * @since     2020-04-22
  */
 
-import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title } from 'chart.js';
+import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title, registerables } from 'chart.js';
 import Masonry from 'masonry-layout';
 import { addElement } from '../../../assets/src/utils';
 
@@ -25,7 +25,7 @@ window.onload = () => {
   }
 };
 
-export const renderVisitorCharts = () => {
+export const renderVisitorCharts = async () => {
   const context = document.getElementById('pmf-chart-visits');
 
   if (context) {
@@ -66,34 +66,97 @@ export const renderVisitorCharts = () => {
       },
     });
 
-    const getData = () => {
-      fetch('./api/dashboard/visits', {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-      })
-        .then(async (response) => {
-          if (response.status === 200) {
-            const visits = await response.json();
-
-            visits.map((visit) => {
-              visitorChart.data.labels.push(visit.date);
-              visitorChart.data.datasets[0].data.push(visit.number);
-            });
-
-            visitorChart.update();
-          }
-        })
-        .catch((error) => {
-          console.log('Request failure: ', error);
+    const getData = async () => {
+      try {
+        const response = await fetch('./api/dashboard/visits', {
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
         });
+
+        if (response.status === 200) {
+          const visits = await response.json();
+
+          visits.forEach((visit) => {
+            visitorChart.data.labels.push(visit.date);
+            visitorChart.data.datasets[0].data.push(visit.number);
+          });
+
+          visitorChart.update();
+        }
+      } catch (error) {
+        console.error('Request failure: ', error);
+      }
     };
 
-    getData();
+    await getData();
+  }
+};
+
+export const renderTopTenCharts = async () => {
+  const context = document.getElementById('pmf-chart-topten');
+
+  if (context) {
+    Chart.register(...registerables);
+
+    let colors = [];
+
+    const doughnutChart = new Chart(context, {
+      type: 'doughnut',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            borderWidth: 1,
+            borderColor: 'white',
+            backgroundColor: colors,
+            label: 'Visitors',
+          },
+        ],
+      },
+    });
+
+    const dynamicColors = () => {
+      const r = Math.floor(Math.random() * 255);
+      const g = Math.floor(Math.random() * 255);
+      const b = Math.floor(Math.random() * 255);
+      return 'rgb(' + r + ',' + g + ',' + b + ')';
+    };
+
+    const getData = async () => {
+      try {
+        const response = await fetch('./api/dashboard/topten', {
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+        });
+
+        if (response.status === 200) {
+          const topTen = await response.json();
+
+          topTen.forEach((faq) => {
+            doughnutChart.data.labels.push(faq.question);
+            doughnutChart.data.datasets[0].data.push(faq.visits);
+            colors.push(dynamicColors());
+          });
+
+          doughnutChart.update();
+        }
+      } catch (error) {
+        console.error('Request failure: ', error);
+      }
+    };
+
+    await getData();
   }
 };
 
