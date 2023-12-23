@@ -351,6 +351,7 @@ class Installer extends Setup
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
         'main.contactInformationHTML' => 'false',
+        'main.blockedStatisticBrowsers' => '',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
