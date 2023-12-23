@@ -222,9 +222,6 @@ if (
 
 // are we running a PMF export file request?
 switch ($action) {
-    case 'exportfile':
-        require 'export.file.php';
-        exit();
     case 'reportexport':
         require 'report.export.php';
         exit();

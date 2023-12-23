@@ -48,14 +48,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryHelper = new CategoryHelper();
                 $categoryHelper->setCategory($category);
                 ?>
-                <form  action="?action=exportfile" method="post" accept-charset="utf-8">
+                <form  action="./api/export/file" method="post" accept-charset="utf-8">
                 <h4><?= Translation::get('ad_export_which_cat') ?></h4>
                 <div class="row mb-2">
-                    <label class="col-lg-2 col-form-label" for="catid">
+                    <label class="col-lg-2 col-form-label" for="categoryId">
                         <?= Translation::get('ad_entry_category') ?>
                     </label>
                     <div class="col-lg-4">
-                        <select name="catid" id="catid" class="form-select">
+                        <select name="categoryId" id="categoryId" class="form-select">
                             <option value="0"><?= Translation::get('msgShowAllCategories') ?></option>
                             <?= $categoryHelper->renderOptions(0) ?>
                         </select>

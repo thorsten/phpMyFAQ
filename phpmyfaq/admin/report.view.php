@@ -139,7 +139,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     ?>
                 </tbody>
             </table>
-            <form action="?action=reportexport" method="post" accept-charset="utf-8">
+            <form action="./api/export/report" method="post" accept-charset="utf-8">
                 <input type="hidden" name="report_category" id="report_category" value="<?= $useCategory ?>">
                 <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?= $useSubcategory ?>">
                 <input type="hidden" name="report_translations" id="report_translations" value="<?= $useTranslation ?>">

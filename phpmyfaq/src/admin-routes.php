@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ConfigurationTabController;
 use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
+use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\FaqController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
@@ -478,6 +479,19 @@ $routes->add(
             '_methods' => 'POST'
         ]
     )
+);
+
+//
+// Export API
+//
+$routes->add(
+    'admin.api.export.file',
+    new Route('/export/file', ['_controller' => [ExportController::class, 'exportFile'], '_methods' => 'POST'])
+);
+
+$routes->add(
+    'admin.api.export.report',
+    new Route('/export/report', ['_controller' => [ExportController::class, 'exportReport'], '_methods' => 'POST'])
 );
 
 return $routes;
