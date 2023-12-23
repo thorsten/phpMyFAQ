@@ -499,7 +499,7 @@ class Session
      * @var array $completeData    The complete data from $this->getLast30DaysVisits
      * @return array<int, stdClass>
      */
-    public function filterLast30DaysVisits(array $completeData):array
+    public function filterLast30DaysVisits(array $completeData): array
     {
         $newData = [];
         foreach ($completeData as $data) {
@@ -569,7 +569,7 @@ class Session
             $visit->number = $stats[$date];
             $completeData[] = $visit;
         }
-        
+
         if ($this->config->get('main.blockedStatisticBrowsers') === '') {
             return $completeData;
         } else {
