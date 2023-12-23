@@ -507,7 +507,8 @@ class Session
             $count = $data->number;
             $timestamp = strtotime($date);
             if (file_exists(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp))) {
-                $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp)));
+                $trackingData = explode
+                    ("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp)));
                 $blockedBrowsers = $this->getListOfBlockedBrowsers();
                 foreach ($trackingData as $line) {
                     $dataFile = explode(';', $line);
