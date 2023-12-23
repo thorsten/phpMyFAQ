@@ -295,7 +295,6 @@ class Sqlsrv implements DatabaseDriver
             $prefix . 'faqgroup_right',
             $prefix . 'faqinstances',
             $prefix . 'faqinstances_config',
-            $prefix . 'faqmeta',
             $prefix . 'faqnews',
             $prefix . 'faqquestions',
             $prefix . 'faqright',
