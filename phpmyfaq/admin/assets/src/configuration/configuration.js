@@ -127,7 +127,7 @@ const handleFaqsSortingOrder = async () => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]');
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
-    const options = await fetchPermLevel(currentValue);
+    const options = await fetchFaqsSortingOrder(currentValue);
     faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
