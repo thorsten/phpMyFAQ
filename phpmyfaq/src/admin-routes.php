@@ -137,6 +137,17 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.configuration.save',
+    new Route(
+        '/configuration',
+        [
+            '_controller' => [ConfigurationTabController::class, 'save'],
+            '_methods' => 'POST'
+        ]
+    )
+);
+
+$routes->add(
     'admin.api.configuration.search-relevance',
     new Route(
         '/configuration/search-relevance/{current}',

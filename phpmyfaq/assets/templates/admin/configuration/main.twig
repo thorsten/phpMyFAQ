@@ -1,5 +1,4 @@
-<form id="configuration-list" name="configuration-list" method="post"
-      action="?action=config&amp;config_action=saveConfig">
+<form id="configuration-list" name="configuration-list" method="post" action="#">
   <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
 
   <div
@@ -8,17 +7,17 @@
       <i aria-hidden="true" class="fa fa-wrench"></i>
       {{ adminHeaderConfiguration }}
     </h1>
+
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <button class="btn btn-sm btn-warning" type="reset">
-          {{ adminConfigurationButtonReset }}
-        </button>
-        <button class="btn btn-sm btn-success" type="submit">
+        <button class="btn btn-sm btn-success" id="save-configuration" type="button">
           {{ adminConfigurationButtonSave }}
         </button>
       </div>
     </div>
   </div>
+
+  <div id="pmf-configuration-result"></div>
 
   <div class="row">
     <div class="col-lg-12">

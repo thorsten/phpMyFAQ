@@ -161,6 +161,7 @@ RewriteRule admin/api/configuration/send-test-mail          admin/api/index.php
 RewriteRule admin/api/configuration/seo-metatags            admin/api/index.php
 RewriteRule admin/api/configuration/templates               admin/api/index.php
 RewriteRule admin/api/configuration/translations            admin/api/index.php
+RewriteRule admin/api/configuration                         admin/api/index.php
 RewriteRule admin/api/content/attachments                   admin/api/index.php
 RewriteRule admin/api/content/attachments/upload            admin/api/index.php
 RewriteRule admin/api/content/comments                      admin/api/index.php

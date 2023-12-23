@@ -13,11 +13,12 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed folder structure (Thorsten, Jan Harms)
 - added experimental support for PHP 8.3 (Thorsten)
 - added Symfony Routing (Thorsten)
+- added new admin configuration frontend (Thorsten)
 - (WIP) added Twig as new template engine (Thorsten)
 - (WIP) added experimental online update feature (Jan Harms, Thorsten)
 - updated to PNPM (Thorsten)
 - removed X/Twitter support (Thorsten)
-- removed support for adding own meta content in templates (Thorsten)
+- removed support for adding own meta-content in templates (Thorsten)
 
 ### phpMyFAQ v3.2.3 - 2023-11-24
 

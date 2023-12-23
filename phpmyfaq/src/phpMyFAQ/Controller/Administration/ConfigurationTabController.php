@@ -19,12 +19,16 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
+use phpMyFAQ\Session\Token;
+use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,6 +61,84 @@ class ConfigurationTabController extends AbstractController
                 ]
             ]
         );
+    }
+
+    #[Route('admin/api/configuration')]
+    public function save(Request $request): JsonResponse
+    {
+        $this->userHasPermission('editconfig');
+
+        $configuration = Configuration::getConfigurationInstance();
+        $response = new JsonResponse();
+
+        $csrfToken = $request->get('pmf-csrf-token');
+        $configurationData = $request->get('edit');
+        $oldConfigurationData = $configuration->getAll();
+
+        if (!Token::getInstance()->verifyToken('configuration', $csrfToken)) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+        } else {
+            // Set the new values
+            $forbiddenValues = ['{', '}'];
+            $newConfigValues = [];
+            $escapeValues = [
+                'main.contactInformation',
+                'main.customPdfHeader',
+                'main.customPdfFooter',
+                'main.titleFAQ',
+                'main.metaKeywords'
+            ];
+
+            // Special checks
+            if (isset($configurationData['main.enableMarkdownEditor'])) {
+                $configurationData['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
+            }
+            if (isset($configurationData['main.currentVersion'])) {
+                unset($configurationData['main.currentVersion']); // don't update the version number
+            }
+
+            if (
+                isset($configurationData['main.referenceURL']) &&
+                is_null(Filter::filterVar($configurationData['main.referenceURL'], FILTER_VALIDATE_URL))
+            ) {
+                unset($configurationData['main.referenceURL']);
+            }
+
+            $newConfigClass = [];
+
+            foreach ($configurationData as $key => $value) {
+                // Remove forbidden characters
+                $newConfigValues[$key] = str_replace($forbiddenValues, '', (string) $value);
+                // Escape some values
+                if (isset($escapeValues[$key])) {
+                    $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
+                }
+                $keyArray = array_values(explode('.', (string) $key));
+                $newConfigClass = array_shift($keyArray);
+            }
+
+            foreach ($oldConfigurationData as $key => $value) {
+                $keyArray = array_values(explode('.', (string) $key));
+                $oldConfigClass = array_shift($keyArray);
+                if (isset($newConfigValues[$key])) {
+                    continue;
+                } else {
+                    if ($oldConfigClass === $newConfigClass && $value === 'true') {
+                        $newConfigValues[$key] = 'false';
+                    } else {
+                        $newConfigValues[$key] = $value;
+                    }
+                }
+            }
+
+            $configuration->update($newConfigValues);
+
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_config_saved')]);
+        }
+
+        return $response;
     }
 
     #[Route('admin/api/configuration/translations')]

@@ -3,7 +3,7 @@
 {% for key, configItem in configurationList %}
   <div class="row my-2">
     <label class="col-lg-3 col-form-label">
-      {{ configItem.label }}
+      {{ configItem.label | raw }}
     </label>
     <div class="col-lg-6">
       {% if configItem.element == 'area' %}

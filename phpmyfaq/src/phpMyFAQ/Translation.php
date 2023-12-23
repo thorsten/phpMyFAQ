@@ -158,6 +158,21 @@ class Translation
         foreach ($LANG_CONF as $key => $value) {
             if (str_starts_with($key, $section)) {
                 $configuration[$key] = ['element' => $value[0] ?? '', 'label' => $value[1] ?? ''];
+
+                switch ($key) {
+                    case 'records.maxAttachmentSize':
+                        $configuration[$key]['label'] = sprintf(
+                            $configuration[$key]['label'],
+                            ini_get('upload_max_filesize')
+                        );
+                        break;
+                    case 'main.dateFormat':
+                        $configuration[$key]['label'] = sprintf(
+                            '<a target="_blank" href="https://www.php.net/manual/en/function.date.php">%s</a>',
+                            $configuration[$key]['label']
+                        );
+                        break;
+                }
             }
         }
 

@@ -14,9 +14,11 @@
  */
 
 import { Tab } from 'bootstrap';
+import { addElement } from '../../../../assets/src/utils';
 
 export const handleConfiguration = async () => {
   const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
+  const result = document.getElementById('pmf-configuration-result');
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {
@@ -52,6 +54,7 @@ export const handleConfiguration = async () => {
 
         tabLoaded = true;
         configTabTrigger.show();
+        result.innerHTML = '';
       });
     });
 
@@ -60,6 +63,37 @@ export const handleConfiguration = async () => {
       await handleTranslation();
       await handleTemplates();
     }
+  }
+};
+
+export const handleSaveConfiguration = async () => {
+  const saveConfigurationButton = document.getElementById('save-configuration');
+
+  if (saveConfigurationButton) {
+    saveConfigurationButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const form = document.getElementById('configuration-list');
+      const formData = new FormData(form);
+
+      const response = await fetch('./api/configuration', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        console.error('Request failed!');
+        return;
+      }
+
+      const json = await response.json();
+      const result = document.getElementById('pmf-configuration-result');
+
+      if (json.success) {
+        result.append(addElement('div', { classList: 'alert alert-success', innerText: json.success }));
+      } else {
+        result.append(addElement('div', { classList: 'alert alert-danger', innerText: json.error }));
+      }
+    });
   }
 };
 
