@@ -127,6 +127,7 @@ $routes->add(
         ['_controller' => [ConfigurationTabController::class, 'permLevel']]
     )
 );
+
 $routes->add(
     'admin.api.configuration.search-relevance',
     new Route(
@@ -134,6 +135,15 @@ $routes->add(
         ['_controller' => [ConfigurationTabController::class, 'searchRelevance']]
     )
 );
+
+$routes->add(
+    'admin.api.configuration.seo-metatags',
+    new Route(
+        '/configuration/seo-metatags/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'seoMetaTags']]
+    )
+);
+
 $routes->add(
     'admin.api.configuration.send-test-mail',
     new Route(

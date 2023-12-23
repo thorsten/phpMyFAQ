@@ -42,6 +42,9 @@ export const handleConfiguration = async () => {
           case '#security':
             await handlePermLevel();
             break;
+          case '#seo':
+            await handleSeoMetaTags();
+            break;
         }
 
         tabLoaded = true;
@@ -116,6 +119,18 @@ export const handleSearchRelevance = async () => {
     const currentValue = searchRelevanceSelectBox[0].dataset.pmfConfigurationCurrentValue;
     const options = await fetchSearchRelevance(currentValue);
     searchRelevanceSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleSeoMetaTags = async () => {
+  const seoMetaTagsSelectBoxes = document.querySelectorAll('select[name^="edit[seo.metaTags"]');
+
+  if (seoMetaTagsSelectBoxes) {
+    seoMetaTagsSelectBoxes.forEach(async (seoMetaTagsSelectBox) => {
+      const currentValue = seoMetaTagsSelectBox.dataset.pmfConfigurationCurrentValue;
+      const options = await fetchSeoMetaTags(currentValue);
+      seoMetaTagsSelectBox.insertAdjacentHTML('beforeend', options);
+    });
   }
 };
 
@@ -234,6 +249,21 @@ const fetchPermLevel = async (currentValue) => {
 const fetchSearchRelevance = async (currentValue) => {
   try {
     const response = await fetch(`./api/configuration/search-relevance/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const fetchSeoMetaTags = async (currentValue) => {
+  try {
+    const response = await fetch(`./api/configuration/seo-metatags/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');

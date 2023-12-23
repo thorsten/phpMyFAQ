@@ -131,11 +131,19 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    #Route('admin/api/configuration/search-relevance')
+    #[Route('admin/api/configuration/search-relevance')]
     public function searchRelevance(Request $request): Response
     {
         return new Response(
             AdministrationHelper::searchRelevanceOptions($request->get('current'))
+        );
+    }
+
+    #[Route('admin/api/configuration/seo-metatags')]
+    public function seoMetaTags(Request $request): Response
+    {
+        return new Response(
+            AdministrationHelper::renderMetaRobotsDropdown($request->get('current'))
         );
     }
 }

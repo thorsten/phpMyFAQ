@@ -44,15 +44,6 @@ function renderInputForm(mixed $key, string $type): void
             printf('<select name="edit[%s]" class="form-select">', $key);
 
             switch ($key) {
-                case 'seo.metaTagsHome':
-                case 'seo.metaTagsFaqs':
-                case 'seo.metaTagsCategories':
-                case 'seo.metaTagsPages':
-                case 'seo.metaTagsAdmin':
-                    $adminHelper = new AdministrationHelper();
-                    echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
-                    break;
-
                 case 'upgrade.releaseEnvironment':
                     printf(
                         '<option value="%s" %s>Development</option>',

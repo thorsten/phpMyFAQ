@@ -138,7 +138,7 @@ class AdministrationHelper
         }
     }
 
-    public function renderMetaRobotsDropdown(string $metaRobots): string
+    public static function renderMetaRobotsDropdown(string $metaRobots): string
     {
         $output = '';
         $options = [

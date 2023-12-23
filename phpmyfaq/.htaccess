@@ -157,6 +157,7 @@ RewriteRule admin/api/configuration/list                    admin/api/index.php 
 RewriteRule admin/api/configuration/perm-level              admin/api/index.php [L,QSA]
 RewriteRule admin/api/configuration/search-relevance        admin/api/index.php [L,QSA]
 RewriteRule admin/api/configuration/send-test-mail          admin/api/index.php
+RewriteRule admin/api/configuration/seo-metatags            admin/api/index.php
 RewriteRule admin/api/configuration/templates               admin/api/index.php
 RewriteRule admin/api/configuration/translations            admin/api/index.php
 RewriteRule admin/api/content/attachments                   admin/api/index.php
