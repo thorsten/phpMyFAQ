@@ -131,6 +131,14 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    #[Route('admin/api/configuration/release-environment')]
+    public function releaseEnvironment(Request $request): Response
+    {
+        return new Response(
+            AdministrationHelper::renderReleaseTypeOptions($request->get('current'))
+        );
+    }
+
     #[Route('admin/api/configuration/search-relevance')]
     public function searchRelevance(Request $request): Response
     {

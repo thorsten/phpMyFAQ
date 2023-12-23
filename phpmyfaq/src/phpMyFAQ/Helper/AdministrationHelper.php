@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 
@@ -246,6 +247,25 @@ class AdministrationHelper
             'keywords,thema,content',
             'search.relevance.keywords-thema-content'
         );
+
+        return $output;
+    }
+
+    public static function renderReleaseTypeOptions(string $current): string
+    {
+        $releaseTypes = [ReleaseType::DEVELOPMENT, ReleaseType::STABLE, ReleaseType::NIGHTLY];
+        $output = '';
+
+        foreach ($releaseTypes as $releaseType) {
+            $value = $releaseType->value;
+
+            $output .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $value,
+                ($value === $current) ? ' selected' : '',
+                ucfirst($releaseType->value)
+            );
+        }
 
         return $output;
     }

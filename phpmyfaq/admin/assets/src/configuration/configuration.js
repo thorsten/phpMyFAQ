@@ -45,6 +45,9 @@ export const handleConfiguration = async () => {
           case '#seo':
             await handleSeoMetaTags();
             break;
+          case '#upgrade':
+            await handleReleaseEnvironment();
+            break;
         }
 
         tabLoaded = true;
@@ -60,7 +63,7 @@ export const handleConfiguration = async () => {
   }
 };
 
-export const handleTranslation = async () => {
+const handleTranslation = async () => {
   const translationSelectBox = document.getElementsByName('edit[main.language]');
 
   if (translationSelectBox !== null) {
@@ -69,7 +72,7 @@ export const handleTranslation = async () => {
   }
 };
 
-export const handleTemplates = async () => {
+const handleTemplates = async () => {
   const templateSelectBox = document.getElementsByName('edit[main.templateSet]');
   if (templateSelectBox !== null) {
     const options = await fetchTemplates();
@@ -77,7 +80,7 @@ export const handleTemplates = async () => {
   }
 };
 
-export const handleFaqsSortingKeys = async () => {
+const handleFaqsSortingKeys = async () => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]');
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
@@ -86,7 +89,7 @@ export const handleFaqsSortingKeys = async () => {
   }
 };
 
-export const handleFaqsSortingOrder = async () => {
+const handleFaqsSortingOrder = async () => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]');
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
@@ -95,7 +98,7 @@ export const handleFaqsSortingOrder = async () => {
   }
 };
 
-export const handleFaqsSortingPopular = async () => {
+const handleFaqsSortingPopular = async () => {
   const faqsPopularSelectBox = document.getElementsByName('edit[records.orderingPopularFaqs]');
   if (faqsPopularSelectBox !== null) {
     const currentValue = faqsPopularSelectBox[0].dataset.pmfConfigurationCurrentValue;
@@ -104,7 +107,7 @@ export const handleFaqsSortingPopular = async () => {
   }
 };
 
-export const handlePermLevel = async () => {
+const handlePermLevel = async () => {
   const permLevelSelectBox = document.getElementsByName('edit[security.permLevel]');
   if (permLevelSelectBox !== null) {
     const currentValue = permLevelSelectBox[0].dataset.pmfConfigurationCurrentValue;
@@ -113,7 +116,16 @@ export const handlePermLevel = async () => {
   }
 };
 
-export const handleSearchRelevance = async () => {
+const handleReleaseEnvironment = async () => {
+  const releaseEnvironmentSelectBox = document.getElementsByName('edit[upgrade.releaseEnvironment]');
+  if (releaseEnvironmentSelectBox !== null) {
+    const currentValue = releaseEnvironmentSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const options = await fetchReleaseEnvironment(currentValue);
+    releaseEnvironmentSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+const handleSearchRelevance = async () => {
   const searchRelevanceSelectBox = document.getElementsByName('edit[search.relevance]');
   if (searchRelevanceSelectBox !== null) {
     const currentValue = searchRelevanceSelectBox[0].dataset.pmfConfigurationCurrentValue;
@@ -122,15 +134,15 @@ export const handleSearchRelevance = async () => {
   }
 };
 
-export const handleSeoMetaTags = async () => {
+const handleSeoMetaTags = async () => {
   const seoMetaTagsSelectBoxes = document.querySelectorAll('select[name^="edit[seo.metaTags"]');
 
   if (seoMetaTagsSelectBoxes) {
-    seoMetaTagsSelectBoxes.forEach(async (seoMetaTagsSelectBox) => {
+    for (const seoMetaTagsSelectBox of seoMetaTagsSelectBoxes) {
       const currentValue = seoMetaTagsSelectBox.dataset.pmfConfigurationCurrentValue;
       const options = await fetchSeoMetaTags(currentValue);
       seoMetaTagsSelectBox.insertAdjacentHTML('beforeend', options);
-    });
+    }
   }
 };
 
@@ -234,6 +246,21 @@ const fetchFaqsSortingPopular = async (currentValue) => {
 const fetchPermLevel = async (currentValue) => {
   try {
     const response = await fetch(`./api/configuration/perm-level/${currentValue}`);
+
+    if (!response.ok) {
+      console.error('Request failed!');
+      return;
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const fetchReleaseEnvironment = async (currentValue) => {
+  try {
+    const response = await fetch(`./api/configuration/release-environment/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');

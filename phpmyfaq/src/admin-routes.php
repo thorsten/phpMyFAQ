@@ -129,6 +129,14 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.configuration.release-environment',
+    new Route(
+        '/configuration/release-environment/{current}',
+        ['_controller' => [ConfigurationTabController::class, 'releaseEnvironment']]
+    )
+);
+
+$routes->add(
     'admin.api.configuration.search-relevance',
     new Route(
         '/configuration/search-relevance/{current}',

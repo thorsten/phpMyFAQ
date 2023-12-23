@@ -16,10 +16,7 @@
  * @since     2005-12-26
  */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,38 +32,7 @@ $configMode = Filter::filterVar($request->query->get('conf'), FILTER_SANITIZE_SP
  * @param mixed  $key
  * @param string $type
  */
-function renderInputForm(mixed $key, string $type): void
-{
-    $faqConfig = Configuration::getConfigurationInstance();
 
-    switch ($type) {
-        case 'select':
-            printf('<select name="edit[%s]" class="form-select">', $key);
-
-            switch ($key) {
-                case 'upgrade.releaseEnvironment':
-                    printf(
-                        '<option value="%s" %s>Development</option>',
-                        ReleaseType::DEVELOPMENT->value,
-                        (ReleaseType::DEVELOPMENT->value === $faqConfig->get($key)) ? 'selected' : ''
-                    );
-                    printf(
-                        '<option value="%s" %s>Stable</option>',
-                        ReleaseType::STABLE->value,
-                        (ReleaseType::STABLE->value === $faqConfig->get($key)) ? 'selected' : ''
-                    );
-                    printf(
-                        '<option value="%s" %s>Nightly</option>',
-                        ReleaseType::NIGHTLY->value,
-                        (ReleaseType::NIGHTLY->value === $faqConfig->get($key)) ? 'selected' : ''
-                    );
-                    break;
-            }
-
-            echo "</select>\n</div>\n";
-            break;
-    }
-}
 
 header('Content-type: text/html; charset=utf-8');
 
@@ -95,7 +61,6 @@ foreach (Translation::getConfigurationItems() as $key => $value) {
         ?>
       </label>
       <div class="col-lg-6">
-          <?php renderInputForm($key, $value['element']); ?>
       </div>
         <?php
     }
