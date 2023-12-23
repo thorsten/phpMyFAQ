@@ -40,7 +40,7 @@ $sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $session = new Session($faqConfig);
     $time = $session->getTimeFromSessionId($sessionId);
-    $trackingData = explode("\n", file_get_contents(PMF_ROOT_DIR . '/data/tracking' . date('dmY', $time)));
+    $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
     ?>
   <table class="table table-striped align-middle">
     <tfoot>
