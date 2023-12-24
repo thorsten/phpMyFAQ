@@ -101,5 +101,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleCheckForUpdates();
 
   // Configuration -> Elasticsearch configuration
-  handleElasticsearch();
+  await handleElasticsearch();
 });

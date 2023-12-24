@@ -16,79 +16,90 @@
 import { addElement } from '../../../../assets/src/utils';
 import { formatBytes } from '../utils';
 
-export const handleElasticsearch = () => {
+export const handleElasticsearch = async () => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
 
   if (buttons) {
     buttons.forEach((element) => {
-      element.addEventListener('click', (event) => {
+      element.addEventListener('click', async (event) => {
         event.preventDefault();
 
         const action = event.target.getAttribute('data-action');
 
-        fetch(`./api/elasticsearch/${action}`)
-          .then(async (response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error('Network response was not ok: ', { cause: { response } });
-          })
-          .then((response) => {
+        try {
+          const response = await fetch(`./api/elasticsearch/${action}`);
+
+          if (response.ok) {
+            const result = await response.json();
             const stats = document.getElementById('pmf-elasticsearch-result');
             stats.insertAdjacentElement(
               'afterend',
               addElement('div', {
                 classList: 'alert alert-success',
-                innerText: response.success,
+                innerText: result.success,
               })
             );
 
             setInterval(elasticsearchStats, 5000);
-          })
-          .catch(async (error) => {
+          } else {
             const result = document.getElementById('pmf-elasticsearch-result');
-            const errorMessage = await error.cause.response.json();
+            const errorMessage = await response.json();
             result.insertAdjacentElement(
               'afterend',
               addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
             );
-          });
+          }
+        } catch (error) {
+          const result = document.getElementById('pmf-elasticsearch-result');
+          const errorMessage = error.cause && error.cause.response ? await error.cause.response.json() : null;
+          result.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage?.error || error.message })
+          );
+        }
       });
-    });
 
-    const elasticsearchStats = () => {
-      const div = document.getElementById('pmf-elasticsearch-stats');
-      if (div) {
-        div.innerHTML = '';
-        fetch('./api/elasticsearch/statistics')
-          .then(async (response) => {
+      const elasticsearchStats = async () => {
+        const div = document.getElementById('pmf-elasticsearch-stats');
+        if (div) {
+          div.innerHTML = '';
+
+          try {
+            const response = await fetch('./api/elasticsearch/statistics');
+
             if (response.ok) {
-              return response.json();
+              const result = await response.json();
+              const indexName = result.index;
+              const stats = result.stats;
+              const count = stats['indices'][indexName]['total']['docs'].count;
+              const sizeInBytes = stats['indices'][indexName]['total']['store'].size_in_bytes;
+              let html = '<dl class="row">';
+              html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count ?? 0}</dd>`;
+              html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(
+                sizeInBytes ?? 0
+              )}</dd>`;
+              html += '</dl>';
+              div.innerHTML = html;
+            } else {
+              const result = document.getElementById('pmf-elasticsearch-result');
+              const errorMessage = await response.json();
+              result.insertAdjacentElement(
+                'afterend',
+                addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+              );
             }
-            throw new Error('Network response was not ok: ', { cause: { response } });
-          })
-          .then((response) => {
-            const indexName = response.index;
-            const stats = response.stats;
-            const count = stats['indices'][indexName]['total']['docs'].count;
-            const sizeInBytes = stats['indices'][indexName]['total']['store'].size_in_bytes;
-            let html = '<dl class="row">';
-            html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count ?? 0}</dd>`;
-            html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(sizeInBytes ?? 0)}</dd>`;
-            html += '</dl>';
-            div.innerHTML = html;
-          })
-          .catch(async (error) => {
+          } catch (error) {
             const result = document.getElementById('pmf-elasticsearch-result');
-            const errorMessage = await error.cause.response.json();
+            const errorMessage = error.cause && error.cause.response ? await error.cause.response.json() : null;
             result.insertAdjacentElement(
               'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage?.error || error.message })
             );
-          });
-      }
-    };
+          }
+        }
+      };
 
-    elasticsearchStats();
+      elasticsearchStats();
+    });
   }
 };
