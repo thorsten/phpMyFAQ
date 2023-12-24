@@ -501,7 +501,7 @@ class Update extends Setup
             $this->queries[] = sprintf('DROP TABLE %sfaqmeta', Database::getTablePrefix());
 
             // Blocked statistics browsers
-            $this->configuration->add('main.blockedStatisticBrowsers', '');
+            $this->configuration->add('main.botIgnoreList', 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma');
         }
     }
 
