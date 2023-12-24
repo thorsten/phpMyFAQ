@@ -74,7 +74,8 @@ class Session
         'Yahoo! Slurp',
         'htdig',
         'gsa-crawler',
-        'AirControl'
+        'AirControl',
+        'Uptime-Kuma',
     ];
 
     /**
