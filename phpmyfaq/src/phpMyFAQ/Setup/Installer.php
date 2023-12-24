@@ -351,7 +351,8 @@ class Installer extends Setup
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
         'main.contactInformationHTML' => 'false',
-        'main.blockedStatisticBrowsers' => '',
+        'main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,
+        w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',

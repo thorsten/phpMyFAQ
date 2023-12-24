@@ -56,28 +56,6 @@ class Session
 
     private ?CurrentUser $currentUser = null;
 
-    /** @var string[] List of bots we don't track */
-    private array $botIgnoreList = [
-        'nustcrape',
-        'webpost',
-        'GoogleBot',
-        'msnbot',
-        'crawler',
-        'scooter',
-        'bravobrian',
-        'archiver',
-        'w3c',
-        'control',
-        'wget',
-        'bot',
-        'spider',
-        'Yahoo! Slurp',
-        'htdig',
-        'gsa-crawler',
-        'AirControl',
-        'Uptime-Kuma',
-    ];
-
     /**
      * Constructor.
      *
@@ -299,6 +277,16 @@ class Session
     }
 
     /**
+     * Returns the botIgnoreList as an array.
+     *
+     * @return array
+     */
+    private function getBotIgnoreList(): array
+    {
+        return explode(',', $this->config->get('main.botIgnoreList'));
+    }
+
+    /**
      * Tracks the user and log what he did.
      *
      * @param string          $action Action string
@@ -324,7 +312,7 @@ class Session
                 $this->setCurrentSessionId(0);
             }
 
-            foreach ($this->botIgnoreList as $bot) {
+            foreach ($this->getBotIgnoreList() as $bot) {
                 if (Strings::strstr($request->headers->get('user-agent'), $bot)) {
                     ++$bots;
                 }
@@ -486,58 +474,6 @@ class Session
     /**
      * Calculates the number of visits per day the last 30 days.
      *
-     * @return array
-     */
-    private function getListOfBlockedBrowsers(): array
-    {
-        return explode(',', $this->config->get('main.blockedStatisticBrowsers'));
-    }
-
-    /**
-     * Calculates the number of visits per day the last 30 days taking into account the blocked browsers for
-     * the visitor-statistic-chart on the dashboard.
-     *
-     * @var array $completeData    The complete data from $this->getLast30DaysVisits
-     * @return array<int, stdClass>
-     */
-    public function filterLast30DaysVisits(array $completeData): array
-    {
-        $newData = [];
-        foreach ($completeData as $data) {
-            $date = $data->date;
-            $count = $data->number;
-            $timestamp = strtotime($date);
-            if (file_exists(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp))) {
-                $trackingData = explode(
-                    "\n",
-                    file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $timestamp))
-                );
-                $blockedBrowsers = $this->getListOfBlockedBrowsers();
-                foreach ($trackingData as $line) {
-                    $dataFile = explode(';', $line);
-                    foreach ($blockedBrowsers as $browser) {
-                        if ($dataFile[6] === $browser) {
-                            $count = $count - 1;
-                        }
-                    }
-                }
-                $visit = new stdClass();
-                $visit->date = $date;
-                $visit->number = $count;
-                $newData[] = $visit;
-            } else {
-                $visit = new stdClass();
-                $visit->date = $date;
-                $visit->number = $count;
-                $newData[] = $visit;
-            }
-        }
-        return $newData;
-    }
-
-    /**
-     * Calculates the number of visits per day the last 30 days.
-     *
      * @return array<int, stdClass>
      */
     public function getLast30DaysVisits(): array
@@ -574,11 +510,7 @@ class Session
             $completeData[] = $visit;
         }
 
-        if ($this->config->get('main.blockedStatisticBrowsers') === '') {
-            return $completeData;
-        } else {
-            return $this->filterLast30DaysVisits($completeData);
-        }
+        return $completeData;
     }
 
     /**

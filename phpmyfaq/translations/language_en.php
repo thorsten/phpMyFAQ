@@ -1381,7 +1381,7 @@ $PMF_LANG['msgMyBookmarks'] = 'My Bookmarks';
 // added v4.0.0-alpha - 2023-09-20 by Jan
 $PMF_LANG['msgNoHashAllowed'] = "It is not allowed to use '#'.";
 
-// added v4.0.0-alpha - 2023-23-12 by Jan
-$LANG_CONF['main.blockedStatisticBrowsers'] = ['area', 'Blocked browsers for dashboard visitors chart (Seperate with commas)'];
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Seperate with commas)'];
 
 return $PMF_LANG;
