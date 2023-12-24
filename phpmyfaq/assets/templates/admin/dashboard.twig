@@ -20,7 +20,7 @@
   <section class="row mb-3">
     <div class="col-12">
       <div class="card bg-danger text-white shadow h-100 py-2">
-        <div class="card-header text-uppercase">Attention!</div>
+        <div class="card-header ">Attention!</div>
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
@@ -56,89 +56,109 @@
   </section>
 {% endif %}
 
-<section class="row masonry-grid">
 
-  {% if hasUserTracking %}
-    <div class="col-4 mb-4">
-      <div class="card mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
-        </h5>
-        <div class="card-body">
-          <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
-        </div>
-      </div>
-    </div>
-  {% endif %}
+<section class="row">
 
-  {% if hasUserTracking %}
-    <div class="col-4 mb-4">
-      <div class="card mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
-        </h5>
-        <div class="card-body">
-          <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  <div class="col-3 mb-4">
-    <div class="card mb-4">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="fa fa-info-circle"></i> {{ adminDashboardInfoHeader }}
-      </h5>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2">
       <div class="card-body">
-        <div class="list-group-flush">
-          <a href="?action=viewsessions"
-             class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardInfoVisits }}
-            </div>
-            <span class="badge bg-primary rounded-pill">{{ adminDashboardInfoNumVisits }}</span>
-          </a>
-          <a href="?action=view" class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <i aria-hidden="true" class="fa fa-list-alt"></i> {{ adminDashboardInfoFaqs }}
-            </div>
-            <span class="badge bg-primary rounded-pill">{{ adminDashboardInfoNumFaqs }}</span>
-          </a>
-          <a href="?action=comments" class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <i aria-hidden="true"
-                 class="fa fa-comments"></i> {{ adminDashboardInfoComments }}
-            </div>
-            <span class="badge bg-primary rounded-pill">{{ adminDashboardInfoNumComments }}</span>
-          </a>
-          <a href="?action=question" class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <i aria-hidden="true"
-                 class="fa fa-question-circle"></i> {{ adminDashboardInfoQuestions }}
-            </div>
-            <span class="badge bg-primary rounded-pill">{{ adminDashboardInfoNumQuestions }}</span>
-          </a>
-          <a href="?action=news" class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <i aria-hidden="true" class="fa fa-list-alt"></i> {{ adminDashboardInfoNews }}
-            </div>
-            <span class="badge bg-primary rounded-pill">{{ adminDashboardInfoNumNews }}</span>
-          </a>
-          <a href="?action=user&user_action=listallusers"
-             class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <i aria-hidden="true"
-                 class="fa fa-users"></i> {{ adminDashboardInfoUser }}
-            </div>
-            <span class="badge bg-primary rounded-pill">{{ adminDashboardInfoNumUser }}</span>
-          </a>
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary  mb-1">{{ adminDashboardInfoVisits }}</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumVisits }}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fa fa-bar-chart fa-2x text-gray-300"></i>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success  mb-1">{{ adminDashboardInfoFaqs }}</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumFaqs }}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fa fa-list-alt fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info  mb-1">{{ adminDashboardInfoComments }}</div>
+            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ adminDashboardInfoNumComments }}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fa fa-comments fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-warning  mb-1">{{ adminDashboardInfoQuestions }}</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumQuestions }}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fa fa-question-circle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if hasUserTracking %}
+<section class="row">
+  <div class="col-8 mb-4">
+    <div class="card shadow h-100 mb-4">
+      <h5 class="card-header py-3">
+        <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
+      </h5>
+      <div class="card-body">
+        <div class="pmf-charts">
+          <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4 mb-4">
+    <div class="card shadow h-100 mb-4">
+      <h5 class="card-header py-3">
+        <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
+      </h5>
+      <div class="card-body">
+        <div class="pmf-charts">
+          <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="row">
+
   <div class="col-3 mb-4">
-    <div class="card mb-4">
+    <div class="card shadow mb-4">
       <h5 class="card-header py-3">
         <i aria-hidden="true" class="fa fa-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
       </h5>
@@ -161,7 +181,7 @@
 
   {% if hasPermissionEditConfig %}
     <div class="col-3 mb-4">
-      <div class="card mb-4">
+      <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-check"></i> {{ adminDashboardHeaderOnlineInfo }}
         </h5>
@@ -200,7 +220,7 @@
     </div>
 
     <div class="col-3 mb-4">
-      <div class="card mb-4">
+      <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> {{ adminDashboardHeaderVerification }}
         </h5>
@@ -248,5 +268,4 @@
       </div>
     </div>
   {% endif %}
-
 </section>

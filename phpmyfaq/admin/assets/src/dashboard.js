@@ -8,52 +8,55 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne
  * @copyright 2020-2023 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2020-04-22
  */
 
-import { BarController, BarElement, Chart, LinearScale, CategoryScale, Title, registerables } from 'chart.js';
-import Masonry from 'masonry-layout';
+import { Chart, registerables } from 'chart.js';
 import { addElement } from '../../../assets/src/utils';
-
-window.onload = () => {
-  const masonryElement = document.querySelector('.masonry-grid');
-
-  if (masonryElement) {
-    new Masonry(masonryElement, { columnWidth: 0 });
-  }
-};
 
 export const renderVisitorCharts = async () => {
   const context = document.getElementById('pmf-chart-visits');
 
   if (context) {
-    Chart.register(BarController, BarElement, LinearScale, Title, CategoryScale);
+    Chart.register(...registerables);
 
     const visitorChart = new Chart(context, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: [],
         datasets: [
           {
             data: [],
-            borderWidth: 1,
-            borderColor: 'black',
-            backgroundColor: '#1cc88a',
-            label: 'Visitors',
+            borderWidth: 2,
+            borderColor: 'grey',
+            backgroundColor: '#b1df00',
+            label: ' Visitors',
+            pointStyle: 'circle',
+            pointRadius: 4,
+            pointHoverRadius: 8,
+            fill: false,
+            cubicInterpolationMode: 'monotone',
+            tension: 0.4,
           },
         ],
       },
       options: {
         responsive: true,
+        interaction: {
+          intersect: false,
+        },
+        maintainAspectRatio: false,
         scales: {
           x: {
+            display: true,
             title: {
               display: false,
             },
           },
           y: {
+            display: true,
             title: {
               display: true,
               text: 'Visitors',
@@ -106,7 +109,7 @@ export const renderTopTenCharts = async () => {
     let colors = [];
 
     const doughnutChart = new Chart(context, {
-      type: 'doughnut',
+      type: 'bar',
       data: {
         labels: [],
         datasets: [
@@ -115,9 +118,41 @@ export const renderTopTenCharts = async () => {
             borderWidth: 1,
             borderColor: 'white',
             backgroundColor: colors,
-            label: 'Visitors',
+            label: ' Visitors',
           },
         ],
+      },
+      options: {
+        responsive: true,
+        interaction: {
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: false,
+            },
+            ticks: {
+              display: false,
+            },
+          },
+          y: {
+            display: true,
+            title: {
+              display: false,
+            },
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        },
       },
     });
 
