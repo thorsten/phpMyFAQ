@@ -66,13 +66,13 @@ if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
                                             <div class="form-floating">
                                                 <input class="form-control" id="faqpassword" name="faqpassword"
                                                        type="password" autocomplete="off"
-                                                       placeholder="<?= Translation::get('ad_auth_passwd') ?>" />
+                                                       placeholder="<?= Translation::get('ad_auth_passwd') ?>" toggle="faqpassword_toggle" />
                                                 <label for="faqpassword">
                                                     <?= Translation::get('ad_auth_passwd') ?>
                                                 </label>
                                             </div>
-                                            <span class="input-group-text">
-                                                <i class="fa" id="togglePassword"></i>
+                                            <span class="input-group-text" id="faqpassword_toggle">
+                                                <i class="fa fa-eye-slash" id="faqpassword_toggle_icon"></i>
                                             </span>
                                         </div>
                                         <div class="form-check mb-3">
