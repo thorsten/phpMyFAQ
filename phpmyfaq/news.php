@@ -67,10 +67,10 @@ $newsHeader = $news['header'];
 
 // Add Glossary entries
 $oGlossary = new Glossary($faqConfig);
-$newsContent = $oGlossary->insertItemsIntoContent($newsContent);
-$newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
+$newsContent = $oGlossary->insertItemsIntoContent($newsContent ?? '');
+$newsHeader = $oGlossary->insertItemsIntoContent($newsHeader ?? '');
 
-// Add information link if existing
+// Add an information link if existing
 if (strlen((string) $news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
@@ -81,7 +81,7 @@ if (strlen((string) $news['link']) > 0) {
     );
 }
 
-// Show link to edit the news?
+// Show a link to edit the news?
 $editThisEntry = '';
 if ($user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
