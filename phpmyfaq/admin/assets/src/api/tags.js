@@ -14,26 +14,28 @@
  */
 
 export const fetchTags = async (searchString) => {
-  return await fetch(`./api/content/tags?search=${searchString}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
-      }
+  try {
+    const response = await fetch(`./api/content/tags?search=${searchString}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
       throw new Error('Network response was not ok: ', { cause: { response } });
-    })
-    .then((response) => {
-      return response;
-    })
-    .catch(async (error) => {
+    }
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    if (error.cause && error.cause.response) {
       const errorMessage = await error.cause.response.json();
       console.error(errorMessage);
-    });
+    }
+    throw error;
+  }
 };

@@ -14,106 +14,116 @@
  */
 
 export const fetchAllGroups = async () => {
-  return await fetch('./api/group/groups', {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch('./api/group/groups', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error fetching groups:', error);
+    throw error;
+  }
 };
 
 export const fetchAllUsersForGroups = async () => {
-  return await fetch('./api/group/users', {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch('./api/group/users', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error fetching users for groups:', error);
+    throw error;
+  }
 };
 
 export const fetchAllMembers = async (groupId) => {
-  return await fetch(`./api/group/members/${groupId}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch(`./api/group/members/${groupId}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error(`Error fetching members for group ${groupId}:`, error);
+    throw error;
+  }
 };
 
 export const fetchGroup = async (groupId) => {
-  return await fetch(`./api/group/data/${groupId}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch(`./api/group/data/${groupId}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error(`Error fetching data for group ${groupId}:`, error);
+    throw error;
+  }
 };
 
 export const fetchGroupRights = async (groupId) => {
-  return await fetch(`./api/group/permissions/${groupId}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch(`./api/group/permissions/${groupId}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error(`Error fetching permissions for group ${groupId}:`, error);
+    throw error;
+  }
 };

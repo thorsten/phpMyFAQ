@@ -14,102 +14,115 @@
  */
 
 export const fetchUsers = async (userName) => {
-  return await fetch(`./api/user/users?filter=${userName}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
-      }
+  try {
+    const response = await fetch(`./api/user/users?filter=${userName}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
       throw new Error('Network response was not ok: ', { cause: { response } });
-    })
-    .then((response) => {
-      return response;
-    })
-    .catch(async (error) => {
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    if (error.cause && error.cause.response) {
       const errorMessage = await error.cause.response.json();
       console.error(errorMessage.error);
-    });
+    }
+    throw error;
+  }
 };
 
 export const fetchUserData = async (userId) => {
-  return await fetch(`./api/user/data/${userId}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch(`./api/user/data/${userId}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error(`Error fetching data for user ${userId}:`, error);
+    throw error;
+  }
 };
 
 export const fetchUserRights = async (userId) => {
-  return await fetch(`./api/user/permissions/${userId}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch(`./api/user/permissions/${userId}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error(`Error fetching permissions for user ${userId}:`, error);
+    throw error;
+  }
 };
 
 export const fetchAllUsers = async () => {
-  return await fetch('./api/user/users', {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch('./api/user/users', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error fetching all users:', error);
+    throw error;
+  }
 };
 
 export const postUserData = async (url = '', data = {}) => {
-  return await fetch(url, {
-    method: 'POST',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data),
-  });
+  try {
+    return await fetch(url, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data),
+    });
+  } catch (error) {
+    console.error('Error posting user data:', error);
+    throw error;
+  }
 };
