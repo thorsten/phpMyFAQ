@@ -359,7 +359,7 @@ if ('list' === $groupAction) {
   <div class="row">
 
     <div class="col-lg-4" id="group_list">
-      <div class="card mb-4">
+      <div class="card shadow mb-4">
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
               method="post">
           <h5 class="card-header py-3">
@@ -380,7 +380,7 @@ if ('list' === $groupAction) {
         </form>
       </div>
 
-      <div id="group_data" class="card mb-4">
+      <div id="group_data" class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i class="fa fa-info-circle" aria-hidden="true"></i> <?= Translation::get('ad_group_details') ?>
         </h5>
@@ -433,7 +433,7 @@ if ('list' === $groupAction) {
       <form id="group_membership" name="group_membership" method="post"
             action="?action=group&amp;group_action=update_members">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0">
-        <div class="card mb-4">
+        <div class="card shadow mb-4">
           <h5 class="card-header py-3">
             <i aria-hidden="true" class="fa fa-user-circle"></i> <?= Translation::get('ad_group_membership') ?>
           </h5>
@@ -510,7 +510,7 @@ if ('list' === $groupAction) {
 
     <div class="col-lg-4" id="groupDetails">
 
-      <div id="groupRights" class="card mb-4">
+      <div id="groupRights" class="card shadow mb-4">
         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
           <h5 class="card-header py-3" id="user_rights_legend">

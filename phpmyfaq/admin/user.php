@@ -294,7 +294,7 @@ if (
                 <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                       method="post" role="form" class="form_inline">
                     <input type="hidden" id="current_user_id" value="<?= $userId ?>">
-                    <div class="card mb-4">
+                    <div class="card shadow mb-4">
                         <h5 class="card-header py-3">
                             <i aria-hidden="true" class="fa fa-search"></i> <?= Translation::get('msgSearch') ?>
                         </h5>
@@ -311,7 +311,7 @@ if (
             </div>
 
             <div class="col-lg-4">
-                <div class="card mb-4">
+                <div class="card shadow mb-4">
                     <h5 class="card-header py-3" id="user_data_legend">
                         <i aria-hidden="true" class="fa fa-user"></i> <?= Translation::get('ad_user_profou') ?>
                     </h5>
@@ -418,7 +418,7 @@ if (
                     <input type="hidden" name="user_id" id="rights_user_id" value="0">
                     <?= Token::getInstance()->getTokenInput('update-user-rights') ?>
 
-                    <div class="card mb-4">
+                    <div class="card shadow mb-4">
                         <h5 class="card-header py-3" id="user_rights_legend">
                             <i aria-hidden="true" class="fa fa-lock"></i> <?= Translation::get('ad_user_rights') ?>
                         </h5>
