@@ -1361,7 +1361,7 @@ $PMF_LANG['msgMyBookmarks'] = 'Meine Lesezeichen';
 // added v4.0.0-alpha - 2023-09-20 by Jan
 $PMF_LANG['msgNoHashAllowed'] = "Die Frage darf '#' nicht enthalten.";
 
-// added v4.0.0-alpha - 2023-23-12 by Jan
-$LANG_CONF['main.blockedStatisticBrowsers'] = ['area', 'Diese Browser für das Besucher-Diagramm auf dem Dashboard sperren (Mit Kommas trennen)'];
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren (Mit Kommas trennen)'];
 
 return $PMF_LANG;
