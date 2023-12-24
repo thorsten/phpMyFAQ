@@ -139,11 +139,6 @@ class Installer extends Setup
             'name' => 'viewadminlink',
             'description' => 'Right to see the link to the admin section'
         ],
-        //19 => "backup delatt", // Duplicate, removed with 2.7.3
-        //[
-        //    'name' => 'delatt',
-        //    'description' => 'Right to delete attachments'
-        //],
         //20 => "backup",
         [
             'name' => 'backup',
@@ -282,28 +277,8 @@ class Installer extends Setup
             'description' => 'Right to view categories'
         ],
         [
-            'name' => 'view_sections',
-            'description' => 'Right to view sections'
-        ],
-        [
             'name' => 'view_news',
             'description' => 'Right to view news'
-        ],
-        [
-            'name' => 'add_section',
-            'description' => 'Right to add sections'
-        ],
-        [
-            'name' => 'edit_section',
-            'description' => 'Right to edit sections'
-        ],
-        [
-            'name' => 'delete_section',
-            'description' => 'Right to delete sections'
-        ],
-        [
-            'name' => 'administrate_sections',
-            'description' => 'Right to administrate sections'
         ],
         [
             'name' => 'administrate_groups',
