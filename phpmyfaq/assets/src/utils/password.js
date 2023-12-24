@@ -14,16 +14,18 @@
  */
 
 export const handlePasswordToggle = () => {
-  const togglePassword = document.querySelector('#togglePassword');
-  const password = document.querySelector('#faqpassword');
-
-  if (togglePassword) {
-    togglePassword.addEventListener('click', () => {
-      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-      password.setAttribute('type', type);
-      togglePassword.classList.toggle('is-active');
-    });
-  }
+  var passwordInputs = document.querySelectorAll('input[type="password"]');
+  passwordInputs.forEach(function(field) {
+      var toggleId = field.getAttribute('toggle');
+      var toggle = document.getElementById(toggleId);
+      toggle.addEventListener('click', () => {
+          var type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+          field.setAttribute('type', type);
+          var icon = document.getElementById(toggleId + '_icon');
+          icon.classList.toggle('fa-eye');
+          icon.classList.toggle('fa-eye-slash');
+      });
+  });
 };
 
 export const handlePasswordStrength = () => {
