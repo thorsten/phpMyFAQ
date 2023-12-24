@@ -691,19 +691,30 @@ if (
                                 <label class="col-lg-4 col-form-label"
                                        for="add_user_password"><?= Translation::get('ad_adus_password') ?></label>
                                 <div class="col-lg-8">
-                                    <input type="password" name="add_user_password" id="add_user_password"
-                                           class="form-control" minlength="8"
-                                           autocomplete="off" tabindex="4">
+                                    <div class="input-group">
+                                        <input type="password" name="add_user_password" id="add_user_password"
+                                            class="form-control" minlength="8"
+                                            autocomplete="off" tabindex="4" toggle="add_user_password_togglePassword">
+                                        <span class="input-group-text" id="add_user_password_togglePassword">
+                                            <i class="fa fa-eye-slash" id="add_user_password_togglePassword_icon"></i>
+                                        </span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
 
                             <div class="row mb-2">
                                 <label class="col-lg-4 col-form-label"
                                        for="add_user_password_confirm"><?= Translation::get('ad_passwd_con') ?></label>
-                                <div class="col-lg-8">
-                                    <input type="password" name="add_user_password_confirm"
-                                           id="add_user_password_confirm" minlength="8"
-                                           class="form-control" autocomplete="off" tabindex="5">
+                               <div class="col-lg-8">
+                                    <div class="input-group">
+                                        <input type="password" name="add_user_password_confirm"
+                                            id="add_user_password_confirm" minlength="8"
+                                            class="form-control" autocomplete="off" tabindex="5" toggle="add_user_password_confirm_togglePassword">
+                                        <span class="input-group-text" id="add_user_password_confirm_togglePassword">
+                                            <i class="fa fa-eye-slash" id="add_user_password_confirm_togglePassword_icon"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -756,8 +767,13 @@ if (
                                 <?= Translation::get('ad_passwd_new') ?>
                             </label>
                             <div class="col-7">
+                              <div class="input-group">
                                 <input type="password" autocomplete="off" name="npass" id="npass"
-                                       class="form-control" required>
+                                       class="form-control" toggle="npass_togglePassword" required>
+                                <span class="input-group-text" id="npass_togglePassword">
+                                    <i class="fa fa-eye-slash" id="npass_togglePassword_icon"></i>
+                                </span>
+                               </div>
                             </div>
                         </div>
 
@@ -766,11 +782,15 @@ if (
                                 <?= Translation::get('ad_passwd_con') ?>
                             </label>
                             <div class="col-7">
+                              <div class="input-group">
                                 <input type="password" autocomplete="off" name="bpass" id="bpass"
-                                       class="form-control" required>
+                                       class="form-control" toggle="bpass_togglePassword" required>
+                                <span class="input-group-text" id="bpass_togglePassword">
+                                    <i class="fa fa-eye-slash" id="bpass_togglePassword_icon"></i>
+                                </span>
+                               </div>
                             </div>
                         </div>
-
                     </form>
                 </div>
                 <div class="modal-footer">
