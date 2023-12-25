@@ -56,11 +56,12 @@
             name="faqpassword"
             id="faqpassword"
             class="form-control"
+            data-pmf-toggle="faqpassword_toggle"
             required
             {{ readonly }}
           />
-          <span class="input-group-text">
-            <i class="fa" id="togglePassword"></i>
+          <span class="input-group-text" id="faqpassword_toggle">
+            <i class="fa fa-eye-slash" id="faqpassword_toggle_icon"></i>
           </span>
         </div>
         <div class="offset-4 col-lg-8">
@@ -72,16 +73,20 @@
 
       <div class="row mb-2">
         <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}:</label>
-        <div class="col-lg-8 w-auto">
+        <div class="col-lg-8 w-auto input-group">
           <input
             type="password"
             autocomplete="off"
             name="faqpassword_confirm"
             id="faqpassword_confirm"
             class="form-control"
+            data-pmf-toggle="faqpassword_confirm_toggle"
             required
             {{ readonly }}
           />
+          <span class="input-group-text" id="faqpassword_confirm_toggle">
+            <i class="fa fa-eye-slash" id="faqpassword_confirm_toggle_icon"></i>
+          </span>
         </div>
       </div>
 

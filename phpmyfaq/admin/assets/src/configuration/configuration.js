@@ -50,6 +50,9 @@ export const handleConfiguration = async () => {
           case '#upgrade':
             await handleReleaseEnvironment();
             break;
+          case '#mail':
+            await handleSMTPPasswordToggle();
+            break;
         }
 
         tabLoaded = true;
@@ -95,6 +98,27 @@ export const handleSaveConfiguration = async () => {
       }
     });
   }
+};
+
+const handleSMTPPasswordToggle = async () => {
+    const passwordField = document.getElementsByName('edit[mail.remoteSMTPPassword]');
+    const toggleHTML = '<span class="input-group-text" id="SMTPtogglePassword"><i class="fa fa-eye-slash" id="SMTPtogglePassword_icon"></i></span>';
+    const containerDiv = document.createElement('div');
+    containerDiv.classList.add('input-group');
+    containerDiv.innerHTML = `
+        <input class="form-control" type="password" autocomplete="off" name="edit[mail.remoteSMTPPassword]" value="" data-pmf-toggle="SMTPtogglePassword">
+        ${toggleHTML}
+    `;
+    passwordField[0].insertAdjacentElement('afterend', containerDiv);
+    passwordField[0].remove();
+    var toggle = document.getElementById('SMTPtogglePassword');
+    toggle.addEventListener('click', () => {
+        var type = passwordField[0].getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField[0].setAttribute('type', type);
+        var icon = document.getElementById('SMTPtogglePassword_icon');
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    });
 };
 
 const handleTranslation = async () => {
