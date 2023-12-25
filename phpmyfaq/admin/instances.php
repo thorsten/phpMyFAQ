@@ -211,7 +211,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
               </label>
                 <div class="col-lg-8">
                     <div class="input-group mb-2">
-                        <input class="form-control" type="password" autocomplete="off" name="password" id="password" toggle="instances_password_toggle" required>
+                        <input class="form-control" type="password" autocomplete="off" name="password" id="password" data-pmf-toggle="instances_password_toggle" required>
                         <span class="input-group-text" id="instances_password_toggle">
                             <i class="fa fa-eye-slash" id="instances_password_toggle_icon"></i>
                         </span>
