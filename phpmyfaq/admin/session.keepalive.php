@@ -19,6 +19,7 @@
  * @since     2006-05-08
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
@@ -38,6 +39,8 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 require PMF_ROOT_DIR . '/translations/language_en.php';
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 //
 // Get language (default: english)
