@@ -14,14 +14,14 @@
  */
 
 export const handlePasswordToggle = () => {
-  var passwordInputs = document.querySelectorAll('input[type="password"]');
+  const passwordInputs = document.querySelectorAll('input[type="password"]');
   passwordInputs.forEach(function(field) {
-      var toggleId = field.getAttribute('toggle');
-      var toggle = document.getElementById(toggleId);
+      const toggleId = field.getAttribute('data-pmf-toggle');
+      const toggle = document.getElementById(toggleId);
       toggle.addEventListener('click', () => {
-          var type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+          const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
           field.setAttribute('type', type);
-          var icon = document.getElementById(toggleId + '_icon');
+          const icon = document.getElementById(toggleId + '_icon');
           icon.classList.toggle('fa-eye');
           icon.classList.toggle('fa-eye-slash');
       });
