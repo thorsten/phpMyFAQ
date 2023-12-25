@@ -694,7 +694,7 @@ if (
                                     <div class="input-group">
                                         <input type="password" name="add_user_password" id="add_user_password"
                                             class="form-control" minlength="8"
-                                            autocomplete="off" tabindex="4" toggle="add_user_password_togglePassword">
+                                            autocomplete="off" tabindex="4" data-pmf-toggle="add_user_password_togglePassword">
                                         <span class="input-group-text" id="add_user_password_togglePassword">
                                             <i class="fa fa-eye-slash" id="add_user_password_togglePassword_icon"></i>
                                         </span>
@@ -710,7 +710,7 @@ if (
                                     <div class="input-group">
                                         <input type="password" name="add_user_password_confirm"
                                             id="add_user_password_confirm" minlength="8"
-                                            class="form-control" autocomplete="off" tabindex="5" toggle="add_user_password_confirm_togglePassword">
+                                            class="form-control" autocomplete="off" tabindex="5" data-pmf-toggle="add_user_password_confirm_togglePassword">
                                         <span class="input-group-text" id="add_user_password_confirm_togglePassword">
                                             <i class="fa fa-eye-slash" id="add_user_password_confirm_togglePassword_icon"></i>
                                         </span>
@@ -769,7 +769,7 @@ if (
                             <div class="col-7">
                               <div class="input-group">
                                 <input type="password" autocomplete="off" name="npass" id="npass"
-                                       class="form-control" toggle="npass_togglePassword" required>
+                                       class="form-control" data-pmf-toggle="npass_togglePassword" required>
                                 <span class="input-group-text" id="npass_togglePassword">
                                     <i class="fa fa-eye-slash" id="npass_togglePassword_icon"></i>
                                 </span>
@@ -784,7 +784,7 @@ if (
                             <div class="col-7">
                               <div class="input-group">
                                 <input type="password" autocomplete="off" name="bpass" id="bpass"
-                                       class="form-control" toggle="bpass_togglePassword" required>
+                                       class="form-control" data-pmf-toggle="bpass_togglePassword" required>
                                 <span class="input-group-text" id="bpass_togglePassword">
                                     <i class="fa fa-eye-slash" id="bpass_togglePassword_icon"></i>
                                 </span>
