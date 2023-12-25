@@ -106,7 +106,7 @@ const handleSMTPPasswordToggle = async () => {
     const containerDiv = document.createElement('div');
     containerDiv.classList.add('input-group');
     containerDiv.innerHTML = `
-        <input class="form-control" type="password" autocomplete="off" name="edit[mail.remoteSMTPPassword]" value="" toggle="SMTPtogglePassword">
+        <input class="form-control" type="password" autocomplete="off" name="edit[mail.remoteSMTPPassword]" value="" data-pmf-toggle="SMTPtogglePassword">
         ${toggleHTML}
     `;
     passwordField[0].insertAdjacentElement('afterend', containerDiv);
