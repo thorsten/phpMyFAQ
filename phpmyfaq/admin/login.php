@@ -66,7 +66,7 @@ if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {
                                             <div class="form-floating">
                                                 <input class="form-control" id="faqpassword" name="faqpassword"
                                                        type="password" autocomplete="off"
-                                                       placeholder="<?= Translation::get('ad_auth_passwd') ?>" toggle="faqpassword_toggle" />
+                                                       placeholder="<?= Translation::get('ad_auth_passwd') ?>" data-pmf-toggle="faqpassword_toggle" />
                                                 <label for="faqpassword">
                                                     <?= Translation::get('ad_auth_passwd') ?>
                                                 </label>
