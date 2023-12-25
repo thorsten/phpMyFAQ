@@ -2,7 +2,7 @@
 {# Macros #}
 
 {# input type=checkbox #}
-{% macro generateCheckbox(key, config, special) %}
+{% macro generateCheckbox(label, key, config, special) %}
   {% set checked = config[key] == 'true' ? ' checked' : '' %}
 
   {% set disabled = '' %}
@@ -15,24 +15,23 @@
   {% endif %}
 
   <div class="form-check">
-    <h1>
-      {{ special.ssoSupport }}
-    </h1>
-    <input class="form-check-input" type="checkbox" name="edit[{{ key }}]" value="true"{{ checked }}{{ disabled }}>
+    <input class="form-check-input" type="checkbox" name="edit[{{ key }}]" id="edit[{{ key }}]" value="true"{{ checked }}{{ disabled }}>
+    <label class="form-check-label" for="edit[{{ key }}]">{{ label | raw }}</label>
   </div>
 {% endmacro %}
 
 
 
 {# input type=password #}
-{% macro generatePasswordInput(key, value) %}
-  <input class="form-control" type="password" autocomplete="off" name="edit[{{ key }}]" value="{{ value|e('html_attr') }}">
+{% macro generatePasswordInput(label, key, value) %}
+  <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
+  <input class="form-control" type="password" autocomplete="off" name="edit[{{ key }}]" value="{{ value|e('html_attr') }}" data-pmf-toggle="instances_password_toggle">
 {% endmacro %}
 
 
 
 {# input type=text, email, url #}
-{% macro generateInputGroup(key, config) %}
+{% macro generateInputGroup(label, key, config) %}
   {% set value = config[key] | replace({'"': '&quot;'}) %}
 
   {% set type = {
@@ -50,6 +49,7 @@
     'ldap.ldap_options.LDAP_OPT_REFERRALS': 'number',
   }[key] | default('text') %}
 
+  <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
   <div class="input-group">
     <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]" value="{{ value|e('html_attr') }}" step="1" min="0">
 
@@ -64,32 +64,36 @@
 
 
 {# button #}
-{% macro sendTestMailButton(key) %}
+{% macro sendTestMailButton(label, key) %}
+  <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
   <button type="button" class="btn btn-primary" id="btn-phpmyfaq-{{ key|replace({'.': '-'}) }}" onclick="handleSendTestMail()">{{ key }}</button>
 {% endmacro %}
 
 
 
 {# textarea #}
-{% macro generateTextarea(key, value) %}
-  <textarea name="edit[{{ key }}]" rows="4" class="form-control">{{ value|e }}</textarea>
+{% macro generateTextarea(label, key, value) %}
+  <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
+  <textarea id="edit[{{ key }}]" name="edit[{{ key }}]" rows="4" class="form-control">{{ value|e }}</textarea>
 {% endmacro %}
 
 
 
 {# inout type=text readonly #}
-{% macro readOnlyTextInput(key, config) %}
+{% macro readOnlyTextInput(label, key, config) %}
   {% set value = config[key] | replace({'"': '&quot;'}) %}
 
-  <input type="text" readonly name="edit[{{ key }}]" class="form-control-plaintext" value="{{ value|e('html_attr') }}">
+  <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
+  <input id="edit[{{ key }}]" type="text" readonly name="edit[{{ key }}]" class="form-control-plaintext" value="{{ value|e('html_attr') }}">
 {% endmacro %}
 
 
 
-{% macro generateSelectBox(key, config) %}
+{% macro generateSelectBox(label, key, config) %}
   {% set value = config[key] | replace({'"': '&quot;'}) %}
 
-  <select name="edit[{{ key }}]" class="form-select" data-pmf-configuration-current-value="{{ value|e('html_attr') }}">
+  <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
+  <select id="edit[{{ key }}]" name="edit[{{ key }}]" class="form-select" data-pmf-configuration-current-value="{{ value|e('html_attr') }}">
     <!-- <option value="{{ value|e('html_attr') }}">{{ value|e('html_attr') }}</option> -->
   </select>
 {% endmacro %}

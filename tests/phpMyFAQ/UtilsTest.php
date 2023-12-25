@@ -2,7 +2,6 @@
 
 namespace phpMyFAQ;
 
-use phpDocumentor\Reflection\Types\This;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
@@ -162,19 +161,20 @@ class UtilsTest extends TestCase
         $string = '<p>Some text with a <strong>highlighted</strong> word.</p>';
         $highlight = 'highlighted';
 
-        $expected = '<p>Some text with a <strong><mark class="pmf-highlighted-string">highlighted</mark></strong> word.</p>';
+        $expected =
+            '<p>Some text with a <strong><mark class="pmf-highlighted-string">highlighted</mark></strong> word.</p>';
         $actual = Utils::setHighlightedString($string, $highlight);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function testIsLikeOnPhpMyFaqDateWithValidInput()
+    public function testIsLikeOnPhpMyFaqDateWithValidInput(): void
     {
         $validDate = '%20220301235959%';
         $this->assertTrue(Utils::isLikeOnPMFDate($validDate));
     }
 
-    public function testIsLikeOnPhpMyFaqDateWithInvalidInput()
+    public function testIsLikeOnPhpMyFaqDateWithInvalidInput(): void
     {
         $invalidDate = '%2022/03/01 23:59:59%';
         $this->assertFalse(Utils::isLikeOnPMFDate($invalidDate));

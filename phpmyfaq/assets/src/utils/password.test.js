@@ -1,17 +1,18 @@
 import { handlePasswordStrength, handlePasswordToggle, passwordStrength } from './password';
 
 describe('handlePasswordToggle', () => {
-  let togglePassword;
-  let password;
-
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <input type="password" id="faqpassword">
-      <button id="togglePassword"></button>
-    `;
-    togglePassword = document.querySelector('#togglePassword');
-    password = document.querySelector('#faqpassword');
-  });
+  document.body.innerHTML = `
+    <div>
+      <input type="password" data-pmf-toggle="toggle1">
+      <span id="toggle1"></span>
+      <span id="toggle1_icon" class="fa-eye"></span>
+    </div>
+    <div>
+      <input type="password" data-pmf-toggle="toggle2">
+      <span id="toggle2"></span>
+      <span id="toggle2_icon" class="fa-eye"></span>
+    </div>
+  `;
 
   afterEach(() => {
     document.body.innerHTML = '';
@@ -20,25 +21,29 @@ describe('handlePasswordToggle', () => {
   test('should toggle the password visibility when clicked', () => {
     handlePasswordToggle();
 
-    togglePassword.click();
-    expect(password.getAttribute('type')).toBe('text');
-    expect(togglePassword.classList.contains('is-active')).toBe(true);
+    // Trigger a click event on the first toggle
+    const toggle1 = document.getElementById('toggle1');
+    toggle1.click();
 
-    togglePassword.click();
-    expect(password.getAttribute('type')).toBe('password');
-    expect(togglePassword.classList.contains('is-active')).toBe(false);
-  });
+    // Check if the first password input type is 'text'
+    const passwordInput1 = document.querySelector('input[data-pmf-toggle="toggle1"]');
+    expect(passwordInput1.getAttribute('type')).toBe('text');
 
-  test('should not throw error if togglePassword element is missing', () => {
-    handlePasswordToggle();
+    // Check if the first icon has the 'fa-eye-slash' class
+    const icon1 = document.getElementById('toggle1_icon');
+    expect(icon1.classList.contains('fa-eye-slash')).toBe(true);
 
-    document.body.innerHTML = `
-      <input type="password" id="faqpassword">
-    `;
+    // Trigger a click event on the second toggle
+    const toggle2 = document.getElementById('toggle2');
+    toggle2.click();
 
-    expect(() => {
-      togglePassword.click();
-    }).not.toThrow();
+    // Check if the second password input type is 'text'
+    const passwordInput2 = document.querySelector('input[data-pmf-toggle="toggle2"]');
+    expect(passwordInput2.getAttribute('type')).toBe('text');
+
+    // Check if the second icon has the 'fa-eye-slash' class
+    const icon2 = document.getElementById('toggle2_icon');
+    expect(icon2.classList.contains('fa-eye-slash')).toBe(true);
   });
 });
 

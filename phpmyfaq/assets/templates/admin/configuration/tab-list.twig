@@ -1,25 +1,22 @@
 {% import 'admin/configuration/macros.twig' as macros %}
 
 {% for key, configItem in configurationList %}
-  <div class="row my-2">
-    <label class="col-lg-3 col-form-label">
-      {{ configItem.label | raw }}
-    </label>
-    <div class="col-lg-6">
+  <div class="row mb-3">
+    <div class="col-9">
       {% if configItem.element == 'area' %}
-      {{ macros.generateTextarea(key, configurationData[key]) }}
+        {{ macros.generateTextarea(configItem.label, key, configurationData[key]) }}
       {% elseif configItem.element == 'checkbox' %}
-      {{ macros.generateCheckbox(key, configurationData, specialCases) }}
+        {{ macros.generateCheckbox(configItem.label, key, configurationData, specialCases) }}
       {% elseif configItem.element == 'password' %}
-      {{ macros.generatePasswordInput(key, configurationData[key]) }}
+        {{ macros.generatePasswordInput(configItem.label, key, configurationData[key]) }}
       {% elseif configItem.element == 'input' %}
-      {{ macros.generateInputGroup(key, configurationData) }}
+        {{ macros.generateInputGroup(configItem.label, key, configurationData) }}
       {% elseif configItem.element == 'button' %}
-      {{ macros.sendTestMailButton(key) }}
+        {{ macros.sendTestMailButton(configItem.label, key) }}
       {% elseif configItem.element == 'print' %}
-      {{ macros.readOnlyTextInput(key, configurationData) }}
+        {{ macros.readOnlyTextInput(configItem.label, key, configurationData) }}
       {% elseif configItem.element == 'select' %}
-        {{ macros.generateSelectBox(key, configurationData) }}
+        {{ macros.generateSelectBox(configItem.label, key, configurationData) }}
       {% endif %}
     </div>
   </div>

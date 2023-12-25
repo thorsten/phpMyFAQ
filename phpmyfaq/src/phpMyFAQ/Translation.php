@@ -154,7 +154,6 @@ class Translation
 
         $configuration = [];
 
-        Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
         foreach ($LANG_CONF as $key => $value) {
             if (str_starts_with($key, $section)) {
                 $configuration[$key] = ['element' => $value[0] ?? '', 'label' => $value[1] ?? ''];
@@ -175,6 +174,8 @@ class Translation
                 }
             }
         }
+
+        Utils::moveToTop($configuration, 'main.maintenanceMode');
 
         return $configuration;
     }
