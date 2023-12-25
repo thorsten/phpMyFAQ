@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 3.2 default admin user management layout
+ * phpMyFAQ 4.0 default admin user management layout
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,6 +12,10 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-23
  */
+
+.autocomplete {
+  @extend .shadow;
+}
 
 .pmf-user-list-result {
   background-color: white;

@@ -290,7 +290,7 @@ if (
         <div id="pmf-user-message"><?= $message ?></div>
 
         <div class="row mb-2">
-            <div class="col-lg-4">
+            <div class="col-6 offset-3">
                 <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                       method="post" role="form" class="form_inline">
                     <input type="hidden" id="current_user_id" value="<?= $userId ?>">
@@ -309,8 +309,11 @@ if (
                     </div>
                 </form>
             </div>
+        </div>
 
-            <div class="col-lg-4">
+        <div class="row mb-2">
+
+            <div class="col-lg-8">
                 <div class="card shadow mb-4">
                     <h5 class="card-header py-3" id="user_data_legend">
                         <i aria-hidden="true" class="fa fa-user"></i> <?= Translation::get('ad_user_profou') ?>
@@ -326,7 +329,7 @@ if (
                                     <?= Translation::get('msgAuthenticationSource') ?>
                                 </label>
                                 <div class="col-lg-8">
-                                    <input id="auth_source" class="form-control-plaintext" type="text" value=""
+                                    <input id="auth_source" class="form-control-plaintext" type="text" value="n/a"
                                            readonly>
                                 </div>
                             </div>
@@ -400,7 +403,8 @@ if (
                         </div>
                         <div class="card-footer text-end">
                             <?php if ($userId > 0): ?>
-                            <a class="btn btn-danger" href="?action=user&amp;user_action=delete_confirm&user_delete_id=<?= $userId ?>">
+                            <a class="btn btn-danger"
+                               href="?action=user&amp;user_action=delete_confirm&user_delete_id=<?= $userId ?>">
                                 <?= Translation::get('ad_user_delete') ?>
                             </a>
                             <?php endif; ?>
@@ -418,10 +422,17 @@ if (
                     <input type="hidden" name="user_id" id="rights_user_id" value="0">
                     <?= Token::getInstance()->getTokenInput('update-user-rights') ?>
 
-                    <div class="card shadow mb-4">
-                        <h5 class="card-header py-3" id="user_rights_legend">
-                            <i aria-hidden="true" class="fa fa-lock"></i> <?= Translation::get('ad_user_rights') ?>
-                        </h5>
+                    <div class="card shadow h-50 mb-4">
+                        <div class="card-header d-flex justify-content-between flex-wrap align-items-center py-3">
+                            <h5 class="" id="user_rights_legend">
+                                <i aria-hidden="true" class="fa fa-lock"></i> <?= Translation::get('ad_user_rights') ?>
+                            </h5>
+                            <div class="card-button">
+                                <button class="btn btn-success" type="submit">
+                                    <?= Translation::get('ad_gen_save') ?>
+                                </button>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <div class="text-center mb-3">
                                 <button type="button" class="btn btn-primary btn-sm" id="checkAll">
