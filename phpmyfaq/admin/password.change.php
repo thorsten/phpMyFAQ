@@ -77,7 +77,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
         'csrfToken' => Token::getInstance()->getTokenString('password'),
         'adminMsgOldPassword' => Translation::get('ad_passwd_old'),
         'adminMsgNewPassword' => Translation::get('ad_passwd_new'),
-        'adminMsgNewPasswordRepeat' => Translation::get('ad_passwd_con'),
+        'adminMsgNewPasswordConfirm' => Translation::get('ad_passwd_con'),
         'adminMsgButtonNewPassword' => Translation::get('ad_passwd_change')
     ];
 
