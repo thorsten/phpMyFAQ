@@ -207,9 +207,9 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                   <div class="col-sm-9">
                     <div class="input-group">
                       <input name="sql_password" type="password" autocomplete="off" id="faqpassword"
-                             class="form-control" required>
-                      <span class="input-group-text">
-                        <i class="fa" id="togglePassword"></i>
+                             class="form-control" data-pmf-toggle="togglePasswordSQL" required>
+                      <span class="input-group-text" id="togglePasswordSQL">
+                        <i class="fa fa-eye-slash" id="togglePasswordSQL_icon"></i>
                       </span>
                     </div>
                     <small class="form-text text-muted">Please enter your database password.</small>
@@ -418,17 +418,27 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="password">Your password:</label>
               <div class="col-sm-9">
+               <div class="input-group">
                 <input type="password" autocomplete="off" name="password" id="password" class="form-control"
-                       placeholder="Your password with at least 8 characters" minlength="8" required>
-                <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
+                       placeholder="Your password with at least 8 characters" minlength="8" data-pmf-toggle="togglePasswordFAQ" required>
+                <span class="input-group-text" id="togglePasswordFAQ">
+                    <i class="fa fa-eye-slash" id="togglePasswordFAQ_icon"></i>
+                </span>
+               </div>
+               <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
               </div>
             </div>
             <div class="row mb-2">
               <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
               <div class="col-sm-9">
+               <div class="input-group">
                 <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
-                       placeholder="Retype the password" minlength="8" class="form-control" required>
-                <small class="form-text text-muted">Please retype your password.</small>
+                       placeholder="Retype the password" minlength="8" class="form-control" data-pmf-toggle="togglePasswordFAQ_confirm" required>
+                <span class="input-group-text" id="togglePasswordFAQ_confirm">
+                    <i class="fa fa-eye-slash" id="togglePasswordFAQ_confirm_icon"></i>
+                </span>
+               </div>
+               <small class="form-text text-muted">Please retype your password.</small>
               </div>
             </div>
             <div class="row mb-2">
