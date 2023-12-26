@@ -1384,4 +1384,7 @@ $PMF_LANG['msgNoHashAllowed'] = "It is not allowed to use '#'.";
 // added v4.0.0-alpha - 2023-12-24 by Jan
 $LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Seperate with commas)'];
 
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gravatar image';
+
 return $PMF_LANG;

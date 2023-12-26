@@ -1364,4 +1364,7 @@ $PMF_LANG['msgNoHashAllowed'] = "Die Frage darf '#' nicht enthalten.";
 // added v4.0.0-alpha - 2023-12-24 by Jan
 $LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren (Mit Kommas trennen)'];
 
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
+
 return $PMF_LANG;

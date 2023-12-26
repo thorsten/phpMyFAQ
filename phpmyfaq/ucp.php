@@ -67,7 +67,9 @@ if ($user->isLoggedIn()) {
         'mainPageContent',
         [
             'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
+            'msgGravatar' => Translation::get('msgGravatar'),
             'ucpGravatarImage' => $gravatarImg,
+            'msgHeaderUserData' => Translation::get('headerUserControlPanel'),
             'userid' => $user->getUserId(),
             'csrf' => Token::getInstance()->getTokenInput('ucp'),
             'lang' => $Language->getLanguage(),
