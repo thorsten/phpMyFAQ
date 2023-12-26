@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Template;
 
+use phpMyFAQ\System;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -26,14 +27,19 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TemplateWrapper;
 use Twig\TwigFunction;
 
-class TwigWrapper
+readonly class TwigWrapper
 {
-    private readonly Environment $twig;
+    private Environment $twig;
 
     public function __construct(string $templatePath)
     {
         $loader = new FilesystemLoader($templatePath);
-        $this->twig = new Environment($loader);
+        $this->twig = new Environment(
+            $loader,
+            [
+                'debug' => System::isDevelopmentVersion()
+            ]
+        );
     }
 
     /**

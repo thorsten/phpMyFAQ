@@ -114,7 +114,7 @@ class CategoryPermission
 
     /**
      * Returns true, if a given category has user or group permissions.
-     * Otherwise, the methods returns false.
+     * Otherwise, the methods return false.
      */
     public function isRestricted(int $categoryId): bool
     {

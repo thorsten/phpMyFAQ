@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="fa fa-list-alt"></i>
-              <?= Translation::get('ad_entry_aor') ?>
+              <?= Translation::get('ad_entry_aor') ?> (Preview: <a href="?action=faqs-overview">New Frontend</a>)
           </h1>
         </div>
 
