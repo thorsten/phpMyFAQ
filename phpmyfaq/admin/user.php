@@ -711,7 +711,6 @@ if (
                                         </span>
                                     </div>
                                 </div>
-                                </div>
                             </div>
 
                             <div class="row mb-2">
