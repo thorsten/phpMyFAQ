@@ -18,13 +18,15 @@ export const handlePasswordToggle = () => {
   passwordInputs.forEach(function(field) {
       const toggleId = field.getAttribute('data-pmf-toggle');
       const toggle = document.getElementById(toggleId);
-      toggle.addEventListener('click', () => {
-          const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
-          field.setAttribute('type', type);
-          const icon = document.getElementById(toggleId + '_icon');
-          icon.classList.toggle('fa-eye');
-          icon.classList.toggle('fa-eye-slash');
-      });
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+            field.setAttribute('type', type);
+            const icon = document.getElementById(toggleId + '_icon');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+      }
   });
 };
 
