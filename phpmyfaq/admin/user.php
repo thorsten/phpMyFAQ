@@ -522,14 +522,13 @@ if (
         <table class="table table-striped align-middle" id="pmf-admin-user-table">
             <thead class="thead-dark">
             <tr>
-                <th><?= Translation::get('ad_entry_id') ?></th>
+                <th><?= Translation::get('msgNewContentName') ?></th>
+                <th><?= Translation::get('msgNewContentMail') ?></th>
+                <th><?= Translation::get('ad_auth_user') ?></th>
                 <th><?= Translation::get('ad_user_status') ?></th>
                 <th><?= Translation::get('ad_user_is_superadmin') ?></th>
                 <th><?= Translation::get('ad_user_is_visible') ?></th>
-                <th><?= Translation::get('msgNewContentName') ?></th>
-                <th><?= Translation::get('ad_auth_user') ?></th>
-                <th><?= Translation::get('msgNewContentMail') ?></th>
-                <th colspan="3">&nbsp;</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <?php
@@ -559,65 +558,71 @@ if (
 
             ?>
                 <tr class="row_user_id_<?= $user->getUserId() ?>">
-                    <td><?= $user->getUserId() ?></td>
-                    <td class="text-center"><i class="fa <?php
-                    switch ($user->getStatus()) {
-                        case 'active':
-                            echo 'fa-check-circle-o';
-                            break;
-                        case 'blocked':
-                            echo 'fa-ban';
-                            break;
-                        case 'protected':
-                            echo 'fa-lock';
-                            break;
-                    }
-                    ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
-                    <td class="text-center">
-                        <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
-                    </td>
-                    <td class="text-center">
-                        <i class="fa <?= $user->getUserData('is_visible') ? 'fa-user' : 'fa-user-o' ?>"></i>
-                    </td>
                     <td><?= Strings::htmlentities($user->getUserData('display_name')) ?></td>
-                    <td><?= Strings::htmlentities($user->getLogin()) ?></td>
                     <td>
                         <a href="mailto:<?= $user->getUserData('email') ?>">
                             <?= $user->getUserData('email') ?>
                         </a>
                     </td>
+                    <td><?= Strings::htmlentities($user->getLogin()) ?></td>
+
+                    <td class="text-center"><i class="fa <?php
+                    switch ($user->getStatus()) {
+                        case 'active':
+                            echo 'fa-check-circle-o text-success';
+                            break;
+                        case 'blocked':
+                            echo 'fa-ban text-danger';
+                            break;
+                        case 'protected':
+                            echo 'fa-lock text-warning';
+                            break;
+                    }
+                    ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
+                    <td class="text-center">
+                        <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret text-success' : 'fa-user-times' ?>"></i>
+                    </td>
+                    <td class="text-center">
+                        <i class="fa <?= $user->getUserData('is_visible') ? 'fa-user' : 'fa-user-o' ?>"></i>
+                    </td>
+
                     <td>
                         <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>"
-                           class="btn btn-sm btn-info">
-                            <i class="fa fa-pencil"></i> <?= Translation::get('ad_user_edit') ?>
+                           class="btn btn-sm">
+                            <i class="fa fa-pencil text-info"></i> <?= Translation::get('ad_user_edit') ?>
                         </a>
-                    </td>
-                    <td>
                         <?php
                         if ($user->getStatus() === 'blocked') : ?>
-                            <button type="button" class="btn btn-sm btn-success btn-activate-user"
+                            <button type="button" class="btn btn-sm btn-activate-user"
                                     id="btn_activate_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
+                                <i class="fa fa-check-circle-o text-success"
+                                   data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
+                                   data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_news_set_active') ?>
                             </button>
                             <?php
                         endif;
                         ?>
-                    </td>
-                    <td>
                         <?php
                         if ($user->getStatus() !== 'protected') {
                             $csrfToken = Token::getInstance()->getTokenString('delete-user');
                             ?>
-                            <button type="button" class="btn btn-sm btn-danger btn-delete-user"
+                            <button type="button" class="btn btn-sm btn-delete-user"
                                     id="btn_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= $csrfToken ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
-                                <i class="fa fa-trash" data-csrf-token="<?= $csrfToken ?>"
+                                <i class="fa fa-trash text-danger" data-csrf-token="<?= $csrfToken ?>"
                                    data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_user_delete') ?>
                             </button>
+                            <?php
+                        } else {
+                            ?>
+                            <span class="small py-2">
+                                <i class="fa fa-trash text-dark"></i> <?= Translation::get('ad_user_delete') ?>
+                            </span>
                             <?php
                         }
                         ?>
