@@ -402,7 +402,7 @@ if (
 
                         </div>
                         <div class="card-footer text-end">
-                            <?php if ($userId > 0): ?>
+                            <?php if ($userId > 0) : ?>
                             <a class="btn btn-danger"
                                href="?action=user&amp;user_action=delete_confirm&user_delete_id=<?= $userId ?>">
                                 <?= Translation::get('ad_user_delete') ?>
@@ -548,16 +548,16 @@ if (
         foreach ($allUsers as $listedUserId) {
             $user->getUserById($listedUserId, true);
 
-                if ($displayedCounter >= $perPage) {
-                    continue;
-                }
+            if ($displayedCounter >= $perPage) {
+                continue;
+            }
                 ++$counter;
-                if ($counter <= $firstPage) {
-                    continue;
-                }
+            if ($counter <= $firstPage) {
+                continue;
+            }
                 ++$displayedCounter;
 
-                ?>
+            ?>
                 <tr class="row_user_id_<?= $user->getUserId() ?>">
                     <td><?= $user->getUserId() ?></td>
                     <td class="text-center"><i class="fa <?php
@@ -609,7 +609,7 @@ if (
                         <?php
                         if ($user->getStatus() !== 'protected') {
                             $csrfToken = Token::getInstance()->getTokenString('delete-user');
-                        ?>
+                            ?>
                             <button type="button" class="btn btn-sm btn-danger btn-delete-user"
                                     id="btn_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= $csrfToken ?>"
@@ -618,14 +618,14 @@ if (
                                    data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_user_delete') ?>
                             </button>
-                        <?php
+                            <?php
                         }
                         ?>
                     </td>
                 </tr>
                 <?php
-            }
-            ?>
+        }
+        ?>
             </tbody>
         </table>
         <?php
@@ -705,7 +705,8 @@ if (
                                     <div class="input-group">
                                         <input type="password" name="add_user_password" id="add_user_password"
                                             class="form-control" minlength="8"
-                                            autocomplete="off" tabindex="4" data-pmf-toggle="add_user_password_togglePassword">
+                                            autocomplete="off" tabindex="4"
+                                               data-pmf-toggle="add_user_password_togglePassword">
                                         <span class="input-group-text" id="add_user_password_togglePassword">
                                             <i class="fa fa-eye-slash" id="add_user_password_togglePassword_icon"></i>
                                         </span>
@@ -720,9 +721,11 @@ if (
                                     <div class="input-group">
                                         <input type="password" name="add_user_password_confirm"
                                             id="add_user_password_confirm" minlength="8"
-                                            class="form-control" autocomplete="off" tabindex="5" data-pmf-toggle="add_user_password_confirm_togglePassword">
+                                            class="form-control" autocomplete="off" tabindex="5"
+                                               data-pmf-toggle="add_user_password_confirm_togglePassword">
                                         <span class="input-group-text" id="add_user_password_confirm_togglePassword">
-                                            <i class="fa fa-eye-slash" id="add_user_password_confirm_togglePassword_icon"></i>
+                                            <i class="fa fa-eye-slash"
+                                               id="add_user_password_confirm_togglePassword_icon"></i>
                                         </span>
                                     </div>
                                 </div>
