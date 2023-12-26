@@ -19,7 +19,7 @@ export const handleReloadCaptcha = (reloadButton) => {
     event.preventDefault();
 
     const action = event.target.getAttribute('data-action');
-    const date = new Date().getTime();
+    const date = Math.floor(new Date().getTime() / 1000);
 
     fetch(`index.php?action=${action}&gen=img&ck=${date}`)
       .then(async (response) => {
