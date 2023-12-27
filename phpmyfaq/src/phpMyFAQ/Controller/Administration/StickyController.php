@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Admin Sticky FAQs Controller.
  *
@@ -31,11 +32,11 @@ class StickyController extends AbstractController
     public function saveOrder(Request $request): JsonResponse
     {
         $response = new JsonResponse();
-        
+
         $data = json_decode($request->getContent());
         $faq = new Faq(Configuration::getConfigurationInstance());
         $faq->setStickyFaqOrder($data->faqIds);
-        
+
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(['success' => Translation::get('ad_categ_save_order')]);
 
