@@ -244,6 +244,44 @@ class Comments
     }
 
     /**
+     * Returns the number of comments of each category as an array.
+     * @return array<int>
+     */
+    public function getNumberOfCommentsByCategory(): array
+    {
+        $numbers = [];
+
+        $query = sprintf(
+            "
+            SELECT
+                COUNT(fc.id) AS number,
+                fcg.category_id AS category_id
+            FROM
+                %sfaqcomments fc
+            LEFT JOIN
+                %sfaqcategoryrelations fcg
+            ON
+                fc.id = fcg.record_id
+            WHERE
+                fc.type = '%s'
+            GROUP BY fcg.category_id
+            ORDER BY fcg.category_id",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            CommentType::FAQ
+        );
+
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
+                $numbers[$row->category_id] = (int)$row->number;
+            }
+        }
+
+        return $numbers;
+    }
+
+    /**
      * Returns all comments with their categories.
      *
      * @param string $type Type of comment: faq or news

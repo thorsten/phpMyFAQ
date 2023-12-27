@@ -18,13 +18,14 @@
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
               data-bs-target="#category-id-{{ category.id }}">
 
-        <span class="">{{ category.name }}</span>
+        <span class="lead">{{ category.name }}</span>
         <span class="badge bg-secondary mx-1">{{ numberOfRecords[category.id] ?? 0 }} {{ msgRecords }}</span>
+        <span class="badge bg-info mx-1">{{ numberOfComments[category.id] ?? 0 }} {{ msgComments }}</span>
 
       </button>
     </div>
     <div id="category-id-{{ category.id }}" class="accordion-collapse collapse"
-         data-bs-parent="#category-id-{{ category.id }}">
+         data-bs-parent="#category-id-{{ category.id }}" data-pmf-categoryId="{{ category.id }}">
       <div class="accordion-body">
         <table class="table table-bordered table-hover table-sm align-middle">
           <thead class="thead-light">
@@ -63,7 +64,7 @@
             </th>
           </tr>
           </thead>
-          <tbody>
+          <tbody id="tbody-category-id-{{ category.id }}">
 
           </tbody>
         </table>

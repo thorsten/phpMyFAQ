@@ -1,9 +1,21 @@
 .category-header-indent-0 {
-  padding-left: 0;
+  padding-left: 1px;
+  background: $secondary-bg-subtle;
 }
 .category-header-indent-1 {
-  padding-left: 1rem;
+  padding-left: 0.5rem;
+  background: $secondary-bg-subtle;
 }
 .category-header-indent-2 {
+  padding-left: 1rem;
+  background: $secondary-bg-subtle;
+}
+.category-header-indent-3 {
+  padding-left: 1.5rem;
+  background: $secondary-bg-subtle;
+}
+
+.category-header-indent-4 {
   padding-left: 2rem;
+  background: $secondary-bg-subtle;
 }

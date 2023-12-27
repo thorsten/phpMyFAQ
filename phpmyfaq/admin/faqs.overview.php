@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
@@ -40,6 +41,8 @@ $category->buildCategoryTree();
 $categoryRelation = new CategoryRelation($faqConfig, $category);
 $categoryRelation->setGroups($currentAdminGroups);
 
+$comments = new Comments($faqConfig);
+
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
@@ -50,7 +53,9 @@ $templateVars = [
     'csrfToken' => Token::getInstance()->getTokenString('faq-overview'),
     'categories' => $category->getCategoryTree(),
     'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
+    'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
     'msgRecords' => Translation::get('msgEntries'),
+    'msgComments' => Translation::get('ad_start_comments'),
     'msgQuestion' => Translation::get('ad_entry_theme'),
     'msgDate' => Translation::get('ad_entry_date'),
     'msgSticky' => Translation::get('ad_entry_sticky'),

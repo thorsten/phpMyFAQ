@@ -225,9 +225,9 @@ switch ($action) {
         if (!is_null($categoryId)) {
             try {
                 if ('all' === $filter) {
-                    $result = $faq->getAllFaqsByCategoryId($categoryId, 'id', 'ASC', false);
+                    $result = $faq->getAllAvailableFaqsByCategoryId($categoryId, 'id', 'ASC', false);
                 } else {
-                    $result = $faq->getAllFaqsByCategoryId($categoryId);
+                    $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
                 }
             } catch (Exception) {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);

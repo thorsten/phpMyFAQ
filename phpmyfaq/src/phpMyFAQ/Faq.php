@@ -128,7 +128,7 @@ class Faq
      *
      * @throws Exception
      */
-    public function getAllFaqsByCategoryId(
+    public function getAllAvailableFaqsByCategoryId(
         int $categoryId,
         string $orderBy = 'id',
         string $sortBy = 'ASC',
@@ -254,6 +254,91 @@ class Faq
                         'created' => $row->created,
                     ];
                 }
+            }
+        } else {
+            return $faqData;
+        }
+
+        return $faqData;
+    }
+
+    public function getAllFaqsByCategory(int $categoryId): array
+    {
+        $faqData = [];
+
+        $query = sprintf(
+            "
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.solution_id AS solution_id,
+                fd.active AS active,
+                fd.sticky AS sticky,
+                fd.thema AS question,
+                fd.updated AS updated,
+                fcr.category_id AS category_id,
+                fv.visits AS visits,
+                fd.created AS created
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqcategoryrelations AS fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqvisits AS fv
+            ON
+                fd.id = fv.id
+            AND
+                fv.lang = fd.lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fcr.category_id = %d
+            AND
+                fd.lang = '%s'
+            ORDER BY
+                fd.id ASC",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $categoryId,
+            $this->config->getLanguage()->getLanguage(),
+        );
+
+        $result = $this->config->getDb()->query($query);
+        $num = $this->config->getDb()->numRows($result);
+
+        if ($num > 0) {
+            while (($row = $this->config->getDb()->fetchObject($result))) {
+                if (empty($row->visits)) {
+                    $visits = 0;
+                } else {
+                    $visits = $row->visits;
+                }
+
+                $faqData[] = [
+                    'id' => $row->id,
+                    'language' => $row->lang,
+                    'solution_id' => $row->solution_id,
+                    'active' => $row->active,
+                    'sticky' => $row->sticky ? 'yes' : 'no',
+                    'category_id' => $row->category_id,
+                    'question' => $row->question,
+                    'updated' => $row->updated,
+                    'visits' => $visits,
+                    'created' => $row->created,
+                ];
             }
         } else {
             return $faqData;

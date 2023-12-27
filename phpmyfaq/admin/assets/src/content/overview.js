@@ -1,3 +1,19 @@
+/**
+ * Handle data for FAQs overview management
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2023 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2023-02-26
+ */
+
+import { fetchAllFaqsByCategory } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
@@ -6,6 +22,21 @@ export const handleFaqOverview = async () => {
   const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
   const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
   const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
+
+  const collapsedCategories = document.querySelectorAll('.accordion-collapse');
+
+  if (collapsedCategories) {
+    collapsedCategories.forEach((category) => {
+      const categoryId = category.getAttribute('data-pmf-categoryId');
+      category.addEventListener('hidden.bs.collapse', () => {
+        clearCategoryTable(categoryId);
+      });
+      category.addEventListener('shown.bs.collapse', async () => {
+        const faqs = await fetchAllFaqsByCategory(categoryId);
+        populateCategoryTable(categoryId, faqs.faqs);
+      });
+    });
+  }
 
   if (deleteFaqButtons) {
     deleteFaqButtons.forEach((element) => {
@@ -97,9 +128,6 @@ export const handleFaqOverview = async () => {
       element.addEventListener('change', (event) => {
         event.preventDefault();
 
-        console.log(event.target);
-        console.log('toggle active faqs');
-
         const categoryId = event.target.getAttribute('data-pmf-category-id');
         const faqIds = [];
         const token = event.target.getAttribute('data-pmf-csrf');
@@ -177,4 +205,40 @@ const saveStatus = (categoryId, faqIds, token, checked, type) => {
     .catch(async (error) => {
       console.error(await error.cause.response.json());
     });
+};
+
+const populateCategoryTable = (catgoryId, faqs) => {
+  const tableBody = document.getElementById(`tbody-category-id-${catgoryId}`);
+
+  faqs.forEach((faq) => {
+    const row = document.createElement('tr');
+
+    row.append(
+      addElement('td', { classList: 'align-middle text-center' }, [
+        addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.id }),
+      ])
+    );
+    row.append(addElement('td', { classList: 'align-middle text-center', innerText: faq.language }));
+    row.append(
+      addElement('td', { classList: 'align-middle text-center' }, [
+        addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.solution_id }),
+      ])
+    );
+    row.append(
+      addElement('td', {}, [
+        addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.question }),
+      ])
+    );
+    row.append(addElement('td', { classList: 'small', innerText: faq.created }));
+    row.append(addElement('td', { innerText: faq.active }));
+    row.append(addElement('td', { innerText: faq.sticky }));
+    row.append(addElement('td', { innerText: 'actions' }));
+
+    tableBody.appendChild(row);
+  });
+};
+
+const clearCategoryTable = (catgoryId) => {
+  const tableBody = document.getElementById(`tbody-category-id-${catgoryId}`);
+  tableBody.innerHTML = '';
 };

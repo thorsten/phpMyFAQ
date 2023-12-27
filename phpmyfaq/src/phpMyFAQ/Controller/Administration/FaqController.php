@@ -78,7 +78,7 @@ class FaqController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
             [
-                'faqs' => $faq->getAllFaqsByCategoryId($categoryId)
+                'faqs' => $faq->getAllFaqsByCategory($categoryId)
             ]
         );
 
