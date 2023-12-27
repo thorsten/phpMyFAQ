@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use Exception;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
@@ -55,6 +56,29 @@ class FaqController extends AbstractController
             [
                 'user' => $faqPermission->get(FaqPermission::USER, $faqId),
                 'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
+            ]
+        );
+
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('admin/api/faqs')]
+    public function listByCategory(Request $request): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+
+        $faq = new Faq($configuration);
+
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(
+            [
+                'faqs' => $faq->getAllFaqsByCategoryId($categoryId)
             ]
         );
 

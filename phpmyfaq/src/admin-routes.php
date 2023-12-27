@@ -282,6 +282,11 @@ $routes->add(
     new Route('/faq/sticky', ['_controller' => [FaqController::class, 'sticky'], '_methods' => 'POST'])
 );
 
+$routes->add(
+    'admin.api.faqs',
+    new Route('/faqs/{categoryId}', ['_controller' => [FaqController::class, 'listByCategory']])
+);
+
 //
 // Group API
 //

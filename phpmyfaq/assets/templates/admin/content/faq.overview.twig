@@ -11,12 +11,6 @@
   </div>
 {% endif %}
 
-<!--
-<pre>
-{{ dump(numberOfRecords) }}
-</pre>
--->
-
 <div class="accordion" id="pm-admin-faq-overview">
   {% for category in categories %}
   <div class="accordion-item">
@@ -32,9 +26,48 @@
     <div id="category-id-{{ category.id }}" class="accordion-collapse collapse"
          data-bs-parent="#category-id-{{ category.id }}">
       <div class="accordion-body">
-        <pre>
-          {{ dump(category) }}
-        </pre>
+        <table class="table table-bordered table-hover table-sm align-middle">
+          <thead class="thead-light">
+          <tr>
+            <th colspan="3" class="align-middle">
+              ID
+            </th>
+            <th class="align-middle">
+              {{ msgQuestion }}
+            </th>
+            <th class="align-middle">
+              {{ msgDate }}
+            </th>
+            <th class="align-middle">
+              <div class="form-check">
+                <input class="form-check-input pmf-admin-faqs-all-sticky" type="checkbox" value=""
+                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfToken }}"
+                       id="sticky_category_block_{{ category.id }}">
+                <label class="form-check-label" for="sticky_category_block_{{ category.id }}">
+                  {{ msgSticky }}
+                </label>
+              </div>
+            </th>
+            <th class="align-middle">
+              <div class="form-check">
+                <input class="form-check-input pmf-admin-faqs-all-active" type="checkbox" value=""
+                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfToken }}"
+                       id="active_category_block_{{ category.id }}">
+                <label class="form-check-label" for="sticky_category_block_{{ category.id }}">
+                  {{ msgActive }}
+                </label>
+              </div>
+            </th>
+            <th colspan="2" class="align-middle">
+              Actions
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+
       </div>
     </div>
   </div>

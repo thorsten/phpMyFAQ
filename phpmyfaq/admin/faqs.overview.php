@@ -18,6 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,10 +47,14 @@ $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
 $templateVars = [
     'msgHeaderFAQOverview' => Translation::get('ad_entry_aor'),
     'errorNoRecords' => Translation::get('err_noArticles'),
+    'csrfToken' => Token::getInstance()->getTokenString('faq-overview'),
     'categories' => $category->getCategoryTree(),
     'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
-    'msgRecords' => Translation::get('msgEntries')
-
+    'msgRecords' => Translation::get('msgEntries'),
+    'msgQuestion' => Translation::get('ad_entry_theme'),
+    'msgDate' => Translation::get('ad_entry_date'),
+    'msgSticky' => Translation::get('ad_entry_sticky'),
+    'msgActive' => Translation::get('ad_record_active'),
 ];
 
 echo $template->render($templateVars);
