@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">
+                <i aria-hidden="true" class="fa fa-star"></i>  {{ stickyFAQsHeader }}</h1>
+        </div>
+        {{ alert | raw }}
+        <div class="card shadow mt-5 ml-5" id="mainCardStickyFAQs">
+            <div class="card-body">
+                <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs">
+                    {{ generatedListStickyFaqs | raw }}
+                </ul>
+            </div>
+        </div>
