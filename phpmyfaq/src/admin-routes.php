@@ -34,6 +34,7 @@ use phpMyFAQ\Controller\Administration\StopWordController;
 use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use phpMyFAQ\Controller\Administration\UserController;
+use phpMyFAQ\Controller\Administration\StickyController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -501,6 +502,14 @@ $routes->add(
 $routes->add(
     'admin.api.export.report',
     new Route('/export/report', ['_controller' => [ExportController::class, 'exportReport'], '_methods' => 'POST'])
+);
+
+//
+// Sticky API
+//
+$routes->add(
+    'admin.api.sticky.order',
+    new Route('/sticky/order', ['_controller' => [StickyController::class, 'saveOrder'], '_methods' => 'POST'])
 );
 
 return $routes;
