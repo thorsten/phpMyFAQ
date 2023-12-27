@@ -13,16 +13,10 @@
  * @since     2023-02-26
  */
 
-import { fetchAllFaqsByCategory } from '../api';
+import { deleteFaq, fetchAllFaqsByCategory } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
-  const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
-  const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
-  const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
-  const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
-  const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
-
   const collapsedCategories = document.querySelectorAll('.accordion-collapse');
 
   if (collapsedCategories) {
@@ -33,131 +27,104 @@ export const handleFaqOverview = async () => {
       });
       category.addEventListener('shown.bs.collapse', async () => {
         const faqs = await fetchAllFaqsByCategory(categoryId);
-        populateCategoryTable(categoryId, faqs.faqs);
-      });
-    });
-  }
+        await populateCategoryTable(categoryId, faqs.faqs);
+        const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
+        const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
+        const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
+        const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
+        const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
 
-  if (deleteFaqButtons) {
-    deleteFaqButtons.forEach((element) => {
-      element.addEventListener('click', (event) => {
-        event.preventDefault();
+        deleteFaqButtons.forEach((element) => {
+          element.addEventListener('click', async (event) => {
+            event.preventDefault();
 
-        const faqId = event.target.getAttribute('data-pmf-id');
-        const faqLanguage = event.target.getAttribute('data-pmf-language');
-        const token = event.target.getAttribute('data-pmf-token');
+            const faqId = event.target.getAttribute('data-pmf-id');
+            const faqLanguage = event.target.getAttribute('data-pmf-language');
+            const token = event.target.getAttribute('data-pmf-token');
 
-        if (confirm('Are you sure?')) {
-          fetch('./api/faq/delete', {
-            method: 'DELETE',
-            headers: {
-              Accept: 'application/json, text/plain, */*',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              csrf: token,
-              faqId: faqId,
-              faqLanguage: faqLanguage,
-            }),
-          })
-            .then(async (response) => {
-              if (response.ok) {
-                return response.json();
-              }
-              throw new Error('Network response was not ok: ', { cause: { response } });
-            })
-            .then((response) => {
-              const result = response;
-              if (result.success) {
-                const faqTableRow = document.getElementById(`record_${faqId}_${faqLanguage}`);
-                faqTableRow.remove();
-              } else {
-                console.error(result.error);
-              }
-            })
-            .catch(async (error) => {
-              const errorMessage = await error.cause.response.json();
-              console.log(errorMessage);
-            });
-        }
-      });
-    });
-  }
-
-  if (toggleStickyAllFaqs) {
-    toggleStickyAllFaqs.forEach((element) => {
-      element.addEventListener('change', (event) => {
-        event.preventDefault();
-
-        const categoryId = event.target.getAttribute('data-pmf-category-id');
-        const faqIds = [];
-        const token = event.target.getAttribute('data-pmf-csrf');
-
-        const checkboxes = document.querySelectorAll('input[type=checkbox]');
-        if (checkboxes) {
-          checkboxes.forEach((checkbox) => {
-            if (checkbox.getAttribute('data-pmf-category-id-sticky') === categoryId) {
-              checkbox.checked = element.checked;
-              if (checkbox.checked === true) {
-                faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+            if (confirm('Are you sure?')) {
+              try {
+                const result = await deleteFaq(faqId, faqLanguage, token);
+                if (result.success) {
+                  const faqTableRow = document.getElementById(`faq_${faqId}_${faqLanguage}`);
+                  faqTableRow.remove();
+                }
+              } catch (error) {
+                console.error(error);
               }
             }
           });
-          saveStatus(categoryId, faqIds, token, event.target.checked, 'sticky');
-        }
-      });
-    });
-  }
+        });
 
-  if (toggleStickyFaq) {
-    toggleStickyFaq.forEach((element) => {
-      element.addEventListener('change', (event) => {
-        event.preventDefault();
+        toggleStickyAllFaqs.forEach((element) => {
+          element.addEventListener('change', (event) => {
+            event.preventDefault();
 
-        const categoryId = event.target.getAttribute('data-pmf-category-id-sticky');
-        const faqId = event.target.getAttribute('data-pmf-faq-id');
-        const token = event.target.getAttribute('data-pmf-csrf');
+            const categoryId = event.target.getAttribute('data-pmf-category-id');
+            const faqIds = [];
+            const token = event.target.getAttribute('data-pmf-csrf');
 
-        saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
-      });
-    });
-  }
-
-  if (toggleActiveAllFaqs) {
-    toggleActiveAllFaqs.forEach((element) => {
-      element.addEventListener('change', (event) => {
-        event.preventDefault();
-
-        const categoryId = event.target.getAttribute('data-pmf-category-id');
-        const faqIds = [];
-        const token = event.target.getAttribute('data-pmf-csrf');
-
-        const checkboxes = document.querySelectorAll('input[type=checkbox]');
-        if (checkboxes) {
-          checkboxes.forEach((checkbox) => {
-            if (checkbox.getAttribute('data-pmf-category-id-active') === categoryId) {
-              checkbox.checked = element.checked;
-              if (checkbox.checked === true) {
-                faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
-              }
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            if (checkboxes) {
+              checkboxes.forEach((checkbox) => {
+                if (checkbox.getAttribute('data-pmf-category-id-sticky') === categoryId) {
+                  checkbox.checked = element.checked;
+                  if (checkbox.checked === true) {
+                    faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+                  }
+                }
+              });
+              saveStatus(categoryId, faqIds, token, event.target.checked, 'sticky');
             }
           });
-          saveStatus(categoryId, faqIds, token, event.target.checked, 'active');
-        }
-      });
-    });
-  }
+        });
 
-  if (toggleActiveFaq) {
-    toggleActiveFaq.forEach((element) => {
-      element.addEventListener('change', (event) => {
-        event.preventDefault();
+        toggleStickyFaq.forEach((element) => {
+          element.addEventListener('change', (event) => {
+            event.preventDefault();
 
-        const categoryId = event.target.getAttribute('data-pmf-category-id-active');
-        const faqId = event.target.getAttribute('data-pmf-faq-id');
-        const token = event.target.getAttribute('data-pmf-csrf');
+            const categoryId = event.target.getAttribute('data-pmf-category-id-sticky');
+            const faqId = event.target.getAttribute('data-pmf-faq-id');
+            const token = event.target.getAttribute('data-pmf-csrf');
 
-        saveStatus(categoryId, [faqId], token, event.target.checked, 'active');
+            saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
+          });
+        });
+
+        toggleActiveAllFaqs.forEach((element) => {
+          element.addEventListener('change', (event) => {
+            event.preventDefault();
+
+            const categoryId = event.target.getAttribute('data-pmf-category-id');
+            const faqIds = [];
+            const token = event.target.getAttribute('data-pmf-csrf');
+
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            if (checkboxes) {
+              checkboxes.forEach((checkbox) => {
+                if (checkbox.getAttribute('data-pmf-category-id-active') === categoryId) {
+                  checkbox.checked = element.checked;
+                  if (checkbox.checked === true) {
+                    faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+                  }
+                }
+              });
+              saveStatus(categoryId, faqIds, token, event.target.checked, 'active');
+            }
+          });
+        });
+
+        toggleActiveFaq.forEach((element) => {
+          element.addEventListener('change', (event) => {
+            event.preventDefault();
+
+            const categoryId = event.target.getAttribute('data-pmf-category-id-active');
+            const faqId = event.target.getAttribute('data-pmf-faq-id');
+            const token = event.target.getAttribute('data-pmf-csrf');
+
+            saveStatus(categoryId, [faqId], token, event.target.checked, 'active');
+          });
+        });
       });
     });
   }
@@ -207,32 +174,71 @@ const saveStatus = (categoryId, faqIds, token, checked, type) => {
     });
 };
 
-const populateCategoryTable = (catgoryId, faqs) => {
+const populateCategoryTable = async (catgoryId, faqs) => {
   const tableBody = document.getElementById(`tbody-category-id-${catgoryId}`);
+  const csrfToken = tableBody.getAttribute('data-pmf-csrf');
 
   faqs.forEach((faq) => {
     const row = document.createElement('tr');
+    row.setAttribute('id', `faq_${faq.id}_${faq.language}`);
 
     row.append(
-      addElement('td', { classList: 'align-middle text-center' }, [
+      addElement('td', { classList: 'align-middle text-center text-decoration-none' }, [
         addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.id }),
       ])
     );
     row.append(addElement('td', { classList: 'align-middle text-center', innerText: faq.language }));
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
-        addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.solution_id }),
+        addElement('a', {
+          classList: 'text-decoration-none',
+          href: `?action=editentry&id=${faq.id}&lang=${faq.language}`,
+          innerText: faq.solution_id,
+        }),
       ])
     );
     row.append(
       addElement('td', {}, [
-        addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.question }),
+        addElement('a', {
+          classList: 'text-decoration-none',
+          href: `?action=editentry&id=${faq.id}&lang=${faq.language}`,
+          innerText: faq.question,
+        }),
       ])
     );
     row.append(addElement('td', { classList: 'small', innerText: faq.created }));
     row.append(addElement('td', { innerText: faq.active }));
     row.append(addElement('td', { innerText: faq.sticky }));
-    row.append(addElement('td', { innerText: 'actions' }));
+    row.append(
+      addElement('td', {}, [
+        addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [
+          addElement('i', { classList: 'fa fa-copy', 'aria-hidden': 'true' }),
+        ]),
+      ])
+    );
+    row.append(
+      addElement('td', {}, [
+        addElement(
+          'button',
+          {
+            classList: 'btn btn-danger pmf-button-delete-faq',
+            type: 'button',
+            'data-pmfId': faq.id,
+            'data-pmfLanguage': faq.language,
+            'data-pmfToken': csrfToken,
+          },
+          [
+            addElement('i', {
+              classList: 'fa fa-trash',
+              'aria-hidden': 'true',
+              'data-pmfId': faq.id,
+              'data-pmfLanguage': faq.language,
+              'data-pmfToken': csrfToken,
+            }),
+          ]
+        ),
+      ])
+    );
 
     tableBody.appendChild(row);
   });

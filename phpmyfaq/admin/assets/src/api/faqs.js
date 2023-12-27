@@ -35,3 +35,54 @@ export const fetchAllFaqsByCategory = async (categoryId) => {
     throw error;
   }
 };
+
+export const fetchFaqsByAutocomplete = async (searchTerm, csrfToken) => {
+  try {
+    const response = await fetch(`./api/faq/search`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        search: searchTerm,
+        csrf: csrfToken,
+      }),
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error fetching FAQs: ', error);
+    throw error;
+  }
+};
+
+export const deleteFaq = async (faqId, faqLanguage, token) => {
+  try {
+    const response = await fetch('./api/faq/delete', {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrf: token,
+        faqId: faqId,
+        faqLanguage: faqLanguage,
+      }),
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error deleting FAQ: ', error);
+    throw error;
+  }
+};

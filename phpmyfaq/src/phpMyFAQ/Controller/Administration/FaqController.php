@@ -68,6 +68,8 @@ class FaqController extends AbstractController
     #[Route('admin/api/faqs')]
     public function listByCategory(Request $request): JsonResponse
     {
+        $this->userHasPermission('edit_faq');
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
@@ -221,7 +223,6 @@ class FaqController extends AbstractController
         $faqSearch = new Search($configuration);
         $faqSearch->setCategory(new Category($configuration));
         $faqSearchResult = new SearchResultSet($user, $faqPermission, $configuration);
-        $searchResult = '';
         $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($searchString)) {

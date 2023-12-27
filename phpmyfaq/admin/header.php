@@ -69,12 +69,6 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq',
 //     $action
 //);
 
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-    'edit_faq+delete_faq',
-    'searchfaqs',
-    'ad_menu_searchfaqs',
-    $action
-);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
@@ -152,11 +146,11 @@ switch ($action) {
     case 'movecategory':
     case 'changecategory':
     case 'showcategory':
+    case 'faqs-overview':
     case 'editentry':
     case 'insertentry':
     case 'saveentry':
     case 'view':
-    case 'searchfaqs':
     case 'glossary':
     case 'saveglossary':
     case 'updateglossary':

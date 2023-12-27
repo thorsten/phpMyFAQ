@@ -145,8 +145,13 @@ class SearchHelper extends Helper
 
                 // Build the link to the faq record
                 $currentUrl = $this->config->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
+                $adminUrl = $this->config->getDefaultUrl() . sprintf(
+                    'admin/?action=editentry&id=%d&lang=%s',
+                    $result->id,
+                    $result->lang
+                );
 
-                $results[] = [ 'url' => $currentUrl, 'question' => $result->question ];
+                $results[] = [ 'url' => $currentUrl, 'question' => $result->question, 'adminUrl' => $adminUrl ];
                 ++$i;
             }
         }

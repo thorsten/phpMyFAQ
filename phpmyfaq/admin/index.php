@@ -258,9 +258,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'view':
                 require 'record.show.php';
                 break;
-            case 'searchfaqs':
-                require 'record.search.php';
-                break;
             case 'takequestion':
             case 'editentry':
             case 'copyentry':

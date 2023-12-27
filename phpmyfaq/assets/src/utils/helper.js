@@ -29,8 +29,19 @@ export const insertAfter = (referenceNode, newNode) => {
  * @param children
  * @returns {*}
  */
-export const addElement = (htmlTag, properties = {}, children = []) =>
-  children.reduce((e, c) => (e.appendChild(c), e), Object.assign(document.createElement(htmlTag), properties));
+export const addElement = (htmlTag, properties = {}, children = []) => {
+  const element = Object.assign(document.createElement(htmlTag), properties);
+
+  Object.keys(properties).forEach((key) => {
+    if (key.startsWith('data-')) {
+      const dataKey = key.replace('data-', '');
+      element.dataset[dataKey] = properties[key];
+    }
+  });
+
+  children.forEach((child) => element.appendChild(child));
+  return element;
+};
 
 /**
  * Escapes a given string.

@@ -3,6 +3,19 @@
     <i aria-hidden="true" class="fa fa-list-alt"></i>
     {{ msgHeaderFAQOverview }} <span class="badge bg-danger">PREVIEW</span>
   </h1>
+  <div class="pmf-faq-overview-search col-4">
+    <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="?action=faq-overview"
+          method="post" role="form">
+      {{ csrfTokenSearch | raw }}
+      <div class="input-group">
+        <input type="text" class="form-control form-control-lg" placeholder="{{ msgSearch }}"
+               id="pmf-faq-overview-search-input" autocomplete="off">
+        <button class="btn btn-primary" type="button" id="pmf-faq-overview-search-button">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% if categories is empty %}
@@ -42,7 +55,7 @@
             <th class="align-middle">
               <div class="form-check">
                 <input class="form-check-input pmf-admin-faqs-all-sticky" type="checkbox" value=""
-                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfToken }}"
+                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
                        id="sticky_category_block_{{ category.id }}">
                 <label class="form-check-label" for="sticky_category_block_{{ category.id }}">
                   {{ msgSticky }}
@@ -52,7 +65,7 @@
             <th class="align-middle">
               <div class="form-check">
                 <input class="form-check-input pmf-admin-faqs-all-active" type="checkbox" value=""
-                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfToken }}"
+                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
                        id="active_category_block_{{ category.id }}">
                 <label class="form-check-label" for="sticky_category_block_{{ category.id }}">
                   {{ msgActive }}
@@ -64,11 +77,10 @@
             </th>
           </tr>
           </thead>
-          <tbody id="tbody-category-id-{{ category.id }}">
+          <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}">
 
           </tbody>
         </table>
-
       </div>
     </div>
   </div>

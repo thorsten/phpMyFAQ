@@ -49,8 +49,10 @@ $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
 
 $templateVars = [
     'msgHeaderFAQOverview' => Translation::get('ad_entry_aor'),
+    'msgSearch' => Translation::get('ad_menu_searchfaqs'),
+    'csrfTokenSearch' => Token::getInstance()->getTokenInput('edit-faq'),
     'errorNoRecords' => Translation::get('err_noArticles'),
-    'csrfToken' => Token::getInstance()->getTokenString('faq-overview'),
+    'csrfTokenOverview' => Token::getInstance()->getTokenString('faq-overview'),
     'categories' => $category->getCategoryTree(),
     'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
     'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
