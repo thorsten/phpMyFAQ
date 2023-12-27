@@ -1367,4 +1367,8 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren
 // added v4.0.0-alpha - 2023-12-26 by Thorsten
 $PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
 
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn du diese Funktion nutzen möchtest, aktiviere sie in der <a class="alert-link" href="./?action=config">Konfiguration</a> -> FAQs.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Benutzerdefinierte Sortierung von wichtigen FAQs'];
+
 return $PMF_LANG;
