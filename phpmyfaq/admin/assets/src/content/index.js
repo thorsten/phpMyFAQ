@@ -9,3 +9,4 @@ export * from './markdown';
 export * from './overview';
 export * from './question';
 export * from './tags';
+export * from './stickyfaqs';
