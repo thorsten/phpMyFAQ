@@ -35,6 +35,7 @@ import {
   handleOpenQuestions,
   handleTags,
   renderEditor,
+  handleStickyFaqs,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -83,6 +84,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Content -> Tags
   handleTags();
+
+  // Content -> Sticky FAQs
+  handleStickyFaqs();
 
   // Statistics
   handleStatistics();
