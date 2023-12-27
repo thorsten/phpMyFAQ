@@ -246,9 +246,11 @@ class Utils
      */
     public static function moveToTop(array &$array, string $key): void
     {
-        $temp = [$key => $array[$key]];
-        unset($array[$key]);
-        $array = $temp + $array;
+        if (isset($array[$key])) {
+            $temp = [$key => $array[$key]];
+            unset($array[$key]);
+            $array = $temp + $array;
+        }
     }
 
     /**
