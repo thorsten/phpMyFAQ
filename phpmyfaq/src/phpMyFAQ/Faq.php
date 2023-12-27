@@ -2619,11 +2619,13 @@ class Faq
     public function setStickyFaqOrder(array $faqIds): bool
     {
         $count = 1;
-        for ($i=0;$i<count($faqIds);$i++) {
-            $query = sprintf("UPDATE `%sfaqdata` SET `sticky_order`=%d WHERE `id`=%d",
-                    Database::getTablePrefix(),
-                    $count,
-                    $faqIds[$i]);
+        for ($i = 0; $i < count($faqIds); $i++) {
+            $query = sprintf(
+                "UPDATE `%sfaqdata` SET `sticky_order`=%d WHERE `id`=%d",
+                Database::getTablePrefix(),
+                $count,
+                $faqIds[$i]
+            );
             $this->config->getDb()->query($query);
             $count++;
         }
