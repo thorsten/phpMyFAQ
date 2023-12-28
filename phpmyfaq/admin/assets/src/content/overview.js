@@ -207,8 +207,34 @@ const populateCategoryTable = async (catgoryId, faqs) => {
       ])
     );
     row.append(addElement('td', { classList: 'small', innerText: faq.created }));
-    row.append(addElement('td', { innerText: faq.active }));
-    row.append(addElement('td', { innerText: faq.sticky }));
+    row.append(
+      addElement('td', { classList: 'align-middle' }, [
+        addElement('input', {
+          classList: 'form-check-input pmf-admin-sticky-faq',
+          type: 'checkbox',
+          'data-pmfCategoryIdSticky': faq.category_id,
+          'data-pmfFaqId': faq.id,
+          'data-pmfCsrf': csrfToken,
+          lang: faq.language,
+          id: `sticky_record_${faq.category_id}_${faq.id}`,
+          checked: faq.sticky === 'yes' ? 'checked' : '',
+        }),
+      ])
+    );
+    row.append(
+      addElement('td', { classList: 'align-middle' }, [
+        addElement('input', {
+          classList: 'form-check-input pmf-admin-active-faq',
+          type: 'checkbox',
+          'data-pmfCategoryIdActive': faq.category_id,
+          'data-pmfFaqId': faq.id,
+          'data-pmfCsrf': csrfToken,
+          lang: faq.language,
+          id: `active_record_${faq.category_id}_${faq.id}`,
+          checked: faq.active === 'yes' ? 'checked' : '',
+        }),
+      ])
+    );
     row.append(
       addElement('td', {}, [
         addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [

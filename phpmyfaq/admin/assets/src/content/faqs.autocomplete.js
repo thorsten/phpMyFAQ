@@ -19,9 +19,9 @@ import { addElement } from '../../../../assets/src/utils';
 
 document.addEventListener('DOMContentLoaded', () => {
   const autoComplete = document.getElementById('pmf-faq-overview-search-input');
-  const csrfToken = document.getElementById('pmf-csrf-token').value;
 
   if (autoComplete) {
+    const csrfToken = document.getElementById('pmf-csrf-token').value;
     autocomplete({
       input: autoComplete,
       minLength: 1,
