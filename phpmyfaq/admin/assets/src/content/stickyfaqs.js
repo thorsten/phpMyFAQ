@@ -17,7 +17,7 @@ import Sortable from 'sortablejs';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleStickyFaqs = () => {
-    const stickyFAQs = document.getElementById('#stickyFAQs');
+    const stickyFAQs = document.getElementById('stickyFAQs');
     if (stickyFAQs) {
         Sortable.create(stickyFAQs, {
             animation: 100,
@@ -37,9 +37,9 @@ export const handleStickyFaqs = () => {
 };
 
 const saveStatus = async (currentOrder) => {
-    const stickyFAQs = document.getElementById('#stickyFAQs');
-    const card = document.getElementById('#mainCardStickyFAQs');
-    const successAlert = document.getElementById('#successAlert');
+    const stickyFAQs = document.getElementById('stickyFAQs');
+    const card = document.getElementById('mainCardStickyFAQs');
+    const successAlert = document.getElementById('successAlert');
     const csrf = stickyFAQs.getAttribute('data-csrf');
     if (successAlert) {
         successAlert.remove();
@@ -53,7 +53,7 @@ const saveStatus = async (currentOrder) => {
             },
             body: JSON.stringify({
                 faqIds: currentOrder,
-                csrf: crsf
+                csrf: csrf
             })
         });
 
