@@ -183,8 +183,12 @@ const populateCategoryTable = async (catgoryId, faqs) => {
     row.setAttribute('id', `faq_${faq.id}_${faq.language}`);
 
     row.append(
-      addElement('td', { classList: 'align-middle text-center text-decoration-none' }, [
-        addElement('a', { href: `?action=editentry&id=${faq.id}&lang=${faq.language}`, innerText: faq.id }),
+      addElement('td', { classList: 'align-middle text-center' }, [
+        addElement('a', {
+          classList: 'text-decoration-none',
+          href: `?action=editentry&id=${faq.id}&lang=${faq.language}`,
+          innerText: faq.id,
+        }),
       ])
     );
     row.append(addElement('td', { classList: 'align-middle text-center', innerText: faq.language }));
@@ -236,18 +240,42 @@ const populateCategoryTable = async (catgoryId, faqs) => {
       ])
     );
     row.append(
-      addElement('td', {}, [
-        addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [
-          addElement('i', { classList: 'fa fa-copy', 'aria-hidden': 'true' }),
+      addElement('td', { classList: 'align-middle text-center' }, [
+        addElement(
+          'a',
+          { classList: 'btn btn-info btn-sm', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` },
+          [addElement('i', { classList: 'fa fa-copy', 'aria-hidden': 'true' })]
+        ),
+      ])
+    );
+    row.append(
+      addElement('td', { classList: 'align-middle text-center' }, [
+        addElement('div', { classList: 'checkbox' }, [
+          addElement(
+            'a',
+            {
+              classList: 'btn btn-primary btn-sm dropdown-toggle',
+              href: '#',
+              role: 'button',
+              id: 'dropdownAddNewTranslation',
+              'data-bsToggle': 'dropdown',
+              'aria-haspopup': 'true',
+              'aria-expanded': 'false',
+            },
+            [addElement('i', { classList: 'fa fa-globe', 'aria-hidden': 'true' })]
+          ),
+          addElement('div', { classList: 'dropdown-menu', 'aria-labelledby': 'dropdownAddNewTranslation' }, [
+            addElement('a', { classList: 'dropdown-item', innerText: 'n/a' }),
+          ]),
         ]),
       ])
     );
     row.append(
-      addElement('td', {}, [
+      addElement('td', { classList: 'text-center' }, [
         addElement(
           'button',
           {
-            classList: 'btn btn-danger pmf-button-delete-faq',
+            classList: 'btn btn-danger btn-sm pmf-button-delete-faq',
             type: 'button',
             'data-pmfId': faq.id,
             'data-pmfLanguage': faq.language,
