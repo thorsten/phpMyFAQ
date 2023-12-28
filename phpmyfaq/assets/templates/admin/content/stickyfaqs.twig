@@ -7,7 +7,7 @@
         {% endif %}
         <div class="card shadow mt-5 ml-5" id="mainCardStickyFAQs">
             <div class="card-body">
-                <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs">
+                <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs" data-csrf="{{ csrfToken }}>
                     {% for faq in stickyData %}
                         <li class="list-group-item" data-pmf-faqid="{{ faq.id|e }}"><a href="{{ faq.url|e }}">{{ faq.question|e }}</a></li>
                     {% endfor %}
