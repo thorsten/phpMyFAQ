@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shows the function for ordering sticky faqs customly.
  *
@@ -19,7 +20,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
-use phpMyFAQ\Database;
 use phpMyFAQ\Session\Token;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
-$faqTableInfo = $faqConfig->getDb()->getTableStatus(Database::getTablePrefix());
+
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/stickyfaqs.twig');
