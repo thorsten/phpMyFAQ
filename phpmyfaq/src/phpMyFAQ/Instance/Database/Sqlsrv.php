@@ -160,6 +160,7 @@ class Sqlsrv extends Database implements Driver
             date_end NVARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created DATETIME DEFAULT CURRENT_TIMESTAMP,
             notes NVARCHAR(MAX) DEFAULT NULL,
+            sticky_order INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
