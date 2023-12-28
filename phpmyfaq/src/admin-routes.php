@@ -287,6 +287,10 @@ $routes->add(
     'admin.api.faqs',
     new Route('/faqs/{categoryId}', ['_controller' => [FaqController::class, 'listByCategory']])
 );
+$routes->add(
+    'admin.api.faqs.sticky.order',
+    new Route('/faqs/sticky/order', ['_controller' => [StickyController::class, 'saveOrder'], '_methods' => 'POST'])
+);
 
 //
 // Group API
@@ -502,14 +506,6 @@ $routes->add(
 $routes->add(
     'admin.api.export.report',
     new Route('/export/report', ['_controller' => [ExportController::class, 'exportReport'], '_methods' => 'POST'])
-);
-
-//
-// Sticky API
-//
-$routes->add(
-    'admin.api.sticky.order',
-    new Route('/sticky/order', ['_controller' => [StickyController::class, 'saveOrder'], '_methods' => 'POST'])
 );
 
 return $routes;
