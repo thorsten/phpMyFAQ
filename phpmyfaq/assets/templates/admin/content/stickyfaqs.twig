@@ -2,11 +2,15 @@
             <h1 class="h2">
                 <i aria-hidden="true" class="fa fa-star"></i>  {{ stickyFAQsHeader }}</h1>
         </div>
-        {{ alert | raw }}
+        {% if orderingStickyFaqsActivated == false %}          
+            <div class="alert alert-warning alert-dismissible fade show">{{ alertMessage | raw }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        {% endif %}
         <div class="card shadow mt-5 ml-5" id="mainCardStickyFAQs">
             <div class="card-body">
                 <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs">
-                    {{ generatedListStickyFaqs | raw }}
+                    {% for faq in stickyData %}
+                        <li class="list-group-item" data-pmf-faqid="{{ faq.id|e }}"><a href="{{ faq.url|e }}">{{ faq.question|e }}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
