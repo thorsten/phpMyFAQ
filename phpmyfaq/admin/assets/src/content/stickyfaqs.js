@@ -26,7 +26,7 @@ export const handleStickyFaqs = () => {
             sort: true,
             filter: '.sortable-disabled',
             dataIdAttr: 'data-pmf-faqid',
-            onEnd: function (event) {
+            onEnd: (event) => {
                 const currentOrder = Array.from(event.from.children).map(function (item) {
                     return item.getAttribute('data-pmf-faqid');
                 });
