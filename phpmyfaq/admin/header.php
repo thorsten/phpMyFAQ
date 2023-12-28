@@ -15,6 +15,7 @@
  * @since 2003-02-26
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
@@ -23,6 +24,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -36,6 +38,9 @@ $statisticsPage = false;
 $exportsPage = false;
 $backupPage = false;
 $configurationPage = false;
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getFromCookie($faqConfig);
 
 $adminHelper = new AdministrationHelper();
 $adminHelper->setUser($user);
@@ -61,13 +66,13 @@ $secLevelEntries['content'] = $adminHelper->addMenuEntry(
     $action
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_entry_add', $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit', $action);
-//$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-//    'edit_faq+delete_faq',
-//    'faqs-overview',
-//    'ad_menu_entry_edit',
-//     $action
-//);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'edit_faq+delete_faq',
+    'faqs-overview',
+    'ad_menu_entry_edit',
+    $action
+);
+
 
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq', 'stickyfaqs', 'stickyRecordsHeader', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
@@ -151,7 +156,6 @@ switch ($action) {
     case 'editentry':
     case 'insertentry':
     case 'saveentry':
-    case 'view':
     case 'glossary':
     case 'saveglossary':
     case 'updateglossary':

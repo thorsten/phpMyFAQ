@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="fa fa-list-alt"></i>
-    {{ msgHeaderFAQOverview }} <span class="badge bg-danger">PREVIEW</span>
+    {{ msgHeaderFAQOverview }}
   </h1>
   <div class="pmf-faq-overview-search col-4">
     <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="?action=faq-overview"
@@ -24,7 +24,7 @@
   </div>
 {% endif %}
 
-<div class="accordion" id="pm-admin-faq-overview">
+<div class="accordion shadow" id="pm-admin-faq-overview">
   {% for category in categories %}
   <div class="accordion-item">
     <div class="accordion-header category-header-indent-{{ category.indent }}">

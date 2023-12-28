@@ -255,9 +255,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'viewinactive':
             case 'viewactive':
-            case 'view':
-                require 'record.show.php';
-                break;
             case 'takequestion':
             case 'editentry':
             case 'copyentry':
