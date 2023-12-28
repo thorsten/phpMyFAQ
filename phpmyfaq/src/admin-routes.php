@@ -70,6 +70,7 @@ $routes->add(
     'admin.api.category.permissions',
     new Route('/category/permissions/{categories}', ['_controller' => [CategoryController::class, 'permissions']])
 );
+
 $routes->add(
     'admin.api.category.update-order',
     new Route(
@@ -81,6 +82,10 @@ $routes->add(
     )
 );
 
+$routes->add(
+    'admin.api.category.translations',
+    new Route('/category/translations/{categoryId}', ['_controller' => [CategoryController::class, 'translations']])
+);
 //
 // Comment API
 //

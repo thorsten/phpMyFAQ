@@ -1085,7 +1085,7 @@ class Category
     }
 
     /**
-     * Create array with translated categories.
+     * Create an array with translated categories.
      *
      * @return string[]
      */
@@ -1104,7 +1104,7 @@ class Category
 
             $result = $this->config->getDb()->query($query);
             if ($row = $this->config->getDb()->fetchArray($result)) {
-                $translated[LanguageCodes::get($language)] =
+                $translated[$language] =
                     $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
             }
         }

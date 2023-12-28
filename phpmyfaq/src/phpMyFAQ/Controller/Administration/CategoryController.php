@@ -56,6 +56,18 @@ class CategoryController extends AbstractController
         return $response;
     }
 
+    #[Route('admin/api/category/translations')]
+    public function translations(Request $request): JsonResponse
+    {
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $category = new Category($configuration, [], false);
+
+        $translations = $category->getCategoryLanguagesTranslated($request->get('categoryId'));
+
+        return $response->setData($translations);
+    }
+
     #[Route('admin/api/category/update-order')]
     public function updateOrder(Request $request): JsonResponse
     {

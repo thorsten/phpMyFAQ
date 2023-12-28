@@ -219,8 +219,9 @@ class CategoryRelation
 
         if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
-                " AND fd.lang = '%s'",
-                $this->config->getLanguage()->getLanguage()
+                " AND fd.lang = '%s' AND fc.lang = '%s'",
+                $this->config->getLanguage()->getLanguage(),
+                $this->config->getLanguage()->getLanguage(),
             );
         }
 

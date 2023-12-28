@@ -13,7 +13,7 @@
  * @since     2023-02-26
  */
 
-import { deleteFaq, fetchAllFaqsByCategory } from '../api';
+import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
@@ -22,6 +22,7 @@ export const handleFaqOverview = async () => {
   if (collapsedCategories) {
     collapsedCategories.forEach((category) => {
       const categoryId = category.getAttribute('data-pmf-categoryId');
+      const language = category.getAttribute('data-pmf-language');
       category.addEventListener('hidden.bs.collapse', () => {
         clearCategoryTable(categoryId);
       });
@@ -33,6 +34,7 @@ export const handleFaqOverview = async () => {
         const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
         const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
         const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
+        const translationDropdown = document.querySelectorAll('#dropdownAddNewTranslation');
 
         deleteFaqButtons.forEach((element) => {
           element.addEventListener('click', async (event) => {
@@ -51,6 +53,28 @@ export const handleFaqOverview = async () => {
                 }
               } catch (error) {
                 console.error(error);
+              }
+            }
+          });
+        });
+
+        translationDropdown.forEach((element) => {
+          element.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const translations = await fetchCategoryTranslations(categoryId);
+            const existingLink = element.nextElementSibling.childNodes[0];
+            const regionNames = new Intl.DisplayNames([language], { type: 'language' });
+            const faqId = element.getAttribute('data-pmf-faq-id');
+
+            for (const [languageCode, languageName] of Object.entries(translations)) {
+              if (languageCode !== language) {
+                const newTranslationLink = addElement('a', {
+                  classList: 'dropdown-item',
+                  href: `?action=editentry&id=${faqId}&cat=${categoryId}&translateTo=${languageCode}`,
+                  innerText: `→ ${regionNames.of(languageCode)}`,
+                });
+                existingLink.insertAdjacentElement('afterend', newTranslationLink);
               }
             }
           });
@@ -261,6 +285,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
               'data-bsToggle': 'dropdown',
               'aria-haspopup': 'true',
               'aria-expanded': 'false',
+              'data-pmfFaqId': faq.id,
             },
             [addElement('i', { classList: 'fa fa-globe', 'aria-hidden': 'true' })]
           ),
