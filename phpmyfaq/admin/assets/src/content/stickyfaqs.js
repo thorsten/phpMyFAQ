@@ -37,9 +37,10 @@ export const handleStickyFaqs = () => {
 };
 
 const saveStatus = async (currentOrder) => {
-    const stickyFAQs = document.querySelector('#stickyFAQs');
-    const card = document.querySelector('#mainCardStickyFAQs');
-    const successAlert = document.querySelector('#successAlert');
+    const stickyFAQs = document.getElementById('#stickyFAQs');
+    const card = document.getElementById('#mainCardStickyFAQs');
+    const successAlert = document.getElementById('#successAlert');
+    const csrf = stickyFAQs.getAttribute('data-csrf');
     if (successAlert) {
         successAlert.remove();
     }
@@ -51,7 +52,8 @@ const saveStatus = async (currentOrder) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                faqIds: currentOrder
+                faqIds: currentOrder,
+                csrf: crsf
             })
         });
 
