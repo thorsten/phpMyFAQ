@@ -170,6 +170,7 @@ switch ($action) {
     case 'attachments':
     case 'tags':
     case 'delete-tag':
+    case 'stickyfaqs':
         $contentPage = true;
         break;
     case 'statistics':
