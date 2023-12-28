@@ -520,6 +520,7 @@ class Update extends Setup
                     Database::getTablePrefix()
                 ),
             };
+            $this->configuration->add('records.orderStickyFaqsCustom', 'false');
 
             // Remove template metadata tables
             $this->queries[] = sprintf('DROP TABLE %sfaqmeta', Database::getTablePrefix());
