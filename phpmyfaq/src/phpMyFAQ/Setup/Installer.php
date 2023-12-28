@@ -354,6 +354,7 @@ class Installer extends Setup
         'records.allowDownloadsForGuests' => 'false',
         'records.numberMaxStoredRevisions' => '10',
         'records.enableAutoRevisions' => 'false',
+        'records.orderStickyFaqsCustom' => 'false',
 
         'search.numberSearchTerms' => '10',
         'search.relevance' => 'thema,content,keywords',
