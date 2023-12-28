@@ -20,6 +20,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Database;
+use phpMyFAQ\Session\Token;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -40,7 +41,8 @@ $templateVars = [
     'stickyData' => $stickyData,
     'sortableDisabled' => ($faqConfig->get('records.orderStickyFaqsCustom') === false) ? 'sortable-disabled' : '',
     'orderingStickyFaqsActivated' => $faqConfig->get('records.orderStickyFaqsCustom'),
-    'alertMessage' => Translation::get('msgOrderStickyFaqsCustomDeactivated')
+    'alertMessage' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
+    'csrfToken' => Token::getInstance()->getTokenString('order-stickyfaqs')
 ];
 
 echo $template->render($templateVars);
