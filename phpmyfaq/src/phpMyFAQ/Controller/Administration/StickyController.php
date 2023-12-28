@@ -28,7 +28,7 @@ use phpMyFAQ\Translation;
 
 class StickyController extends AbstractController
 {
-    #[Route('admin/api/sticky/order')]
+    #[Route('admin/api/faqs/sticky/order')]
     public function saveOrder(Request $request): JsonResponse
     {
         $response = new JsonResponse();
