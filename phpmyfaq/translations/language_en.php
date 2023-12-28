@@ -1387,4 +1387,8 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Seperate with comm
 // added v4.0.0-alpha - 2023-12-26 by Thorsten
 $PMF_LANG['msgGravatar'] = 'Gravatar image';
 
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Custom ordering of sticky records is deactivated in the main configuration. If you would like to use it, please activate it in the <a href="./?action=config">main configuration</a> -> records.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Custom ordering of sticky records'];
+
 return $PMF_LANG;

@@ -13,6 +13,7 @@
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @author    Peter Caesar <p.caesar@osmaco.de>
+ * @author    Jan Harms <model_railroader@gmx-topmail.de>
  * @copyright 2005-2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
@@ -2586,13 +2587,49 @@ class Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
+                $data['id'] = $row->id;
+                $data['order'] = $row->sticky_order;
 
                 $sticky[] = $data;
             }
             $oldId = $row->id;
         }
+        // Sort stickyData by order if activated
+        if ($this->config->get('records.orderStickyFaqsCustom') === true) {
+            usort($sticky, array($this, 'sortStickyArrayByOrder'));
+        }
 
         return $sticky;
+    }
+
+    /**
+    * Comparison function for usort() of sticky faqs.
+    */
+    private function sortStickyArrayByOrder($a, $b)
+    {
+        return $a['order'] - $b['order'];
+    }
+
+    /**
+     * Returns true if saving the order of the sticky faqs was successfull.
+     *
+     * @param array $faqIds Order of record id's
+     * @return bool
+     */
+    public function setStickyFaqOrder(array $faqIds): bool
+    {
+        $count = 1;
+        for ($i = 0; $i < count($faqIds); $i++) {
+            $query = sprintf(
+                "UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d",
+                Database::getTablePrefix(),
+                $count,
+                $faqIds[$i]
+            );
+            $this->config->getDb()->query($query);
+            $count++;
+        }
+        return true;
     }
 
     /**

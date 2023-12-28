@@ -69,6 +69,7 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq',
 //     $action
 //);
 
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq', 'stickyfaqs', 'stickyRecordsHeader', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(

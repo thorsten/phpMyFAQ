@@ -244,4 +244,26 @@ class FaqController extends AbstractController
 
         return $response;
     }
+
+    #[Route('admin/api/faqs/sticky/order')]
+    public function saveOrderOfStickyFaqs(Request $request): JsonResponse
+    {
+        $response = new JsonResponse();
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance()->verifyToken('order-stickyfaqs', $data->csrf)) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
+        }
+
+        $faq = new Faq(Configuration::getConfigurationInstance());
+        $faq->setStickyFaqOrder($data->faqIds);
+
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData(['success' => Translation::get('ad_categ_save_order')]);
+
+        return $response;
+    }
 }
