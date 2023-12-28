@@ -2516,6 +2516,7 @@ class Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS thema,
+                fd.sticky_order AS sticky_order,
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
