@@ -2621,7 +2621,7 @@ class Faq
         $count = 1;
         for ($i = 0; $i < count($faqIds); $i++) {
             $query = sprintf(
-                "UPDATE `%sfaqdata` SET `sticky_order`=%d WHERE `id`=%d",
+                "UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d",
                 Database::getTablePrefix(),
                 $count,
                 $faqIds[$i]
