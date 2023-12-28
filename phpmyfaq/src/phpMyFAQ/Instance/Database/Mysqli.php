@@ -163,6 +163,7 @@ class Mysqli extends Database implements Driver
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes TEXT DEFAULT NULL,
+            sticky_order int(10) DEFAULT NULL,
             FULLTEXT (keywords,thema,content),
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 
