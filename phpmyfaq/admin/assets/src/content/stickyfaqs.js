@@ -36,33 +36,37 @@ export const handleStickyFaqs = () => {
     }
 };
 
-const saveStatus = (currentOrder) => {
-    const stickyFAQs = document.getElementById('#stickyFAQs');
-    const card = document.getElementById('#mainCardStickyFAQs');
-    const successAlert = document.getElementById('#successAlert');
+const saveStatus = async (currentOrder) => {
+    const stickyFAQs = document.querySelector('#stickyFAQs');
+    const card = document.querySelector('#mainCardStickyFAQs');
+    const successAlert = document.querySelector('#successAlert');
     if (successAlert) {
         successAlert.remove();
     }
-    fetch('./api/sticky/order', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            faqIds: currentOrder
-        })
-    })
-            .then(async (response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok: ', {cause: {response}});
+    try {
+        const response = await fetch('./api/faqs/sticky/order', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                faqIds: currentOrder
             })
-            .then((response) => {
-                card.insertAdjacentElement(
-                        'beforebegin',
-                        addElement('div', {classList: 'alert alert-success', id: 'successAlert', innerText: response.success})
-                        );
-            });
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+
+            card.insertAdjacentElement(
+                'beforebegin',
+                addElement('div', {classList: 'alert alert-success', id: 'successAlert', innerText: jsonResponse.success})
+            );
+        } else {
+            const errorResponse = await response.json(); // assuming the error response is in JSON format
+            throw new Error('Network response was not ok: ' + JSON.stringify(errorResponse));
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
 };
