@@ -40,7 +40,6 @@ $backupPage = false;
 $configurationPage = false;
 
 $faqConfig = Configuration::getConfigurationInstance();
-$user = CurrentUser::getFromCookie($faqConfig);
 
 $adminHelper = new AdministrationHelper();
 $adminHelper->setUser($user);
