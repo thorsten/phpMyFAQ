@@ -509,6 +509,18 @@ class Update extends Setup
                 ),
             };
 
+            // Custom order of sticky records
+            $this->queries[] = match (Database::getType()) {
+                'mysqli' => sprintf(
+                    'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order int(10) DEFAULT NULL',
+                    Database::getTablePrefix()
+                ),
+                'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
+                    'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order integer DEFAULT NULL',
+                    Database::getTablePrefix()
+                ),
+            };
+
             // Remove template metadata tables
             $this->queries[] = sprintf('DROP TABLE %sfaqmeta', Database::getTablePrefix());
 
