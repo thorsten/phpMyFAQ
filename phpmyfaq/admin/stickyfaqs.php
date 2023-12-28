@@ -33,31 +33,14 @@ $twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/stickyfaqs.twig');
 
 $faq = new Faq($faqConfig);
-$data = $faq->getStickyRecordsData();
-
-$stickyFaqsList = '';
-
-foreach ($data as $sticky) {
-    $stickyFaqsList .= sprintf('<li class="list-group-item" data-pmf-faqid="%d"><a href="%s">%s</a></li>',
-        $sticky['id'],
-        $sticky['url'],
-        $sticky['question']);
-}
+$stickyData = $faq->getStickyRecordsData();
 
 $templateVars = [
     'stickyFAQsHeader' => Translation::get('stickyRecordsHeader'),
-    'generatedListStickyFaqs' => $stickyFaqsList,
-    'sortableDisabled' => ($faqConfig->get('records.orderStickyFaqsCustom') === false) ? 'sortable-disabled' : ''
+    'stickyData' => $stickyData,
+    'sortableDisabled' => ($faqConfig->get('records.orderStickyFaqsCustom') === false) ? 'sortable-disabled' : '',
+    'orderingStickyFaqsActivated' => $faqConfig->get('records.orderStickyFaqsCustom'),
+    'alertMessage' => Translation::get('msgOrderStickyFaqsCustomDeactivated')
 ];
-
-if ($faqConfig->get('records.orderStickyFaqsCustom') === false) {
-    $templateVars = [
-        ...$templateVars,
-        'alert' => sprintf(
-            '<div class="alert alert-warning alert-dismissible fade show">%s<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
-            Translation::get('msgOrderStickyFaqsCustomDeactivated')
-        )
-    ];
-}
 
 echo $template->render($templateVars);
