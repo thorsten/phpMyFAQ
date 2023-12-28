@@ -41,7 +41,8 @@ $templateVars = [
     'stickyData' => $stickyData,
     'sortableDisabled' => ($faqConfig->get('records.orderStickyFaqsCustom') === false) ? 'sortable-disabled' : '',
     'orderingStickyFaqsActivated' => $faqConfig->get('records.orderStickyFaqsCustom'),
-    'alertMessage' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
+    'alertMessageStickyFaqsDeactivated' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
+    'alertMessageNoStickyRecords' => Translation::get('msgNoStickyFaqs'),
     'csrfToken' => Token::getInstance()->getTokenString('order-stickyfaqs')
 ];
 
