@@ -1,8 +1,8 @@
 {% import 'admin/configuration/macros.twig' as macros %}
 
 {% for key, configItem in configurationList %}
-  <div class="row mb-3">
-    <div class="col-9">
+  <div class="row mb-2 p-1">
+    <div class="col-9 border-start border-5">
       {% if configItem.element == 'area' %}
         {{ macros.generateTextarea(configItem.label, key, configurationData[key]) }}
       {% elseif configItem.element == 'checkbox' %}
