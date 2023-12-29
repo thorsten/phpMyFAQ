@@ -23,9 +23,11 @@ export const handleFaqOverview = async () => {
     collapsedCategories.forEach((category) => {
       const categoryId = category.getAttribute('data-pmf-categoryId');
       const language = category.getAttribute('data-pmf-language');
+
       category.addEventListener('hidden.bs.collapse', () => {
         clearCategoryTable(categoryId);
       });
+
       category.addEventListener('shown.bs.collapse', async () => {
         const faqs = await fetchAllFaqsByCategory(categoryId);
         await populateCategoryTable(categoryId, faqs.faqs);
@@ -35,6 +37,9 @@ export const handleFaqOverview = async () => {
         const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
         const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
         const translationDropdown = document.querySelectorAll('#dropdownAddNewTranslation');
+
+        allFaqsAreActive(categoryId);
+        allFaqsAreSticky(categoryId);
 
         deleteFaqButtons.forEach((element) => {
           element.addEventListener('click', async (event) => {
@@ -326,4 +331,26 @@ const populateCategoryTable = async (catgoryId, faqs) => {
 const clearCategoryTable = (catgoryId) => {
   const tableBody = document.getElementById(`tbody-category-id-${catgoryId}`);
   tableBody.innerHTML = '';
+};
+
+const allFaqsAreActive = (categoryId) => {
+  const checkboxes = document.querySelectorAll('.pmf-admin-active-faq');
+  const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  if (allChecked) {
+    const mainCheckboxToggle = document.getElementById(`active_category_block_${categoryId}`);
+    if (mainCheckboxToggle) {
+      mainCheckboxToggle.checked = true;
+    }
+  }
+};
+
+const allFaqsAreSticky = (categoryId) => {
+  const checkboxes = document.querySelectorAll('.pmf-admin-sticky-faq');
+  const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+  if (allChecked) {
+    const mainCheckboxToggle = document.getElementById(`sticky_category_block_${categoryId}`);
+    if (mainCheckboxToggle) {
+      mainCheckboxToggle.checked = true;
+    }
+  }
 };
