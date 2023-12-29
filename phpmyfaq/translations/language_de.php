@@ -1372,4 +1372,7 @@ $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sorti
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Benutzerdefinierte Sortierung von wichtigen FAQs'];
 $PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./?action=faqs-overview" class="alert-link">FAQ Übersicht</a>, um FAQs als wichtig zu markieren.';
 
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];
+
 return $PMF_LANG;

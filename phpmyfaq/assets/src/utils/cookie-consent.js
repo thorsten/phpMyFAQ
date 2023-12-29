@@ -22,9 +22,9 @@ cc.run({
   autoclear_cookies: true, // default: false
   page_scripts: true, // default: false
   cookie_name: 'phpmyfaq_cc_cookie',
+  auto_language: 'browser',
   // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
   // delay: 0,                               // default: 0
-  // auto_language: null                     // default: null; could also be 'browser' or 'document'
   // autorun: true,                          // default: true
   // force_consent: false,                   // default: false
   // hide_from_bots: true,                   // default: true

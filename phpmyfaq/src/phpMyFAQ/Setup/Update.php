@@ -528,6 +528,9 @@ class Update extends Setup
             // Blocked statistics browsers
             $this->configuration->add('main.botIgnoreList', 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
             bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma');
+
+            // Enable/Disable cookie consent
+            $this->configuration->add('main.enableCookieConsent', true);
         }
     }
 

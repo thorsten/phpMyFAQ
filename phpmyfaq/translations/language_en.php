@@ -1392,4 +1392,7 @@ $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Custom ordering of sticky re
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Custom ordering of sticky records'];
 $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can mark records as stick in the <a href="./?action=faqs-overview" class="alert-link">FAQ Overview</a>.';
 
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
+
 return $PMF_LANG;

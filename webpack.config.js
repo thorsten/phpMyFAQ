@@ -7,6 +7,7 @@ module.exports = {
   entry: {
     backend: './phpmyfaq/admin/assets/src/index.js',
     frontend: './phpmyfaq/assets/src/frontend.js',
+    cookieConsent: './phpmyfaq/assets/src/cookie-consent.js',
     setup: './phpmyfaq/assets/src/setup.js',
     update: './phpmyfaq/assets/src/update.js',
     styles: './phpmyfaq/assets/themes/default/scss/style.scss',

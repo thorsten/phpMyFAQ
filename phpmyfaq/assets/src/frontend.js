@@ -20,7 +20,6 @@ import { handleBookmarks, saveFormData } from './api';
 import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
-import './utils/cookie-consent';
 import './utils/tooltip';
 
 //

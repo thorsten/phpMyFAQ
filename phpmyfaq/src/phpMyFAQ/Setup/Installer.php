@@ -328,6 +328,7 @@ class Installer extends Setup
         'main.contactInformationHTML' => 'false',
         'main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,
         w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma',
+        'main.enableCookieConsent' => 'true',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',

@@ -735,6 +735,10 @@ if (DEBUG) {
     );
 }
 
+if ($faqConfig->get('main.enableCookieConsent')) {
+    $template->parseBlock('index', 'cookieConsentEnabled');
+}
+
 //
 // Redirect old "action=artikel" URLs via 301 to new location
 //
@@ -798,6 +802,7 @@ $response->setCache([
     'stale_if_error'   => 86400,
     'stale_while_revalidate' => 60,
     'immutable'        => true,
-    'last_modified'    => new \DateTime()
+    'last_modified'    => new DateTime()
 ]);
+
 $response->send();

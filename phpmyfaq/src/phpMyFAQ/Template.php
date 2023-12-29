@@ -254,7 +254,7 @@ class Template
      * @param string $blockName Block name
      * @param array<string, mixed>  $blockContent Content of the block
      */
-    public function parseBlock(string $templateName, string $blockName, array $blockContent): void
+    public function parseBlock(string $templateName, string $blockName, array $blockContent = []): void
     {
         if (isset($this->blocks[$templateName][$blockName])) {
             $block = $this->blocks[$templateName][$blockName];
