@@ -98,8 +98,8 @@ class TwoFactor
     {
         $user = CurrentUser::getFromSession($this->config);
         $label = $this->config->getTitle() . ':' . $user->getUserData('email');
-        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) . $this->config->getDefaultUrl() .
-        'assets/themes/' . Template::getTplSetName() . '/img/favicon.ico';
+        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) . '&image=' . $this->config->getDefaultUrl() .
+        'assets/themes/' . Template::getTplSetName() . '/img/logo.png';
 
         return 'data:'
             . $this->QrCodeProvider->getMimeType()
