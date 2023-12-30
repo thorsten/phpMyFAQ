@@ -4,7 +4,7 @@
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <a class="btn btn-sm btn-success" href="#" id="addCategoryModal">
+      <a class="btn btn-sm btn-success" href="?action=addcategory" id="addCategoryModal">
         <i aria-hidden="true" class="fa fa-folder-plus"></i> {{ msgAddCategory }}
       </a>
       <a class="btn btn-sm btn-info" href="?action=showcategory">
@@ -17,13 +17,19 @@
   </div>
 </div>
 
-<pre>
-  {{ dump(categoryInfo[1]) }}
-</pre>
+<div class="row mb-2">
+  <div class="col">
+    <div id="pmf-category-tree" class="list-group nested-sortable">
+      {{ _self.renderCategories(categoryTree, categoryInfo) }}
+    </div>
+  </div>
+</div>
 
-<div class="row">
-  <div id="pmf-category-tree" class="list-group col nested-sortable">
-    {{ _self.renderCategories(categoryTree, categoryInfo) }}
+<div class="row mt-4">
+  <div class="col">
+    <div class="alert alert-info">
+      {{ msgCategoryRemark }}
+    </div>
   </div>
 </div>
 
