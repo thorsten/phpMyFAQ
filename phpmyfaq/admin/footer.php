@@ -88,9 +88,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 
 <?php
-if (DEBUG) {
-    printf('<hr><div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
-}
 
 $user = CurrentUser::getCurrentUser($faqConfig);
 

@@ -38,7 +38,6 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template;
-use phpMyFAQ\Template\TemplateHelper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
@@ -726,13 +725,7 @@ $template->parse(
 );
 
 if (DEBUG) {
-    $template->parseBlock(
-        'index',
-        'debugMode',
-        [
-            'debugQueries' => $faqConfig->getDb()->log(),
-        ]
-    );
+    $template->parseBlock('index', 'debugMode');
 }
 
 if ($faqConfig->get('main.enableCookieConsent')) {
