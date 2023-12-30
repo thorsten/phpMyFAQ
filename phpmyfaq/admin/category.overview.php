@@ -47,6 +47,7 @@ $templateVars = [
     'msgCategoryMatrix' => Translation::get('ad_categ_show'),
     'categoryTree' => $categoryTree,
     'categoryInfo' => $categoryInfo,
+    'msgCategoryRemark' => Translation::get('ad_categ_remark'),
 ];
 
 echo $template->render($templateVars);

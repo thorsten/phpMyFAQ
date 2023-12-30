@@ -19,6 +19,12 @@ namespace phpMyFAQ\Component;
 
 use phpMyFAQ\Translation;
 
+/**
+ * Class Alert
+ *
+ * @package phpMyFAQ\Component
+ * @deprecated will be removed in phpMyFAQ v4.1, please use Alerts directly in Twig templates
+ */
 class Alert
 {
     /**
