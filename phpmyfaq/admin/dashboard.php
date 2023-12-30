@@ -47,6 +47,7 @@ $template = $twig->loadTemplate('./admin/dashboard.twig');
 
 $templateVars = [
     'adminHeaderDashboard' => Translation::get('admin_mainmenu_home'),
+    'isDebugMode' => DEBUG,
     'isMaintenanceMode' => $faqConfig->get('main.maintenanceMode'),
     'adminDashboardMaintenance' => Translation::get('msgMaintenanceMode'),
     'adminDashboardOnline' => Translation::get('msgOnlineMode'),

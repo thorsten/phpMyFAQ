@@ -24,7 +24,7 @@ use phpMyFAQ\Template\TemplateException;
  * Class Template
  *
  * @package phpMyFAQ
- * @deprecated will be removed with phpMyFAQ 3.4
+ * @deprecated will be removed with phpMyFAQ 4.1
  */
 class Template
 {

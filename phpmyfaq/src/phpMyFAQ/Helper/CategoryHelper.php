@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Language\Plurals;
@@ -258,6 +259,7 @@ class CategoryHelper extends Helper
      *
      * @param int[] $categories
      * @return string[]
+     * @throws Exception
      */
     public function getModerators(array $categories): array
     {

@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="fa fa-folder"></i> {{ msgHeaderCategoryOverview }}
+  </h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <a class="btn btn-sm btn-success" href="#" id="addCategoryModal">
+        <i aria-hidden="true" class="fa fa-folder-plus"></i> {{ msgAddCategory }}
+      </a>
+      <a class="btn btn-sm btn-info" href="?action=showcategory">
+        <i aria-hidden="true" class="fa fa-list"></i> {{ msgCategoryMatrix }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<pre>
+  {{ dump(categoryInfo[1]) }}
+</pre>
+
+<div class="row">
+  <div id="pmf-category-tree" class="list-group col nested-sortable">
+    {{ _self.renderCategories(categoryTree, categoryInfo) }}
+  </div>
+</div>
+
+{% macro renderCategories(categories, categoryInfo, depth = 1) %}
+  {% for key, children in categories %}
+    <div class="list-group-item nested-{{ depth }}">
+      <h6 class="m-2">
+        {{ categoryInfo[key]['name'] }}
+
+        {% if categoryInfo[key]['show_home'] == 1 %}
+        <i class="fa fa-star" aria-hidden="true"></i>
+        {% endif %}
+      </h6>
+      {% if children is not empty %}
+        <div class="list-group nested-sortable">
+          {{ _self.renderCategories(children, categoryInfo, depth + 1) }}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endmacro %}

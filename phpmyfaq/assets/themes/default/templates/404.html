@@ -16,6 +16,9 @@
     <meta content="app-id=977896957" name="apple-itunes-app" />
 
     <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" />
+    [debugMode]
+    <link href="{{ baseHref }}assets/dist/debugMode.css" rel="stylesheet">
+    [/debugMode]
 
     <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" rel="shortcut icon" />
     <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" rel="apple-touch-icon" />
@@ -136,17 +139,6 @@
           </div>
         </div>
       </div>
-      [debugMode]
-      <div class="container">
-        <h5 class="border-top">⚠︎ DEBUG MODE ENABLED ⚠︎</h5>
-        <div class="row">
-          <div class="col-12">
-            <h6 class="text-danger">DATABASE QUERIES</h6>
-            {{ debugQueries }}
-          </div>
-        </div>
-      </div>
-      [/debugMode]
     </footer>
 
     [cookieConsentEnabled]

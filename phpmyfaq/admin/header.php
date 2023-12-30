@@ -139,6 +139,7 @@ switch ($action) {
         break;
     case 'content':
     case 'category':
+    case 'category-overview':
     case 'addcategory':
     case 'savecategory':
     case 'editcategory':

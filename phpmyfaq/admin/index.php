@@ -304,6 +304,9 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'pastecategory':
                 require 'category.main.php';
                 break;
+            case 'category-overview':
+                require 'category.overview.php';
+                break;
             case 'addcategory':
                 require 'category.add.php';
                 break;

@@ -16,11 +16,31 @@
   </div>
 </div>
 
+{% if isDebugMode %}
+  <section class="row mb-3">
+    <div class="col-12">
+      <div class="card bg-danger text-white shadow h-100 py-2">
+        <div class="card-header">Attention!</div>
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="mb-0 font-weight-bold text-gray-800">
+                When life gets too serious, disable debug mode and let the bugs roam free! 🐞✨
+                Please disable it in your src/Bootstrap.php file.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
 {% if hasVersionConflict %}
   <section class="row mb-3">
     <div class="col-12">
       <div class="card bg-danger text-white shadow h-100 py-2">
-        <div class="card-header ">Attention!</div>
+        <div class="card-header">Attention!</div>
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">

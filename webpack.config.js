@@ -12,6 +12,7 @@ module.exports = {
     update: './phpmyfaq/assets/src/update.js',
     styles: './phpmyfaq/assets/themes/default/scss/style.scss',
     admin: './phpmyfaq/admin/assets/scss/style.scss',
+    debugMode: './phpmyfaq/assets/scss/debug-mode.scss',
   },
   devtool: 'source-map',
   output: {
