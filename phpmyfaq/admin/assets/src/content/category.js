@@ -17,77 +17,14 @@ import Sortable from 'sortablejs';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleCategories = () => {
-  const listGroupItems = document.querySelectorAll('.list-group-item');
-  const sortableCategories = document.querySelector('.list-group.list-group-root');
-
-  listGroupItems.forEach((element) => {
-    element.addEventListener('click', (event) => {
-      const hasSubCategories = event.target.querySelector('.pmf-has-subcategories');
-      if (hasSubCategories) {
-        hasSubCategories.classList.toggle('fa-caret-right');
-        hasSubCategories.classList.toggle('fa-caret-down');
-      }
-    });
-  });
-
-  if (sortableCategories) {
-    Sortable.create(sortableCategories, {
-      animation: 150,
-      dataIdAttr: 'data-id',
-      filter: '.pmf-category-not-sortable',
-      group: 'phpmyfaq.category.order',
-      store: {
-        /**
-         * Get the order of elements. Called once during initialization.
-         * @param   {Sortable}  sortable
-         * @returns {Array}
-         */
-        get: (sortable) => {
-          const order = localStorage.getItem(sortable.options.group.name);
-          return order ? order.split('|') : [];
-        },
-
-        /**
-         * Save the order of elements. Called onEnd (when the item is dropped).
-         * @param {Sortable}  sortable
-         */
-        set: (sortable) => {
-          const order = sortable.toArray();
-          const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
-          localStorage.setItem(sortable.options.group.name, order.join('|'));
-
-          fetch('./api/category/update-order', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json, text/plain, */*',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              csrf: csrf,
-              order: order,
-            }),
-          })
-            .then(async (response) => {
-              if (response.ok) {
-                return response.json();
-              }
-              throw new Error('Network response was not ok: ', { cause: { response } });
-            })
-            .then((response) => {
-              sortableCategories.insertAdjacentElement(
-                'beforebegin',
-                addElement('div', { classList: 'alert alert-success', innerText: response.success })
-              );
-            })
-            .catch(async (error) => {
-              const errorMessage = await error.cause.response.json();
-              sortableCategories.insertAdjacentElement(
-                'beforebegin',
-                addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
-              );
-            });
-        },
-      },
-    });
-  }
+    const nestedSortables = document.querySelectorAll('.nested-sortable');
+    for (var i = 0; i < nestedSortables.length; i++) {
+        new Sortable(nestedSortables[i], {
+            group: 'nested',
+            animation: 150,
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
+            dataIdAttr: 'data-pmf-catid'
+        });
+    }
 };
