@@ -14,17 +14,27 @@
  */
 
 import Sortable from 'sortablejs';
-import { addElement } from '../../../../assets/src/utils';
 
 export const handleCategories = () => {
-    const nestedSortables = document.querySelectorAll('.nested-sortable');
-    for (var i = 0; i < nestedSortables.length; i++) {
-        new Sortable(nestedSortables[i], {
-            group: 'nested',
-            animation: 150,
-            fallbackOnBody: true,
-            swapThreshold: 0.65,
-            dataIdAttr: 'data-pmf-catid'
-        });
-    }
+  const nestedSortables = document.querySelectorAll('.nested-sortable');
+  for (let i = 0; i < nestedSortables.length; i++) {
+    new Sortable(nestedSortables[i], {
+      group: 'nested',
+      animation: 150,
+      fallbackOnBody: true,
+      swapThreshold: 0.65,
+      dataIdAttr: 'data-pmf-catid',
+      store: {
+        get: (sortable) => {
+          const order = localStorage.getItem(sortable.options.group.name);
+          return order ? order.split('|') : [];
+        },
+        set: (sortable) => {
+          const order = sortable.toArray();
+          //const csrf = document.querySelector("input[name=pmf-csrf-token]").value;
+          localStorage.setItem(sortable.options.group.name, order.join('|'));
+        },
+      },
+    });
+  }
 };
