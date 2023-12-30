@@ -31,7 +31,7 @@ export const handleStickyFaqs = () => {
           return item.getAttribute('data-pmf-faqid');
         });
         await saveStatus(currentOrder);
-      },
+      }
     });
   }
 };

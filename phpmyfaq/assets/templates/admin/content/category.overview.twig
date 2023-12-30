@@ -10,6 +10,9 @@
       <a class="btn btn-sm btn-info" href="?action=showcategory">
         <i aria-hidden="true" class="fa fa-list"></i> {{ msgCategoryMatrix }}
       </a>
+      <a class="btn btn-sm btn-info" id="test">
+        <i aria-hidden="true" class="fa fa-eye"></i>
+      </a>
     </div>
   </div>
 </div>
@@ -26,7 +29,7 @@
 
 {% macro renderCategories(categories, categoryInfo, depth = 1) %}
   {% for key, children in categories %}
-    <div class="list-group-item nested-{{ depth }}">
+    <div class="list-group-item nested-{{ depth }}" data-pmf-catid="{{ categoryInfo[key]['id'] }}">
       <h6 class="m-2">
         {{ categoryInfo[key]['name'] }}
 

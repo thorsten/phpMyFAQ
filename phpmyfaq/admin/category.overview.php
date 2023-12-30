@@ -41,6 +41,8 @@ $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 $categoryInfo = $category->getAllCategories();
 $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
 
+var_dump($categoryTree);
+
 $templateVars = [
     'msgHeaderCategoryOverview' => Translation::get('ad_menu_categ_edit'),
     'msgAddCategory' => Translation::get('ad_kateg_add'),
