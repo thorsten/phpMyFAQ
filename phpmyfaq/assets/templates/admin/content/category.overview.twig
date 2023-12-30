@@ -13,3 +13,32 @@
     </div>
   </div>
 </div>
+
+<pre>
+  {{ dump(categoryInfo[1]) }}
+</pre>
+
+<div class="row">
+  <div id="pmf-category-tree" class="list-group col nested-sortable">
+    {{ _self.renderCategories(categoryTree, categoryInfo) }}
+  </div>
+</div>
+
+{% macro renderCategories(categories, categoryInfo, depth = 1) %}
+  {% for key, children in categories %}
+    <div class="list-group-item nested-{{ depth }}">
+      <h6 class="m-2">
+        {{ categoryInfo[key]['name'] }}
+
+        {% if categoryInfo[key]['show_home'] == 1 %}
+        <i class="fa fa-star" aria-hidden="true"></i>
+        {% endif %}
+      </h6>
+      {% if children is not empty %}
+        <div class="list-group nested-sortable">
+          {{ _self.renderCategories(children, categoryInfo, depth + 1) }}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endmacro %}

@@ -457,6 +457,35 @@ class Category
     }
 
     /**
+     * Creates the category tree for the admin category overview.
+     *
+     * @param array $categories
+     * @param int   $parentId
+     * @return array
+     */
+    public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
+    {
+        $result = [];
+
+        foreach ($categories as $category) {
+            if ($category['parent_id'] == $parentId) {
+                $id = $category['id'];
+
+                $children = $this->buildAdminCategoryTree($categories, $category['id']);
+
+                if (!empty($children)) {
+                    $result[$id] = $children;
+                } else {
+                    $result[$id] = [];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+
+    /**
      * Transforms the linear array in a 1D array in the order of the tree, with
      * the info.
      *
@@ -867,7 +896,7 @@ class Category
     }
 
     /**
-     * Returns the category tree as array.
+     * Returns the category tree as an array.
      */
     public function getCategoryTree(): array
     {
@@ -888,7 +917,7 @@ class Category
      * @param array $categoryData Array of category data
      * @param int   $parentId Parent id
      * @param null  $id Entity id
-     * @deprecated will be removed in v3.3, please use Category::create()
+     * @deprecated will be removed in v4.0, please use Category::create()
      */
     public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
     {

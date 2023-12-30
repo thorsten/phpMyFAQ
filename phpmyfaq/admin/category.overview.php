@@ -15,6 +15,7 @@
  * @since     2013-12-30
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -30,15 +31,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 
+$category = new Category($faqConfig, [], false);
+$category->buildCategoryTree();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 
+$categoryInfo = $category->getAllCategories();
+$categoryTree = $category->buildAdminCategoryTree($categoryInfo);
+
 $templateVars = [
     'msgHeaderCategoryOverview' => Translation::get('ad_menu_categ_edit'),
     'msgAddCategory' => Translation::get('ad_kateg_add'),
     'msgCategoryMatrix' => Translation::get('ad_categ_show'),
+    'categoryTree' => $categoryTree,
+    'categoryInfo' => $categoryInfo,
 ];
 
 echo $template->render($templateVars);
