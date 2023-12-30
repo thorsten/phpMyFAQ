@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
  * Class FileNotFoundException
  *
  * @package phpMyFAQ\Template
+ * @deprecated will be removed with phpMyFAQ 4.1
  */
 class TemplateException extends Exception
 {
