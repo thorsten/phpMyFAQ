@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,8 +45,13 @@ $templateVars = [
     'msgHeaderCategoryOverview' => Translation::get('ad_menu_categ_edit'),
     'msgAddCategory' => Translation::get('ad_kateg_add'),
     'msgCategoryMatrix' => Translation::get('ad_categ_show'),
+    'csrfTokenInput' => Token::getInstance()->getTokenInput('category'),
     'categoryTree' => $categoryTree,
     'categoryInfo' => $categoryInfo,
+    'msgAddFaqAction' => Translation::get('ad_quick_entry'),
+    'msgAddCategoryAction' => Translation::get('ad_quick_category'),
+    'msgEditCategoryAction' => Translation::get('ad_kateg_rename'),
+    'msgTranslateCategoryAction' => Translation::get('ad_categ_translate'),
     'msgCategoryRemark' => Translation::get('ad_categ_remark'),
 ];
 

@@ -19,9 +19,12 @@
 
 <div class="row mb-2">
   <div class="col">
-    <div id="pmf-category-tree" class="list-group nested-sortable">
-      {{ _self.renderCategories(categoryTree, categoryInfo) }}
-    </div>
+    <form method="post">
+      {{ csrfTokenInput | raw }}
+      <div id="pmf-category-tree" class="list-group nested-sortable">
+        {{ _self.renderCategories(categoryTree, categoryInfo) }}
+      </div>
+    </form>
   </div>
 </div>
 
@@ -36,13 +39,44 @@
 {% macro renderCategories(categories, categoryInfo, depth = 1) %}
   {% for key, children in categories %}
     <div class="list-group-item nested-{{ depth }}" data-pmf-catid="{{ categoryInfo[key]['id'] }}">
-      <h6 class="m-2">
-        {{ categoryInfo[key]['name'] }}
+      <div class="border-left-0 border-right-0 d-flex justify-content-between align-items-center">
+        <h6 class="m-2">
+          {{ categoryInfo[key]['name'] }}
 
-        {% if categoryInfo[key]['show_home'] == 1 %}
-        <i class="fa fa-star" aria-hidden="true"></i>
-        {% endif %}
-      </h6>
+          {% if categoryInfo[key]['show_home'] == 1 %}
+            <i class="fa fa-star" aria-hidden="true"></i>
+          {% endif %}
+        </h6>
+
+        <div class="pmf-category-actions">
+          <!-- Add FAQ to category (always) -->
+          <a class="btn btn-info btn-sm mb-1 mt-1"
+             href="?action=editentry&amp;cat={{ categoryInfo[key]['id'] }}&amp;lang={{ categoryInfo[key]['lang'] }}">
+            <i aria-hidden="true" class="fa fa-indent" title="{{ msgAddFaqAction }}"></i>
+          </a>
+
+          <!-- Add subcategory (if current language) -->
+          <a class="btn btn-info btn-sm"
+             href="?action=addcategory&amp;cat={{ categoryInfo[key]['id'] }}&amp;lang={{ categoryInfo[key]['lang'] }}">
+            <i aria-hidden="true" class="fa fa-plus-square" title="{{ msgAddCategoryAction }}"></i>
+          </a>
+
+          <!-- Edit category (if current language) -->
+          <a class="btn btn-info btn-sm"
+             href="?action=editcategory&amp;cat={{ categoryInfo[key]['id'] }}">
+            <i aria-hidden="true" class="fa fa-edit" title="{{ msgEditCategoryAction }}"></i>
+          </a>
+
+          <!-- Translate category -->
+          <a class="btn btn-info btn-sm"
+             href="?action=translatecategory&amp;cat={{ categoryInfo[key]['id'] }}">
+            <i aria-hidden="true" class="fa fa-globe" title="{{ msgTranslateCategoryAction }}"></i>
+          </a>
+
+          <!-- Delete category (if no subcategories) -->
+
+        </div>
+      </div>
       {% if children is not empty %}
         <div class="list-group nested-sortable">
           {{ _self.renderCategories(children, categoryInfo, depth + 1) }}

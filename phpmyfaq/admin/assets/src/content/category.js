@@ -31,7 +31,7 @@ export const handleCategories = () => {
         },
         set: (sortable) => {
           const order = sortable.toArray();
-          //const csrf = document.querySelector("input[name=pmf-csrf-token]").value;
+          const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           localStorage.setItem(sortable.options.group.name, order.join('|'));
         },
       },
