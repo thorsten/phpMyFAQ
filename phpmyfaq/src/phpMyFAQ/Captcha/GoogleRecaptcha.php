@@ -12,7 +12,7 @@
  * @copyright 2023 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-02-06
+ * @since     2023-02-11
  */
 
 namespace phpMyFAQ\Captcha;

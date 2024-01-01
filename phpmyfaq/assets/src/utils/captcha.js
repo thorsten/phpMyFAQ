@@ -7,12 +7,11 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023 phpMyFAQ Team
+ * @copyright 2023-2024 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-01-02
  */
-import { addElement } from '../utils';
 
 export const handleReloadCaptcha = (reloadButton) => {
   reloadButton.addEventListener('click', (event) => {

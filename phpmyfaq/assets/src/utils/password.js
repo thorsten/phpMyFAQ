@@ -7,7 +7,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023 phpMyFAQ Team
+ * @copyright 2023-2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-01-26
@@ -15,18 +15,18 @@
 
 export const handlePasswordToggle = () => {
   const passwordInputs = document.querySelectorAll('input[type="password"]');
-  passwordInputs.forEach(function(field) {
-      const toggleId = field.getAttribute('data-pmf-toggle');
-      const toggle = document.getElementById(toggleId);
-      if (toggle) {
-        toggle.addEventListener('click', () => {
-            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
-            field.setAttribute('type', type);
-            const icon = document.getElementById(toggleId + '_icon');
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        });
-      }
+  passwordInputs.forEach(function (field) {
+    const toggleId = field.getAttribute('data-pmf-toggle');
+    const toggle = document.getElementById(toggleId);
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+        field.setAttribute('type', type);
+        const icon = document.getElementById(toggleId + '_icon');
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+      });
+    }
   });
 };
 
