@@ -144,8 +144,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     }
 
                     // Category Order entry
-                    //$categoryOrder = new CategoryOrder($faqConfig);
-                    //$categoryOrder->add($categoryId, $parentId);
+                    $categoryOrder = new CategoryOrder($faqConfig);
+                    $categoryOrder->add($categoryId, $parentId);
 
                     // All the other translations
                     $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_SPECIAL_CHARS);
