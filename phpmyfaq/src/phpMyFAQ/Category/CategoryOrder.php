@@ -37,12 +37,13 @@ readonly class CategoryOrder
     /**
      * Adds a given category ID to the last position.
      */
-    public function add(int $categoryId): bool
+    public function add(int $categoryId, int $parentId): bool
     {
         $query = sprintf(
-            'INSERT INTO %sfaqcategory_order (category_id, position) VALUES (%d, %d)',
+            'INSERT INTO %sfaqcategory_order (category_id, parent_id, position) VALUES (%d, %d, %d)',
             Database::getTablePrefix(),
             $categoryId,
+            $parentId,
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position')
         );
 
@@ -52,6 +53,7 @@ readonly class CategoryOrder
     /**
      * Returns the current position for the given category ID
      *
+     * @param int $categoryId
      * @return bool
      */
     public function getPositionById(int $categoryId): bool
@@ -94,5 +96,62 @@ readonly class CategoryOrder
         );
 
         return (bool) $this->config->getDb()->query($query);
+    }
+
+    /**
+     * Returns the category tree from the database.
+     */
+    public function getCategoryTree(): array
+    {
+        $query = sprintf(
+            'SELECT category_id, parent_id, position FROM %sfaqcategory_order ORDER BY parent_id, position',
+            Database::getTablePrefix()
+        );
+
+        $result = $this->config->getDb()->query($query);
+
+        $data = [];
+        while ($row = $this->config->getDb()->fetchArray($result)) {
+            $parentId = $row['parent_id'];
+            $id = $row['id'];
+
+            if (!isset($data[$parentId])) {
+                $data[$parentId] = [];
+            }
+
+            $data[$parentId][$id] = $row;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Stores the category tree in the database.
+     *
+     * @param array $categoryTree
+     * @param int|null $parentId
+     * @param int $position
+     * @return void
+     */
+    public function setCategoryTree(array $categoryTree, int $parentId = null, int $position = 1): void
+    {
+        foreach ($categoryTree as $category) {
+            $id = $category['id'];
+
+            $query = sprintf(
+                'INSERT INTO %sfaqcategory_order(id, parent_id, ordering) VALUES (%d, %d, $%d)',
+                Database::getTablePrefix(),
+                $id,
+                $parentId,
+                $position
+            );
+            $this->config->getDb()->query($query);
+
+            if (!empty($category['children'])) {
+                $this->setCategoryTree($category['children'], $id);
+            }
+
+            $position++;
+        }
     }
 }

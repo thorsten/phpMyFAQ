@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
@@ -34,6 +35,9 @@ $faqConfig = Configuration::getConfigurationInstance();
 
 $category = new Category($faqConfig, [], false);
 $category->buildCategoryTree();
+
+$categoryOrder = new CategoryOrder($faqConfig);
+$newCategoryTree = $categoryOrder->getCategoryTree();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
