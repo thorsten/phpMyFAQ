@@ -531,6 +531,47 @@ class Update extends Setup
 
             // Enable/Disable cookie consent
             $this->configuration->add('main.enableCookieConsent', true);
+
+            // Add parent category ID to faqcategory_order
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id int(11) DEFAULT NULL AFTER category_id',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlsrv':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id INTEGER DEFAULT NULL AFTER category_id',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlite3':
+                case 'pgsql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqcategory_order_new (
+                            category_id INTEGER NOT NULL,
+                            parent_id INTEGER DEFAULT NULL,
+                            position INTEGER NOT NULL,
+                            PRIMARY KEY (category_id))',
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'INSERT INTO %sfaqcategory_order_new SELECT * FROM %sfaqcategory_order',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'DROP TABLE %sfaqcategory_order',
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqcategory_order_new RENAME TO %sfaqcategory_order',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix()
+                    );
+                    break;
+            }
         }
     }
 

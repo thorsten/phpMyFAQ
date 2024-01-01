@@ -54,7 +54,7 @@ readonly class CategoryOrder
      *
      * @return bool
      */
-    public function getPositionById(int $categoryId)
+    public function getPositionById(int $categoryId): bool
     {
         $query = sprintf(
             'SELECT position FROM %sfaqcategory_order WHERE category_id = %d',

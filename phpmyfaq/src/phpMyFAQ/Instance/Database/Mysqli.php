@@ -116,6 +116,7 @@ class Mysqli extends Database implements Driver
 
         'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
             category_id int(11) NOT NULL,
+            parent_id int(11) DEFAULT NULL,
             position int(11) NOT NULL,
             PRIMARY KEY (category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 

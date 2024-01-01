@@ -111,6 +111,7 @@ class Pgsql extends Database implements Driver
 
         'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
             category_id INTEGER NOT NULL,
+            parent_id INTEGER DEFAULT NULL,
             position INTEGER NOT NULL,
             PRIMARY KEY (category_id))',
 
