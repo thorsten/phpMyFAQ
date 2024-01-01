@@ -51,30 +51,39 @@
         <div class="pmf-category-actions">
           <!-- Add FAQ to category (always) -->
           <a class="btn btn-info btn-sm mb-1 mt-1"
-             href="?action=editentry&amp;cat={{ categoryInfo[key]['id'] }}&amp;lang={{ categoryInfo[key]['lang'] }}">
+             href="?action=editentry&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
             <i aria-hidden="true" class="fa fa-indent" title="{{ msgAddFaqAction }}"></i>
           </a>
 
           <!-- Add subcategory (if current language) -->
           <a class="btn btn-info btn-sm"
-             href="?action=addcategory&amp;cat={{ categoryInfo[key]['id'] }}&amp;lang={{ categoryInfo[key]['lang'] }}">
+             href="?action=addcategory&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
             <i aria-hidden="true" class="fa fa-plus-square" title="{{ msgAddCategoryAction }}"></i>
           </a>
 
           <!-- Edit category (if current language) -->
           <a class="btn btn-info btn-sm"
-             href="?action=editcategory&amp;cat={{ categoryInfo[key]['id'] }}">
+             href="?action=editcategory&cat={{ categoryInfo[key]['id'] }}">
             <i aria-hidden="true" class="fa fa-edit" title="{{ msgEditCategoryAction }}"></i>
           </a>
 
           <!-- Translate category -->
           <a class="btn btn-info btn-sm"
-             href="?action=translatecategory&amp;cat={{ categoryInfo[key]['id'] }}">
+             href="?action=translatecategory&cat={{ categoryInfo[key]['id'] }}">
             <i aria-hidden="true" class="fa fa-globe" title="{{ msgTranslateCategoryAction }}"></i>
           </a>
 
           <!-- Delete category (if no subcategories) -->
-
+          {% if children is empty %}
+            <a class="btn btn-danger btn-sm"
+               href="?action=deletecategory&cat={{ categoryInfo[key]['id'] }}&catlang={{ categoryInfo[key]['lang'] }}">
+              <i aria-hidden="true" class="fa fa-trash" title="%s"></i>
+            </a>
+          {% else %}
+            <a class="btn btn-inverse btn-sm border" style="cursor: not-allowed;">
+              <i aria-hidden="true" class="fa fa-trash"></i>
+            </a>
+          {% endif %}
         </div>
       </div>
       {% if children is not empty %}
