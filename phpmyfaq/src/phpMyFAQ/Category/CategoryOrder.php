@@ -2,6 +2,7 @@
 
 /**
  * The category order class.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -24,12 +25,12 @@ use phpMyFAQ\Database;
  *
  * @package phpMyFAQ\Category
  */
-class CategoryOrder
+readonly class CategoryOrder
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private Configuration $config)
     {
     }
 

@@ -15,15 +15,20 @@
 
 import Sortable from 'sortablejs';
 
+const nestedQuery = '.nested-sortable';
+const identifier = 'pmfCatid';
+
 export const handleCategories = () => {
-  const nestedSortables = document.querySelectorAll('.nested-sortable');
+  const root = document.getElementById('pmf-category-tree');
+  const nestedSortables = document.querySelectorAll(nestedQuery);
+
   for (let i = 0; i < nestedSortables.length; i++) {
     new Sortable(nestedSortables[i], {
-      group: 'nested',
+      group: 'Categories',
       animation: 150,
       fallbackOnBody: true,
       swapThreshold: 0.65,
-      dataIdAttr: 'data-pmf-catid',
+      dataIdAttr: identifier,
       store: {
         get: (sortable) => {
           const order = localStorage.getItem(sortable.options.group.name);
@@ -32,9 +37,24 @@ export const handleCategories = () => {
         set: (sortable) => {
           const order = sortable.toArray();
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
+          const data = JSON.stringify(serializedTree(root));
           localStorage.setItem(sortable.options.group.name, order.join('|'));
+
+          console.log(data);
         },
       },
     });
   }
+
+  const serializedTree = (sortable) => {
+    return Array.from(sortable.children).map((child) => {
+      const nested = child.querySelector(nestedQuery);
+      return {
+        id: child.dataset[identifier],
+        children: nested ? serializedTree(nested) : [],
+      };
+    });
+  };
+
+  console.log(serializedTree(root));
 };
