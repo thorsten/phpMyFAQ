@@ -14,6 +14,7 @@
  */
 
 import Sortable from 'sortablejs';
+import { setCategoryTree } from '../api';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
@@ -34,13 +35,13 @@ export const handleCategories = () => {
           const order = localStorage.getItem(sortable.options.group.name);
           return order ? order.split('|') : [];
         },
-        set: (sortable) => {
+        set: async (sortable) => {
           const order = sortable.toArray();
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
-          const data = JSON.stringify(serializedTree(root));
+          const data = serializedTree(root);
           localStorage.setItem(sortable.options.group.name, order.join('|'));
 
-          console.log(data);
+          await setCategoryTree(data, csrf);
         },
       },
     });
@@ -55,6 +56,4 @@ export const handleCategories = () => {
       };
     });
   };
-
-  console.log(serializedTree(root));
 };

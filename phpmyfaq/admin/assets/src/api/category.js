@@ -35,3 +35,29 @@ export const fetchCategoryTranslations = async (categoryId) => {
     throw error;
   }
 };
+
+export const setCategoryTree = async (categoryTree, csrfToken) => {
+  try {
+    const response = await fetch('./api/category/update-order', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        categoryTree: categoryTree,
+        csrfToken: csrfToken,
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.', response.text());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

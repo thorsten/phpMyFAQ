@@ -71,40 +71,21 @@ class CategoryController extends AbstractController
     #[Route('admin/api/category/update-order')]
     public function updateOrder(Request $request): JsonResponse
     {
+        $this->userHasPermission('editcateg');
+
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('category', $data->csrf)) {
+        if (!Token::getInstance()->verifyToken('category', $data->csrfToken)) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
             return $response;
         }
 
         $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $category = new Category($configuration, [], false);
-        $category->setUser($currentAdminUser);
-        $category->setGroups($currentAdminGroups);
 
         $categoryOrder = new CategoryOrder($configuration);
-
-        $sortedData = array_filter($data->order, function ($element): bool {
-            return is_numeric($element) ?? (int)$element;
-        });
-
-        $order = 1;
-        foreach ($sortedData as $categoryId) {
-            $currentPosition = $categoryOrder->getPositionById((int) $categoryId);
-
-            if (!$currentPosition) {
-                $categoryOrder->setPositionById((int) $categoryId, $order);
-            } else {
-                $categoryOrder->updatePositionById((int) $categoryId, $order);
-            }
-            $order++;
-        }
+        $categoryOrder->setCategoryTree($data->categoryTree);
 
         $response->setData(
             ['success' => Translation::get('ad_categ_save_order')]
