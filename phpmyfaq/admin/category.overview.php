@@ -37,14 +37,14 @@ $category = new Category($faqConfig, [], false);
 $category->buildCategoryTree();
 
 $categoryOrder = new CategoryOrder($faqConfig);
-$newCategoryTree = $categoryOrder->getCategoryTree();
+$orderedCategories = $categoryOrder->getAllCategories();
+$categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 
 $categoryInfo = $category->getAllCategories();
-$categoryTree = $category->buildAdminCategoryTree($categoryInfo);
 
 $templateVars = [
     'msgHeaderCategoryOverview' => Translation::get('ad_menu_categ_edit'),

@@ -69,33 +69,6 @@ readonly class CategoryOrder
     }
 
     /**
-     * Returns the category tree from the database.
-     */
-    public function getCategoryTree(): array
-    {
-        $query = sprintf(
-            'SELECT category_id, parent_id, position FROM %sfaqcategory_order ORDER BY parent_id, position',
-            Database::getTablePrefix()
-        );
-
-        $result = $this->config->getDb()->query($query);
-
-        $data = [];
-        while ($row = $this->config->getDb()->fetchArray($result)) {
-            $parentId = $row['parent_id'];
-            $id = $row['category_id'];
-
-            if (!isset($data[$parentId])) {
-                $data[$parentId] = [];
-            }
-
-            $data[$parentId][$id] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
      * Stores the category tree in the database.
      *
      * @param array $categoryTree
@@ -121,10 +94,41 @@ readonly class CategoryOrder
             $this->config->getDb()->query($query);
 
             if (!empty($category->children)) {
-                $this->setCategoryTree($category->children, $id);
+                $this->setCategoryTree($category->children, $id, $position);
             }
 
             $position++;
         }
+    }
+
+    public function getCategoryTree(array $categories, int $parentId = 0)
+    {
+        $result = [];
+
+        foreach ($categories as $item) {
+            if ($item['parent_id'] == $parentId) {
+                $children = $this->getCategoryTree($categories, $item['category_id']);
+                $result[$item['category_id']] = $children;
+            }
+        }
+
+        return $result;
+    }
+
+    public function getAllCategories(): array
+    {
+        $query = sprintf(
+            'SELECT category_id, parent_id, position FROM %sfaqcategory_order ORDER BY position',
+            Database::getTablePrefix()
+        );
+        $result = $this->config->getDb()->query($query);
+
+        $categories = [];
+
+        while ($row = $this->config->getDb()->fetchArray($result)) {
+            $categories[] = $row;
+        }
+
+        return $categories;
     }
 }
