@@ -80,10 +80,11 @@ readonly class CategoryOrder
     {
         $this->config->getDb()->query(sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix()));
 
+        $insertQueries = [];
         foreach ($categoryTree as $category) {
             $id = $category->id;
 
-            $query = sprintf(
+            $insertQueries[] = sprintf(
                 'INSERT INTO %sfaqcategory_order(category_id, parent_id, position) VALUES (%d, %d, %d)',
                 Database::getTablePrefix(),
                 $id,
@@ -91,17 +92,19 @@ readonly class CategoryOrder
                 $position
             );
 
-            $this->config->getDb()->query($query);
-
             if (!empty($category->children)) {
                 $this->setCategoryTree($category->children, $id, $position);
             }
 
             $position++;
         }
+
+        foreach ($insertQueries as $query) {
+            $this->config->getDb()->query($query);
+        }
     }
 
-    public function getCategoryTree(array $categories, int $parentId = 0)
+    public function getCategoryTree(array $categories, int $parentId = 0): array
     {
         $result = [];
 

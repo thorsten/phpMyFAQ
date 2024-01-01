@@ -31,16 +31,10 @@ export const handleCategories = () => {
       swapThreshold: 0.65,
       dataIdAttr: identifier,
       store: {
-        get: (sortable) => {
-          const order = localStorage.getItem(sortable.options.group.name);
-          return order ? order.split('|') : [];
-        },
         set: async (sortable) => {
           const order = sortable.toArray();
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           const data = serializedTree(root);
-          localStorage.setItem(sortable.options.group.name, order.join('|'));
-
           await setCategoryTree(data, csrf);
         },
       },

@@ -28,11 +28,10 @@ export const fetchCategoryTranslations = async (categoryId) => {
     if (response.status === 200) {
       return await response.json();
     } else {
-      throw new Error('Network response was not ok.');
+      throw new Error('Network response was not ok.', response.text());
     }
   } catch (error) {
-    console.error('Error fetching groups:', error);
-    throw error;
+    console.error(error);
   }
 };
 

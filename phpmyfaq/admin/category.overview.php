@@ -35,16 +35,20 @@ $faqConfig = Configuration::getConfigurationInstance();
 
 $category = new Category($faqConfig, [], false);
 $category->buildCategoryTree();
+$categoryInfo = $category->getAllCategories();
 
 $categoryOrder = new CategoryOrder($faqConfig);
 $orderedCategories = $categoryOrder->getAllCategories();
 $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
+if (empty($categoryTree)) {
+    // Fallback if no category order is available
+    $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
+}
+
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
-
-$categoryInfo = $category->getAllCategories();
 
 $templateVars = [
     'msgHeaderCategoryOverview' => Translation::get('ad_menu_categ_edit'),
