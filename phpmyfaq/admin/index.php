@@ -301,7 +301,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'checkIfCategoryExists':
             case 'removecategory':
             case 'changecategory':
-            case 'pastecategory':
                 require 'category.main.php';
                 break;
             case 'category-overview':
@@ -318,9 +317,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'deletecategory':
                 require 'category.delete.php';
-                break;
-            case 'cutcategory':
-                require 'category.cut.php';
                 break;
             case 'showcategory':
                 require 'category.showstructure.php';

@@ -300,20 +300,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
             }
 
-            // Pastes a category
-            if ($action == 'pastecategory') {
-                $category = new Category($faqConfig, [], false);
-                $category->setUser($currentAdminUser);
-                $category->setGroups($currentAdminGroups);
-                $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-                $parentId = Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
-                if ($category->updateParentCategory((int) $categoryId, (int) $parentId)) {
-                    echo Alert::success('ad_categ_updated');
-                } else {
-                    echo Alert::danger('ad_categ_paste_error', $faqConfig->getDb()->error());
-                }
-            }
-
             // Lists all categories
             $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS, $faqLangCode);
 
@@ -432,14 +418,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     echo '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i aria-hidden="true" class="fa fa-trash"></i></a>';
                 }
 
-                if ($cat['lang'] == $lang) {
-                    // cut category (if current language)
-                    printf(
-                        '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i aria-hidden="true" class="fa fa-cut" title="%s"></i></a>  ',
-                        $cat['id'],
-                        Translation::get('ad_categ_cut')
-                    );
-                }
                 echo '</span>';
                 echo '</div>';
 

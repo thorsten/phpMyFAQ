@@ -147,8 +147,6 @@ switch ($action) {
     case 'updatecategory':
     case 'deletecategory':
     case 'removecategory':
-    case 'cutcategory':
-    case 'pastecategory':
     case 'movecategory':
     case 'changecategory':
     case 'showcategory':
