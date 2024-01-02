@@ -68,24 +68,6 @@ readonly class CategoryOrder
     }
 
     /**
-     * Returns the current position for the given category ID
-     *
-     * @param int $categoryId
-     * @return bool
-     */
-    public function getPositionById(int $categoryId): bool
-    {
-        $query = sprintf(
-            'SELECT position FROM %sfaqcategory_order WHERE category_id = %d',
-            Database::getTablePrefix(),
-            $categoryId
-        );
-        $result = $this->config->getDb()->query($query);
-
-        return (bool) $this->config->getDb()->fetchRow($result);
-    }
-
-    /**
      * Stores the category tree in the database.
      *
      * @param array $categoryTree
