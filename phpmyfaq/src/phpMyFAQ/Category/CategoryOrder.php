@@ -104,6 +104,13 @@ readonly class CategoryOrder
         }
     }
 
+    /**
+     * Returns the category tree.
+     *
+     * @param array $categories
+     * @param int $parentId
+     * @return array
+     */
     public function getCategoryTree(array $categories, int $parentId = 0): array
     {
         $result = [];
@@ -118,6 +125,11 @@ readonly class CategoryOrder
         return $result;
     }
 
+    /**
+     * Returns all categories.
+     *
+     * @return array
+     */
     public function getAllCategories(): array
     {
         $query = sprintf(

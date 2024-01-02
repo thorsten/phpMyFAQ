@@ -1,7 +1,20 @@
-.category-header {
-  cursor: pointer;
+.nested-2,
+.nested-3,
+.nested-4,
+.nested-5,
+.nested-6,
+.nested-7,
+.nested-8,
+.nested-9,
+.nested-10 {
+  margin-right: calc(-1rem - 1px);
 }
 
+.pmf-category-actions {
+  padding: 0.2rem;
+}
+
+// @deprecated
 .list-group.list-group-root {
   padding: 0;
   overflow: hidden;
