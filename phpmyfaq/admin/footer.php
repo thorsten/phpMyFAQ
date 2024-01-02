@@ -94,7 +94,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 if ($user->isLoggedIn()) {
     ?>
   <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
-          style="display: none;"></iframe>
+          style="display: none;" name="keep-phpmyfaq-session-alive"></iframe>
     <?php
 }
 ?>

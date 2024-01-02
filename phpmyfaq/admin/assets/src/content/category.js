@@ -15,12 +15,14 @@
 
 import Sortable from 'sortablejs';
 import { setCategoryTree } from '../api';
+import { addElement } from '../../../../assets/src/utils';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
 
 export const handleCategories = () => {
   const root = document.getElementById('pmf-category-tree');
+  const result = document.getElementById('pmf-category-result');
   const nestedSortables = document.querySelectorAll(nestedQuery);
 
   for (let i = 0; i < nestedSortables.length; i++) {
@@ -31,11 +33,30 @@ export const handleCategories = () => {
       swapThreshold: 0.65,
       dataIdAttr: identifier,
       store: {
-        set: async (sortable) => {
-          const order = sortable.toArray();
+        set: async () => {
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           const data = serializedTree(root);
-          await setCategoryTree(data, csrf);
+          const response = await setCategoryTree(data, csrf);
+          if (response.success) {
+            result.append(
+              addElement(
+                'div',
+                {
+                  classList: 'alert alert-success alert-dismissible fade show',
+                  innerText: response.success,
+                  role: 'alert',
+                },
+                [
+                  addElement('button', {
+                    classList: 'btn-close',
+                    type: 'button',
+                    'data-bsDismiss': 'alert',
+                    'aria-label': 'Close',
+                  }),
+                ]
+              )
+            );
+          }
         },
       },
     });

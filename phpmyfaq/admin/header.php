@@ -236,7 +236,8 @@ switch ($action) {
     <a class="navbar-brand ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
 
     <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
+            name="sidebar-toggle" href="#">
         <i class="fa fa-bars"></i>
     </button>
 

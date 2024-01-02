@@ -40,8 +40,9 @@ class LanguageHelper
         string $id = 'language'
     ): string {
         $output = sprintf(
-            '<select class="form-select" name="%s" id="%s" %s>',
+            '<select class="form-select" name="%s" aria-label="%s" id="%s" %s>',
             $id,
+            ucfirst($id),
             $id,
             $submitOnChange ? ' onchange="this.form.submit();"' : ''
         );
