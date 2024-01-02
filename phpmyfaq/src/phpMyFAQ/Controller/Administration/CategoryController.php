@@ -18,10 +18,13 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryImage;
 use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -32,6 +35,67 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
+    #[Route('admin/api/category/delete')]
+    public function delete(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::CATEGORY_DELETE->value);
+
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        $response = new JsonResponse();
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance()->verifyToken('category', $data->csrfToken)) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            return $response;
+        }
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $category = new Category($configuration, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        $categoryRelation = new CategoryRelation($configuration, $category);
+
+        $categoryImage = new CategoryImage($configuration);
+        $categoryImage->setFileName($category->getCategoryData($data->categoryId)->getImage());
+
+        $categoryOrder = new CategoryOrder($configuration);
+        $categoryOrder->remove($data->categoryId);
+
+        $categoryPermission = new CategoryPermission($configuration);
+
+        if (
+            (
+                is_countable($category->getCategoryLanguagesTranslated($data->categoryId))
+                    ? count($category->getCategoryLanguagesTranslated($data->categoryId)) : 0
+            ) === 1
+        ) {
+            $categoryPermission->delete(CategoryPermission::USER, [$data->categoryId]);
+            $categoryPermission->delete(CategoryPermission::GROUP, [$data->categoryId]);
+            $categoryImage->delete();
+        }
+
+        if (
+            $category->deleteCategory($data->categoryId, $data->language) &&
+            $categoryRelation->delete($data->categoryId, $data->language)
+        ) {
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(
+                ['success' => Translation::get('ad_categ_deleted')]
+            );
+        } else {
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(
+                ['error' => Translation::get('ad_adus_dberr') . $configuration->getDb()->error()]
+            );
+        }
+
+        return $response;
+    }
     #[Route('admin/api/category/permissions')]
     public function permissions(Request $request): JsonResponse
     {
@@ -71,7 +135,7 @@ class CategoryController extends AbstractController
     #[Route('admin/api/category/update-order')]
     public function updateOrder(Request $request): JsonResponse
     {
-        $this->userHasPermission('editcateg');
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT->value);
 
         $response = new JsonResponse();
         $data = json_decode($request->getContent());

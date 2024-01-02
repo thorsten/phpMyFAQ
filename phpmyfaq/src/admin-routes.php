@@ -67,6 +67,18 @@ $routes->add(
 // Category API
 //
 $routes->add(
+    'admin.api.category.delete',
+    new Route(
+        '/category/delete',
+        [
+            '_controller' => [CategoryController::class, 'delete'],
+            '_methods' => 'DELETE'
+        ]
+    )
+);
+
+
+$routes->add(
     'admin.api.category.permissions',
     new Route('/category/permissions/{categories}', ['_controller' => [CategoryController::class, 'permissions']])
 );

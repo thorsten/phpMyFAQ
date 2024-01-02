@@ -35,6 +35,33 @@ export const fetchCategoryTranslations = async (categoryId) => {
   }
 };
 
+export const deleteCategory = async (categoryId, language, csrfToken) => {
+  try {
+    const response = await fetch(`./api/category/delete`, {
+      method: 'DELETE',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        categoryId: categoryId,
+        language: language,
+        csrfToken: csrfToken,
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.', response.text());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const setCategoryTree = async (categoryTree, csrfToken) => {
   try {
     const response = await fetch('./api/category/update-order', {

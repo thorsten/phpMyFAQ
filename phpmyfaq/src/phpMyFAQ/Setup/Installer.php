@@ -27,6 +27,7 @@ use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
@@ -114,14 +115,12 @@ class Installer extends Setup
             'name' => 'addcateg',
             'description' => 'Right to add categories',
         ],
-        //14 => "editcateg",
         [
-            'name' => 'editcateg',
+            'name' => PermissionType::CATEGORY_EDIT->value,
             'description' => 'Right to edit categories',
         ],
-        //15 => "delcateg",
         [
-            'name' => 'delcateg',
+            'name' => PermissionType::CATEGORY_DELETE->value,
             'description' => 'Right to delete categories',
         ],
         //16 => "passwd",

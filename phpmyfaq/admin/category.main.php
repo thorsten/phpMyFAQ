@@ -267,42 +267,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_SPECIAL_CHARS);
             }
 
-            // Deletes an existing category
-            if (
-                $user->perm->hasPermission($user->getUserId(), 'delcateg') && $action === 'removecategory' &&
-                Token::getInstance()->verifyToken('remove-category', $csrfToken)
-            ) {
-                $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-                $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-
-                $category = new Category($faqConfig, [], false);
-                $category->setUser($currentAdminUser);
-                $category->setGroups($currentAdminGroups);
-
-                $categoryRelation = new CategoryRelation($faqConfig, $category);
-
-                $categoryImage = new CategoryImage($faqConfig);
-                $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
-
-                $categoryOrder = new CategoryOrder($faqConfig);
-                $categoryOrder->remove($categoryId);
-
-                if ((is_countable($category->getCategoryLanguagesTranslated($categoryId)) ? count($category->getCategoryLanguagesTranslated($categoryId)) : 0) === 1) {
-                    $categoryPermission->delete(CategoryPermission::USER, [$categoryId]);
-                    $categoryPermission->delete(CategoryPermission::GROUP, [$categoryId]);
-                    $categoryImage->delete();
-                }
-
-                if (
-                    $category->deleteCategory($categoryId, $categoryLang) &&
-                    $categoryRelation->delete($categoryId, $categoryLang)
-                ) {
-                    echo Alert::success('ad_categ_deleted');
-                } else {
-                    echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
-                }
-            }
-
             // Lists all categories
             $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS, $faqLangCode);
 
@@ -408,18 +372,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     $cat['id'],
                     Translation::get('ad_categ_translate')
                 );
-
-                // delete (sub) category (if current language)
-                if ((is_countable($category->getChildren($cat['id'])) ? count($category->getChildren($cat['id'])) : 0) == 0 && $cat['lang'] == $lang) {
-                    printf(
-                        '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><i aria-hidden="true" class="fa fa-trash" title="%s"></i></a> ',
-                        $cat['id'],
-                        $cat['lang'],
-                        Translation::get('ad_categ_delete')
-                    );
-                } else {
-                    echo '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i aria-hidden="true" class="fa fa-trash"></i></a>';
-                }
 
                 echo '</span>';
                 echo '</div>';

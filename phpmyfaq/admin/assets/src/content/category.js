@@ -14,7 +14,7 @@
  */
 
 import Sortable from 'sortablejs';
-import { setCategoryTree } from '../api';
+import { deleteCategory, setCategoryTree } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
 const nestedQuery = '.nested-sortable';
@@ -22,7 +22,6 @@ const identifier = 'pmfCatid';
 
 export const handleCategories = () => {
   const root = document.getElementById('pmf-category-tree');
-  const result = document.getElementById('pmf-category-result');
   const nestedSortables = document.querySelectorAll(nestedQuery);
 
   for (let i = 0; i < nestedSortables.length; i++) {
@@ -37,26 +36,7 @@ export const handleCategories = () => {
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           const data = serializedTree(root);
           const response = await setCategoryTree(data, csrf);
-          if (response.success) {
-            result.append(
-              addElement(
-                'div',
-                {
-                  classList: 'alert alert-success alert-dismissible fade show',
-                  innerText: response.success,
-                  role: 'alert',
-                },
-                [
-                  addElement('button', {
-                    classList: 'btn-close',
-                    type: 'button',
-                    'data-bsDismiss': 'alert',
-                    'aria-label': 'Close',
-                  }),
-                ]
-              )
-            );
-          }
+          handleAlert(response);
         },
       },
     });
@@ -71,4 +51,47 @@ export const handleCategories = () => {
       };
     });
   };
+};
+
+export const handleCategoryDelete = async () => {
+  const buttonDelete = document.getElementsByName('pmf-category-delete-button');
+
+  if (buttonDelete) {
+    buttonDelete.forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const categoryId = event.target.getAttribute('data-pmf-category-id');
+        const language = event.target.getAttribute('data-pmf-language');
+        const csrfToken = document.querySelector('input[name=pmf-csrf-token]').value;
+
+        const response = await deleteCategory(categoryId, language, csrfToken);
+        handleAlert(response);
+        document.getElementById(`pmf-category-${categoryId}`).remove();
+      });
+    });
+  }
+};
+
+const handleAlert = (response) => {
+  const result = document.getElementById('pmf-category-result');
+  if (response.success) {
+    result.append(
+      addElement(
+        'div',
+        {
+          classList: 'alert alert-success alert-dismissible fade show',
+          innerText: response.success,
+          role: 'alert',
+        },
+        [
+          addElement('button', {
+            classList: 'btn-close',
+            type: 'button',
+            'data-bsDismiss': 'alert',
+            'aria-label': 'Close',
+          }),
+        ]
+      )
+    );
+  }
 };

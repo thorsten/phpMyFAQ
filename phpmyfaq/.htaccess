@@ -148,6 +148,7 @@ RewriteRule api/setup/backup                                api/index.php [L,QSA
 RewriteRule api/setup/update-database                       api/index.php [L,QSA]
 
 # Administration API
+RewriteRule admin/api/category/delete                       admin/api/index.php [L,QSA]
 RewriteRule admin/api/category/permissions                  admin/api/index.php [L,QSA]
 RewriteRule admin/api/category/update-order                 admin/api/index.php [L,QSA]
 RewriteRule admin/api/category/translations                 admin/api/index.php [L,QSA]
