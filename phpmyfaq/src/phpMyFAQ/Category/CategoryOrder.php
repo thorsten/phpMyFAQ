@@ -51,6 +51,23 @@ readonly class CategoryOrder
     }
 
     /**
+     * Deletes a given category ID.
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    public function remove(int $categoryId): bool
+    {
+        $query = sprintf(
+            'DELETE FROM %sfaqcategory_order WHERE category_id = %d',
+            Database::getTablePrefix(),
+            $categoryId
+        );
+
+        return (bool) $this->config->getDb()->query($query);
+    }
+
+    /**
      * Returns the current position for the given category ID
      *
      * @param int $categoryId
