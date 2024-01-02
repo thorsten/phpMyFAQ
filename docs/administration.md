@@ -54,13 +54,15 @@ permissions, please set the permission level from _basic_ to _medium_ in the mai
 
 ### 5.2.1 Category Administration
 
-phpMyFAQ lets you create different categories and nested sub-categories for your FAQs. You can also re-arrange your
-categories in a different order. It is possible to use various languages per category, too; there's also a frontend to
-view all translated categories. For accessibility reasons, you should add a small description for every category. You
-can add an image for every category, which will be shown even on the start page if you flag this category with this
-configuration. If you add a new category, you can set the permissions for users and groups, and you can bind an
-administrator to that category. This is quite nice if you want to share the work in your FAQ between various admin
-users.
+phpMyFAQ lets you create different categories and nested subcategories for your FAQs.
+You can also re-arrange your categories in a different order with drag'n'drop.
+It is possible to use various languages per category, too; there's also a frontend to view all translated categories.
+For accessibility reasons, you should add a small description for every category.
+You can add an image for every category, which will be shown even on the start page if you flag this category with this
+configuration.
+If you add a new category, you can set the permissions for users and groups, and you can bind an administrator to new
+category.
+This is quite nice if you want to share the work in your FAQ between various admin users.
 
 ### 5.2.2 FAQ Administration
 

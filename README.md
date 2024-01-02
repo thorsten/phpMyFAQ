@@ -76,8 +76,9 @@ To run the test using Docker you have to install the Composer development depend
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
+    $ php composeer.phar test
 
-#### Quote from ElasticSearch documentation
+#### Quote from Elasticsearch documentation
 
 The vm.max_map_count kernel setting needs to be set to at least 262144 for production use. Depending on your platform:
 
@@ -149,7 +150,7 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit http://semver.org/.
 
-## Bug tracker
+## Issue tracker
 
 Found a bug, or do you have a feature request? [Please open a new issue](https://github.com/thorsten/phpMyFAQ/issues).
 Before opening any issue, please search for existing issues.
@@ -160,12 +161,11 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 ## Documentation
 
-You can find the full documentation on [https://phpmyfaq.readthedocs.io](https://phpmyfaq.readthedocs.io/en/latest/).
+You can read the complete documentation on [here](https://phpmyfaq.readthedocs.io/en/latest/).
 
 ## REST API v3.0
 
-The REST API v3.0 documentation is located [here in this repository](API.md) and on
-[phpmyfaq.de](https://www.phpmyfaq.de/documentation).
+The REST API v3.0 documentation is located [here in this repository](API.md).
 
 ## License
 

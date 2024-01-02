@@ -8,19 +8,21 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.0.0-dev - 2024-
 
-- changed PHP requirement to PHP 8.2.0 or later (Thorsten)
+- changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
 - added Symfony Routing (Thorsten)
 - added new admin configuration frontend (Thorsten)
+- added new admin category management frontend with full drag and drop sorting support (Thorsten)
 - added new admin FAQ management frontend (Thorsten)
 - added possibility to sort sticky FAQs (Jan Harms)
 - added possibility to enable/disable cookie consent (Thorsten)
-- (WIP) added experimental online update feature (Jan Harms, Thorsten)
+- added experimental online update feature (Jan Harms, Thorsten)
+- added REST API v3.0 (Thorsten)
 - (WIP) added Twig as new template engine (Thorsten)
-- updated to PNPM (Thorsten)
-- removed X/Twitter support (Thorsten)
+- removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
+- migrated from Yarn to PNPM (Thorsten)
 
 ### phpMyFAQ v3.2.3 - 2023-11-24
 

@@ -29,7 +29,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-
 $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 
