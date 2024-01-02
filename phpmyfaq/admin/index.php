@@ -400,7 +400,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             // functions for FAQ export
             case 'export':
-                require 'export.main.php';
+                require 'export.php';
                 break;
             // attachment administration
             case 'attachments':
