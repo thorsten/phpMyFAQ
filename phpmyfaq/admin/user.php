@@ -270,7 +270,7 @@ if (
                 <div class="btn-group mr-2">
                     <?php
                     if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                 data-bs-target="#addUserModal">
                             <i class="fa fa-user-plus" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
                         </button>
@@ -278,7 +278,7 @@ if (
                     endif ?>
                     <?php
                     if ($currentUser->perm->hasPermission($user->getUserId(), 'edit_user')) : ?>
-                        <a class="btn btn-sm btn-secondary" href="?action=user&amp;user_action=listallusers">
+                        <a class="btn btn-outline-info" href="?action=user&amp;user_action=listallusers">
                             <i class="fa fa-users" aria-label="true"></i> <?= Translation::get('list_all_users') ?>
                         </a>
                         <?php

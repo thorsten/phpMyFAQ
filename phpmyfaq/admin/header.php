@@ -232,8 +232,8 @@ switch ($action) {
 <body dir="<?= Translation::get('dir'); ?>" id="page-top">
 
 <!-- phpMyFAQ Admin Top Bar -->
-<nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-gradient-dark">
-    <a class="navbar-brand ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
+<nav class="pmf-admin-topnav navbar navbar-expand bg-dark">
+    <a class="navbar-brand text-white ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
 
     <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
@@ -243,7 +243,7 @@ switch ($action) {
 
     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
-            <div class="text-white-50 small">
+            <div class="text-white small">
                 <i class="fa fa-clock-o fa-fw"></i> <?= Translation::get('ad_session_expiration'); ?>:
                 <span id="sessioncounter" class="pl-2">
                     <div class="spinner-border spinner-border-sm" role="status">
@@ -267,7 +267,7 @@ switch ($action) {
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                <span class="mr-2 d-none d-lg-inline small">
                       <?= $user->getUserData('display_name'); ?>
                 </span>
                 <?php

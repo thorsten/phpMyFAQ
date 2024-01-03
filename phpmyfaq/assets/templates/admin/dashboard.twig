@@ -7,9 +7,9 @@
     <div class="btn-group mr-2">
       <a href="?action=config">
         {% if isMaintenanceMode %}
-          <button class="btn btn-sm btn-danger">{{ adminDashboardMaintenance }}</button>
+          <button class="btn btn-danger">{{ adminDashboardMaintenance }}</button>
         {% else %}
-          <button class="btn btn-sm btn-success">{{ adminDashboardOnline }}</button>
+          <button class="btn btn-success">{{ adminDashboardOnline }}</button>
         {% endif %}
       </a>
     </div>
@@ -17,16 +17,13 @@
 </div>
 
 {% if isDebugMode %}
-  <section class="row mb-3">
+  <section class="row">
     <div class="col-12">
       <div class="alert alert-danger" role="alert">
-        <h5 class="alert-heading">
-          Attention!
-        </h5>
-        <p>
-          When life gets too serious, disable debug mode and let the bugs roam free! 🐞✨
-          Please disable it in your src/Bootstrap.php file.
-        </p>
+        phoMyFAQ is currently running in debug mode.
+        Debug mode may expose sensitive information and is intended for development purposes only.
+        We strongly recommend disabling debug mode for security reasons.
+        You can disable debug mode in the <code>src/Bootstrap.php</code> file.
       </div>
     </div>
   </section>
@@ -36,7 +33,6 @@
   <section class="row mb-3">
     <div class="col-12">
       <div class="card bg-danger text-white shadow h-100 py-2">
-        <div class="card-header">Attention!</div>
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
@@ -58,15 +54,10 @@
   <section class="row">
     <div class="col">
       <div class="alert alert-danger" role="alert">
-        <h5 class="alert-heading">
-          Attention!
-        </h5>
-        <p>
-          phpMyFAQ is currently in development ({{ currentVersionApp }}).
-          And therefore not yet ready for production.
-          Please <a target="_blank" href="https://github.com/thorsten/phpMyFAQ/issues" class="alert-link">report all
-            issues on Github</a>. Thank you very much!
-        </p>
+        phpMyFAQ is currently in development ({{ currentVersionApp }}).
+        And therefore not yet ready for production.
+        Please <a target="_blank" href="https://github.com/thorsten/phpMyFAQ/issues" class="alert-link">report all
+          issues on Github</a>. Thank you very much!
       </div>
     </div>
   </section>
@@ -107,7 +98,6 @@
     </div>
   </div>
 
-  <!-- Earnings (Monthly) Card Example -->
   <div class="col-xl-3 col-md-6 mb-4">
     <div class="card text-bg-info bg-gradient-info shadow h-100 py-2">
       <div class="card-body">
@@ -142,33 +132,33 @@
 </section>
 
 {% if hasUserTracking %}
-<section class="row">
-  <div class="col-8 mb-4">
-    <div class="card shadow h-100 mb-4">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
-      </h5>
-      <div class="card-body">
-        <div class="pmf-charts">
-          <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
+  <section class="row">
+    <div class="col-8 mb-4">
+      <div class="card shadow h-100 mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
+        </h5>
+        <div class="card-body">
+          <div class="pmf-charts">
+            <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-4 mb-4">
-    <div class="card shadow h-100 mb-4">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
-      </h5>
-      <div class="card-body">
-        <div class="pmf-charts">
-          <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
+    <div class="col-4 mb-4">
+      <div class="card shadow h-100 mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
+        </h5>
+        <div class="card-body">
+          <div class="pmf-charts">
+            <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 {% endif %}
 
 <section class="row">

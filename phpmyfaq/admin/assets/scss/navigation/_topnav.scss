@@ -6,6 +6,7 @@
   padding-left: 0;
   height: $pmf-admin-topnav-base-height;
   z-index: $pmf-admin-zindex-topnav;
+  color: $white;
 
   .navbar-brand {
     width: $pmf-admin-sidenav-base-width;
@@ -24,5 +25,9 @@
     #sidebarToggle {
       color: $pmf-admin-topnav-light-toggler-color;
     }
+  }
+
+  .nav-link {
+    color: $white;
   }
 }
