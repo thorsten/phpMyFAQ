@@ -1,25 +1,7 @@
-/**
- * phpMyFAQ 4.0 variables for admin
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
- *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2022-2024 phpMyFAQ Team
- * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2022-01-25
- */
-
-@import '~bootstrap/scss/functions.scss';
+//
+// phpMyFAQ 4.0 color variables
 
 $theme: 'phpMyFAQ 4' !default;
-
-//
-// Color system
-//
 
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
@@ -56,11 +38,9 @@ $dark: $gray-800 !default;
 $min-contrast-ratio: 1.85 !default;
 
 // Body
-
 $body-color: $gray-800 !default;
 
 // Fonts
-
 // stylelint-disable value-keyword-case
 $font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
   sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !default;
@@ -71,13 +51,10 @@ $font-size-base: 1.1rem !default;
 $headings-font-weight: 700 !default;
 
 // Tables
-
 $table-border-color: rgba(0, 0, 0, 0.1) !default;
-
 $table-bg-scale: 0% !default;
 
 // Buttons
-
 $input-btn-padding-y: 0.5rem !default;
 $input-btn-padding-x: 1.1rem !default;
 $btn-font-family: $font-family-sans-serif !default;
@@ -89,22 +66,18 @@ $btn-border-radius-lg: 2.688em !default;
 $btn-border-radius-sm: 0.844em !default;
 
 // Forms
-
 $input-border-color: rgba(0, 0, 0, 0.1) !default;
 $input-group-addon-bg: $gray-200 !default;
 
 // Navbar
 
 // Tooltips
-
 $tooltip-font-size: 11px !default;
 
 // Badges
-
 $badge-font-weight: 400 !default;
 $badge-padding-y: 0.6em !default;
 $badge-padding-x: 1.2em !default;
 
 // Alerts
-
 $alert-border-width: 0 !default;

@@ -1,4 +1,6 @@
+//
 // Background Gradient Utilities
+//
 
 @each $color, $value in $theme-colors {
   .bg-gradient-#{$color} {
@@ -7,8 +9,6 @@
     background-size: cover;
   }
 }
-
-// Grayscale Background Utilities
 
 @each $level, $value in $grays {
   .bg-gray-#{$level} {

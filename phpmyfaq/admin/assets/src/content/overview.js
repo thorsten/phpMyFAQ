@@ -7,7 +7,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023 phpMyFAQ Team
+ * @copyright 2023-2024 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-02-26
@@ -86,7 +86,7 @@ export const handleFaqOverview = async () => {
         });
 
         toggleStickyAllFaqs.forEach((element) => {
-          element.addEventListener('change', (event) => {
+          element.addEventListener('change', async (event) => {
             event.preventDefault();
 
             const categoryId = event.target.getAttribute('data-pmf-category-id');
@@ -103,25 +103,25 @@ export const handleFaqOverview = async () => {
                   }
                 }
               });
-              saveStatus(categoryId, faqIds, token, event.target.checked, 'sticky');
+              await saveStatus(categoryId, faqIds, token, event.target.checked, 'sticky');
             }
           });
         });
 
         toggleStickyFaq.forEach((element) => {
-          element.addEventListener('change', (event) => {
+          element.addEventListener('change', async (event) => {
             event.preventDefault();
 
             const categoryId = event.target.getAttribute('data-pmf-category-id-sticky');
             const faqId = event.target.getAttribute('data-pmf-faq-id');
             const token = event.target.getAttribute('data-pmf-csrf');
 
-            saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
+            await saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
           });
         });
 
         toggleActiveAllFaqs.forEach((element) => {
-          element.addEventListener('change', (event) => {
+          element.addEventListener('change', async (event) => {
             event.preventDefault();
 
             const categoryId = event.target.getAttribute('data-pmf-category-id');
@@ -138,20 +138,20 @@ export const handleFaqOverview = async () => {
                   }
                 }
               });
-              saveStatus(categoryId, faqIds, token, event.target.checked, 'active');
+              await saveStatus(categoryId, faqIds, token, event.target.checked, 'active');
             }
           });
         });
 
         toggleActiveFaq.forEach((element) => {
-          element.addEventListener('change', (event) => {
+          element.addEventListener('change', async (event) => {
             event.preventDefault();
 
             const categoryId = event.target.getAttribute('data-pmf-category-id-active');
             const faqId = event.target.getAttribute('data-pmf-faq-id');
             const token = event.target.getAttribute('data-pmf-csrf');
 
-            saveStatus(categoryId, [faqId], token, event.target.checked, 'active');
+            await saveStatus(categoryId, [faqId], token, event.target.checked, 'active');
           });
         });
       });
@@ -159,7 +159,7 @@ export const handleFaqOverview = async () => {
   }
 };
 
-const saveStatus = (categoryId, faqIds, token, checked, type) => {
+const saveStatus = async (categoryId, faqIds, token, checked, type) => {
   let url;
   const languageElement = document.getElementById(`${type}_record_${categoryId}_${faqIds[0]}`);
   const faqLanguage = languageElement.getAttribute('lang');
@@ -170,37 +170,35 @@ const saveStatus = (categoryId, faqIds, token, checked, type) => {
     url = './api/faq/sticky';
   }
 
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      csrf: token,
-      categoryId: categoryId,
-      faqIds: faqIds,
-      faqLanguage: faqLanguage,
-      checked: checked,
-    }),
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok: ', { cause: { response } });
-    })
-    .then((response) => {
-      const result = response;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrf: token,
+        categoryId: categoryId,
+        faqIds: faqIds,
+        faqLanguage: faqLanguage,
+        checked: checked,
+      }),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
       if (result.success) {
         console.error(result.success);
       } else {
         console.error(result.error);
       }
-    })
-    .catch(async (error) => {
-      console.error(await error.cause.response.json());
-    });
+    } else {
+      throw new Error('Network response was not ok: ', response.text());
+    }
+  } catch (error) {
+    console.error(await error.cause.response.json());
+  }
 };
 
 const populateCategoryTable = async (catgoryId, faqs) => {
@@ -270,11 +268,9 @@ const populateCategoryTable = async (catgoryId, faqs) => {
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
-        addElement(
-          'a',
-          { classList: 'btn btn-info btn-sm', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` },
-          [addElement('i', { classList: 'fa fa-copy', 'aria-hidden': 'true' })]
-        ),
+        addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [
+          addElement('i', { classList: 'fa fa-copy', 'aria-hidden': 'true' }),
+        ]),
       ])
     );
     row.append(
@@ -283,7 +279,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
           addElement(
             'a',
             {
-              classList: 'btn btn-primary btn-sm dropdown-toggle',
+              classList: 'btn btn-primary dropdown-toggle',
               href: '#',
               role: 'button',
               id: 'dropdownAddNewTranslation',
@@ -305,7 +301,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
         addElement(
           'button',
           {
-            classList: 'btn btn-danger btn-sm pmf-button-delete-faq',
+            classList: 'btn btn-danger pmf-button-delete-faq',
             type: 'button',
             'data-pmfId': faq.id,
             'data-pmfLanguage': faq.language,
