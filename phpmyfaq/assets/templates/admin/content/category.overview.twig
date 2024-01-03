@@ -4,14 +4,11 @@
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <a class="btn btn-sm btn-success" href="?action=addcategory" id="addCategoryModal">
-        <i aria-hidden="true" class="fa fa-folder-plus"></i> {{ msgAddCategory }}
+      <a class="btn btn-success" href="?action=addcategory" id="addCategoryModal">
+        <i aria-hidden="true" class="fa fa-plus"></i> {{ msgAddCategory }}
       </a>
-      <a class="btn btn-sm btn-info" href="?action=showcategory">
+      <a class="btn btn-info" href="?action=showcategory">
         <i aria-hidden="true" class="fa fa-list"></i> {{ msgCategoryMatrix }}
-      </a>
-      <a class="btn btn-sm btn-info" id="test">
-        <i aria-hidden="true" class="fa fa-eye"></i>
       </a>
     </div>
   </div>
@@ -57,32 +54,32 @@
 
         <div class="pmf-category-actions">
           <!-- Add FAQ to category (always) -->
-          <a class="btn btn-info btn-sm mb-1 mt-1"
+          <a class="btn btn-info mb-1 mt-1"
              href="?action=editentry&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
             <i aria-hidden="true" class="fa fa-indent" title="{{ msgAddFaqAction }}"></i>
           </a>
 
           <!-- Add subcategory (if current language) -->
-          <a class="btn btn-info btn-sm"
+          <a class="btn btn-info"
              href="?action=addcategory&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
             <i aria-hidden="true" class="fa fa-plus-square" title="{{ msgAddCategoryAction }}"></i>
           </a>
 
           <!-- Edit category (if current language) -->
-          <a class="btn btn-info btn-sm"
+          <a class="btn btn-info"
              href="?action=editcategory&cat={{ categoryInfo[key]['id'] }}">
             <i aria-hidden="true" class="fa fa-edit" title="{{ msgEditCategoryAction }}"></i>
           </a>
 
           <!-- Translate category -->
-          <a class="btn btn-info btn-sm"
+          <a class="btn btn-info"
              href="?action=translatecategory&cat={{ categoryInfo[key]['id'] }}">
             <i aria-hidden="true" class="fa fa-globe" title="{{ msgTranslateCategoryAction }}"></i>
           </a>
 
           <!-- Delete category (if no subcategories) -->
           {% if children is empty %}
-            <button type="button" class="btn btn-danger btn-sm" name="pmf-category-delete-button"
+            <button type="button" class="btn btn-danger" name="pmf-category-delete-button"
                     data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
                     data-pmf-language="{{ categoryInfo[key]['lang'] }}">
               <i aria-hidden="true" class="fa fa-trash" title="%s"
@@ -90,7 +87,7 @@
                  data-pmf-language="{{ categoryInfo[key]['lang'] }}"></i>
             </button>
           {% else %}
-            <div class="btn btn-inverse btn-sm border" style="cursor: not-allowed;">
+            <div class="btn btn-inverse border" style="cursor: not-allowed;">
               <i aria-hidden="true" class="fa fa-trash"></i>
             </div>
           {% endif %}

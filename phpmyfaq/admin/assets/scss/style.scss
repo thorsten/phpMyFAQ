@@ -15,12 +15,20 @@
 
 // Import Variables
 @import 'variables.scss';
+@import './variables/spacing.scss';
+@import './variables/navigation.scss';
 
 // Import Bootstrap
 @import '~bootstrap/scss/bootstrap.scss';
 
+// Import Mixins
+@import 'mixins.scss';
+
 // Import global styles
 @import 'global.scss';
+
+// Import utilities
+@import 'utilities.scss';
 
 // Import special layouts
 @import 'layout/faq';

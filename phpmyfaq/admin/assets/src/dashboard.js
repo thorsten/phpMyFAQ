@@ -29,9 +29,9 @@ export const renderVisitorCharts = async () => {
         datasets: [
           {
             data: [],
-            borderWidth: 2,
-            borderColor: 'grey',
-            backgroundColor: '#b1df00',
+            borderWidth: 1,
+            borderColor: '#212529',
+            backgroundColor: '#02b875',
             label: ' Visitors',
             pointStyle: 'circle',
             pointRadius: 4,

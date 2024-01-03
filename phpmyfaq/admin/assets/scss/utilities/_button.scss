@@ -1,0 +1,21 @@
+.btn {
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.1);
+
+  &-link {
+    text-shadow: none;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    @include btn-shadow($value);
+  }
+
+  .btn-#{$color}:not(.disabled):hover {
+    @include btn-shadow(shade-color($value, 8%));
+  }
+}
+
+[class*='btn-outline-'] {
+  text-shadow: none;
+}

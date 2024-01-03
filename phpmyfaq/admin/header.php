@@ -232,7 +232,7 @@ switch ($action) {
 <body dir="<?= Translation::get('dir'); ?>" id="page-top">
 
 <!-- phpMyFAQ Admin Top Bar -->
-<nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-gradient-dark">
     <a class="navbar-brand ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
 
     <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
