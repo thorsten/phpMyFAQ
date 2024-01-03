@@ -7,9 +7,9 @@
     <div class="btn-group mr-2">
       <a href="?action=config">
         {% if isMaintenanceMode %}
-          <button class="btn btn-danger">{{ adminDashboardMaintenance }}</button>
+          <button class="btn btn-outline-danger">{{ adminDashboardMaintenance }}</button>
         {% else %}
-          <button class="btn btn-success">{{ adminDashboardOnline }}</button>
+          <button class="btn btn-outline-success">{{ adminDashboardOnline }}</button>
         {% endif %}
       </a>
     </div>

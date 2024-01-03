@@ -40,7 +40,7 @@ $request = Request::createFromGlobals();
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <a class="btn btn-sm btn-danger"
+            <a class="btn btn-outline-danger"
                href="?action=clear-visits&csrf=<?= Token::getInstance()->getTokenString('clear-visits') ?>">
                 <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_clear_all_visits') ?>
             </a>

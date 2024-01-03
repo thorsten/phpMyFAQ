@@ -2,7 +2,6 @@
 
 /**
  * The reporting page.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -26,15 +25,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
     ?>
 
-    <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_menu_reports') ?>
-        </h1>
-    </div>
+    <form action="?action=reportview" method="post" accept-charset="utf-8">
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">
+                <i aria-hidden="true" class="fa fa-tasks"></i> <?= Translation::get('ad_menu_reports') ?>
+            </h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group mr-2">
+                    <button class="btn btn-outline-primary" type="submit">
+                        <?= Translation::get('ad_stat_report_make_report') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <div class="container">
-        <form action="?action=reportview" method="post" accept-charset="utf-8">
+        <div class="container">
             <h4><?= Translation::get('ad_stat_report_fields') ?></h4>
 
             <div class="row mb-2">
@@ -123,15 +129,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
                 </div>
             </div>
 
-            <div class="row mb-2">
-                <button class="btn btn-primary" type="submit">
-                    <?= Translation::get('ad_stat_report_make_report') ?>
-                </button>
-            </div>
-
-        </form>
-
-    </div>
+        </div>
+    </form>
 
     <?php
 } else {

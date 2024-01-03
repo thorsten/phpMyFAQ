@@ -35,7 +35,7 @@ if (isset($error) && 0 < strlen((string) $error)) {
 $request = Request::createFromGlobals();
 
 if ($request->query->get('action') === 'logout') {
-    $message = Alert::success('ad_logout');
+    $message .= Alert::success('ad_logout');
 }
 
 if ($request->isSecure() || !$faqConfig->get('security.useSslForLogins')) {

@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a href="?action=addglossary">
-                <button class="btn btn-sm btn-success">
+                <button class="btn btn-outline-success">
                     <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_glossary_add') ?>
                 </button>
             </a>

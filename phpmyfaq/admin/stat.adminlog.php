@@ -75,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' ===
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a class="btn btn-sm btn-danger"
+                <a class="btn btn-outline-danger"
                    href="?action=deleteadminlog&csrf=<?= Token::getInstance()->getTokenString('delete-adminlog') ?>">
                     <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_adminlog_del_older_30d') ?>
                 </a>

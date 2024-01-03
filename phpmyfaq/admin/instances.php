@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         ) : ?>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a class="btn btn-sm btn-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
+                <a class="btn btn-outline-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
                     <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_instance_add') ?>
                 </a>
             </div>
