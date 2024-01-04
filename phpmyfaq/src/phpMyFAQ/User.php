@@ -878,7 +878,7 @@ class User
             // Send activation email.
             $subject = '[%sitename%] Login name / activation';
             $message = sprintf(
-                "\nName: %s\nLogin name: %s\nNew password: %s\n\n",
+                "Name: %s<br>Login name: %s<br>New password: %s",
                 $this->getUserData('display_name'),
                 $this->getLogin(),
                 $newPassword

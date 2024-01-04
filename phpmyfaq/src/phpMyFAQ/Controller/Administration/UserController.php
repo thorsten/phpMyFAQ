@@ -248,7 +248,7 @@ class UserController extends AbstractController
                     $permissions->removeFromAllGroups($userId);
                 }
 
-                $message = Alert::success('ad_user_deleted');
+                $message = Translation::get('ad_user_deleted');
             }
         }
         $response->setStatusCode(Response::HTTP_OK);

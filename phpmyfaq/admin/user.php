@@ -504,13 +504,13 @@ if (
         <div class="btn-group mr-2">
             <?php
             if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#addUserModal">
                     <i class="fa fa-user-plus" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
                 </button>
                 <?php
             endif ?>
-            <button type="button" class="btn btn-sm btn-secondary" id="pmf-button-export-users">
+            <button type="button" class="btn btn-outline-info" id="pmf-button-export-users">
                 <i class="fa fa-download" aria-label="true"></i> Export users as CSV
             </button>
         </div>
@@ -588,12 +588,12 @@ if (
 
                     <td>
                         <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>"
-                           class="btn btn-sm">
+                           class="btn">
                             <i class="fa fa-pencil text-info"></i> <?= Translation::get('ad_user_edit') ?>
                         </a>
                         <?php
                         if ($user->getStatus() === 'blocked') : ?>
-                            <button type="button" class="btn btn-sm btn-activate-user"
+                            <button type="button" class="btn btn-activate-user"
                                     id="btn_activate_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
@@ -609,7 +609,7 @@ if (
                         if ($user->getStatus() !== 'protected') {
                             $csrfToken = Token::getInstance()->getTokenString('delete-user');
                             ?>
-                            <button type="button" class="btn btn-sm btn-delete-user"
+                            <button type="button" class="btn btn-delete-user"
                                     id="btn_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= $csrfToken ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
@@ -617,16 +617,8 @@ if (
                                    data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_user_delete') ?>
                             </button>
-                            <?php
-                        } else {
-                            ?>
-                            <span class="small py-2">
-                                <i class="fa fa-trash text-dark"></i> <?= Translation::get('ad_user_delete') ?>
-                            </span>
-                            <?php
-                        }
-                        ?>
-                    </td>
+                            <?php } ?>
+                     </td>
                 </tr>
                 <?php
         }

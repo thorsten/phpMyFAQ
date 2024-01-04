@@ -16,73 +16,73 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
+import { pushNotification } from '../utils';
 
-const activateUser = (userId, csrfToken) => {
-  fetch('./api/user/activate', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      csrfToken: csrfToken,
-      userId: userId,
-    }),
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then(() => {
+const activateUser = async (userId, csrfToken) => {
+  try {
+    const response = await fetch('./api/user/activate', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrfToken: csrfToken,
+        userId: userId,
+      }),
+    });
+
+    if (response.status === 200) {
+      await response.json();
       const icon = document.querySelector(`.icon_user_id_${userId}`);
       icon.classList.remove('fa-ban');
       icon.classList.add('fa-check-circle-o');
       const button = document.getElementById(`btn_activate_user_id_${userId}`);
       button.remove();
-    })
-    .catch((error) => {
-      const message = document.getElementById('pmf-user-message');
-      message.insertAdjacentElement(
-        'afterend',
-        addElement('div', { classList: 'alert alert-danger', innerText: error })
-      );
-    });
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    const message = document.getElementById('pmf-user-message');
+    message.insertAdjacentElement(
+      'afterend',
+      addElement('div', { classList: 'alert alert-danger', innerText: error.message })
+    );
+  }
 };
 
-const deleteUser = (userId, csrfToken) => {
+const deleteUser = async (userId, csrfToken) => {
   const message = document.getElementById('pmf-user-message');
-  fetch('./api/user/delete', {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      csrfToken: csrfToken,
-      userId: userId,
-    }),
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok: ', { cause: { response } });
-    })
-    .then((response) => {
-      message.insertAdjacentElement('afterend', addElement('div', { innerHTML: response }));
+
+  try {
+    const response = await fetch('./api/user/delete', {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrfToken: csrfToken,
+        userId: userId,
+      }),
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
       const row = document.querySelector(`.row_user_id_${userId}`);
       row.addEventListener('click', () => (row.style.opacity = '0'));
       row.addEventListener('transitionend', () => row.remove());
-    })
-    .catch(async (error) => {
-      const errorMessage = await error.cause.response.json();
-      message.insertAdjacentElement(
-        'afterend',
-        addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
-      );
-    });
+      pushNotification(responseData);
+    } else {
+      throw new Error('Network response was not ok: ', { cause: { response } });
+    }
+  } catch (error) {
+    const errorMessage = await error.cause.response.json();
+    message.insertAdjacentElement(
+      'afterend',
+      addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
+    );
+  }
 };
 
 export const handleUserList = () => {
@@ -91,13 +91,13 @@ export const handleUserList = () => {
 
   if (activateButtons) {
     activateButtons.forEach((button) => {
-      button.addEventListener('click', (event) => {
+      button.addEventListener('click', async (event) => {
         event.preventDefault();
 
         const csrfToken = event.target.getAttribute('data-csrf-token');
         const userId = event.target.getAttribute('data-user-id');
 
-        activateUser(userId, csrfToken);
+        await activateUser(userId, csrfToken);
       });
     });
   }

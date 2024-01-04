@@ -18,6 +18,7 @@
 import { Modal } from 'bootstrap';
 import { fetchAllUsers, fetchUserData, fetchUserRights, postUserData } from '../api';
 import { addElement, capitalize } from '../../../../assets/src/utils';
+import { pushNotification } from '../utils';
 
 /**
  * Updates the current loaded user
@@ -88,7 +89,6 @@ export const handleUsers = async () => {
   const addUser = document.getElementById('pmf-add-user-action');
   const addUserForm = document.getElementById('pmf-add-user-form');
   const addUserError = document.getElementById('pmf-add-user-error-message');
-  const addUserMessage = document.getElementById('pmf-user-message');
   const passwordToggle = document.getElementById('add_user_automatic_password');
   const passwordInputs = document.getElementById('add_user_show_password_inputs');
 
@@ -148,17 +148,19 @@ export const handleUsers = async () => {
           throw new Error('Network response was not ok: ', { cause: { response } });
         })
         .then((response) => {
-          addUserMessage.innerHTML = `<p class="alert alert-success">${response.success}</p>`;
-
           modal.style.display = 'none';
           modal.classList.remove('show');
           modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
 
           const tableBody = document.querySelector('#pmf-admin-user-table tbody');
           const row = addElement('tr', { id: `row_user_id_${response.id}` }, [
-            addElement('td', { innerText: response.id }),
+            addElement('td', { innerText: response.realName }),
+            addElement('td', {}, [addElement('a', { href: 'mailto:' + response.email, innerText: response.email })]),
+            addElement('td', { innerText: response.userName }),
             addElement('td', { className: 'text-center' }, [
-              addElement('i', { className: response.status ? 'fa fa-check-circle-o' : 'fa fa-ban' }),
+              addElement('i', {
+                className: response.status ? 'fa fa-check-circle-o text-success' : 'fa fa-ban text-danger',
+              }),
             ]),
             addElement('td', { className: 'text-center' }, [
               addElement('i', { className: response.isSuperAdmin ? 'fa fa-user-secret' : 'fa fa-user-times' }),
@@ -166,12 +168,9 @@ export const handleUsers = async () => {
             addElement('td', { className: 'text-center' }, [
               addElement('i', { className: response.isVisible ? 'fa fa-user' : 'fa fa-user-o' }),
             ]),
-            addElement('td', { innerText: response.realName }),
-            addElement('td', { innerText: response.userName }),
-            addElement('td', {}, [addElement('a', { href: 'mailto:' + response.email, innerText: response.email })]),
             addElement('td', {}, [
-              addElement('a', { className: 'btn btn-sm btn-info', href: `?action=user&user_id=${response.id}` }, [
-                addElement('i', { className: 'fa fa-pencil' }),
+              addElement('a', { className: 'btn', href: `?action=user&user_id=${response.id}` }, [
+                addElement('i', { className: 'fa fa-pencil text-info' }),
                 addElement('span', { innerText: ' ' + response.editTranslationString }),
               ]),
             ]),
@@ -179,6 +178,7 @@ export const handleUsers = async () => {
             addElement('td', {}),
           ]);
           tableBody.appendChild(row);
+          pushNotification(response.success);
         })
         .catch(async (error) => {
           const errors = await error.cause.response.json();
