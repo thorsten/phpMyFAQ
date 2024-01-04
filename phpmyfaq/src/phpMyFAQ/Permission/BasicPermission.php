@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Permission;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User\CurrentUser;
@@ -34,7 +33,7 @@ class BasicPermission extends Permission implements PermissionInterface
      *
      * @var array<string, string|bool>
      */
-    public $defaultRightData = [
+    public array $defaultRightData = [
         'name' => 'DEFAULT_RIGHT',
         'description' => 'Short description.',
         'for_users' => true,
@@ -227,6 +226,19 @@ class BasicPermission extends Permission implements PermissionInterface
     public function getAllUserRights(int $userId): array
     {
         return $this->getUserRights($userId);
+    }
+
+    /**
+     * Returns the number of user-rights the user specified by
+     * user_id owns.
+     *
+     * @param CurrentUser $user User object
+     */
+    public function getUserRightsCount(CurrentUser $user): int
+    {
+        $userRights = $this->getAllUserRights($user->getUserId());
+
+        return is_countable($userRights) ? count($userRights) : 0;
     }
 
     /**

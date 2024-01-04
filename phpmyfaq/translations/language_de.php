@@ -1374,5 +1374,6 @@ $PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];
+$PMF_LANG['msgSessionExpired'] = 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.';
 
 return $PMF_LANG;

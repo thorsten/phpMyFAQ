@@ -1394,5 +1394,6 @@ $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can ma
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
+$PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
 
 return $PMF_LANG;

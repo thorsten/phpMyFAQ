@@ -55,8 +55,10 @@ class Permission
      *
      * @return Permission|BasicPermission|MediumPermission
      */
-    public static function selectPerm(string $permLevel, Configuration $config)
-    {
+    public static function selectPerm(
+        string $permLevel,
+        Configuration $config
+    ): Permission|BasicPermission|MediumPermission {
         $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';
         if (class_exists($permClass)) {
             return new $permClass($config);
