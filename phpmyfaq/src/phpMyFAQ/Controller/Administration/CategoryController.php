@@ -151,7 +151,6 @@ class CategoryController extends AbstractController
 
         [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-
         $categoryOrder = new CategoryOrder($configuration);
         $categoryOrder->setCategoryTree($data->categoryTree);
 
