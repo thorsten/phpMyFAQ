@@ -87,7 +87,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta content="phpMyFAQ Team" name="publisher">
     <?php if ($user->isLoggedIn() && ($refreshTime > 0)) { ?>
     <script>
-        const sessionTimeoutWarning = async () => {
+        const sessionTimeoutWarning = () => {
           if (window.confirm('<?php printf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING); ?>')) {
             location.href = location.href;
           }
@@ -98,7 +98,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
           const duration = expire - sessionStart;
 
           if (expire.getFullYear() < 2022) {
-            parent.location.search = '?action=logout&why=wrong-year';
+            parent.location.search = '?action=logout';
             return;
           }
 
@@ -116,8 +116,8 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 
           window.setTimeout(sessionTimeoutWarning, <?= $refreshTime ?> * 1000);
           window.setInterval(
-            async () => {
-              await sessionTimeoutClock(topRef, sessionStart, expire);
+            () => {
+              sessionTimeoutClock(topRef, sessionStart, expire);
             },
             1000,
           );
