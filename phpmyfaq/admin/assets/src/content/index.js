@@ -6,7 +6,7 @@ export * from './editor';
 export * from './faqs';
 export * from './faqs.autocomplete';
 export * from './markdown';
-export * from './overview';
+export * from './faqs.overview';
 export * from './question';
 export * from './tags';
 export * from './stickyfaqs';

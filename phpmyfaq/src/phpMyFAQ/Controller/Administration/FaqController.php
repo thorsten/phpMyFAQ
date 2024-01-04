@@ -116,8 +116,13 @@ class FaqController extends AbstractController
                 }
             }
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => $success]);
+            if ($success) {
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('ad_entry_savedsuc')]);
+            } else {
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => Translation::get('ad_entry_savedfail')]);
+            }
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'No FAQ IDs provided.']);
@@ -154,8 +159,14 @@ class FaqController extends AbstractController
                     $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
                 }
             }
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => $success]);
+
+            if ($success) {
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData(['success' => Translation::get('ad_entry_savedsuc')]);
+            } else {
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $response->setData(['error' => Translation::get('ad_entry_savedfail')]);
+            }
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'No FAQ IDs provided.']);

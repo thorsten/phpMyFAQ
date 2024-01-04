@@ -15,6 +15,7 @@
 
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
 import { addElement } from '../../../../assets/src/utils';
+import { pushNotification } from '../utils';
 
 export const handleFaqOverview = async () => {
   const collapsedCategories = document.querySelectorAll('.accordion-collapse');
@@ -189,7 +190,7 @@ const saveStatus = async (categoryId, faqIds, token, checked, type) => {
     if (response.ok) {
       const result = await response.json();
       if (result.success) {
-        console.error(result.success);
+        pushNotification(result.success);
       } else {
         console.error(result.error);
       }
