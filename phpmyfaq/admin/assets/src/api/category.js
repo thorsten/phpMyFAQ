@@ -25,10 +25,10 @@ export const fetchCategoryTranslations = async (categoryId) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
+    if (response.ok) {
       return await response.json();
     } else {
-      throw new Error('Network response was not ok.', response.text());
+      return await response.json();
     }
   } catch (error) {
     console.error(error);
@@ -52,10 +52,10 @@ export const deleteCategory = async (categoryId, language, csrfToken) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
+    if (response.ok) {
       return await response.json();
     } else {
-      throw new Error('Network response was not ok.', response.text());
+      return await response.json();
     }
   } catch (error) {
     console.error(error);
@@ -79,10 +79,10 @@ export const setCategoryTree = async (categoryTree, categoryId, csrfToken) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
+    if (response.ok) {
       return await response.json();
     } else {
-      throw new Error('Network response was not ok.', response.text());
+      return await response.json();
     }
   } catch (error) {
     console.error(error);

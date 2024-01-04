@@ -15,7 +15,7 @@
 
 import Sortable from 'sortablejs';
 import { deleteCategory, setCategoryTree } from '../api';
-import { pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
@@ -37,6 +37,8 @@ export const handleCategories = () => {
         const response = await setCategoryTree(data, categoryId, csrf);
         if (response.success) {
           pushNotification(response.success);
+        } else {
+          pushErrorNotification(response.error);
         }
       },
     });

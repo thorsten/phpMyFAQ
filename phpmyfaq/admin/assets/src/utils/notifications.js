@@ -25,3 +25,14 @@ export const pushNotification = (message) => {
   }
   notification.show();
 };
+
+export const pushErrorNotification = (message) => {
+  const toast = document.getElementById('pmf-notification-error');
+  const notificationMessage = document.getElementById('pmf-notification-error-message');
+
+  const notification = Toast.getOrCreateInstance(toast);
+  if (message) {
+    notificationMessage.innerText = message;
+  }
+  notification.show();
+};
