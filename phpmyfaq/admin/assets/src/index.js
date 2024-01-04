@@ -41,6 +41,7 @@ import {
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
+import { pushNotification } from './utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';

@@ -15,8 +15,7 @@
 
 import Sortable from 'sortablejs';
 import { deleteCategory, setCategoryTree } from '../api';
-import { addElement } from '../../../../assets/src/utils';
-import { Toast } from 'bootstrap';
+import { pushNotification } from '../utils';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
@@ -37,7 +36,9 @@ export const handleCategories = () => {
           const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
           const data = serializedTree(root);
           const response = await setCategoryTree(data, csrf);
-          handleNotification(response);
+          if (response.success) {
+            pushNotification(response.success);
+          }
         },
       },
     });
@@ -66,20 +67,11 @@ export const handleCategoryDelete = async () => {
         const csrfToken = document.querySelector('input[name=pmf-csrf-token]').value;
 
         const response = await deleteCategory(categoryId, language, csrfToken);
-        handleNotification(response);
+        if (response.success) {
+          pushNotification(response.success);
+        }
         document.getElementById(`pmf-category-${categoryId}`).remove();
       });
     });
   }
-};
-
-const handleNotification = (response) => {
-  const toast = document.getElementById('pmf-notification-category');
-  const result = document.getElementById('pmf-category-result');
-
-  const notification = Toast.getOrCreateInstance(toast);
-  if (response.success) {
-    result.innerText = response.success;
-  }
-  notification.show();
 };

@@ -29,6 +29,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </div>
         </main>
 
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
+            <div id="pmf-notification" class="toast align-items-center text-bg-primary border-0" role="alert"
+                 aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" id="pmf-notification-message">
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close">
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Session expired modal - not used yet -->
         <div class="modal fade phpmyfaq-session-expired-modal" id="sessionExpiredModal" tabindex="-1"
              aria-labelledby="sessionExpiredModalLabel"
