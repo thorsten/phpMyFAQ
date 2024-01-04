@@ -7,12 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2024 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-26
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2003-02-26
  */
 
 use phpMyFAQ\Configuration;
@@ -24,7 +24,6 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -71,7 +70,6 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'ad_menu_entry_edit',
     $action
 );
-
 
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq', 'stickyfaqs', 'stickyRecordsHeader', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
@@ -137,18 +135,12 @@ switch ($action) {
     case 'cookies':
         $userPage = true;
         break;
-    case 'content':
-    case 'category':
     case 'category-overview':
     case 'addcategory':
     case 'savecategory':
     case 'editcategory':
     case 'translatecategory':
     case 'updatecategory':
-    case 'deletecategory':
-    case 'removecategory':
-    case 'movecategory':
-    case 'changecategory':
     case 'showcategory':
     case 'faqs-overview':
     case 'editentry':
@@ -197,7 +189,6 @@ switch ($action) {
     case 'instances':
     case 'system':
     case 'elasticsearch':
-    case' upgrade':
         $configurationPage = true;
         break;
     default:
@@ -206,7 +197,7 @@ switch ($action) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= Translation::get('metaLanguage'); ?>">
+<html lang="<?= Translation::get('metaLanguage'); ?>" data-bs-theme="light">
 <head>
   <meta charset="utf-8">
 
@@ -235,7 +226,7 @@ switch ($action) {
 <nav class="pmf-admin-topnav navbar navbar-expand bg-dark">
     <a class="navbar-brand text-white ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
 
-    <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
+    <?php if ($adminHelper->canAccessContent($user)) : ?>
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
             name="sidebar-toggle" href="#">
         <i class="fa fa-bars"></i>
@@ -261,7 +252,7 @@ switch ($action) {
         <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
     </form>
 
-    <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())): ?>
+    <?php if ($adminHelper->canAccessContent($user)) : ?>
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
@@ -304,7 +295,7 @@ switch ($action) {
 
 <div id="pmf-admin-layout-sidenav">
 
-    <?php if ($user->isLoggedIn() && ((is_countable($user->perm->getAllUserRights($user->getUserId())) ? count($user->perm->getAllUserRights($user->getUserId())) : 0) || $user->isSuperAdmin())) : ?>
+    <?php if ($adminHelper->canAccessContent($user)) : ?>
     <!-- phpMyFAQ Admin Side Navigation -->
     <div id="pmf-admin-layout-sidenav_nav">
         <nav class="pmf-admin-sidenav accordion pmf-admin-sidenav-dark" id="sidenavAccordion">
@@ -365,7 +356,9 @@ switch ($action) {
                     <?php if ($secLevelEntries['exports'] !== '') : ?>
                     <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-file-archive-o"></i></div>
+                        <div class="pmf-admin-nav-link-icon">
+                            <i aria-hidden="true" class="fa fa-file-archive-o"></i>
+                        </div>
                         <?= Translation::get('admin_mainmenu_exports'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
@@ -380,7 +373,9 @@ switch ($action) {
                     <?php if ($secLevelEntries['backup'] !== '') : ?>
                     <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-cloud-download"></i></div>
+                        <div class="pmf-admin-nav-link-icon">
+                            <i aria-hidden="true" class="fa fa-cloud-download"></i>
+                        </div>
                         <?= Translation::get('admin_mainmenu_backup'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>

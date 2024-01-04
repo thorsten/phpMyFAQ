@@ -21,6 +21,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 
 /**
  * Class Administration
@@ -269,6 +270,32 @@ class AdministrationHelper
 
         return $output;
     }
+
+    /**
+     * Checks if the current user can access the content.
+     *
+     * @param CurrentUser $user
+     * @return bool
+     */
+    public function canAccessContent(CurrentUser $user): bool
+    {
+        if (
+            $user->isLoggedIn() &&
+            (
+                (
+                    is_countable($user->perm->getAllUserRights($user->getUserId()))
+                    ?
+                    count($user->perm->getAllUserRights($user->getUserId()))
+                    : 0
+                ) || $user->isSuperAdmin()
+            )
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     private static function generateOption(string $current, string $value, string $label): string
     {
