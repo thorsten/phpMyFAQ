@@ -75,3 +75,6 @@ tests/fixtures/path-to-delete/foo.bar.baz
 
 # Jest related stuff
 coverage/*
+
+# Netbeans project folder
+nbproject/
