@@ -299,13 +299,8 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'news.php';
                 break;
             // category administration
-            case 'content':
-            case 'category':
             case 'savecategory':
             case 'updatecategory':
-            case 'checkIfCategoryExists':
-            case 'removecategory':
-            case 'changecategory':
                 require 'category.main.php';
                 break;
             case 'category-overview':
@@ -319,9 +314,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'translatecategory':
                 require 'category.translate.php';
-                break;
-            case 'deletecategory':
-                require 'category.delete.php';
                 break;
             case 'showcategory':
                 require 'category.showstructure.php';

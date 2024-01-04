@@ -1062,7 +1062,7 @@ class Category
      * @param int    $categoryId Entity id
      * @param string $categoryLanguage Entity language
      */
-    public function checkLanguage(int $categoryId, string $categoryLanguage): bool
+    public function hasLanguage(int $categoryId, string $categoryLanguage): bool
     {
         $query = sprintf(
             "SELECT lang FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
@@ -1101,7 +1101,7 @@ class Category
     /**
      * Deletes a category.
      */
-    public function deleteCategory(int $categoryId, string $categoryLang): bool
+    public function delete(int $categoryId, string $categoryLang): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
@@ -1167,8 +1167,8 @@ class Category
     }
 
     /**
-     * Gets all categories which are not translated in actual language
-     * to add in this->categories (used in admin section).
+     * Gets all categories that are not translated in actual language
+     * to add in this->categories (used in the admin section).
      */
     public function getMissingCategories(): void
     {

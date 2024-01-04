@@ -80,7 +80,7 @@ class CategoryController extends AbstractController
         }
 
         if (
-            $category->deleteCategory($data->categoryId, $data->language) &&
+            $category->delete($data->categoryId, $data->language) &&
             $categoryRelation->delete($data->categoryId, $data->language)
         ) {
             $response->setStatusCode(Response::HTTP_OK);

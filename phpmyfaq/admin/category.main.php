@@ -203,7 +203,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
             );
         }
 
-        if (!$category->checkLanguage($categoryData['id'], $categoryData['lang'])) {
+        if (!$category->hasLanguage($categoryData['id'], $categoryData['lang'])) {
             if (
                 $category->addCategory($categoryData, $parentId, $categoryData['id']) && $categoryPermission->add(
                     CategoryPermission::USER,
