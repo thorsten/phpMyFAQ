@@ -62,7 +62,7 @@ export const deleteCategory = async (categoryId, language, csrfToken) => {
   }
 };
 
-export const setCategoryTree = async (categoryTree, csrfToken) => {
+export const setCategoryTree = async (categoryTree, categoryId, csrfToken) => {
   try {
     const response = await fetch('./api/category/update-order', {
       method: 'POST',
@@ -72,6 +72,7 @@ export const setCategoryTree = async (categoryTree, csrfToken) => {
       },
       body: JSON.stringify({
         categoryTree: categoryTree,
+        categoryId: categoryId,
         csrfToken: csrfToken,
       }),
       redirect: 'follow',

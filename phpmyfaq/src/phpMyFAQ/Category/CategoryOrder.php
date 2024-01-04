@@ -125,6 +125,32 @@ readonly class CategoryOrder
     }
 
     /**
+     * Returns the parent ID of a given categoryTree.
+     *
+     * @param array    $categoryTree
+     * @param int      $categoryId
+     * @param int|null $parentId
+     * @return int|null
+     */
+    public function getParentId(array $categoryTree, int $categoryId, int $parentId = null): ?int
+    {
+        foreach ($categoryTree as $category) {
+            if ((int)$category->id === $categoryId) {
+                return (int)$parentId;
+            }
+
+            if (!empty($category->children)) {
+                $foundParentId = $this->getParentId($category->children, $categoryId, $category->id);
+                if ($foundParentId !== null) {
+                    return $foundParentId;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns all categories.
      *
      * @return array

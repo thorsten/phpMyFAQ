@@ -98,4 +98,35 @@ class CategoryOrderTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testGetParentId(): void
+    {
+        $categoryTree = [
+            (object)[
+                'id' => '1',
+                'children' => [
+                    (object)[
+                        'id' => '6',
+                        'children' => [
+                            (object)['id' => '7', 'children' => []],
+                            (object)['id' => '8', 'children' => []],
+                        ],
+                    ],
+                    (object)['id' => '9', 'children' => []],
+                    (object)['id' => '10', 'children' => []],
+                    (object)['id' => '12', 'children' => []],
+                ],
+            ],
+            (object)['id' => '3', 'children' => []],
+            (object)['id' => '2', 'children' => []],
+            (object)['id' => '4', 'children' => []],
+            (object)['id' => '5', 'children' => []],
+        ];
+
+        $actual = $this->categoryOrder->getParentId($categoryTree, 7);
+
+        $expected = 6;
+
+        $this->assertEquals($expected, $actual);
+    }
 }

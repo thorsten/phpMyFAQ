@@ -23,7 +23,6 @@ const identifier = 'pmfCatid';
 export const handleCategories = () => {
   const root = document.getElementById('pmf-category-tree');
   const nestedSortables = document.querySelectorAll(nestedQuery);
-
   for (let i = 0; i < nestedSortables.length; i++) {
     new Sortable(nestedSortables[i], {
       group: 'Categories',
@@ -31,15 +30,14 @@ export const handleCategories = () => {
       fallbackOnBody: true,
       swapThreshold: 0.65,
       dataIdAttr: identifier,
-      store: {
-        set: async () => {
-          const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
-          const data = serializedTree(root);
-          const response = await setCategoryTree(data, csrf);
-          if (response.success) {
-            pushNotification(response.success);
-          }
-        },
+      onEnd: async (event) => {
+        const categoryId = event.item.getAttribute('data-pmf-catid');
+        const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
+        const data = serializedTree(root);
+        const response = await setCategoryTree(data, categoryId, csrf);
+        if (response.success) {
+          pushNotification(response.success);
+        }
       },
     });
   }

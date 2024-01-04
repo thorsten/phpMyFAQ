@@ -39,8 +39,11 @@ $request = Request::createFromGlobals();
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <a class="btn btn-sm btn-success" href="?action=addcategory">
-          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= Translation::get('ad_kateg_add'); ?>
+        <a class="btn btn-outline-success" href="?action=addcategory">
+          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= Translation::get('ad_kateg_add') ?>
+        </a>
+        <a class="btn btn-outline-info" href="?action=category-overview">
+          <i aria-hidden="true" class="fa fa-list"></i> <?= Translation::get('ad_menu_categ_edit') ?>
         </a>
       </div>
     </div>

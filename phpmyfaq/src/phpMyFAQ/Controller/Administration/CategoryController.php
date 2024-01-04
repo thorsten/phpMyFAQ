@@ -147,9 +147,20 @@ class CategoryController extends AbstractController
         }
 
         $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
 
         $categoryOrder = new CategoryOrder($configuration);
         $categoryOrder->setCategoryTree($data->categoryTree);
+
+        $parentId = $categoryOrder->getParentId($data->categoryTree, (int)$data->categoryId);
+
+        $category = new Category($configuration, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->updateParentCategory($data->categoryId, $parentId);
 
         $response->setData(
             ['success' => Translation::get('ad_categ_save_order')]
