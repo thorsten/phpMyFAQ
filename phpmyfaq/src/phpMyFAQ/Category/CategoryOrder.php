@@ -19,6 +19,7 @@ namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use stdClass;
 
 /**
  * Class CategoryOrder
@@ -70,7 +71,7 @@ readonly class CategoryOrder
     /**
      * Stores the category tree in the database.
      *
-     * @param array $categoryTree
+     * @param stdClass[] $categoryTree
      * @param int|null $parentId
      * @param int $position
      * @return void
@@ -106,7 +107,7 @@ readonly class CategoryOrder
     /**
      * Returns the category tree.
      *
-     * @param array $categories
+     * @param stdClass[] $categories
      * @param int $parentId
      * @return array
      */
@@ -127,7 +128,7 @@ readonly class CategoryOrder
     /**
      * Returns the parent ID of a given categoryTree.
      *
-     * @param array    $categoryTree
+     * @param stdClass[] $categoryTree
      * @param int      $categoryId
      * @param int|null $parentId
      * @return int|null
