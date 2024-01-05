@@ -15,6 +15,7 @@
 
 import { Tab } from 'bootstrap';
 import { addElement } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleConfiguration = async () => {
   const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
@@ -89,12 +90,11 @@ export const handleSaveConfiguration = async () => {
       }
 
       const json = await response.json();
-      const result = document.getElementById('pmf-configuration-result');
 
       if (json.success) {
-        result.append(addElement('div', { classList: 'alert alert-success', innerText: json.success }));
+        pushNotification(json.success);
       } else {
-        result.append(addElement('div', { classList: 'alert alert-danger', innerText: json.error }));
+        pushErrorNotification(json.error);
       }
     });
   }
@@ -222,6 +222,12 @@ const fetchConfiguration = async (target) => {
     }
 
     tabContent.innerHTML = html.toString();
+
+    // Special cases
+    const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]');
+    if (dateLastChecked) {
+      dateLastChecked.value = new Date(dateLastChecked.value).toLocaleString();
+    }
   } catch (error) {
     console.error(error.message);
   }
