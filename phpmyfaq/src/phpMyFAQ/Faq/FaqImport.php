@@ -23,15 +23,16 @@ namespace phpMyFAQ\Faq;
  * @package phpMyFAQ\Faq
  */
 class FaqImport {
-
-    public function parseCSV($handle) {
-        while (($data = fgetcsv($handle)) !== FALSE) {
+    public function parseCSV($handle): array
+    {
+        while (($data = fgetcsv($handle)) !== false) {
             $csvData[] = $data;
         }
         return $csvData;
     }
 
-    public function isCSVFile($file) {
+    public function isCSVFile($file): bool
+    {
         $allowedExtensions = array("csv");
         $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
