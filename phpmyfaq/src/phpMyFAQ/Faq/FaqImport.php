@@ -22,7 +22,8 @@ namespace phpMyFAQ\Faq;
  *
  * @package phpMyFAQ\Faq
  */
-class FaqImport {
+class FaqImport
+{
     public function parseCSV($handle): array
     {
         while (($data = fgetcsv($handle)) !== false) {
