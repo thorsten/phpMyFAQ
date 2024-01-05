@@ -109,9 +109,18 @@ class Setup
      *
      * @param  int[]|string[] $data   Array with database credentials
      * @param  string         $folder Folder
+     * @throws Exception
      */
     public function createDatabaseFile(array $data, string $folder = '/content/core/config'): int|bool
     {
+        if (!file_exists($this->rootDir . $folder)) {
+            throw new Exception('File [' . $this->rootDir . $folder . '] does not exist.');
+        }
+
+        if (!is_writable($this->rootDir . $folder)) {
+            throw new Exception('File [' . $this->rootDir . $folder . '] is not writable.');
+        }
+
         return file_put_contents(
             $this->rootDir . $folder . '/database.php',
             "<?php\n" .

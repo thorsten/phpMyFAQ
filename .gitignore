@@ -37,6 +37,21 @@ phpmyfaq/content/user/images/*
 phpmyfaq/content/user/attachments/*
 !phpmyfaq/content/user/attachments/.gitkeep
 
+# Legacy config folders
+phpmyfaq/config/database.php
+phpmyfaq/config/database.bak.php
+phpmyfaq/config/ldap.php
+phpmyfaq/config/ldap.bak.php
+phpmyfaq/config/elasticsearch.php
+phpmyfaq/config/elasticsearch.bak.php
+phpmyfaq/config/azure.php
+phpmyfaq/config/azure.bak.php
+phpmyfaq/config/index.html
+phpmyfaq/data/*
+phpmyfaq/logs/*
+phpmyfaq/images/*
+phpmyfaq/attachments/*
+
 # Third party PHP libraries
 phpmyfaq/src/libs
 

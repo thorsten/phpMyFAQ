@@ -22,6 +22,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
+use phpMyFAQ\Filesystem;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use RecursiveDirectoryIterator;
@@ -463,13 +464,70 @@ class Update extends Setup
     }
 
 
+    /**
+     * @throws Exception
+     */
     private function applyUpdates400Alpha(): void
     {
         if (version_compare($this->version, '4.0.0-alpha', '<')) {
-            // Move everything to the new file layout
-            // @todo move attachments in filesystem and database
+            // First, move everything to the new file layout
+            $fileSystem = new Filesystem(PMF_ROOT_DIR);
 
-            // Automatic updates
+            // Copy database configuration
+            $fileSystem->copy(
+                PMF_LEGACY_CONFIG_DIR . '/database.php',
+                PMF_CONFIG_DIR . '/database.php'
+            );
+
+            // Copy Azure configuration, if available
+            if (file_exists(PMF_LEGACY_CONFIG_DIR . '/azure.php')) {
+                $fileSystem->copy(
+                    PMF_LEGACY_CONFIG_DIR . '/azure.php',
+                    PMF_CONFIG_DIR . '/azure.php'
+                );
+            }
+
+            // Copy Elasticsearch configuration, if available
+            if (file_exists(PMF_LEGACY_CONFIG_DIR . '/elasticsearch.php')) {
+                $fileSystem->copy(
+                    PMF_LEGACY_CONFIG_DIR . '/elasticsearch.php',
+                    PMF_CONFIG_DIR . '/elasticsearch.php'
+                );
+            }
+
+            // Copy LDAP configuration, if available
+            if (file_exists(PMF_LEGACY_CONFIG_DIR . '/ldap.php')) {
+                $fileSystem->copy(
+                    PMF_LEGACY_CONFIG_DIR . '/ldap.php',
+                    PMF_CONFIG_DIR . '/ldap.php'
+                );
+            }
+
+            // Copy data directory
+            $fileSystem->recursiveCopy(
+                PMF_ROOT_DIR . '/data',
+                PMF_ROOT_DIR . '/content/core'
+            );
+
+            // Copy logs directory
+            $fileSystem->recursiveCopy(
+                PMF_ROOT_DIR . '/logs',
+                PMF_ROOT_DIR . '/content/core'
+            );
+
+            // Copy attachments directory
+            $fileSystem->recursiveCopy(
+                PMF_ROOT_DIR . '/attachments',
+                PMF_ROOT_DIR . '/content/user'
+            );
+
+            // Copy images directory
+            $fileSystem->recursiveCopy(
+                PMF_ROOT_DIR . '/images',
+                PMF_ROOT_DIR . '/content/user'
+            );
+
+            // Online Update configuration
             $this->configuration->add('upgrade.onlineUpdateEnabled', true);
             $this->configuration->add('upgrade.releaseEnvironment', ReleaseType::DEVELOPMENT->value);
             $this->configuration->add('upgrade.dateLastChecked', '');

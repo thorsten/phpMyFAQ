@@ -26,7 +26,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-const COPYRIGHT = '&copy; 2001-2023 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
+const COPYRIGHT = '&copy; 2001-2024 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>';
 const IS_VALID_PHPMYFAQ = null;
 
 define('PMF_ROOT_DIR', dirname(__FILE__, 2));

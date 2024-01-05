@@ -84,7 +84,8 @@ if (file_exists(PMF_ROOT_DIR . '/multisite/multisite.php') && 'cli' !== PHP_SAPI
 // Read configuration and constants
 //
 if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/content/core/config'); // Single instance configuration
+    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/content/core/config'); // 4.0 single instance configuration
+    define('PMF_LEGACY_CONFIG_DIR', PMF_ROOT_DIR . '/config'); // 3.x single instance configuration
 } else {
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR); // Multi instance configuration
 }
@@ -92,15 +93,25 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
+if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_LEGACY_CONFIG_DIR . '/database.php')) {
     $response = new RedirectResponse('./setup/index.php');
     $response->send();
+} else {
+    if (file_exists(PMF_CONFIG_DIR . '/database.php')) {
+        $databaseFile = PMF_CONFIG_DIR . '/database.php';
+    } else {
+        $databaseFile = PMF_LEGACY_CONFIG_DIR . '/database.php';
+    }
 }
 
 //
 // Get required phpMyFAQ constants
 //
-require PMF_CONFIG_DIR . '/constants.php';
+if (file_exists(PMF_CONFIG_DIR . '/constants.php')) {
+    require PMF_CONFIG_DIR . '/constants.php';
+} else {
+    require PMF_LEGACY_CONFIG_DIR . '/constants.php';
+}
 
 //
 // The directory where the translations reside
@@ -127,7 +138,7 @@ ob_start();
 // Create a database connection
 //
 try {
-    $dbConfig = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
+    $dbConfig = new DatabaseConfiguration($databaseFile);
     Database::setTablePrefix($dbConfig->getPrefix());
     $db = Database::factory($dbConfig->getType());
     $db->connect(
