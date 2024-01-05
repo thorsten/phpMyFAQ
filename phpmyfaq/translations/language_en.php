@@ -1396,4 +1396,15 @@ $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can ma
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
 $PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
 
+// added v4.0.0-alpha - 2023-01-05 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Language code (e.g. en, de ...)';
+$PMF_LANG['msgSeperateWithCommas'] = '(seperate with commas)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
+$PMF_LANG['msgImportRecords'] = 'Import records';
+$PMF_LANG['msgImportCSVFile'] = 'Import CSV file';
+$PMF_LANG['msgImportCSVFileBody'] = 'You can import an CSV File with your record data and the given structure (see above) here.';
+$PMF_LANG['msgImport'] = 'Import';
+$PMF_LANG['msgColumnStructure'] = 'Coloumn structure';
+$PMF_LANG['msgImportSuccessful'] = 'Import successfull!';
+
 return $PMF_LANG;

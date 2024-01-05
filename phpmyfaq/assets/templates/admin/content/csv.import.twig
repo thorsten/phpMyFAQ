@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i aria-hidden="true" class="fa fa-upload"></i>
+        {{ adminHeaderImport }}
+    </h1>
+</div>
+{% if successAlert is defined %}
+    <div class="alert alert-success alert-dismissible fade show">{{ successAlert }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div> 
+{% endif %}
+
+<div class="card shadow mb-4">
+    <h5 class="card-header py-3">
+        {{ adminHeaderCSVImportColumns }}
+    </h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <p>{{ msgImportRecordsColumnStructure }}</p>
+                <ul>
+                    <li>{{ categoryId }} *</li>
+                    <li>{{ question }} *</li>
+                    <li>{{ answer }} *</li>
+                    <li>{{ keywords }} {{ seperateWithCommas }}</li>
+                    <li>{{ tags }} {{ seperateWithCommas }}</li>
+                    <li>{{ languageCode }} *</li>
+                    <li>{{ author }} *</li>
+                    <li>{{ email }} *</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <form method="post" action="?action=importcsv&csrf={{ csrfToken }}"
+          enctype="multipart/form-data">
+        <h5 class="card-header py-3">
+            {{ adminHeaderCSVImport }}
+        </h5>
+        <div class="card-body">
+            <p>{{ adminBodyCSVImport }}</p>
+            <div class="row">
+                <label class="col-lg-4 col-form-label">{{ adminImportLabel }}:</label>
+                <div class="col-lg-8">
+                    <input type="file" name="userfile">
+                </div>
+            </div>
+            <div class="form-row row">
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary btn-lg m-2" type="submit">
+                        <i aria-hidden="true" class="fa fa-upload"></i> {{ adminCSVImport }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</div>

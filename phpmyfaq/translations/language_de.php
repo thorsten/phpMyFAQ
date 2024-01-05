@@ -1376,4 +1376,15 @@ $PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];
 $PMF_LANG['msgSessionExpired'] = 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.';
 
+// added v4.0.0-alpha - 2023-01-05 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Sprachcode (z. B. de, en ...)';
+$PMF_LANG['msgSeperateWithCommas'] = '(mit Kommas trennen)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'Die zu importierende CSV-Datei muss folgende Spalten in dieser Reihenfolge ohne Spaltenbeschriftung enthalten. Pro Zeile ist ein FAQ-Beitrag zu definieren. Alle Zellen der Spalten mit * müssen einen Wert enthalten.';
+$PMF_LANG['msgImportRecords'] = 'FAQs importieren';
+$PMF_LANG['msgImportCSVFile'] = 'CSV-Datei importieren';
+$PMF_LANG['msgImportCSVFileBody'] = 'Hier kann eine CSV-Datei mit FAQ-Daten und der oben vorgegebenen Struktur importiert werden.';
+$PMF_LANG['msgImport'] = 'Importieren';
+$PMF_LANG['msgColumnStructure'] = 'Spaltenstruktur';
+$PMF_LANG['msgImportSuccessful'] = 'Import erfolgreich!';
+
 return $PMF_LANG;
