@@ -136,7 +136,7 @@ class SetupController
 
             try {
                 if ($update->applyUpdates($progressCallback)) {
-                    $configuration->set('main.maintenanceMode', false);
+                    $configuration->set('main.maintenanceMode', 'false');
                     echo json_encode(['success' => '✅ Database successfully updated.']);
                 }
             } catch (Exception $e) {

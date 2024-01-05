@@ -92,11 +92,11 @@ export const handleConfigBackup = () => {
   }
 };
 
-export const handleDatabaseUpdate = () => {
+export const handleDatabaseUpdate = async () => {
   if (window.location.href.endsWith('update.php?step=3')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
-    fetch('../../api/setup/update-database', {
+    await fetch('../../api/setup/update-database', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -105,21 +105,29 @@ export const handleDatabaseUpdate = () => {
       body: installedVersion.value,
     })
       .then(async (response) => {
-        if (response.ok) {
-          return response.json();
+        const progressBarInstallation = document.getElementById('result-update');
+        const reader = response.body.getReader();
+
+        function pump() {
+          return reader.read().then(({ done, value }) => {
+            const decodedValue = new TextDecoder().decode(value);
+
+            if (done) {
+              progressBarInstallation.style.width = '100%';
+              progressBarInstallation.innerText = '100%';
+              progressBarInstallation.classList.remove('progress-bar-animated');
+              const alert = document.getElementById('phpmyfaq-update-database-success');
+              alert.classList.remove('d-none');
+              return;
+            } else {
+              progressBarInstallation.style.width = JSON.parse(decodedValue).progress;
+              progressBarInstallation.innerText = JSON.parse(decodedValue).progress;
+            }
+
+            return pump();
+          });
         }
-        throw new Error('Network response was not ok: ', { cause: { response } });
-      })
-      .then((data) => {
-        if (data.success) {
-          const alert = document.getElementById('phpmyfaq-update-database-success');
-          alert.classList.remove('d-none');
-        } else {
-          const alert = document.getElementById('phpmyfaq-update-database-error');
-          const errorList = document.getElementById('error-messages');
-          alert.classList.remove('d-none');
-          errorList.innerHTML = '<li>' + data.error + '</li>';
-        }
+        return pump();
       })
       .catch(async (error) => {
         const errorMessage = await error.cause.response.json();
@@ -127,7 +135,6 @@ export const handleDatabaseUpdate = () => {
 
         alert.classList.remove('d-none');
         alert.innerHTML = errorMessage.error;
-        å;
       });
   }
 };

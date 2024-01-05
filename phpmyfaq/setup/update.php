@@ -57,12 +57,6 @@ if (!$update->checkDatabaseFile()) {
     $redirect->send();
 }
 
-try {
-    $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/config/database.php');
-} catch (ErrorException $e) {
-    $dbConfig = new DatabaseConfiguration(PMF_ROOT_DIR . '/content/core/config/database.php');
-}
-
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./setup/update.twig');
 
