@@ -54,7 +54,7 @@ if ($user->isLoggedIn()) {
 
     $tfa = new TwoFactor($faqConfig);
     $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
-    if (is_null($secret)) {
+    if ('' === $secret) {
         try {
             $secret = $tfa->generateSecret();
         } catch (TwoFactorAuthException $e) {
