@@ -368,7 +368,7 @@ if (
                                 <div class="offset-lg-4 col-lg-8">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="is_superadmin"
-                                               name="is_superadmin" disabled>
+                                               name="is_superadmin">
                                         <label class="form-check-label" for="is_superadmin">
                                             <?= Translation::get('ad_user_is_superadmin') ?>
                                         </label>
