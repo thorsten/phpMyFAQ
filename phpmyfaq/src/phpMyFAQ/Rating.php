@@ -121,13 +121,26 @@ class Rating
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
+            $question = Strings::htmlspecialchars(trim($row->question));
+            $url = sprintf(
+                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                $this->config->getDefaultUrl(),
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
+
+            $link = new Link($url, $this->config);
+            $link->itemTitle = $question;
+
             $ratings[] = [
                 'id' => $row->id,
                 'lang' => $row->lang,
                 'category_id' => $row->category_id,
-                'question' => $row->question,
-                'num' => $row->num,
-                'usr' => $row->usr
+                'question' => $question,
+                'url' => $link->toString(),
+                'number' => $row->num,
+                'user' => $row->usr
             ];
         }
 
