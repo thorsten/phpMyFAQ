@@ -1028,6 +1028,7 @@ class Installer extends Setup
             'email' => $email,
         ];
         $admin->setUserData($adminData);
+        $admin->setSuperAdmin(true);
 
         // add default rights
         foreach ($this->mainRights as $right) {
