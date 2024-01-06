@@ -39,7 +39,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/statistics/ratings.twig');
 
     $category = new Category($faqConfig, [], false);
@@ -54,7 +53,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
     }
 
     if ('clear-statistics' === $action && $clearStatistics) {
-        echo 'huhu';
         if ($ratings->deleteAll()) {
             $deletedStatistics = true;
         } else {

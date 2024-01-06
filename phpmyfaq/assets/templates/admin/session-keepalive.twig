@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="{{ metaLanguage }}" class="no-js">
+<head>
+  <meta charset="utf-8">
+
+  <title>phpMyFAQ - "Welcome to the real world."</title>
+
+  <meta content="Only Chuck Norris can divide by zero." name="description">
+  <meta content="phpMyFAQ Team" name="author">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="phpMyFAQ {{ phpMyFAQVersion }}" name="application-name">
+  <meta content="© 2001-{{ currentYear }} phpMyFAQ Team" name="copyright">
+  <meta content="phpMyFAQ Team" name="publisher">
+  {% if isUserLoggedIn %}
+  <script>
+    const sessionTimeoutWarning = () => {
+      if (window.confirm('{{msgConfirm}}')) {
+        location.href = location.href;
+      }
+    };
+
+    const sessionTimeoutClock = (topRef, sessionStart, expire) => {
+      expire.setSeconds(expire.getSeconds() - 1);
+      const duration = expire - sessionStart;
+
+      if (expire.getFullYear() < 2022) {
+        parent.location.search = '?action=logout';
+        return;
+      }
+
+      if (topRef) {
+        topRef.innerHTML = new Date(duration).toISOString().substring(11, 19);
+      }
+    };
+
+    window.onload = () => {
+      const expire = new Date();
+      const sessionStart = new Date();
+      expire.setSeconds({{ sessionTimeout }} * 60);
+
+      const topRef = top.document.getElementById('sessioncounter');
+
+      window.setTimeout(sessionTimeoutWarning, {{ refreshTime }} * 1000);
+      window.setInterval(
+        () => {
+          sessionTimeoutClock(topRef, sessionStart, expire);
+        },
+        1000,
+      );
+    };
+  </script>
+  {% endif %}
+</head>
+<body>
+
+</body>
+</html>
