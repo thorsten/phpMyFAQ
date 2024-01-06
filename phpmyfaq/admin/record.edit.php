@@ -275,35 +275,35 @@ if (
         $link->itemTitle = $faqData['title'];
 
         ?>
-    <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-edit"></i>
-            <?= Translation::get('ad_entry_edit_1') ?>
-            <?= Translation::get('ad_entry_edit_2') ?>
-        </h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-          <span class="btn btn-sm btn-info">
-            <i class="fa fa-hashtag" aria-hidden="true"></i>
-            <?= $currentRevision ?>
-          </span>
-                <a href="<?= $link->toString() ?>" class="btn btn-sm btn-success">
-                    <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
-                    <?= Translation::get('ad_view_faq') ?>
-                </a>
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">
+                <i aria-hidden="true" class="fa fa-edit"></i>
+                <?= Translation::get('ad_entry_edit_1') ?>
+                <?= Translation::get('ad_entry_edit_2') ?>
+            </h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group mr-2">
+              <span class="btn btn-outline-info">
+                <i class="fa fa-hashtag" aria-hidden="true"></i>
+                <?= $currentRevision ?>
+              </span>
+                    <a href="<?= $link->toString() ?>" class="btn btn-outline-success">
+                        <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
+                        <?= Translation::get('ad_view_faq') ?>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
 
     <?php } else { ?>
-    <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-edit"></i>
-            <?= Translation::get('ad_entry_add') ?>
-        </h1>
-    </div>
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">
+                <i aria-hidden="true" class="fa fa-edit"></i>
+                <?= Translation::get('ad_entry_add') ?>
+            </h1>
+        </div>
     <?php } ?>
 
     <div class="row">
@@ -329,9 +329,7 @@ if (
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#tab-notes-changelog" role="tab">
                                 <i class="fa fa-sticky-note-o"></i>
-                                <?=
-                                Translation::get('ad_admin_notes') . ' / ' .
-                                Translation::get('ad_entry_changelog') ?>
+                                <?= Translation::get('ad_admin_notes') . ' / ' . Translation::get('ad_entry_changelog') ?>
                             </a>
                         </li>
                     </ul>
@@ -375,10 +373,7 @@ if (
                                         </form>
                                     </div>
                                 <?php }
-                                if (
-                                    isset($selectedRevisionId) &&
-                                    isset($faqData['revision_id']) && $selectedRevisionId !== $faqData['revision_id']
-                                ) {
+                                if (isset($selectedRevisionId) && isset($faqData['revision_id']) && $selectedRevisionId !== $faqData['revision_id']) {
                                     $faq->language = $faqData['lang'];
                                     $faq->getRecord($faqData['id'], $selectedRevisionId, true);
                                     $faqData = $faq->faqRecord;
@@ -601,7 +596,7 @@ if (
                                                 <input type="radio" id="restrictedgroups" name="grouppermission"
                                                        class="form-check-input"
                                                        value="restricted"
-                                                       <?php echo($restrictedGroups ? 'checked' : ''); ?>>
+                                                    <?php echo($restrictedGroups ? 'checked' : ''); ?>>
                                                 <label for="selected-groups" class="form-check-label"
                                                        for="restrictedgroups">
                                                     <?= Translation::get('ad_entry_restricted_groups') ?>
@@ -822,7 +817,7 @@ if (
                     </div>
 
                     <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')) : ?>
-                        <h5 class="mb-0">
+                        <h5 class="mt-2">
                             <?= Translation::get('ad_entry_new_revision') ?>
                         </h5>
                         <div class="form-group">
@@ -840,6 +835,8 @@ if (
                             </div>
                         </div>
                     <?php endif ?>
+
+                    <hr>
 
                     <div class="form-group">
                         <!-- sticky or not -->
@@ -860,14 +857,15 @@ if (
                         </div>
                     </div>
 
+                    <hr>
+
                     <div class="form-group">
                         <!-- solution id -->
                         <label class="col-form-label" for="solution_id">
                             <?= Translation::get('ad_entry_solution_id') ?>:
                         </label>
                         <input type="number" name="solution_id" id="solution_id" size="5" class="form-control"
-                               readonly
-                               value="<?= $faqData['solution_id'] ?? $faq->getNextSolutionId() ?>">
+                               value="<?= $faqData['solution_id'] ?? $faq->getNextSolutionId() ?>" readonly>
                     </div>
                 </div>
             </div>
@@ -897,7 +895,7 @@ if (
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="api/attachment.php?action=upload" enctype="multipart/form-data" method="post"
+                    <form action="./api/attachment" enctype="multipart/form-data" method="post"
                           id="attachmentForm" novalidate>
                         <fieldset>
                             <input type="hidden" name="MAX_FILE_SIZE"
