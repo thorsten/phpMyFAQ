@@ -39,11 +39,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FaqController extends AbstractController
-{
+class FaqController extends AbstractController {
+
     #[Route('admin/api/faq/permissions')]
-    public function listPermissions(Request $request): JsonResponse
-    {
+    public function listPermissions(Request $request): JsonResponse {
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
@@ -53,10 +52,10 @@ class FaqController extends AbstractController
 
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
-            [
-                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
-                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
-            ]
+                [
+                    'user' => $faqPermission->get(FaqPermission::USER, $faqId),
+                    'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
+                ]
         );
 
         return $response;
@@ -66,8 +65,7 @@ class FaqController extends AbstractController
      * @throws Exception
      */
     #[Route('admin/api/faqs')]
-    public function listByCategory(Request $request): JsonResponse
-    {
+    public function listByCategory(Request $request): JsonResponse {
         $this->userHasPermission('edit_faq');
 
         $response = new JsonResponse();
@@ -79,17 +77,16 @@ class FaqController extends AbstractController
 
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
-            [
-                'faqs' => $faq->getAllFaqsByCategory($categoryId)
-            ]
+                [
+                    'faqs' => $faq->getAllFaqsByCategory($categoryId)
+                ]
         );
 
         return $response;
     }
 
     #[Route('admin/api/faq/activate')]
-    public function activate(Request $request): JsonResponse
-    {
+    public function activate(Request $request): JsonResponse {
         $this->userHasPermission('approverec');
 
         $response = new JsonResponse();
@@ -132,8 +129,7 @@ class FaqController extends AbstractController
     }
 
     #[Route('admin/api/faq/sticky')]
-    public function sticky(Request $request): JsonResponse
-    {
+    public function sticky(Request $request): JsonResponse {
         $this->userHasPermission('edit_faq');
 
         $response = new JsonResponse();
@@ -176,8 +172,7 @@ class FaqController extends AbstractController
     }
 
     #[Route('admin/api/faq/delete')]
-    public function delete(Request $request): JsonResponse
-    {
+    public function delete(Request $request): JsonResponse {
         $this->userHasPermission('delete_faq');
 
         $response = new JsonResponse();
@@ -208,14 +203,13 @@ class FaqController extends AbstractController
         }
 
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => Translation::get('ad_entry_delsuc') ]);
+        $response->setData(['success' => Translation::get('ad_entry_delsuc')]);
 
         return $response;
     }
 
     #[Route('admin/api/faq/search')]
-    public function search(Request $request): JsonResponse
-    {
+    public function search(Request $request): JsonResponse {
         $this->userHasPermission('edit_faq');
 
         $response = new JsonResponse();
@@ -246,7 +240,7 @@ class FaqController extends AbstractController
 
             $response->setStatusCode(Response::HTTP_OK);
             $response->setData(
-                ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult) ]
+                    ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult)]
             );
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -257,8 +251,7 @@ class FaqController extends AbstractController
     }
 
     #[Route('admin/api/faqs/sticky/order')]
-    public function saveOrderOfStickyFaqs(Request $request): JsonResponse
-    {
+    public function saveOrderOfStickyFaqs(Request $request): JsonResponse {
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
 
@@ -277,4 +270,91 @@ class FaqController extends AbstractController
 
         return $response;
     }
+
+    #[Route('admin/api/faq/add')]
+    public function addFaq(Request $request): JsonResponse {
+        $response = new JsonResponse();
+        $data = json_decode($request->getContent());
+        $faqConfig = Configuration::getConfigurationInstance();
+
+        $language = new Language($faqConfig);
+        $currentLanguage = $language->setLanguageByAcceptLanguage();
+
+        $user = CurrentUser::getCurrentUser($faqConfig);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
+
+        if (!Token::getInstance()->verifyToken('addFaq', $data->csrf)) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $response->send();
+            exit();
+        }
+
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        $category = new Category($faqConfig, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->setLanguage($currentLanguage);
+
+        if (isset($data->faq_id)) {
+            $faqId = Filter::filterVar($data->faq_id, FILTER_VALIDATE_INT);
+        } else {
+            $faqId = null;
+        }
+        $languageCode = Filter::filterVar($data->languageCode, FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = Filter::filterVar($data->cat_id, FILTER_VALIDATE_INT);
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
+        $isActive = Filter::filterVar($data->is_active, FILTER_VALIDATE_BOOLEAN);
+        $isSticky = Filter::filterVar($data->is_sticky, FILTER_VALIDATE_BOOLEAN);
+
+        if ($faq->hasTitleAHash($question)) {
+            $response->setStatusCode(400);
+            $result = [
+                'stored' => false,
+                'error' => 'It is not allowed, that the question title contains a hash.'
+            ];
+            $response->setData($result);
+            exit();
+        }
+
+        $categories = [$categoryId];
+        $isActive = !is_null($isActive);
+        $isSticky = !is_null($isSticky);
+
+        $faqData = new FaqEntity();
+        $faqData
+                ->setLanguage($languageCode)
+                ->setQuestion($question)
+                ->setAnswer($answer)
+                ->setKeywords($keywords)
+                ->setAuthor($author)
+                ->setEmail($email)
+                ->setActive($isActive)
+                ->setSticky($isSticky)
+                ->setComment(false)
+                ->setNotes('');
+
+        if (is_null($faqId)) {
+            $faqId = $faq->create($faqData);
+        } else {
+            $faqData->setId($faqId);
+            $faqData->setRevisionId(0);
+            $faq->update($faqData);
+        }
+
+        $result = [
+            'stored' => true
+        ];
+        $response->setData($result);
+
+        return $response;
+    }
+
 }
