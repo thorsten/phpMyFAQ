@@ -36,13 +36,13 @@ $templateVars = [
     'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
     'requestIsSecure' => $request->isSecure(),
     'security.useSslForLogins' => $faqConfig->get('security.useSslForLogins'),
-    'actionIsLogout' => ($request->query->get('action') === 'logout') ? true : false,
+    'actionIsLogout' => $request->query->get('action') === 'logout',
     'ad_logout' => Translation::get('ad_logout'),
     'error' => $error,
     'requestHost' => $request->getHost(),
     'requestUri' => $request->getRequestUri(),
     'msgSecureSwitch' => Translation::get('msgSecureSwitch'),
-    'systemUri' => $faqSystem->getSystemUri($faqConfig),
+    'systemUri' => $faqConfig->getDefaultUrl()
 ];
 
 echo $template->render($templateVars);
