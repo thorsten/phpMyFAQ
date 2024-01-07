@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </main>
 
         <div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
-            <div id="pmf-notification" class="toast align-items-center text-bg-primary border-0" role="alert"
+            <div id="pmf-notification" class="toast align-items-center text-bg-primary shadow border-0" role="alert"
                  aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body" id="pmf-notification-message">
@@ -40,8 +40,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     </button>
                 </div>
             </div>
-            <div id="pmf-notification-error" class="toast align-items-center text-bg-danger border-0" role="alert"
-                 aria-live="assertive" aria-atomic="true">
+            <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0"
+                 role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body" id="pmf-notification-error-message">
                     </div>
@@ -57,7 +57,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <div class="d-flex align-items-center justify-content-between small">
                     <div class="text-muted">
                         Proudly <?= System::getPoweredByString() ?> |
-                        <a target="_blank" class="text-decoration-none" href="https://en.isupportukraine.eu/trombinoscope">
+                        <a target="_blank" class="text-decoration-none"
+                           href="https://en.isupportukraine.eu/trombinoscope">
                             #StandWithUkraine
                         </a>
                     </div>

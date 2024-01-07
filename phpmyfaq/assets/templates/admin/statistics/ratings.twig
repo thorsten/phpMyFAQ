@@ -1,0 +1,89 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="fa fa-tasks"></i> {{ adminHeaderRatings }}
+  </h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <a class="btn btn-outline-danger"
+         href="?action=clear-statistics&csrf={{ csrfToken }}">
+        <i aria-hidden="true" class="fa fa-trash"></i> {{ buttonDeleteAllVotings }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% if isDeleteAllVotings %}
+  {% if isDeletedStatistics %}
+    <div class="alert alert-success" role="alert">
+      {{ msgDeleteAllVotings }}
+    </div>
+  {% else %}
+    <div class="alert alert-danger" role="alert">
+      {{ msgDeleteAllVotingsError }}
+    </div>
+  {% endif %}
+{% endif %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <table class="table">
+      <tbody>
+      {% for rating in ratingData %}
+        {% if rating['category_id'] != currentCategory %}
+          <tr>
+            <th colspan="6" class="bg-secondary-subtle">
+              <h6 class="mt-2">{{ categoryNames[rating['category_id']].name }}</h6>
+            </th>
+          </tr>
+        {% endif %}
+        <tr>
+          <td>{{ rating['id'] }}</td>
+          <td>{{ rating['lang'] }}</td>
+          <td>
+            <a href="{{ rating['url'] }}" title="{{ rating['question'] }}">
+              {{ rating['question'] }}
+            </a>
+          </td>
+          <td>{{ rating['user'] }}x</td>
+          <td class="w-25">
+            {% if (rating['number'] * 20) > 75 %}
+              {% set progressBar = 'success' %}
+            {% elseif ( (rating['number'] * 20) < 25 ) %}
+              {% set progressBar = 'danger' %}
+            {% else %}
+              {% set progressBar = 'primary' %}
+            {% endif %}
+            <div class="progress" role="progressbar" aria-label="Success example"
+                 aria-valuenow="{{ (rating['number'] * 20) }}" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar progress-bar-striped bg-{{ progressBar }}"
+                   style="width: {{ (rating['number'] * 20) }}%"></div>
+            </div>
+          </td>
+          <td>{{ (rating['number'] * 20) }}%</td>
+        </tr>
+        {% set currentCategory = rating['category_id'] %}
+      {% endfor %}
+      </tbody>
+      {% if numberOfRatings > 0 %}
+      <tfoot>
+        <tr>
+          <td colspan="6">
+            <small>
+              <span class="bg-success text-white fw-bold">{{ green }}</span>
+              {{ greenNote }}
+              <span class="bg-danger text-white fw-bold">{{ red }}</span>
+              {{ redNote }}
+            </small>
+          </td>
+        </tr>
+      </tfoot>
+      {% else %}
+      <tfoot>
+        <tr>
+          <td colspan="6">{{ msgNoRatings }}</td>
+        </tr>
+      </tfoot>
+      {% endif %}
+    </table>
+  </div>
+</div>

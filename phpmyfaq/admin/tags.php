@@ -15,13 +15,13 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -29,72 +29,43 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
-?>
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-tags"></i>
-      <?= Translation::get('ad_entry_tags') ?>
-  </h1>
-</div>
+$tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-<div class="row">
-  <div class="col-lg-12">
-    <form action="" method="post" id="tag-form">
-        <?= Token::getInstance()->getTokenInput('tags') ?>
-        <?php
-        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
-            $tags = new Tags($faqConfig);
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template = $twig->loadTemplate('./admin/content/tags.twig');
 
-            if ('delete-tag' === $action) {
-                $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if ($tags->deleteTag($tagId)) {
-                    echo Alert::success('ad_tag_delete_success');
-                } else {
-                    echo Alert::danger('ad_tag_delete_error', $faqConfig->getDb()->error());
-                }
-            }
+$tags = new Tags($faqConfig);
 
-            $tagData = $tags->getAllTags();
+if ('delete-tag' === $action) {
+    $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    if ($tags->deleteTag($tagId)) {
+        $deleteSuccess = true;
+    } else {
+        $deleteSuccess = false;
+    }
+}
 
-            if (count($tagData) === 0) {
-                echo Alert::warning('ad_news_nodata');
-            }
+$tagData = $tags->getAllTags();
 
-            echo '<table class="table table-hover align-middle">';
-            echo '<tbody>';
+$templateVars = [
+    'adminHeaderTags' => Translation::get('ad_entry_tags'),
+    'csrfToken' => Token::getInstance()->getTokenInput('tags'),
+    'isDelete' => 'delete-tag' === $action,
+    'isDeleteSuccess' => $deleteSuccess ?? false,
+    'msgDeleteSuccess' => Translation::get('ad_tag_delete_success'),
+    'msgDeleteError' => Translation::get('ad_tag_delete_error'),
+    'tags' => $tagData,
+    'noTags' => Translation::get('ad_news_nodata'),
+    'buttonEdit' => Translation::get('ad_user_edit'),
+    'msgConfirm' => Translation::get('ad_user_del_3'),
+    'buttonDelete' => Translation::get('ad_entry_delete'),
+];
 
-            foreach ($tagData as $key => $tag) {
-                echo '<tr>';
-                echo '<td><span id="tag-id-' . $key . '">' . Strings::htmlentities($tag) . '</span></td>';
-                printf(
-                    '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s">' .
-                    '<i aria-hidden="true" class="fa fa-edit" data-btn-id="%d"></i></a></td>',
-                    $key,
-                    Translation::get('ad_user_edit'),
-                    $key,
-                );
+echo $template->render($templateVars);
 
-                printf(
-                    '<td><a class="btn btn-danger" onclick="return confirm(\'%s\');" href="%s%d">',
-                    Translation::get('ad_user_del_3'),
-                    '?action=delete-tag&amp;id=',
-                    $key
-                );
-                printf(
-                    '<span title="%s"><i aria-hidden="true" class="fa fa-trash"></i></span></a></td>',
-                    Translation::get('ad_entry_delete')
-                );
+if (!$user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+    require 'no-permission.php';
+}
 
-                echo '<tr>';
-            }
-
-            echo '</tbody>';
-            echo '</table>';
-        } else {
-            require 'no-permission.php';
-        }
-        ?>
-    </form>
-  </div>
-</div>

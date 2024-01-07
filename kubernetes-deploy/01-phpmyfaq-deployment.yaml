@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyfaq
+  namespace: phpmyfaq
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: phpmyfaq
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: phpmyfaq
+    spec:
+      containers:
+      - image: ${registry}:phpmyfaq:3.2
+        imagePullPolicy: Always
+        name: phpmyfaq
+        env:
+        - name: PMF_DB_HOST # use any mysql kubernetes deployment. Ej. MYSQL BITNAMY HELM CHART
+          value: ${host}
+        - name: PMF_DB_NAME
+          value: "db_phpmyfaq"
+        - name: PMF_DB_USER
+          value: "phpmyfaq"
+        - name: PMF_DB_PASS
+          value: ${pass}
+        - name: PHP_LOG_ERRORS
+          value: "On"
+        ports:
+        - containerPort: 80
+          protocol: TCP
+          name: http
+        - containerPort: 443
+          protocol: TCP
+          name: https
+        volumeMounts:
+        - mountPath: /etc/apache2/ssl/cert-key.pem
+          name: certs
+          subPath: tls.key
+        - mountPath: /etc/apache2/ssl/cert.pem
+          name: certs
+          subPath: tls.crt
+        - mountPath: /var/www/html
+          name: data
+          subPath: html
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      volumes:
+        - name: certs
+          secret:
+            secretName: phpmyfaq-tls
+        - name: data
+          nfs:
+            server: xxx.xxx.xxx.xxx # use nfs-external-provisioner or any nfs storage class
+            path: /mnt/nfs-vol/phpmyfaq-data
+            readOnly: false
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 0

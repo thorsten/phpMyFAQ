@@ -50,7 +50,6 @@ const setUserData = async (userId) => {
   if (userData.is_superadmin) {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.setAttribute('checked', 'checked');
-    superAdmin.removeAttribute('disabled');
   }
 
   if (userData.twofactor_enabled === '1') {

@@ -19,6 +19,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added possibility to enable/disable cookie consent (Thorsten)
 - added experimental online update feature (Jan Harms, Thorsten)
 - added REST API v3.0 (Thorsten)
+- added Kubernetes manifest samples (OWNDOMAINHOME SAS)
 - (WIP) added Twig as new template engine (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)

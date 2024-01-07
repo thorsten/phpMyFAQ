@@ -418,7 +418,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
     require 'no-permission.php';
 // User is NOT authenticated
 } else {
-    $error = Translation::get('msgSessionExpired');
+    //$error = Translation::get('msgSessionExpired');
     require 'login.php';
 }
 

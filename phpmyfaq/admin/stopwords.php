@@ -16,66 +16,43 @@
  * @since     2009-04-01
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
-?>
 
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-wrench"></i>
-        <?= Translation::get('ad_menu_stopwordsconfig') ?>
-    </h1>
-  </div>
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
-<?php
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template = $twig->loadTemplate('./admin/configuration/stopwords.twig');
+
+$sortedLanguageCodes = [];
 if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     $sortedLanguageCodes = LanguageCodes::getAll();
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);
-    ?>
-  <div class="row">
-    <div class="col-lg-12">
-      <p>
-          <?= Translation::get('ad_stopwords_desc') ?>
-      </p>
-        <form class="row row-cols-lg-auto g-3 align-items-center">
-            <?= Token::getInstance()->getTokenInput('stopwords') ?>
+}
 
-            <div class="col-12">
-                <label class="visually-hidden" for="pmf-stop-words-language-selector">
-                    <?= Translation::get('ad_stopwords_desc') ?>
-                </label>
-                <select id="pmf-stop-words-language-selector" class="form-select">
-                    <option value="none">---</option>
-                    <?php foreach ($sortedLanguageCodes as $key => $value) { ?>
-                        <option value="<?= strtolower($key) ?>"><?= $value ?></option>
-                    <?php } ?>
-                </select>
-                <span id="pmf-stop-words-loading-indicator"></span>
-            </div>
+$templateVars = [
+    'adminHeaderStopWords' => Translation::get('ad_menu_stopwordsconfig'),
+    'hasPermission' => $user->perm->hasPermission($user->getUserId(), 'editconfig'),
+    'msgDescription' => Translation::get('ad_stopwords_desc'),
+    'csrfToken' => Token::getInstance()->getTokenInput('stopwords'),
+    'msgStopWordsLabel' => Translation::get('ad_stopwords_desc'),
+    'sortedLanguageCodes' => $sortedLanguageCodes,
+    'buttonAdd' => Translation::get('ad_config_stopword_input'),
+];
 
-            <div class="col-12">
-                <button class="btn btn-primary" type="button" id="pmf-stop-words-add-input" disabled>
-                    <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_config_stopword_input') ?>
-                </button>
-            </div>
-      </form>
-    </div>
-  </div>
+echo $template->render($templateVars);
 
-    <div class="row">
-        <div class="col-12">
-            <div class="mt-3" id="pmf-stopwords-content"></div>
-        </div>
-    </div>
-
-    <?php
-} else {
+if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
     require 'no-permission.php';
 }
