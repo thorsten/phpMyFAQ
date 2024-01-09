@@ -6,6 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v3.2.4 - 2024-01-10
+
+- updated bundled dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.3 - 2023-11-24
 
 - added support for PHP 8.3 (Thorsten)
@@ -1529,7 +1534,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - bBCode support for the news
 - better category browsing
 - graphical analysis of votings
-- date informations ISO 8601 compliant
+- date information ISO 8601 compliant
 - some optimized code
 - added Russian language file
 - enhanced BB-Code Editor
@@ -1833,4 +1838,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-Copyright © 2001-2023 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001-2024 Thorsten Rinne and the phpMyFAQ Team
