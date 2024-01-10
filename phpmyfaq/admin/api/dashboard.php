@@ -57,7 +57,7 @@ switch ($ajaxAction) {
             $response->setStatusCode(Response::HTTP_OK);
             if (-1 === version_compare($versions['installed'], $versions['current'])) {
                 $response->setData(
-                    ['success' => Translation::get('ad_you_should_update')]
+                    ['info' => Translation::get('ad_you_should_update')]
                 );
             } else {
                 $response->setData(

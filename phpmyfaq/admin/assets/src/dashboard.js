@@ -116,13 +116,23 @@ export const getLatestVersion = () => {
         if (response.ok) {
           const version = await response.json();
           loader.classList.add('d-none');
-          versionText.insertAdjacentElement(
-            'afterend',
-            addElement('div', {
-              classList: 'alert alert-success',
-              innerText: version.success,
-            })
-          );
+          if (version.success) {
+            versionText.insertAdjacentElement(
+              'afterend',
+              addElement('div', {
+                classList: 'alert alert-success',
+                innerText: version.success,
+              })
+            );
+          } else {
+            versionText.insertAdjacentElement(
+              'afterend',
+              addElement('div', {
+                classList: 'alert alert-info',
+                innerText: version.info,
+              })
+            );
+          }
         }
         throw new Error('Network response was not ok: ', { cause: { response } });
       })
