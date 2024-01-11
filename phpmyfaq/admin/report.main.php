@@ -29,7 +29,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
-                <i aria-hidden="true" class="bi bi-tasks"></i> <?= Translation::get('ad_menu_reports') ?>
+                <i aria-hidden="true" class="bi bi-file-excel"></i> <?= Translation::get('ad_menu_reports') ?>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
