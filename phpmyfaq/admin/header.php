@@ -224,7 +224,9 @@ switch ($action) {
 
 <!-- phpMyFAQ Admin Top Bar -->
 <nav class="pmf-admin-topnav navbar navbar-expand bg-dark">
-    <a class="navbar-brand text-white ps-3" href="../">phpMyFAQ <?= System::getVersion() ?></a>
+    <a class="navbar-brand text-white text-center ps-3" href="../" title="phpMyFAQ <?= System::getVersion() ?>">
+        phpMyFAQ <?= System::getMajorVersion() ?>
+    </a>
 
     <?php if ($adminHelper->canAccessContent($user)) : ?>
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
