@@ -29,53 +29,34 @@ class Services
      *
      * @var int
      */
-    protected $faqId;
+    protected int $faqId;
 
     /**
      * Entity ID.
      *
      * @var int
      */
-    protected $categoryId;
+    protected int $categoryId;
 
     /**
      * Language.
      *
      * @var string
      */
-    protected $language;
+    protected string $language;
 
     /**
      * Question of the FAQ.
      *
      * @var string
      */
-    protected $question;
+    protected string $question;
 
     /**
      * Constructor.
      */
     public function __construct(private readonly Configuration $config)
     {
-    }
-
-    /**
-     * Returns the current URL.
-     */
-    public function getLink(): string
-    {
-        $url = sprintf(
-            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
-            $this->config->getDefaultUrl(),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage()
-        );
-
-        $link = new Link($url, $this->config);
-        $link->itemTitle = $this->question;
-
-        return urlencode($link->toString());
     }
 
     public function getCategoryId(): int
@@ -86,7 +67,7 @@ class Services
     /**
      * @param int $categoryId
      */
-    public function setCategoryId($categoryId): void
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
@@ -99,7 +80,7 @@ class Services
     /**
      * @param int $faqId
      */
-    public function setFaqId($faqId): void
+    public function setFaqId(int $faqId): void
     {
         $this->faqId = $faqId;
     }
@@ -112,7 +93,7 @@ class Services
     /**
      * @param string $language
      */
-    public function setLanguage($language): void
+    public function setLanguage(string $language): void
     {
         $this->language = $language;
     }

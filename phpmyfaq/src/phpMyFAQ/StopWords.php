@@ -56,11 +56,6 @@ class StopWords
         return $this;
     }
 
-    public function setTableName(string $tableName): void
-    {
-        $this->tableName = $tableName;
-    }
-
     /**
      * Add a word to the stop words dictionary.
      * If the given word already exists, false is returned.
@@ -70,7 +65,7 @@ class StopWords
         if (!$this->match($word)) {
             $sql = sprintf(
                 "INSERT INTO %s VALUES(%d, '%s', '%s')",
-                $this->tableName,
+                $this->getTableName(),
                 $this->config->getDb()->nextId($this->tableName, 'id'),
                 $this->language,
                 $word
@@ -91,7 +86,7 @@ class StopWords
         $sql = "UPDATE %s SET stopword = '%s' WHERE id = %d AND lang = '%s'";
         $sql = sprintf(
             $sql,
-            $this->tableName,
+            $this->getTableName(),
             $word,
             $id,
             $this->language
@@ -107,7 +102,7 @@ class StopWords
     {
         $sql = sprintf(
             "DELETE FROM %s WHERE id = %d AND lang = '%s'",
-            $this->tableName,
+            $this->getTableName(),
             $id,
             $this->language
         );
@@ -122,7 +117,7 @@ class StopWords
     {
         $sql = sprintf(
             "SELECT id FROM %s WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
-            $this->tableName,
+            $this->getTableName(),
             $word,
             $this->language
         );
@@ -143,7 +138,7 @@ class StopWords
         $lang = is_null($lang) ? $this->config->getLanguage()->getLanguage() : $lang;
         $sql = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM %s WHERE lang = '%s'",
-            $this->tableName,
+            $this->getTableName(),
             $lang
         );
 

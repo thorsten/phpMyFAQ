@@ -179,7 +179,7 @@ class Sitemap
      * @param string $letter Letter
      * @throws \Exception
      */
-    public function getRecordsFromLetter($letter = 'A'): string
+    public function getRecordsFromLetter(string $letter = 'A'): string
     {
         global $sids;
 
