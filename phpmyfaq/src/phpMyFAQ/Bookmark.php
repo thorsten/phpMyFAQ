@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -25,7 +24,7 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ
  */
-class Bookmark
+readonly class Bookmark
 {
     /**
      * Constructor.
@@ -33,27 +32,28 @@ class Bookmark
      * @param Configuration $config Configuration object
      * @param CurrentUser   $user   CurrentUser object
      */
-    public function __construct(private readonly Configuration $config, private readonly CurrentUser $user)
+    public function __construct(private Configuration $config, private CurrentUser $user)
     {
     }
 
     /**
-     * Returns true if a given Faq-Id is a bookmark of the current User.
+     * Returns true if a given FAQ ID is a bookmark of the current User.
      * Returns false if not.
      *
-     * @param int $faqId Id of the Faq
+     * @param int $faqId ID of the Faq
      * @return bool
      */
     public function isFaqBookmark(int $faqId): bool
     {
         $bookmarks = $this->getAll();
-        $success = false;
-        foreach ($bookmarks as $object => $key) {
+
+        foreach ($bookmarks as $key) {
             if ((int) $key->faqid === $faqId) {
-                $success = true;
+                return true;
             }
         }
-        return $success;
+
+        return false;
     }
 
     /**
@@ -61,7 +61,7 @@ class Bookmark
      *
      * @param int $faqId ID of the Faq
      */
-    public function saveFaqAsBookmarkById(int $faqId)
+    public function saveFaqAsBookmarkById(int $faqId): bool
     {
         $query = sprintf(
             "INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)",
@@ -75,7 +75,7 @@ class Bookmark
     /**
      * Gets all bookmarks from the current user.
      */
-    public function getAll()
+    public function getAll(): array
     {
         $query = sprintf(
             'SELECT faqid FROM %sfaqbookmarks WHERE userid = %d',
@@ -148,12 +148,12 @@ class Bookmark
                 '<a href="%s" class="list-group-item list-group-item-action" id="delete-bookmark-%d">' .
                 '<div class="d-flex w-100 justify-content-between">' .
                 '<h5 class="mb-1">%s</h5>' .
-                '<i class="bi bi-trash bi-2x m-1 pmf-delete-bookmark" data-pmf-bookmark-id="%d"></i>' .
+                '<i class="bi bi-trash-fill text-danger m-1 pmf-delete-bookmark" data-pmf-bookmark-id="%d"></i>' .
                 '</div>' .
                 '</a>',
                 $link->toString(),
                 $faqData['id'],
-                htmlspecialchars_decode($faqData['content']),
+                htmlspecialchars_decode($faqData['title']),
                 $faqData['id'],
             );
         }
