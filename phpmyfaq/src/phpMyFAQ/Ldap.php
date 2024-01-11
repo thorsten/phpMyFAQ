@@ -20,6 +20,8 @@
 
 namespace phpMyFAQ;
 
+use LDAP\Connection;
+
 /**
  * Class Ldap
  *
@@ -44,7 +46,7 @@ class Ldap
      *
      * @var resource|false
      */
-    private \LDAP\Connection|bool|null $ds = null;
+    private Connection|bool|null $ds = null;
 
     /**
      * The LDAP base.
