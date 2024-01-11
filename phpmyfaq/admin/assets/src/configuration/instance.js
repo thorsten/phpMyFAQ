@@ -75,7 +75,7 @@ export const handleInstances = () => {
                   href: `?action=edit-instance&instance_id=${response.added}`,
                   classList: 'btn btn-info',
                 },
-                [addElement('i', { classList: 'fa fa-pencil', ariaHidden: true })]
+                [addElement('i', { classList: 'bi bi-pencil', ariaHidden: true })]
               ),
             ]),
             addElement('td', {}, [
@@ -89,7 +89,7 @@ export const handleInstances = () => {
                 [
                   addElement('i', {
                     ariaHidden: true,
-                    classList: 'fa fa-trash',
+                    classList: 'bi bi-trash',
                     'data-delete-instance-id': `${response.added}`,
                   }),
                 ]

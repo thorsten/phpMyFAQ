@@ -23,8 +23,8 @@ export const handlePasswordToggle = () => {
         const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
         field.setAttribute('type', type);
         const icon = document.getElementById(toggleId + '_icon');
-        icon.classList.toggle('fa-eye');
-        icon.classList.toggle('fa-eye-slash');
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
       });
     }
   });

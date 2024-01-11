@@ -5,12 +5,12 @@ describe('handlePasswordToggle', () => {
     <div>
       <input type="password" data-pmf-toggle="toggle1">
       <span id="toggle1"></span>
-      <span id="toggle1_icon" class="fa-eye"></span>
+      <span id="toggle1_icon" class="bi-eye"></span>
     </div>
     <div>
       <input type="password" data-pmf-toggle="toggle2">
       <span id="toggle2"></span>
-      <span id="toggle2_icon" class="fa-eye"></span>
+      <span id="toggle2_icon" class="bi-eye"></span>
     </div>
   `;
 
@@ -29,9 +29,9 @@ describe('handlePasswordToggle', () => {
     const passwordInput1 = document.querySelector('input[data-pmf-toggle="toggle1"]');
     expect(passwordInput1.getAttribute('type')).toBe('text');
 
-    // Check if the first icon has the 'fa-eye-slash' class
+    // Check if the first icon has the 'bi-eye-slash' class
     const icon1 = document.getElementById('toggle1_icon');
-    expect(icon1.classList.contains('fa-eye-slash')).toBe(true);
+    expect(icon1.classList.contains('bi-eye-slash')).toBe(true);
 
     // Trigger a click event on the second toggle
     const toggle2 = document.getElementById('toggle2');
@@ -41,9 +41,9 @@ describe('handlePasswordToggle', () => {
     const passwordInput2 = document.querySelector('input[data-pmf-toggle="toggle2"]');
     expect(passwordInput2.getAttribute('type')).toBe('text');
 
-    // Check if the second icon has the 'fa-eye-slash' class
+    // Check if the second icon has the 'bi-eye-slash' class
     const icon2 = document.getElementById('toggle2_icon');
-    expect(icon2.classList.contains('fa-eye-slash')).toBe(true);
+    expect(icon2.classList.contains('bi-eye-slash')).toBe(true);
   });
 });
 

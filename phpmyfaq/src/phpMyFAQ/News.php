@@ -63,7 +63,7 @@ class News
             }
 
             $output .= sprintf(
-                '<h5%s><a id="news_%d" href="%s">%s</a> <i aria-hidden="true" class="fa fa-caret-right"></i></h6>',
+                '<h5%s><a id="news_%d" href="%s">%s</a> <i aria-hidden="true" class="bi bi-caret-right"></i></h6>',
                 ' class="mt-3 pmf-news-heading"',
                 $item['id'],
                 Strings::htmlentities($oLink->toString()),

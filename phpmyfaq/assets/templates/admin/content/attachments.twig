@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i aria-hidden="true" class="fa fa-paperclip"></i>
+        <i aria-hidden="true" class="bi bi-paperclip"></i>
         {{ adminHeaderAttachments }}
     </h1>
 </div>
@@ -28,14 +28,14 @@
                 <td>
                     <button class="btn btn-danger btn-delete-attachment" title="{{ adminMsgButtonDelete }}"
                             data-attachment-id="{{ item.id }}" data-csrf="{{ csrfToken }}">
-                        <i aria-hidden="true" class="fa fa-trash btn-delete-attachment" data-attachment-id="{{ item.id }}"
+                        <i aria-hidden="true" class="bi bi-trash btn-delete-attachment" data-attachment-id="{{ item.id }}"
                            data-csrf="{{ csrfToken }}"></i>
                     </button>
                 </td>
                 <td>
                     <a title="{{ adminMsgFaqTitle }}" class="btn btn-info"
                        href="../index.php?action=faq&id={{ item.record_id }}&lang={{ item.record_lang }}">
-                        <i aria-hidden="true" class="fa fa-link"></i>
+                        <i aria-hidden="true" class="bi bi-link"></i>
                     </a>
                 </td>
             </tr>

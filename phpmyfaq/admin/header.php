@@ -229,13 +229,13 @@ switch ($action) {
     <?php if ($adminHelper->canAccessContent($user)) : ?>
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
             name="sidebar-toggle" href="#">
-        <i class="fa fa-bars"></i>
+        <i class="bi bi-list h6"></i>
     </button>
 
     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
             <div class="text-white small">
-                <i class="fa fa-clock-o fa-fw"></i> <?= Translation::get('ad_session_expiration'); ?>:
+                <i class="bi bi-clock-o bi-fw"></i> <?= Translation::get('ad_session_expiration'); ?>:
                 <span id="sessioncounter" class="pl-2">
                     <div class="spinner-border spinner-border-sm" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -269,7 +269,7 @@ switch ($action) {
                         ['size' => 24, 'class' => 'img-profile rounded-circle']
                     );
                 } else {
-                    echo '<i aria-hidden="true" class="fa fa-user"></i>';
+                    echo '<i aria-hidden="true" class="bi bi-user"></i>';
                 }
                 ?>
             </a>
@@ -303,7 +303,7 @@ switch ($action) {
                 <div class="nav">
                     <!-- Dashboard -->
                     <a class="nav-link" href="index.php">
-                        <div class="pmf-admin-nav-link-icon"><i class="fa fa-tachometer"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i class="bi bi-speedometer h6"></i></div>
                         Dashboard
                     </a>
 
@@ -311,9 +311,9 @@ switch ($action) {
                     <?php if ($secLevelEntries['user'] !== '') : ?>
                     <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-user"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-person h6"></i></div>
                         <?= Translation::get('admin_mainmenu_users'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
                     </a>
                     <div class="<?= ($userPage) ? '' : 'collapse' ?>" id="collapseUsers" aria-labelledby="headingOne"
                          data-bs-parent="#sidenavAccordion">
@@ -326,9 +326,9 @@ switch ($action) {
                     <?php if ($secLevelEntries['content'] !== '') : ?>
                     <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-edit"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-pencil-square h6"></i></div>
                         <?= Translation::get('admin_mainmenu_content'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
                     </a>
                     <div class="<?= ($contentPage) ? '' : 'collapse' ?>" id="collapseContent"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -341,9 +341,9 @@ switch ($action) {
                     <?php if ($secLevelEntries['statistics'] !== '') : ?>
                     <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-tasks"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-graph-up-arrow h6"></i></div>
                         <?= Translation::get('admin_mainmenu_statistics'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
                     </a>
                     <div class="<?= ($statisticsPage) ? '' : 'collapse' ?>" id="collapseStatistics"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -357,10 +357,10 @@ switch ($action) {
                     <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
                         <div class="pmf-admin-nav-link-icon">
-                            <i aria-hidden="true" class="fa fa-file-archive-o"></i>
+                            <i aria-hidden="true" class="bi bi-archive h6"></i>
                         </div>
                         <?= Translation::get('admin_mainmenu_exports'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
                     </a>
                     <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -374,10 +374,10 @@ switch ($action) {
                     <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
                         <div class="pmf-admin-nav-link-icon">
-                            <i aria-hidden="true" class="fa fa-cloud-download"></i>
+                            <i aria-hidden="true" class="bi bi-cloud-download"></i>
                         </div>
                         <?= Translation::get('admin_mainmenu_backup'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
                     </a>
                     <div class="<?= ($backupPage) ? '' : 'collapse' ?>" id="collapseBackupAdmin"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -391,9 +391,9 @@ switch ($action) {
                     <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#"
                        data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
                        aria-controls="collapseConfigAdmin">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="fa fa-wrench"></i></div>
+                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-wrench"></i></div>
                         <?= Translation::get('admin_mainmenu_configuration'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
                     </a>
                     <div class="<?= ($configurationPage) ? '' : 'collapse' ?>" id="collapseConfigAdmin"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">

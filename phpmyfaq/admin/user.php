@@ -184,7 +184,7 @@ if (
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">
-                        <i aria-hidden="true" class="fa fa-user"></i>
+                        <i aria-hidden="true" class="bi bi-user"></i>
                         <?= Translation::get('ad_user_deleteUser') ?> <?= Strings::htmlentities($user->getLogin(), ENT_QUOTES) ?>
                     </h1>
                 </div>
@@ -263,7 +263,7 @@ if (
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
-                <i aria-hidden="true" class="fa fa-user"></i>
+                <i aria-hidden="true" class="bi bi-user"></i>
                 <?= Translation::get('ad_user') ?>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
@@ -272,14 +272,14 @@ if (
                     if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                 data-bs-target="#addUserModal">
-                            <i class="fa fa-user-plus" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
+                            <i class="bi bi-user-plus" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
                         </button>
                         <?php
                     endif ?>
                     <?php
                     if ($currentUser->perm->hasPermission($user->getUserId(), 'edit_user')) : ?>
                         <a class="btn btn-outline-info" href="?action=user&amp;user_action=listallusers">
-                            <i class="fa fa-users" aria-label="true"></i> <?= Translation::get('list_all_users') ?>
+                            <i class="bi bi-users" aria-label="true"></i> <?= Translation::get('list_all_users') ?>
                         </a>
                         <?php
                     endif ?>
@@ -296,7 +296,7 @@ if (
                     <input type="hidden" id="current_user_id" value="<?= $userId ?>">
                     <div class="card shadow mb-4">
                         <h5 class="card-header py-3">
-                            <i aria-hidden="true" class="fa fa-search"></i> <?= Translation::get('msgSearch') ?>
+                            <i aria-hidden="true" class="bi bi-search"></i> <?= Translation::get('msgSearch') ?>
                         </h5>
                         <div class="card-body">
                             <div class="form-floating">
@@ -316,7 +316,7 @@ if (
             <div class="col-lg-8">
                 <div class="card shadow mb-4">
                     <h5 class="card-header py-3" id="user_data_legend">
-                        <i aria-hidden="true" class="fa fa-user"></i> <?= Translation::get('ad_user_profou') ?>
+                        <i aria-hidden="true" class="bi bi-user"></i> <?= Translation::get('ad_user_profou') ?>
                     </h5>
                     <form action="?action=user&amp;user_action=update_data" method="post">
                         <div class="card-body">
@@ -425,7 +425,7 @@ if (
                     <div class="card shadow h-50 mb-4">
                         <div class="card-header d-flex justify-content-between flex-wrap align-items-center py-3">
                             <h5 class="" id="user_rights_legend">
-                                <i aria-hidden="true" class="fa fa-lock"></i> <?= Translation::get('ad_user_rights') ?>
+                                <i aria-hidden="true" class="bi bi-lock"></i> <?= Translation::get('ad_user_rights') ?>
                             </h5>
                             <div class="card-button">
                                 <button class="btn btn-success" type="submit">
@@ -497,7 +497,7 @@ if (
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i aria-hidden="true" class="fa fa-user"></i>
+        <i aria-hidden="true" class="bi bi-user"></i>
         <?= Translation::get('ad_user') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -506,12 +506,12 @@ if (
             if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#addUserModal">
-                    <i class="fa fa-user-plus" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
+                    <i class="bi bi-user-plus" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
                 </button>
                 <?php
             endif ?>
             <button type="button" class="btn btn-outline-info" id="pmf-button-export-users">
-                <i class="fa fa-download" aria-label="true"></i> Export users as CSV
+                <i class="bi bi-download" aria-label="true"></i> Export users as CSV
             </button>
         </div>
     </div>
@@ -569,27 +569,27 @@ if (
                     <td class="text-center"><i class="fa <?php
                     switch ($user->getStatus()) {
                         case 'active':
-                            echo 'fa-check-circle-o text-success';
+                            echo 'bi-check-circle-o text-success';
                             break;
                         case 'blocked':
-                            echo 'fa-ban text-danger';
+                            echo 'bi-ban text-danger';
                             break;
                         case 'protected':
-                            echo 'fa-lock text-warning';
+                            echo 'bi-lock text-warning';
                             break;
                     }
                     ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
                     <td class="text-center">
-                        <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret text-success' : 'fa-user-times' ?>"></i>
+                        <i class="fa <?= $user->isSuperAdmin() ? 'bi-user-secret text-success' : 'bi-user-times' ?>"></i>
                     </td>
                     <td class="text-center">
-                        <i class="fa <?= $user->getUserData('is_visible') ? 'fa-user' : 'fa-user-o' ?>"></i>
+                        <i class="fa <?= $user->getUserData('is_visible') ? 'bi-user' : 'bi-user-o' ?>"></i>
                     </td>
 
                     <td>
                         <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>"
                            class="btn">
-                            <i class="fa fa-pencil text-info"></i> <?= Translation::get('ad_user_edit') ?>
+                            <i class="bi bi-pencil text-info"></i> <?= Translation::get('ad_user_edit') ?>
                         </a>
                         <?php
                         if ($user->getStatus() === 'blocked') : ?>
@@ -597,7 +597,7 @@ if (
                                     id="btn_activate_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
-                                <i class="fa fa-check-circle-o text-success"
+                                <i class="bi bi-check-circle-o text-success"
                                    data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
                                    data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_news_set_active') ?>
@@ -613,7 +613,7 @@ if (
                                     id="btn_user_id_<?= $user->getUserData('user_id') ?>"
                                     data-csrf-token="<?= $csrfToken ?>"
                                     data-user-id="<?= $user->getUserData('user_id') ?>">
-                                <i class="fa fa-trash text-danger" data-csrf-token="<?= $csrfToken ?>"
+                                <i class="bi bi-trash text-danger" data-csrf-token="<?= $csrfToken ?>"
                                    data-user-id="<?= $user->getUserData('user_id') ?>"></i>
                                 <?= Translation::get('ad_user_delete') ?>
                             </button>
@@ -638,7 +638,7 @@ if (
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addUserModalLabel">
-                        <i aria-hidden="true" class="fa fa-user-plus"></i> <?= Translation::get('ad_adus_adduser') ?>
+                        <i aria-hidden="true" class="bi bi-user-plus"></i> <?= Translation::get('ad_adus_adduser') ?>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -705,7 +705,7 @@ if (
                                             autocomplete="off" tabindex="4"
                                                data-pmf-toggle="add_user_password_togglePassword">
                                         <span class="input-group-text" id="add_user_password_togglePassword">
-                                            <i class="fa fa-eye-slash" id="add_user_password_togglePassword_icon"></i>
+                                            <i class="bi bi-eye-slash" id="add_user_password_togglePassword_icon"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -721,7 +721,7 @@ if (
                                             class="form-control" autocomplete="off" tabindex="5"
                                                data-pmf-toggle="add_user_password_confirm_togglePassword">
                                         <span class="input-group-text" id="add_user_password_confirm_togglePassword">
-                                            <i class="fa fa-eye-slash"
+                                            <i class="bi bi-eye-slash"
                                                id="add_user_password_confirm_togglePassword_icon"></i>
                                         </span>
                                     </div>
@@ -781,7 +781,7 @@ if (
                                 <input type="password" autocomplete="off" name="npass" id="npass"
                                        class="form-control" data-pmf-toggle="npass_togglePassword" required>
                                 <span class="input-group-text" id="npass_togglePassword">
-                                    <i class="fa fa-eye-slash" id="npass_togglePassword_icon"></i>
+                                    <i class="bi bi-eye-slash" id="npass_togglePassword_icon"></i>
                                 </span>
                                </div>
                             </div>
@@ -796,7 +796,7 @@ if (
                                 <input type="password" autocomplete="off" name="bpass" id="bpass"
                                        class="form-control" data-pmf-toggle="bpass_togglePassword" required>
                                 <span class="input-group-text" id="bpass_togglePassword">
-                                    <i class="fa fa-eye-slash" id="bpass_togglePassword_icon"></i>
+                                    <i class="bi bi-eye-slash" id="bpass_togglePassword_icon"></i>
                                 </span>
                                </div>
                             </div>

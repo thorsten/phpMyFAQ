@@ -35,15 +35,15 @@ $request = Request::createFromGlobals();
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-folder"></i> <?= Translation::get('ad_menu_categ_structure') ?>
+      <i aria-hidden="true" class="bi bi-folder"></i> <?= Translation::get('ad_menu_categ_structure') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <a class="btn btn-outline-success" href="?action=addcategory">
-          <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= Translation::get('ad_kateg_add') ?>
+          <i aria-hidden="true" class="bi bi-folder-plus"></i> <?= Translation::get('ad_kateg_add') ?>
         </a>
         <a class="btn btn-outline-info" href="?action=category-overview">
-          <i aria-hidden="true" class="fa fa-list"></i> <?= Translation::get('ad_menu_categ_edit') ?>
+          <i aria-hidden="true" class="bi bi-list"></i> <?= Translation::get('ad_menu_categ_edit') ?>
         </a>
       </div>
     </div>
@@ -115,7 +115,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
         if ($cat['lang'] != $faqLangCode) {
             // translate category
             printf(
-                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-globe"></span></a></a>',
+                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="bi bi-globe"></span></a></a>',
                 $request->getBasePath(),
                 $cat['id'],
                 $faqLangCode,
@@ -146,7 +146,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="badge bg-success"><i aria-hidden="true" class="fa fa-check"></i></span></td>',
+                    '<span title="%s: %s" class="badge bg-success"><i aria-hidden="true" class="bi bi-check"></i></span></td>',
                     Translation::get('ad_categ_titel'),
                     $spokenLanguage
                 );
@@ -159,7 +159,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                     Translation::get('ad_categ_translate')
                 );
                 printf(
-                    '<span title="%s" class="badge bg-primary"><i aria-hidden="true" class="fa fa-globe fa-white"></i></span></a>',
+                    '<span title="%s" class="badge bg-primary"><i aria-hidden="true" class="bi bi-globe bi-white"></i></span></a>',
                     Translation::get('ad_categ_translate')
                 );
             }

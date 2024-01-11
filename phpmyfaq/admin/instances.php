@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= Translation::get('ad_menu_instances') ?>
+            <i aria-hidden="true" class="bi bi-wrench bi-fw"></i> <?= Translation::get('ad_menu_instances') ?>
         </h1>
         <?php if ($user->perm->hasPermission($user->getUserId(), 'addinstances') &&
             is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
@@ -43,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
                 <a class="btn btn-outline-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
-                    <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_instance_add') ?>
+                    <i aria-hidden="true" class="bi bi-plus"></i> <?= Translation::get('ad_instance_add') ?>
                 </a>
             </div>
         </div>
@@ -126,7 +126,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
         <td><?= Strings::htmlentities($site->comment, ENT_QUOTES) ?></td>
         <td>
           <a href="?action=edit-instance&instance_id=<?= $site->id ?>" class="btn btn-info">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
+            <i aria-hidden="true" class="bi bi-pencil"></i>
           </a>
         </td>
         <td>
@@ -137,7 +137,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
               <button data-delete-instance-id="<?= $site->id ?>" type="button"
                  class="btn btn-danger pmf-instance-delete"
                  data-csrf-token="<?= $csrfToken ?>">
-                <i aria-hidden="true" class="fa fa-trash" data-delete-instance-id="<?= $site->id ?>"
+                <i aria-hidden="true" class="bi bi-trash" data-delete-instance-id="<?= $site->id ?>"
                    data-csrf-token="<?= $csrfToken ?>"></i>
               </button>
             <?php } ?>
@@ -213,7 +213,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
                     <div class="input-group mb-2">
                         <input class="form-control" type="password" autocomplete="off" name="password" id="password" data-pmf-toggle="instances_password_toggle" required>
                         <span class="input-group-text" id="instances_password_toggle">
-                            <i class="fa fa-eye-slash" id="instances_password_toggle_icon"></i>
+                            <i class="bi bi-eye-slash" id="instances_password_toggle_icon"></i>
                         </span>
                     </div>
                 </div>

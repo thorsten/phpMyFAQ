@@ -21,6 +21,9 @@
 // Import Bootstrap
 @import '~bootstrap/scss/bootstrap.scss';
 
+// Bootstrap Icons
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
 // Import Mixins
 @import 'mixins.scss';
 
@@ -44,7 +47,3 @@
 @import 'navigation/nav.scss';
 @import 'navigation/sidenav';
 @import 'navigation/topnav.scss';
-
-// Fork Awesome
-$fa-font-path: '~fork-awesome/fonts';
-@import '~fork-awesome/scss/fork-awesome';

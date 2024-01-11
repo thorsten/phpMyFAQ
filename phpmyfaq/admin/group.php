@@ -166,7 +166,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
       <header class="row">
         <div class="col-lg-12">
           <h2 class="page-header">
-            <i aria-hidden="true" class="fa fa-users fa-fw"></i>
+            <i aria-hidden="true" class="bi bi-users bi-fw"></i>
               <?= Translation::get('ad_group_deleteGroup') ?> "<?= Strings::htmlentities($groupData['name']) ?>"
           </h2>
         </div>
@@ -275,7 +275,7 @@ if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'add
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-users"></i>
+      <i aria-hidden="true" class="bi bi-users"></i>
         <?= Translation::get('ad_group_add') ?>
     </h1>
   </div>
@@ -342,7 +342,7 @@ if ('list' === $groupAction) {
     ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-users"></i>
+      <i aria-hidden="true" class="bi bi-users"></i>
         <?= Translation::get('ad_menu_group_administration') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -363,7 +363,7 @@ if ('list' === $groupAction) {
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
               method="post">
           <h5 class="card-header py-3">
-            <i aria-hidden="true" class="fa fa-users"></i> <?= Translation::get('ad_groups') ?>
+            <i aria-hidden="true" class="bi bi-users"></i> <?= Translation::get('ad_groups') ?>
           </h5>
           <div class="card-body">
             <select name="group_list_select" id="group_list_select" class="form-select"
@@ -382,7 +382,7 @@ if ('list' === $groupAction) {
 
       <div id="group_data" class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i class="fa fa-info-circle" aria-hidden="true"></i> <?= Translation::get('ad_group_details') ?>
+          <i class="bi bi-info-circle" aria-hidden="true"></i> <?= Translation::get('ad_group_details') ?>
         </h5>
         <form action="?action=group&group_action=update_data" method="post">
           <input id="update_group_id" type="hidden" name="group_id" value="0">
@@ -435,19 +435,19 @@ if ('list' === $groupAction) {
         <input id="update_member_group_id" type="hidden" name="group_id" value="0">
         <div class="card shadow mb-4">
           <h5 class="card-header py-3">
-            <i aria-hidden="true" class="fa fa-user-circle"></i> <?= Translation::get('ad_group_membership') ?>
+            <i aria-hidden="true" class="bi bi-user-circle"></i> <?= Translation::get('ad_group_membership') ?>
           </h5>
           <div class="card-body">
             <div class="row">
               <div class="text-center">
                 <span class="select_all">
                   <button type="button" class="btn btn-primary btn-sm" id="select_all_group_user_list">
-                      <i aria-hidden="true" class="fa fa-user-plus"></i>
+                      <i aria-hidden="true" class="bi bi-user-plus"></i>
                   </button>
                 </span>
                 <span class="unselect_all">
                   <button type="button" class="btn btn-primary btn-sm" id="unselect_all_group_user_list">
-                      <i aria-hidden="true" class="fa fa-user-times"></i>
+                      <i aria-hidden="true" class="bi bi-user-times"></i>
                   </button>
                 </span>
               </div>
@@ -472,7 +472,7 @@ if ('list' === $groupAction) {
 
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
-              <i aria-hidden="true" class="fa fa-user-circle"></i> <?= Translation::get('ad_group_members'); ?></li>
+              <i aria-hidden="true" class="bi bi-user-circle"></i> <?= Translation::get('ad_group_members'); ?></li>
           </ul>
 
           <div class="card-body">
@@ -480,12 +480,12 @@ if ('list' === $groupAction) {
               <div class="text-center">
                 <span class="select_all">
                     <button type="button" class="btn btn-primary btn-sm" id="select_all_members">
-                        <i aria-hidden="true" class="fa fa-user-plus"></i>
+                        <i aria-hidden="true" class="bi bi-user-plus"></i>
                     </button>
                 </span>
                 <span class="unselect_all">
                   <button type="button" class="btn btn-primary btn-sm" id="unselect_all_members">
-                      <i aria-hidden="true" class="fa fa-user-times"></i>
+                      <i aria-hidden="true" class="bi bi-user-times"></i>
                   </button>
                 </span>
               </div>
@@ -514,7 +514,7 @@ if ('list' === $groupAction) {
         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
           <h5 class="card-header py-3" id="user_rights_legend">
-            <i aria-hidden="true" class="fa fa-lock"></i> <?= Translation::get('ad_group_rights') ?>
+            <i aria-hidden="true" class="bi bi-lock"></i> <?= Translation::get('ad_group_rights') ?>
 
           </h5>
 

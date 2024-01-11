@@ -43,7 +43,7 @@ class AttachmentHelper
 
         foreach ($attachmentList as $attachment) {
             $html .= sprintf(
-                '<li><i class="fa fa-%s" aria-hidden="true"></i> <a href="%s">%s</a></li>',
+                '<li><i class="bi bi-%s" aria-hidden="true"></i> <a href="%s">%s</a></li>',
                 $this->mapMimeTypeToIcon($attachment->getMimeType()),
                 $attachment->buildUrl(),
                 Strings::htmlentities($attachment->getFilename())

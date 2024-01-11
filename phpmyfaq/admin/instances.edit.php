@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-wrench fa-fw"></i>
+            <i aria-hidden="true" class="bi bi-wrench bi-fw"></i>
             <?= Translation::get('ad_menu_instances'); ?>
         </h1>
     </div>

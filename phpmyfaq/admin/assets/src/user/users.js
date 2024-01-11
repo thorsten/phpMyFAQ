@@ -158,18 +158,18 @@ export const handleUsers = async () => {
             addElement('td', { innerText: response.userName }),
             addElement('td', { className: 'text-center' }, [
               addElement('i', {
-                className: response.status ? 'fa fa-check-circle-o text-success' : 'fa fa-ban text-danger',
+                className: response.status ? 'bi bi-check-circle-o text-success' : 'bi bi-ban text-danger',
               }),
             ]),
             addElement('td', { className: 'text-center' }, [
-              addElement('i', { className: response.isSuperAdmin ? 'fa fa-user-secret' : 'fa fa-user-times' }),
+              addElement('i', { className: response.isSuperAdmin ? 'bi bi-user-secret' : 'bi bi-user-times' }),
             ]),
             addElement('td', { className: 'text-center' }, [
-              addElement('i', { className: response.isVisible ? 'fa fa-user' : 'fa fa-user-o' }),
+              addElement('i', { className: response.isVisible ? 'bi bi-user' : 'bi bi-user-o' }),
             ]),
             addElement('td', {}, [
               addElement('a', { className: 'btn', href: `?action=user&user_id=${response.id}` }, [
-                addElement('i', { className: 'fa fa-pencil text-info' }),
+                addElement('i', { className: 'bi bi-pencil text-info' }),
                 addElement('span', { innerText: ' ' + response.editTranslationString }),
               ]),
             ]),

@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-tags"></i>
+    <i aria-hidden="true" class="bi bi-tags"></i>
     {{ adminHeaderTags }}
   </h1>
 </div>
@@ -39,13 +39,13 @@
             </td>
             <td>
               <a class="btn btn-primary btn-edit" data-btn-id="{{ key }}" title="{{ buttonEdit }}">
-                <i aria-hidden="true" class="fa fa-edit" data-btn-id="{{ key }}"></i>
+                <i aria-hidden="true" class="bi bi-pencil" data-btn-id="{{ key }}"></i>
               </a>
             </td>
             <td>
               <a class="btn btn-danger" onclick="return confirm('{{ msgConfirm }}');"
                  href="?action=delete-tag&amp;id={{ key }}">
-                <span title="{{ buttonDelete }}"><i aria-hidden="true" class="fa fa-trash"></i></span>
+                <span title="{{ buttonDelete }}"><i aria-hidden="true" class="bi bi-trash"></i></span>
               </a>
             </td>
           </tr>

@@ -148,7 +148,7 @@ class Bookmark
                 '<a href="%s" class="list-group-item list-group-item-action" id="delete-bookmark-%d">' .
                 '<div class="d-flex w-100 justify-content-between">' .
                 '<h5 class="mb-1">%s</h5>' .
-                '<i class="fa fa-trash fa-2x m-1 pmf-delete-bookmark" data-pmf-bookmark-id="%d"></i>' .
+                '<i class="bi bi-trash bi-2x m-1 pmf-delete-bookmark" data-pmf-bookmark-id="%d"></i>' .
                 '</div>' .
                 '</a>',
                 $link->toString(),

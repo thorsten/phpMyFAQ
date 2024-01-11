@@ -31,7 +31,7 @@ $sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-tasks"></i>
+      <i aria-hidden="true" class="bi bi-tasks"></i>
         <?php printf('%s #%d', Translation::get('ad_sess_session'), $sessionId); ?>
     </h1>
   </div>

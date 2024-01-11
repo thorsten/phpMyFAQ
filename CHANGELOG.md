@@ -24,6 +24,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)
+- migrated from Fork Awesome to Bootstrap Icons (Thorsten, Jan Harms)
 
 ### phpMyFAQ v3.2.4 - 2024-01-10
 

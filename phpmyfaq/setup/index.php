@@ -209,7 +209,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                       <input name="sql_password" type="password" autocomplete="off" id="faqpassword"
                              class="form-control" data-pmf-toggle="togglePasswordSQL" required>
                       <span class="input-group-text" id="togglePasswordSQL">
-                        <i class="fa fa-eye-slash" id="togglePasswordSQL_icon"></i>
+                        <i class="bi bi-eye-slash" id="togglePasswordSQL_icon"></i>
                       </span>
                     </div>
                     <small class="form-text text-muted">Please enter your database password.</small>
@@ -422,7 +422,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <input type="password" autocomplete="off" name="password" id="password" class="form-control"
                        placeholder="Your password with at least 8 characters" minlength="8" data-pmf-toggle="togglePasswordFAQ" required>
                 <span class="input-group-text" id="togglePasswordFAQ">
-                    <i class="fa fa-eye-slash" id="togglePasswordFAQ_icon"></i>
+                    <i class="bi bi-eye-slash" id="togglePasswordFAQ_icon"></i>
                 </span>
                </div>
                <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
@@ -435,7 +435,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
                        placeholder="Retype the password" minlength="8" class="form-control" data-pmf-toggle="togglePasswordFAQ_confirm" required>
                 <span class="input-group-text" id="togglePasswordFAQ_confirm">
-                    <i class="fa fa-eye-slash" id="togglePasswordFAQ_confirm_icon"></i>
+                    <i class="bi bi-eye-slash" id="togglePasswordFAQ_confirm_icon"></i>
                 </span>
                </div>
                <small class="form-text text-muted">Please retype your password.</small>
@@ -444,7 +444,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             <div class="row mb-2">
               <div class="col-sm">
                 <p class="alert alert-info text-center mt-4">
-                  <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
+                  <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
                   After clicking the "Submit" button, all necessary tables will be created and filled with your data.
                   Depending on your system, this may take some time. Stay tuned.
                 </p>

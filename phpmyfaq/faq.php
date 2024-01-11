@@ -196,7 +196,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
 $editThisEntry = '';
 if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     $editThisEntry = sprintf(
-        '<i aria-hidden="true" class="fa fa-pencil"></i> ' .
+        '<i aria-hidden="true" class="bi bi-pencil"></i> ' .
         '<a class="text-decoration-none" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         $faqId,
         $lang,
@@ -356,7 +356,7 @@ $template->parse(
             ),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
-        'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'fa fa-bookmark' : 'fa fa-bookmark-o',
+        'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark' : 'bi bi-bookmark-o',
         'bookmarkLink' =>
             $bookmark->isFaqBookmark($faqId)
                 ?

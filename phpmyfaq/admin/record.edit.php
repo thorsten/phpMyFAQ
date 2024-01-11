@@ -278,18 +278,18 @@ if (
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
-                <i aria-hidden="true" class="fa fa-edit"></i>
+                <i aria-hidden="true" class="bi bi-pencil"></i>
                 <?= Translation::get('ad_entry_edit_1') ?>
                 <?= Translation::get('ad_entry_edit_2') ?>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
               <span class="btn btn-outline-info">
-                <i class="fa fa-hashtag" aria-hidden="true"></i>
+                <i class="bi bi-hashtag" aria-hidden="true"></i>
                 <?= $currentRevision ?>
               </span>
                     <a href="<?= $link->toString() ?>" class="btn btn-outline-success">
-                        <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
+                        <i class="bi bi-arrow-alt-circle-right" aria-hidden="true"></i>
                         <?= Translation::get('ad_view_faq') ?>
                     </a>
                 </div>
@@ -300,7 +300,7 @@ if (
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
-                <i aria-hidden="true" class="fa fa-edit"></i>
+                <i aria-hidden="true" class="bi bi-pencil"></i>
                 <?= Translation::get('ad_entry_add') ?>
             </h1>
         </div>
@@ -313,22 +313,22 @@ if (
                     <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
-                                <i class="fa fa-pencil-square-o"></i> <?= Translation::get('ad_record_faq') ?>
+                                <i class="bi bi-pencil-square-o"></i> <?= Translation::get('ad_record_faq') ?>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
-                                <i class="fa fa-database"></i> <?= Translation::get('ad_menu_faq_meta') ?>
+                                <i class="bi bi-database"></i> <?= Translation::get('ad_menu_faq_meta') ?>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
-                                <i class="fa fa-unlock-alt"></i> <?= Translation::get('ad_record_permissions') ?>
+                                <i class="bi bi-unlock-alt"></i> <?= Translation::get('ad_record_permissions') ?>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#tab-notes-changelog" role="tab">
-                                <i class="fa fa-sticky-note-o"></i>
+                                <i class="bi bi-sticky-note-o"></i>
                                 <?= Translation::get('ad_admin_notes') . ' / ' . Translation::get('ad_entry_changelog') ?>
                             </a>
                         </li>
@@ -500,7 +500,7 @@ if (
                                                 );
                                                 if ($user->perm->hasPermission($currentUserId, 'delattachment')) {
                                                     printf(
-                                                        '<a class="badge bg-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
+                                                        '<a class="badge bg-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="bi bi-trash"></i></a>',
                                                         $faqData['id'],
                                                         $att->getId(),
                                                         $faqData['lang']
@@ -696,7 +696,7 @@ if (
                                             ?>
                                             <li class="small pt-0">
                                                 <?php printf(
-                                                    '<i class="fa fa-hand-o-right"></i> %s  1.%d <i class="fa fa-calendar"></i> %s <i class="fa fa-user"></i> %s',
+                                                    '<i class="bi bi-hand-o-right"></i> %s  1.%d <i class="bi bi-calendar"></i> %s <i class="bi bi-user"></i> %s',
                                                     Translation::get('ad_entry_revision'),
                                                     $entry['revision_id'],
                                                     $date->format(date('Y-m-d H:i', $entry['date'])),
