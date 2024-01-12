@@ -200,7 +200,7 @@ if (
                         'success' => Translation::get('ad_adus_suc'),
                         'id' => $newUser->getUserId(),
                         'status' => $newUser->getStatus(),
-                        'isSuperAdmin' => (bool)$userIsSuperAdmin,
+                        'isSuperAdmin' => (bool) $userIsSuperAdmin,
                         'isVisible' => (bool) $newUser->userdata->get('is_visible'),
                         'realName' => $userRealName,
                         'userName' => $userName,
