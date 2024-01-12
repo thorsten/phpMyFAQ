@@ -221,6 +221,13 @@ if (
             break;
 
         case 'delete_user':
+            if (!$user->perm->hasPermission($user->getUserId(), 'delete_user')) {
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                $response->setData(['error' => Translation::get('err_NotAuth')]);
+                $response->send();
+                exit(1);
+            }
+
             $deleteData = json_decode(file_get_contents('php://input', true));
 
             if (!Token::getInstance()->verifyToken('delete-user', $deleteData->csrfToken)) {

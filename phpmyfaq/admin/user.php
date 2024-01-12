@@ -597,7 +597,10 @@ if (
                     </td>
                     <td>
                         <?php
-                        if ($user->getStatus() !== 'protected') {
+                        if (
+                            $user->getStatus() !== 'protected' &&
+                            $currentUser->perm->hasPermission($currentUser->getUserId(), 'delete_user')
+                        ) {
                             $csrfToken = Token::getInstance()->getTokenString('delete-user');
                         ?>
                             <button type="button" class="btn btn-sm btn-danger btn-delete-user"
