@@ -100,7 +100,8 @@ $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('adminlog', 'adminl
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
 
-$secLevelEntries['exports'] = $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', $action);
+$secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry('add_faq', 'importcsv', 'msgImportRecords', $action);
+$secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', $action);
 
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
 
@@ -178,6 +179,7 @@ switch ($action) {
         $statisticsPage = true;
         break;
     case 'export':
+    case 'importcsv':
         $exportsPage = true;
         break;
     case 'backup':
@@ -353,19 +355,19 @@ switch ($action) {
                     </div>
                     <?php endif; ?>
                     <!-- Exports -->
-                    <?php if ($secLevelEntries['exports'] !== '') : ?>
+                    <?php if ($secLevelEntries['imports_exports'] !== '') : ?>
                     <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
                        data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
                         <div class="pmf-admin-nav-link-icon">
                             <i aria-hidden="true" class="fa fa-file-archive-o"></i>
                         </div>
-                        <?= Translation::get('admin_mainmenu_exports'); ?>
+                        <?= Translation::get('admin_mainmenu_imports_exports'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                     </a>
                     <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['exports']; ?>
+                            <?= $secLevelEntries['imports_exports']; ?>
                         </nav>
                     </div>
                     <?php endif; ?>
