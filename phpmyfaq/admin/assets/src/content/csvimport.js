@@ -21,15 +21,23 @@ export const handleUploadCSVForm = async () => {
                             '<div class="alert alert-success alert-dismissible fade show">' + jsonResponse.success +
                             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     fileInput.value = null;
+                } 
+                if (response.status === 400) {
+                    const jsonResponse = await response.json();
+                    document.getElementById('divImportColumns').insertAdjacentHTML('beforebegin',
+                            '<div class="alert alert-danger alert-dismissible fade show">' + jsonResponse.error +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    fileInput.value = null;
                 } else {
                     const errorResponse = await response.json();
                     throw new Error('Network response was not ok: ' + JSON.stringify(errorResponse));
                 }
             } catch (error) {
                 if (error.storedAll === false) {
+                    console.log(error.messages);
                     error.messages.forEach(message => {
                         document.getElementById('divImportColumns').insertAdjacentHTML('beforebegin',
-                                '<div class="alert alert-success alert-dismissible fade show">' + message +
+                                '<div class="alert alert-danger alert-dismissible fade show">' + message +
                                 '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     });
                 }

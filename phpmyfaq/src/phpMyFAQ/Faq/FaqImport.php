@@ -32,7 +32,7 @@ use phpMyFAQ\Filter;
  * @package phpMyFAQ\Faq
  */
 class FaqImport {
-    
+
     private Configuration $config;
 
     public function __construct() {
@@ -101,7 +101,7 @@ class FaqImport {
 
         $faqMetaData = new FaqMetaData($this->config);
         $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
-        
+
         return true;
     }
 
@@ -117,6 +117,32 @@ class FaqImport {
         $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
         return in_array(strtolower($fileExtension), $allowedExtensions);
+    }
+
+    public function validateCSV($csvData): bool {
+        foreach ($csvData as $row) {
+            if (count($row) !== 9) {
+                return false;
+            }
+
+            $requiredColumns = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+            foreach ($requiredColumns as $columnIndex) {
+                if (empty($row[$columnIndex])) {
+                    return false;
+                }
+            }
+
+            $activatedColumn = 7;
+            $importantFAQColumn = 8;
+            $validBooleanValues = ['true', 'false'];
+
+            if (!in_array(strtolower($row[$activatedColumn]), $validBooleanValues) ||
+                    !in_array(strtolower($row[$importantFAQColumn]), $validBooleanValues)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

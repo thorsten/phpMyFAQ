@@ -1387,5 +1387,6 @@ $PMF_LANG['msgColumnStructure'] = 'Spaltenstruktur';
 $PMF_LANG['msgImportSuccessful'] = 'Import erfolgreich!';
 $PMF_LANG['msgCSVImportTrueOrFalse'] = '(true oder false)';
 $PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Die Datei scheint nicht alle Vorgaben zu erfüllen. Bitte prüfe nochmals die Dateistruktur anhand der Vorgaben.';
 
 return $PMF_LANG;

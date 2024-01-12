@@ -295,6 +295,15 @@ class FaqController extends AbstractController {
         if (isset($file) && 0 === $file['error'] && $faqImport->isCSVFile($file)) {
             $handle = fopen($file['tmp_name'], 'r');
             $csvData = $faqImport->parseCSV($handle);
+            if (!$faqImport->validateCSV($csvData)) {
+                $response->setStatusCode(400);
+                $result = [
+                    'storedAll' => false,
+                    'error' => Translation::get('msgCSVFileNotValidated')
+                ];
+                $response->setData($result);
+                return $response;
+            }
             foreach ($csvData as $record) {
                 $error = $faqImport->import($record);
                 if ($error !== true) {
