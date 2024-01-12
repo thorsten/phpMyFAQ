@@ -47,6 +47,7 @@ $template->parse(
         'ad_user_loginname' => Translation::get('ad_user_loginname'),
         'csrf' => Token::getInstance()->getTokenInput('request-removal'),
         'lang' => $Language->getLanguage(),
+        'userId' => $user->getUserId(),
         'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
         'defaultContentName' =>
             ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
