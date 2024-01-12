@@ -304,6 +304,10 @@ $routes->add(
     new Route('/faqs/{categoryId}', ['_controller' => [FaqController::class, 'listByCategory']])
 );
 $routes->add(
+    'admin.api.faq.import',
+    new Route('/faq/import', ['_controller' => [FaqController::class, 'importFaqs']])
+);
+$routes->add(
     'admin.api.faqs.sticky.order',
     new Route('/faqs/sticky/order', ['_controller' => [FaqController::class, 'saveOrderOfStickyFaqs'], '_methods' => 'POST'])
 );

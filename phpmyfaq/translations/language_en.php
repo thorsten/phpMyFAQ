@@ -1406,5 +1406,6 @@ $PMF_LANG['msgImportCSVFileBody'] = 'You can import an CSV File with your record
 $PMF_LANG['msgImport'] = 'Import';
 $PMF_LANG['msgColumnStructure'] = 'Coloumn structure';
 $PMF_LANG['msgImportSuccessful'] = 'Import successfull!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true or false)';
 
 return $PMF_LANG;

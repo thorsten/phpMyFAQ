@@ -1386,5 +1386,6 @@ $PMF_LANG['msgImportCSVFileBody'] = 'Hier kann eine CSV-Datei mit FAQ-Daten und 
 $PMF_LANG['msgImport'] = 'Importieren';
 $PMF_LANG['msgColumnStructure'] = 'Spaltenstruktur';
 $PMF_LANG['msgImportSuccessful'] = 'Import erfolgreich!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true oder false)';
 
 return $PMF_LANG;
