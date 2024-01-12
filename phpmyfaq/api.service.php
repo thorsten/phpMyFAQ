@@ -981,6 +981,7 @@ switch ($action) {
             break;
         }
 
+        $userId = Filter::filterVar($postData['userId'], FILTER_VALIDATE_INT);
         $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
         $loginName = trim((string) Filter::filterVar($postData['loginname'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
@@ -989,6 +990,19 @@ switch ($action) {
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
             $email = $faqConfig->getAdminEmail();
+        }
+
+        // Validate User ID, Username and email
+        $user = new User($faqConfig);
+        if (
+            !$user->getUserById($userId) ||
+            $userId !== $user->getUserId() ||
+            $loginName !== $user->getLogin() ||
+            $email !== $user->getUserData('email')
+        ) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('ad_user_error_loginInvalid')]);
+            break;
         }
 
         if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
