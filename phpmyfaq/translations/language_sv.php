@@ -578,7 +578,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Hem';
 $PMF_LANG['admin_mainmenu_users'] = 'Användare';
 $PMF_LANG['admin_mainmenu_content'] = 'Innehåll';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistik';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exporter';
 $PMF_LANG['admin_mainmenu_backup'] = 'Säkerhetskopiera';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Inställningar';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logga ut';

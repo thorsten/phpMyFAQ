@@ -703,7 +703,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
 $PMF_LANG['admin_mainmenu_users'] = 'Users';
 $PMF_LANG['admin_mainmenu_content'] = 'Content';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exports';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
@@ -1395,5 +1394,19 @@ $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can ma
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
 $PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
+
+// added v4.0.0-alpha - 2023-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Language code (e.g. en, de ...)';
+$PMF_LANG['msgSeperateWithCommas'] = '(seperate with commas)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
+$PMF_LANG['msgImportRecords'] = 'Import records';
+$PMF_LANG['msgImportCSVFile'] = 'Import CSV file';
+$PMF_LANG['msgImportCSVFileBody'] = 'You can import an CSV File with your record data and the given structure (see above) here.';
+$PMF_LANG['msgImport'] = 'Import';
+$PMF_LANG['msgColumnStructure'] = 'Coloumn structure';
+$PMF_LANG['msgImportSuccessful'] = 'Import successfull!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true or false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
+$PMF_LANG['msgCSVFileNotValidated'] = 'It seems that the file does not have the right structure. Please check the structure based on the given requirements again.';
 
 return $PMF_LANG;

@@ -38,6 +38,7 @@ import {
   renderEditor,
   handleStickyFaqs,
   handleCategoryDelete,
+  handleUploadCSVForm,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -110,4 +111,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Configuration -> Elasticsearch configuration
   await handleElasticsearch();
+  
+  await handleUploadCSVForm();
 });

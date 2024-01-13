@@ -581,7 +581,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'หน้าหลัก';
 $PMF_LANG['admin_mainmenu_users'] = 'ผู้ใช้งาน';
 $PMF_LANG['admin_mainmenu_content'] = 'เนื้อหาข้อมูล';
 $PMF_LANG['admin_mainmenu_statistics'] = 'สถิติ';
-$PMF_LANG['admin_mainmenu_exports'] = 'เก็บข้อมูล';
 $PMF_LANG['admin_mainmenu_backup'] = 'สำรองข้อมูล';
 $PMF_LANG['admin_mainmenu_configuration'] = 'ข้อมูลระบบ';
 $PMF_LANG['admin_mainmenu_logout'] = 'ออกจากระบบ';

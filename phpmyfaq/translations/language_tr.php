@@ -690,7 +690,6 @@ $PMF_LANG['admin_mainmenu_home'] = "Anasayfa";
 $PMF_LANG['admin_mainmenu_users'] = "Kullanıcılar";
 $PMF_LANG['admin_mainmenu_content'] = "İçerik";
 $PMF_LANG['admin_mainmenu_statistics'] = "İstatistikler";
-$PMF_LANG['admin_mainmenu_exports'] = "Dışa aktar";
 $PMF_LANG['admin_mainmenu_backup'] = "Yedekleme";
 $PMF_LANG['admin_mainmenu_configuration'] = "Yapılandırma";
 $PMF_LANG['admin_mainmenu_logout'] = "Çıkış";

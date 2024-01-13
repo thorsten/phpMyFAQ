@@ -707,7 +707,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
 $PMF_LANG['admin_mainmenu_users'] = 'Užívatelia';
 $PMF_LANG['admin_mainmenu_content'] = 'Obsah';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Štatistiky';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exporty';
 $PMF_LANG['admin_mainmenu_backup'] = 'Záloha';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurácia';
 $PMF_LANG['admin_mainmenu_logout'] = 'Odhlásenie';

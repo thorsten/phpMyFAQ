@@ -571,7 +571,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'الرئيسية';
 $PMF_LANG['admin_mainmenu_users'] = 'المستخدمين';
 $PMF_LANG['admin_mainmenu_content'] = 'المحتوى';
 $PMF_LANG['admin_mainmenu_statistics'] = 'إحصائيات';
-$PMF_LANG['admin_mainmenu_exports'] = 'تصدير';
 $PMF_LANG['admin_mainmenu_backup'] = 'أخذ نسخة إحتياطية';
 $PMF_LANG['admin_mainmenu_configuration'] = 'الإعدادات';
 $PMF_LANG['admin_mainmenu_logout'] = 'خروج';

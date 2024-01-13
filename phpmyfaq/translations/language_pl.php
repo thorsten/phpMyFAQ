@@ -601,7 +601,6 @@ $PMF_LANG['ad_menu_translations'] = 'Tłumaczenie interfejsu';
 $PMF_LANG['admin_mainmenu_backup'] = 'Kopia bezpieczeństwa';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguracja';
 $PMF_LANG['admin_mainmenu_content'] = 'Zawartość';
-$PMF_LANG['admin_mainmenu_exports'] = 'Eksport';
 $PMF_LANG['admin_mainmenu_home'] = 'Start';
 $PMF_LANG['admin_mainmenu_logout'] = 'Wyloguj';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statystyki';

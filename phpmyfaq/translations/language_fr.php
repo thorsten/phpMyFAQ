@@ -703,7 +703,6 @@ $PMF_LANG["admin_mainmenu_home"] = "Tableau de bord";
 $PMF_LANG["admin_mainmenu_users"] = "Utilisateurs";
 $PMF_LANG["admin_mainmenu_content"] = "Contenu";
 $PMF_LANG["admin_mainmenu_statistics"] = "Statistiques";
-$PMF_LANG["admin_mainmenu_exports"] = "Exports";
 $PMF_LANG["admin_mainmenu_backup"] = "Sauvegardes";
 $PMF_LANG["admin_mainmenu_configuration"] = "Configuration";
 $PMF_LANG["admin_mainmenu_logout"] = "Déconnexion";

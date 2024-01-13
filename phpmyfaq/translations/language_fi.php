@@ -591,7 +591,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Kojelauta';
 $PMF_LANG['admin_mainmenu_users'] = 'Käyttäjät';
 $PMF_LANG['admin_mainmenu_content'] = 'Sisältö';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistiikka';
-$PMF_LANG['admin_mainmenu_exports'] = 'Vienti';
 $PMF_LANG['admin_mainmenu_backup'] = 'Turvakopio';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Asetukset';
 $PMF_LANG['admin_mainmenu_logout'] = 'Kirjaudu ulos';

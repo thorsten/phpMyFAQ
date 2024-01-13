@@ -702,7 +702,6 @@ $PMF_LANG['admin_mainmenu_home'] = "Dashboard";
 $PMF_LANG['admin_mainmenu_users'] = "Benutzer";
 $PMF_LANG['admin_mainmenu_content'] = "Inhalte";
 $PMF_LANG['admin_mainmenu_statistics'] = "Statistiken";
-$PMF_LANG['admin_mainmenu_exports'] = "Export";
 $PMF_LANG['admin_mainmenu_backup'] = "Datensicherung";
 $PMF_LANG['admin_mainmenu_configuration'] = "Konfiguration";
 $PMF_LANG['admin_mainmenu_logout'] = "Ausloggen";
@@ -1375,5 +1374,19 @@ $PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];
 $PMF_LANG['msgSessionExpired'] = 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.';
+
+// added v4.0.0-alpha - 2023-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Sprachcode (z. B. de, en ...)';
+$PMF_LANG['msgSeperateWithCommas'] = '(mit Kommas trennen)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'Die zu importierende CSV-Datei muss folgende Spalten in dieser Reihenfolge ohne Spaltenbeschriftung enthalten. Pro Zeile ist ein FAQ-Beitrag zu definieren. Alle Zellen der Spalten mit * müssen einen Wert enthalten.';
+$PMF_LANG['msgImportRecords'] = 'FAQs importieren';
+$PMF_LANG['msgImportCSVFile'] = 'CSV-Datei importieren';
+$PMF_LANG['msgImportCSVFileBody'] = 'Hier kann eine CSV-Datei mit FAQ-Daten und der oben vorgegebenen Struktur importiert werden.';
+$PMF_LANG['msgImport'] = 'Importieren';
+$PMF_LANG['msgColumnStructure'] = 'Spaltenstruktur';
+$PMF_LANG['msgImportSuccessful'] = 'Import erfolgreich!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true oder false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Die Datei scheint nicht alle Vorgaben zu erfüllen. Bitte prüfe nochmals die Dateistruktur anhand der Vorgaben.';
 
 return $PMF_LANG;

@@ -558,7 +558,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Панель управления';
 $PMF_LANG['admin_mainmenu_users'] = 'Пользователи';
 $PMF_LANG['admin_mainmenu_content'] = 'Содержание';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Статистика';
-$PMF_LANG['admin_mainmenu_exports'] = 'Экспорт';
 $PMF_LANG['admin_mainmenu_backup'] = 'Резервная копия';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Конфигурация';
 $PMF_LANG['admin_mainmenu_logout'] = 'Выход';

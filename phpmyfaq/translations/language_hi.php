@@ -714,7 +714,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'घर';
 $PMF_LANG['admin_mainmenu_users'] = 'प्रयोगकर्ता';
 $PMF_LANG['admin_mainmenu_content'] = 'विषय';
 $PMF_LANG['admin_mainmenu_statistics'] = 'लेखा जोखा';
-$PMF_LANG['admin_mainmenu_exports'] = 'निर्यात';
 $PMF_LANG['admin_mainmenu_backup'] = 'बेकअप';
 $PMF_LANG['admin_mainmenu_configuration'] = 'सरंचना';
 $PMF_LANG['admin_mainmenu_logout'] = 'सत्रांत';

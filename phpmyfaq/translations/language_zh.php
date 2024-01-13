@@ -559,7 +559,6 @@ $PMF_LANG['admin_mainmenu_home'] = '控制台';
 $PMF_LANG['admin_mainmenu_users'] = '用户';
 $PMF_LANG['admin_mainmenu_content'] = '内容';
 $PMF_LANG['admin_mainmenu_statistics'] = '统计';
-$PMF_LANG['admin_mainmenu_exports'] = '导出';
 $PMF_LANG['admin_mainmenu_backup'] = '备份';
 $PMF_LANG['admin_mainmenu_configuration'] = '设置';
 $PMF_LANG['admin_mainmenu_logout'] = '注销';

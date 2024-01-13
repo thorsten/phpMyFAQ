@@ -700,7 +700,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Tablero de mandos';
 $PMF_LANG['admin_mainmenu_users'] = 'Usuarios';
 $PMF_LANG['admin_mainmenu_content'] = 'Contenido';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Estadísticas';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exportar';
 $PMF_LANG['admin_mainmenu_backup'] = "Backup";
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuración';
 $PMF_LANG['admin_mainmenu_logout'] = 'Cerrar sesión';

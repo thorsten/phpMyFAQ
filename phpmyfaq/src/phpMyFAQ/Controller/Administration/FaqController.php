@@ -26,6 +26,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\FaqImport;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
@@ -54,9 +55,9 @@ class FaqController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
             [
-                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
-                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
-            ]
+                    'user' => $faqPermission->get(FaqPermission::USER, $faqId),
+                    'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
+                ]
         );
 
         return $response;
@@ -80,8 +81,8 @@ class FaqController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
             [
-                'faqs' => $faq->getAllFaqsByCategory($categoryId)
-            ]
+                    'faqs' => $faq->getAllFaqsByCategory($categoryId)
+                ]
         );
 
         return $response;
@@ -208,7 +209,7 @@ class FaqController extends AbstractController
         }
 
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => Translation::get('ad_entry_delsuc') ]);
+        $response->setData(['success' => Translation::get('ad_entry_delsuc')]);
 
         return $response;
     }
@@ -246,7 +247,7 @@ class FaqController extends AbstractController
 
             $response->setStatusCode(Response::HTTP_OK);
             $response->setData(
-                ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult) ]
+                ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult)]
             );
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -274,6 +275,64 @@ class FaqController extends AbstractController
 
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(['success' => Translation::get('ad_categ_save_order')]);
+
+        return $response;
+    }
+
+    #[Route('admin/api/faq/import')]
+    public function importFaqs(Request $request): JsonResponse
+    {
+        $response = new JsonResponse();
+
+        $file = $request->files->get('file');
+        if (!isset($file)) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'Bad request: There is no file submitted.']);
+            return $response;
+        }
+
+        if (!Token::getInstance()->verifyToken('importfaqs', $request->request->get('csrf'))) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            return $response;
+        }
+
+        $faqImport = new FaqImport();
+        $errors = array();
+
+        if (isset($file) && 0 === $file->getError() && $faqImport->isCSVFile($file)) {
+            $handle = fopen($file->getRealPath(), 'r');
+            $csvData = $faqImport->parseCSV($handle);
+            if (!$faqImport->validateCSV($csvData)) {
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $result = [
+                    'storedAll' => false,
+                    'error' => Translation::get('msgCSVFileNotValidated')
+                ];
+                $response->setData($result);
+                return $response;
+            }
+            foreach ($csvData as $record) {
+                $error = $faqImport->import($record);
+                if ($error !== true) {
+                    $errors[] = $error;
+                }
+            }
+            if (empty($errors)) {
+                $response->setStatusCode(Response::HTTP_OK);
+                $result = [
+                    'storedAll' => true,
+                    'success' => Translation::get('msgImportSuccessful')
+                ];
+            } else {
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $result = [
+                    'storedAll' => false,
+                    'messages' => $errors
+                ];
+            }
+        }
+        $response->setData($result);
 
         return $response;
     }

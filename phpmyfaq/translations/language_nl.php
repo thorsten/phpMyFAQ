@@ -557,7 +557,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Instrumentenbord';
 $PMF_LANG['admin_mainmenu_users'] = 'Gebruikers';
 $PMF_LANG['admin_mainmenu_content'] = 'Inhoud';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistieken';
-$PMF_LANG['admin_mainmenu_exports'] = 'Export';
 $PMF_LANG['admin_mainmenu_backup'] = 'Back-up';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuratie';
 $PMF_LANG['admin_mainmenu_logout'] = 'Afmelden';

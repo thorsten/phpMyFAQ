@@ -583,7 +583,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Úvod';
 $PMF_LANG['admin_mainmenu_users'] = 'Uživatelé';
 $PMF_LANG['admin_mainmenu_content'] = 'Obsah';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistiky';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exporty';
 $PMF_LANG['admin_mainmenu_backup'] = 'Zálohování';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurace';
 $PMF_LANG['admin_mainmenu_logout'] = 'Odhlásit';

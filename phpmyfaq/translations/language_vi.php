@@ -699,7 +699,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Trang chủ';
 $PMF_LANG['admin_mainmenu_users'] = 'Thành viên';
 $PMF_LANG['admin_mainmenu_content'] = 'Nội dung';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Thống kê';
-$PMF_LANG['admin_mainmenu_exports'] = 'Xuất';
 $PMF_LANG['admin_mainmenu_backup'] = 'Bản lưu';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Cấu hình';
 $PMF_LANG['admin_mainmenu_logout'] = 'Thoát';

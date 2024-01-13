@@ -802,7 +802,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Műszerfal';
 $PMF_LANG['admin_mainmenu_users'] = 'Felhasználók';
 $PMF_LANG['admin_mainmenu_content'] = 'Tartalom';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statisztika';
-$PMF_LANG['admin_mainmenu_exports'] = 'Export';
 $PMF_LANG['admin_mainmenu_backup'] = 'Mentés';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Beállítások';
 $PMF_LANG['admin_mainmenu_logout'] = 'Kilépés';

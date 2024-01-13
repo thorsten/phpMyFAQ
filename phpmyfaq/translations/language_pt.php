@@ -567,7 +567,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Quadro';
 $PMF_LANG['admin_mainmenu_users'] = 'Utilizadores';
 $PMF_LANG['admin_mainmenu_content'] = 'Conteúdo';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Estatísticas';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exportação';
 $PMF_LANG['admin_mainmenu_backup'] = '<em>Backup</em>';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuração';
 $PMF_LANG['admin_mainmenu_logout'] = 'Sair';

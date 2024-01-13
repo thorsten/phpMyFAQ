@@ -580,7 +580,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Papan Pemuka';
 $PMF_LANG['admin_mainmenu_users'] = 'Pengguna';
 $PMF_LANG['admin_mainmenu_content'] = 'Kandungan';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistik';
-$PMF_LANG['admin_mainmenu_exports'] = 'Eksport';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurasi';
 $PMF_LANG['admin_mainmenu_logout'] = 'Keluar';

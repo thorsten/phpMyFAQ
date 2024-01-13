@@ -18,7 +18,6 @@
  * @link      https://www.phpmyfaq.de
  * @since     2002-09-16
  */
-
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
@@ -72,10 +71,10 @@ if (!Language::isASupportedLanguage($faqLangCode)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
-        ->setDefaultLanguage('en')
-        ->setCurrentLanguage($faqLangCode)
-        ->setMultiByteLanguage();
+            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage($faqLangCode)
+            ->setMultiByteLanguage();
 } catch (Exception $e) {
     echo '<strong>Error:</strong> ' . $e->getMessage();
 }
@@ -94,8 +93,8 @@ Template::setTplSetName($faqConfig->get('main.templateSet'));
 // Initialize attachment factory
 //
 AttachmentFactory::init(
-    $faqConfig->get('records.defaultAttachmentEncKey'),
-    $faqConfig->get('records.enableAttachmentEncryption')
+        $faqConfig->get('records.defaultAttachmentEncKey'),
+        $faqConfig->get('records.enableAttachmentEncryption')
 );
 
 //
@@ -133,10 +132,10 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
 $error = '';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
 $faqpassword = Filter::filterInput(
-    INPUT_POST,
-    'faqpassword',
-    FILTER_SANITIZE_SPECIAL_CHARS,
-    FILTER_FLAG_NO_ENCODE_QUOTES
+                INPUT_POST,
+                'faqpassword',
+                FILTER_SANITIZE_SPECIAL_CHARS,
+                FILTER_FLAG_NO_ENCODE_QUOTES
 );
 $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -207,10 +206,10 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 if (
-    $csrfToken &&
-    Token::getInstance()->verifyToken('logout', $csrfToken) &&
-    $action === 'logout' &&
-    $user->isLoggedIn()
+        $csrfToken &&
+        Token::getInstance()->verifyToken('logout', $csrfToken) &&
+        $action === 'logout' &&
+        $user->isLoggedIn()
 ) {
     $user->deleteFromSession(true);
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
@@ -223,7 +222,7 @@ if (
 //
 // Get current admin user and group id - default: -1
 //
-[ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
+[$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($user);
 
 // are we running a PMF export file request?
 switch ($action) {
@@ -283,6 +282,9 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'stickyfaqs':
                 require 'stickyfaqs.php';
+                break;
+            case 'importcsv':
+                require 'csv.import.php';
                 break;
             // functions for tags
             case 'tags':

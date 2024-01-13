@@ -719,7 +719,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Panelė';
 $PMF_LANG['admin_mainmenu_users'] = 'Naudotojai';
 $PMF_LANG['admin_mainmenu_content'] = 'Turinys';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistika';
-$PMF_LANG['admin_mainmenu_exports'] = 'Eksportas';
 $PMF_LANG['admin_mainmenu_backup'] = 'Atsarginė kopija';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigūracija';
 $PMF_LANG['admin_mainmenu_logout'] = 'Atsijungti';
