@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpDocumentor\Reflection\Types\This;
 use phpMyFAQ\Date;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
@@ -93,9 +94,9 @@ readonly class StatisticsHelper
                 $date = $request->server->get('REQUEST_TIME');
             }
 
-            return $this->date->format(date('Y-m-d H:i', $date)) . '<br>';
+            return $this->date->format(date('Y-m-d H:i', $date));
         } else {
-            return Translation::get('ad_sess_noentry') . '<br>';
+            return Translation::get('ad_sess_noentry');
         }
     }
 
@@ -158,5 +159,42 @@ readonly class StatisticsHelper
 
         // Delete sessions
         return $this->session->deleteAllSessions();
+    }
+
+    public function renderMonthSelector(): string
+    {
+        $oldValue = mktime(0, 0, 0, 1, 1, 1970);
+        $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
+        foreach ($this->getAllTrackingDates() as $trackingDate) {
+            if (date('Y-m', $oldValue) != date('Y-m', $trackingDate)) {
+                // The filename format is: trackingDDMMYYYY
+                // e.g.: tracking02042006
+                $renderedHtml .= sprintf(
+                    '<option value="%s">%s</option>',
+                    date('mY', $trackingDate),
+                    date('Y-m', $trackingDate)
+                );
+                $oldValue = $trackingDate;
+            }
+        }
+
+        return $renderedHtml;
+    }
+
+    public function renderDaySelector(): string
+    {
+        $request = Request::createFromGlobals();
+        $renderedHtml = '';
+        foreach ($this->getAllTrackingDates() as $trackingDate) {
+            $renderedHtml .= sprintf('<option value="%d"', $trackingDate);
+            if (date('Y-m-d', $trackingDate) == date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
+                $renderedHtml .= ' selected';
+            }
+            $renderedHtml .= '>';
+            $renderedHtml .= $this->date->format(date('Y-m-d H:i', $trackingDate));
+            $renderedHtml .= "</option>\n";
+        }
+
+        return $renderedHtml;
     }
 }
