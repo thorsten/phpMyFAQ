@@ -30,6 +30,7 @@ use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\QuestionController;
 use phpMyFAQ\Controller\Administration\SearchController;
+use phpMyFAQ\Controller\Administration\SessionController;
 use phpMyFAQ\Controller\Administration\StopWordController;
 use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
@@ -526,6 +527,14 @@ $routes->add(
 $routes->add(
     'admin.api.export.report',
     new Route('/export/report', ['_controller' => [ExportController::class, 'exportReport'], '_methods' => 'POST'])
+);
+
+//
+// Session API
+//
+$routes->add(
+    'admin.api.session.export',
+    new Route('/session/export', ['_controller' => [SessionController::class, 'export'], '_methods' => 'POST'])
 );
 
 return $routes;
