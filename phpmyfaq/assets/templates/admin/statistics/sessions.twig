@@ -74,7 +74,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
   <div class="col-6">
     <div class="card shadow">
       <h5 class="card-header py-3">
@@ -103,3 +103,31 @@
     </div>
   </div>
 </div>
+
+<div class="row mb-3">
+  <div class="col-6">
+    <div class="card shadow">
+      <h5 class="card-header py-3">
+        <i class="bi bi-file-earmark-arrow-down"></i> {{ msgExportSessionsAsCSV }}
+      </h5>
+      <div class="card-body">
+        <form class="row">
+        <label for="firstHour" class="col-1 col-form-label">Von</label>
+        <div class="col-5">
+            <input type="date" class="form-control" id="firstHour"/>
+        </div>
+        <label for="lastHour" class="col-1 col-form-label">Bis</label>
+        <div class="col-5">
+            <input type="date" class="form-control" id="lastHour"/>
+        </div>
+        <div class="mt-3 d-flex justify-content-end">
+            <button class="btn btn-primary" type="submit" id="exportSessions">
+              <i class="bi bi-file-earmark-arrow-down"></i> {{ msgExportSessions }}
+            </button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+            

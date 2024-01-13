@@ -1395,7 +1395,7 @@ $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can ma
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
 $PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
 
-// added v4.0.0-alpha - 2023-01-12 by Jan
+// added v4.0.0-alpha - 2024-01-12 by Jan
 $PMF_LANG['msgLanguageCode'] = 'Language code (e.g. en, de ...)';
 $PMF_LANG['msgSeperateWithCommas'] = '(seperate with commas)';
 $PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
@@ -1408,5 +1408,9 @@ $PMF_LANG['msgImportSuccessful'] = 'Import successfull!';
 $PMF_LANG['msgCSVImportTrueOrFalse'] = '(true or false)';
 $PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
 $PMF_LANG['msgCSVFileNotValidated'] = 'It seems that the file does not have the right structure. Please check the structure based on the given requirements again.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Export Sessions as CSV-file';
+$PMF_LANG['msgExportSessions'] = 'Export Sessions';
 
 return $PMF_LANG;

@@ -1389,4 +1389,8 @@ $PMF_LANG['msgCSVImportTrueOrFalse'] = '(true oder false)';
 $PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
 $PMF_LANG['msgCSVFileNotValidated'] = 'Die Datei scheint nicht alle Vorgaben zu erfüllen. Bitte prüfe nochmals die Dateistruktur anhand der Vorgaben.';
 
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Sessions als CSV-Datei exportieren';
+$PMF_LANG['msgExportSessions'] = 'Sessions exportieren';
+
 return $PMF_LANG;
