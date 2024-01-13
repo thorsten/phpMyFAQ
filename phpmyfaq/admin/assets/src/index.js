@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Dashboard
   await renderVisitorCharts();
   await renderTopTenCharts();
-  getLatestVersion();
+  await getLatestVersion();
 
   // User -> User Management
   await handleUsers();
