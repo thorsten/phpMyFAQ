@@ -263,7 +263,7 @@ $routes->add(
 
 $routes->add(
     'admin.api.elasticsearch.import',
-    new Route('/elasticsearch/import', ['_controller' => [ElasticsearchController::class, 'import']])
+    new Route('/elasticsearch/import', ['_controller' => [ElasticsearchController::class, 'import'], '_methods' => 'POST'])
 );
 
 $routes->add(

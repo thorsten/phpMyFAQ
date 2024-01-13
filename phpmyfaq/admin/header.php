@@ -363,13 +363,8 @@ switch ($action) {
                         <div class="pmf-admin-nav-link-icon">
                             <i aria-hidden="true" class="bi bi-archive h6"></i>
                         </div>
-<<<<<<< HEAD
                         <?= Translation::get('admin_mainmenu_imports_exports'); ?>
                         <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-=======
-                        <?= Translation::get('admin_mainmenu_exports'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
->>>>>>> e0cdd85241e88c9c6ddc00b864e198ee92e4ac8f
                     </a>
                     <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports"
                          aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
