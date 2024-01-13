@@ -774,14 +774,30 @@ switch ($action) {
 
         $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
-        $link = trim((string) Filter::filterVar($postData['link'], FILTER_VALIDATE_URL));
         $attached = trim((string) Filter::filterVar($postData['message'], FILTER_SANITIZE_SPECIAL_CHARS));
         $mailto = Filter::filterArray($postData['mailto[]']);
+
+        $faqLanguage = trim((string) Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $faqId = trim((string) Filter::filterVar($postData['faqId'], FILTER_VALIDATE_INT));
+        $categoryId = trim((string) Filter::filterVar($postData['categoryId'], FILTER_VALIDATE_INT));
+
+        if (is_array($mailto) && count($mailto) > 5) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('err_sendMail')]);
+            break;
+        }
 
         if (
             !is_null($author) && !is_null($email) && is_array($mailto) &&
             $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))
         ) {
+            $send2friendLink = sprintf(
+                '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $faqConfig->getDefaultUrl(),
+                $categoryId,
+                $faqId,
+                urlencode($faqLanguage)
+            );
 
             foreach ($mailto as $recipient) {
                 $recipient = trim(strip_tags((string) $recipient));
@@ -799,8 +815,8 @@ switch ($action) {
                         "%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
                         $faqConfig->get('main.send2friendText'),
                         Translation::get('msgS2FText2'),
-                        $link,
-                        $attached
+                        $send2friendLink,
+                        strip_tags($attached)
                     );
 
                     // Send the email

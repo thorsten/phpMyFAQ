@@ -121,7 +121,7 @@ export const handleUsers = async () => {
       let isSuperAdmin = document.querySelector('#add_user_is_superadmin');
 
       if (isSuperAdmin) {
-        isSuperAdmin = isSuperAdmin.value;
+        isSuperAdmin = isSuperAdmin.checked;
       } else {
         isSuperAdmin = false;
       }
