@@ -14,6 +14,7 @@
  */
 
 import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
+import { handleSessions } from './sessions';
 import { sidebarToggle } from './sidebar';
 import {
   handleConfiguration,
@@ -112,5 +113,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Configuration -> Elasticsearch configuration
   await handleElasticsearch();
   
+  // Import & Export -> Import Records
   await handleUploadCSVForm();
+  
+  // Statistics -> User-tracking
+  await handleSessions();
 });
