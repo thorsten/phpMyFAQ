@@ -13,7 +13,7 @@
  * @since     2024-01-04
  */
 
-import { Toast, Alert } from 'bootstrap';
+import { Toast } from 'bootstrap';
 
 export const pushNotification = (message) => {
   const toast = document.getElementById('pmf-notification');

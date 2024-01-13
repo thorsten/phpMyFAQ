@@ -1,3 +1,21 @@
+/**
+ * Stuff for importing records via csv-file
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jan Harms <model_railroader@gmx-topmail.de>
+ * @copyright 2022-2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-01-13
+ */
+
+import { addElement } from '../../../../assets/src/utils';
+
 export const handleUploadCSVForm = async () => {
     const submitButton = document.getElementById('submitButton');
     if (submitButton) {
@@ -17,16 +35,18 @@ export const handleUploadCSVForm = async () => {
                 });
                 if (response.ok) {
                     const jsonResponse = await response.json();
-                    document.getElementById('divImportColumns').insertAdjacentHTML('beforebegin',
-                            '<div class="alert alert-success alert-dismissible fade show">' + jsonResponse.success +
-                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    document.getElementById('divImportColumns').insertAdjacentElement(
+                            'beforebegin',
+                            addElement('div', {classList: 'alert alert-success alert-dismissible fade show', innerText: jsonResponse.success})
+                            );
                     fileInput.value = null;
-                } 
+                }
                 if (response.status === 400) {
                     const jsonResponse = await response.json();
-                    document.getElementById('divImportColumns').insertAdjacentHTML('beforebegin',
-                            '<div class="alert alert-danger alert-dismissible fade show">' + jsonResponse.error +
-                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    document.getElementById('divImportColumns').insertAdjacentElement(
+                            'beforebegin',
+                            addElement('div', {classList: 'alert alert-danger alert-dismissible fade show', innerText: jsonResponse.error})
+                            );
                     fileInput.value = null;
                 } else {
                     const errorResponse = await response.json();
@@ -36,9 +56,10 @@ export const handleUploadCSVForm = async () => {
                 if (error.storedAll === false) {
                     console.log(error.messages);
                     error.messages.forEach(message => {
-                        document.getElementById('divImportColumns').insertAdjacentHTML('beforebegin',
-                                '<div class="alert alert-danger alert-dismissible fade show">' + message +
-                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        document.getElementById('divImportColumns').insertAdjacentElement(
+                                'beforebegin',
+                                addElement('div', {classList: 'alert alert-danger alert-dismissible fade show', innerText: message})
+                                );
                     });
                 }
             }

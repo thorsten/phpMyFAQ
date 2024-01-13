@@ -112,5 +112,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Configuration -> Elasticsearch configuration
   await handleElasticsearch();
   
-  handleUploadCSVForm();
+  await handleUploadCSVForm();
 });

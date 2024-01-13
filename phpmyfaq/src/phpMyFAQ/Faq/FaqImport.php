@@ -125,7 +125,7 @@ class FaqImport {
                 return false;
             }
 
-            $requiredColumns = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+            $requiredColumns = [0, 1, 2, 4, 5, 6, 7, 8];
             foreach ($requiredColumns as $columnIndex) {
                 if (empty($row[$columnIndex])) {
                     return false;
