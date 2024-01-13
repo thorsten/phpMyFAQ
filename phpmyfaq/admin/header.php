@@ -225,7 +225,7 @@ switch ($action) {
 <!-- phpMyFAQ Admin Top Bar -->
 <nav class="pmf-admin-topnav navbar navbar-expand bg-dark">
     <a class="navbar-brand text-white text-center ps-3" href="../" title="phpMyFAQ <?= System::getVersion() ?>">
-        phpMyFAQ <?= System::getMajorVersion() ?>
+        <img height="50" src="../assets/img/logo-transparent.svg" alt="phpMyFAQ Logo">
     </a>
 
     <?php if ($adminHelper->canAccessContent($user)) : ?>
