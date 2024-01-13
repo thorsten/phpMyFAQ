@@ -342,7 +342,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'viewsessions':
             case 'clear-visits':
-                require 'stat.main.php';
+                require 'statistics.sessions.php';
                 break;
             case 'sessionbrowse':
                 require 'stat.browser.php';

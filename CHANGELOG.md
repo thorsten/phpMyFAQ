@@ -1752,7 +1752,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - porting to PHP4
 - many bugfixes
-- more functions in the attachments module
+- more functions in the attachment module
 - support for sub categories
 - user tracking and admin logging can be switched off
 - better installation script
@@ -1761,7 +1761,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - no actions could be performed without any records
 - better admin logging
 - admin account cannot be deleted (security fix)
-- better documention
+- better documentation
 
 ### phpMyFAQ v1.0.1a - 2001-10-15
 
