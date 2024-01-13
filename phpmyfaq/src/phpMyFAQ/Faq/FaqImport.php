@@ -73,7 +73,7 @@ class FaqImport
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
 
         if ($faq->hasTitleAHash($question)) {
-            return 'It is not allowed, that the question title ' . $question . ' contains a hash.';
+            throw new Exception('It is not allowed, that the question title ' . $question . ' contains a hash.');
         }
 
         $categories = [$categoryId];
