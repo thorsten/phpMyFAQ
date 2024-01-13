@@ -41,7 +41,14 @@ class FaqImport
         $this->config = $config;
     }
 
-    public function import(array $record): bool|string
+    /**
+     * Imports a record with the given record data.
+     *
+     * @param array $record Record data
+     *
+     * @return bool
+     */
+    public function import(array $record): bool
     {
         $language = new Language($this->config);
         $currentLanguage = $language->setLanguageByAcceptLanguage();
@@ -108,6 +115,13 @@ class FaqImport
         return true;
     }
 
+    /**
+     * Returns the data from a csv file.
+     *
+     * @param PHPFileHandler $handle
+     *
+     * @return array $csvData
+     */
     public function parseCSV($handle): array
     {
         while (($record = fgetcsv($handle)) !== false) {
@@ -116,6 +130,13 @@ class FaqImport
         return $csvData;
     }
 
+    /**
+     * Returns true if given Symfony FileBag-object is a csv file. Returns false if not.
+     *
+     * @param FileBag $file
+     *
+     * @return bool
+     */
     public function isCSVFile($file): bool
     {
         $allowedExtensions = array('csv');
@@ -124,6 +145,13 @@ class FaqImport
         return in_array(strtolower($fileExtension), $allowedExtensions);
     }
 
+    /**
+     * Checks if the given csv-Data matches all requirements.
+     *
+     * @param array $csvData
+     *
+     * @return bool
+     */
     public function validateCSV($csvData): bool
     {
         foreach ($csvData as $row) {
