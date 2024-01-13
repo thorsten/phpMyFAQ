@@ -707,7 +707,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Home';
 $PMF_LANG['admin_mainmenu_users'] = 'Korisnici';
 $PMF_LANG['admin_mainmenu_content'] = 'Sadr&#382;aj';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistika';
-$PMF_LANG['admin_mainmenu_exports'] = 'Izvoz';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguracija';
 $PMF_LANG['admin_mainmenu_logout'] = 'Odjava';

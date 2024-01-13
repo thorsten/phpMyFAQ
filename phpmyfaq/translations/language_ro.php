@@ -755,7 +755,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Tablou de bord';
 $PMF_LANG['admin_mainmenu_users'] = 'Useri';
 $PMF_LANG['admin_mainmenu_content'] = 'Continut';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistici';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exporturi';
 $PMF_LANG['admin_mainmenu_backup'] = 'Back-up';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuratie';
 $PMF_LANG['admin_mainmenu_logout'] = 'Iesi din cont';

@@ -578,7 +578,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Hjem';
 $PMF_LANG['admin_mainmenu_users'] = 'Brugere';
 $PMF_LANG['admin_mainmenu_content'] = 'Indhold';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistik';
-$PMF_LANG['admin_mainmenu_exports'] = 'Eksporter';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Log ud';

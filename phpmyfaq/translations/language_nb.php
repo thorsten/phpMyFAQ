@@ -560,7 +560,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Dashbord';
 $PMF_LANG['admin_mainmenu_users'] = 'Brukere';
 $PMF_LANG['admin_mainmenu_content'] = 'Innhold';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistikk';
-$PMF_LANG['admin_mainmenu_exports'] = 'Eksport';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup ';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurasjon';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logg ut';

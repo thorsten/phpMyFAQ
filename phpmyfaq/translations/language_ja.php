@@ -581,7 +581,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'ダッシュボード';
 $PMF_LANG['admin_mainmenu_users'] = 'ユーザー';
 $PMF_LANG['admin_mainmenu_content'] = 'コンテンツ';
 $PMF_LANG['admin_mainmenu_statistics'] = '統計';
-$PMF_LANG['admin_mainmenu_exports'] = 'エクスポート';
 $PMF_LANG['admin_mainmenu_backup'] = 'バックアップ';
 $PMF_LANG['admin_mainmenu_configuration'] = '設定';
 $PMF_LANG['admin_mainmenu_logout'] = 'ログアウト';

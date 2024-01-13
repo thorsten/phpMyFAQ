@@ -707,7 +707,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Home';
 $PMF_LANG['admin_mainmenu_users'] = 'Users';
 $PMF_LANG['admin_mainmenu_content'] = 'Content';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exports';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';

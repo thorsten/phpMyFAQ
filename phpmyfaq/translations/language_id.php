@@ -707,7 +707,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Panel';
 $PMF_LANG['admin_mainmenu_users'] = 'Pengguna';
 $PMF_LANG['admin_mainmenu_content'] = 'Konten';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistik';
-$PMF_LANG['admin_mainmenu_exports'] = 'Ekspor';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurasi';
 $PMF_LANG['admin_mainmenu_logout'] = 'Keluar';

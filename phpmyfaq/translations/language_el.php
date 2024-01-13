@@ -584,7 +584,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Πίνακας';
 $PMF_LANG['admin_mainmenu_users'] = 'Χρήστες';
 $PMF_LANG['admin_mainmenu_content'] = 'Περιεχόμενα';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Στατιστικά';
-$PMF_LANG['admin_mainmenu_exports'] = 'Εξαγωγές';
 $PMF_LANG['admin_mainmenu_backup'] = 'Αρχειοθέτηση';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Ρυθμίσεις';
 $PMF_LANG['admin_mainmenu_logout'] = 'Αποσύνδεση';

@@ -694,7 +694,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'Хянах самбар';
 $PMF_LANG['admin_mainmenu_users'] = 'Хэрэглэгчид';
 $PMF_LANG['admin_mainmenu_content'] = 'Агуулга';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Статистик';
-$PMF_LANG['admin_mainmenu_exports'] = 'Экспорт';
 $PMF_LANG['admin_mainmenu_backup'] = 'Нөөц';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Тохиргоо';
 $PMF_LANG['admin_mainmenu_logout'] = 'Гарах';

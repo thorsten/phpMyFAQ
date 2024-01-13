@@ -578,7 +578,6 @@ $PMF_LANG['admin_mainmenu_home'] = 'עמוד הבית';
 $PMF_LANG['admin_mainmenu_users'] = 'משתמשים';
 $PMF_LANG['admin_mainmenu_content'] = 'תוכן';
 $PMF_LANG['admin_mainmenu_statistics'] = 'סטטיסטיקות';
-$PMF_LANG['admin_mainmenu_exports'] = 'יצוא';
 $PMF_LANG['admin_mainmenu_backup'] = 'גיבוי';
 $PMF_LANG['admin_mainmenu_configuration'] = 'תצורה';
 $PMF_LANG['admin_mainmenu_logout'] = 'יציאה מהמערכת';

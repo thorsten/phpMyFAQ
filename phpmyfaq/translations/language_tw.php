@@ -689,7 +689,6 @@ $PMF_LANG['admin_mainmenu_home'] = "控制台 Dashboard";
 $PMF_LANG['admin_mainmenu_users'] = "使用者們 Users";
 $PMF_LANG['admin_mainmenu_content'] = "內容 Content";
 $PMF_LANG['admin_mainmenu_statistics'] = "統計 Statistics";
-$PMF_LANG['admin_mainmenu_exports'] = "匯出 Exports";
 $PMF_LANG['admin_mainmenu_backup'] = "備份 Backup";
 $PMF_LANG['admin_mainmenu_configuration'] = "設定 Configuration";
 $PMF_LANG['admin_mainmenu_logout'] = "登出 Logout";

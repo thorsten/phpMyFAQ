@@ -599,7 +599,6 @@ $PMF_LANG['newsArchive'] = ' Archives des actualités';
 $PMF_LANG['newsWriteComment'] = 'Commenter cette actualité';
 $PMF_LANG['newsCommentDate'] = 'Ajoutée à : ';
 $PMF_LANG['ad_record_expiration_window'] = 'Définir un intervalle de temps pour cet enregistrement (optionnel)';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exports';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['ad_user_error_noEmail'] = 'Entrez, s\'il vous plaît, votre adresse courriel. ';
 $PMF_LANG['ad_user_error_noRealName'] = 'Entrez, s\'il vous plaît, votre vrai nom. ';
