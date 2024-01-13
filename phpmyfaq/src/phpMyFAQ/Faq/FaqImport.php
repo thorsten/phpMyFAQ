@@ -34,14 +34,15 @@ use phpMyFAQ\Filter;
 
 class FaqImport
 {
-
     private Configuration $config;
 
-    public function __construct(Configuration $config) {
+    public function __construct(Configuration $config)
+    {
         $this->config = $config;
     }
 
-    public function import(array $record): bool|string {
+    public function import(array $record): bool|string
+    {
         $language = new Language($this->config);
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
@@ -107,21 +108,24 @@ class FaqImport
         return true;
     }
 
-    public function parseCSV($handle): array {
+    public function parseCSV($handle): array
+    {
         while (($record = fgetcsv($handle)) !== false) {
             $csvData[] = $record;
         }
         return $csvData;
     }
 
-    public function isCSVFile($file): bool {
+    public function isCSVFile($file): bool
+    {
         $allowedExtensions = array('csv');
         $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
         return in_array(strtolower($fileExtension), $allowedExtensions);
     }
 
-    public function validateCSV($csvData): bool {
+    public function validateCSV($csvData): bool
+    {
         foreach ($csvData as $row) {
             if (count($row) !== 9) {
                 return false;
@@ -138,13 +142,14 @@ class FaqImport
             $importantFAQColumn = 8;
             $validBooleanValues = ['true', 'false'];
 
-            if (!in_array(strtolower($row[$activatedColumn]), $validBooleanValues) ||
-                    !in_array(strtolower($row[$importantFAQColumn]), $validBooleanValues)) {
+            if (
+                !in_array(strtolower($row[$activatedColumn]), $validBooleanValues) ||
+                    !in_array(strtolower($row[$importantFAQColumn]), $validBooleanValues)
+            ) {
                 return false;
             }
         }
 
         return true;
     }
-
 }

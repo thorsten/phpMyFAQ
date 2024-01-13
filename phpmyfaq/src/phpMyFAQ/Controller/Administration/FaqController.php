@@ -42,7 +42,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FaqController extends AbstractController
 {
-
     #[Route('admin/api/faq/permissions')]
     public function listPermissions(Request $request): JsonResponse
     {
@@ -55,7 +54,7 @@ class FaqController extends AbstractController
 
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
-                [
+            [
                     'user' => $faqPermission->get(FaqPermission::USER, $faqId),
                     'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
                 ]
@@ -81,7 +80,7 @@ class FaqController extends AbstractController
 
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
-                [
+            [
                     'faqs' => $faq->getAllFaqsByCategory($categoryId)
                 ]
         );
@@ -248,7 +247,7 @@ class FaqController extends AbstractController
 
             $response->setStatusCode(Response::HTTP_OK);
             $response->setData(
-                    ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult)]
+                ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult)]
             );
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -286,7 +285,7 @@ class FaqController extends AbstractController
         $response = new JsonResponse();
 
         $file = $request->files->get('file');
-        if(!isset($file)) {
+        if (!isset($file)) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'Bad request: There is no file submitted.']);
             return $response;
@@ -337,5 +336,4 @@ class FaqController extends AbstractController
 
         return $response;
     }
-
 }
