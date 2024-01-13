@@ -133,6 +133,14 @@ class System
     }
 
     /**
+     * Returns the current major version of phpMyFAQ
+     */
+    public static function getMajorVersion(): string
+    {
+        return sprintf('%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR);
+    }
+
+    /**
      * Returns the current API version of phpMyFAQ for installation and
      * version in the database.
      */
@@ -161,7 +169,7 @@ class System
      */
     public static function getDocumentationUrl(): string
     {
-        return sprintf('%sdocs/%s', self::PHPMYFAQ_URL, substr(self::getVersion(), 0, 3));
+        return sprintf('%sdocs/%s', self::PHPMYFAQ_URL, self::getMajorVersion());
     }
 
     /**

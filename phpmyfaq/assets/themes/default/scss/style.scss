@@ -27,9 +27,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 // Import global styles
 @import 'global';
 
-// Fork Awesome
-$fa-font-path: '~fork-awesome/fonts';
-@import '~fork-awesome/scss/fork-awesome';
+// Bootstrap Icons
+@import '~bootstrap-icons/font/bootstrap-icons.css';
 
 // Cookie Consent
 @import 'vanilla-cookieconsent/dist/cookieconsent.css';

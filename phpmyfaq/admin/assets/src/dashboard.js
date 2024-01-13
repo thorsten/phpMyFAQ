@@ -195,25 +195,29 @@ export const renderTopTenCharts = async () => {
   }
 };
 
-export const getLatestVersion = () => {
+export const getLatestVersion = async () => {
   const loader = document.getElementById('version-loader');
   const versionText = document.getElementById('phpmyfaq-latest-version');
 
   if (loader) {
     loader.classList.remove('d-none');
-    fetch('./api/dashboard/versions', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const version = await response.json();
-          loader.classList.add('d-none');
+
+    try {
+      const response = await fetch('./api/dashboard/versions', {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      });
+
+      if (response.ok) {
+        const version = await response.json();
+        loader.classList.add('d-none');
+
+        if (version.success) {
           versionText.insertAdjacentElement(
             'afterend',
             addElement('div', {
@@ -222,20 +226,27 @@ export const getLatestVersion = () => {
             })
           );
         } else {
-          throw new Error('Network response was not ok: ', { cause: { response } });
+          versionText.insertAdjacentElement(
+            'afterend',
+            addElement('div', {
+              classList: 'alert alert-info',
+              innerText: version.info,
+            })
+          );
         }
-      })
-      .catch(async (error) => {
-        const errorMessage = await error.cause.response;
-        console.log(errorMessage);
-        loader.classList.add('d-none');
-        versionText.insertAdjacentElement(
-          'afterend',
-          addElement('div', {
-            classList: 'alert alert-danger',
-            innerText: errorMessage,
-          })
-        );
-      });
+      } else {
+        throw new Error('Network response was not ok:', { cause: { response } });
+      }
+    } catch (error) {
+      const errorMessage = (error.cause && error.cause.response) || 'Unknown error';
+      loader.classList.add('d-none');
+      versionText.insertAdjacentElement(
+        'afterend',
+        addElement('div', {
+          classList: 'alert alert-danger',
+          innerText: errorMessage,
+        })
+      );
+    }
   }
 };

@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fa fa-comments-o"></i>
+      <i aria-hidden="true" class="bi bi-chat-right-dots"></i>
         <?= Translation::get('ad_comment_administration') ?>
     </h1>
   </div>
@@ -75,7 +75,6 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                       </label>
                     </td>
                     <td>
-                    <span style="font-weight: bold;">
                         <a href="mailto:<?= $faqComment->getEmail() ?>">
                             <?= Strings::htmlentities($faqComment->getUsername()) ?>
                         </a> |
@@ -88,7 +87,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                                  ) ?>">
                             <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
                         </a>
-                    </span><br>
+                    <br>
                         <?= Strings::htmlentities($faqComment->getComment()) ?>
                     </td>
                   </tr>
@@ -135,7 +134,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
                         </a> |
                         <?= $date->format(date('Y-m-d H:i', $newsComment->getDate())) ?> |
                         <a href="<?php printf('../?action=news&newsid=%d&artlang=%s', $newsComment->getRecordId(), $faqLangCode) ?>">
-                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                            <i class="bi bi-newspaper-o" aria-hidden="true"></i>
                         </a>
                     </span><br/>
                         <?= $newsComment->getComment() ?>

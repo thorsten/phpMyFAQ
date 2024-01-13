@@ -20,7 +20,7 @@ mkdir -vp $folders
 
 ##=== Check database vars ===
 #=== DB host ===
-if [ -z "$PMF_DB_HOST" -a ! -e "./config/database.php" ]; then
+if [ -z "$PMF_DB_HOST" -a ! -e "./content/core/config/database.php" ]; then
   echo >&2 'WARN: missing PMF_DB_HOST environment variable'
   echo >&2 '  Did you forget to --link some_mysql_container:db ?'
 else

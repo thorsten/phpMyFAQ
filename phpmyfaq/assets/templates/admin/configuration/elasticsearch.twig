@@ -1,21 +1,21 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i aria-hidden="true" class="fa fa-wrench"></i>
+        <i aria-hidden="true" class="bi bi-wrench"></i>
         {{ adminHeaderElasticsearch }}
         <?= Translation::get('ad_menu_elasticsearch') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <button class="btn btn-outline-primary pmf-elasticsearch" data-action="create">
-                <i aria-hidden="true" class="fa fa-searchengine"></i> {{ adminElasticsearchButtonCreate }}
+                <i aria-hidden="true" class="bi bi-database-fill-add"></i> {{ adminElasticsearchButtonCreate }}
             </button>
 
             <button class="btn btn-outline-success pmf-elasticsearch" data-action="import">
-                <i aria-hidden="true" class="fa fa-search-plus"></i> {{ adminElasticsearchButtonIndex }}
+                <i aria-hidden="true" class="bi bi-database-fill-gear"></i> {{ adminElasticsearchButtonIndex }}
             </button>
 
             <button class="btn btn-outline-danger pmf-elasticsearch" data-action="drop">
-                <i aria-hidden="true" class="fa fa-trash"></i> {{ adminElasticsearchButtonDelete }}
+                <i aria-hidden="true" class="bi bi-database-slash"></i> {{ adminElasticsearchButtonDelete }}
             </button>
         </div>
     </div>

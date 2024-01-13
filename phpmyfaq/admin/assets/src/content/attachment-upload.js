@@ -92,7 +92,7 @@ export const handleAttachmentUploads = () => {
                 addElement('a', {
                   className: 'badge bg-danger',
                   href: `?action=delatt&record_id=${attachment.faqId}&id=${attachment.attachmentId}&lang=attachment.faqLanguage`,
-                  innerHTML: '<i aria-hidden="true" class="fa fa-trash"></i>',
+                  innerHTML: '<i aria-hidden="true" class="bi bi-trash"></i>',
                 }),
               ])
             );

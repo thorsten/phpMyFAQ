@@ -96,7 +96,7 @@ const setContentAndHandler = (data) => {
  */
 const startLoadingIndicator = () => {
   const loadingIndicator = document.getElementById('pmf-stop-words-loading-indicator');
-  const startLoading = addElement('i', { classList: 'fa fa-cog fa-spin fa-fw' }, [
+  const startLoading = addElement('i', { classList: 'bi bi-cog bi-spin bi-fw' }, [
     addElement('span', { classList: 'sr-only', innerText: 'Loading...' }),
   ]);
   loadingIndicator.appendChild(startLoading);

@@ -21,12 +21,12 @@ dependencies:
   bootstrap-datepicker:
     specifier: ^1.10.0
     version: 1.10.0
+  bootstrap-icons:
+    specifier: ^1.11.3
+    version: 1.11.3
   chart.js:
     specifier: ^4.4.0
     version: 4.4.0
-  fork-awesome:
-    specifier: ^1.2.0
-    version: 1.2.0
   handlebars:
     specifier: 4.7.8
     version: 4.7.8
@@ -3145,6 +3145,10 @@ packages:
       jquery: 3.7.1
     dev: false
 
+  /bootstrap-icons@1.11.3:
+    resolution: {integrity: sha512-+3lpHrCw/it2/7lBL15VR0HEumaBss0+f/Lb6ZvHISn1mlK83jjFpooTLsMWbIjJMDjDjOExMsTxnXSIT4k4ww==}
+    dev: false
+
   /bootstrap@5.3.2(@popperjs/core@2.11.8):
     resolution: {integrity: sha512-D32nmNWiQHo94BKHLmOrdjlL05q1c8oxbtBphQFb9Z5to6eGRDCm0QgeaZ4zFBHzfg2++rqa2JkqCcxDy0sH0g==}
     peerDependencies:
@@ -4257,11 +4261,6 @@ packages:
     resolution: {integrity: sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /fork-awesome@1.2.0:
-    resolution: {integrity: sha512-MNwTBnnudMIweHfDtTY8TeR5fxIAZ2w9o8ITn5XDySqdxa4k5AH8IuAMa89RVxDxgPNlosZxqkFKN5UmHXuYSw==}
-    engines: {node: '>=0.10.3'}
-    dev: false
 
   /form-data@4.0.0:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}

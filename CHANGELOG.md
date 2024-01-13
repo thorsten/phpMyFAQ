@@ -24,6 +24,12 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)
+- migrated from Fork Awesome to Bootstrap Icons (Thorsten, Jan Harms)
+
+### phpMyFAQ v3.2.4 - 2024-01-10
+
+- updated bundled dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.2.3 - 2023-11-24
 
@@ -1548,7 +1554,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - bBCode support for the news
 - better category browsing
 - graphical analysis of votings
-- date informations ISO 8601 compliant
+- date information ISO 8601 compliant
 - some optimized code
 - added Russian language file
 - enhanced BB-Code Editor
@@ -1746,7 +1752,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - porting to PHP4
 - many bugfixes
-- more functions in the attachments module
+- more functions in the attachment module
 - support for sub categories
 - user tracking and admin logging can be switched off
 - better installation script
@@ -1755,7 +1761,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - no actions could be performed without any records
 - better admin logging
 - admin account cannot be deleted (security fix)
-- better documention
+- better documentation
 
 ### phpMyFAQ v1.0.1a - 2001-10-15
 

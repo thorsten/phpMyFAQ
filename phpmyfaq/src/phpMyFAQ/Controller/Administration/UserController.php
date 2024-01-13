@@ -216,7 +216,7 @@ class UserController extends AbstractController
     #[Route('admin/api/user/delete')]
     public function deleteUser(Request $request): JsonResponse
     {
-        $this->userHasUserPermission();
+        $this->userHasPermission('delete_user');
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

@@ -35,8 +35,8 @@ const activateUser = async (userId, csrfToken) => {
     if (response.status === 200) {
       await response.json();
       const icon = document.querySelector(`.icon_user_id_${userId}`);
-      icon.classList.remove('fa-ban');
-      icon.classList.add('fa-check-circle-o');
+      icon.classList.remove('bi-ban');
+      icon.classList.add('bi-check-circle-o');
       const button = document.getElementById(`btn_activate_user_id_${userId}`);
       button.remove();
     } else {

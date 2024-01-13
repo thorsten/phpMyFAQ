@@ -338,9 +338,9 @@ class Tags
         $tags = [];
 
         // Limit the result set (see: PMF_TAGS_CLOUD_RESULT_SET_SIZE)
-        // for avoiding an 'heavy' load during the evaluation
+        // for avoiding a 'heavy' load during the evaluation
         // of the number of records for each tag
-        $tagList = $this->getAllTags('', PMF_TAGS_CLOUD_RESULT_SET_SIZE);
+        $tagList = $this->getAllTags('');
 
         foreach ($tagList as $tagId => $tagName) {
             $totFaqByTag = count($this->getFaqsByTagName($tagName));
@@ -466,10 +466,10 @@ class Tags
     }
 
     /**
-     * @param int $limit Specify the maximum amount of records to return
+     * @param int $limit Specify the maximum number of records to return
      * @return array<int, int>
      */
-    public function getPopularTags($limit = 0): array
+    public function getPopularTags(int $limit = 0): array
     {
         $tags = [];
 

@@ -62,12 +62,12 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ? sprintf(
             '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s ' .
-            '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
+            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ',
             $taggingIds,
             Strings::htmlentities($tagName)
         ) : sprintf(
             '<a class="btn btn-primary m-1" href="?action=search&amp;search=">%s ' .
-            '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
+            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ',
             Strings::htmlentities($tagName)
         );
     }
@@ -104,7 +104,7 @@ class TagsHelper extends Helper
             '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s %s ' .
             '<span class="badge bg-secondary">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
-            '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
+            '<i aria-hidden="true" class="bi bi-plus-square"></i> ',
             Strings::htmlentities($tagName),
             $relevance
         );

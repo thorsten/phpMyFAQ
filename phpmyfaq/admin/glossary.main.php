@@ -29,13 +29,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i aria-hidden="true" class="fa fa-list-ul"></i> <?= Translation::get('ad_menu_glossary') ?>
+        <i aria-hidden="true" class="bi bi-list-ul"></i> <?= Translation::get('ad_menu_glossary') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a href="?action=addglossary">
                 <button class="btn btn-outline-success">
-                    <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_glossary_add') ?>
+                    <i aria-hidden="true" class="bi bi-plus"></i> <?= Translation::get('ad_glossary_add') ?>
                 </button>
             </a>
         </div>
@@ -124,7 +124,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     Token::getInstance()->getTokenString('delete-glossary')
                 );
                 printf(
-                    '<span title="%s"><i aria-hidden="true" class="fa fa-trash"></i></span></a></td>',
+                    '<span title="%s"><i aria-hidden="true" class="bi bi-trash"></i></span></a></td>',
                     Translation::get('ad_entry_delete')
                 );
                 echo '</tr>';

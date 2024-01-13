@@ -39,7 +39,7 @@ $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHA
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) { ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-pencil"></i>
+    <i aria-hidden="true" class="bi bi-pencil"></i>
     <?= Translation::get('ad_news_add') ?>
   </h1>
 </div>
@@ -191,13 +191,13 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i aria-hidden="true" class="fa fa-pencil"></i> <?= Translation::get('msgNews') ?>
+        <i aria-hidden="true" class="bi bi-pencil"></i> <?= Translation::get('msgNews') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a href="?action=add-news">
                 <button class="btn btn-outline-success">
-                    <i aria-hidden="true" class="fa fa-plus"></i> <?= Translation::get('ad_menu_news_add') ?>
+                    <i aria-hidden="true" class="bi bi-plus"></i> <?= Translation::get('ad_menu_news_add') ?>
                 </button>
             </a>
         </div>
@@ -226,12 +226,12 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
                 <td><?= $date->format($newsItem['date']) ?></td>
                 <td>
                     <a class="btn btn-primary" href="?action=edit-news&amp;id=<?= $newsItem['id'] ?>">
-                        <span title="<?= Translation::get('ad_news_update') ?>" class="fa fa-edit"></span>
+                        <span title="<?= Translation::get('ad_news_update') ?>" class="bi bi-pencil"></span>
                     </a>
                 </td>
                 <td>
                     <a class="btn btn-danger" href="?action=delete-news&amp;id=<?= $newsItem['id'] ?>">
-                        <span title="<?= Translation::get('ad_news_delete') ?>" class="fa fa-trash"></span>
+                        <span title="<?= Translation::get('ad_news_delete') ?>" class="bi bi-trash"></span>
                     </a>
                 </td>
             </tr>
@@ -255,7 +255,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-pencil"></i>
+    <i aria-hidden="true" class="bi bi-pencil"></i>
     <?= Translation::get('ad_news_edit') ?>
   </h1>
 </div>
@@ -441,7 +441,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
             <?= $item['content'] ?><br>
             <?= Translation::get('newsCommentDate') . Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
             <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= CommentType::NEWS ?>">
-                <i aria-hidden="true" class="fa fa-trash"></i>
+                <i aria-hidden="true" class="bi bi-trash"></i>
             </a>
         </div>
     </div>
@@ -452,7 +452,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
+            <i aria-hidden="true" class="bi bi-pencil"></i>
             <?= Translation::get('ad_news_data') ?>
           </h1>
         </div>
@@ -489,7 +489,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
+            <i aria-hidden="true" class="bi bi-pencil"></i>
             <?= Translation::get('ad_news_data') ?>
           </h1>
         </div>
@@ -541,7 +541,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-pencil"></i>
+            <i aria-hidden="true" class="bi bi-pencil"></i>
             <?= Translation::get('ad_news_data') ?>
           </h1>
         </div>

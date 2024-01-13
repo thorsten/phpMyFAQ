@@ -71,6 +71,8 @@ $template->parse(
     'mainPageContent',
     [
         'lang' => Strings::htmlentities($faqLanguage),
+        'faqId' => $faqId,
+        'categoryId' => $faqCategory,
         'msgSend2Friend' => Translation::get('msgSend2Friend'),
         'msgS2FReferrer' => 'link',
         'msgS2FName' => Translation::get('msgS2FName'),

@@ -270,7 +270,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [
-          addElement('i', { classList: 'fa fa-copy', 'aria-hidden': 'true' }),
+          addElement('i', { classList: 'bi bi-copy', 'aria-hidden': 'true' }),
         ]),
       ])
     );
@@ -289,7 +289,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
               'aria-expanded': 'false',
               'data-pmfFaqId': faq.id,
             },
-            [addElement('i', { classList: 'fa fa-globe', 'aria-hidden': 'true' })]
+            [addElement('i', { classList: 'bi bi-globe', 'aria-hidden': 'true' })]
           ),
           addElement('div', { classList: 'dropdown-menu', 'aria-labelledby': 'dropdownAddNewTranslation' }, [
             addElement('a', { classList: 'dropdown-item', innerText: 'n/a' }),
@@ -310,7 +310,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
           },
           [
             addElement('i', {
-              classList: 'fa fa-trash',
+              classList: 'bi bi-trash',
               'aria-hidden': 'true',
               'data-pmfId': faq.id,
               'data-pmfLanguage': faq.language,

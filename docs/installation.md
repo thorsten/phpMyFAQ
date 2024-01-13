@@ -3,7 +3,7 @@
 ## 2.1 Requirements for phpMyFAQ
 
 phpMyFAQ addresses a database system via PHP.
-In order to install it, you will need a web server that meets the following requirements:
+To install it, you will need a web server that meets the following requirements:
 
 ### PHP requirements
 
@@ -42,6 +42,7 @@ that the `.htaccess` file processes correctly, and rewrite rules take effect.
 
 - correctly set: access permissions, owner, group
 - **Docker** (optional)
+- **Kubernetes** (optional)
 
 In case PHP runs as a module of the Apache, you will have to be able to do a chown on the files before installation. The
 files and directories must be owned by the web server's user.
@@ -110,6 +111,18 @@ You first need a database, let's try with a MariaDB container:
 Then start the phpMyFAQ web application:
 
     $ docker run -ti --link phpmyfaq-db:db -p 8080:80 phpmyfaq/phpmyfaq
+
+### 2.2.3 Cloud or On-Premise Hosting via Kubernetes
+
+You can use any mysql deployment/helm chart, like: https://github.com/bitnami/charts/tree/main/bitnami/mysql, you can
+also choose another database engine.
+View official resources or find one on: https://artifacthub.io/
+
+> You must have a storage method to persist your data.
+
+Then, install it, using referenced manifests on this project: https://github.com/thorsten/phpMyFAQ/tree/main/kubernetes-deploy.
+
+Read the definitions and configure according to your needs. If you have any doubt, do not hesitate to consult us.
 
 ## 2.3 Setup
 

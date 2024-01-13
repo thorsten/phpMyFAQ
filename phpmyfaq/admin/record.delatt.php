@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 printf(
-    '<header><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></header>',
+    '<header><h2 class="page-header"><i aria-hidden="true" class="bi bi-pencil"></i> %s</h2></header>',
     Translation::get('ad_entry_aor')
 );
 

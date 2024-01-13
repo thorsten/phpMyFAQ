@@ -23,12 +23,12 @@ namespace phpMyFAQ;
  *
  * @package phpMyFAQ
  */
-class Seo
+readonly class Seo
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private Configuration $config)
     {
     }
 

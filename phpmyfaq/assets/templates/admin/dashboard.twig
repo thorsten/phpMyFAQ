@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-tachometer"></i>
+    <i aria-hidden="true" class="bi bi-speedometer"></i>
     {{ adminHeaderDashboard }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
@@ -74,7 +74,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumVisits }}</div>
           </div>
           <div class="col-auto">
-            <i class="fa fa-bar-chart fa-2x text-gray-300"></i>
+            <i class="bi bi-bar-chart h1 text-gray-300"></i>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumFaqs }}</div>
           </div>
           <div class="col-auto">
-            <i class="fa fa-list-alt fa-2x text-gray-300"></i>
+            <i class="bi bi-list-check h1 text-gray-300"></i>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@
             <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ adminDashboardInfoNumComments }}</div>
           </div>
           <div class="col-auto">
-            <i class="fa fa-comments fa-2x text-gray-300"></i>
+            <i class="bi bi-chat-left-text h1 text-gray-300"></i>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@
             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumQuestions }}</div>
           </div>
           <div class="col-auto">
-            <i class="fa fa-question-circle fa-2x text-gray-300"></i>
+            <i class="bi bi-question-circle h1 text-gray-300"></i>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@
     <div class="col-8 mb-4">
       <div class="card shadow h-100 mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderVisits }}
+          <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderVisits }}
         </h5>
         <div class="card-body">
           <div class="pmf-charts">
@@ -148,7 +148,7 @@
     <div class="col-4 mb-4">
       <div class="card shadow h-100 mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
+          <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
         </h5>
         <div class="card-body">
           <div class="pmf-charts">
@@ -165,14 +165,14 @@
   <div class="col-3 mb-4">
     <div class="card shadow mb-4">
       <h5 class="card-header py-3">
-        <i aria-hidden="true" class="fa fa-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
+        <i aria-hidden="true" class="bi bi-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
       </h5>
       <div class="card-body">
         <ul class="list-unstyled">
           {% if adminDashboardInactiveFaqs|length > 0 %}
             {% for inactiveFaqs in adminDashboardInactiveFaqs %}
               <li>
-                <i class="fa fa-question-circle"></i>
+                <i class="bi bi-question-circle"></i>
                 <a href="{{ inactiveFaqs.url }}">{{ inactiveFaqs.question }}</a>
               </li>
             {% endfor %}
@@ -188,7 +188,7 @@
     <div class="col-3 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-check"></i> {{ adminDashboardHeaderOnlineInfo }}
+          <i aria-hidden="true" class="bi bi-check"></i> {{ adminDashboardHeaderOnlineInfo }}
         </h5>
         <div class="card-body">
           {% if showVersion %}
@@ -227,7 +227,7 @@
     <div class="col-3 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> {{ adminDashboardHeaderVerification }}
+          <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ adminDashboardHeaderVerification }}
         </h5>
         <div class="card-body">
           {% if showVerificationResult %}

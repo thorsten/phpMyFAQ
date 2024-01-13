@@ -1,14 +1,14 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-folder"></i> {{ msgHeaderCategoryOverview }}
+    <i aria-hidden="true" class="bi bi-folder"></i> {{ msgHeaderCategoryOverview }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
       <a class="btn btn-outline-success" href="?action=addcategory" id="addCategoryModal">
-        <i aria-hidden="true" class="fa fa-plus"></i> {{ msgAddCategory }}
+        <i aria-hidden="true" class="bi bi-plus"></i> {{ msgAddCategory }}
       </a>
       <a class="btn btn-outline-info" href="?action=showcategory">
-        <i aria-hidden="true" class="fa fa-list"></i> {{ msgCategoryMatrix }}
+        <i aria-hidden="true" class="bi bi-list"></i> {{ msgCategoryMatrix }}
       </a>
     </div>
   </div>
@@ -42,7 +42,7 @@
           {{ categoryInfo[key]['name'] }}
 
           {% if categoryInfo[key]['show_home'] == 1 %}
-            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="bi bi-star" aria-hidden="true"></i>
           {% endif %}
         </h6>
 
@@ -50,25 +50,25 @@
           <!-- Add FAQ to category (always) -->
           <a class="btn btn-info mb-1 mt-1"
              href="?action=editentry&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
-            <i aria-hidden="true" class="fa fa-indent" title="{{ msgAddFaqAction }}"></i>
+            <i aria-hidden="true" class="bi bi-indent" title="{{ msgAddFaqAction }}"></i>
           </a>
 
           <!-- Add subcategory (if current language) -->
           <a class="btn btn-info"
              href="?action=addcategory&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
-            <i aria-hidden="true" class="fa fa-plus-square" title="{{ msgAddCategoryAction }}"></i>
+            <i aria-hidden="true" class="bi bi-plus-square" title="{{ msgAddCategoryAction }}"></i>
           </a>
 
           <!-- Edit category (if current language) -->
           <a class="btn btn-info"
              href="?action=editcategory&cat={{ categoryInfo[key]['id'] }}">
-            <i aria-hidden="true" class="fa fa-edit" title="{{ msgEditCategoryAction }}"></i>
+            <i aria-hidden="true" class="bi bi-pencil" title="{{ msgEditCategoryAction }}"></i>
           </a>
 
           <!-- Translate category -->
           <a class="btn btn-info"
              href="?action=translatecategory&cat={{ categoryInfo[key]['id'] }}">
-            <i aria-hidden="true" class="fa fa-globe" title="{{ msgTranslateCategoryAction }}"></i>
+            <i aria-hidden="true" class="bi bi-globe" title="{{ msgTranslateCategoryAction }}"></i>
           </a>
 
           <!-- Delete category (if no subcategories) -->
@@ -76,13 +76,13 @@
             <button type="button" class="btn btn-danger" name="pmf-category-delete-button"
                     data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
                     data-pmf-language="{{ categoryInfo[key]['lang'] }}">
-              <i aria-hidden="true" class="fa fa-trash" title="%s"
+              <i aria-hidden="true" class="bi bi-trash" title="%s"
                  data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
                  data-pmf-language="{{ categoryInfo[key]['lang'] }}"></i>
             </button>
           {% else %}
             <div class="btn btn-inverse border" style="cursor: not-allowed;">
-              <i aria-hidden="true" class="fa fa-trash"></i>
+              <i aria-hidden="true" class="bi bi-trash"></i>
             </div>
           {% endif %}
         </div>

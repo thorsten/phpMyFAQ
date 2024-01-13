@@ -250,7 +250,7 @@ class SearchHelper extends Helper
                 $html .= '<li class="mb-2">';
                 $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf(
-                    '<strong>%s</strong><br><i class="fa fa-question-circle-o"></i> %s<br>',
+                    '<strong>%s</strong><br><i class="bi bi-question-circle-o"></i> %s<br>',
                     Strings::htmlentities($this->Category->getPath($categoryInfo[0]['id'])),
                     $oLink->toHtmlAnchor()
                 );
@@ -278,8 +278,8 @@ class SearchHelper extends Helper
     private function renderScore(float $relevance = 0): string
     {
         $html = sprintf('<span title="%01.2f%%">', $relevance);
-        $emptyStar = '<i aria-hidden="true" class="fa fa-star-o"></i>';
-        $fullStar = '<i aria-hidden="true" class="fa fa-star"></i>';
+        $emptyStar = '<i aria-hidden="true" class="bi bi-star-o"></i>';
+        $fullStar = '<i aria-hidden="true" class="bi bi-star"></i>';
 
         if (0 === (int) $relevance) {
             $html .= $emptyStar . $emptyStar . $emptyStar;
@@ -323,7 +323,7 @@ class SearchHelper extends Helper
                 $link->text = Strings::htmlentities($result->question);
                 $link->tooltip = Strings::htmlentities($result->question);
                 $link->class = 'text-decoration-none';
-                $html .= '<li><i class="fa fa-question-circle"></i> ' . $link->toHtmlAnchor() . '</li>';
+                $html .= '<li><i class="bi bi-question-circle"></i> ' . $link->toHtmlAnchor() . '</li>';
             }
             $html .= '</ul>';
         }

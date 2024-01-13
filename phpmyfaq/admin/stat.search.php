@@ -36,14 +36,14 @@ $request = Request::createFromGlobals();
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="fa fa-tasks"></i>
+    <i aria-hidden="true" class="bi bi-bar-chart"></i>
       <?= Translation::get('ad_menu_searchstats') ?>
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
       <a class="btn btn-outline-danger"
          href="?action=truncatesearchterms&csrf=<?= Token::getInstance()->getTokenString('truncate-seaerchterms') ?>">
-        <i aria-hidden="true" class="fa fa-trash"></i> <?= Translation::get('ad_searchterm_del') ?>
+        <i aria-hidden="true" class="bi bi-trash"></i> <?= Translation::get('ad_searchterm_del') ?>
       </a>
     </div>
   </div>
@@ -142,7 +142,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
                               title="<?= Translation::get('ad_news_delete') ?>"
                               data-delete-search-term-id="<?= $searchItem['id'] ?>"
                               data-csrf-token="<?= $csrfToken ?>">
-                        <i aria-hidden="true" class="fa fa-trash"
+                        <i aria-hidden="true" class="bi bi-trash"
                            data-delete-search-term-id="<?= $searchItem['id'] ?>"
                            data-csrf-token="<?= $csrfToken ?>"></i>
                       </button>

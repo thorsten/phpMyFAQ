@@ -88,7 +88,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
         ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">
-                <i aria-hidden="true" class="fa fa-edit"></i>
+                <i aria-hidden="true" class="bi bi-pencil"></i>
                 <?= Translation::get('ad_entry_aor') ?>
             </h1>
         </div>
@@ -231,7 +231,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
         }
     } else {
         printf(
-            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
+            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="bi bi-pencil"></i> %s</h2></div></header>',
             Translation::get('ad_entry_aor')
         );
         echo Alert::danger('ad_entryins_fail');
