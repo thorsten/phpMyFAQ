@@ -31,12 +31,14 @@ use phpMyFAQ\Filter;
  *
  * @package phpMyFAQ\Faq
  */
-class FaqImport {
+
+class FaqImport
+{
 
     private Configuration $config;
 
-    public function __construct() {
-        $this->config = Configuration::getConfigurationInstance();
+    public function __construct(Configuration $config) {
+        $this->config = $config;
     }
 
     public function import(array $record): bool|string {
@@ -113,8 +115,8 @@ class FaqImport {
     }
 
     public function isCSVFile($file): bool {
-        $allowedExtensions = array("csv");
-        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $allowedExtensions = array('csv');
+        $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
         return in_array(strtolower($fileExtension), $allowedExtensions);
     }

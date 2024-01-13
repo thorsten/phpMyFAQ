@@ -40,10 +40,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FaqController extends AbstractController {
+class FaqController extends AbstractController
+{
 
     #[Route('admin/api/faq/permissions')]
-    public function listPermissions(Request $request): JsonResponse {
+    public function listPermissions(Request $request): JsonResponse
+    {
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
@@ -66,7 +68,8 @@ class FaqController extends AbstractController {
      * @throws Exception
      */
     #[Route('admin/api/faqs')]
-    public function listByCategory(Request $request): JsonResponse {
+    public function listByCategory(Request $request): JsonResponse
+    {
         $this->userHasPermission('edit_faq');
 
         $response = new JsonResponse();
@@ -87,7 +90,8 @@ class FaqController extends AbstractController {
     }
 
     #[Route('admin/api/faq/activate')]
-    public function activate(Request $request): JsonResponse {
+    public function activate(Request $request): JsonResponse
+    {
         $this->userHasPermission('approverec');
 
         $response = new JsonResponse();
@@ -130,7 +134,8 @@ class FaqController extends AbstractController {
     }
 
     #[Route('admin/api/faq/sticky')]
-    public function sticky(Request $request): JsonResponse {
+    public function sticky(Request $request): JsonResponse
+    {
         $this->userHasPermission('edit_faq');
 
         $response = new JsonResponse();
@@ -173,7 +178,8 @@ class FaqController extends AbstractController {
     }
 
     #[Route('admin/api/faq/delete')]
-    public function delete(Request $request): JsonResponse {
+    public function delete(Request $request): JsonResponse
+    {
         $this->userHasPermission('delete_faq');
 
         $response = new JsonResponse();
@@ -210,7 +216,8 @@ class FaqController extends AbstractController {
     }
 
     #[Route('admin/api/faq/search')]
-    public function search(Request $request): JsonResponse {
+    public function search(Request $request): JsonResponse
+    {
         $this->userHasPermission('edit_faq');
 
         $response = new JsonResponse();
@@ -252,7 +259,8 @@ class FaqController extends AbstractController {
     }
 
     #[Route('admin/api/faqs/sticky/order')]
-    public function saveOrderOfStickyFaqs(Request $request): JsonResponse {
+    public function saveOrderOfStickyFaqs(Request $request): JsonResponse
+    {
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
 
@@ -273,30 +281,31 @@ class FaqController extends AbstractController {
     }
 
     #[Route('admin/api/faq/import')]
-    public function importFaqs(Request $request): JsonResponse {
+    public function importFaqs(Request $request): JsonResponse
+    {
         $response = new JsonResponse();
-        
-        $file = $_FILES['file'];
+
+        $file = $request->files->get('file');
         if(!isset($file)) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => 'Bad request: There is no file submitted.']);
             return $response;
         }
-        
+
         if (!Token::getInstance()->verifyToken('importfaqs', $request->request->get('csrf'))) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
-            exit();
+            return $response;
         }
 
         $faqImport = new FaqImport();
         $errors = array();
 
-        if (isset($file) && 0 === $file['error'] && $faqImport->isCSVFile($file)) {
-            $handle = fopen($file['tmp_name'], 'r');
+        if (isset($file) && 0 === $file->getError() && $faqImport->isCSVFile($file)) {
+            $handle = fopen($file->getRealPath(), 'r');
             $csvData = $faqImport->parseCSV($handle);
             if (!$faqImport->validateCSV($csvData)) {
-                $response->setStatusCode(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = [
                     'storedAll' => false,
                     'error' => Translation::get('msgCSVFileNotValidated')
@@ -317,7 +326,7 @@ class FaqController extends AbstractController {
                     'success' => Translation::get('msgImportSuccessful')
                 ];
             } else {
-                $response->setStatusCode(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = [
                     'storedAll' => false,
                     'messages' => $errors
