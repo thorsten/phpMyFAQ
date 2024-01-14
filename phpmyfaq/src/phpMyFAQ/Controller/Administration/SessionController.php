@@ -32,13 +32,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SessionController extends AbstractController
 {
-
     #[Route('./admin/api/session/export')]
     public function export(Request $request): BinaryFileResponse|JsonResponse
     {
         $config = Configuration::getConfigurationInstance();
         $requestData = json_decode($request->getContent());
-        
+
         if (!Token::getInstance()->verifyToken('export-sessions', $requestData->csrf)) {
             $response = new JsonResponse();
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
@@ -57,13 +56,12 @@ class SessionController extends AbstractController
             fclose($file);
             $response = new BinaryFileResponse($filePath);
             $response->setContentDisposition(
-                    ResponseHeaderBag::DISPOSITION_INLINE,
-                    'sessions_' . $requestData->firstHour . '-' . $requestData->lastHour . '.csv'
+                ResponseHeaderBag::DISPOSITION_INLINE,
+                'sessions_' . $requestData->firstHour . '-' . $requestData->lastHour . '.csv'
             );
             $response->headers->set('Content-Type', 'text/csv');
             return $response;
-        }
-        else {
+        } else {
             $response = new JsonResponse();
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'Unable to open file.']);
@@ -71,5 +69,4 @@ class SessionController extends AbstractController
 
         return $response;
     }
-
 }
