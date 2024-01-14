@@ -264,6 +264,8 @@ class FaqController extends AbstractController
     #[Route('admin/api/faqs/sticky/order')]
     public function saveOrderOfStickyFaqs(Request $request): JsonResponse
     {
+        $this->userHasPermission('edit_faq');
+
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
 
@@ -283,9 +285,14 @@ class FaqController extends AbstractController
         return $response;
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     #[Route('admin/api/faq/import')]
     public function import(Request $request): JsonResponse
     {
+        $this->userHasPermission('add_faq');
+
         $response = new JsonResponse();
 
         $file = $request->files->get('file');

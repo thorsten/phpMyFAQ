@@ -48,20 +48,8 @@ readonly class FaqImport
      */
     public function import(array $record): bool
     {
-        $language = new Language($this->config);
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
-
         $user = CurrentUser::getCurrentUser($this->config);
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->config);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-
-        $category = new Category($this->config, $currentGroups, true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
-        $category->setLanguage($currentLanguage);
 
         $categoryId = Filter::filterVar($record[0], FILTER_VALIDATE_INT);
         $question = Filter::filterVar($record[1], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -72,6 +60,15 @@ readonly class FaqImport
         $email = Filter::filterVar($record[6], FILTER_SANITIZE_EMAIL);
         $isActive = Filter::filterVar($record[7], FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
+
+        $faq = new Faq($this->config);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        $category = new Category($this->config, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->setLanguage($languageCode);
 
         if ($faq->hasTitleAHash($question)) {
             throw new Exception('It is not allowed, that the question title ' . $question . ' contains a hash.');
