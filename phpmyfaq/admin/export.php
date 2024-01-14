@@ -22,6 +22,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,9 +31,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+[$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($user);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/export.twig');
+$template = $twig->loadTemplate('./admin/import-export/export.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), 'export')) {
     $category = new Category($faqConfig, [], false);

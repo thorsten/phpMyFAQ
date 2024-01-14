@@ -277,9 +277,16 @@ class Pagination
      * @param string $url url
      * @param int    $page page number
      */
-    protected function renderUrl(string $url, int $page): string
+    protected function renderUrl(string $url = '', int $page = 1): string
     {
-        return sprintf($this->rewriteUrl, $page);
+        if ($url === '') {
+            $url = sprintf($this->rewriteUrl, $page);
+        } else {
+            $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
+            $url = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+        }
+
+        return $url;
     }
 
     /**

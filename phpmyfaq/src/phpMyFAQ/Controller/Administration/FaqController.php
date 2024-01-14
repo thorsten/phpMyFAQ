@@ -2,7 +2,6 @@
 
 /**
  * The Admin FAQ Controller
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -55,9 +54,15 @@ class FaqController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
             [
+<<<<<<< HEAD
                     'user' => $faqPermission->get(FaqPermission::USER, $faqId),
                     'group' => $faqPermission->get(FaqPermission::GROUP, $faqId)
                 ]
+=======
+                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
+                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
+            ]
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         );
 
         return $response;
@@ -81,8 +86,13 @@ class FaqController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->setData(
             [
+<<<<<<< HEAD
                     'faqs' => $faq->getAllFaqsByCategory($categoryId)
                 ]
+=======
+                'faqs' => $faq->getAllFaqsByCategory($categoryId),
+            ]
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         );
 
         return $response;
@@ -104,6 +114,7 @@ class FaqController extends AbstractController
         if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
+
             return $response;
         }
 
@@ -148,6 +159,7 @@ class FaqController extends AbstractController
         if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
+
             return $response;
         }
 
@@ -194,6 +206,7 @@ class FaqController extends AbstractController
         if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
+
             return $response;
         }
 
@@ -205,6 +218,7 @@ class FaqController extends AbstractController
         } catch (FileException | AttachmentException $e) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => $e->getMessage()]);
+
             return $response;
         }
 
@@ -228,6 +242,7 @@ class FaqController extends AbstractController
         if (!Token::getInstance()->verifyToken('edit-faq', $data->csrf)) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
+
             return $response;
         }
 
@@ -260,6 +275,8 @@ class FaqController extends AbstractController
     #[Route('admin/api/faqs/sticky/order')]
     public function saveOrderOfStickyFaqs(Request $request): JsonResponse
     {
+        $this->userHasPermission('edit_faq');
+
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
 
@@ -279,21 +296,37 @@ class FaqController extends AbstractController
         return $response;
     }
 
+<<<<<<< HEAD
     #[Route('admin/api/faq/import')]
     public function importFaqs(Request $request): JsonResponse
     {
+=======
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[Route('admin/api/faq/import')]
+    public function import(Request $request): JsonResponse
+    {
+        $this->userHasPermission('add_faq');
+
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         $response = new JsonResponse();
 
         $file = $request->files->get('file');
         if (!isset($file)) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'Bad request: There is no file submitted.']);
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
             return $response;
         }
 
         if (!Token::getInstance()->verifyToken('importfaqs', $request->request->get('csrf'))) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
+<<<<<<< HEAD
             return $response;
         }
 
@@ -303,34 +336,77 @@ class FaqController extends AbstractController
         if (isset($file) && 0 === $file->getError() && $faqImport->isCSVFile($file)) {
             $handle = fopen($file->getRealPath(), 'r');
             $csvData = $faqImport->parseCSV($handle);
+=======
+
+            return $response;
+        }
+
+        $faqImport = new FaqImport(Configuration::getConfigurationInstance());
+
+        $result = [];
+        $errors = [];
+
+        if (0 === $file->getError() && $faqImport->isCSVFile($file)) {
+            $handle = fopen($file->getRealPath(), 'r');
+            $csvData = $faqImport->parseCSV($handle);
+
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
             if (!$faqImport->validateCSV($csvData)) {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = [
                     'storedAll' => false,
+<<<<<<< HEAD
                     'error' => Translation::get('msgCSVFileNotValidated')
                 ];
                 $response->setData($result);
                 return $response;
             }
+=======
+                    'error' => Translation::get('msgCSVFileNotValidated'),
+                ];
+                $response->setData($result);
+
+                return $response;
+            }
+
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
             foreach ($csvData as $record) {
                 $error = $faqImport->import($record);
                 if ($error !== true) {
                     $errors[] = $error;
                 }
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
             if (empty($errors)) {
                 $response->setStatusCode(Response::HTTP_OK);
                 $result = [
                     'storedAll' => true,
+<<<<<<< HEAD
                     'success' => Translation::get('msgImportSuccessful')
+=======
+                    'success' => Translation::get('msgImportSuccessful'),
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
                 ];
             } else {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = [
                     'storedAll' => false,
+<<<<<<< HEAD
                     'messages' => $errors
                 ];
             }
+=======
+                    'messages' => $errors,
+                ];
+            }
+
+            $response->setData($result);
+
+            return $response;
+>>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         }
         $response->setData($result);
 

@@ -498,7 +498,7 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
-$PMF_LANG["ad_menu_export"] = "Export your FAQ";
+$PMF_LANG["ad_menu_export"] = "FAQ Export";
 
 $PMF_LANG['permission::add_user'] = "Add user";
 $PMF_LANG['permission::edit_user'] = "Edit user";

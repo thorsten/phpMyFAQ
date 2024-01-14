@@ -495,7 +495,7 @@ $PMF_LANG["ad_attach_1"] = "Please choose a directory for attachments first in c
 $PMF_LANG["ad_attach_2"] = "Please choose a link for attachments first in configuration.";
 $PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentification.";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s Bytes.";
-$PMF_LANG["ad_menu_export"] = "Export your FAQ";
+$PMF_LANG["ad_menu_export"] = "Export";
 $PMF_LANG["ad_export_file"] = "Error: Cannot write file.";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export of all records";
 
