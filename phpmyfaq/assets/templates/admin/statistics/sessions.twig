@@ -22,7 +22,7 @@
   <div class="col-6">
     <div class="card shadow">
       <h5 class="card-header py-3">
-        {{ adminHeaderSessions }}
+        <i aria-hidden="true" class="bi bi-list-ol"></i> {{ adminHeaderSessions }}
       </h5>
       <div class="card-body">
         <table class="table table-striped align-middle">
@@ -78,7 +78,7 @@
   <div class="col-6">
     <div class="card shadow">
       <h5 class="card-header py-3">
-        {{ msgSessionManagement }}
+        <i aria-hidden="true" class="bi bi-trash"></i> {{ msgSessionManagement }}
       </h5>
       <div class="card-body">
         <form action="?action=viewsessions" method="post"
@@ -108,17 +108,18 @@
   <div class="col-6">
     <div class="card shadow">
       <h5 class="card-header py-3">
-        <i class="bi bi-file-earmark-arrow-down"></i> {{ msgExportSessionsAsCSV }}
+        <i aria-hidden="true" class="bi bi-file-earmark-arrow-down"></i> {{ msgExportSessionsAsCSV }}
       </h5>
       <div class="card-body">
         <form class="row">
-        <label for="firstHour" class="col-1 col-form-label">Von</label>
+        <input type="hidden" id="csrf" value="{{ csrfTokenExport }}"/>
+        <label for="firstHour" class="col-1 col-form-label">{{ msgExportSessionsFrom }}</label>
         <div class="col-5">
             <input type="date" class="form-control" id="firstHour"/>
         </div>
-        <label for="lastHour" class="col-1 col-form-label">Bis</label>
+        <label for="lastHour" class="col-1 col-form-label">{{ msgExportSessionsTo }}</label>
         <div class="col-5">
-            <input type="date" class="form-control" id="lastHour"/>
+            <input type="date" class="form-control" id="lastHour" max="{{ dateToday }}"/>
         </div>
         <div class="mt-3 d-flex justify-content-end">
             <button class="btn btn-primary" type="submit" id="exportSessions">

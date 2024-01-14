@@ -1412,5 +1412,7 @@ $PMF_LANG['msgCSVFileNotValidated'] = 'It seems that the file does not have the 
 // added v4.0.0-alpha - 2024-01-13 by Jan
 $PMF_LANG['msgExportSessionsAsCSV'] = 'Export Sessions as CSV-file';
 $PMF_LANG['msgExportSessions'] = 'Export Sessions';
+$PMF_LANG['msgExportSessionsFrom'] = 'From';
+$PMF_LANG['msgExportSessionsTo'] = 'To';
 
 return $PMF_LANG;
