@@ -224,9 +224,9 @@ You can import faqs from a csv file. Further, you find an example of such a csv 
 > [!IMPORTANT]
 > It is not allowed to have the first line of the following example file containing the headers in the uploaded file as well. Otherwise, the import will fail.
 
-| category-Id | question | answer | keywords | language code | author | email address of author | active | sticky
-| 1 | What's the answer? | This one is the answer | question,answer | en | Thorsten | thorsten@phpmyfaq.de | true | false
-| 1 | Can you buy me an ice cream? | Strawberry or chocolate is available. | ice,strawberry,chocolate | en | Thorsten | thorsten@phpmyfaq.de | true | true
+| category-Id | question | answer | keywords | language code | author | email address of author | active | sticky |
+| 1 | What's the answer? | This one is the answer | question,answer | en | Thorsten | thorsten@phpmyfaq.de | true | false |
+| 1 | Can you buy me an ice cream? | Strawberry or chocolate is available. | ice,strawberry,chocolate | en | Thorsten | thorsten@phpmyfaq.de | true | true |
 
 > [!NOTE]
 > All cells are required except of the keywords. Additionally, you are able to use several keywords that are seperated with commas.
