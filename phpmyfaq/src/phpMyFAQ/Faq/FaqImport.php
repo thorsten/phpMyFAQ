@@ -17,13 +17,13 @@
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Filter;
 
 /**
@@ -32,21 +32,18 @@ use phpMyFAQ\Filter;
  * @package phpMyFAQ\Faq
  */
 
-class FaqImport
+readonly class FaqImport
 {
-    private Configuration $config;
-
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
     }
 
     /**
      * Imports a record with the given record data.
      *
      * @param array $record Record data
-     *
      * @return bool
+     * @throws Exception
      */
     public function import(array $record): bool
     {
@@ -70,6 +67,7 @@ class FaqImport
         } else {
             $faqId = null;
         }
+
         $categoryId = Filter::filterVar($record[0], FILTER_VALIDATE_INT);
         $question = Filter::filterVar($record[1], FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = Filter::filterVar($record[2], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -118,7 +116,7 @@ class FaqImport
     /**
      * Returns the data from a csv file.
      *
-     * @param PHPFileHandler $handle
+     * @param resource $handle
      *
      * @return array $csvData
      */
@@ -139,7 +137,7 @@ class FaqImport
      */
     public function isCSVFile($file): bool
     {
-        $allowedExtensions = array('csv');
+        $allowedExtensions = ['csv'];
         $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
         return in_array(strtolower($fileExtension), $allowedExtensions);
@@ -152,7 +150,7 @@ class FaqImport
      *
      * @return bool
      */
-    public function validateCSV($csvData): bool
+    public function validateCSV(array $csvData): bool
     {
         foreach ($csvData as $row) {
             if (count($row) !== 9) {
