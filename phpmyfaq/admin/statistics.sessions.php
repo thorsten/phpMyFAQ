@@ -102,6 +102,10 @@ if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
         'buttonDeleteMonth' => Translation::get('ad_stat_delete'),
         'msgExportSessions' => Translation::get('msgExportSessions'),
         'msgExportSessionsAsCSV' => Translation::get('msgExportSessionsAsCSV'),
+        'csrfTokenExport' => Token::getInstance()->getTokenString('export-sessions'),
+        'dateToday' => date('Y-m-d'),
+        'msgExportSessionsFrom' => Translation::get('msgExportSessionsFrom'),
+        'msgExportSessionsTo' => Translation::get('msgExportSessionsTo'),
     ];
 
     echo $template->render($templateVars);

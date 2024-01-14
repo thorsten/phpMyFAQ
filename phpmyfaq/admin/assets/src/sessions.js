@@ -11,18 +11,48 @@
  * @copyright 2022-2024 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2022-03-21
+ * @since     2024-01-14
  */
+
+import { pushErrorNotification } from './utils';
 
 export const handleSessions = () => {
     const firstHour = document.getElementById('firstHour');
     const lastHour = document.getElementById('lastHour');
     const exportSessions = document.getElementById('exportSessions');
-    
-    exportSessions.addEventListener('click', (event) => {
+    const csrf = document.getElementById('csrf');
+
+    exportSessions.addEventListener('click', async (event) => {
         event.preventDefault();
-        console.log(firstHour.value);
+
+        try {
+            const response = await fetch('./api/session/export', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    csrf: csrf.value,
+                    firstHour: firstHour.value,
+                    lastHour: lastHour.value
+                })
+            });
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'sessions_' + firstHour.value + '--' + lastHour.value + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+            } else {
+                const jsonResponse = response.json();
+                pushErrorNotification(jsonResponse.error);
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
     });
 };
-
-

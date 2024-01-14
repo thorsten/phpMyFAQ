@@ -22,6 +22,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Session;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,20 +47,21 @@ class SessionController extends AbstractController
         }
 
         $session = new Session($config);
-        $data = $session->getSessionsByDate($requestData->firstHour, $requestData->lastHour);
+        $data = $session->getSessionsByDate(strtotime($requestData->firstHour), strtotime($requestData->lastHour));
         $filePath = tempnam(sys_get_temp_dir(), 'csv_');
         $file = fopen($filePath, 'w');
-        if (file) {
+        if ($file) {
             foreach ($data as $row) {
                 fputcsv($file, array($row['ip'], $row['time']));
             }
             fclose($file);
             $response = new BinaryFileResponse($filePath);
             $response->setContentDisposition(
-                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                    'sessions_' . date(DATE_RSS, $requestData->firstHour) . '-' . date(DATE_RSS, $requestData->lastHour) . '.csv'
+                    ResponseHeaderBag::DISPOSITION_INLINE,
+                    'sessions_' . $requestData->firstHour . '-' . $requestData->lastHour . '.csv'
             );
-            $response->headers->set('Content-Type', 'application/octet-stream');
+            $response->headers->set('Content-Type', 'text/csv');
+            return $response;
         }
         else {
             $response = new JsonResponse();
