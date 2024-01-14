@@ -62,12 +62,6 @@ readonly class FaqImport
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        if (isset($record->faq_id)) {
-            $faqId = Filter::filterVar($record->faq_id, FILTER_VALIDATE_INT);
-        } else {
-            $faqId = null;
-        }
-
         $categoryId = Filter::filterVar($record[0], FILTER_VALIDATE_INT);
         $question = Filter::filterVar($record[1], FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = Filter::filterVar($record[2], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -99,13 +93,7 @@ readonly class FaqImport
                 ->setComment(false)
                 ->setNotes('');
 
-        if (is_null($faqId)) {
-            $faqId = $faq->create($faqData);
-        } else {
-            $faqData->setId($faqId);
-            $faqData->setRevisionId(0);
-            $faq->update($faqData);
-        }
+        $faqId = $faq->create($faqData);
 
         $faqMetaData = new FaqMetaData($this->config);
         $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
