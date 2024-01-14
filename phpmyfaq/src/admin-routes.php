@@ -312,7 +312,7 @@ $routes->add(
 );
 $routes->add(
     'admin.api.faq.import',
-    new Route('/faq/import', ['_controller' => [FaqController::class, 'import']])
+    new Route('/faq/import', ['_controller' => [FaqController::class, 'import'], '_methods' => 'POST'])
 );
 $routes->add(
     'admin.api.faqs.sticky.order',
