@@ -17,15 +17,22 @@
  * @since     2005-09-15
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -37,7 +44,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
     <div class="col-lg-12">
     <?php
-    if ($user->perm->hasPermission($user->getUserId(), 'editglossary')) {
+    if ($user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_EDIT->value)) {
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $glossary = new Glossary($faqConfig);
         $glossaryItem = $glossary->getGlossaryItem($id);

@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -29,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $template = $twig->loadTemplate('./admin/configuration/main.twig');
 

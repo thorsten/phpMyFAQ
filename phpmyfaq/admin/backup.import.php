@@ -19,6 +19,7 @@ use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -37,7 +38,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (
-    $user->perm->hasPermission($user->getUserId(), 'restore') &&
+    $user->perm->hasPermission($user->getUserId(), PermissionType::RESTORE->value) &&
     Token::getInstance()->verifyToken('restore', $csrfToken)
 ) {
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');

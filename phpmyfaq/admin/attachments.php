@@ -17,12 +17,14 @@
 
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\FormatBytesTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -32,39 +34,44 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
-$page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
-$page = max(1, $page);
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::ATTACHMENT_DELETE->value)) {
+    $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
+    $page = max(1, $page);
 
-$attachmentCollection = new AttachmentCollection($faqConfig);
-$itemsPerPage = 24;
-$allCrumbs = $attachmentCollection->getBreadcrumbs();
+    $attachmentCollection = new AttachmentCollection($faqConfig);
+    $itemsPerPage = 24;
+    $allCrumbs = $attachmentCollection->getBreadcrumbs();
 
-$crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
+    $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
-$pagination = new Pagination(
-    [
-        'baseUrl' => $faqConfig->getDefaultUrl() . $request->getRequestUri(),
-        'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
-        'perPage' => $itemsPerPage,
-    ]
-);
+    $pagination = new Pagination(
+        [
+            'baseUrl' => $faqConfig->getDefaultUrl() . $request->getRequestUri(),
+            'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
+            'perPage' => $itemsPerPage,
+        ]
+    );
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new FormatBytesTwigExtension());
-$template = $twig->loadTemplate('./admin/content/attachments.twig');
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new FormatBytesTwigExtension());
+    $template = $twig->loadTemplate('./admin/content/attachments.twig');
 
-$templateVars = [
-    'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),
-    'adminMsgAttachmentsFilename' => Translation::get('msgAttachmentsFilename'),
-    'adminMsgTransToolLanguage' => Translation::get('msgTransToolLanguage'),
-    'adminMsgAttachmentsFilesize' => Translation::get('msgAttachmentsFilesize'),
-    'adminMsgAttachmentsMimeType' => Translation::get('msgAttachmentsMimeType'),
-    'csrfToken' => Token::getInstance()->getTokenString('delete-attachment'),
-    'attachments' => $crumbs,
-    'adminMsgButtonDelete' => Translation::get('ad_gen_delete'),
-    'adminMsgFaqTitle' => Translation::get('ad_entry_faq_record'),
-    'adminAttachmentPagination' => $pagination->render()
-];
+    $templateVars = [
+        'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),
+        'adminMsgAttachmentsFilename' => Translation::get('msgAttachmentsFilename'),
+        'adminMsgTransToolLanguage' => Translation::get('msgTransToolLanguage'),
+        'adminMsgAttachmentsFilesize' => Translation::get('msgAttachmentsFilesize'),
+        'adminMsgAttachmentsMimeType' => Translation::get('msgAttachmentsMimeType'),
+        'csrfToken' => Token::getInstance()->getTokenString('delete-attachment'),
+        'attachments' => $crumbs,
+        'adminMsgButtonDelete' => Translation::get('ad_gen_delete'),
+        'adminMsgFaqTitle' => Translation::get('ad_entry_faq_record'),
+        'adminAttachmentPagination' => $pagination->render()
+    ];
 
-echo $template->render($templateVars);
+    echo $template->render($templateVars);
+} else {
+    require 'no-permission.php';
+}

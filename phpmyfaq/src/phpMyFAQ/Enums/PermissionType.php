@@ -23,6 +23,10 @@ enum PermissionType: string
 
     case ATTACHMENT_DELETE = 'delattachment';
 
+    case BACKUP = 'backup';
+
+    case CATEGORY_ADD = 'addcateg';
+
     case CATEGORY_DELETE = 'delcateg';
 
     case CATEGORY_EDIT = 'editcateg';
@@ -41,6 +45,18 @@ enum PermissionType: string
 
     case FAQ_EDIT = 'edit_faq';
 
+    case GLOSSARY_ADD = 'addglossary';
+
+    case GLOSSARY_DELETE = 'delglossary';
+
+    case GLOSSARY_EDIT = 'editglossary';
+
+    case GROUP_ADD = 'addgroup';
+
+    case GROUP_DELETE = 'delgroup';
+
+    case GROUP_EDIT = 'editgroup';
+
     case INSTANCE_ADD = 'addinstances';
 
     case INSTANCE_DELETE = 'delinstances';
@@ -50,6 +66,8 @@ enum PermissionType: string
     case QUESTION_DELETE = 'delquestion';
 
     case REPORTS = 'reports';
+
+    case RESTORE = 'restore';
 
     case STATISTICS_VIEWLOGS = 'viewlog';
 

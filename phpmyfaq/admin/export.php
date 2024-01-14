@@ -19,6 +19,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -37,7 +38,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/import-export/export.twig');
 
-if ($user->perm->hasPermission($user->getUserId(), 'export')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::EXPORT->value)) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

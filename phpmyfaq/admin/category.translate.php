@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Session\Token;
@@ -28,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

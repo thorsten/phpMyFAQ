@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -29,7 +30,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-if ($user->perm->hasPermission($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
+if (
+    $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value) &&
+    $faqConfig->get('search.enableElasticsearch')
+) {
     $elasticsearch = new Elasticsearch($faqConfig);
     $esConfigData = $faqConfig->getElasticsearchConfig();
 

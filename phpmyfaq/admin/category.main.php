@@ -21,6 +21,7 @@ use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
@@ -54,7 +55,7 @@ $categoryImage->setUploadedFile($uploadedFile);
 
 $categoryPermission = new CategoryPermission($faqConfig);
 
-if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     // Save a new category
     if ($action === 'savecategory' && Token::getInstance()->verifyToken('save-category', $csrfToken)) {
         $category = new Category($faqConfig, [], false);

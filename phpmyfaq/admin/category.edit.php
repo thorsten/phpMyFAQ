@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Session\Token;
@@ -30,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $currentUserId = $user->getUserId();
 
-if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
     $category = new Category($faqConfig, [], false);
@@ -85,7 +86,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                   <?= Translation::get('ad_categ_titel') ?>
               </label>
               <div class="col-lg-4">
-                <input type="text" id="name" name="name" value="<?= Strings::htmlentities($categoryData->getName()) ?>" class="form-control">
+                <input type="text" id="name" name="name" value="<?= Strings::htmlentities($categoryData->getName()) ?>"
+                       class="form-control">
               </div>
             </div>
 

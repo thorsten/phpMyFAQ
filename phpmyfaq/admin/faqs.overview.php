@@ -22,6 +22,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\DebugExtension;
 
@@ -32,6 +33,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
+[ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
 $category = new Category($faqConfig, $currentAdminGroups, true);
 $category->setUser($currentAdminUser);

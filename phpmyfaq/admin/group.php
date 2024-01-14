@@ -18,6 +18,8 @@
  */
 
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -30,10 +32,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 if (
-    !$user->perm->hasPermission($user->getUserId(), 'editgroup') &&
-    !$user->perm->hasPermission($user->getUserId(), 'delgroup') &&
-    !$user->perm->hasPermission($user->getUserId(), 'addgroup')
+    !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_ADD->value) &&
+    !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_DELETE->value) &&
+    !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
 ) {
     require 'no-permission.php';
 }
@@ -71,7 +76,10 @@ if (!in_array($groupAction, $groupActionList)) {
 }
 
 // update group members
-if ($groupAction == 'update_members' && $user->perm->hasPermission($user->getUserId(), 'editgroup')) {
+if (
+    $groupAction == 'update_members' &&
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
+) {
     $message = '';
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -98,7 +106,10 @@ if ($groupAction == 'update_members' && $user->perm->hasPermission($user->getUse
 }
 
 // update group rights
-if ($groupAction == 'update_rights' && $user->perm->hasPermission($user->getUserId(), 'editgroup')) {
+if (
+    $groupAction == 'update_rights' &&
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
+) {
     $message = '';
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -124,7 +135,10 @@ if ($groupAction == 'update_rights' && $user->perm->hasPermission($user->getUser
 }
 
 // update group data
-if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId(), 'editgroup')) {
+if (
+    $groupAction == 'update_data' &&
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
+) {
     $message = '';
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -152,7 +166,10 @@ if ($groupAction == 'update_data' && $user->perm->hasPermission($user->getUserId
 }
 
 // delete group confirmation
-if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUserId(), 'delgroup')) {
+if (
+    $groupAction == 'delete_confirm' &&
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_DELETE->value)
+) {
     $message = '';
     $user = new CurrentUser($faqConfig);
     $perm = $user->perm;
@@ -193,7 +210,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->hasPermission($user->getUse
     }
 }
 
-if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), 'delgroup')) {
+if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_DELETE->value)) {
     $message = '';
     $user = new User($faqConfig);
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
@@ -218,7 +235,7 @@ if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), '
     }
 }
 
-if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 'addgroup')) {
+if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_ADD->value)) {
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
@@ -269,7 +286,7 @@ if (!isset($message)) {
 }
 
 // show new group form
-if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), 'addgroup')) {
+if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_ADD->value)) {
     $user = new CurrentUser($faqConfig);
     ?>
 

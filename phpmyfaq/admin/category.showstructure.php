@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Strings;
@@ -50,7 +51,7 @@ $request = Request::createFromGlobals();
   </div>
 
 <?php
-if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

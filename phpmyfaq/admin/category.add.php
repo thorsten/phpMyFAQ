@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language\LanguageCodes;
@@ -49,7 +50,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $currentUserId = $user->getUserId();
 
-if ($user->perm->hasPermission($user->getUserId(), 'addcateg')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_ADD->value)) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

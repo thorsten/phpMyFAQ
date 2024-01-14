@@ -20,6 +20,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -48,7 +49,7 @@ $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPEC
 
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-if ($user->perm->hasPermission($user->getUserId(), 'backup')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::BACKUP->value)) {
     $tables = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
     $tableNames = '';
 
