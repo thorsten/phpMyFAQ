@@ -14,18 +14,24 @@
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/content/csv.import.twig');
+    $template = $twig->loadTemplate('./admin/import-export/import.csv.twig');
 
     $templateVars = [
         'adminHeaderImport' => Translation::get('msgImportRecords'),
@@ -49,7 +55,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
         'is_sticky' => Translation::get('ad_entry_sticky'),
         'trueFalse' => Translation::get('msgCSVImportTrueOrFalse')
     ];
+
     echo $template->render($templateVars);
 } else {
     require 'no-permission.php';
-} 
+}

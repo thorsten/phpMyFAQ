@@ -283,9 +283,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'stickyfaqs':
                 require 'stickyfaqs.php';
                 break;
-            case 'importcsv':
-                require 'csv.import.php';
-                break;
             // functions for tags
             case 'tags':
             case 'delete-tag':
@@ -397,7 +394,10 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'restore':
                 require 'backup.import.php';
                 break;
-            // functions for FAQ export
+            // functions for FAQ import and export
+            case 'importcsv':
+                require 'import.csv.php';
+                break;
             case 'export':
                 require 'export.php';
                 break;
