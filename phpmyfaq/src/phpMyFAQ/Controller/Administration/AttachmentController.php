@@ -22,6 +22,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,6 +35,8 @@ class AttachmentController extends AbstractController
     #[Route('./admin/api/content/attachments')]
     public function delete(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::ATTACHMENT_DELETE->value);
+
         $response = new JsonResponse();
         $deleteData = json_decode($request->getContent());
         try {
@@ -68,6 +71,8 @@ class AttachmentController extends AbstractController
     #[Route('./admin/api/content/attachments/upload')]
     public function upload(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::ATTACHMENT_ADD->value);
+
         $response = new JsonResponse();
 
         if (!isset($_FILES['filesToUpload'])) {

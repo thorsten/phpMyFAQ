@@ -19,17 +19,20 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BookmarkController
+class BookmarkController extends AbstractController
 {
     #[Route('api/bookmark')]
     public function delete(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 

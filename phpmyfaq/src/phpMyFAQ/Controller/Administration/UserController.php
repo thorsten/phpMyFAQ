@@ -24,6 +24,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
@@ -216,7 +217,7 @@ class UserController extends AbstractController
     #[Route('admin/api/user/delete')]
     public function deleteUser(Request $request): JsonResponse
     {
-        $this->userHasPermission('delete_user');
+        $this->userHasPermission(PermissionType::USER_DELETE->value);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -257,6 +258,9 @@ class UserController extends AbstractController
         return $response;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/user/add')]
     public function addUser(Request $request): JsonResponse
     {

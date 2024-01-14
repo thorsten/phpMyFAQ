@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\TagEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
@@ -36,6 +37,8 @@ class TagController extends AbstractController
     #[Route('admin/api/content/tag')]
     public function update(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $tag = new Tags($configuration);
@@ -69,6 +72,8 @@ class TagController extends AbstractController
     #[Route('admin/api/content/tags')]
     public function search(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $tag = new Tags($configuration);

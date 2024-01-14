@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Pagination;
@@ -52,7 +53,7 @@ $request = Request::createFromGlobals();
         <div class="row">
           <div class="col-lg-12">
 <?php
-if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
     $perPage = 10;
     $pages = Filter::filterVar($request->query->get('pages'), FILTER_VALIDATE_INT);
     $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);

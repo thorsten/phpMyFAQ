@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MarkdownController extends AbstractController
 {
     #[Route('admin/api/content/markdown')]
-    public function render(Request $request): JsonResponse
+    public function renderMarkdown(Request $request): JsonResponse
     {
         $response = new JsonResponse();
         $data = json_decode($request->getContent());

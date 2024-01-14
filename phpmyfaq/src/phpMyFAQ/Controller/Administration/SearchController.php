@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
@@ -33,6 +34,8 @@ class SearchController extends AbstractController
     #[Route('admin/api/search/term')]
     public function deleteTerm(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS->value);
+
         $response = new JsonResponse();
         $deleteData = json_decode($request->getContent());
 

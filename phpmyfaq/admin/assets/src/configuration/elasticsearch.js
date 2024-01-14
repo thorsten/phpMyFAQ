@@ -13,8 +13,7 @@
  * @since     2022-03-20
  */
 
-import { addElement } from '../../../../assets/src/utils';
-import { formatBytes } from '../utils';
+import { formatBytes, pushErrorNotification, pushNotification } from '../utils';
 
 export const handleElasticsearch = async () => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
@@ -31,31 +30,16 @@ export const handleElasticsearch = async () => {
 
           if (response.ok) {
             const result = await response.json();
-            const stats = document.getElementById('pmf-elasticsearch-result');
-            stats.insertAdjacentElement(
-              'afterend',
-              addElement('div', {
-                classList: 'alert alert-success',
-                innerText: result.success,
-              })
-            );
+            pushNotification(result.success);
 
             setInterval(elasticsearchStats, 5000);
           } else {
-            const result = document.getElementById('pmf-elasticsearch-result');
             const errorMessage = await response.json();
-            result.insertAdjacentElement(
-              'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
-            );
+            pushErrorNotification(errorMessage.error);
           }
         } catch (error) {
-          const result = document.getElementById('pmf-elasticsearch-result');
           const errorMessage = error.cause && error.cause.response ? await error.cause.response.json() : null;
-          result.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage?.error || error.message })
-          );
+          pushErrorNotification(errorMessage?.error || error.message);
         }
       });
 
@@ -81,20 +65,12 @@ export const handleElasticsearch = async () => {
               html += '</dl>';
               div.innerHTML = html;
             } else {
-              const result = document.getElementById('pmf-elasticsearch-result');
               const errorMessage = await response.json();
-              result.insertAdjacentElement(
-                'afterend',
-                addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
-              );
+              pushErrorNotification(errorMessage.error);
             }
           } catch (error) {
-            const result = document.getElementById('pmf-elasticsearch-result');
             const errorMessage = error.cause && error.cause.response ? await error.cause.response.json() : null;
-            result.insertAdjacentElement(
-              'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage?.error || error.message })
-            );
+            pushErrorNotification(errorMessage?.error || error.message);
           }
         }
       };

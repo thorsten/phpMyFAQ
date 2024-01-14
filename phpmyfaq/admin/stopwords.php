@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
@@ -35,7 +36,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/configuration/stopwords.twig');
 
 $sortedLanguageCodes = [];
-if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     $sortedLanguageCodes = LanguageCodes::getAll();
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);

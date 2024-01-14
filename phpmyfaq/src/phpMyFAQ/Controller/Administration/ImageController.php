@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,9 +29,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImageController extends AbstractController
 {
-    #[Route('admin/api/content/markdown')]
+    #[Route('admin/api/content/images')]
     public function upload(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $uploadDir =  PMF_CONTENT_DIR . '/user/images/';

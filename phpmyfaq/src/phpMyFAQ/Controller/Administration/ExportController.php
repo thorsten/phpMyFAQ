@@ -23,6 +23,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
@@ -36,7 +37,7 @@ class ExportController extends AbstractController
     #[Route('admin/api/export/file')]
     public function exportFile(Request $request): void
     {
-        $this->userHasPermission('export');
+        $this->userHasPermission(PermissionType::EXPORT->value);
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
         $downwards = Filter::filterVar($request->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
@@ -68,7 +69,7 @@ class ExportController extends AbstractController
     #[Route('admin/api/export/file')]
     public function exportReport(Request $request): void
     {
-        $this->userHasPermission('reports');
+        $this->userHasPermission(PermissionType::REPORTS->value);
 
         $configuration = Configuration::getConfigurationInstance();
         $report = new Report($configuration);

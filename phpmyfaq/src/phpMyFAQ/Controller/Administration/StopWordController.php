@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
@@ -34,6 +35,8 @@ class StopWordController extends AbstractController
     #[Route('admin/api/stopwords')]
     public function list(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $stopWords = new StopWords($configuration);
@@ -55,6 +58,8 @@ class StopWordController extends AbstractController
     #[Route('admin/api/stopword/delete')]
     public function delete(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $stopWords = new StopWords($configuration);
@@ -87,6 +92,8 @@ class StopWordController extends AbstractController
     #[Route('admin/api/stopword/save')]
     public function save(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $stopWords = new StopWords($configuration);

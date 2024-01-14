@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +33,8 @@ class CommentController extends AbstractController
     #[Route('admin/api/content/comments')]
     public function delete(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::COMMENT_DELETE->value);
+
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
 

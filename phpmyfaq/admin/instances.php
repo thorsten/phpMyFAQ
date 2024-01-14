@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Entity\InstanceEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
@@ -37,9 +38,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <h1 class="h2">
             <i aria-hidden="true" class="bi bi-wrench bi-fw"></i> <?= Translation::get('ad_menu_instances') ?>
         </h1>
-        <?php if ($user->perm->hasPermission($user->getUserId(), 'addinstances') &&
+        <?php if (
+        $user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_ADD->value) &&
             is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
-        ) : ?>
+) : ?>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
                 <a class="btn btn-outline-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
@@ -53,7 +55,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
   <div class="row">
   <div class="col-lg-12">
 <?php
-if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT->value)) {
     $fileSystem = new Filesystem(PMF_ROOT_DIR);
     $instance = new Instance($faqConfig);
     $currentClient = new Client($faqConfig);
@@ -133,7 +135,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
             <?php
             if (!$currentInstance->getConfig('isMaster')) {
                 $csrfToken = Token::getInstance()->getTokenString('delete-instance');
-            ?>
+                ?>
               <button data-delete-instance-id="<?= $site->id ?>" type="button"
                  class="btn btn-danger pmf-instance-delete"
                  data-csrf-token="<?= $csrfToken ?>">

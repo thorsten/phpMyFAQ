@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
@@ -41,6 +42,8 @@ class InstanceController extends AbstractController
     #[Route('admin/api/instance/add')]
     public function add(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::INSTANCE_ADD->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
@@ -161,6 +164,8 @@ class InstanceController extends AbstractController
     #[Route('admin/api/instance/delete')]
     public function delete(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::INSTANCE_DELETE->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 

@@ -228,7 +228,10 @@ $routes->add(
 //
 $routes->add(
     'admin.api.content.markdown',
-    new Route('/content/markdown', ['_controller' => [MarkdownController::class, 'render'], '_methods' => 'POST'])
+    new Route(
+        '/content/markdown',
+        ['_controller' => [MarkdownController::class, 'renderMarkdown'], '_methods' => 'POST']
+    )
 );
 
 //
@@ -263,7 +266,10 @@ $routes->add(
 
 $routes->add(
     'admin.api.elasticsearch.import',
-    new Route('/elasticsearch/import', ['_controller' => [ElasticsearchController::class, 'import'], '_methods' => 'POST'])
+    new Route(
+        '/elasticsearch/import',
+        ['_controller' => [ElasticsearchController::class, 'import'], '_methods' => 'POST']
+    )
 );
 
 $routes->add(
@@ -309,7 +315,10 @@ $routes->add(
 );
 $routes->add(
     'admin.api.faqs.sticky.order',
-    new Route('/faqs/sticky/order', ['_controller' => [FaqController::class, 'saveOrderOfStickyFaqs'], '_methods' => 'POST'])
+    new Route(
+        '/faqs/sticky/order',
+        ['_controller' => [FaqController::class, 'saveOrderOfStickyFaqs'], '_methods' => 'POST']
+    )
 );
 
 //

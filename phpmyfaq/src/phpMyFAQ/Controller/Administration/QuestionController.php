@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -32,7 +33,7 @@ class QuestionController extends AbstractController
     #[Route('admin/api/question/delete')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission('delquestion');
+        $this->userHasPermission(PermissionType::QUESTION_DELETE->value);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

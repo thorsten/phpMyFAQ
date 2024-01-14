@@ -23,6 +23,7 @@ use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
@@ -156,7 +157,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -192,7 +193,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/extract-package')]
     public function extractPackage(): StreamedResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
@@ -217,7 +218,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/create-temporary-backup')]
     public function createTemporaryBackup(): StreamedResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
@@ -242,7 +243,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
@@ -265,7 +266,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/update-database')]
     public function updateDatabase(): StreamedResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $configuration = Configuration::getConfigurationInstance();
         $update = new Update(new System(), $configuration);
@@ -291,7 +292,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/cleanup')]
     public function cleanUp(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

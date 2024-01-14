@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -34,6 +35,8 @@ class ConfigurationController extends AbstractController
     #[Route('admin/api/configuration/send-test-mail')]
     public function sendTestMail(Request $request): JsonResponse
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 

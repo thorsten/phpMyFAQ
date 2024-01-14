@@ -19,7 +19,41 @@ namespace phpMyFAQ\Enums;
 
 enum PermissionType: string
 {
+    case ATTACHMENT_ADD = 'addattachment';
+
+    case ATTACHMENT_DELETE = 'delattachment';
+
     case CATEGORY_DELETE = 'delcateg';
 
     case CATEGORY_EDIT = 'editcateg';
+
+    case COMMENT_DELETE = 'delcomment';
+
+    case CONFIGURATION_EDIT = 'editconfig';
+
+    case EXPORT = 'export';
+
+    case FAQ_ADD = 'addfaq';
+
+    case FAQ_APPROVE = 'approverec';
+
+    case FAQ_DELETE = 'delete_faq';
+
+    case FAQ_EDIT = 'edit_faq';
+
+    case INSTANCE_ADD = 'addinstances';
+
+    case INSTANCE_DELETE = 'delinstances';
+
+    case INSTANCE_EDIT = 'editinstances';
+
+    case QUESTION_DELETE = 'delquestion';
+
+    case REPORTS = 'reports';
+
+    case STATISTICS_VIEWLOGS = 'viewlog';
+
+    case USER_ADD = 'add_user';
+
+    case USER_DELETE = 'delete_user';
 }

@@ -22,6 +22,7 @@ use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Translation;
@@ -34,6 +35,8 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/create')]
     public function create(): JsonResponse
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $response = new JsonResponse();
         $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
 
@@ -52,6 +55,8 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/drop')]
     public function drop(): JsonResponse
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $response = new JsonResponse();
         $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
 
@@ -70,6 +75,8 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/import')]
     public function import(): JsonResponse
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
@@ -92,6 +99,8 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/statistics')]
     public function statistics(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 

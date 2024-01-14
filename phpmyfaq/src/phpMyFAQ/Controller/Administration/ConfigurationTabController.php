@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -41,6 +42,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/list')]
     public function list(Request $request): Response
     {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+
         $configuration = Configuration::getConfigurationInstance();
 
         $mode = $request->get('mode');
@@ -66,7 +69,7 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration')]
     public function save(Request $request): JsonResponse
     {
-        $this->userHasPermission('editconfig');
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
 
         $configuration = Configuration::getConfigurationInstance();
         $response = new JsonResponse();
@@ -144,6 +147,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/translations')]
     public function translations(): Response
     {
+        $this->userIsAuthenticated();
+
         $configuration = Configuration::getConfigurationInstance();
         $response = new Response();
 
@@ -166,6 +171,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/templates')]
     public function templates(): Response
     {
+        $this->userIsAuthenticated();
+
         $response = new Response();
         $faqSystem = new System();
         $templates = $faqSystem->getAvailableTemplates();
@@ -185,6 +192,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/faqs-sorting-key')]
     public function faqsSortingKey(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             AdministrationHelper::sortingKeyOptions($request->get('current'))
         );
@@ -193,6 +202,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/faqs-sorting-order')]
     public function faqsSortingOrder(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             AdministrationHelper::sortingOrderOptions($request->get('current'))
         );
@@ -201,6 +212,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/faqs-sorting-popular')]
     public function faqsSortingPopular(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             AdministrationHelper::sortingPopularFaqsOptions($request->get('current'))
         );
@@ -208,6 +221,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/perm-level')]
     public function permLevel(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             PermissionHelper::permOptions($request->get('current'))
         );
@@ -216,6 +231,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/release-environment')]
     public function releaseEnvironment(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             AdministrationHelper::renderReleaseTypeOptions($request->get('current'))
         );
@@ -224,6 +241,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/search-relevance')]
     public function searchRelevance(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             AdministrationHelper::searchRelevanceOptions($request->get('current'))
         );
@@ -232,6 +251,8 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/seo-metatags')]
     public function seoMetaTags(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         return new Response(
             AdministrationHelper::renderMetaRobotsDropdown($request->get('current'))
         );

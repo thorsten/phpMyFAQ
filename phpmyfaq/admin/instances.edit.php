@@ -15,6 +15,7 @@
  * @since     2012-04-16
  */
 
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Strings;
@@ -33,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </h1>
     </div>
 <?php
-if ($user->perm->hasPermission($user->getUserId(), 'editinstances')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT->value)) {
     $instanceId = Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 
     $instance = new Instance($faqConfig);

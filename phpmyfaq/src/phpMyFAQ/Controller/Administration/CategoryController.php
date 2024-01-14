@@ -99,6 +99,8 @@ class CategoryController extends AbstractController
     #[Route('admin/api/category/permissions')]
     public function permissions(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $categoryPermission = new CategoryPermission(Configuration::getConfigurationInstance());
 
@@ -123,6 +125,8 @@ class CategoryController extends AbstractController
     #[Route('admin/api/category/translations')]
     public function translations(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $category = new Category($configuration, [], false);
