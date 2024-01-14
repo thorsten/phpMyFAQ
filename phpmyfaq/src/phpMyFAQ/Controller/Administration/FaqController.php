@@ -284,7 +284,7 @@ class FaqController extends AbstractController
     }
 
     #[Route('admin/api/faq/import')]
-    public function importFaqs(Request $request): JsonResponse
+    public function import(Request $request): JsonResponse
     {
         $response = new JsonResponse();
 
