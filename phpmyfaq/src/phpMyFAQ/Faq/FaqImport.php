@@ -17,23 +17,15 @@
 
 namespace phpMyFAQ\Faq;
 
-<<<<<<< HEAD
-=======
 use phpMyFAQ\Core\Exception;
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
 use phpMyFAQ\Language;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\User\CurrentUser;
-<<<<<<< HEAD
-use phpMyFAQ\Faq\FaqMetaData;
-use phpMyFAQ\Filter;
-=======
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
 
 /**
  * Class FaqImport
@@ -41,53 +33,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @package phpMyFAQ\Faq
  */
 
-<<<<<<< HEAD
-class FaqImport
-{
-    private Configuration $config;
-
-    public function __construct(Configuration $config)
-    {
-        $this->config = $config;
-=======
 readonly class FaqImport
 {
     public function __construct(private Configuration $config)
     {
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
     }
 
     /**
      * Imports a record with the given record data.
      *
      * @param array $record Record data
-<<<<<<< HEAD
-     *
-     * @return bool
-     */
-    public function import(array $record): bool
-    {
-        $language = new Language($this->config);
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
-
-        $user = CurrentUser::getCurrentUser($this->config);
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->config);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-
-        $category = new Category($this->config, $currentGroups, true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
-        $category->setLanguage($currentLanguage);
-
-        if (isset($record->faq_id)) {
-            $faqId = Filter::filterVar($record->faq_id, FILTER_VALIDATE_INT);
-        } else {
-            $faqId = null;
-        }
-=======
      * @return bool
      * @throws Exception
      */
@@ -96,7 +51,6 @@ readonly class FaqImport
         $user = CurrentUser::getCurrentUser($this->config);
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
 
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         $categoryId = Filter::filterVar($record[0], FILTER_VALIDATE_INT);
         $question = Filter::filterVar($record[1], FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = Filter::filterVar($record[2], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -107,8 +61,6 @@ readonly class FaqImport
         $isActive = Filter::filterVar($record[7], FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
 
-<<<<<<< HEAD
-=======
         $faq = new Faq($this->config);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
@@ -118,7 +70,6 @@ readonly class FaqImport
         $category->setGroups($currentGroups);
         $category->setLanguage($languageCode);
 
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         if ($faq->hasTitleAHash($question)) {
             throw new Exception('It is not allowed, that the question title ' . $question . ' contains a hash.');
         }
@@ -140,17 +91,7 @@ readonly class FaqImport
                 ->setComment(false)
                 ->setNotes('');
 
-<<<<<<< HEAD
-        if (is_null($faqId)) {
-            $faqId = $faq->create($faqData);
-        } else {
-            $faqData->setId($faqId);
-            $faqData->setRevisionId(0);
-            $faq->update($faqData);
-        }
-=======
         $faqId = $faq->create($faqData);
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
 
         $faqMetaData = new FaqMetaData($this->config);
         $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
@@ -161,11 +102,7 @@ readonly class FaqImport
     /**
      * Returns the data from a csv file.
      *
-<<<<<<< HEAD
-     * @param PHPFileHandler $handle
-=======
      * @param resource $handle
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
      *
      * @return array $csvData
      */
@@ -180,15 +117,6 @@ readonly class FaqImport
     /**
      * Returns true if given Symfony FileBag-object is a csv file. Returns false if not.
      *
-<<<<<<< HEAD
-     * @param FileBag $file
-     *
-     * @return bool
-     */
-    public function isCSVFile($file): bool
-    {
-        $allowedExtensions = array('csv');
-=======
      * @param UploadedFile $file
      *
      * @return bool
@@ -196,7 +124,6 @@ readonly class FaqImport
     public function isCSVFile(UploadedFile $file): bool
     {
         $allowedExtensions = ['csv'];
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
         $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
         return in_array(strtolower($fileExtension), $allowedExtensions);
@@ -209,11 +136,7 @@ readonly class FaqImport
      *
      * @return bool
      */
-<<<<<<< HEAD
-    public function validateCSV($csvData): bool
-=======
     public function validateCSV(array $csvData): bool
->>>>>>> c3a9cb78e700513f709177ef6f14dc7265399c00
     {
         foreach ($csvData as $row) {
             if (count($row) !== 9) {

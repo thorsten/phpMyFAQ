@@ -15,6 +15,7 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
+import { pushNotification, pushErrorNotification } from '../utils';
 
 export const handleUploadCSVForm = async () => {
     const submitButton = document.getElementById('submitButton');
@@ -35,18 +36,12 @@ export const handleUploadCSVForm = async () => {
                 });
                 if (response.ok) {
                     const jsonResponse = await response.json();
-                    document.getElementById('divImportColumns').insertAdjacentElement(
-                            'beforebegin',
-                            addElement('div', {classList: 'alert alert-success alert-dismissible fade show', innerText: jsonResponse.success})
-                            );
+                    pushNotification(jsonResponse.success);
                     fileInput.value = null;
                 }
                 if (response.status === 400) {
                     const jsonResponse = await response.json();
-                    document.getElementById('divImportColumns').insertAdjacentElement(
-                            'beforebegin',
-                            addElement('div', {classList: 'alert alert-danger alert-dismissible fade show', innerText: jsonResponse.error})
-                            );
+                    pushErrorNotification(jsonResponse.error);
                     fileInput.value = null;
                 } else {
                     const errorResponse = await response.json();
@@ -54,12 +49,8 @@ export const handleUploadCSVForm = async () => {
                 }
             } catch (error) {
                 if (error.storedAll === false) {
-                    console.log(error.messages);
                     error.messages.forEach(message => {
-                        document.getElementById('divImportColumns').insertAdjacentElement(
-                                'beforebegin',
-                                addElement('div', {classList: 'alert alert-danger alert-dismissible fade show', innerText: message})
-                                );
+                        pushErrorNotification(message);
                     });
                 }
             }
