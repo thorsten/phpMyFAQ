@@ -25,6 +25,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Filter;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class FaqImport
@@ -119,11 +120,11 @@ readonly class FaqImport
     /**
      * Returns true if given Symfony FileBag-object is a csv file. Returns false if not.
      *
-     * @param FileBag $file
+     * @param UploadedFile $file
      *
      * @return bool
      */
-    public function isCSVFile($file): bool
+    public function isCSVFile(UploadedFile $file): bool
     {
         $allowedExtensions = ['csv'];
         $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
