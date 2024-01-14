@@ -216,8 +216,22 @@ information is split into keywords, the number of searches for this term, the la
 On the report page you can select various data columns to generate a report about content and usage of your FAQ
 installation. You can export the report then as a CSV file.
 
-## 5.4 Exports
+## 5.4 Imports & Exports
 
+### 5.4.1 Imports
+You can import faqs from a csv file. Further, you find an example of such a csv file:
+
+> [!IMPORTANT]
+> It is not allowed to have the first line of the following example file containing the headers in the uploaded file as well. Otherwise, the import will fail.
+
+| category-Id | question | answer | keywords | language code | author | email address of author | active | sticky
+| 1 | What's the answer? | This one is the answer | question,answer | en | Thorsten | thorsten@phpmyfaq.de | true | false
+| 1 | Can you buy me an ice cream? | Strawberry or chocolate is available. | ice,strawberry,chocolate | en | Thorsten | thorsten@phpmyfaq.de | true | true
+
+> [!NOTE]
+> All cells are required except of the keywords. Additionally, you are able to use several keywords that are seperated with commas.
+
+### 5.4.2 Exports
 You can export your contents of your whole FAQ or just some selected categories into four formats:
 
 - a JSON file
