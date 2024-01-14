@@ -498,7 +498,7 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
-$PMF_LANG["ad_menu_export"] = "Export your FAQ";
+$PMF_LANG["ad_menu_export"] = "FAQ Export";
 
 $PMF_LANG['permission::add_user'] = "Add user";
 $PMF_LANG['permission::edit_user'] = "Edit user";
@@ -1399,7 +1399,7 @@ $PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
 $PMF_LANG['msgLanguageCode'] = 'Language code (e.g. en, de ...)';
 $PMF_LANG['msgSeperateWithCommas'] = '(seperate with commas)';
 $PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
-$PMF_LANG['msgImportRecords'] = 'Import records';
+$PMF_LANG['msgImportRecords'] = 'FAQ Import';
 $PMF_LANG['msgImportCSVFile'] = 'Import CSV file';
 $PMF_LANG['msgImportCSVFileBody'] = 'You can import an CSV File with your record data and the given structure (see above) here.';
 $PMF_LANG['msgImport'] = 'Import';
