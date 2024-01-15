@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Session\Token;
@@ -35,7 +36,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');

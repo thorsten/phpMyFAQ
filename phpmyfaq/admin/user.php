@@ -20,6 +20,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
@@ -35,10 +36,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (
-    $user->perm->hasPermission($user->getUserId(), 'edit_user') || $user->perm->hasPermission(
-        $user->getUserId(),
-        'delete_user'
-    ) || $user->perm->hasPermission($user->getUserId(), 'add_user')
+    $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
+    $user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value) ||
+    $user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value)
 ) {
     $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 
@@ -71,7 +71,10 @@ if (
     }
 
     // update user rights
-    if ($userAction == 'update_rights' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
+    if (
+        $userAction == 'update_rights' &&
+        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)
+    ) {
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -109,7 +112,10 @@ if (
     }
 
     // update user data
-    if ($userAction == 'update_data' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
+    if (
+        $userAction == 'update_data' &&
+        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)
+    ) {
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -164,7 +170,10 @@ if (
     }
 
     // delete user confirmation
-    if ($userAction == 'delete_confirm' && $user->perm->hasPermission($user->getUserId(), 'delete_user')) {
+    if (
+        $userAction == 'delete_confirm' &&
+        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value)
+    ) {
         $message = '';
         $user = new CurrentUser($faqConfig);
 
@@ -185,7 +194,8 @@ if (
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">
                         <i aria-hidden="true" class="bi bi-person"></i>
-                        <?= Translation::get('ad_user_deleteUser') ?> <?= Strings::htmlentities($user->getLogin(), ENT_QUOTES) ?>
+                        <?= Translation::get('ad_user_deleteUser') ?>
+                        <?= Strings::htmlentities($user->getLogin(), ENT_QUOTES) ?>
                     </h1>
                 </div>
 
@@ -212,7 +222,7 @@ if (
     }
 
     // delete user
-    if ($userAction == 'delete' && $user->perm->hasPermission($user->getUserId(), 'delete_user')) {
+    if ($userAction == 'delete' && $user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value)) {
         $message = '';
         $user = new User($faqConfig);
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -470,7 +480,10 @@ if (
     }
 
     // show a list of all users
-    if ($userAction == 'listallusers' && $user->perm->hasPermission($user->getUserId(), 'edit_user')) {
+    if (
+        $userAction == 'listallusers' &&
+        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)
+    ) {
         $allUsers = $user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
         $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
@@ -503,7 +516,7 @@ if (
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <?php
-            if ($currentUser->perm->hasPermission($user->getUserId(), 'add_user')) : ?>
+            if ($currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value)) : ?>
                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#addUserModal">
                     <i class="bi bi-person-add" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
@@ -608,7 +621,10 @@ if (
                         <?php
                         if (
                             $user->getStatus() !== 'protected' &&
-                            $currentUser->perm->hasPermission($currentUser->getUserId(), 'delete_user')
+                            $currentUser->perm->hasPermission(
+                                $currentUser->getUserId(),
+                                PermissionType::USER_DELETE->value
+                            )
                         ) {
                             $csrfToken = Token::getInstance()->getTokenString('delete-user');
                             ?>

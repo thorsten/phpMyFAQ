@@ -18,6 +18,7 @@
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Session;
@@ -37,7 +38,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 $request = Request::createFromGlobals();
 
-if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
     $session = new Session($faqConfig);
     $date = new Date($faqConfig);
     $visits = new Visits($faqConfig);

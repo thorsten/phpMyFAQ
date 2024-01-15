@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Date;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
@@ -38,26 +39,26 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->hasPermission($user->getUserId(), 'delquestion')) {
-          $category = new Category($faqConfig, [], false);
-          $question = new Question($faqConfig);
-          $category->setUser($currentAdminUser);
-          $category->setGroups($currentAdminGroups);
-          $date = new Date($faqConfig);
-          $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-          $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELETE->value)) {
+            $category = new Category($faqConfig, [], false);
+            $question = new Question($faqConfig);
+            $category->setUser($currentAdminUser);
+            $category->setGroups($currentAdminGroups);
+            $date = new Date($faqConfig);
+            $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
-          if ($csrfToken && Token::getInstance()->verifyToken('toggle-question-visibility', $csrfToken)) {
-              $csrfChecked = true;
-          } else {
-              $csrfChecked = false;
-          }
+            if ($csrfToken && Token::getInstance()->verifyToken('toggle-question-visibility', $csrfToken)) {
+                $csrfChecked = true;
+            } else {
+                $csrfChecked = false;
+            }
 
-          $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS);
-          if ($csrfChecked && $toggle === 'toggle') {
-              $isVisible = $question->getVisibility($questionId);
-              $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
-          }
+            $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($csrfChecked && $toggle === 'toggle') {
+                $isVisible = $question->getVisibility($questionId);
+                $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
+            }
 
             echo '<div id="returnMessage"></div>';
 
@@ -66,7 +67,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             if ((is_countable($openQuestions) ? count($openQuestions) : 0) > 0) {
                 ?>
             <form id="phpmyfaq-open-questions" name="phpmyfaq-open-questions" method="post" accept-charset="utf-8">
-              <?= Token::getInstance()->getTokenInput('delete-questions') ?>
+                <?= Token::getInstance()->getTokenInput('delete-questions') ?>
               <table class="table table-striped align-middle">
                 <thead>
                 <tr>
@@ -83,7 +84,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                   <tr>
                     <td>
                       <label>
-                        <input id="questions[]" name="questions[]" value="<?= $openQuestion->getId() ?>" type="checkbox">
+                        <input id="questions[]" name="questions[]" value="<?= $openQuestion->getId() ?>"
+                               type="checkbox">
                       </label>
                     </td>
                     <td>

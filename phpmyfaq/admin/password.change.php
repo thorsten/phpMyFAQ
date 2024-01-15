@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
@@ -34,7 +35,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/user/password.change.twig');
 
-if ($user->perm->hasPermission($user->getUserId(), 'passwd')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::PASSWORD_CHANGE->value)) {
     // If we have to save a new password, do that first
     $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_SPECIAL_CHARS);
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);

@@ -23,6 +23,7 @@ use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -43,7 +44,7 @@ $category = new Category($faqConfig, [], false);
 $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 
-if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
     // Get submit action
     $submit = Filter::filterInputArray(
         INPUT_POST,

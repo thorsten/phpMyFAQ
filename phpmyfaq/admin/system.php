@@ -22,6 +22,7 @@ use Elastic\Transport\Exception\NoNodeAvailableException;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -40,7 +41,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/configuration/system.twig');
 
-if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     $faqSystem = new System();
 
     if ($faqConfig->get('search.enableElasticsearch')) {

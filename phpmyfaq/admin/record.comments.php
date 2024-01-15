@@ -17,17 +17,23 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -40,7 +46,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 echo '<div id="returnMessage"></div>';
 
-if ($user->perm->hasPermission($user->getUserId(), 'delcomment')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELETE->value)) {
     $comment = new Comments($faqConfig);
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

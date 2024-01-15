@@ -15,6 +15,7 @@
  * @since     2011-01-12
  */
 
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -22,8 +23,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'reports')) {
-    ?>
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->value)) {
+?>
 
     <form action="?action=reportview" method="post" accept-charset="utf-8">
         <div

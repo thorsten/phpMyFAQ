@@ -17,21 +17,27 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 printf(
     '<header><h2 class="page-header"><i aria-hidden="true" class="bi bi-pencil"></i> %s</h2></header>',
     Translation::get('ad_entry_aor')
 );
 
-if ($user->perm->hasPermission($user->getUserId(), 'delattachment')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::ATTACHMENT_DELETE->value)) {
     $recordId = Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
     $recordLang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

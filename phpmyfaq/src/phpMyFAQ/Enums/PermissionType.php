@@ -63,15 +63,21 @@ enum PermissionType: string
 
     case INSTANCE_EDIT = 'editinstances';
 
+    case PASSWORD_CHANGE = 'passwd';
+
     case QUESTION_DELETE = 'delquestion';
 
     case REPORTS = 'reports';
 
     case RESTORE = 'restore';
 
+    case STATISTICS_ADMINLOG = 'adminlog';
+
     case STATISTICS_VIEWLOGS = 'viewlog';
 
     case USER_ADD = 'add_user';
+
+    case USER_EDIT = 'edit_user';
 
     case USER_DELETE = 'delete_user';
 }

@@ -23,6 +23,7 @@ use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
@@ -47,11 +48,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $currentUserId = CurrentUser::getCurrentUser($faqConfig)->getUserId();
 
-if (
-    ($user->perm->hasPermission($currentUserId, 'edit_faq') || $user->perm->hasPermission(
-        $currentUserId,
-        'add_faq'
-    )) && !Database::checkOnEmptyTable('faqcategories')
+if ((
+    $user->perm->hasPermission($currentUserId, PermissionType::FAQ_EDIT->value) ||
+    $user->perm->hasPermission($currentUserId, PermissionType::FAQ_EDIT->value)) &&
+    !Database::checkOnEmptyTable('faqcategories')
 ) {
     $category = new Category($faqConfig, [], false);
 

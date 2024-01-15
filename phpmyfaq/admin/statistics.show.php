@@ -15,6 +15,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
@@ -37,7 +38,7 @@ $sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
   </div>
 
 <?php
-if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
     $session = new Session($faqConfig);
     $time = $session->getTimeFromSessionId($sessionId);
     $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));

@@ -18,6 +18,7 @@
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
@@ -38,7 +39,10 @@ if ($csrfToken && !Token::getInstance()->verifyToken('delete-adminlog', $csrfTok
     $deleteLog = true;
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' === $action) {
+if (
+    $user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_ADMINLOG->value) &&
+    'adminlog' === $action
+) {
     $date = new Date($faqConfig);
     $perpage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -67,7 +71,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'adminlog' ===
     $pagination = new Pagination($options);
 
     $loggingData = $logging->getAll();
-?>
+    ?>
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
