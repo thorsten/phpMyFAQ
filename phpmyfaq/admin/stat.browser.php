@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Date;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
@@ -25,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'viewlog')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
     $perpage = 50;
     $day = Filter::filterInput(INPUT_POST, 'day', FILTER_VALIDATE_INT);
     $firstHour = mktime(0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));

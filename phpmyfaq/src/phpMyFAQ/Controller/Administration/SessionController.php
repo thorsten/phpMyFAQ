@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Sess Controller
+ * The Session Controller
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-01-13
@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
@@ -35,6 +36,8 @@ class SessionController extends AbstractController
     #[Route('./admin/api/session/export')]
     public function export(Request $request): BinaryFileResponse|JsonResponse
     {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS->value);
+
         $config = Configuration::getConfigurationInstance();
         $requestData = json_decode($request->getContent());
 
