@@ -21,6 +21,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added REST API v3.0 (Thorsten)
 - added Kubernetes manifest samples (OWNDOMAINHOME SAS)
 - added experimental import of FAQs from CSV (Jan Harms)
+- added CSV export of user sessions (Jan Harms)
 - (WIP) added Twig as new template engine (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
