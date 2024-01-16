@@ -91,7 +91,7 @@ class TagController extends AbstractController
             $tags = $tag->getAllTags();
         }
 
-        if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+        if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
             $i = 0;
             $tagNames = [];
             foreach ($tags as $tagName) {

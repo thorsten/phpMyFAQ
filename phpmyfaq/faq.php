@@ -25,6 +25,7 @@ use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
@@ -194,7 +195,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
 
 // Show link to edit the faq?
 $editThisEntry = '';
-if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
     $editThisEntry = sprintf(
         '<i aria-hidden="true" class="bi bi-pencil"></i> ' .
         '<a class="text-decoration-none" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
@@ -243,7 +244,10 @@ if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($a
     );
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') && !empty($faq->faqRecord['notes'])) {
+if (
+    $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value) &&
+    !empty($faq->faqRecord['notes'])
+) {
     $template->parseBlock(
         'mainPageContent',
         'privateNotes',

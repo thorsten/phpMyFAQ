@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
@@ -65,7 +66,7 @@ $templateVars = [
 
 echo $template->render($templateVars);
 
-if (!$user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
+if (!$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
     require 'no-permission.php';
 }
 

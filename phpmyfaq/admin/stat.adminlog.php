@@ -146,7 +146,11 @@ if (
     </table>
 
     <?php
-} elseif ($user->perm->hasPermission($user->getUserId(), 'adminlog') && 'deleteadminlog' === $action && $deleteLog) {
+} elseif (
+    $user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_ADMINLOG->value) &&
+    'deleteadminlog' === $action &&
+    $deleteLog
+) {
     if ($logging->delete()) {
         echo Alert::success('ad_adminlog_delete_success');
     } else {

@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
@@ -90,10 +91,10 @@ abstract class AbstractController
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
         if (
-            !$user->perm->hasPermission($user->getUserId(), 'add_user') ||
-            !$user->perm->hasPermission($user->getUserId(), 'edit_user') ||
-            !$user->perm->hasPermission($user->getUserId(), 'delete_user') ||
-            !$user->perm->hasPermission($user->getUserId(), 'editgroup')
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value) ||
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value) ||
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
         ) {
             throw new UnauthorizedHttpException('User has no group permission.');
         }
@@ -107,9 +108,9 @@ abstract class AbstractController
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
         if (
-            !$user->perm->hasPermission($user->getUserId(), 'add_user') ||
-            !$user->perm->hasPermission($user->getUserId(), 'edit_user') ||
-            !$user->perm->hasPermission($user->getUserId(), 'delete_user')
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value) ||
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value)
         ) {
             throw new UnauthorizedHttpException('User has no user permission.');
         }
@@ -118,12 +119,12 @@ abstract class AbstractController
     /**
      * @throws UnauthorizedHttpException
      */
-    protected function userHasPermission(string $permission): void
+    protected function userHasPermission(PermissionType $permission): void
     {
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
         if (!$user->perm->hasPermission($user->getUserId(), $permission)) {
-            throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permission));
+            throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permission->value));
         }
     }
 }

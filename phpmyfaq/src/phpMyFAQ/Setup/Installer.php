@@ -54,40 +54,35 @@ class Installer extends Setup
      */
     protected array $mainRights = [
         [
-            'name' => 'add_user',
+            'name' => PermissionType::USER_ADD->value,
             'description' => 'Right to add user accounts',
         ],
         [
-            'name' => 'edit_user',
+            'name' => PermissionType::USER_EDIT->value,
             'description' => 'Right to edit user accounts',
         ],
         [
-            'name' => 'delete_user',
+            'name' => PermissionType::USER_DELETE->value,
             'description' => 'Right to delete user accounts',
         ],
-        //4 => "add_faq",
         [
-            'name' => 'add_faq',
+            'name' => PermissionType::FAQ_ADD->value,
             'description' => 'Right to add faq entries',
         ],
-        //5 => "edit_faq",
         [
-            'name' => 'edit_faq',
+            'name' => PermissionType::FAQ_EDIT->value,
             'description' => 'Right to edit faq entries',
         ],
-        //6 => "delete_faq",
         [
-            'name' => 'delete_faq',
+            'name' => PermissionType::FAQ_DELETE->value,
             'description' => 'Right to delete faq entries',
         ],
-        //7 => "viewlog",
         [
-            'name' => 'viewlog',
+            'name' => PermissionType::STATISTICS_VIEWLOGS->value,
             'description' => 'Right to view logfiles',
         ],
-        //8 => "adminlog",
         [
-            'name' => 'adminlog',
+            'name' => PermissionType::STATISTICS_ADMINLOG->value,
             'description' => 'Right to view admin log',
         ],
         //9 => "delcomment",
@@ -210,7 +205,7 @@ class Installer extends Setup
         ],
         // 34 => 'addattachment'
         [
-            'name' => 'addattachment',
+            'name' => PermissionType::ATTACHMENT_ADD->value,
             'description' => 'Right to add attachments',
         ],
         // 35 => 'editattachment'

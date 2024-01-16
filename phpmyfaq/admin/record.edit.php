@@ -947,8 +947,14 @@ if ((
         }
     </script>
     <?php
-} elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && !Database::checkOnEmptyTable('faqcategories')) {
+} elseif (
+    $user->perm->hasPermission($currentUserId, PermissionType::FAQ_EDIT->value) &&
+    !Database::checkOnEmptyTable('faqcategories')
+) {
     require 'no-permission.php';
-} elseif ($user->perm->hasPermission($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
+} elseif (
+    $user->perm->hasPermission($currentUserId, PermissionType::FAQ_EDIT->value) &&
+    Database::checkOnEmptyTable('faqcategories')
+) {
     echo Translation::get('no_cats');
 }

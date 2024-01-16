@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
@@ -63,7 +64,12 @@ $secLevelEntries['content'] = $adminHelper->addMenuEntry(
     'ad_menu_categ_edit',
     $action
 );
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_entry_add', $action);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    PermissionType::FAQ_ADD->value,
+    'editentry',
+    'ad_entry_add',
+    $action
+);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'faqs-overview',
@@ -71,7 +77,12 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     $action
 );
 
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq', 'stickyfaqs', 'stickyRecordsHeader', $action);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    PermissionType::FAQ_EDIT->value,
+    'stickyfaqs',
+    'stickyRecordsHeader',
+    $action
+);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
@@ -92,15 +103,45 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'ad_menu_attachments',
     $action
 );
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq', 'tags', 'ad_entry_tags', $action);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    PermissionType::FAQ_EDIT->value,
+    'tags',
+    'ad_entry_tags',
+    $action
+);
 
-$secLevelEntries['statistics'] = $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
-$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
-$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
-$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+$secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
+    PermissionType::STATISTICS_VIEWLOGS->value,
+    'statistics',
+    'ad_menu_stat',
+    $action
+);
+$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
+    PermissionType::STATISTICS_VIEWLOGS->value,
+    'viewsessions',
+    'ad_menu_session',
+    $action
+);
+$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
+    PermissionType::STATISTICS_ADMINLOG->value,
+    'adminlog',
+    'ad_menu_adminlog',
+    $action
+);
+$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
+    PermissionType::STATISTICS_VIEWLOGS->value,
+    'searchstats',
+    'ad_menu_searchstats',
+    $action
+);
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
 
-$secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry('add_faq', 'importcsv', 'msgImportRecords', $action);
+$secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
+    PermissionType::FAQ_ADD->value,
+    'importcsv',
+    'msgImportRecords',
+    $action
+);
 $secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', $action);
 
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
