@@ -13,46 +13,43 @@
  * @since     2022-03-21
  */
 
-import { addElement } from '../../../assets/src/utils';
-
 export const handleStatistics = () => {
   const buttonsDeleteSearchTerm = document.querySelectorAll('.pmf-delete-search-term');
 
   if (buttonsDeleteSearchTerm) {
     buttonsDeleteSearchTerm.forEach((element) => {
-      element.addEventListener('click', (event) => {
+      element.addEventListener('click', async (event) => {
         event.preventDefault();
 
         const searchTermId = event.target.getAttribute('data-delete-search-term-id');
         const csrf = event.target.getAttribute('data-csrf-token');
 
         if (confirm('Are you sure?')) {
-          fetch('./api/search/term', {
-            method: 'DELETE',
-            headers: {
-              Accept: 'application/json, text/plain, */*',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              csrf: csrf,
-              searchTermId: searchTermId,
-            }),
-          })
-            .then(async (response) => {
-              if (response.ok) {
-                return response.json();
-              }
-              throw new Error('Network response was not ok: ', { cause: { response } });
-            })
-            .then((response) => {
-              const row = document.getElementById(`row-search-id-${response.deleted}`);
+          try {
+            const response = await fetch('./api/search/term', {
+              method: 'DELETE',
+              headers: {
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                csrf: csrf,
+                searchTermId: searchTermId,
+              }),
+            });
+
+            if (response.ok) {
+              const jsonResponse = await response.json();
+              const row = document.getElementById(`row-search-id-${jsonResponse.deleted}`);
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
-            })
-            .catch(async (error) => {
-              const errorMessage = await error.cause.response.json();
-              console.error(errorMessage.error);
-            });
+            } else {
+              const errorMessage = await response.json();
+              throw new Error(`Network response was not ok: ${errorMessage.error}`);
+            }
+          } catch (error) {
+            console.error(error.message);
+          }
         }
       });
     });
