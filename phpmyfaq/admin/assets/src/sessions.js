@@ -6,9 +6,8 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2022-2024 phpMyFAQ Team
+ * @copyright 2024 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-01-14
@@ -17,42 +16,44 @@
 import { pushErrorNotification } from './utils';
 
 export const handleSessions = () => {
-    const firstHour = document.getElementById('firstHour');
-    const lastHour = document.getElementById('lastHour');
-    const exportSessions = document.getElementById('exportSessions');
-    const csrf = document.getElementById('csrf');
+  const firstHour = document.getElementById('firstHour');
+  const lastHour = document.getElementById('lastHour');
+  const exportSessions = document.getElementById('exportSessions');
+  const csrf = document.getElementById('csrf');
 
+  if (exportSessions) {
     exportSessions.addEventListener('click', async (event) => {
-        event.preventDefault();
+      event.preventDefault();
 
-        try {
-            const response = await fetch('./api/session/export', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    csrf: csrf.value,
-                    firstHour: firstHour.value,
-                    lastHour: lastHour.value
-                })
-            });
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'sessions_' + firstHour.value + '--' + lastHour.value + '.csv';
-                document.body.appendChild(link);
-                link.click();
-                URL.revokeObjectURL(url);
-            } else {
-                const jsonResponse = response.json();
-                pushErrorNotification(jsonResponse.error);
-            }
-        } catch (error) {
-            console.error(error.message);
+      try {
+        const response = await fetch('./api/session/export', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            csrf: csrf.value,
+            firstHour: firstHour.value,
+            lastHour: lastHour.value,
+          }),
+        });
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'sessions_' + firstHour.value + '--' + lastHour.value + '.csv';
+          document.body.appendChild(link);
+          link.click();
+          URL.revokeObjectURL(url);
+        } else {
+          const jsonResponse = response.json();
+          pushErrorNotification(jsonResponse.error);
         }
+      } catch (error) {
+        console.error(error.message);
+      }
     });
+  }
 };
