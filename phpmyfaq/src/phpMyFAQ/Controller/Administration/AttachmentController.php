@@ -35,7 +35,7 @@ class AttachmentController extends AbstractController
     #[Route('./admin/api/content/attachments')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::ATTACHMENT_DELETE->value);
+        $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
 
         $response = new JsonResponse();
         $deleteData = json_decode($request->getContent());
@@ -71,7 +71,7 @@ class AttachmentController extends AbstractController
     #[Route('./admin/api/content/attachments/upload')]
     public function upload(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::ATTACHMENT_ADD->value);
+        $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
         $response = new JsonResponse();
 

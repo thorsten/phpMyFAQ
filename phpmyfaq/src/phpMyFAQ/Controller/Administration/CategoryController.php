@@ -38,7 +38,7 @@ class CategoryController extends AbstractController
     #[Route('admin/api/category/delete')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CATEGORY_DELETE->value);
+        $this->userHasPermission(PermissionType::CATEGORY_DELETE);
 
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
@@ -139,7 +139,7 @@ class CategoryController extends AbstractController
     #[Route('admin/api/category/update-order')]
     public function updateOrder(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CATEGORY_EDIT->value);
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $response = new JsonResponse();
         $data = json_decode($request->getContent());

@@ -37,7 +37,7 @@ class ExportController extends AbstractController
     #[Route('admin/api/export/file')]
     public function exportFile(Request $request): void
     {
-        $this->userHasPermission(PermissionType::EXPORT->value);
+        $this->userHasPermission(PermissionType::EXPORT);
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
         $downwards = Filter::filterVar($request->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
@@ -69,7 +69,7 @@ class ExportController extends AbstractController
     #[Route('admin/api/export/file')]
     public function exportReport(Request $request): void
     {
-        $this->userHasPermission(PermissionType::REPORTS->value);
+        $this->userHasPermission(PermissionType::REPORTS);
 
         $configuration = Configuration::getConfigurationInstance();
         $report = new Report($configuration);

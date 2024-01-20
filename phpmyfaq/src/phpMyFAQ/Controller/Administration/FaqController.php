@@ -45,7 +45,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faq/permissions')]
     public function listPermissions(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -71,7 +71,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faqs')]
     public function listByCategory(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -93,7 +93,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faq/activate')]
     public function activate(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_APPROVE->value);
+        $this->userHasPermission(PermissionType::FAQ_APPROVE);
 
         $response = new JsonResponse();
 
@@ -138,7 +138,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faq/sticky')]
     public function sticky(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
 
@@ -183,7 +183,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faq/delete')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_DELETE->value);
+        $this->userHasPermission(PermissionType::FAQ_DELETE);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -223,7 +223,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faq/search')]
     public function search(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -267,7 +267,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faqs/sticky/order')]
     public function saveOrderOfStickyFaqs(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
         $data = json_decode($request->getContent());
@@ -294,7 +294,7 @@ class FaqController extends AbstractController
     #[Route('admin/api/faq/import')]
     public function import(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_ADD->value);
+        $this->userHasPermission(PermissionType::FAQ_ADD);
 
         $response = new JsonResponse();
 

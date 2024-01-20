@@ -157,7 +157,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -193,7 +193,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/extract-package')]
     public function extractPackage(): StreamedResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
@@ -218,7 +218,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/create-temporary-backup')]
     public function createTemporaryBackup(): StreamedResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
@@ -243,7 +243,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
@@ -266,7 +266,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/update-database')]
     public function updateDatabase(): StreamedResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
         $update = new Update(new System(), $configuration);
@@ -292,7 +292,7 @@ class UpdateController extends AbstractController
     #[Route('admin/api/cleanup')]
     public function cleanUp(): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
