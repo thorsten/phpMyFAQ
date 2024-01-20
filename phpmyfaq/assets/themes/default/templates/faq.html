@@ -37,12 +37,14 @@
             {{ numberOfComments }}
           </li>
           [/enableComments]
+          [enableBookmarks]
           <li class="list-group-item">
             <i aria-hidden="true" class="{{ bookmarkIcon }}"></i>
             <a target="_self" id="bookmark-link" href="{{ bookmarkLink }}" rel="noopener" title="{{ msgAddBookmark }}" class="text-decoration-none">
               {{ msgAddBookmark }}
             </a>
           </li>
+          [/enableBookmarks]
           <li class="list-group-item">
             <i aria-hidden="true" class="bi bi-file-pdf-o"></i>
             <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}" class="text-decoration-none">
