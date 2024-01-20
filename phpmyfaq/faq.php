@@ -238,7 +238,7 @@ if (-1 !== $user->getUserId()) {
         'mainPageContent',
         'enableBookmarks',
         [
-            'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark' : 'bi bi-bookmark-o',
+            'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark',
             'bookmarkLink' =>
                 $bookmark->isFaqBookmark($faqId)
                     ?
