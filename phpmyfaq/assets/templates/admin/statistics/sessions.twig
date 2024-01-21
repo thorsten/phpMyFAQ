@@ -115,11 +115,11 @@
         <input type="hidden" id="csrf" value="{{ csrfTokenExport }}"/>
         <label for="firstHour" class="col-1 col-form-label">{{ msgExportSessionsFrom }}</label>
         <div class="col-5">
-            <input type="date" class="form-control" id="firstHour"/>
+            <input type="date" class="form-control" min="{{ datePickerMinDate }}" max="{{ dateToday }}" id="firstHour"/>
         </div>
         <label for="lastHour" class="col-1 col-form-label">{{ msgExportSessionsTo }}</label>
         <div class="col-5">
-            <input type="date" class="form-control" id="lastHour" max="{{ dateToday }}"/>
+            <input type="date" class="form-control" id="lastHour" min="{{ datePickerMinDate }}" max="{{ dateToday }}"/>
         </div>
         <div class="mt-3 d-flex justify-content-end">
             <button class="btn btn-primary" type="submit" id="exportSessions">

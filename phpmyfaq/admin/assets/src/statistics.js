@@ -40,7 +40,7 @@ export const handleStatistics = () => {
 
             if (response.ok) {
               const jsonResponse = await response.json();
-              const row = document.getElementById(`row-search-id-${jsonResponse.deleted}`);
+              const row = document.getElementById(`row - search - id - ${jsonResponse.deleted}`);
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
             } else {

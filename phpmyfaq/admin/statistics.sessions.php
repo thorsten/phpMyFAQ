@@ -107,6 +107,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         'dateToday' => date('Y-m-d'),
         'msgExportSessionsFrom' => Translation::get('msgExportSessionsFrom'),
         'msgExportSessionsTo' => Translation::get('msgExportSessionsTo'),
+        'datePickerMinDate' => date('Y-m-d', $stats->firstDate),
     ];
 
     echo $template->render($templateVars);
