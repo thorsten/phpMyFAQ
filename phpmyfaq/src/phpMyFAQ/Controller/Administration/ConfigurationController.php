@@ -35,7 +35,7 @@ class ConfigurationController extends AbstractController
     #[Route('admin/api/configuration/send-test-mail')]
     public function sendTestMail(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

@@ -42,7 +42,7 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration/list')]
     public function list(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
 
@@ -69,7 +69,7 @@ class ConfigurationTabController extends AbstractController
     #[Route('admin/api/configuration')]
     public function save(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
         $response = new JsonResponse();

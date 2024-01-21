@@ -35,7 +35,7 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/create')]
     public function create(): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
@@ -55,7 +55,7 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/drop')]
     public function drop(): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
@@ -75,7 +75,7 @@ class ElasticsearchController extends AbstractController
     #[Route('./admin/api/elasticsearch/import')]
     public function import(): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

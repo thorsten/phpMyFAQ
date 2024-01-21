@@ -42,7 +42,7 @@ class InstanceController extends AbstractController
     #[Route('admin/api/instance/add')]
     public function add(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::INSTANCE_ADD->value);
+        $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -164,7 +164,7 @@ class InstanceController extends AbstractController
     #[Route('admin/api/instance/delete')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::INSTANCE_DELETE->value);
+        $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

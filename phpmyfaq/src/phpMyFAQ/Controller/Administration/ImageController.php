@@ -32,7 +32,7 @@ class ImageController extends AbstractController
     #[Route('admin/api/content/images')]
     public function upload(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

@@ -33,7 +33,7 @@ class CommentController extends AbstractController
     #[Route('admin/api/content/comments')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::COMMENT_DELETE->value);
+        $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
         $response = new JsonResponse();
         $data = json_decode($request->getContent());

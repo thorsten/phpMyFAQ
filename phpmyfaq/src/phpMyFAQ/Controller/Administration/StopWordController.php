@@ -58,7 +58,7 @@ class StopWordController extends AbstractController
     #[Route('admin/api/stopword/delete')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -92,7 +92,7 @@ class StopWordController extends AbstractController
     #[Route('admin/api/stopword/save')]
     public function save(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT->value);
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

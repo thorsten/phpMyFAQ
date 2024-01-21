@@ -232,6 +232,25 @@ if (
     );
 }
 
+// Display ability for saving bookmarks only for registered users
+if (-1 !== $user->getUserId()) {
+    $template->parseBlock(
+        'mainPageContent',
+        'enableBookmarks',
+        [
+            'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark',
+            'bookmarkLink' =>
+                $bookmark->isFaqBookmark($faqId)
+                    ?
+                    sprintf('index.php?action=faq&bookmark_action=remove&id=%d', $faqId)
+                    :
+                    sprintf('index.php?action=faq&bookmark_action=add&id=%d', $faqId),
+            'msgAddBookmark' =>
+                $bookmark->isFaqBookmark($faqId) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
+        ]
+    );
+}
+
 $availableLanguages = $faqConfig->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
 
 if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
@@ -360,15 +379,6 @@ $template->parse(
             ),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
-        'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark' : 'bi bi-bookmark-o',
-        'bookmarkLink' =>
-            $bookmark->isFaqBookmark($faqId)
-                ?
-                sprintf('index.php?action=faq&bookmark_action=remove&id=%d', $faqId)
-                :
-                sprintf('index.php?action=faq&bookmark_action=add&id=%d', $faqId),
-        'msgAddBookmark' =>
-            $bookmark->isFaqBookmark($faqId) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
         'alert' => (isset($bookmarkAlert)) ? $bookmarkAlert : '',
     ]
 );

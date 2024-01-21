@@ -76,7 +76,7 @@ class FaqHelper extends Helper
 
         return sprintf(
             '<i aria-hidden="true" class="bi bi-envelope"></i>' .
-            '<a rel="nofollow" href="%s" class="text-decoration-none">%s</a>',
+            '<a rel="nofollow" href="%s" class="text-decoration-none"> %s</a>',
             $url,
             Translation::get('msgSend2Friend')
         );

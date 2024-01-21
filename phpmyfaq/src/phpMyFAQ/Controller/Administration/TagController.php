@@ -37,7 +37,7 @@ class TagController extends AbstractController
     #[Route('admin/api/content/tag')]
     public function update(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_EDIT->value);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
@@ -91,7 +91,7 @@ class TagController extends AbstractController
             $tags = $tag->getAllTags();
         }
 
-        if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
+        if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT)) {
             $i = 0;
             $tagNames = [];
             foreach ($tags as $tagName) {

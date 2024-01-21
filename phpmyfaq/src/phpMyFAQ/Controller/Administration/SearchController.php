@@ -34,7 +34,7 @@ class SearchController extends AbstractController
     #[Route('admin/api/search/term')]
     public function deleteTerm(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS->value);
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $response = new JsonResponse();
         $deleteData = json_decode($request->getContent());

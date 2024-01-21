@@ -33,7 +33,7 @@ class QuestionController extends AbstractController
     #[Route('admin/api/question/delete')]
     public function delete(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::QUESTION_DELETE->value);
+        $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();

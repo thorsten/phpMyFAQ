@@ -36,7 +36,7 @@ class SessionController extends AbstractController
     #[Route('./admin/api/session/export')]
     public function export(Request $request): BinaryFileResponse|JsonResponse
     {
-        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS->value);
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $config = Configuration::getConfigurationInstance();
         $requestData = json_decode($request->getContent());
