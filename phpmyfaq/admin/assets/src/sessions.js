@@ -21,6 +21,24 @@ export const handleSessions = () => {
   const exportSessions = document.getElementById('exportSessions');
   const csrf = document.getElementById('csrf');
 
+  if (firstHour && lastHour) {
+    firstHour.addEventListener('change', async () => {
+      if (firstHour.value !== '' && lastHour.value !== '') {
+        exportSessions.disabled = false;
+      } else {
+        exportSessions.disabled = true;
+      }
+    });
+    lastHour.addEventListener('change', async () => {
+      if (lastHour.value !== '' && firstHour.value !== '') {
+        exportSessions.disabled = false;
+      } else {
+        exportSessions.disabled = true;
+      }
+    });
+  }
+  exportSessions.disabled = true;
+
   if (exportSessions) {
     exportSessions.addEventListener('click', async (event) => {
       event.preventDefault();
