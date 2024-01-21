@@ -6,6 +6,7 @@
 
 # PhpStorm/IntelliJ folder
 .idea*
+.run/*
 
 # Mac OS X crap
 .DS_Store

@@ -30,6 +30,9 @@ class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
 
+    /**
+     * @throws TwoFactorAuthException
+     */
     public function __construct(private readonly Configuration $config)
     {
         $this->twoFactorAuth = new TwoFactorAuth(issuer: $this->config->get('main.metaPublisher'));
@@ -78,10 +81,11 @@ class TwoFactor
 
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
+     * @throws TwoFactorAuthException
      */
     public function getQrCode(string $secret): string
     {
-        $user = new CurrentUser($this->config);
+        $user = CurrentUser::getCurrentUser($this->config);
         return $this->twoFactorAuth->getQRCodeImageAsDataUri($user->getUserData('email'), $secret);
     }
 }
