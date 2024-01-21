@@ -207,7 +207,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'editcateg')) {
                           </label>
                       </div>
                       <select name="restricted_users" id="restricted_users" class="form-select">
-                          <?= $userHelper->getAllUserOptions($userPermission[0]) ?>
+                          <?= $userHelper->getAllUserOptions($categoryData->getUserId()) ?>
                       </select>
                   </div>
               </div>
