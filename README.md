@@ -125,6 +125,8 @@ Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ## Testing
 
+### PHP
+
 To run our unit tests via PHPUnit v10.x, just execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
@@ -132,6 +134,42 @@ To run our unit tests via PHPUnit v10.x, just execute this command on your CLI
     $ ./vendor/bin/phpunit
 
 Please note that phpMyFAQ needs to be installed via Composer.
+
+### Javascript
+
+To run our Javascript tests via Jest, just execute this command on your CLI
+
+    $ curl -fsSL https://get.pnpm.io/install.sh | sh -
+    $ pnpm install
+    $ pnpm test
+
+### End-to-end tests
+
+To run our end-to-end tests via Playwright, you can use several commands:
+
+    $ pnpm exec playwright test
+
+Runs the end-to-end tests.
+
+    $ pnpm exec playwright test --ui
+
+Starts the interactive UI mode.
+
+    $ pnpm exec playwright test --project=chromium
+
+Runs the tests only on Desktop Chrome.
+
+    $ pnpm exec playwright test example
+
+Runs the tests in a specific file.
+
+    $ pnpm exec playwright test --debug
+
+Runs the tests in debug mode.
+
+    $ pnpm exec playwright codegen
+
+Auto generate tests with Codegen.
 
 ## Versioning
 

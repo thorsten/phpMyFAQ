@@ -10,4 +10,6 @@ module.exports = {
 
   // The test environment that will be used for testing
   testEnvironment: 'jsdom',
+
+  testMatch: ['**/*.test.js', '!**/*.playwright.test.js'],
 };

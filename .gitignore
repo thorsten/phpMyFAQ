@@ -92,5 +92,12 @@ tests/fixtures/path-to-delete/foo.bar.baz
 # Jest related stuff
 coverage/*
 
+# Playwright related stuff
+playwright-report/
+
 # Netbeans project folder
 nbproject/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
