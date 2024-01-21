@@ -145,7 +145,7 @@ class Category
      *
      * @param bool $withPermission With or without permission check
      */
-    public function getOrderedCategories(bool $withPermission = true): array
+    public function getOrderedCategories(bool $withPermission = true, bool $withInactive = false): array
     {
         $categories = [];
         $where = '';
@@ -157,11 +157,11 @@ class Category
                     ( fg.group_id IN (%s)
                 OR
                     (fu.user_id = %d AND fg.group_id IN (%s)))
-                AND
-                    fc.active = 1',
+                %s',
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups)
+                implode(', ', $this->groups),
+                $withInactive ? '' : 'AND fc.active = 1'
             );
         }
 
@@ -1151,6 +1151,7 @@ class Category
             $query .= " WHERE lang != '" . $this->language . "'";
         }
         $query .= ' ORDER BY id';
+
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
             if (!array_key_exists($row['id'], $this->categoryName)) {
