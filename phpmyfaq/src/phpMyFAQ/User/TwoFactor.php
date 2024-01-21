@@ -85,7 +85,7 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        $user = CurrentUser::getFromSession($this->config);
+        $user = CurrentUser::getCurrentUser($this->config);
         return $this->twoFactorAuth->getQRCodeImageAsDataUri($user->getUserData('email'), $secret);
     }
 }

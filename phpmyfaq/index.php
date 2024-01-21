@@ -187,7 +187,7 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
 
 if (isset($userAuth)) {
     if ($userAuth instanceof UserAuthentication) {
-        if ($userAuth->hasTwoFactorAuthentication() === true) {
+        if ($userAuth->hasTwoFactorAuthentication()) {
             $action = 'twofactor';
         }
     }
