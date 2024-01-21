@@ -81,6 +81,7 @@ class TwoFactor
 
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
+     *
      * @throws TwoFactorAuthException
      */
     public function getQrCode(string $secret): string
