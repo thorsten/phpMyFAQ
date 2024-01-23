@@ -186,7 +186,7 @@ class CurrentUser extends User
             $this->getUserByLogin($login);
 
             // only save this successful login to session when 2FA is not enabled
-            if ($this->getUserData('twofactor_enabled') !== 1) {
+            if ((int)$this->getUserData('twofactor_enabled') !== 1) {
                 $this->setLoggedIn(true);
                 $this->updateSessionId(true);
                 $this->saveToSession();
@@ -210,7 +210,7 @@ class CurrentUser extends User
             }
 
             // Login successful if 2FA is not enabled
-            if ($this->getUserData('twofactor_enabled') !== 1) {
+            if ((int)$this->getUserData('twofactor_enabled') !== 1) {
                 $this->setSuccess(true);
             }
 

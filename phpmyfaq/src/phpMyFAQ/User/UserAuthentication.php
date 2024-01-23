@@ -87,7 +87,7 @@ class UserAuthentication
 
         // Local
         if ($this->user->login($username, $password)) {
-            if ($this->user->getUserData('twofactor_enabled') == 1) {
+            if ($this->user->getUserData('twofactor_enabled')) {
                 $this->setTwoFactorAuthentication(true);
                 $this->user->setLoggedIn(false);
             } else {

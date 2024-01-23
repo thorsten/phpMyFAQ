@@ -144,7 +144,7 @@ if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)
 //
 // Validating token from 2FA if given; else: returns error message
 //
-if ($token !== '' && $userid !== '') {
+if ($token !== '' && !is_null($userid)) {
     if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userid);
@@ -185,7 +185,7 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
 
 if (isset($userAuth)) {
     if ($userAuth instanceof UserAuthentication) {
-        if ($userAuth->hasTwoFactorAuthentication() === true) {
+        if ($userAuth->hasTwoFactorAuthentication()) {
             $action = 'twofactor';
         }
     }

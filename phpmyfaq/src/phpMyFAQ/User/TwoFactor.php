@@ -93,10 +93,12 @@ class TwoFactor
 
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
+     *
+     * @throws TwoFactorAuthException
      */
     public function getQrCode(string $secret): string
     {
-        $user = CurrentUser::getFromSession($this->config);
+        $user = CurrentUser::getCurrentUser($this->config);
         $label = $this->config->getTitle() . ':' . $user->getUserData('email');
         $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) . '&image=' . $this->config->getDefaultUrl() .
         'assets/themes/' . Template::getTplSetName() . '/img/logo.png';
