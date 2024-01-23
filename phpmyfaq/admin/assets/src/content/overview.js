@@ -63,6 +63,8 @@ export const handleFaqOverview = async () => {
               checkbox.checked = element.checked;
               if (checkbox.checked === true) {
                 faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+              } else {
+                faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
               }
             }
           });
@@ -91,9 +93,6 @@ export const handleFaqOverview = async () => {
       element.addEventListener('change', (event) => {
         event.preventDefault();
 
-        console.log(event.target);
-        console.log('toggle active faqs');
-
         const categoryId = event.target.getAttribute('data-pmf-category-id');
         const faqIds = [];
         const token = event.target.getAttribute('data-pmf-csrf');
@@ -104,6 +103,8 @@ export const handleFaqOverview = async () => {
             if (checkbox.getAttribute('data-pmf-category-id-active') === categoryId) {
               checkbox.checked = element.checked;
               if (checkbox.checked === true) {
+                faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
+              } else {
                 faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
               }
             }
