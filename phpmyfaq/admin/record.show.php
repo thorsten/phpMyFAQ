@@ -105,6 +105,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
     $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory();
 
     $numActiveByCat = [];
+    $numStickyByCat = [];
 
     $csrfToken = Token::getInstance()->getTokenString('faq-overview');
 
@@ -134,7 +135,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
             if (!isset($numActiveByCat[$record['category_id']])) {
                 $numActiveByCat[$record['category_id']] = 0;
             }
+            if (!isset($numStickyByCat[$record['category_id']])) {
+                $numStickyByCat[$record['category_id']] = 0;
+            }
             $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
+            $numStickyByCat[$record['category_id']] += $record['sticky'];
         }
     } else {
         $fdTable = Database::getTablePrefix() . 'faqdata';
@@ -324,7 +329,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq') || $user->perm->h
                       <div class="form-check">
                         <input class="form-check-input pmf-admin-faqs-all-sticky" type="checkbox" value=""
                                data-pmf-category-id="<?= $cid ?>" data-pmf-csrf="<?= $csrfToken ?>"
-                               id="sticky_category_block_<?= $cid ?>">
+                               id="sticky_category_block_<?= $cid ?>"
+                            <?php
+                            if (
+                                isset($numRecordsByCat[$cid]) && isset($numStickyByCat[$cid]) &&
+                                $numRecordsByCat[$cid] === $numStickyByCat[$cid]
+                            ) {
+                                echo 'checked';
+                            }
+                            ?>>
                         <label class="form-check-label" for="sticky_category_block_<?= $cid ?>">
                           <?= Translation::get('ad_record_sticky') ?>
                         </label>
