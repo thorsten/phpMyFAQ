@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Class for User Authentication.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2023 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2023-02-04
+ */
+
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Auth\AuthLdap;
@@ -67,7 +82,7 @@ class UserAuthentication
 
         // Local
         if ($this->user->login($username, $password)) {
-            if ($this->user->getUserData('twofactor_enabled') == 1) {
+            if ($this->user->getUserData('twofactor_enabled')) {
                 $this->setTwoFactorAuthentication(true);
                 $this->user->setLoggedIn(false);
             } else {

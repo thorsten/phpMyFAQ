@@ -321,6 +321,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             }
 
             $category = new Category($faqConfig, $currentAdminGroups, true);
+            $category->getOrderedCategories(true, true);
             $category->setUser($currentAdminUser);
             $category->setGroups($currentAdminGroups);
             $category->getMissingCategories();
