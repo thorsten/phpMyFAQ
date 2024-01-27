@@ -12,7 +12,10 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-05
  */
-import { deleteGlossary } from '../api';
+
+import { createGlossary, deleteGlossary } from '../api';
+import { addElement } from '../../../../assets/src/utils';
+import { pushNotification } from '../utils';
 
 export const handleDeleteGlossary = () => {
   const deleteButtons = document.querySelectorAll('.pmf-admin-delete-glossary');
@@ -29,8 +32,54 @@ export const handleDeleteGlossary = () => {
 
         if (response) {
           button.closest('tr').remove();
+          pushNotification(response.success);
         }
       });
+    });
+  }
+};
+
+export const handleAddGlossary = () => {
+  const saveGlossaryButton = document.getElementById('pmf-admin-glossary-add');
+  const modal = document.getElementById('addGlossaryModal');
+  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
+
+  if (saveGlossaryButton) {
+    saveGlossaryButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      const glossaryItem = document.getElementById('item').value;
+      const glossaryDefinition = document.getElementById('definition').value;
+      const csrfToken = document.getElementById('pmf-csrf-token').value;
+
+      const response = await createGlossary(glossaryItem, glossaryDefinition, csrfToken);
+
+      if (response) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+
+        const tableBody = document.querySelector('#pmf-admin-glossary-table tbody');
+        const row = addElement('tr', {}, [
+          addElement('td', { innerText: glossaryItem }),
+          addElement('td', { innerText: glossaryDefinition }),
+          addElement('td', { classList: 'text-end' }, [
+            addElement(
+              'button',
+              {
+                classList: 'btn btn-danger pmf-admin-delete-glossary',
+                'data-pmfGlossaryId': glossaryItem,
+                'data-pmfCsrfToken': '',
+                type: 'button',
+                innerText: 'Delete',
+              },
+              [addElement('i', { class: 'bi bi-trash' })]
+            ),
+          ]),
+        ]);
+        tableBody.appendChild(row);
+        pushNotification(response.success);
+      }
     });
   }
 };

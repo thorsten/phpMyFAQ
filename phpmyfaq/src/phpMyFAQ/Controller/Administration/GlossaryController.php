@@ -61,4 +61,37 @@ class GlossaryController extends AbstractController
 
         return $response;
     }
+
+    #[Route('admin/api/glossary/add')]
+    public function create(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::GLOSSARY_ADD);
+
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $data = json_decode($request->getContent());
+
+        $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
+        $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance()->verifyToken('add-glossary', $data->csrf)) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+
+            return $response;
+        }
+
+        $glossary = new Glossary($configuration);
+
+        if ($glossary->addGlossaryItem($glossaryItem, $glossaryDefinition)) {
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_glossary_save_success')]);
+        } else {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('ad_glossary_save_error')]);
+        }
+
+        return $response;
+    }
 }

@@ -321,11 +321,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'glossary':
             case 'saveglossary':
             case 'updateglossary':
-            case 'deleteglossary':
                 require 'glossary.main.php';
-                break;
-            case 'addglossary':
-                require 'glossary.add.php';
                 break;
             case 'editglossary':
                 require 'glossary.edit.php';

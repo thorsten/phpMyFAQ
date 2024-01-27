@@ -208,6 +208,10 @@ $routes->add(
 // Glossary API
 //
 $routes->add(
+    'admin.api.glossary.add',
+    new Route('/glossary/add', ['_controller' => [GlossaryController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
     'admin.api.glossary.delete',
     new Route('/glossary/delete', ['_controller' => [GlossaryController::class, 'delete'], '_methods' => 'DELETE'])
 );

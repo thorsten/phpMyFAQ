@@ -53,6 +53,10 @@ if (
         'glossaryItems' => $glossary->getAllGlossaryItems(),
         'buttonDelete' => Translation::get('ad_entry_delete'),
         'csrfTokenDelete' => Token::getInstance()->getTokenString('delete-glossary'),
+        'addGlossaryTitle' => Translation::get('ad_glossary_add'),
+        'addGlossaryCsrfTokenInput' => Token::getInstance()->getTokenInput('add-glossary'),
+        'closeModal' => Translation::get('ad_att_close'),
+        'saveModal' => Translation::get('ad_gen_save'),
     ];
 
     echo $template->render($templateVars);
@@ -61,7 +65,6 @@ if (
 }
 
         $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-        $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (
             $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_ADD->value) ||
@@ -69,20 +72,6 @@ if (
             $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_DELETE->value)
         ) {
             $glossary = new Glossary($faqConfig);
-
-            if (
-                'saveglossary' == $action &&
-                $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_ADD->value) &&
-                Token::getInstance()->verifyToken('add-glossary', $csrfTokenFromPost)
-            ) {
-                $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
-                $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
-                if ($glossary->addGlossaryItem($item, $definition)) {
-                    echo Alert::success('ad_glossary_save_success');
-                } else {
-                    echo Alert::danger('ad_glossary_save_error', $faqConfig->getDb()->error());
-                }
-            }
 
             if (
                 'updateglossary' == $action &&
@@ -96,19 +85,6 @@ if (
                     echo Alert::success('ad_glossary_update_success');
                 } else {
                     echo Alert::danger('ad_glossary_update_error', $faqConfig->getDb()->error());
-                }
-            }
-
-            if (
-                'deleteglossary' == $action &&
-                $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_DELETE->value) &&
-                Token::getInstance()->verifyToken('delete-glossary', $csrfTokenFromGet)
-            ) {
-                $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-                if ($glossary->deleteGlossaryItem($id)) {
-                    echo Alert::success('ad_glossary_delete_success');
-                } else {
-                    echo Alert::danger('ad_glossary_delete_error', $faqConfig->getDb()->error());
                 }
             }
 

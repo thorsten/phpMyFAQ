@@ -187,6 +187,7 @@ RewriteRule admin/api/faq/search                            admin/api/index.php
 RewriteRule admin/api/faq/sticky                            admin/api/index.php
 RewriteRule admin/api/faq/import                            admin/api/index.php
 RewriteRule admin/api/faqs                                  admin/api/index.php
+RewriteRule admin/api/glossary/add                          admin/api/index.php
 RewriteRule admin/api/glossary/delete                       admin/api/index.php
 RewriteRule admin/api/group/data                   admin/api/index.php
 RewriteRule admin/api/group/groups                 admin/api/index.php

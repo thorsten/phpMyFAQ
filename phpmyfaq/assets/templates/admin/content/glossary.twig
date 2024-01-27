@@ -4,7 +4,7 @@
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button class="btn btn-outline-success">
+      <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addGlossaryModal">
         <i aria-hidden="true" class="bi bi-plus"></i> {{ msgAddGlossary }}
       </button>
     </div>
@@ -14,7 +14,7 @@
 <div class="row">
   <div class="col-12">
 
-    <table class="table table-striped align-middle">
+    <table class="table table-striped align-middle" id="pmf-admin-glossary-table">
       <thead>
       <tr>
         <th>{{ msgGlossaryItem }}</th>
@@ -37,5 +37,46 @@
       </tbody>
     </table>
 
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addGlossaryModal" tabindex="-1" aria-labelledby="addGlossaryModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addGlossaryModalLabel">
+          <i aria-hidden="true" class="bi bi-list-ul"></i>
+          {{ addGlossaryTitle }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ closeModal }}"></button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" accept-charset="utf-8">
+          {{ addGlossaryCsrfTokenInput | raw }}
+
+          <div class="row mb-2">
+            <label class="col-3 col-form-label" for="item">{{ msgGlossaryItem }}</label>
+            <div class="col-9">
+              <input class="form-control" type="text" name="item" id="item" required>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-3 col-form-label" for="definition">
+              {{ msgGlossaryDefinition }}
+            </label>
+            <div class="col-9">
+              <textarea class="form-control" name="definition" id="definition" cols="50" rows="5" required></textarea>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ closeModal }}</button>
+        <button type="button" class="btn btn-primary" id="pmf-admin-glossary-add">{{ saveModal }}</button>
+      </div>
+    </div>
   </div>
 </div>

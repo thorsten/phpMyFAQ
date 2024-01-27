@@ -40,6 +40,7 @@ import {
   handleCategoryDelete,
   handleUploadCSVForm,
   handleDeleteGlossary,
+  handleAddGlossary,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Content -> Glossary
   handleDeleteGlossary();
+  handleAddGlossary();
 
   // Content -> Tags
   handleTags();
