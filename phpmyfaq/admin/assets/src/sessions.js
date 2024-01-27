@@ -23,23 +23,15 @@ export const handleSessions = () => {
 
   if (firstHour && lastHour) {
     firstHour.addEventListener('change', async () => {
-      if (firstHour.value !== '' && lastHour.value !== '') {
-        exportSessions.disabled = false;
-      } else {
-        exportSessions.disabled = true;
-      }
+      exportSessions.disabled = !(firstHour.value !== '' && lastHour.value !== '');
     });
     lastHour.addEventListener('change', async () => {
-      if (lastHour.value !== '' && firstHour.value !== '') {
-        exportSessions.disabled = false;
-      } else {
-        exportSessions.disabled = true;
-      }
+      exportSessions.disabled = !(lastHour.value !== '' && firstHour.value !== '');
     });
   }
-  exportSessions.disabled = true;
 
   if (exportSessions) {
+    exportSessions.disabled = true;
     exportSessions.addEventListener('click', async (event) => {
       event.preventDefault();
 
