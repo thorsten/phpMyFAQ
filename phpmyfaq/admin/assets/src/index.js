@@ -14,7 +14,7 @@
  */
 
 import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
-import { handleSessions } from './sessions';
+import { handleSessions, handleStatistics } from './statistics';
 import { sidebarToggle } from './sidebar';
 import {
   handleConfiguration,
@@ -24,7 +24,6 @@ import {
   handleCheckForUpdates,
   handleSaveConfiguration,
 } from './configuration';
-import { handleStatistics } from './statistics';
 import {
   handleAttachmentUploads,
   handleCategories,
@@ -40,6 +39,7 @@ import {
   handleStickyFaqs,
   handleCategoryDelete,
   handleUploadCSVForm,
+  handleDeleteGlossary,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Content -> Attachments
   handleDeleteAttachments();
 
+  // Content -> Glossary
+  handleDeleteGlossary();
+
   // Content -> Tags
   handleTags();
 
@@ -112,10 +115,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Configuration -> Elasticsearch configuration
   await handleElasticsearch();
-  
+
   // Import & Export -> Import Records
   await handleUploadCSVForm();
-  
+
   // Statistics -> User-tracking
   await handleSessions();
 });

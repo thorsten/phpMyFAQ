@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="bi bi-list-ul"></i> {{ adminHeaderGlossary }}
+  </h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button class="btn btn-outline-success">
+        <i aria-hidden="true" class="bi bi-plus"></i> {{ msgAddGlossary }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+
+    <table class="table table-striped align-middle">
+      <thead>
+      <tr>
+        <th>{{ msgGlossaryItem }}</th>
+        <th colspan="2">{{ msgGlossaryDefinition }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for glossary in glossaryItems %}
+        <tr>
+          <td><a href="?action=editglossary&id={{ glossary.id }}">{{ glossary.item }}</a></td>
+          <td>{{ glossary.definition }}</td>
+          <td class="text-end">
+            <button class="btn btn-danger pmf-admin-delete-glossary" data-pmf-glossary-id="{{ glossary.id }}" data-pmf-csrf-token="{{ csrfTokenDelete }}">
+              <i aria-hidden="true" class="bi bi-trash"></i>
+              {{ buttonDelete }}
+            </button>
+          </td>
+        </tr>
+      {%  endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>

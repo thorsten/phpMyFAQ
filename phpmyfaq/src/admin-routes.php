@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\FaqController;
+use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\InstanceController;
@@ -201,6 +202,14 @@ $routes->add(
 $routes->add(
     'admin.api.configuration.templates',
     new Route('/configuration/templates', ['_controller' => [ConfigurationTabController::class, 'templates']])
+);
+
+//
+// Glossary API
+//
+$routes->add(
+    'admin.api.glossary.delete',
+    new Route('/glossary/delete', ['_controller' => [GlossaryController::class, 'delete'], '_methods' => 'DELETE'])
 );
 
 //

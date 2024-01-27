@@ -13,7 +13,7 @@
  * @since     2024-01-14
  */
 
-import { pushErrorNotification } from './utils';
+import { pushErrorNotification } from '../utils';
 
 export const handleSessions = () => {
   const firstHour = document.getElementById('firstHour');

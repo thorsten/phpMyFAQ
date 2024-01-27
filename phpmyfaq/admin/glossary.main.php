@@ -21,8 +21,11 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,26 +35,31 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-?>
+if (
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_ADD->value) ||
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_EDIT->value) ||
+    $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_DELETE->value)
+) {
+    $glossary = new Glossary($faqConfig);
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-        <i aria-hidden="true" class="bi bi-list-ul"></i> <?= Translation::get('ad_menu_glossary') ?>
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <a href="?action=addglossary">
-                <button class="btn btn-outline-success">
-                    <i aria-hidden="true" class="bi bi-plus"></i> <?= Translation::get('ad_glossary_add') ?>
-                </button>
-            </a>
-        </div>
-    </div>
-</div>
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $template = $twig->loadTemplate('./admin/content/glossary.twig');
 
-<div class="row">
-  <div class="col-lg-12">
-      <?php
+    $templateVars = [
+        'adminHeaderGlossary' => Translation::get('ad_menu_glossary'),
+        'msgAddGlossary' => Translation::get('ad_glossary_add'),
+        'msgGlossaryItem' => Translation::get('ad_glossary_item'),
+        'msgGlossaryDefinition' => Translation::get('ad_glossary_definition'),
+        'glossaryItems' => $glossary->getAllGlossaryItems(),
+        'buttonDelete' => Translation::get('ad_entry_delete'),
+        'csrfTokenDelete' => Token::getInstance()->getTokenString('delete-glossary'),
+    ];
+
+    echo $template->render($templateVars);
+} else {
+    require 'no-permission.php';
+}
+
         $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
         $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -104,45 +112,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
                 }
             }
 
-            $glossaryItems = $glossary->getAllGlossaryItems();
-
-            echo '<table class="table table-striped align-middle">';
-            printf(
-                '<thead><tr><th>%s</th><th>%s</th><th style="width: 16px">&nbsp;</th></tr></thead>',
-                Translation::get('ad_glossary_item'),
-                Translation::get('ad_glossary_definition')
-            );
-
-            foreach ($glossaryItems as $items) {
-                echo '<tr>';
-                printf(
-                    '<td><a href="%s%d">%s</a></td>',
-                    '?action=editglossary&amp;id=',
-                    $items['id'],
-                    $items['item']
-                );
-                printf(
-                    '<td>%s</td>',
-                    $items['definition']
-                );
-                printf(
-                    '<td><a class="btn btn-danger" onclick="return confirm(\'%s\');" href="%s%d%s%s">',
-                    Translation::get('ad_user_del_3'),
-                    '?action=deleteglossary&amp;id=',
-                    $items['id'],
-                    '&csrf=',
-                    Token::getInstance()->getTokenString('delete-glossary')
-                );
-                printf(
-                    '<span title="%s"><i aria-hidden="true" class="bi bi-trash"></i></span></a></td>',
-                    Translation::get('ad_entry_delete')
-                );
-                echo '</tr>';
-            }
-            echo '</table>';
         } else {
             require 'no-permission.php';
         }
-        ?>
-  </div>
-</div>
+
