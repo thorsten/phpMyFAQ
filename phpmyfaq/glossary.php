@@ -36,7 +36,7 @@ $request = Request::createFromGlobals();
 $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 
 $glossary = new Glossary($faqConfig);
-$glossaryItems = $glossary->getAllGlossaryItems();
+$glossaryItems = $glossary->fetchAll();
 $numItems = is_countable($glossaryItems) ? count($glossaryItems) : 0;
 $itemsPerPage = 10;
 

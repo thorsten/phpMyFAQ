@@ -207,13 +207,21 @@ $routes->add(
 //
 // Glossary API
 //
+$routes->add('admin.api.glossary', new Route('/glossary', ['_controller' => [GlossaryController::class, 'fetch']]));
+
 $routes->add(
     'admin.api.glossary.add',
     new Route('/glossary/add', ['_controller' => [GlossaryController::class, 'create'], '_methods' => 'POST'])
 );
+
 $routes->add(
     'admin.api.glossary.delete',
     new Route('/glossary/delete', ['_controller' => [GlossaryController::class, 'delete'], '_methods' => 'DELETE'])
+);
+
+$routes->add(
+    'admin.api.glossary.update',
+    new Route('/glossary/update', ['_controller' => [GlossaryController::class, 'delete'], '_methods' => 'PUT'])
 );
 
 //

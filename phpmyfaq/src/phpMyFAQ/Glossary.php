@@ -133,7 +133,7 @@ class Glossary
             'onafterscriptexecute',
         ];
 
-        foreach ($this->getAllGlossaryItems() as $item) {
+        foreach ($this->fetchAll() as $item) {
             $this->definition = $item['definition'];
             $item['item'] = preg_quote((string) $item['item'], '/');
             $content = Strings::preg_replace_callback(
@@ -160,8 +160,10 @@ class Glossary
 
     /**
      * Gets all items and definitions from the database.
+     *
+     * @return array<array<int, string, string>>
      */
-    public function getAllGlossaryItems(): array
+    public function fetchAll(): array
     {
         $items = [];
 
@@ -231,7 +233,7 @@ class Glossary
      *
      * @param int $id Glossary ID
      */
-    public function getGlossaryItem(int $id): array
+    public function fetch(int $id): array
     {
         $item = [];
 
@@ -261,7 +263,7 @@ class Glossary
      * @param string $item       Item
      * @param string $definition Definition
      */
-    public function addGlossaryItem(string $item, string $definition): bool
+    public function create(string $item, string $definition): bool
     {
         $this->definition = $this->config->getDb()->escape($definition);
 
@@ -288,7 +290,7 @@ class Glossary
      * @param string $item       Item
      * @param string $definition Definition
      */
-    public function updateGlossaryItem(int $id, string $item, string $definition): bool
+    public function update(int $id, string $item, string $definition): bool
     {
         $item = $this->config->getDb()->escape($item);
         $definition = $this->config->getDb()->escape($definition);
@@ -314,7 +316,7 @@ class Glossary
      *
      * @param int $id Glossary ID
      */
-    public function deleteGlossaryItem(int $id): bool
+    public function delete(int $id): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",

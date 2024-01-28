@@ -38,47 +38,10 @@ RewriteEngine On
 RewriteBase /
 
 # Error pages
-#ErrorDocument 404 /index.php?action=404
+ErrorDocument 404 /index.php?action=404
 
-# show all categories
-RewriteCond %{REQUEST_URI}          /show-categories\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=show [L,QSA]
-
-# the search page
-RewriteCond %{REQUEST_URI}          /search\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=search [L,QSA]
-
-# the add content page
-RewriteCond %{REQUEST_URI}          /addcontent\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=add [L,QSA]
-
-# the ask question page
-RewriteCond %{REQUEST_URI}          /ask\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
-
-# the open questions page
-RewriteCond %{REQUEST_URI}          /open-questions\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=open-questions [L,QSA]
-
-# the contact page
-RewriteCond %{REQUEST_URI}          /contact\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
-
-# the glossary page
-RewriteCond %{REQUEST_URI}          /glossary\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=glossary [L,QSA]
-
-# the overview page
-RewriteCond %{REQUEST_URI}          /overview\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=overview [L,QSA]
-
-# the login page
-RewriteCond %{REQUEST_URI}          /login\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=login [L,QSA]
-
-# the login page
-RewriteCond %{REQUEST_URI}          /privacy\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=privacy [L,QSA]
+# General pages
+RewriteRule ^(show-categories|search|addcontent|ask|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
 
 # start page
 RewriteRule ^index.html$            index.php [PT]
@@ -92,147 +55,58 @@ RewriteCond %{REQUEST_URI}          /bookmarks\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=bookmarks [L,QSA]
 
 # PMF faq record page
-# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
-# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.html
 RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
 
 # PMF category page with page count
-# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.htm
-# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.html
 RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$               index.php?action=show&cat=$1&seite=$2 [L,QSA]
 
 # PMF category page
-# * http://[...]/category/1/<CATEGORY NAME>.htm
-# * http://[...]/category/1/<CATEGORY NAME>.html
 RewriteRule category/([0-9]+)/(.+)\.htm(l?)$                        index.php?action=show&cat=$1 [L,QSA]
 
 # PMF news page
-# * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.htm
-# * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.html
 RewriteRule news/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$                 index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
 
 # PMF sitemap
-# * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.htm
-# * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.html
 RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$                   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 
 # PMF Google sitemap
-# * http://[...]/sitemap.xml
-# * http://[...]/sitemap.gz
-# * http://[...]/sitemap.xml.gz
 RewriteRule sitemap.xml$                                            sitemap.xml.php [L]
 RewriteRule sitemap.gz$                                             sitemap.xml.php?gz=1 [L]
 RewriteRule sitemap.xml.gz$                                         sitemap.xml.php?gz=1 [L]
 
 # PMF tags page with page count
-# * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
 
 # PMF tags page
-# * http://[...]/tags/<ID>/<HEADER>.html
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
 
 # User pages
-RewriteRule user/ucp                                        index.php?action=ucp [L,QSA]
-RewriteRule user/bookmarks                                  index.php?action=bookmarks [L,QSA]
-RewriteRule user/request-removal                            index.php?action=request-removal [L,QSA]
-RewriteRule user/logout                                     index.php?action=logout [L,QSA]
+RewriteRule user/(ucp|bookmarks|request-removal|logout)            index.php?action=$1 [L,QSA]
+
 
 # Private APIs
-RewriteRule api/autocomplete                                api/index.php [L,QSA]
-RewriteRule api/bookmark/([0-9]+)                           api/index.php [L,QSA]
+RewriteRule api/(autocomplete|bookmark/([0-9]+))                   api/index.php [L,QSA]
+
 
 # Setup APIs
-RewriteRule api/setup/check                                 api/index.php [L,QSA]
-RewriteRule api/setup/backup                                api/index.php [L,QSA]
-RewriteRule api/setup/update-database                       api/index.php [L,QSA]
+RewriteRule api/setup/(check|backup|update-database)               api/index.php [L,QSA]
 
 # Administration API
-RewriteRule admin/api/category/delete                       admin/api/index.php [L,QSA]
-RewriteRule admin/api/category/permissions                  admin/api/index.php [L,QSA]
-RewriteRule admin/api/category/update-order                 admin/api/index.php [L,QSA]
-RewriteRule admin/api/category/translations                 admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/faqs-sorting-key        admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/faqs-sorting-order      admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/faqs-sorting-popular    admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/list                    admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/perm-level              admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/release-environment     admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/search-relevance        admin/api/index.php [L,QSA]
-RewriteRule admin/api/configuration/send-test-mail          admin/api/index.php
-RewriteRule admin/api/configuration/seo-metatags            admin/api/index.php
-RewriteRule admin/api/configuration/templates               admin/api/index.php
-RewriteRule admin/api/configuration/translations            admin/api/index.php
-RewriteRule admin/api/configuration                         admin/api/index.php
-RewriteRule admin/api/content/attachments                   admin/api/index.php
-RewriteRule admin/api/content/attachments/upload            admin/api/index.php
-RewriteRule admin/api/content/comments                      admin/api/index.php
-RewriteRule admin/api/content/images                        admin/api/index.php
-RewriteRule admin/api/content/markdown                      admin/api/index.php
-RewriteRule admin/api/content/tags                          admin/api/index.php
-RewriteRule admin/api/content/tag                           admin/api/index.php
-RewriteRule admin/api/dashboard/topten                      admin/api/index.php
-RewriteRule admin/api/dashboard/versions                    admin/api/index.php
-RewriteRule admin/api/dashboard/visits                      admin/api/index.php
-RewriteRule admin/api/elasticsearch/create                  admin/api/index.php
-RewriteRule admin/api/elasticsearch/drop                    admin/api/index.php
-RewriteRule admin/api/elasticsearch/import                  admin/api/index.php
-RewriteRule admin/api/elasticsearch/statistics              admin/api/index.php
-RewriteRule admin/api/export/file                           admin/api/index.php
-RewriteRule admin/api/export/report                         admin/api/index.php
-RewriteRule admin/api/faq/activate                          admin/api/index.php
-RewriteRule admin/api/faq/delete                            admin/api/index.php
-RewriteRule admin/api/faq/permissions                       admin/api/index.php
-RewriteRule admin/api/faq/search                            admin/api/index.php
-RewriteRule admin/api/faq/sticky                            admin/api/index.php
-RewriteRule admin/api/faq/import                            admin/api/index.php
-RewriteRule admin/api/faqs                                  admin/api/index.php
-RewriteRule admin/api/glossary/add                          admin/api/index.php
-RewriteRule admin/api/glossary/delete                       admin/api/index.php
-RewriteRule admin/api/group/data                   admin/api/index.php
-RewriteRule admin/api/group/groups                 admin/api/index.php
-RewriteRule admin/api/group/members                admin/api/index.php
-RewriteRule admin/api/group/permissions            admin/api/index.php
-RewriteRule admin/api/group/users                  admin/api/index.php
-RewriteRule admin/api/instance/add                 admin/api/index.php
-RewriteRule admin/api/instance/delete              admin/api/index.php
-RewriteRule admin/api/question/delete              admin/api/index.php
-RewriteRule admin/api/search/term                  admin/api/index.php
-RewriteRule admin/api/session/export               admin/api/index.php
-RewriteRule admin/api/stopword/delete              admin/api/index.php
-RewriteRule admin/api/stopword/save                admin/api/index.php
-RewriteRule admin/api/stopwords                    admin/api/index.php
-RewriteRule admin/api/user/users                   admin/api/index.php
-RewriteRule admin/api/user/activate                admin/api/index.php
-RewriteRule admin/api/user/add                     admin/api/index.php
-RewriteRule admin/api/user/data                    admin/api/index.php
-RewriteRule admin/api/user/delete                  admin/api/index.php
-RewriteRule admin/api/user/permissions             admin/api/index.php
-RewriteRule admin/api/user/overwrite-password      admin/api/index.php
-RewriteRule admin/api/health-check                 admin/api/index.php
-RewriteRule admin/api/versions                     admin/api/index.php
-RewriteRule admin/api/update-check                 admin/api/index.php
-RewriteRule admin/api/download-package             admin/api/index.php
-RewriteRule admin/api/extract-package              admin/api/index.php
-RewriteRule admin/api/create-temporary-backup      admin/api/index.php
-RewriteRule admin/api/install-package              admin/api/index.php
-RewriteRule admin/api/update-database              admin/api/index.php
-RewriteRule admin/api/cleanup                      admin/api/index.php
-RewriteRule admin/api/faqs/sticky/order            admin/api/index.php
+RewriteRule admin/api/(.*)                                         admin/api/index.php [L,QSA]
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>
-RewriteRule api/v2.0/version                       api/index.php
-RewriteRule api/v2.0/language                      api/index.php
-RewriteRule api/v2.0/categories                    api/index.php
-RewriteRule api/v2.0/searches/popular              api/index.php
-RewriteRule api/v2.0/search                        api/index.php
-RewriteRule api/v2.0/tags                          api/index.php
-RewriteRule api/v2.0/open-questions                api/index.php
-RewriteRule api/v2.0/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.0/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.0/news                          api/index.php
-RewriteRule api/v2.0/login                         api/index.php
+RewriteRule api/v2.0/version                       api/index.php [L,QSA]
+RewriteRule api/v2.0/language                      api/index.php [L,QSA]
+RewriteRule api/v2.0/categories                    api/index.php [L,QSA]
+RewriteRule api/v2.0/searches/popular              api/index.php [L,QSA]
+RewriteRule api/v2.0/search                        api/index.php [L,QSA]
+RewriteRule api/v2.0/tags                          api/index.php [L,QSA]
+RewriteRule api/v2.0/open-questions                api/index.php [L,QSA]
+RewriteRule api/v2.0/comments/([0-9]+)             api/index.php [L,QSA]
+RewriteRule api/v2.0/attachments/([0-9]+)          api/index.php [L,QSA]
+RewriteRule api/v2.0/news                          api/index.php [L,QSA]
+RewriteRule api/v2.0/login                         api/index.php [L,QSA]
 RewriteRule api/v2.0/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.0/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.0/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -243,17 +117,17 @@ RewriteRule api/v2.0/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId
 
 # REST API v2.1
 # * http://[...]/api/v2.1/<ACTION>
-RewriteRule api/v2.1/version                       api/index.php
-RewriteRule api/v2.1/language                      api/index.php
-RewriteRule api/v2.1/categories                    api/index.php
-RewriteRule api/v2.1/searches/popular              api/index.php
-RewriteRule api/v2.1/search                        api/index.php
-RewriteRule api/v2.1/tags                          api/index.php
-RewriteRule api/v2.1/open-questions                api/index.php
-RewriteRule api/v2.1/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.1/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.1/news                          api/index.php
-RewriteRule api/v2.1/login                         api/index.php
+RewriteRule api/v2.1/version                       api/index.php [L,QSA]
+RewriteRule api/v2.1/language                      api/index.php [L,QSA]
+RewriteRule api/v2.1/categories                    api/index.php [L,QSA]
+RewriteRule api/v2.1/searches/popular              api/index.php [L,QSA]
+RewriteRule api/v2.1/search                        api/index.php [L,QSA]
+RewriteRule api/v2.1/tags                          api/index.php [L,QSA]
+RewriteRule api/v2.1/open-questions                api/index.php [L,QSA]
+RewriteRule api/v2.1/comments/([0-9]+)             api/index.php [L,QSA]
+RewriteRule api/v2.1/attachments/([0-9]+)          api/index.php [L,QSA]
+RewriteRule api/v2.1/news                          api/index.php [L,QSA]
+RewriteRule api/v2.1/login                         api/index.php [L,QSA]
 RewriteRule api/v2.1/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.1/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.1/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -267,20 +141,20 @@ RewriteRule api/v2.1/question                      api.php?action=question [L,QS
 
 # REST API v2.2
 # * http://[...]/api/v2.2/<ACTION>
-RewriteRule api/v2.2/version                       api/index.php
-RewriteRule api/v2.2/title                         api/index.php
-RewriteRule api/v2.2/language                      api/index.php
-RewriteRule api/v2.2/categories                    api/index.php
+RewriteRule api/v2.2/version                       api/index.php [L,QSA]
+RewriteRule api/v2.2/title                         api/index.php [L,QSA]
+RewriteRule api/v2.2/language                      api/index.php [L,QSA]
+RewriteRule api/v2.2/categories                    api/index.php [L,QSA]
 RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
-RewriteRule api/v2.2/groups                        api/index.php
-RewriteRule api/v2.2/searches/popular              api/index.php
-RewriteRule api/v2.2/search                        api/index.php
-RewriteRule api/v2.2/tags                          api/index.php
-RewriteRule api/v2.2/open-questions                api/index.php
-RewriteRule api/v2.2/comments/([0-9]+)             api/index.php
-RewriteRule api/v2.2/attachments/([0-9]+)          api/index.php
-RewriteRule api/v2.2/news                          api/index.php
-RewriteRule api/v2.2/login                         api/index.php
+RewriteRule api/v2.2/groups                        api/index.php [L,QSA]
+RewriteRule api/v2.2/searches/popular              api/index.php [L,QSA]
+RewriteRule api/v2.2/search                        api/index.php [L,QSA]
+RewriteRule api/v2.2/tags                          api/index.php [L,QSA]
+RewriteRule api/v2.2/open-questions                api/index.php [L,QSA]
+RewriteRule api/v2.2/comments/([0-9]+)             api/index.php [L,QSA]
+RewriteRule api/v2.2/attachments/([0-9]+)          api/index.php [L,QSA]
+RewriteRule api/v2.2/news                          api/index.php [L,QSA]
+RewriteRule api/v2.2/login                         api/index.php [L,QSA]
 RewriteRule api/v2.2/faqs/([0-9]+)                 api.php?action=faqs&categoryId=$1 [L,QSA]
 RewriteRule api/v2.2/faqs/popular                  api.php?action=faqs&filter=popular [L,QSA]
 RewriteRule api/v2.2/faqs/latest                   api.php?action=faqs&filter=latest [L,QSA]
@@ -294,16 +168,4 @@ RewriteRule api/v2.2/question                      api.php?action=question [L,QS
 
 # REST API v3.0
 # * http://[...]/api/v3.0/<ACTION>
-RewriteRule api/v3.0/attachments/([0-9]+)          api/index.php
-RewriteRule api/v3.0/categories                    api/index.php
-RewriteRule api/v3.0/comments/([0-9]+)             api/index.php
-RewriteRule api/v3.0/groups                        api/index.php
-RewriteRule api/v3.0/language                      api/index.php
-RewriteRule api/v3.0/login                         api/index.php
-RewriteRule api/v3.0/news                          api/index.php
-RewriteRule api/v3.0/open-questions                api/index.php
-RewriteRule api/v3.0/search                        api/index.php
-RewriteRule api/v3.0/searches/popular              api/index.php
-RewriteRule api/v3.0/tags                          api/index.php
-RewriteRule api/v3.0/title                         api/index.php
-RewriteRule api/v3.0/version                       api/index.php
+RewriteRule api/v3.0/(.*)                                          api/index.php [L,QSA]

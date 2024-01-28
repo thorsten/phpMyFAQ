@@ -15,17 +15,13 @@
  * @since     2005-09-15
  */
 
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -50,7 +46,7 @@ if (
         'msgAddGlossary' => Translation::get('ad_glossary_add'),
         'msgGlossaryItem' => Translation::get('ad_glossary_item'),
         'msgGlossaryDefinition' => Translation::get('ad_glossary_definition'),
-        'glossaryItems' => $glossary->getAllGlossaryItems(),
+        'glossaryItems' => $glossary->fetchAll(),
         'buttonDelete' => Translation::get('ad_entry_delete'),
         'csrfTokenDelete' => Token::getInstance()->getTokenString('delete-glossary'),
         'addGlossaryTitle' => Translation::get('ad_glossary_add'),
@@ -63,32 +59,3 @@ if (
 } else {
     require 'no-permission.php';
 }
-
-        $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (
-            $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_ADD->value) ||
-            $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_EDIT->value) ||
-            $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_DELETE->value)
-        ) {
-            $glossary = new Glossary($faqConfig);
-
-            if (
-                'updateglossary' == $action &&
-                $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_EDIT->value) &&
-                Token::getInstance()->verifyToken('edit-glossary', $csrfTokenFromPost)
-            ) {
-                $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-                $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
-                $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
-                if ($glossary->updateGlossaryItem($id, $item, $definition)) {
-                    echo Alert::success('ad_glossary_update_success');
-                } else {
-                    echo Alert::danger('ad_glossary_update_error', $faqConfig->getDb()->error());
-                }
-            }
-
-        } else {
-            require 'no-permission.php';
-        }
-

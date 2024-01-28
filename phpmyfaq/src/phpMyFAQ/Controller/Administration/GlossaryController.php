@@ -30,6 +30,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GlossaryController extends AbstractController
 {
+    #[Route('admin/api/glossary')]
+    public function fetch(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
+
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $data = json_decode($request->getContent());
+
+        $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+
+        $glossary = new Glossary($configuration);
+
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setData($glossary->fetch($glossaryId));
+
+        return $response;
+    }
+
     #[Route('admin/api/glossary/delete')]
     public function delete(Request $request): JsonResponse
     {
@@ -51,7 +71,7 @@ class GlossaryController extends AbstractController
 
         $glossary = new Glossary($configuration);
 
-        if ($glossary->deleteGlossaryItem($glossaryId)) {
+        if ($glossary->delete($glossaryId)) {
             $response->setStatusCode(Response::HTTP_OK);
             $response->setData(['success' => Translation::get('ad_glossary_delete_success')]);
         } else {
@@ -84,12 +104,46 @@ class GlossaryController extends AbstractController
 
         $glossary = new Glossary($configuration);
 
-        if ($glossary->addGlossaryItem($glossaryItem, $glossaryDefinition)) {
+        if ($glossary->create($glossaryItem, $glossaryDefinition)) {
             $response->setStatusCode(Response::HTTP_OK);
             $response->setData(['success' => Translation::get('ad_glossary_save_success')]);
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('ad_glossary_save_error')]);
+        }
+
+        return $response;
+    }
+
+    #[Route('admin/api/glossary/update')]
+    public function update(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
+
+        $response = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+
+        $data = json_decode($request->getContent());
+
+        $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
+        $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance()->verifyToken('edit-glossary', $data->csrf)) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData(['error' => Translation::get('err_NotAuth')]);
+
+            return $response;
+        }
+
+        $glossary = new Glossary($configuration);
+
+        if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData(['success' => Translation::get('ad_glossary_update_success')]);
+        } else {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData(['error' => Translation::get('ad_glossary_update_error')]);
         }
 
         return $response;
