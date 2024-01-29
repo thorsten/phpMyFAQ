@@ -82,7 +82,7 @@ class News
                 );
             }
 
-            $output .= sprintf('<small class="text-muted">%s</small>', $date->format($item['date']));
+            $output .= sprintf('<small class="text-muted ms-1">%s</small>', $date->format($item['date']));
         }
 
         return ('' == $output) ? Translation::get('msgNoNews') : $output;

@@ -86,7 +86,7 @@ class Date
     }
 
     /**
-     * Returns date formatted according to user defined format.
+     * Returns date formatted according to user-defined format.
      */
     public function format(string $unformattedDate): string
     {
