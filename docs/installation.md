@@ -7,7 +7,7 @@ To install it, you will need a web server that meets the following requirements:
 
 ### PHP requirements
 
-- version 8.1 or later
+- version 8.2 or later
 - memory_limit = 128M (the more the better)
 - cURL support
 - GD support
@@ -48,12 +48,12 @@ In case PHP runs as a module of the Apache, you will have to be able to do a cho
 files and directories must be owned by the web server's user.
 
 You can determine which versions your web server is running by creating a file called **info.php** with the following
-content: `<?php phpinfo(); ?>`
+content: `<?php phpinfo();`
 
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you're running PHP before 8.1, you cannot use phpMyFAQ.
+In case you're running PHP before 8.2, you cannot use phpMyFAQ.
 
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are the latest Mozilla Firefox
 (Windows/macOS/Linux), the latest Safari (macOS/iOS), the latest Chrome (Windows/macOS/Linux), the latest Opera
@@ -325,10 +325,11 @@ of performance reasons, its availability is checked automatically at the run tim
 
 Please be aware:
 
-- Disabling encryption will cause all files be saved unencrypted. In this case you'll benefit sparing disk space,
+- Disabling encryption will cause all files be saved unencrypted. In this case, you'll benefit from sparing disk space,
   because identical files will be saved only once.
-- Do not change the default attachment encryption key once files was uploaded. Doing so will cause all the previously
-  uploaded files to be wrong decrypted. If you need to change the default key, you will have to re-upload all files.
+- Do not change the default attachment encryption key once files were uploaded.
+  Doing so will cause all the previously uploaded files to be wrong decrypted.
+  If you need to change the default key, you will have to re-upload all files.
 - Always memorize your encryption keys. There is no way to decrypt files without a correct key.
 - Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id
   etc), so there is no way to asses a file directly using the name it was uploaded under.
@@ -359,9 +360,10 @@ To disable highlighting altogether use the "nohighlight" class:
 
 ## 2.16 Elasticsearch Support
 
-To improve the search performance and quality of search results it's possible to use Elasticsearch. You need a
-running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST. You can add the IP(s)/Domain(s) and port(s)
-of your Elasticsearch cluster during installation or later by renaming the Elasticsearch file located in the folder
-config/. If you choose to add this during installation, the file will be automatically written and the index will be
-built. If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import and delete your
+To improve the search performance and quality of search results, it's possible to use Elasticsearch.
+You need a running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST.
+You can add the IP(s)/Domain(s) and port(s) of your Elasticsearch cluster during installation or later by renaming the
+Elasticsearch file located in the folder config/.
+If you choose to add this during installation, the file will be automatically written and the index will be built.
+If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import and delete your
 index with a user-friendly interface.

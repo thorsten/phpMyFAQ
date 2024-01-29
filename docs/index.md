@@ -1,20 +1,32 @@
 # phpMyFAQ Manual
 
-phpMyFAQ is a multilingual, completely database-driven FAQ system. It supports various databases to store all data,
-PHP 8.1+ is needed to access this data. phpMyFAQ also offers a multi-language Content Management System with a
-WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user
-and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking,
-40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates with support for
-own text and HTML snippets, PDF-support, a backup-system, a dynamic sitemap, related FAQs, tagging, built-in spam
-protection systems, OpenLDAP, Microsoft Active Directory, and Microsoft Entra ID support, and an easy-to-use
-installation script. You can run phpMyFAQ on almost every web hosting provider or in the cloud in a Docker container.
+phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
+It is compatible with a variety of databases for data storage and requires PHP 8.2+ for data access.
+The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
+It also provides real-time search capabilities with Elasticsearch.
 
-This documentation should help you with installing, updating, using and administrating phpMyFAQ.
+phpMyFAQ supports flexible multi-user functionality,
+offering user and group-based permissions on categories and records.
+It includes a wiki-like revision feature, a news system, and configurable user-tracking.
+With support for over 40 languages, it also boasts enhanced automatic content negotiation and HTML5- / CSS3-based
+responsive templates.
+These templates allow for the inclusion of your own text and HTML snippets.
+
+Additional features include PDF support, a backup system, a dynamic sitemap,
+related FAQs, tagging, and built-in spam protection systems.
+It also supports OpenLDAP, Microsoft Active Directory, and Microsoft Entra ID.
+The system is easy to install, thanks to its user-friendly installation script.
+
+phpMyFAQ is versatile
+and can be run on almost any web hosting provider or deployed in the cloud using a Docker container.
+
+This documentation serves as a guide to help you install, update, use, and administer phpMyFAQ effectively.
 
 ### Copyright
 
-phpMyFAQ is published under the [Mozilla Public License Version 2.0](http://www.mozilla.org/MPL/2.0/) (MPL). This
-license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify and distribute phpMyFAQ.
+phpMyFAQ is published under the [Mozilla Public License Version 2.0](http://www.mozilla.org/MPL/2.0/) (MPL).
+This license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify and distribute
+phpMyFAQ.
 
 The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne and the phpMyFAQ Team. Any
 modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program that may only be accessing
@@ -25,7 +37,7 @@ met.
 
 We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between the
 protection of the openness and free distribution on the one hand and the interaction with other software regardless of
-its licensing model. When compared to other licensing models its text is short and easily comprehensible, even for
+its licensing model. When compared to other licensing models, its text is short and easily comprehensible, even for
 newcomers.
 
 This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).

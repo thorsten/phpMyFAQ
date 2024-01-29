@@ -28,9 +28,9 @@ You can switch the current language in the administration backend, and you have 
 ### 5.1.1 User Administration
 
 phpMyFAQ offers flexible management of privileges (or rights) for different users in the admin area. To search for a
-certain user, just start typing the username in the input form, and you'll get a list of hits for usernames. It is
+certain user, start typing the username in the input form, and you'll get a list of hits for usernames. It is
 possible to assign different privileges to real people (represented by the term users). Those privileges are very
-detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is very important
+detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is crucial
 to contemplate which user shall get which privileges. You could edit an entry by completely deleting all content, which
 would be equivalent to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.
 
@@ -55,7 +55,7 @@ permissions, please set the permission level from _basic_ to _medium_ in the mai
 ### 5.2.1 Category Administration
 
 phpMyFAQ lets you create different categories and nested subcategories for your FAQs.
-You can also re-arrange your categories in a different order with drag'n'drop.
+You can re-arrange your categories in a different order and create nested ones with drag'n'drop.
 It is possible to use various languages per category, too; there's also a frontend to view all translated categories.
 For accessibility reasons, you should add a small description for every category.
 You can add an image for every category, which will be shown even on the start page if you flag this category with this
@@ -119,8 +119,8 @@ time with all the relevant data of the specific entry. The meaning of the fields
   be invisible. Suggested FAQs are deactivated by default to prevent any abuse.
 
 - **Sticky?**
-  If a FAQ is "sticky" it is a very important FAQ record and will always be shown on all pages on the right column.
-  You should mark records as sticky if they're very important for your whole FAQ. Sticky records also appear at the
+  If a FAQ is "sticky" it is a crucial FAQ record and will always be shown on all pages on the right column.
+  You should mark records as sticky if they're crucial for your whole FAQ. Sticky records also appear at the
   top positions of the lists of FAQ entries.
 
 - **Comments?**
@@ -158,31 +158,39 @@ phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor 
 the public area, and may give an answer. If you wish to get rid of open questions, you can do so using this section.
 Alternatively, you can take over a question and answer it yourself and hereby add it to the FAQ.
 
-### 5.2.3 Comment Administration
+### 5.2.3 Sticky FAQs
+
+You can arrange the order of the sticky FAQs by drag'n'drop.
+The order of the sticky FAQs will be the same in the public frontend.
+
+### 5.2.4 Comment Administration
 
 In this frontend, you can see all comments that'd been posted in the FAQs and the news. You can't edit comments,
 but you can delete them with one easy click.
 
-### 5.2.4 Open questions
+### 5.2.5 Open Questions
 
-...
+On the "Open Questions" page, you can see all open questions that visitors have posted.
+You can answer them directly or, if they are not visible due to your configuration in the public area, you can activate
+them.
+Additionally, you can delete them, too.
 
-### 5.2.5 Glossary
+### 5.2.6 Glossary
 
 A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can add,
 edit and delete glossary items here. The items will be automatically displayed in <abbr> tags in the frontend.
 
-### 5.2.6 News Administration
+### 5.2.7 News Administration
 
 phpMyFAQ offers the ability to post news on the starting page of your FAQ. In the administration area you can create
 new news, edit existing news or delete them.
 
-### 5.2.7 Attachment Administration
+### 5.2.8 Attachment Administration
 
 In the attachment administration, you can see an overview of all all attachments with their filename, file size,
 language and MIME type. You can delete them, too.
 
-### 5.2.8 Tags Administration
+### 5.2.9 Tags Administration
 
 You can edit existing tags, of if you need to, you can delete the tag.
 
@@ -219,20 +227,22 @@ installation. You can export the report then as a CSV file.
 ## 5.4 Imports & Exports
 
 ### 5.4.1 Imports
+
 You can import faqs from a csv file. Further, you find an example of such a csv file:
 
 > [!IMPORTANT]
 > It is not allowed to have the first line of the following example file containing the headers in the uploaded file as well. Otherwise, the import will fail.
 
-| category-Id | question | answer | keywords | language code | author | email address of author | active | sticky |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | What's the answer? | This one is the answer | question,answer | en | Thorsten | thorsten@phpmyfaq.de | true | false |
-| 1 | Can you buy me an ice cream? | Strawberry or chocolate is available. | ice,strawberry,chocolate | en | Thorsten | thorsten@phpmyfaq.de | true | true |
+| category-Id | question                     | answer                                | keywords                 | language code | author   | email address of author | active | sticky |
+| ----------- | ---------------------------- | ------------------------------------- | ------------------------ | ------------- | -------- | ----------------------- | ------ | ------ |
+| 1           | What's the answer?           | This one is the answer                | question,answer          | en            | Thorsten | thorsten@phpmyfaq.de    | true   | false  |
+| 1           | Can you buy me an ice cream? | Strawberry or chocolate is available. | ice,strawberry,chocolate | en            | Thorsten | thorsten@phpmyfaq.de    | true   | true   |
 
 > [!NOTE]
 > All cells are required except of the keywords. Additionally, you are able to use several keywords that are seperated with commas.
 
 ### 5.4.2 Exports
+
 You can export your contents of your whole FAQ or just some selected categories into four formats:
 
 - a JSON file
@@ -264,12 +274,7 @@ To back up the whole data located on your web server you can run our simple back
 Here you can edit the general, FAQ specific, search, spam protection, spam control center, SEO related, Social networks
 settings, Mail setup for SMTP, LDAP configuration, and API settings of phpMyFAQ.
 
-### 5.6.2 System information
-
-On this page phpMyFAQ displays some relevant system information like PHP version, database version or session path.
-Please use this information when report bugs.
-
-### 5.6.3 FAQ Multi-sites
+### 5.6.2 FAQ Multi-sites
 
 You can see a list of all multisite installations, and you're able to add new ones.
 
@@ -293,14 +298,31 @@ For example, if you want to use _faq.example.org_ and _beta.faq.example.org_, it
             |-- constants.php
             `-- database.php
 
-### 5.6.4 Stop Words configuration
+### 5.6.3 Stop Words configuration
 
 We need stop words for the smart answering feature and the related answers. If a user is adding a new question to your
 FAQ the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
 very low relevance like the English word _the_.
+
+### 5.6.4 phpMyFAQ Update (Experimental feature)
+
+If you're running phpMyFAQ 4.0.0 or later, you can use the built-in automatic upgrade feature.
+You can click through the update wizard:
+
+1. Check for System Health: this checks if your system is ready for the upgrade
+2. Check for Updates: this checks if there is a new version of phpMyFAQ available
+3. Download of phpMyFAQ: this downloads the latest version of phpMyFAQ in the background, this can take some seconds
+4. Extracting phpMyFAQ: this extracts the downloaded archive, this can take a while
+5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
+   files into your installation and in the end, the database is updated
 
 ### 5.6.5 Elasticsearch configuration
 
 Here you can create and drop the Elasticsearch index, and you can run a full import of all data from your database
 into the Elasticsearch index. You can also see some Elasticsearch relevant usage data. This page is only available if
 Elasticsearch is enabled.
+
+### 5.6.2 System information
+
+On this page phpMyFAQ displays some relevant system information like PHP version, database version or session path.
+Please use this information when report bugs.

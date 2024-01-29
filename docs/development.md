@@ -7,7 +7,7 @@ is a templates/default directory where the default layouts get shipped.
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit
 your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
-_assets/themes/default/_. All original templates are valid HTML5 based on Bootstrap v5.3
+_assets/themes/default/_. All original templates are valid HTML5 based on Bootstrap v5.3.
 
 ### 6.1.1 Creating a custom layout
 
@@ -159,11 +159,11 @@ During development, you can use the watch mode:
 
     $ pnpm build:watch
 
-To run the PHPUnit based tests, you can use the following command:
+To run the PHPUnit-based tests, you can use the following command:
 
     $ composer test
 
-To run the Jest based tests, you can use the following command:
+To run the Jest-based tests, you can use the following command:
 
     $ pnpm test
 
@@ -171,12 +171,12 @@ To run the Jest based tests, you can use the following command:
 
 Before submitting your patch, please update your local branch:
 
-    $ git checkout 3.2
+    $ git checkout 4.0
     $ git fetch upstream
-    $ git merge upstream/3.2
+    $ git merge upstream/4.0
     $ git checkout YOUR_BRANCH_NAME
-    $ git rebase 3.2
+    $ git rebase 4.0
 
 ### 6.4.8 Make a Pull Request
 
-You can now make a pull request on the phpMyFAQ Github repository.
+You can now make a pull request on the phpMyFAQ GitHub repository.
