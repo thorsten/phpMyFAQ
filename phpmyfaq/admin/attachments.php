@@ -21,6 +21,7 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
+use phpMyFAQ\Strings;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -70,10 +71,10 @@ $pagination = new Pagination(
       <?php foreach ($crumbs as $item) : ?>
         <tr id="attachment_<?= $item->id ?>" title="<?= $item->thema ?>">
           <td><?= $item->id ?></td>
-          <td><?= $item->filename ?></td>
-          <td><?= $item->record_lang ?></td>
+          <td><?= Strings::htmlentities($item->filename); ?></td>
+          <td><?= Strings::htmlentities($item->record_lang); ?></td>
           <td><?= Utils::formatBytes($item->filesize) ?></td>
-          <td><?= $item->mime_type ?></td>
+          <td><?= Strings::htmlentities($item->mime_type); ?></td>
           <td>
             <button class="btn btn-danger btn-delete-attachment" title="<?= Translation::get('ad_gen_delete') ?>"
                     data-attachment-id="<?= $item->id ?>"
