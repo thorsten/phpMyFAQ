@@ -19,6 +19,18 @@ import { addElement } from '../../../../assets/src/utils';
 export const handleCategories = () => {
   const listGroupItems = document.querySelectorAll('.list-group-item');
   const sortableCategories = document.querySelector('.list-group.list-group-root');
+  const resetButton = document.getElementById('button-reset-category-image');
+
+  if (resetButton) {
+    const categoryExistingImage = document.getElementById('pmf-category-existing-image');
+    const categoryImageInput = document.getElementById('pmf-category-image-upload');
+    const categoryImageLabel = document.getElementById('pmf-category-image-label');
+    resetButton.addEventListener('click', () => {
+      categoryImageInput.value = '';
+      categoryExistingImage.value = '';
+      categoryImageLabel.innerHTML = '';
+    });
+  }
 
   listGroupItems.forEach((element) => {
     element.addEventListener('click', (event) => {
