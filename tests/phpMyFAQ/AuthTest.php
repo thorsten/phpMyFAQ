@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class AuthTest
  *
- * @testdox Authentication should
  * @package phpMyFAQ
  */
 class AuthTest extends TestCase
@@ -29,18 +28,12 @@ class AuthTest extends TestCase
         $this->auth = new Auth($this->configuration);
     }
 
-    /**
-     * @testdox return the instance of the selected encryption type class
-     */
     public function testSelectEncType(): void
     {
         $encryptionType = $this->auth->selectEncType('bcrypt');
         $this->assertInstanceOf('phpMyFAQ\EncryptionTypes\Bcrypt', $encryptionType);
     }
 
-    /**
-     * @testdox return an empty string if no error occurred.
-     */
     public function testErrorWithNoError(): void
     {
         $this->auth->selectEncType('bcrypt');
@@ -48,9 +41,6 @@ class AuthTest extends TestCase
         $this->assertEquals('', $this->auth->error());
     }
 
-    /**
-     * @testdox return an error message if an error occurred.
-     */
     public function testErrorWithError(): void
     {
         $this->auth->selectEncType('foobar');
@@ -58,9 +48,6 @@ class AuthTest extends TestCase
         $this->assertEquals("EncryptionTypes method could not be found.\n", $this->auth->error());
     }
 
-    /**
-     * @testdox be possible for databases, HTTP and SSO
-     */
     public function testSelectAuth(): void
     {
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthDatabase', $this->auth->selectAuth('database'));
@@ -68,9 +55,6 @@ class AuthTest extends TestCase
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthSso', $this->auth->selectAuth('sso'));
     }
 
-    /**
-     * @testdox sets the read only flag correctly
-     */
     public function testSetReadOnly(): void
     {
         $this->assertFalse($this->auth->setReadOnly());
@@ -78,9 +62,6 @@ class AuthTest extends TestCase
         $this->assertTrue($this->auth->setReadOnly());
     }
 
-    /**
-     * @testdox returns an encrypted password hash
-     */
     public function testEncrypt(): void
     {
         $this->auth->selectEncType('bcrypt');

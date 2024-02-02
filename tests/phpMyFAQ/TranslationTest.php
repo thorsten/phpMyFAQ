@@ -5,9 +5,6 @@ namespace phpMyFAQ;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox A Translation
- */
 class TranslationTest extends TestCase
 {
     private Translation $translation;
@@ -20,7 +17,6 @@ class TranslationTest extends TestCase
     }
 
     /**
-     * @testdox can set a languages directory
      * @throws Exception
      */
     public function testSetLanguagesDir(): void
@@ -31,9 +27,6 @@ class TranslationTest extends TestCase
         );
     }
 
-    /**
-     * @testdox throws an exception when set a wrong languages directory
-     */
     public function testSetLanguagesDirWithException(): void
     {
         $this->expectException(Exception::class);
@@ -44,7 +37,6 @@ class TranslationTest extends TestCase
     }
 
     /**
-     * @testdox returns a translated key
      * @throws Exception
      */
     public function testGet(): void
@@ -55,9 +47,6 @@ class TranslationTest extends TestCase
         $this->assertEquals('deutsch', Translation::get('language'));
     }
 
-    /**
-     * @testdox returns the class if calling the factory method
-     */
     public function testCreate(): void
     {
         $this->assertEquals(
@@ -66,9 +55,6 @@ class TranslationTest extends TestCase
         );
     }
 
-    /**
-     * @testdox returns the class if calling the getInstance() method
-     */
     public function testGetInstance(): void
     {
         $this->assertEquals(
@@ -78,7 +64,6 @@ class TranslationTest extends TestCase
     }
 
     /**
-     * @testdox returns the current language
      * @throws Exception
      */
     public function testGetCurrentLanguage(): void
@@ -95,7 +80,6 @@ class TranslationTest extends TestCase
     }
 
     /**
-     * @testdox sets the default language
      * @throws Exception
      */
     public function testSetDefaultLanguage(): void

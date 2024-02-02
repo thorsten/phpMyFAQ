@@ -27,6 +27,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed support for adding own meta-content in templates (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)
 - migrated from Fork Awesome to Bootstrap Icons (Thorsten, Jan Harms)
+- migrated codebase to use PHP 8.2 language features (Thorsten)
+- updated to PHPUnit v11 (Thorsten)
 
 ### phpMyFAQ v3.2.4 - 2024-01-10
 

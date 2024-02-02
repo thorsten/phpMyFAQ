@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class CaptchaTest
  *
- * @testdox Captcha should
  * @package phpMyFAQ
  */
 class BuiltinCaptchaTest extends TestCase
@@ -40,7 +39,6 @@ class BuiltinCaptchaTest extends TestCase
     }
 
     /**
-     * @testdox validate correctly the captcha code
      * @throws Exception
      */
     public function testValidateCaptchaCode(): void
@@ -48,9 +46,6 @@ class BuiltinCaptchaTest extends TestCase
         $this->assertFalse($this->captcha->validateCaptchaCode(''));
     }
 
-    /**
-     * @testdox render a HTML <img> tag with the captcha image correctly
-     */
     public function testRenderCaptchaImage(): void
     {
         $expected = '<img id="captchaImage" class="rounded border" ' .
@@ -59,9 +54,6 @@ class BuiltinCaptchaTest extends TestCase
         $this->assertEquals($expected, $this->captcha->renderCaptchaImage('foobar'));
     }
 
-    /**
-     * @testdox return true if a user is logged in
-     */
     public function testSetUserIsLoggedIn(): void
     {
         $this->assertFalse($this->captcha->isUserIsLoggedIn());
@@ -69,18 +61,12 @@ class BuiltinCaptchaTest extends TestCase
         $this->assertTrue($this->captcha->isUserIsLoggedIn());
     }
 
-    /**
-     * @testdox should set a session id and return the class
-     */
     public function testSetSessionId(): void
     {
         $captcha = $this->captcha->setSessionId('sid=4711');
         $this->assertInstanceOf('phpMyFAQ\Captcha\BuiltinCaptcha', $captcha);
     }
 
-    /**
-     * @testdox should return true for validating the captcha code of a logged in user
-     */
     public function testCheckCaptchaCode(): void
     {
         $this->captcha->setUserIsLoggedIn(true);

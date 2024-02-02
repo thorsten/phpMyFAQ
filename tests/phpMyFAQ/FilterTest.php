@@ -4,14 +4,8 @@ namespace phpMyFAQ;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox Filter should
- */
 class FilterTest extends TestCase
 {
-    /**
-     * @testdox return filtered strings
-     */
     public function testFilterVar(): void
     {
         $this->assertEquals('test', Filter::filterVar('test', FILTER_DEFAULT));
@@ -28,9 +22,7 @@ class FilterTest extends TestCase
         );
     }
 
-    /**
-     * @testdox return sanitized strings
-     */
+
     public function testFilterSanitizeString(): void
     {
         $this->assertEquals('test', (new Filter())->filterSanitizeString('test'));
@@ -41,9 +33,6 @@ class FilterTest extends TestCase
         );
     }
 
-    /**
-     * @testdox return strings without HTML tag attributes
-     */
     public function testRemoveAttributes(): void
     {
         $this->assertEquals('<video />', Filter::removeAttributes('<video preload="auto" />'));

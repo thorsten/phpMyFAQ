@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class DatabaseHelperTest
  *
- * @testdox DatabaseHelper should
  * @package phpMyFAQ
  */
 class DatabaseHelperTest extends TestCase
@@ -44,9 +43,6 @@ class DatabaseHelperTest extends TestCase
         $dbHandle->query('DROP TABLE faqtest');
     }
 
-    /**
-     * @testdox create the correct INSERT queries
-     */
     public function testBuildInsertQueries(): void
     {
         $table = 'faqtest';

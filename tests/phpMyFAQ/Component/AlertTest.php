@@ -6,9 +6,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox An Alert component
- */
 class AlertTest extends TestCase
 {
     /**
@@ -24,9 +21,6 @@ class AlertTest extends TestCase
             ->setCurrentLanguage('de');
     }
 
-    /**
-     * @testdox renders a danger alert without an error message
-     */
     public function testDangerWithoutError(): void
     {
         $this->assertEquals(
@@ -36,9 +30,6 @@ class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @testdox renders a danger alert with an error message
-     */
     public function testDangerWithError(): void
     {
         $this->assertEquals(
@@ -49,9 +40,6 @@ class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @testdox renders a warning alert
-     */
     public function testWarning(): void
     {
         $this->assertEquals(
@@ -61,9 +49,6 @@ class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @testdox renders a success alert
-     */
     public function testSuccess(): void
     {
         $this->assertEquals(
@@ -73,9 +58,6 @@ class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @testdox renders a info alert
-     */
     public function testInfo(): void
     {
         $this->assertEquals(

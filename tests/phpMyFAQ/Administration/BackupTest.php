@@ -13,7 +13,6 @@ use SodiumException;
 /**
  * Class BackupTest
  *
- * @testdox Backup should
  * @package phpMyFAQ
  */
 class BackupTest extends TestCase
@@ -44,7 +43,6 @@ class BackupTest extends TestCase
     }
 
     /**
-     * @testdox create a complete backup file
      * @throws SodiumException
      */
     public function testCreateBackup(): void
@@ -78,9 +76,6 @@ class BackupTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @testdox generates correct INSERT queries for the backup
-     */
     public function testGenerateBackupQueries(): void
     {
         $tableNames = 'faqconfig faqinstances';
