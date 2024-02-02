@@ -280,7 +280,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 $categoryRelation = new CategoryRelation($faqConfig, $category);
 
                 $categoryImage = new CategoryImage($faqConfig);
-                $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
+                $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage() ?? '');
 
                 if ((is_countable($category->getCategoryLanguagesTranslated($categoryId)) ? count($category->getCategoryLanguagesTranslated($categoryId)) : 0) === 1) {
                     $categoryPermission->delete(CategoryPermission::USER, [$categoryId]);
