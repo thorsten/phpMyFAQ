@@ -69,7 +69,7 @@ readonly class Bookmark
             $this->user->getUserId(),
             $faqId
         );
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**
