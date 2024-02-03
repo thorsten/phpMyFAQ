@@ -130,7 +130,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
                     <div class="input-group">
                       <input class="form-control" type="file" name="image" id="pmf-category-image-upload"
                              value="<?= $categoryData->getImage() ?>">
-                      <span class="input-group-text"><?= $categoryData->getImage() ?></span>
+                      <span class="input-group-text" id="pmf-category-image-label"><?= $categoryData->getImage() ?></span>
                     </div>
                       <div class="input-group mt-2">
                           <button type="button" class="btn btn-info" id="button-reset-category-image">
