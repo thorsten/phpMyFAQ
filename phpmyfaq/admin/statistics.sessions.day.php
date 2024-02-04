@@ -36,10 +36,10 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $request = Request::createFromGlobals();
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
-    $perpage = 50;
+    $perPage = 50;
     $day = Filter::filterVar($request->request->get('day'), FILTER_VALIDATE_INT);
-    $firstHour = mktime(0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));
-    $lastHour = mktime(23, 59, 59, date('m', $day), date('d', $day), date('Y', $day));
+    $firstHour = strtotime('midnight', $day);
+    $lastHour = strtotime('tomorrow', $firstHour) - 1;
 
     $session = new Session($faqConfig);
     $sessionData = $session->getSessionsByDate($firstHour, $lastHour);
@@ -52,7 +52,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $templateVars = [
         'adminHeaderSessionsPerDay' => Translation::get('ad_sess_session'),
         'currentDay' => date('Y-m-d', $day),
-        'msgIpAdress' => Translation::get('ad_sess_ip'),
+        'msgIpAddress' => Translation::get('ad_sess_ip'),
         'msgSessionDate' => Translation::get('ad_sess_s_date'),
         'msgSession' => Translation::get('ad_sess_session'),
         'sessionData' => $sessionData,

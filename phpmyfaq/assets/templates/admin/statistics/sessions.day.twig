@@ -9,19 +9,19 @@
   <div class="col-lg-12">
     <table class="table table-striped align-middle">
       <thead>
-      <tr>
-        <th>{{ msgIpAdress }}</th>
-        <th>{{ msgSessionDate }}</th>
-        <th>{{ msgSession }}</th>
-      </tr>
+        <tr>
+          <th>{{ msgIpAddress }}</th>
+          <th>{{ msgSessionDate }}</th>
+          <th>{{ msgSession }}</th>
+        </tr>
       </thead>
       <tbody>
       {% for sid, data in sessionData %}
-      <tr>
-        <td>{{ data.ip }}</td>
-        <td>{{ data.time | date }}</td>
-        <td><a href="?action=viewsession&id={{ sid }}">{{ sid }}</a></td>
-      </tr>
+        <tr>
+          <td>{{ data.ip }}</td>
+          <td>{{ data.time | date }}</td>
+          <td><a href="?action=viewsession&id={{ sid }}">{{ sid }}</a></td>
+        </tr>
       {% endfor %}
       </tbody>
     </table>
