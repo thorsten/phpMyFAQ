@@ -54,6 +54,6 @@ $templateVars = [
 
 echo $template->render($templateVars);
 
-if (!$user->perm->hasPermission($user->getUserId(), 'editconfig')) {
+if (!$user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     require 'no-permission.php';
 }
