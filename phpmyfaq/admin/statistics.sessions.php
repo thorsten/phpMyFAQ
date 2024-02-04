@@ -111,7 +111,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     ];
 
     echo $template->render($templateVars);
-
 } else {
     echo Alert::danger('err_NotAuth');
 }

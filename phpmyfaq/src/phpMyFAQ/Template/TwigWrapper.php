@@ -63,4 +63,9 @@ readonly class TwigWrapper
     {
         $this->twig->addFunction($function);
     }
+
+    public function getExtension(string $class): ExtensionInterface
+    {
+        return $this->twig->getExtension($class);
+    }
 }

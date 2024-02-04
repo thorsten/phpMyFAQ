@@ -340,7 +340,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'statistics.sessions.php';
                 break;
             case 'sessionbrowse':
-                require 'stat.browser.php';
+                require 'statistics.sessions.day.php';
                 break;
             case 'viewsession':
                 require 'statistics.show.php';
