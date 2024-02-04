@@ -38,9 +38,7 @@ class GlossaryController extends AbstractController
         $response = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
-        $data = json_decode($request->getContent());
-
-        $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
 
         $glossary = new Glossary($configuration);
 
@@ -129,7 +127,7 @@ class GlossaryController extends AbstractController
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance()->verifyToken('edit-glossary', $data->csrf)) {
+        if (!Token::getInstance()->verifyToken('update-glossary', $data->csrf)) {
             $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
             $response->setData(['error' => Translation::get('err_NotAuth')]);
 

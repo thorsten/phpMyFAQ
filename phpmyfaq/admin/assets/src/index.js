@@ -15,7 +15,6 @@
 
 import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
 import { handleSessions, handleStatistics } from './statistics';
-import { sidebarToggle } from './sidebar';
 import {
   handleConfiguration,
   handleInstances,
@@ -41,10 +40,13 @@ import {
   handleUploadCSVForm,
   handleDeleteGlossary,
   handleAddGlossary,
+  onOpenUpdateGlossaryModal,
+  handleUpdateGlossary,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
+import { sidebarToggle } from './utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
@@ -92,6 +94,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Content -> Glossary
   handleDeleteGlossary();
   handleAddGlossary();
+  onOpenUpdateGlossaryModal();
+  handleUpdateGlossary();
 
   // Content -> Tags
   handleTags();

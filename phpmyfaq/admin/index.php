@@ -319,12 +319,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             // glossary
             case 'glossary':
-            case 'saveglossary':
-            case 'updateglossary':
                 require 'glossary.main.php';
-                break;
-            case 'editglossary':
-                require 'glossary.edit.php';
                 break;
             // functions for password administration
             case 'passwd':

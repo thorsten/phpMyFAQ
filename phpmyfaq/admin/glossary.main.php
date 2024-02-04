@@ -53,6 +53,8 @@ if (
         'addGlossaryCsrfTokenInput' => Token::getInstance()->getTokenInput('add-glossary'),
         'closeModal' => Translation::get('ad_att_close'),
         'saveModal' => Translation::get('ad_gen_save'),
+        'updateGlossaryTitle' => Translation::get('ad_glossary_edit'),
+        'updateGlossaryCsrfToken' => Token::getInstance()->getTokenString('update-glossary'),
     ];
 
     echo $template->render($templateVars);

@@ -13,7 +13,7 @@
  * @since     2023-03-05
  */
 
-import { createGlossary, deleteGlossary } from '../api';
+import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 import { pushNotification } from '../utils';
 
@@ -78,6 +78,54 @@ export const handleAddGlossary = () => {
           ]),
         ]);
         tableBody.appendChild(row);
+        pushNotification(response.success);
+      }
+    });
+  }
+};
+
+export const onOpenUpdateGlossaryModal = () => {
+  const updateGlossaryModal = document.getElementById('updateGlossaryModal');
+
+  if (updateGlossaryModal) {
+    updateGlossaryModal.addEventListener('show.bs.modal', async (event) => {
+      const glossaryId = event.relatedTarget.getAttribute('data-pmf-glossary-id');
+      const response = await getGlossary(glossaryId);
+
+      document.getElementById('update-id').value = response.id;
+      document.getElementById('update-item').value = response.item;
+      document.getElementById('update-definition').value = response.definition;
+    });
+  }
+};
+
+export const handleUpdateGlossary = () => {
+  const updateGlossaryButton = document.getElementById('pmf-admin-glossary-update');
+  const modal = document.getElementById('updateGlossaryModal');
+  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
+
+  if (updateGlossaryButton) {
+    updateGlossaryButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      const glossaryId = document.getElementById('update-id').value;
+      const glossaryItem = document.getElementById('update-item').value;
+      const glossaryDefinition = document.getElementById('update-definition').value;
+      const csrfToken = document.getElementById('update-csrf-token').value;
+
+      const response = await updateGlossary(glossaryId, glossaryItem, glossaryDefinition, csrfToken);
+
+      if (response) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+
+        const item = document.querySelector(`#pmf-glossary-id-${glossaryId} td:nth-child(1) a`);
+        const definition = document.querySelector(`#pmf-glossary-id-${glossaryId} td:nth-child(2)`);
+
+        item.innerText = glossaryItem;
+        definition.innerText = glossaryDefinition;
+
         pushNotification(response.success);
       }
     });

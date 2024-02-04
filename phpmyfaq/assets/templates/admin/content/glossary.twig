@@ -23,11 +23,17 @@
       </thead>
       <tbody>
       {% for glossary in glossaryItems %}
-        <tr>
-          <td><a href="?action=editglossary&id={{ glossary.id }}">{{ glossary.item }}</a></td>
+        <tr id="pmf-glossary-id-{{ glossary.id }}">
+          <td>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#updateGlossaryModal"
+               data-pmf-glossary-id="{{ glossary.id }}">
+              {{ glossary.item }}
+            </a>
+          </td>
           <td>{{ glossary.definition }}</td>
           <td class="text-end">
-            <button class="btn btn-danger pmf-admin-delete-glossary" data-pmf-glossary-id="{{ glossary.id }}" data-pmf-csrf-token="{{ csrfTokenDelete }}">
+            <button class="btn btn-danger pmf-admin-delete-glossary" data-pmf-glossary-id="{{ glossary.id }}"
+                    data-pmf-csrf-token="{{ csrfTokenDelete }}">
               <i aria-hidden="true" class="bi bi-trash"></i>
               {{ buttonDelete }}
             </button>
@@ -76,6 +82,50 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ closeModal }}</button>
         <button type="button" class="btn btn-primary" id="pmf-admin-glossary-add">{{ saveModal }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Glossary Modal -->
+<div class="modal fade" id="updateGlossaryModal" tabindex="-1" aria-labelledby="updateGlossaryModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateGlossaryModalLabel">
+          <i aria-hidden="true" class="bi bi-list-ul"></i>
+          {{ updateGlossaryTitle }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ closeModal }}"></button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" accept-charset="utf-8">
+          <input type="hidden" name="update-id" id="update-id" value="">
+          <input type="hidden" name="update-csrf-token" id="update-csrf-token" value="{{ updateGlossaryCsrfToken }}">
+
+          <div class="row mb-2">
+            <label class="col-3 col-form-label" for="update-item">{{ msgGlossaryItem }}</label>
+            <div class="col-9">
+              <input class="form-control" type="text" name="update-item" id="update-item" value="" required>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-3 col-form-label" for="update-definition">
+              {{ msgGlossaryDefinition }}
+            </label>
+            <div class="col-9">
+              <textarea class="form-control" name="update-definition" id="update-definition" cols="50" rows="5" required>
+
+              </textarea>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ closeModal }}</button>
+        <button type="button" class="btn btn-primary" id="pmf-admin-glossary-update">{{ saveModal }}</button>
       </div>
     </div>
   </div>

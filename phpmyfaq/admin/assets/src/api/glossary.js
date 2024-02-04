@@ -63,3 +63,52 @@ export const deleteGlossary = async (glossaryId, csrfToken) => {
     throw error;
   }
 };
+
+export const getGlossary = async (glossaryId) => {
+  try {
+    const response = await fetch(`./api/glossary/${glossaryId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error getting FAQ: ', error);
+    throw error;
+  }
+};
+
+export const updateGlossary = async (glossaryId, item, definition, csrfToken) => {
+  try {
+    const response = await fetch('./api/glossary/update', {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrf: csrfToken,
+        id: glossaryId,
+        item: item,
+        definition: definition,
+      }),
+    });
+
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      console.error('Error updating FAQ: ', response);
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error updating FAQ: ', error);
+    throw error;
+  }
+};
