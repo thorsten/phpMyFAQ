@@ -386,7 +386,7 @@ class Category
             if ('' === $row['image']) {
                 $image = '';
             } else {
-                $image = 'images/' . $row['image'];
+                $image = 'content/user/images/' . $row['image'];
             }
 
             $category = [

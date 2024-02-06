@@ -28,7 +28,7 @@ use phpMyFAQ\Core\Exception;
 class CategoryImage
 {
     /** @var string */
-    private const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
+    private const UPLOAD_DIR = PMF_CONTENT_DIR . '/user/images/';
 
     private bool $isUpload = false;
 
