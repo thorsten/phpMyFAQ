@@ -41,7 +41,9 @@ RewriteBase /
 ErrorDocument 404 /index.php?action=404
 
 # General pages
-RewriteRule ^(show-categories|search|addcontent|ask|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
+RewriteRule addcontent.html$ index.php?action=add [L,QSA]
+RewriteRule show-categories.html$ index.php?action=show [L,QSA]
+RewriteRule ^(search|ask|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
 
 # start page
 RewriteRule ^index.html$            index.php [PT]
