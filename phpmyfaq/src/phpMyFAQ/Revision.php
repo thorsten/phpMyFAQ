@@ -38,14 +38,17 @@ class Revision
     {
         $query = sprintf(
             "
-            INSERT INTO
-                %sfaqdata_revisions
-            SELECT * FROM
-                %sfaqdata
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
+            INSERT INTO 
+                %sfaqdata_revisions 
+            SELECT 
+                id, lang, solution_id, revision_id + 1, active, sticky, keywords, thema, content, author, email, 
+                comment, updated, date_start, date_end, created, notes 
+            FROM 
+                %sfaqdata 
+            WHERE 
+                id = %d 
+              AND 
+                laqng = '%s'",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
