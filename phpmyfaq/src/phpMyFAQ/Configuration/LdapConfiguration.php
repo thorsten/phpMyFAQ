@@ -20,10 +20,15 @@ namespace phpMyFAQ\Configuration;
 class LdapConfiguration
 {
     private readonly string $mainServer;
+
     private readonly int $mainPort;
+
     private readonly string $mainUser;
+
     private readonly string $mainPassword;
+
     private readonly string $mainBase;
+
     private array $servers = [];
 
     public function __construct(string $filename)

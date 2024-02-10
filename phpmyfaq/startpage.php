@@ -70,11 +70,7 @@ if (!isset($stickyRecordsParams['error'])) {
 }
 
 // generate top ten list
-if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
-    $param = 'visits';
-} else {
-    $param = 'voted';
-}
+$param = $faqConfig->get('records.orderingPopularFaqs') == 'visits' ? 'visits' : 'voted';
 
 $toptenParams = $faq->getTopTen($param);
 if (!isset($toptenParams['error'])) {

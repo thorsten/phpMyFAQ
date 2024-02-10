@@ -81,7 +81,7 @@ class AttachmentFactory
      * @throws AttachmentException
      * @return File[]
      */
-    public static function fetchByRecordId(Configuration $config, int $recordId): array
+    public static function fetchByRecordId(Configuration $configuration, int $recordId): array
     {
         $files = [];
 
@@ -99,9 +99,9 @@ class AttachmentFactory
             Language::$language
         );
 
-        $result = $config->getDb()->fetchAll($config->getDb()->query($sql));
+        $result = $configuration->getDb()->fetchAll($configuration->getDb()->query($sql));
 
-        if (!empty($result)) {
+        if ($result !== null && $result !== []) {
             foreach ($result as $item) {
                 $files[] = self::create((int) $item->id);
             }
@@ -138,9 +138,9 @@ class AttachmentFactory
         $filesCount = is_countable($filePost['name']) ? count($filePost['name']) : 0;
         $filesKeys = array_keys($filePost);
 
-        for ($i = 0; $i < $filesCount; $i++) {
-            foreach ($filesKeys as $key) {
-                $filesArray[$i][$key] = $filePost[$key][$i];
+        for ($i = 0; $i < $filesCount; ++$i) {
+            foreach ($filesKeys as $fileKey) {
+                $filesArray[$i][$fileKey] = $filePost[$fileKey][$i];
             }
         }
 

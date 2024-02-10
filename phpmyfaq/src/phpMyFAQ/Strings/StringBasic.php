@@ -32,6 +32,7 @@ class StringBasic extends StringsAbstract
      * @var string
      */
     final public const DEFAULT_ENCODING = 'utf-8';
+
     /**
      * Instance.
      */

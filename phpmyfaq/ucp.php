@@ -60,6 +60,7 @@ if ($user->isLoggedIn()) {
         } catch (TwoFactorAuthException $e) {
             $faqConfig->getLogger()->error('Cannot generate 2FA secret: ' . $e->getMessage());
         }
+
         $tfa->saveSecret($secret);
     }
 

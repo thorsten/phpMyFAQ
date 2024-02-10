@@ -36,7 +36,7 @@ class Tags
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -51,8 +51,12 @@ class Tags
 
         foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
             $title = Strings::htmlentities($taggingName);
-            $url = sprintf('%sindex.php?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $taggingId);
-            $oLink = new Link($url, $this->config);
+            $url = sprintf(
+                '%sindex.php?action=search&amp;tagging_id=%d',
+                $this->configuration->getDefaultUrl(),
+                $taggingId
+            );
+            $oLink = new Link($url, $this->configuration);
             $oLink->itemTitle = $title;
             $oLink->text = $title;
             $oLink->tooltip = $title;
@@ -91,9 +95,9 @@ class Tags
             $recordId
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         if ($result) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->tagging_name;
             }
         }
@@ -113,29 +117,32 @@ class Tags
         $registeredTags = [];
 
         // Delete all tag references for the faq record
-        if (count($tags) > 0) {
+        if ($tags !== []) {
             $this->deleteTagsFromRecordId($recordId);
         }
 
         // Store tags and references for the faq record
-        foreach ($tags as $tagName) {
-            $tagName = trim($tagName);
-            if (Strings::strlen($tagName) > 0 && !in_array($tagName, $registeredTags, true)) {
+        foreach ($tags as $tag) {
+            $tag = trim($tag);
+            if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, true)) {
                 if (
                     !in_array(
-                        Strings::strtolower($tagName),
+                        Strings::strtolower($tag),
                         array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags)
                     )
                 ) {
                     // Create the new tag
-                    $newTagId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqtags', 'tagging_id');
+                    $newTagId = $this->configuration->getDb()->nextId(
+                        Database::getTablePrefix() . 'faqtags',
+                        'tagging_id'
+                    );
                     $query = sprintf(
                         "INSERT INTO %sfaqtags (tagging_id, tagging_name) VALUES (%d, '%s')",
                         Database::getTablePrefix(),
                         $newTagId,
-                        $tagName
+                        $tag
                     );
-                    $this->config->getDb()->query($query);
+                    $this->configuration->getDb()->query($query);
 
                     // Add the tag reference for the faq record
                     $query = sprintf(
@@ -151,13 +158,15 @@ class Tags
                         Database::getTablePrefix(),
                         $recordId,
                         array_search(
-                            Strings::strtolower($tagName),
-                            array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags)
+                            Strings::strtolower($tag),
+                            array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
+                            true
                         )
                     );
                 }
-                $this->config->getDb()->query($query);
-                $registeredTags[] = $tagName;
+
+                $this->configuration->getDb()->query($query);
+                $registeredTags[] = $tag;
             }
         }
 
@@ -213,16 +222,17 @@ class Tags
             (isset($search) && ($search != '') ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '')
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
             $i = 0;
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 if ($i < $limit) {
                     $allTags[$row->tagging_id] = $row->tagging_name;
                 } else {
                     break;
                 }
+
                 ++$i;
             }
         }
@@ -243,7 +253,7 @@ class Tags
             $recordId
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -251,16 +261,16 @@ class Tags
     /**
      * Updates a tag.
      */
-    public function updateTag(EntityTags $entity): bool
+    public function updateTag(EntityTags $entityTags): bool
     {
         $query = sprintf(
             "UPDATE %sfaqtags SET tagging_name = '%s' WHERE tagging_id = %d",
             Database::getTablePrefix(),
-            $entity->getName(),
-            $entity->getId()
+            $entityTags->getName(),
+            $entityTags->getId()
         );
 
-        return $this->config->getDb()->query($query);
+        return $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -274,7 +284,7 @@ class Tags
             $tagId
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         $query = sprintf(
             'DELETE FROM %sfaqdata_tags WHERE tagging_id = %d',
@@ -282,7 +292,7 @@ class Tags
             $tagId
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -317,13 +327,13 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             implode("', '", $arrayOfTags),
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             count($arrayOfTags)
         );
 
         $records = [];
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -358,10 +368,10 @@ class Tags
             $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES);
             $url = sprintf(
                 '%sindex.php?action=search&amp;tagging_id=%d',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 $tag['id']
             );
-            $oLink = new Link($url, $this->config);
+            $oLink = new Link($url, $this->configuration);
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
@@ -381,7 +391,7 @@ class Tags
      */
     public function getFaqsByTagName(string $tagName): array
     {
-        if (count($this->recordsByTagName)) {
+        if ($this->recordsByTagName !== []) {
             return $this->recordsByTagName;
         }
 
@@ -402,12 +412,12 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($tagName)
+            $this->configuration->getDb()->escape($tagName)
         );
 
         $this->recordsByTagName = [];
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $this->recordsByTagName[] = $row->record_id;
         }
 
@@ -440,8 +450,8 @@ class Tags
         );
 
         $records = [];
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -487,13 +497,13 @@ class Tags
             ORDER BY freq DESC",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->freq;
                 if (--$limit === 0) {
                     break;
@@ -517,8 +527,8 @@ class Tags
             $tagId
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
             return $row->tagging_name;
         }
 

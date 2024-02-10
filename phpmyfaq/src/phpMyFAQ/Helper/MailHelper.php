@@ -37,9 +37,9 @@ class MailHelper
     /**
      * MailHelper constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->mail = new Mail($this->config);
+        $this->mail = new Mail($this->configuration);
     }
 
     /**
@@ -49,17 +49,16 @@ class MailHelper
     public function sendMailToNewUser(User $user, string $password): bool
     {
         $text = sprintf(
-            '<p>You have been registered as a new user:</p>' .
-            '<p>Name: %s<br>Login name: %s<br>Password: %s</p>' .
+            '<p>You have been registered as a new user:</p><p>Name: %s<br>Login name: %s<br>Password: %s</p>' .
             '<p><a href="%s">Check it out here</a></p>',
             $user->getUserData('display_name'),
             $user->getLogin(),
             $password,
-            $this->config->getDefaultUrl()
+            $this->configuration->getDefaultUrl()
         );
 
         $this->mail->addTo($user->getUserData('email'), $user->getUserData('display_name'));
-        $this->mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->config);
+        $this->mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->configuration);
         $this->mail->message = $text;
 
         return (bool)$this->mail->send();

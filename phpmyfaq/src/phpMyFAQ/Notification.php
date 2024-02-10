@@ -34,13 +34,13 @@ class Notification
      *
      * @throws Core\Exception
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->mail = new Mail($this->config);
-        $this->faq = new Faq($this->config);
+        $this->mail = new Mail($this->configuration);
+        $this->faq = new Faq($this->configuration);
         $this->mail->setReplyTo(
-            $this->config->getAdminEmail(),
-            $this->config->getTitle()
+            $this->configuration->getAdminEmail(),
+            $this->configuration->getTitle()
         );
     }
 
@@ -54,12 +54,12 @@ class Notification
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
-        if ($this->config->get('main.enableNotifications')) {
+        if ($this->configuration->get('main.enableNotifications')) {
             $this->mail->addTo($email, $userName);
-            $this->mail->subject = $this->config->getTitle() . ' - ' . Translation::get('msgQuestionAnswered');
+            $this->mail->subject = $this->configuration->getTitle() . ' - ' . Translation::get('msgQuestionAnswered');
             $this->mail->message = sprintf(
                 Translation::get('msgMessageQuestionAnswered'),
-                $this->config->getTitle()
+                $this->configuration->getTitle()
             ) . "\n\r" . $url;
             $this->mail->send();
         }
@@ -73,30 +73,31 @@ class Notification
      */
     public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage): void
     {
-        if ($this->config->get('main.enableNotifications')) {
-            $this->mail->addTo($this->config->getAdminEmail());
+        if ($this->configuration->get('main.enableNotifications')) {
+            $this->mail->addTo($this->configuration->getAdminEmail());
             foreach ($emails as $email) {
                 $this->mail->addCc($email);
             }
-            $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
+
+            $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
             $this->faq->getRecord($faqId, null, true);
 
             $url = sprintf(
                 '%sadmin/?action=editentry&id=%d&lang=%s',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 $faqId,
                 $faqLanguage
             );
-            $link = new Link($url, $this->config);
+            $link = new Link($url, $this->configuration);
             $link->itemTitle = $this->faq->getRecordTitle($faqId);
 
-            $this->mail->message = html_entity_decode(Translation::get('msgMailCheck')) .
+            $this->mail->message = html_entity_decode((string) Translation::get('msgMailCheck')) .
                 "<p><strong>" . Translation::get('msgAskYourQuestion') . ":</strong> " .
                 $this->faq->getRecordTitle($faqId) . "</p>" .
                 "<p><strong>" . Translation::get('msgNewContentArticle') . ":</strong> " .
                 $this->faq->faqRecord['content'] . "</p>" .
                 "<hr>" .
-                $this->config->getTitle() .
+                $this->configuration->getTitle() .
                 ': <a target="_blank" href="' . $link->toString() . '">' . $link->toString() . '</a>';
 
             $this->mail->contentType = 'text/html';

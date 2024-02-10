@@ -74,10 +74,10 @@ class Elasticsearch
     /**
      * Elasticsearch constructor.
      */
-    public function __construct(protected Configuration $config)
+    public function __construct(protected Configuration $configuration)
     {
-        $this->client = $config->getElasticsearch();
-        $this->esConfig = $config->getElasticsearchConfig();
+        $this->client = $configuration->getElasticsearch();
+        $this->esConfig = $configuration->getElasticsearchConfig();
     }
 
     /**
@@ -117,7 +117,9 @@ class Elasticsearch
                             ],
                             'Language_stemmer' => [
                                 'type' => 'stemmer',
-                                'name' => PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->config->getDefaultLanguage()]
+                                'name' => PMF_ELASTICSEARCH_STEMMING_LANGUAGE[
+                                    $this->configuration->getDefaultLanguage()
+                                ]
                             ]
                         ],
                         'analyzer' => [
@@ -219,7 +221,7 @@ class Elasticsearch
         try {
             return $this->client->index($params)->asObject();
         } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
-            $this->config->getLogger()->error('Index error.', [$e->getMessage()]);
+            $this->configuration->getLogger()->error('Index error.', [$e->getMessage()]);
         }
     }
 
@@ -262,20 +264,19 @@ class Elasticsearch
                 } catch (ClientResponseException | ServerResponseException $e) {
                     return ['error' => $e->getMessage()];
                 }
+
                 $params = ['body' => []];
                 unset($responses);
             }
 
-            $i++;
+            ++$i;
         }
 
         // Send the last batch if it exists
-        if (!empty($params['body'])) {
-            try {
-                $responses = $this->client->bulk($params);
-            } catch (ClientResponseException | ServerResponseException $e) {
-                return ['error' => $e->getMessage()];
-            }
+        try {
+            $responses = $this->client->bulk($params);
+        } catch (ClientResponseException | ServerResponseException $e) {
+            return ['error' => $e->getMessage()];
         }
 
         if (isset($responses) && $responses->getStatusCode() === 200) {

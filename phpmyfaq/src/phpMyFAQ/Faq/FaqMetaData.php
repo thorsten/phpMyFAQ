@@ -40,7 +40,7 @@ class FaqMetaData
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -68,23 +68,23 @@ class FaqMetaData
      */
     public function save(): void
     {
-        $categoryRelation = new CategoryRelation($this->config, new Category($this->config));
+        $categoryRelation = new CategoryRelation($this->configuration, new Category($this->configuration));
         $categoryRelation->add($this->categories, $this->faqId, $this->faqLanguage);
 
         // Activate visits
-        $visits = new Visits($this->config);
+        $visits = new Visits($this->configuration);
         $visits->logViews($this->faqId);
 
         // Set permissions
-        $faqPermission = new FaqPermission($this->config);
-        $categoryPermission = new CategoryPermission($this->config);
+        $faqPermission = new FaqPermission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
 
         $userPermissions = $categoryPermission->get(CategoryPermission::USER, $this->categories);
 
         $faqPermission->add(FaqPermission::USER, $this->faqId, $userPermissions);
         $categoryPermission->add(CategoryPermission::USER, $this->categories, $userPermissions);
 
-        if ($this->config->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get('security.permLevel') !== 'basic') {
             $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $this->categories);
             $faqPermission->add(FaqPermission::GROUP, $this->faqId, $groupPermissions);
             $categoryPermission->add(CategoryPermission::GROUP, $this->categories, $groupPermissions);

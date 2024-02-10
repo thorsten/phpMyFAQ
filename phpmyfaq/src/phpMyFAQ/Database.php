@@ -31,8 +31,7 @@ use phpMyFAQ\Database\Sqlsrv;
  */
 class Database
 {
-    /** @var DatabaseDriver|null */
-    private static ?DatabaseDriver $instance = null;
+    private static ?DatabaseDriver $databaseDriver = null;
 
     /** @var string Database type. */
     private static string $dbType;
@@ -57,9 +56,9 @@ class Database
         }
 
         if (class_exists($class)) {
-            self::$instance = new $class();
+            self::$databaseDriver = new $class();
 
-            return self::$instance;
+            return self::$databaseDriver;
         }
 
         throw new Exception('Invalid Database Type: ' . $type);
@@ -70,12 +69,12 @@ class Database
      */
     public static function getInstance(): ?DatabaseDriver
     {
-        if (null == self::$instance) {
+        if (null == self::$databaseDriver) {
             $className = self::class;
-            self::$instance = new $className();
+            self::$databaseDriver = new $className();
         }
 
-        return self::$instance;
+        return self::$databaseDriver;
     }
 
     /**
@@ -94,8 +93,8 @@ class Database
      */
     public static function checkOnEmptyTable(string $tableName): bool
     {
-        return self::$instance->numRows(
-            self::$instance->query('SELECT * FROM ' . self::getTablePrefix() . $tableName)
+        return self::$databaseDriver->numRows(
+            self::$databaseDriver->query('SELECT * FROM ' . self::getTablePrefix() . $tableName)
         ) < 1;
     }
 

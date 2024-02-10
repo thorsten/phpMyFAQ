@@ -69,12 +69,8 @@ class BasicPermission extends Permission implements PermissionInterface
             $rightId
         );
 
-        $res = $this->config->getDb()->query($insert);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($insert);
+        return (bool) $res;
     }
 
     /**
@@ -104,13 +100,13 @@ class BasicPermission extends Permission implements PermissionInterface
             $rightId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return [];
         }
 
         // process right data
-        $rightData = $this->config->getDb()->fetchArray($res);
+        $rightData = $this->configuration->getDb()->fetchArray($res);
         $rightData['for_users'] = (bool)$rightData['for_users'];
         $rightData['for_groups'] = (bool)$rightData['for_groups'];
         $rightData['for_sections'] = (bool)$rightData['for_sections'];
@@ -129,18 +125,18 @@ class BasicPermission extends Permission implements PermissionInterface
      */
     public function hasPermission(int $userId, mixed $right): bool
     {
-        $user = new CurrentUser($this->config);
-        $user->getUserById($userId);
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userId);
 
-        if ($user->isSuperAdmin()) {
+        if ($currentUser->isSuperAdmin()) {
             return true;
         }
 
-        if (!is_numeric($right) and is_string($right)) {
+        if (!is_numeric($right) && is_string($right)) {
             $right = $this->getRightId($right);
         }
 
-        return $this->checkUserRight($user->getUserId(), $right);
+        return $this->checkUserRight($currentUser->getUserId(), $right);
     }
 
     /**
@@ -160,14 +156,15 @@ class BasicPermission extends Permission implements PermissionInterface
             WHERE
                 name = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($name)
+            $this->configuration->getDb()->escape($name)
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return 0;
         }
-        $row = $this->config->getDb()->fetchArray($res);
+
+        $row = $this->configuration->getDb()->fetchArray($res);
 
         return $row['right_id'];
     }
@@ -207,12 +204,8 @@ class BasicPermission extends Permission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) == 1) {
-            return true;
-        }
-
-        return false;
+        $res = $this->configuration->getDb()->query($select);
+        return $this->configuration->getDb()->numRows($res) == 1;
     }
 
     /**
@@ -232,11 +225,11 @@ class BasicPermission extends Permission implements PermissionInterface
      * Returns the number of user-rights the user specified by
      * user_id owns.
      *
-     * @param CurrentUser $user User object
+     * @param CurrentUser $currentUser User object
      */
-    public function getUserRightsCount(CurrentUser $user): int
+    public function getUserRightsCount(CurrentUser $currentUser): int
     {
-        $userRights = $this->getAllUserRights($user->getUserId());
+        $userRights = $this->getAllUserRights($currentUser->getUserId());
 
         return is_countable($userRights) ? count($userRights) : 0;
     }
@@ -271,9 +264,9 @@ class BasicPermission extends Permission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
 
@@ -293,7 +286,7 @@ class BasicPermission extends Permission implements PermissionInterface
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqright', 'right_id');
+        $nextId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqright', 'right_id');
         $rightData = $this->checkRightData($rightData);
 
         $insert = sprintf(
@@ -312,7 +305,7 @@ class BasicPermission extends Permission implements PermissionInterface
             $rightData['for_sections'] ?? 1
         );
 
-        if (!$this->config->getDb()->query($insert)) {
+        if (!$this->configuration->getDb()->query($insert)) {
             return 0;
         }
 
@@ -334,15 +327,19 @@ class BasicPermission extends Permission implements PermissionInterface
         if (!isset($rightData['name']) || !is_string($rightData['name'])) {
             $rightData['name'] = $this->defaultRightData['name'];
         }
+
         if (!isset($rightData['description']) || !is_string($rightData['description'])) {
             $rightData['description'] = $this->defaultRightData['description'];
         }
+
         if (!isset($rightData['for_users'])) {
             $rightData['for_users'] = $this->defaultRightData['for_users'];
         }
+
         if (!isset($rightData['for_groups'])) {
             $rightData['for_groups'] = $this->defaultRightData['for_groups'];
         }
+
         if (!isset($rightData['for_sections'])) {
             $rightData['for_sections'] = $this->defaultRightData['for_sections'];
         }
@@ -376,12 +373,7 @@ class BasicPermission extends Permission implements PermissionInterface
             $newName,
             $rightId
         );
-
-        if (!$this->config->getDb()->query($update)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -414,12 +406,12 @@ class BasicPermission extends Permission implements PermissionInterface
             $order
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [];
         $i = 0;
 
         if ($res) {
-            while ($row = $this->config->getDb()->fetchArray($res)) {
+            while ($row = $this->configuration->getDb()->fetchArray($res)) {
                 $result[$i] = $row;
                 ++$i;
             }
@@ -446,11 +438,7 @@ class BasicPermission extends Permission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($delete);
+        return (bool) $res;
     }
 }

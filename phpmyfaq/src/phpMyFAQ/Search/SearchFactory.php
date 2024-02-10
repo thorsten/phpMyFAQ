@@ -32,14 +32,14 @@ class SearchFactory
      *
      * @param string[] $searchHandler Array with search handlers, e.g. array('database' => 'mysqli')
      */
-    public static function create(Configuration $config, array $searchHandler): DatabaseInterface
+    public static function create(Configuration $configuration, array $searchHandler): DatabaseInterface
     {
         $searchClass = sprintf(
             '\phpMyFAQ\Search\%s\%s',
-            ucfirst(key($searchHandler)),
+            ucfirst((string) key($searchHandler)),
             ucfirst(current($searchHandler))
         );
 
-        return new $searchClass($config);
+        return new $searchClass($configuration);
     }
 }

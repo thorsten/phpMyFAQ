@@ -30,16 +30,16 @@ class MarkdownController extends AbstractController
     #[Route('admin/api/content/markdown')]
     public function renderMarkdown(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $data = json_decode($request->getContent());
 
         $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $parseDown = new ParsedownExtra();
+        $parsedownExtra = new ParsedownExtra();
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => $parseDown->text($answer)]);
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(['success' => $parsedownExtra->text($answer)]);
 
-        return $response;
+        return $jsonResponse;
     }
 }

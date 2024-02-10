@@ -62,7 +62,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 //
 // Bootstrapping
 //
-require 'src/Bootstrap.php';
+require __DIR__ . '/src/Bootstrap.php';
 
 //
 // Create Request & Response
@@ -86,7 +86,7 @@ if ($faqConfig->get('security.enableGoogleReCaptchaV2')) {
 
 $Language = new Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
-require_once 'translations/language_en.php';
+require_once __DIR__ . '/translations/language_en.php';
 $faqConfig->setLanguage($Language);
 
 if (Language::isASupportedLanguage($apiLanguage)) {
@@ -94,7 +94,7 @@ if (Language::isASupportedLanguage($apiLanguage)) {
     require_once 'translations/language_' . $languageCode . '.php';
 } else {
     $languageCode = 'en';
-    require_once 'translations/language_en.php';
+    require_once __DIR__ . '/translations/language_en.php';
 }
 
 //
@@ -105,9 +105,9 @@ try {
         ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($languageCode);
-} catch (Exception $e) {
+} catch (Exception $exception) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-    $response->setData(['error' => $e->getMessage()]);
+    $response->setData(['error' => $exception->getMessage()]);
 }
 
 //
@@ -208,7 +208,7 @@ switch ($action) {
         // Check display name and e-mail address for not logged-in users
         if (!$user->isLoggedIn()) {
             $user = new User($faqConfig);
-            if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
+            if ($user->checkDisplayName($username) && $user->checkMailAddress($mailer)) {
                 $response->setStatusCode(Response::HTTP_CONFLICT);
                 $response->setData(['error' => Translation::get('err_SaveComment')]);
                 $faqConfig->getLogger()->error('Name and mail already used by registered user.');
@@ -302,11 +302,9 @@ switch ($action) {
                         $catUser->getUserById($userId);
                         $catOwnerEmail = $catUser->getUserData('email');
 
-                        if ($catOwnerEmail !== '') {
-                            if (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo) {
-                                $mailer->addCc($catOwnerEmail);
-                                $send[$catOwnerEmail] = 1;
-                            }
+                        if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
+                            $mailer->addCc($catOwnerEmail);
+                            $send[$catOwnerEmail] = 1;
                         }
                     }
                 }
@@ -325,6 +323,7 @@ switch ($action) {
                 } catch (Exception) {
                     // @todo handle the exception
                 }
+
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $response->setData(['error' => Translation::get('err_SaveComment')]);
             }
@@ -332,6 +331,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => 'Please add your name, your e-mail address and a comment!']);
         }
+
         break;
 
     case 'add-faq':
@@ -362,12 +362,14 @@ switch ($action) {
             $answer = strip_tags((string) $answer);
             $answer = trim(nl2br($answer));
         }
+
         $contentLink = Filter::filterVar($postData['contentlink'], FILTER_VALIDATE_URL);
         $keywords = Filter::filterVar($postData['keywords'], FILTER_SANITIZE_SPECIAL_CHARS);
         if (isset($postData['rubrik[]'])) {
             if (is_string($postData['rubrik[]'])) {
                 $postData['rubrik[]'] = [ $postData['rubrik[]'] ];
             }
+
             $categories = Filter::filterArray(
                 $postData['rubrik[]']
             );
@@ -381,9 +383,9 @@ switch ($action) {
         }
 
         if (
-            !is_null($author) && !is_null($email) && !empty($question) &&
+            !is_null($author) && !is_null($email) && ($question !== '' && $question !== '0') &&
             $stopWords->checkBannedWord(strip_tags($question)) &&
-            !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer))
+            ($answer !== '' && $answer !== '0') && $stopWords->checkBannedWord(strip_tags($answer))
         ) {
             $isNew = true;
             $newLanguage = '';
@@ -423,7 +425,7 @@ switch ($action) {
 
             $faqEntity = new FaqEntity();
             $faqEntity
-                ->setLanguage(($isTranslation === true ? $newLanguage : $languageCode))
+                ->setLanguage(($isTranslation ? $newLanguage : $languageCode))
                 ->setQuestion($question)
                 ->setActive(($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO))
                 ->setSticky(false)
@@ -507,6 +509,7 @@ switch ($action) {
             $response->setData(['error' => Translation::get('err_NotAuth')]);
             break;
         }
+
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
@@ -531,12 +534,8 @@ switch ($action) {
             $save = true;
         }
 
-        if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
-            if ($faqConfig->get('records.enableVisibilityQuestions')) {
-                $visibility = 'Y';
-            } else {
-                $visibility = 'N';
-            }
+        if ($author !== '' && $author !== '0' && ($email !== '' && $email !== '0') && ($question !== '' && $question !== '0') && $stopWords->checkBannedWord($question)) {
+            $visibility = $faqConfig->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
 
             $questionData = [
                 'username' => $author,
@@ -563,11 +562,12 @@ switch ($action) {
                     if (!empty($word)) {
                         try {
                             $searchResult[] = $faqSearch->search($word, false);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             // @todo handle exception
                         }
                     }
                 }
+
                 foreach ($searchResult as $resultSet) {
                     foreach ($resultSet as $result) {
                         $mergedResult[] = $result;
@@ -606,6 +606,7 @@ switch ($action) {
                             // handle exception
                         }
                     }
+
                     $smartAnswer .= '</ul>';
 
                     $response->setData(['result' => $smartAnswer]);
@@ -618,6 +619,7 @@ switch ($action) {
                         $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                         $response->setData(['error' => $exception->getMessage()]);
                     }
+
                     $response->setStatusCode(Response::HTTP_OK);
                     $response->setData(['success' => Translation::get('msgAskThx4Mail')]);
                 }
@@ -630,6 +632,7 @@ switch ($action) {
                     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                     $response->setData(['error' => $exception->getMessage()]);
                 }
+
                 $response->setStatusCode(Response::HTTP_OK);
                 $response->setData(['success' => Translation::get('msgAskThx4Mail')]);
             }
@@ -667,6 +670,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_sendMail')]);
         }
+
         break;
 
     case 'add-voting':
@@ -690,11 +694,12 @@ switch ($action) {
                 'user_ip' => $userIp,
             ];
 
-            if (!$rating->getNumberOfVotings($faqId)) {
+            if ($rating->getNumberOfVotings($faqId) === 0) {
                 $rating->addVoting($votingData);
             } else {
                 $rating->update($votingData);
             }
+
             $response->setStatusCode(Response::HTTP_OK);
             $response->setData([
                 'success' => Translation::get('msgVoteThanks'),
@@ -707,6 +712,7 @@ switch ($action) {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $response->setData(['error' => $exception->getMessage()]);
             }
+
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_VoteTooMuch')]);
         } else {
@@ -716,6 +722,7 @@ switch ($action) {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $response->setData(['error' => $exception->getMessage()]);
             }
+
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_noVote')]);
         }
@@ -737,7 +744,7 @@ switch ($action) {
             $email = $faqConfig->getAdminEmail();
         }
 
-        if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
+        if ($author !== '' && $author !== '0' && !empty($email) && ($question !== '' && $question !== '0') && $stopWords->checkBannedWord($question)) {
             $question = sprintf(
                 "%s: %s\n%s: %s\n\n %s",
                 Translation::get('msgNewContentName'),
@@ -766,6 +773,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_sendMail')]);
         }
+
         break;
 
     // Send mails to friends
@@ -801,7 +809,7 @@ switch ($action) {
 
             foreach ($mailto as $recipient) {
                 $recipient = trim(strip_tags((string) $recipient));
-                if (!empty($recipient)) {
+                if ($recipient !== '' && $recipient !== '0') {
                     $mailer = new Mail($faqConfig);
                     try {
                         $mailer->setReplyTo($email, $author);
@@ -810,6 +818,7 @@ switch ($action) {
                         $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                         $response->setData(['error' => $exception->getMessage()]);
                     }
+
                     $mailer->subject = Translation::get('msgS2FMailSubject') . $author;
                     $mailer->message = sprintf(
                         "%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
@@ -832,6 +841,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_sendMail')]);
         }
+
         break;
 
     //
@@ -861,11 +871,7 @@ switch ($action) {
 
         $isAzureAdUser = $user->getUserAuthSource() === 'azure';
 
-        if ($deleteSecret === 'on') {
-            $secret = '';
-        } else {
-            $secret = $user->getUserData('secret');
-        }
+        $secret = $deleteSecret === 'on' ? '' : $user->getUserData('secret');
 
         if ($userId !== $user->getUserId()) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -899,6 +905,7 @@ switch ($action) {
                     if ($auth->setReadOnly()) {
                         continue;
                     }
+
                     if (!$auth->update($user->getLogin(), $password)) {
                         $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                         $response->setData(['error' => $auth->error()]);
@@ -925,6 +932,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('ad_entry_savedfail')]);
         }
+
         break;
 
     //
@@ -935,7 +943,7 @@ switch ($action) {
         $username = trim((string) Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
 
-        if (!empty($username) && !empty($email)) {
+        if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
             $user = new CurrentUser($faqConfig);
             $loginExist = $user->getUserByLogin($username);
 
@@ -946,12 +954,14 @@ switch ($action) {
                     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                     $response->setData(['error' => $exception->getMessage()]);
                 }
+
                 try {
                     $user->changePassword($newPassword);
                 } catch (Exception $exception) {
                     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                     $response->setData(['error' => $exception->getMessage()]);
                 }
+
                 $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .
                     $newPassword . "\n\n" . Translation::get('lostpwd_text_2');
 
@@ -962,6 +972,7 @@ switch ($action) {
                     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                     $response->setData(['error' => $exception->getMessage()]);
                 }
+
                 $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $faqConfig);
                 $mailer->message = $text;
                 try {
@@ -970,6 +981,7 @@ switch ($action) {
                     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                     $response->setData(['error' => $exception->getMessage()]);
                 }
+
                 unset($mailer);
                 // Trust that the email has been sent
                 $response->setStatusCode(Response::HTTP_OK);
@@ -982,6 +994,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_CONFLICT);
             $response->setData(['error' => Translation::get('lostpwd_err_2')]);
         }
+
         break;
 
     //
@@ -1021,7 +1034,7 @@ switch ($action) {
             break;
         }
 
-        if (!empty($author) && !empty($email) && !empty($question) && $stopWords->checkBannedWord($question)) {
+        if ($author !== '' && $author !== '0' && ($email !== '' && $email !== '0') && ($question !== '' && $question !== '0') && $stopWords->checkBannedWord($question)) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
                 Translation::get('ad_user_loginname'),
@@ -1052,6 +1065,7 @@ switch ($action) {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_sendMail')]);
         }
+
         break;
 }
 

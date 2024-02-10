@@ -26,16 +26,17 @@ class OpenQuestionController
 {
     public function list(): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
-        $questions = new Question($faqConfig);
-        $result = $questions->getAllOpenQuestions();
+        $question = new Question($faqConfig);
+        $result = $question->getAllOpenQuestions();
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

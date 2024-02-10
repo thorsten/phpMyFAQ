@@ -31,16 +31,16 @@ use phpMyFAQ\User;
  */
 class AuthDatabase extends Auth implements AuthDriverInterface
 {
-    private readonly DatabaseDriver $db;
+    private readonly DatabaseDriver $databaseDriver;
 
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
+        parent::__construct($configuration);
 
-        $this->db = $this->config->getDb();
+        $this->databaseDriver = $this->configuration->getDb();
     }
 
     /**
@@ -50,7 +50,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     {
         if ($this->isValidLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
-            $this->config->getLogger()->error(User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE);
+            $this->configuration->getLogger()->error(User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE);
 
             return false;
         }
@@ -58,24 +58,26 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $add = sprintf(
             "INSERT INTO %sfaquserlogin (login, pass, domain) VALUES ('%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->db->escape($login),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($password)),
-            $this->db->escape($domain)
+            $this->databaseDriver->escape($login),
+            $this->databaseDriver->escape($this->encContainer->setSalt($login)->encrypt($password)),
+            $this->databaseDriver->escape($domain)
         );
 
 
-        $add = $this->db->query($add);
-        $error = $this->db->error();
+        $add = $this->databaseDriver->query($add);
 
-        if (strlen($error) > 0) {
+        $error = $this->databaseDriver->error();
+
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . 'error(): ' . $error;
-            $this->config->getLogger()->error(User::ERROR_USER_ADD . 'error(): ' . $error);
+            $this->configuration->getLogger()->error(User::ERROR_USER_ADD . 'error(): ' . $error);
 
             return false;
         }
+
         if (!$add) {
             $this->errors[] = User::ERROR_USER_ADD;
-            $this->config->getLogger()->error(User::ERROR_USER_ADD);
+            $this->configuration->getLogger()->error(User::ERROR_USER_ADD);
 
             return false;
         }
@@ -91,22 +93,24 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $change = sprintf(
             "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($password)),
-            $this->db->escape($login)
+            $this->databaseDriver->escape($this->encContainer->setSalt($login)->encrypt($password)),
+            $this->databaseDriver->escape($login)
         );
 
-        $change = $this->db->query($change);
-        $error = $this->db->error();
+        $change = $this->databaseDriver->query($change);
 
-        if (strlen($error) > 0) {
+        $error = $this->databaseDriver->error();
+
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
-            $this->config->getLogger()->error(User::ERROR_USER_CHANGE . 'error(): ' . $error);
+            $this->configuration->getLogger()->error(User::ERROR_USER_CHANGE . 'error(): ' . $error);
 
             return false;
         }
+
         if (!$change) {
             $this->errors[] = User::ERROR_USER_CHANGE;
-            $this->config->getLogger()->error(User::ERROR_USER_CHANGE);
+            $this->configuration->getLogger()->error(User::ERROR_USER_CHANGE);
 
             return false;
         }
@@ -122,21 +126,23 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $delete = sprintf(
             "DELETE FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($login)
+            $this->databaseDriver->escape($login)
         );
 
-        $delete = $this->db->query($delete);
-        $error = $this->db->error();
+        $delete = $this->databaseDriver->query($delete);
 
-        if (strlen($error) > 0) {
+        $error = $this->databaseDriver->error();
+
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_DELETE . 'error(): ' . $error;
-            $this->config->getLogger()->error(User::ERROR_USER_DELETE . 'error(): ' . $error);
+            $this->configuration->getLogger()->error(User::ERROR_USER_DELETE . 'error(): ' . $error);
 
             return false;
         }
+
         if (!$delete) {
             $this->errors[] = User::ERROR_USER_DELETE;
-            $this->config->getLogger()->error(User::ERROR_USER_DELETE);
+            $this->configuration->getLogger()->error(User::ERROR_USER_DELETE);
 
             return false;
         }
@@ -152,23 +158,24 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($login)
+            $this->databaseDriver->escape($login)
         );
 
-        $check = $this->db->query($check);
-        $error = $this->db->error();
+        $check = $this->databaseDriver->query($check);
 
-        if (strlen($error) > 0) {
+        $error = $this->databaseDriver->error();
+
+        if (strlen((string) $error) > 0) {
             $this->errors[] = User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
-            $this->config->getLogger()->error(User::ERROR_USER_NOT_FOUND . 'error(): ' . $error);
+            $this->configuration->getLogger()->error(User::ERROR_USER_NOT_FOUND . 'error(): ' . $error);
 
             return false;
         }
 
-        $numRows = $this->db->numRows($check);
+        $numRows = $this->databaseDriver->numRows($check);
         if ($numRows < 1) {
             $this->errors[] = User::ERROR_USER_NOT_FOUND;
-            $this->config->getLogger()->error(User::ERROR_USER_NOT_FOUND);
+            $this->configuration->getLogger()->error(User::ERROR_USER_NOT_FOUND);
 
             return false;
         }
@@ -176,17 +183,18 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         // if login not unique, raise an error, but continue
         if ($numRows > 1) {
             $this->errors[] = User::ERROR_USER_LOGIN_NOT_UNIQUE;
-            $this->config->getLogger()->error(User::ERROR_USER_LOGIN_NOT_UNIQUE);
+            $this->configuration->getLogger()->error(User::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
 
         // if multiple accounts are ok, just 1 valid required
-        while ($user = $this->db->fetchArray($check)) {
+        while ($user = $this->databaseDriver->fetchArray($check)) {
             if ($user['pass'] === $this->encContainer->setSalt($user['login'])->encrypt($password)) {
                 return true;
             }
         }
+
         $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
-        $this->config->getLogger()->error(User::ERROR_USER_INCORRECT_PASSWORD);
+        $this->configuration->getLogger()->error(User::ERROR_USER_INCORRECT_PASSWORD);
 
         return false;
     }
@@ -199,19 +207,20 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $check = sprintf(
             "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($login)
+            $this->databaseDriver->escape($login)
         );
 
-        $check = $this->db->query($check);
-        $error = $this->db->error();
+        $check = $this->databaseDriver->query($check);
 
-        if (strlen($error) > 0) {
+        $error = $this->databaseDriver->error();
+
+        if (strlen((string) $error) > 0) {
             $this->errors[] = $error;
-            $this->config->getLogger()->error($error);
+            $this->configuration->getLogger()->error($error);
 
             return 0;
         }
 
-        return $this->db->numRows($check);
+        return $this->databaseDriver->numRows($check);
     }
 }

@@ -37,10 +37,13 @@ use ZipArchive;
 class Upgrade extends Setup
 {
     final public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
+
     private const GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
+
     private const PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
 
     public string $upgradeDirectory = PMF_CONTENT_DIR . '/upgrades';
+
     private bool $isNightly;
 
     public function __construct(protected System $system, private readonly Configuration $configuration)
@@ -57,69 +60,71 @@ class Upgrade extends Setup
      */
     public function checkFilesystem(): bool
     {
-        if (!is_dir($this->upgradeDirectory)) {
-            if (!mkdir($this->upgradeDirectory)) {
-                throw new Exception('The folder ' . $this->upgradeDirectory . ' is missing.');
-            }
+        if (!is_dir($this->upgradeDirectory) && !mkdir($this->upgradeDirectory)) {
+            throw new Exception('The folder ' . $this->upgradeDirectory . ' is missing.');
         }
 
         if (!is_dir(PMF_CONTENT_DIR . '/user/attachments')) {
             throw new Exception('The folder /content/user/attachments is missing.');
         }
+
         if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
             throw new Exception('The folder /content/user/images is missing.');
         }
+
         if (!is_dir(PMF_CONTENT_DIR . '/core/data')) {
             throw new Exception('The folder /content/core/data is missing.');
         }
+
         if (!is_dir(PMF_ROOT_DIR . '/assets/themes')) {
             throw new Exception('The folder /phpmyfaq/assets/themes is missing.');
         }
-
-        if (
-            is_dir(PMF_CONTENT_DIR . '/user/attachments') &&
-            is_dir(PMF_CONTENT_DIR . '/user/images') &&
-            is_dir(PMF_CONTENT_DIR . '/core/data') &&
-            is_dir(PMF_ROOT_DIR . '/assets/themes')
-        ) {
-            if (
-                is_file(PMF_CONTENT_DIR . '/core/config/constants.php') &&
-                is_file(PMF_CONTENT_DIR . '/core/config/database.php')
-            ) {
-                if ($this->configuration->isElasticsearchActive()) {
-                    if (!is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')) {
-                        throw new Exception(
-                            'The file /content/core/config/elasticsearch.php is missing.'
-                        );
-                    }
-                }
-                if ($this->configuration->isLdapActive()) {
-                    if (!is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
-                        throw new Exception('The file /content/core/config/ldap.php is missing.');
-                    }
-                }
-                if ($this->configuration->isSignInWithMicrosoftActive()) {
-                    if (!is_file(PMF_CONTENT_DIR . '/core/config/azure.php')) {
-                        throw new Exception('The file /content/core/config/azure.php is missing.');
-                    }
-                }
-
-                return true;
-            } else {
-                throw new Exception(
-                    'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
-                );
-            }
-        } else {
+        if (!is_dir(PMF_CONTENT_DIR . '/user/attachments')) {
             return false;
         }
+        if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
+            return false;
+        }
+        if (!is_dir(PMF_CONTENT_DIR . '/core/data')) {
+            return false;
+        }
+        if (!is_dir(PMF_ROOT_DIR . '/assets/themes')) {
+            return false;
+        }
+        if (
+            is_file(PMF_CONTENT_DIR . '/core/config/constants.php') &&
+            is_file(PMF_CONTENT_DIR . '/core/config/database.php')
+        ) {
+            if (
+                $this->configuration->isElasticsearchActive() &&
+                !is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')
+            ) {
+                throw new Exception(
+                    'The file /content/core/config/elasticsearch.php is missing.'
+                );
+            }
+
+            if ($this->configuration->isLdapActive() && !is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
+                throw new Exception('The file /content/core/config/ldap.php is missing.');
+            }
+
+            if (
+                $this->configuration->isSignInWithMicrosoftActive() &&
+                !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
+            ) {
+                throw new Exception('The file /content/core/config/azure.php is missing.');
+            }
+
+            return true;
+        }
+        throw new Exception(
+            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
+        );
     }
 
     /**
      * Method to download a phpMyFAQ package, returns false if it doesn't work
      *
-     * @param string $version
-     * @return string
      * @throws Exception
      * @todo handle possible proxy servers
      */
@@ -160,8 +165,8 @@ class Upgrade extends Setup
      */
     public function verifyPackage(string $path, string $version): bool
     {
-        $client = HttpClient::create();
-        $response = $client->request(
+        $httpClient = HttpClient::create();
+        $response = $httpClient->request(
             'GET',
             DownloadHostType::PHPMYFAQ->value . 'info/' . $version
         );
@@ -169,11 +174,7 @@ class Upgrade extends Setup
         try {
             $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-            if (md5_file($path) === $responseContent['zip']['md5']) {
-                return true;
-            } else {
-                return false;
-            }
+            return md5_file($path) === $responseContent['zip']['md5'];
         } catch (
             TransportExceptionInterface |
             ClientExceptionInterface |
@@ -190,39 +191,34 @@ class Upgrade extends Setup
      * Method to extract the downloaded phpMyFAQ package
      *
      * @param string   $path | Path of the package
-     * @param callable $progressCallback
-     * @return bool
      * @throws Exception
      */
     public function extractPackage(string $path, callable $progressCallback): bool
     {
-        $zip = new ZipArchive();
+        $zipArchive = new ZipArchive();
 
         if (!is_file($path)) {
             throw new Exception('Given path to download package is not valid.');
         }
 
-        $zipFile = $zip->open($path);
+        $zipFile = $zipArchive->open($path);
 
-        $zip->registerProgressCallback(0.05, function ($rate) use ($progressCallback) {
+        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback) {
             $progress = sprintf('%d%%', $rate * 100);
             $progressCallback($progress);
         });
 
         if ($zipFile) {
-            $zip->extractTo($this->upgradeDirectory . '/new/');
-            return $zip->close();
-        } else {
-            throw new Exception('Cannot open zipped download package.');
+            $zipArchive->extractTo($this->upgradeDirectory . '/new/');
+            return $zipArchive->close();
         }
+        throw new Exception('Cannot open zipped download package.');
     }
 
     /**
      * Method to create a temporary backup of the current files
      *
      * @param string   $backupName | Name of the created backup
-     * @param callable $progressCallback
-     * @return bool
      * @throws Exception
      */
     public function createTemporaryBackup(string $backupName, callable $progressCallback): bool
@@ -233,8 +229,8 @@ class Upgrade extends Setup
             throw new Exception('Backup file already exists.');
         }
 
-        $zip = new ZipArchive();
-        if ($zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+        $zipArchive = new ZipArchive();
+        if ($zipArchive->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
             throw new Exception('Cannot create backup file.');
         }
 
@@ -244,7 +240,7 @@ class Upgrade extends Setup
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $zip->registerProgressCallback(0.05, function ($rate) use ($progressCallback) {
+        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback) {
             $progress = sprintf('%d%%', $rate * 100);
             $progressCallback($progress);
         });
@@ -253,14 +249,16 @@ class Upgrade extends Setup
             $file = realpath($file);
             if (!str_contains($file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
-                    $zip->addEmptyDir(str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
+                    $zipArchive->addEmptyDir(
+                        str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR)
+                    );
                 } elseif (is_file($file)) {
-                    $zip->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file));
+                    $zipArchive->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file));
                 }
             }
         }
 
-        $zip->close();
+        $zipArchive->close();
 
         return file_exists($outputZipFile);
     }
@@ -274,9 +272,8 @@ class Upgrade extends Setup
     {
         if (is_file($this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName)) {
             return unlink($this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -288,9 +285,6 @@ class Upgrade extends Setup
 
     /**
      * Method to install the package
-     *
-     * @param callable $progressCallback
-     * @return bool
      */
     public function installPackage(callable $progressCallback): bool
     {
@@ -317,18 +311,18 @@ class Upgrade extends Setup
                 copy($source, $destination);
             }
 
-            $currentFile++;
+            ++$currentFile;
             if ($currentFile % 10 === 0) {
                 $progress = $totalFiles > 0 ? sprintf('%d%%', ($currentFile / $totalFiles) * 100) : 100;
                 call_user_func($progressCallback, $progress);
             }
         }
+
         return true;
     }
 
     /**
      * Method to clean up the upgrade directory
-     * @return bool
      */
     public function cleanUp(): bool
     {
@@ -376,9 +370,6 @@ class Upgrade extends Setup
 
     /**
      * Returns the filename of the download package
-     *
-     * @param string $version
-     * @return string
      */
     public function getFilename(string $version): string
     {
@@ -389,17 +380,11 @@ class Upgrade extends Setup
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
     }
 
-    /**
-     * @return string
-     */
     public function getUpgradeDirectory(): string
     {
         return $this->upgradeDirectory;
     }
 
-    /**
-     * @param string $upgradeDirectory
-     */
     public function setUpgradeDirectory(string $upgradeDirectory): void
     {
         $this->upgradeDirectory = $upgradeDirectory;
@@ -410,9 +395,6 @@ class Upgrade extends Setup
         return $this->isNightly;
     }
 
-    /**
-     * @param bool $isNightly
-     */
     public function setIsNightly(bool $isNightly): void
     {
         $this->isNightly = $isNightly;

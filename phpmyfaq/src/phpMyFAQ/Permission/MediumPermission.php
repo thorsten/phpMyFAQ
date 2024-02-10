@@ -52,6 +52,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         if ($groupId <= 0 || !is_numeric($groupId)) {
             return [];
         }
+
         // check right
         $select = sprintf(
             '
@@ -71,9 +72,9 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
 
@@ -92,10 +93,10 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function hasPermission(int $userId, mixed $right): bool
     {
-        $user = new CurrentUser($this->config);
-        $user->getUserById($userId);
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userId);
 
-        if ($user->isSuperAdmin()) {
+        if ($currentUser->isSuperAdmin()) {
             return true;
         }
 
@@ -105,14 +106,11 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         }
 
         // check user right and group right
-        if (
-            $this->checkUserGroupRight($userId, $right)
-            || $this->checkUserRight($userId, $right)
-        ) {
+        if ($this->checkUserGroupRight($userId, $right)) {
             return true;
         }
 
-        return false;
+        return $this->checkUserRight($userId, $right);
     }
 
     /**
@@ -155,12 +153,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) == 1) {
-            return true;
-        }
-
-        return false;
+        $res = $this->configuration->getDb()->query($select);
+        return $this->configuration->getDb()->numRows($res) == 1;
     }
 
     /**
@@ -196,12 +190,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $rightId
         );
 
-        $res = $this->config->getDb()->query($insert);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($insert);
+        return (bool) $res;
     }
 
     /**
@@ -218,7 +208,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqgroup', 'group_id');
+        $nextId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqgroup', 'group_id');
         $groupData = $this->checkGroupData($groupData);
         $insert = sprintf(
             "
@@ -234,7 +224,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             (int)$groupData['auto_join']
         );
 
-        $res = $this->config->getDb()->query($insert);
+        $res = $this->configuration->getDb()->query($insert);
         if (!$res) {
             return 0;
         }
@@ -259,14 +249,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             WHERE
                 name = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($name)
+            $this->configuration->getDb()->escape($name)
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return 0;
         }
-        $row = $this->config->getDb()->fetchArray($res);
+
+        $row = $this->configuration->getDb()->fetchArray($res);
 
         return $row['group_id'];
     }
@@ -286,12 +277,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         if (!isset($groupData['name']) || !is_string($groupData['name'])) {
             $groupData['name'] = $this->defaultGroupData['name'];
         }
+
         if (!isset($groupData['description']) || !is_string($groupData['description'])) {
             $groupData['description'] = $this->defaultGroupData['description'];
         }
+
         if (!isset($groupData['auto_join'])) {
             $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
         }
+
         $groupData['auto_join'] = (int)$groupData['auto_join'];
 
         return $groupData;
@@ -309,8 +303,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $set = '';
         $comma = '';
 
-        foreach ($groupData as $key => $val) {
-            $set .= $comma . $key . " = '" . $this->config->getDb()->escape($checkedData[$key]) . "'";
+        foreach (array_keys($groupData) as $key) {
+            $set .= $comma . $key . " = '" . $this->configuration->getDb()->escape($checkedData[$key]) . "'";
             $comma = ",\n                ";
         }
 
@@ -327,13 +321,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($update);
-
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($update);
+        return (bool) $res;
     }
 
     /**
@@ -358,7 +347,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($delete);
+        $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -373,7 +362,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($delete);
+        $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -388,12 +377,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($delete);
+        return (bool) $res;
     }
 
     /**
@@ -428,9 +413,9 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
 
@@ -469,9 +454,9 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [-1];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
 
@@ -484,18 +469,18 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      * @param array<int> $groups Selected groups
      * @todo   Move into the Helper class
      */
-    public function getAllGroupsOptions(array $groups, CurrentUser $user): string
+    public function getAllGroupsOptions(array $groups, CurrentUser $currentUser): string
     {
         $options = '';
-        $allGroups = $this->getAllGroups($user);
+        $allGroups = $this->getAllGroups($currentUser);
 
-        foreach ($allGroups as $groupId) {
-            if (-1 != $groupId) {
+        foreach ($allGroups as $allGroup) {
+            if (-1 != $allGroup) {
                 $options .= sprintf(
                     '<option value="%d" %s>%s</option>',
-                    $groupId,
-                    ((in_array($groupId, $groups) || (isset($groups[0]) && $groups[0] === -1)) ? 'selected' : ''),
-                    $this->getGroupName($groupId)
+                    $allGroup,
+                    ((in_array($allGroup, $groups) || (isset($groups[0]) && $groups[0] === -1)) ? 'selected' : ''),
+                    $this->getGroupName($allGroup)
                 );
             }
         }
@@ -509,14 +494,14 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      *
      * @return array<int>
      */
-    public function getAllGroups(CurrentUser $user): array
+    public function getAllGroups(CurrentUser $currentUser): array
     {
         $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
 
         if (
-            !$this->config->get('main.enableCategoryRestrictions') &&
-            $user->getUserId() !== 1 &&
-            !$user->isSuperAdmin()
+            !$this->configuration->get('main.enableCategoryRestrictions') &&
+            $currentUser->getUserId() !== 1 &&
+            !$currentUser->isSuperAdmin()
         ) {
             $select = sprintf(
                 '
@@ -530,13 +515,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
                     fug.user_id = %d',
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $user->getUserId()
+                $currentUser->getUserId()
             );
         }
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
 
@@ -566,11 +551,12 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return '-';
         }
-        $row = $this->config->getDb()->fetchArray($res);
+
+        $row = $this->configuration->getDb()->fetchArray($res);
 
         return $row['name'];
     }
@@ -589,6 +575,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         if ($userId <= 0 || !is_numeric($userId)) {
             return [];
         }
+
         $userRights = $this->getUserRights($userId);
         $groupRights = $this->getUserGroupRights($userId);
 
@@ -633,9 +620,9 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
 
@@ -669,13 +656,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             Database::getTablePrefix()
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         if (!$res) {
             return false;
         }
 
         $auto_join = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $auto_join[] = $row['group_id'];
         }
 
@@ -717,12 +704,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($insert);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($insert);
+        return (bool) $res;
     }
 
     /**
@@ -754,12 +737,12 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return [];
         }
 
-        return $this->config->getDb()->fetchArray($res);
+        return $this->configuration->getDb()->fetchArray($res);
     }
 
     /**
@@ -784,12 +767,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $userId
         );
 
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($delete);
+        return (bool) $res;
     }
 
     /**
@@ -814,12 +793,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($delete);
+        return (bool) $res;
     }
 
     /**
@@ -830,7 +805,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function removeAllUsersFromGroup(int $groupId): bool
     {
-        if ($groupId <= 0 or !is_numeric($groupId)) {
+        if ($groupId <= 0 || !is_numeric($groupId)) {
             return false;
         }
 
@@ -840,11 +815,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($delete);
+        return (bool) $res;
     }
 }

@@ -72,13 +72,13 @@ class ExportController extends AbstractController
         $this->userHasPermission(PermissionType::REPORTS);
 
         $configuration = Configuration::getConfigurationInstance();
-        $report = new Report($configuration);
+        new Report($configuration);
         $columns = $request->request->all();
 
         $text = [];
         $text[0] = [];
 
-        foreach ($columns as $column => $value) {
+        foreach (array_keys($columns) as $column) {
             $text[0][] = Translation::get('ad_stat_' . $column);
         }
 

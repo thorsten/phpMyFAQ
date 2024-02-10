@@ -367,27 +367,23 @@ class Pgsql extends Database implements Driver
 
     /**
      * Constructor.
-     *
-     * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        $this->config = $config;
+        $this->configuration = $configuration;
     }
 
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.
      *
-     *
-     * @return bool
      */
     public function createTables(string $prefix = ''): bool
     {
         foreach ($this->createTableStatements as $key => $stmt) {
             if ($key == 'idx_records' || $key == 'faqsessions_idx') {
-                $result = $this->config->getDb()->query(sprintf($stmt, $prefix, $prefix));
+                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
             } else {
-                $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
+                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
             }
 
             if (!$result) {

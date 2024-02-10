@@ -48,7 +48,7 @@ class UpdateController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
@@ -56,16 +56,16 @@ class UpdateController extends AbstractController
 
         try {
             $upgrade->checkFilesystem();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(
                 [
                     'message' => Translation::get('healthCheckOkay'),
                     'dateLastChecked' => $dateLastChecked,
                 ]
             );
         } catch (Exception $exception) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(
                 [
                     'message' => $exception->getMessage(),
                     'dateLastChecked' => $dateLastChecked,
@@ -73,7 +73,7 @@ class UpdateController extends AbstractController
             );
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/versions')]
@@ -81,26 +81,26 @@ class UpdateController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $client = HttpClient::create();
-        $response = new JsonResponse();
+        $httpClient = HttpClient::create();
+        $jsonResponse = new JsonResponse();
         try {
-            $versions = $client->request(
+            $versions = $httpClient->request(
                 'GET',
                 'https://api.phpmyfaq.de/versions'
             );
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent($versions->getContent());
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setContent($versions->getContent());
         } catch (
             TransportExceptionInterface |
             ClientExceptionInterface |
             ServerExceptionInterface |
             RedirectionExceptionInterface $exception
         ) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData($exception->getMessage());
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData($exception->getMessage());
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/update-check')]
@@ -108,7 +108,7 @@ class UpdateController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
@@ -120,7 +120,7 @@ class UpdateController extends AbstractController
             $configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
             if (version_compare($versions['installed'], $versions[$branch], '<')) {
-                $response->setData(
+                $jsonResponse->setData(
                     [
                         'version' => $versions[$branch],
                         'message' => Translation::get('currentVersion') . $versions[$branch],
@@ -128,7 +128,7 @@ class UpdateController extends AbstractController
                     ]
                 );
             } else {
-                $response->setData(
+                $jsonResponse->setData(
                     [
                         'version' => $versions['installed'],
                         'message' => Translation::get('versionIsUpToDate'),
@@ -137,13 +137,13 @@ class UpdateController extends AbstractController
                 );
             }
 
-            $response->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
         } catch (Exception | TransportExceptionInterface | DecodingExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $e->getMessage()]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => $e->getMessage()]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     /**
@@ -159,7 +159,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -169,25 +169,25 @@ class UpdateController extends AbstractController
         $pathToPackage = $upgrade->downloadPackage($versionNumber);
 
         if ($pathToPackage === false) {
-            $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
-            $response->setData(['error' => Translation::get('downloadFailure')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_GATEWAY);
+            $jsonResponse->setData(['error' => Translation::get('downloadFailure')]);
+            return $jsonResponse;
         }
 
         if (!$upgrade->isNightly()) {
             $result = $upgrade->verifyPackage($pathToPackage, $versionNumber);
             if ($result === false) {
-                $response->setStatusCode(Response::HTTP_BAD_GATEWAY);
-                $response->setData(['error' => Translation::get('verificationFailure')]);
-                return $response;
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_GATEWAY);
+                $jsonResponse->setData(['error' => Translation::get('verificationFailure')]);
+                return $jsonResponse;
             }
         }
 
         $configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => Translation::get('downloadSuccessful')]);
-        return $response;
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(['success' => Translation::get('downloadSuccessful')]);
+        return $jsonResponse;
     }
 
     #[Route('admin/api/extract-package')]
@@ -198,15 +198,14 @@ class UpdateController extends AbstractController
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
 
-        $pathToPackage = urldecode($configuration->get('upgrade.lastDownloadedPackage'));
+        $pathToPackage = urldecode((string) $configuration->get('upgrade.lastDownloadedPackage'));
 
-        return new StreamedResponse(function () use ($upgrade, $pathToPackage) {
-            $progressCallback = function ($progress) {
+        return new StreamedResponse(static function () use ($upgrade, $pathToPackage) {
+            $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
-
             if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
                 echo json_encode(['message' => Translation::get('extractSuccessful')]);
             } else {
@@ -225,13 +224,12 @@ class UpdateController extends AbstractController
 
         $backupHash = md5(uniqid());
 
-        return new StreamedResponse(function () use ($upgrade, $backupHash) {
-            $progressCallback = function ($progress) {
+        return new StreamedResponse(static function () use ($upgrade, $backupHash) {
+            $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
-
             if ($upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
                 echo json_encode(['message' => '✅ Backup successful']);
             } else {
@@ -248,13 +246,12 @@ class UpdateController extends AbstractController
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
 
-        return new StreamedResponse(function () use ($upgrade) {
-            $progressCallback = function ($progress) {
+        return new StreamedResponse(static function () use ($upgrade) {
+            $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
-
             if ($upgrade->installPackage($progressCallback)) {
                 echo json_encode(['message' => '✅ Package successfully installed.']);
             } else {
@@ -272,19 +269,18 @@ class UpdateController extends AbstractController
         $update = new Update(new System(), $configuration);
         $update->setVersion(System::getVersion());
 
-        return new StreamedResponse(function () use ($update) {
-            $progressCallback = function ($progress) {
+        return new StreamedResponse(static function () use ($update) {
+            $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
-
             try {
                 if ($update->applyUpdates($progressCallback)) {
                     echo json_encode(['message' => '✅ Database successfully updated.']);
                 }
-            } catch (Exception $e) {
-                echo json_encode(['message' => 'Update database failed: ' . $e->getMessage()]);
+            } catch (Exception $exception) {
+                echo json_encode(['message' => 'Update database failed: ' . $exception->getMessage()]);
             }
         });
     }
@@ -294,19 +290,19 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
-        $update = new Upgrade(new System(), $configuration);
+        $upgrade = new Upgrade(new System(), $configuration);
 
         try {
-            $update->cleanUp();
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['message' => '✅ Cleanup successful.']);
-        } catch (Exception $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['message' => 'Cleanup failed: ' . $e->getMessage()]);
+            $upgrade->cleanUp();
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['message' => '✅ Cleanup successful.']);
+        } catch (Exception $exception) {
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['message' => 'Cleanup failed: ' . $exception->getMessage()]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

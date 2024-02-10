@@ -38,34 +38,33 @@ class Translation
     /** @var bool Translation already initialized? */
     protected bool $isReady = false;
 
-    private static ?Translation $instance = null;
+    private static ?Translation $translation = null;
 
     public static function create(): Translation
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
+        if (self::$translation === null) {
+            self::$translation = new self();
         }
 
-        return self::$instance;
+        return self::$translation;
     }
 
     /**
      * Returns the translation of a specific key from the current language
      *
-     * @param string $languageKey
      * @return string|string[][]|null
      */
     public static function get(string $languageKey): string|array|null
     {
         try {
-            self::$instance->checkInit();
-            self::$instance->checkLanguageLoaded();
+            self::$translation->checkInit();
+            self::$translation->checkLanguageLoaded();
 
-            if (!empty(self::$instance->loadedLanguages[self::$instance->currentLanguage][$languageKey])) {
-                return self::$instance->loadedLanguages[self::$instance->currentLanguage][$languageKey];
+            if (!empty(self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey])) {
+                return self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey];
             }
 
-            return self::$instance->loadedLanguages[self::$instance->defaultLanguage][$languageKey];
+            return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey];
         } catch (Exception) {
             // handle exception
             // log to stderr
@@ -79,10 +78,10 @@ class Translation
      */
     public function setLanguagesDir(string $languagesDir): Translation
     {
-        self::$instance->languagesDir = $languagesDir;
-        self::$instance->checkLanguageDirectory();
+        self::$translation->languagesDir = $languagesDir;
+        self::$translation->checkLanguageDirectory();
 
-        return self::$instance;
+        return self::$translation;
     }
 
     /**
@@ -90,11 +89,11 @@ class Translation
      */
     public function setDefaultLanguage(string $defaultLanguage): Translation
     {
-        self::$instance->defaultLanguage = $defaultLanguage;
-        self::$instance->checkDefaultLanguage();
-        self::$instance->checkDefaultLanguageLoaded();
+        self::$translation->defaultLanguage = $defaultLanguage;
+        self::$translation->checkDefaultLanguage();
+        self::$translation->checkDefaultLanguageLoaded();
 
-        return self::$instance;
+        return self::$translation;
     }
 
     public function getDefaultLanguage(): string
@@ -107,16 +106,16 @@ class Translation
      */
     public function setCurrentLanguage(string $currentLanguage): Translation
     {
-        self::$instance->checkInit();
-        self::$instance->currentLanguage = $currentLanguage;
-        self::$instance->checkLanguageLoaded();
+        self::$translation->checkInit();
+        self::$translation->currentLanguage = $currentLanguage;
+        self::$translation->checkLanguageLoaded();
 
-        return self::$instance;
+        return self::$translation;
     }
 
     public function getCurrentLanguage(): string
     {
-        return self::$instance->currentLanguage;
+        return self::$translation->currentLanguage;
     }
 
     /**
@@ -124,12 +123,12 @@ class Translation
      */
     public static function getInstance(): Translation
     {
-        if (null == self::$instance) {
+        if (null == self::$translation) {
             $className = self::class;
-            self::$instance = new $className();
+            self::$translation = new $className();
         }
 
-        return self::$instance;
+        return self::$translation;
     }
 
     /**
@@ -150,12 +149,12 @@ class Translation
      */
     public static function getConfigurationItems(string $section = ''): array
     {
-        include self::$instance->filename(self::$instance->currentLanguage);
+        include self::$translation->filename(self::$translation->currentLanguage);
 
         $configuration = [];
 
         foreach ($LANG_CONF as $key => $value) {
-            if (str_starts_with($key, $section)) {
+            if (str_starts_with((string) $key, $section)) {
                 $configuration[$key] = ['element' => $value[0] ?? '', 'label' => $value[1] ?? ''];
 
                 switch ($key) {
@@ -185,10 +184,10 @@ class Translation
      */
     protected function checkDefaultLanguageLoaded(): void
     {
-        if (empty(self::$instance->loadedLanguages[self::$instance->defaultLanguage])) {
-            self::$instance->checkCurrentLanguage();
-            self::$instance->loadedLanguages[self::$instance->defaultLanguage] = require(
-                self::$instance->filename(self::$instance->defaultLanguage)
+        if (empty(self::$translation->loadedLanguages[self::$translation->defaultLanguage])) {
+            self::$translation->checkCurrentLanguage();
+            self::$translation->loadedLanguages[self::$translation->defaultLanguage] = require(
+                self::$translation->filename(self::$translation->defaultLanguage)
             );
         }
     }
@@ -198,10 +197,10 @@ class Translation
      */
     protected function checkLanguageLoaded(): void
     {
-        if (empty(self::$instance->loadedLanguages[self::$instance->currentLanguage])) {
-            self::$instance->checkCurrentLanguage();
-            self::$instance->loadedLanguages[self::$instance->currentLanguage] = require(
-                self::$instance->filename(self::$instance->currentLanguage)
+        if (empty(self::$translation->loadedLanguages[self::$translation->currentLanguage])) {
+            self::$translation->checkCurrentLanguage();
+            self::$translation->loadedLanguages[self::$translation->currentLanguage] = require(
+                self::$translation->filename(self::$translation->currentLanguage)
             );
         }
     }
@@ -212,8 +211,8 @@ class Translation
      */
     protected function checkLanguageDirectory(): void
     {
-        if (!is_dir(self::$instance->languagesDir)) {
-            throw new Exception('The directory ' . self::$instance->languagesDir . ' was not found!');
+        if (!is_dir(self::$translation->languagesDir)) {
+            throw new Exception('The directory ' . self::$translation->languagesDir . ' was not found!');
         }
     }
 
@@ -223,8 +222,8 @@ class Translation
      */
     protected function checkDefaultLanguage(): void
     {
-        if (!file_exists(static::filename(self::$instance->defaultLanguage))) {
-            throw new Exception('Default language "' . self::$instance->defaultLanguage . '"not found!');
+        if (!file_exists(static::filename(self::$translation->defaultLanguage))) {
+            throw new Exception('Default language "' . self::$translation->defaultLanguage . '"not found!');
         }
     }
 
@@ -234,7 +233,7 @@ class Translation
      */
     protected function checkInit(): void
     {
-        if (!self::$instance->isReady) {
+        if (!self::$translation->isReady) {
             static::init();
         }
     }
@@ -244,10 +243,11 @@ class Translation
      */
     protected function init(): void
     {
-        self::$instance->checkLanguageDirectory();
-        self::$instance->checkDefaultLanguage();
-        self::$instance->currentLanguage = self::$instance->getCurrentLanguage();
-        self::$instance->isReady = true;
+        self::$translation->checkLanguageDirectory();
+        self::$translation->checkDefaultLanguage();
+
+        self::$translation->currentLanguage = self::$translation->getCurrentLanguage();
+        self::$translation->isReady = true;
     }
 
     /**
@@ -255,8 +255,8 @@ class Translation
      */
     protected function checkCurrentLanguage(): void
     {
-        if (!file_exists(self::$instance->filename(self::$instance->currentLanguage))) {
-            self::$instance->currentLanguage = self::$instance->defaultLanguage;
+        if (!file_exists(self::$translation->filename(self::$translation->currentLanguage))) {
+            self::$translation->currentLanguage = self::$translation->defaultLanguage;
         }
     }
 
@@ -265,6 +265,6 @@ class Translation
      */
     protected function filename(string $language): string
     {
-        return self::$instance->languagesDir . DIRECTORY_SEPARATOR . 'language_' . $language . '.php';
+        return self::$translation->languagesDir . DIRECTORY_SEPARATOR . 'language_' . $language . '.php';
     }
 }

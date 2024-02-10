@@ -59,9 +59,9 @@ if (0 < $numItems) {
     $output = [];
     $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
-    foreach ($visibleItems as $item) {
-        $output['item'][] = $item['item'];
-        $output['definition'][] = $item['definition'];
+    foreach ($visibleItems as $visibleItem) {
+        $output['item'][] = $visibleItem['item'];
+        $output['definition'][] = $visibleItem['definition'];
     }
 
     $template->parseBlock(

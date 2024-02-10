@@ -35,7 +35,7 @@ class CategoryPermission
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -52,18 +52,18 @@ class CategoryPermission
             return false;
         }
 
-        foreach ($categories as $categoryId) {
+        foreach ($categories as $category) {
             foreach ($ids as $id) {
                 $query = sprintf(
                     'SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d',
                     Database::getTablePrefix(),
                     $mode,
-                    $categoryId,
+                    $category,
                     $mode,
                     $id
                 );
 
-                if ($this->config->getDb()->numRows($this->config->getDb()->query($query))) {
+                if ($this->configuration->getDb()->numRows($this->configuration->getDb()->query($query))) {
                     continue;
                 }
 
@@ -72,11 +72,11 @@ class CategoryPermission
                     Database::getTablePrefix(),
                     $mode,
                     $mode,
-                    $categoryId,
+                    $category,
                     $id
                 );
 
-                $this->config->getDb()->query($query);
+                $this->configuration->getDb()->query($query);
             }
         }
 
@@ -95,7 +95,7 @@ class CategoryPermission
             return false;
         }
 
-        foreach ($categories as $category_id) {
+        foreach ($categories as $category) {
             $query = sprintf(
                 '
                 DELETE FROM
@@ -104,9 +104,9 @@ class CategoryPermission
                     category_id = %d',
                 Database::getTablePrefix(),
                 $mode,
-                $category_id
+                $category
             );
-            $this->config->getDb()->query($query);
+            $this->configuration->getDb()->query($query);
         }
 
         return true;
@@ -120,15 +120,8 @@ class CategoryPermission
     {
         $hasUserPermissions = $this->get(self::USER, [$categoryId]);
         $hasGroupPermissions = $this->get(self::GROUP, [$categoryId]);
-
-        if (
-            (isset($hasUserPermissions[0]) && $hasUserPermissions[0] !== -1) ||
-            (isset($hasGroupPermissions[0]) && $hasGroupPermissions[0] !== -1)
-        ) {
-            return true;
-        }
-
-        return false;
+        return (isset($hasUserPermissions[0]) && $hasUserPermissions[0] !== -1) ||
+        (isset($hasGroupPermissions[0]) && $hasGroupPermissions[0] !== -1);
     }
 
     /**
@@ -153,8 +146,8 @@ class CategoryPermission
             implode(', ', $categories)
         );
 
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $permissions[] = (int)$row->permission;
         }
 

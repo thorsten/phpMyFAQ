@@ -33,7 +33,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user) : [];
@@ -46,10 +46,11 @@ class GroupController extends AbstractController
                 'name' => $data['name'],
             ];
         }
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($groups);
 
-        return $response;
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($groups);
+
+        return $jsonResponse;
     }
 
     #[Route('admin/api/group/users')]
@@ -57,7 +58,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $users = [];
@@ -68,10 +69,11 @@ class GroupController extends AbstractController
                 'login' => $user->getLogin(),
             ];
         }
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($users);
 
-        return $response;
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($users);
+
+        return $jsonResponse;
     }
 
     #[Route('admin/api/group/data')]
@@ -79,15 +81,15 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupId = $request->get('groupId');
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($user->perm->getGroupData($groupId));
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($user->perm->getGroupData($groupId));
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/group/members')]
@@ -95,24 +97,24 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupId = $request->get('groupId');
 
         $members = [];
-        foreach ($user->perm->getGroupMembers($groupId) as $singleMember) {
-            $user->getUserById($singleMember, true);
+        foreach ($user->perm->getGroupMembers($groupId) as $groupMember) {
+            $user->getUserById($groupMember, true);
             $members[] = [
                 'user_id' => $user->getUserId(),
                 'login' => $user->getLogin(),
             ];
         }
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($members);
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($members);
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/group/permissions')]
@@ -120,14 +122,14 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupId = $request->get('groupId');
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($user->perm->getGroupRights($groupId));
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($user->perm->getGroupRights($groupId));
 
-        return $response;
+        return $jsonResponse;
     }
 }

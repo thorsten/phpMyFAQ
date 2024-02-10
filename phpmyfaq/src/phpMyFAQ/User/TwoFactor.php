@@ -33,20 +33,20 @@ class TwoFactor
 {
     private readonly TwoFactorAuth $twoFactorAuth;
 
-    private readonly EndroidQrCodeProvider $QrCodeProvider;
+    private readonly EndroidQrCodeProvider $endroidQrCodeProvider;
 
     /**
      * @throws TwoFactorAuthException
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->QrCodeProvider = new EndroidQrCodeProvider();
+        $this->endroidQrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
-            $this->config->get('main.metaPublisher'),
+            $this->configuration->get('main.metaPublisher'),
             6,
             30,
             Algorithm::Sha1,
-            $this->QrCodeProvider
+            $this->endroidQrCodeProvider
         );
     }
 
@@ -66,7 +66,7 @@ class TwoFactor
      */
     public function saveSecret(string $secret): bool
     {
-        $user = CurrentUser::getFromSession($this->config);
+        $user = CurrentUser::getFromSession($this->configuration);
         $user->setUserData(['secret' => $secret]);
         return true;
     }
@@ -74,9 +74,9 @@ class TwoFactor
     /**
      * Returns the secret of the current user
      */
-    public function getSecret(CurrentUser $user): string|null
+    public function getSecret(CurrentUser $currentUser): string|null
     {
-        return $user->getUserData('secret');
+        return $currentUser->getUserData('secret');
     }
 
     /**
@@ -84,9 +84,10 @@ class TwoFactor
      */
     public function validateToken(string $token, int $userid): bool
     {
-        $user = new CurrentUser($this->config);
-        $user->getUserById($userid);
-        $secret = $user->getUserData('secret');
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userid);
+
+        $secret = $currentUser->getUserData('secret');
 
         return $this->twoFactorAuth->verifyCode($secret, $token);
     }
@@ -98,14 +99,15 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        $user = CurrentUser::getCurrentUser($this->config);
-        $label = $this->config->getTitle() . ':' . $user->getUserData('email');
-        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) . '&image=' . $this->config->getDefaultUrl() .
-        'assets/themes/' . Template::getTplSetName() . '/img/logo.png';
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $label = $this->configuration->getTitle() . ':' . $currentUser->getUserData('email');
+        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) .
+            '&image=' . $this->configuration->getDefaultUrl() .
+            'assets/themes/' . Template::getTplSetName() . '/img/logo.png';
 
         return 'data:'
-            . $this->QrCodeProvider->getMimeType()
+            . $this->endroidQrCodeProvider->getMimeType()
             . ';base64,'
-            . base64_encode($this->QrCodeProvider->getQRCodeImage($qrCodeText, 200));
+            . base64_encode((string) $this->endroidQrCodeProvider->getQRCodeImage($qrCodeText, 200));
     }
 }

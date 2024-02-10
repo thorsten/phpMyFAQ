@@ -18,6 +18,7 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
@@ -33,12 +34,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SessionController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('./admin/api/session/export')]
     public function export(Request $request): BinaryFileResponse|JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $config = Configuration::getConfigurationInstance();
+        $configuration = Configuration::getConfigurationInstance();
         $requestData = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('export-sessions', $requestData->csrf)) {
@@ -48,14 +52,18 @@ class SessionController extends AbstractController
             return $response;
         }
 
-        $session = new Session($config);
-        $data = $session->getSessionsByDate(strtotime($requestData->firstHour), strtotime($requestData->lastHour));
+        $session = new Session($configuration);
+        $data = $session->getSessionsByDate(
+            strtotime((string) $requestData->firstHour),
+            strtotime((string) $requestData->lastHour)
+        );
         $filePath = tempnam(sys_get_temp_dir(), 'csv_');
         $file = fopen($filePath, 'w');
         if ($file) {
             foreach ($data as $row) {
-                fputcsv($file, array($row['ip'], $row['time']));
+                fputcsv($file, [$row['ip'], $row['time']]);
             }
+
             fclose($file);
             $response = new BinaryFileResponse($filePath);
             $response->setContentDisposition(
@@ -64,11 +72,10 @@ class SessionController extends AbstractController
             );
             $response->headers->set('Content-Type', 'text/csv');
             return $response;
-        } else {
-            $response = new JsonResponse();
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Unable to open file.']);
         }
+        $response = new JsonResponse();
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $response->setData(['error' => 'Unable to open file.']);
 
         return $response;
     }

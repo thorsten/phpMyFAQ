@@ -112,6 +112,7 @@ class Html5 extends Export
                 if ($this->config->get('spam.mailAddressInExport')) {
                     $this->xml->writeElement('p', Translation::get('msgAuthor') . ': ' . $data['author_email']);
                 }
+
                 $this->xml->writeElement(
                     'p',
                     Translation::get('msgLastUpdateArticle') . Date::createIsoDate($data['lastmodified'])

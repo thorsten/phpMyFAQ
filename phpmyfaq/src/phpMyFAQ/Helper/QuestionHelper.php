@@ -35,7 +35,7 @@ class QuestionHelper
     /**
      * QuestionHelper constructor.
      */
-    public function __construct(private readonly Configuration $config, private readonly Category $category)
+    public function __construct(private readonly Configuration $configuration, private readonly Category $category)
     {
     }
 
@@ -51,25 +51,26 @@ class QuestionHelper
             ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
             Translation::get('msgAskYourQuestion') . ': ' .
             wordwrap((string) $questionData['question'], 72) . "\n\n" .
-            $this->config->getDefaultUrl() . 'admin/';
+            $this->configuration->getDefaultUrl() . 'admin/';
 
         $userId = $this->category->getOwner($questionData['category_id']);
-        $oUser = new User($this->config);
+        $oUser = new User($this->configuration);
         $oUser->getUserById($userId);
 
         $userEmail = $oUser->getUserData('email');
-        $mainAdminEmail = $this->config->getAdminEmail();
+        $mainAdminEmail = $this->configuration->getAdminEmail();
 
-        $mailer = new Mail($this->config);
-        $mailer->setReplyTo($questionData['email'], $questionData['username']);
-        $mailer->addTo($mainAdminEmail);
+        $mail = new Mail($this->configuration);
+        $mail->setReplyTo($questionData['email'], $questionData['username']);
+        $mail->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
         if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
-            $mailer->addCc($userEmail);
+            $mail->addCc($userEmail);
         }
-        $mailer->subject = $this->config->getTitle() . ': New Question was added.';
-        $mailer->message = $questionMail;
-        $mailer->send();
-        unset($mailer);
+
+        $mail->subject = $this->configuration->getTitle() . ': New Question was added.';
+        $mail->message = $questionMail;
+        $mail->send();
+        unset($mail);
     }
 }

@@ -34,12 +34,12 @@ class PermissionHelper
         $options = ['basic', 'medium'];
         $output = '';
 
-        foreach ($options as $value) {
+        foreach ($options as $option) {
             $output .= sprintf(
                 '<option value="%s" %s>%s</option>',
-                $value,
-                ($value == $current) ? 'selected' : '',
-                $value
+                $option,
+                ($option == $current) ? 'selected' : '',
+                $option
             );
         }
 

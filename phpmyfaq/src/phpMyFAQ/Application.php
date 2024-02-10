@@ -74,30 +74,31 @@ class Application
                 ->setDefaultLanguage('en')
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
     }
 
-    private function handleRequest(RouteCollection $routes): void
+    private function handleRequest(RouteCollection $routeCollection): void
     {
         $request = Request::createFromGlobals();
-        $context = new RequestContext();
-        $context->fromRequest($request);
-        $matcher = new UrlMatcher($routes, $context);
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+
+        $urlMatcher = new UrlMatcher($routeCollection, $requestContext);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
         $response = new Response();
 
         try {
-            $request->attributes->add($matcher->match($request->getPathInfo()));
+            $request->attributes->add($urlMatcher->match($request->getPathInfo()));
             $controller = $controllerResolver->getController($request);
             $arguments = $argumentResolver->getArguments($request, $controller);
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
-        } catch (ResourceNotFoundException $exception) {
+        } catch (ResourceNotFoundException) {
             $response = new Response('Not Found', Response::HTTP_NOT_FOUND);
-        } catch (UnauthorizedHttpException $exception) {
+        } catch (UnauthorizedHttpException) {
             $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
         } catch (ErrorException | Exception $exception) {
             $response = new Response(

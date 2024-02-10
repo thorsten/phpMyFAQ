@@ -30,7 +30,7 @@ class Revision
     /**
      * Revision constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -55,7 +55,7 @@ class Revision
             $faqLanguage
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -84,10 +84,10 @@ class Revision
             $faqLanguage
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $revisionData[] = [
                     'revision_id' => $row->revision_id,
                     'updated' => $faqId === 0 ? date('YmdHis') : $row->updated,
@@ -112,6 +112,6 @@ class Revision
             $faqLanguage
         );
 
-        return $this->config->getDb()->query($query);
+        return $this->configuration->getDb()->query($query);
     }
 }

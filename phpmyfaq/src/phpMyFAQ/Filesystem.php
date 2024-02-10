@@ -26,7 +26,7 @@ use phpMyFAQ\Core\Exception;
  */
 class Filesystem
 {
-    private string $rootPath;
+    private readonly string $rootPath;
 
     private string $path;
 
@@ -35,11 +35,7 @@ class Filesystem
      */
     public function __construct(string $rootPath = '')
     {
-        if (empty($rootPath)) {
-            $this->rootPath = dirname(__DIR__, 2);
-        } else {
-            $this->rootPath = $rootPath;
-        }
+        $this->rootPath = $rootPath === '' || $rootPath === '0' ? dirname(__DIR__, 2) : $rootPath;
     }
 
     public function getRootPath(): string
@@ -140,6 +136,7 @@ class Filesystem
                 }
             }
         }
+
         closedir($directory);
 
         return rmdir($pathname);

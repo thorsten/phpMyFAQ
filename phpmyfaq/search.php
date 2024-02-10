@@ -103,14 +103,18 @@ $tagSearch = false;
 if ('' !== $inputTag) {
     $tagSearch = true;
     $tags = [];
-    $tagIds = explode(',', $inputTag);
+    $tagIds = explode(',', (string) $inputTag);
 
     $tagHelper->setTaggingIds($tagIds);
 
     foreach ($tagIds as $tagId) {
-        if (!isset($tags[$tagId]) && is_numeric($tagId)) {
-            $tags[$tagId] = $tagging->getTagNameById($tagId);
+        if (isset($tags[$tagId])) {
+            continue;
         }
+        if (!is_numeric($tagId)) {
+            continue;
+        }
+        $tags[$tagId] = $tagging->getTagNameById($tagId);
     }
 
     $recordIds = $tagging->getFaqsByIntersectionTags($tags);
@@ -122,7 +126,7 @@ if ('' !== $inputTag) {
 
         foreach ($recordIds as $recordId) {
             $resultTags = $tagging->getAllTagsById($recordId);
-            foreach ($resultTags as $resultTagId => $resultTagName) {
+            foreach (array_keys($resultTags) as $resultTagId) {
                 if (isset($tags[$resultTagId])) {
                     // if the given tag is in the search term we don't want to list it
                     continue;
@@ -136,7 +140,7 @@ if ('' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, fn($a, $b) => $b - $a);
+        uasort($relatedTags, static fn($a, $b) => $b - $a);
         $numTags = 0;
         $relTags = '';
 
@@ -146,6 +150,7 @@ if ('' !== $inputTag) {
                 break;
             }
         }
+
         $searchResult = $faq->renderRecordsByFaqIds($recordIds);
     }
 } else {
@@ -158,10 +163,11 @@ if ('' !== $inputTag) {
 if ($inputSearchTerm !== '' || $searchTerm !== '') {
     $searchResults = [];
     if ($inputSearchTerm !== '') {
-        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $inputSearchTerm));
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($inputSearchTerm));
     }
+
     if ($searchTerm !== '') {
-        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags((string) $searchTerm));
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($searchTerm));
     }
 
     $faqSearch->setCategory($category);

@@ -35,15 +35,15 @@ class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $questionIds = $data->data->{'questions[]'};
@@ -53,17 +53,18 @@ class QuestionController extends AbstractController
             if (!is_array($questionIds)) {
                 $questionIds = [$questionIds];
             }
+
             foreach ($questionIds as $questionId) {
                 $question->deleteQuestion((int)$questionId);
             }
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => Translation::get('ad_open_question_deleted')]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => Translation::get('ad_open_question_deleted')]);
         } else {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

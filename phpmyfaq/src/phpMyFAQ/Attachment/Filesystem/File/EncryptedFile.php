@@ -102,6 +102,6 @@ class EncryptedFile extends File
 
         $chunk = substr($chunk, 0, -$chunkDelimLen);
 
-        return empty($chunk) ? '' : $this->aes->decrypt($chunk);
+        return $chunk === '' || $chunk === '0' ? '' : $this->aes->decrypt($chunk);
     }
 }

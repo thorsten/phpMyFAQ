@@ -61,21 +61,23 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
  */
 function buildSiteMapNode(string $location, string $lastModified = null): string
 {
-    if (empty($lastModified)) {
+    if ($lastModified === null || $lastModified === '' || $lastModified === '0') {
         $lastModified = Date::createIsoDate(Request::createFromGlobals()->server->get('REQUEST_TIME'), DATE_W3C, false);
     }
-    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', (string) $lastModified)) {
+
+    if (preg_match('/^[1|2]\d{3}-[0|1]\d\-[0|1|2|3]\d$/', $lastModified)) {
         $lastModified .= 'T' . date('H:i:sO');
     }
-    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', (string) $lastModified)) {
+
+    if (preg_match('/^[1|2]\d{3}-[0|1]\d\-[0|1|2|3]\d$/', $lastModified)) {
         $lastModified .= 'T' . date('H:i:sP');
-    } elseif (preg_match('/([\+|\-][0-9]{2})([0-9]{2})$/', (string) $lastModified, $arrayFind)) {
+    } elseif (preg_match('/([\+|\-]\d{2})(\d{2})$/', $lastModified, $arrayFind)) {
         if (isset($arrayFind[1]) && isset($arrayFind[2])) {
-            $lastModified = str_replace($arrayFind[0], $arrayFind[1] . ':' . $arrayFind[2], (string) $lastModified);
+            $lastModified = str_replace($arrayFind[0], $arrayFind[1] . ':' . $arrayFind[2], $lastModified);
         }
     }
-    return '<url>'
-    . '<loc>' . Strings::htmlspecialchars($location) . '</loc>'
+
+    return '<url><loc>' . Strings::htmlspecialchars($location) . '</loc>'
     . '<lastmod>' . $lastModified . '</lastmod>'
     . '</url>';
 }
@@ -101,8 +103,7 @@ if ((is_countable($items) ? count($items) : 0) > 0) {
 
 // Sitemap header
 $siteMap =
-    '<?xml version="1.0" encoding="UTF-8"?>'
-    . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 // 1st entry: the faq server itself
 $siteMap .= buildSiteMapNode(
     $faqConfig->getDefaultUrl(),
@@ -114,13 +115,12 @@ foreach ($items as $item) {
     // a. We use plain PMF urls w/o any SEO schema
     $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', (string) $item['url']);
     // b. We use SEO PMF urls
-    if (PMF_SITEMAP_GOOGLE_USE_SEO) {
-        if (isset($item['thema'])) {
-            $oL = new Link($link, $faqConfig);
-            $oL->itemTitle = $item['thema'];
-            $link = $oL->toString();
-        }
+    if (PMF_SITEMAP_GOOGLE_USE_SEO && isset($item['thema'])) {
+        $oL = new Link($link, $faqConfig);
+        $oL->itemTitle = $item['thema'];
+        $link = $oL->toString();
     }
+
     $siteMap .= buildSiteMapNode($link, $item['date']);
 }
 

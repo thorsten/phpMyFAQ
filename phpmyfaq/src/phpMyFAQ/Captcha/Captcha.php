@@ -21,7 +21,7 @@ use phpMyFAQ\Configuration;
 
 class Captcha
 {
-    private static ?CaptchaInterface $instance = null;
+    private static ?CaptchaInterface $captcha = null;
 
     private static Configuration $configuration;
 
@@ -30,11 +30,11 @@ class Captcha
         self::$configuration = $configuration;
 
         if (self::$configuration->get('security.enableGoogleReCaptchaV2')) {
-            self::$instance = new GoogleRecaptcha(self::$configuration);
+            self::$captcha = new GoogleRecaptcha(self::$configuration);
         } else {
-            self::$instance = new BuiltinCaptcha(self::$configuration);
+            self::$captcha = new BuiltinCaptcha(self::$configuration);
         }
 
-        return self::$instance;
+        return self::$captcha;
     }
 }

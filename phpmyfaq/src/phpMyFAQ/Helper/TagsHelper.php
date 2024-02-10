@@ -87,7 +87,10 @@ class TagsHelper extends Helper
      */
     public function setTaggingIds(array $taggingIds): void
     {
-        $this->taggingIds = array_filter($taggingIds, fn($tagId) => Filter::filterVar($tagId, FILTER_VALIDATE_INT));
+        $this->taggingIds = array_filter(
+            $taggingIds,
+            static fn($tagId) => Filter::filterVar($tagId, FILTER_VALIDATE_INT)
+        );
     }
 
 

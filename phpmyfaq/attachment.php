@@ -53,13 +53,13 @@ try {
     $attachment = AttachmentFactory::create($id);
     $userPermission = $faqPermission->get(FaqPermission::USER, $attachment->getRecordId());
     $groupPermission = $faqPermission->get(FaqPermission::GROUP, $attachment->getRecordId());
-} catch (AttachmentException $e) {
-    $attachmentErrors[] = Translation::get('msgAttachmentInvalid') . ' (' . $e->getMessage() . ')';
+} catch (AttachmentException $attachmentException) {
+    $attachmentErrors[] = Translation::get('msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
 }
 
 // Check on group permissions
 if ($user->perm instanceof MediumPermission) {
-    if (count($groupPermission)) {
+    if ($groupPermission !== []) {
         foreach ($user->perm->getUserGroups($user->getUserId()) as $userGroups) {
             if (in_array($userGroups, $groupPermission)) {
                 $groupPermission = true;
@@ -74,11 +74,7 @@ if ($user->perm instanceof MediumPermission) {
 }
 
 // Check user's permissions
-if (in_array($user->getUserId(), $userPermission)) {
-    $userPermission = true;
-} else {
-    $userPermission = false;
-}
+$userPermission = in_array($user->getUserId(), $userPermission);
 
 // get user rights
 $permission = [];
@@ -88,11 +84,12 @@ if ($user->isLoggedIn()) {
     foreach ($allRights as $right) {
         $permission[$right['name']] = false;
     }
+
     // check user rights, set true
     $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights)) {
-            $permission[$right['name']] = true;
+    foreach ($allRights as $allRight) {
+        if (in_array($allRight['right_id'], $allUserRights)) {
+            $permission[$allRight['name']] = true;
         }
     }
 }
@@ -106,10 +103,10 @@ if (
     } catch (AttachmentException $e) {
         $attachmentErrors[] = $e->getMessage();
     }
+
     exit(0);
-} else {
-    $attachmentErrors[] = Translation::get('err_NotAuth');
 }
+$attachmentErrors[] = Translation::get('err_NotAuth');
 
 // If we're here, there was an error with file download
 $template->parseBlock('mainPageContent', 'attachmentErrors', ['item' => implode('<br>', $attachmentErrors)]);

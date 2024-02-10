@@ -30,12 +30,12 @@ class StopWords
     /**
      * Table name.
      */
-    private string $tableName;
+    private readonly string $tableName;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
         $this->tableName = Database::getTablePrefix() . 'faqstopwords';
     }
@@ -66,11 +66,11 @@ class StopWords
             $sql = sprintf(
                 "INSERT INTO %s VALUES(%d, '%s', '%s')",
                 $this->getTableName(),
-                $this->config->getDb()->nextId($this->tableName, 'id'),
+                $this->configuration->getDb()->nextId($this->tableName, 'id'),
                 $this->language,
                 $word
             );
-            $this->config->getDb()->query($sql);
+            $this->configuration->getDb()->query($sql);
 
             return true;
         }
@@ -92,7 +92,7 @@ class StopWords
             $this->language
         );
 
-        return (bool) $this->config->getDb()->query($sql);
+        return (bool) $this->configuration->getDb()->query($sql);
     }
 
     /**
@@ -107,7 +107,7 @@ class StopWords
             $this->language
         );
 
-        return (bool) $this->config->getDb()->query($sql);
+        return (bool) $this->configuration->getDb()->query($sql);
     }
 
     /**
@@ -122,9 +122,9 @@ class StopWords
             $this->language
         );
 
-        $result = $this->config->getDb()->query($sql);
+        $result = $this->configuration->getDb()->query($sql);
 
-        return $this->config->getDb()->numRows($result) > 0;
+        return $this->configuration->getDb()->numRows($result) > 0;
     }
 
     /**
@@ -135,23 +135,23 @@ class StopWords
      */
     public function getByLang(string $lang = null, bool $wordsOnly = false): array
     {
-        $lang = is_null($lang) ? $this->config->getLanguage()->getLanguage() : $lang;
+        $lang = is_null($lang) ? $this->configuration->getLanguage()->getLanguage() : $lang;
         $sql = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM %s WHERE lang = '%s'",
             $this->getTableName(),
             $lang
         );
 
-        $result = $this->config->getDb()->query($sql);
+        $result = $this->configuration->getDb()->query($sql);
 
         $stopWords = [];
 
         if ($wordsOnly) {
-            while (($row = $this->config->getDb()->fetchObject($result)) == true) {
+            while (($row = $this->configuration->getDb()->fetchObject($result)) == true) {
                 $stopWords[] = Strings::htmlentities($row->stopword);
             }
         } else {
-            return $this->config->getDb()->fetchAll($result);
+            return $this->configuration->getDb()->fetchAll($result);
         }
 
         return $stopWords;
@@ -171,12 +171,19 @@ class StopWords
 
         foreach ($words as $word) {
             $word = Strings::strtolower($word);
-            if (
-                !is_numeric($word) && 1 < Strings::strlen($word)
-                && !in_array($word, $stop_words) && !in_array($word, $retval)
-            ) {
-                $retval[] = $word;
+            if (is_numeric($word)) {
+                continue;
             }
+            if (1 >= Strings::strlen($word)) {
+                continue;
+            }
+            if (in_array($word, $stop_words)) {
+                continue;
+            }
+            if (in_array($word, $retval)) {
+                continue;
+            }
+            $retval[] = $word;
         }
 
         return $retval;
@@ -191,7 +198,7 @@ class StopWords
     {
         // Sanity checks
         $content = Strings::strtolower(trim($content));
-        if (('' === $content) || (!$this->config->get('spam.checkBannedWords'))) {
+        if (('' === $content) || (!$this->configuration->get('spam.checkBannedWords'))) {
             return true;
         }
 
@@ -204,8 +211,8 @@ class StopWords
         $bannedWords = $this->getBannedWords();
         // We just search a match of, at least, one banned word into $content
         foreach ($bannedWords as $bannedWord) {
-            foreach ($checkWords as $word) {
-                if (Strings::strtolower($word) === Strings::strtolower($bannedWord)) {
+            foreach ($checkWords as $checkWord) {
+                if (Strings::strtolower($checkWord) === Strings::strtolower($bannedWord)) {
                     return false;
                 }
             }

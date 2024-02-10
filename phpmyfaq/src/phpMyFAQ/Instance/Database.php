@@ -32,6 +32,7 @@ class Database
      * Instance.
      */
     private static ?Driver $instance = null;
+
     /**
      * DROP TABLE statements.
      */
@@ -76,28 +77,27 @@ class Database
     /**
      * Constructor.
      */
-    private function __construct(protected Configuration $config)
+    private function __construct(protected Configuration $configuration)
     {
     }
 
     /**
      * Database factory.
      *
-     * @param Configuration $config phpMyFAQ configuration container
+     * @param Configuration $configuration phpMyFAQ configuration container
      * @param string        $type Database management system type
      * @throws Exception
      */
-    public static function factory(Configuration $config, string $type): ?Driver
+    public static function factory(Configuration $configuration, string $type): ?Driver
     {
         $class = '\phpMyFAQ\Instance\Database\\' . ucfirst($type);
 
         if (class_exists($class)) {
-            self::$instance = new $class($config);
+            self::$instance = new $class($configuration);
 
             return self::$instance;
-        } else {
-            throw new Exception('Invalid Database Type: ' . $type);
         }
+        throw new Exception('Invalid Database Type: ' . $type);
     }
 
     /**
@@ -105,7 +105,7 @@ class Database
      */
     public static function getInstance(): ?Driver
     {
-        if (null === self::$instance) {
+        if (!self::$instance instanceof \phpMyFAQ\Instance\Database\Driver) {
             $className = self::class;
             self::$instance = new $className();
         }
@@ -118,8 +118,8 @@ class Database
      */
     public function dropTables(string $prefix = ''): bool
     {
-        foreach ($this->dropTableStmts as $stmt) {
-            $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
+        foreach ($this->dropTableStmts as $dropTableStmt) {
+            $result = $this->configuration->getDb()->query(sprintf($dropTableStmt, $prefix));
 
             if (!$result) {
                 return false;

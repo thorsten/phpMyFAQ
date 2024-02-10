@@ -90,6 +90,7 @@ if ($bookmarkAction === 'add' && isset($faqId)) {
     $alert = new Alert();
     $bookmarkAlert = $alert->success('msgBookmarkAdded');
 }
+
 if ($bookmarkAction === 'remove' && isset($faqId)) {
     $bookmark->remove($faqId);
     $alert = new Alert();
@@ -128,7 +129,7 @@ if ($faqConfig->get('main.enableMarkdownEditor')) {
 $answer = $faqHelper->cleanUpContent($answer);
 
 // Rewrite URL fragments
-$currentUrl = htmlspecialchars("//{$request->getHost()}{$request->getRequestUri()}", ENT_QUOTES, 'UTF-8');
+$currentUrl = htmlspecialchars(sprintf('//%s%s', $request->getHost(), $request->getRequestUri()), ENT_QUOTES, 'UTF-8');
 $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
 
 // Add Glossary entries for answers only
@@ -147,10 +148,10 @@ if (
     $highlight = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
 
-    foreach ($searchItems as $item) {
-        if (Strings::strlen($item) > 2) {
-            $question = Utils::setHighlightedString($question, $item);
-            $answer = Utils::setHighlightedString($answer, $item);
+    foreach ($searchItems as $searchItem) {
+        if (Strings::strlen($searchItem) > 2) {
+            $question = Utils::setHighlightedString($question, $searchItem);
+            $answer = Utils::setHighlightedString($answer, $searchItem);
         }
     }
 }
@@ -169,11 +170,12 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
 $renderedCategoryPath = '';
 $multiCategories = $category->getCategoriesFromFaq($faqId);
 if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
-    foreach ($multiCategories as $multiCat) {
-        $path = $category->getPath($multiCat['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
-        if ('' === trim($path)) {
+    foreach ($multiCategories as $multiCategory) {
+        $path = $category->getPath($multiCategory['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
+        if ('' === trim((string) $path)) {
             continue;
         }
+
         $renderedCategoryPath .= $path;
     }
 }
@@ -327,11 +329,7 @@ if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
 }
 
 // Check if the author name should be visible, according to the GDPR option
-if ($user->getUserVisibilityByEmail($faq->faqRecord['email'])) {
-    $author = $faq->faqRecord['author'];
-} else {
-    $author = 'n/a';
-}
+$author = $user->getUserVisibilityByEmail($faq->faqRecord['email']) ? $faq->faqRecord['author'] : 'n/a';
 
 $template->parse(
     'mainPageContent',
@@ -379,7 +377,7 @@ $template->parse(
             ),
         'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
         'msg_about_faq' => Translation::get('msg_about_faq'),
-        'alert' => (isset($bookmarkAlert)) ? $bookmarkAlert : '',
+        'alert' => $bookmarkAlert ?? '',
     ]
 );
 

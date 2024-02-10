@@ -28,7 +28,7 @@ class CategoryController
 {
     public function list(): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $language = new Language($faqConfig);
         $currentLanguage = $language->setLanguageByAcceptLanguage();
@@ -40,15 +40,17 @@ class CategoryController
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
+
         $result = array_values($category->getAllCategories());
 
-        if (count($result) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        if ($result === []) {
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
         } else {
-            $response->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

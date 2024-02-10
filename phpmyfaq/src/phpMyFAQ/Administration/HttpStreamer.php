@@ -72,6 +72,7 @@ class HttpStreamer
         if (headers_sent()) {
             throw new Exception('Error: unable to send my headers: someone already sent other headers!');
         }
+
         if (ob_get_contents()) {
             throw new Exception('Error: unable to send my data: someone already sent other data!');
         }

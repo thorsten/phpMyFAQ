@@ -70,9 +70,11 @@ class SMTP implements MailUserAgentInterface
         if (isset($headers['CC'])) {
             $email->cc($headers['CC']);
         }
+
         if (isset($headers['Bcc'])) {
             $email->bcc($headers['Bcc']);
         }
+
         if (isset($headers['Reply-To'])) {
             $email->replyTo($headers['Reply-To']);
         }

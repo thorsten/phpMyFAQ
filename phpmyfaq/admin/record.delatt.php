@@ -44,10 +44,10 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::ATTACHMENT_DE
 
     try {
         $att = AttachmentFactory::create($id);
-        if ($att && $att->delete()) {
+        if ($att->delete()) {
             echo Alert::success('ad_att_delsuc');
         }
-    } catch (AttachmentException) {
+    } catch (ErrorException | AttachmentException $e) {
         echo Alert::danger('ad_att_delfail');
     }
 

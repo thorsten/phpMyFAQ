@@ -29,10 +29,10 @@ readonly class Bookmark
     /**
      * Constructor.
      *
-     * @param Configuration $config Configuration object
-     * @param CurrentUser   $user   CurrentUser object
+     * @param Configuration $configuration Configuration object
+     * @param CurrentUser $currentUser CurrentUser object
      */
-    public function __construct(private Configuration $config, private CurrentUser $user)
+    public function __construct(private Configuration $configuration, private CurrentUser $currentUser)
     {
     }
 
@@ -41,14 +41,13 @@ readonly class Bookmark
      * Returns false if not.
      *
      * @param int $faqId ID of the Faq
-     * @return bool
      */
     public function isFaqBookmark(int $faqId): bool
     {
         $bookmarks = $this->getAll();
 
-        foreach ($bookmarks as $key) {
-            if ((int) $key->faqid === $faqId) {
+        foreach ($bookmarks as $bookmark) {
+            if ((int) $bookmark->faqid === $faqId) {
                 return true;
             }
         }
@@ -66,10 +65,10 @@ readonly class Bookmark
         $query = sprintf(
             "INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)",
             Database::getTablePrefix(),
-            $this->user->getUserId(),
+            $this->currentUser->getUserId(),
             $faqId
         );
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -80,10 +79,10 @@ readonly class Bookmark
         $query = sprintf(
             'SELECT faqid FROM %sfaqbookmarks WHERE userid = %d',
             Database::getTablePrefix(),
-            $this->user->getUserId()
+            $this->currentUser->getUserId()
         );
-        $result = $this->config->getDb()->query($query);
-        return $this->config->getDb()->fetchAll($result);
+        $result = $this->configuration->getDb()->query($query);
+        return $this->configuration->getDb()->fetchAll($result);
     }
 
     /**
@@ -96,17 +95,15 @@ readonly class Bookmark
         $query = sprintf(
             'DELETE FROM %sfaqbookmarks WHERE userid = %d AND faqid = %d',
             Database::getTablePrefix(),
-            $this->user->getUserId(),
+            $this->currentUser->getUserId(),
             $faqId
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
      * Renders the bookmark tree for the personal bookmark list.
-     *
-     * @return string
      */
     public function renderBookmarkTree(): string
     {
@@ -120,29 +117,30 @@ readonly class Bookmark
      * Builds the list of bookmarks for the bookmark tree.
      *
      * @todo move this method to a new helper class
-     * @return string
      */
     public function renderBookmarkList(): string
     {
         $bookmarks = $this->getAll();
-        $faq = new Faq($this->config);
-        $category = new Category($this->config);
+        $faq = new Faq($this->configuration);
+        $category = new Category($this->configuration);
         $html = '';
 
-        foreach ($bookmarks as $object => $key) {
-            $faq->getRecord((int) $key->faqid);
+        foreach ($bookmarks as $bookmark) {
+            $faq->getRecord((int) $bookmark->faqid);
             $faqData = $faq->faqRecord;
 
             $url = sprintf(
                 '%sindex.php?action=faq&amp;id=%d&cat=%d&artlang=%s',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 $faqData['id'],
                 $category->getCategoryIdFromFaq($faqData['id']),
                 $faqData['lang']
             );
 
-            $link = new Link($url, $this->config);
-            $link->text = $link->itemTitle = $link->tooltip = Strings::htmlentities($faqData['title']);
+            $link = new Link($url, $this->configuration);
+            $link->text = Strings::htmlentities($faqData['title']);
+            $link->itemTitle = $link->text;
+            $link->tooltip = $link->text;
 
             $html .= sprintf(
                 '<a href="%s" class="list-group-item list-group-item-action" id="delete-bookmark-%d">' .
@@ -153,10 +151,11 @@ readonly class Bookmark
                 '</a>',
                 $link->toString(),
                 $faqData['id'],
-                htmlspecialchars_decode($faqData['title']),
+                htmlspecialchars_decode((string) $faqData['title']),
                 $faqData['id'],
             );
         }
+
         return $html;
     }
 }

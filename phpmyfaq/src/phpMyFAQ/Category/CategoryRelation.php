@@ -34,7 +34,7 @@ class CategoryRelation
     /**
      * CategoryRelation constructor.
      */
-    public function __construct(private readonly Configuration $config, private readonly Category $category)
+    public function __construct(private readonly Configuration $configuration, private readonly Category $category)
     {
     }
 
@@ -72,10 +72,10 @@ class CategoryRelation
             Database::getTablePrefix(),
             Database::getTablePrefix()
         );
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $matrix[$row->id_cat][$row->id] = true;
             }
         }
@@ -114,7 +114,7 @@ class CategoryRelation
             Database::getTablePrefix()
         );
 
-        if ($this->config->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get('security.permLevel') !== 'basic') {
             if (-1 === $this->category->getUser()) {
                 $query .= sprintf(
                     'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
@@ -133,18 +133,18 @@ class CategoryRelation
             }
         }
 
-        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
+        if (strlen((string) $this->configuration->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s'",
-                $this->config->getLanguage()->getLanguage()
+                $this->configuration->getLanguage()->getLanguage()
             );
         }
 
         $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description";
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($category = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($category = $this->configuration->getDb()->fetchObject($result)) {
                 $categoryTree[(int) $category->id] = [
                     'category_id' => (int) $category->id,
                     'parent_id' => (int) $category->parent_id,
@@ -217,19 +217,19 @@ class CategoryRelation
             );
         }
 
-        if (strlen($this->config->getLanguage()->getLanguage()) > 0) {
+        if (strlen((string) $this->configuration->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s' AND fc.lang = '%s'",
-                $this->config->getLanguage()->getLanguage(),
-                $this->config->getLanguage()->getLanguage(),
+                $this->configuration->getLanguage()->getLanguage(),
+                $this->configuration->getLanguage()->getLanguage(),
             );
         }
 
         $query .= " GROUP BY fcr.category_id, fc.parent_id";
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $numRecordsByCat[$row->category_id] = (int)$row->number;
             }
         }
@@ -292,8 +292,8 @@ class CategoryRelation
             $faqLang
         );
 
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $categories[$row->category_id] = [
                 'category_id' => $row->category_id,
                 'category_lang' => $row->category_lang
@@ -312,12 +312,12 @@ class CategoryRelation
      */
     public function add(array $categories, int $faqId, string $language): bool
     {
-        foreach ($categories as $categoryId) {
-            $this->config->getDb()->query(
+        foreach ($categories as $category) {
+            $this->configuration->getDb()->query(
                 sprintf(
                     "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
                     Database::getTablePrefix(),
-                    $categoryId,
+                    $category,
                     $language,
                     $faqId,
                     $language
@@ -347,7 +347,7 @@ class CategoryRelation
             $query .= sprintf(" AND category_lang = '%s'", $categoryLang);
         }
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -362,9 +362,9 @@ class CategoryRelation
             "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->config->getDb()->escape($faqLanguage)
+            $this->configuration->getDb()->escape($faqLanguage)
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 }

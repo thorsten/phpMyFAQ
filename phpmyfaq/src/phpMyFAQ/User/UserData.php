@@ -47,7 +47,7 @@ class UserData
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -80,12 +80,13 @@ class UserData
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return false;
         }
-        $arr = $this->config->getDb()->fetchArray($res);
-        if ($singleReturn and $field != '*') {
+
+        $arr = $this->configuration->getDb()->fetchArray($res);
+        if ($singleReturn && $field != '*') {
             return $arr[$field];
         }
 
@@ -108,16 +109,15 @@ class UserData
             $key,
             Database::getTablePrefix(),
             $key,
-            $this->config->getDb()->escape($value)
+            $this->configuration->getDb()->escape($value)
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
 
-        if (0 === $this->config->getDb()->numRows($res)) {
+        if (0 === $this->configuration->getDb()->numRows($res)) {
             return null;
-        } else {
-            return $this->config->getDb()->fetchObject($res)->$key;
         }
+        return $this->configuration->getDb()->fetchObject($res)->$key;
     }
 
     /**
@@ -136,14 +136,15 @@ class UserData
             secret FROM %sfaquserdata WHERE %s = '%s'",
             Database::getTablePrefix(),
             $key,
-            $this->config->getDb()->escape($value)
+            $this->configuration->getDb()->escape($value)
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
             return ['user_id' => -1];
         }
-        return $this->data = $this->config->getDb()->fetchArray($res);
+
+        return $this->data = $this->configuration->getDb()->fetchArray($res);
     }
 
     /**
@@ -160,12 +161,15 @@ class UserData
         if (!is_array($field)) {
             $field = [$field];
         }
+
         if (!is_array($value)) {
             $value = [$value];
         }
-        if (count($field) != count($value)) {
+
+        if (count($field) !== count($value)) {
             return false;
         }
+
         // update data
         $num = count($field);
         for ($i = 0; $i < $num; ++$i) {
@@ -205,11 +209,12 @@ class UserData
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) !== 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return false;
         }
-        $this->data = $this->config->getDb()->fetchArray($res);
+
+        $this->data = $this->configuration->getDb()->fetchArray($res);
 
         return true;
     }
@@ -235,20 +240,16 @@ class UserData
                 user_id = %d",
             Database::getTablePrefix(),
             date('YmdHis', $_SERVER['REQUEST_TIME']),
-            $this->config->getDb()->escape($this->data['display_name']),
-            $this->config->getDb()->escape($this->data['email']),
+            $this->configuration->getDb()->escape($this->data['display_name']),
+            $this->configuration->getDb()->escape($this->data['email']),
             $this->data['is_visible'],
             $this->data['twofactor_enabled'],
             $this->data['secret'],
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($update);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($update);
+        return (bool) $res;
     }
 
     /**
@@ -276,12 +277,8 @@ class UserData
             date('YmdHis', $_SERVER['REQUEST_TIME'])
         );
 
-        $res = $this->config->getDb()->query($insert);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
+        $res = $this->configuration->getDb()->query($insert);
+        return (bool) $res;
     }
 
     /**
@@ -307,10 +304,11 @@ class UserData
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($delete);
+        $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         $this->data = [];
 
         return true;

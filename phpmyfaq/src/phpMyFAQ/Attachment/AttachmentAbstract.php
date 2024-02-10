@@ -136,7 +136,7 @@ abstract class AttachmentAbstract
 
         if ($result) {
             $assoc = $this->db->fetchArray($result);
-            if (!empty($assoc)) {
+            if ($assoc !== null && $assoc !== []) {
                 $this->recordId = $assoc['record_id'];
                 $this->recordLang = $assoc['record_lang'];
                 $this->realHash = $assoc['real_hash'];
@@ -161,9 +161,9 @@ abstract class AttachmentAbstract
      */
     public function buildUrl(bool $forHTML = true): string
     {
-        $amp = true === $forHTML ? '&amp;' : '&';
+        $amp = $forHTML ? '&amp;' : '&';
 
-        return "index.php?action=attachment{$amp}id={$this->id}";
+        return sprintf('index.php?action=attachment%sid=%d', $amp, $this->id);
     }
 
     /**
@@ -176,12 +176,15 @@ abstract class AttachmentAbstract
     {
         $this->key = $key;
         $this->encrypted = null !== $key;
-
         // Not default means the key was set explicitly
         // for this attachment, so lets hash it
-        if ($this->encrypted && !$default) {
-            $this->passwordHash = sha1($key);
+        if (!$this->encrypted) {
+            return;
         }
+        if ($default) {
+            return;
+        }
+        $this->passwordHash = sha1((string) $key);
     }
 
     /**

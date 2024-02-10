@@ -47,22 +47,22 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
         $faqPermission = new FaqPermission($configuration);
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(
             [
                 'user' => $faqPermission->get(FaqPermission::USER, $faqId),
                 'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
             ]
         );
 
-        return $response;
+        return $jsonResponse;
     }
 
     /**
@@ -73,21 +73,21 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
 
         $faq = new Faq($configuration);
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(
             [
                 'faqs' => $faq->getAllFaqsByCategory($categoryId),
             ]
         );
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/faq/activate')]
@@ -95,7 +95,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_APPROVE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
 
         $data = json_decode($request->getContent());
 
@@ -104,13 +104,13 @@ class FaqController extends AbstractController
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
         if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
-        if (!empty($faqIds)) {
+        if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
             $faq = new Faq(Configuration::getConfigurationInstance());
             $success = false;
 
@@ -121,18 +121,18 @@ class FaqController extends AbstractController
             }
 
             if ($success) {
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => Translation::get('ad_entry_savedsuc')]);
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setData(['success' => Translation::get('ad_entry_savedsuc')]);
             } else {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => Translation::get('ad_entry_savedfail')]);
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setData(['error' => Translation::get('ad_entry_savedfail')]);
             }
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'No FAQ IDs provided.']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'No FAQ IDs provided.']);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/faq/sticky')]
@@ -140,7 +140,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
 
         $data = json_decode($request->getContent());
 
@@ -149,13 +149,13 @@ class FaqController extends AbstractController
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
         if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
-        if (!empty($faqIds)) {
+        if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
             $faq = new Faq(Configuration::getConfigurationInstance());
             $success = false;
 
@@ -166,18 +166,18 @@ class FaqController extends AbstractController
             }
 
             if ($success) {
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => Translation::get('ad_entry_savedsuc')]);
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setData(['success' => Translation::get('ad_entry_savedsuc')]);
             } else {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => Translation::get('ad_entry_savedfail')]);
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setData(['error' => Translation::get('ad_entry_savedfail')]);
             }
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'No FAQ IDs provided.']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'No FAQ IDs provided.']);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/faq/delete')]
@@ -185,7 +185,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_DELETE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
         $faq = new Faq($configuration);
@@ -196,10 +196,10 @@ class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
         $adminLog = new AdminLog($configuration);
@@ -208,16 +208,16 @@ class FaqController extends AbstractController
         try {
             $faq->deleteRecord($faqId, $faqLanguage);
         } catch (FileException | AttachmentException $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $e->getMessage()]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => $e->getMessage()]);
 
-            return $response;
+            return $jsonResponse;
         }
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => Translation::get('ad_entry_delsuc')]);
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(['success' => Translation::get('ad_entry_delsuc')]);
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/faq/search')]
@@ -225,43 +225,44 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('edit-faq', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
         $faqPermission = new FaqPermission($configuration);
         $faqSearch = new Search($configuration);
         $faqSearch->setCategory(new Category($configuration));
-        $faqSearchResult = new SearchResultSet($user, $faqPermission, $configuration);
+
+        $searchResultSet = new SearchResultSet($user, $faqPermission, $configuration);
         $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($searchString)) {
             $searchResult = $faqSearch->search($searchString, false);
 
-            $faqSearchResult->reviewResultSet($searchResult);
+            $searchResultSet->reviewResultSet($searchResult);
 
             $searchHelper = new SearchHelper($configuration);
             $searchHelper->setSearchTerm($searchString);
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(
-                ['success' => $searchHelper->renderAdminSuggestionResult($faqSearchResult)]
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(
+                ['success' => $searchHelper->renderAdminSuggestionResult($searchResultSet)]
             );
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'No search string provided.']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'No search string provided.']);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/faqs/sticky/order')]
@@ -269,23 +270,23 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('order-stickyfaqs', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->send();
             exit();
         }
 
         $faq = new Faq(Configuration::getConfigurationInstance());
         $faq->setStickyFaqOrder($data->faqIds);
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData(['success' => Translation::get('ad_categ_save_order')]);
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(['success' => Translation::get('ad_categ_save_order')]);
 
-        return $response;
+        return $jsonResponse;
     }
 
     /**
@@ -296,21 +297,21 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
 
         $file = $request->files->get('file');
         if (!isset($file)) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Bad request: There is no file submitted.']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Bad request: There is no file submitted.']);
 
-            return $response;
+            return $jsonResponse;
         }
 
         if (!Token::getInstance()->verifyToken('importfaqs', $request->request->get('csrf'))) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
         $faqImport = new FaqImport(Configuration::getConfigurationInstance());
@@ -323,43 +324,44 @@ class FaqController extends AbstractController
             $csvData = $faqImport->parseCSV($handle);
 
             if (!$faqImport->validateCSV($csvData)) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = [
                     'storedAll' => false,
                     'error' => Translation::get('msgCSVFileNotValidated'),
                 ];
-                $response->setData($result);
+                $jsonResponse->setData($result);
 
-                return $response;
+                return $jsonResponse;
             }
 
             foreach ($csvData as $record) {
                 $error = $faqImport->import($record);
-                if ($error !== true) {
+                if (!$error) {
                     $errors[] = $error;
                 }
             }
 
-            if (empty($errors)) {
-                $response->setStatusCode(Response::HTTP_OK);
+            if ($errors === []) {
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
                 $result = [
                     'storedAll' => true,
                     'success' => Translation::get('msgImportSuccessful'),
                 ];
             } else {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = [
                     'storedAll' => false,
                     'messages' => $errors,
                 ];
             }
 
-            $response->setData($result);
+            $jsonResponse->setData($result);
 
-            return $response;
+            return $jsonResponse;
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

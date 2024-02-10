@@ -49,9 +49,9 @@ class SearchHelper extends Helper
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        $this->config = $config;
+        $this->config = $configuration;
     }
 
     /**
@@ -77,17 +77,17 @@ class SearchHelper extends Helper
     /**
      * Renders the results for Typehead.
      *
-     * @param SearchResultSet $resultSet Result set object
+     * @param SearchResultSet $searchResultSet Result set object
      */
-    public function createAutoCompleteResult(SearchResultSet $resultSet): array
+    public function createAutoCompleteResult(SearchResultSet $searchResultSet): array
     {
         $results = [];
         $maxResults = $this->config->get('records.numberOfRecordsPerPage');
-        $numOfResults = $resultSet->getNumberOfResults();
+        $numOfResults = $searchResultSet->getNumberOfResults();
 
         if (0 < $numOfResults) {
             $i = 0;
-            foreach ($resultSet->getResultSet() as $result) {
+            foreach ($searchResultSet->getResultSet() as $result) {
                 if ($i > $maxResults) {
                     continue;
                 }
@@ -121,17 +121,17 @@ class SearchHelper extends Helper
     /**
      * Renders the result page for Instant Response.
      *
-     * @param SearchResultSet $resultSet SearchResultSet object
+     * @param SearchResultSet $searchResultSet SearchResultSet object
      */
-    public function renderAdminSuggestionResult(SearchResultSet $resultSet): array
+    public function renderAdminSuggestionResult(SearchResultSet $searchResultSet): array
     {
         $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
-        $numOfResults = $resultSet->getNumberOfResults();
+        $numOfResults = $searchResultSet->getNumberOfResults();
         $results = [];
 
         if (0 < $numOfResults) {
             $i = 0;
-            foreach ($resultSet->getResultSet() as $result) {
+            foreach ($searchResultSet->getResultSet() as $result) {
                 if ($i > $confPerPage) {
                     continue;
                 }
@@ -165,11 +165,11 @@ class SearchHelper extends Helper
      *
      * @throws Exception
      */
-    public function renderSearchResult(SearchResultSet $resultSet, int $currentPage): string
+    public function renderSearchResult(SearchResultSet $searchResultSet, int $currentPage): string
     {
         $html = '';
         $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
-        $numOfResults = $resultSet->getNumberOfResults();
+        $numOfResults = $searchResultSet->getNumberOfResults();
 
         $totalPages = (int)ceil($numOfResults / $confPerPage);
         $lastPage = $currentPage * $confPerPage;
@@ -192,10 +192,10 @@ class SearchHelper extends Helper
             }
 
             $html .= "<ul class=\"phpmyfaq-search-results list-unstyled\">\n";
-
-            $counter = $displayedCounter = 0;
+            $counter = 0;
+            $displayedCounter = 0;
             $faqHelper = new FaqHelper($this->config);
-            foreach ($resultSet->getResultSet() as $result) {
+            foreach ($searchResultSet->getResultSet() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     break;
                 }
@@ -224,10 +224,10 @@ class SearchHelper extends Helper
                 $searchItems = explode(' ', $searchTerm);
 
                 if ($this->config->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
-                    foreach ($searchItems as $item) {
-                        if (Strings::strlen($item) > 2) {
-                            $question = Utils::setHighlightedString($question, $item);
-                            $answerPreview = Utils::setHighlightedString($answerPreview, $item);
+                    foreach ($searchItems as $searchItem) {
+                        if (Strings::strlen($searchItem) > 2) {
+                            $question = Utils::setHighlightedString($question, $searchItem);
+                            $answerPreview = Utils::setHighlightedString($answerPreview, $searchItem);
                         }
                     }
                 }
@@ -245,7 +245,8 @@ class SearchHelper extends Helper
 
                 $oLink = new Link($currentUrl, $this->config);
                 $oLink->text = $question;
-                $oLink->itemTitle = $oLink->tooltip = $result->question;
+                $oLink->itemTitle = $result->question;
+                $oLink->tooltip = $result->question;
 
                 $html .= '<li class="mb-2">';
                 $html .= $this->renderScore($result->score * 33);
@@ -261,6 +262,7 @@ class SearchHelper extends Helper
                 );
                 $html .= '</li>';
             }
+
             $html .= "</ul>\n";
             if (1 < $totalPages) {
                 $html .= $this->pagination->render();
@@ -294,21 +296,23 @@ class SearchHelper extends Helper
         return $html . '</span> ';
     }
 
-    public function renderRelatedFaqs(SearchResultSet $resultSet, int $recordId): string
+    public function renderRelatedFaqs(SearchResultSet $searchResultSet, int $recordId): string
     {
         $html = '';
-        $numOfResults = $resultSet->getNumberOfResults();
+        $numOfResults = $searchResultSet->getNumberOfResults();
 
         if ($numOfResults > 0) {
             $html .= '<ul class="list-unstyled">';
             $counter = 0;
-            foreach ($resultSet->getResultSet() as $result) {
+            foreach ($searchResultSet->getResultSet() as $result) {
                 if ($counter >= 5) {
                     continue;
                 }
+
                 if ($recordId == $result->id) {
                     continue;
                 }
+
                 ++$counter;
 
                 $url = sprintf(
@@ -325,6 +329,7 @@ class SearchHelper extends Helper
                 $link->class = 'text-decoration-none';
                 $html .= '<li><i class="bi bi-question-circle"></i> ' . $link->toHtmlAnchor() . '</li>';
             }
+
             $html .= '</ul>';
         }
 
@@ -340,14 +345,14 @@ class SearchHelper extends Helper
     {
         $html = '';
 
-        foreach ($mostPopularSearches as $searchItem) {
-            if (Strings::strlen($searchItem['searchterm']) > 0) {
+        foreach ($mostPopularSearches as $mostPopularSearch) {
+            if (Strings::strlen($mostPopularSearch['searchterm']) > 0) {
                 $html .= sprintf(
                     '<a class="btn btn-primary m-1" href="?search=%s&submit=Search&action=search">%s ' .
                     '<span class="badge bg-secondary">%dx</span> </a>',
-                    urlencode((string) $searchItem['searchterm']),
-                    $searchItem['searchterm'],
-                    $searchItem['number']
+                    urlencode((string) $mostPopularSearch['searchterm']),
+                    $mostPopularSearch['searchterm'],
+                    $mostPopularSearch['number']
                 );
             }
         }

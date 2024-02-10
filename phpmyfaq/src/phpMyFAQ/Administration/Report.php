@@ -32,7 +32,7 @@ class Report
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -92,12 +92,12 @@ class Report
             Database::getTablePrefix()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         $lastId = 0;
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($row->id == $lastId) {
-                $report[$row->id]['faq_translations'] += 1;
+                ++$report[$row->id]['faq_translations'];
             } else {
                 $report[$row->id] = [
                     'faq_id' => $row->id,
@@ -114,6 +114,7 @@ class Report
                     'faq_last_author' => $row->last_author,
                 ];
             }
+
             $lastId = $row->id;
         }
 
@@ -147,12 +148,11 @@ class Report
     /**
      * Sanitizes input to avoid CSV injection.
      * @param string|int $value
-     * @return string
      */
     public static function sanitize($value): string
     {
         if (preg_match('/[=\+\-\@\|]/', $value)) {
-            $value = '"' . str_replace('"', '""', $value) . '"';
+            return '"' . str_replace('"', '""', $value) . '"';
         }
 
         return $value;

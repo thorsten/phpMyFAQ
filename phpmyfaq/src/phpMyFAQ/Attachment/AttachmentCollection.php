@@ -30,7 +30,7 @@ class AttachmentCollection
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $config)
+    public function __construct(protected Configuration $configuration)
     {
     }
 
@@ -63,10 +63,10 @@ class AttachmentCollection
             Database::getTablePrefix() . 'faqdata'
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            $breadCrumbs = $this->config->getDb()->fetchAll($result);
+            return $this->configuration->getDb()->fetchAll($result);
         }
 
         return $breadCrumbs;

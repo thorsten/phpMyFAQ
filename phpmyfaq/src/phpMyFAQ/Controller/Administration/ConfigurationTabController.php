@@ -72,15 +72,15 @@ class ConfigurationTabController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $configuration = Configuration::getConfigurationInstance();
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
 
         $csrfToken = $request->get('pmf-csrf-token');
         $configurationData = $request->get('edit');
         $oldConfigurationData = $configuration->getAll();
 
         if (!Token::getInstance()->verifyToken('configuration', $csrfToken)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
         } else {
             // Set the new values
             $forbiddenValues = ['{', '}'];
@@ -97,6 +97,7 @@ class ConfigurationTabController extends AbstractController
             if (isset($configurationData['main.enableMarkdownEditor'])) {
                 $configurationData['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
             }
+
             if (isset($configurationData['main.currentVersion'])) {
                 unset($configurationData['main.currentVersion']); // don't update the version number
             }
@@ -117,6 +118,7 @@ class ConfigurationTabController extends AbstractController
                 if (isset($escapeValues[$key])) {
                     $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
                 }
+
                 $keyArray = array_values(explode('.', (string) $key));
                 $newConfigClass = array_shift($keyArray);
             }
@@ -126,22 +128,21 @@ class ConfigurationTabController extends AbstractController
                 $oldConfigClass = array_shift($keyArray);
                 if (isset($newConfigValues[$key])) {
                     continue;
+                }
+                if ($oldConfigClass === $newConfigClass && $value === 'true') {
+                    $newConfigValues[$key] = 'false';
                 } else {
-                    if ($oldConfigClass === $newConfigClass && $value === 'true') {
-                        $newConfigValues[$key] = 'false';
-                    } else {
-                        $newConfigValues[$key] = $value;
-                    }
+                    $newConfigValues[$key] = $value;
                 }
             }
 
             $configuration->update($newConfigValues);
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => Translation::get('ad_config_saved')]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => Translation::get('ad_config_saved')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/configuration/translations')]
@@ -153,19 +154,18 @@ class ConfigurationTabController extends AbstractController
         $response = new Response();
 
         $languages = LanguageHelper::getAvailableLanguages();
-        if (count($languages) > 0) {
+        if ($languages !== []) {
             return $response->setContent(LanguageHelper::renderLanguageOptions(
                 str_replace(
                     [ 'language_', '.php', ],
                     '',
-                    $configuration->get('main.language')
+                    (string) $configuration->get('main.language')
                 ),
                 false,
                 true
             ));
-        } else {
-            return $response->setContent('<option value="language_en.php">English</option>');
         }
+        return $response->setContent('<option value="language_en.php">English</option>');
     }
 
     #[Route('admin/api/configuration/templates')]
@@ -218,6 +218,7 @@ class ConfigurationTabController extends AbstractController
             AdministrationHelper::sortingPopularFaqsOptions($request->get('current'))
         );
     }
+
     #[Route('admin/api/configuration/perm-level')]
     public function permLevel(Request $request): Response
     {

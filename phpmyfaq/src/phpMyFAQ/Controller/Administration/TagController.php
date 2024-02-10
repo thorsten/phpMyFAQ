@@ -39,34 +39,34 @@ class TagController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
-        $tag = new Tags($configuration);
+        $tags = new Tags($configuration);
 
         $postData = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('tags', $postData->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
         $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $entity = new TagEntity();
-        $entity->setId($id);
-        $entity->setName($newTag);
+        $tagEntity = new TagEntity();
+        $tagEntity->setId($id);
+        $tagEntity->setName($newTag);
 
-        if ($tag->updateTag($entity)) {
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['updated' => Translation::get('ad_entryins_suc')]);
+        if ($tags->updateTag($tagEntity)) {
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['updated' => Translation::get('ad_entryins_suc')]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('ad_entryins_fail')]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('ad_entryins_fail')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/content/tags')]
@@ -74,7 +74,7 @@ class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $tag = new Tags($configuration);
         $user = CurrentUser::getCurrentUser($configuration);
@@ -82,11 +82,16 @@ class TagController extends AbstractController
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($autoCompleteValue)) {
-            if (strpos($autoCompleteValue, ',')) {
-                $arrayOfValues = explode(',', $autoCompleteValue);
+            if (strpos((string) $autoCompleteValue, ',')) {
+                $arrayOfValues = explode(',', (string) $autoCompleteValue);
                 $autoCompleteValue = end($arrayOfValues);
             }
-            $tags = $tag->getAllTags(strtolower(trim($autoCompleteValue)), PMF_TAGS_CLOUD_RESULT_SET_SIZE, true);
+
+            $tags = $tag->getAllTags(
+                strtolower(trim((string) $autoCompleteValue)),
+                PMF_TAGS_CLOUD_RESULT_SET_SIZE,
+                true
+            );
         } else {
             $tags = $tag->getAllTags();
         }
@@ -94,18 +99,18 @@ class TagController extends AbstractController
         if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT)) {
             $i = 0;
             $tagNames = [];
-            foreach ($tags as $tagName) {
+            foreach ($tags as $tag) {
                 ++$i;
                 if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
                     $currentTag = new stdClass();
-                    $currentTag->tagName = $tagName;
+                    $currentTag->tagName = $tag;
                     $tagNames[] = $currentTag;
                 }
             }
 
-            $response->setData($tagNames);
+            $jsonResponse->setData($tagNames);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

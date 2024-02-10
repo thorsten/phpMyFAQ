@@ -365,9 +365,9 @@ class Sqlite3 extends Database implements Driver
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        $this->config = $config;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -377,8 +377,8 @@ class Sqlite3 extends Database implements Driver
      */
     public function createTables(string $prefix = ''): bool
     {
-        foreach ($this->createTableStatements as $stmt) {
-            $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
+        foreach ($this->createTableStatements as $createTableStatement) {
+            $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
 
             if (!$result) {
                 return false;

@@ -26,7 +26,7 @@ class GoogleRecaptcha implements CaptchaInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -38,18 +38,13 @@ class GoogleRecaptcha implements CaptchaInterface
 
         $url = sprintf(
             'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
-            $this->config->get('security.googleReCaptchaV2SecretKey'),
+            $this->configuration->get('security.googleReCaptchaV2SecretKey'),
             $code
         );
 
         $response = file_get_contents($url);
         $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-
-        if ($response['success'] === true) {
-            return true;
-        }
-
-        return false;
+        return $response['success'] === true;
     }
 
     /**

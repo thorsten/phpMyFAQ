@@ -30,7 +30,7 @@ class Relation
     /**
      * Relation constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -44,7 +44,7 @@ class Relation
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
         $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
-        $search = SearchFactory::create($this->config, ['database' => Database::getType()]);
+        $search = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
 
         $search
             ->setTable(Database::getTablePrefix() . 'faqdata AS fd')
@@ -68,7 +68,7 @@ class Relation
             ->setConditions(
                 [
                     'fd.active' => "'yes'",
-                    'fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'",
+                    'fd.lang' => "'" . $this->configuration->getLanguage()->getLanguage() . "'",
                 ]
             )
             ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
@@ -76,6 +76,6 @@ class Relation
 
         $result = $search->search($terms);
 
-        return $this->config->getDb()->fetchAll($result);
+        return $this->configuration->getDb()->fetchAll($result);
     }
 }

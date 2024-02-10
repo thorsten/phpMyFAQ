@@ -37,7 +37,7 @@ class StopWordController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $stopWords = new StopWords($configuration);
 
@@ -45,14 +45,14 @@ class StopWordController extends AbstractController
 
         if (Language::isASupportedLanguage($language)) {
             $stopWordsList = $stopWords->getByLang($language);
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($stopWordsList);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData($stopWordsList);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Language not supported']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Language not supported']);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/stopword/delete')]
@@ -60,7 +60,7 @@ class StopWordController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $stopWords = new StopWords($configuration);
 
@@ -70,23 +70,23 @@ class StopWordController extends AbstractController
         $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('stopwords', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
             $stopWords
                 ->setLanguage($stopWordsLang)
                 ->remove((int)$stopWordId);
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['deleted' => $stopWordId ]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['deleted' => $stopWordId ]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Language not supported']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Language not supported']);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/stopword/save')]
@@ -94,7 +94,7 @@ class StopWordController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $stopWords = new StopWords($configuration);
 
@@ -105,9 +105,9 @@ class StopWordController extends AbstractController
         $stopWord = Filter::filterVar($data->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('stopwords', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         if (null != $stopWord && Language::isASupportedLanguage($stopWordsLang)) {
@@ -115,18 +115,18 @@ class StopWordController extends AbstractController
 
             if (null !== $stopWordId && -1 < $stopWordId) {
                 $stopWords->update((int)$stopWordId, $stopWord);
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['updated' => $stopWordId ]);
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setData(['updated' => $stopWordId ]);
             } elseif (!$stopWords->match($stopWord)) {
                 $stopWordId = $stopWords->add($stopWord);
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['added' => $stopWordId ]);
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setData(['added' => $stopWordId ]);
             }
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Language not supported']);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Language not supported']);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

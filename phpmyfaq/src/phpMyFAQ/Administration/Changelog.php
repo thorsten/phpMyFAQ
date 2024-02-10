@@ -30,7 +30,7 @@ class Changelog
     /**
      * Changelog constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -46,7 +46,7 @@ class Changelog
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqchanges', 'id'),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqchanges', 'id'),
             $id,
             $lang,
             $revisionId,
@@ -55,7 +55,7 @@ class Changelog
             $text
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -78,8 +78,8 @@ class Changelog
             $recordId
         );
 
-        if ($result = $this->config->getDb()->query($query)) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($result = $this->configuration->getDb()->query($query)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $entries[] = [
                     'revision_id' => $row->revision_id,
                     'user' => $row->usr,

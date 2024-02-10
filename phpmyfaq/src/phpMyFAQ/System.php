@@ -158,14 +158,12 @@ class System
                 self::PHPMYFAQ_URL,
                 self::getVersion()
             );
-        } else {
-            return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
         }
+        return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
     }
 
     /**
      * Returns the URL of the documentation
-     * @return string
      */
     public static function getDocumentationUrl(): string
     {
@@ -192,12 +190,13 @@ class System
      */
     public static function renderFooter(bool $onePageBack = false): never
     {
-        if (true === $onePageBack) {
+        if ($onePageBack) {
             printf(
                 '<p><a href="./index.php">%s</a></p>',
                 'Back to the Setup page'
             );
         }
+
         printf(
             '</div></section></main><footer class="setup-footer container"><p class="text-end">%s</p></footer>' .
             '</body></html>',
@@ -211,9 +210,9 @@ class System
         return $this->database;
     }
 
-    public function setDatabase(DatabaseDriver $database): System
+    public function setDatabase(DatabaseDriver $databaseDriver): System
     {
-        $this->database = $database;
+        $this->database = $databaseDriver;
         return $this;
     }
 
@@ -228,9 +227,13 @@ class System
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/themes/') as $item) {
             $basename = $item->getBasename();
-            if (!$item->isDot() && $item->isDir()) {
-                $templates[$basename] = Template::getTplSetName() === $basename;
+            if ($item->isDot()) {
+                continue;
             }
+            if (!$item->isDir()) {
+                continue;
+            }
+            $templates[$basename] = Template::getTplSetName() === $basename;
         }
 
         return $templates;
@@ -245,12 +248,16 @@ class System
     {
         $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
-            if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
-                if ($returnAsHtml) {
-                    $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
-                } else {
-                    $retVal[$extension] = $database;
-                }
+            if (!extension_loaded($extension)) {
+                continue;
+            }
+            if (version_compare(PHP_VERSION, $database[0]) < 0) {
+                continue;
+            }
+            if ($returnAsHtml) {
+                $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
+            } else {
+                $retVal[$extension] = $database;
             }
         }
 
@@ -270,14 +277,12 @@ class System
     /**
      * Checks if the system URI is running with http or https.
      */
-    public function getSystemUri(Configuration $faqConfig): string
+    public function getSystemUri(Configuration $configuration): string
     {
-        $mainUrl = $faqConfig->getDefaultUrl();
+        $mainUrl = $configuration->getDefaultUrl();
 
-        if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
-            if (!str_contains($mainUrl, 'https')) {
-                $mainUrl = str_replace('http://', 'https://', $mainUrl);
-            }
+        if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME'] && !str_contains($mainUrl, 'https')) {
+            $mainUrl = str_replace('http://', 'https://', $mainUrl);
         }
 
         if (!str_ends_with($mainUrl, '/')) {
@@ -301,7 +306,7 @@ class System
      */
     public function checkDatabase(): bool
     {
-        foreach ($this->supportedDatabases as $extension => $database) {
+        foreach (array_keys($this->supportedDatabases) as $extension) {
             if (extension_loaded($extension)) {
                 return true;
             }
@@ -315,17 +320,12 @@ class System
      */
     public function checkRequiredExtensions(): bool
     {
-        foreach ($this->requiredExtensions as $extension) {
-            if (!extension_loaded($extension)) {
-                $this->missingExtensions[] = $extension;
+        foreach ($this->requiredExtensions as $requiredExtension) {
+            if (!extension_loaded($requiredExtension)) {
+                $this->missingExtensions[] = $requiredExtension;
             }
         }
-
-        if (count($this->missingExtensions) > 0) {
-            return false;
-        }
-
-        return true;
+        return count($this->missingExtensions) <= 0;
     }
 
     /**
@@ -353,14 +353,14 @@ class System
      */
     public function createHashes(): string
     {
-        $created = new DateTime();
+        $dateTime = new DateTime();
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(PMF_ROOT_DIR),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
         $hashes = [
-            'created' => $created->format('Y-m-d H:i:sP'),
+            'created' => $dateTime->format('Y-m-d H:i:sP'),
         ];
         $ignoredFiles = [
             '/config/constants.php' => false,
@@ -384,11 +384,12 @@ class System
                     if (isset($ignoredFiles[$current])) {
                         continue;
                     }
+
                     $hashes[$current] = sha1(file_get_contents($file->getPathname()));
                 }
             }
-        } catch (UnexpectedValueException $e) {
-            $hashes[$current . ' failed'] = $e->getMessage();
+        } catch (UnexpectedValueException $unexpectedValueException) {
+            $hashes[$current . ' failed'] = $unexpectedValueException->getMessage();
         }
 
         return json_encode($hashes, JSON_THROW_ON_ERROR);
@@ -419,6 +420,7 @@ class System
         if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
             unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
         }
+
         // Remove './config/ldap.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
             unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');

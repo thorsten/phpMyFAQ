@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 readonly class FaqImport
 {
-    public function __construct(private Configuration $config)
+    public function __construct(private Configuration $configuration)
     {
     }
 
@@ -43,12 +43,11 @@ readonly class FaqImport
      * Imports a record with the given record data.
      *
      * @param array $record Record data
-     * @return bool
      * @throws Exception
      */
     public function import(array $record): bool
     {
-        $user = CurrentUser::getCurrentUser($this->config);
+        $user = CurrentUser::getCurrentUser($this->configuration);
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
 
         $categoryId = Filter::filterVar($record[0], FILTER_VALIDATE_INT);
@@ -61,11 +60,11 @@ readonly class FaqImport
         $isActive = Filter::filterVar($record[7], FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
 
-        $faq = new Faq($this->config);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $category = new Category($this->config, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($languageCode);
@@ -78,8 +77,8 @@ readonly class FaqImport
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
-        $faqData = new FaqEntity();
-        $faqData
+        $faqEntity = new FaqEntity();
+        $faqEntity
                 ->setLanguage($languageCode)
                 ->setQuestion($question)
                 ->setAnswer($answer)
@@ -91,9 +90,9 @@ readonly class FaqImport
                 ->setComment(false)
                 ->setNotes('');
 
-        $faqId = $faq->create($faqData);
+        $faqId = $faq->create($faqEntity);
 
-        $faqMetaData = new FaqMetaData($this->config);
+        $faqMetaData = new FaqMetaData($this->configuration);
         $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
 
         return true;
@@ -111,20 +110,19 @@ readonly class FaqImport
         while (($record = fgetcsv($handle)) !== false) {
             $csvData[] = $record;
         }
+
         return $csvData;
     }
 
     /**
      * Returns true if given Symfony FileBag-object is a csv file. Returns false if not.
      *
-     * @param UploadedFile $file
      *
-     * @return bool
      */
-    public function isCSVFile(UploadedFile $file): bool
+    public function isCSVFile(UploadedFile $uploadedFile): bool
     {
         $allowedExtensions = ['csv'];
-        $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+        $fileExtension = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_EXTENSION);
 
         return in_array(strtolower($fileExtension), $allowedExtensions);
     }
@@ -132,9 +130,7 @@ readonly class FaqImport
     /**
      * Checks if the given csv-Data matches all requirements.
      *
-     * @param array $csvData
      *
-     * @return bool
      */
     public function validateCSV(array $csvData): bool
     {
@@ -144,8 +140,8 @@ readonly class FaqImport
             }
 
             $requiredColumns = [0, 1, 2, 4, 5, 6, 7, 8];
-            foreach ($requiredColumns as $columnIndex) {
-                if (empty($row[$columnIndex])) {
+            foreach ($requiredColumns as $requiredColumn) {
+                if (empty($row[$requiredColumn])) {
                     return false;
                 }
             }
@@ -155,8 +151,8 @@ readonly class FaqImport
             $validBooleanValues = ['true', 'false'];
 
             if (
-                !in_array(strtolower($row[$activatedColumn]), $validBooleanValues) ||
-                    !in_array(strtolower($row[$importantFAQColumn]), $validBooleanValues)
+                !in_array(strtolower((string) $row[$activatedColumn]), $validBooleanValues) ||
+                    !in_array(strtolower((string) $row[$importantFAQColumn]), $validBooleanValues)
             ) {
                 return false;
             }

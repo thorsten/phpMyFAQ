@@ -20,11 +20,17 @@ namespace phpMyFAQ\Configuration;
 class DatabaseConfiguration
 {
     private readonly string $server;
+
     private readonly ?int $port;
+
     private readonly string $user;
+
     private readonly string $password;
+
     private readonly string $db;
+
     private readonly string $prefix;
+
     private readonly string $type;
 
     public function __construct(string $filename)
@@ -42,7 +48,7 @@ class DatabaseConfiguration
         include($filename);
 
         $this->server = $DB['server'];
-        $this->port = strlen($DB['port']) === 0 ? null : (int) $DB['port'];
+        $this->port = $DB['port'] === '' ? null : (int) $DB['port'];
         $this->user = $DB['user'];
         $this->password = $DB['password'];
         $this->db = $DB['db'];

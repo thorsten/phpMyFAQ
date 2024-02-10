@@ -40,7 +40,7 @@ class OAuth
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config, private readonly Session $session)
+    public function __construct(private readonly Configuration $configuration, private readonly Session $session)
     {
     }
 
@@ -74,7 +74,7 @@ class OAuth
             'form_params' => [
                 'grant_type' => 'authorization_code',
                 'client_id' => AAD_OAUTH_CLIENTID,
-                'redirect_uri' => $this->config->getDefaultUrl() . 'services/azure/callback.php',
+                'redirect_uri' => $this->configuration->getDefaultUrl() . 'services/azure/callback.php',
                 'code' => $code,
                 'code_verifier' => $codeVerifier,
                 'client_secret' => AAD_OAUTH_SECRET

@@ -52,7 +52,7 @@ class Strings
      */
     public static function init(string $language = 'en'): void
     {
-        if (!self::$instance) {
+        if (self::$instance === null) {
             if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
                 self::$instance = Mbstring::getInstance($language);
             } else {
@@ -256,7 +256,7 @@ class Strings
         bool $doubleEncode = false
     ): string {
         return htmlspecialchars(
-            $string,
+            (string) $string,
             $quoteStyle,
             $charset,
             $doubleEncode

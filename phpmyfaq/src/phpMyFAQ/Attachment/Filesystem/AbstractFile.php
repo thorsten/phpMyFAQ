@@ -38,7 +38,9 @@ abstract class AbstractFile extends AbstractEntry
      * Enums.
      */
     public const MODE_READ = 'rb';
+
     public const MODE_APPEND = 'ab';
+
     public const MODE_WRITE = 'wb';
 
     /**
@@ -109,7 +111,7 @@ abstract class AbstractFile extends AbstractEntry
         }
 
         if (isset($_FILES['userfile']) && $this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
-            $deleted = $this->deleteDir(dirname($this->path));
+            return $this->deleteDir(dirname($this->path));
         }
 
         return $deleted;
@@ -150,12 +152,10 @@ abstract class AbstractFile extends AbstractEntry
     public function copyToSimple($target): bool
     {
         if (is_uploaded_file($this->path)) {
-            $success = move_uploaded_file($this->path, $target);
-        } else {
-            $success = copy($this->path, $target);
+            return move_uploaded_file($this->path, $target);
         }
 
-        return $success;
+        return copy($this->path, $target);
     }
 
     /**
@@ -178,7 +178,7 @@ abstract class AbstractFile extends AbstractEntry
     public function deleteDir($path): bool
     {
         if (!file_exists($path)) {
-            throw new FileException("Directory $path doesn't exist.");
+            throw new FileException(sprintf('Directory %s doesn\'t exist.', $path));
         }
 
         $it = new RecursiveIteratorIterator(
@@ -189,12 +189,14 @@ abstract class AbstractFile extends AbstractEntry
         foreach ($it as $file) {
             if (in_array($file->getBasename(), ['.', '..'])) {
                 continue;
-            } elseif ($file->isDir()) {
+            }
+            if ($file->isDir()) {
                 rmdir($file->getPathname());
             } elseif ($file->isFile() || $file->isLink()) {
                 if (!is_writable($file->getPathname())) {
                     throw new FileException("File can't be deleted.");
                 }
+
                 unlink($file->getPathname());
             }
         }

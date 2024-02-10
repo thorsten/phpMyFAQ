@@ -91,8 +91,8 @@ class Date
         try {
             $dateTime = new DateTime($unformattedDate);
             return $dateTime->format($this->configuration->get('main.dateFormat'));
-        } catch (Exception $e) {
-            $this->configuration->getLogger()->error($e->getMessage());
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error($exception->getMessage());
             return '';
         }
     }

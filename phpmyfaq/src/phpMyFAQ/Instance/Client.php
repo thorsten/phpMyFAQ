@@ -31,7 +31,7 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
  */
 class Client extends Instance
 {
-    private ?Filesystem $fileSystem = null;
+    private ?Filesystem $filesystem = null;
 
     private readonly string $clientFolder;
 
@@ -40,9 +40,9 @@ class Client extends Instance
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
+        parent::__construct($configuration);
 
         $this->clientFolder = PMF_ROOT_DIR . '/multisite/';
     }
@@ -60,7 +60,7 @@ class Client extends Instance
      */
     public function setFileSystem(Filesystem $fileSystem): void
     {
-        $this->fileSystem = $fileSystem;
+        $this->filesystem = $fileSystem;
     }
 
     public function createClient(Instance $instance): void
@@ -79,7 +79,7 @@ class Client extends Instance
             return false;
         }
 
-        return $this->fileSystem->createDirectory($this->clientFolder . $hostname);
+        return $this->filesystem->createDirectory($this->clientFolder . $hostname);
     }
 
     /**
@@ -91,32 +91,32 @@ class Client extends Instance
     {
         try {
             // First, create the client tables
-            $instanceDatabase = InstanceDatabase::factory($this->config, Database::getType());
+            $instanceDatabase = InstanceDatabase::factory($this->configuration, Database::getType());
             $instanceDatabase->createTables($prefix);
 
-            // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
-            $this->config->getDb()->query(
+            // Then, copy data from the tables "faqconfig", "faqright" and "faquser_right"
+            $this->configuration->getDb()->query(
                 sprintf(
                     'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
                     $prefix,
                     Database::getTablePrefix()
                 )
             );
-            $this->config->getDb()->query(
+            $this->configuration->getDb()->query(
                 sprintf(
                     "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
                     $prefix,
                     $this->clientUrl
                 )
             );
-            $this->config->getDb()->query(
+            $this->configuration->getDb()->query(
                 sprintf(
                     'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
                     $prefix,
                     Database::getTablePrefix()
                 )
             );
-            $this->config->getDb()->query(
+            $this->configuration->getDb()->query(
                 sprintf(
                     'INSERT INTO %sfaquser_right SELECT * FROM %sfaquser_right WHERE user_id = 1',
                     $prefix,
@@ -135,8 +135,8 @@ class Client extends Instance
      */
     public function copyConstantsFile(string $destination): bool
     {
-        return $this->fileSystem->copy(
-            $this->fileSystem->getRootPath() . '/content/core/config/constants.php',
+        return $this->filesystem->copy(
+            $this->filesystem->getRootPath() . '/content/core/config/constants.php',
             $destination
         );
     }
@@ -151,10 +151,10 @@ class Client extends Instance
      */
     public function copyTemplateFolder(string $destination, string $templateDir = 'default'): void
     {
-        $sourceTpl = $this->fileSystem->getRootPath() . '/assets/themes/' . $templateDir;
+        $sourceTpl = $this->filesystem->getRootPath() . '/assets/themes/' . $templateDir;
         $destTpl = $destination . '/assets/themes/';
 
-        $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
+        $this->filesystem->recursiveCopy($sourceTpl, $destTpl);
     }
 
     /**
@@ -169,7 +169,7 @@ class Client extends Instance
         $sourcePath = str_replace('https://', '', $sourceUrl);
         $destinationPath = str_replace('https://', '', $destinationUrl);
 
-        return $this->fileSystem->moveDirectory(
+        return $this->filesystem->moveDirectory(
             $this->clientFolder . $sourcePath,
             $this->clientFolder . $destinationPath
         );
@@ -185,7 +185,7 @@ class Client extends Instance
         }
 
         $sourcePath = str_replace('https://', '', $sourceUrl);
-        return $this->fileSystem->deleteDirectory($this->clientFolder . $sourcePath);
+        return $this->filesystem->deleteDirectory($this->clientFolder . $sourcePath);
     }
 
     /**
@@ -193,10 +193,6 @@ class Client extends Instance
      */
     public function isMultiSiteWriteable(): bool
     {
-        if (!is_writeable($this->clientFolder)) {
-            return false;
-        }
-
-        return true;
+        return is_writable($this->clientFolder);
     }
 }

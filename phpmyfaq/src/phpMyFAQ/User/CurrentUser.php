@@ -25,6 +25,7 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
@@ -90,11 +91,14 @@ class CurrentUser extends User
 
     /**
      * Constructor.
+     *
+     * @throws Exception
+     * @throws \Exception
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
-        $this->session = new Session($config);
+        parent::__construct($configuration);
+        $this->session = new Session($configuration);
     }
 
     /**
@@ -112,9 +116,14 @@ class CurrentUser extends User
     public function login(string $login, string $password): bool
     {
         $optData = [];
-        $loginError = $passwordError = $count = 0;
+        $loginError = 0;
+        $passwordError = 0;
+        $count = 0;
 
-        if ($this->config->get('security.loginWithEmailAddress') && Filter::filterVar($login, FILTER_VALIDATE_EMAIL)) {
+        if (
+            $this->configuration->get('security.loginWithEmailAddress') &&
+            Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
+        ) {
             $userId = $this->getUserIdByEmail($login);
             $this->getUserById($userId);
             $login = $this->getLogin();
@@ -124,38 +133,34 @@ class CurrentUser extends User
         $this->getUserByLogin($login);
         if ($this->isFailedLastLoginAttempt()) {
             $this->errors[] = parent::ERROR_USER_TOO_MANY_FAILED_LOGINS;
-            $this->config->getLogger()->info(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
+            $this->configuration->getLogger()->info(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
             return false;
         }
 
         // Additional code for LDAP: user\\domain
+        // If LDAP configuration and ldap_use_domain_prefix are true,
+        // and LDAP credentials are provided (password is not empty)
         if (
-            $this->config->isLdapActive() && $this->config->get('ldap.ldap_use_domain_prefix')
-            && '' !== $password
+            $this->configuration->isLdapActive() &&
+            $this->configuration->get('ldap.ldap_use_domain_prefix') &&
+            '' !== $password &&
+            ($pos = strpos($login, '\\')) !== false
         ) {
-            // If LDAP configuration and ldap_use_domain_prefix are true,
-            // and LDAP credentials are provided (password is not empty)
-            if (($pos = strpos($login, '\\')) !== false) {
-                if ($pos !== 0) {
-                    $optData['domain'] = substr($login, 0, $pos);
-                }
-
-                $login = substr($login, $pos + 1);
+            if ($pos !== 0) {
+                $optData['domain'] = substr($login, 0, $pos);
             }
+            $login = substr($login, $pos + 1);
         }
 
         // Additional code for SSO
-        if ($this->config->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
+        if ($this->configuration->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
             // if SSO configuration is enabled, REMOTE_USER is provided, and we try to log in using SSO (no password)
-            if (($pos = strpos($login, '@')) !== false) {
-                if ($pos !== 0) {
-                    $login = substr($login, 0, $pos);
-                }
+            if (($pos = strpos($login, '@')) !== false && $pos !== 0) {
+                $login = substr($login, 0, $pos);
             }
-            if (($pos = strpos($login, '\\')) !== false) {
-                if ($pos !== 0) {
-                    $login = substr($login, $pos + 1);
-                }
+
+            if (($pos = strpos($login, '\\')) !== false && $pos !== 0) {
+                $login = substr($login, $pos + 1);
             }
         }
 
@@ -170,7 +175,7 @@ class CurrentUser extends User
             }
 
             // $login does not exist, so continue
-            if (!$auth->isValidLogin($login, $optData)) {
+            if ($auth->isValidLogin($login, $optData) === 0) {
                 ++$loginError;
                 continue;
             }
@@ -222,6 +227,7 @@ class CurrentUser extends User
             $this->setSuccess(false);
             $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
         }
+
         if ($passwordError > 0) {
             $this->getUserByLogin($login);
             $this->setLoginAttempt();
@@ -265,9 +271,9 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        return (bool) $this->config->getDb()->fetchRow($result);
+        return (bool) $this->configuration->getDb()->fetchRow($result);
     }
 
     /**
@@ -278,10 +284,7 @@ class CurrentUser extends User
      */
     public function sessionIsTimedOut(): bool
     {
-        if ($this->sessionTimeout <= $this->sessionAge()) {
-            return true;
-        }
-        return false;
+        return $this->sessionTimeout <= $this->sessionAge();
     }
 
     /**
@@ -289,10 +292,7 @@ class CurrentUser extends User
      */
     public function sessionIdIsTimedOut(): bool
     {
-        if ($this->sessionIdTimeout <= $this->sessionAge()) {
-            return true;
-        }
-        return false;
+        return $this->sessionIdTimeout <= $this->sessionAge();
     }
 
     /**
@@ -303,6 +303,7 @@ class CurrentUser extends User
         if (!isset($_SESSION[SESSION_ID_TIMESTAMP])) {
             return 0;
         }
+
         return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
     }
 
@@ -330,12 +331,12 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        $res = $this->config->getDb()->query($select);
-        if (!$res or $this->config->getDb()->numRows($res) != 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if (!$res || $this->configuration->getDb()->numRows($res) != 1) {
             return [];
         }
 
-        return $this->config->getDb()->fetchArray($res);
+        return $this->configuration->getDb()->fetchArray($res);
     }
 
     /**
@@ -356,11 +357,13 @@ class CurrentUser extends User
             if (str_contains($sessionPath, ';')) {
                 $sessionPath = substr($sessionPath, strpos($sessionPath, ';') + 1);
             }
+
             $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
             if (@file_exists($sessionFilename)) {
                 @unlink($sessionFilename);
             }
         }
+
         // store session-ID age
         $_SESSION[SESSION_ID_TIMESTAMP] = $_SERVER['REQUEST_TIME'];
         // save session information in user table
@@ -383,9 +386,9 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->configuration->getDb()->query($update);
         if (!$res) {
-            $this->errors[] = $this->config->getDb()->error();
+            $this->errors[] = $this->configuration->getDb()->error();
 
             return false;
         }
@@ -430,10 +433,10 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->configuration->getDb()->query($update);
 
         if (!$res) {
-            $this->errors[] = $this->config->getDb()->error();
+            $this->errors[] = $this->configuration->getDb()->error();
 
             return false;
         }
@@ -451,17 +454,18 @@ class CurrentUser extends User
     /**
      * Returns the current user object from cookie or session
      */
-    public static function getCurrentUser(Configuration $faqConfig): CurrentUser
+    public static function getCurrentUser(Configuration $configuration): CurrentUser
     {
-        $user = self::getFromCookie($faqConfig);
+        $user = self::getFromCookie($configuration);
 
         if (!$user instanceof CurrentUser) {
-            $user = self::getFromSession($faqConfig);
+            $user = self::getFromSession($configuration);
         }
+
         if ($user instanceof CurrentUser) {
             $user->setLoggedIn(true);
         } else {
-            $user = new CurrentUser($faqConfig);
+            $user = new CurrentUser($configuration);
         }
 
         return $user;
@@ -482,6 +486,7 @@ class CurrentUser extends User
             } else {
                 $currentGroups = [-1];
             }
+
             if (0 === (is_countable($currentGroups) ? count($currentGroups) : 0)) {
                 $currentGroups = [-1];
             }
@@ -504,7 +509,7 @@ class CurrentUser extends User
      *
      * @static
      */
-    public static function getFromSession(Configuration $config): ?CurrentUser
+    public static function getFromSession(Configuration $configuration): ?CurrentUser
     {
         // there is no valid user object in session
         if (!isset($_SESSION[SESSION_CURRENT_USER]) || !isset($_SESSION[SESSION_ID_TIMESTAMP])) {
@@ -512,7 +517,7 @@ class CurrentUser extends User
         }
 
         // create a new CurrentUser object
-        $user = new self($config);
+        $user = new self($configuration);
         $user->getUserById($_SESSION[SESSION_CURRENT_USER]);
 
         // user object is timed out
@@ -522,20 +527,27 @@ class CurrentUser extends User
 
             return null;
         }
+
         // session-id not found in user table
         $sessionInfo = $user->getSessionInfo();
         $sessionId = ($sessionInfo['session_id'] ?? '');
         if ($sessionId === '' || $sessionId !== session_id()) {
             return null;
         }
+
         // check ip
-        if ($config->get('security.ipCheck') && $sessionInfo['ip'] != Request::createFromGlobals()->getClientIp()) {
+        if (
+            $configuration->get('security.ipCheck') &&
+            $sessionInfo['ip'] != Request::createFromGlobals()->getClientIp()
+        ) {
             return null;
         }
+
         // session-id needs to be updated
         if ($user->sessionIdIsTimedOut()) {
             $user->updateSessionId();
         }
+
         // user is now logged in
         $user->loggedIn = true;
         // save current user to session and return the instance
@@ -555,14 +567,14 @@ class CurrentUser extends User
      *
      * @static
      */
-    public static function getFromCookie(Configuration $config): ?CurrentUser
+    public static function getFromCookie(Configuration $configuration): ?CurrentUser
     {
         if (!isset($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME])) {
             return null;
         }
 
         // create a new CurrentUser object
-        $user = new self($config);
+        $user = new self($configuration);
         $user->getUserByCookie($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME]);
 
         if (-1 === $user->getUserId()) {
@@ -606,11 +618,11 @@ class CurrentUser extends User
         $update = sprintf(
             "UPDATE %sfaquser SET auth_source = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($authSource),
+            $this->configuration->getDb()->escape($authSource),
             $this->getUserId()
         );
 
-        return $this->config->getDb()->query($update);
+        return $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -621,11 +633,11 @@ class CurrentUser extends User
         $update = sprintf(
             "UPDATE %sfaquser SET remember_me = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($rememberMe),
+            $this->configuration->getDb()->escape($rememberMe),
             $this->getUserId()
         );
 
-        return $this->config->getDb()->query($update);
+        return $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -651,12 +663,11 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        return (bool) $this->config->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**
      * @param array<string> $token
-     * @return bool
      * @throws \JsonException
      */
     public function setTokenData(array $token): bool
@@ -680,7 +691,7 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        return (bool) $this->config->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -689,7 +700,7 @@ class CurrentUser extends User
      */
     protected function setLoginAttempt(): mixed
     {
-        $this->loginAttempts++;
+        ++$this->loginAttempts;
 
         $update = sprintf(
             "
@@ -708,7 +719,7 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        return $this->config->getDb()->query($update);
+        return $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -742,11 +753,7 @@ class CurrentUser extends User
             Request::createFromGlobals()->getClientIp()
         );
 
-        $result = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($result) !== 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $result = $this->configuration->getDb()->query($select);
+        return $this->configuration->getDb()->numRows($result) !== 0;
     }
 }

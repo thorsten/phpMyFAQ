@@ -34,7 +34,7 @@ class LoginController
      */
     public function login(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $postBody = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
@@ -43,23 +43,24 @@ class LoginController
         $faqPassword = Filter::filterVar($postBody->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $user = new CurrentUser($faqConfig);
-        $userAuth = new UserAuthentication($faqConfig, $user);
+        $userAuthentication = new UserAuthentication($faqConfig, $user);
         try {
-            $user = $userAuth->authenticate($faqUsername, $faqPassword);
-            $response->setStatusCode(Response::HTTP_OK);
+            $user = $userAuthentication->authenticate($faqUsername, $faqPassword);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
             $result = [
                 'loggedin' => true
             ];
-        } catch (Exception $e) {
-            $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            $faqConfig->getLogger()->error('Failed login: ' . $exception->getMessage());
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'loggedin' => false,
                 'error' => Translation::get('ad_auth_fail')
             ];
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

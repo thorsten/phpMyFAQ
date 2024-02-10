@@ -61,6 +61,7 @@ class Init
                     $GLOBALS[$external][$key] = null;
                     unset($GLOBALS[$external][$key]);
                 }
+
                 foreach (array_keys($newValues) as $key) {
                     $GLOBALS[$external][$key] = $newValues[$key];
                 }
@@ -118,8 +119,8 @@ class Init
 
         // fix &entitiy\n;
         $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#', '$1;', $string);
-        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#i', '$1$2;', $string);
-        $string = html_entity_decode($string, ENT_COMPAT, 'utf-8');
+        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#i', '$1$2;', (string) $string);
+        $string = html_entity_decode((string) $string, ENT_COMPAT, 'utf-8');
 
         // remove any attribute starting with "on" or xmlns
         $string = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>#iU', '$1>', $string);
@@ -129,23 +130,23 @@ class Init
             '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a' .
             '[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
             '$1=$2nojavascript...',
-            $string
+            (string) $string
         );
         $string = preg_replace(
             '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r' .
             '[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
             '$1=$2novbscript...',
-            $string
+            (string) $string
         );
         $string = preg_replace(
             '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#U',
             '$1=$2nomozbinding...',
-            $string
+            (string) $string
         );
         $string = preg_replace(
             '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*data[\x00-\x20]*:#U',
             '$1=$2nodata...',
-            $string
+            (string) $string
         );
 
         //<span style="width: expression(alert('Ping!'));"></span>
@@ -153,22 +154,22 @@ class Init
         $string = preg_replace(
             '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',
             '$1>',
-            $string
+            (string) $string
         );
         $string = preg_replace(
             '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',
             '$1>',
-            $string
+            (string) $string
         );
         $string = preg_replace(
             '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i' .
             '[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',
             '$1>',
-            $string
+            (string) $string
         );
 
         //remove namespaced elements (we do not need them...)
-        $string = preg_replace('#</*\w+:\w[^>]*>#i', '', $string);
+        $string = preg_replace('#</*\w+:\w[^>]*>#i', '', (string) $string);
 
         //remove really unwanted tags
         do {
@@ -177,9 +178,9 @@ class Init
                 '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|' .
                 'bgsound|title|base)[^>]*>#i',
                 '',
-                $string
+                (string) $string
             );
-        } while ($oldString != $string);
+        } while ($oldString !== $string);
 
         return $string;
     }
@@ -191,11 +192,11 @@ class Init
     private static function cleanFilenames(): void
     {
         reset($_FILES);
-        foreach ($_FILES as $key => $value) {
+        foreach (array_keys($_FILES) as $key) {
             if (is_array($_FILES[$key]['name'])) {
                 reset($_FILES[$key]['name']);
                 // We have a multiple upload with the same name for <input />
-                foreach ($_FILES[$key]['name'] as $idx => $valu2) {
+                foreach (array_keys($_FILES[$key]['name']) as $idx) {
                     $_FILES[$key]['name'][$idx] = self::basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
                         $_FILES[$key]['type'][$idx] = '';
@@ -204,6 +205,7 @@ class Init
                         $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
                     }
                 }
+
                 reset($_FILES[$key]['name']);
             } else {
                 $_FILES[$key]['name'] = self::basicFilenameClean($_FILES[$key]['name']);
@@ -234,10 +236,12 @@ class Init
         if ($path_parts['basename'] !== $filename) {
             return '';
         }
+
         //  We need a filename with at least 1 chars plus the optional extension
         if (isset($path_parts['extension']) && ($path_parts['basename'] == '.' . $path_parts['extension'])) {
             return '';
         }
+
         if (!isset($path_parts['extension']) && (StringBasic::strlen($path_parts['basename']) == 0)) {
             return '';
         }
@@ -246,10 +250,9 @@ class Init
         if (!isset($path_parts['extension'])) {
             $path_parts['extension'] = '';
         }
-        if (count($denyUploadExts) > 0) {
-            if (in_array(strtolower($path_parts['extension']), $denyUploadExts)) {
-                return '';
-            }
+
+        if (count($denyUploadExts) > 0 && in_array(strtolower($path_parts['extension']), $denyUploadExts)) {
+            return '';
         }
 
         // Clean the file to remove some chars depending on the server OS

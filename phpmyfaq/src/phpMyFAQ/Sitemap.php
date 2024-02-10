@@ -47,9 +47,9 @@ class Sitemap
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
-        if ($this->config->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }
@@ -92,7 +92,7 @@ class Sitemap
 
         $renderLetters = '<ul class="nav">';
 
-        if ($this->config->getDb() instanceof Sqlite3) {
+        if ($this->configuration->getDb() instanceof Sqlite3) {
             $query = sprintf(
                 "
                     SELECT
@@ -118,7 +118,7 @@ class Sitemap
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $this->config->getLanguage()->getLanguage(),
+                $this->configuration->getLanguage()->getLanguage(),
                 $permPart
             );
         } else {
@@ -147,23 +147,23 @@ class Sitemap
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $this->config->getLanguage()->getLanguage(),
+                $this->configuration->getLanguage()->getLanguage(),
                 $permPart
             );
         }
 
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $letters = Strings::strtoupper($row->letters);
-            if (Strings::preg_match("/^\w+/iu", $letters)) {
+            if (Strings::preg_match("/^\w+/iu", $letters) !== 0) {
                 $url = sprintf(
                     '%sindex.php?%saction=sitemap&amp;letter=%s&amp;lang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $letters,
-                    $this->config->getLanguage()->getLanguage()
+                    $this->configuration->getLanguage()->getLanguage()
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->text = $letters;
                 $oLink->class = 'nav-link';
                 $renderLetters .= '<li class="nav-item">' . $oLink->toHtmlAnchor() . '</li>';
@@ -199,7 +199,7 @@ class Sitemap
             );
         }
 
-        $letter = Strings::strtoupper($this->config->getDb()->escape(Strings::substr($letter, 0, 1)));
+        $letter = Strings::strtoupper($this->configuration->getDb()->escape(Strings::substr($letter, 0, 1)));
 
         $renderSiteMap = '';
 
@@ -238,7 +238,7 @@ class Sitemap
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 $letter,
-                $this->config->getLanguage()->getLanguage(),
+                $this->configuration->getLanguage()->getLanguage(),
                 $permPart
             ),
             default => sprintf(
@@ -275,44 +275,45 @@ class Sitemap
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 $letter,
-                $this->config->getLanguage()->getLanguage(),
+                $this->configuration->getLanguage()->getLanguage(),
                 $permPart
             ),
         };
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         $oldId = 0;
-        $parsedown = new ParsedownExtra();
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $parsedownExtra = new ParsedownExtra();
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = Strings::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
 
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
 
                 $renderSiteMap .= '<li>' . $oLink->toHtmlAnchor() . '<br>' . "\n";
 
-                if ($this->config->get('main.enableMarkdownEditor')) {
-                    $renderSiteMap .= Utils::chopString(strip_tags((string) $parsedown->text($row->snap)), 25) .
+                if ($this->configuration->get('main.enableMarkdownEditor')) {
+                    $renderSiteMap .= Utils::chopString(strip_tags((string) $parsedownExtra->text($row->snap)), 25) .
                         " ...</li>\n";
                 } else {
                     $renderSiteMap .= Utils::chopString(strip_tags((string) $row->snap), 25) .
                         " ...</li>\n";
                 }
             }
+
             $oldId = $row->id;
         }
 
-        return empty($renderSiteMap) ? '' : '<ul>' . $renderSiteMap . '</ul>';
+        return $renderSiteMap === '' || $renderSiteMap === '0' ? '' : '<ul>' . $renderSiteMap . '</ul>';
     }
 }

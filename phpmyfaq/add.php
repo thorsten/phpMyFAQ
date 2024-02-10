@@ -70,12 +70,12 @@ try {
 // Get possible user input
 $selectedQuestion = Filter::filterVar($request->query->get('question'), FILTER_VALIDATE_INT);
 $selectedCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, -1);
-
-$question = $readonly = '';
+$question = '';
+$readonly = '';
 if (!is_null($selectedQuestion)) {
     $questionData = $questionObject->getQuestion($selectedQuestion);
     $question = Strings::htmlentities($questionData['question']);
-    if (Strings::strlen($question)) {
+    if (Strings::strlen($question) !== 0) {
         $readonly = ' readonly';
     }
 }

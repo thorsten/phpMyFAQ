@@ -29,18 +29,19 @@ class CommentController
 {
     public function list(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
 
-        $comment = new Comments($faqConfig);
-        $result = $comment->getCommentsData($recordId, CommentType::FAQ);
+        $comments = new Comments($faqConfig);
+        $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

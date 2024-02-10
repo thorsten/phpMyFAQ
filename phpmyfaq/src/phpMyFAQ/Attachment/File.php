@@ -42,10 +42,14 @@ class File extends AttachmentAbstract implements AttachmentInterface
         $subDirNameLength = 5;
 
         for ($i = 0; $i < $subDirCount; ++$i) {
-            $attachmentPath .= DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength, $subDirNameLength);
+            $attachmentPath .= DIRECTORY_SEPARATOR . substr(
+                (string) $fsHash,
+                $i * $subDirNameLength,
+                $subDirNameLength
+            );
         }
 
-        return $attachmentPath . (DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength));
+        return $attachmentPath . (DIRECTORY_SEPARATOR . substr((string) $fsHash, $i * $subDirNameLength));
     }
 
     /**
@@ -106,10 +110,10 @@ class File extends AttachmentAbstract implements AttachmentInterface
                 // Doing this check we're sure not to unnecessary
                 // overwrite existing unencrypted file duplicates.
                 if (!$this->linkedRecords()) {
-                    $source = new VanillaFile($filePath);
+                    $vanillaFile = new VanillaFile($filePath);
                     $target = $this->getFile(FilesystemFile::MODE_WRITE);
 
-                    $success = $source->moveTo($target);
+                    $success = $vanillaFile->moveTo($target);
                 } else {
                     $success = true;
                 }
@@ -168,8 +172,8 @@ class File extends AttachmentAbstract implements AttachmentInterface
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
             header('Content-Type: ' . $this->mimeType);
             header('Content-Length: ' . $this->filesize);
-            header("Content-Disposition: $disposition; filename=\"" . rawurlencode($this->filename) . "\"");
-            header("Content-MD5: {$this->realHash}");
+            header(sprintf('Content-Disposition: %s; filename="', $disposition) . rawurlencode($this->filename) . '"');
+            header('Content-MD5: ' . $this->realHash);
         }
 
         while (!$file->eof()) {
@@ -187,15 +191,13 @@ class File extends AttachmentAbstract implements AttachmentInterface
     private function getFile($mode = FilesystemFile::MODE_READ)
     {
         if ($this->encrypted) {
-            $file = new EncryptedFile(
+            return new EncryptedFile(
                 $this->buildFilePath(),
                 $mode,
                 $this->key
             );
-        } else {
-            $file = new VanillaFile($this->buildFilePath(), $mode);
         }
 
-        return $file;
+        return new VanillaFile($this->buildFilePath(), $mode);
     }
 }

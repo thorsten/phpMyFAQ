@@ -29,7 +29,7 @@ class Question
     /**
      * Question constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -48,18 +48,18 @@ class Question
                 VALUES
             (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', 'id'),
-            $this->config->getLanguage()->getLanguage(),
-            $this->config->getDb()->escape($questionData['username']),
-            $this->config->getDb()->escape($questionData['email']),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', 'id'),
+            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($questionData['username']),
+            $this->configuration->getDb()->escape($questionData['email']),
             $questionData['category_id'],
-            $this->config->getDb()->escape($questionData['question']),
+            $this->configuration->getDb()->escape($questionData['question']),
             date('YmdHis'),
             $questionData['is_visible'],
             0
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -73,10 +73,10 @@ class Question
             "DELETE FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $this->config->getDb()->query($delete);
+        $this->configuration->getDb()->query($delete);
 
         return true;
     }
@@ -117,22 +117,23 @@ class Question
                 lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        if ($result = $this->config->getDb()->query($query)) {
-            if ($row = $this->config->getDb()->fetchObject($result)) {
-                $question = [
-                    'id' => $row->id,
-                    'lang' => $row->lang,
-                    'username' => $row->username,
-                    'email' => $row->email,
-                    'category_id' => $row->category_id,
-                    'question' => $row->question,
-                    'created' => $row->created,
-                    'is_visible' => $row->is_visible,
-                ];
-            }
+        if (
+            ($result = $this->configuration->getDb()->query($query)) &&
+            ($row = $this->configuration->getDb()->fetchObject($result))
+        ) {
+            return [
+                'id' => $row->id,
+                'lang' => $row->lang,
+                'username' => $row->username,
+                'email' => $row->email,
+                'category_id' => $row->category_id,
+                'question' => $row->question,
+                'created' => $row->created,
+                'is_visible' => $row->is_visible,
+            ];
         }
 
         return $question;
@@ -159,12 +160,12 @@ class Question
             ORDER BY 
                 created ASC",
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             ($showAll === false ? " AND is_visible = 'Y'" : '')
         );
 
-        if ($result = $this->config->getDb()->query($query)) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($result = $this->configuration->getDb()->query($query)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $question = new QuestionEntity();
                 $question
                     ->setId($row->id)
@@ -194,12 +195,12 @@ class Question
             "SELECT is_visible FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            $row = $this->config->getDb()->fetchObject($result);
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            $row = $this->configuration->getDb()->fetchObject($result);
 
             return $row->is_visible;
         }
@@ -217,10 +218,10 @@ class Question
             Database::getTablePrefix(),
             $isVisible,
             $questionId,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -238,6 +239,6 @@ class Question
             $openQuestionId
         );
 
-        return $this->config->getDb()->query($query);
+        return $this->configuration->getDb()->query($query);
     }
 }

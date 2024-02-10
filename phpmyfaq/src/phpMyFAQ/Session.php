@@ -61,7 +61,7 @@ class Session
      *
      * @throws \Exception
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
         $this->createCurrentSessionKey();
     }
@@ -152,10 +152,10 @@ class Session
 
         $query = sprintf('SELECT time FROM %sfaqsessions WHERE sid = %d', Database::getTablePrefix(), $sessionId);
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            $res = $this->config->getDb()->fetchObject($result);
+            $res = $this->configuration->getDb()->fetchObject($result);
             $timestamp = $res->time;
         }
 
@@ -181,8 +181,8 @@ class Session
             $lastHour
         );
 
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $sessions[$row->sid] = [
                 'ip' => $row->ip,
                 'time' => $row->time,
@@ -201,9 +201,9 @@ class Session
 
         $query = sprintf('SELECT COUNT(sid) as num_sessions FROM %sfaqsessions', Database::getTablePrefix());
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         if ($result) {
-            $row = $this->config->getDb()->fetchObject($result);
+            $row = $this->configuration->getDb()->fetchObject($result);
             $num = $row->num_sessions;
         }
 
@@ -225,7 +225,7 @@ class Session
             $last
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -237,7 +237,7 @@ class Session
     {
         $query = sprintf('DELETE FROM %sfaqsessions', Database::getTablePrefix());
 
-        return $this->config->getDb()->query($query);
+        return $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -256,9 +256,9 @@ class Session
             $ip,
             $_SERVER['REQUEST_TIME'] - 86400
         );
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) == 0) {
+        if ($this->configuration->getDb()->numRows($result) == 0) {
             $this->userTracking('old_session', $sessionIdToCheck);
         } else {
             // Update global session id
@@ -272,18 +272,16 @@ class Session
                 $sessionIdToCheck,
                 $ip
             );
-            $this->config->getDb()->query($query);
+            $this->configuration->getDb()->query($query);
         }
     }
 
     /**
      * Returns the botIgnoreList as an array.
-     *
-     * @return array
      */
     private function getBotIgnoreList(): array
     {
-        return explode(',', $this->config->get('main.botIgnoreList'));
+        return explode(',', (string) $this->configuration->get('main.botIgnoreList'));
     }
 
     /**
@@ -295,7 +293,7 @@ class Session
      */
     public function userTracking(string $action, int|string $data = null): void
     {
-        if ($this->config->get('main.enableUserTracking')) {
+        if ($this->configuration->get('main.enableUserTracking')) {
             $request = Request::createFromGlobals();
             $bots = 0;
             $banned = false;
@@ -308,6 +306,7 @@ class Session
             if (!is_null($cookieId)) {
                 $this->setCurrentSessionId($cookieId);
             }
+
             if ($action === 'old_session') {
                 $this->setCurrentSessionId(0);
             }
@@ -332,14 +331,14 @@ class Session
             // Anonymize IP address
             $remoteAddress = IpUtils::anonymize($remoteAddress);
 
-            $network = new Network($this->config);
+            $network = new Network($this->configuration);
             if ($network->isBanned($remoteAddress)) {
                 $banned = true;
             }
 
             if (0 === $bots && false === $banned) {
-                if (!isset($this->currentSessionId)) {
-                    $this->currentSessionId = $this->config->getDb()->nextId(
+                if ($this->currentSessionId === null) {
+                    $this->currentSessionId = $this->configuration->getDb()->nextId(
                         Database::getTablePrefix() . 'faqsessions',
                         'sid'
                     );
@@ -357,7 +356,7 @@ class Session
                         $_SERVER['REQUEST_TIME']
                     );
 
-                    $this->config->getDb()->query($query);
+                    $this->configuration->getDb()->query($query);
                 }
 
                 $data = $this->getCurrentSessionId() . ';' .
@@ -375,7 +374,7 @@ class Session
                     touch($file);
                 }
 
-                if (is_writeable($file)) {
+                if (is_writable($file)) {
                     file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
                 } else {
                     throw new Exception('Cannot write to ' . $file);
@@ -402,7 +401,7 @@ class Session
             [
                 'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
                 'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
-                'domain' => parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
+                'domain' => parse_url((string) $this->configuration->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => $strict ? 'strict' : '',
                 'secure' => $secure,
                 'httponly' => true,
@@ -434,10 +433,10 @@ class Session
     {
         $users = [0, 0];
 
-        if ($this->config->get('main.enableUserTracking')) {
+        if ($this->configuration->get('main.enableUserTracking')) {
             $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
 
-            if (!$this->config->get('security.enableLoginOnly')) {
+            if (!$this->configuration->get('security.enableLoginOnly')) {
                 // Count all sids within the time window for public installations
                 $query = sprintf(
                     'SELECT count(sid) AS anonymous_users FROM %sfaqsessions WHERE user_id = -1 AND time > %d',
@@ -445,10 +444,10 @@ class Session
                     $timeNow
                 );
 
-                $result = $this->config->getDb()->query($query);
+                $result = $this->configuration->getDb()->query($query);
 
                 if (isset($result)) {
-                    $row = $this->config->getDb()->fetchObject($result);
+                    $row = $this->configuration->getDb()->fetchObject($result);
                     $users[0] = $row->anonymous_users;
                 }
             }
@@ -460,10 +459,10 @@ class Session
                 $timeNow
             );
 
-            $result = $this->config->getDb()->query($query);
+            $result = $this->configuration->getDb()->query($query);
 
             if (isset($result)) {
-                $row = $this->config->getDb()->fetchObject($result);
+                $row = $this->configuration->getDb()->fetchObject($result);
                 $users[1] = $row->registered_users;
             }
         }
@@ -478,8 +477,9 @@ class Session
      */
     public function getLast30DaysVisits(): array
     {
-        $stats = $visits = $completeData = [];
-
+        $stats = [];
+        $visits = [];
+        $completeData = [];
         $startDate = strtotime('-1 month');
         $endDate = $_SERVER['REQUEST_TIME'];
 
@@ -489,9 +489,9 @@ class Session
             $startDate,
             $endDate
         );
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $visits[] = $row->time;
         }
 
@@ -500,10 +500,12 @@ class Session
         }
 
         foreach ($visits as $visitDate) {
-            isset($stats[date('Y-m-d', $visitDate)]) ? $stats[date('Y-m-d', $visitDate)]++ : null;
+            if (isset($stats[date('Y-m-d', $visitDate)])) {
+                ++$stats[date('Y-m-d', $visitDate)];
+            }
         }
 
-        foreach ($stats as $date => $stat) {
+        foreach (array_keys($stats) as $date) {
             $visit = new stdClass();
             $visit->date = $date;
             $visit->number = $stats[$date];

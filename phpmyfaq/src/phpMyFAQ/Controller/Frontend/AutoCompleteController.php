@@ -36,7 +36,7 @@ class AutoCompleteController
     #[Route('api/autocomplete')]
     public function search(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $searchString = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -52,23 +52,23 @@ class AutoCompleteController
 
         $faqPermission = new FaqPermission($faqConfig);
         $faqSearch = new Search($faqConfig);
-        $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
+        $searchResultSet = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         if (!is_null($searchString)) {
             $faqSearch->setCategory($category);
 
             $searchResult = $faqSearch->autoComplete($searchString);
 
-            $faqSearchResult->reviewResultSet($searchResult);
+            $searchResultSet->reviewResultSet($searchResult);
 
             $faqSearchHelper = new SearchHelper($faqConfig);
             $faqSearchHelper->setSearchTerm($searchString);
             $faqSearchHelper->setCategory($category);
             $faqSearchHelper->setPlurals(new Plurals());
-            $response->setData(Response::HTTP_OK);
-            $response->setData($faqSearchHelper->createAutoCompleteResult($faqSearchResult));
+            $jsonResponse->setData(Response::HTTP_OK);
+            $jsonResponse->setData($faqSearchHelper->createAutoCompleteResult($searchResultSet));
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

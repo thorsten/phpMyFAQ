@@ -36,27 +36,27 @@ class SearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $deleteData = json_decode($request->getContent());
 
         $search = new Search(Configuration::getConfigurationInstance());
 
         if (!Token::getInstance()->verifyToken('delete-searchterm', $deleteData->csrf)) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
 
         if ($search->deleteSearchTermById($searchId)) {
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['deleted' => $searchId]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['deleted' => $searchId]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $searchId]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => $searchId]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

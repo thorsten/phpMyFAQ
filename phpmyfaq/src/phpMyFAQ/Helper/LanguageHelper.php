@@ -48,7 +48,7 @@ class LanguageHelper
         );
         $languages = self::getAvailableLanguages();
 
-        if (count($languages) > 0) {
+        if ($languages !== []) {
             foreach ($languages as $lang => $value) {
                 if (!in_array($lang, $excludedLanguages)) {
                     $output .= sprintf(
@@ -74,7 +74,8 @@ class LanguageHelper
     public static function getAvailableLanguages(): array
     {
         $search = ['language_', '.php'];
-        $languages = $languageFiles = [];
+        $languages = [];
+        $languageFiles = [];
 
         $dir = new DirectoryIterator(PMF_TRANSLATION_DIR);
         foreach ($dir as $fileInfo) {
@@ -85,11 +86,11 @@ class LanguageHelper
             }
         }
 
-        foreach ($languageFiles as $lang) {
+        foreach ($languageFiles as $languageFile) {
             // Check if the file is related to a (real) language before using it
-            $isValidLanguage = LanguageCodes::get($lang);
+            $isValidLanguage = LanguageCodes::get($languageFile);
             if ($isValidLanguage !== null) {
-                $languages[strtolower($lang)] = LanguageCodes::get($lang);
+                $languages[strtolower($languageFile)] = LanguageCodes::get($languageFile);
             }
         }
 
@@ -115,12 +116,13 @@ class LanguageHelper
         $output = '';
         foreach (LanguageHelper::getAvailableLanguages() as $key => $value) {
             if ($onlyThisLang) {
-                if (strtolower($key) == $lang) {
+                if (strtolower($key) === $lang) {
                     if ($fileLanguageValue) {
                         $output .= "\t<option value=\"language_" . strtolower($lang) . '.php"';
                     } else {
                         $output .= "\t<option value=\"" . strtolower($lang) . '"';
                     }
+
                     $output .= ' selected="selected"';
                     $output .= '>' . $value . "</option>\n";
                     break;
@@ -131,9 +133,11 @@ class LanguageHelper
                 } else {
                     $output .= "\t<option value=\"" . strtolower($key) . '"';
                 }
-                if (strtolower($key) == $lang) {
+
+                if (strtolower($key) === $lang) {
                     $output .= ' selected="selected"';
                 }
+
                 $output .= '>' . $value . "</option>\n";
             }
         }

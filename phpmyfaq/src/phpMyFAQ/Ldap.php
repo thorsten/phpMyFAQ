@@ -56,9 +56,9 @@ class Ldap
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->ldapConfig = $this->config->getLdapConfig();
+        $this->ldapConfig = $this->configuration->getLdapConfig();
     }
 
     /**
@@ -90,13 +90,13 @@ class Ldap
         }
 
         // Set LDAP options
-        foreach ($this->config->getLdapOptions() as $key => $value) {
-            if (!ldap_set_option($this->ds, constant($key), $value)) {
+        foreach ($this->configuration->getLdapOptions() as $key => $ldapOption) {
+            if (!ldap_set_option($this->ds, constant($key), $ldapOption)) {
                 $this->errno = ldap_errno($this->ds);
                 $this->error = sprintf(
                     'Unable to set LDAP option "%s" to "%s" (Error: %s).',
                     $key,
-                    $value,
+                    $ldapOption,
                     ldap_error($this->ds)
                 );
 
@@ -104,11 +104,12 @@ class Ldap
             }
         }
 
-        if ($this->config->get('ldap.ldap_use_dynamic_login')) {
+        if ($this->configuration->get('ldap.ldap_use_dynamic_login')) {
             // Check for dynamic user binding
-            $ldapRdn = $this->config->get('ldap.ldap_dynamic_login_attribute') . '=' . $ldapUser . ',' . $ldapBase;
+            $ldapRdn = $this->configuration->get('ldap.ldap_dynamic_login_attribute') .
+                '=' . $ldapUser . ',' . $ldapBase;
             $ldapBind = $this->bind($ldapRdn, $ldapPassword);
-        } elseif ($this->config->get('ldap.ldap_use_anonymous_login')) {
+        } elseif ($this->configuration->get('ldap.ldap_use_anonymous_login')) {
             // Check for anonymous binding
             $ldapBind = $this->bind();
         } else {
@@ -143,9 +144,8 @@ class Ldap
 
         if ('' === $rdn && '' === $password) {
             return ldap_bind($this->ds);
-        } else {
-            return ldap_bind($this->ds, $rdn, $password);
         }
+        return ldap_bind($this->ds, $rdn, $password);
     }
 
     /**
@@ -183,15 +183,15 @@ class Ldap
 
         $filter = sprintf(
             '(%s=%s)',
-            $this->config->get('ldap.ldap_mapping.username'),
+            $this->configuration->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
 
-        if ($this->config->get('ldap.ldap_use_memberOf')) {
+        if ($this->configuration->get('ldap.ldap_use_memberOf')) {
             $filter = sprintf(
                 '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))',
                 $filter,
-                $this->config->get('ldap.ldap_mapping.memberOf')
+                $this->configuration->get('ldap.ldap_mapping.memberOf')
             );
         }
 
@@ -223,7 +223,7 @@ class Ldap
         }
 
         $entries = ldap_get_entries($this->ds, $searchResult);
-        for ($i = 0; $i < $entries['count']; $i++) {
+        for ($i = 0; $i < $entries['count']; ++$i) {
             if (isset($entries[$i][$fields[0]][0])) {
                 return $entries[$i][$fields[0]][0];
             }
@@ -269,7 +269,7 @@ class Ldap
 
         $filter = sprintf(
             '(%s=%s)',
-            $this->config->get('ldap.ldap_mapping.username'),
+            $this->configuration->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
         $sr = ldap_search($this->ds, $this->base, $filter);

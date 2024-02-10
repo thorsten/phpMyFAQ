@@ -29,28 +29,31 @@ class AttachmentController
 {
     public function list(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
-
-        $attachments = $result = [];
+        $attachments = [];
+        $result = [];
         try {
             $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
         } catch (AttachmentException) {
             $result = [];
         }
+
         foreach ($attachments as $attachment) {
             $result[] = [
                 'filename' => $attachment->getFilename(),
                 'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
             ];
         }
-        if (count($result) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-        $response->setData($result);
 
-        return $response;
+        if ($result === []) {
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

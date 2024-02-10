@@ -96,11 +96,11 @@ class Faq
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
         $this->plurals = new Plurals();
 
-        if ($this->config->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }
@@ -139,11 +139,7 @@ class Faq
 
         $faqData = [];
 
-        if ($orderBy == 'visits') {
-            $currentTable = 'fv';
-        } else {
-            $currentTable = 'fd';
-        }
+        $currentTable = $orderBy == 'visits' ? 'fv' : 'fd';
 
         $now = date('YmdHis');
         $query = sprintf(
@@ -200,35 +196,33 @@ class Faq
             $now,
             $now,
             $categoryId,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
             $currentTable,
-            $this->config->getDb()->escape($orderBy),
-            $this->config->getDb()->escape($sortBy)
+            $this->configuration->getDb()->escape($orderBy),
+            $this->configuration->getDb()->escape($sortBy)
         );
 
-        $result = $this->config->getDb()->query($query);
-        $num = $this->config->getDb()->numRows($result);
+        $result = $this->configuration->getDb()->query($query);
+        $num = $this->configuration->getDb()->numRows($result);
 
         if ($num > 0) {
-            $faqHelper = new FaqHelper($this->config);
-            while (($row = $this->config->getDb()->fetchObject($result))) {
-                if (empty($row->visits)) {
-                    $visits = 0;
-                } else {
-                    $visits = $row->visits;
-                }
+            $faqHelper = new FaqHelper($this->configuration);
+            while (($row = $this->configuration->getDb()->fetchObject($result))) {
+                $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $url = sprintf(
                     '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;
+                $oLink = new Link($url, $this->configuration);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $row->thema;
+                $oLink->tooltip = $row->thema;
 
                 if ($preview) {
                     $faqData[] = [
@@ -314,19 +308,15 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $categoryId,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
-        $result = $this->config->getDb()->query($query);
-        $num = $this->config->getDb()->numRows($result);
+        $result = $this->configuration->getDb()->query($query);
+        $num = $this->configuration->getDb()->numRows($result);
 
         if ($num > 0) {
-            while (($row = $this->config->getDb()->fetchObject($result))) {
-                if (empty($row->visits)) {
-                    $visits = 0;
-                } else {
-                    $visits = $row->visits;
-                }
+            while (($row = $this->configuration->getDb()->fetchObject($result))) {
+                $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $faqData[] = [
                     'id' => $row->id,
@@ -361,13 +351,12 @@ class Faq
                     'AND fdg.group_id IN (%s)',
                     implode(', ', $this->groups)
                 );
-            } else {
-                return sprintf(
-                    'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
-                    $this->user,
-                    implode(', ', $this->groups)
-                );
             }
+            return sprintf(
+                'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
+                $this->user,
+                implode(', ', $this->groups)
+            );
         }
 
         if (-1 !== $this->user) {
@@ -375,9 +364,8 @@ class Faq
                 'AND ( fdu.user_id = %d OR fdu.user_id = -1 )',
                 $this->user
             );
-        } else {
-            return 'AND fdu.user_id = -1';
         }
+        return 'AND fdu.user_id = -1';
     }
 
     /**
@@ -391,26 +379,22 @@ class Faq
     {
         global $sids;
 
-        $numPerPage = $this->config->get('records.numberOfRecordsPerPage');
+        $numPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $output = '';
         $title = '';
 
-        if ($orderBy == 'visits') {
-            $currentTable = 'fv';
-        } else {
-            $currentTable = 'fd';
-        }
+        $currentTable = $orderBy == 'visits' ? 'fv' : 'fd';
 
         // If random FAQs are activated, we don't need an order
-        if (true === $this->config->get('records.randomSort')) {
+        if (true === $this->configuration->get('records.randomSort')) {
             $order = '';
         } else {
             $order = sprintf(
                 'ORDER BY fd.sticky DESC, %s.%s %s',
                 $currentTable,
-                $this->config->getDb()->escape($orderBy),
-                $this->config->getDb()->escape($sortBy)
+                $this->configuration->getDb()->escape($orderBy),
+                $this->configuration->getDb()->escape($sortBy)
             );
         }
 
@@ -467,20 +451,16 @@ class Faq
             $now,
             $now,
             $categoryId,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
             $order
         );
 
-        $result = $this->config->getDb()->query($query);
-        $num = $this->config->getDb()->numRows($result);
+        $result = $this->configuration->getDb()->query($query);
+        $num = $this->configuration->getDb()->numRows($result);
         $pages = (int)ceil($num / $numPerPage);
 
-        if ($page == 1) {
-            $first = 0;
-        } else {
-            $first = $page * $numPerPage - $numPerPage;
-        }
+        $first = $page == 1 ? 0 : $page * $numPerPage - $numPerPage;
 
         if ($num > 0) {
             if ($pages > 1) {
@@ -493,40 +473,40 @@ class Faq
                     Translation::get('msgPages')
                 );
             }
+
             $output .= '<ul class="list-group list-group-flush mb-4">';
 
             $counter = 0;
             $displayedCounter = 0;
             $renderedItems = [];
-            while (($row = $this->config->getDb()->fetchObject($result)) && $displayedCounter < $numPerPage) {
+            while (($row = $this->configuration->getDb()->fetchObject($result)) && $displayedCounter < $numPerPage) {
                 ++$counter;
                 if ($counter <= $first) {
                     continue;
                 }
+
                 ++$displayedCounter;
 
-                if (empty($row->visits)) {
-                    $visits = 0;
-                } else {
-                    $visits = $row->visits;
-                }
+                $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $title = Strings::htmlentities($row->question);
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
 
-                $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $oLink->text = $oLink->tooltip = $title;
+                $oLink = new Link($url, $this->configuration);
+                $oLink->itemTitle = $title;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
                 $oLink->class = 'text-decoration-none';
 
                 // If random FAQs are activated, we don't need sticky FAQs
-                if (true === $this->config->get('records.randomSort')) {
+                if (true === $this->configuration->get('records.randomSort')) {
                     $row->sticky = 0;
                 }
 
@@ -546,7 +526,7 @@ class Faq
             }
 
             // If random FAQs are activated, shuffle the FAQs :-)
-            if (true === $this->config->get('records.randomSort')) {
+            if (true === $this->configuration->get('records.randomSort')) {
                 shuffle($renderedItems);
             }
 
@@ -557,17 +537,17 @@ class Faq
         }
 
         if ($pages > 1) {
-            $link = new Link($this->config->getDefaultUrl(), $this->config);
+            $link = new Link($this->configuration->getDefaultUrl(), $this->configuration);
             $rewriteUrl = sprintf(
                 '%scategory/%d/%%d/%s.html',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 $categoryId,
                 $link->getSEOItemTitle($title)
             );
 
             $baseUrl = sprintf(
                 '%sindex.php?%saction=show&amp;cat=%d&amp;seite=%d',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 (empty($sids) ? '' : $sids),
                 $categoryId,
                 $page
@@ -576,7 +556,7 @@ class Faq
             $options = [
                 'baseUrl' => $baseUrl,
                 'total' => $num,
-                'perPage' => $this->config->get('records.numberOfRecordsPerPage'),
+                'perPage' => $this->configuration->get('records.numberOfRecordsPerPage'),
                 'rewriteUrl' => $rewriteUrl,
                 'pageParamName' => 'seite'
             ];
@@ -656,22 +636,22 @@ class Faq
             $now,
             $now,
             $records,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
-            $this->config->getDb()->escape($orderBy),
-            $this->config->getDb()->escape($sortBy)
+            $this->configuration->getDb()->escape($orderBy),
+            $this->configuration->getDb()->escape($sortBy)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        $num = $this->config->getDb()->numRows($result);
-        $pages = ceil($num / $this->config->get('records.numberOfRecordsPerPage'));
+        $num = $this->configuration->getDb()->numRows($result);
+        $pages = ceil($num / $this->configuration->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $this->config->get('records.numberOfRecordsPerPage')) -
-                $this->config->get('records.numberOfRecordsPerPage');
+            $first = ($page * $this->configuration->get('records.numberOfRecordsPerPage')) -
+                $this->configuration->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -683,41 +663,39 @@ class Faq
                     $pages . Translation::get('msgPages')
                 );
             }
+
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
 
             $lastFaqId = 0;
             while (
-                ($row = $this->config->getDb()->fetchObject($result)) &&
-                $displayedCounter < $this->config->get('records.numberOfRecordsPerPage')
+                ($row = $this->configuration->getDb()->fetchObject($result)) &&
+                $displayedCounter < $this->configuration->get('records.numberOfRecordsPerPage')
             ) {
                 ++$counter;
                 if ($counter <= $first) {
                     continue;
                 }
+
                 ++$displayedCounter;
 
                 if ($lastFaqId == $row->id) {
                     continue; // Don't show multiple FAQs
                 }
 
-                if (empty($row->visits)) {
-                    $visits = 0;
-                } else {
-                    $visits = $row->visits;
-                }
+                $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $title = $row->thema;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
@@ -731,35 +709,39 @@ class Faq
 
                 $lastFaqId = $row->id;
             }
+
             $output .= '</ul><span id="totFaqRecords" style="display: none;">' . $num . '</span>';
         } else {
             return false;
         }
 
-        if ($num > $this->config->get('records.numberOfRecordsPerPage')) {
+        if ($num > $this->configuration->get('records.numberOfRecordsPerPage')) {
             $output .= '<p class="text-center"><strong>';
             if (!isset($page)) {
                 $page = 1;
             }
+
             $vor = $page - 1;
             $next = $page + 1;
             if ($vor != 0) {
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
-                $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
+                $oLink = new Link($this->configuration->getDefaultUrl() . '?' . $url, $this->configuration);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = Translation::get('msgPrevious');
                 $oLink->tooltip = Translation::get('msgPrevious');
                 $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
             }
+
             $output .= ' ';
             if ($next <= $pages) {
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
-                $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
+                $oLink = new Link($this->configuration->getDefaultUrl() . '?' . $url, $this->configuration);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = Translation::get('msgNext');
                 $oLink->tooltip = Translation::get('msgNext');
                 $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
             }
+
             $output .= '</strong></p>';
         }
 
@@ -775,16 +757,16 @@ class Faq
      */
     public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false): void
     {
-        $currentLanguage = $this->config->getLanguage()->getLanguage();
-        $defaultLanguage = $this->config->getDefaultLanguage();
+        $currentLanguage = $this->configuration->getLanguage()->getLanguage();
+        $defaultLanguage = $this->configuration->getDefaultLanguage();
 
         $result = $this->getRecordResult($faqId, $currentLanguage, $faqRevisionId, $isAdmin);
 
-        if (0 === $this->config->getDb()->numRows($result)) {
+        if (0 === $this->configuration->getDb()->numRows($result)) {
             $result = $this->getRecordResult($faqId, $defaultLanguage, $faqRevisionId, $isAdmin);
         }
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
             $question = nl2br((string) $row->thema);
             $answer = $row->content;
             $active = ('yes' === $row->active);
@@ -794,6 +776,7 @@ class Faq
                 if (!$active) {
                     $answer = Translation::get('err_inactiveArticle');
                 }
+
                 if ($expired) {
                     $answer = Translation::get('err_expiredArticle');
                 }
@@ -883,7 +866,7 @@ class Faq
             ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
 
-        return $this->config->getDb()->query($query);
+        return $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -938,29 +921,27 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             implode(',', $faqIds),
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        $faqHelper = new FaqHelper($this->config);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
-            if (empty($row->visits)) {
-                $visits = 0;
-            } else {
-                $visits = $row->visits;
-            }
+        $faqHelper = new FaqHelper($this->configuration);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $visits = empty($row->visits) ? 0 : $row->visits;
 
             $url = sprintf(
                 '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 $row->category_id,
                 $row->id,
                 $row->lang
             );
-            $oLink = new Link($url, $this->config);
-            $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->question;
+            $oLink = new Link($url, $this->configuration);
+            $oLink->itemTitle = $row->question;
+            $oLink->text = $row->question;
+            $oLink->tooltip = $row->question;
 
             $faqRecords[] = [
                 'record_id' => (int)$row->id,
@@ -981,10 +962,10 @@ class Faq
     /**
      * Creates a new FAQ.
      */
-    public function create(FaqEntity $faq): int
+    public function create(FaqEntity $faqEntity): int
     {
-        if (is_null($faq->getId())) {
-            $faq->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'));
+        if (is_null($faqEntity->getId())) {
+            $faqEntity->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'));
         }
 
         $query = sprintf(
@@ -994,28 +975,28 @@ class Faq
             VALUES
             (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $faq->getId(),
-            $this->config->getDb()->escape($faq->getLanguage()),
+            $faqEntity->getId(),
+            $this->configuration->getDb()->escape($faqEntity->getLanguage()),
             $this->getNextSolutionId(),
             0,
-            $faq->isActive() ? 'yes' : 'no',
-            $faq->isSticky() ? 1 : 0,
-            $this->config->getDb()->escape($faq->getKeywords()),
-            $this->config->getDb()->escape($faq->getQuestion()),
-            $this->config->getDb()->escape($faq->getAnswer()),
-            $this->config->getDb()->escape($faq->getAuthor()),
-            $faq->getEmail(),
-            $faq->isComment() ? 'y' : 'n',
-            $faq->getUpdatedDate()->format('YmdHis'),
+            $faqEntity->isActive() ? 'yes' : 'no',
+            $faqEntity->isSticky() ? 1 : 0,
+            $this->configuration->getDb()->escape($faqEntity->getKeywords()),
+            $this->configuration->getDb()->escape($faqEntity->getQuestion()),
+            $this->configuration->getDb()->escape($faqEntity->getAnswer()),
+            $this->configuration->getDb()->escape($faqEntity->getAuthor()),
+            $faqEntity->getEmail(),
+            $faqEntity->isComment() ? 'y' : 'n',
+            $faqEntity->getUpdatedDate()->format('YmdHis'),
             '00000000000000',
             '99991231235959',
             date('Y-m-d H:i:s'),
-            $faq->getNotes()
+            $faqEntity->getNotes()
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
-        return $faq->getId();
+        return $faqEntity->getId();
     }
 
     /**
@@ -1027,22 +1008,20 @@ class Faq
 
         $query = sprintf('SELECT MAX(solution_id) AS solution_id FROM %sfaqdata', Database::getTablePrefix());
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($result && $row = $this->config->getDb()->fetchObject($result)) {
+        if ($result && $row = $this->configuration->getDb()->fetchObject($result)) {
             $latestId = $row->solution_id;
         }
 
         if ($latestId < PMF_SOLUTION_ID_START_VALUE) {
-            $nextSolutionId = PMF_SOLUTION_ID_START_VALUE;
-        } else {
-            $nextSolutionId = $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
+            return PMF_SOLUTION_ID_START_VALUE;
         }
 
-        return $nextSolutionId;
+        return $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
     }
 
-    public function update(FaqEntity $faq): bool
+    public function update(FaqEntity $faqEntity): bool
     {
         $query = sprintf(
             "UPDATE
@@ -1066,24 +1045,24 @@ class Faq
             AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            $faq->getRevisionId(),
-            $faq->isActive() ? 'yes' : 'no',
-            $faq->isSticky() ? 1 : 0,
-            $this->config->getDb()->escape($faq->getKeywords()),
-            $this->config->getDb()->escape($faq->getQuestion()),
-            $this->config->getDb()->escape($faq->getAnswer()),
-            $this->config->getDb()->escape($faq->getAuthor()),
-            $faq->getEmail(),
-            $faq->isComment() ? 'y' : 'n',
-            $faq->getUpdatedDate()->format('YmdHis'),
-            $faq->getValidFrom()->format('YmdHis'),
-            $faq->getValidTo()->format('YmdHis'),
-            $faq->getNotes(),
-            $faq->getId(),
-            $faq->getLanguage()
+            $faqEntity->getRevisionId(),
+            $faqEntity->isActive() ? 'yes' : 'no',
+            $faqEntity->isSticky() ? 1 : 0,
+            $this->configuration->getDb()->escape($faqEntity->getKeywords()),
+            $this->configuration->getDb()->escape($faqEntity->getQuestion()),
+            $this->configuration->getDb()->escape($faqEntity->getAnswer()),
+            $this->configuration->getDb()->escape($faqEntity->getAuthor()),
+            $faqEntity->getEmail(),
+            $faqEntity->isComment() ? 'y' : 'n',
+            $faqEntity->getUpdatedDate()->format('YmdHis'),
+            $faqEntity->getValidFrom()->format('YmdHis'),
+            $faqEntity->getValidTo()->format('YmdHis'),
+            $faqEntity->getNotes(),
+            $faqEntity->getId(),
+            $faqEntity->getLanguage()
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1108,31 +1087,31 @@ class Faq
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $this->config->getDb()->escape($recordLang)
+                $this->configuration->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $this->config->getDb()->escape($recordLang)
+                $this->configuration->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $this->config->getDb()->escape($recordLang)
+                $this->configuration->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $this->config->getDb()->escape($recordLang)
+                $this->configuration->getDb()->escape($recordLang)
             ),
             sprintf(
                 "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
                 Database::getTablePrefix(),
                 $recordId,
-                $this->config->getDb()->escape($recordLang)
+                $this->configuration->getDb()->escape($recordLang)
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_user WHERE record_id = %d',
@@ -1169,20 +1148,20 @@ class Faq
         ];
 
         foreach ($queries as $query) {
-            $this->config->getDb()->query($query);
+            $this->configuration->getDb()->query($query);
         }
 
         // Delete possible attachments
-        $attachments = AttachmentFactory::fetchByRecordId($this->config, $recordId);
+        $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $recordId);
         foreach ($attachments as $attachment) {
             $currentAttachment = AttachmentFactory::create($attachment->getId());
             $currentAttachment->delete();
         }
 
         // Delete possible Elasticsearch documents
-        if ($this->config->get('search.enableElasticsearch')) {
-            $esInstance = new Elasticsearch($this->config);
-            $esInstance->delete($solutionId);
+        if ($this->configuration->get('search.enableElasticsearch')) {
+            $elasticsearch = new Elasticsearch($this->configuration);
+            $elasticsearch->delete($solutionId);
         }
 
         return true;
@@ -1197,12 +1176,12 @@ class Faq
             "SELECT solution_id FROM %sfaqdata WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->config->getDb()->escape($faqLang)
+            $this->configuration->getDb()->escape($faqLang)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
             return $row->solution_id;
         }
 
@@ -1229,26 +1208,17 @@ class Faq
                 lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
-            $this->config->getDb()->escape($recordLang)
+            $this->configuration->getDb()->escape($recordLang)
         );
 
-        $result = $this->config->getDb()->query($query);
-
-        if ($this->config->getDb()->numRows($result)) {
-            return true;
-        }
-
-        return false;
+        $result = $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->numRows($result);
     }
 
     public function isActive(int $recordId, string $recordLang, string $commentType = 'faq'): bool
     {
 
-        if ('news' === $commentType) {
-            $table = 'faqnews';
-        } else {
-            $table = 'faqdata';
-        }
+        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
 
         $query = sprintf(
             "
@@ -1263,12 +1233,12 @@ class Faq
             Database::getTablePrefix(),
             $table,
             $recordId,
-            $this->config->getDb()->escape($recordLang)
+            $this->configuration->getDb()->escape($recordLang)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
             if (($row->active === 'y') || ($row->active === 'yes')) {
                 return false;
             }
@@ -1287,11 +1257,7 @@ class Faq
      */
     public function commentDisabled(int $recordId, string $recordLang, string $commentType = 'faq'): bool
     {
-        if ('news' === $commentType) {
-            $table = 'faqnews';
-        } else {
-            $table = 'faqdata';
-        }
+        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
 
         $query = sprintf(
             "
@@ -1306,16 +1272,15 @@ class Faq
             Database::getTablePrefix(),
             $table,
             $recordId,
-            $this->config->getDb()->escape($recordLang)
+            $this->configuration->getDb()->escape($recordLang)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
-            return !(($row->comment === 'y'));
-        } else {
-            return true;
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+            return $row->comment !== 'y';
         }
+        return true;
     }
 
     /**
@@ -1348,9 +1313,9 @@ class Faq
             $this->queryPermission($this->groupSupport)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
             $question = nl2br((string) $row->thema);
             $content = $row->content;
             $active = ('yes' == $row->active);
@@ -1359,6 +1324,7 @@ class Faq
             if (!$active) {
                 $content = Translation::get('err_inactiveArticle');
             }
+
             if ($expired) {
                 $content = Translation::get('err_expiredArticle');
             }
@@ -1414,9 +1380,9 @@ class Faq
             $solutionId
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
             return [
                 'id' => $row->id,
                 'lang' => $row->lang,
@@ -1452,13 +1418,15 @@ class Faq
                     $where .= ' IN (';
                     $separator = '';
                     foreach ($data as $value) {
-                        $where .= $separator . "'" . $this->config->getDb()->escape($value) . "'";
+                        $where .= $separator . "'" . $this->configuration->getDb()->escape($value) . "'";
                         $separator = ', ';
                     }
+
                     $where .= ')';
                 } else {
-                    $where .= " = '" . $this->config->getDb()->escape($data) . "'";
+                    $where .= " = '" . $this->configuration->getDb()->escape($data) . "'";
                 }
+
                 if ($num > 0) {
                     $where .= ' AND ';
                 }
@@ -1529,9 +1497,9 @@ class Faq
             $orderBy
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $content = $row->content;
             $active = ('yes' == $row->active);
             $expired = (date('YmdHis') > $row->date_end);
@@ -1539,6 +1507,7 @@ class Faq
             if (!$active) {
                 $content = Translation::get('err_inactiveArticle');
             }
+
             if ($expired) {
                 $content = Translation::get('err_expiredArticle');
             }
@@ -1583,12 +1552,12 @@ class Faq
             "SELECT thema AS question FROM %sfaqdata WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $question = Strings::htmlentities($row->question);
             }
         } else {
@@ -1617,18 +1586,17 @@ class Faq
             WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            $row = $this->config->getDb()->fetchObject($result);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            $row = $this->configuration->getDb()->fetchObject($result);
 
             return Strings::htmlspecialchars($row->keywords, ENT_QUOTES, 'utf-8');
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -1657,16 +1625,16 @@ class Faq
                 lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            $row = $this->config->getDb()->fetchObject($result);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            $row = $this->configuration->getDb()->fetchObject($result);
             $answerPreview = strip_tags((string) $row->answer);
         } else {
-            $answerPreview = $this->config->get('main.metaDescription');
+            $answerPreview = $this->configuration->get('main.metaDescription');
         }
 
         return Utils::makeShorterText($answerPreview, $wordCount);
@@ -1696,18 +1664,17 @@ class Faq
             AND
                 date_end >= '%s'",
             Database::getTablePrefix(),
-            null === $language ? '' : "AND lang = '" . $this->config->getDb()->escape($language) . "'",
+            null === $language ? '' : "AND lang = '" . $this->configuration->getDb()->escape($language) . "'",
             $now,
             $now
         );
 
-        $num = $this->config->getDb()->numRows($this->config->getDb()->query($query));
+        $num = $this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
 
         if ($num > 0) {
             return $num;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     /**
@@ -1718,13 +1685,21 @@ class Faq
     public function getTopTen(string $type = 'visits'): array
     {
         if ('visits' === $type) {
-            $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->config->getLanguage()->getLanguage());
+            $result = $this->getTopTenData(
+                PMF_NUMBER_RECORDS_TOPTEN,
+                0,
+                $this->configuration->getLanguage()->getLanguage()
+            );
         } else {
-            $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, $this->config->getLanguage()->getLanguage());
+            $result = $this->getTopVotedData(
+                PMF_NUMBER_RECORDS_TOPTEN,
+                $this->configuration->getLanguage()->getLanguage()
+            );
         }
+
         $output = [];
 
-        if (count($result) > 0) {
+        if ($result !== []) {
             foreach ($result as $row) {
                 if ('visits' == $type) {
                     $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
@@ -1804,13 +1779,15 @@ class Faq
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                fcr.category_id = \'' . $categoryId . '\'';
+                fcr.category_id = \'' . $categoryId . "'";
         }
+
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $this->config->getDb()->escape($language) . '\'';
+                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
         }
+
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
 
@@ -1819,20 +1796,21 @@ class Faq
             ORDER BY
                 fv.visits DESC';
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         $topTen = [];
         $data = [];
 
         if ($result) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user]) || !in_array($row->group_id, $this->groups)) {
-                        continue;
-                    }
-                } else {
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
+                    if (!in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } elseif (!in_array($row->user_id, [-1, $this->user])) {
+                    continue;
                 }
 
                 $data['visits'] = (int)$row->visits;
@@ -1844,13 +1822,13 @@ class Faq
                 $title = $row->question;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->question;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
@@ -1877,8 +1855,8 @@ class Faq
     public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, string $language = null): array
     {
         global $sids;
-
-        $topten = $data = [];
+        $topten = [];
+        $data = [];
 
         $now = date('YmdHis');
         $query =
@@ -1916,23 +1894,25 @@ class Faq
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                fcr.category_id = \'' . $categoryId . '\'';
+                fcr.category_id = \'' . $categoryId . "'";
         }
+
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $this->config->getDb()->escape($language) . '\'';
+                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
         }
+
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
             ORDER BY
                 avg DESC';
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         $i = 1;
         $oldId = 0;
-        while (($row = $this->config->getDb()->fetchObject($result)) && $i <= $count) {
+        while (($row = $this->configuration->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
                 $data['avg'] = $row->avg;
                 $data['question'] = $row->thema;
@@ -1942,13 +1922,13 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
@@ -1956,6 +1936,7 @@ class Faq
                 $topten[] = $data;
                 ++$i;
             }
+
             $oldId = $row->id;
         }
 
@@ -1969,11 +1950,11 @@ class Faq
      */
     public function getLatest(): array
     {
-        $date = new Date($this->config);
-        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->config->getLanguage()->getLanguage());
+        $date = new Date($this->configuration);
+        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->configuration->getLanguage()->getLanguage());
         $output = [];
 
-        if (count($result) > 0) {
+        if ($result !== []) {
             foreach ($result as $row) {
                 $output['url'][] = Strings::htmlentities($row['url']);
                 $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
@@ -2037,8 +2018,9 @@ class Faq
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $this->config->getDb()->escape($language) . '\'';
+                fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
         }
+
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
             GROUP BY
@@ -2046,20 +2028,21 @@ class Faq
             ORDER BY
                 fd.updated DESC';
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         $latest = [];
         $data = [];
 
         if ($result) {
-            while (($row = $this->config->getDb()->fetchObject($result))) {
+            while (($row = $this->configuration->getDb()->fetchObject($result))) {
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, [-1, $this->user]) || !in_array($row->group_id, $this->groups)) {
-                        continue;
-                    }
-                } else {
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
+                    if (!in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } elseif (!in_array($row->user_id, [-1, $this->user])) {
+                    continue;
                 }
 
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
@@ -2070,13 +2053,13 @@ class Faq
                 $title = $row->question;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $title;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
@@ -2105,11 +2088,11 @@ class Faq
         $faqs = [];
 
         $query = $this->getSQLQuery($queryType, $nCatid, $bDownwards, $lang, $date);
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
             $i = 0;
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $faq = [];
                 $faq['id'] = $row->id;
                 $faq['solution_id'] = $row->solution_id;
@@ -2181,33 +2164,38 @@ class Faq
             Database::getTablePrefix()
         );
         // faqvisits data selection
-        if (!empty($faqId)) {
+        if ($faqId !== 0) {
             // Select ONLY the faq with the provided $faqid
             $query .= "fd.id = '" . $faqId . "' AND ";
         }
+
         $query .= 'fd.id = fv.id
             AND
                 fd.lang = fv.lang';
         $needAndOp = true;
-        if ((!empty($categoryId)) && $categoryId > 0) {
+        if (($categoryId !== 0) && $categoryId > 0) {
             $query .= ' AND';
             $query .= ' (fcr.category_id = ' . $categoryId;
             if ($bDownwards) {
                 $query .= $this->getCatidWhereSequence($categoryId, 'OR');
             }
+
             $query .= ')';
             $needAndOp = true;
         }
-        if ((!empty($date)) && Utils::isLikeOnPMFDate($date)) {
+
+        if (($date !== '' && $date !== '0') && Utils::isLikeOnPMFDate($date)) {
             $query .= ' AND';
             $query .= " fd.updated LIKE '" . $date . "'";
             $needAndOp = true;
         }
-        if ((!empty($lang)) && Utils::isLanguage($lang)) {
+
+        if (($lang !== '' && $lang !== '0') && Utils::isLanguage($lang)) {
             $query .= ' AND';
-            $query .= " fd.lang = '" . $this->config->getDb()->escape($lang) . "'";
+            $query .= " fd.lang = '" . $this->configuration->getDb()->escape($lang) . "'";
             $needAndOp = true;
         }
+
         switch ($queryType) {
             case FAQ_QUERY_TYPE_APPROVAL:
                 $query .= ' AND';
@@ -2221,6 +2209,7 @@ class Faq
                 $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
                 break;
         }
+
         match ($queryType) {
             FAQ_QUERY_TYPE_EXPORT_PDF,
             FAQ_QUERY_TYPE_EXPORT_XHTML,
@@ -2235,20 +2224,21 @@ class Faq
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
-     * @param Category|null $oCat
+     * @param Category|null $category
      */
-    private function getCatidWhereSequence(int $nCatid, string $logicOp = 'OR', Category $oCat = null): string
+    private function getCatidWhereSequence(int $nCatid, string $logicOp = 'OR', Category $category = null): string
     {
         $sqlWhereFilter = '';
 
-        if (!isset($oCat)) {
-            $oCat = new Category($this->config);
+        if (!isset($category)) {
+            $category = new Category($this->configuration);
         }
-        $aChildren = array_values($oCat->getChildren($nCatid));
 
-        foreach ($aChildren as $catid) {
-            $sqlWhereFilter .= ' ' . $logicOp . ' fcr.category_id = ' . $catid;
-            $sqlWhereFilter .= $this->getCatidWhereSequence($catid, 'OR', $oCat);
+        $aChildren = array_values($category->getChildren($nCatid));
+
+        foreach ($aChildren as $aChild) {
+            $sqlWhereFilter .= ' ' . $logicOp . ' fcr.category_id = ' . $aChild;
+            $sqlWhereFilter .= $this->getCatidWhereSequence($aChild, 'OR', $category);
         }
 
         return $sqlWhereFilter;
@@ -2318,28 +2308,28 @@ class Faq
             $now,
             $now,
             $categoryId,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
-            $this->config->get('records.orderby'),
-            $this->config->get('records.sortby')
+            $this->configuration->get('records.orderby'),
+            $this->configuration->get('records.sortby')
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
             $output = '<ul>';
-            while (($row = $this->config->getDb()->fetchObject($result))) {
+            while (($row = $this->configuration->getDb()->fetchObject($result))) {
                 $title = $row->thema;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
 
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
@@ -2347,6 +2337,7 @@ class Faq
 
                 $output .= $listItem;
             }
+
             $output .= '</ul>';
         }
 
@@ -2363,17 +2354,17 @@ class Faq
     {
         global $sids, $category;
 
-        $date = new Date($this->config);
-        $mail = new Mail($this->config);
+        $date = new Date($this->configuration);
+        $mail = new Mail($this->configuration);
 
         $query = sprintf(
             "SELECT COUNT(id) AS num FROM %sfaqquestions WHERE lang = '%s' AND is_visible != 'Y'",
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
-        $row = $this->config->getDb()->fetchObject($result);
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
         $numOfInvisibles = $row->num;
 
         if ($numOfInvisibles > 0) {
@@ -2389,14 +2380,14 @@ class Faq
         $query = sprintf(
             "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         $output = '';
 
-        if ($result && $this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($result && $this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf(
                     '<td><small>%s</small><br><a href="mailto:%s">%s</a></td>',
@@ -2411,7 +2402,7 @@ class Faq
                         '',
                     Strings::htmlentities($row->question)
                 );
-                if ($this->config->get('records.enableCloseQuestion') && $row->answer_id) {
+                if ($this->configuration->get('records.enableCloseQuestion') && $row->answer_id) {
                     $output .= sprintf(
                         '<td><a id="PMF_openQuestionAnswered" href="?%saction=faq&amp;cat=%d&amp;id=%d">%s</a></td>',
                         $sids,
@@ -2429,6 +2420,7 @@ class Faq
                         Translation::get('msg2answer')
                     );
                 }
+
                 $output .= '</tr>';
             }
         } else {
@@ -2472,10 +2464,10 @@ class Faq
                 $type,
                 $flag,
                 $faqId,
-                $this->config->getDb()->escape($faqLanguage)
+                $this->configuration->getDb()->escape($faqLanguage)
             );
 
-            return (bool)$this->config->getDb()->query($update);
+            return (bool)$this->configuration->getDb()->query($update);
         }
 
         return false;
@@ -2489,7 +2481,7 @@ class Faq
         $result = $this->getStickyRecordsData();
         $output = [];
 
-        if (count($result) > 0) {
+        if ($result !== []) {
             foreach ($result as $row) {
                 $output['title'][] = Utils::makeShorterText(Strings::htmlentities($row['question']), 8);
                 $output['preview'][] = Strings::htmlentities($row['question']);
@@ -2560,31 +2552,31 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $now,
             $now,
             $this->queryPermission($this->groupSupport)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         $sticky = [];
         $data = [];
 
         $oldId = 0;
-        while (($row = $this->config->getDb()->fetchObject($result))) {
+        while (($row = $this->configuration->getDb()->fetchObject($result))) {
             if ($oldId != $row->id) {
                 $data['question'] = $row->thema;
 
                 $title = $row->thema;
                 $url = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
@@ -2593,11 +2585,13 @@ class Faq
 
                 $sticky[] = $data;
             }
+
             $oldId = $row->id;
         }
+
         // Sort stickyData by order if activated
-        if ($this->config->get('records.orderStickyFaqsCustom') === true) {
-            usort($sticky, array($this, 'sortStickyArrayByOrder'));
+        if ($this->configuration->get('records.orderStickyFaqsCustom') === true) {
+            usort($sticky, $this->sortStickyArrayByOrder(...));
         }
 
         return $sticky;
@@ -2615,21 +2609,22 @@ class Faq
      * Returns true if saving the order of the sticky faqs was successfull.
      *
      * @param array $faqIds Order of record id's
-     * @return bool
      */
     public function setStickyFaqOrder(array $faqIds): bool
     {
         $count = 1;
-        for ($i = 0; $i < count($faqIds); $i++) {
+        $counter = count($faqIds);
+        for ($i = 0; $i < $counter; ++$i) {
             $query = sprintf(
                 "UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d",
                 Database::getTablePrefix(),
                 $count,
                 $faqIds[$i]
             );
-            $this->config->getDb()->query($query);
-            $count++;
+            $this->configuration->getDb()->query($query);
+            ++$count;
         }
+
         return true;
     }
 
@@ -2655,25 +2650,26 @@ class Faq
             ORDER BY
                 fd.id DESC",
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
         $inactive = [];
         $data = [];
 
         $oldId = 0;
-        while (($row = $this->config->getDb()->fetchObject($result))) {
+        while (($row = $this->configuration->getDb()->fetchObject($result))) {
             if ($oldId != $row->id) {
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
                     '%sadmin/?action=editentry&id=%d&lang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $row->id,
                     $row->lang
                 );
                 $inactive[] = $data;
             }
+
             $oldId = $row->id;
         }
 

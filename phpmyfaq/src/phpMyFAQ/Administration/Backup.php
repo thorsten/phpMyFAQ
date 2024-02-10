@@ -32,8 +32,10 @@ class Backup
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config, private readonly DatabaseHelper $databaseHelper)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly DatabaseHelper $databaseHelper
+    ) {
     }
 
     /**
@@ -52,14 +54,14 @@ class Backup
         $query = sprintf(
             "INSERT INTO %sfaqbackup (id, filename, authkey, authcode, created) VALUES (%d, '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqbackup', 'id'),
-            $this->config->getDb()->escape($fileName),
-            $this->config->getDb()->escape(sodium_bin2hex($authKey)),
-            $this->config->getDb()->escape(sodium_bin2hex($authCode)),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqbackup', 'id'),
+            $this->configuration->getDb()->escape($fileName),
+            $this->configuration->getDb()->escape(sodium_bin2hex($authKey)),
+            $this->configuration->getDb()->escape(sodium_bin2hex($authCode)),
             $backupDate
         );
 
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return $fileName;
     }
@@ -72,13 +74,13 @@ class Backup
         $query = sprintf(
             "SELECT id, filename, authkey, authcode, created FROM %sfaqbackup WHERE filename = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($backupFileName),
+            $this->configuration->getDb()->escape($backupFileName),
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            $row = $this->config->getDb()->fetchObject($result);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            $row = $this->configuration->getDb()->fetchObject($result);
 
             return sodium_crypto_auth_verify(
                 sodium_hex2bin((string) $row->authcode),
@@ -113,7 +115,7 @@ class Backup
     private function getBackupHeader(string $tableNames): array
     {
         return [
-            sprintf('-- pmf%s: %s', substr($this->config->getVersion(), 0, 3), $tableNames),
+            sprintf('-- pmf%s: %s', substr((string) $this->configuration->getVersion(), 0, 3), $tableNames),
             '-- DO NOT REMOVE THE FIRST LINE!',
             '-- pmftableprefix: ' . Database::getTablePrefix(),
             '-- DO NOT REMOVE THE LINES ABOVE!',

@@ -60,9 +60,10 @@ class CategoryHelper extends Helper
             for ($j = 0; $j < $cat['indent']; ++$j) {
                 $indent .= '....';
             }
+
             $categories .= sprintf('<option value="%s"', $cat['id']);
 
-            if (0 === $i && count($categoryId) === 0) {
+            if (0 === $i && $categoryId === []) {
                 $categories .= ' selected';
             } else {
                 foreach ($categoryId as $categorised) {
@@ -84,7 +85,7 @@ class CategoryHelper extends Helper
      */
     public function renderStartPageCategories(array $categories): string
     {
-        if (count($categories) === 0) {
+        if ($categories === []) {
             return '';
         }
 
@@ -99,6 +100,7 @@ class CategoryHelper extends Helper
                     $category['image']
                 );
             }
+
             $decks .= '>';
             $decks .= sprintf(
                 '<h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">%s</h3>',
@@ -131,14 +133,13 @@ class CategoryHelper extends Helper
                 '<ul class="pmf-category-overview">%s</ul>',
                 $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
             );
-        } else {
-            $languagesAvailable = $this->Category->getCategoryLanguagesTranslated($parentId);
-            return sprintf(
-                '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
-                Translation::get('msgCategoryMissingButTranslationAvailable'),
-                $this->buildAvailableCategoryTranslationsList($languagesAvailable)
-            );
         }
+        $languagesAvailable = $this->Category->getCategoryLanguagesTranslated($parentId);
+        return sprintf(
+            '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
+            Translation::get('msgCategoryMissingButTranslationAvailable'),
+            $this->buildAvailableCategoryTranslationsList($languagesAvailable)
+        );
     }
 
     /**
@@ -178,7 +179,7 @@ class CategoryHelper extends Helper
                     $link = new Link($url, $this->config);
                     $link->itemTitle = Strings::htmlentities($node['name']);
                     $link->text = Strings::htmlentities($node['name']);
-                    $link->tooltip = !is_null($node['description']) ? Strings::htmlentities($node['description']) : '';
+                    $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
                     $name = $link->toHtmlAnchor();
                 } else {
                     $name = Strings::htmlentities($node['name']);
@@ -198,6 +199,7 @@ class CategoryHelper extends Helper
                 $html .= '</li>';
             }
         }
+
         return $html;
     }
 
@@ -267,9 +269,9 @@ class CategoryHelper extends Helper
 
         $user = new User($this->config);
 
-        foreach ($categories as $_category) {
-            $userId = $this->Category->getOwner($_category);
-            $groupId = $this->Category->getModeratorGroupId($_category);
+        foreach ($categories as $category) {
+            $userId = $this->Category->getOwner($category);
+            $groupId = $this->Category->getModeratorGroupId($category);
 
             $user->getUserById($userId);
             $catOwnerEmail = $user->getUserData('email');
@@ -284,11 +286,14 @@ class CategoryHelper extends Helper
                 foreach ($moderators as $moderator) {
                     $user->getUserById($moderator);
                     $moderatorEmail = $user->getUserData('email');
-
                     // Avoid to send multiple emails to the same moderator
-                    if (!empty($moderatorEmail) && !isset($send[$moderatorEmail])) {
-                        $recipients[] = $moderatorEmail;
+                    if (empty($moderatorEmail)) {
+                        continue;
                     }
+                    if (isset($send[$moderatorEmail])) {
+                        continue;
+                    }
+                    $recipients[] = $moderatorEmail;
                 }
             }
         }
@@ -305,8 +310,12 @@ class CategoryHelper extends Helper
         $availableTranslations = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         $availableLanguages = LanguageHelper::getAvailableLanguages();
 
-        foreach ($availableTranslations as $language) {
-            $options .= sprintf('<option value="%s">%s</option>', $language, $availableLanguages[$language]);
+        foreach ($availableTranslations as $availableTranslation) {
+            $options .= sprintf(
+                '<option value="%s">%s</option>',
+                $availableTranslation,
+                $availableLanguages[$availableTranslation]
+            );
         }
 
         return $options;

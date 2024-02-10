@@ -44,7 +44,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 //
 // Bootstrapping
 //
-require 'src/Bootstrap.php';
+require __DIR__ . '/src/Bootstrap.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
 
@@ -81,6 +81,7 @@ if (Language::isASupportedLanguage($currentLanguage)) {
 } else {
     require PMF_TRANSLATION_DIR . '/language_en.php';
 }
+
 $faqConfig->setLanguage($language);
 
 //
@@ -91,9 +92,9 @@ try {
         ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($currentLanguage);
-} catch (Exception $e) {
+} catch (Exception $exception) {
     $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-    $response->setData(['error' => $e->getMessage()]);
+    $response->setData(['error' => $exception->getMessage()]);
 }
 
 //
@@ -153,17 +154,9 @@ switch ($action) {
         $name = Filter::filterVar($postData['category-name'], FILTER_SANITIZE_SPECIAL_CHARS);
         $description = Filter::filterVar($postData['description'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (isset($postData['user-id'])) {
-            $userId = Filter::filterVar($postData['user-id'], FILTER_VALIDATE_INT);
-        } else {
-            $userId = 1;
-        }
+        $userId = isset($postData['user-id']) ? Filter::filterVar($postData['user-id'], FILTER_VALIDATE_INT) : 1;
 
-        if (isset($postData['group-id'])) {
-            $groupId = Filter::filterVar($postData['group-id'], FILTER_VALIDATE_INT);
-        } else {
-            $groupId = -1;
-        }
+        $groupId = isset($postData['group-id']) ? Filter::filterVar($postData['group-id'], FILTER_VALIDATE_INT) : -1;
 
         $active = Filter::filterVar($postData['is-active'], FILTER_VALIDATE_BOOLEAN);
         $showOnHome = Filter::filterVar($postData['show-on-homepage'], FILTER_VALIDATE_BOOLEAN);
@@ -212,6 +205,7 @@ switch ($action) {
                 'error' => 'Cannot add category'
             ];
         }
+
         $response->setData($result);
         break;
 
@@ -269,6 +263,7 @@ switch ($action) {
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
         }
+
         $response->setData($result);
         break;
 
@@ -299,6 +294,7 @@ switch ($action) {
 
                 $result = $service->getPdfApiLink();
             }
+
             $response->setData($result);
             break;
         }
@@ -322,12 +318,8 @@ switch ($action) {
         $category->setLanguage($currentLanguage);
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
+        $faqId = isset($postData['faq-id']) ? Filter::filterVar($postData['faq-id'], FILTER_VALIDATE_INT) : null;
 
-        if (isset($postData['faq-id'])) {
-            $faqId = Filter::filterVar($postData['faq-id'], FILTER_VALIDATE_INT);
-        } else {
-            $faqId = null;
-        }
         $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
         if (isset($postData['category-name'])) {
@@ -335,6 +327,7 @@ switch ($action) {
         } else {
             $categoryName = null;
         }
+
         $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = Filter::filterVar($postData['answer'], FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($postData['keywords'], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -360,7 +353,7 @@ switch ($action) {
         }
 
         if ($faq->hasTitleAHash($question)) {
-            $response->setStatusCode(400);
+            $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST);
             $result = [
                 'stored' => false,
                 'error' => 'It is not allowed, that the question title contains a hash.'
@@ -444,6 +437,7 @@ switch ($action) {
                 'error' => Translation::get('err_sendMail')
             ];
         }
+
         $response->setData($result);
         break;
 
@@ -464,11 +458,7 @@ switch ($action) {
         $author = Filter::filterVar($postData['author'], FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($postData['email'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if ($faqConfig->get('records.enableVisibilityQuestions')) {
-            $visibility = 'Y';
-        } else {
-            $visibility = 'N';
-        }
+        $visibility = $faqConfig->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
 
         $questionData = [
             'username' => $author,

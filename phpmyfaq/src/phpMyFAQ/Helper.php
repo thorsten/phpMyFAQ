@@ -120,9 +120,9 @@ abstract class Helper
     /**
      * Sets configuration.
      */
-    public function setConfiguration(Configuration $config): Helper
+    public function setConfiguration(Configuration $configuration): Helper
     {
-        $this->config = $config;
+        $this->config = $configuration;
         return $this;
     }
 }

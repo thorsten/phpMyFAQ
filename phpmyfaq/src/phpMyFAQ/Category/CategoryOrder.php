@@ -31,7 +31,7 @@ readonly class CategoryOrder
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private Configuration $configuration)
     {
     }
 
@@ -45,17 +45,14 @@ readonly class CategoryOrder
             Database::getTablePrefix(),
             $categoryId,
             $parentId,
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position')
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position')
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
      * Deletes a given category ID.
-     *
-     * @param int $categoryId
-     * @return bool
      */
     public function remove(int $categoryId): bool
     {
@@ -65,7 +62,7 @@ readonly class CategoryOrder
             $categoryId
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -73,12 +70,10 @@ readonly class CategoryOrder
      *
      * @param stdClass[] $categoryTree
      * @param int|null $parentId
-     * @param int $position
-     * @return void
      */
     public function setCategoryTree(array $categoryTree, int $parentId = null, int $position = 1): void
     {
-        $this->config->getDb()->query(sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix()));
+        $this->configuration->getDb()->query(sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix()));
 
         $insertQueries = [];
         foreach ($categoryTree as $category) {
@@ -96,11 +91,11 @@ readonly class CategoryOrder
                 $this->setCategoryTree($category->children, $id, $position);
             }
 
-            $position++;
+            ++$position;
         }
 
-        foreach ($insertQueries as $query) {
-            $this->config->getDb()->query($query);
+        foreach ($insertQueries as $insertQuery) {
+            $this->configuration->getDb()->query($insertQuery);
         }
     }
 
@@ -108,17 +103,15 @@ readonly class CategoryOrder
      * Returns the category tree.
      *
      * @param stdClass[] $categories
-     * @param int $parentId
-     * @return array
      */
     public function getCategoryTree(array $categories, int $parentId = 0): array
     {
         $result = [];
 
-        foreach ($categories as $item) {
-            if ($item['parent_id'] == $parentId) {
-                $children = $this->getCategoryTree($categories, $item['category_id']);
-                $result[$item['category_id']] = $children;
+        foreach ($categories as $category) {
+            if ($category['parent_id'] == $parentId) {
+                $children = $this->getCategoryTree($categories, $category['category_id']);
+                $result[$category['category_id']] = $children;
             }
         }
 
@@ -129,9 +122,7 @@ readonly class CategoryOrder
      * Returns the parent ID of a given categoryTree.
      *
      * @param stdClass[] $categoryTree
-     * @param int      $categoryId
      * @param int|null $parentId
-     * @return int|null
      */
     public function getParentId(array $categoryTree, int $categoryId, int $parentId = null): ?int
     {
@@ -153,8 +144,6 @@ readonly class CategoryOrder
 
     /**
      * Returns all categories.
-     *
-     * @return array
      */
     public function getAllCategories(): array
     {
@@ -162,11 +151,11 @@ readonly class CategoryOrder
             'SELECT category_id, parent_id, position FROM %sfaqcategory_order ORDER BY position',
             Database::getTablePrefix()
         );
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         $categories = [];
 
-        while ($row = $this->config->getDb()->fetchArray($result)) {
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
             $categories[] = $row;
         }
 

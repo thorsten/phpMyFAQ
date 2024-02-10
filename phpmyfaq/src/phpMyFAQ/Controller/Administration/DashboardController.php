@@ -44,6 +44,7 @@ class DashboardController extends AbstractController
             } else {
                 $info = ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['stable']];
             }
+
             return $this->json($info);
         } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);

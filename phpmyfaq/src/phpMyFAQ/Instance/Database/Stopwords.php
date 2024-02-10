@@ -3332,7 +3332,7 @@ class Stopwords
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -3345,12 +3345,12 @@ class Stopwords
      */
     public function executeInsertQueries($prefix = '')
     {
-        foreach ($this->insertQueries as $stmt) {
-            $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
+        foreach ($this->insertQueries as $insertQuery) {
+            $result = $this->configuration->getDb()->query(sprintf($insertQuery, $prefix));
 
             if (!$result) {
-                echo sprintf($stmt, $prefix);
-                echo $this->config->getDb()->error();
+                echo sprintf($insertQuery, $prefix);
+                echo $this->configuration->getDb()->error();
 
                 return false;
             }

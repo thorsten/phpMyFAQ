@@ -33,7 +33,7 @@ class BookmarkController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $id = Filter::filterVar($request->get('bookmarkId'), FILTER_VALIDATE_INT);
@@ -42,8 +42,8 @@ class BookmarkController extends AbstractController
 
         $bookmark = new Bookmark($faqConfig, $currentUser);
 
-        $response->setData(['success' => $bookmark->remove($id)]);
+        $jsonResponse->setData(['success' => $bookmark->remove($id)]);
 
-        return $response;
+        return $jsonResponse;
     }
 }

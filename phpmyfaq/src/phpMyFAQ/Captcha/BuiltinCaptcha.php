@@ -91,7 +91,7 @@ class BuiltinCaptcha implements CaptchaInterface
     /** @var int[] */
     private array $backgroundColor;
 
-    private GdImage $img;
+    private GdImage $gdImage;
 
     /** @var string */
     private readonly mixed $userAgent;
@@ -105,7 +105,7 @@ class BuiltinCaptcha implements CaptchaInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
         $request = Request::createFromGlobals();
         $this->userAgent = $request->headers->get('user-agent');
@@ -175,12 +175,13 @@ class BuiltinCaptcha implements CaptchaInterface
         $this->drawText();
         if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');
-            imagejpeg($this->img, null, $this->quality);
+            imagejpeg($this->gdImage, null, $this->quality);
         } elseif (function_exists('imagegif')) {
             header('Content-Type: image/gif');
-            imagegif($this->img);
+            imagegif($this->gdImage);
         }
-        imagedestroy($this->img);
+
+        imagedestroy($this->gdImage);
     }
 
     /**
@@ -190,19 +191,19 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function createBackground(): void
     {
-        $this->img = imagecreate($this->width, $this->height);
+        $this->gdImage = imagecreate($this->width, $this->height);
         $this->backgroundColor['r'] = random_int(210, 255);
         $this->backgroundColor['g'] = random_int(220, 255);
         $this->backgroundColor['b'] = random_int(210, 255);
 
         $colorAllocate = imagecolorallocate(
-            $this->img,
+            $this->gdImage,
             $this->backgroundColor['r'],
             $this->backgroundColor['g'],
             $this->backgroundColor['b']
         );
 
-        imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorAllocate);
+        imagefilledrectangle($this->gdImage, 0, 0, $this->width, $this->height, $colorAllocate);
     }
 
     /**
@@ -220,11 +221,13 @@ class BuiltinCaptcha implements CaptchaInterface
 
         for ($x = 0; $x < $this->width; $x += $nextLine) {
             if ($x < $this->width) {
-                imageline($this->img, $x + $w1, 0, $x + $w2, $this->height - 1, random_int($color1, $color2));
+                imageline($this->gdImage, $x + $w1, 0, $x + $w2, $this->height - 1, random_int($color1, $color2));
             }
+
             if ($x < $this->height) {
-                imageline($this->img, 0, $x - $w2, $this->width - 1, $x - $w1, random_int($color1, $color2));
+                imageline($this->gdImage, 0, $x - $w2, $this->width - 1, $x - $w1, random_int($color1, $color2));
             }
+
             if (function_exists('imagettftext')) {
                 $nextLine += random_int(-5, 7);
                 if ($nextLine < 1) {
@@ -233,6 +236,7 @@ class BuiltinCaptcha implements CaptchaInterface
             } else {
                 $nextLine += random_int(1, 7);
             }
+
             $w1 += random_int(-4, 4);
             $w2 += random_int(-4, 4);
         }
@@ -269,6 +273,7 @@ class BuiltinCaptcha implements CaptchaInterface
         for ($i = 1; $i <= $capLength; ++$i) {
             $this->code .= $this->letters[random_int(0, 34)];
         }
+
         if (!$this->saveCaptcha()) {
             return $this->generateCaptchaCode($capLength);
         }
@@ -299,7 +304,7 @@ class BuiltinCaptcha implements CaptchaInterface
             $_SERVER['REQUEST_TIME'] - $time
         );
 
-        $this->config->getDb()->query($delete);
+        $this->configuration->getDb()->query($delete);
 
         $delete = sprintf(
             "
@@ -309,11 +314,11 @@ class BuiltinCaptcha implements CaptchaInterface
                 useragent = '%s' AND language = '%s' AND ip = '%s'",
             Database::getTablePrefix(),
             $this->userAgent,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             $this->ip
         );
 
-        $this->config->getDb()->query($delete);
+        $this->configuration->getDb()->query($delete);
     }
 
     /**
@@ -333,32 +338,29 @@ class BuiltinCaptcha implements CaptchaInterface
             $this->code
         );
 
-        $result = $this->config->getDb()->query($select);
+        $result = $this->configuration->getDb()->query($select);
 
         if ($result) {
-            $num = $this->config->getDb()->numRows($result);
+            $num = $this->configuration->getDb()->numRows($result);
             if ($num > 0) {
                 return false;
-            } else {
-                $insert = sprintf(
-                    "
+            }
+            $insert = sprintf(
+                "
                     INSERT INTO 
                         %sfaqcaptcha 
                     (id, useragent, language, ip, captcha_time) 
                         VALUES 
                     ('%s', '%s', '%s', '%s', %d)",
-                    Database::getTablePrefix(),
-                    $this->code,
-                    $this->userAgent,
-                    $this->config->getLanguage()->getLanguage(),
-                    $this->ip,
-                    $this->timestamp
-                );
-
-                $this->config->getDb()->query($insert);
-
-                return true;
-            }
+                Database::getTablePrefix(),
+                $this->code,
+                $this->userAgent,
+                $this->configuration->getLanguage()->getLanguage(),
+                $this->ip,
+                $this->timestamp
+            );
+            $this->configuration->getDb()->query($insert);
+            return true;
         }
 
         return false;
@@ -386,27 +388,30 @@ class BuiltinCaptcha implements CaptchaInterface
             do {
                 $foreColor['r'] = random_int(30, 199);
             } while ($foreColor['r'] === $this->backgroundColor['r']);
+
             do {
                 $foreColor['g'] = random_int(30, 199);
             } while ($foreColor['g'] === $this->backgroundColor['g']);
+
             do {
                 $foreColor['b'] = random_int(30, 199);
             } while ($foreColor['b'] === $this->backgroundColor['b']);
-            $colorOne = imagecolorallocate($this->img, $foreColor['r'], $foreColor['g'], $foreColor['b']);
+
+            $colorOne = imagecolorallocate($this->gdImage, $foreColor['r'], $foreColor['g'], $foreColor['b']);
 
             // Add the letter
             if (function_exists('imagettftext')) {
-                imagettftext($this->img, $size, $rotation, (int)$x + 2, $y, $colorOne, $this->font, $letter);
-                imagettftext($this->img, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $this->font, $letter);
-                imagettftext($this->img, $size, $rotation, (int)$x, $y + 2, $colorOne, $this->font, $letter);
+                imagettftext($this->gdImage, $size, $rotation, (int)$x + 2, $y, $colorOne, $this->font, $letter);
+                imagettftext($this->gdImage, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $this->font, $letter);
+                imagettftext($this->gdImage, $size, $rotation, (int)$x, $y + 2, $colorOne, $this->font, $letter);
             } else {
                 $size = 5;
-                $c3 = imagecolorallocate($this->img, 0, 0, 255);
+                $c3 = imagecolorallocate($this->gdImage, 0, 0, 255);
                 $x = 20;
                 $y = 12;
                 $s = 30;
-                imagestring($this->img, $size, $x + 1 + ($s * $p), $y + 1, $letter, $c3);
-                imagestring($this->img, $size, $x + ($s * $p), $y, $letter, $colorOne);
+                imagestring($this->gdImage, $size, $x + 1 + ($s * $p), $y + 1, $letter, $c3);
+                imagestring($this->gdImage, $size, $x + ($s * $p), $y, $letter, $colorOne);
             }
         }
     }
@@ -422,11 +427,11 @@ class BuiltinCaptcha implements CaptchaInterface
         if ($this->isUserIsLoggedIn()) {
             return true;
         }
-        if ($this->config->get('spam.enableCaptchaCode')) {
+
+        if ($this->configuration->get('spam.enableCaptchaCode')) {
             return $this->validateCaptchaCode($code);
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**
@@ -459,11 +464,11 @@ class BuiltinCaptcha implements CaptchaInterface
         $query = sprintf(
             "SELECT id FROM %sfaqcaptcha WHERE id = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($captchaCode)
+            $this->configuration->getDb()->escape($captchaCode)
         );
 
-        if ($result = $this->config->getDb()->query($query)) {
-            $num = $this->config->getDb()->numRows($result);
+        if ($result = $this->configuration->getDb()->query($query)) {
+            $num = $this->configuration->getDb()->numRows($result);
             if ($num > 0) {
                 $this->code = $captchaCode;
                 $this->removeCaptcha($captchaCode);
@@ -485,7 +490,8 @@ class BuiltinCaptcha implements CaptchaInterface
         if ($captchaCode == null) {
             $captchaCode = $this->code;
         }
+
         $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", Database::getTablePrefix(), $captchaCode);
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
     }
 }

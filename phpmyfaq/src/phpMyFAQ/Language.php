@@ -42,7 +42,7 @@ class Language
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -74,10 +74,10 @@ class Language
             $where
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $output[] = $row->lang;
             }
         }
@@ -101,27 +101,32 @@ class Language
         if (!is_null($detectedLang['post']) && !self::isASupportedLanguage($detectedLang['post'])) {
             $detectedLang['post'] = null;
         }
+
         // Get the user language
         $detectedLang['get'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!is_null($detectedLang['get']) && !self::isASupportedLanguage($detectedLang['get'])) {
             $detectedLang['get'] = null;
         }
+
         // Get the faq record language
         $detectedLang['artget'] = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!is_null($detectedLang['artget']) && !self::isASupportedLanguage($detectedLang['artget'])) {
             $detectedLang['artget'] = null;
         }
+
         // Get the language from the session
         if (isset($_SESSION['lang']) && self::isASupportedLanguage($_SESSION['lang'])) {
             $detectedLang['session'] = trim((string) $_SESSION['lang']);
         }
+
         // Get the language from the config
         $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
         if (self::isASupportedLanguage($confLangCode)) {
             $detectedLang['config'] = $confLangCode;
         }
+
         // Detect the browser's language
-        if ((true === $configDetection) && self::isASupportedLanguage($this->acceptLanguage)) {
+        if (($configDetection) && self::isASupportedLanguage($this->acceptLanguage)) {
             $detectedLang['detection'] = strtolower($this->acceptLanguage);
         }
 
@@ -196,7 +201,7 @@ class Language
      */
     public static function isASupportedLanguage(?string $langCode): bool
     {
-        return !($langCode === null) && LanguageCodes::getSupported($langCode) !== null;
+        return $langCode !== null && LanguageCodes::getSupported($langCode) !== null;
     }
 
     /**

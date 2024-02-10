@@ -35,16 +35,16 @@ class CommentController extends AbstractController
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-comment', $data->data->{'pmf-csrf-token'})) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->send();
         }
 
-        $comment = new Comments(Configuration::getConfigurationInstance());
+        $comments = new Comments(Configuration::getConfigurationInstance());
         $commentIds = $data->data->{'comments[]'} ?? [];
 
         $result = false;
@@ -52,17 +52,18 @@ class CommentController extends AbstractController
             if (!is_array($commentIds)) {
                 $commentIds = [$commentIds];
             }
+
             foreach ($commentIds as $commentId) {
-                $result = $comment->delete($data->type, $commentId);
+                $result = $comments->delete($data->type, $commentId);
             }
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => $result]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => $result]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => false]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => false]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

@@ -53,6 +53,7 @@ class Category
      * The tree with the tabs.
      */
     public array $treeTab = [];
+
     /**
      * The category tree.
      */
@@ -96,14 +97,17 @@ class Category
     /**
      * Constructor.
      *
-     * @param Configuration $config Configuration object
+     * @param Configuration $configuration Configuration object
      * @param int[] $groups Array with group IDs
      * @param bool $withPerm With or without permission check
      */
-    public function __construct(private readonly Configuration $config, array $groups = [], bool $withPerm = true)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        array $groups = [],
+        bool $withPerm = true
+    ) {
         $this->setGroups($groups);
-        $this->setLanguage($this->config->getLanguage()->getLanguage());
+        $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
         $this->getOrderedCategories($withPerm);
         foreach ($this->categoryName as $id) {
@@ -116,9 +120,10 @@ class Category
      */
     public function setGroups(array $groups): Category
     {
-        if (0 === count($groups)) {
+        if ([] === $groups) {
             $groups = [-1];
         }
+
         $this->groups = $groups;
         return $this;
     }
@@ -165,12 +170,12 @@ class Category
             );
         }
 
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $where .= empty($where) ? '
+        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $where .= $where === '' || $where === '0' ? '
             WHERE' : '
             AND';
             $where .= "
-                fc.lang = '" . $this->config->getDb()->escape($this->language) . "'";
+                fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
         }
 
         $query = sprintf(
@@ -213,10 +218,10 @@ class Category
             $where
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            while ($row = $this->config->getDb()->fetchArray($result)) {
+            while ($row = $this->configuration->getDb()->fetchArray($result)) {
                 $this->categoryName[(int)$row['id']] = $row;
                 $this->categories[(int)$row['id']] = $row;
                 $this->children[(int)$row['parent_id']][(int)$row['id']] = &$this->categoryName[(int)$row['id']];
@@ -285,12 +290,13 @@ class Category
                 %sfaqcategories',
             Database::getTablePrefix()
         );
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " WHERE lang = '" . $this->config->getDb()->escape($this->language) . "'";
+        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
         }
-        $result = $this->config->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchArray($result)) {
+        $result = $this->configuration->getDb()->query($query);
+
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
             $categories[(int)$row['id']] = [
                 'id' => (int)$row['id'],
                 'lang' => $row['lang'],
@@ -319,8 +325,8 @@ class Category
         $categories = [];
         $where = '';
 
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $where = "AND fc.lang = '" . $this->config->getDb()->escape($this->language) . "'";
+        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $where = "AND fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
         }
 
         $query = sprintf(
@@ -365,7 +371,7 @@ class Category
                 fc.show_home, fco.position
             ORDER BY
                 fco.position, fc.id ASC
-                
+
                 ',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
@@ -377,17 +383,13 @@ class Category
             $where
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchArray($result)) {
-            $url = sprintf('%sindex.php?action=show&cat=%d', $this->config->getDefaultUrl(), $row['id']);
-            $link = new Link($url, $this->config);
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+            $url = sprintf('%sindex.php?action=show&cat=%d', $this->configuration->getDefaultUrl(), $row['id']);
+            $link = new Link($url, $this->configuration);
             $link->itemTitle = $row['name'];
-            if ('' === $row['image']) {
-                $image = '';
-            } else {
-                $image = 'content/user/images/' . $row['image'];
-            }
+            $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
 
             $category = [
                 'url' => Strings::htmlentities($link->toString()),
@@ -411,13 +413,13 @@ class Category
 
         $query = sprintf('SELECT id FROM %sfaqcategories', Database::getTablePrefix());
 
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= sprintf(" WHERE lang = '%s'", $this->language);
         }
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchArray($result)) {
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
             $categories[] = (int)$row['id'];
         }
 
@@ -436,9 +438,16 @@ class Category
         $x = 0;
 
         foreach ($this->categories as $categoryId => $n) {
-            if (isset($n['parent_id']) && $n['parent_id'] == $parentId && $categoryId > 0) {
-                $tt[$x++] = $categoryId;
+            if (!isset($n['parent_id'])) {
+                continue;
             }
+            if ($n['parent_id'] != $parentId) {
+                continue;
+            }
+            if ($categoryId <= 0) {
+                continue;
+            }
+            $tt[$x++] = $categoryId;
         }
 
         if ($x != 0) {
@@ -448,6 +457,7 @@ class Category
                     foreach ($this->categories[$d] as $key => $value) {
                         $tmp[$key] = $value;
                     }
+
                     $tmp['indent'] = $indent;
                     $this->catTree[] = $tmp;
                     $this->buildCategoryTree($tmp['id'], $indent + 1);
@@ -458,10 +468,6 @@ class Category
 
     /**
      * Creates the category tree for the admin category overview.
-     *
-     * @param array $categories
-     * @param int   $parentId
-     * @return array
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {
@@ -470,14 +476,8 @@ class Category
         foreach ($categories as $category) {
             if ($category['parent_id'] == $parentId) {
                 $id = $category['id'];
-
                 $children = $this->buildAdminCategoryTree($categories, $category['id']);
-
-                if (!empty($children)) {
-                    $result[$id] = $children;
-                } else {
-                    $result[$id] = [];
-                }
+                $result[$id] = [];
             }
         }
 
@@ -493,12 +493,14 @@ class Category
      */
     public function transform(int $id): void
     {
-        $parentId = $showHome = 0;
+        $parentId = 0;
+        $showHome = 0;
         $tree = [];
         $tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
         $num = count($tabs);
         $symbol = 'minus';
-        $name = $description = '';
+        $name = '';
+        $description = '';
         $active = true;
         $image = '';
 
@@ -526,6 +528,7 @@ class Category
                 if (0 === (int)$ascendants[$i]) {
                     break;
                 }
+
                 $brothers = $this->getBrothers($ascendants[$i]);
                 $tree[$i] = ($ascendants[$i] == $brothers[count($brothers) - 1]) ? 'space' : 'vertical';
             }
@@ -548,8 +551,8 @@ class Category
             ];
         }
 
-        foreach ($tabs as $i) {
-            $this->transform($i);
+        foreach ($tabs as $tab) {
+            $this->transform($tab);
         }
     }
 
@@ -684,19 +687,19 @@ class Category
      */
     public function getCategoryData(int $categoryId): CategoryEntity
     {
-        $entity = new CategoryEntity();
+        $categoryEntity = new CategoryEntity();
 
         $query = sprintf(
             "SELECT * FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $categoryId,
-            $this->config->getDb()->escape($this->language)
+            $this->configuration->getDb()->escape($this->language)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($row = $this->config->getDb()->fetchObject($result)) {
-            $entity
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $categoryEntity
                 ->setId($row->id)
                 ->setLang($row->lang)
                 ->setParentId($row->parent_id)
@@ -709,7 +712,7 @@ class Category
                 ->setImage($row->image);
         }
 
-        return $entity;
+        return $categoryEntity;
     }
 
     /**
@@ -731,8 +734,10 @@ class Category
         $ids = $this->getNodes($id);
 
         $num = count($ids);
-
-        $tempName = $categoryId = $description = $breadcrumb = [];
+        $tempName = [];
+        $categoryId = [];
+        $description = [];
+        $breadcrumb = [];
 
         for ($i = 0; $i < $num; ++$i) {
             $t = $this->getLineCategory($ids[$i]);
@@ -742,6 +747,7 @@ class Category
                 $description[] = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
             }
         }
+
         if (isset($this->treeTab[$this->getLineCategory($id)]['name'])) {
             $tempName[] = $this->treeTab[$this->getLineCategory($id)]['name'];
             $categoryId[] = $this->treeTab[$this->getLineCategory($id)]['id'];
@@ -753,11 +759,11 @@ class Category
             foreach ($tempName as $key => $category) {
                 $url = sprintf(
                     '%sindex.php?%saction=show&amp;cat=%d',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $sids,
                     $categoryId[$key]
                 );
-                $oLink = new Link($url, $this->config);
+                $oLink = new Link($url, $this->configuration);
                 $oLink->text = Strings::htmlentities($category);
                 $oLink->itemTitle = Strings::htmlentities($category);
                 $oLink->tooltip = Strings::htmlentities($description[$key] ?? '');
@@ -778,9 +784,8 @@ class Category
                 $useCssClass,
                 implode('', $tempName)
             );
-        } else {
-            return implode($separator, $tempName);
         }
+        return implode($separator, $tempName);
     }
 
     /**
@@ -791,11 +796,7 @@ class Category
     public function getCategoryIdFromFaq(int $faqId): int
     {
         $cats = $this->getCategoryIdsFromFaq($faqId);
-        if (isset($cats[0])) {
-            return $cats[0];
-        } else {
-            return 0;
-        }
+        return $cats[0] ?? 0;
     }
 
     /**
@@ -821,12 +822,12 @@ class Category
         $query = sprintf(
             "SELECT id FROM %sfaqcategories WHERE name = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($categoryName)
+            $this->configuration->getDb()->escape($categoryName)
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            return (int) $this->config->getDb()->fetchRow($result);
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            return (int) $this->configuration->getDb()->fetchRow($result);
         }
 
         return false;
@@ -864,16 +865,16 @@ class Category
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            $this->config->getDb()->escape($this->language),
-            $this->config->getDb()->escape($this->language)
+            $this->configuration->getDb()->escape($this->language),
+            $this->configuration->getDb()->escape($this->language)
         );
 
-        $result = $this->config->getDb()->query($query);
-        $num = $this->config->getDb()->numRows($result);
+        $result = $this->configuration->getDb()->query($query);
+        $num = $this->configuration->getDb()->numRows($result);
         $this->categories = [];
         if ($num > 0) {
-            while ($row = $this->config->getDb()->fetchArray($result)) {
-                $this->categories[intval($row['id'])] = $row;
+            while ($row = $this->configuration->getDb()->fetchArray($result)) {
+                $this->categories[(int) $row['id']] = $row;
             }
         }
 
@@ -923,7 +924,7 @@ class Category
     {
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
-            $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+            $id = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         }
 
         $query = sprintf(
@@ -935,17 +936,17 @@ class Category
             (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             Database::getTablePrefix(),
             $id,
-            $this->config->getDb()->escape($categoryData['lang']),
+            $this->configuration->getDb()->escape($categoryData['lang']),
             $parentId,
-            $this->config->getDb()->escape($categoryData['name']),
-            $this->config->getDb()->escape($categoryData['description']),
+            $this->configuration->getDb()->escape($categoryData['name']),
+            $this->configuration->getDb()->escape($categoryData['description']),
             $categoryData['user_id'],
             $categoryData['group_id'],
             $categoryData['active'],
-            $this->config->getDb()->escape($categoryData['image'] ?? ''),
+            $this->configuration->getDb()->escape($categoryData['image'] ?? ''),
             $categoryData['show_home']
         );
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return $id;
     }
@@ -953,9 +954,9 @@ class Category
     /**
      * Creates a new category
      */
-    public function create(CategoryEntity $categoryData): ?int
+    public function create(CategoryEntity $categoryEntity): ?int
     {
-        $categoryId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
 
         $query = sprintf(
             "
@@ -966,17 +967,17 @@ class Category
             (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             Database::getTablePrefix(),
             $categoryId,
-            $this->config->getDb()->escape($categoryData->getLang()),
-            $categoryData->getParentId(),
-            $this->config->getDb()->escape($categoryData->getName()),
-            $this->config->getDb()->escape($categoryData->getDescription()),
-            $categoryData->getUserId(),
-            $categoryData->getGroupId(),
-            $categoryData->getActive(),
-            $this->config->getDb()->escape($categoryData->getImage()),
-            $categoryData->getShowHome()
+            $this->configuration->getDb()->escape($categoryEntity->getLang()),
+            $categoryEntity->getParentId(),
+            $this->configuration->getDb()->escape($categoryEntity->getName()),
+            $this->configuration->getDb()->escape($categoryEntity->getDescription()),
+            $categoryEntity->getUserId(),
+            $categoryEntity->getGroupId(),
+            $categoryEntity->getActive(),
+            $this->configuration->getDb()->escape($categoryEntity->getImage()),
+            $categoryEntity->getShowHome()
         );
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return $categoryId;
     }
@@ -991,13 +992,13 @@ class Category
         $query = sprintf(
             "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($categoryData['name']),
-            $this->config->getDb()->escape($categoryData['lang'])
+            $this->configuration->getDb()->escape($categoryData['name']),
+            $this->configuration->getDb()->escape($categoryData['lang'])
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        return $this->config->getDb()->numRows($result);
+        return $this->configuration->getDb()->numRows($result);
     }
 
     /**
@@ -1024,18 +1025,18 @@ class Category
             AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($categoryData['name']),
-            $this->config->getDb()->escape($categoryData['description']),
+            $this->configuration->getDb()->escape($categoryData['name']),
+            $this->configuration->getDb()->escape($categoryData['description']),
             $categoryData['user_id'],
             $categoryData['group_id'],
             $categoryData['active'],
             $categoryData['show_home'],
-            $this->config->getDb()->escape($categoryData['image']),
+            $this->configuration->getDb()->escape($categoryData['image']),
             $categoryData['id'],
-            $this->config->getDb()->escape($categoryData['lang'])
+            $this->configuration->getDb()->escape($categoryData['lang'])
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1053,7 +1054,7 @@ class Category
             $from
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1068,12 +1069,12 @@ class Category
             "SELECT lang FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $categoryId,
-            $this->config->getDb()->escape($categoryLanguage)
+            $this->configuration->getDb()->escape($categoryLanguage)
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        return $this->config->getDb()->numRows($result) > 0;
+        return $this->configuration->getDb()->numRows($result) > 0;
     }
 
     /**
@@ -1095,7 +1096,7 @@ class Category
             $categoryId
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1107,10 +1108,10 @@ class Category
             "DELETE FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $categoryId,
-            $this->config->getDb()->escape($categoryLang)
+            $this->configuration->getDb()->escape($categoryLang)
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1120,23 +1121,27 @@ class Category
      */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
-        $existingCategoryLanguages = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $existingCategoryLanguages = $this->configuration->getLanguage()->isLanguageAvailable(
+            $categoryId,
+            'faqcategories'
+        );
         $translated = [];
 
-        foreach ($existingCategoryLanguages as $language) {
+        foreach ($existingCategoryLanguages as $existingCategoryLanguage) {
             $query = sprintf(
                 "SELECT name, description FROM %sfaqcategories WHERE %s lang = '%s'",
                 Database::getTablePrefix(),
                 $categoryId === 0 ? '' : 'id = ' . $categoryId . ' AND ',
-                $this->config->getDb()->escape($language)
+                $this->configuration->getDb()->escape($existingCategoryLanguage)
             );
 
-            $result = $this->config->getDb()->query($query);
-            if ($row = $this->config->getDb()->fetchArray($result)) {
-                $translated[$language] =
+            $result = $this->configuration->getDb()->query($query);
+            if ($row = $this->configuration->getDb()->fetchArray($result)) {
+                $translated[$existingCategoryLanguage] =
                     $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
             }
         }
+
         ksort($translated);
 
         return $translated;
@@ -1151,7 +1156,10 @@ class Category
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
     {
         $output = '';
-        $existingCategoryLanguage = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $existingCategoryLanguage = $this->configuration->getLanguage()->isLanguageAvailable(
+            $categoryId,
+            'faqcategories'
+        );
 
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
             if (!in_array(strtolower((string) $lang), $existingCategoryLanguage)) {
@@ -1159,6 +1167,7 @@ class Category
                 if ($lang == $selectedLanguage) {
                     $output .= ' selected="selected"';
                 }
+
                 $output .= '>' . $langname . "</option>\n";
             }
         }
@@ -1176,13 +1185,14 @@ class Category
             'SELECT id, lang, parent_id, name, description, user_id FROM %sfaqcategories',
             Database::getTablePrefix()
         );
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang != '" . $this->language . "'";
         }
+
         $query .= ' ORDER BY id';
 
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchArray($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
             if (!array_key_exists($row['id'], $this->categoryName)) {
                 $this->categoryName[$row['id']] = $row;
                 $this->categories[$row['id']] = $row;

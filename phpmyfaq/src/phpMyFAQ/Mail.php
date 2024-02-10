@@ -171,7 +171,7 @@ class Mail
      */
     private mixed $to = [];
 
-    private readonly Configuration $config;
+    private readonly Configuration $configuration;
 
     /*
      * Default constructor.
@@ -180,20 +180,20 @@ class Mail
      *
      * @param Configuration $config
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
         // Set default value for public properties
-        $this->agent = $config->get('mail.remoteSMTP') ? 'SMTP' : 'built-in';
+        $this->agent = $configuration->get('mail.remoteSMTP') ? 'SMTP' : 'built-in';
         $this->boundary = self::createBoundary();
         $this->messageId = '<' . $_SERVER['REQUEST_TIME'] . '.' . md5(microtime()) . '@' . self::getServerName() . '>';
 
         // Set default value for private properties
-        $this->config = $config;
+        $this->configuration = $configuration;
 
         // Set phpMyFAQ related data
-        $this->mailer = 'phpMyFAQ/' . $this->config->getVersion();
+        $this->mailer = 'phpMyFAQ/' . $this->configuration->getVersion();
         try {
-            $this->setFrom($this->config->getAdminEmail(), $this->config->getTitle());
+            $this->setFrom($this->configuration->getAdminEmail(), $this->configuration->getTitle());
         } catch (Exception) {
             // @todo handle exception
         }
@@ -257,8 +257,8 @@ class Mail
         if (count($target) > 2) {
             $keys = array_keys($target);
             trigger_error(
-                "<strong>Mail Class</strong>: a valid e-mail address, $keys[0], " .
-                "has been already added as '$targetAlias'!",
+                sprintf('<strong>Mail Class</strong>: a valid e-mail address, %s, ', $keys[0]) .
+                sprintf('has been already added as \'%s\'!', $targetAlias),
                 E_USER_ERROR
             );
         }
@@ -304,12 +304,14 @@ class Mail
 
         // Add the email address into the target array
         $target[$address] = $name;
-
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
-        if (('WIN' === strtoupper(substr(PHP_OS, 0, 3))) && ('built-in' == $this->agent)) {
-            $target[$address] = null;
+        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) {
+            return true;
         }
-
+        if ('built-in' != $this->agent) {
+            return true;
+        }
+        $target[$address] = null;
         return true;
     }
 
@@ -322,7 +324,7 @@ class Mail
      */
     public static function validateEmail(string $address): bool
     {
-        if (empty($address)) {
+        if ($address === '' || $address === '0') {
             return false;
         }
 
@@ -330,12 +332,7 @@ class Mail
         if ($address !== str_replace($unsafe, '', $address)) {
             return false;
         }
-
-        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-            return false;
-        }
-
-        return true;
+        return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -358,11 +355,12 @@ class Mail
         if (!file_exists($path)) {
             // File isn't found
             return false;
-        } elseif (('inline' == $disposition) && empty($cid)) {
+        }
+        if (('inline' == $disposition) && ($cid === '' || $cid === '0')) {
             // Content ID is required
             return false;
         } else {
-            if (empty($name)) {
+            if ($name === null || $name === '' || $name === '0') {
                 $name = basename($path);
             }
 
@@ -419,7 +417,7 @@ class Mail
         }
 
         // Has any alternative message been provided?
-        if (!empty($this->messageAlt)) {
+        if ($this->messageAlt !== '' && $this->messageAlt !== '0') {
             $this->contentType = 'multipart/alternative';
         }
 
@@ -448,9 +446,10 @@ class Mail
         foreach ($this->to as $address => $name) {
             $to[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
+
         $recipients = implode(',', $to);
         // Check for the need of undisclosed recipients outlook-like <TO:>
-        if (empty($recipients) && (0 == count($this->cc))) {
+        if (($recipients === '' || $recipients === '0') && (0 == count($this->cc))) {
             $recipients = '<Undisclosed-Recipient:;>';
         }
 
@@ -465,11 +464,11 @@ class Mail
 
         if (method_exists($mua, 'setAuthConfig')) {
             $mua->setAuthConfig(
-                $this->config->get('mail.remoteSMTPServer'),
-                $this->config->get('mail.remoteSMTPUsername'),
-                $this->config->get('mail.remoteSMTPPassword'),
-                $this->config->get('mail.remoteSMTPPort'),
-                $this->config->get('mail.remoteSMTPDisableTLSPeerVerification')
+                $this->configuration->get('mail.remoteSMTPServer'),
+                $this->configuration->get('mail.remoteSMTPUsername'),
+                $this->configuration->get('mail.remoteSMTPPassword'),
+                $this->configuration->get('mail.remoteSMTPPort'),
+                $this->configuration->get('mail.remoteSMTPDisableTLSPeerVerification')
             );
         }
 
@@ -508,8 +507,9 @@ class Mail
         foreach ($this->notifyTo as $address => $name) {
             $notifyTos[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
+
         $notifyTo = implode(',', $notifyTos);
-        if (!empty($notifyTo)) {
+        if ($notifyTo !== '' && $notifyTo !== '0') {
             $this->headers['Disposition-Notification-To'] = $notifyTo;
         }
 
@@ -544,6 +544,7 @@ class Mail
         foreach ($this->from as $address => $name) {
             $this->headers['Return-Path'] = '<' . $address . '>';
         }
+
         foreach ($this->returnPath as $address => $name) {
             $this->headers['Return-Path'] = '<' . $address . '>';
         }
@@ -558,7 +559,7 @@ class Mail
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
         $this->headers['Subject'] = Utils::resolveMarkers(
             html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8'),
-            $this->config
+            $this->configuration
         );
 
         // X-Mailer
@@ -599,11 +600,7 @@ class Mail
      */
     public static function getTime(): int
     {
-        if (isset($_SERVER['REQUEST_TIME'])) {
-            return $_SERVER['REQUEST_TIME'];
-        }
-
-        return time();
+        return $_SERVER['REQUEST_TIME'] ?? time();
     }
 
     /**
@@ -637,15 +634,16 @@ class Mail
 
         if (str_contains($this->contentType, 'multipart')) {
             // At least we have messageAlt and message
-            if (!empty($this->messageAlt)) {
+            if ($this->messageAlt !== '' && $this->messageAlt !== '0') {
                 // 1/2. messageAlt, supposed as plain text
                 $lines[] = '--' . $this->boundary;
                 $lines[] = 'Content-Type: text/plain; charset="' . $this->charset . '"';
                 $lines[] = 'Content-Transfer-Encoding: ' . $this->contentTransferEncoding;
                 $lines[] = '';
-                $lines[] = self::wrapLines(Utils::resolveMarkers($this->messageAlt, $this->config));
+                $lines[] = self::wrapLines(Utils::resolveMarkers($this->messageAlt, $this->configuration));
                 $lines[] = '';
             }
+
             // 2/2. message, supposed as, potentially, HTML
             $lines[] = '--' . $this->boundary;
             $lines[] = 'Content-Type: text/html; charset="' . $this->charset . '"';
@@ -674,11 +672,13 @@ class Mail
                 if ('inline' == $attachment['disposition']) {
                     $lines[] = 'Content-ID: <' . $attachment['cid'] . '>';
                 }
+
                 $lines[] =
                     'Content-Disposition: ' . $attachment['disposition'] . '; filename="' . $attachment['name'] . '"';
                 $lines[] = '';
                 $lines[] = chunk_split(base64_encode(file_get_contents($attachment['path'])));
             }
+
             // Close the boundary delimiter
             $lines[] = '--' . $this->boundary . '--';
         }
@@ -704,9 +704,9 @@ class Mail
 
         $lines = explode($this->eol, $message);
         $wrapped = '';
-        foreach ($lines as $value) {
-            $wrapped .= (empty($wrapped) ? '' : $this->eol);
-            $wrapped .= wordwrap($value, $width, $this->eol, $cut);
+        foreach ($lines as $line) {
+            $wrapped .= ($wrapped === '' || $wrapped === '0' ? '' : $this->eol);
+            $wrapped .= wordwrap($line, $width, $this->eol, $cut);
         }
 
         return $wrapped;
@@ -782,10 +782,9 @@ class Mail
      */
     public function safeEmail(string $email): string
     {
-        if ($this->config->get('spam.enableSafeEmail')) {
+        if ($this->configuration->get('spam.enableSafeEmail')) {
             return str_replace(['@', '.'], ['_AT_', '_DOT_'], $email);
-        } else {
-            return $email;
         }
+        return $email;
     }
 }

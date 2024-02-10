@@ -41,35 +41,53 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
 class User
 {
     final public const ERROR_USER_ADD = 'Account could not be created. ';
+
     final public const ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
+
     final public const ERROR_USER_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
+
     final public const ERROR_USER_CANNOT_DELETE_USER = 'User account could not be deleted. ';
+
     final public const ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
+
     final public const ERROR_USER_CHANGE = 'Account could not be updated. ';
+
     final public const ERROR_USER_DELETE = 'Account could not be deleted. ';
+
     final public const ERROR_USER_INCORRECT_LOGIN = 'The login name could not be found. ';
+
     final public const ERROR_USER_INCORRECT_PASSWORD = 'The password is not correct.';
+
     final public const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
+
     final public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen login name is too short.';
+
     final public const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
+
     final public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
         'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+
     final public const ERROR_USER_NO_PERM = 'No permission container specified.';
+
     final public const ERROR_USER_NO_USERID = 'No user-ID found. ';
+
     final public const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
+
     final public const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
+
     final public const ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
+
     final public const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and ' .
         'are temporarily blocked. Please try again later.';
 
     final public const STATUS_USER_PROTECTED = 'User account is protected. ';
+
     final public const STATUS_USER_BLOCKED = 'User account is blocked. ';
+
     final public const STATUS_USER_ACTIVE = 'User account is active. ';
 
     /**
      * Permission container.
-     *
-     * @var Permission
      */
     public Permission $perm;
 
@@ -156,16 +174,16 @@ class User
      *
      * @throws Core\Exception
      */
-    public function __construct(protected ?Configuration $config)
+    public function __construct(protected ?Configuration $configuration)
     {
-        $perm = Permission::selectPerm($this->config->get('security.permLevel'), $this->config);
-        if (!$this->addPerm($perm)) {
+        $permission = Permission::selectPerm($this->configuration->get('security.permLevel'), $this->configuration);
+        if (!$this->addPerm($permission)) {
             return;
         }
 
         // Always create a 'local' authentication object (see: $authData)
         $this->authContainer = [];
-        $auth = new Auth($this->config);
+        $auth = new Auth($this->configuration);
 
         $selectedAuth = $auth->selectAuth($this->getAuthSource('name'));
         $selectedAuth->selectEncType($this->getAuthData('encType'));
@@ -184,17 +202,17 @@ class User
         }
 
         // user data object
-        $this->userdata = new UserData($this->config);
+        $this->userdata = new UserData($this->configuration);
     }
 
     /**
      * Adds a permission object to the user.
      *
-     * @param Permission $perm Permission object
+     * @param Permission $permission Permission object
      */
-    public function addPerm(Permission $perm): bool
+    public function addPerm(Permission $permission): bool
     {
-        $this->perm = $perm;
+        $this->perm = $permission;
         return true;
     }
 
@@ -222,13 +240,13 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param AuthDriverInterface $auth Driver object
+     * @param AuthDriverInterface $authDriver Driver object
      * @param string                                                          $name Auth name
      */
-    public function addAuth(AuthDriverInterface $auth, string $name): bool
+    public function addAuth(AuthDriverInterface $authDriver, string $name): bool
     {
-        if ($this->checkAuth($auth)) {
-            $this->authContainer[$name] = $auth;
+        if ($this->checkAuth($authDriver)) {
+            $this->authContainer[$name] = $authDriver;
 
             return true;
         }
@@ -270,16 +288,17 @@ class User
             WHERE
                 remember_me = '%s' AND account_status != 'blocked'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($cookie)
+            $this->configuration->getDb()->escape($cookie)
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) !== 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
 
             return false;
         }
-        $user = $this->config->getDb()->fetchArray($res);
+
+        $user = $this->configuration->getDb()->fetchArray($res);
 
         // Don't ever log in via anonymous user
         if (-1 === $user['user_id']) {
@@ -292,8 +311,9 @@ class User
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
+
         $this->userdata->load($this->getUserId());
 
         return true;
@@ -320,14 +340,10 @@ class User
     public function checkDisplayName(string $name): bool
     {
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
 
-        if ($name === $this->userdata->fetch('display_name', $name)) {
-            return true;
-        } else {
-            return false;
-        }
+        return $name === $this->userdata->fetch('display_name', $name);
     }
 
     /**
@@ -336,14 +352,10 @@ class User
     public function checkMailAddress(string $name): bool
     {
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
 
-        if ($name === $this->userdata->fetch('email', $name)) {
-            return true;
-        } else {
-            return false;
-        }
+        return $name === $this->userdata->fetch('email', $name);
     }
 
     /**
@@ -365,16 +377,16 @@ class User
             WHERE 
                 login LIKE '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($search . '%')
+            $this->configuration->getDb()->escape($search . '%')
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         if (!$res) {
             return [];
         }
 
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = $row;
         }
 
@@ -411,7 +423,7 @@ class User
 
         // set user-ID
         if (0 == $userId) {
-            $this->userId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
+            $this->userId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
@@ -421,15 +433,16 @@ class User
             "INSERT INTO %sfaquser (user_id, login, session_timestamp, member_since) VALUES (%d, '%s', %d, '%s')",
             Database::getTablePrefix(),
             $this->getUserId(),
-            $this->config->getDb()->escape($login),
+            $this->configuration->getDb()->escape($login),
             $_SERVER['REQUEST_TIME'],
             date('YmdHis', $_SERVER['REQUEST_TIME'])
         );
 
-        $this->config->getDb()->query($insert);
+        $this->configuration->getDb()->query($insert);
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
+
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USERDATA;
@@ -438,21 +451,24 @@ class User
         }
 
         // create authentication entry
-        if (strlen($pass) === 0) {
+        if ($pass === '') {
             $pass = $this->createPassword();
         }
+
         $success = false;
 
         foreach ($this->authContainer as $name => $auth) {
             if ($auth->setReadOnly()) {
                 continue;
             }
+
             if (!$auth->create($login, $pass, $domain)) {
                 $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
             } else {
                 $success = true;
             }
         }
+
         if (!$success) {
             return false;
         }
@@ -506,11 +522,11 @@ class User
             WHERE
                 login = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($login)
+            $this->configuration->getDb()->escape($login)
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) !== 1) {
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             if ($raiseError) {
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
@@ -518,7 +534,7 @@ class User
             return false;
         }
 
-        $user = $this->config->getDb()->fetchArray($res);
+        $user = $this->configuration->getDb()->fetchArray($res);
 
         $this->userId = (int) $user['user_id'];
         $this->login = (string) $user['login'];
@@ -527,8 +543,9 @@ class User
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
+
         $this->userdata->load($this->getUserId());
 
         return true;
@@ -551,7 +568,7 @@ class User
         $skipped = false;
 
         while (strlen($newPassword) < $minimumLength) {
-            $caseFunc = random_int(0, 1) ? 'strtoupper' : 'strtolower';
+            $caseFunc = random_int(0, 1) !== 0 ? 'strtoupper' : 'strtolower';
 
             switch (random_int(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
                 case 0:
@@ -617,16 +634,17 @@ class User
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($delete);
+        $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
-            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . 'error(): ' . $this->config->getDb()->error();
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . 'error: ' . $this->configuration->getDb()->error();
 
             return false;
         }
 
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
+
         $data = $this->userdata->delete($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USERDATA;
@@ -643,17 +661,14 @@ class User
                 ++$readOnly;
                 continue;
             }
+
             $delete[] = $auth->delete($this->login);
         }
 
-        if ($readOnly == $authCount) {
+        if ($readOnly === $authCount) {
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
-        if (!in_array(true, $delete)) {
-            return false;
-        }
-
-        return true;
+        return in_array(true, $delete);
     }
 
     /**
@@ -669,6 +684,7 @@ class User
         foreach ($this->errors as $error) {
             $message .= $error . "<br>\n";
         }
+
         $this->errors = [];
 
         return $message;
@@ -711,13 +727,13 @@ class User
             ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
         );
 
-        $res = $this->config->getDb()->query($select);
+        $res = $this->configuration->getDb()->query($select);
         if (!$res) {
             return [];
         }
 
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($res)) {
             $result[] = (int) $row['user_id'];
         }
 
@@ -749,14 +765,14 @@ class User
             $userId
         );
 
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
-            $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->config->getDb()->error();
+        $res = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($res) != 1) {
+            $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->configuration->getDb()->error();
 
             return false;
         }
 
-        $user = $this->config->getDb()->fetchArray($res);
+        $user = $this->configuration->getDb()->fetchArray($res);
 
         $this->userId = (int) $user['user_id'];
         $this->login = (string) $user['login'];
@@ -779,17 +795,20 @@ class User
                 $this->login
             );
 
-            $res = $this->config->getDb()->query($select);
-            if ($this->config->getDb()->numRows($res) != 1) {
-                $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->config->getDb()->error();
+            $res = $this->configuration->getDb()->query($select);
+            if ($this->configuration->getDb()->numRows($res) != 1) {
+                $this->errors[] =
+                    self::ERROR_USER_NO_USERLOGINDATA . 'error: ' . $this->configuration->getDb()->error();
 
                 return false;
             }
         }
+
         // get user-data
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
+
         $this->userdata->load($this->getUserId());
 
         return true;
@@ -804,7 +823,7 @@ class User
     public function getUserData(string $field = '*'): array|int|string|null
     {
         if (!($this->userdata instanceof UserData)) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
 
         return $this->userdata->get($field);
@@ -818,8 +837,9 @@ class User
     public function setUserData(array $data): bool
     {
         if (!($this->userdata instanceof UserData)) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
+
         $this->userdata->load($this->getUserId());
 
         return $this->userdata->set(array_keys($data), array_values($data));
@@ -839,7 +859,7 @@ class User
     public function getUserIdByEmail(string $email): int
     {
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
 
         $userData = $this->userdata->fetchAll('email', $email);
@@ -855,7 +875,7 @@ class User
     public function getUserVisibilityByEmail(string $email): bool
     {
         if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->config);
+            $this->userdata = new UserData($this->configuration);
         }
 
         $userData = $this->userdata->fetchAll('email', $email);
@@ -884,9 +904,10 @@ class User
                 $newPassword
             );
             // Only set to active if the activation mail sent correctly.
-            if ($this->mailUser($subject, $message)) {
+            if ($this->mailUser($subject, $message) !== 0) {
                 return $this->setStatus('active');
             }
+
             return true;
         }
 
@@ -898,11 +919,13 @@ class User
      */
     public function getStatus(): string
     {
-        if (isset($this->status) && strlen($this->status) > 0) {
-            return $this->status;
+        if (!isset($this->status)) {
+            return '';
         }
-
-        return '';
+        if (strlen($this->status) <= 0) {
+            return '';
+        }
+        return $this->status;
     }
 
     /**
@@ -931,17 +954,12 @@ class User
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($status),
+            $this->configuration->getDb()->escape($status),
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($update);
-
-        if ($res) {
-            return true;
-        }
-
-        return false;
+        $res = $this->configuration->getDb()->query($update);
+        return (bool) $res;
     }
 
     /**
@@ -952,11 +970,11 @@ class User
         $update = sprintf(
             "UPDATE %sfaquser SET auth_source = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($authSource),
+            $this->configuration->getDb()->escape($authSource),
             $this->getUserId()
         );
 
-        return $this->config->getDb()->query($update);
+        return $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -984,11 +1002,11 @@ class User
             if ($auth->setReadOnly()) {
                 continue;
             }
+
             if (!$auth->update($login, $pass)) {
                 continue;
-            } else {
-                $success = true;
             }
+            $success = true;
         }
 
         return $success;
@@ -1001,8 +1019,9 @@ class User
      */
     public function mailUser(string $subject, string $message): int
     {
-        $mail = new Mail($this->config);
+        $mail = new Mail($this->configuration);
         $mail->addTo($this->getUserData('email'));
+
         $mail->subject = $subject;
         $mail->message = $message;
         $result = $mail->send();
@@ -1038,13 +1057,8 @@ class User
             $this->userId
         );
 
-        $res = $this->config->getDb()->query($update);
-
-        if ($res) {
-            return true;
-        }
-
-        return false;
+        $res = $this->configuration->getDb()->query($update);
+        return (bool) $res;
     }
 
     /**
@@ -1058,6 +1072,6 @@ class User
             $this->userId
         );
 
-        return (bool) $this->config->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 }

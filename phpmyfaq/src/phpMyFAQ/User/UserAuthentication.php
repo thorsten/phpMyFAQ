@@ -34,8 +34,10 @@ class UserAuthentication
 
     private bool $twoFactorAuthentication = false;
 
-    public function __construct(private readonly Configuration $configuration, private readonly CurrentUser $user)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly CurrentUser $currentUser
+    ) {
     }
 
     public function isRememberMe(): bool
@@ -57,6 +59,7 @@ class UserAuthentication
     {
         $this->twoFactorAuthentication = $twoFactorAuthentication;
     }
+
     /**
      * Authenticates a user with a given username and password against
      * LDAP, SSO or local database.
@@ -66,14 +69,14 @@ class UserAuthentication
     public function authenticate(string $username, string $password): CurrentUser
     {
         if ($this->isRememberMe()) {
-            $this->user->enableRememberMe();
+            $this->currentUser->enableRememberMe();
         }
 
         // LDAP
         if ($this->configuration->isLdapActive() && function_exists('ldap_connect')) {
             try {
                 $authLdap = new AuthLdap($this->configuration);
-                $this->user->addAuth($authLdap, 'ldap');
+                $this->currentUser->addAuth($authLdap, 'ldap');
             } catch (Exception $exception) {
                 throw new Exception($exception->getMessage());
             }
@@ -82,26 +85,24 @@ class UserAuthentication
         // SSO
         if ($this->configuration->get('security.ssoSupport')) {
             $authSso = new AuthSso($this->configuration);
-            $this->user->addAuth($authSso, 'sso');
+            $this->currentUser->addAuth($authSso, 'sso');
         }
 
         // Local
-        if ($this->user->login($username, $password)) {
-            if ($this->user->getUserData('twofactor_enabled')) {
+        if ($this->currentUser->login($username, $password)) {
+            if ($this->currentUser->getUserData('twofactor_enabled')) {
                 $this->setTwoFactorAuthentication(true);
-                $this->user->setLoggedIn(false);
+                $this->currentUser->setLoggedIn(false);
+            } elseif ($this->currentUser->getStatus() !== 'blocked') {
+                $this->currentUser->setLoggedIn(true);
             } else {
-                if ($this->user->getStatus() !== 'blocked') {
-                    $this->user->setLoggedIn(true);
-                } else {
-                    $this->user->setLoggedIn(false);
-                    throw new Exception(Translation::get('ad_auth_fail') . ' (' . $username . ')');
-                }
+                $this->currentUser->setLoggedIn(false);
+                throw new Exception(Translation::get('ad_auth_fail') . ' (' . $username . ')');
             }
         } else {
             throw new Exception(Translation::get('ad_auth_fail'));
         }
 
-        return $this->user;
+        return $this->currentUser;
     }
 }

@@ -27,7 +27,9 @@ class Pagination
 {
     /** Template vars. */
     private const TPL_VAR_LINK_URL = '{LINK_URL}';
+
     private const TPL_VAR_LINK_TEXT = '{LINK_TEXT}';
+
     private const TPL_VAR_LAYOUT_CONTENT = '{LAYOUT_CONTENT}';
 
     /**
@@ -193,9 +195,9 @@ class Pagination
     {
         $page = 1;
 
-        if (!empty($url)) {
+        if ($url !== '' && $url !== '0') {
             $match = [];
-            if (Strings::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match)) {
+            if (Strings::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match) !== 0) {
                 $page = $match[2] ?? $page;
             }
         }
@@ -227,11 +229,7 @@ class Pagination
 
             $link = $this->renderUrl($this->baseUrl, $page);
 
-            if ($page == $this->currentPage) {
-                $template = $this->currentPageLinkTpl;
-            } else {
-                $template = $this->linkTpl;
-            }
+            $template = $page == $this->currentPage ? $this->currentPageLinkTpl : $this->linkTpl;
 
             $content[] = $this->renderLink($template, $link, $page);
         }
@@ -280,13 +278,10 @@ class Pagination
     protected function renderUrl(string $url = '', int $page = 1): string
     {
         if ($url === '') {
-            $url = sprintf($this->rewriteUrl, $page);
-        } else {
-            $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
-            $url = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+            return sprintf($this->rewriteUrl, $page);
         }
-
-        return $url;
+        $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
+        return sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
     }
 
     /**

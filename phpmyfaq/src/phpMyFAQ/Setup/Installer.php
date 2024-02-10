@@ -503,15 +503,16 @@ class Installer extends Setup
 
         if ('' !== $databaseType) {
             $databaseFound = false;
-            foreach ($this->system->getSupportedDatabases() as $database => $values) {
+            foreach (array_keys($this->system->getSupportedDatabases()) as $database) {
                 if ($database === $databaseType) {
                     $databaseFound = true;
                     break;
                 }
             }
+
             if (!$databaseFound) {
-                echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.<br>' .
-                    'We found ' . ucfirst($database) .
+                echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.' .
+                    '<br>We found ' . ucfirst((string) $database) .
                     '<br>' . 'Please use the change the database type in <code>config/database.php</code>.</p>';
                 System::renderFooter();
             }
@@ -534,7 +535,7 @@ class Installer extends Setup
             '/content/user/attachments',
         ];
         $failedDirs = $instanceSetup->checkDirs($dirs);
-        $numDirs = sizeof($failedDirs);
+        $numDirs = count($failedDirs);
 
         if (1 <= $numDirs) {
             printf(
@@ -542,9 +543,10 @@ class Installer extends Setup
                 (1 < $numDirs) ? 'directories' : 'directory',
                 (1 < $numDirs) ? 'are' : 'is'
             );
-            foreach ($failedDirs as $dir) {
-                echo "<li>$dir</li>\n";
+            foreach ($failedDirs as $failedDir) {
+                echo "<li>{$failedDir}</li>\n";
             }
+
             printf(
                 '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
                 'greater if necessary).</p>',
@@ -565,28 +567,33 @@ class Installer extends Setup
             echo '<p class="alert alert-warning">phpMyFAQ could not find HTTPS support. For security reasons we ' .
                 'recommend activating HTTPS.</p>';
         }
+
         if (!extension_loaded('gd')) {
             echo '<p class="alert alert-warning">You don\'t have GD support enabled in your PHP installation. Please ' .
-                'enable GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+                "enable GD support in your php.ini file otherwise you can't use Captchas for spam protection.</p>";
         }
+
         if (!function_exists('imagettftext')) {
             echo '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension of ' .
                 'your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
                 'for spam protection will be quite easy to break.</p>';
         }
+
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
             echo '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
-                'installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t ' .
+                "installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can't " .
                 'use Elasticsearch.</p>';
         }
+
         if (!extension_loaded('fileinfo')) {
             echo '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP installation. ' .
-                'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
+                "Please enable Fileinfo support in your php.ini file otherwise you can't use our backup/restore " .
                 'functionality.</p>';
         }
+
         if (!extension_loaded('sodium')) {
             echo '<p class="alert alert-warning">You don\'t have Sodium support enabled in your PHP installation. ' .
-                'Please enable Sodium support in your php.ini file otherwise you can\'t use our backup/restore ' .
+                "Please enable Sodium support in your php.ini file otherwise you can't use our backup/restore " .
                 'functionality.</p>';
         }
     }
@@ -600,7 +607,9 @@ class Installer extends Setup
     public function startInstall(array $setup = null): void
     {
         $ldapSetup = [];
-        $query = $uninstall = $dbSetup = [];
+        $query = [];
+        $uninstall = [];
+        $dbSetup = [];
 
         // Check table prefix
         $dbSetup['dbPrefix'] = Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -614,6 +623,7 @@ class Installer extends Setup
         } else {
             $dbSetup['dbType'] = $setup['dbType'];
         }
+
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim((string) $dbSetup['dbType']);
             if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
@@ -640,6 +650,7 @@ class Installer extends Setup
         } else {
             $dbSetup['dbPort'] = $setup['dbPort'];
         }
+
         if (is_null($dbSetup['dbPort']) && ! System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
             System::renderFooter(true);
@@ -663,6 +674,7 @@ class Installer extends Setup
         } else {
             $dbSetup['dbDatabaseName'] = $setup['dbDatabaseName'];
         }
+
         if (is_null($dbSetup['dbDatabaseName']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database name.</p>\n";
             System::renderFooter(true);
@@ -676,8 +688,8 @@ class Installer extends Setup
                 $setup['dbServer']
             );
             if (is_null($dbSetup['dbServer'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a SQLite database " .
-                    "filename.</p>\n";
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a SQLite database filename.</p>
+';
                 System::renderFooter(true);
             }
         }
@@ -693,8 +705,8 @@ class Installer extends Setup
                 $dbSetup['dbDatabaseName'],
                 $dbSetup['dbPort']
             );
-        } catch (Exception $e) {
-            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $e->getMessage());
+        } catch (Exception $exception) {
+            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
             System::renderFooter(true);
         }
 
@@ -773,7 +785,7 @@ class Installer extends Setup
             // ES hosts
             $esHosts = Filter::filterInputArray(INPUT_POST, $esHostFilter);
             if (is_null($esHosts)) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add at least one Elasticsearch " .
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please add at least one Elasticsearch ' .
                     "host.</p>\n";
                 System::renderFooter(true);
             }
@@ -783,18 +795,18 @@ class Installer extends Setup
             // ES Index name
             $esSetup['index'] = Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($esSetup['index'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add an Elasticsearch index " .
-                    "name.</p>\n";
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please add an Elasticsearch index name.</p>
+';
                 System::renderFooter(true);
             }
 
-            $psr4Loader = new ClassLoader();
-            $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR . '/libs/elasticsearch/src/Elasticsearch');
-            $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR . '/libs/guzzlehttp/ringphp/src');
-            $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR . '/libs/monolog/src/Monolog');
-            $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR . '/libs/psr/log/Psr');
-            $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
-            $psr4Loader->register();
+            $classLoader = new ClassLoader();
+            $classLoader->addPsr4('Elasticsearch\\', PMF_SRC_DIR . '/libs/elasticsearch/src/Elasticsearch');
+            $classLoader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR . '/libs/guzzlehttp/ringphp/src');
+            $classLoader->addPsr4('Monolog\\', PMF_SRC_DIR . '/libs/monolog/src/Monolog');
+            $classLoader->addPsr4('Psr\\', PMF_SRC_DIR . '/libs/psr/log/Psr');
+            $classLoader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
+            $classLoader->register();
 
             // check LDAP connection
             $esHosts = array_values($esHosts['elasticsearch_server']);
@@ -814,6 +826,7 @@ class Installer extends Setup
         } else {
             $loginName = $setup['loginname'];
         }
+
         if (is_null($loginName)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a login name for your account.</p>';
             System::renderFooter(true);
@@ -825,6 +838,7 @@ class Installer extends Setup
         } else {
             $password = $setup['password'];
         }
+
         if (is_null($password)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for your account.</p>';
             System::renderFooter(true);
@@ -872,27 +886,27 @@ class Installer extends Setup
         }
 
         // check LDAP is enabled
-        if (extension_loaded('ldap') && !is_null($ldapEnabled) && count($ldapSetup)) {
-            if (!$instanceSetup->createLdapFile($ldapSetup, '')) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.' .
-                    '</p>';
-                $this->system->cleanFailedInstallationFiles();
-                System::renderFooter(true);
-            }
+        if (
+            extension_loaded('ldap') &&
+            !is_null($ldapEnabled) &&
+            count($ldapSetup) &&
+            !$instanceSetup->createLdapFile($ldapSetup, '')
+        ) {
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>';
+            $this->system->cleanFailedInstallationFiles();
+            System::renderFooter(true);
         }
 
         // check if Elasticsearch is enabled
-        if (!is_null($esEnabled) && count($esSetup)) {
-            if (!$instanceSetup->createElasticsearchFile($esSetup, '')) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ' .
-                    './config/elasticsearch.php.</p>';
-                $this->system->cleanFailedInstallationFiles();
-                System::renderFooter(true);
-            }
+        if (!is_null($esEnabled) && count($esSetup) && !$instanceSetup->createElasticsearchFile($esSetup, '')) {
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ' .
+                './config/elasticsearch.php.</p>';
+            $this->system->cleanFailedInstallationFiles();
+            System::renderFooter(true);
         }
 
         // connect to the database using config/database.php
-        $dbConfig = new DatabaseConfiguration($rootDir . '/content/core/config/database.php');
+        $databaseConfiguration = new DatabaseConfiguration($rootDir . '/content/core/config/database.php');
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
@@ -902,14 +916,14 @@ class Installer extends Setup
         }
 
         $db->connect(
-            $dbConfig->getServer(),
-            $dbConfig->getUser(),
-            $dbConfig->getPassword(),
-            $dbConfig->getDatabase(),
-            $dbConfig->getPort()
+            $databaseConfiguration->getServer(),
+            $databaseConfiguration->getUser(),
+            $databaseConfiguration->getPassword(),
+            $databaseConfiguration->getDatabase(),
+            $databaseConfiguration->getPort()
         );
 
-        if (!$db) {
+        if (!$db instanceof \phpMyFAQ\Database\DatabaseDriver) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
@@ -947,9 +961,10 @@ class Installer extends Setup
                 $this->system->cleanFailedInstallationFiles();
                 System::renderFooter(true);
             }
+
             usleep(1000);
             ++$count;
-            if (!($count % 10)) {
+            if ($count % 10 === 0) {
                 echo '| ';
             }
         }
@@ -970,51 +985,52 @@ class Installer extends Setup
         $configuration->add('security.salt', md5($configuration->getDefaultUrl()));
 
         // add an admin account and rights
-        $admin = new User($configuration);
-        if (!$admin->createUser($loginName, $password, '', 1)) {
+        $user = new User($configuration);
+        if (!$user->createUser($loginName, $password, '', 1)) {
             printf(
                 '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>' .
                 "Couldn't create the admin user: %s</p>\n",
-                $admin->error()
+                $user->error()
             );
             $this->system->cleanFailedInstallationFiles();
             System::renderFooter(true);
         }
-        $admin->setStatus('protected');
+
+        $user->setStatus('protected');
         $adminData = [
             'display_name' => $realname,
             'email' => $email,
         ];
-        $admin->setUserData($adminData);
-        $admin->setSuperAdmin(true);
+        $user->setUserData($adminData);
+        $user->setSuperAdmin(true);
 
         // add default rights
-        foreach ($this->mainRights as $right) {
-            $admin->perm->grantUserRight(1, $admin->perm->addRight($right));
+        foreach ($this->mainRights as $mainRight) {
+            $user->perm->grantUserRight(1, $user->perm->addRight($mainRight));
         }
 
         // Add an anonymous user account
         $instanceSetup->createAnonymousUser($configuration);
 
         // Add primary instance
-        $instanceData = new InstanceEntity();
-        $instanceData
+        $instanceEntity = new InstanceEntity();
+        $instanceEntity
             ->setUrl($link->getSystemUri($_SERVER['SCRIPT_NAME']))
             ->setInstance($link->getSystemRelativeUri('setup/index.php'))
             ->setComment('phpMyFAQ ' . System::getVersion());
         $faqInstance = new Instance($configuration);
-        $faqInstance->addInstance($instanceData);
+        $faqInstance->addInstance($instanceEntity);
 
         $faqInstanceMaster = new Master($configuration);
         $faqInstanceMaster->createMaster($faqInstance);
 
         // connect to Elasticsearch if enabled
         if (!is_null($esEnabled) && is_file($rootDir . '/config/elasticsearch.php')) {
-            $esConfig = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
+            $elasticsearchConfiguration = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
 
-            $configuration->setElasticsearchConfig($esConfig);
+            $configuration->setElasticsearchConfig($elasticsearchConfiguration);
 
-            $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();
+            $esClient = ClientBuilder::create()->setHosts($elasticsearchConfiguration->getHosts())->build();
 
             $configuration->setElasticsearch($esClient);
 
@@ -1055,18 +1071,13 @@ class Installer extends Setup
         foreach ($lines as $line) {
             if (str_starts_with($line, 'RewriteBase')) {
                 $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
-                $rewriteBase = substr($requestUri, 0, strpos($requestUri, 'index.php'));
+                $rewriteBase = substr((string) $requestUri, 0, strpos((string) $requestUri, 'index.php'));
                 $rewriteBase = ($rewriteBase === '') ? '/' : $rewriteBase;
                 $newLines[] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
             } else {
                 $newLines[] = $line;
             }
         }
-
-        if (file_put_contents($htaccessPath, implode('', $newLines)) !== false) {
-            return true;
-        }
-
-        return false;
+        return file_put_contents($htaccessPath, implode('', $newLines)) !== false;
     }
 }

@@ -43,7 +43,7 @@ class Builtin implements MailUserAgentInterface
             $sender = str_replace(
                 ['<', '>'],
                 '',
-                $headers['Return-Path']
+                (string) $headers['Return-Path']
             );
             unset($headers['Return-Path']);
         }
@@ -57,8 +57,7 @@ class Builtin implements MailUserAgentInterface
         // Send the email
         if (empty($sender)) {
             return (int)mail($recipients, $subject, $body, $mailHeaders);
-        } else {
-            return (int)mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
         }
+        return (int)mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
     }
 }

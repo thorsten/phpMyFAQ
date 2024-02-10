@@ -41,7 +41,7 @@ class Filter
                 $type,
                 $variableName,
                 FILTER_CALLBACK,
-                ['options' => [new Filter(), 'filterSanitizeString']]
+                ['options' => static fn(string $string): string => (new Filter())->filterSanitizeString($string)]
             );
         }
 
@@ -74,7 +74,7 @@ class Filter
             $return = filter_var(
                 $variable,
                 FILTER_CALLBACK,
-                ['options' => [new Filter(), 'filterSanitizeString']]
+                ['options' => static fn(string $string): string => (new Filter())->filterSanitizeString($string)]
             );
         }
 
@@ -120,7 +120,7 @@ class Filter
     {
         $string = htmlspecialchars($string);
         $string = preg_replace('/\x00|<[^>]*>?/', '', $string);
-        return str_replace(["'", '"'], ['&#39;', '&#34;'], $string);
+        return str_replace(["'", '"'], ['&#39;', '&#34;'], (string) $string);
     }
 
     /**
@@ -154,9 +154,13 @@ class Filter
 
         foreach ($attributes[0] as $attribute) {
             $attributeName = stristr((string) $attribute, '=', true);
-            if (self::isAttribute($attributeName) && !in_array($attributeName, $keep)) {
-                $html = str_replace(' ' . $attribute, '', $html);
+            if (!self::isAttribute($attributeName)) {
+                continue;
             }
+            if (in_array($attributeName, $keep)) {
+                continue;
+            }
+            $html = str_replace(' ' . $attribute, '', $html);
         }
 
         return $html;

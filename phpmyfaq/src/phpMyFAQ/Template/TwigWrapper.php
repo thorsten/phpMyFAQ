@@ -29,13 +29,13 @@ use Twig\TwigFunction;
 
 readonly class TwigWrapper
 {
-    private Environment $twig;
+    private Environment $twigEnvironment;
 
     public function __construct(string $templatePath)
     {
-        $loader = new FilesystemLoader($templatePath);
-        $this->twig = new Environment(
-            $loader,
+        $filesystemLoader = new FilesystemLoader($templatePath);
+        $this->twigEnvironment = new Environment(
+            $filesystemLoader,
             [
                 'debug' => System::isDevelopmentVersion()
             ]
@@ -48,7 +48,7 @@ readonly class TwigWrapper
     public function loadTemplate(string $templateFile): TemplateWrapper
     {
         try {
-            return $this->twig->load($templateFile);
+            return $this->twigEnvironment->load($templateFile);
         } catch (LoaderError | RuntimeError | SyntaxError $exception) {
             throw new TemplateException($exception->getMessage());
         }
@@ -56,16 +56,16 @@ readonly class TwigWrapper
 
     public function addExtension(ExtensionInterface $extension): void
     {
-        $this->twig->addExtension($extension);
+        $this->twigEnvironment->addExtension($extension);
     }
 
-    public function addFunction(TwigFunction $function): void
+    public function addFunction(TwigFunction $twigFunction): void
     {
-        $this->twig->addFunction($function);
+        $this->twigEnvironment->addFunction($twigFunction);
     }
 
     public function getExtension(string $class): ExtensionInterface
     {
-        return $this->twig->getExtension($class);
+        return $this->twigEnvironment->getExtension($class);
     }
 }

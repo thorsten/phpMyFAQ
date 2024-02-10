@@ -25,12 +25,13 @@ namespace phpMyFAQ;
 class Glossary
 {
     private string $definition = '';
+
     private array $cachedItems = [];
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -137,9 +138,7 @@ class Glossary
             $this->definition = $item['definition'];
             $item['item'] = preg_quote((string) $item['item'], '/');
             $content = Strings::preg_replace_callback(
-                '/'
-                // a. the glossary item could be an attribute name
-                . '(' . $item['item'] . '="[^"]*")|'
+                '/(' . $item['item'] . '="[^"]*")|'
                 // b. the glossary item could be inside an attribute value
                 . '((' . implode('|', $attributes) . ')="[^"]*' . $item['item'] . '[^"]*")|'
                 // c. the glossary item could be everywhere as a distinct word
@@ -167,19 +166,19 @@ class Glossary
     {
         $items = [];
 
-        if (count($this->cachedItems) > 0) {
+        if ($this->cachedItems !== []) {
             return $this->cachedItems;
         }
 
         $query = sprintf(
             "SELECT id, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
             Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $items[] = [
                 'id' => $row->id,
                 'item' => stripslashes((string) $row->item),
@@ -197,8 +196,8 @@ class Glossary
      */
     public function setTooltip(array $matches): string
     {
-        $prefix = $postfix = '';
-
+        $prefix = '';
+        $postfix = '';
         if (count($matches) > 9) {
             // if the word is at the end of the string
             $prefix = $matches[9];
@@ -241,12 +240,12 @@ class Glossary
             "SELECT id, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $item = [
                 'id' => $row->id,
                 'item' => stripslashes((string) $row->item),
@@ -265,22 +264,17 @@ class Glossary
      */
     public function create(string $item, string $definition): bool
     {
-        $this->definition = $this->config->getDb()->escape($definition);
+        $this->definition = $this->configuration->getDb()->escape($definition);
 
         $query = sprintf(
             "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
+            $this->configuration->getLanguage()->getLanguage(),
             Strings::htmlspecialchars(substr($item, 0, 254)),
             Strings::htmlspecialchars($this->definition)
         );
-
-        if ($this->config->getDb()->query($query)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -292,23 +286,18 @@ class Glossary
      */
     public function update(int $id, string $item, string $definition): bool
     {
-        $item = $this->config->getDb()->escape($item);
-        $definition = $this->config->getDb()->escape($definition);
+        $item = $this->configuration->getDb()->escape($item);
+        $definition = $this->configuration->getDb()->escape($definition);
 
         $query = sprintf(
             "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            Strings::htmlspecialchars(substr($item, 0, 254)),
+            Strings::htmlspecialchars(substr((string) $item, 0, 254)),
             Strings::htmlspecialchars($definition),
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
-
-        if ($this->config->getDb()->query($query)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -322,13 +311,8 @@ class Glossary
             "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
-
-        if ($this->config->getDb()->query($query)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 }

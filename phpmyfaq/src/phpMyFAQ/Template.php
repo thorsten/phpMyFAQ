@@ -100,8 +100,8 @@ class Template
         if ($block === null) {
             return [];
         }
-
-        $tmpBlocks = $tplBlocks = [];
+        $tmpBlocks = [];
+        $tplBlocks = [];
 
         // read all blocks into $tmpBlocks
         Strings::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\{\}\}\<\>\=\"\/]*?\s*\[\/\1\]/', $block, $tmpBlocks);
@@ -162,7 +162,11 @@ class Template
      */
     public function merge(string $from, string $into): void
     {
-        $this->outputs[$into] = str_replace('{{ ' . $from . ' }}', $this->outputs[$from], $this->outputs[$into]);
+        $this->outputs[$into] = str_replace(
+            '{{ ' . $from . ' }}',
+            $this->outputs[$from],
+            (string) $this->outputs[$into]
+        );
         $this->outputs[$from] = null;
     }
 
@@ -197,7 +201,7 @@ class Template
             $templateContent = $this->checkContent($templateContent);
             // @phpstan-ignore-next-line
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
-                $varName = trim(Strings::preg_replace('/[\{\{\}\}]/', '', $tplVar));
+                $varName = trim((string) Strings::preg_replace('/[\{\{\}\}]/', '', $tplVar));
                 if (isset($templateContent[$varName])) {
                     $tmp = str_replace($tplVar, $templateContent[$varName], $tmp);
                 }
@@ -313,7 +317,8 @@ class Template
      */
     private function multiplyBlock(string $blockName, array $blockContent): string
     {
-        $replace = $tmpBlock = [];
+        $replace = [];
+        $tmpBlock = [];
         $multiplyTimes = 0;
 
         // create the replacement array

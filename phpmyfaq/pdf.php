@@ -36,7 +36,7 @@ const IS_VALID_PHPMYFAQ = null;
 //
 // Bootstrapping
 //
-require 'src/Bootstrap.php';
+require __DIR__ . '/src/Bootstrap.php';
 
 // get language (default: english)
 $Language = new Language($faqConfig);
@@ -56,7 +56,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
     require_once 'translations/language_' . $lang . '.php';
 } else {
     $lang = 'en';
-    require_once 'translations/language_en.php';
+    require_once __DIR__ . '/translations/language_en.php';
 }
 
 //
@@ -67,8 +67,8 @@ try {
         ->setLanguagesDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode);
-} catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
+} catch (Exception $exception) {
+    echo '<strong>Error:</strong> ' . $exception->getMessage();
 }
 
 //

@@ -30,12 +30,13 @@ use phpMyFAQ\Helper;
 class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
 {
     private const FORM_ID = 'captcha';
+
     private const FORM_BUTTON = 'captcha-button';
 
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $config)
+    public function __construct(protected Configuration $configuration)
     {
     }
 
@@ -52,7 +53,7 @@ class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
     ): string {
         $html = '';
 
-        if (true === $this->config->get('spam.enableCaptchaCode') && !$auth) {
+        if (true === $this->configuration->get('spam.enableCaptchaCode') && !$auth) {
             $html .= '<div class="row mb-2">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
             $html .= '    <div class="col-sm-4">';

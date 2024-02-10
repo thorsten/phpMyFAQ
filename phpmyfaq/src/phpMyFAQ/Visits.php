@@ -27,7 +27,7 @@ class Visits
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -43,14 +43,15 @@ class Visits
             "SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result)) {
-            $row = $this->config->getDb()->fetchObject($result);
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result)) {
+            $row = $this->configuration->getDb()->fetchObject($result);
             $nVisits = $row->visits;
         }
+
         if ($nVisits === 0) {
             $this->add($id);
         } else {
@@ -69,12 +70,12 @@ class Visits
             "INSERT INTO %sfaqvisits VALUES (%d, '%s', %d, %d)",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage(),
+            $this->configuration->getLanguage()->getLanguage(),
             1,
             $_SERVER['REQUEST_TIME']
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -89,10 +90,10 @@ class Visits
             Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
             $id,
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -108,9 +109,9 @@ class Visits
             'SELECT * FROM %sfaqvisits ORDER BY visits DESC',
             Database::getTablePrefix()
         );
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $data[] = [
                 'id' => $row->id,
                 'lang' => $row->lang,
@@ -127,7 +128,7 @@ class Visits
      */
     public function resetAll(): bool
     {
-        return (bool) $this->config->getDb()->query(
+        return (bool) $this->configuration->getDb()->query(
             sprintf(
                 'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
                 Database::getTablePrefix(),

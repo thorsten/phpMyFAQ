@@ -208,6 +208,7 @@ class Pgsql implements DatabaseDriver
         if ($result) {
             return $result;
         }
+
         return [];
     }
 

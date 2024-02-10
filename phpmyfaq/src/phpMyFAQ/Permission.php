@@ -45,7 +45,7 @@ class Permission
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $config)
+    public function __construct(protected Configuration $configuration)
     {
     }
 
@@ -57,13 +57,13 @@ class Permission
      */
     public static function selectPerm(
         string $permLevel,
-        Configuration $config
+        Configuration $configuration
     ): Permission|BasicPermission|MediumPermission {
         $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';
         if (class_exists($permClass)) {
-            return new $permClass($config);
+            return new $permClass($configuration);
         }
 
-        return new self($config);
+        return new self($configuration);
     }
 }

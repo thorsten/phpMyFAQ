@@ -33,7 +33,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 {
     private readonly Client $client;
 
-    private readonly ElasticsearchConfiguration $esConfig;
+    private readonly ElasticsearchConfiguration $elasticsearchConfiguration;
 
     private string $language = '';
 
@@ -43,12 +43,12 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
+        parent::__construct($configuration);
 
         $this->client = $this->config->getElasticsearch();
-        $this->esConfig = $this->config->getElasticsearchConfig();
+        $this->elasticsearchConfiguration = $this->config->getElasticsearchConfig();
     }
 
     /**
@@ -62,7 +62,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         $result = [];
         $this->resultSet = [];
         $searchParams = [
-            'index' => $this->esConfig->getIndex(),
+            'index' => $this->elasticsearchConfiguration->getIndex(),
             'size' => 100,
             'body' => [
                 'query' => [
@@ -144,7 +144,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         $this->resultSet = [];
 
         $searchParams = [
-            'index' => $this->esConfig->getIndex(),
+            'index' => $this->elasticsearchConfiguration->getIndex(),
             'size' => 100,
             'body' => [
                 'query' => [

@@ -31,17 +31,15 @@ abstract class AbstractController
     /**
      * Returns a Twig rendered template as response.
      *
-     * @param string        $pathToTwigFile
      * @param string[]      $templateVars
      * @param Response|null $response
-     * @return Response
      * @throws TemplateException
      */
     protected function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
     {
         $response ??= new Response();
-        $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-        $template = $twig->loadTemplate($pathToTwigFile);
+        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));
 
@@ -50,11 +48,6 @@ abstract class AbstractController
 
     /**
      * Returns a JsonResponse that uses json_encode().
-     *
-     * @param mixed $data
-     * @param int   $status
-     * @param array $headers
-     * @return JsonResponse
      */
     protected function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
@@ -89,12 +82,12 @@ abstract class AbstractController
     protected function userHasGroupPermission(): void
     {
         $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $currentUser = CurrentUser::getCurrentUser($configuration);
         if (
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value) ||
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value) ||
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value) ||
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
         ) {
             throw new UnauthorizedHttpException('User has no group permission.');
         }
@@ -106,11 +99,11 @@ abstract class AbstractController
     protected function userHasUserPermission(): void
     {
         $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $currentUser = CurrentUser::getCurrentUser($configuration);
         if (
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value) ||
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value)
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
         ) {
             throw new UnauthorizedHttpException('User has no user permission.');
         }
@@ -119,12 +112,12 @@ abstract class AbstractController
     /**
      * @throws UnauthorizedHttpException
      */
-    protected function userHasPermission(PermissionType $permission): void
+    protected function userHasPermission(PermissionType $permissionType): void
     {
         $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
-        if (!$user->perm->hasPermission($user->getUserId(), $permission)) {
-            throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permission->value));
+        $currentUser = CurrentUser::getCurrentUser($configuration);
+        if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType)) {
+            throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permissionType->value));
         }
     }
 }

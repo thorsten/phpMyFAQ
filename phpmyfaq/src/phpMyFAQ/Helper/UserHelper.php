@@ -45,13 +45,13 @@ class UserHelper
         $options = '';
         $allUsers = $this->user->getAllUsers(true, $allowBlockedUsers);
 
-        foreach ($allUsers as $userId) {
-            if (-1 !== $userId) {
-                $this->user->getUserById($userId);
+        foreach ($allUsers as $allUser) {
+            if (-1 !== $allUser) {
+                $this->user->getUserById($allUser);
                 $options .= sprintf(
                     '<option value="%d" %s>%s (%s)</option>',
-                    $userId,
-                    (($userId === $id) ? 'selected' : ''),
+                    $allUser,
+                    (($allUser === $id) ? 'selected' : ''),
                     Strings::htmlentities($this->user->getUserData('display_name')),
                     $this->user->getLogin()
                 );

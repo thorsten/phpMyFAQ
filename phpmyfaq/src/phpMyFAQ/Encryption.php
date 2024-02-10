@@ -95,6 +95,7 @@ class Encryption
         if (!is_array($this->errors)) {
             $this->errors = [(string)$this->errors];
         }
+
         $message = '';
         foreach ($this->errors as $error) {
             $message .= $error . "\n";

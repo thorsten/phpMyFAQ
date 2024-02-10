@@ -34,9 +34,9 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
+        parent::__construct($configuration);
     }
 
     /**
@@ -45,7 +45,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
      */
     public function create(string $login, string $password, string $domain = ''): bool
     {
-        $user = new User($this->config);
+        $user = new User($this->configuration);
         $result = $user->createUser($login);
 
         $user->setStatus('active');
@@ -78,9 +78,8 @@ class AuthHttp extends Auth implements AuthDriverInterface
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
-        } else {
-            return ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $password);
         }
+        return ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $password);
     }
 
     /**

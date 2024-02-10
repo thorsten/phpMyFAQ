@@ -48,9 +48,9 @@ $siteMap->setGroups($currentGroups);
 $template->parse(
     'mainPageContent',
     [
-        'pageHeader' => empty($currentLetter) ? Translation::get('msgSitemap') : $currentLetter,
+        'pageHeader' => $currentLetter === '' || $currentLetter === '0' ? Translation::get('msgSitemap') : $currentLetter,
         'renderLetters' => $siteMap->getAllFirstLetters(),
         'renderSiteMap' => $siteMap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter' => empty($currentLetter) ? Translation::get('msgSitemap') : $currentLetter,
+        'writeCurrentLetter' => $currentLetter === '' || $currentLetter === '0' ? Translation::get('msgSitemap') : $currentLetter,
     ]
 );

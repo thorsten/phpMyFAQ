@@ -44,9 +44,9 @@ class FaqHelper extends Helper
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        $this->config = $config;
+        $this->config = $configuration;
     }
 
     /**
@@ -70,7 +70,7 @@ class FaqHelper extends Helper
      */
     public function renderSendToFriend(string $url): string
     {
-        if (empty($url) || !$this->config->get('main.enableSendToFriend')) {
+        if ($url === '' || $url === '0' || !$this->config->get('main.enableSendToFriend')) {
             return '';
         }
 
@@ -103,10 +103,10 @@ class FaqHelper extends Helper
             $html = '<form method="post">';
             $html .= '<select name="language" onchange="top.location.href = this.options[this.selectedIndex].value;">';
 
-            foreach ($availableLanguages as $language) {
-                $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $language));
-                $html .= ($faq->faqRecord['lang'] === $language ? ' selected' : '');
-                $html .= sprintf('>%s</option>', LanguageCodes::get($language));
+            foreach ($availableLanguages as $availableLanguage) {
+                $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $availableLanguage));
+                $html .= ($faq->faqRecord['lang'] === $availableLanguage ? ' selected' : '');
+                $html .= sprintf('>%s</option>', LanguageCodes::get($availableLanguage));
             }
 
             $html .= '</select></form>';
@@ -123,11 +123,10 @@ class FaqHelper extends Helper
     public function renderAnswerPreview(string $answer, int $numWords): string
     {
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $parseDown = new ParsedownExtra();
-            return Utils::chopString(strip_tags((string) $parseDown->text($answer)), $numWords);
-        } else {
-            return Utils::chopString(strip_tags($answer), $numWords);
+            $parsedownExtra = new ParsedownExtra();
+            return Utils::chopString(strip_tags((string) $parsedownExtra->text($answer)), $numWords);
         }
+        return Utils::chopString(strip_tags($answer), $numWords);
     }
 
     /**
@@ -146,7 +145,7 @@ class FaqHelper extends Helper
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
         $date = new Date($this->config);
 
-        if (is_countable($faq->faqRecords) ? count($faq->faqRecords) : 0) {
+        if ((is_countable($faq->faqRecords) ? count($faq->faqRecords) : 0) !== 0) {
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
                 if (!is_null($data['category_id']) && $data['category_id'] !== $lastCategory) {
@@ -160,6 +159,7 @@ class FaqHelper extends Helper
                 if (!empty($data['content'])) {
                     $output .= sprintf('<article>%s</article>', $this->cleanUpContent($data['content']));
                 }
+
                 $output .= sprintf(
                     '<p>%s: %s<br>%s',
                     Translation::get('msgAuthor'),
@@ -184,15 +184,15 @@ class FaqHelper extends Helper
         $output = '';
 
         $availableLanguages = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
-        foreach ($availableLanguages as $languageCode) {
-            if ($languageCode !== $faqLang) {
+        foreach ($availableLanguages as $availableLanguage) {
+            if ($availableLanguage !== $faqLang) {
                 $output .= sprintf(
                     '<a class="dropdown-item" href="?action=editentry&id=%d&cat=%d&translateTo=%s">%s %s</a>',
                     $faqId,
                     $categoryId,
-                    $languageCode,
+                    $availableLanguage,
                     'Translate to',
-                    LanguageCodes::get($languageCode)
+                    LanguageCodes::get($availableLanguage)
                 );
             } else {
                 $output .= '<a class="dropdown-item">n/a</a>';
@@ -204,10 +204,6 @@ class FaqHelper extends Helper
 
     /**
      * Returns the URL for a given FAQ Entity and category ID.
-     *
-     * @param FaqEntity $faqEntity
-     * @param int       $categoryId
-     * @return string
      */
     public function createFaqUrl(FaqEntity $faqEntity, int $categoryId): string
     {

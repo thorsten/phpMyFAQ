@@ -36,7 +36,7 @@ class FaqPermission
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -63,7 +63,7 @@ class FaqPermission
                 $id
             );
 
-            $this->config->getDb()->query($query);
+            $this->configuration->getDb()->query($query);
         }
 
         return true;
@@ -87,7 +87,7 @@ class FaqPermission
             $mode,
             $faqId
         );
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -117,10 +117,10 @@ class FaqPermission
             $faqId
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while (($row = $this->config->getDb()->fetchObject($result))) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while (($row = $this->configuration->getDb()->fetchObject($result))) {
                 $permissions[] = (int)$row->permission;
             }
         }

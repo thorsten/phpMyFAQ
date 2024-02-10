@@ -29,7 +29,7 @@ class News
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -46,43 +46,43 @@ class News
     {
         $output = '';
         $news = $this->getLatestData($showArchive, $active);
-        $date = new Date($this->config);
+        $date = new Date($this->configuration);
 
-        foreach ($news as $item) {
+        foreach ($news as $new) {
             $url = sprintf(
                 '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
-                $this->config->getDefaultUrl(),
-                $item['id'],
-                $item['lang']
+                $this->configuration->getDefaultUrl(),
+                $new['id'],
+                $new['lang']
             );
 
-            $oLink = new Link($url, $this->config);
+            $oLink = new Link($url, $this->configuration);
 
-            if (isset($item['header'])) {
-                $oLink->itemTitle = Strings::htmlentities($item['header']);
+            if (isset($new['header'])) {
+                $oLink->itemTitle = Strings::htmlentities($new['header']);
             }
 
             $output .= sprintf(
                 '<h5%s><a id="news_%d" href="%s">%s</a> <i aria-hidden="true" class="bi bi-caret-right"></i></h6>',
                 ' class="mt-3 pmf-news-heading"',
-                $item['id'],
+                $new['id'],
                 Strings::htmlentities($oLink->toString()),
-                Strings::htmlentities($item['header'])
+                Strings::htmlentities($new['header'])
             );
 
-            $output .= sprintf('%s', strip_tags($item['content']));
+            $output .= strip_tags((string) $new['content']);
 
-            if (strlen((string) $item['link']) > 1) {
+            if (strlen((string) $new['link']) > 1) {
                 $output .= sprintf(
                     '<br>%s <a href="%s" target="_%s">%s</a>',
                     Translation::get('msgInfo'),
-                    Strings::htmlentities($item['link']),
-                    $item['target'],
-                    Strings::htmlentities($item['linkTitle'])
+                    Strings::htmlentities($new['link']),
+                    $new['target'],
+                    Strings::htmlentities($new['linkTitle'])
                 );
             }
 
-            $output .= sprintf('<small class="text-muted ms-1">%s</small>', $date->format($item['date']));
+            $output .= sprintf('<small class="text-muted ms-1">%s</small>', $date->format($new['date']));
         }
 
         return ('' == $output) ? Translation::get('msgNoNews') : $output;
@@ -120,13 +120,13 @@ class News
             $now,
             $now,
             $active ? "AND active = 'y'" : '',
-            $this->config->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage()
         );
 
-        $result = $this->config->getDb()->query($query);
-        $numberOfShownNewsEntries = $this->config->get('records.numberOfShownNewsEntries');
-        if ($numberOfShownNewsEntries > 0 && $this->config->getDb()->numRows($result) > 0) {
-            while (($row = $this->config->getDb()->fetchObject($result))) {
+        $result = $this->configuration->getDb()->query($query);
+        $numberOfShownNewsEntries = $this->configuration->get('records.numberOfShownNewsEntries');
+        if ($numberOfShownNewsEntries > 0 && $this->configuration->getDb()->numRows($result) > 0) {
+            while (($row = $this->configuration->getDb()->fetchObject($result))) {
                 ++$counter;
                 if (
                     ($showArchive && ($counter > $numberOfShownNewsEntries)) ||
@@ -135,11 +135,11 @@ class News
                 ) {
                     $url = sprintf(
                         '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
-                        $this->config->getDefaultUrl(),
+                        $this->configuration->getDefaultUrl(),
                         $row->id,
                         $row->lang
                     );
-                    $oLink = new Link($url, $this->config);
+                    $oLink = new Link($url, $this->configuration);
                     $oLink->itemTitle = $row->header;
 
                     $item = [
@@ -185,12 +185,12 @@ class News
             WHERE
                 lang = '%s'
             ORDER BY
-                datum DESC", Database::getTablePrefix(), $this->config->getLanguage()->getLanguage());
+                datum DESC", Database::getTablePrefix(), $this->configuration->getLanguage()->getLanguage());
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $expired = ($now > $row->date_end);
                 $headers[] = [
                     'id' => $row->id,
@@ -221,44 +221,44 @@ class News
             "SELECT * FROM %sfaqnews WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getDb()->escape($this->config->getLanguage()->getLanguage())
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage())
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        if ($this->config->getDb()->numRows($result) > 0) {
-            if ($row = $this->config->getDb()->fetchObject($result)) {
-                $content = $row->artikel;
-                $active = ('y' == $row->active);
-                $allowComments = ('y' == $row->comment);
-                $expired = (date('YmdHis') > $row->date_end);
-
-                if (!$admin) {
-                    if (!$active) {
-                        $content = Translation::get('err_inactiveNews');
-                    }
-                    if ($expired) {
-                        $content = Translation::get('err_expiredNews');
-                    }
+        if (
+            $this->configuration->getDb()->numRows($result) > 0 &&
+            ($row = $this->configuration->getDb()->fetchObject($result))
+        ) {
+            $content = $row->artikel;
+            $active = ('y' == $row->active);
+            $allowComments = ('y' == $row->comment);
+            $expired = (date('YmdHis') > $row->date_end);
+            if (!$admin) {
+                if (!$active) {
+                    $content = Translation::get('err_inactiveNews');
                 }
 
-                $news = [
-                    'id' => $row->id,
-                    'lang' => $row->lang,
-                    'date' => Date::createIsoDate($row->datum),
-                    'header' => $row->header,
-                    'content' => $content,
-                    'authorName' => $row->author_name,
-                    'authorEmail' => $row->author_email,
-                    'dateStart' => $row->date_start,
-                    'dateEnd' => $row->date_end,
-                    'active' => $active,
-                    'allowComments' => $allowComments,
-                    'link' => $row->link,
-                    'linkTitle' => $row->linktitel,
-                    'target' => $row->target
-                ];
+                if ($expired) {
+                    $content = Translation::get('err_expiredNews');
+                }
             }
+            $news = [
+                'id' => $row->id,
+                'lang' => $row->lang,
+                'date' => Date::createIsoDate($row->datum),
+                'header' => $row->header,
+                'content' => $content,
+                'authorName' => $row->author_name,
+                'authorEmail' => $row->author_email,
+                'dateStart' => $row->date_start,
+                'dateEnd' => $row->date_end,
+                'active' => $active,
+                'allowComments' => $allowComments,
+                'link' => $row->link,
+                'linkTitle' => $row->linktitel,
+                'target' => $row->target
+            ];
         }
 
         return $news;
@@ -280,27 +280,22 @@ class News
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
             $data['date'],
             $data['lang'],
-            $this->config->getDb()->escape($data['header']),
-            $this->config->getDb()->escape($data['content']),
-            $this->config->getDb()->escape($data['authorName']),
+            $this->configuration->getDb()->escape($data['header']),
+            $this->configuration->getDb()->escape($data['content']),
+            $this->configuration->getDb()->escape($data['authorName']),
             $data['authorEmail'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['active'],
             $data['comment'],
-            $this->config->getDb()->escape($data['link']),
-            $this->config->getDb()->escape($data['linkTitle']),
+            $this->configuration->getDb()->escape($data['link']),
+            $this->configuration->getDb()->escape($data['linkTitle']),
             $data['target']
         );
-
-        if (!$this->config->getDb()->query($query)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -334,25 +329,20 @@ class News
             Database::getTablePrefix(),
             $data['date'],
             $data['lang'],
-            $this->config->getDb()->escape($data['header']),
-            $this->config->getDb()->escape($data['content']),
-            $this->config->getDb()->escape($data['authorName']),
+            $this->configuration->getDb()->escape($data['header']),
+            $this->configuration->getDb()->escape($data['content']),
+            $this->configuration->getDb()->escape($data['authorName']),
             $data['authorEmail'],
             $data['dateStart'],
             $data['dateEnd'],
             $data['active'],
             $data['comment'],
-            $this->config->getDb()->escape($data['link']),
-            $this->config->getDb()->escape($data['linkTitle']),
+            $this->configuration->getDb()->escape($data['link']),
+            $this->configuration->getDb()->escape($data['linkTitle']),
             $data['target'],
             $id
         );
-
-        if (!$this->config->getDb()->query($query)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -367,9 +357,9 @@ class News
             "DELETE FROM %sfaqnews WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getDb()->escape($this->config->getLanguage()->getLanguage())
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage())
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 }

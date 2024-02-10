@@ -36,9 +36,6 @@ abstract class Setup
 
     /**
      * We only support updates from 3.0.0 and later.
-     *
-     * @param string $version
-     * @return bool
      */
     public function checkMinimumUpdateVersion(string $version): bool
     {
@@ -47,8 +44,6 @@ abstract class Setup
 
     /**
      * Updates only possible if maintenance mode is enabled.
-     *
-     * @return bool
      */
     public function checkMaintenanceMode(): bool
     {
@@ -57,19 +52,11 @@ abstract class Setup
 
     /**
      * Checks if the database file exists.
-     *
-     * @return bool
      */
     public function checkDatabaseFile(): bool
     {
-        if (
-            !file_exists(PMF_ROOT_DIR . '/config/database.php') &&
-            !file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')
-        ) {
-            return false;
-        }
-
-        return true;
+        return !(!file_exists(PMF_ROOT_DIR . '/config/database.php') &&
+        !file_exists(PMF_ROOT_DIR . '/content/core/config/database.php'));
     }
 
     /**
@@ -96,15 +83,16 @@ abstract class Setup
 
         if ('' !== $databaseType) {
             $databaseFound = false;
-            foreach ($this->system->getSupportedDatabases() as $database => $values) {
+            foreach (array_keys($this->system->getSupportedDatabases()) as $database) {
                 if ($database === $databaseType) {
                     $databaseFound = true;
                     break;
                 }
             }
+
             if (!$databaseFound) {
                 throw new Exception(
-                    sprintf('Sorry, but the database %s is not supported!', ucfirst($database))
+                    sprintf('Sorry, but the database %s is not supported!', ucfirst((string) $database))
                 );
             }
         }

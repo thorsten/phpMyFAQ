@@ -24,6 +24,7 @@ use phpMyFAQ\System;
 class Token
 {
     final public const PMF_SESSION_NAME = 'pmf-csrf-token';
+
     private const PMF_SESSION_EXPIRY = 1800;
 
     private string $page;
@@ -34,7 +35,7 @@ class Token
 
     private ?string $cookieToken = null;
 
-    private static ?Token $instance = null;
+    private static ?Token $token = null;
 
     /**
      * Constructor.
@@ -90,11 +91,11 @@ class Token
 
     public static function getInstance(): Token
     {
-        if (!(self::$instance instanceof Token)) {
-            self::$instance = new self();
+        if (!(self::$token instanceof Token)) {
+            self::$token = new self();
         }
 
-        return self::$instance;
+        return self::$token;
     }
 
     /**
@@ -137,7 +138,7 @@ class Token
         $token = $this->getSession($page);
 
         // if the time is greater than the expiry form submission window
-        if (empty($token) || time() > $token->getExpiry()) {
+        if (!$token instanceof \phpMyFAQ\Session\Token || time() > $token->getExpiry()) {
             $this->removeToken($page);
             return false;
         }
@@ -150,13 +151,8 @@ class Token
         if ($removeToken) {
             $this->removeToken($page);
         }
-
         // both session and cookie match
-        if ($sessionConfirm && $cookieConfirm) {
-            return true;
-        }
-
-        return false;
+        return $sessionConfirm && $cookieConfirm;
     }
 
     public function removeToken(string $page): bool
@@ -168,12 +164,12 @@ class Token
 
     private function getSession(string $page): ?Token
     {
-        return !empty($_SESSION[self::PMF_SESSION_NAME][$page]) ? $_SESSION[self::PMF_SESSION_NAME][$page] : null;
+        return empty($_SESSION[self::PMF_SESSION_NAME][$page]) ? null : $_SESSION[self::PMF_SESSION_NAME][$page];
     }
 
     private function getCookie(string $page): string
     {
-        return !empty($_COOKIE[$this->getCookieName($page)]) ? $_COOKIE[$this->getCookieName($page)] : '';
+        return empty($_COOKIE[$this->getCookieName($page)]) ? '' : $_COOKIE[$this->getCookieName($page)];
     }
 
     /**
@@ -190,7 +186,7 @@ class Token
 
         setcookie(
             $token->getCookieName($page),
-            $token->getCookieToken(),
+            (string) $token->getCookieToken(),
             [
                 'expires' => $token->getExpiry(),
                 'path' => dirname((string) $_SERVER['SCRIPT_NAME']),

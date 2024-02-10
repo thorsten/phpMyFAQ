@@ -51,16 +51,17 @@ class Setup
      *
      * @throws Exception
      */
-    public function createAnonymousUser(Configuration $faqConfig): void
+    public function createAnonymousUser(Configuration $configuration): void
     {
-        $anonymous = new User($faqConfig);
-        $anonymous->createUser('anonymous', '', '', -1);
-        $anonymous->setStatus('protected');
+        $user = new User($configuration);
+        $user->createUser('anonymous', '', '', -1);
+        $user->setStatus('protected');
+
         $anonymousData = [
             'display_name' => 'Anonymous User',
             'email' => '',
         ];
-        $anonymous->setUserData($anonymousData);
+        $user->setUserData($anonymousData);
     }
 
     /**
@@ -79,20 +80,16 @@ class Setup
                 if (false === mkdir($this->rootDir . $dir)) {
                     // If the folder creation fails
                     $failedDirs[] = 'Folder [' . $dir . '] could not be created.';
-                } else {
-                    if (false === chmod($this->rootDir . $dir, 0775)) {
-                        $failedDirs[] = 'Folder [' . $dir . '] could not be given correct permissions (775).';
-                    }
+                } elseif (false === chmod($this->rootDir . $dir, 0775)) {
+                    $failedDirs[] = 'Folder [' . $dir . '] could not be given correct permissions (775).';
                 }
-            } else {
+            } elseif (false === is_writable($this->rootDir . $dir)) {
                 // The folder exists, check permissions
-                if (false === is_writable($this->rootDir . $dir)) {
-                    // If the folder exists but is not writeable
-                    $failedDirs[] = 'Folder [' . $dir . '] exists but is not writable.';
-                }
+                // If the folder exists but is not writeable
+                $failedDirs[] = 'Folder [' . $dir . '] exists but is not writable.';
             }
 
-            if (0 === count($failedDirs)) {
+            if ([] === $failedDirs) {
                 // if no failed dirs exist
                 copy(
                     $this->rootDir . '/setup/index.html',
@@ -123,8 +120,8 @@ class Setup
 
         return file_put_contents(
             $this->rootDir . $folder . '/database.php',
-            "<?php\n" .
-            "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
+            '<?php
+$DB[\'server\'] = \'' . $data['dbServer'] . "';\n" .
             "\$DB['port'] = '" . $data['dbPort'] . "';\n" .
             "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
             "\$DB['password'] = '" . $data['dbPassword'] . "';\n" .
@@ -145,8 +142,8 @@ class Setup
     {
         return file_put_contents(
             $this->rootDir . $folder . '/config/ldap.php',
-            "<?php\n" .
-            "\$PMF_LDAP['ldap_server'] = '" . $data['ldapServer'] . "';\n" .
+            '<?php
+$PMF_LDAP[\'ldap_server\'] = \'' . $data['ldapServer'] . "';\n" .
             "\$PMF_LDAP['ldap_port'] = '" . $data['ldapPort'] . "';\n" .
             "\$PMF_LDAP['ldap_user'] = '" . $data['ldapUser'] . "';\n" .
             "\$PMF_LDAP['ldap_password'] = '" . $data['ldapPassword'] . "';\n" .
@@ -165,8 +162,8 @@ class Setup
     {
         return file_put_contents(
             $this->rootDir . $folder . '/config/elasticsearch.php',
-            "<?php\n" .
-            "\$PMF_ES['hosts'] = ['" . implode("'], ['", $data['hosts']) . "'];\n" .
+            '<?php
+$PMF_ES[\'hosts\'] = [\'' . implode("'], ['", $data['hosts']) . "'];\n" .
             "\$PMF_ES['index'] = '" . $data['index'] . "';\n",
             LOCK_EX
         );

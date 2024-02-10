@@ -32,7 +32,7 @@ class AdminLog
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -43,8 +43,8 @@ class AdminLog
     {
         $query = sprintf('SELECT id FROM %sfaqadminlog', Database::getTablePrefix());
 
-        return $this->config->getDb()->numRows(
-            $this->config->getDb()->query($query)
+        return $this->configuration->getDb()->numRows(
+            $this->configuration->getDb()->query($query)
         );
     }
 
@@ -65,9 +65,9 @@ class AdminLog
             Database::getTablePrefix()
         );
 
-        $result = $this->config->getDb()->query($query);
+        $result = $this->configuration->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchObject($result)) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $data[$row->id] = ['time' => $row->time, 'usr' => $row->usr, 'text' => $row->text, 'ip' => $row->ip];
         }
 
@@ -82,21 +82,20 @@ class AdminLog
      */
     public function log(User $user, string $logText = ''): bool
     {
-        if ($this->config->get('main.enableAdminLog')) {
+        if ($this->configuration->get('main.enableAdminLog')) {
             $query = sprintf(
                 "INSERT INTO %sfaqadminlog (id, time, usr, text, ip) VALUES (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
-                $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
-                $this->config->getDb()->escape($_SERVER['REQUEST_TIME']),
+                $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
+                $this->configuration->getDb()->escape($_SERVER['REQUEST_TIME']),
                 $user->getUserId(),
-                $this->config->getDb()->escape(nl2br($logText)),
-                $this->config->getDb()->escape(Request::createFromGlobals()->getClientIp())
+                $this->configuration->getDb()->escape(nl2br($logText)),
+                $this->configuration->getDb()->escape(Request::createFromGlobals()->getClientIp())
             );
 
-            return (bool) $this->config->getDb()->query($query);
-        } else {
-            return false;
+            return (bool) $this->configuration->getDb()->query($query);
         }
+        return false;
     }
 
     /**
@@ -110,6 +109,6 @@ class AdminLog
             $_SERVER['REQUEST_TIME'] - 30 * 86400
         );
 
-        return (bool) $this->config->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 }

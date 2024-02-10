@@ -43,14 +43,14 @@ class Api
 
     private ?string $remoteHashes = null;
 
-    private readonly HttpClientInterface $client;
+    private readonly HttpClientInterface $httpClient;
 
     /**
      * Api constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->client = HttpClient::create([
+        $this->httpClient = HttpClient::create([
             'max_redirects' => 2,
         ]);
     }
@@ -64,7 +64,7 @@ class Api
      */
     public function getVersions(): array
     {
-        $response = $this->client->request(
+        $response = $this->httpClient->request(
             'GET',
             $this->apiUrl . 'versions'
         );
@@ -73,7 +73,7 @@ class Api
             try {
                 $content = $response->toArray();
                 return [
-                    'installed' => $this->config->getVersion(),
+                    'installed' => $this->configuration->getVersion(),
                     'stable' => $content['stable'],
                     'development' => $content['development'],
                     'nightly' => $content['nightly']
@@ -88,7 +88,7 @@ class Api
             }
         } else {
             return [
-                'installed' => $this->config->getVersion(),
+                'installed' => $this->configuration->getVersion(),
                 'stable' => 'n/a',
                 'development' => 'n/a',
                 'nightly' => 'n/a'
@@ -103,19 +103,15 @@ class Api
      */
     public function isVerified(): bool
     {
-        $response = $this->client->request(
+        $response = $this->httpClient->request(
             'GET',
-            $this->apiUrl . 'verify/' . $this->config->getVersion()
+            $this->apiUrl . 'verify/' . $this->configuration->getVersion()
         );
 
         try {
             $this->remoteHashes = $response->getContent();
-            if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
-                if (!is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR))) {
-                    return false;
-                }
-
-                return true;
+            if (json_decode((string) $this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
+                return is_array(json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR));
             }
         } catch (
             ClientExceptionInterface |
@@ -139,7 +135,7 @@ class Api
         $system = new System();
         return array_diff(
             json_decode($system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
-            json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
+            json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
         );
     }
 }

@@ -52,6 +52,7 @@ class Error
         if ($code !== 404) {
             $code = 500;
         }
+
         http_response_code($code);
         echo "<h1>phpMyFAQ Fatal error</h1>";
         echo "<p>Uncaught exception: '" . $exception::class . "'</p>";

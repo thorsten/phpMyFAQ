@@ -48,21 +48,17 @@ class VanillaFile extends AbstractFile
     public function copyTo($entry): bool
     {
         $doSimple = is_string($entry) || $entry instanceof self;
-
         if ($doSimple) {
             // If the target is a string or vanilla object, just move
             // it the simplest way we can.
-            $success = $this->copyToSimple((string)$entry);
-        } else {
-            $entry->setMode(self::MODE_WRITE);
-            while (!$this->eof()) {
-                $entry->putChunk($this->getChunk());
-            }
-
-            $success = true;
+            return $this->copyToSimple((string)$entry);
+        }
+        $entry->setMode(self::MODE_WRITE);
+        while (!$this->eof()) {
+            $entry->putChunk($this->getChunk());
         }
 
-        return $success;
+        return true;
     }
 
     /**

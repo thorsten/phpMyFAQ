@@ -48,10 +48,12 @@ class Utils
         if (str_starts_with($dateToTest, '%')) {
             $dateToTest = substr($dateToTest, 1);
         }
+
         // Suppress last occurrences of '%'
         if (str_ends_with($dateToTest, '%')) {
             $dateToTest = substr($dateToTest, 0, strlen($dateToTest) - 1);
         }
+
         // PMF date consists of numbers only: YYYYMMDDhhmmss
         return is_numeric($dateToTest);
     }
@@ -67,7 +69,7 @@ class Utils
     public static function makeShorterText(string $string, int $characters): string
     {
         $string = Strings::preg_replace('/\s+/u', ' ', $string);
-        $arrStr = explode(' ', $string);
+        $arrStr = explode(' ', (string) $string);
         $shortStr = '';
         $num = count($arrStr);
 
@@ -75,6 +77,7 @@ class Utils
             for ($j = 0; $j < $characters; ++$j) {
                 $shortStr .= $arrStr[$j] . ' ';
             }
+
             $shortStr .= '...';
         } else {
             $shortStr = $string;
@@ -88,11 +91,11 @@ class Utils
      *
      * @param string $text Text contains PMF markers
      */
-    public static function resolveMarkers(string $text, Configuration $config): string
+    public static function resolveMarkers(string $text, Configuration $configuration): string
     {
         // Available markers: key and resolving value
         $markers = [
-            '%sitename%' => $config->getTitle(),
+            '%sitename%' => $configuration->getTitle(),
         ];
 
         // Resolve any known pattern
@@ -117,6 +120,7 @@ class Utils
         if ($words > $num) {
             $words = $num;
         }
+
         for ($i = 0; $i < $words; ++$i) {
             $str .= $pieces[$i] . ' ';
         }
@@ -192,8 +196,8 @@ class Utils
             'img', 'picture', 'mark'
         ];
 
-        foreach ($forbiddenElements as $element) {
-            if (str_starts_with($element, $string)) {
+        foreach ($forbiddenElements as $forbiddenElement) {
+            if (str_starts_with($forbiddenElement, $string)) {
                 return true;
             }
         }
@@ -261,7 +265,7 @@ class Utils
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
         $bytes /= (1 << (10 * $pow));

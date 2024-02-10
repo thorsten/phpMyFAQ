@@ -44,15 +44,15 @@ class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('add-instance', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $url = Filter::filterVar($data->url, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -63,16 +63,16 @@ class InstanceController extends AbstractController
         $password = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Cannot create instance.']);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Cannot create instance.']);
+            return $jsonResponse;
         }
 
         $url = 'https://' . $url . '.' . $_SERVER['SERVER_NAME'];
         if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Cannot create instance: wrong URL']);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Cannot create instance: wrong URL']);
+            return $jsonResponse;
         }
 
         $data = new InstanceEntity();
@@ -99,21 +99,21 @@ class InstanceController extends AbstractController
             try {
                 $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
             } catch (Exception $e) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $e->getMessage()]);
-                $response->send();
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setData(['error' => $e->getMessage()]);
+                $jsonResponse->send();
                 exit(1);
             }
 
-            $dbConfig = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
+            $databaseConfiguration = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
             $dbSetup = [
-                'dbServer' => $dbConfig->getServer(),
-                'dbPort' => $dbConfig->getPort(),
-                'dbUser' => $dbConfig->getUser(),
-                'dbPassword' => $dbConfig->getPassword(),
-                'dbDatabaseName' => $dbConfig->getDatabase(),
+                'dbServer' => $databaseConfiguration->getServer(),
+                'dbPort' => $databaseConfiguration->getPort(),
+                'dbUser' => $databaseConfiguration->getUser(),
+                'dbPassword' => $databaseConfiguration->getPassword(),
+                'dbDatabaseName' => $databaseConfiguration->getDatabase(),
                 'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
-                'dbType' => $dbConfig->getType()
+                'dbType' => $databaseConfiguration->getType()
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
@@ -123,42 +123,43 @@ class InstanceController extends AbstractController
             Database::setTablePrefix($dbSetup['dbPrefix']);
 
             // add an admin account and rights
-            $instanceAdmin = new User($configuration);
-            $instanceAdmin->createUser($admin, $password, '', 1);
-            $instanceAdmin->setStatus('protected');
+            $user = new User($configuration);
+            $user->createUser($admin, $password, '', 1);
+            $user->setStatus('protected');
             $instanceAdminData = [
                 'display_name' => '',
                 'email' => $email,
             ];
-            $instanceAdmin->setUserData($instanceAdminData);
+            $user->setUserData($instanceAdminData);
 
             // Add an anonymous user account
             try {
                 $clientSetup->createAnonymousUser($configuration);
             } catch (Exception $e) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $e->getMessage()]);
-                return $response;
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setData(['error' => $e->getMessage()]);
+                return $jsonResponse;
             }
 
-            Database::setTablePrefix($dbConfig->getPrefix());
+            Database::setTablePrefix($databaseConfiguration->getPrefix());
         } else {
             $faqInstance->removeInstance($instanceId);
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Cannot create instance.']);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => 'Cannot create instance.']);
+            return $jsonResponse;
         }
+
         if (0 !== $instanceId) {
-            $response->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
             $payload = ['added' => $instanceId, 'url' => $data->getUrl()];
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $payload = ['error' => $instanceId];
         }
 
-        $response->setData($payload);
+        $jsonResponse->setData($payload);
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/instance/delete')]
@@ -166,15 +167,15 @@ class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-instance', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $instanceId = Filter::filterVar($data->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -188,15 +189,16 @@ class InstanceController extends AbstractController
                 $client->deleteClientFolder($clientData->url) &&
                 $client->removeInstance($instanceId)
             ) {
-                $response->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
                 $payload = ['deleted' => $instanceId];
             } else {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $payload = ['error' => $instanceId];
             }
-            $response->setData($payload);
+
+            $jsonResponse->setData($payload);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

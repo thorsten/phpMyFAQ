@@ -70,7 +70,8 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         if (empty($records)) {
             $records = $categoryHelper->renderCategoryTree();
         }
-        if (is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) {
+
+        if ((is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) !== 0) {
             $categoryFaqsHeader = Translation::get('msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree($selectedCategoryId);
             $template->parseBlock(
@@ -94,7 +95,8 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $text = $category->categoryName[$categoryData->getParentId()]['name'] ?? Translation::get('msgCategoryUp');
 
         $link = new Link($url, $faqConfig);
-        $link->itemTitle = $link->text = $text;
+        $link->itemTitle = $text;
+        $link->text = $text;
         $link->tooltip = Translation::get('msgCategoryUp');
 
         $up = sprintf('<i class="bi bi-level-up" aria-hidden="true"></i> %s', $link->toHtmlAnchor());

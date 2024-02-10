@@ -41,18 +41,14 @@ class Plurals
     /**
      * True when there is no support for plural forms in current language $lang.
      */
-    private bool $useDefaultPluralForm;
+    private readonly bool $useDefaultPluralForm;
 
     public function __construct()
     {
         $this->nPlurals = (int)Translation::get('nplurals');
         $this->lang = Translation::get('metaLanguage');
 
-        if ($this->plural($this->lang, 0) != -1) {
-            $this->useDefaultPluralForm = false;
-        } else {
-            $this->useDefaultPluralForm = true;
-        }
+        $this->useDefaultPluralForm = $this->plural($this->lang, 0) == -1;
     }
 
     /**
@@ -126,8 +122,7 @@ class Plurals
         if ($plural > $this->nPlurals - 1) {
             // incorrectly defined plural function or wrong $nPlurals
             return $this->nPlurals - 1;
-        } else {
-            return $plural;
         }
+        return $plural;
     }
 }

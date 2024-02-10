@@ -48,12 +48,12 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function __construct(Configuration $config, private readonly OAuth $oAuth)
+    public function __construct(Configuration $configuration, private readonly OAuth $oAuth)
     {
-        $this->config = $config;
-        $this->session = new Session($config);
+        $this->configuration = $configuration;
+        $this->session = new Session($configuration);
 
-        parent::__construct($config);
+        parent::__construct($configuration);
     }
 
     /**
@@ -62,7 +62,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      */
     public function create(string $login, string $password, string $domain = ''): mixed
     {
-        $user = new User($this->config);
+        $user = new User($this->configuration);
         $result = $user->createUser($login, '', $domain);
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
@@ -133,14 +133,14 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s',
             AAD_OAUTH_TENANTID,
             AAD_OAUTH_CLIENTID,
-            urlencode($this->config->getDefaultUrl() . 'services/azure/callback.php'),
+            urlencode($this->configuration->getDefaultUrl() . 'services/azure/callback.php'),
             AAD_OAUTH_SCOPE,
             $this->oAuthChallenge,
             self::AAD_CHALLENGE_METHOD
         );
 
-        $response = new RedirectResponse($oAuthURL);
-        $response->send();
+        $redirectResponse = new RedirectResponse($oAuthURL);
+        $redirectResponse->send();
     }
 
     /**
@@ -149,8 +149,8 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      */
     public function logout(): void
     {
-        $redirect = new RedirectResponse(self::AAD_LOGOUT_URL);
-        $redirect->send();
+        $redirectResponse = new RedirectResponse(self::AAD_LOGOUT_URL);
+        $redirectResponse->send();
     }
 
     /**
@@ -163,12 +163,12 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     {
         $verifier = $this->oAuthVerifier;
 
-        if (!$this->oAuthVerifier) {
+        if ($this->oAuthVerifier === '' || $this->oAuthVerifier === '0') {
             $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._~';
             $charLen = strlen($chars) - 1;
             $verifier = '';
 
-            for ($i = 0; $i < 128; $i++) {
+            for ($i = 0; $i < 128; ++$i) {
                 $verifier .= $chars[random_int(0, $charLen)];
             }
 

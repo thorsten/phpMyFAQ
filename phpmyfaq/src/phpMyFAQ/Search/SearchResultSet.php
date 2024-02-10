@@ -19,7 +19,6 @@ namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq\FaqPermission;
-use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 
@@ -59,13 +58,13 @@ class SearchResultSet
     /**
      * Constructor.
      *
-     * @param CurrentUser   $user User object
-     * @param Configuration $config Configuration object
+     * @param CurrentUser $currentUser User object
+     * @param Configuration $configuration Configuration object
      */
     public function __construct(
-        protected CurrentUser $user,
+        protected CurrentUser $currentUser,
         private readonly FaqPermission $faqPermission,
-        protected Configuration $config
+        protected Configuration $configuration
     ) {
     }
 
@@ -80,9 +79,9 @@ class SearchResultSet
 
         $duplicateResults = [];
 
-        if ('basic' !== $this->config->get('security.permLevel')) {
+        if ('basic' !== $this->configuration->get('security.permLevel')) {
             // @phpstan-ignore-next-line
-            $currentGroupIds = $this->user->perm->getUserGroups($this->user->getUserId());
+            $currentGroupIds = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
         } else {
             $currentGroupIds = [-1];
         }
@@ -91,7 +90,7 @@ class SearchResultSet
             $permission = false;
 
             // check permissions for groups
-            if ('medium' === $this->config->get('security.permLevel')) {
+            if ('medium' === $this->configuration->get('security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(FaqPermission::GROUP, $result->id);
                 foreach ($groupPermissions as $groupPermission) {
                     if (in_array($groupPermission, $currentGroupIds)) {
@@ -99,14 +98,14 @@ class SearchResultSet
                     }
                 }
             }
+
             // check permission for user
-            if ('basic' === $this->config->get('security.permLevel')) {
+            if ('basic' === $this->configuration->get('security.permLevel')) {
                 $userPermission = $this->faqPermission->get(FaqPermission::USER, $result->id);
-                if (in_array(-1, $userPermission) || in_array($this->user->getUserId(), $userPermission)) {
-                    $permission = true;
-                } else {
-                    $permission = false;
-                }
+                $permission = in_array(-1, $userPermission) || in_array(
+                    $this->currentUser->getUserId(),
+                    $userPermission
+                );
             }
 
             // check on duplicates

@@ -137,7 +137,7 @@ class Mbstring extends StringsAbstract
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0): int
     {
-        return preg_match(self::appendU($pattern), $subject, $matches, $flags, $offset);
+        return preg_match($this->appendU($pattern), $subject, $matches, $flags, $offset);
     }
 
     /**
@@ -150,7 +150,7 @@ class Mbstring extends StringsAbstract
      */
     public function preg_match_all(string $pattern, string $subject, array &$matches, $flags = 0, $offset = 0): int
     {
-        return preg_match_all(self::appendU($pattern), $subject, $matches, $flags, $offset);
+        return preg_match_all($this->appendU($pattern), $subject, $matches, $flags, $offset);
     }
 
     /**
@@ -162,7 +162,7 @@ class Mbstring extends StringsAbstract
      */
     public function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array|bool
     {
-        return preg_split(self::appendU($pattern), $subject, $limit, $flags);
+        return preg_split($this->appendU($pattern), $subject, $limit, $flags);
     }
 
     /**
@@ -177,10 +177,10 @@ class Mbstring extends StringsAbstract
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
-                $p = self::appendU($p);
+                $p = $this->appendU($p);
             }
         } else {
-            $pattern = self::appendU($pattern);
+            $pattern = $this->appendU($pattern);
         }
 
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
@@ -204,10 +204,10 @@ class Mbstring extends StringsAbstract
     ): string|array|null {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
-                $p = self::appendU($p);
+                $p = $this->appendU($p);
             }
         } else {
-            $pattern = self::appendU($pattern);
+            $pattern = $this->appendU($pattern);
         }
 
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
@@ -217,7 +217,7 @@ class Mbstring extends StringsAbstract
      * Append a "u" to the string.
      * The string is supposed to be a regex prepared to use with a preg_* function.
      */
-    private static function appendU(string $str): string
+    private function appendU(string $str): string
     {
         return parent::isUTF8($str) ? $str . 'u' : $str;
     }

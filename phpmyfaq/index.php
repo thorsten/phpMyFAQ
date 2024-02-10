@@ -88,8 +88,8 @@ try {
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode)
         ->setMultiByteLanguage();
-} catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
+} catch (Exception $exception) {
+    echo '<strong>Error:</strong> ' . $exception->getMessage();
 }
 
 //
@@ -183,11 +183,9 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
     $user = CurrentUser::getCurrentUser($faqConfig);
 }
 
-if (isset($userAuth)) {
-    if ($userAuth instanceof UserAuthentication) {
-        if ($userAuth->hasTwoFactorAuthentication()) {
-            $action = 'twofactor';
-        }
+if (isset($userAuth) && $userAuth instanceof UserAuthentication) {
+    if ($userAuth->hasTwoFactorAuthentication()) {
+        $action = 'twofactor';
     }
 }
 
@@ -202,6 +200,7 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
         $redirect = new RedirectResponse($ssoLogout);
         $redirect->send();
     }
+
     if ($faqConfig->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
         $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
         $redirect->send();
@@ -262,10 +261,8 @@ if ($faqConfig->get('main.enableUserTracking')) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
-        if (is_null($sidCookie)) {
-            if (!is_null($sidGet)) {
-                $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
-            }
+        if (is_null($sidCookie) && !is_null($sidGet)) {
+            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
         }
     }
 } elseif (
@@ -337,7 +334,7 @@ if ($id !== 0) {
     $faq->getRecord($id);
     $title = ' - ' . $faq->faqRecord['title'];
     $keywords = ',' . $faq->faqRecord['keywords'];
-    $metaDescription = str_replace('"', '', strip_tags((string) $faq->getRecordPreview($id)));
+    $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         Strings::htmlentities($faqConfig->getDefaultUrl()),
@@ -407,14 +404,17 @@ $categoryFromId = -1;
 if (is_numeric($id) && $id > 0) {
     $categoryFromId = $category->getCategoryIdFromFaq($id);
 }
+
 if ($categoryFromId != -1 && $cat == 0) {
     $cat = $categoryFromId;
 }
+
 $category->transform(0);
 $category->collapseAll();
 if ($cat != 0) {
     $category->expandTo($cat);
 }
+
 if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
     $title = ' - ' . $category->categoryName[$cat]['name'];
     $metaDescription = $category->categoryName[$cat]['description'];
@@ -443,6 +443,7 @@ if ($action !== 'main') {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
     }
+
     $renderUri = '?sid=' . $faqSession->getCurrentSessionId();
 }
 
@@ -503,11 +504,7 @@ $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
-if (!is_null($error)) {
-    $loginMessage = '<p class="alert alert-danger">' . $error . '</p>';
-} else {
-    $loginMessage = '';
-}
+$loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error . '</p>';
 
 $faqSeo = new Seo($faqConfig);
 
@@ -700,6 +697,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
     } else {
         $msgLoginUser = '<a class="dropdown-item" href="?action=login">%s</a>';
     }
+
     $template->parseBlock(
         'index',
         'notLoggedIn',

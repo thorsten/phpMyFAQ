@@ -103,7 +103,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        $this->category->categoryName[$faq['category_id']]['name'],
+                        (string) $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),
@@ -146,6 +146,7 @@ class Pdf extends Export
                 $this->pdf->Ln();
                 $this->pdf->Write(5, Translation::get('msgNewContentKeywords') . ' ' . $faq['keywords']);
             }
+
             if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->pdf->Ln();
                 $this->pdf->Write(5, Translation::get('ad_entry_tags') . ': ' . implode(', ', $tags));

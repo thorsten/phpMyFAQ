@@ -26,11 +26,7 @@ $response = new Response();
 
 $privacyUrl = $faqConfig->get('main.privacyURL');
 
-if (strlen((string) $privacyUrl) > 0) {
-    $redirectUrl = $privacyUrl;
-} else {
-    $redirectUrl = $faqConfig->get('main.referenceURL');
-}
+$redirectUrl = strlen((string) $privacyUrl) > 0 ? $privacyUrl : $faqConfig->get('main.referenceURL');
 
 $response->isRedirect($redirectUrl);
 $response->send();

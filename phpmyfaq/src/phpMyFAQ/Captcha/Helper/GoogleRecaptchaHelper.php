@@ -26,7 +26,7 @@ class GoogleRecaptchaHelper extends Helper implements CaptchaHelperInterface
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $config)
+    public function __construct(protected Configuration $configuration)
     {
     }
 
@@ -38,14 +38,14 @@ class GoogleRecaptchaHelper extends Helper implements CaptchaHelperInterface
     ): string {
         $html = '';
 
-        if (true === $this->config->get('spam.enableCaptchaCode') && !$auth) {
+        if (true === $this->configuration->get('spam.enableCaptchaCode') && !$auth) {
             $html .= '<div class="row mb-2">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
             $html .= '    <div class="col-sm-9">';
             $html .= '        <script src="https://www.google.com/recaptcha/api.js" async defer></script>';
             $html .= sprintf(
                 '<div class="g-recaptcha" data-sitekey="%s"></div>',
-                $this->config->get('security.googleReCaptchaV2SiteKey')
+                $this->configuration->get('security.googleReCaptchaV2SiteKey')
             );
             $html .= '    </div>';
             $html .= '</div>';

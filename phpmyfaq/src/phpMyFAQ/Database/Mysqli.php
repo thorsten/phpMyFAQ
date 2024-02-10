@@ -74,8 +74,8 @@ class Mysqli implements DatabaseDriver
                 // Connect to MySQL via network
                 $this->conn = new \mysqli($host, $user, $password, null, $port);
             }
-        } catch (mysqli_sql_exception $exception) {
-            throw new Exception($exception->getMessage());
+        } catch (mysqli_sql_exception $mysqlisqlexception) {
+            throw new Exception($mysqlisqlexception->getMessage());
         }
 
         if ($this->conn->connect_error) {
@@ -302,8 +302,8 @@ class Mysqli implements DatabaseDriver
 
         try {
             $result = $this->conn->query($query);
-        } catch (mysqli_sql_exception $exception) {
-            throw new Exception($exception->getMessage());
+        } catch (mysqli_sql_exception $mysqlisqlexception) {
+            throw new Exception($mysqlisqlexception->getMessage());
         }
 
         if (false === $result) {

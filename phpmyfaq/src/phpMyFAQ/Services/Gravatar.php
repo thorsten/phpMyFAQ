@@ -40,20 +40,24 @@ class Gravatar
         if (isset($params['default'])) {
             $opts[] = 'default=' . $params['default'];
         }
+
         if (isset($params['size'])) {
             $opts[] = 'size=' . $params['size'];
         }
+
         if (isset($params['rating'])) {
             $opts[] = 'rating=' . $params['rating'];
         }
+
         if (isset($params['force_default']) && $params['force_default']) {
             $opts[] = 'forcedefault=y';
         }
+
         if (!isset($params['class'])) {
             $params['class'] = '';
         }
 
-        $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode('&', $opts) : false);
+        $gravatar = $imageUrl . ($opts !== [] ? '?' . implode('&', $opts) : false);
 
         return sprintf(
             '<img src="%s" class="%s" alt="Gravatar">',

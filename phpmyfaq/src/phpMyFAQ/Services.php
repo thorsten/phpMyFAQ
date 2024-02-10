@@ -26,36 +26,28 @@ class Services
 {
     /**
      * FAQ ID.
-     *
-     * @var int
      */
     protected int $faqId;
 
     /**
      * Entity ID.
-     *
-     * @var int
      */
     protected int $categoryId;
 
     /**
      * Language.
-     *
-     * @var string
      */
     protected string $language;
 
     /**
      * Question of the FAQ.
-     *
-     * @var string
      */
     protected string $question;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -64,9 +56,6 @@ class Services
         return $this->categoryId;
     }
 
-    /**
-     * @param int $categoryId
-     */
     public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
@@ -77,9 +66,6 @@ class Services
         return $this->faqId;
     }
 
-    /**
-     * @param int $faqId
-     */
     public function setFaqId(int $faqId): void
     {
         $this->faqId = $faqId;
@@ -90,9 +76,6 @@ class Services
         return $this->language;
     }
 
-    /**
-     * @param string $language
-     */
     public function setLanguage(string $language): void
     {
         $this->language = $language;
@@ -115,7 +98,7 @@ class Services
     {
         return sprintf(
             '%sindex.php?action=send2friend&cat=%d&id=%d&artlang=%s',
-            $this->config->getDefaultUrl(),
+            $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -129,7 +112,7 @@ class Services
     {
         return sprintf(
             '%spdf.php?cat=%d&id=%d&artlang=%s',
-            $this->config->getDefaultUrl(),
+            $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -143,7 +126,7 @@ class Services
     {
         return sprintf(
             '%spdf.php?cat=%d&id=%d&artlang=%s',
-            $this->config->getDefaultUrl(),
+            $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()

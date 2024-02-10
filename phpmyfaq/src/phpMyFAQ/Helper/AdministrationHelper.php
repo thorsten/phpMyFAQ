@@ -72,9 +72,8 @@ class AdministrationHelper
 
         if ($checkPerm) {
             return $this->evaluatePermission($restrictions) ? $output : '';
-        } else {
-            return $output;
         }
+        return $output;
     }
 
     /**
@@ -123,19 +122,21 @@ class AdministrationHelper
         foreach ($allRights as $right) {
             $this->permission[$right['name']] = false;
         }
+
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
         if (false != $allUserRights) {
-            foreach ($allRights as $right) {
-                if (in_array($right['right_id'], $allUserRights)) {
-                    $this->permission[$right['name']] = true;
+            foreach ($allRights as $allRight) {
+                if (in_array($allRight['right_id'], $allUserRights)) {
+                    $this->permission[$allRight['name']] = true;
                 }
             }
         }
+
         // If user is super admin, give all rights
         if ($user->isSuperAdmin()) {
-            foreach ($allRights as $right) {
-                $this->permission[$right['name']] = true;
+            foreach ($allRights as $allRight) {
+                $this->permission[$allRight['name']] = true;
             }
         }
     }
@@ -150,11 +151,11 @@ class AdministrationHelper
             'noindex, nofollow',
         ];
 
-        foreach ($options as $value) {
+        foreach ($options as $option) {
             $output .= sprintf(
                 '<option%s>%s</option>',
-                ($value === $metaRobots) ? ' selected' : '',
-                $value
+                ($option === $metaRobots) ? ' selected' : '',
+                $option
             );
         }
 
@@ -169,11 +170,11 @@ class AdministrationHelper
         $options = ['id', 'thema', 'visits', 'updated', 'author'];
         $output = '';
 
-        foreach ($options as $value) {
+        foreach ($options as $option) {
             $output .= AdministrationHelper::generateOption(
                 $current,
-                $value,
-                'ad_conf_order_' . $value
+                $option,
+                'ad_conf_order_' . $option
             );
         }
 
@@ -188,11 +189,11 @@ class AdministrationHelper
         $options = ['ASC', 'DESC'];
         $output = '';
 
-        foreach ($options as $value) {
+        foreach ($options as $option) {
             $output .= AdministrationHelper::generateOption(
                 $current,
-                $value,
-                'ad_conf_' . strtolower($value)
+                $option,
+                'ad_conf_' . strtolower($option)
             );
         }
 
@@ -204,11 +205,11 @@ class AdministrationHelper
         $options = ['visits', 'voting'];
         $output = '';
 
-        foreach ($options as $value) {
+        foreach ($options as $option) {
             $output .= AdministrationHelper::generateOption(
                 $current,
-                $value,
-                'records.orderingPopularFaqs.' . $value
+                $option,
+                'records.orderingPopularFaqs.' . $option
             );
         }
 
@@ -243,13 +244,12 @@ class AdministrationHelper
             'keywords,content,thema',
             'search.relevance.keywords-content-thema'
         );
-        $output .= AdministrationHelper::generateOption(
+
+        return $output . AdministrationHelper::generateOption(
             $current,
             'keywords,thema,content',
             'search.relevance.keywords-thema-content'
         );
-
-        return $output;
     }
 
     public static function renderReleaseTypeOptions(string $current): string
@@ -273,27 +273,18 @@ class AdministrationHelper
 
     /**
      * Checks if the current user can access the content.
-     *
-     * @param CurrentUser $user
-     * @return bool
      */
-    public function canAccessContent(CurrentUser $user): bool
+    public function canAccessContent(CurrentUser $currentUser): bool
     {
-        if (
-            $user->isLoggedIn() &&
+        return $currentUser->isLoggedIn() &&
+        (
             (
-                (
-                    is_countable($user->perm->getAllUserRights($user->getUserId()))
-                    ?
-                    count($user->perm->getAllUserRights($user->getUserId()))
-                    : 0
-                ) || $user->isSuperAdmin()
-            )
-        ) {
-            return true;
-        }
-
-        return false;
+                is_countable($currentUser->perm->getAllUserRights($currentUser->getUserId()))
+                ?
+                count($currentUser->perm->getAllUserRights($currentUser->getUserId()))
+                : 0
+            ) || $currentUser->isSuperAdmin()
+        );
     }
 
 

@@ -94,7 +94,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $searchTerm
         );
 
-        $this->resultSet = $this->config->getDb()->query($query);
+        $this->resultSet = $this->configuration->getDb()->query($query);
 
         return $this->resultSet;
     }
@@ -106,11 +106,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     {
         $resultColumns = '';
 
-        foreach ($this->resultColumns as $column) {
+        foreach ($this->resultColumns as $resultColumn) {
             if (empty($resultColumns)) {
-                $resultColumns = $column;
+                $resultColumns = $resultColumn;
             } else {
-                $resultColumns .= ', ' . $column;
+                $resultColumns .= ', ' . $resultColumn;
             }
         }
 
@@ -154,11 +154,10 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      */
     public function getJoinedTable(): string
     {
-        if (empty($this->joinedTable)) {
+        if ($this->joinedTable === '' || $this->joinedTable === '0') {
             return '';
-        } else {
-            return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
         }
+        return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
     }
 
     /**
@@ -180,8 +179,8 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     {
         $joinedColumns = '';
 
-        foreach ($this->joinedColumns as $column) {
-            $joinedColumns .= $column . ' AND ';
+        foreach ($this->joinedColumns as $joinedColumn) {
+            $joinedColumns .= $joinedColumn . ' AND ';
         }
 
         return Strings::substr($joinedColumns, 0, -4);
@@ -226,13 +225,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     {
         $conditions = '';
 
-        if (count($this->conditions)) {
-            foreach ($this->conditions as $column => $value) {
-                if (is_array($value)) {
-                    $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
-                } else {
-                    $conditions .= ' AND ' . $column . ' = ' . $value;
-                }
+        foreach ($this->conditions as $column => $value) {
+            if (is_array($value)) {
+                $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
+            } else {
+                $conditions .= ' AND ' . $column . ' = ' . $value;
             }
         }
 
@@ -265,20 +262,23 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
         for ($i = 0; $i < $numKeys; ++$i) {
             if (strlen($where) != 0) {
-                $where = $where . ' OR';
+                $where .= ' OR';
             }
-            $where = $where . ' (';
+
+            $where .= ' (';
             for ($j = 0; $j < $numMatch; ++$j) {
                 if ($j != 0) {
-                    $where = $where . ' OR ';
+                    $where .= ' OR ';
                 }
+
                 $where = sprintf(
                     "%s%s LIKE '%%%s%%'",
                     $where,
                     $this->matchingColumns[$j],
-                    $this->config->getDb()->escape($keys[$i])
+                    $this->configuration->getDb()->escape($keys[$i])
                 );
             }
+
             $where .= ')';
         }
 

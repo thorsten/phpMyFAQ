@@ -33,7 +33,7 @@ use phpMyFAQ\User;
  */
 class AuthLdap extends Auth implements AuthDriverInterface
 {
-    private ?LdapCore $ldap = null;
+    private ?LdapCore $ldapCore = null;
 
     /** @var string[] Array of LDAP servers */
     private readonly array $ldapServer;
@@ -48,19 +48,19 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        $this->config = $config;
-        $this->ldapServer = $this->config->getLdapServer();
-        $this->multipleServers = $this->config->get('ldap.ldap_use_multiple_servers');
+        $this->configuration = $configuration;
+        $this->ldapServer = $this->configuration->getLdapServer();
+        $this->multipleServers = $this->configuration->get('ldap.ldap_use_multiple_servers');
 
-        parent::__construct($this->config);
+        parent::__construct($this->configuration);
 
         if (0 === (is_countable($this->ldapServer) ? count($this->ldapServer) : 0)) {
             throw new Exception('An error occurred while contacting LDAP: No configuration found.');
         }
 
-        $this->ldap = new LdapCore($this->config);
+        $this->ldapCore = new LdapCore($this->configuration);
         $this->connect($this->activeServer);
     }
 
@@ -70,7 +70,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     public function create(string $login, string $password, string $domain = ''): bool
     {
-        $user = new User($this->config);
+        $user = new User($this->configuration);
         $result = $user->createUser($login, '', $domain);
 
         $this->connect($this->activeServer);
@@ -81,8 +81,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
         // Set user information from LDAP
         $user->setUserData(
             [
-                'display_name' => $this->ldap->getCompleteName($login),
-                'email' => $this->ldap->getMail($login)
+                'display_name' => $this->ldapCore->getCompleteName($login),
+                'email' => $this->ldapCore->getMail($login)
             ]
         );
 
@@ -119,7 +119,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         // Get active LDAP server for current user
         if ($this->multipleServers) {
             // Try all LDAP servers
-            foreach ($this->ldapServer as $key => $value) {
+            foreach (array_keys($this->ldapServer) as $key) {
                 $this->connect($key);
                 $this->activeServer = (int)$key;
                 break;
@@ -127,19 +127,19 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         $bindLogin = $login;
-        if ($this->config->get('ldap.ldap_use_domain_prefix')) {
+        if ($this->configuration->get('ldap.ldap_use_domain_prefix')) {
             if (array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
         } else {
             $this->connect($this->activeServer);
 
-            $bindLogin = $this->ldap->getDn($login);
+            $bindLogin = $this->ldapCore->getDn($login);
         }
 
         // Check user in LDAP
-        $this->ldap = new LdapCore($this->config);
-        $this->ldap->connect(
+        $this->ldapCore = new LdapCore($this->configuration);
+        $this->ldapCore->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
             $this->ldapServer[$this->activeServer]['ldap_port'],
             $this->ldapServer[$this->activeServer]['ldap_base'],
@@ -147,13 +147,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
             htmlspecialchars_decode((string) $password)
         );
 
-        if (!$this->ldap->bind($bindLogin, htmlspecialchars_decode((string) $password))) {
-            $this->errors[] = $this->ldap->error;
+        if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode((string) $password))) {
+            $this->errors[] = $this->ldapCore->error;
             return false;
-        } else {
-            $this->create($login, htmlspecialchars_decode((string) $password));
-            return true;
         }
+        $this->create($login, htmlspecialchars_decode((string) $password));
+        return true;
     }
 
     /**
@@ -164,7 +163,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         // Get active LDAP server for current user
         if ($this->multipleServers) {
             // Try all LDAP servers
-            foreach ($this->ldapServer as $key => $value) {
+            foreach (array_keys($this->ldapServer) as $key) {
                 $this->connect($key);
                 $this->activeServer = (int)$key;
                 break;
@@ -173,12 +172,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         $this->connect($this->activeServer);
 
-        return strlen((string) $this->ldap->getCompleteName($login));
+        return strlen((string) $this->ldapCore->getCompleteName($login));
     }
 
     private function connect(int $activeServer = 0): void
     {
-        $this->ldap->connect(
+        $this->ldapCore->connect(
             $this->ldapServer[$activeServer]['ldap_server'],
             $this->ldapServer[$activeServer]['ldap_port'],
             $this->ldapServer[$activeServer]['ldap_base'],
@@ -186,8 +185,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$activeServer]['ldap_password']
         );
 
-        if ($this->ldap->error) {
-            $this->errors[] = $this->ldap->error;
+        if ($this->ldapCore->error) {
+            $this->errors[] = $this->ldapCore->error;
         }
     }
 }

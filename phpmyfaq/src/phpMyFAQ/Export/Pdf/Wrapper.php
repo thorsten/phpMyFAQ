@@ -410,15 +410,18 @@ class Wrapper extends TCPDF
                 } else {
                     $baseUrl .= 'cat=0';
                 }
+
                 $baseUrl .= '&amp;id=' . $this->faq['id'];
                 $baseUrl .= '&amp;artlang=' . $this->faq['lang'];
             }
+
             $url = $this->config->getDefaultUrl() . $baseUrl;
             $link = new Link($url, $this->config);
             $link->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $link->toString());
             $this->Cell(0, 10, 'URL: ' . $_url, 0, 1, 'C', 0, $_url);
         }
+
         $this->TextColor = $currentTextColor;
     }
 

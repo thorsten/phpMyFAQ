@@ -37,32 +37,32 @@ class ConfigurationController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('configuration', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         try {
-            $mailer = new Mail($configuration);
-            $mailer->setReplyTo($configuration->getAdminEmail());
-            $mailer->addTo($configuration->getAdminEmail());
-            $mailer->subject = $configuration->getTitle() . ': Mail test successful.';
-            $mailer->message = 'It works on my machine. 🚀';
-            $result = $mailer->send();
+            $mail = new Mail($configuration);
+            $mail->setReplyTo($configuration->getAdminEmail());
+            $mail->addTo($configuration->getAdminEmail());
+            $mail->subject = $configuration->getTitle() . ': Mail test successful.';
+            $mail->message = 'It works on my machine. 🚀';
+            $result = $mail->send();
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => $result]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => $result]);
         } catch (Exception | TransportExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $e->getMessage()]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => $e->getMessage()]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

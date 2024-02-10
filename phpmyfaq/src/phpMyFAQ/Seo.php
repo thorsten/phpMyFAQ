@@ -28,17 +28,17 @@ readonly class Seo
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $config)
+    public function __construct(private Configuration $configuration)
     {
     }
 
     public function getMetaRobots(string $action): string
     {
         return match ($action) {
-            'main' => $this->config->get('seo.metaTagsHome'),
-            'faq' => $this->config->get('seo.metaTagsFaqs'),
-            'show' => $this->config->get('seo.metaTagsCategories'),
-            default => $this->config->get('seo.metaTagsPages'),
+            'main' => $this->configuration->get('seo.metaTagsHome'),
+            'faq' => $this->configuration->get('seo.metaTagsFaqs'),
+            'show' => $this->configuration->get('seo.metaTagsCategories'),
+            default => $this->configuration->get('seo.metaTagsPages'),
         };
     }
 }

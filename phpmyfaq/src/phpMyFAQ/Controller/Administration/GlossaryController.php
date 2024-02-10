@@ -35,17 +35,17 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
 
         $glossary = new Glossary($configuration);
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($glossary->fetch($glossaryId));
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($glossary->fetch($glossaryId));
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/glossary/delete')]
@@ -53,7 +53,7 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
@@ -61,23 +61,23 @@ class GlossaryController extends AbstractController
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
         if (!Token::getInstance()->verifyToken('delete-glossary', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
         $glossary = new Glossary($configuration);
 
         if ($glossary->delete($glossaryId)) {
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => Translation::get('ad_glossary_delete_success')]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => Translation::get('ad_glossary_delete_success')]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('ad_glossary_delete_error')]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('ad_glossary_delete_error')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/glossary/add')]
@@ -85,7 +85,7 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_ADD);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
@@ -94,23 +94,23 @@ class GlossaryController extends AbstractController
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('add-glossary', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
         $glossary = new Glossary($configuration);
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => Translation::get('ad_glossary_save_success')]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => Translation::get('ad_glossary_save_success')]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('ad_glossary_save_error')]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('ad_glossary_save_error')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/glossary/update')]
@@ -118,7 +118,7 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
@@ -128,22 +128,22 @@ class GlossaryController extends AbstractController
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('update-glossary', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
 
-            return $response;
+            return $jsonResponse;
         }
 
         $glossary = new Glossary($configuration);
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => Translation::get('ad_glossary_update_success')]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => Translation::get('ad_glossary_update_success')]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('ad_glossary_update_error')]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('ad_glossary_update_error')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

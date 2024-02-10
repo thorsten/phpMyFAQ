@@ -38,31 +38,31 @@ class Configuration
 
     private Logger $logger;
 
-    private static ?Configuration $instance = null;
+    private static ?Configuration $configuration = null;
 
     protected string $tableName = 'faqconfig';
 
     /**
      * Constructor.
      */
-    public function __construct(DatabaseDriver $database)
+    public function __construct(DatabaseDriver $databaseDriver)
     {
-        $this->setDatabase($database);
+        $this->setDatabase($databaseDriver);
         $this->setLogger();
 
-        if (is_null(self::$instance)) {
-            self::$instance = $this;
+        if (is_null(self::$configuration)) {
+            self::$configuration = $this;
         }
     }
 
     public static function getConfigurationInstance(): Configuration
     {
-        return self::$instance;
+        return self::$configuration;
     }
 
-    public function setDatabase(DatabaseDriver $database): void
+    public function setDatabase(DatabaseDriver $databaseDriver): void
     {
-        $this->config['core.database'] = $database;
+        $this->config['core.database'] = $databaseDriver;
     }
 
     /**
@@ -178,9 +178,8 @@ class Configuration
 
         if (!str_ends_with((string) $defaultUrl, '/')) {
             return $defaultUrl . '/';
-        } else {
-            return $defaultUrl;
         }
+        return $defaultUrl;
     }
 
     /**
@@ -228,23 +227,23 @@ class Configuration
     /**
      * Sets the LDAP configuration.
      */
-    public function setLdapConfig(LdapConfiguration $ldapConfig): void
+    public function setLdapConfig(LdapConfiguration $ldapConfiguration): void
     {
         // Always add the main LDAP server
         $this->config['core.ldapServer'][0] = [
-            'ldap_server' => $ldapConfig->getMainServer(),
-            'ldap_port' => $ldapConfig->getMainPort(),
-            'ldap_user' => $ldapConfig->getMainUser(),
-            'ldap_password' => $ldapConfig->getMainPassword(),
-            'ldap_base' => $ldapConfig->getMainBase(),
+            'ldap_server' => $ldapConfiguration->getMainServer(),
+            'ldap_port' => $ldapConfiguration->getMainPort(),
+            'ldap_user' => $ldapConfiguration->getMainUser(),
+            'ldap_password' => $ldapConfiguration->getMainPassword(),
+            'ldap_base' => $ldapConfiguration->getMainBase(),
         ];
 
         // Add multiple LDAP servers if enabled
         if (true === $this->get('ldap.ldap_use_multiple_servers')) {
             $key = 1;
             while (true) {
-                if (isset($ldapConfig->getServers()[$key])) {
-                    $this->config['core.ldapServer'][$key] = $ldapConfig->getServers()[$key];
+                if (isset($ldapConfiguration->getServers()[$key])) {
+                    $this->config['core.ldapServer'][$key] = $ldapConfiguration->getServers()[$key];
                     ++$key;
                 } else {
                     break;
@@ -346,9 +345,9 @@ class Configuration
     /**
      * Sets the Elasticsearch configuration.
      */
-    public function setElasticsearchConfig(ElasticsearchConfiguration $data): void
+    public function setElasticsearchConfig(ElasticsearchConfiguration $elasticsearchConfiguration): void
     {
-        $this->config['core.elasticsearchConfig'] = $data;
+        $this->config['core.elasticsearchConfig'] = $elasticsearchConfiguration;
     }
 
     /**

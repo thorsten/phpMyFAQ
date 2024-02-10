@@ -39,9 +39,9 @@ class CategoryImage
     /**
      * Constructor.
      *
-     * @param Configuration $config Configuration object
+     * @param Configuration $configuration Configuration object
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -55,6 +55,7 @@ class CategoryImage
         if (isset($uploadedFile['error']) && UPLOAD_ERR_OK === $uploadedFile['error']) {
             $this->isUpload = true;
         }
+
         $this->uploadedFile = $uploadedFile;
 
         return $this;
@@ -105,8 +106,6 @@ class CategoryImage
 
     /**
      * Checks for valid image MIME types, returns true if valid
-     * @param string $file
-     * @return bool
      */
     private function isValidMimeType(string $file): bool
     {
@@ -125,7 +124,7 @@ class CategoryImage
     {
         if (
             $this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name'])
-            && $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')
+            && $this->uploadedFile['size'] < $this->configuration->get('records.maxAttachmentSize')
         ) {
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {
                 throw new Exception('Cannot detect image size');
@@ -140,9 +139,8 @@ class CategoryImage
             }
 
             return true;
-        } else {
-            throw new Exception('Uploaded image is too big');
         }
+        throw new Exception('Uploaded image is too big');
     }
 
     /**

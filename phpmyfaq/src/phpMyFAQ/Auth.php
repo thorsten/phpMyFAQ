@@ -60,7 +60,7 @@ class Auth
     /**
      * Constructor.
      */
-    public function __construct(protected ?Configuration $config)
+    public function __construct(protected ?Configuration $configuration)
     {
     }
 
@@ -72,7 +72,7 @@ class Auth
      */
     public function selectEncType(string $encType): Encryption
     {
-        $this->encContainer = Encryption::selectEnc($encType, $this->config);
+        $this->encContainer = Encryption::selectEnc($encType, $this->configuration);
         return $this->encContainer;
     }
 
@@ -88,6 +88,7 @@ class Auth
         if (!is_array($this->errors)) {
             $this->errors = [(string)$this->errors];
         }
+
         foreach ($this->errors as $error) {
             $message .= $error . "\n";
         }
@@ -118,7 +119,7 @@ class Auth
             throw new Exception(self::PMF_ERROR_USER_NO_AUTH_TYPE);
         }
 
-        return new $authClass($this->config);
+        return new $authClass($this->configuration);
     }
 
     /**

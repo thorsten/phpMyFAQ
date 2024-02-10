@@ -34,7 +34,7 @@ class Rating
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
         $this->plr = new Plurals();
     }
@@ -119,18 +119,18 @@ class Rating
             ),
         };
 
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
-            $question = Strings::htmlspecialchars(trim($row->question));
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $question = Strings::htmlspecialchars(trim((string) $row->question));
             $url = sprintf(
                 '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 $row->category_id,
                 $row->id,
                 $row->lang
             );
 
-            $link = new Link($url, $this->config);
+            $link = new Link($url, $this->configuration);
             $link->itemTitle = $question;
 
             $ratings[] = [
@@ -157,18 +157,17 @@ class Rating
             Database::getTablePrefix(),
             $id
         );
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            $row = $this->config->getDb()->fetchObject($result);
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            $row = $this->configuration->getDb()->fetchObject($result);
 
             return sprintf(
                 ' <span data-rating="%s">%s</span> (' . $this->plr->GetMsg('plmsgVotes', $row->usr) . ')',
                 round($row->voting, 2),
                 round($row->voting, 2)
             );
-        } else {
-            return ' <span data-rating="0">0</span> (' . $this->plr->GetMsg('plmsgVotes', 0) . ')';
         }
+        return ' <span data-rating="0">0</span> (' . $this->plr->GetMsg('plmsgVotes', 0) . ')';
     }
 
     /**
@@ -187,12 +186,7 @@ class Rating
             $ip,
             $check
         );
-
-        if ($this->config->getDb()->numRows($this->config->getDb()->query($query))) {
-            return false;
-        }
-
-        return true;
+        return !$this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
     }
 
     /**
@@ -205,10 +199,11 @@ class Rating
             Database::getTablePrefix(),
             $recordId
         );
-        if ($result = $this->config->getDb()->query($query)) {
-            if ($row = $this->config->getDb()->fetchObject($result)) {
-                return $row->usr;
-            }
+        if (!($result = $this->configuration->getDb()->query($query))) {
+            return 0;
+        }
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+            return $row->usr;
         }
 
         return 0;
@@ -224,13 +219,13 @@ class Rating
         $query = sprintf(
             "INSERT INTO %sfaqvoting VALUES (%d, %d, %d, 1, %d, '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
             $votingData['user_ip']
         );
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -250,7 +245,7 @@ class Rating
             $votingData['user_ip'],
             $votingData['record_id']
         );
-        $this->config->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
 
         return true;
     }
@@ -260,7 +255,7 @@ class Rating
      */
     public function deleteAll(): bool
     {
-        return $this->config->getDb()->query(
+        return $this->configuration->getDb()->query(
             sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix())
         );
     }

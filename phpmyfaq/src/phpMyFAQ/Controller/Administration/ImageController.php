@@ -34,37 +34,38 @@ class ImageController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $uploadDir =  PMF_CONTENT_DIR . '/user/images/';
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
         $timestamp = time();
 
         if (!Token::getInstance()->verifyToken('edit-faq', $request->query->get('csrf'))) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            $response->send();
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            $jsonResponse->send();
         }
 
         reset($_FILES);
         $temp = current($_FILES);
         if (is_uploaded_file($temp['tmp_name'])) {
-            if ($request->server->get('HTTP_ORIGIN') !== null) {
-                if ($request->server->get('HTTP_ORIGIN') . '/' === $configuration->getDefaultUrl()) {
-                    $response->headers->set('Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN'));
-                }
+            if (
+                $request->server->get('HTTP_ORIGIN') !== null &&
+                $request->server->get('HTTP_ORIGIN') . '/' === $configuration->getDefaultUrl()
+            ) {
+                $jsonResponse->headers->set('Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN'));
             }
 
             // Sanitize input
-            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                return $response;
+            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", (string) $temp['name'])) {
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                return $jsonResponse;
             }
 
             // Verify extension
-            if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                return $response;
+            if (!in_array(strtolower(pathinfo((string) $temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                return $jsonResponse;
             }
 
             // Accept upload if there was no origin, or if it is an accepted origin
@@ -72,12 +73,14 @@ class ImageController extends AbstractController
             move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
 
             // Respond to the successful upload with JSON with the full URL of the uploaded image.
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['location' => $configuration->getDefaultUrl() . 'content/user/images/' . $fileName]);
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(
+                ['location' => $configuration->getDefaultUrl() . 'content/user/images/' . $fileName]
+            );
         } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $jsonResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 }

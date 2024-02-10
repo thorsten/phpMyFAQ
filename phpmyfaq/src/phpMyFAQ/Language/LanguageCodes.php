@@ -324,6 +324,6 @@ class LanguageCodes
 
     public static function getKey(string $value): ?string
     {
-        return array_search($value, static::$languageCodes);
+        return array_search($value, static::$languageCodes, true);
     }
 }

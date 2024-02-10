@@ -42,7 +42,7 @@ class Instance
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $config)
+    public function __construct(protected Configuration $configuration)
     {
     }
 
@@ -51,22 +51,22 @@ class Instance
      *
      * @return int $id
      */
-    public function addInstance(InstanceEntity $data): int
+    public function addInstance(InstanceEntity $instanceEntity): int
     {
-        $this->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
+        $this->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             Database::getTablePrefix(),
             $this->getId(),
-            $this->config->getDb()->escape($data->getUrl()),
-            $this->config->getDb()->escape($data->getInstance()),
-            $this->config->getDb()->escape($data->getComment()),
-            $this->config->getDb()->now(),
-            $this->config->getDb()->now()
+            $this->configuration->getDb()->escape($instanceEntity->getUrl()),
+            $this->configuration->getDb()->escape($instanceEntity->getInstance()),
+            $this->configuration->getDb()->escape($instanceEntity->getComment()),
+            $this->configuration->getDb()->now(),
+            $this->configuration->getDb()->now()
         );
 
-        if (!$this->config->getDb()->query($insert)) {
+        if (!$this->configuration->getDb()->query($insert)) {
             return 0;
         }
 
@@ -101,9 +101,9 @@ class Instance
             Database::getTablePrefix()
         );
 
-        $result = $this->config->getDb()->query($select);
+        $result = $this->configuration->getDb()->query($select);
 
-        return $this->config->getDb()->fetchAll($result);
+        return $this->configuration->getDb()->fetchAll($result);
     }
 
     /**
@@ -117,26 +117,26 @@ class Instance
             $id
         );
 
-        $result = $this->config->getDb()->query($select);
+        $result = $this->configuration->getDb()->query($select);
 
-        return $this->config->getDb()->fetchObject($result);
+        return $this->configuration->getDb()->fetchObject($result);
     }
 
     /**
      * Updates the instance data.
      */
-    public function updateInstance(int $id, InstanceEntity $data): bool
+    public function updateInstance(int $id, InstanceEntity $instanceEntity): bool
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($data->getInstance()),
-            $this->config->getDb()->escape($data->getComment()),
-            $this->config->getDb()->escape($data->getUrl()),
+            $this->configuration->getDb()->escape($instanceEntity->getInstance()),
+            $this->configuration->getDb()->escape($instanceEntity->getComment()),
+            $this->configuration->getDb()->escape($instanceEntity->getUrl()),
             $id
         );
 
-        return $this->config->getDb()->query($update);
+        return $this->configuration->getDb()->query($update);
     }
 
     /**
@@ -159,7 +159,7 @@ class Instance
         ];
 
         foreach ($deletes as $delete) {
-            $success = $this->config->getDb()->query($delete);
+            $success = $this->configuration->getDb()->query($delete);
             if (!$success) {
                 return false;
             }
@@ -181,11 +181,11 @@ class Instance
                 (%d, '%s', '%s')",
             Database::getTablePrefix(),
             $this->getId(),
-            $this->config->getDb()->escape(trim($name)),
-            $this->config->getDb()->escape(trim($value))
+            $this->configuration->getDb()->escape(trim($name)),
+            $this->configuration->getDb()->escape(trim($value))
         );
 
-        return $this->config->getDb()->query($insert);
+        return $this->configuration->getDb()->query($insert);
     }
 
     /**
@@ -223,8 +223,8 @@ class Instance
             $instanceId
         );
 
-        $result = $this->config->getDb()->query($query);
-        $config = $this->config->getDb()->fetchAll($result);
+        $result = $this->configuration->getDb()->query($query);
+        $config = $this->configuration->getDb()->fetchAll($result);
 
         foreach ($config as $items) {
             $this->instanceConfig[$items->config_name] = $items->config_value;

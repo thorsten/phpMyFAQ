@@ -32,7 +32,7 @@ class Network
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -45,7 +45,7 @@ class Network
      */
     public function isBanned(string $ip): bool
     {
-        $bannedIps = explode(' ', (string) $this->config->get('security.bannedIPs'));
+        $bannedIps = explode(' ', (string) $this->configuration->get('security.bannedIPs'));
         return IpUtils::checkIp($ip, $bannedIps);
     }
 }

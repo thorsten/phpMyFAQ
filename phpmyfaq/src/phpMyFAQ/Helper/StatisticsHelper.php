@@ -44,13 +44,16 @@ readonly class StatisticsHelper
             if ($dat != '.' && $dat != '..') {
                 ++$numberOfDays;
             }
+
             if (Date::getTrackingFileDate($dat) > $last) {
                 $last = Date::getTrackingFileDate($dat);
             }
+
             if (Date::getTrackingFileDate($dat) < $first && Date::getTrackingFileDate($dat) > 0) {
                 $first = Date::getTrackingFileDate($dat);
             }
         }
+
         closedir($dir);
 
         $result = new stdClass();
@@ -64,30 +67,33 @@ readonly class StatisticsHelper
     public function getFirstTrackingDate(int $firstDate): string
     {
         $request = Request::createFromGlobals();
+        $requestTime = $request->server->get('REQUEST_TIME');
         $date = 0;
 
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $firstDate))) {
             $fp = @fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $firstDate), 'r');
             while (($data = fgetcsv($fp, 1024, ';')) !== false) {
-                $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $request->server->get('REQUEST_TIME');
+                $date = isset($data[7]) && 10 === strlen((string) $data[7]) ? $data[7] : $requestTime;
             }
+
             fclose($fp);
             return $this->date->format(date('Y-m-d H:i', $date));
-        } else {
-            return Translation::get('ad_sess_noentry');
         }
+        return Translation::get('ad_sess_noentry');
     }
 
     public function getLastTrackingDate(int $lastDate): string
     {
         $request = Request::createFromGlobals();
+        $requestTime = $request->server->get('REQUEST_TIME');
 
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $lastDate))) {
             $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $lastDate), 'r');
 
             while (($data = fgetcsv($fp, 1024, ';')) !== false) {
-                $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $request->server->get('REQUEST_TIME');
+                $date = isset($data[7]) && 10 === strlen((string) $data[7]) ? $data[7] : $requestTime;
             }
+
             fclose($fp);
 
             if (empty($date)) {
@@ -95,9 +101,8 @@ readonly class StatisticsHelper
             }
 
             return $this->date->format(date('Y-m-d H:i', $date));
-        } else {
-            return Translation::get('ad_sess_noentry');
         }
+        return Translation::get('ad_sess_noentry');
     }
 
     /**
@@ -114,6 +119,7 @@ readonly class StatisticsHelper
                 $trackingDates[] = Date::getTrackingFileDate($dat);
             }
         }
+
         closedir($dir);
         sort($trackingDates);
 
@@ -134,12 +140,15 @@ readonly class StatisticsHelper
                 if (($candidateLast > 0) && ($candidateLast > $last)) {
                     $last = $candidateLast;
                 }
+
                 if (($candidateFirst > 0) && ($candidateFirst < $first)) {
                     $first = $candidateFirst;
                 }
+
                 unlink(PMF_ROOT_DIR . '/data/' . $trackingFile);
             }
         }
+
         closedir($dir);
 
         return $this->session->deleteSessions($first, $last);
@@ -166,7 +175,7 @@ readonly class StatisticsHelper
         $oldValue = mktime(0, 0, 0, 1, 1, 1970);
         $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
         foreach ($this->getAllTrackingDates() as $trackingDate) {
-            if (date('Y-m', $oldValue) != date('Y-m', $trackingDate)) {
+            if (date('Y-m', $oldValue) !== date('Y-m', $trackingDate)) {
                 // The filename format is: trackingDDMMYYYY
                 // e.g.: tracking02042006
                 $renderedHtml .= sprintf(
@@ -187,9 +196,10 @@ readonly class StatisticsHelper
         $renderedHtml = '';
         foreach ($this->getAllTrackingDates() as $trackingDate) {
             $renderedHtml .= sprintf('<option value="%d"', $trackingDate);
-            if (date('Y-m-d', $trackingDate) == date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
+            if (date('Y-m-d', $trackingDate) === date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
                 $renderedHtml .= ' selected';
             }
+
             $renderedHtml .= '>';
             $renderedHtml .= $this->date->format(date('Y-m-d H:i', $trackingDate));
             $renderedHtml .= "</option>\n";

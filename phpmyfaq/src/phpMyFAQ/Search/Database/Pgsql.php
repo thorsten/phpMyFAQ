@@ -32,9 +32,9 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
+        parent::__construct($configuration);
         $this->relevanceSupport = true;
     }
 
@@ -100,13 +100,13 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
             $weight[$columnName] = array_shift($weights);
         }
 
-        foreach ($this->matchingColumns as $matchColumn) {
-            $columnName = substr(strstr($matchColumn, '.'), 1);
+        foreach ($this->matchingColumns as $matchingColumn) {
+            $columnName = substr(strstr($matchingColumn, '.'), 1);
 
             if (isset($weight[$columnName])) {
                 $column = sprintf(
                     "TS_RANK_CD(SETWEIGHT(TO_TSVECTOR(COALESCE(%s, '')), '%s'), query) AS relevance_%s",
-                    $matchColumn,
+                    $matchingColumn,
                     $weight[$columnName],
                     $columnName
                 );
@@ -133,7 +133,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 'relevance_%s DESC',
                 $field
             );
-            if (empty($order)) {
+            if ($order === '' || $order === '0') {
                 $order .= $string;
             } else {
                 $order .= ', ' . $string;
@@ -153,9 +153,9 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
         if ($enableRelevance) {
             $matchColumns = '';
 
-            foreach ($this->matchingColumns as $matchColumn) {
-                $match = sprintf("to_tsvector(coalesce(%s,''))", $matchColumn);
-                if (empty($matchColumns)) {
+            foreach ($this->matchingColumns as $matchingColumn) {
+                $match = sprintf("to_tsvector(coalesce(%s,''))", $matchingColumn);
+                if ($matchColumns === '' || $matchColumns === '0') {
                     $matchColumns .= '(' . $match;
                 } else {
                     $matchColumns .= ' || ' . $match;

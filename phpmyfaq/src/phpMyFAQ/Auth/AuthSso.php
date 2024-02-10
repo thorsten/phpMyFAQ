@@ -36,23 +36,19 @@ class AuthSso extends Auth implements AuthDriverInterface
      */
     public function create(string $login, string $password, string $domain = ''): bool
     {
-        if ($this->config->isLdapActive()) {
+        if ($this->configuration->isLdapActive()) {
             // LDAP/AD + SSO
-            $authLdap = new AuthLdap($this->config);
+            $authLdap = new AuthLdap($this->configuration);
             return $authLdap->create($login, '', $domain);
-        } else {
-            // SSO without LDAP/AD
-            $user = new User($this->config);
-            $result = $user->createUser($login, '', $domain);
-
-            $user->setStatus('active');
-            $user->setAuthSource(AuthenticationSourceType::AUTH_SSO->value);
-
-            // Set user information
-            $user->setUserData([ 'display_name' => $login ]);
-
-            return $result;
         }
+        // SSO without LDAP/AD
+        $user = new User($this->configuration);
+        $result = $user->createUser($login, '', $domain);
+        $user->setStatus('active');
+        $user->setAuthSource(AuthenticationSourceType::AUTH_SSO->value);
+        // Set user information
+        $user->setUserData([ 'display_name' => $login ]);
+        return $result;
     }
 
     /**
@@ -79,27 +75,22 @@ class AuthSso extends Auth implements AuthDriverInterface
     {
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
-        } else {
-            // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
-            $remoteUser = explode('\\', (string) $_SERVER['REMOTE_USER']);
-            if (is_array($remoteUser) && count($remoteUser) > 1) {
-                $user = $remoteUser[1];
-            } else {
-                $remoteUser = explode('@', (string) $_SERVER['REMOTE_USER']);
-                if (is_array($remoteUser) && count($remoteUser) > 1) {
-                    $user = $remoteUser[0];
-                } else {
-                    $user = $_SERVER['REMOTE_USER'];
-                }
-            }
-            if ($user === $login) {
-                $this->create($login, $password);
-
-                return true;
-            } else {
-                return false;
-            }
         }
+        // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
+        $remoteUser = explode('\\', (string) $_SERVER['REMOTE_USER']);
+        if (is_array($remoteUser) && count($remoteUser) > 1) {
+            $user = $remoteUser[1];
+        } else {
+            $remoteUser = explode('@', (string) $_SERVER['REMOTE_USER']);
+            $user = is_array($remoteUser) && count($remoteUser) > 1 ? $remoteUser[0] : $_SERVER['REMOTE_USER'];
+        }
+
+        if ($user === $login) {
+            $this->create($login, $password);
+
+            return true;
+        }
+        return false;
     }
 
     /**

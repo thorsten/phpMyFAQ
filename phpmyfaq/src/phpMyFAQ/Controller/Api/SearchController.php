@@ -36,7 +36,7 @@ class SearchController
      */
     public function search(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($faqConfig);
 
@@ -44,41 +44,43 @@ class SearchController
         $search->setCategory(new Category($faqConfig));
 
         $faqPermission = new FaqPermission($faqConfig);
-        $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
+        $searchResultSet = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchResults = $search->search($searchString, false);
-        $faqSearchResult->reviewResultSet($searchResults);
+        $searchResultSet->reviewResultSet($searchResults);
 
-        if ($faqSearchResult->getNumberOfResults() > 0) {
+        if ($searchResultSet->getNumberOfResults() > 0) {
             $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             $result = [];
-            foreach ($faqSearchResult->getResultSet() as $data) {
+            foreach ($searchResultSet->getResultSet() as $data) {
                 $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, 'utf-8');
                 $data->answer = Utils::makeShorterText($data->answer, 12);
                 $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
                 $result[] = $data;
             }
-            $response->setData($result);
+
+            $jsonResponse->setData($result);
         } else {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     public function popular(): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $search = new Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

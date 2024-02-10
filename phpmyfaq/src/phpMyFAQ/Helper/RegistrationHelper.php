@@ -37,9 +37,9 @@ class RegistrationHelper extends Helper
     /**
      * RegistrationHelper constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        $this->config = $config;
+        $this->config = $configuration;
     }
 
     /**
@@ -59,49 +59,40 @@ class RegistrationHelper extends Helper
                 'registered' => false,
                 'error' => $user->error()
             ];
-        } else {
-            $user->userdata->set(
-                ['display_name', 'email', 'is_visible'],
-                [$fullName, $email, $isVisible === 'on' ? 1 : 0]
-            );
-            $user->setStatus('blocked');
-
-            if (!$this->config->get('spam.manualActivation')) {
-                $isNowActive = $user->activateUser();
-            } else {
-                $isNowActive = false;
-            }
-
-            if ($isNowActive) {
-                // @todo add translation strings
-                $adminMessage = 'This user has been automatically activated, you can still' .
-                    ' modify the users permissions or decline membership by visiting the admin section';
-            } else {
-                $adminMessage = 'To activate this user please use';
-            }
-
-            $text = sprintf(
-                'A new user has been registered:<br><br>Name: %s<br>Login name: %s<br><br>%s the administration at %s.',
-                $fullName,
-                $userName,
-                $adminMessage,
-                $this->config->getDefaultUrl()
-            );
-
-            $mailer = new Mail($this->config);
-            $mailer->setReplyTo($email, $fullName);
-            $mailer->addTo($this->config->getAdminEmail());
-            $mailer->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->config);
-            $mailer->message = $text;
-            $mailer->send();
-            unset($mailer);
-
-            return [
-                'registered' => true,
-                'success' => trim(Translation::get('successMessage')) . ' ' .
-                    trim(Translation::get('msgRegThankYou')),
-            ];
         }
+        $user->userdata->set(
+            ['display_name', 'email', 'is_visible'],
+            [$fullName, $email, $isVisible === 'on' ? 1 : 0]
+        );
+        $user->setStatus('blocked');
+        $isNowActive = !$this->config->get('spam.manualActivation') && $user->activateUser();
+        if ($isNowActive) {
+            // @todo add translation strings
+            $adminMessage = 'This user has been automatically activated, you can still' .
+                ' modify the users permissions or decline membership by visiting the admin section';
+        } else {
+            $adminMessage = 'To activate this user please use';
+        }
+        $text = sprintf(
+            'A new user has been registered:<br><br>Name: %s<br>Login name: %s<br><br>%s the administration at %s.',
+            $fullName,
+            $userName,
+            $adminMessage,
+            $this->config->getDefaultUrl()
+        );
+        $mail = new Mail($this->config);
+        $mail->setReplyTo($email, $fullName);
+        $mail->addTo($this->config->getAdminEmail());
+
+        $mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->config);
+        $mail->message = $text;
+        $mail->send();
+        unset($mail);
+        return [
+            'registered' => true,
+            'success' => trim((string) Translation::get('successMessage')) . ' ' .
+                trim((string) Translation::get('msgRegThankYou')),
+        ];
     }
 
     /**

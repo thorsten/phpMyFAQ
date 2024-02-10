@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
-use phpMyFAQ\Attachment\AttachmentException as AttachmentException;
+use phpMyFAQ\Attachment\AttachmentException;
 
 /**
  * Class FileException

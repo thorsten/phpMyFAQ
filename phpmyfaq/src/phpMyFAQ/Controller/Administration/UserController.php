@@ -47,7 +47,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $filtered = Filter::filterVar($request->query->get('filter'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -55,8 +55,8 @@ class UserController extends AbstractController
         if ('' === $filtered) {
             $allUsers = $user->getAllUsers(false);
             $userData = [];
-            foreach ($allUsers as $userId) {
-                $user->getUserById($userId, true);
+            foreach ($allUsers as $allUser) {
+                $user->getUserById($allUser, true);
                 $userObject = new stdClass();
                 $userObject->id = $user->getUserId();
                 $userObject->status = $user->getStatus();
@@ -68,8 +68,9 @@ class UserController extends AbstractController
                 $userObject->authSource = $user->getUserAuthSource();
                 $userData[] = $userObject;
             }
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($userData);
+
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData($userData);
         } else {
             $allUsers = [];
             foreach ($user->searchUsers($filtered) as $singleUser) {
@@ -78,11 +79,12 @@ class UserController extends AbstractController
                 $users->value = (int)$singleUser['user_id'];
                 $allUsers[] = $users;
             }
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($allUsers);
+
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData($allUsers);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/user/data')]
@@ -90,10 +92,11 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $user->getUserById($request->get('userId'), true);
+
         $userdata = $user->userdata->get('*');
 
         if (is_array($userdata)) {
@@ -106,10 +109,10 @@ class UserController extends AbstractController
             $userdata = [];
         }
 
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($userdata);
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($userdata);
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/user/permissions')]
@@ -117,14 +120,14 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $userId = $request->get('userId');
         $user->getUserById($userId, true);
-        $response->setData($user->perm->getUserRights($userId));
+        $jsonResponse->setData($user->perm->getUserRights($userId));
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/user/activate')]
@@ -132,14 +135,14 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $data = json_decode($request->getContent());
         if (!Token::getInstance()->verifyToken('activate-user', $data->csrfToken)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -147,18 +150,18 @@ class UserController extends AbstractController
         $user->getUserById($userId, true);
         try {
             if ($user->activateUser()) {
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => $user->getStatus()]);
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setData(['success' => $user->getStatus()]);
             } else {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $user->getStatus()]);
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setData(['error' => $user->getStatus()]);
             }
-        } catch (TransportExceptionInterface $e) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => $e->getMessage()]);
+        } catch (TransportExceptionInterface $transportException) {
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => $transportException->getMessage()]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     /**
@@ -169,7 +172,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -181,15 +184,15 @@ class UserController extends AbstractController
         $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('overwrite-password', $csrfToken)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
-        if (strlen($newPassword) <= 7 || strlen($retypedPassword) <= 7) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('ad_passwd_fail')]);
-            return $response;
+        if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
+            return $jsonResponse;
         }
 
         $user->getUserById($userId, true);
@@ -200,18 +203,19 @@ class UserController extends AbstractController
 
         if ($newPassword === $retypedPassword) {
             if (!$user->changePassword($newPassword)) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => Translation::get('ad_passwd_fail')]);
-                $response->send();
+                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
+                $jsonResponse->send();
             }
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData(['success' => Translation::get('ad_passwdsuc')]);
+
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData(['success' => Translation::get('ad_passwdsuc')]);
         } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('ad_passwd_fail')]);
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
         }
 
-        return $response;
+        return $jsonResponse;
     }
 
     #[Route('admin/api/user/delete')]
@@ -219,16 +223,16 @@ class UserController extends AbstractController
     {
         $this->userHasPermission(PermissionType::USER_DELETE);
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-user', $data->csrfToken)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -236,26 +240,25 @@ class UserController extends AbstractController
         $user->getUserById($userId, true);
         if ($user->getStatus() == 'protected' || $userId == 1) {
             $message = '<p class="alert alert-error">' . Translation::get('ad_user_error_protectedAccount') . '</p>';
+        } elseif (!$user->deleteUser()) {
+            $message = Translation::get('ad_user_error_delete');
         } else {
-            if (!$user->deleteUser()) {
-                $message = Translation::get('ad_user_error_delete');
-            } else {
-                $category = new Category($configuration, [], false);
-                $category->moveOwnership((int) $userId, 1);
+            $category = new Category($configuration, [], false);
+            $category->moveOwnership((int) $userId, 1);
 
-                // Remove the user from groups
-                if ('basic' !== $configuration->get('security.permLevel')) {
-                    $permissions = Permission::selectPerm('medium', $configuration);
-                    $permissions->removeFromAllGroups($userId);
-                }
-
-                $message = Translation::get('ad_user_deleted');
+            // Remove the user from groups
+            if ('basic' !== $configuration->get('security.permLevel')) {
+                $permissions = Permission::selectPerm('medium', $configuration);
+                $permissions->removeFromAllGroups($userId);
             }
-        }
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->setData($message);
 
-        return $response;
+            $message = Translation::get('ad_user_deleted');
+        }
+
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($message);
+
+        return $jsonResponse;
     }
 
     /**
@@ -266,15 +269,15 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('add-user', $data->csrf)) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $jsonResponse;
         }
 
         $errorMessage = [];
@@ -293,24 +296,28 @@ class UserController extends AbstractController
         if (!$newUser->isValidLogin($userName)) {
             $errorMessage[] = Translation::get('ad_user_error_loginInvalid');
         }
+
         if ($newUser->getUserByLogin($userName)) {
             $errorMessage[] = Translation::get('ad_adus_exerr');
         }
+
         if ($userRealName === '') {
             $errorMessage[] = Translation::get('ad_user_error_noRealName');
         }
+
         if (is_null($userEmail)) {
             $errorMessage[] = Translation::get('ad_user_error_noEmail');
         }
+
         if (!$automaticPassword) {
-            if (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7) {
+            if (strlen((string) $userPassword) <= 7 || strlen((string) $userPasswordConfirm) <= 7) {
                 $errorMessage[] = Translation::get('ad_passwd_fail');
             }
         } else {
             $userPassword = $newUser->createPassword(8, false);
         }
 
-        if (count($errorMessage) === 0) {
+        if ($errorMessage === []) {
             if (!$newUser->createUser($userName, $userPassword)) {
                 $errorMessage[] = $newUser->error();
             } else {
@@ -320,9 +327,10 @@ class UserController extends AbstractController
                 $mailHelper = new MailHelper($configuration);
                 try {
                     $mailHelper->sendMailToNewUser($newUser, $userPassword);
-                } catch (Exception | TransportExceptionInterface $e) {
+                } catch (Exception | TransportExceptionInterface) {
                     // @todo catch exception
                 }
+
                 $successMessage = [
                     'success' => Translation::get('ad_adus_suc'),
                     'id' => $newUser->getUserId(),
@@ -336,14 +344,14 @@ class UserController extends AbstractController
                 ];
             }
 
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData($successMessage);
-            return $response;
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setData($successMessage);
+            return $jsonResponse;
         }
 
-        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        $response->setData($errorMessage);
+        $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $jsonResponse->setData($errorMessage);
 
-        return $response;
+        return $jsonResponse;
     }
 }

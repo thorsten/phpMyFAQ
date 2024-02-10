@@ -349,7 +349,7 @@ class Sqlsrv implements DatabaseDriver
      */
     private function formatErrors(array $errors): string
     {
-        $error = '<h3>SQL Error:</h3>' . 'MS SQL Error information: <br/>';
+        $error = '<h3>SQL Error:</h3>MS SQL Error information: <br/>';
         foreach ($errors as $error) {
             $error .= sprintf(
                 'SQLSTATE: %s<br/>Code: %s<br/>Message: %s<br/>',

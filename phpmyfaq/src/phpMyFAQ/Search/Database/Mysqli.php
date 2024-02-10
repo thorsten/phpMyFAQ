@@ -30,9 +30,9 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
     /**
      * Constructor.
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $configuration)
     {
-        parent::__construct($config);
+        parent::__construct($configuration);
         $this->relevanceSupport = true;
     }
 
@@ -44,33 +44,30 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
      */
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
             return parent::search($searchTerm);
+        }
+        $relevance = $this->configuration->get('search.enableRelevance');
+        $columns = $this->getResultColumns();
+        if ($this->relevanceSupport && $relevance) {
+            $columns .= ', ' . $this->setRelevanceRanking($searchTerm);
+            $orderBy = 'ORDER BY score DESC';
         } else {
-            $relevance = $this->config->get('search.enableRelevance');
-            $columns = $this->getResultColumns();
-
-            if ($this->relevanceSupport && $relevance) {
-                $columns .= ', ' . $this->setRelevanceRanking($searchTerm);
-                $orderBy = 'ORDER BY score DESC';
-            } else {
-                $orderBy = '';
-            }
-
-            $chars = [
-                "\xe2\x80\x98",
-                "\xe2\x80\x99",
-                "\xe2\x80\x9c",
-                "\xe2\x80\x9d",
-                "\xe2\x80\x93",
-                "\xe2\x80\x94",
-                "\xe2\x80\xa6",
-            ];
-            $replace = ["'", "'", '"', '"', '-', '--', '...'];
-            $searchTerm = str_replace($chars, $replace, $searchTerm);
-
-            $query = sprintf(
-                "
+            $orderBy = '';
+        }
+        $chars = [
+            "\xe2\x80\x98",
+            "\xe2\x80\x99",
+            "\xe2\x80\x9c",
+            "\xe2\x80\x9d",
+            "\xe2\x80\x93",
+            "\xe2\x80\x94",
+            "\xe2\x80\xa6",
+        ];
+        $replace = ["'", "'", '"', '"', '-', '--', '...'];
+        $searchTerm = str_replace($chars, $replace, $searchTerm);
+        $query = sprintf(
+            "
                 SELECT
                     %s
                 FROM 
@@ -79,22 +76,20 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
                     MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)
                     %s
                     %s",
-                $columns,
-                $this->getTable(),
-                $this->getJoinedTable(),
-                $this->getJoinedColumns(),
-                $this->getMatchingColumns(),
-                $this->config->getDb()->escape($searchTerm),
-                $this->getConditions(),
-                $orderBy
-            );
-
-            $this->resultSet = $this->config->getDb()->query($query);
-
-            // Fallback for searches with less than three characters
-            if (false !== $this->resultSet && 0 === $this->config->getDb()->numRows($this->resultSet)) {
-                $query = sprintf(
-                    '
+            $columns,
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getJoinedColumns(),
+            $this->getMatchingColumns(),
+            $this->configuration->getDb()->escape($searchTerm),
+            $this->getConditions(),
+            $orderBy
+        );
+        $this->resultSet = $this->configuration->getDb()->query($query);
+        // Fallback for searches with less than three characters
+        if (false !== $this->resultSet && 0 === $this->configuration->getDb()->numRows($this->resultSet)) {
+            $query = sprintf(
+                '
                     SELECT
                         %s
                     FROM 
@@ -102,19 +97,17 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
                     WHERE
                         %s
                         %s',
-                    $this->getResultColumns(),
-                    $this->getTable(),
-                    $this->getJoinedTable(),
-                    $this->getJoinedColumns(),
-                    $this->getMatchClause($searchTerm),
-                    $this->getConditions()
-                );
+                $this->getResultColumns(),
+                $this->getTable(),
+                $this->getJoinedTable(),
+                $this->getJoinedColumns(),
+                $this->getMatchClause($searchTerm),
+                $this->getConditions()
+            );
 
-                $this->resultSet = $this->config->getDb()->query($query);
-            }
-
-            return $this->resultSet;
+            $this->resultSet = $this->configuration->getDb()->query($query);
         }
+        return $this->resultSet;
     }
 
     /**
@@ -125,7 +118,7 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
         return sprintf(
             "MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE) as score",
             $this->getMatchingColumns(),
-            $this->config->getDb()->escape($searchTerm)
+            $this->configuration->getDb()->escape($searchTerm)
         );
     }
 }

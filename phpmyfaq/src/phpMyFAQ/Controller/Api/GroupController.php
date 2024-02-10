@@ -27,17 +27,18 @@ class GroupController
 {
     public function list(): JsonResponse
     {
-        $response = new JsonResponse();
+        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($faqConfig);
 
-        $groupPermission = new MediumPermission($faqConfig);
-        $result = $groupPermission->getAllGroups($user);
+        $mediumPermission = new MediumPermission($faqConfig);
+        $result = $mediumPermission->getAllGroups($user);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
         }
-        $response->setData($result);
 
-        return $response;
+        $jsonResponse->setData($result);
+
+        return $jsonResponse;
     }
 }

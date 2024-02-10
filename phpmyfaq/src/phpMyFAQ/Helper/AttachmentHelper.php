@@ -31,11 +31,10 @@ class AttachmentHelper
      * Returns an HTML list of attached files.
      *
      * @param AttachmentAbstract[] $attachmentList
-     * @return string
      */
     public function renderAttachmentList(array $attachmentList): string
     {
-        if (count($attachmentList) === 0) {
+        if ($attachmentList === []) {
             return '';
         }
 

@@ -31,7 +31,7 @@ class Comments
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $config)
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -46,16 +46,16 @@ class Comments
     public function getComments(int $id, string $type): string
     {
         $comments = $this->getCommentsData($id, $type);
-        $date = new Date($this->config);
-        $mail = new Mail($this->config);
+        $date = new Date($this->configuration);
+        $mail = new Mail($this->configuration);
         $gravatar = new Gravatar();
 
         $output = '';
-        foreach ($comments as $item) {
+        foreach ($comments as $comment) {
             $output .= '<div class="row mt-2 mb-2">';
             $output .= '  <div class="col-sm-1">';
             $output .= '    <div class="thumbnail">';
-            $output .= $gravatar->getImage($item->getEmail(), ['class' => 'img-thumbnail']);
+            $output .= $gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
             $output .= '   </div>';
             $output .= '  </div>';
 
@@ -64,14 +64,14 @@ class Comments
             $output .= '     <div class="card-header card-header-comments">';
             $output .= sprintf(
                 '<strong><a href="mailto:%s">%s</a></strong>',
-                $mail->safeEmail($item->getEmail()),
-                Strings::htmlentities($item->getUsername())
+                $mail->safeEmail($comment->getEmail()),
+                Strings::htmlentities($comment->getUsername())
             );
-            $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item->getDate()));
+            $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($comment->getDate()));
             $output .= '     </div>';
             $output .= sprintf(
                 '<div class="card-body">%s</div>',
-                $this->showShortComment($item->getId(), $item->getComment())
+                $this->showShortComment($comment->getId(), $comment->getComment())
             );
             $output .= '   </div>';
             $output .= '  </div>';
@@ -108,9 +108,9 @@ class Comments
             $referenceId
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $comment = new Comment();
                 $comment
                     ->setId($row->id_comment)
@@ -145,6 +145,7 @@ class Comments
                     '">' . Translation::get('msgShowMore') . '</a>' .
                     '<span class="comment-more-' . $id . ' d-none">';
             }
+
             ++$numWords;
         }
 
@@ -164,21 +165,16 @@ class Comments
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
             $comment->getRecordId(),
             $comment->getType(),
-            $this->config->getDb()->escape($comment->getUsername()),
-            $this->config->getDb()->escape($comment->getEmail()),
-            $this->config->getDb()->escape($comment->getComment()),
+            $this->configuration->getDb()->escape($comment->getUsername()),
+            $this->configuration->getDb()->escape($comment->getEmail()),
+            $this->configuration->getDb()->escape($comment->getComment()),
             $comment->getDate(),
             $comment->hasHelped()
         );
-
-        if (!$this->config->getDb()->query($query)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -200,12 +196,7 @@ class Comments
             $type,
             $commentId
         );
-
-        if (!$this->config->getDb()->query($query)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -233,9 +224,9 @@ class Comments
             $type
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $num[$row->id] = $row->anz;
             }
         }
@@ -271,9 +262,9 @@ class Comments
             CommentType::FAQ
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $numbers[$row->category_id] = (int)$row->number;
             }
         }
@@ -315,9 +306,9 @@ class Comments
             $type
         );
 
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
+        $result = $this->configuration->getDb()->query($query);
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $comment = new Comment();
                 $comment
                     ->setId($row->comment_id)

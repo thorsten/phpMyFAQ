@@ -29,56 +29,101 @@ namespace phpMyFAQ;
 class Link
 {
     private const LINK_AMPERSAND = '&amp;';
+
     private const LINK_CATEGORY = 'category/';
+
     private const LINK_CONTENT = 'content/';
+
     private const LINK_EQUAL = '=';
+
     private const LINK_FRAGMENT_SEPARATOR = '#';
+
     private const LINK_HTML_SLASH = '/';
+
     private const LINK_NEWS = 'news/';
+
     private const LINK_SITEMAP = 'sitemap/';
+
     private const LINK_SLASH = '/';
+
     private const LINK_SEARCHPART_SEPARATOR = '?';
+
     private const LINK_TAGS = 'tags/';
+
     private const LINK_INDEX_HOME = '/index.php';
 
     private const LINK_GET_ACTION = 'action';
+
     private const LINK_GET_ARTLANG = 'artlang';
+
     private const LINK_GET_CATEGORY = 'cat';
+
     private const LINK_GET_HIGHLIGHT = 'highlight';
+
     private const LINK_GET_ID = 'id';
+
     private const LINK_GET_LANG = 'lang';
+
     private const LINK_GET_LETTER = 'letter';
+
     private const LINK_GET_NEWS_ID = 'newsid';
+
     private const LINK_GET_NEWS_LANG = 'newslang';
+
     private const LINK_GET_PAGE = 'seite';
+
     private const LINK_GET_SIDS = 'sid';
+
     private const LINK_GET_TAGGING_ID = 'tagging_id';
+
     private const LINK_GET_LANGS = 'langs';
 
     private const LINK_GET_ACTION_ADD = 'add';
+
     private const LINK_GET_ACTION_FAQ = 'faq';
+
     private const LINK_GET_ACTION_ASK = 'ask';
+
     private const LINK_GET_ACTION_CONTACT = 'contact';
+
     private const LINK_GET_ACTION_GLOSSARY = 'glossary';
+
     private const LINK_GET_ACTION_HELP = 'help';
+
     private const LINK_GET_ACTION_LOGIN = 'login';
+
     private const LINK_GET_ACTION_NEWS = 'news';
+
     private const LINK_GET_ACTION_OPEN = 'open-questions';
+
     private const LINK_GET_ACTION_SEARCH = 'search';
+
     private const LINK_GET_ACTION_SITEMAP = 'sitemap';
+
     private const LINK_GET_ACTION_SHOW = 'show';
+
     private const LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
+
     private const LINK_HTML_EXTENSION = '.html';
 
     private const LINK_HTML_ADDCONTENT = 'addcontent.html';
+
     private const LINK_HTML_ASK = 'ask.html';
+
     private const LINK_HTML_CONTACT = 'contact.html';
+
     private const LINK_HTML_GLOSSARY = 'glossary.html';
+
     private const LINK_HTML_HELP = 'help.html';
+
     private const LINK_HTML_LOGIN = 'login.html';
+
     private const LINK_HTML_OPEN = 'open-questions.html';
+
     private const LINK_HTML_SEARCH = 'search.html';
+
     private const LINK_HTML_SHOWCAT = 'show-categories.html';
+
     private const LINK_HTML_BOOKMARKS = 'user/bookmarks';
 
     /**
@@ -131,8 +176,6 @@ class Link
 
     /**
      * Tooltip.
-     *
-     * @var string|null
      */
     public ?string $tooltip = '';
 
@@ -166,7 +209,7 @@ class Link
      *
      * @param string $url URL
      */
-    public function __construct(public string $url, private readonly Configuration $config)
+    public function __construct(public string $url, private readonly Configuration $configuration)
     {
     }
 
@@ -203,24 +246,22 @@ class Link
      */
     public function getSystemScheme(): string
     {
-        if ($this->config->get('security.useSslOnly')) {
+        if ($this->configuration->get('security.useSslOnly')) {
             return 'https://';
         }
-
         if (!self::isIISServer()) {
             // Apache, nginx, lighttpd
             if (isset($_SERVER['HTTPS']) && 'on' === strtolower((string) $_SERVER['HTTPS'])) {
                 return 'https://';
-            } else {
-                return 'http://';
             }
-        } else {
+            return 'http://';
+        }
+
+        if ('on' === strtolower((string) $_SERVER['HTTPS'])) {
             // IIS Server
-            if ('on' === strtolower((string) $_SERVER['HTTPS'])) {
-                return 'https://';
-            } else {
-                return 'http://';
-            }
+            return 'https://';
+        } else {
+            return 'http://';
         }
     }
 
@@ -256,40 +297,41 @@ class Link
         // Prepare HTML anchor element
         $htmlAnchor = '<a';
 
-        if (!empty($this->class)) {
+        if ($this->class !== '' && $this->class !== '0') {
             $htmlAnchor .= sprintf(' class="%s"', $this->class);
         }
 
-        if (!empty($this->id)) {
+        if ($this->id !== '' && $this->id !== '0') {
             $htmlAnchor .= ' id="' . $this->id . '"';
         }
 
-        if (!empty($this->tooltip)) {
+        if ($this->tooltip !== null && $this->tooltip !== '' && $this->tooltip !== '0') {
             $htmlAnchor .= sprintf(' title="%s"', Strings::htmlentities($this->tooltip));
         }
 
-        if (!empty($this->name)) {
+        if ($this->name !== '' && $this->name !== '0') {
             $htmlAnchor .= sprintf(' name="%s"', Strings::htmlentities($this->name));
         } else {
-            if (!empty($this->url)) {
+            if ($this->url !== '' && $this->url !== '0') {
                 $htmlAnchor .= sprintf(' href="%s"', $url);
             }
-            if (!empty($this->target)) {
+
+            if ($this->target !== '' && $this->target !== '0') {
                 $htmlAnchor .= sprintf(' target="%s"', $this->target);
             }
         }
-        if (!empty($this->rel)) {
+
+        if ($this->rel !== '' && $this->rel !== '0') {
             $htmlAnchor .= sprintf(' rel="%s"', $this->rel);
         }
+
         $htmlAnchor .= '>';
-        if (('0' == $this->text) || (!empty($this->text))) {
+        if (('0' == $this->text) || ($this->text !== '' && $this->text !== '0')) {
             $htmlAnchor .= $this->text;
+        } elseif ($this->name !== '' && $this->name !== '0') {
+            $htmlAnchor .= $this->name;
         } else {
-            if (!empty($this->name)) {
-                $htmlAnchor .= $this->name;
-            } else {
-                $htmlAnchor .= $url;
-            }
+            $htmlAnchor .= $url;
         }
 
         return $htmlAnchor . '</a>';
@@ -334,10 +376,12 @@ class Link
                                 self::LINK_GET_HIGHLIGHT . '=' .
                                 $getParams[self::LINK_GET_HIGHLIGHT];
                         }
+
                         if (isset($getParams[self::LINK_FRAGMENT_SEPARATOR])) {
                             $url .= self::LINK_FRAGMENT_SEPARATOR .
                                 $getParams[self::LINK_FRAGMENT_SEPARATOR];
                         }
+
                         break;
 
                     case self::LINK_GET_ACTION_ASK:
@@ -377,6 +421,7 @@ class Link
                             if (isset($getParams[self::LINK_GET_PAGE])) {
                                 $url .= self::LINK_HTML_SLASH . $getParams[self::LINK_GET_PAGE];
                             }
+
                             $url .= self::LINK_SLASH .
                                 $this->getSEOItemTitle() .
                                 self::LINK_HTML_EXTENSION;
@@ -390,11 +435,13 @@ class Link
                                     $getParams[self::LINK_GET_PAGE];
                             }
                         }
+
                         if (isset($getParams[self::LINK_GET_LANGS])) {
                             $url .= self::LINK_AMPERSAND .
                                 self::LINK_GET_LANGS . '=' .
                                 $getParams[self::LINK_GET_LANGS];
                         }
+
                         break;
 
                     case self::LINK_GET_ACTION_SITEMAP:
@@ -410,6 +457,7 @@ class Link
                                 $getParams[self::LINK_GET_LANG] .
                                 self::LINK_HTML_EXTENSION;
                         }
+
                         break;
 
                     case self::LINK_GET_ACTION_SHOW:
@@ -426,10 +474,12 @@ class Link
                                 $url .= self::LINK_HTML_SLASH .
                                     $getParams[self::LINK_GET_PAGE];
                             }
+
                             $url .= self::LINK_HTML_SLASH .
                                 $this->getSEOItemTitle() .
                                 self::LINK_HTML_EXTENSION;
                         }
+
                         break;
 
                     case self::LINK_GET_ACTION_NEWS:
@@ -465,14 +515,10 @@ class Link
      */
     public function toUri(): string
     {
-        $url = $this->url;
-        if (!empty($this->url)) {
-            if ((!$this->hasScheme()) && (!$this->isInternalReference())) {
-                $url = $this->getDefaultScheme() . $this->url;
-            }
+        if (!($this->url === '' || $this->url === '0') && ((!$this->hasScheme()) && (!$this->isInternalReference()))) {
+            return $this->getDefaultScheme() . $this->url;
         }
-
-        return $url;
+        return $this->url;
     }
 
     /**
@@ -482,7 +528,7 @@ class Link
     {
         $parsed = parse_url($this->url);
 
-        return (!empty($parsed['scheme']));
+        return (isset($parsed['scheme']) && ($parsed['scheme'] !== '' && $parsed['scheme'] !== '0'));
     }
 
     /**
@@ -493,6 +539,7 @@ class Link
         if ($this->isRelativeSystemLink()) {
             return true;
         }
+
         if (!str_contains($this->url, '#')) {
             return false;
         }
@@ -518,12 +565,10 @@ class Link
      */
     protected function getDefaultScheme(): string
     {
-        $scheme = 'https://';
         if ($this->isSystemLink()) {
-            $scheme = $this->getSystemScheme();
+            return $this->getSystemScheme();
         }
-
-        return $scheme;
+        return 'https://';
     }
 
     /**
@@ -536,8 +581,9 @@ class Link
         if ($this->isRelativeSystemLink()) {
             return true;
         }
+
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
-        return !(!str_contains($this->url, (string) $_SERVER['HTTP_HOST']));
+        return str_contains($this->url, (string) $_SERVER['HTTP_HOST']);
     }
 
     /**
@@ -549,7 +595,7 @@ class Link
             return false;
         }
 
-        return !(!str_contains($this->url, self::LINK_INDEX_HOME));
+        return str_contains($this->url, self::LINK_INDEX_HOME);
     }
 
     /**
@@ -561,18 +607,18 @@ class Link
         $query = $this->getQuery();
         $parameters = [];
 
-        if (!empty($query)) {
+        if ($query !== []) {
             // Check fragment
             if (isset($query['fragment'])) {
-                $parameters[self::LINK_FRAGMENT_SEPARATOR] = urldecode((string) $query['fragment']);
+                $parameters[self::LINK_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
             }
 
             // Check if query string contains &amp;
-            $query['main'] = str_replace(['&amp;', '#38;', 'amp;'], '&', (string) $query['main']);
+            $query['main'] = str_replace(['&amp;', '#38;', 'amp;'], '&', $query['main']);
 
             $params = explode('&', $query['main']);
             foreach ($params as $param) {
-                if (!empty($param)) {
+                if ($param !== '' && $param !== '0') {
                     [$key, $val] = explode(self::LINK_EQUAL, $param);
                     $parameters[$key] = urldecode($val);
                 }
@@ -590,12 +636,13 @@ class Link
     {
         $query = [];
 
-        if (!empty($this->url)) {
+        if ($this->url !== '' && $this->url !== '0') {
             $parsed = parse_url($this->url);
 
             if (isset($parsed['query'])) {
                 $query['main'] = filter_var($parsed['query'], FILTER_SANITIZE_SPECIAL_CHARS);
             }
+
             if (isset($parsed['fragment'])) {
                 $query['fragment'] = filter_var($parsed['fragment'], FILTER_SANITIZE_SPECIAL_CHARS);
             }
@@ -627,7 +674,7 @@ class Link
         $itemTitle = str_replace(
             ['+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>', '%'],
             '',
-            $itemTitle
+            (string) $itemTitle
         );
         // Hack: move some chars to "similar" but plain ASCII chars
         $itemTitle = str_replace(
@@ -692,11 +739,11 @@ class Link
      */
     private function appendSids(string $url, int $sids): string
     {
-        $separator = (!str_contains($url, self::LINK_SEARCHPART_SEPARATOR))
+        $separator = (str_contains($url, self::LINK_SEARCHPART_SEPARATOR))
             ?
-            self::LINK_SEARCHPART_SEPARATOR
+            self::LINK_AMPERSAND
             :
-            self::LINK_AMPERSAND;
+            self::LINK_SEARCHPART_SEPARATOR;
 
         return $url . $separator . self::LINK_GET_SIDS . self::LINK_EQUAL . $sids;
     }
@@ -706,7 +753,7 @@ class Link
      */
     public function getCurrentUrl(): string
     {
-        $defaultUrl = $this->config->getDefaultUrl();
+        $defaultUrl = $this->configuration->getDefaultUrl();
         $url = Filter::filterVar($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
         $parsedUrl = parse_url((string) $url);
 

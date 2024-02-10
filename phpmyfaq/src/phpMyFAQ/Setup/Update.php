@@ -43,9 +43,6 @@ class Update extends Setup
         parent::__construct($this->system);
     }
 
-    /**
-     * @param string $version
-     */
     public function setVersion(string $version): void
     {
         $this->version = $version;
@@ -54,11 +51,11 @@ class Update extends Setup
     /**
      * Checks if the "faqconfig" table is available
      */
-    public function isConfigTableAvailable(DatabaseDriver $database): bool
+    public function isConfigTableAvailable(DatabaseDriver $databaseDriver): bool
     {
         $query = sprintf('SELECT * FROM %s%s', Database::getTablePrefix(), 'faqconfig');
-        $result = $database->query($query);
-        return $database->numRows($result) === 0;
+        $result = $databaseDriver->query($query);
+        return $databaseDriver->numRows($result) === 0;
     }
 
     /**
@@ -69,8 +66,8 @@ class Update extends Setup
     {
         $outputZipFile = $configDir . DIRECTORY_SEPARATOR . $this->getBackupFilename();
 
-        $zip = new ZipArchive();
-        if ($zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+        $zipArchive = new ZipArchive();
+        if ($zipArchive->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
             throw new Exception('Cannot create config backup file.');
         }
 
@@ -83,14 +80,16 @@ class Update extends Setup
             $file = realpath($file);
             if (!str_contains($file, $configDir . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
-                    $zip->addEmptyDir(str_replace($configDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
+                    $zipArchive->addEmptyDir(
+                        str_replace($configDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR)
+                    );
                 } elseif (is_file($file)) {
-                    $zip->addFile($file, str_replace($configDir . DIRECTORY_SEPARATOR, '', $file));
+                    $zipArchive->addFile($file, str_replace($configDir . DIRECTORY_SEPARATOR, '', $file));
                 }
             }
         }
 
-        $zip->close();
+        $zipArchive->close();
 
         if (!file_exists($outputZipFile)) {
             throw new Exception('Cannot store config backup file.');
@@ -98,6 +97,7 @@ class Update extends Setup
 
         return $this->configuration->getDefaultUrl() . 'content/' . $this->getBackupFilename();
     }
+
     /**
      * @throws Exception
      */
@@ -139,6 +139,7 @@ class Update extends Setup
                 foreach ($this->configuration->getDb()->tableNames as $tableName) {
                     $this->queries[] = 'OPTIMIZE TABLE ' . $tableName;
                 }
+
                 break;
             case 'pgsql':
                 $this->queries[] = 'VACUUM ANALYZE;';
@@ -146,9 +147,6 @@ class Update extends Setup
         }
     }
 
-    /**
-     * @param bool $dryRun
-     */
     public function setDryRun(bool $dryRun): void
     {
         $this->dryRun = $dryRun;
@@ -167,9 +165,7 @@ class Update extends Setup
             foreach ($this->queries as $query) {
                 try {
                     $this->configuration->getDb()->query($query);
-                    if ($progressCallback !== null) {
-                        $progressCallback($query);
-                    }
+                    $progressCallback($query);
                 } catch (Exception $exception) {
                     throw new Exception($exception->getMessage());
                 }
