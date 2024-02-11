@@ -140,6 +140,9 @@ devDependencies:
   webpack-cli:
     specifier: ^5.1.4
     version: 5.1.4(webpack@5.90.0)
+  webpack-merge:
+    specifier: ^5.10.0
+    version: 5.10.0
   webpack-sources:
     specifier: ^3.2.3
     version: 3.2.3

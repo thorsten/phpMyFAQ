@@ -60,8 +60,8 @@ composer install --no-dev --prefer-dist
 printf "\n 🚀 Install JS dependencies\n";
 pnpm install
 
-printf "\n 🚀 Run \"pnpm build\" to build frontend production build\n";
-pnpm build
+printf "\n 🚀 Run \"pnpm build:prod\" to build frontend production build\n";
+pnpm build:prod
 
 printf "\n 🚀 Remove fonts and examples from TCPDF\n"
 rm -rf "$cwd"/build/checkout/"${PMF_PACKAGE_FOLDER}"/phpmyfaq/src/libs/tecnickcom/tcpdf/fonts

@@ -18,7 +18,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'phpmyfaq/assets/dist'),
   },
-  mode: 'development',
+  mode: 'production',
   watchOptions: {
     aggregateTimeout: 200,
     poll: 1000,
