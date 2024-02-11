@@ -16,8 +16,8 @@
  * @since     2003-02-26
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
-use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -89,6 +89,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <?php
 
+$faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->isLoggedIn()) {

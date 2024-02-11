@@ -52,8 +52,6 @@ class Session
 
     private string $currentSessionKey;
 
-    private readonly string $currentToken;
-
     private ?CurrentUser $currentUser = null;
 
     /**
@@ -98,11 +96,6 @@ class Session
     public function getCurrentSessionKey(): ?string
     {
         return $this->currentSessionKey ?? $this->get(self::PMF_AZURE_AD_SESSIONKEY);
-    }
-
-    public function getCurrentToken(): ?string
-    {
-        return $this->currentToken ?? $this->get(self::PMF_AZURE_AD_JWT);
     }
 
     /**
@@ -278,6 +271,8 @@ class Session
 
     /**
      * Returns the botIgnoreList as an array.
+     *
+     * @return array<string>
      */
     private function getBotIgnoreList(): array
     {
@@ -326,7 +321,7 @@ class Session
             }
 
             // clean up as well
-            $remoteAddress = preg_replace('([^0-9a-z:\.]+)i', '', (string) $remoteAddress);
+            $remoteAddress = preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
 
             // Anonymize IP address
             $remoteAddress = IpUtils::anonymize($remoteAddress);

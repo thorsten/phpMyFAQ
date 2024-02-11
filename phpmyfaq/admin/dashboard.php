@@ -159,6 +159,8 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             }
         } catch (Exception $e) {
             $errorMessageVerification = $e->getMessage();
+        } catch (TransportExceptionInterface $e) {
+            $errorMessageVerification = $e->getMessage();
         }
         $templateVars = [
             ...$templateVars,
