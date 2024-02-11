@@ -6,11 +6,13 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-alpha - 2024-02-
+### phpMyFAQ v4.0.0-alpha - 2024-02-12
 
+- Happy 23rd Birthday, phpMyFAQ!
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
+- (WIP) added Twig as new template engine (Thorsten)
 - added Symfony Routing (Thorsten)
 - added new admin configuration frontend (Thorsten)
 - added new admin category management frontend with full drag and drop sorting support (Thorsten)
@@ -22,7 +24,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Kubernetes manifest samples (OWNDOMAINHOME SAS)
 - added experimental import of FAQs from CSV (Jan Harms)
 - added CSV export of user sessions (Jan Harms)
-- (WIP) added Twig as new template engine (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)

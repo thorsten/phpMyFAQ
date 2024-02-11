@@ -1,4 +1,4 @@
-# phpMyFAQ 4.0-dev
+# phpMyFAQ 4.0-alpha
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -19,7 +19,7 @@ script.
 ## Requirements
 
 phpMyFAQ is only supported on PHP 8.2 and up, you need a database as well. Supported databases are MySQL, MariaDB,
-Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as main search
+Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as the main search
 engine, you need Elasticsearch 6.x or later. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
 
@@ -40,7 +40,7 @@ as the phpmyfaq folder is meant to be mounted as the `/var/www/html` folder in t
 
 #### docker-compose.yml
 
-For development purposes you can start a full stack to run your current PhpMyFAQ source code from your local repo.
+For development purposes, you can start a full stack to run your current PhpMyFAQ source code from your local repo.
 
     $ docker-compose up
 
@@ -54,9 +54,9 @@ _Specific images started once to prepare the project:_
 _Running using named volumes:_
 
 - **mariadb**: image with MariaDB database with xtrabackup support
-- **phpmyadmin**: a PHP tool to have a look on your MariaDB database.
+- **phpmyadmin**: a PHP tool to have a look at your MariaDB database.
 - **postgres**: image with PostgreSQL database
-- **pgadmin**: a PHP tool to have a look on your PostgreSQL database.
+- **pgadmin**: a PHP tool to have a look at your PostgreSQL database.
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 
@@ -64,7 +64,7 @@ _Running apache web server with PHP 8.3 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
-Then services will be available at following addresses:
+Then services will be available at the following addresses:
 
 - phpMyFAQ: (http://localhost:8080 or https://localhost:443)
 - phpMyAdmin: (http://localhost:8000)
@@ -72,7 +72,7 @@ Then services will be available at following addresses:
 
 #### Running tests
 
-To run the test using Docker you have to install the Composer development dependencies
+To run the test using Docker, you have to install the Composer development dependencies
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
@@ -127,7 +127,7 @@ Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ### PHP
 
-To run our unit tests via PHPUnit v10.x, just execute this command on your CLI
+To run our unit tests via PHPUnit v11.x, just execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
