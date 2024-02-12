@@ -951,7 +951,7 @@ if ((
     $user->perm->hasPermission($currentUserId, PermissionType::FAQ_EDIT->value) &&
     !Database::checkOnEmptyTable('faqcategories')
 ) {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 } elseif (
     $user->perm->hasPermission($currentUserId, PermissionType::FAQ_EDIT->value) &&
     Database::checkOnEmptyTable('faqcategories')

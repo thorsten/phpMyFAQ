@@ -60,5 +60,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     echo $template->render($templateVars);
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

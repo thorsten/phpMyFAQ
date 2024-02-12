@@ -188,7 +188,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <input type="hidden" name="report_visits" id="report_visits" value="<?= $useVisits ?>">
                     <?php
                 } else {
-                    require 'no-permission.php';
+                    require __DIR__ . '/no-permission.php';
                 }
                 ?>
             </div>

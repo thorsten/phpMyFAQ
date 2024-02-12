@@ -69,6 +69,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::EXPORT->value
 
     echo $template->render($templateVars);
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }
 

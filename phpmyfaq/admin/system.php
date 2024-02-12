@@ -78,5 +78,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
 
     echo $template->render($templateVars);
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

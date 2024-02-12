@@ -135,5 +135,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->valu
 
     <?php
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

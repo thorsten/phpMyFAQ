@@ -279,5 +279,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
         <?php
     }
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

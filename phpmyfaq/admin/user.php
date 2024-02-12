@@ -833,5 +833,5 @@ if (
 
     <?php
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

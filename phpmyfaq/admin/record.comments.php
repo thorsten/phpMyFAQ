@@ -162,5 +162,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELET
         echo '<p><strong>n/a</strong></p>';
     }
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

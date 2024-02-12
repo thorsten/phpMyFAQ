@@ -157,5 +157,5 @@ if (
         echo Alert::danger('ad_adminlog_delete_failure');
     }
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

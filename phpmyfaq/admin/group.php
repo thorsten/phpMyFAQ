@@ -40,7 +40,7 @@ if (
     !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_DELETE->value) &&
     !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_EDIT->value)
 ) {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }
 
 // set some parameters

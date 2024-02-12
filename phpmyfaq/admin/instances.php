@@ -235,5 +235,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
   </div>
     <?php
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

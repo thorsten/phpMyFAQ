@@ -406,7 +406,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
     }
 // User is authenticated but has no rights
 } elseif ($user->isLoggedIn() && $numRights === 0) {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 // User is NOT authenticated
 } else {
     //$error = Translation::get('msgSessionExpired');

@@ -58,5 +58,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::ATTACHMENT_DE
         Translation::get('ad_entry_back')
     );
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

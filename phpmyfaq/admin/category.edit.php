@@ -114,5 +114,5 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
 
     echo $template->render($templateVars);
 } else {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }

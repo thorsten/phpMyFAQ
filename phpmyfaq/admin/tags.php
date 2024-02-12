@@ -67,6 +67,6 @@ $templateVars = [
 echo $template->render($templateVars);
 
 if (!$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
-    require 'no-permission.php';
+    require __DIR__ . '/no-permission.php';
 }
 
