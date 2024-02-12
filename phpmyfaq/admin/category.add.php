@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
@@ -25,6 +26,7 @@ use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\User\CurrentUser;
 use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -32,17 +34,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$currentUser = CurrentUser::getCurrentUser($faqConfig);
 
-$currentUserId = $user->getUserId();
-
-if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_ADD->value)) {
+if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CATEGORY_ADD->value)) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 
     $categoryPermission = new CategoryPermission($faqConfig);
 
-    $userHelper = new UserHelper($user);
+    $userHelper = new UserHelper($currentUser);
 
     $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
@@ -82,7 +84,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_ADD-
     if ($faqConfig->get('security.permLevel') !== 'basic') {
         $templateVars = [
             ...$templateVars,
-            'groupsOptions' => $user->perm->getAllGroupsOptions([], $user),
+            'groupsOptions' => $currentUser->perm->getAllGroupsOptions([], $currentUser),
             'ad_categ_moderator' => Translation::get('ad_categ_moderator')
         ];
     }
