@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
@@ -62,18 +63,17 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
 
     // translate an existing category
     if ($showCategory === 'yes') {
-        $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryData = [
-            'id' => Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
-            'lang' => Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS),
-            'parent_id' => $parentId,
-            'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS),
-            'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS),
-            'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT)
-        ];
+        $categoryEntity = new CategoryEntity();
+        $categoryEntity
+            ->setId(Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT))
+            ->setLang(Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setParentId(Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT))
+            ->setName(Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setDescription(Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setUserId(Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
 
         // translate.category only returns non-existent languages to translate too
-        if ($category->addCategory($categoryData, $parentId, $categoryData['id'])) {
+        if ($category->create($categoryEntity)) {
             echo Alert::success('ad_categ_translated');
         } else {
             echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());

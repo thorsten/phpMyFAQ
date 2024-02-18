@@ -1,0 +1,43 @@
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="bi bi-folder"></i>
+    {{ msgHeaderCategoryMain }}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-12">
+
+    {% if isSuccess %}
+    <div class="alert alert-success" role="alert">
+      <p>{{ successMessage }}</p>
+    </div>
+    {% endif %}
+
+    {% if isError %}
+      <div class="alert alert-danger" role="alert">
+        <p>{{ errorMessage }}</p>
+      </div>
+    {% endif %}
+
+    {% if isWarning %}
+      <div class="alert alert-warning" role="alert">
+        <p>{{ warningMessage }}</p>
+      </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-center">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Saving ...</span>
+      </div>
+    </div>
+    <script>
+      (() => {
+        setTimeout(() => {
+          window.location = "index.php?action=category-overview";
+        }, 5000);
+      })();
+    </script>
+  </div>
+</div>
