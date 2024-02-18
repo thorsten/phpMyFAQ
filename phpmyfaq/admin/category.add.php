@@ -65,7 +65,11 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'ad_entry_all_users' => Translation::get('ad_entry_all_users'),
         'ad_entry_restricted_users' => Translation::get('ad_entry_restricted_users'),
         'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
-        'ad_categ_add' => Translation::get('ad_categ_add')
+        'ad_categ_add' => Translation::get('ad_categ_add'),
+        'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
+        'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
+        'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
+        'restricted_groups' => $currentUser->perm->getAllGroupsOptions([], $user)
     ];
 
     if ($parentId > 0) {

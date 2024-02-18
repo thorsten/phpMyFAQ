@@ -13,20 +13,21 @@
 
 <div class="row mb-2">
   <div class="col-lg-12">
-    <form enctype="multipart/form-data"  action="?action=savecategory" method="post">
+    <form enctype="multipart/form-data" action="?action=savecategory" method="post">
       <input type="hidden" id="lang" name="lang" value="{{ faqLangCode }}">
       <input type="hidden" name="parent_id" value="{{ parentId }}">
       {{ csrfTokenInput|raw }}
       {% if parentId > 0 %}
-      <input type="hidden" name="restricted_users" value="{{ userAllowed }}">
-      {% for group in groupsAllowed %}
-      <input type="hidden" name="restricted_groups[]" value="{{ group }}">
-      {% endfor %}
-      <div class="row mb-2"><label class="col-lg-2 col-form-label">{{ msgMainCategory }}:</label>
-        <div class="col-lg-4">
-          <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ categoryName }} ({{ categoryNameLangCode }})">
+        <input type="hidden" name="restricted_users" value="{{ userAllowed }}">
+        {% for group in groupsAllowed %}
+          <input type="hidden" name="restricted_groups[]" value="{{ group }}">
+        {% endfor %}
+        <div class="row mb-2"><label class="col-lg-2 col-form-label">{{ msgMainCategory }}:</label>
+          <div class="col-lg-4">
+            <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                   value="{{ categoryName }} ({{ categoryNameLangCode }})">
+          </div>
         </div>
-      </div>
       {% endif %}
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="name">
@@ -88,43 +89,72 @@
           </select>
         </div>
       </div>
-      {% if parentId == 0 %}
       {% if permLevel != 'basic' %}
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="group_id">
-          {{ ad_categ_moderator }}</label>
-        <div class="col-lg-4">
-          <select name="group_id" id="group_id" class="form-select">
-            {{ groupsOptions|raw }}
-          </select>
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="group_id">
+            {{ ad_categ_moderator }}</label>
+          <div class="col-lg-4">
+            <select name="group_id" id="group_id" class="form-select">
+              {{ groupsOptions|raw }}
+            </select>
+          </div>
         </div>
-      </div>
       {% else %}
-      <input type="hidden" name="group_id" value="-1">
+        <input type="hidden" name="group_id" value="-1">
       {% endif %}
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="restricted_users">
-          {{ ad_entry_userpermission }}
-        </label>
-        <div class="col-lg-4">
-          <div class="form-check">
-            <input type="radio" name="userpermission" id="userpermission_all" value="all"
-                   class="form-check-input" checked>
-            <label class="form-check-label" for="userpermission_all">
-              {{ ad_entry_all_users }}
+      {% if parentId == 0 %}
+        {% if permLevel != 'basic' %}
+          <div class="row mb-2">
+            <label class="col-lg-2 col-form-label" for="restricted_groups">
+              {{ ad_entry_grouppermission }}
             </label>
+            <div class="col-lg-4">
+              <div class="form-check">
+                <input type="radio" name="grouppermission" id="grouppermission_all" value="all"
+                       class="form-check-input" checked>
+                <label class="form-check-label" for="grouppermission_all">
+                  {{ ad_entry_all_groups }}
+                </label>
+              </div>
+              <div class="form-check">
+                <input type="radio" name="grouppermission" id="grouppermission" value="restricted"
+                       class="form-check-input">
+                <label class="form-check-label" for="grouppermission">
+                  {{ ad_entry_restricted_groups }}
+                </label>
+              </div>
+              <select name="restricted_groups[]" id="restricted_groups" size="3" class="form-select"
+                      multiple>
+                {{ restricted_groups|raw }}
+              </select>
+            </div>
           </div>
-          <div class="form-check">
-            <input type="radio" name="userpermission" id="userpermission" value="restricted" class="form-check-input">
-            <label class="form-check-label" for="userpermission">
-              {{ ad_entry_restricted_users }}
-            </label>
+        {% else %}
+          <input type="hidden" name="grouppermission" value="all">
+        {% endif %}
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="restricted_users">
+            {{ ad_entry_userpermission }}
+          </label>
+          <div class="col-lg-4">
+            <div class="form-check">
+              <input type="radio" name="userpermission" id="userpermission_all" value="all"
+                     class="form-check-input" checked>
+              <label class="form-check-label" for="userpermission_all">
+                {{ ad_entry_all_users }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input type="radio" name="userpermission" id="userpermission" value="restricted" class="form-check-input">
+              <label class="form-check-label" for="userpermission">
+                {{ ad_entry_restricted_users }}
+              </label>
+            </div>
+            <select name="restricted_users" id="restricted_users" class="form-select">
+              {{ userOptions|raw }}
+            </select>
           </div>
-          <select name="restricted_users" id="restricted_users" class="form-select">
-            {{ userOptions|raw }}
-          </select>
         </div>
-      </div>
       {% endif %}
       <div class="row mb-2">
         <div class="offset-lg-2 col-lg-4">
