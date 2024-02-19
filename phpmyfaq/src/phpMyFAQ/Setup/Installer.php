@@ -1039,7 +1039,7 @@ class Installer extends Setup
         }
 
         // adjust RewriteBase in .htaccess
-        $this->adjustRewriteBaseHtaccess();
+        $this->adjustRewriteBaseHtaccess($rootDir);
     }
 
     /**
@@ -1056,13 +1056,13 @@ class Installer extends Setup
      * Returns true, if the file was successfully changed.
      *
      * @throws Exception
-*/
-    public function adjustRewriteBaseHtaccess(): bool
+     */
+    public function adjustRewriteBaseHtaccess(string $path): bool
     {
-        $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
+        $htaccessPath = $path . '/.htaccess';
 
         if (!file_exists($htaccessPath)) {
-            throw new Exception('The .htaccess file does not exist!');
+            throw new Exception(sprintf('The %s file does not exist!', $htaccessPath));
         }
 
         $lines = file($htaccessPath);
@@ -1078,6 +1078,7 @@ class Installer extends Setup
                 $newLines[] = $line;
             }
         }
+
         return file_put_contents($htaccessPath, implode('', $newLines)) !== false;
     }
 }
