@@ -132,7 +132,6 @@ class Link
     public static array $allowedActionParameters = [
         'add' => 1,
         'faq' => 1,
-        'artikel' => 1, // @deprecated
         'ask' => 1,
         'attachment' => 1,
         'contact' => 1,
