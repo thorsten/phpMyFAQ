@@ -2,7 +2,6 @@
 
 namespace phpMyFAQ\Setup;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
@@ -21,8 +20,12 @@ class InstallerTest extends TestCase
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
         $this->installer = new Installer(new System());
+    }
+
+    public function testCheckMinimumPhpVersion(): void
+    {
+        $this->assertTrue($this->installer->checkMinimumPhpVersion());
     }
 
     /**

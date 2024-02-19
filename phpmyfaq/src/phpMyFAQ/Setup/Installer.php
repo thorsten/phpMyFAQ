@@ -1071,7 +1071,7 @@ class Installer extends Setup
         foreach ($lines as $line) {
             if (str_starts_with($line, 'RewriteBase')) {
                 $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
-                $rewriteBase = substr((string) $requestUri, 0, strpos((string) $requestUri, 'index.php'));
+                $rewriteBase = substr((string) $requestUri, 0, strpos((string) $requestUri, 'setup/index.php'));
                 $rewriteBase = ($rewriteBase === '') ? '/' : $rewriteBase;
                 $newLines[] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
             } else {
