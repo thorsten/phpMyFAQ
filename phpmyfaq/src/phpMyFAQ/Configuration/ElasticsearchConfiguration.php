@@ -17,12 +17,12 @@
 
 namespace phpMyFAQ\Configuration;
 
-class ElasticsearchConfiguration
+readonly class ElasticsearchConfiguration
 {
     /** @var string[] */
-    private readonly array $hosts;
+    private array $hosts;
 
-    private readonly string $index;
+    private string $index;
 
     public function __construct(string $filename)
     {
