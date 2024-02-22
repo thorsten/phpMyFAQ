@@ -67,8 +67,6 @@ class User
     final public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
         'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
 
-    final public const ERROR_USER_NO_PERM = 'No permission container specified.';
-
     final public const ERROR_USER_NO_USERID = 'No user-ID found. ';
 
     final public const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
@@ -106,7 +104,7 @@ class User
     /**
      * authentication container.
      *
-     * @var array<string, AuthDriverInterface>
+     * @var array<string, Auth|AuthDriverInterface>
      */
     protected array $authContainer = [];
 
@@ -240,10 +238,10 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param AuthDriverInterface $authDriver Driver object
+     * @param Auth $authDriver Driver object
      * @param string                                                          $name Auth name
      */
-    public function addAuth(AuthDriverInterface $authDriver, string $name): bool
+    public function addAuth(Auth $authDriver, string $name): bool
     {
         if ($this->checkAuth($authDriver)) {
             $this->authContainer[$name] = $authDriver;
@@ -257,9 +255,9 @@ class User
     /**
      * Returns true if auth is a valid authentication object.
      *
-     * @param AuthDriverInterface $auth Auth object
+     * @param Auth $auth Auth object
      */
-    protected function checkAuth(AuthDriverInterface $auth): bool
+    protected function checkAuth(Auth $auth): bool
     {
         $methods = ['checkCredentials'];
         foreach ($methods as $method) {
@@ -359,10 +357,10 @@ class User
     }
 
     /**
-     * search users by login.
+     * Search users by login.
      *
      * @param string $search Login name
-     * @return array<int, array>
+     * @return array<string[]>
      */
     public function searchUsers(string $search): array
     {
@@ -626,6 +624,7 @@ class User
             return false;
         }
 
+        /** @phpstan-ignore-next-line */
         $this->perm->refuseAllUserRights($this->userId);
 
         $delete = sprintf(
