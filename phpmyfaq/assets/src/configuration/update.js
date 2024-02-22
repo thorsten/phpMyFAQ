@@ -40,13 +40,9 @@ export const handleUpdateInformation = async () => {
       });
 
       if (!response.ok) {
-        let errorMessage = 'Network response was not ok.';
-        if (response.status === 404) {
-          errorMessage = 'The requested resource was not found on the server. Please check your server configuration.';
-        } else if (response.status === 409) {
-          errorMessage = 'Maintenance mode is not enabled. Please enable it first.';
-        }
-        throw new Error(errorMessage);
+        let errorMessage = await response.json();
+
+        throw new Error(errorMessage.message);
       }
 
       const button = document.getElementById('phpmyfaq-update-next-step-button');
@@ -56,6 +52,11 @@ export const handleUpdateInformation = async () => {
       button.classList.remove('disabled');
       button.disabled = false;
     } catch (errorMessage) {
+      if (errorMessage instanceof SyntaxError) {
+        errorMessage = 'The requested resource was not found on the server. Please check your server configuration.';
+      } else {
+        errorMessage = errorMessage.message;
+      }
       const alert = document.getElementById('phpmyfaq-update-check-alert');
       const alertResult = document.getElementById('phpmyfaq-update-check-result');
 
