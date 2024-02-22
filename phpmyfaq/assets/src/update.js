@@ -20,7 +20,9 @@ import {
   handleUpdateNextStepButton,
 } from './configuration';
 
-handleUpdateNextStepButton();
-handleUpdateInformation();
-handleConfigBackup();
-await handleDatabaseUpdate();
+document.addEventListener('DOMContentLoaded', async () => {
+  handleUpdateNextStepButton();
+  await handleUpdateInformation();
+  await handleConfigBackup();
+  await handleDatabaseUpdate();
+});
