@@ -85,9 +85,8 @@ class Installer extends Setup
             'name' => PermissionType::STATISTICS_ADMINLOG->value,
             'description' => 'Right to view admin log',
         ],
-        //9 => "delcomment",
         [
-            'name' => 'delcomment',
+            'name' => PermissionType::COMMENT_DELETE->value,
             'description' => 'Right to delete comments',
         ],
         //10 => "addnews",
@@ -282,6 +281,8 @@ class Installer extends Setup
 
     /**
      * Configuration array.
+     *
+     * @var array<string, string>
      */
     protected array $mainConfig = [
         'main.currentVersion' => null,

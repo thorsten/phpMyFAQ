@@ -138,7 +138,7 @@ class User
      * regular expression to find invalid login strings
      * (default: /^[a-z0-9][\w\.\-@]+/is ).
      */
-    private string $validUsername = '/^[a-z0-9][\w\.\-@]+/is';
+    private string $validUsername = '/^[a-z0-9][\w.\-@]+/i';
 
     /**
      * user ID.
@@ -257,9 +257,9 @@ class User
     /**
      * Returns true if auth is a valid authentication object.
      *
-     * @param Auth $auth Auth object
+     * @param AuthDriverInterface $auth Auth object
      */
-    protected function checkAuth(Auth $auth): bool
+    protected function checkAuth(AuthDriverInterface $auth): bool
     {
         $methods = ['checkCredentials'];
         foreach ($methods as $method) {
