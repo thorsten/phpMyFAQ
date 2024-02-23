@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq\FaqPermission;
@@ -34,6 +35,16 @@ class SearchController
     /**
      * @throws \Exception
      */
+    #[OA\Get(
+        path: '/api/v3.0/search',
+        operationId: 'getSearch'
+    )]
+
+    #[OA\Response(
+        response: 404,
+        description: 'If the search returns no results',
+        content: new OA\JsonContent(example: []),
+    )]
     public function search(Request $request): JsonResponse
     {
         $jsonResponse = new JsonResponse();

@@ -1,5 +1,7 @@
 # REST API v3.0 for phpMyFAQ 4.0
 
+> This documentation will be migrated to the OpenAPI format during the 4.0 development cycle.
+
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like an iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
 phpMyFAQ installation.

@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: 'phpMyFAQ REST API'
+  contact:
+    name: 'phpMyFAQ Team'
+    email: support@phpmyfaq.de
+  license:
+    name: 'Mozilla Public Licence 2.0'
+    url: 'https://www.mozilla.org/MPL/2.0/'
+  version: '3.0'
+paths:
+  /api/v3.0/search:
+    get:
+      operationId: getSearch
+      responses:
+        '404':
+          description: 'If the search returns no results'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/tags:
+    get:
+      operationId: getTags
+      responses:
+        '200':
+          description: 'Returns the tags for the given language provided by "Accept-Language".'
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\"tagId\": 4, \"tagName\": \"phpMyFAQ\", \"tagFrequency\": 3 },\n            {\"tagId\": 1, \"tagName\": \"PHP 8\", \"tagFrequency\": 2 }\n        ]"
+        '404':
+          description: 'If no tags are stored.'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/title:
+    get:
+      operationId: getTitle
+      responses:
+        '200':
+          description: 'Returns the title of the phpMyFAQ instance as a string.'
+          content:
+            application/json:
+              schema: {}
+              example: 'phpMyFAQ Codename Pontus'
+  /api/v3.0/version:
+    get:
+      operationId: getVersion
+      responses:
+        '200':
+          description: 'Returns the phpMyFAQ version number as string.'
+          content:
+            application/json:
+              schema: {}
+              example: 4.0.0

@@ -18,10 +18,18 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use OpenApi\Attributes as OA;
+use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class VersionController
+class VersionController extends AbstractController
 {
+    #[OA\Get(path: '/api/v3.0/version', operationId: 'getVersion')]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the phpMyFAQ version number as string.',
+        content: new OA\JsonContent(example: '4.0.0'),
+    )]
     public function index(): JsonResponse
     {
         return new JsonResponse(Configuration::getConfigurationInstance()->getVersion());
