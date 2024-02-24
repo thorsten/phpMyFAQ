@@ -147,6 +147,8 @@ To run our Javascript tests via Jest, just execute this command on your CLI
 
 ### End-to-end tests
 
+> **Note**: Not implemented yet.
+
 To run our end-to-end tests via Playwright, you can use several commands:
 
     $ pnpm exec playwright test
@@ -203,9 +205,9 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can read the complete documentation on [here](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v3.0
+## REST API v3.0 documentation
 
-The REST API v3.0 documentation is located [here in this repository](API.md).
+The REST API documentation is available as OpenAPI 3.0 specification [here](api-docs/openapi.yaml).
 
 ## License
 
