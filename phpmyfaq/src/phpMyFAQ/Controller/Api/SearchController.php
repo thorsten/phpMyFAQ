@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
@@ -33,13 +34,34 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchController
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[OA\Get(
         path: '/api/v3.0/search',
         operationId: 'getSearch'
     )]
-
+    #[OA\Parameter(
+        name: 'q',
+        description: 'The search term',
+        in: 'query',
+        required: true,
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the results for the query string search term.',
+        content: new OA\JsonContent(example: '
+        [
+            {
+                "id": "1",
+                "lang": "en",
+                "category_id": "15",
+                "question": "Why are you using phpMyFAQ?",
+                "answer": "Because it is cool!",
+                "link": "https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en"
+            }
+        ]')
+    )]
     #[OA\Response(
         response: 404,
         description: 'If the search returns no results',

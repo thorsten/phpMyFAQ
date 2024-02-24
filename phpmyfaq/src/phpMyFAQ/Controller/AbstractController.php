@@ -36,6 +36,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
         email: 'support@phpmyfaq.de'
     )
 )]
+#[OA\Server(url: 'https://localhost', description: 'Local dockerized server')]
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {

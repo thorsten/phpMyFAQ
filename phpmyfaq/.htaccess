@@ -23,6 +23,11 @@ DirectoryIndex index.php
 # X-Frame-Options to prevent clickjacking
 Header always append X-Frame-Options SAMEORIGIN
 
+# CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+
 # Set cache control
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
     Header set Cache-Control "max-age=84600, no-store"

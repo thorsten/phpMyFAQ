@@ -47,8 +47,8 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
     {
         parent::__construct($configuration);
 
-        $this->client = $this->config->getElasticsearch();
-        $this->elasticsearchConfiguration = $this->config->getElasticsearchConfig();
+        $this->client = $this->configuration->getElasticsearch();
+        $this->elasticsearchConfiguration = $this->configuration->getElasticsearchConfig();
     }
 
     /**
