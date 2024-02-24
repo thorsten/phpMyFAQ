@@ -12,17 +12,17 @@ Public endpoints require no Authentication.
 
 ### General APIs
 
-- [Version](api-docs/version.md): `GET /api/v3.0/version`
-- [Title](api-docs/title.md): `GET /api/v3.0/title`
+- Version: `GET /api/v3.0/version`
+- Title: `GET /api/v3.0/title`
 - [Language](api-docs/language.md): `GET /api/v3.0/language`
-- [News](api-docs/news.md): `GET /api/v3.0/news`
+- News: `GET /api/v3.0/news`
 - [Categories](api-docs/categories.md): `GET /api/v3.0/categories`
-- [Tags](api-docs/tags.md): `GET /api/v3.0/tags`
-- [Open Questions](api-docs/open-questions.md): `GET /api/v3.0/open-questions`
+- Tags: `GET /api/v3.0/tags`
+- Open Questions: `GET /api/v3.0/open-questions`
 
 ### Search related APIs
 
-- [Search](api-docs/search.md): `GET /api/v3.0/search?q=<search string>`
+- Search: `GET /api/v3.0/search?q=<search string>`
 - [Popular Searches](api-docs/searches/popular.md): `GET /api/v3.0/searches/popular`
 
 ### FAQ related APIs

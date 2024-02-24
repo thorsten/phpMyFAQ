@@ -30,7 +30,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[OA\Info(
     version: '3.0',
-    title: 'phpMyFAQ REST API',
+    title: 'REST API for phpMyFAQ 4.0',
     contact: new OA\Contact(
         name: 'phpMyFAQ Team',
         email: 'support@phpmyfaq.de'
