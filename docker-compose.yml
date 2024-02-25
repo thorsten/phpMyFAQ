@@ -140,9 +140,3 @@ services:
     ports:
       - '9200:9200'
       - '9300:9300'
-
-  swagger-editor:
-    image: swaggerapi/swagger-editor
-    container_name: 'swagger-editor-container'
-    ports:
-      - '8081:8080'
