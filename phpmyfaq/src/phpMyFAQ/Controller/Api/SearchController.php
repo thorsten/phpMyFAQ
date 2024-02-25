@@ -102,6 +102,40 @@ class SearchController
         return $jsonResponse;
     }
 
+    #[OA\Get(
+        path: '/api/v3.0/searches/popular',
+        operationId: 'getPopularSearch',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the login.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the popular search terms for the given language provided by "Accept-Language"',
+        content: new OA\JsonContent(example: '
+        [
+            {
+                "id": 3,
+                "searchterm": "mac",
+                "number": "18",
+                "lang": "en"
+            },
+            {
+                "id": 7,
+                "searchterm": "test",
+                "number": 9,
+                "lang": "en"
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If the popular search returns no results.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function popular(): JsonResponse
     {
         $jsonResponse = new JsonResponse();

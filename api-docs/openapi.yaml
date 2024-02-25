@@ -1,6 +1,7 @@
 openapi: 3.0.0
 info:
   title: 'REST API for phpMyFAQ 4.0'
+  description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the phpMyFAQ installation.'
   contact:
     name: 'phpMyFAQ Team'
     email: support@phpmyfaq.de
@@ -12,6 +13,42 @@ servers:
   - url: 'https://localhost'
     description: 'Local dockerized server'
 paths:
+  '/api/v3.0/attachments/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'Returns a list of attachments for a given FAQ record ID.'
+      operationId: getAttachments
+      parameters:
+        - name: faqId
+          in: path
+          description: 'The FAQ record ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ has at least one attached file.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=2\"\n            }\n        ]"
+        '404':
+          description: 'If the FAQ has no attachments.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
   /api/v3.0/categories:
     get:
       tags:
@@ -172,6 +209,34 @@ paths:
               example: "\n        [\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"category_id\": \"15\",\n                \"question\": \"Why are you using phpMyFAQ?\",\n                \"answer\": \"Because it is cool!\",\n                \"link\": \"https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en\"\n            }\n        ]"
         '404':
           description: 'If the search returns no results'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/searches/popular:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getPopularSearch
+      responses:
+        '200':
+          description: 'Returns the popular search terms for the given language provided by "Accept-Language"'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 3,\n                \"searchterm\": \"mac\",\n                \"number\": \"18\",\n                \"lang\": \"en\"\n            },\n            {\n                \"id\": 7,\n                \"searchterm\": \"test\",\n                \"number\": 9,\n                \"lang\": \"en\"\n            }\n        ]"
+        '404':
+          description: 'If the popular search returns no results.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
           content:
             application/json:
               schema: {}
