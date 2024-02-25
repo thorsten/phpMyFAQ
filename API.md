@@ -14,7 +14,7 @@ Public endpoints require no Authentication.
 
 - Version: `GET /api/v3.0/version`
 - Title: `GET /api/v3.0/title`
-- [Language](api-docs/language.md): `GET /api/v3.0/language`
+- Language: `GET /api/v3.0/language`
 - News: `GET /api/v3.0/news`
 - [Categories](api-docs/categories.md): `GET /api/v3.0/categories`
 - Tags: `GET /api/v3.0/tags`
@@ -40,7 +40,7 @@ Public endpoints require no Authentication.
 
 ### Login/Registration related APIs
 
-- [Login](api-docs/login.md): `POST /api/v3.0/login`
+- Login: `POST /api/v3.0/login`
 
 ## Endpoints that require Authentication
 

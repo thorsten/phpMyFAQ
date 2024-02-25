@@ -12,6 +12,89 @@ servers:
   - url: 'https://localhost'
     description: 'Local dockerized server'
 paths:
+  /api/v3.0/categories:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getCategories
+      responses:
+        '200':
+          description: 'Returns the the categories for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the categories.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"parent_id\": 0,\n                \"name\": \"Test\",\n                \"description\": \"Hello, World! Hello, Tests!\",\n                \"user_id\": 1,\n                \"group_id\": 1,\n                \"active\": 1,\n                \"show_home\": 1,\n                \"image\": \"category-1-en.png\",\n                \"level\": 1\n              }\n        ]"
+        '404':
+          description: 'If no categories are found for the given language.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the categories.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/language:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getLanguage
+      responses:
+        '200':
+          description: 'Returns the default language as language code.'
+          content:
+            application/json:
+              schema: {}
+              example: '"en"'
+  /api/v3.0/login:
+    post:
+      tags:
+        - 'Public Endpoints'
+      operationId: login
+      requestBody:
+        description: 'The username and password for the login.'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'If "username" and "password" combination are correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "loggedin": true }'
+        '400':
+          description: 'If "username" and "password" combination are wrong.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "loggedin": false, "error": "Wrong username or password." }'
   /api/v3.0/news:
     get:
       tags:

@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -30,8 +31,43 @@ use Symfony\Component\HttpFoundation\Response;
 class LoginController
 {
     /**
-     * @throws \JsonException
+     * @throws \JsonException|Exception
      */
+    #[OA\Post(
+        path: '/api/v3.0/login',
+        operationId: 'login',
+        tags: ['Public Endpoints'],
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the login.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\RequestBody(
+        description: 'The username and password for the login.',
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                required: ['username', 'password'],
+                properties: [
+                    new OA\Property(property: 'username', type: 'string'),
+                    new OA\Property(property: 'password', type: 'string')
+                ],
+                type: 'object'
+            )
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If "username" and "password" combination are correct.',
+        content: new OA\JsonContent(example: '{ "loggedin": true }')
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'If "username" and "password" combination are wrong.',
+        content: new OA\JsonContent(example: '{ "loggedin": false, "error": "Wrong username or password." }')
+    )]
     public function login(Request $request): JsonResponse
     {
         $jsonResponse = new JsonResponse();
@@ -48,13 +84,13 @@ class LoginController
             $user = $userAuthentication->authenticate($faqUsername, $faqPassword);
             $jsonResponse->setStatusCode(Response::HTTP_OK);
             $result = [
-                'loggedin' => true
+                'loggedin' => $user->isLoggedIn()
             ];
         } catch (Exception $exception) {
             $faqConfig->getLogger()->error('Failed login: ' . $exception->getMessage());
             $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
-                'loggedin' => false,
+                'loggedin' => $user->isLoggedIn(),
                 'error' => Translation::get('ad_auth_fail')
             ];
         }
