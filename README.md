@@ -44,7 +44,7 @@ For development purposes, you can start a full stack to run your current PhpMyFA
 
     $ docker-compose up
 
-The command above starts eight containers for multi database development as following.
+The command above starts ten containers for multi database development as following.
 
 _Specific images started once to prepare the project:_
 
@@ -59,6 +59,7 @@ _Running using named volumes:_
 - **pgadmin**: a PHP tool to have a look at your PostgreSQL database.
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
+- **swagger-editor**: a web-based API documentation tool
 
 _Running apache web server with PHP 8.3 support:_
 
@@ -66,9 +67,10 @@ _Running apache web server with PHP 8.3 support:_
 
 Then services will be available at the following addresses:
 
-- phpMyFAQ: (http://localhost:8080 or https://localhost:443)
+- phpMyFAQ: (https://localhost:443 or http://localhost:8080 as fallback)
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
+- Swagger Editor: (http://localhost:8081)
 
 #### Running tests
 
@@ -145,6 +147,8 @@ To run our Javascript tests via Jest, just execute this command on your CLI
 
 ### End-to-end tests
 
+> **Note**: Not implemented yet.
+
 To run our end-to-end tests via Playwright, you can use several commands:
 
     $ pnpm exec playwright test
@@ -201,9 +205,9 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can read the complete documentation on [here](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v3.0
+## REST API v3.0 documentation
 
-The REST API v3.0 documentation is located [here in this repository](API.md).
+The REST API documentation is available as OpenAPI 3.0 specification [here](api-docs/openapi.yaml).
 
 ## License
 

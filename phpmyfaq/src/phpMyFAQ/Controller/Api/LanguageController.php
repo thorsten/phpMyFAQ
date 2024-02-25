@@ -17,11 +17,22 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LanguageController
 {
+    #[OA\Get(
+        path: '/api/v3.0/language',
+        operationId: 'getLanguage',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the default language as language code.',
+        content: new OA\JsonContent(example: '"en"')
+    )]
     public function index(): JsonResponse
     {
         return new JsonResponse(Configuration::getConfigurationInstance()->getLanguage()->getLanguage());

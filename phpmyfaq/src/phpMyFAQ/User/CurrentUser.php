@@ -56,7 +56,7 @@ class CurrentUser extends User
 
     /**
      * Specifies the timeout for the session in minutes. If the session ID was
-     * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
+     * not updated for the last $this->sessionTimeout minutes, the CurrentUser
      * will be logged out automatically if no cookie was set.
      */
     private int $sessionTimeout = PMF_AUTH_TIMEOUT;
@@ -68,7 +68,7 @@ class CurrentUser extends User
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
-     * was not updated for the last $this->_sessionIdTimeout minutes, it will
+     * was not updated for the last $this->sessionIdTimeout minutes, it will
      * be updated. If set to 0, the session ID will be updated on every click.
      * The session ID timeout must not be greater than Session timeout.
      */
@@ -453,6 +453,8 @@ class CurrentUser extends User
 
     /**
      * Returns the current user object from cookie or session
+     *
+     * @throws Exception
      */
     public static function getCurrentUser(Configuration $configuration): CurrentUser
     {
@@ -475,7 +477,7 @@ class CurrentUser extends User
      * Returns the current user ID and group IDs as an array, default values are -1
      *
      * @param CurrentUser|null $user
-     * @return array [int, int[]]
+     * @return array<int, int[]>
      */
     public static function getCurrentUserGroupId(CurrentUser $user = null): array
     {

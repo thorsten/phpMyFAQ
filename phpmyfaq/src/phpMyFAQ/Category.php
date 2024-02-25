@@ -913,45 +913,6 @@ class Category
     }
 
     /**
-     * Adds a new category entry.
-     *
-     * @param array $categoryData Array of category data
-     * @param int   $parentId Parent id
-     * @param null  $id Entity id
-     * @deprecated will be removed in v4.0, please use Category::create()
-     */
-    public function addCategory(array $categoryData, int $parentId = 0, $id = null): ?int
-    {
-        // If we only need a new language, we don't need a new category id
-        if (is_null($id)) {
-            $id = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
-        }
-
-        $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqcategories
-            (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
-                VALUES
-            (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
-            Database::getTablePrefix(),
-            $id,
-            $this->configuration->getDb()->escape($categoryData['lang']),
-            $parentId,
-            $this->configuration->getDb()->escape($categoryData['name']),
-            $this->configuration->getDb()->escape($categoryData['description']),
-            $categoryData['user_id'],
-            $categoryData['group_id'],
-            $categoryData['active'],
-            $this->configuration->getDb()->escape($categoryData['image'] ?? ''),
-            $categoryData['show_home']
-        );
-        $this->configuration->getDb()->query($query);
-
-        return $id;
-    }
-
-    /**
      * Creates a new category
      */
     public function create(CategoryEntity $categoryEntity): ?int
@@ -977,6 +938,7 @@ class Category
             $this->configuration->getDb()->escape($categoryEntity->getImage()),
             $categoryEntity->getShowHome()
         );
+
         $this->configuration->getDb()->query($query);
 
         return $categoryId;
@@ -985,15 +947,15 @@ class Category
     /**
      * Check if category already exists.
      *
-     * @param string[] $categoryData Array of category data
+     * @param CategoryEntity $categoryData Array of category data
      */
-    public function checkIfCategoryExists(array $categoryData): int
+    public function checkIfCategoryExists(CategoryEntity $categoryData): int
     {
         $query = sprintf(
             "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($categoryData['name']),
-            $this->configuration->getDb()->escape($categoryData['lang'])
+            $this->configuration->getDb()->escape($categoryData->getName()),
+            $this->configuration->getDb()->escape($categoryData->getLang())
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -1004,9 +966,9 @@ class Category
     /**
      * Updates an existent category entry.
      *
-     * @param string[] $categoryData Array of category data
+     * @param CategoryEntity $categoryData CategoryEntity object
      */
-    public function update(array $categoryData): bool
+    public function update(CategoryEntity $categoryData): bool
     {
         $query = sprintf(
             "
@@ -1025,15 +987,15 @@ class Category
             AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($categoryData['name']),
-            $this->configuration->getDb()->escape($categoryData['description']),
-            $categoryData['user_id'],
-            $categoryData['group_id'],
-            $categoryData['active'],
-            $categoryData['show_home'],
-            $this->configuration->getDb()->escape($categoryData['image']),
-            $categoryData['id'],
-            $this->configuration->getDb()->escape($categoryData['lang'])
+            $this->configuration->getDb()->escape($categoryData->getName()),
+            $this->configuration->getDb()->escape($categoryData->getDescription()),
+            $categoryData->getUserId(),
+            $categoryData->getGroupId(),
+            $categoryData->getActive(),
+            $categoryData->getShowHome(),
+            $this->configuration->getDb()->escape($categoryData->getImage()),
+            $categoryData->getId(),
+            $this->configuration->getDb()->escape($categoryData->getLang())
         );
 
         return (bool) $this->configuration->getDb()->query($query);

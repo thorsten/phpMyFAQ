@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Tags;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +25,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TagController
 {
+    #[OA\Get(
+        path: '/api/v3.0/tags',
+        operationId: 'getTags',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the tags for the given language provided by "Accept-Language".',
+        content: new OA\JsonContent(example: '[
+            {"tagId": 4, "tagName": "phpMyFAQ", "tagFrequency": 3 },
+            {"tagId": 1, "tagName": "PHP 8", "tagFrequency": 2 }
+        ]'),
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If no tags are stored.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function list(): JsonResponse
     {
         $jsonResponse = new JsonResponse();

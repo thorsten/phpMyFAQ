@@ -363,20 +363,21 @@ class System
             'created' => $dateTime->format('Y-m-d H:i:sP'),
         ];
         $ignoredFiles = [
-            '/config/constants.php' => false,
-            '/config/constants_elasticsearch.php' => false,
-            '/config/database.php' => false,
-            '/config/elasticsearch.php' => false,
-            '/config/ldap.php' => false,
+            '/content/core/config/azure.php' => false,
+            '/content/core/config/constants.php' => false,
+            '/content/core/config/constants_elasticsearch.php' => false,
+            '/content/core/config/database.php' => false,
+            '/content/core/config/elasticsearch.php' => false,
+            '/content/core/config/ldap.php' => false,
         ];
         $current = '';
 
         try {
             foreach ($files as $file) {
                 if (
-                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION) && !preg_match(
-                        '#/tests/#',
-                        (string) $file->getPath()
+                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION) && !str_contains(
+                        (string)$file->getPath(),
+                        '/tests/'
                     )
                 ) {
                     $current = str_replace(PMF_ROOT_DIR, '', (string) $file->getPathname());

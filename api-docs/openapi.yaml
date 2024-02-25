@@ -1,0 +1,346 @@
+openapi: 3.0.0
+info:
+  title: 'REST API for phpMyFAQ 4.0'
+  description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the phpMyFAQ installation.'
+  contact:
+    name: 'phpMyFAQ Team'
+    email: support@phpmyfaq.de
+  license:
+    name: 'Mozilla Public Licence 2.0'
+    url: 'https://www.mozilla.org/MPL/2.0/'
+  version: '3.0'
+servers:
+  - url: 'https://localhost'
+    description: 'Local dockerized server'
+paths:
+  '/api/v3.0/attachments/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'Returns a list of attachments for a given FAQ record ID.'
+      operationId: getAttachments
+      parameters:
+        - name: faqId
+          in: path
+          description: 'The FAQ record ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ has at least one attached file.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=2\"\n            }\n        ]"
+        '404':
+          description: 'If the FAQ has no attachments.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/categories:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getCategories
+      responses:
+        '200':
+          description: 'Returns the the categories for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the categories.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"parent_id\": 0,\n                \"name\": \"Test\",\n                \"description\": \"Hello, World! Hello, Tests!\",\n                \"user_id\": 1,\n                \"group_id\": 1,\n                \"active\": 1,\n                \"show_home\": 1,\n                \"image\": \"category-1-en.png\",\n                \"level\": 1\n              }\n        ]"
+        '404':
+          description: 'If no categories are found for the given language.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the categories.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  '/api/v3.0/comments/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'Returns a list of comments for a given FAQ record ID.'
+      operationId: getComments
+      parameters:
+        - name: faqId
+          in: path
+          description: 'The FAQ record ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ has at least one comment.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 2,\n                \"recordId\": 142,\n                \"categoryId\": null,\n                \"type\": \"faq\",\n                \"username\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"comment\": \"Foo! Bar?\",\n                \"date\": \"2019-12-24T12:24:57+0100\",\n                \"helped\": null\n            }\n        ]"
+        '404':
+          description: 'If the FAQ has no comments.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/groups:
+    get:
+      tags:
+        - 'Endpoints with Authentication'
+      description: 'Used to fetch all group IDs.'
+      operationId: getGroups
+      responses:
+        '200':
+          description: 'Returns a list of group IDs.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"group-id\": 1\n            },\n            {\n                \"group-id\": 2\n            }\n        ]"
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+  /api/v3.0/language:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getLanguage
+      responses:
+        '200':
+          description: 'Returns the default language as language code.'
+          content:
+            application/json:
+              schema: {}
+              example: '"en"'
+  /api/v3.0/login:
+    post:
+      tags:
+        - 'Public Endpoints'
+      operationId: login
+      requestBody:
+        description: 'The username and password for the login.'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'If "username" and "password" combination are correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "loggedin": true }'
+        '400':
+          description: 'If "username" and "password" combination are wrong.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "loggedin": false, "error": "Wrong username or password." }'
+  /api/v3.0/news:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getNews
+      responses:
+        '200':
+          description: 'Returns the news for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"date\": \"2019-08-23T20:43:00+0200\",\n                \"header\": \"Hallo, World!\",\n                \"content\": \"Hello, phpMyFAQ!\",\n                \"authorName\": \"phpMyFAQ User\",\n                \"authorEmail\": \"user@example.org\",\n                \"dateStart\": \"0\",\n                \"dateEnd\": \"99991231235959\",\n                \"active\": true,\n                \"allowComments\": true,\n                \"link\": \"\",\n                \"linkTitle\": \"\",\n                \"target\": \"\",\n                \"url\": \"https://www.example.org/?action=news&newsid=1&newslang=de\"\n              }\n        ]"
+        '404':
+          description: 'If no news are stored.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/open-questions:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getOpenQuestions
+      responses:
+        '200':
+          description: 'Returns the open questions for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"username\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"categoryId\": 3,\n                \"question\": \"Foo? Bar? Baz?\",\n                \"created\": \"20190106180429\",\n                \"answerId\": 0,\n                \"isVisible\": \"N\"\n              }\n        ]"
+        '404':
+          description: 'If no open questions are stored.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/search:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getSearch
+      parameters:
+        - name: q
+          in: query
+          description: 'The search term'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Returns the results for the query string search term.'
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"category_id\": \"15\",\n                \"question\": \"Why are you using phpMyFAQ?\",\n                \"answer\": \"Because it is cool!\",\n                \"link\": \"https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en\"\n            }\n        ]"
+        '404':
+          description: 'If the search returns no results'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/searches/popular:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getPopularSearch
+      responses:
+        '200':
+          description: 'Returns the popular search terms for the given language provided by "Accept-Language"'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 3,\n                \"searchterm\": \"mac\",\n                \"number\": \"18\",\n                \"lang\": \"en\"\n            },\n            {\n                \"id\": 7,\n                \"searchterm\": \"test\",\n                \"number\": 9,\n                \"lang\": \"en\"\n            }\n        ]"
+        '404':
+          description: 'If the popular search returns no results.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/tags:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getTags
+      responses:
+        '200':
+          description: 'Returns the tags for the given language provided by "Accept-Language".'
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\"tagId\": 4, \"tagName\": \"phpMyFAQ\", \"tagFrequency\": 3 },\n            {\"tagId\": 1, \"tagName\": \"PHP 8\", \"tagFrequency\": 2 }\n        ]"
+        '404':
+          description: 'If no tags are stored.'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/title:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getTitle
+      responses:
+        '200':
+          description: 'Returns the title of the phpMyFAQ instance as a string.'
+          content:
+            application/json:
+              schema: {}
+              example: 'phpMyFAQ Codename Pontus'
+  /api/v3.0/version:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getVersion
+      responses:
+        '200':
+          description: 'Returns the phpMyFAQ version number as string.'
+          content:
+            application/json:
+              schema: {}
+              example: 4.0.0

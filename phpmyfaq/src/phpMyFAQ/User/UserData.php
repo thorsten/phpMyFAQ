@@ -68,13 +68,7 @@ class UserData
         }
 
         $select = sprintf(
-            '
-            SELECT
-                %s
-            FROM
-                %sfaquserdata
-            WHERE
-                user_id = %d',
+            'SELECT %s FROM %sfaquserdata WHERE user_id = %d',
             $fields,
             Database::getTablePrefix(),
             $this->userId
@@ -99,13 +93,7 @@ class UserData
     public function fetch(string $key, string $value): ?string
     {
         $select = sprintf(
-            "
-            SELECT
-                %s
-            FROM
-                %sfaquserdata
-            WHERE
-                %s = '%s'",
+            "SELECT %s FROM %sfaquserdata WHERE %s = '%s'",
             $key,
             Database::getTablePrefix(),
             $key,
@@ -128,12 +116,9 @@ class UserData
     public function fetchAll(string $key, string $value): array
     {
         $select = sprintf(
-            "SELECT user_id,
-            last_modified,
-            display_name, email,
-            is_visible,
-            twofactor_enabled,
-            secret FROM %sfaquserdata WHERE %s = '%s'",
+            "SELECT 
+                user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret 
+            FROM %sfaquserdata WHERE %s = '%s'",
             Database::getTablePrefix(),
             $key,
             $this->configuration->getDb()->escape($value)
@@ -295,11 +280,7 @@ class UserData
 
         $this->userId = $userId;
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaquserdata
-            WHERE
-                user_id = %d',
+            'DELETE FROM %sfaquserdata WHERE user_id = %d',
             Database::getTablePrefix(),
             $this->userId
         );

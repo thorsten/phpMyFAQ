@@ -17,7 +17,9 @@
 
 namespace phpMyFAQ\Controller;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
@@ -26,12 +28,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
+#[OA\Info(
+    version: '3.0',
+    description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ ' .
+    'version or doing a search against the phpMyFAQ installation.',
+    title: 'REST API for phpMyFAQ 4.0',
+    contact: new OA\Contact(
+        name: 'phpMyFAQ Team',
+        email: 'support@phpmyfaq.de'
+    ),
+)]
+#[OA\Server(url: 'https://localhost', description: 'Local dockerized server')]
+#[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
     /**
      * Returns a Twig rendered template as response.
      *
-     * @param string[]      $templateVars
+     * @param string[] $templateVars
      * @param Response|null $response
      * @throws TemplateException
      */
@@ -48,6 +62,11 @@ abstract class AbstractController
 
     /**
      * Returns a JsonResponse that uses json_encode().
+     *
+     * @param mixed $data
+     * @param int $status
+     * @param string[] $headers
+     * @return JsonResponse
      */
     protected function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
@@ -56,6 +75,7 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
+     * @throws Exception
      */
     protected function userIsAuthenticated(): void
     {
@@ -67,6 +87,7 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
+     * @throws Exception
      */
     protected function userIsSuperAdmin(): void
     {
@@ -78,6 +99,7 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
+     * @throws Exception
      */
     protected function userHasGroupPermission(): void
     {
@@ -95,6 +117,7 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
+     * @throws Exception
      */
     protected function userHasUserPermission(): void
     {
@@ -111,6 +134,7 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
+     * @throws Exception
      */
     protected function userHasPermission(PermissionType $permissionType): void
     {

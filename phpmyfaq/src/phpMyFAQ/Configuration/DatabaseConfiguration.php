@@ -17,21 +17,21 @@
 
 namespace phpMyFAQ\Configuration;
 
-class DatabaseConfiguration
+readonly class DatabaseConfiguration
 {
-    private readonly string $server;
+    private string $server;
 
-    private readonly ?int $port;
+    private ?int $port;
 
-    private readonly string $user;
+    private string $user;
 
-    private readonly string $password;
+    private string $password;
 
-    private readonly string $db;
+    private string $db;
 
-    private readonly string $prefix;
+    private string $prefix;
 
-    private readonly string $type;
+    private string $type;
 
     public function __construct(string $filename)
     {

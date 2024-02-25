@@ -66,6 +66,6 @@ readonly class TwigWrapper
 
     public function getExtension(string $class): ExtensionInterface
     {
-        return $this->twigEnvironment->getExtension($class);
+        return $this->twigEnvironment->getExtension($class); /** @phpstan-ignore-line */
     }
 }

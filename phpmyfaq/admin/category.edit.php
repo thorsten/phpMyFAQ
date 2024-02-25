@@ -108,7 +108,6 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'buttonUpdate' => Translation::get('ad_categ_update'),
     ];
 
-
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $template = $twig->loadTemplate('./admin/content/category.edit.twig');
 

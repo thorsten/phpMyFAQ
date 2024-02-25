@@ -25,70 +25,73 @@ export const handleUpdateNextStepButton = () => {
   }
 };
 
-export const handleUpdateInformation = () => {
+export const handleUpdateInformation = async () => {
   if (window.location.href.endsWith('update.php')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
-    fetch('../../api/setup/check', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: installedVersion.value,
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok: ', { cause: { response } });
-      })
-      .then((data) => {
-        const button = document.getElementById('phpmyfaq-update-next-step-button');
-        const alert = document.getElementById('phpmyfaq-update-check-success');
-
-        alert.classList.remove('d-none');
-
-        button.classList.remove('disabled');
-        button.disabled = false;
-      })
-      .catch(async (error) => {
-        const errorMessage = await error.cause.response.json();
-        const alert = document.getElementById('phpmyfaq-update-check-alert');
-        const alertResult = document.getElementById('phpmyfaq-update-check-result');
-
-        alert.classList.remove('d-none');
-        alertResult.innerText = errorMessage.message;
+    try {
+      const response = await fetch('../../api/setup/check', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: installedVersion.value,
       });
+
+      if (!response.ok) {
+        let errorMessage = await response.json();
+
+        throw new Error(errorMessage.message);
+      }
+
+      const button = document.getElementById('phpmyfaq-update-next-step-button');
+      const alert = document.getElementById('phpmyfaq-update-check-success');
+
+      alert.classList.remove('d-none');
+      button.classList.remove('disabled');
+      button.disabled = false;
+    } catch (errorMessage) {
+      if (errorMessage instanceof SyntaxError) {
+        errorMessage = 'The requested resource was not found on the server. Please check your server configuration.';
+      } else {
+        errorMessage = errorMessage.message;
+      }
+      const alert = document.getElementById('phpmyfaq-update-check-alert');
+      const alertResult = document.getElementById('phpmyfaq-update-check-result');
+
+      alert.classList.remove('d-none');
+      alertResult.innerText = errorMessage;
+    }
   }
 };
 
-export const handleConfigBackup = () => {
+export const handleConfigBackup = async () => {
   if (window.location.href.endsWith('update.php?step=2')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
-    fetch('../../api/setup/backup', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: installedVersion.value,
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok: ', { cause: { response } });
-      })
-      .then((data) => {
-        const downloadLink = document.getElementById('phpmyfaq-update-backup-download-link');
-        downloadLink.href = data.backupFile;
-      })
-      .catch(async (error) => {
-        const errorMessage = await error.cause.response.json();
-        return errorMessage.error;
+    try {
+      const response = await fetch('../../api/setup/backup', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: installedVersion.value,
       });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      const downloadLink = document.getElementById('phpmyfaq-update-backup-download-link');
+      downloadLink.href = data.backupFile;
+    } catch (error) {
+      const errorMessage =
+        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
+      return errorMessage.error;
+    }
   }
 };
 
@@ -96,45 +99,46 @@ export const handleDatabaseUpdate = async () => {
   if (window.location.href.endsWith('update.php?step=3')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
-    await fetch('../../api/setup/update-database', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: installedVersion.value,
-    })
-      .then(async (response) => {
-        const progressBarInstallation = document.getElementById('result-update');
-        const reader = response.body.getReader();
-
-        function pump() {
-          return reader.read().then(({ done, value }) => {
-            const decodedValue = new TextDecoder().decode(value);
-
-            if (done) {
-              progressBarInstallation.style.width = '100%';
-              progressBarInstallation.innerText = '100%';
-              progressBarInstallation.classList.remove('progress-bar-animated');
-              const alert = document.getElementById('phpmyfaq-update-database-success');
-              alert.classList.remove('d-none');
-              return;
-            } else {
-              progressBarInstallation.style.width = JSON.parse(decodedValue).progress;
-              progressBarInstallation.innerText = JSON.parse(decodedValue).progress;
-            }
-
-            return pump();
-          });
-        }
-        return pump();
-      })
-      .catch(async (error) => {
-        const errorMessage = await error.cause.response.json();
-        const alert = document.getElementById('phpmyfaq-update-database-error');
-
-        alert.classList.remove('d-none');
-        alert.innerHTML = errorMessage.error;
+    try {
+      const response = await fetch('../../api/setup/update-database', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: installedVersion.value,
       });
+
+      const progressBarInstallation = document.getElementById('result-update');
+      const reader = response.body.getReader();
+
+      async function pump() {
+        const { done, value } = await reader.read();
+        const decodedValue = new TextDecoder().decode(value);
+
+        if (done) {
+          progressBarInstallation.style.width = '100%';
+          progressBarInstallation.innerText = '100%';
+          progressBarInstallation.classList.remove('progress-bar-animated');
+          const alert = document.getElementById('phpmyfaq-update-database-success');
+          alert.classList.remove('d-none');
+          return;
+        } else {
+          progressBarInstallation.style.width = JSON.parse(decodedValue).progress;
+          progressBarInstallation.innerText = JSON.parse(decodedValue).progress;
+        }
+
+        await pump();
+      }
+
+      await pump();
+    } catch (error) {
+      const errorMessage =
+        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
+      const alert = document.getElementById('phpmyfaq-update-database-error');
+
+      alert.classList.remove('d-none');
+      alert.innerHTML = errorMessage.error;
+    }
   }
 };

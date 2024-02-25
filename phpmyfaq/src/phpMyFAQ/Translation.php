@@ -146,19 +146,20 @@ class Translation
 
     /**
      * Returns the configuration items from the current language for the given section.
+     *
+     * @return array<string, array<string, string>>
      */
     public static function getConfigurationItems(string $section = ''): array
     {
-        include self::$translation->filename(self::$translation->currentLanguage);
-
         $configuration = [];
 
-        foreach ($LANG_CONF as $key => $value) {
-            if (str_starts_with((string) $key, $section)) {
+        foreach (self::fetchTranslationFile() as $key => $value) {
+            if (str_starts_with($key, $section)) {
                 $configuration[$key] = ['element' => $value[0] ?? '', 'label' => $value[1] ?? ''];
 
                 switch ($key) {
                     case 'records.maxAttachmentSize':
+                        /** @phpstan-ignore-next-line */
                         $configuration[$key]['label'] = sprintf(
                             $configuration[$key]['label'],
                             ini_get('upload_max_filesize')
@@ -266,5 +267,17 @@ class Translation
     protected function filename(string $language): string
     {
         return self::$translation->languagesDir . DIRECTORY_SEPARATOR . 'language_' . $language . '.php';
+    }
+
+    /**
+     * Fetches the translation file for the current language.
+     * @return array<string, array<string, string>>
+     */
+    private static function fetchTranslationFile(): array
+    {
+        $LANG_CONF = [];
+        include self::$translation->filename(self::$translation->currentLanguage);
+
+        return $LANG_CONF;
     }
 }

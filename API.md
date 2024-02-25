@@ -1,5 +1,7 @@
 # REST API v3.0 for phpMyFAQ 4.0
 
+> This documentation will be migrated to the OpenAPI format during the 4.0 development cycle.
+
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like an iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
 phpMyFAQ installation.
@@ -10,23 +12,23 @@ Public endpoints require no Authentication.
 
 ### General APIs
 
-- [Version](api-docs/version.md): `GET /api/v3.0/version`
-- [Title](api-docs/title.md): `GET /api/v3.0/title`
-- [Language](api-docs/language.md): `GET /api/v3.0/language`
-- [News](api-docs/news.md): `GET /api/v3.0/news`
-- [Categories](api-docs/categories.md): `GET /api/v3.0/categories`
-- [Tags](api-docs/tags.md): `GET /api/v3.0/tags`
-- [Open Questions](api-docs/open-questions.md): `GET /api/v3.0/open-questions`
+- Version: `GET /api/v3.0/version`
+- Title: `GET /api/v3.0/title`
+- Language: `GET /api/v3.0/language`
+- News: `GET /api/v3.0/news`
+- Categories: `GET /api/v3.0/categories`
+- Tags: `GET /api/v3.0/tags`
+- Open Questions: `GET /api/v3.0/open-questions`
 
 ### Search related APIs
 
-- [Search](api-docs/search.md): `GET /api/v3.0/search?q=<search string>`
-- [Popular Searches](api-docs/searches/popular.md): `GET /api/v3.0/searches/popular`
+- Search: `GET /api/v3.0/search?q=<search string>`
+- Popular Searches: `GET /api/v3.0/searches/popular`
 
 ### FAQ related APIs
 
-- [Attachments](api-docs/attachments.md): `GET /api/v3.0/attachments`
-- [Comments](api-docs/comments.md): `GET /api/v3.0/comments`
+- Attachments: `GET /api/v3.0/attachments`
+- Comments: `GET /api/v3.0/comments`
 - [All FAQs](api-docs/faqs.md): `GET /api/v3.0/faqs`
 - [All FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v3.0/faqs/:categoryId`
 - [All FAQs per Tags](api-docs/faqs/tags.md): `GET /api/v3.0/faqs/tags/:tagId`
@@ -38,7 +40,7 @@ Public endpoints require no Authentication.
 
 ### Login/Registration related APIs
 
-- [Login](api-docs/login.md): `POST /api/v3.0/login`
+- Login: `POST /api/v3.0/login`
 
 ## Endpoints that require Authentication
 
@@ -57,7 +59,7 @@ be acquired from the admin configuration.
 
 ### Groups related APIs
 
-- [All groups](api-docs/groups.md): `GET /api/v3.0/groups`
+- All groups: `GET /api/v3.0/groups`
 
 ### Login/Registration related APIs
 

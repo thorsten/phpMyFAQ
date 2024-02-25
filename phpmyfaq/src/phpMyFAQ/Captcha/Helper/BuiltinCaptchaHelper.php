@@ -70,7 +70,7 @@ class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(
                 '<button type="button" class="btn btn-primary" id="%s" data-action="%s">' .
-                    '<i aria-hidden="true" class="bi bi-refresh" data-action="%s"></i></button>',
+                    '<i aria-hidden="true" class="bi bi-arrow-repeat" data-action="%s"></i></button>',
                 self::FORM_BUTTON,
                 $action,
                 $action

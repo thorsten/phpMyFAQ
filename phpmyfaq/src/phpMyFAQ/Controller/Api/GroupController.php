@@ -17,16 +17,52 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class GroupController
+class GroupController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/groups',
+        operationId: 'getGroups',
+        description: 'Used to fetch all group IDs.',
+        tags: ['Endpoints with Authentication']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the login.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns a list of group IDs.',
+        content: new OA\JsonContent(example: '
+        [
+            {
+                "group-id": 1
+            },
+            {
+                "group-id": 2
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'If the user is not authenticated.'
+    )]
     public function list(): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($faqConfig);
