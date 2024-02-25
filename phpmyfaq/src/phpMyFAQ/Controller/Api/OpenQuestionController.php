@@ -27,7 +27,8 @@ class OpenQuestionController
 {
     #[OA\Get(
         path: '/api/v3.0/open-questions',
-        operationId: 'getOpenQuestions'
+        operationId: 'getOpenQuestions',
+        tags: ['Public Endpoints']
     )]
     #[OA\Header(
         header: 'Accept-Language',

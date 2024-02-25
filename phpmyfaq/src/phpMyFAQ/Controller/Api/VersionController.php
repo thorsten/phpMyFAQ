@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class VersionController extends AbstractController
 {
-    #[OA\Get(path: '/api/v3.0/version', operationId: 'getVersion')]
+    #[OA\Get(path: '/api/v3.0/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the phpMyFAQ version number as string.',

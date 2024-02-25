@@ -25,7 +25,8 @@ class TitleController
 {
     #[OA\Get(
         path: '/api/v3.0/title',
-        operationId: 'getTitle'
+        operationId: 'getTitle',
+        tags: ['Public Endpoints']
     )]
     #[OA\Response(
         response: 200,

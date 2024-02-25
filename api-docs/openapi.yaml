@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 'phpMyFAQ REST API'
+  title: 'REST API for phpMyFAQ 4.0'
   contact:
     name: 'phpMyFAQ Team'
     email: support@phpmyfaq.de
@@ -12,8 +12,38 @@ servers:
   - url: 'https://localhost'
     description: 'Local dockerized server'
 paths:
+  /api/v3.0/news:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getNews
+      responses:
+        '200':
+          description: 'Returns the news for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"date\": \"2019-08-23T20:43:00+0200\",\n                \"header\": \"Hallo, World!\",\n                \"content\": \"Hello, phpMyFAQ!\",\n                \"authorName\": \"phpMyFAQ User\",\n                \"authorEmail\": \"user@example.org\",\n                \"dateStart\": \"0\",\n                \"dateEnd\": \"99991231235959\",\n                \"active\": true,\n                \"allowComments\": true,\n                \"link\": \"\",\n                \"linkTitle\": \"\",\n                \"target\": \"\",\n                \"url\": \"https://www.example.org/?action=news&newsid=1&newslang=de\"\n              }\n        ]"
+        '404':
+          description: 'If no news are stored.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
   /api/v3.0/open-questions:
     get:
+      tags:
+        - 'Public Endpoints'
       operationId: getOpenQuestions
       responses:
         '200':
@@ -40,6 +70,8 @@ paths:
               example: []
   /api/v3.0/search:
     get:
+      tags:
+        - 'Public Endpoints'
       operationId: getSearch
       parameters:
         - name: q
@@ -63,6 +95,8 @@ paths:
               example: []
   /api/v3.0/tags:
     get:
+      tags:
+        - 'Public Endpoints'
       operationId: getTags
       responses:
         '200':
@@ -79,6 +113,8 @@ paths:
               example: []
   /api/v3.0/title:
     get:
+      tags:
+        - 'Public Endpoints'
       operationId: getTitle
       responses:
         '200':
@@ -89,6 +125,8 @@ paths:
               example: 'phpMyFAQ Codename Pontus'
   /api/v3.0/version:
     get:
+      tags:
+        - 'Public Endpoints'
       operationId: getVersion
       responses:
         '200':

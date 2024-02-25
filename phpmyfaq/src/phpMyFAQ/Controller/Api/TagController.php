@@ -27,7 +27,8 @@ class TagController
 {
     #[OA\Get(
         path: '/api/v3.0/tags',
-        operationId: 'getTags'
+        operationId: 'getTags',
+        tags: ['Public Endpoints']
     )]
     #[OA\Response(
         response: 200,

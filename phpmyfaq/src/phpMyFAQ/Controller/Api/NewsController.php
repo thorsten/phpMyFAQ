@@ -27,7 +27,8 @@ class NewsController
 {
     #[OA\Get(
         path: '/api/v3.0/news',
-        operationId: 'getNews'
+        operationId: 'getNews',
+        tags: ['Public Endpoints']
     )]
     #[OA\Header(
         header: 'Accept-Language',

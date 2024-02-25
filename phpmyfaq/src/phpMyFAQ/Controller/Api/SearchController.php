@@ -38,7 +38,8 @@ class SearchController
      */
     #[OA\Get(
         path: '/api/v3.0/search',
-        operationId: 'getSearch'
+        operationId: 'getSearch',
+        tags: ['Public Endpoints']
     )]
     #[OA\Parameter(
         name: 'q',
