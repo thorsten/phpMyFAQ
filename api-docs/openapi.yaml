@@ -77,6 +77,67 @@ paths:
             application/json:
               schema: {}
               example: []
+  '/api/v3.0/comments/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'Returns a list of comments for a given FAQ record ID.'
+      operationId: getComments
+      parameters:
+        - name: faqId
+          in: path
+          description: 'The FAQ record ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ has at least one comment.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 2,\n                \"recordId\": 142,\n                \"categoryId\": null,\n                \"type\": \"faq\",\n                \"username\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"comment\": \"Foo! Bar?\",\n                \"date\": \"2019-12-24T12:24:57+0100\",\n                \"helped\": null\n            }\n        ]"
+        '404':
+          description: 'If the FAQ has no comments.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/groups:
+    get:
+      tags:
+        - 'Endpoints with Authentication'
+      description: 'Used to fetch all group IDs.'
+      operationId: getGroups
+      responses:
+        '200':
+          description: 'Returns a list of group IDs.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"group-id\": 1\n            },\n            {\n                \"group-id\": 2\n            }\n        ]"
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
   /api/v3.0/language:
     get:
       tags:

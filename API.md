@@ -28,7 +28,7 @@ Public endpoints require no Authentication.
 ### FAQ related APIs
 
 - Attachments: `GET /api/v3.0/attachments`
-- [Comments](api-docs/comments.md): `GET /api/v3.0/comments`
+- Comments: `GET /api/v3.0/comments`
 - [All FAQs](api-docs/faqs.md): `GET /api/v3.0/faqs`
 - [All FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v3.0/faqs/:categoryId`
 - [All FAQs per Tags](api-docs/faqs/tags.md): `GET /api/v3.0/faqs/tags/:tagId`
@@ -59,7 +59,7 @@ be acquired from the admin configuration.
 
 ### Groups related APIs
 
-- [All groups](api-docs/groups.md): `GET /api/v3.0/groups`
+- All groups: `GET /api/v3.0/groups`
 
 ### Login/Registration related APIs
 
