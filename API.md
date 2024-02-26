@@ -49,7 +49,7 @@ be acquired from the admin configuration.
 
 ### Category related APIs
 
-- [Add category](api-docs/category/post.md): `POST /api/v3.0/category`
+- Add category: `POST /api/v3.0/category`
 
 ### FAQ related APIs
 

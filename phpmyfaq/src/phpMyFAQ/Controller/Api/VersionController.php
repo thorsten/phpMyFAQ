@@ -32,6 +32,6 @@ class VersionController extends AbstractController
     )]
     public function index(): JsonResponse
     {
-        return new JsonResponse(Configuration::getConfigurationInstance()->getVersion());
+        return $this->json(Configuration::getConfigurationInstance()->getVersion());
     }
 }

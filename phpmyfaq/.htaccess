@@ -154,7 +154,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule api/v2.2/title                         api/index.php [L,QSA]
     RewriteRule api/v2.2/language                      api/index.php [L,QSA]
     RewriteRule api/v2.2/categories                    api/index.php [L,QSA]
-    RewriteRule api/v2.2/category                      api.php?action=category [L,QSA]
+    RewriteRule api/v2.2/category                      api/index.php [L,QSA]
     RewriteRule api/v2.2/groups                        api/index.php [L,QSA]
     RewriteRule api/v2.2/searches/popular              api/index.php [L,QSA]
     RewriteRule api/v2.2/search                        api/index.php [L,QSA]

@@ -19,9 +19,10 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class TitleController
+class TitleController extends AbstractController
 {
     #[OA\Get(
         path: '/api/v3.0/title',
@@ -35,6 +36,6 @@ class TitleController
     )]
     public function index(): JsonResponse
     {
-        return new JsonResponse(Configuration::getConfigurationInstance()->getTitle());
+        return $this->json(Configuration::getConfigurationInstance()->getTitle());
     }
 }

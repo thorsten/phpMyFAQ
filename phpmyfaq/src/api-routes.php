@@ -48,6 +48,10 @@ $routes->add(
     new Route("v{$apiVersion}/categories", ['_controller' => [CategoryController::class, 'list']])
 );
 $routes->add(
+    'api.category',
+    new Route("v{$apiVersion}/category", ['_controller' => [CategoryController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
     'api.comments',
     new Route("v{$apiVersion}/comments/{recordId}", ['_controller' => [CommentController::class, 'list']])
 );

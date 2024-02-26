@@ -25,6 +25,7 @@ use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -71,6 +72,18 @@ abstract class AbstractController
     protected function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
         return new JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * @throws UnauthorizedHttpException
+     */
+    protected function hasValidToken(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $request = Request::createFromGlobals();
+        if ($configuration->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+            throw new UnauthorizedHttpException('"x-pmf-token" is not valid.');
+        }
     }
 
     /**
