@@ -117,41 +117,6 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 // Handle actions
 //
 switch ($action) {
-    case 'faqs':
-        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-
-        // api/v2.2/faqs/popular
-        if ('popular' === $filter) {
-            $result = array_values($faq->getTopTenData());
-        }
-
-        // api/v2.2/faqs/latest
-        if ('latest' === $filter) {
-            $result = array_values($faq->getLatestData());
-        }
-
-        // api/v2.2/faqs/sticky
-        if ('sticky' === $filter) {
-            $result = array_values($faq->getStickyRecordsData());
-        }
-
-        // api/v2.2/faqs
-        if (is_null($categoryId) && is_null($tagId) && is_null($filter)) {
-            $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
-            $result = $faq->faqRecords;
-        }
-
-        if ((is_countable($result) ? count($result) : 0) === 0) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
-
-        $response->setData($result);
-        break;
-
-
     case 'faq':
         //
         // GET

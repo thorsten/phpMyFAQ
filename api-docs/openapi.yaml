@@ -371,6 +371,35 @@ paths:
             application/json:
               schema: {}
               example: []
+  /api/v3.0/faqs:
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns all the FAQs for the given language provided by "Accept-Language".'
+      operationId: getAll
+      responses:
+        '200':
+          description: "If there's at least one FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"solution_id\": \"1000\",\n                \"revision_id\": \"0\",\n                \"active\": \"yes\",\n                \"sticky\": \"0\",\n                \"keywords\": \"\",\n                \"title\": \"Is there life after death?\",\n                \"content\": \"Maybe!\",\n                \"author\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"comment\": \"y\",\n                \"updated\": \"2009-10-10 17:54:00\",\n                \"dateStart\": \"00000000000000\",\n                \"dateEnd\": \"99991231235959\",\n                \"created\": \"2008-09-03T21:30:17+02:00\",\n                \"notes\": \"\"\n            }\n        ]"
+        '404':
+          description: "If there's not one single FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
   /api/v3.0/groups:
     get:
       tags:

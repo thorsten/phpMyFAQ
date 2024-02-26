@@ -29,7 +29,7 @@ Public endpoints require no Authentication.
 
 - Attachments: `GET /api/v3.0/attachments`
 - Comments: `GET /api/v3.0/comments`
-- [All FAQs](api-docs/faqs.md): `GET /api/v3.0/faqs`
+- All FAQs: `GET /api/v3.0/faqs`
 - All FAQs per Category: `GET /api/v3.0/faqs/:categoryId`
 - All FAQs per Tags: `GET /api/v3.0/faqs/tags/:tagId`
 - [FAQ](api-docs/faq.md): `GET /api/v3.0/faq/:categoryId/:faqId`

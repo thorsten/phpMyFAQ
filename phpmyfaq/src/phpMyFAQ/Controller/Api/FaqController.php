@@ -220,7 +220,9 @@ class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        if (empty($result)) {
+        $result = array_values($faq->getTopTenData());
+
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
             return $jsonResponse;
         }
@@ -274,7 +276,9 @@ class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        if (empty($result)) {
+        $result = array_values($faq->getLatestData());
+
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
             return $jsonResponse;
         }
@@ -335,7 +339,7 @@ class FaqController extends AbstractController
 
         $result = array_values($faq->getStickyRecordsData());
 
-        if (empty($result)) {
+        if ((is_countable($result) ? count($result) : 0) === 0) {
             $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
             return $jsonResponse;
         }
@@ -345,8 +349,71 @@ class FaqController extends AbstractController
         return $jsonResponse;
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/faqs',
+        operationId: 'getAll',
+        description: 'This endpoint returns all the FAQs for the given language provided by "Accept-Language".',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If there\'s at least one FAQ.',
+        content: new OA\JsonContent(example: '[
+            {
+                "id": "1",
+                "lang": "en",
+                "solution_id": "1000",
+                "revision_id": "0",
+                "active": "yes",
+                "sticky": "0",
+                "keywords": "",
+                "title": "Is there life after death?",
+                "content": "Maybe!",
+                "author": "phpMyFAQ User",
+                "email": "user@example.org",
+                "comment": "y",
+                "updated": "2009-10-10 17:54:00",
+                "dateStart": "00000000000000",
+                "dateEnd": "99991231235959",
+                "created": "2008-09-03T21:30:17+02:00",
+                "notes": ""
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If there\'s not one single FAQ.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function list(): JsonResponse
     {
-        // ...
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $configuration->getLanguage()->getLanguage()]);
+        $result = $faq->faqRecords;
+
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $jsonResponse;
+        }
+
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($result);
+        return $jsonResponse;
     }
 }

@@ -77,6 +77,10 @@ $routes->add(
     new Route("v{$apiVersion}/faqs/{categoryId}", ['_controller' => [FaqController::class, 'getByCategoryId']])
 );
 $routes->add(
+    'api.faqs',
+    new Route("v{$apiVersion}/faqs", ['_controller' => [FaqController::class, 'list']])
+);
+$routes->add(
     'api.groups',
     new Route("v{$apiVersion}/groups", ['_controller' => [GroupController::class, 'list']])
 );
