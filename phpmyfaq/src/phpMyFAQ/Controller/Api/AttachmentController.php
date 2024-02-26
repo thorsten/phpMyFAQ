@@ -36,7 +36,7 @@ class AttachmentController
     )]
     #[OA\Header(
         header: 'Accept-Language',
-        description: 'The language code for the login.',
+        description: 'The language code for the attachment.',
         schema: new OA\Schema(type: 'string')
     )]
     #[OA\Parameter(

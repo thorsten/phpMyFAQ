@@ -18,6 +18,7 @@
 use phpMyFAQ\Controller\Api\AttachmentController;
 use phpMyFAQ\Controller\Api\CategoryController;
 use phpMyFAQ\Controller\Api\CommentController;
+use phpMyFAQ\Controller\Api\FaqController;
 use phpMyFAQ\Controller\Api\GroupController;
 use phpMyFAQ\Controller\Api\LanguageController;
 use phpMyFAQ\Controller\Api\LoginController;
@@ -54,6 +55,14 @@ $routes->add(
 $routes->add(
     'api.comments',
     new Route("v{$apiVersion}/comments/{recordId}", ['_controller' => [CommentController::class, 'list']])
+);
+$routes->add(
+    'api.faqs.by-category-id',
+    new Route("v{$apiVersion}/faqs/{categoryId}", ['_controller' => [FaqController::class, 'getByCategoryId']])
+);
+$routes->add(
+    'api.faqs.by-tag-id',
+    new Route("v{$apiVersion}/faqs/tags/{tagId}", ['_controller' => [FaqController::class, 'getByTagId']])
 );
 $routes->add(
     'api.groups',

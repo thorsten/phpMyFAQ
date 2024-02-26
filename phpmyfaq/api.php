@@ -123,30 +123,6 @@ switch ($action) {
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        // api/v2.2/faqs/:categoryId
-        if (!is_null($categoryId)) {
-            try {
-                if ('all' === $filter) {
-                    $result = $faq->getAllAvailableFaqsByCategoryId($categoryId, 'id', 'ASC', false);
-                } else {
-                    $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
-                }
-            } catch (Exception) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        // api/v2.2/faqs/tags/:tagId
-        if (!is_null($tagId)) {
-            $tags = new Tags($faqConfig);
-            $recordIds = $tags->getFaqsByTagId($tagId);
-            try {
-                $result = $faq->getRecordsByIds($recordIds);
-            } catch (Exception) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            }
-        }
-
         // api/v2.2/faqs/popular
         if ('popular' === $filter) {
             $result = array_values($faq->getTopTenData());
