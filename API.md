@@ -30,13 +30,13 @@ Public endpoints require no Authentication.
 - Attachments: `GET /api/v3.0/attachments`
 - Comments: `GET /api/v3.0/comments`
 - [All FAQs](api-docs/faqs.md): `GET /api/v3.0/faqs`
-- [All FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v3.0/faqs/:categoryId`
-- [All FAQs per Tags](api-docs/faqs/tags.md): `GET /api/v3.0/faqs/tags/:tagId`
+- All FAQs per Category: `GET /api/v3.0/faqs/:categoryId`
+- All FAQs per Tags: `GET /api/v3.0/faqs/tags/:tagId`
 - [FAQ](api-docs/faq.md): `GET /api/v3.0/faq/:categoryId/:faqId`
 - [FAQ as PDF](api-docs/faq/pdf.md): `GET /api/v3.0/faq/:categoryId/:faqId?filter=pdf`
-- [Latest FAQs](api-docs/faqs/latest.md): `GET /api/v3.0/faqs/latest`
-- [Popular FAQs](api-docs/faqs/popular.md): `GET /api/v3.0/faqs/popular`
-- [Sticky FAQs](api-docs/faqs/sticky.md): `GET /api/v3.0/faqs/sticky`
+- Latest FAQs: `GET /api/v3.0/faqs/latest`
+- Popular FAQs: `GET /api/v3.0/faqs/popular`
+- Sticky FAQs: `GET /api/v3.0/faqs/sticky`
 
 ### Login/Registration related APIs
 

@@ -57,12 +57,24 @@ $routes->add(
     new Route("v{$apiVersion}/comments/{recordId}", ['_controller' => [CommentController::class, 'list']])
 );
 $routes->add(
-    'api.faqs.by-category-id',
-    new Route("v{$apiVersion}/faqs/{categoryId}", ['_controller' => [FaqController::class, 'getByCategoryId']])
-);
-$routes->add(
     'api.faqs.by-tag-id',
     new Route("v{$apiVersion}/faqs/tags/{tagId}", ['_controller' => [FaqController::class, 'getByTagId']])
+);
+$routes->add(
+    'api.faqs.latest',
+    new Route("v{$apiVersion}/faqs/latest", ['_controller' => [FaqController::class, 'getLatest']])
+);
+$routes->add(
+    'api.faqs.popular',
+    new Route("v{$apiVersion}/faqs/popular", ['_controller' => [FaqController::class, 'getPopular']])
+);
+$routes->add(
+    'api.faqs.sticky',
+    new Route("v{$apiVersion}/faqs/sticky", ['_controller' => [FaqController::class, 'getSticky']])
+);
+$routes->add(
+    'api.faqs.by-category-id',
+    new Route("v{$apiVersion}/faqs/{categoryId}", ['_controller' => [FaqController::class, 'getByCategoryId']])
 );
 $routes->add(
     'api.groups',

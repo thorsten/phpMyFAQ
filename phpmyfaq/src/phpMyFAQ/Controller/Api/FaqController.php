@@ -176,19 +176,173 @@ class FaqController extends AbstractController
         return $jsonResponse;
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/faqs/popular',
+        operationId: 'getPopular',
+        description: 'This endpoint returns the popular FAQs for the given language provided by "Accept-Language".',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If there\'s at least one popular FAQ.',
+        content: new OA\JsonContent(example: '[
+            {
+                "date": "2019-07-13T11:28:00+0200",
+                "question": "How can I survive without phpMyFAQ?",
+                "answer": "A good question!",
+                "visits": 10,
+                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If there\'s not a single popular FAQ.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function getPopular(): JsonResponse
     {
-        // ...
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        if (empty($result)) {
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $jsonResponse;
+        }
+
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($result);
+        return $jsonResponse;
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/faqs/latest',
+        operationId: 'getLatest',
+        description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If there\'s at least one latest FAQ.',
+        content: new OA\JsonContent(example: '[
+            {
+                "date": "2019-07-13T11:28:00+0200",
+                "question": "How can I survive without phpMyFAQ?",
+                "answer": "A good question!",
+                "visits": 10,
+                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If there\'s not one latest FAQ.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function getLatest(): JsonResponse
     {
-        // ...
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        if (empty($result)) {
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $jsonResponse;
+        }
+
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($result);
+        return $jsonResponse;
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/faqs/sticky',
+        operationId: 'getSticky',
+        description: 'This endpoint returns the sticky FAQs for the given language provided by "Accept-Language".',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If there\'s at least one sticky FAQ.',
+        content: new OA\JsonContent(example: '[
+            {
+                "question": "How can I survive without phpMyFAQ?",
+                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de",
+                "id": "8",
+                "order": "1"
+            },
+            {
+                "question": "Is there life after death?",
+                "url": "https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en",
+                "id": "10",
+                "order": "2"
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If there\'s not one sticky FAQ.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function getSticky(): JsonResponse
     {
-        // ...
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        $result = array_values($faq->getStickyRecordsData());
+
+        if (empty($result)) {
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $jsonResponse;
+        }
+
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData($result);
+        return $jsonResponse;
     }
 
     public function list(): JsonResponse
