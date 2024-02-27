@@ -20,26 +20,20 @@
 const IS_VALID_PHPMYFAQ = null;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Question;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 //
 // Bootstrapping
@@ -288,51 +282,6 @@ switch ($action) {
         }
 
         $response->setData($result);
-        break;
-
-    case 'question':
-        if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData([
-                'stored' => false,
-                'error' => 'X_PMF_Token not valid.'
-            ]);
-            break;
-        }
-
-        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-        $languageCode = Filter::filterVar($postData['language'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $categoryId = Filter::filterVar($postData['category-id'], FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($postData['author'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($postData['email'], FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $visibility = $faqConfig->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
-
-        $questionData = [
-            'username' => $author,
-            'email' => $email,
-            'category_id' => $categoryId,
-            'question' => $question,
-            'is_visible' => $visibility
-        ];
-
-        $questionObject = new Question($faqConfig);
-        $questionObject->addQuestion($questionData);
-
-        $categoryObject = new Category($faqConfig);
-        $categoryObject->getCategoryData($categoryId);
-        $categories = $categoryObject->getAllCategories();
-
-        $questionHelper = new QuestionHelper($faqConfig, $categoryObject);
-        try {
-            $questionHelper->sendSuccessMail($questionData, $categories);
-        } catch (TransportExceptionInterface | Exception $e) {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response->setData(['error' => $e->getMessage() ]);
-        }
-
-        $response->setData(['stored' => true]);
         break;
 }
 

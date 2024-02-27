@@ -120,7 +120,7 @@ paths:
               type: object
             example: "{\n                \"language\": \"en\",\n                \"parent-id\": 1,\n                \"parent-category-name\": \"Test\",\n                \"category-name\": \"Test 2\",\n                \"description\": \"Hello, World! Hello, Tests!\",\n                \"user-id\": 1,\n                \"group-id\": 1,\n                \"is-active\": true,\n                \"show-on-homepage\": true\n            }"
       responses:
-        '200':
+        '201':
           description: 'If all posted data is correct.'
           headers:
             Accept-Language:
@@ -536,6 +536,51 @@ paths:
             application/json:
               schema: {}
               example: []
+  /api/v3.0/question:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - language
+                - category-id
+                - question
+                - author
+                - email
+              properties:
+                language:
+                  type: string
+                category-id:
+                  type: integer
+                question:
+                  type: string
+                author:
+                  type: string
+                email:
+                  type: string
+              type: object
+            example: "{\n                \"language\": \"de\",\n                \"category-id\": \"1\",\n                \"question\": \"Is this the world we created?\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\"\n            }"
+      responses:
+        '201':
+          description: 'Used to add a new question in one existing category.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
   /api/v3.0/search:
     get:
       tags:

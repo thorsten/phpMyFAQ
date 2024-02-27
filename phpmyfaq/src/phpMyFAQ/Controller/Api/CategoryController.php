@@ -162,7 +162,7 @@ class CategoryController extends AbstractController
         )
     )]
     #[OA\Response(
-        response: 200,
+        response: 201,
         description: 'If all posted data is correct.',
         content: new OA\JsonContent(example: '{ "stored": true }')
     )]
@@ -256,7 +256,7 @@ class CategoryController extends AbstractController
             $categoryPermission->add(CategoryPermission::USER, [$categoryId], [-1]);
             $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], [-1]);
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            $jsonResponse->setStatusCode(Response::HTTP_CREATED);
             $result = [
                 'stored' => true
             ];
