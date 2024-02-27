@@ -25,6 +25,7 @@ use phpMyFAQ\Controller\Api\LoginController;
 use phpMyFAQ\Controller\Api\NewsController;
 use phpMyFAQ\Controller\Api\OpenQuestionController;
 use phpMyFAQ\Controller\Api\QuestionController;
+use phpMyFAQ\Controller\Api\RegistrationController;
 use phpMyFAQ\Controller\Api\SearchController;
 use phpMyFAQ\Controller\Api\TagController;
 use phpMyFAQ\Controller\Api\TitleController;
@@ -104,6 +105,16 @@ $routes->add(
 $routes->add(
     'api.question',
     new Route("v{$apiVersion}/question", ['_controller' => [QuestionController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.register',
+    new Route(
+        "v{$apiVersion}/register",
+        [
+            '_controller' => [RegistrationController::class, 'create'],
+            '_methods' => 'POST'
+        ]
+    )
 );
 $routes->add(
     'api.search',

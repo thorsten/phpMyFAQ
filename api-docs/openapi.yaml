@@ -581,6 +581,104 @@ paths:
             application/json:
               schema: {}
               example: '{ "stored": true }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+  /api/v3.0/register:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - fullname
+                - email
+                - is-visible
+              properties:
+                username:
+                  type: string
+                fullname:
+                  type: string
+                email:
+                  type: string
+                is-visible:
+                  type: boolean
+              type: object
+            example: "{\n                \"username\": \"ada\",\n                \"fullname\": \"Ada Lovelace\",\n                \"email\": \"ada.lovelace@example.org\",\n                \"is-visible\": false\n            }"
+      responses:
+        '201':
+          description: 'If "username", "fullname", "email", and "is-visible" combination is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": true, "success": "User created."}'
+        '400':
+          description: 'If "username", "fullname", "email", and "is-visible" combination is not correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": false, "error": "Error message"}'
+        '409':
+          description: 'If the domain of the email address is not allowed.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": false, "error": "The domain is not allowed."}'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": false }'
   /api/v3.0/search:
     get:
       tags:

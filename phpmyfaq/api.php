@@ -25,7 +25,6 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
@@ -238,49 +237,6 @@ switch ($action) {
         $result = [
             'stored' => true
         ];
-        $response->setData($result);
-        break;
-
-    case 'register':
-        if ($faqConfig->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $result = [
-                'registered' => false,
-                'error' => 'X_PMF_Token not valid.'
-            ];
-            $response->setData($result);
-            break;
-        }
-
-        $registration = new RegistrationHelper($faqConfig);
-
-        $userName = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
-        $fullName = Filter::filterInput(INPUT_POST, 'fullname', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $isVisible = Filter::filterInput(INPUT_POST, 'is-visible', FILTER_SANITIZE_SPECIAL_CHARS);
-        $isVisible = $isVisible === 'true';
-
-        if (!$registration->isDomainAllowed($email)) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $result = [
-                'registered' => false,
-                'error' => 'The domain is not whitelisted.'
-            ];
-            $response->setData($result);
-            break;
-        }
-
-        if (!is_null($userName) && !is_null($fullName) && !is_null($email)) {
-            $result = $registration->createUser($userName, $fullName, $email, $isVisible);
-            $response->setStatusCode(Response::HTTP_OK);
-        } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $result = [
-                'registered' => false,
-                'error' => Translation::get('err_sendMail')
-            ];
-        }
-
         $response->setData($result);
         break;
 }
