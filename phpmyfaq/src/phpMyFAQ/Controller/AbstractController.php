@@ -44,6 +44,15 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 abstract class AbstractController
 {
     /**
+     * Check if the FAQ should be secured.
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->isSecured();
+    }
+
+    /**
      * Returns a Twig rendered template as response.
      *
      * @param string[] $templateVars
@@ -83,6 +92,18 @@ abstract class AbstractController
         $request = Request::createFromGlobals();
         if ($configuration->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
             throw new UnauthorizedHttpException('"x-pmf-token" is not valid.');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function isSecured(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $currentUser = CurrentUser::getCurrentUser($configuration);
+        if (!$currentUser->isLoggedIn() && $configuration->get('security.enableLoginOnly')) {
+            throw new UnauthorizedHttpException('You are not allowed to view this content.');
         }
     }
 
