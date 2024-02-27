@@ -227,6 +227,8 @@ class CategoryController extends AbstractController
                     'stored' => false,
                     'error' => 'The given parent category name was not found.'
                 ];
+                $jsonResponse->setData($result);
+                return $jsonResponse;
             }
 
             $parentId = $parentCategoryIdFound;
