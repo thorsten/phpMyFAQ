@@ -76,7 +76,9 @@ class Notification
         if ($this->config->get('main.enableNotifications')) {
             $this->mail->addTo($this->config->getAdminEmail());
             foreach ($emails as $email) {
-                $this->mail->addCc($email);
+                if ($email !== $this->config->getAdminEmail()) {
+                    $this->mail->addCc($email);
+                }
             }
             $this->mail->subject = $this->config->getTitle() . ': New FAQ was added.';
             $this->faq->getRecord($faqId, null, true);

@@ -175,7 +175,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
                     $notifyEmail = Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
                     $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_SANITIZE_SPECIAL_CHARS);
                     $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
-                } catch (Exception $e) {
+                } catch (Exception | TransportExceptionInterface $e) {
                     printf('<p class="alert alert-warning">%s</p>', $e->getMessage());
                 }
             }
@@ -244,7 +244,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'add_faq')) {
             (() => {
               setTimeout(() => {
                 window.location = "index.php?action=editentry&id=<?= $recordId;
-                    ?>&lang=<?= $faqData->getLanguage() ?>";
+                ?>&lang=<?= $faqData->getLanguage() ?>";
               }, 5000);
             })();
             </script>
