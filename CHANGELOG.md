@@ -32,6 +32,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated codebase to use PHP 8.2 language features (Thorsten)
 - updated to PHPUnit v11 (Thorsten)
 
+### phpMyFAQ v3.2.6 - unreleased
+
+- updated bundled dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.5 - 2024-02-05
 
 - fixed multiple security vulnerabilities (Thorsten)
