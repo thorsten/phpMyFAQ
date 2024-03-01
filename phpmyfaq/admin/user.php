@@ -573,8 +573,8 @@ if (
                 <tr class="row_user_id_<?= $user->getUserId() ?>">
                     <td><?= Strings::htmlentities($user->getUserData('display_name')) ?></td>
                     <td>
-                        <a href="mailto:<?= $user->getUserData('email') ?>">
-                            <?= $user->getUserData('email') ?>
+                        <a href="mailto:<?= Strings::htmlentities($user->getUserData('email')) ?>">
+                            <?= Strings::htmlentities($user->getUserData('email')) ?>
                         </a>
                     </td>
                     <td><?= Strings::htmlentities($user->getLogin()) ?></td>
