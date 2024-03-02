@@ -40,7 +40,7 @@ Content-Type: application/json
   "faq-id": 1,
   "language": "de",
   "category-id": 1,
-  "question": "Is this the world we created?",
+  "question": "Is this the world we updated?",
   "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today",
   "keywords": "phpMyFAQ, FAQ, Foo, Bar",
   "author": "Freddie Mercury",

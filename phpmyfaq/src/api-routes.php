@@ -56,6 +56,14 @@ $routes->add(
     new Route("v{$apiVersion}/category", ['_controller' => [CategoryController::class, 'create'], '_methods' => 'POST'])
 );
 $routes->add(
+    'api.faq.create',
+    new Route("v{$apiVersion}/faq/create", ['_controller' => [FaqController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.faq.update',
+    new Route("v{$apiVersion}/faq/update", ['_controller' => [FaqController::class, 'update'], '_methods' => 'PUT'])
+);
+$routes->add(
     'api.faq-by-id',
     new Route("v{$apiVersion}/faq/{categoryId}/{faqId}", ['_controller' => [FaqController::class, 'getById']])
 );

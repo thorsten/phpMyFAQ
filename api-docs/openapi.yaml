@@ -442,6 +442,195 @@ paths:
             application/json:
               schema: {}
               example: []
+  /api/v3.0/faq/create:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createFaq
+      requestBody:
+        description: 'The category ID is a required value, the category name is optional. If the category name is present and the ID can be mapped, the category ID from the name will be used. If the category name cannot be mapped, a 409 error is thrown.'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - language
+                - category-id
+                - category-name
+                - question
+                - answer
+                - keywords
+                - author
+                - email
+                - is-active
+                - is-sticky
+              properties:
+                language:
+                  type: string
+                category-id:
+                  type: integer
+                category-name:
+                  type: string
+                question:
+                  type: string
+                answer:
+                  type: string
+                keywords:
+                  type: string
+                author:
+                  type: string
+                email:
+                  type: string
+                is-active:
+                  type: boolean
+                is-sticky:
+                  type: boolean
+              type: object
+            example: "{\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"category-name\": \"Queen Songs\",\n                \"question\": \"Is this the world we created?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
+      responses:
+        '201':
+          description: 'If all posted data is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
+        '400':
+          description: "If something didn't worked out."
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
+        '409':
+          description: 'If the parent category name cannot be mapped.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "The given category name was not found" }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+  /api/v3.0/faq/update:
+    put:
+      tags:
+        - 'Endpoints with Authentication'
+      description: 'Used to update a FAQ in one existing category.'
+      operationId: updateFaq
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - faq-id
+                - language
+                - category-id
+                - question
+                - answer
+                - keywords
+                - author
+                - email
+                - is-active
+                - is-sticky
+              properties:
+                faq-id:
+                  type: integer
+                language:
+                  type: string
+                category-id:
+                  type: integer
+                question:
+                  type: string
+                answer:
+                  type: string
+                keywords:
+                  type: string
+                author:
+                  type: string
+                email:
+                  type: string
+                is-active:
+                  type: boolean
+                is-sticky:
+                  type: boolean
+              type: object
+            example: "{\n                \"faq-id\": 1,\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"question\": \"Is this the world we updated?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
+      responses:
+        '200':
+          description: 'If all posted data is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
+        '400':
+          description: "If something didn't worked out."
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
   /api/v3.0/groups:
     get:
       tags:

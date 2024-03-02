@@ -19,9 +19,12 @@ namespace phpMyFAQ\Controller\Api;
 
 use Exception;
 use OpenApi\Attributes as OA;
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -499,6 +502,343 @@ class FaqController extends AbstractController
 
         $jsonResponse->setStatusCode(Response::HTTP_OK);
         $jsonResponse->setData($result);
+        return $jsonResponse;
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     * @throws \JsonException
+     */
+    #[OA\Post(
+        path: '/api/v3.0/faq/create',
+        operationId: 'createFaq',
+        tags: ['Endpoints with Authentication'],
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the login.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Header(
+        header: 'x-pmf-token',
+        description: 'phpMyFAQ client API Token, generated in admin backend',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\RequestBody(
+        description: 'The category ID is a required value, the category name is optional. If the category name is ' .
+            'present and the ID can be mapped, the category ID from the name will be used. If the category name ' .
+            'cannot be mapped, a 409 error is thrown.',
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                required: [
+                    'language',
+                    'category-id',
+                    'category-name',
+                    'question',
+                    'answer',
+                    'keywords',
+                    'author',
+                    'email',
+                    'is-active',
+                    'is-sticky'
+                ],
+                properties: [
+                    new OA\Property(property: 'language', type: 'string'),
+                    new OA\Property(property: 'category-id', type: 'integer'),
+                    new OA\Property(property: 'category-name', type: 'string'),
+                    new OA\Property(property: 'question', type: 'string'),
+                    new OA\Property(property: 'answer', type: 'string'),
+                    new OA\Property(property: 'keywords', type: 'string'),
+                    new OA\Property(property: 'author', type: 'string'),
+                    new OA\Property(property: 'email', type: 'string'),
+                    new OA\Property(property: 'is-active', type: 'boolean'),
+                    new OA\Property(property: 'is-sticky', type: 'boolean')
+                ],
+                type: 'object'
+            ),
+            example: '{
+                "language": "de",
+                "category-id": 1,
+                "category-name": "Queen Songs",
+                "question": "Is this the world we created?",
+                "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the ' .
+                    'end, is this what we\'re all living for today",
+                "keywords": "phpMyFAQ, FAQ, Foo, Bar",
+                "author": "Freddie Mercury",
+                "email": "freddie.mercury@example.org",
+                "is-active": "true",
+                "is-sticky": "false"
+            }'
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: 'If all posted data is correct.',
+        content: new OA\JsonContent(example: '{ "stored": true }')
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'If something didn\'t worked out.',
+        content: new OA\JsonContent(
+            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
+        )
+    )]
+    #[OA\Response(
+        response: 409,
+        description: 'If the parent category name cannot be mapped.',
+        content: new OA\JsonContent(
+            example: '{ "stored": false, "error": "The given category name was not found" }'
+        )
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'If the user is not authenticated.'
+    )]
+    public function create(Request $request): JsonResponse
+    {
+        $this->hasValidToken();
+
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+
+        $currentLanguage = $configuration->getLanguage()->getLanguage();
+
+        $category = new Category($configuration, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->setLanguage($currentLanguage);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
+        if (isset($data->{'category-name'})) {
+            $categoryName = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        } else {
+            $categoryName = null;
+        }
+
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
+        $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
+        $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
+
+        // Check if category name can be mapped
+        if (!is_null($categoryName)) {
+            $categoryIdFound = $category->getCategoryIdFromName($categoryName);
+            if ($categoryIdFound === false) {
+                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
+                $result = [
+                    'stored' => false,
+                    'error' => 'The given category name was not found.'
+                ];
+                $jsonResponse->setData($result);
+                return $jsonResponse;
+            }
+
+            $categoryId = $categoryIdFound;
+        }
+
+        if ($faq->hasTitleAHash($question)) {
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $result = [
+                'stored' => false,
+                'error' => 'It is not allowed, that the question title contains a hash.'
+            ];
+            $jsonResponse->setData($result);
+            return $jsonResponse;
+        }
+
+        $categories = [ $categoryId ];
+        $isActive = !is_null($isActive);
+        $isSticky = !is_null($isSticky);
+
+        $faqData = new FaqEntity();
+        $faqData
+            ->setLanguage($languageCode)
+            ->setQuestion($question)
+            ->setAnswer($answer)
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setActive($isActive)
+            ->setSticky($isSticky)
+            ->setComment(false)
+            ->setNotes('');
+
+        $faqId = $faq->create($faqData);
+
+        $faqMetaData = new FaqMetaData($configuration);
+        $faqMetaData
+            ->setFaqId($faqId)
+            ->setFaqLanguage($languageCode)
+            ->setCategories($categories)
+            ->save();
+
+        $jsonResponse->setStatusCode(Response::HTTP_CREATED);
+        $jsonResponse->setData(['stored' => true]);
+        return $jsonResponse;
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     * @throws \JsonException
+     */
+    #[OA\Put(
+        path: '/api/v3.0/faq/update',
+        operationId: 'updateFaq',
+        tags: ['Endpoints with Authentication'],
+        description: 'Used to update a FAQ in one existing category.'
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the login.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Header(
+        header: 'x-pmf-token',
+        description: 'phpMyFAQ client API Token, generated in admin backend',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                required: [
+                    'faq-id',
+                    'language',
+                    'category-id',
+                    'question',
+                    'answer',
+                    'keywords',
+                    'author',
+                    'email',
+                    'is-active',
+                    'is-sticky'
+                ],
+                properties: [
+                    new OA\Property(property: 'faq-id', type: 'integer'),
+                    new OA\Property(property: 'language', type: 'string'),
+                    new OA\Property(property: 'category-id', type: 'integer'),
+                    new OA\Property(property: 'question', type: 'string'),
+                    new OA\Property(property: 'answer', type: 'string'),
+                    new OA\Property(property: 'keywords', type: 'string'),
+                    new OA\Property(property: 'author', type: 'string'),
+                    new OA\Property(property: 'email', type: 'string'),
+                    new OA\Property(property: 'is-active', type: 'boolean'),
+                    new OA\Property(property: 'is-sticky', type: 'boolean')
+                ],
+                type: 'object'
+            ),
+            example: '{
+                "faq-id": 1,
+                "language": "de",
+                "category-id": 1,
+                "question": "Is this the world we updated?",
+                "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the ' .
+                    'end, is this what we\'re all living for today",
+                "keywords": "phpMyFAQ, FAQ, Foo, Bar",
+                "author": "Freddie Mercury",
+                "email": "freddie.mercury@example.org",
+                "is-active": "true",
+                "is-sticky": "false"
+            }'
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If all posted data is correct.',
+        content: new OA\JsonContent(example: '{ "stored": true }')
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'If something didn\'t worked out.',
+        content: new OA\JsonContent(
+            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
+        )
+    )]
+    #[OA\Response(
+        response: 401,
+        description: 'If the user is not authenticated.'
+    )]
+    public function update(Request $request): JsonResponse
+    {
+        $this->hasValidToken();
+
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+
+        $currentLanguage = $configuration->getLanguage()->getLanguage();
+
+        $category = new Category($configuration, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->setLanguage($currentLanguage);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        $faqId = Filter::filterVar($data->{'faq-id'}, FILTER_VALIDATE_INT);
+        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+        $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
+        $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
+        $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
+
+        if ($faq->hasTitleAHash($question)) {
+            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $result = [
+                'stored' => false,
+                'error' => 'It is not allowed, that the question title contains a hash.'
+            ];
+            $jsonResponse->setData($result);
+            return $jsonResponse;
+        }
+
+        $isActive = !is_null($isActive);
+        $isSticky = !is_null($isSticky);
+
+        $faqData = new FaqEntity();
+        $faqData
+            ->setId($faqId)
+            ->setRevisionId(0)
+            ->setLanguage($languageCode)
+            ->setQuestion($question)
+            ->setAnswer($answer)
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setActive($isActive)
+            ->setSticky($isSticky)
+            ->setComment(false)
+            ->setNotes('');
+
+        $faq->update($faqData);
+
+        $jsonResponse->setStatusCode(Response::HTTP_OK);
+        $jsonResponse->setData(['stored' => true]);
         return $jsonResponse;
     }
 }
