@@ -25,6 +25,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
+use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,6 +100,90 @@ class FaqController extends AbstractController
             return $jsonResponse;
         }
 
+        return $jsonResponse;
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/faq/{categoryId}/{faqId}',
+        operationId: 'getFaqById',
+        description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by ' .
+            '"Accept-Language".',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Parameter(
+        name: 'categoryId',
+        description: 'The category ID.',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Parameter(
+        name: 'faqId',
+        description: 'The FAQ ID.',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If the FAQ exists.',
+        content: new OA\JsonContent(example: '{
+            "id": 1,
+            "lang": "en",
+            "solution_id": 1000,
+            "revision_id": 0,
+            "active": "yes",
+            "sticky": 0,
+            "keywords": "",
+            "title": "Is there life after death?",
+            "content": "Maybe!",
+            "author": "phpMyFAQ User",
+            "email": "user@example.org",
+            "comment": "y",
+            "date": "2019-10-10 17:54",
+            "dateStart": "00000000000000",
+            "dateEnd": "99991231235959",
+            "created": "2019-09-03T21:30:17+02:00"
+        }')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If there are no FAQs for the given FAQ ID.',
+        content: new OA\JsonContent(example: []),
+    )]
+    public function getById(Request $request): JsonResponse
+    {
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($configuration);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+
+        $faq->getRecord($faqId);
+        $result = $faq->faqRecord;
+
+        if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
+            $result = new stdClass();
+            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+        } else {
+            $jsonResponse->setStatusCode(Response::HTTP_OK);
+        }
+
+        $jsonResponse->setData($result);
         return $jsonResponse;
     }
 

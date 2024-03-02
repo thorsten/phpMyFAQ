@@ -32,8 +32,8 @@ Public endpoints require no Authentication.
 - All FAQs: `GET /api/v3.0/faqs`
 - All FAQs per Category: `GET /api/v3.0/faqs/:categoryId`
 - All FAQs per Tags: `GET /api/v3.0/faqs/tags/:tagId`
-- [FAQ](api-docs/faq.md): `GET /api/v3.0/faq/:categoryId/:faqId`
-- [FAQ as PDF](api-docs/faq/pdf.md): `GET /api/v3.0/faq/:categoryId/:faqId?filter=pdf`
+- FAQ: `GET /api/v3.0/faq/:categoryId/:faqId`
+- FAQ as PDF: `GET /api/v3.0/pdf/:categoryId/:faqId`
 - Latest FAQs: `GET /api/v3.0/faqs/latest`
 - Popular FAQs: `GET /api/v3.0/faqs/popular`
 - Sticky FAQs: `GET /api/v3.0/faqs/sticky`

@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\Api\LanguageController;
 use phpMyFAQ\Controller\Api\LoginController;
 use phpMyFAQ\Controller\Api\NewsController;
 use phpMyFAQ\Controller\Api\OpenQuestionController;
+use phpMyFAQ\Controller\Api\PdfController;
 use phpMyFAQ\Controller\Api\QuestionController;
 use phpMyFAQ\Controller\Api\RegistrationController;
 use phpMyFAQ\Controller\Api\SearchController;
@@ -53,6 +54,10 @@ $routes->add(
 $routes->add(
     'api.category',
     new Route("v{$apiVersion}/category", ['_controller' => [CategoryController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.faq-by-id',
+    new Route("v{$apiVersion}/faq/{categoryId}/{faqId}", ['_controller' => [FaqController::class, 'getById']])
 );
 $routes->add(
     'api.comments',
@@ -101,6 +106,10 @@ $routes->add(
 $routes->add(
     'api.open-questions',
     new Route("v{$apiVersion}/open-questions", ['_controller' => [OpenQuestionController::class, 'list']])
+);
+$routes->add(
+    'api.pdf-by-id',
+    new Route("v{$apiVersion}/pdf/{categoryId}/{faqId}", ['_controller' => [PdfController::class, 'getById']])
 );
 $routes->add(
     'api.question',

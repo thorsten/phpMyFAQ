@@ -248,6 +248,48 @@ paths:
             application/json:
               schema: {}
               example: []
+  '/api/v3.0/faq/{categoryId}/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by "Accept-Language".'
+      operationId: getFaqById
+      parameters:
+        - name: categoryId
+          in: path
+          description: 'The category ID.'
+          required: true
+          schema:
+            type: integer
+        - name: faqId
+          in: path
+          description: 'The FAQ ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ exists.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "{\n            \"id\": 1,\n            \"lang\": \"en\",\n            \"solution_id\": 1000,\n            \"revision_id\": 0,\n            \"active\": \"yes\",\n            \"sticky\": 0,\n            \"keywords\": \"\",\n            \"title\": \"Is there life after death?\",\n            \"content\": \"Maybe!\",\n            \"author\": \"phpMyFAQ User\",\n            \"email\": \"user@example.org\",\n            \"comment\": \"y\",\n            \"date\": \"2019-10-10 17:54\",\n            \"dateStart\": \"00000000000000\",\n            \"dateEnd\": \"99991231235959\",\n            \"created\": \"2019-09-03T21:30:17+02:00\"\n        }"
+        '404':
+          description: 'If there are no FAQs for the given FAQ ID.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
   '/api/v3.0/faqs/tags/{tagId}':
     get:
       tags:
@@ -530,6 +572,48 @@ paths:
           headers:
             Accept-Language:
               description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  '/api/v3.0/pdf/{categoryId}/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided by "Accept-Language".'
+      operationId: getPdfById
+      parameters:
+        - name: categoryId
+          in: path
+          description: 'The category ID.'
+          required: true
+          schema:
+            type: integer
+        - name: faqId
+          in: path
+          description: 'The FAQ ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the PDF of the FAQ exists.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '"https://www.example.org/pdf.php?cat=3&id=142&artlang=de"'
+        '404':
+          description: "If there's no FAQ and PDF for the given FAQ ID."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
               schema:
                 type: string
           content:

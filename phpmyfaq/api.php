@@ -111,35 +111,6 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 //
 switch ($action) {
     case 'faq':
-        //
-        // GET
-        //
-        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-
-        if ($request->getMethod() === 'GET' && $recordId > 0) {
-            $faq->getRecord($recordId);
-            $result = $faq->faqRecord;
-
-            if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
-                $result = new stdClass();
-                $response->setStatusCode(Response::HTTP_NOT_FOUND);
-            }
-
-            if ('pdf' === $filter) {
-                $service = new Services($faqConfig);
-                $service->setFaqId($recordId);
-                $service->setLanguage($currentLanguage);
-                $service->setCategoryId($categoryId);
-
-                $result = $service->getPdfApiLink();
-            }
-
-            $response->setData($result);
-            break;
-        }
 
         //
         // POST or PUT
