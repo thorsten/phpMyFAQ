@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
@@ -38,6 +39,7 @@ class ConfigurationTabController extends AbstractController
 {
     /**
      * @throws TemplateException
+     * @throws Exception
      */
     #[Route('admin/api/configuration/list')]
     public function list(Request $request): Response
@@ -66,6 +68,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration')]
     public function save(Request $request): JsonResponse
     {
@@ -145,6 +150,9 @@ class ConfigurationTabController extends AbstractController
         return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/translations')]
     public function translations(): Response
     {
@@ -168,6 +176,9 @@ class ConfigurationTabController extends AbstractController
         return $response->setContent('<option value="language_en.php">English</option>');
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/templates')]
     public function templates(): Response
     {
@@ -189,6 +200,9 @@ class ConfigurationTabController extends AbstractController
         return $response->setContent($htmlString);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/faqs-sorting-key')]
     public function faqsSortingKey(Request $request): Response
     {
@@ -199,6 +213,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/faqs-sorting-order')]
     public function faqsSortingOrder(Request $request): Response
     {
@@ -209,6 +226,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/faqs-sorting-popular')]
     public function faqsSortingPopular(Request $request): Response
     {
@@ -219,6 +239,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/perm-level')]
     public function permLevel(Request $request): Response
     {
@@ -229,6 +252,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/release-environment')]
     public function releaseEnvironment(Request $request): Response
     {
@@ -239,6 +265,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/search-relevance')]
     public function searchRelevance(Request $request): Response
     {
@@ -249,6 +278,9 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/seo-metatags')]
     public function seoMetaTags(Request $request): Response
     {

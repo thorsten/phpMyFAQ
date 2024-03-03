@@ -6,9 +6,8 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-alpha - 2024-02-12
+### phpMyFAQ v4.0.0-alpha.2 - unreleased
 
-- Happy 23rd Birthday, phpMyFAQ!
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
@@ -20,17 +19,23 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added possibility to sort sticky FAQs (Jan Harms)
 - added possibility to enable/disable cookie consent (Thorsten)
 - added experimental online update feature (Jan Harms, Thorsten)
-- [WIP] added REST API v3.0 with OpenAPI specification (Thorsten)
+- added REST API v3 with OpenAPI specification (Thorsten)
 - added Kubernetes manifest samples (OWNDOMAINHOME SAS)
 - added experimental import of FAQs from CSV (Jan Harms)
 - added CSV export of user sessions (Jan Harms)
 - added experimental support for PHP 8.4 (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
+- removed REST API v2 (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)
 - migrated from Fork Awesome to Bootstrap Icons (Thorsten, Jan Harms)
 - migrated codebase to use PHP 8.2 language features (Thorsten)
 - updated to PHPUnit v11 (Thorsten)
+
+### phpMyFAQ v3.2.6 - unreleased
+
+- updated bundled dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v3.2.5 - 2024-02-05
 

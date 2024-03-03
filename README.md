@@ -44,7 +44,7 @@ For development purposes, you can start a full stack to run your current PhpMyFA
 
     $ docker-compose up
 
-The command above starts ten containers for multi database development as following.
+The command above starts nine containers for multi database development as following.
 
 _Specific images started once to prepare the project:_
 
@@ -59,7 +59,6 @@ _Running using named volumes:_
 - **pgadmin**: a PHP tool to have a look at your PostgreSQL database.
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
-- **swagger-editor**: a web-based API documentation tool
 
 _Running apache web server with PHP 8.3 support:_
 
@@ -70,7 +69,6 @@ Then services will be available at the following addresses:
 - phpMyFAQ: (https://localhost:443 or http://localhost:8080 as fallback)
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
-- Swagger Editor: (http://localhost:8081)
 
 #### Running tests
 
@@ -207,7 +205,7 @@ You can read the complete documentation on [here](https://phpmyfaq.readthedocs.i
 
 ## REST API v3.0 documentation
 
-The REST API documentation is available as OpenAPI 3.0 specification [here](api-docs/openapi.yaml).
+The REST API documentation is available as OpenAPI 3.0 specification [here](docs/openapi.yaml).
 
 ## License
 

@@ -25,6 +25,7 @@ use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -42,6 +43,15 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
+    /**
+     * Check if the FAQ should be secured.
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->isSecured();
+    }
+
     /**
      * Returns a Twig rendered template as response.
      *
@@ -71,6 +81,30 @@ abstract class AbstractController
     protected function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
         return new JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * @throws UnauthorizedHttpException
+     */
+    protected function hasValidToken(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $request = Request::createFromGlobals();
+        if ($configuration->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+            throw new UnauthorizedHttpException('"x-pmf-token" is not valid.');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function isSecured(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $currentUser = CurrentUser::getCurrentUser($configuration);
+        if (!$currentUser->isLoggedIn() && $configuration->get('security.enableLoginOnly')) {
+            throw new UnauthorizedHttpException('You are not allowed to view this content.');
+        }
     }
 
     /**

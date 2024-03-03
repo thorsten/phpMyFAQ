@@ -22,6 +22,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -32,6 +33,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AttachmentController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('./admin/api/content/attachments')]
     public function delete(Request $request): JsonResponse
     {
@@ -68,6 +72,7 @@ class AttachmentController extends AbstractController
     /**
      * @throws AttachmentException
      * @throws FileException
+     * @throws Exception
      */
     #[Route('./admin/api/content/attachments/upload')]
     public function upload(Request $request): JsonResponse
