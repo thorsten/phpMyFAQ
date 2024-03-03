@@ -21,12 +21,15 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
@@ -124,6 +127,82 @@ class UserController extends AbstractController
         } else {
             $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $jsonResponse->setData(['error' => Translation::get('ad_entry_savedfail')]);
+        }
+
+        return $jsonResponse;
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('api/user/data/update', methods: ['PUT'])]
+    public function updatePassword(Request $request): JsonResponse
+    {
+        $jsonResponse = new JsonResponse();
+        $configuration = Configuration::getConfigurationInstance();
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        $data = json_decode($request->getContent());
+
+        $username = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
+            $loginExist = $user->getUserByLogin($username);
+
+            if ($loginExist && ($email == $user->getUserData('email'))) {
+                try {
+                    $newPassword = $user->createPassword();
+                } catch (Exception $exception) {
+                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $jsonResponse->setData(['error' => $exception->getMessage()]);
+                    return $jsonResponse;
+                }
+
+                try {
+                    $user->changePassword($newPassword);
+                } catch (\Exception $exception) {
+                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $jsonResponse->setData(['error' => $exception->getMessage()]);
+                    return $jsonResponse;
+                }
+
+                $text = Translation::get('lostpwd_text_1') .
+                    sprintf('<br><br>Username: %s', $username) .
+                    sprintf('<br>New Password: %s<br><br>', $newPassword) .
+                    Translation::get('lostpwd_text_2');
+
+                $mailer = new Mail($configuration);
+                try {
+                    $mailer->addTo($email);
+                } catch (Exception $exception) {
+                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $jsonResponse->setData(['error' => $exception->getMessage()]);
+                    return $jsonResponse;
+                }
+
+                $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $configuration);
+                $mailer->message = $text;
+                try {
+                    $result = $mailer->send();
+                } catch (Exception | TransportExceptionInterface $exception) {
+                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+                    $jsonResponse->setData(['error' => $exception->getMessage()]);
+                    return $jsonResponse;
+                }
+
+                unset($mailer);
+                // Trust that the email has been sent
+                $jsonResponse->setStatusCode(Response::HTTP_OK);
+                $jsonResponse->setData(['success' => Translation::get('lostpwd_mail_okay')]);
+            } else {
+                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
+                $jsonResponse->setData(['error' => Translation::get('lostpwd_err_1')]);
+                return $jsonResponse;
+            }
+        } else {
+            $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
+            $jsonResponse->setData(['error' => Translation::get('lostpwd_err_2')]);
+            return $jsonResponse;
         }
 
         return $jsonResponse;

@@ -165,6 +165,10 @@ $routes->add(
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
 );
 $routes->add(
+    'api.user.password',
+    new Route('user/password/update', ['_controller' => [UserController::class, 'updatePassword'], '_methods' => 'PUT'])
+);
+$routes->add(
     'api.user.update',
     new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
 );

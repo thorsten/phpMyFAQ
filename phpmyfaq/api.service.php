@@ -19,7 +19,6 @@
 
 const IS_VALID_PHPMYFAQ = null;
 
-use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
@@ -840,68 +839,6 @@ switch ($action) {
         } else {
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $response->setData(['error' => Translation::get('err_sendMail')]);
-        }
-
-        break;
-
-    //
-    // Change password
-    //
-    case 'change-password':
-        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-        $username = trim((string) Filter::filterVar($postData['username'], FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
-
-        if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
-            $user = new CurrentUser($faqConfig);
-            $loginExist = $user->getUserByLogin($username);
-
-            if ($loginExist && ($email == $user->getUserData('email'))) {
-                try {
-                    $newPassword = $user->createPassword();
-                } catch (Exception $exception) {
-                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $response->setData(['error' => $exception->getMessage()]);
-                }
-
-                try {
-                    $user->changePassword($newPassword);
-                } catch (Exception $exception) {
-                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $response->setData(['error' => $exception->getMessage()]);
-                }
-
-                $text = Translation::get('lostpwd_text_1') . "\nUsername: " . $username . "\nNew Password: " .
-                    $newPassword . "\n\n" . Translation::get('lostpwd_text_2');
-
-                $mailer = new Mail($faqConfig);
-                try {
-                    $mailer->addTo($email);
-                } catch (Exception $exception) {
-                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $response->setData(['error' => $exception->getMessage()]);
-                }
-
-                $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $faqConfig);
-                $mailer->message = $text;
-                try {
-                    $result = $mailer->send();
-                } catch (Exception | TransportExceptionInterface $exception) {
-                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $response->setData(['error' => $exception->getMessage()]);
-                }
-
-                unset($mailer);
-                // Trust that the email has been sent
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => Translation::get('lostpwd_mail_okay')]);
-            } else {
-                $response->setStatusCode(Response::HTTP_CONFLICT);
-                $response->setData(['error' => Translation::get('lostpwd_err_1')]);
-            }
-        } else {
-            $response->setStatusCode(Response::HTTP_CONFLICT);
-            $response->setData(['error' => Translation::get('lostpwd_err_2')]);
         }
 
         break;

@@ -37,3 +37,26 @@ export const updateUserControlPanelData = async (data) => {
     console.error(error);
   }
 };
+
+export const updateUserPassword = async (data) => {
+  try {
+    const response = await fetch('api/user/password/update', {
+      method: 'PUT',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(serialize(data)),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return await response.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

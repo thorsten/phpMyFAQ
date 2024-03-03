@@ -19,9 +19,9 @@ import Masonry from 'masonry-layout';
 import { handleBookmarks, saveFormData } from './api';
 import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
+import { handleUserControlPanel, handleUserPassword } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
-import { handleUserControlPanel } from './user';
 
 //
 // Reload Captchas
@@ -65,6 +65,11 @@ handleBookmarks();
 // Handle user control panel
 //
 handleUserControlPanel();
+
+//
+// Handle user password
+//
+handleUserPassword();
 
 //
 // Masonry on startpage

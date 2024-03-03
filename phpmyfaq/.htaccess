@@ -95,7 +95,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule user/(ucp|bookmarks|request-removal|logout) index.php?action=$1 [L,QSA]
 
     # Private APIs
-    RewriteRule api/(autocomplete|bookmark/([0-9]+)|user/data/update) api/index.php [L,QSA]
+    RewriteRule api/(autocomplete|bookmark/([0-9]+)|user/(.*)) api/index.php [L,QSA]
 
     # Setup APIs
     RewriteRule api/setup/(check|backup|update-database) api/index.php [L,QSA]
