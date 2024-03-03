@@ -21,6 +21,7 @@ import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
+import { handleUserControlPanel } from './user';
 
 //
 // Reload Captchas
@@ -59,6 +60,11 @@ handleComments();
 // Handle Bookmarks
 //
 handleBookmarks();
+
+//
+// Handle user control panel
+//
+handleUserControlPanel();
 
 //
 // Masonry on startpage

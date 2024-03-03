@@ -33,6 +33,7 @@ use phpMyFAQ\Controller\Api\TitleController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
+use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Setup\SetupController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
@@ -162,6 +163,10 @@ $routes->add(
 $routes->add(
     'api.bookmark',
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
+);
+$routes->add(
+    'api.user.update',
+    new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
 );
 
 // Setup REST API
