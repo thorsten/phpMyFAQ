@@ -81,7 +81,6 @@ class FaqController extends AbstractController
     )]
     public function getByCategoryId(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -95,15 +94,10 @@ class FaqController extends AbstractController
 
         try {
             $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData($result);
+            return $this->json($result, Response::HTTP_OK);
         } catch (Exception $e) {
-            $jsonResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $jsonResponse->setData(['error' => $e->getMessage()]);
-            return $jsonResponse;
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $jsonResponse;
     }
 
     /**
@@ -164,7 +158,6 @@ class FaqController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -181,13 +174,10 @@ class FaqController extends AbstractController
 
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
             $result = new stdClass();
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
         }
-
-        $jsonResponse->setData($result);
-        return $jsonResponse;
     }
 
     /**
@@ -236,7 +226,6 @@ class FaqController extends AbstractController
     )]
     public function getByTagId(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -253,15 +242,10 @@ class FaqController extends AbstractController
 
         try {
             $result = $faq->getRecordsByIds($recordIds);
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData($result);
+            return $this->json($result, Response::HTTP_OK);
         } catch (Exception $e) {
-            $jsonResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $jsonResponse->setData(['error' => $e->getMessage()]);
-            return $jsonResponse;
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $jsonResponse;
     }
 
     /**
@@ -298,7 +282,6 @@ class FaqController extends AbstractController
     )]
     public function getPopular(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -311,13 +294,10 @@ class FaqController extends AbstractController
         $result = array_values($faq->getTopTenData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
-            return $jsonResponse;
+            $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($result);
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 
     /**
@@ -367,13 +347,10 @@ class FaqController extends AbstractController
         $result = array_values($faq->getLatestData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
-            return $jsonResponse;
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($result);
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 
     /**
@@ -415,7 +392,6 @@ class FaqController extends AbstractController
     )]
     public function getSticky(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -428,13 +404,10 @@ class FaqController extends AbstractController
         $result = array_values($faq->getStickyRecordsData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
-            return $jsonResponse;
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($result);
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 
     /**
@@ -496,13 +469,10 @@ class FaqController extends AbstractController
         $result = $faq->faqRecords;
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
-            return $jsonResponse;
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($result);
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 
     /**
@@ -639,26 +609,22 @@ class FaqController extends AbstractController
         if (!is_null($categoryName)) {
             $categoryIdFound = $category->getCategoryIdFromName($categoryName);
             if ($categoryIdFound === false) {
-                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
                 $result = [
                     'stored' => false,
                     'error' => 'The given category name was not found.'
                 ];
-                $jsonResponse->setData($result);
-                return $jsonResponse;
+                return $this->json($result, Response::HTTP_CONFLICT);
             }
 
             $categoryId = $categoryIdFound;
         }
 
         if ($faq->hasTitleAHash($question)) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'stored' => false,
                 'error' => 'It is not allowed, that the question title contains a hash.'
             ];
-            $jsonResponse->setData($result);
-            return $jsonResponse;
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
 
         $categories = [ $categoryId ];
@@ -687,9 +653,7 @@ class FaqController extends AbstractController
             ->setCategories($categories)
             ->save();
 
-        $jsonResponse->setStatusCode(Response::HTTP_CREATED);
-        $jsonResponse->setData(['stored' => true]);
-        return $jsonResponse;
+        return $this->json(['stored' => true], Response::HTTP_CREATED);
     }
 
     /**
@@ -699,8 +663,8 @@ class FaqController extends AbstractController
     #[OA\Put(
         path: '/api/v3.0/faq/update',
         operationId: 'updateFaq',
-        tags: ['Endpoints with Authentication'],
-        description: 'Used to update a FAQ in one existing category.'
+        description: 'Used to update a FAQ in one existing category.',
+        tags: ['Endpoints with Authentication']
     )]
     #[OA\Header(
         header: 'Accept-Language',
@@ -778,7 +742,6 @@ class FaqController extends AbstractController
     {
         $this->hasValidToken();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -808,13 +771,11 @@ class FaqController extends AbstractController
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
 
         if ($faq->hasTitleAHash($question)) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'stored' => false,
                 'error' => 'It is not allowed, that the question title contains a hash.'
             ];
-            $jsonResponse->setData($result);
-            return $jsonResponse;
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
 
         $isActive = !is_null($isActive);
@@ -837,8 +798,6 @@ class FaqController extends AbstractController
 
         $faq->update($faqData);
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData(['stored' => true]);
-        return $jsonResponse;
+        return $this->json(['stored' => true], Response::HTTP_OK);
     }
 }

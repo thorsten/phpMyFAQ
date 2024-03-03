@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Translation;
@@ -28,7 +29,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class LoginController
+class LoginController extends AbstractController
 {
     /**
      * @throws \JsonException|Exception
@@ -70,9 +71,7 @@ class LoginController
     )]
     public function login(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
-
         $postBody = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
         $faqUsername = Filter::filterVar($postBody->username, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -82,21 +81,17 @@ class LoginController
         $userAuthentication = new UserAuthentication($faqConfig, $user);
         try {
             $user = $userAuthentication->authenticate($faqUsername, $faqPassword);
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
             $result = [
                 'loggedin' => $user->isLoggedIn()
             ];
+            return $this->json($result, Response::HTTP_OK);
         } catch (Exception $exception) {
             $faqConfig->getLogger()->error('Failed login: ' . $exception->getMessage());
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'loggedin' => $user->isLoggedIn(),
                 'error' => Translation::get('ad_auth_fail')
             ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
-
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
     }
 }

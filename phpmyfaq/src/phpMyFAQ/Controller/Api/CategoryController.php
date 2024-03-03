@@ -71,7 +71,6 @@ class CategoryController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $language = new Language($faqConfig);
         $currentLanguage = $language->setLanguageByAcceptLanguage();
@@ -87,14 +86,10 @@ class CategoryController extends AbstractController
         $result = array_values($category->getAllCategories());
 
         if ($result === []) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
         }
-
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
     }
 
     /**
@@ -186,7 +181,6 @@ class CategoryController extends AbstractController
     {
         $this->hasValidToken();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -222,13 +216,11 @@ class CategoryController extends AbstractController
         if (!is_null($parentCategoryName)) {
             $parentCategoryIdFound = $category->getCategoryIdFromName($parentCategoryName);
             if ($parentCategoryIdFound === false) {
-                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
                 $result = [
                     'stored' => false,
                     'error' => 'The given parent category name was not found.'
                 ];
-                $jsonResponse->setData($result);
-                return $jsonResponse;
+                return $this->json($result, Response::HTTP_CONFLICT);
             }
 
             $parentId = $parentCategoryIdFound;
@@ -256,20 +248,16 @@ class CategoryController extends AbstractController
             $categoryPermission->add(CategoryPermission::USER, [$categoryId], [-1]);
             $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], [-1]);
 
-            $jsonResponse->setStatusCode(Response::HTTP_CREATED);
             $result = [
                 'stored' => true
             ];
+            return $this->json($result, Response::HTTP_CREATED);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'stored' => false,
                 'error' => 'Cannot add category'
             ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
-
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
     }
 }
