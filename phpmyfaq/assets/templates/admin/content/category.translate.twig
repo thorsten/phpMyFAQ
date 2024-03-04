@@ -1,6 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-folder"></i> {{ ad_categ_trans_1 }} {{ ad_categ_trans_2 }}: <em>{{ categoryName }}</em>
+    <i aria-hidden="true" class="bi bi-folder"></i> {{ ad_categ_trans_1 }} {{ ad_categ_trans_2 }}:
+    <em>{{ categoryName }}</em>
   </h1>
 </div>
 <div class="row">
@@ -12,9 +13,9 @@
       <input type="hidden" name="showcat" value="{{ showcat }}">
       <input type="hidden" name="active" value="{{ category.active }}">
       {% if permLevel != basic %}
-      <input type="hidden" name="restricted_groups[]" value="{{ groupPermission }}">
+        <input type="hidden" name="restricted_groups[]" value="{{ groupPermission }}">
       {% else %}
-      <input type="hidden" name="restricted_groups[]" value="-1">
+        <input type="hidden" name="restricted_groups[]" value="-1">
       {% endif %}
       <input type="hidden" name="restricted_users" value="{{ userPermission }}">
       <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
@@ -56,7 +57,8 @@
         <div class="col-lg-4">
           <ul class="list-unstyled">
             {% for language, description in langTranslated %}
-            <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ language }}: {{ description }}">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                     value="{{ language }}: {{ description }}">
             {% endfor %}
           </ul>
         </div>
