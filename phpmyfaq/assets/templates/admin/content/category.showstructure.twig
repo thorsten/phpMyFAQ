@@ -15,14 +15,14 @@
   </div>
 </div>
 {% if message_typ is defined %}
-<div class="alert alert-{{ message_typ }} alert-dismissible fade show">
-  {% if message_heading is defined %}
-  <h4 class="alert-heading">{{ message_heading }}</h4>
-  <p>{{ error }}</p>
-  {% endif %}
-  {{ message }}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+  <div class="alert alert-{{ message_typ }} alert-dismissible fade show">
+    {% if message_heading is defined %}
+      <h4 class="alert-heading">{{ message_heading }}</h4>
+      <p>{{ error }}</p>
+    {% endif %}
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 {% endif %}
 <table class="table table-light table-striped align-middle">
   <thead class="thead-dark">
@@ -51,17 +51,18 @@
               {% set break = false %}
               {% for translation_code in category_trans %}
                 {% if break == false %}
-                {% if translation_code == code %}
-                  <span class="badge bg-success" title="{{ ad_categ_translated }}"><i class="bi bi-check"></i></span>
-                {% endif %}
-                {% if code in category_trans %}
-                {% else %}
-                  <a href="{{ basePath }}?action=translatecategory&amp;cat={{ category.id }}&amp;trlang={{ code }}" title="{{ ad_categ_translate }}">
+                  {% if translation_code == code %}
+                    <span class="badge bg-success" title="{{ ad_categ_translated }}"><i class="bi bi-check"></i></span>
+                  {% endif %}
+                  {% if code in category_trans %}
+                  {% else %}
+                    <a href="{{ basePath }}?action=translatecategory&amp;cat={{ category.id }}&amp;trlang={{ code }}"
+                       title="{{ ad_categ_translate }}">
                   <span title="{{ ad_categ_translate }}" class="badge bg-primary">
                     <i aria-hidden="true" class="bi bi-globe bi-white"></i></span>
-                  </a>
-                  {% set break = true %}
-                {% endif %}
+                    </a>
+                    {% set break = true %}
+                  {% endif %}
                 {% endif %}
               {% endfor %}
             {% endif %}
