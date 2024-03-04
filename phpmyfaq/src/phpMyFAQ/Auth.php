@@ -107,7 +107,7 @@ class Auth
      * @param string $method Authentication access methods
      * @throws Exception
      */
-    public function selectAuth(string $method): AuthDriverInterface
+    public function selectAuth(string $method): Auth
     {
         // verify selected authentication
         $method = ucfirst(strtolower($method));

@@ -17,19 +17,61 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CommentController
+class CommentController extends AbstractController
 {
+    #[OA\Get(
+        path: '/api/v3.0/comments/{faqId}',
+        operationId: 'getComments',
+        description: 'Returns a list of comments for a given FAQ record ID.',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the login.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Parameter(
+        name: 'faqId',
+        description: 'The FAQ record ID.',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If the FAQ has at least one comment.',
+        content: new OA\JsonContent(example: '
+        [
+            {
+                "id": 2,
+                "recordId": 142,
+                "categoryId": null,
+                "type": "faq",
+                "username": "phpMyFAQ User",
+                "email": "user@example.org",
+                "comment": "Foo! Bar?",
+                "date": "2019-12-24T12:24:57+0100",
+                "helped": null
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If the FAQ has no comments.',
+        content: new OA\JsonContent(example: []),
+    )]
     public function list(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
@@ -37,11 +79,9 @@ class CommentController
         $comments = new Comments($faqConfig);
         $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 }

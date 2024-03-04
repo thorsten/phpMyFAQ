@@ -17,13 +17,25 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class TitleController
+class TitleController extends AbstractController
 {
+    #[OA\Get(
+        path: '/api/v3.0/title',
+        operationId: 'getTitle',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the title of the phpMyFAQ instance as a string.',
+        content: new OA\JsonContent(example: 'phpMyFAQ Codename Pontus'),
+    )]
     public function index(): JsonResponse
     {
-        return new JsonResponse(Configuration::getConfigurationInstance()->getTitle());
+        return $this->json(Configuration::getConfigurationInstance()->getTitle());
     }
 }

@@ -85,9 +85,8 @@ class Installer extends Setup
             'name' => PermissionType::STATISTICS_ADMINLOG->value,
             'description' => 'Right to view admin log',
         ],
-        //9 => "delcomment",
         [
-            'name' => 'delcomment',
+            'name' => PermissionType::COMMENT_DELETE->value,
             'description' => 'Right to delete comments',
         ],
         //10 => "addnews",
@@ -282,6 +281,8 @@ class Installer extends Setup
 
     /**
      * Configuration array.
+     *
+     * @var array<string, string>
      */
     protected array $mainConfig = [
         'main.currentVersion' => null,
@@ -1039,7 +1040,7 @@ class Installer extends Setup
         }
 
         // adjust RewriteBase in .htaccess
-        $this->adjustRewriteBaseHtaccess();
+        $this->adjustRewriteBaseHtaccess($rootDir);
     }
 
     /**
@@ -1056,13 +1057,13 @@ class Installer extends Setup
      * Returns true, if the file was successfully changed.
      *
      * @throws Exception
-*/
-    public function adjustRewriteBaseHtaccess(): bool
+     */
+    public function adjustRewriteBaseHtaccess(string $path): bool
     {
-        $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
+        $htaccessPath = $path . '/.htaccess';
 
         if (!file_exists($htaccessPath)) {
-            throw new Exception('The .htaccess file does not exist!');
+            throw new Exception(sprintf('The %s file does not exist!', $htaccessPath));
         }
 
         $lines = file($htaccessPath);
@@ -1071,13 +1072,14 @@ class Installer extends Setup
         foreach ($lines as $line) {
             if (str_starts_with($line, 'RewriteBase')) {
                 $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
-                $rewriteBase = substr((string) $requestUri, 0, strpos((string) $requestUri, 'index.php'));
+                $rewriteBase = substr((string) $requestUri, 0, strpos((string) $requestUri, 'setup/index.php'));
                 $rewriteBase = ($rewriteBase === '') ? '/' : $rewriteBase;
                 $newLines[] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
             } else {
                 $newLines[] = $line;
             }
         }
+
         return file_put_contents($htaccessPath, implode('', $newLines)) !== false;
     }
 }

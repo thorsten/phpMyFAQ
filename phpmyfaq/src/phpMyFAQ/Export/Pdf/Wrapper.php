@@ -27,6 +27,14 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use TCPDF;
 
+if (!defined('PMF_ROOT_DIR')) {
+    define('PMF_ROOT_DIR', __DIR__ . '/../../../');
+}
+
+if (!defined('PMF_SRC_DIR')) {
+    define('PMF_SRC_DIR', __DIR__ . '/../../');
+}
+
 define('K_TCPDF_EXTERNAL_CONFIG', true);
 
 define('K_PATH_URL', '');

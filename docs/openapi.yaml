@@ -1,0 +1,1049 @@
+openapi: 3.0.0
+info:
+  title: 'REST API for phpMyFAQ 4.0'
+  description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the phpMyFAQ installation.'
+  contact:
+    name: 'phpMyFAQ Team'
+    email: support@phpmyfaq.de
+  license:
+    name: 'Mozilla Public Licence 2.0'
+    url: 'https://www.mozilla.org/MPL/2.0/'
+  version: '3.0'
+servers:
+  - url: 'https://localhost'
+    description: 'Local dockerized server'
+paths:
+  '/api/v3.0/attachments/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'Returns a list of attachments for a given FAQ record ID.'
+      operationId: getAttachments
+      parameters:
+        - name: faqId
+          in: path
+          description: 'The FAQ record ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ has at least one attached file.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the attachment.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=2\"\n            }\n        ]"
+        '404':
+          description: 'If the FAQ has no attachments.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the attachment.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/categories:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getCategories
+      responses:
+        '200':
+          description: 'Returns the the categories for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the categories.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"parent_id\": 0,\n                \"name\": \"Test\",\n                \"description\": \"Hello, World! Hello, Tests!\",\n                \"user_id\": 1,\n                \"group_id\": 1,\n                \"active\": 1,\n                \"show_home\": 1,\n                \"image\": \"category-1-en.png\",\n                \"level\": 1\n              }\n        ]"
+        '404':
+          description: 'If no categories are found for the given language.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the categories.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/category:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createCategory
+      requestBody:
+        description: 'The parent category ID is a required value, the parent category name is optional. If the parent category name is present and the ID can be mapped, the parent category ID from the name will be used. If the parent category name cannot be mapped, a 409 error is thrown'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - language
+                - parent-id
+                - parent-category-name
+                - category-name
+                - description
+                - user-id
+                - group-id
+                - is-active
+                - show-on-homepage
+              properties:
+                language:
+                  type: string
+                parent-id:
+                  type: integer
+                parent-category-name:
+                  type: string
+                category-name:
+                  type: string
+                description:
+                  type: string
+                user-id:
+                  type: integer
+                group-id:
+                  type: integer
+                is-active:
+                  type: boolean
+                show-on-homepage:
+                  type: boolean
+              type: object
+            example: "{\n                \"language\": \"en\",\n                \"parent-id\": 1,\n                \"parent-category-name\": \"Test\",\n                \"category-name\": \"Test 2\",\n                \"description\": \"Hello, World! Hello, Tests!\",\n                \"user-id\": 1,\n                \"group-id\": 1,\n                \"is-active\": true,\n                \"show-on-homepage\": true\n            }"
+      responses:
+        '201':
+          description: 'If all posted data is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
+        '400':
+          description: "If something didn't worked out."
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "Cannot add category" }'
+        '409':
+          description: 'If the parent category name cannot be mapped.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "The given parent category name was not found." }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+  '/api/v3.0/comments/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'Returns a list of comments for a given FAQ record ID.'
+      operationId: getComments
+      parameters:
+        - name: faqId
+          in: path
+          description: 'The FAQ record ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ has at least one comment.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 2,\n                \"recordId\": 142,\n                \"categoryId\": null,\n                \"type\": \"faq\",\n                \"username\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"comment\": \"Foo! Bar?\",\n                \"date\": \"2019-12-24T12:24:57+0100\",\n                \"helped\": null\n            }\n        ]"
+        '404':
+          description: 'If the FAQ has no comments.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  '/api/v3.0/faqs/{categoryId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns all the FAQs with a preview of the answer for the given category ID and the language provided by "Accept-Language".'
+      operationId: getByCategoryId
+      parameters:
+        - name: categoryId
+          in: path
+          description: 'The category ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the category returns at least one FAQ.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq/phpmyfaq/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+        '404':
+          description: 'If the category has no FAQs.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  '/api/v3.0/faq/{categoryId}/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by "Accept-Language".'
+      operationId: getFaqById
+      parameters:
+        - name: categoryId
+          in: path
+          description: 'The category ID.'
+          required: true
+          schema:
+            type: integer
+        - name: faqId
+          in: path
+          description: 'The FAQ ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the FAQ exists.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "{\n            \"id\": 1,\n            \"lang\": \"en\",\n            \"solution_id\": 1000,\n            \"revision_id\": 0,\n            \"active\": \"yes\",\n            \"sticky\": 0,\n            \"keywords\": \"\",\n            \"title\": \"Is there life after death?\",\n            \"content\": \"Maybe!\",\n            \"author\": \"phpMyFAQ User\",\n            \"email\": \"user@example.org\",\n            \"comment\": \"y\",\n            \"date\": \"2019-10-10 17:54\",\n            \"dateStart\": \"00000000000000\",\n            \"dateEnd\": \"99991231235959\",\n            \"created\": \"2019-09-03T21:30:17+02:00\"\n        }"
+        '404':
+          description: 'If there are no FAQs for the given FAQ ID.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  '/api/v3.0/faqs/tags/{tagId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: "This endpoint returns all the FAQs for the given tag ID and the language provided by \n        \"Accept-Language\""
+      operationId: getByTagId
+      parameters:
+        - name: tagId
+          in: path
+          description: 'The tag ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the tag ID returns at least one FAQ.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"record_id\": 1,\n                \"record_lang\": \"en\",\n                \"category_id\": 1,\n                \"record_title\": \"Is there life after death?\",\n                \"record_preview\": \"Maybe!\",\n                \"record_link\": \"/phpmyfaq/phpmyfaq/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"record_updated\": \"20191010175452\",\n                \"visits\": 3,\n                \"record_created\": \"2018-09-03T21:30:17+02:00\"\n            }\n        ]"
+        '404':
+          description: 'If the tag ID has no FAQs.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/faqs/popular:
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the popular FAQs for the given language provided by "Accept-Language".'
+      operationId: getPopular
+      responses:
+        '200':
+          description: "If there's at least one popular FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\"\n            }\n        ]"
+        '404':
+          description: "If there's not a single popular FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/faqs/latest:
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".'
+      operationId: getLatest
+      responses:
+        '200':
+          description: "If there's at least one latest FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\"\n            }\n        ]"
+        '404':
+          description: "If there's not one latest FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/faqs/sticky:
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the sticky FAQs for the given language provided by "Accept-Language".'
+      operationId: getSticky
+      responses:
+        '200':
+          description: "If there's at least one sticky FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\",\n                \"id\": \"8\",\n                \"order\": \"1\"\n            },\n            {\n                \"question\": \"Is there life after death?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"id\": \"10\",\n                \"order\": \"2\"\n            }\n        ]"
+        '404':
+          description: "If there's not one sticky FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/faqs:
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns all the FAQs for the given language provided by "Accept-Language".'
+      operationId: getAll
+      responses:
+        '200':
+          description: "If there's at least one FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"solution_id\": \"1000\",\n                \"revision_id\": \"0\",\n                \"active\": \"yes\",\n                \"sticky\": \"0\",\n                \"keywords\": \"\",\n                \"title\": \"Is there life after death?\",\n                \"content\": \"Maybe!\",\n                \"author\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"comment\": \"y\",\n                \"updated\": \"2009-10-10 17:54:00\",\n                \"dateStart\": \"00000000000000\",\n                \"dateEnd\": \"99991231235959\",\n                \"created\": \"2008-09-03T21:30:17+02:00\",\n                \"notes\": \"\"\n            }\n        ]"
+        '404':
+          description: "If there's not one single FAQ."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/faq/create:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createFaq
+      requestBody:
+        description: 'The category ID is a required value, the category name is optional. If the category name is present and the ID can be mapped, the category ID from the name will be used. If the category name cannot be mapped, a 409 error is thrown.'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - language
+                - category-id
+                - category-name
+                - question
+                - answer
+                - keywords
+                - author
+                - email
+                - is-active
+                - is-sticky
+              properties:
+                language:
+                  type: string
+                category-id:
+                  type: integer
+                category-name:
+                  type: string
+                question:
+                  type: string
+                answer:
+                  type: string
+                keywords:
+                  type: string
+                author:
+                  type: string
+                email:
+                  type: string
+                is-active:
+                  type: boolean
+                is-sticky:
+                  type: boolean
+              type: object
+            example: "{\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"category-name\": \"Queen Songs\",\n                \"question\": \"Is this the world we created?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
+      responses:
+        '201':
+          description: 'If all posted data is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
+        '400':
+          description: "If something didn't worked out."
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
+        '409':
+          description: 'If the parent category name cannot be mapped.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "The given category name was not found" }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+  /api/v3.0/faq/update:
+    put:
+      tags:
+        - 'Endpoints with Authentication'
+      description: 'Used to update a FAQ in one existing category.'
+      operationId: updateFaq
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - faq-id
+                - language
+                - category-id
+                - question
+                - answer
+                - keywords
+                - author
+                - email
+                - is-active
+                - is-sticky
+              properties:
+                faq-id:
+                  type: integer
+                language:
+                  type: string
+                category-id:
+                  type: integer
+                question:
+                  type: string
+                answer:
+                  type: string
+                keywords:
+                  type: string
+                author:
+                  type: string
+                email:
+                  type: string
+                is-active:
+                  type: boolean
+                is-sticky:
+                  type: boolean
+              type: object
+            example: "{\n                \"faq-id\": 1,\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"question\": \"Is this the world we updated?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
+      responses:
+        '200':
+          description: 'If all posted data is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
+        '400':
+          description: "If something didn't worked out."
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+  /api/v3.0/groups:
+    get:
+      tags:
+        - 'Endpoints with Authentication'
+      description: 'Used to fetch all group IDs.'
+      operationId: getGroups
+      responses:
+        '200':
+          description: 'Returns a list of group IDs.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"group-id\": 1\n            },\n            {\n                \"group-id\": 2\n            }\n        ]"
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+  /api/v3.0/language:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getLanguage
+      responses:
+        '200':
+          description: 'Returns the default language as language code.'
+          content:
+            application/json:
+              schema: {}
+              example: '"en"'
+  /api/v3.0/login:
+    post:
+      tags:
+        - 'Public Endpoints'
+      operationId: login
+      requestBody:
+        description: 'The username and password for the login.'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'If "username" and "password" combination are correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "loggedin": true }'
+        '400':
+          description: 'If "username" and "password" combination are wrong.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "loggedin": false, "error": "Wrong username or password." }'
+  /api/v3.0/news:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getNews
+      responses:
+        '200':
+          description: 'Returns the news for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"date\": \"2019-08-23T20:43:00+0200\",\n                \"header\": \"Hallo, World!\",\n                \"content\": \"Hello, phpMyFAQ!\",\n                \"authorName\": \"phpMyFAQ User\",\n                \"authorEmail\": \"user@example.org\",\n                \"dateStart\": \"0\",\n                \"dateEnd\": \"99991231235959\",\n                \"active\": true,\n                \"allowComments\": true,\n                \"link\": \"\",\n                \"linkTitle\": \"\",\n                \"target\": \"\",\n                \"url\": \"https://www.example.org/?action=news&newsid=1&newslang=de\"\n              }\n        ]"
+        '404':
+          description: 'If no news are stored.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/open-questions:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getOpenQuestions
+      responses:
+        '200':
+          description: 'Returns the open questions for the given language provided by "Accept-Language".'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 1,\n                \"lang\": \"en\",\n                \"username\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"categoryId\": 3,\n                \"question\": \"Foo? Bar? Baz?\",\n                \"created\": \"20190106180429\",\n                \"answerId\": 0,\n                \"isVisible\": \"N\"\n              }\n        ]"
+        '404':
+          description: 'If no open questions are stored.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the open questions.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  '/api/v3.0/pdf/{categoryId}/{faqId}':
+    get:
+      tags:
+        - 'Public Endpoints'
+      description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided by "Accept-Language".'
+      operationId: getPdfById
+      parameters:
+        - name: categoryId
+          in: path
+          description: 'The category ID.'
+          required: true
+          schema:
+            type: integer
+        - name: faqId
+          in: path
+          description: 'The FAQ ID.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'If the PDF of the FAQ exists.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '"https://www.example.org/pdf.php?cat=3&id=142&artlang=de"'
+        '404':
+          description: "If there's no FAQ and PDF for the given FAQ ID."
+          headers:
+            Accept-Language:
+              description: 'The language code for the FAQ.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/question:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - language
+                - category-id
+                - question
+                - author
+                - email
+              properties:
+                language:
+                  type: string
+                category-id:
+                  type: integer
+                question:
+                  type: string
+                author:
+                  type: string
+                email:
+                  type: string
+              type: object
+            example: "{\n                \"language\": \"de\",\n                \"category-id\": \"1\",\n                \"question\": \"Is this the world we created?\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\"\n            }"
+      responses:
+        '201':
+          description: 'Used to add a new question in one existing category.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "stored": true }'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+  /api/v3.0/register:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - fullname
+                - email
+                - is-visible
+              properties:
+                username:
+                  type: string
+                fullname:
+                  type: string
+                email:
+                  type: string
+                is-visible:
+                  type: boolean
+              type: object
+            example: "{\n                \"username\": \"ada\",\n                \"fullname\": \"Ada Lovelace\",\n                \"email\": \"ada.lovelace@example.org\",\n                \"is-visible\": false\n            }"
+      responses:
+        '201':
+          description: 'If "username", "fullname", "email", and "is-visible" combination is correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": true, "success": "User created."}'
+        '400':
+          description: 'If "username", "fullname", "email", and "is-visible" combination is not correct.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": false, "error": "Error message"}'
+        '409':
+          description: 'If the domain of the email address is not allowed.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": false, "error": "The domain is not allowed."}'
+        '401':
+          description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the question.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: '{ "registered": false }'
+  /api/v3.0/search:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getSearch
+      parameters:
+        - name: q
+          in: query
+          description: 'The search term'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Returns the results for the query string search term.'
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": \"1\",\n                \"lang\": \"en\",\n                \"category_id\": \"15\",\n                \"question\": \"Why are you using phpMyFAQ?\",\n                \"answer\": \"Because it is cool!\",\n                \"link\": \"https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en\"\n            }\n        ]"
+        '404':
+          description: 'If the search returns no results'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/searches/popular:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getPopularSearch
+      responses:
+        '200':
+          description: 'Returns the popular search terms for the given language provided by "Accept-Language"'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: "\n        [\n            {\n                \"id\": 3,\n                \"searchterm\": \"mac\",\n                \"number\": \"18\",\n                \"lang\": \"en\"\n            },\n            {\n                \"id\": 7,\n                \"searchterm\": \"test\",\n                \"number\": 9,\n                \"lang\": \"en\"\n            }\n        ]"
+        '404':
+          description: 'If the popular search returns no results.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/tags:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getTags
+      responses:
+        '200':
+          description: 'Returns the tags for the given language provided by "Accept-Language".'
+          content:
+            application/json:
+              schema: {}
+              example: "[\n            {\"tagId\": 4, \"tagName\": \"phpMyFAQ\", \"tagFrequency\": 3 },\n            {\"tagId\": 1, \"tagName\": \"PHP 8\", \"tagFrequency\": 2 }\n        ]"
+        '404':
+          description: 'If no tags are stored.'
+          content:
+            application/json:
+              schema: {}
+              example: []
+  /api/v3.0/title:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getTitle
+      responses:
+        '200':
+          description: 'Returns the title of the phpMyFAQ instance as a string.'
+          content:
+            application/json:
+              schema: {}
+              example: 'phpMyFAQ Codename Pontus'
+  /api/v3.0/version:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getVersion
+      responses:
+        '200':
+          description: 'Returns the phpMyFAQ version number as string.'
+          content:
+            application/json:
+              schema: {}
+              example: 4.0.0

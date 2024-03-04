@@ -23,30 +23,31 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Template;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
 use RobThree\Auth\Algorithm;
 
-class TwoFactor
+readonly class TwoFactor
 {
-    private readonly TwoFactorAuth $twoFactorAuth;
+    private TwoFactorAuth $twoFactorAuth;
 
-    private readonly EndroidQrCodeProvider $endroidQrCodeProvider;
+    private EndroidQrCodeProvider $qrCodeProvider;
 
     /**
      * @throws TwoFactorAuthException
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
-        $this->endroidQrCodeProvider = new EndroidQrCodeProvider();
+        $this->qrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
             $this->configuration->get('main.metaPublisher'),
             6,
             30,
             Algorithm::Sha1,
-            $this->endroidQrCodeProvider
+            $this->qrCodeProvider
         );
     }
 
@@ -81,7 +82,9 @@ class TwoFactor
 
     /**
      * Validates a given token. Returns true if the token is correct.
-     */
+     *
+     * @throws Exception
+*/
     public function validateToken(string $token, int $userid): bool
     {
         $currentUser = new CurrentUser($this->configuration);
@@ -95,19 +98,23 @@ class TwoFactor
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
      *
-     * @throws TwoFactorAuthException
+     * @throws Exception
      */
     public function getQrCode(string $secret): string
     {
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
         $label = $this->configuration->getTitle() . ':' . $currentUser->getUserData('email');
-        $qrCodeText = $this->twoFactorAuth->getQrText($label, $secret) .
-            '&image=' . $this->configuration->getDefaultUrl() .
-            'assets/themes/' . Template::getTplSetName() . '/img/logo.png';
+        $qrCodeText = sprintf(
+            '%s&image=%sassets/themes/%s/img/logo.png',
+            $this->twoFactorAuth->getQrText($label, $secret),
+            $this->configuration->getDefaultUrl(),
+            Template::getTplSetName()
+        );
 
-        return 'data:'
-            . $this->endroidQrCodeProvider->getMimeType()
-            . ';base64,'
-            . base64_encode((string) $this->endroidQrCodeProvider->getQRCodeImage($qrCodeText, 200));
+        return sprintf(
+            'data:%s;base64,%s',
+            $this->qrCodeProvider->getMimeType(),
+            base64_encode($this->qrCodeProvider->getQRCodeImage($qrCodeText, 200))
+        );
     }
 }

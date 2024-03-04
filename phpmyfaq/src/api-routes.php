@@ -18,17 +18,22 @@
 use phpMyFAQ\Controller\Api\AttachmentController;
 use phpMyFAQ\Controller\Api\CategoryController;
 use phpMyFAQ\Controller\Api\CommentController;
+use phpMyFAQ\Controller\Api\FaqController;
 use phpMyFAQ\Controller\Api\GroupController;
 use phpMyFAQ\Controller\Api\LanguageController;
 use phpMyFAQ\Controller\Api\LoginController;
 use phpMyFAQ\Controller\Api\NewsController;
 use phpMyFAQ\Controller\Api\OpenQuestionController;
+use phpMyFAQ\Controller\Api\PdfController;
+use phpMyFAQ\Controller\Api\QuestionController;
+use phpMyFAQ\Controller\Api\RegistrationController;
 use phpMyFAQ\Controller\Api\SearchController;
 use phpMyFAQ\Controller\Api\TagController;
 use phpMyFAQ\Controller\Api\TitleController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
+use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Setup\SetupController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
@@ -48,8 +53,48 @@ $routes->add(
     new Route("v{$apiVersion}/categories", ['_controller' => [CategoryController::class, 'list']])
 );
 $routes->add(
+    'api.category',
+    new Route("v{$apiVersion}/category", ['_controller' => [CategoryController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.faq.create',
+    new Route("v{$apiVersion}/faq/create", ['_controller' => [FaqController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.faq.update',
+    new Route("v{$apiVersion}/faq/update", ['_controller' => [FaqController::class, 'update'], '_methods' => 'PUT'])
+);
+$routes->add(
+    'api.faq-by-id',
+    new Route("v{$apiVersion}/faq/{categoryId}/{faqId}", ['_controller' => [FaqController::class, 'getById']])
+);
+$routes->add(
     'api.comments',
     new Route("v{$apiVersion}/comments/{recordId}", ['_controller' => [CommentController::class, 'list']])
+);
+$routes->add(
+    'api.faqs.by-tag-id',
+    new Route("v{$apiVersion}/faqs/tags/{tagId}", ['_controller' => [FaqController::class, 'getByTagId']])
+);
+$routes->add(
+    'api.faqs.latest',
+    new Route("v{$apiVersion}/faqs/latest", ['_controller' => [FaqController::class, 'getLatest']])
+);
+$routes->add(
+    'api.faqs.popular',
+    new Route("v{$apiVersion}/faqs/popular", ['_controller' => [FaqController::class, 'getPopular']])
+);
+$routes->add(
+    'api.faqs.sticky',
+    new Route("v{$apiVersion}/faqs/sticky", ['_controller' => [FaqController::class, 'getSticky']])
+);
+$routes->add(
+    'api.faqs.by-category-id',
+    new Route("v{$apiVersion}/faqs/{categoryId}", ['_controller' => [FaqController::class, 'getByCategoryId']])
+);
+$routes->add(
+    'api.faqs',
+    new Route("v{$apiVersion}/faqs", ['_controller' => [FaqController::class, 'list']])
 );
 $routes->add(
     'api.groups',
@@ -70,6 +115,24 @@ $routes->add(
 $routes->add(
     'api.open-questions',
     new Route("v{$apiVersion}/open-questions", ['_controller' => [OpenQuestionController::class, 'list']])
+);
+$routes->add(
+    'api.pdf-by-id',
+    new Route("v{$apiVersion}/pdf/{categoryId}/{faqId}", ['_controller' => [PdfController::class, 'getById']])
+);
+$routes->add(
+    'api.question',
+    new Route("v{$apiVersion}/question", ['_controller' => [QuestionController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.register',
+    new Route(
+        "v{$apiVersion}/register",
+        [
+            '_controller' => [RegistrationController::class, 'create'],
+            '_methods' => 'POST'
+        ]
+    )
 );
 $routes->add(
     'api.search',
@@ -100,6 +163,14 @@ $routes->add(
 $routes->add(
     'api.bookmark',
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
+);
+$routes->add(
+    'api.user.password',
+    new Route('user/password/update', ['_controller' => [UserController::class, 'updatePassword'], '_methods' => 'PUT'])
+);
+$routes->add(
+    'api.user.update',
+    new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
 );
 
 // Setup REST API

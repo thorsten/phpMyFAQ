@@ -33,5 +33,5 @@ interface SearchInterface
      * @return mixed
      * @throws Exception
      */
-    public function search(string $searchTerm);
+    public function search(string $searchTerm): mixed;
 }
