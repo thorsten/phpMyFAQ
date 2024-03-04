@@ -64,12 +64,16 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
             <i aria-hidden="true" class="bi bi-folder"></i> <?= $header ?>
           </h1>
         </div>
+    <?php
+    var_dump($category->categoryName[$id]);
+    ?>
 
         <div class="row">
           <div class="col-lg-12">
             <form action="?action=updatecategory" method="post" accept-charset="utf-8">
               <input type="hidden" name="id" value="<?= $id ?>">
               <input type="hidden" name="parent_id" value="<?= $category->categoryName[$id]['parent_id'] ?>">
+              <input type="hidden" name="group_id" value="<?= $category->categoryName[$id]['group_id'] ?>">
               <input type="hidden" name="showcat" value="<?= $showcat ?>">
               <input type="hidden" name="active" value="<?= $category->categoryName[$id]['active'] ?>">
                 <?php if ($faqConfig->get('security.permLevel') !== 'basic') : ?>
@@ -78,7 +82,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
                   <input type="hidden" name="restricted_groups[]" value="-1">
                 <?php endif; ?>
               <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
-                <?= Token::getInstance()->getTokenInput('update-category') ?>
+                <input type="hidden" name="csrf" id="csrf" value="<?= Token::getInstance()->getTokenString('update-category') ?>">
 
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="name"><?= Translation::get('ad_categ_titel') ?>:</label>

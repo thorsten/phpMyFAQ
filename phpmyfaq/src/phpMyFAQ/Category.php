@@ -917,7 +917,9 @@ class Category
      */
     public function create(CategoryEntity $categoryEntity): ?int
     {
-        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+        if (is_null($categoryEntity->getId())) {
+            $categoryEntity->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id'));
+        }
 
         $query = sprintf(
             "
@@ -927,7 +929,7 @@ class Category
                 VALUES
             (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             Database::getTablePrefix(),
-            $categoryId,
+            $categoryEntity->getId(),
             $this->configuration->getDb()->escape($categoryEntity->getLang()),
             $categoryEntity->getParentId(),
             $this->configuration->getDb()->escape($categoryEntity->getName()),
@@ -941,7 +943,7 @@ class Category
 
         $this->configuration->getDb()->query($query);
 
-        return $categoryId;
+        return $categoryEntity->getId();
     }
 
     /**

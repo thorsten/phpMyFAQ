@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd" bootstrap="tests/bootstrap.php" executionOrder="depends,defects" beStrictAboutOutputDuringTests="true" failOnRisky="true" failOnWarning="true" testdox="true" cacheDirectory=".phpunit.cache" requireCoverageMetadata="false" beStrictAboutCoverageMetadata="true" displayDetailsOnTestsThatTriggerWarnings="true">
-  <testsuites>
-    <testsuite name="phpMyFAQ Test Suite">
-      <directory>./tests/phpMyFAQ</directory>
-    </testsuite>
-  </testsuites>
-  <coverage>
-    <report>
-      <text outputFile="coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
-    </report>
-  </coverage>
-  <source>
-    <include>
-      <directory suffix=".php">./phpmyfaq/src/phpMyFAQ</directory>
-    </include>
-    <exclude>
-      <directory suffix=".php">./phpmyfaq/src/libs</directory>
-    </exclude>
-  </source>
+    <testsuites>
+        <testsuite name="phpMyFAQ Test Suite">
+            <directory>./tests/phpMyFAQ</directory>
+        </testsuite>
+    </testsuites>
+    <coverage>
+        <report>
+            <text outputFile="coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+        </report>
+    </coverage>
+    <source>
+        <include>
+            <directory suffix=".php">./phpmyfaq/src/phpMyFAQ</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">./phpmyfaq/src/libs</directory>
+        </exclude>
+    </source>
 </phpunit>
