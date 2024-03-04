@@ -103,9 +103,10 @@ class Category
      */
     public function __construct(
         private readonly Configuration $configuration,
-        array $groups = [],
-        bool $withPerm = true
-    ) {
+        array                          $groups = [],
+        bool                           $withPerm = true
+    )
+    {
         $this->setGroups($groups);
         $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
@@ -718,17 +719,18 @@ class Category
     /**
      * Gets the path from root to child as breadcrumbs.
      *
-     * @param int    $id Entity ID
+     * @param int $id Entity ID
      * @param string $separator Path separator
-     * @param bool   $renderAsHtml Renders breadcrumbs as HTML
+     * @param bool $renderAsHtml Renders breadcrumbs as HTML
      * @param string $useCssClass Use CSS class "breadcrumb"
      */
     public function getPath(
-        int $id,
+        int    $id,
         string $separator = ' / ',
-        bool $renderAsHtml = false,
+        bool   $renderAsHtml = false,
         string $useCssClass = 'breadcrumb'
-    ): string {
+    ): string
+    {
         global $sids;
 
         $ids = $this->getNodes($id);
@@ -827,7 +829,7 @@ class Category
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            return (int) $this->configuration->getDb()->fetchRow($result);
+            return (int)$this->configuration->getDb()->fetchRow($result);
         }
 
         return false;
@@ -874,7 +876,7 @@ class Category
         $this->categories = [];
         if ($num > 0) {
             while ($row = $this->configuration->getDb()->fetchArray($result)) {
-                $this->categories[(int) $row['id']] = $row;
+                $this->categories[(int)$row['id']] = $row;
             }
         }
 
@@ -1000,7 +1002,7 @@ class Category
             $this->configuration->getDb()->escape($categoryData->getLang())
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1018,13 +1020,13 @@ class Category
             $from
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
      * Checks if a language is already defined for a category id.
      *
-     * @param int    $categoryId Entity id
+     * @param int $categoryId Entity id
      * @param string $categoryLanguage Entity language
      */
     public function hasLanguage(int $categoryId, string $categoryLanguage): bool
@@ -1060,7 +1062,7 @@ class Category
             $categoryId
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1075,7 +1077,7 @@ class Category
             $this->configuration->getDb()->escape($categoryLang)
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1114,7 +1116,7 @@ class Category
     /**
      * Create all languages which can be used for translation as <option>.
      *
-     * @param int    $categoryId Entity id
+     * @param int $categoryId Entity id
      * @param string $selectedLanguage Selected language
      */
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
@@ -1126,8 +1128,8 @@ class Category
         );
 
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
-            if (!in_array(strtolower((string) $lang), $existingCategoryLanguage)) {
-                $output .= "\t<option value=\"" . strtolower((string) $lang) . '"';
+            if (!in_array(strtolower((string)$lang), $existingCategoryLanguage)) {
+                $output .= "\t<option value=\"" . strtolower((string)$lang) . '"';
                 if ($lang == $selectedLanguage) {
                     $output .= ' selected="selected"';
                 }
