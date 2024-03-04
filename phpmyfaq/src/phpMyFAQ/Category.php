@@ -918,7 +918,8 @@ class Category
     public function create(CategoryEntity $categoryEntity): ?int
     {
         if (is_null($categoryEntity->getId())) {
-            $categoryEntity->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id'));
+            $categoryEntity->setId($this->configuration->getDb()
+                ->nextId(Database::getTablePrefix() . 'faqcategories', 'id'));
         }
 
         $query = sprintf(
