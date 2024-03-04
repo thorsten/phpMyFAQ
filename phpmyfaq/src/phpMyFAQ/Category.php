@@ -103,10 +103,9 @@ class Category
      */
     public function __construct(
         private readonly Configuration $configuration,
-        array                          $groups = [],
-        bool                           $withPerm = true
-    )
-    {
+        array $groups = [],
+        bool $withPerm = true
+    ) {
         $this->setGroups($groups);
         $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
@@ -725,12 +724,11 @@ class Category
      * @param string $useCssClass Use CSS class "breadcrumb"
      */
     public function getPath(
-        int    $id,
+        int $id,
         string $separator = ' / ',
-        bool   $renderAsHtml = false,
+        bool $renderAsHtml = false,
         string $useCssClass = 'breadcrumb'
-    ): string
-    {
+    ): string {
         global $sids;
 
         $ids = $this->getNodes($id);
