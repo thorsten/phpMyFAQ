@@ -19,11 +19,12 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class NewsController
+class NewsController extends AbstractController
 {
     #[OA\Get(
         path: '/api/v3.0/news',
@@ -66,17 +67,14 @@ class NewsController
     )]
     public function list(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
+        $configuration = Configuration::getConfigurationInstance();
 
-        $news = new News($faqConfig);
+        $news = new News($configuration);
         $result = $news->getLatestData(false, true, true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 }

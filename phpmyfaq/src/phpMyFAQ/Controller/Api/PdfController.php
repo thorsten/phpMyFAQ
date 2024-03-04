@@ -74,7 +74,6 @@ class PdfController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -92,7 +91,7 @@ class PdfController extends AbstractController
 
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
             $result = new stdClass();
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         } else {
             $service = new Services($configuration);
             $service->setFaqId($faqId);
@@ -100,10 +99,7 @@ class PdfController extends AbstractController
             $service->setCategoryId($categoryId);
 
             $result = $service->getPdfApiLink();
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
+            return $this->json($result, Response::HTTP_OK);
         }
-
-        $jsonResponse->setData($result);
-        return $jsonResponse;
     }
 }

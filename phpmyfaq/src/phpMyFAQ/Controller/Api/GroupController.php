@@ -63,18 +63,15 @@ class GroupController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($faqConfig);
 
         $mediumPermission = new MediumPermission($faqConfig);
         $result = $mediumPermission->getAllGroups($user);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 }

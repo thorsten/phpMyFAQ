@@ -21,12 +21,13 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AttachmentController
+class AttachmentController extends AbstractController
 {
     #[OA\Get(
         path: '/api/v3.0/attachments/{faqId}',
@@ -74,6 +75,7 @@ class AttachmentController
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
         $attachments = [];
         $result = [];
+
         try {
             $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
         } catch (AttachmentException) {
@@ -88,11 +90,9 @@ class AttachmentController
         }
 
         if ($result === []) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 }

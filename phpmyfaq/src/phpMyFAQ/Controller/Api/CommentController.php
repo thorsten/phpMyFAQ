@@ -20,13 +20,14 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CommentController
+class CommentController extends AbstractController
 {
     #[OA\Get(
         path: '/api/v3.0/comments/{faqId}',
@@ -71,7 +72,6 @@ class CommentController
     )]
     public function list(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
@@ -79,11 +79,9 @@ class CommentController
         $comments = new Comments($faqConfig);
         $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
+        return $this->json($result, Response::HTTP_OK);
     }
 }
