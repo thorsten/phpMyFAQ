@@ -925,13 +925,13 @@ class Faq
             $this->config->getDb()->escape($faq->getQuestion()),
             $this->config->getDb()->escape($faq->getAnswer()),
             $this->config->getDb()->escape($faq->getAuthor()),
-            $faq->getEmail(),
+            $this->config->getDb()->escape($faq->getEmail()),
             $faq->isComment() ? 'y' : 'n',
             $faq->getUpdatedDate()->format('YmdHis'),
             '00000000000000',
             '99991231235959',
             date('Y-m-d H:i:s'),
-            $faq->getNotes()
+            $this->config->getDb()->escape($faq->getNotes())
         );
 
         $this->config->getDb()->query($query);
@@ -994,12 +994,12 @@ class Faq
             $this->config->getDb()->escape($faq->getQuestion()),
             $this->config->getDb()->escape($faq->getAnswer()),
             $this->config->getDb()->escape($faq->getAuthor()),
-            $faq->getEmail(),
+            $this->config->getDb()->escape($faq->getEmail()),
             $faq->isComment() ? 'y' : 'n',
             $faq->getUpdatedDate()->format('YmdHis'),
             $faq->getValidFrom()->format('YmdHis'),
             $faq->getValidTo()->format('YmdHis'),
-            $faq->getNotes(),
+            $this->config->getDb()->escape($faq->getNotes()),
             $faq->getId(),
             $faq->getLanguage()
         );
