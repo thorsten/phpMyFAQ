@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Controller\Setup;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
@@ -28,16 +29,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class SetupController
+class SetupController extends AbstractController
 {
     public function check(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-
         if (empty($request->getContent())) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['message' => 'No version given.']);
-            return $jsonResponse;
+            return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
         $configuration = Configuration::getConfigurationInstance();
@@ -48,9 +45,10 @@ class SetupController
         $update->setVersion($installedVersion);
 
         if (!$update->checkMaintenanceMode()) {
-            $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-            $jsonResponse->setData(['message' => 'Maintenance mode is not enabled. Please enable it first.']);
-            return $jsonResponse;
+            return $this->json(
+                ['message' => 'Maintenance mode is not enabled. Please enable it first.'],
+                Response::HTTP_CONFLICT
+            );
         }
 
         if (!$update->checkMinimumUpdateVersion($installedVersion)) {
@@ -58,33 +56,23 @@ class SetupController
                 'Your installed version is phpMyFAQ %s. Please update to the latest phpMyFAQ 3.0 version first.',
                 $installedVersion
             );
-            $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-            $jsonResponse->setData(['message' => $message]);
-            return $jsonResponse;
+            return $this->json(['message' => $message], Response::HTTP_CONFLICT);
         }
 
         // Check hard requirements
         try {
             $update->checkPreUpgrade(Database::getType());
         } catch (Exception $exception) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['message' => $exception->getMessage()]);
-            return $jsonResponse;
+            return $this->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData(['message' => '✅ Installation check successful']);
-        return $jsonResponse;
+        return $this->json(['message' => '✅ Installation check successful'], Response::HTTP_OK);
     }
 
     public function backup(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-
         if (empty($request->getContent())) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['message' => 'No version given.']);
-            return $jsonResponse;
+            return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
         $update = new Update(new System(), Configuration::getConfigurationInstance());
@@ -100,14 +88,10 @@ class SetupController
         try {
             $pathToBackup = $update->createConfigBackup($configPath);
         } catch (Exception $exception) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_GATEWAY);
-            $jsonResponse->setData(['message' => $exception->getMessage()]);
-            return $jsonResponse;
+            return $this->json(['message' => $exception->getMessage()], Response::HTTP_BAD_GATEWAY);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData(['message' => '✅ Backup successful', 'backupFile' => $pathToBackup]);
-        return $jsonResponse;
+        return $this->json(['message' => '✅ Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
     }
 
     public function updateDatabase(Request $request): StreamedResponse|JsonResponse
@@ -127,7 +111,7 @@ class SetupController
         $update->setVersion($installedVersion);
 
         $response = new StreamedResponse();
-        $response->setCallback(static function () use ($update, $configuration, $response) {
+        $response->setCallback(static function () use ($update, $configuration) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();

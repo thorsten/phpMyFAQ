@@ -21,6 +21,7 @@ use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
@@ -31,7 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SearchController
+class SearchController extends AbstractController
 {
     /**
      * @throws Exception
@@ -70,7 +71,6 @@ class SearchController
     )]
     public function search(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($faqConfig);
 
@@ -94,12 +94,10 @@ class SearchController
                 $result[] = $data;
             }
 
-            $jsonResponse->setData($result);
+            return $this->json($result, Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
         }
-
-        return $jsonResponse;
     }
 
     #[OA\Get(
@@ -138,17 +136,15 @@ class SearchController
     )]
     public function popular(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
+        $configuration = Configuration::getConfigurationInstance();
 
-        $search = new Search($faqConfig);
+        $search = new Search($configuration);
         $result = $search->getMostPopularSearches(7, true);
+
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        } else {
+            return $this->json($result, Response::HTTP_OK);
         }
-
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
     }
 }

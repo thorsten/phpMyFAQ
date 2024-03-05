@@ -57,14 +57,12 @@ class QuestionController extends AbstractController
             mediaType: 'application/json',
             schema: new OA\Schema(
                 required: [
-                    'language',
                     'category-id',
                     'question',
                     'author',
                     'email'
                 ],
                 properties: [
-                    new OA\Property(property: 'language', type: 'string'),
                     new OA\Property(property: 'category-id', type: 'integer'),
                     new OA\Property(property: 'question', type: 'string'),
                     new OA\Property(property: 'author', type: 'string'),
@@ -73,7 +71,6 @@ class QuestionController extends AbstractController
                 type: 'object'
             ),
             example: '{
-                "language": "de",
                 "category-id": "1",
                 "question": "Is this the world we created?",
                 "author": "Freddie Mercury",
@@ -94,11 +91,9 @@ class QuestionController extends AbstractController
     {
         $this->hasValidToken();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -125,13 +120,9 @@ class QuestionController extends AbstractController
         try {
             $questionHelper->sendSuccessMail($questionData, $categories);
         } catch (TransportExceptionInterface | Exception $e) {
-            $jsonResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $jsonResponse->setData(['error' => $e->getMessage() ]);
-            return $jsonResponse;
+            return $this->json(['error' => $e->getMessage() ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_CREATED);
-        $jsonResponse->setData(['stored' => true]);
-        return $jsonResponse;
+        return $this->json(['stored' => true], Response::HTTP_CREATED);
     }
 }

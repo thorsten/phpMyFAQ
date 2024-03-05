@@ -102,7 +102,6 @@ class RegistrationController extends AbstractController
     {
         $this->hasValidToken();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $registration = new RegistrationHelper($configuration);
@@ -115,27 +114,22 @@ class RegistrationController extends AbstractController
         $isVisible = $isVisible === 'true';
 
         if (!$registration->isDomainAllowed($email)) {
-            $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
             $result = [
                 'registered' => false,
                 'error' => 'The domain is not allowed.'
             ];
-            $jsonResponse->setData($result);
-            return $jsonResponse;
+            return $this->json($result, Response::HTTP_CONFLICT);
         }
 
         if (!is_null($userName) && !is_null($fullName) && !is_null($email)) {
             $result = $registration->createUser($userName, $fullName, $email, $isVisible);
-            $jsonResponse->setStatusCode(Response::HTTP_CREATED);
+            return $this->json($result, Response::HTTP_CREATED);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $result = [
                 'registered' => false,
                 'error' => Translation::get('err_sendMail')
             ];
+            return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
-
-        $jsonResponse->setData($result);
-        return $jsonResponse;
     }
 }
