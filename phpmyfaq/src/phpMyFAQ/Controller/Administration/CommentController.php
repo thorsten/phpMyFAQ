@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -30,18 +31,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/content/comments')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
-        $jsonResponse = new JsonResponse();
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-comment', $data->data->{'pmf-csrf-token'})) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            $jsonResponse->send();
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $comments = new Comments(Configuration::getConfigurationInstance());
@@ -57,13 +58,9 @@ class CommentController extends AbstractController
                 $result = $comments->delete($data->type, $commentId);
             }
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => $result]);
+            return $this->json(['success' => $result], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => false]);
+            return $this->json(['error' => false], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 }

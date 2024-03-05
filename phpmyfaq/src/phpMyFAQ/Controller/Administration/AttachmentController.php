@@ -41,32 +41,24 @@ class AttachmentController extends AbstractController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
 
-        $jsonResponse = new JsonResponse();
         $deleteData = json_decode($request->getContent());
         try {
             if (!Token::getInstance()->verifyToken('delete-attachment', $deleteData->csrf)) {
-                $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-                $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-                $jsonResponse->send();
-                exit();
+                return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
             }
 
             $attachment = AttachmentFactory::create($deleteData->attId);
             if ($attachment->delete()) {
-                $jsonResponse->setStatusCode(Response::HTTP_OK);
                 $result = ['success' => Translation::get('msgAttachmentsDeleted')];
+                return $this->json($result, Response::HTTP_OK);
             } else {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $result = ['error' => Translation::get('ad_att_delfail')];
+                return $this->json($result, Response::HTTP_BAD_REQUEST);
             }
         } catch (AttachmentException $attachmentException) {
-            $jsonResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
             $result = ['error' => $attachmentException->getMessage()];
+            return $this->json($result, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
     }
 
     /**
@@ -79,11 +71,8 @@ class AttachmentController extends AbstractController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
-        $jsonResponse = new JsonResponse();
-
         if (!isset($_FILES['filesToUpload'])) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            return $jsonResponse;
+            return $this->json([], Response::HTTP_BAD_REQUEST);
         }
 
         $files = AttachmentFactory::rearrangeUploadedFiles($_FILES['filesToUpload']);
@@ -113,15 +102,10 @@ class AttachmentController extends AbstractController
                     'faqLanguage' => $request->request->get('record_lang')
                 ];
             } else {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $jsonResponse->setData('The image is too large.');
-                return $jsonResponse;
+                return $this->json('The image is too large.', Response::HTTP_BAD_REQUEST);
             }
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($uploadedFiles);
-
-        return $jsonResponse;
+        return $this->json($uploadedFiles, Response::HTTP_OK);
     }
 }

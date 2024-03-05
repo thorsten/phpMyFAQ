@@ -42,27 +42,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FaqController extends AbstractController
 {
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     #[Route('admin/api/faq/permissions')]
     public function listPermissions(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
-        $faqPermission = new FaqPermission($configuration);
+        $faqPermission = new FaqPermission(Configuration::getConfigurationInstance());
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData(
+        return $this->json(
             [
                 'user' => $faqPermission->get(FaqPermission::USER, $faqId),
                 'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
-            ]
+            ],
+            Response::HTTP_OK
         );
-
-        return $jsonResponse;
     }
 
     /**
@@ -73,23 +71,21 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq(Configuration::getConfigurationInstance());
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData(
+        return $this->json(
             [
                 'faqs' => $faq->getAllFaqsByCategory($categoryId),
-            ]
+            ],
+            Response::HTTP_OK
         );
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     #[Route('admin/api/faq/activate')]
     public function activate(Request $request): JsonResponse
     {

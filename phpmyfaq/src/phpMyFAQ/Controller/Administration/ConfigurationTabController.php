@@ -84,8 +84,7 @@ class ConfigurationTabController extends AbstractController
         $oldConfigurationData = $configuration->getAll();
 
         if (!Token::getInstance()->verifyToken('configuration', $csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         } else {
             // Set the new values
             $forbiddenValues = ['{', '}'];
@@ -143,11 +142,8 @@ class ConfigurationTabController extends AbstractController
 
             $configuration->update($newConfigValues);
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_config_saved')]);
+            return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
         }
-
-        return $jsonResponse;
     }
 
     /**

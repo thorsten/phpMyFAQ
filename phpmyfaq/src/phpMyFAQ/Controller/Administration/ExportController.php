@@ -34,6 +34,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExportController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/export/file')]
     public function exportFile(Request $request): void
     {
@@ -64,24 +67,5 @@ class ExportController extends AbstractController
         } catch (Exception | \JsonException $e) {
             echo $e->getMessage();
         }
-    }
-
-    #[Route('admin/api/export/file')]
-    public function exportReport(Request $request): void
-    {
-        $this->userHasPermission(PermissionType::REPORTS);
-
-        $configuration = Configuration::getConfigurationInstance();
-        new Report($configuration);
-        $columns = $request->request->all();
-
-        $text = [];
-        $text[0] = [];
-
-        foreach (array_keys($columns) as $column) {
-            $text[0][] = Translation::get('ad_stat_' . $column);
-        }
-
-        var_dump($text);
     }
 }
