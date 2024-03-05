@@ -97,10 +97,11 @@ class CategoryImage
         $mapping = [
             'image/gif' => 'gif',
             'image/jpeg' => 'jpg',
-            'image/png' => 'png'
+            'image/png' => 'png',
+            'image/webp' => 'webp',
         ];
 
-        return $mapping[$mimeType] ?? '';
+        return $mapping[$mimeType] ?? 'png';
     }
 
     /**
@@ -110,7 +111,7 @@ class CategoryImage
      */
     private function isValidMimeType(string $file): bool
     {
-        $types = ['image/jpeg','image/gif','image/png'];
+        $types = ['image/jpeg','image/gif','image/png', 'image/webp'];
         $type = mime_content_type($file);
 
         return in_array($type, $types);
