@@ -24,6 +24,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -69,6 +70,9 @@ $newsHeader = $news['header'];
 $oGlossary = new Glossary($faqConfig);
 $newsContent = $oGlossary->insertItemsIntoContent($newsContent ?? '');
 $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader ?? '');
+
+$helper = new FaqHelper($faqConfig);
+$newsContent = $helper->cleanUpContent($newsContent);
 
 // Add an information link if existing
 if (strlen((string) $news['link']) > 0) {
