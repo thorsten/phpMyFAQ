@@ -29,7 +29,7 @@
   <tr>
     <th>{{ msgCategory }}</th>
     <th class="text-center">{{ currentLanguage }}</th>
-    {% for language in all_langs %}
+    {% for language in allLangs %}
       {% if language != currentLanguage %}
         <th class="text-center">{{ language }}</th>
       {% endif %}
@@ -44,7 +44,7 @@
         <a href="?action=editcategory&cat={{ category.id }}"><span><i class="bi bi-pencil"></i></span></a>&nbsp;
         <span class="ps-{{ indent }}">{{ category.name }}</span>
       </th>
-      {% for code in all_lang_codes %}
+      {% for code in allLangCodes %}
         <th class="text-center">
           {% for catid, category_trans in translations %}
             {% if catid == category.id %}

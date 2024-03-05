@@ -111,8 +111,8 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
     $templateVars = [
         ...$templateVars,
         'currentLanguage' => $currentLanguage,
-        'all_langs' => $all_lang,
-        'all_lang_codes' => $all_lang_codes,
+        'allLangs' => $all_lang,
+        'allLangCodes' => $all_lang_codes,
         'categoryTree' => $category->getCategoryTree(),
         'basePath' => $request->getBasePath(),
         'faqlangcode' => $faqLangCode,
