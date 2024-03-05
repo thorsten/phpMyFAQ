@@ -22,7 +22,9 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -58,86 +60,35 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
 
     $userPermission = $categoryPermission->get(CategoryPermission::USER, [$id]);
     $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$id]);
-    ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="bi bi-folder"></i> <?= $header ?>
-          </h1>
-        </div>
 
-        <div class="row">
-          <div class="col-lg-12">
-            <form action="?action=updatecategory" method="post" accept-charset="utf-8">
-              <input type="hidden" name="id" value="<?= $id ?>">
-              <input type="hidden" name="parent_id" value="<?= $category->categoryName[$id]['parent_id'] ?>">
-              <input type="hidden" name="showcat" value="<?= $showcat ?>">
-              <input type="hidden" name="active" value="<?= $category->categoryName[$id]['active'] ?>">
-                <?php if ($faqConfig->get('security.permLevel') !== 'basic') : ?>
-                  <input type="hidden" name="restricted_groups[]" value="<?= $groupPermission[0] ?>">
-                <?php else : ?>
-                  <input type="hidden" name="restricted_groups[]" value="-1">
-                <?php endif; ?>
-              <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
-                <?= Token::getInstance()->getTokenInput('update-category') ?>
+    $templateVars = [
+        'categoryName' => $category->categoryName[$id]['name'],
+        'ad_categ_trans_1' => Translation::get('ad_categ_trans_1'),
+        'ad_categ_trans_2' => Translation::get('ad_categ_trans_2'),
+        'categoryId' => $id,
+        'category' => $category->categoryName[$id],
+        'showcat' => $showcat,
+        'permLevel' => $faqConfig->get('security.permLevel'),
+        'groupPermission' => $groupPermission[0],
+        'userPermission' => $userPermission[0],
+        'csrf' => Token::getInstance()->getTokenString('update-category'),
+        'ad_categ_title' => Translation::get('ad_categ_titel'),
+        'ad_categ_lang' => Translation::get('ad_categ_lang'),
+        'langToTranslate' => $category->getCategoryLanguagesToTranslate($id, $selectedLanguage),
+        'ad_categ_desc' => Translation::get('ad_categ_desc'),
+        'ad_categ_owner' => Translation::get('ad_categ_owner'),
+        'userOptions' => $userHelper->getAllUserOptions($category->categoryName[$id]['user_id']),
+        'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
+        'langTranslated' => $category->getCategoryLanguagesTranslated($id),
+        'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg')
+    ];
 
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="name"><?= Translation::get('ad_categ_titel') ?>:</label>
-                <div class="col-lg-4">
-                  <input type="text" name="name" class="form-control" id="name">
-                </div>
-              </div>
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new DebugExtension());
+    $template = $twig->loadTemplate('./admin/content/category.translate.twig');
 
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="catlang"><?= Translation::get('ad_categ_lang') ?>:</label>
-                <div class="col-lg-4">
-                  <select name="catlang" id="catlang" class="form-select">
-                      <?= $category->getCategoryLanguagesToTranslate($id, $selectedLanguage) ?>
-                  </select>
-                </div>
-              </div>
+    echo $template->render($templateVars);
 
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label"><?= Translation::get('ad_categ_desc') ?>:</label>
-                <div class="col-lg-4">
-                  <textarea name="description" rows="3" class="form-control"></textarea>
-                </div>
-              </div>
-
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label"><?= Translation::get('ad_categ_owner') ?>:</label>
-                <div class="col-lg-4">
-                  <select name="user_id" class="form-control">
-                      <?= $userHelper->getAllUserOptions($category->categoryName[$id]['user_id']) ?>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label"><?= Translation::get('ad_categ_transalready') ?></label>
-                <div class="col-lg-4">
-                  <ul class="list-unstyled">
-                      <?php
-                        foreach ($category->getCategoryLanguagesTranslated($id) as $language => $description) {
-                            echo '<input type="text" readonly class="form-control-plaintext" id="staticEmail" ' .
-                                 'value="' . $language . ': ' . $description . '">';
-                        }
-                        ?>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="offset-lg-2 col-lg-4">
-                  <button class="btn btn-primary" type="submit" name="submit">
-                      <?= Translation::get('ad_categ_translatecateg') ?>
-                  </button>
-                </div>
-              </div>
-
-            </form>
-          </div>
-        </div>
-    <?php
 } else {
     require __DIR__ . '/no-permission.php';
 }

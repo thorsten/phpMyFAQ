@@ -10,6 +10,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @author    Jan Harms <model_railroader@gmx-topmail.de>
  * @copyright 2006-2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
@@ -23,8 +24,10 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -33,26 +36,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $request = Request::createFromGlobals();
 
-?>
-
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-folder"></i> <?= Translation::get('ad_menu_categ_structure') ?>
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <a class="btn btn-outline-success" href="?action=addcategory">
-          <i aria-hidden="true" class="bi bi-folder-plus"></i> <?= Translation::get('ad_kateg_add') ?>
-        </a>
-        <a class="btn btn-outline-info" href="?action=category-overview">
-          <i aria-hidden="true" class="bi bi-list"></i> <?= Translation::get('ad_menu_categ_edit') ?>
-        </a>
-      </div>
-    </div>
-  </div>
-
-<?php
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
+    $templateVars = [];
+
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -74,105 +60,78 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
 
         // translate.category only returns non-existent languages to translate too
         if ($category->create($categoryEntity)) {
-            echo Alert::success('ad_categ_translated');
+            $templateVars = [
+                ...$templateVars,
+                'message' => Translation::get('ad_categ_translated'),
+                'message_typ' => 'success'
+            ];
         } else {
-            echo Alert::danger('ad_adus_dberr', $faqConfig->getDb()->error());
+            $templateVars = [
+                ...$templateVars,
+                'message_heading' => Translation::get('ad_adus_dberr'),
+                'error' => $faqConfig->getDb()->error(),
+                'message_typ' => 'danger'
+            ];
         }
     }
 
     $category->getMissingCategories();
     $category->buildCategoryTree();
-    ?>
-        <table class="table table-light table-striped align-middle">
-        <thead class="thead-dark">
-            <tr>
-                <th><?= $currentLanguage ?></th>
-                <?php
-                // get languages in use for all categories
-                $allLanguages = $faqConfig->getLanguage()->isLanguageAvailable(0, $table = 'faqcategories');
-                foreach ($allLanguages as $lang) {
-                    $all_lang[$lang] = LanguageCodes::get($lang);
-                }
-                asort($all_lang);
-                foreach ($all_lang as $language) {
-                    if ($language != $currentLanguage) {
-                        printf('<th class="text-center">' . $language . "</th>\n", $language);
-                    }
-                }
-                ?>
-            </tr>
-        </thead>
-        <tbody>
-    <?php
-    foreach ($category->getCategoryTree() as $cat) {
-        print "<tr>\n";
 
-        $indent = str_repeat('&nbsp;&nbsp;&nbsp;', $cat['indent']);
-        // category translated in this language?
-        ($cat['lang'] == $faqLangCode) ? $categoryName = $cat['name'] : $categoryName = $cat['name'] . ' (' . LanguageCodes::get($cat['lang']) . ')';
-
-        // show category name in actual language
-        print '<td>';
-        if ($cat['lang'] != $faqLangCode) {
-            // translate category
-            printf(
-                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="bi bi-globe"></span></a></a>',
-                $request->getBasePath(),
-                $cat['id'],
-                $faqLangCode,
-                Translation::get('ad_categ_translate'),
-                Translation::get('ad_categ_translate')
-            );
-        }
-        printf(
-            '&nbsp;%s<strong>%s</strong>',
-            $indent,
-            $categoryName
-        );
-        print "</td>\n";
-
-        // get languages in use for categories
-        $id_languages = $category->getCategoryLanguagesTranslated($cat['id']);
-
-        foreach ($all_lang as $lang => $language) {
-            if ($language == $currentLanguage) {
-                continue;
-            }
-
-            if (array_key_exists($language, $id_languages)) {
-                $spokenLanguage = Strings::preg_replace('/\(.*\)/', '', $id_languages[$language]);
-                printf(
-                    '<td class="text-center" title="%s: %s">',
-                    Translation::get('ad_categ_titel'),
-                    $spokenLanguage
-                );
-                printf(
-                    '<span title="%s: %s" class="badge bg-success"><i aria-hidden="true" class="bi bi-check"></i></span></td>',
-                    Translation::get('ad_categ_titel'),
-                    $spokenLanguage
-                );
-            } else {
-                printf(
-                    '<td class="text-center"><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
-                    $request->getBasePath(),
-                    $cat['id'],
-                    $lang,
-                    Translation::get('ad_categ_translate')
-                );
-                printf(
-                    '<span title="%s" class="badge bg-primary"><i aria-hidden="true" class="bi bi-globe bi-white"></i></span></a>',
-                    Translation::get('ad_categ_translate')
-                );
-            }
-            print "</td>\n";
-        }
-        print "</tr>\n";
+    // get languages in use for all categories
+    $allLanguages = $faqConfig->getLanguage()->isLanguageAvailable(0, $table = 'faqcategories');
+    foreach ($allLanguages as $lang) {
+        $all_lang[$lang] = LanguageCodes::get($lang);
     }
-    ?>
-        </tbody>
-        </table>
-    <?php
-    printf('<p>%s</p>', Translation::get('ad_categ_remark_overview'));
+    asort($all_lang);
+
+    $translations = [];
+
+    foreach ($category->getCategoryTree() as $cat) {
+        // get languages of category which are already translated
+        $id_languages = $category->getCategoryLanguagesTranslated($cat['id']);
+        $spokenLanguage = [];
+
+        // collect all languages of a category
+        $translation_array = [];
+        foreach ($id_languages as $lang => $title) {
+            $translation_array[] = $lang;
+        }
+        $translations[$cat['id']] = $translation_array;
+    }
+
+    // convert language names to codes | currentLanguage is always first
+    $all_lang_codes = [LanguageCodes::getKey($currentLanguage)];
+    foreach ($all_lang as $language) {
+        if ($language !== $currentLanguage) {
+            $all_lang_codes[] = LanguageCodes::getKey($language);
+        }
+    }
+
+    $templateVars = [
+        ...$templateVars,
+        'currentLanguage' => $currentLanguage,
+        'allLangs' => $all_lang,
+        'allLangCodes' => $all_lang_codes,
+        'categoryTree' => $category->getCategoryTree(),
+        'basePath' => $request->getBasePath(),
+        'faqlangcode' => $faqLangCode,
+        'ad_categ_remark_overview' => Translation::get('ad_categ_remark_overview'),
+        'ad_categ_title' => Translation::get('ad_categ_titel'),
+        'ad_categ_translate' => Translation::get('ad_categ_translate'),
+        'ad_menu_categ_structure' => Translation::get('ad_menu_categ_structure'),
+        'ad_kateg_add' => Translation::get('ad_kateg_add'),
+        'ad_menu_categ_edit' => Translation::get('ad_menu_categ_edit'),
+        'msgCategory' => Translation::get('msgCategory'),
+        'translations' => $translations,
+        'ad_categ_translated' => Translation::get('ad_categ_translated')
+    ];
+
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new DebugExtension());
+    $template = $twig->loadTemplate('./admin/content/category.showstructure.twig');
+
+    echo $template->render($templateVars);
 } else {
     require __DIR__ . '/no-permission.php';
 }

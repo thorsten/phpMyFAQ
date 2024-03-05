@@ -70,6 +70,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT))
             ->setActive(Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT))
             ->setImage($categoryImage->getFileName($categoryId, $categoryLang))
+            ->setParentId($parentId)
             ->setShowHome(Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT));
 
         $permissions = [];
@@ -166,6 +167,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         $categoryId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_SPECIAL_CHARS);
         $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_SPECIAL_CHARS);
+        $existingImage = is_null($existingImage) ? '' : $existingImage;
         $image = count($uploadedFile) ? $categoryImage->getFileName(
             $categoryId,
             $categoryLang

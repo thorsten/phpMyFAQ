@@ -718,9 +718,9 @@ class Category
     /**
      * Gets the path from root to child as breadcrumbs.
      *
-     * @param int    $id Entity ID
+     * @param int $id Entity ID
      * @param string $separator Path separator
-     * @param bool   $renderAsHtml Renders breadcrumbs as HTML
+     * @param bool $renderAsHtml Renders breadcrumbs as HTML
      * @param string $useCssClass Use CSS class "breadcrumb"
      */
     public function getPath(
@@ -827,7 +827,7 @@ class Category
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            return (int) $this->configuration->getDb()->fetchRow($result);
+            return (int)$this->configuration->getDb()->fetchRow($result);
         }
 
         return false;
@@ -874,7 +874,7 @@ class Category
         $this->categories = [];
         if ($num > 0) {
             while ($row = $this->configuration->getDb()->fetchArray($result)) {
-                $this->categories[(int) $row['id']] = $row;
+                $this->categories[(int)$row['id']] = $row;
             }
         }
 
@@ -917,7 +917,10 @@ class Category
      */
     public function create(CategoryEntity $categoryEntity): ?int
     {
-        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+        if (is_null($categoryEntity->getId())) {
+            $categoryEntity->setId($this->configuration->getDb()
+                ->nextId(Database::getTablePrefix() . 'faqcategories', 'id'));
+        }
 
         $query = sprintf(
             "
@@ -927,7 +930,7 @@ class Category
                 VALUES
             (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             Database::getTablePrefix(),
-            $categoryId,
+            $categoryEntity->getId(),
             $this->configuration->getDb()->escape($categoryEntity->getLang()),
             $categoryEntity->getParentId(),
             $this->configuration->getDb()->escape($categoryEntity->getName()),
@@ -941,7 +944,7 @@ class Category
 
         $this->configuration->getDb()->query($query);
 
-        return $categoryId;
+        return $categoryEntity->getId();
     }
 
     /**
@@ -998,7 +1001,7 @@ class Category
             $this->configuration->getDb()->escape($categoryData->getLang())
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1016,13 +1019,13 @@ class Category
             $from
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
      * Checks if a language is already defined for a category id.
      *
-     * @param int    $categoryId Entity id
+     * @param int $categoryId Entity id
      * @param string $categoryLanguage Entity language
      */
     public function hasLanguage(int $categoryId, string $categoryLanguage): bool
@@ -1058,7 +1061,7 @@ class Category
             $categoryId
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1073,7 +1076,7 @@ class Category
             $this->configuration->getDb()->escape($categoryLang)
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1112,7 +1115,7 @@ class Category
     /**
      * Create all languages which can be used for translation as <option>.
      *
-     * @param int    $categoryId Entity id
+     * @param int $categoryId Entity id
      * @param string $selectedLanguage Selected language
      */
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
@@ -1124,8 +1127,8 @@ class Category
         );
 
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
-            if (!in_array(strtolower((string) $lang), $existingCategoryLanguage)) {
-                $output .= "\t<option value=\"" . strtolower((string) $lang) . '"';
+            if (!in_array(strtolower((string)$lang), $existingCategoryLanguage)) {
+                $output .= "\t<option value=\"" . strtolower((string)$lang) . '"';
                 if ($lang == $selectedLanguage) {
                     $output .= ' selected="selected"';
                 }
