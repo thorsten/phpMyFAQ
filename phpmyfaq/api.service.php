@@ -412,7 +412,7 @@ switch ($action) {
                     $answer,
                     Translation::get('msgInfo'),
                     Strings::substr($contentLink, 7),
-                    $contentLink
+                    Strings::htmlentities($contentLink)
                 );
             }
 
