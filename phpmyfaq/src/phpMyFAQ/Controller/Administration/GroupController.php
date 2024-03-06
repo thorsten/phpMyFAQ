@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,12 +29,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GroupController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/group/groups')]
     public function listGroups(): JsonResponse
     {
         $this->userHasGroupPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user) : [];
@@ -47,18 +50,17 @@ class GroupController extends AbstractController
             ];
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($groups);
-
-        return $jsonResponse;
+        return $this->json($groups, Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/group/users')]
-    public function listUsers(Request $request): JsonResponse
+    public function listUsers(): JsonResponse
     {
         $this->userHasGroupPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $users = [];
@@ -70,34 +72,32 @@ class GroupController extends AbstractController
             ];
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($users);
-
-        return $jsonResponse;
+        return $this->json($users, Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/group/data')]
     public function groupData(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupId = $request->get('groupId');
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($user->perm->getGroupData($groupId));
-
-        return $jsonResponse;
+        return $this->json($user->perm->getGroupData($groupId), Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/group/members')]
     public function listMembers(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupId = $request->get('groupId');
@@ -111,25 +111,21 @@ class GroupController extends AbstractController
             ];
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($members);
-
-        return $jsonResponse;
+        return $this->json($members, Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/group/permissions')]
     public function listPermissions(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $groupId = $request->get('groupId');
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($user->perm->getGroupRights($groupId));
-
-        return $jsonResponse;
+        return $this->json($user->perm->getGroupRights($groupId), Response::HTTP_OK);
     }
 }
