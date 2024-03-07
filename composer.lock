@@ -360,16 +360,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "5.0.5",
+            "version": "5.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "739fc545bfade2470765219dc2a615a6f1e94987"
+                "reference": "3a9cc61d2d34df93f6edc2140e7880966ee7860f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/739fc545bfade2470765219dc2a615a6f1e94987",
-                "reference": "739fc545bfade2470765219dc2a615a6f1e94987",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/3a9cc61d2d34df93f6edc2140e7880966ee7860f",
+                "reference": "3a9cc61d2d34df93f6edc2140e7880966ee7860f",
                 "shasum": ""
             },
             "require": {
@@ -423,7 +423,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/5.0.5"
+                "source": "https://github.com/endroid/qr-code/tree/5.0.6"
             },
             "funding": [
                 {
@@ -431,7 +431,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-03T18:17:54+00:00"
+            "time": "2024-03-06T22:34:02+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -6345,5 +6345,5 @@
     "platform-overrides": {
         "php": "8.2.0"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
