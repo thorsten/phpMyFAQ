@@ -16,7 +16,9 @@
  */
 
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -24,116 +26,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->value)) {
-?>
+    $templateVars = [
+        'ad_menu_reports' => Translation::get('ad_menu_reports'),
+        'ad_stat_report_make_report' => Translation::get('ad_stat_report_make_report'),
+        'ad_stat_report_fields' => Translation::get('ad_stat_report_fields'),
+        'ad_stat_report_category' => Translation::get('ad_stat_report_category'),
+        'ad_stat_report_sub_category' => Translation::get('ad_stat_report_sub_category'),
+        'ad_stat_report_translations' => Translation::get('ad_stat_report_translations'),
+        'ad_stat_report_language' => Translation::get('ad_stat_report_language'),
+        'ad_stat_report_id' => Translation::get('ad_stat_report_id'),
+        'ad_stat_report_sticky' => Translation::get('ad_stat_report_sticky'),
+        'ad_stat_report_title' => Translation::get('ad_stat_report_title'),
+        'ad_stat_report_creation_date' => Translation::get('ad_stat_report_creation_date'),
+        'ad_stat_report_owner' => Translation::get('ad_stat_report_owner'),
+        'ad_stat_report_last_modified_person' => Translation::get('ad_stat_report_last_modified_person'),
+        'ad_stat_report_url' => Translation::get('ad_stat_report_url'),
+        'ad_stat_report_visits' => Translation::get('ad_stat_report_visits')
+    ];
 
-    <form action="?action=reportview" method="post" accept-charset="utf-8">
-        <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">
-                <i aria-hidden="true" class="bi bi-file-excel"></i> <?= Translation::get('ad_menu_reports') ?>
-            </h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group mr-2">
-                    <button class="btn btn-outline-primary" type="submit">
-                        <?= Translation::get('ad_stat_report_make_report') ?>
-                    </button>
-                </div>
-            </div>
-        </div>
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new DebugExtension());
+    $template = $twig->loadTemplate('./admin/statistics/report.main.twig');
 
-        <div class="container">
-            <h4><?= Translation::get('ad_stat_report_fields') ?></h4>
-
-            <div class="row mb-2">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_category" name="report_category"
-                           value="1" checked>
-                    <label class="form-check-label" for="report_category">
-                        <?= Translation::get('ad_stat_report_category') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_sub_category" name="report_sub_category"
-                           value="1" checked>
-                    <label class="form-check-label" for="report_sub_category">
-                        <?= Translation::get('ad_stat_report_sub_category') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_translations"
-                           name="report_translations" value="1" checked>
-                    <label class="form-check-label" for="report_translations">
-                        <?= Translation::get('ad_stat_report_translations') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_language" name="report_language"
-                           value="1" checked>
-                    <label class="form-check-label" for="report_language">
-                        <?= Translation::get('ad_stat_report_language') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_id" name="report_id" value="1" checked>
-                    <label class="form-check-label" for="report_id">
-                        <?= Translation::get('ad_stat_report_id') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_sticky" name="report_sticky" value="1"
-                           checked>
-                    <label class="form-check-label" for="report_sticky">
-                        <?= Translation::get('ad_stat_report_sticky') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_title" name="report_title" value="1"
-                           checked>
-                    <label class="form-check-label" for="report_title">
-                        <?= Translation::get('ad_stat_report_title') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_creation_date"
-                           name="report_creation_date" value="1" checked>
-                    <label class="form-check-label" for="report_creation_date">
-                        <?= Translation::get('ad_stat_report_creation_date') ?>
-                    </label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_owner" name="report_owner" value="1"
-                           checked>
-                    <label class="form-check-label" for="report_owner">
-                        <?= Translation::get('ad_stat_report_owner') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_last_modified_person"
-                           name="report_last_modified_person" value="1" checked>
-                    <label class="form-check-label" for="report_last_modified_person">
-                        <?= Translation::get('ad_stat_report_last_modified_person') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_url" name="report_url" value="1" checked>
-                    <label class="form-check-label" for="report_url">
-                        <?= Translation::get('ad_stat_report_url') ?>
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="report_visits" name="report_visits" value="1"
-                           checked>
-                    <label class="form-check-label" for="report_visits">
-                        <?= Translation::get('ad_stat_report_visits') ?>
-                    </label>
-                </div>
-            </div>
-
-        </div>
-    </form>
-
-    <?php
+    echo $template->render($templateVars);
 } else {
     require __DIR__ . '/no-permission.php';
 }
