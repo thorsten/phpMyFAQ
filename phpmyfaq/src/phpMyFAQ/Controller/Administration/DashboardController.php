@@ -31,6 +31,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class DashboardController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/dashboard/versions')]
     public function versions(): JsonResponse
     {
@@ -69,6 +72,9 @@ class DashboardController extends AbstractController
         return $this->json(['error' => 'User tracking is disabled.'], 400);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/dashboard/topten')]
     public function topTen(): JsonResponse
     {

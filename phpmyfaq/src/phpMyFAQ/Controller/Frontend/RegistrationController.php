@@ -9,6 +9,6 @@ class RegistrationController extends AbstractController
 {
     public function create(): JsonResponse
     {
-        return new JsonResponse(['status' => 'ok']);
+        return $this->json(['status' => 'ok']);
     }
 }

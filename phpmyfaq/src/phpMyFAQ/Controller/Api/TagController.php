@@ -19,11 +19,12 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Tags;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class TagController
+class TagController extends AbstractController
 {
     #[OA\Get(
         path: '/api/v3.0/tags',
@@ -45,17 +46,14 @@ class TagController
     )]
     public function list(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
+        $configuration = Configuration::getConfigurationInstance();
 
-        $tags = new Tags($faqConfig);
+        $tags = new Tags($configuration);
         $result = $tags->getPopularTagsAsArray(16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $jsonResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        } else {
+            return $this->json($result, Response::HTTP_OK);
         }
-
-        $jsonResponse->setData($result);
-
-        return $jsonResponse;
     }
 }

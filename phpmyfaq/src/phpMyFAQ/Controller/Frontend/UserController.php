@@ -42,7 +42,6 @@ class UserController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -51,9 +50,7 @@ class UserController extends AbstractController
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('ucp', $csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('ad_msg_noauth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userid, FILTER_VALIDATE_INT);
@@ -70,22 +67,19 @@ class UserController extends AbstractController
         $secret = $deleteSecret === 'on' ? '' : $user->getUserData('secret');
 
         if ($userId !== $user->getUserId()) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => 'User ID mismatch!']);
-            return $jsonResponse;
+            return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
         }
 
         if (!$isAzureAdUser) {
             if ($password !== $confirm) {
-                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-                $jsonResponse->setData(['error' => Translation::get('ad_user_error_passwordsDontMatch')]);
-                return $jsonResponse;
+                return $this->json(
+                    ['error' => Translation::get('ad_user_error_passwordsDontMatch')],
+                    Response::HTTP_CONFLICT
+                );
             }
 
             if (strlen($password) <= 7 || strlen($confirm) <= 7) {
-                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-                $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
-                return $jsonResponse;
+                return $this->json(['error' => Translation::get('ad_passwd_fail')], Response::HTTP_CONFLICT);
             } else {
                 $userData = [
                     'display_name' => $userName,
@@ -103,9 +97,7 @@ class UserController extends AbstractController
                     }
 
                     if (!$auth->update($user->getLogin(), $password)) {
-                        $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                        $jsonResponse->setData(['error' => $auth->error()]);
-                        $success = false;
+                        return $this->json(['error' => $auth->error()], Response::HTTP_BAD_REQUEST);
                     } else {
                         $success = true;
                     }
@@ -122,14 +114,10 @@ class UserController extends AbstractController
         }
 
         if ($success) {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_entry_savedsuc')]);
+            return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => Translation::get('ad_entry_savedfail')]);
+            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 
     /**

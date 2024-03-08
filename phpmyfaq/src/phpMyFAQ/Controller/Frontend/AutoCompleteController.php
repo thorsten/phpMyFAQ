@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
@@ -31,12 +32,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AutoCompleteController
+class AutoCompleteController extends AbstractController
 {
     #[Route('api/autocomplete')]
     public function search(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $faqConfig = Configuration::getConfigurationInstance();
 
         $searchString = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -65,10 +65,10 @@ class AutoCompleteController
             $faqSearchHelper->setSearchTerm($searchString);
             $faqSearchHelper->setCategory($category);
             $faqSearchHelper->setPlurals(new Plurals());
-            $jsonResponse->setData(Response::HTTP_OK);
-            $jsonResponse->setData($faqSearchHelper->createAutoCompleteResult($searchResultSet));
+
+            return $this->json($faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
         }
 
-        return $jsonResponse;
+        return $this->json([], Response::HTTP_NOT_FOUND);
     }
 }

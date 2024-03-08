@@ -32,52 +32,50 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ElasticsearchController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('./admin/api/elasticsearch/create')]
     public function create(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $jsonResponse = new JsonResponse();
         $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
 
         try {
             $elasticsearch->createIndex();
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_es_create_index_success')]);
+            return $this->json(['success' => Translation::get('ad_es_create_index_success')], Response::HTTP_OK);
         } catch (Exception $exception) {
-            $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-            $jsonResponse->setData(['error' => $exception->getMessage()]);
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('./admin/api/elasticsearch/drop')]
     public function drop(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $jsonResponse = new JsonResponse();
         $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
 
         try {
             $elasticsearch->dropIndex();
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_es_drop_index_success')]);
+            return $this->json(['success' => Translation::get('ad_es_drop_index_success')], Response::HTTP_OK);
         } catch (Exception $exception) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $exception->getMessage()]);
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('./admin/api/elasticsearch/import')]
     public function import(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $elasticsearch = new Elasticsearch($configuration);
@@ -86,40 +84,35 @@ class ElasticsearchController extends AbstractController
 
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
         if (isset($bulkIndexResult['success'])) {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_es_create_import_success')]);
+            return $this->json(['success' => Translation::get('ad_es_create_import_success')], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $bulkIndexResult]);
+            return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('./admin/api/elasticsearch/statistics')]
     public function statistics(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $elasticsearchConfiguration = $configuration->getElasticsearchConfig();
 
         $indexName = $elasticsearchConfiguration->getIndex();
         try {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(
+            return $this->json(
                 [
                     'index' => $indexName,
                     'stats' => $configuration->getElasticsearch()->indices()->stats(['index' => $indexName])->asArray()
-                ]
+                ],
+                Response::HTTP_OK
             );
         } catch (ClientResponseException | ServerResponseException $e) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $e->getMessage()]);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 }

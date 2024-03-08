@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,22 +29,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BookmarkController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('api/bookmark')]
     public function delete(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
+        $configuration = Configuration::getConfigurationInstance();
 
         $id = Filter::filterVar($request->get('bookmarkId'), FILTER_VALIDATE_INT);
 
-        $currentUser = CurrentUser::getCurrentUser($faqConfig);
+        $currentUser = CurrentUser::getCurrentUser($configuration);
 
-        $bookmark = new Bookmark($faqConfig, $currentUser);
+        $bookmark = new Bookmark($configuration, $currentUser);
 
-        $jsonResponse->setData(['success' => $bookmark->remove($id)]);
-
-        return $jsonResponse;
+        return $this->json(['success' => $bookmark->remove($id)], JsonResponse::HTTP_OK);
     }
 }

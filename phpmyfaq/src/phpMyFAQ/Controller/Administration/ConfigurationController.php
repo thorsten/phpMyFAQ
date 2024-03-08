@@ -32,20 +32,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ConfigurationController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/configuration/send-test-mail')]
     public function sendTestMail(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('configuration', $data->csrf)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -56,13 +56,9 @@ class ConfigurationController extends AbstractController
             $mail->message = 'It works on my machine. 🚀';
             $result = $mail->send();
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => $result]);
+            return $this->json(['success' => $result], Response::HTTP_OK);
         } catch (Exception | TransportExceptionInterface $e) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $e->getMessage()]);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 }

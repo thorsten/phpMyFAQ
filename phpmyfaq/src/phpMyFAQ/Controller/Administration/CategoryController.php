@@ -24,6 +24,7 @@ use phpMyFAQ\Category\CategoryPermission;
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -35,6 +36,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/category/delete')]
     public function delete(Request $request): JsonResponse
     {
@@ -47,9 +51,7 @@ class CategoryController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('category', $data->csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($currentUser);
@@ -83,26 +85,23 @@ class CategoryController extends AbstractController
             $category->delete($data->categoryId, $data->language) &&
             $categoryRelation->delete($data->categoryId, $data->language)
         ) {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(
-                ['success' => Translation::get('ad_categ_deleted')]
-            );
+            return $this->json(['success' => Translation::get('ad_categ_deleted')], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            $jsonResponse->setData(
-                ['error' => Translation::get('ad_adus_dberr') . $configuration->getDb()->error()]
+            return $this->json(
+                ['error' => Translation::get('ad_adus_dberr') . $configuration->getDb()->error()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/category/permissions')]
     public function permissions(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $categoryPermission = new CategoryPermission(Configuration::getConfigurationInstance());
 
         $categoryData = $request->get('categories');
@@ -113,42 +112,43 @@ class CategoryController extends AbstractController
             $categories = explode(',', (string) $categoryData);
         }
 
-        $jsonResponse->setData(
+        return $this->json(
             [
                 'user' => $categoryPermission->get(CategoryPermission::USER, $categories),
                 'group' => $categoryPermission->get(CategoryPermission::GROUP, $categories)
-            ]
+            ],
+            Response::HTTP_OK
         );
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/category/translations')]
     public function translations(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $category = new Category($configuration, [], false);
 
         $translations = $category->getCategoryLanguagesTranslated($request->get('categoryId'));
 
-        return $jsonResponse->setData($translations);
+        return $this->json($translations, Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/category/update-order')]
     public function updateOrder(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
-        $jsonResponse = new JsonResponse();
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('category', $data->csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $configuration = Configuration::getConfigurationInstance();
@@ -166,9 +166,6 @@ class CategoryController extends AbstractController
         $category->setGroups($currentAdminGroups);
         $category->updateParentCategory($data->categoryId, $parentId);
 
-        $jsonResponse->setData(
-            ['success' => Translation::get('ad_categ_save_order')]
-        );
-        return $jsonResponse;
+        return $this->json(['success' => Translation::get('ad_categ_save_order')], Response::HTTP_OK);
     }
 }
