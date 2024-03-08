@@ -109,7 +109,7 @@ class Instance
     /**
      * Returns the instance.
      */
-    public function getInstanceById(int $id): object
+    public function getInstanceById(int $id, string $type = 'object'): object|array|false
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
@@ -119,7 +119,15 @@ class Instance
 
         $result = $this->configuration->getDb()->query($select);
 
-        return $this->configuration->getDb()->fetchObject($result);
+        if ($type === 'object') {
+            return $this->configuration->getDb()->fetchObject($result);
+        }
+        if ($type === 'array') {
+            return $this->configuration->getDb()->fetchArray($result);
+        }
+        else {
+            return false;
+        }
     }
 
     /**
