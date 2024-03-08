@@ -377,9 +377,9 @@ switch ($action) {
         // Check on translation
         if (isset($postData['faqid']) && isset($postData['lang']) && isset($postData['translated_answer'])) {
             $faqId = Filter::filterVar($postData['faqid'], FILTER_VALIDATE_INT);
-            $faqLanguage = Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = trim((string) Filter::filterVar($postData['translated_answer'], FILTER_SANITIZE_SPECIAL_CHARS));
         }
+        $faqLanguage = Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (
             !is_null($author) && !is_null($email) && ($question !== '' && $question !== '0') &&
