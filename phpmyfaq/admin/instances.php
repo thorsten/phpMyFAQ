@@ -25,47 +25,23 @@ use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-?>
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i aria-hidden="true" class="bi bi-wrench bi-fw"></i> <?= Translation::get('ad_menu_instances') ?>
-        </h1>
-        <?php if (
-        $user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_ADD->value) &&
-            is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')
-) : ?>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-                <a class="btn btn-outline-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
-                    <i aria-hidden="true" class="bi bi-plus"></i> <?= Translation::get('ad_instance_add') ?>
-                </a>
-            </div>
-        </div>
-        <?php endif; ?>
-    </div>
 
-  <div class="row">
-  <div class="col-lg-12">
-<?php
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT->value)) {
     $fileSystem = new Filesystem(PMF_ROOT_DIR);
     $instance = new Instance($faqConfig);
     $currentClient = new Client($faqConfig);
     $currentClient->setFileSystem($fileSystem);
     $instanceId = Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
-
-    // Check, if /multisite is writeable
-    if (!$currentClient->isMultiSiteWriteable()) {
-        echo Alert::danger('ad_instance_error_notwritable');
-    }
 
     // Update client instance
     if ('update-instance' === $action && is_integer($instanceId)) {
@@ -100,140 +76,38 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
             }
         }
     }
-    ?>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>#</th>
-      <th><?= Translation::get('ad_instance_url') ?></th>
-      <th><?= Translation::get('ad_instance_path') ?></th>
-      <th colspan="3"><?= Translation::get('ad_instance_name') ?></th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php
-    foreach ($instance->getAllInstances() as $site) :
-        $currentInstance = new Instance($faqConfig);
-        $currentInstance->getInstanceById($site->id);
-        $currentInstance->setId($site->id);
-        ?>
-      <tr id="row-instance-<?= $site->id ?>">
-        <td><?= $site->id ?></td>
-        <td>
-          <a href="<?= Strings::htmlentities($site->url . $site->instance, ENT_QUOTES) ?>">
-                <?= Strings::htmlentities($site->url, ENT_QUOTES) ?>
-          </a>
-        </td>
-        <td><?= Strings::htmlentities($site->instance, ENT_QUOTES) ?></td>
-        <td><?= Strings::htmlentities($site->comment, ENT_QUOTES) ?></td>
-        <td>
-          <a href="?action=edit-instance&instance_id=<?= $site->id ?>" class="btn btn-info">
-            <i aria-hidden="true" class="bi bi-pencil"></i>
-          </a>
-        </td>
-        <td>
-            <?php
-            if (!$currentInstance->getConfig('isMaster')) {
-                $csrfToken = Token::getInstance()->getTokenString('delete-instance');
-                ?>
-              <button data-delete-instance-id="<?= $site->id ?>" type="button"
-                 class="btn btn-danger pmf-instance-delete"
-                 data-csrf-token="<?= $csrfToken ?>">
-                <i aria-hidden="true" class="bi bi-trash" data-delete-instance-id="<?= $site->id ?>"
-                   data-csrf-token="<?= $csrfToken ?>"></i>
-              </button>
-            <?php } ?>
-        </td>
-      </tr>
-    <?php endforeach; ?>
-    </tbody>
-  </table>
 
-  <div class="modal fade" id="pmf-modal-add-instance">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4><?= Translation::get('ad_instance_add') ?></h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
-            <?= Token::getInstance()->getTokenInput('add-instance') ?>
-            <div class="form-group row">
-              <label class="col-form-label col-lg-4" for="url">
-                  <?= Translation::get('ad_instance_url') ?>:
-              </label>
-              <div class="col-lg-8">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">https://</div>
-                  </div>
-                  <input class="form-control mb-2" type="text" name="url" id="url" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">.<?= Request::createFromGlobals()->getHost() ?></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-form-label col-lg-4" for="instance">
-                  <?= Translation::get('ad_instance_path') ?>:
-              </label>
-              <div class="col-lg-8">
-                <input class="form-control mb-2" type="text" name="instance" id="instance" required>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-form-label col-lg-4" for="comment">
-                  <?= Translation::get('ad_instance_name') ?>:
-              </label>
-              <div class="col-lg-8">
-                <input class="form-control mb-2" type="text" name="comment" id="comment" required>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-form-label col-lg-4" for="email">
-                  <?= Translation::get('ad_instance_email') ?>:
-              </label>
-              <div class="col-lg-8">
-                <input class="form-control mb-2" type="email" name="email" id="email" required>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-form-label col-lg-4" for="admin">
-                  <?= Translation::get('ad_instance_admin') ?>:
-              </label>
-              <div class="col-lg-8">
-                <input class="form-control mb-2" type="text" name="admin" id="admin" required>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-form-label col-lg-4" for="password">
-                  <?= Translation::get('ad_instance_password') ?>:
-              </label>
-                <div class="col-lg-8">
-                    <div class="input-group mb-2">
-                        <input class="form-control" type="password" autocomplete="off" name="password" id="password" data-pmf-toggle="instances_password_toggle" required>
-                        <span class="input-group-text" id="instances_password_toggle">
-                            <i class="bi bi-eye-slash" id="instances_password_toggle_icon"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <p class="text-sm-start"><?= Translation::get('ad_instance_hint') ?></p>
-          <button class="btn btn-primary pmf-instance-add" type="submit">
-              <?= Translation::get('ad_instance_button') ?>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-  </div>
-    <?php
+    $masterConfig = [];
+    foreach ($instance->getAllInstances() as $site) {
+        $masterConfig[$site->id] = $instance->getInstanceConfig($site->id)['isMaster'];
+    }
+
+    $templateVars = [
+        'userPermInstanceAdd' => $user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_ADD->value),
+        'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
+        'ad_instance_add' => Translation::get('ad_instance_add'),
+        'allInstances' => $instance->getAllInstances(),
+        'csrfTokenDeleteInstance' => Token::getInstance()->getTokenString('delete-instance'),
+        'csrfTokenAddInstance' => Token::getInstance()->getTokenString('add_instance'),
+        'masterConfig' => $masterConfig,
+        'requestHost' => Request::createFromGlobals()->getHost(),
+        'ad_instance_button' => Translation::get('ad_instance_button'),
+        'ad_instance_hint' => Translation::get('ad_instance_hint'),
+        'ad_instance_admin' => Translation::get('ad_instance_admin'),
+        'ad_instance_password' => Translation::get('ad_instance_password'),
+        'ad_instance_email' => Translation::get('ad_instance_email'),
+        'ad_instance_name' => Translation::get('ad_instance_name'),
+        'ad_instance_path' => Translation::get('ad_instance_path'),
+        'ad_instance_url' => Translation::get('ad_instance_url'),
+        'ad_instance_error_notwritable' => Translation::get('ad_instance_error_notwritable'),
+        'ad_menu_instances' => Translation::get('ad_menu_instances')
+    ];
+
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new DebugExtension());
+    $template = $twig->loadTemplate('./admin/configuration/instances.twig');
+
+    echo $template->render($templateVars);
 } else {
     require __DIR__ . '/no-permission.php';
 }
