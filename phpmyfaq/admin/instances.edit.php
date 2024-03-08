@@ -36,7 +36,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
 
     $templateVars = [
         'ad_menu_instances' => Translation::get('ad_menu_instances'),
-        'instanceConfig' => $instance->getInstanceConfig($instanceData['id']),
+        'instanceConfig' => $instance->getInstanceConfig($instanceData->id),
         'ad_instance_url' => Translation::get('ad_instance_url'),
         'ad_instance_button' => Translation::get('ad_instance_button'),
         'ad_instance_path' => Translation::get('ad_instance_path'),
