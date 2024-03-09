@@ -19,7 +19,7 @@ import Masonry from 'masonry-layout';
 import { handleBookmarks, saveFormData } from './api';
 import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
-import { handleUserControlPanel, handleUserPassword } from './user';
+import { handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
 
@@ -70,6 +70,11 @@ handleUserControlPanel();
 // Handle user password
 //
 handleUserPassword();
+
+//
+// Handle request removal
+//
+handleRequestRemoval();
 
 //
 // Masonry on startpage

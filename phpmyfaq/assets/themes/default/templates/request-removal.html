@@ -13,11 +13,11 @@
       <div class="spinner-border text-primary d-none" id="loader" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <div id="faqs"></div>
+      <div id="pmf-request-removal-response"></div>
     </div>
   </div>
 
-  <form id="formValues" action="#" method="post" class="needs-validation" novalidate>
+  <form id="pmf-request-removal-form" action="#" method="post" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
     <input type="hidden" name="userId" id="userId" value="{{ userId }}">
     {{ csrf }}
@@ -79,7 +79,7 @@
         <button
           class="btn btn-primary btn-lg"
           type="submit"
-          id="pmf-submit-values"
+          id="pmf-submit-request-removal"
           data-pmf-form="submit-request-removal"
         >
           {{ msgS2FButton }}

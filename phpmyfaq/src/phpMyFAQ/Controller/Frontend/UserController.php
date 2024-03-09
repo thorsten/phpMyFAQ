@@ -23,7 +23,9 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -123,10 +125,9 @@ class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('api/user/data/update', methods: ['PUT'])]
+    #[Route('api/user/password/update', methods: ['PUT'])]
     public function updatePassword(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 
@@ -140,18 +141,14 @@ class UserController extends AbstractController
             if ($loginExist && ($email == $user->getUserData('email'))) {
                 try {
                     $newPassword = $user->createPassword();
-                } catch (Exception $exception) {
-                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $jsonResponse->setData(['error' => $exception->getMessage()]);
-                    return $jsonResponse;
+                } catch (\Exception $exception) {
+                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
                 try {
                     $user->changePassword($newPassword);
                 } catch (\Exception $exception) {
-                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $jsonResponse->setData(['error' => $exception->getMessage()]);
-                    return $jsonResponse;
+                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
                 $text = Translation::get('lostpwd_text_1') .
@@ -163,36 +160,99 @@ class UserController extends AbstractController
                 try {
                     $mailer->addTo($email);
                 } catch (Exception $exception) {
-                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $jsonResponse->setData(['error' => $exception->getMessage()]);
-                    return $jsonResponse;
+                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
                 $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $configuration);
                 $mailer->message = $text;
                 try {
-                    $result = $mailer->send();
+                    $mailer->send();
                 } catch (Exception | TransportExceptionInterface $exception) {
-                    $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                    $jsonResponse->setData(['error' => $exception->getMessage()]);
-                    return $jsonResponse;
+                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
                 unset($mailer);
                 // Trust that the email has been sent
-                $jsonResponse->setStatusCode(Response::HTTP_OK);
-                $jsonResponse->setData(['success' => Translation::get('lostpwd_mail_okay')]);
+                return $this->json(['success' => Translation::get('lostpwd_mail_okay')], Response::HTTP_OK);
             } else {
-                $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-                $jsonResponse->setData(['error' => Translation::get('lostpwd_err_1')]);
-                return $jsonResponse;
+                return $this->json(['error' => Translation::get('lostpwd_err_1')], Response::HTTP_CONFLICT);
             }
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_CONFLICT);
-            $jsonResponse->setData(['error' => Translation::get('lostpwd_err_2')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('lostpwd_err_2')], Response::HTTP_CONFLICT);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('api/user/request-removal', methods: ['POST'])]
+    public function requestUserRemoval(Request $request): JsonResponse
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $stopWords = new StopWords($configuration);
+        $user = CurrentUser::getCurrentUser($configuration);
+
+        $data = json_decode($request->getContent());
+
+        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance()->verifyToken('request-removal', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        return $jsonResponse;
+        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
+        $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
+        $loginName = trim((string) Filter::filterVar($data->loginname, FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+        $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
+
+        // If e-mail address is set to optional
+        if (!$configuration->get('main.optionalMailAddress') && is_null($email)) {
+            $email = $configuration->getAdminEmail();
+        }
+
+        // Validate User ID, Username and email
+        if (
+            !$user->getUserById($userId) ||
+            $userId !== $user->getUserId() ||
+            $loginName !== $user->getLogin() ||
+            $email !== $user->getUserData('email')
+        ) {
+            return $this->json(['error' => Translation::get('ad_user_error_loginInvalid')], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (
+            $author !== '' &&
+            $author !== '0' &&
+            ($email !== '' && $email !== '0') &&
+            ($question !== '' && $question !== '0') &&
+            $stopWords->checkBannedWord($question)
+        ) {
+            $question = sprintf(
+                "%s %s<br>%s %s<br>%s %s<br><br>%s",
+                Translation::get('ad_user_loginname'),
+                $loginName,
+                Translation::get('msgNewContentName'),
+                $author,
+                Translation::get('msgNewContentMail'),
+                $email,
+                $question
+            );
+
+            $mailer = new Mail($configuration);
+            try {
+                $mailer->setReplyTo($email, $author);
+                $mailer->addTo($configuration->getAdminEmail());
+                $mailer->subject = $configuration->getTitle() . ': Remove User Request';
+                $mailer->message = $question;
+                $mailer->send();
+                unset($mailer);
+
+                return $this->json(['success' => Translation::get('msgMailContact')], Response::HTTP_OK);
+            } catch (Exception | TransportExceptionInterface $exception) {
+                return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+            }
+        } else {
+            return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

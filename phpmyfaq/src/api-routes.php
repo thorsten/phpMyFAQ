@@ -169,6 +169,13 @@ $routes->add(
     new Route('user/password/update', ['_controller' => [UserController::class, 'updatePassword'], '_methods' => 'PUT'])
 );
 $routes->add(
+    'api.user.request-removal',
+    new Route(
+        'user/request-removal',
+        ['_controller' => [UserController::class, 'requestUserRemoval'], '_methods' => 'POST']
+    )
+);
+$routes->add(
     'api.user.update',
     new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
 );
