@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
@@ -31,32 +32,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/search/term')]
     public function deleteTerm(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $jsonResponse = new JsonResponse();
         $deleteData = json_decode($request->getContent());
 
         $search = new Search(Configuration::getConfigurationInstance());
 
         if (!Token::getInstance()->verifyToken('delete-searchterm', $deleteData->csrf)) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
 
         if ($search->deleteSearchTermById($searchId)) {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['deleted' => $searchId]);
+            return $this->json(['deleted' => $searchId], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $searchId]);
+            return $this->json(['error' => $searchId], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 }

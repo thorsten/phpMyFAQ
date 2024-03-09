@@ -46,10 +46,7 @@ class SessionController extends AbstractController
         $requestData = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('export-sessions', $requestData->csrf)) {
-            $response = new JsonResponse();
-            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            return $response;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $session = new Session($configuration);
@@ -73,10 +70,7 @@ class SessionController extends AbstractController
             $response->headers->set('Content-Type', 'text/csv');
             return $response;
         }
-        $response = new JsonResponse();
-        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        $response->setData(['error' => 'Unable to open file.']);
 
-        return $response;
+        return $this->json(['error' => 'Unable to open file.'], Response::HTTP_BAD_REQUEST);
     }
 }

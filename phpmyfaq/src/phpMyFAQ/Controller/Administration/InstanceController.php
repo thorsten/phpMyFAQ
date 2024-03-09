@@ -39,20 +39,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class InstanceController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/instance/add')]
     public function add(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('add-instance', $data->csrf)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $url = Filter::filterVar($data->url, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -63,16 +63,12 @@ class InstanceController extends AbstractController
         $password = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => 'Cannot create instance.']);
-            return $jsonResponse;
+            return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
         $url = 'https://' . $url . '.' . $_SERVER['SERVER_NAME'];
         if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => 'Cannot create instance: wrong URL']);
-            return $jsonResponse;
+            return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
         }
 
         $data = new InstanceEntity();
@@ -99,10 +95,7 @@ class InstanceController extends AbstractController
             try {
                 $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
             } catch (Exception $e) {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $jsonResponse->setData(['error' => $e->getMessage()]);
-                $jsonResponse->send();
-                exit(1);
+                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
 
             $databaseConfiguration = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
@@ -136,46 +129,38 @@ class InstanceController extends AbstractController
             try {
                 $clientSetup->createAnonymousUser($configuration);
             } catch (Exception $e) {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $jsonResponse->setData(['error' => $e->getMessage()]);
-                return $jsonResponse;
+                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
 
             Database::setTablePrefix($databaseConfiguration->getPrefix());
         } else {
             $faqInstance->removeInstance($instanceId);
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => 'Cannot create instance.']);
-            return $jsonResponse;
+            return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
         if (0 !== $instanceId) {
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
             $payload = ['added' => $instanceId, 'url' => $data->getUrl()];
+            return $this->json($payload, Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
             $payload = ['error' => $instanceId];
+            return $this->json($payload, Response::HTTP_BAD_REQUEST);
         }
-
-        $jsonResponse->setData($payload);
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/instance/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-instance', $data->csrf)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $instanceId = Filter::filterVar($data->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -189,16 +174,15 @@ class InstanceController extends AbstractController
                 $client->deleteClientFolder($clientData->url) &&
                 $client->removeInstance($instanceId)
             ) {
-                $jsonResponse->setStatusCode(Response::HTTP_OK);
                 $payload = ['deleted' => $instanceId];
+                return $this->json($payload, Response::HTTP_OK);
             } else {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $payload = ['error' => $instanceId];
+                return $this->json($payload, Response::HTTP_BAD_REQUEST);
             }
-
-            $jsonResponse->setData($payload);
+        } else {
+            $payload = ['error' => $instanceId];
+            return $this->json($payload, Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 }

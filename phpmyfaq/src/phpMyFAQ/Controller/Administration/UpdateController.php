@@ -43,12 +43,14 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class UpdateController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/health-check')]
     public function healthCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
@@ -56,59 +58,56 @@ class UpdateController extends AbstractController
 
         try {
             $upgrade->checkFilesystem();
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(
+            return $this->json(
                 [
                     'message' => Translation::get('healthCheckOkay'),
                     'dateLastChecked' => $dateLastChecked,
-                ]
+                ],
+                Response::HTTP_OK
             );
         } catch (Exception $exception) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(
+            return $this->json(
                 [
                     'message' => $exception->getMessage(),
                     'dateLastChecked' => $dateLastChecked,
-                ]
+                ],
+                Response::HTTP_BAD_REQUEST
             );
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/versions')]
     public function versions(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $httpClient = HttpClient::create();
-        $jsonResponse = new JsonResponse();
         try {
-            $versions = $httpClient->request(
+            $versions = HttpClient::create()->request(
                 'GET',
                 'https://api.phpmyfaq.de/versions'
             );
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setContent($versions->getContent());
+            return $this->json($versions->getContent(), Response::HTTP_OK);
         } catch (
             TransportExceptionInterface |
             ClientExceptionInterface |
             ServerExceptionInterface |
             RedirectionExceptionInterface $exception
         ) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData($exception->getMessage());
+            return $this->json($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/update-check')]
     public function updateCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $jsonResponse = new JsonResponse();
         $dateTime = new DateTime();
         $configuration = Configuration::getConfigurationInstance();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
@@ -120,30 +119,27 @@ class UpdateController extends AbstractController
             $configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
             if (version_compare($versions['installed'], $versions[$branch], '<')) {
-                $jsonResponse->setData(
+                return $this->json(
                     [
                         'version' => $versions[$branch],
                         'message' => Translation::get('currentVersion') . $versions[$branch],
                         'dateLastChecked' => $dateLastChecked,
-                    ]
+                    ],
+                    Response::HTTP_OK
                 );
             } else {
-                $jsonResponse->setData(
+                return $this->json(
                     [
                         'version' => $versions['installed'],
                         'message' => Translation::get('versionIsUpToDate'),
                         'dateLastChecked' => $dateLastChecked,
-                    ]
+                    ],
+                    Response::HTTP_OK
                 );
             }
-
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
         } catch (Exception | TransportExceptionInterface | DecodingExceptionInterface $e) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $e->getMessage()]);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 
     /**
@@ -169,27 +165,24 @@ class UpdateController extends AbstractController
         $pathToPackage = $upgrade->downloadPackage($versionNumber);
 
         if ($pathToPackage === false) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_GATEWAY);
-            $jsonResponse->setData(['error' => Translation::get('downloadFailure')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('downloadFailure')], Response::HTTP_BAD_GATEWAY);
         }
 
         if (!$upgrade->isNightly()) {
             $result = $upgrade->verifyPackage($pathToPackage, $versionNumber);
             if ($result === false) {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_GATEWAY);
-                $jsonResponse->setData(['error' => Translation::get('verificationFailure')]);
-                return $jsonResponse;
+                return $this->json(['error' => Translation::get('verificationFailure')], Response::HTTP_BAD_GATEWAY);
             }
         }
 
         $configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData(['success' => Translation::get('downloadSuccessful')]);
-        return $jsonResponse;
+        return $this->json(['success' => Translation::get('downloadSuccessful')], Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/extract-package')]
     public function extractPackage(): StreamedResponse
     {
@@ -214,6 +207,9 @@ class UpdateController extends AbstractController
         });
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/create-temporary-backup')]
     public function createTemporaryBackup(): StreamedResponse
     {
@@ -238,6 +234,9 @@ class UpdateController extends AbstractController
         });
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
@@ -260,6 +259,9 @@ class UpdateController extends AbstractController
         });
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/update-database')]
     public function updateDatabase(): StreamedResponse
     {
@@ -285,24 +287,19 @@ class UpdateController extends AbstractController
         });
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/cleanup')]
     public function cleanUp(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
         $upgrade = new Upgrade(new System(), $configuration);
 
-        try {
-            $upgrade->cleanUp();
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['message' => '✅ Cleanup successful.']);
-        } catch (Exception $exception) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['message' => 'Cleanup failed: ' . $exception->getMessage()]);
-        }
+        $upgrade->cleanUp();
 
-        return $jsonResponse;
+        return $this->json(['message' => '✅ Cleanup successful.'], Response::HTTP_OK);
     }
 }
