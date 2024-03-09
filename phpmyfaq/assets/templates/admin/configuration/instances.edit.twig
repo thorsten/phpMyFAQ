@@ -1,0 +1,49 @@
+<div
+  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="bi bi-wrench bi-fw"></i>
+    {{ ad_menu_instances }}
+  </h1>
+</div>
+<form action="?action=update-instance" method="post" accept-charset="utf-8">
+  <input type="hidden" name="instance_id" value="{{ instance.id }}"/>
+  <div class="row mb-2">
+    <label for="url" class="col-lg-2 col-form-label">{{ ad_instance_url }}:</label>
+    <div class="col-lg-8">
+      <input type="url" name="url" id="url" class="form-control"
+             value="{{ instance.url|escape('html') }}" required>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <label for="instance" class="col-lg-2 col-form-label">{{ ad_instance_path }}:</label>
+    <div class="col-lg-8">
+      <input type="text" name="instance" id="instance" class="form-control" required
+             value="{{ instance.instance|escape('html') }}">
+    </div>
+  </div>
+  <div class="row mb-2">
+    <label for="comment" class="col-lg-2 col-form-label">{{ ad_instance_name }}:</label>
+    <div class="col-lg-8">
+      <input type="text" name="comment" id="comment" class="form-control" required
+             value="{{ instance.comment|escape('html') }}">
+    </div>
+  </div>
+  <div class="row mb-2">
+    <label class="col-lg-2 col-form-label" for="config">{{ ad_instance_config }}:</label>
+    <div class="col-lg-8">
+      {% for key, config in instanceConfig %}
+      <input type="text" readonly class="form-control-plaintext" id="config" value="{{ key }}: {{ config }}">
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="offset-lg-2 col-lg-4">
+      <a class="btn btn-secondary" href="?action=instances">
+        {{ ad_entry_back }}
+      </a>
+      <button class="btn btn-primary" type="submit">
+        {{ ad_instance_button }}
+      </button>
+    </div>
+  </div>
+</form>
