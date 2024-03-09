@@ -669,7 +669,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         'index',
         'userloggedIn',
         [
-            'msgUserControl' => $adminSection,
+            'msgAdmin' => $adminSection,
             'activeUserControl' => ('ucp' == $action) ? 'active' : '',
             'msgUserControlDropDown' => sprintf(
                 '<a class="dropdown-item" href="user/ucp">%s</a>',

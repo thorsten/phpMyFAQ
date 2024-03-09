@@ -66,45 +66,45 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^bookmarks\.html$ index.php?action=bookmarks [L,QSA]
 
     # phpMyFAQ faq record page
-    RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$ index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
+    RewriteRule ^content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$ index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
 
     # phpMyFAQ category page with page count
-    RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1&seite=$2 [L,QSA]
+    RewriteRule ^category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1&seite=$2 [L,QSA]
 
     # phpMyFAQ category page
-    RewriteRule category/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1 [L,QSA]
+    RewriteRule ^category/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1 [L,QSA]
 
     # phpMyFAQ news page
-    RewriteRule news/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
+    RewriteRule ^news/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
 
     # phpMyFAQ sitemap
-    RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+    RewriteRule ^sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 
     # phpMyFAQ Google sitemap
-    RewriteRule sitemap.xml$ sitemap.xml.php [L]
-    RewriteRule sitemap.gz$ sitemap.xml.php?gz=1 [L]
-    RewriteRule sitemap.xml.gz$ sitemap.xml.php?gz=1 [L]
+    RewriteRule ^sitemap.xml$ sitemap.xml.php [L]
+    RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L]
+    RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L]
 
     # phpMyFAQ tags page with page count
-    RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
+    RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
 
     # phpMyFAQ tags page
-    RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
+    RewriteRule ^tags/([0-9]+)/([^\/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
 
     # User pages
-    RewriteRule user/(ucp|bookmarks|request-removal|logout) index.php?action=$1 [L,QSA]
-
-    # Private APIs
-    RewriteRule api/(autocomplete|bookmark/([0-9]+)|user/(.*)) api/index.php [L,QSA]
-
-    # Setup APIs
-    RewriteRule api/setup/(check|backup|update-database) api/index.php [L,QSA]
+    RewriteRule ^user/(ucp|bookmarks|request-removal|logout) index.php?action=$1 [L,QSA]
 
     # Administration API
-    RewriteRule admin/api/(.*) admin/api/index.php [L,QSA]
+    RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
+
+    # Private APIs
+    RewriteRule ^api/(autocomplete|bookmark/([0-9]+)|user/data/update|user/password/update|user/request-removal|contact) api/index.php [L,QSA]
+
+    # Setup APIs
+    RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]
 
     # REST API v3.0
     # * http://[...]/api/v3.0/<ACTION>
-    RewriteRule api/v3.0/(.*) api/index.php [L,QSA]
+    RewriteRule ^api/v3.0/(.*) api/index.php [L,QSA]
 
 </IfModule>

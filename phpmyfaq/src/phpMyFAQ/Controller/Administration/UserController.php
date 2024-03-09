@@ -42,6 +42,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/user/users')]
     public function list(Request $request): JsonResponse
     {
@@ -69,8 +72,7 @@ class UserController extends AbstractController
                 $userData[] = $userObject;
             }
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData($userData);
+            return $this->json($userData, Response::HTTP_OK);
         } else {
             $allUsers = [];
             foreach ($user->searchUsers($filtered) as $singleUser) {
@@ -80,19 +82,18 @@ class UserController extends AbstractController
                 $allUsers[] = $users;
             }
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData($allUsers);
+            return $this->json($allUsers, Response::HTTP_OK);
         }
-
-        return $jsonResponse;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/user/data')]
     public function userData(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $user->getUserById($request->get('userId'), true);
@@ -109,40 +110,38 @@ class UserController extends AbstractController
             $userdata = [];
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($userdata);
-
-        return $jsonResponse;
+        return $this->json($userdata, Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/user/permissions')]
     public function userPermissions(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $userId = $request->get('userId');
         $user->getUserById($userId, true);
-        $jsonResponse->setData($user->perm->getUserRights($userId));
 
-        return $jsonResponse;
+        return $this->json($user->perm->getUserRights($userId), Response::HTTP_OK);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/user/activate')]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $data = json_decode($request->getContent());
         if (!Token::getInstance()->verifyToken('activate-user', $data->csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -150,18 +149,13 @@ class UserController extends AbstractController
         $user->getUserById($userId, true);
         try {
             if ($user->activateUser()) {
-                $jsonResponse->setStatusCode(Response::HTTP_OK);
-                $jsonResponse->setData(['success' => $user->getStatus()]);
+                return $this->json(['success' => $user->getStatus()], Response::HTTP_OK);
             } else {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $jsonResponse->setData(['error' => $user->getStatus()]);
+                return $this->json(['error' => $user->getStatus()], Response::HTTP_BAD_REQUEST);
             }
-        } catch (TransportExceptionInterface $transportException) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => $transportException->getMessage()]);
+        } catch (TransportExceptionInterface | \Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 
     /**

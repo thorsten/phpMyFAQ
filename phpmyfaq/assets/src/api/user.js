@@ -60,3 +60,26 @@ export const updateUserPassword = async (data) => {
     console.error(error);
   }
 };
+
+export const requestUserRemoval = async (data) => {
+  try {
+    const response = await fetch('api/user/request-removal', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(serialize(data)),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return await response.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
@@ -30,20 +31,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/question/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $jsonResponse = new JsonResponse();
         $configuration = Configuration::getConfigurationInstance();
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $questionIds = $data->data->{'questions[]'};
@@ -58,13 +59,9 @@ class QuestionController extends AbstractController
                 $question->deleteQuestion((int)$questionId);
             }
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_open_question_deleted')]);
+            return $this->json(['success' => Translation::get('ad_open_question_deleted')], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
-
-        return $jsonResponse;
     }
 }
