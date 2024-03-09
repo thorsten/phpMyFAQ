@@ -127,6 +127,8 @@ class UserController extends AbstractController
     #[Route('api/user/password/update', methods: ['PUT'])]
     public function updatePassword(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $configuration = Configuration::getConfigurationInstance();
         $user = CurrentUser::getCurrentUser($configuration);
 

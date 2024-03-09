@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
@@ -34,6 +35,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AutoCompleteController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('api/autocomplete')]
     public function search(Request $request): JsonResponse
     {
