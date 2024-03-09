@@ -13,7 +13,7 @@
  * @since     2024-03-09
  */
 
-import { requestUserRemoval } from '../api/user';
+import { requestUserRemoval } from '../api';
 import { addElement } from '../utils';
 
 export const handleRequestRemoval = () => {

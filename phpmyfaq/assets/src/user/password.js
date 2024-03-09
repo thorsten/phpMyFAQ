@@ -13,7 +13,7 @@
  * @since     2024-03-03
  */
 
-import { updateUserPassword } from '../api/user';
+import { updateUserPassword } from '../api';
 import { addElement } from '../utils';
 
 export const handleUserPassword = () => {

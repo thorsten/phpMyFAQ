@@ -33,6 +33,7 @@ use phpMyFAQ\Controller\Api\TitleController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
+use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Setup\SetupController;
 use phpMyFAQ\System;
@@ -163,6 +164,10 @@ $routes->add(
 $routes->add(
     'api.bookmark',
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
+);
+$routes->add(
+    'api.contact',
+    new Route('contact', ['_controller' => [ContactController::class, 'create'], '_methods' => 'POST'])
 );
 $routes->add(
     'api.user.password',

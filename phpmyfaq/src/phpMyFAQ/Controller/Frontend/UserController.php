@@ -25,7 +25,6 @@ use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;

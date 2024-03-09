@@ -17,6 +17,7 @@ import 'bootstrap';
 import Masonry from 'masonry-layout';
 
 import { handleBookmarks, saveFormData } from './api';
+import { handleContactForm } from './contact';
 import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
@@ -75,6 +76,11 @@ handleUserPassword();
 // Handle request removal
 //
 handleRequestRemoval();
+
+//
+// Handle contact form
+//
+handleContactForm();
 
 //
 // Masonry on startpage

@@ -728,53 +728,6 @@ switch ($action) {
 
         break;
 
-    //
-    // Send mails from contact form
-    //
-    case 'submit-contact':
-        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-
-        $author = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
-        $question = trim((string) Filter::filterVar($postData['question'], FILTER_SANITIZE_SPECIAL_CHARS));
-
-        // If e-mail address is set to optional
-        if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $faqConfig->getAdminEmail();
-        }
-
-        if ($author !== '' && $author !== '0' && !empty($email) && ($question !== '' && $question !== '0') && $stopWords->checkBannedWord($question)) {
-            $question = sprintf(
-                "%s: %s\n%s: %s\n\n %s",
-                Translation::get('msgNewContentName'),
-                $author,
-                Translation::get('msgNewContentMail'),
-                $email,
-                $question
-            );
-
-            $mailer = new Mail($faqConfig);
-            try {
-                $mailer->setReplyTo($email, $author);
-                $mailer->addTo($faqConfig->getAdminEmail());
-                $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $faqConfig);
-                $mailer->message = $question;
-                $mailer->send();
-                unset($mailer);
-
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => Translation::get('msgMailContact')]);
-            } catch (Exception | TransportExceptionInterface $e) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $e->getMessage()]);
-            }
-        } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('err_sendMail')]);
-        }
-
-        break;
-
     // Send mails to friends
     case 'sendtofriends':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);

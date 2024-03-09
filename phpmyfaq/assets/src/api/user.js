@@ -64,7 +64,7 @@ export const updateUserPassword = async (data) => {
 export const requestUserRemoval = async (data) => {
   try {
     const response = await fetch('api/user/request-removal', {
-      method: 'PUT',
+      method: 'POST',
       cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',

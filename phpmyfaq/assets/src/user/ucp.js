@@ -13,7 +13,7 @@
  * @since     2024-03-03
  */
 
-import { updateUserControlPanelData } from '../api/user';
+import { updateUserControlPanelData } from '../api';
 import { addElement } from '../utils';
 
 export const handleUserControlPanel = () => {
