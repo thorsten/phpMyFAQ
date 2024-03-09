@@ -672,62 +672,6 @@ switch ($action) {
 
         break;
 
-    case 'add-voting':
-        $faq = new Faq($faqConfig);
-        $rating = new Rating($faqConfig);
-
-        $faqId = Filter::filterVar($postData['id'] ?? null, FILTER_VALIDATE_INT, 0);
-        $vote = Filter::filterVar($postData['value'], FILTER_VALIDATE_INT);
-        $userIp = Filter::filterVar($request->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP);
-
-        if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
-            try {
-                $faqSession->userTracking('save_voting', $faqId);
-            } catch (Exception) {
-                // @todo handle the exception
-            }
-
-            $votingData = [
-                'record_id' => $faqId,
-                'vote' => $vote,
-                'user_ip' => $userIp,
-            ];
-
-            if ($rating->getNumberOfVotings($faqId) === 0) {
-                $rating->addVoting($votingData);
-            } else {
-                $rating->update($votingData);
-            }
-
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setData([
-                'success' => Translation::get('msgVoteThanks'),
-                'rating' => $rating->getVotingResult($faqId),
-            ]);
-        } elseif (!$rating->check($faqId, $userIp)) {
-            try {
-                $faqSession->userTracking('error_save_voting', $faqId);
-            } catch (Exception $exception) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $exception->getMessage()]);
-            }
-
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('err_VoteTooMuch')]);
-        } else {
-            try {
-                $faqSession->userTracking('error_save_voting', $faqId);
-            } catch (Exception $exception) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $exception->getMessage()]);
-            }
-
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('err_noVote')]);
-        }
-
-        break;
-
     // Send mails to friends
     case 'sendtofriends':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);

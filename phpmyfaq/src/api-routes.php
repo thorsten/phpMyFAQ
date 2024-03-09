@@ -35,6 +35,7 @@ use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
 use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\UserController;
+use phpMyFAQ\Controller\Frontend\VotingController;
 use phpMyFAQ\Controller\Setup\SetupController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
@@ -183,6 +184,10 @@ $routes->add(
 $routes->add(
     'api.user.update',
     new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
+);
+$routes->add(
+    'api.voting',
+    new Route('voting', ['_controller' => [VotingController::class, 'create'], '_methods' => 'POST'])
 );
 
 // Setup REST API

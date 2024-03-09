@@ -4,3 +4,4 @@ export * from './contact';
 export * from './forms';
 export * from './setup';
 export * from './user';
+export * from './voting';
