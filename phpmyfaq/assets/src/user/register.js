@@ -1,5 +1,5 @@
 /**
- * Contact form functionality
+ * User registration functionality
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,14 +13,14 @@
  * @since     2024-03-10
  */
 
-import { send } from './api';
-import { addElement } from './utils';
+import { register } from '../api';
+import { addElement } from '../utils';
 
-export const handleContactForm = () => {
-  const contactSubmit = document.getElementById('pmf-submit-contact');
+export const handleRegister = () => {
+  const registerSubmit = document.getElementById('pmf-submit-register');
 
-  if (contactSubmit) {
-    contactSubmit.addEventListener('click', async (event) => {
+  if (registerSubmit) {
+    registerSubmit.addEventListener('click', async (event) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -28,14 +28,14 @@ export const handleContactForm = () => {
       if (!formValidation.checkValidity()) {
         formValidation.classList.add('was-validated');
       } else {
-        const form = document.querySelector('#pmf-contact-form');
+        const form = document.querySelector('#pmf-register-form');
         const loader = document.getElementById('loader');
         const formData = new FormData(form);
-        const response = await send(formData);
+        const response = await register(formData);
 
         if (response.success) {
           loader.classList.add('d-none');
-          const message = document.getElementById('pmf-contact-response');
+          const message = document.getElementById('pmf-register-response');
           message.insertAdjacentElement(
             'afterend',
             addElement('div', { classList: 'alert alert-success', innerText: response.success })
@@ -44,7 +44,7 @@ export const handleContactForm = () => {
 
         if (response.error) {
           loader.classList.add('d-none');
-          const message = document.getElementById('pmf-contact-response');
+          const message = document.getElementById('pmf-register-response');
           message.insertAdjacentElement(
             'afterend',
             addElement('div', { classList: 'alert alert-danger', innerText: response.error })

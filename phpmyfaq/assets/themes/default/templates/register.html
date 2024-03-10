@@ -7,39 +7,39 @@
       <div class="spinner-border text-primary d-none" id="loader" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <div id="faqs"></div>
+      <div id="pmf-register-response"></div>
     </div>
   </div>
 
-  <form id="formValues" method="post" action="#" class="needs-validation" novalidate>
-    <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+  <form id="pmf-register-form" method="post" action="#" class="needs-validation" novalidate>
+    <input type="hidden" name="lang" id="lang" value="{{ lang }}">
 
     <div class="row mb-2">
       <label class="col-3 form-control-label" for="realname">{{ realname }}</label>
       <div class="col-9">
-        <input type="text" name="realname" id="realname" required class="form-control" />
+        <input type="text" name="realname" id="realname" required class="form-control">
       </div>
     </div>
 
     <div class="row mb-2">
       <label class="col-3 form-control-label" for="name">{{ loginname }}</label>
       <div class="col-9">
-        <input type="text" name="name" id="name" required class="form-control" />
+        <input type="text" name="name" id="name" required class="form-control">
       </div>
     </div>
 
     <div class="row mb-2">
       <label class="col-3 form-control-label" for="email">{{ email }}</label>
       <div class="col-9">
-        <input type="email" name="email" id="email" required class="form-control" />
+        <input type="email" name="email" id="email" required class="form-control">
       </div>
     </div>
 
     <div class="row mb-2">
       <div class="offset-3 col-sm-9">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible" />
-          <label class="form-check-label" for="is_visible"> {{ is_visible }} </label>
+          <input class="form-check-input" type="checkbox" id="isVisible" name="isVisible">
+          <label class="form-check-label" for="isVisible"> {{ is_visible }} </label>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
 
     <div class="row mb-2">
       <div class="col-12 text-end">
-        <button class="btn btn-primary" type="submit" id="pmf-submit-values" data-pmf-form="save-registration">
+        <button class="btn btn-primary" type="submit" id="pmf-submit-register" data-pmf-form="save-registration">
           {{ submitRegister }}
         </button>
       </div>

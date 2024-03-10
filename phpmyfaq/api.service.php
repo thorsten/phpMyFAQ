@@ -642,36 +642,6 @@ switch ($action) {
 
         break;
 
-    case 'save-registration':
-        $registration = new RegistrationHelper($faqConfig);
-
-        $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-
-        $fullName = trim((string) Filter::filterVar($postData['realname'], FILTER_SANITIZE_SPECIAL_CHARS));
-        $userName = trim((string) Filter::filterVar($postData['name'], FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL));
-        $isVisible = Filter::filterVar($postData['is_visible'], FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
-
-        if (!$registration->isDomainAllowed($email)) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'The domain is not whitelisted.']);
-            break;
-        }
-
-        if (!is_null($userName) && !is_null($email) && !is_null($fullName)) {
-            try {
-                $response->setData($registration->createUser($userName, $fullName, $email, $isVisible));
-            } catch (Exception | TransportExceptionInterface $exception) {
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => $exception->getMessage()]);
-            }
-        } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('err_sendMail')]);
-        }
-
-        break;
-
     // Send mails to friends
     case 'sendtofriends':
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);

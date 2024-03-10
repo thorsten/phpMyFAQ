@@ -20,7 +20,7 @@ import { handleBookmarks, saveFormData } from './api';
 import { handleContactForm } from './contact';
 import { handleComments, handleSaveComment, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
-import { handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
+import { handleRegister, handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
 
@@ -81,6 +81,11 @@ handleRequestRemoval();
 // Handle contact form
 //
 handleContactForm();
+
+//
+// Handle registration form
+//
+handleRegister();
 
 //
 // Masonry on startpage

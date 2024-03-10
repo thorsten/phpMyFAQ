@@ -34,6 +34,7 @@ use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
 use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\VotingController;
 use phpMyFAQ\Controller\Setup\SetupController;
@@ -169,6 +170,10 @@ $routes->add(
 $routes->add(
     'api.contact',
     new Route('contact', ['_controller' => [ContactController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.register',
+    new Route('register', ['_controller' => [RegistrationFrontendController::class, 'create']])
 );
 $routes->add(
     'api.user.password',
