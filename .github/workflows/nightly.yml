@@ -95,7 +95,7 @@ jobs:
           args: zip -X -r phpMyFAQ-${{ env.release_name }}.zip phpmyfaq -x "phpmyfaq/src/libs/tecnickcom/tcpdf/fonts/*"
 
       - name: Update nightly release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           prerelease: true
           generate_release_notes: false
