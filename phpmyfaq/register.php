@@ -43,11 +43,6 @@ try {
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
-
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 $template->parse(

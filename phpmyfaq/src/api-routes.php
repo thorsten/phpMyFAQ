@@ -33,6 +33,7 @@ use phpMyFAQ\Controller\Api\TitleController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
+use phpMyFAQ\Controller\Frontend\CaptchaController;
 use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
 use phpMyFAQ\Controller\Frontend\UserController;
@@ -158,7 +159,9 @@ $routes->add(
     new Route("v$apiVersion/version", ['_controller' => [VersionController::class, 'index']])
 );
 
+//
 // Private REST API
+//
 $routes->add(
     'api.autocomplete',
     new Route('autocomplete', ['_controller' => [AutoCompleteController::class, 'search']])
@@ -166,6 +169,10 @@ $routes->add(
 $routes->add(
     'api.bookmark',
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
+);
+$routes->add(
+    'api.captcha',
+    new Route('captcha', ['_controller' => [CaptchaController::class, 'renderImage']])
 );
 $routes->add(
     'api.contact',
@@ -195,7 +202,9 @@ $routes->add(
     new Route('voting', ['_controller' => [VotingController::class, 'create'], '_methods' => 'POST'])
 );
 
+//
 // Setup REST API
+//
 $routes->add(
     'api.setup.check',
     new Route('setup/check', ['_controller' => [SetupController::class, 'check'], '_methods' => 'POST'])

@@ -20,4 +20,6 @@ namespace phpMyFAQ\Captcha;
 interface CaptchaInterface
 {
     public function checkCaptchaCode(string $code): bool;
+
+    public function setUserIsLoggedIn(bool $userIsLoggedIn): BuiltinCaptcha|GoogleRecaptcha;
 }

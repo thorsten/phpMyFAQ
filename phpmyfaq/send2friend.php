@@ -42,11 +42,6 @@ if (!$faqConfig->get('main.enableSendToFriend')) {
     exit();
 }
 
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
-
 try {
     $faqSession->userTracking('send2friend', 0);
 } catch (Exception) {

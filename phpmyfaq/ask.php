@@ -39,11 +39,6 @@ $request = Request::createFromGlobals();
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
-
 try {
     $faqSession->userTracking('ask_question', 0);
 } catch (Exception) {

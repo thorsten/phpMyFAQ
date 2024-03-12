@@ -70,10 +70,6 @@ $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
 
 $currentCategory = $cat;
 

@@ -40,11 +40,6 @@ $captcha->setSessionId($sids);
 
 $comment = new Comments($faqConfig);
 
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
-
 $request = Request::createFromGlobals();
 $newsId = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
 

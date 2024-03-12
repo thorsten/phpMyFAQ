@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq\FaqPermission;
@@ -37,26 +36,25 @@ class AutoCompleteController extends AbstractController
 {
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[Route('api/autocomplete')]
     public function search(Request $request): JsonResponse
     {
-        $faqConfig = Configuration::getConfigurationInstance();
-
         $searchString = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $user = CurrentUser::getCurrentUser($faqConfig);
+        $user = CurrentUser::getCurrentUser($this->configuration);
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $category = new Category($faqConfig, $currentGroups);
+        $category = new Category($this->configuration, $currentGroups);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->transform(0);
         $category->buildCategoryTree();
 
-        $faqPermission = new FaqPermission($faqConfig);
-        $faqSearch = new Search($faqConfig);
-        $searchResultSet = new SearchResultSet($user, $faqPermission, $faqConfig);
+        $faqPermission = new FaqPermission($this->configuration);
+        $faqSearch = new Search($this->configuration);
+        $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
 
         if (!is_null($searchString)) {
             $faqSearch->setCategory($category);
@@ -65,7 +63,7 @@ class AutoCompleteController extends AbstractController
 
             $searchResultSet->reviewResultSet($searchResult);
 
-            $faqSearchHelper = new SearchHelper($faqConfig);
+            $faqSearchHelper = new SearchHelper($this->configuration);
             $faqSearchHelper->setSearchTerm($searchString);
             $faqSearchHelper->setCategory($category);
             $faqSearchHelper->setPlurals(new Plurals());

@@ -64,8 +64,6 @@ $request = Request::createFromGlobals();
 $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
 
-$showCaptcha = Filter::filterVar($request->query->get('gen'), FILTER_SANITIZE_SPECIAL_CHARS);
-
 $faqConfig = Configuration::getConfigurationInstance();
 
 //
@@ -75,7 +73,7 @@ $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
-if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
+if (!Language::isASupportedLanguage($faqLangCode)) {
     $faqLangCode = 'en';
 }
 

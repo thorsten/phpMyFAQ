@@ -56,11 +56,6 @@ $captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
 
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
-
 try {
     $faqSession->userTracking('new_entry', 0);
 } catch (Exception $exception) {

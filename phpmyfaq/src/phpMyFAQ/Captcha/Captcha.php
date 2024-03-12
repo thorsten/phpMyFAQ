@@ -25,7 +25,7 @@ class Captcha
 
     private static Configuration $configuration;
 
-    public static function getInstance(Configuration $configuration): ?CaptchaInterface
+    public static function getInstance(Configuration $configuration): BuiltinCaptcha|GoogleRecaptcha
     {
         self::$configuration = $configuration;
 

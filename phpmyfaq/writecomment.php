@@ -25,7 +25,3 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha = new BuiltinCaptcha($faqConfig);
 $captcha->setSessionId($sids);
 
-if (!is_null($showCaptcha)) {
-    $captcha->drawCaptchaImage();
-    exit;
-}

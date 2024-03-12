@@ -19,6 +19,7 @@ namespace phpMyFAQ;
 
 use ErrorException;
 use phpMyFAQ\Core\Exception;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -99,6 +100,8 @@ readonly class Application
             $response = new Response('Not Found', Response::HTTP_NOT_FOUND);
         } catch (UnauthorizedHttpException) {
             $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
+        } catch (BadRequestException $exception) {
+            $response = new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (ErrorException | Exception $exception) {
             $response = new Response(
                 sprintf(

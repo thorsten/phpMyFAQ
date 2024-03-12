@@ -147,15 +147,10 @@ class BuiltinCaptcha implements CaptchaInterface
      *
      * @param string $action The action parameter
      */
-    public function renderCaptchaImage(string $action): string
+    public function renderCaptchaImage(): string
     {
         return sprintf(
-            '<img id="captchaImage" %s src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s">',
-            'class="rounded border"',
-            $_SERVER['SCRIPT_NAME'],
-            $this->sessionId ?? '',
-            $action,
-            $_SERVER['REQUEST_TIME'],
+            '<img id="captchaImage" class="rounded border" src="./api/captcha" height="%d" width="%d" alt="%s">',
             $this->height,
             $this->width,
             'Chuck Norris has counted to infinity. Twice.'
@@ -163,25 +158,24 @@ class BuiltinCaptcha implements CaptchaInterface
     }
 
     /**
-     * Draw the Captcha.
+     * Returns the Captcha.
      *
      * @throws Exception
      */
-    public function drawCaptchaImage(): void
+    public function getCaptchaImage(): string
     {
         $this->createBackground();
         $this->drawLines();
         $this->generateCaptchaCode($this->captchaLength);
         $this->drawText();
-        if (function_exists('imagejpeg')) {
-            header('Content-Type: image/jpeg');
-            imagejpeg($this->gdImage, null, $this->quality);
-        } elseif (function_exists('imagegif')) {
-            header('Content-Type: image/gif');
-            imagegif($this->gdImage);
-        }
+
+        ob_start();
+        imagejpeg($this->gdImage, null, $this->quality);
+        $image = ob_get_clean();
 
         imagedestroy($this->gdImage);
+
+        return $image;
     }
 
     /**

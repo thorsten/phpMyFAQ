@@ -1,9 +1,23 @@
 <?php
 
+/**
+ * The Voting Controller
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-03-03
+ */
+
 namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
@@ -21,11 +35,9 @@ class VotingController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
-
-        $rating = new Rating($configuration);
-        $session = new Session($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
+        $rating = new Rating($this->configuration);
+        $session = new Session($this->configuration);
         $session->setCurrentUser($user);
 
         $data = json_decode($request->getContent());
@@ -38,7 +50,7 @@ class VotingController extends AbstractController
             try {
                 $session->userTracking('save_voting', $faqId);
             } catch (Exception $exception) {
-                $configuration->getLogger()->error('Error saving voting', ['exception' => $exception]);
+                $this->configuration->getLogger()->error('Error saving voting', ['exception' => $exception]);
             }
 
             $votingData = [

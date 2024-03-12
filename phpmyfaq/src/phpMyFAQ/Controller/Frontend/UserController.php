@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -43,8 +42,7 @@ class UserController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -129,8 +127,7 @@ class UserController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -157,14 +154,17 @@ class UserController extends AbstractController
                     sprintf('<br>New Password: %s<br><br>', $newPassword) .
                     Translation::get('lostpwd_text_2');
 
-                $mailer = new Mail($configuration);
+                $mailer = new Mail($this->configuration);
                 try {
                     $mailer->addTo($email);
                 } catch (Exception $exception) {
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
-                $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $configuration);
+                $mailer->subject = Utils::resolveMarkers(
+                    '[%sitename%] Username / password request',
+                    $this->configuration
+                );
                 $mailer->message = $text;
                 try {
                     $mailer->send();
@@ -189,9 +189,8 @@ class UserController extends AbstractController
     #[Route('api/user/request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $stopWords = new StopWords($configuration);
-        $user = CurrentUser::getCurrentUser($configuration);
+        $stopWords = new StopWords($this->configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -207,8 +206,8 @@ class UserController extends AbstractController
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
         // If e-mail address is set to optional
-        if (!$configuration->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $configuration->getAdminEmail();
+        if (!$this->configuration->get('main.optionalMailAddress') && is_null($email)) {
+            $email = $this->configuration->getAdminEmail();
         }
 
         // Validate User ID, Username and email
@@ -239,11 +238,11 @@ class UserController extends AbstractController
                 $question
             );
 
-            $mailer = new Mail($configuration);
+            $mailer = new Mail($this->configuration);
             try {
                 $mailer->setReplyTo($email, $author);
-                $mailer->addTo($configuration->getAdminEmail());
-                $mailer->subject = $configuration->getTitle() . ': Remove User Request';
+                $mailer->addTo($this->configuration->getAdminEmail());
+                $mailer->subject = $this->configuration->getTitle() . ': Remove User Request';
                 $mailer->message = $question;
                 $mailer->send();
                 unset($mailer);
