@@ -18,7 +18,7 @@ import Masonry from 'masonry-layout';
 
 import { handleBookmarks, saveFormData } from './api';
 import { handleContactForm } from './contact';
-import { handleComments, handleSaveComment, handleUserVoting } from './faq';
+import { handleComments, handleSaveComment, handleShare, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import { handleRegister, handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
@@ -56,6 +56,11 @@ handleUserVoting();
 //
 handleSaveComment();
 handleComments();
+
+//
+// Handle sharing
+//
+handleShare();
 
 //
 // Handle Bookmarks

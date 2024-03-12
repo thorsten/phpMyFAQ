@@ -4,11 +4,11 @@
       <div class="spinner-border text-primary d-none" id="loader" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <div id="faqs"></div>
+      <div id="pmf-share-response"></div>
     </div>
   </div>
 
-  <form id="formValues" action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
+  <form id="pmf-share-form" action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
     <input type="hidden" name="{{ msgS2FReferrer }}" value="{{ send2friendLink }}">
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
     <input type="hidden" name="faqId" id="faqId" value="{{ faqId }}">
@@ -83,7 +83,7 @@
     {{ captchaFieldset }}
 
     <div class="form-actions text-end">
-      <button class="btn btn-primary btn-lg" type="submit" id="pmf-submit-values" data-pmf-form="sendtofriends">
+      <button class="btn btn-primary btn-lg" type="submit" id="pmf-submit-share" data-pmf-form="share">
         {{ msgS2FButton }}
       </button>
     </div>

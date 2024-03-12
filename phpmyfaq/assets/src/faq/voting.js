@@ -12,6 +12,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-20
  */
+
 import { addElement } from '../utils';
 import { saveVoting } from '../api';
 

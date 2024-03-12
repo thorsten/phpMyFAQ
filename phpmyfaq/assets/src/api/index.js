@@ -4,5 +4,6 @@ export * from './contact';
 export * from './forms';
 export * from './register';
 export * from './setup';
+export * from './share';
 export * from './user';
 export * from './voting';
