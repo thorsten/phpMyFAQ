@@ -46,7 +46,7 @@ class ContactController extends AbstractController
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
-        if (!$this->captchaCodeIsValid($data->captcha)) {
+        if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 

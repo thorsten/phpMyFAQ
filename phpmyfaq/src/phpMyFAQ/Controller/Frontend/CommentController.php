@@ -19,7 +19,7 @@ class CommentController extends AbstractController
     {
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!$this->captchaCodeIsValid($data->captcha)) {
+        if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 

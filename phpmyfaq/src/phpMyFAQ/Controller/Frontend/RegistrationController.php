@@ -44,7 +44,7 @@ class RegistrationController extends AbstractController
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $isVisible = Filter::filterVar($data->isVisible, FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
 
-        if (!$this->captchaCodeIsValid($data->captcha)) {
+        if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 

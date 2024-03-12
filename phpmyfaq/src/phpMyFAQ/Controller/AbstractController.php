@@ -22,11 +22,10 @@ use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -179,14 +178,23 @@ abstract class AbstractController
 
     /**
      * @throws Exception
+     * @throws \JsonException
      */
-    protected function captchaCodeIsValid(string $captchaCode): bool
+    protected function captchaCodeIsValid(Request $request): bool
     {
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
         $captcha = Captcha::getInstance($this->configuration);
         $captcha->setUserIsLoggedIn($currentUser->isLoggedIn());
 
-        if ($captcha->checkCaptchaCode($captchaCode)) {
+        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        if ($this->configuration->get('security.enableGoogleReCaptchaV2')) {
+            $code = Filter::filterVar($data->{'g-recaptcha-response'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        } else {
+            $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+
+        if ($captcha->checkCaptchaCode($code)) {
             return true;
         }
 
