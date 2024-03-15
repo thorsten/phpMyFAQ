@@ -62,7 +62,7 @@ class Sqlite3 implements DatabaseDriver
         string $user,
         string $password,
         string $database = '',
-        int $port = null
+        int|null $port = null
     ): ?bool {
         $this->conn = new \Sqlite3($host);
 
