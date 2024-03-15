@@ -22,12 +22,12 @@ namespace phpMyFAQ;
  *
  * @package phpMyFAQ
  */
-class Visits
+readonly class Visits
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

@@ -24,12 +24,12 @@ use phpMyFAQ\Entity\QuestionEntity;
  *
  * @package phpMyFAQ
  */
-class Question
+readonly class Question
 {
     /**
      * Question constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

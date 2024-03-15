@@ -27,12 +27,12 @@ use Symfony\Component\HttpFoundation\IpUtils;
  *
  * @package phpMyFAQ
  */
-class Network
+readonly class Network
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

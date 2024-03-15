@@ -24,17 +24,17 @@ use phpMyFAQ\Language\Plurals;
  *
  * @package phpMyFAQ
  */
-class Rating
+readonly class Rating
 {
     /**
      * Plural form support.
      */
-    private readonly Plurals $plr;
+    private Plurals $plr;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
         $this->plr = new Plurals();
     }

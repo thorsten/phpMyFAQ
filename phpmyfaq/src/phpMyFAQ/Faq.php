@@ -22,7 +22,6 @@
 
 namespace phpMyFAQ;
 
-use DateTimeInterface;
 use Exception;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;

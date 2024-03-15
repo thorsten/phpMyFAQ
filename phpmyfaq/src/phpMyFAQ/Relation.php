@@ -25,12 +25,12 @@ use phpMyFAQ\Search\SearchFactory;
  * Class Relation
  * @package phpMyFAQ
  */
-class Relation
+readonly class Relation
 {
     /**
      * Relation constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

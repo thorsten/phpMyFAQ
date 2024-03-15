@@ -26,12 +26,12 @@ use Exception;
  *
  * @package phpMyFAQ
  */
-class Date
+readonly class Date
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

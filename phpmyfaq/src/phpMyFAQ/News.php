@@ -24,12 +24,12 @@ use Exception;
  *
  * @package phpMyFAQ
  */
-class News
+readonly class News
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

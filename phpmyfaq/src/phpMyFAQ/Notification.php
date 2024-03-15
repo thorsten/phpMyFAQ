@@ -23,18 +23,18 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  *
  * @package phpMyFAQ
  */
-class Notification
+readonly class Notification
 {
-    private readonly Mail $mail;
+    private Mail $mail;
 
-    private readonly Faq $faq;
+    private Faq $faq;
 
     /**
      * Constructor.
      *
      * @throws Core\Exception
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
         $this->mail = new Mail($this->configuration);
         $this->faq = new Faq($this->configuration);
