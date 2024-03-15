@@ -125,12 +125,8 @@ class Auth
     /**
      * @param bool $readOnly boolean flag
      */
-    public function setReadOnly(bool $readOnly = null): bool
+    public function setReadOnly(bool $readOnly = false): bool
     {
-        if ($readOnly === null) {
-            return $this->readOnly;
-        }
-
         $oldReadOnly = $this->readOnly;
         $this->readOnly = $readOnly;
 

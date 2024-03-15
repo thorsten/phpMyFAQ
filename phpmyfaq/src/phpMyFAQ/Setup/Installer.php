@@ -605,7 +605,7 @@ class Installer extends Setup
      * @param array|null $setup
      * @throws Exception|AuthenticationException
      */
-    public function startInstall(array $setup = null): void
+    public function startInstall(array|null $setup = null): void
     {
         $ldapSetup = [];
         $query = [];

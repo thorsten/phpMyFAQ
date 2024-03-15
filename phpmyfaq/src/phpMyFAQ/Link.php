@@ -229,7 +229,7 @@ class Link
      *
      * @param string|null $path
      */
-    public function getSystemUri(string $path = null): string
+    public function getSystemUri(string|null $path = null): string
     {
         $pattern = [];
         // Remove any ref to standard ports 80 and 443.
@@ -277,7 +277,7 @@ class Link
      *
      * @param string|null $path
      */
-    public static function getSystemRelativeUri(string $path = null): string
+    public static function getSystemRelativeUri(string|null $path = null): string
     {
         if (isset($path)) {
             return str_replace($path, '', (string) $_SERVER['SCRIPT_NAME']);
