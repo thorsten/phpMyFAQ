@@ -4,7 +4,9 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,5 +26,16 @@ class FaqController extends AbstractController
         }
 
         return $this->json(['status' => 'ok']);
+    }
+
+    private function isAddingFaqsAllowed(CurrentUser $user): bool
+    {
+        if (
+            !$this->configuration->get('records.allowNewFaqsForGuests') &&
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)
+        ) {
+            return false;
+        }
+        return true;
     }
 }

@@ -91,22 +91,22 @@ class Installer extends Setup
         ],
         //10 => "addnews",
         [
-            'name' => 'addnews',
+            'name' => PermissionType::NEWS_ADD->value,
             'description' => 'Right to add news',
         ],
         //11 => "editnews",
         [
-            'name' => 'editnews',
+            'name' => PermissionType::NEWS_EDIT->value,
             'description' => 'Right to edit news',
         ],
         //12 => "delnews",
         [
-            'name' => 'delnews',
+            'name' => PermissionType::NEWS_DELETE->value,
             'description' => 'Right to delete news',
         ],
         //13 => "addcateg",
         [
-            'name' => 'addcateg',
+            'name' => PermissionType::CATEGORY_ADD->value,
             'description' => 'Right to add categories',
         ],
         [
@@ -119,12 +119,12 @@ class Installer extends Setup
         ],
         //16 => "passwd",
         [
-            'name' => 'passwd',
+            'name' => PermissionType::PASSWORD_CHANGE->value,
             'description' => 'Right to change passwords',
         ],
         //17 => "editconfig",
         [
-            'name' => 'editconfig',
+            'name' => PermissionType::CONFIGURATION_EDIT->value,
             'description' => 'Right to edit configuration',
         ],
         //18 => "viewadminlink",
@@ -134,12 +134,12 @@ class Installer extends Setup
         ],
         //20 => "backup",
         [
-            'name' => 'backup',
+            'name' => PermissionType::BACKUP->value,
             'description' => 'Right to save backups',
         ],
         //21 => "restore",
         [
-            'name' => 'restore',
+            'name' => PermissionType::RESTORE->value,
             'description' => 'Right to load backups',
         ],
         //22 => "delquestion",
@@ -239,7 +239,7 @@ class Installer extends Setup
         ],
         // 41 => 'addcomment'
         [
-            'name' => 'addcomment',
+            'name' => PermissionType::COMMENT_ADD->value,
             'description' => 'Right to add comments in frontend',
         ],
         // 42 => 'editinstances'

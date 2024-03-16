@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
@@ -231,7 +232,7 @@ class CommentController extends AbstractController
     {
         if (
             !$this->configuration->get('records.allowCommentsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), 'addcomment')
+            !$user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_ADD->value)
         ) {
             return false;
         }

@@ -31,6 +31,7 @@ enum PermissionType: string
 
     case CATEGORY_EDIT = 'editcateg';
 
+    case COMMENT_ADD = 'addcomment';
     case COMMENT_DELETE = 'delcomment';
 
     case CONFIGURATION_EDIT = 'editconfig';
@@ -62,6 +63,12 @@ enum PermissionType: string
     case INSTANCE_DELETE = 'delinstances';
 
     case INSTANCE_EDIT = 'editinstances';
+
+    case NEWS_ADD = 'addnews';
+
+    case NEWS_EDIT = 'editnews';
+
+    case NEWS_DELETE = 'delnews';
 
     case PASSWORD_CHANGE = 'passwd';
 
