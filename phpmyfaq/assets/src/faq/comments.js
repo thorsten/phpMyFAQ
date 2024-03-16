@@ -30,7 +30,6 @@ export const handleSaveComment = () => {
         form.classList.add('was-validated');
       } else {
         const comments = new FormData(form);
-
         const response = await createComment(comments);
 
         if (response.success) {
@@ -42,6 +41,7 @@ export const handleSaveComment = () => {
           modal.style.display = 'none';
           modal.classList.remove('show');
           modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+          form.reset();
         }
 
         if (response.error) {

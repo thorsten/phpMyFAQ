@@ -41,6 +41,7 @@ export const handleShare = () => {
             'afterend',
             addElement('div', { classList: 'alert alert-success', innerText: response.success })
           );
+          form.reset();
         }
 
         if (response.error) {

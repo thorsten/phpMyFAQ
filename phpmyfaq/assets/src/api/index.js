@@ -2,6 +2,7 @@ export * from './autocomplete';
 export * from './bookmarks';
 export * from './comment';
 export * from './contact';
+export * from './faq';
 export * from './forms';
 export * from './register';
 export * from './setup';

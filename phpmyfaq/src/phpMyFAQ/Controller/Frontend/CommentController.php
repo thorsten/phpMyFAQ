@@ -66,7 +66,7 @@ class CommentController extends AbstractController
         );
 
         if (!$this->isCommentAllowed($user)) {
-            return $this->json(['error' => Translation::get('msgNotAllowed')], Response::HTTP_FORBIDDEN);
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
         if (!$this->captchaCodeIsValid($request)) {
