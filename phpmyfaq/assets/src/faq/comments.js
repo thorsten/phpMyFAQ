@@ -14,6 +14,7 @@
  */
 
 import { addElement, serialize } from '../utils';
+import { createComment } from '../api';
 
 export const handleSaveComment = () => {
   const saveButton = document.getElementById('pmf-button-save-comment');
@@ -21,7 +22,7 @@ export const handleSaveComment = () => {
   const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
 
   if (saveButton) {
-    saveButton.addEventListener('click', (event) => {
+    saveButton.addEventListener('click', async (event) => {
       event.preventDefault();
       event.stopPropagation();
       const form = document.querySelector('#pmf-add-comment-form');
@@ -30,46 +31,26 @@ export const handleSaveComment = () => {
       } else {
         const comments = new FormData(form);
 
-        fetch('api.service.php?action=add-comment', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(serialize(comments)),
-        })
-          .then(async (response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error('Network response was not ok: ', { cause: { response } });
-          })
-          .then((response) => {
-            if (response.success) {
-              const message = document.getElementById('pmf-comment-add-success');
-              message.insertAdjacentElement(
-                'afterend',
-                addElement('div', { classList: 'alert alert-success', innerText: response.success })
-              );
-              modal.style.display = 'none';
-              modal.classList.remove('show');
-              modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
-            } else {
-              const element = document.getElementById('pmf-add-comment-error');
-              element.insertAdjacentElement(
-                'afterend',
-                addElement('div', { classList: 'alert alert-danger', innerText: response.error })
-              );
-            }
-          })
-          .catch(async (error) => {
-            const element = document.getElementById('pmf-add-comment-error');
-            const errorMessage = await error.cause.response.json();
-            element.insertAdjacentElement(
-              'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
-            );
-          });
+        const response = await createComment(comments);
+
+        if (response.success) {
+          const message = document.getElementById('pmf-comment-add-success');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-success', innerText: response.success })
+          );
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+          modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+        }
+
+        if (response.error) {
+          const message = document.getElementById('pmf-comment-add-error');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          );
+        }
       }
     });
   }

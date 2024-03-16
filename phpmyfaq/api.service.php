@@ -21,10 +21,7 @@ const IS_VALID_PHPMYFAQ = null;
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Category;
-use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Entity\Comment;
-use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
@@ -33,24 +30,18 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\QuestionHelper;
-use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
-use phpMyFAQ\Mail;
 use phpMyFAQ\Network;
-use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
-use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session;
-use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -166,172 +157,6 @@ if ($fatalError) {
 
 // Save user generated content
 switch ($action) {
-    //
-    // Comments
-    //
-    case 'add-comment':
-        if (
-            !$faqConfig->get('records.allowCommentsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), 'addcomment')
-        ) {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => Translation::get('err_NotAuth')]);
-            break;
-        }
-
-        $faq = new Faq($faqConfig);
-        $oComment = new Comments($faqConfig);
-        $category = new Category($faqConfig);
-
-        $type = Filter::filterVar($postData['type'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqId = Filter::filterVar($postData['id'] ?? null, FILTER_VALIDATE_INT, 0);
-        $newsId = Filter::filterVar($postData['newsId'] ?? null, FILTER_VALIDATE_INT);
-        $username = Filter::filterVar($postData['user'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $mailer = Filter::filterVar($postData['mail'], FILTER_VALIDATE_EMAIL);
-        $comment = Filter::filterVar($postData['comment_text'], FILTER_SANITIZE_SPECIAL_CHARS);
-
-        switch ($type) {
-            case 'news':
-                $id = $newsId;
-                break;
-            case 'faq':
-                $id = $faqId;
-                break;
-        }
-
-        // If e-mail address is set to optional
-        if (!$faqConfig->get('main.optionalMailAddress') && is_null($mailer)) {
-            $mailer = $faqConfig->getAdminEmail();
-        }
-
-        // Check display name and e-mail address for not logged-in users
-        if (!$user->isLoggedIn()) {
-            $user = new User($faqConfig);
-            if ($user->checkDisplayName($username) && $user->checkMailAddress($mailer)) {
-                $response->setStatusCode(Response::HTTP_CONFLICT);
-                $response->setData(['error' => Translation::get('err_SaveComment')]);
-                $faqConfig->getLogger()->error('Name and mail already used by registered user.');
-                break;
-            }
-        }
-
-        if (
-            !is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord($comment) &&
-            !$faq->commentDisabled($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
-        ) {
-            try {
-                $faqSession->userTracking('save_comment', $id);
-            } catch (Exception $exception) {
-                $faqConfig->getLogger()->error('Tracking of save new comment', ['exception' => $exception->getMessage()]);
-            }
-
-            $commentEntity = new Comment();
-            $commentEntity
-                ->setRecordId($id)
-                ->setType($type)
-                ->setUsername($username)
-                ->setEmail($mailer)
-                ->setComment(nl2br(strip_tags((string) $comment)))
-                ->setDate($request->server->get('REQUEST_TIME'));
-
-            if ($oComment->addComment($commentEntity)) {
-                $emailTo = $faqConfig->getAdminEmail();
-                $title = '';
-                $urlToContent = '';
-                if ('faq' == $type) {
-                    $faq->getRecord($id);
-                    if ($faq->faqRecord['email'] != '') {
-                        $emailTo = $faq->faqRecord['email'];
-                    }
-
-                    $title = $faq->getRecordTitle($id);
-
-                    $faqUrl = sprintf(
-                        '%s?action=faq&cat=%d&id=%d&artlang=%s',
-                        $faqConfig->getDefaultUrl(),
-                        $category->getCategoryIdFromFaq($faq->faqRecord['id']),
-                        $faq->faqRecord['id'],
-                        $faq->faqRecord['lang']
-                    );
-                    $oLink = new Link($faqUrl, $faqConfig);
-                    $oLink->itemTitle = $faq->faqRecord['title'];
-                    $urlToContent = $oLink->toString();
-                } else {
-                    $news = new News($faqConfig);
-                    $newsData = $news->getNewsEntry($id);
-                    if ($newsData['authorEmail'] != '') {
-                        $emailTo = $newsData['authorEmail'];
-                    }
-
-                    $title = $newsData['header'];
-
-                    $link = sprintf(
-                        '%s?action=news&newsid=%d&newslang=%s',
-                        $faqConfig->getDefaultUrl(),
-                        $newsData['id'],
-                        $newsData['lang']
-                    );
-                    $oLink = new Link($link, $faqConfig);
-                    $oLink->itemTitle = $newsData['header'];
-                    $urlToContent = $oLink->toString();
-                }
-
-                $commentMail =
-                    'User: ' . $commentEntity->getUsername() . ', mailto:' . $commentEntity->getEmail() . "\n" .
-                    'Title: ' . $title . "\n" .
-                    'New comment posted here: ' . $urlToContent .
-                    "\n\n" .
-                    wordwrap((string) $comment, 72);
-
-                $send = [];
-                $mailer = new Mail($faqConfig);
-                $mailer->setReplyTo($commentEntity->getEmail(), $commentEntity->getUsername());
-                $mailer->addTo($emailTo);
-
-                $send[$emailTo] = 1;
-                $send[$faqConfig->getAdminEmail()] = 1;
-
-                if ($type === CommentType::FAQ) {
-                    // Let the category owner of a FAQ get a copy of the message
-                    $category = new Category($faqConfig);
-                    $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
-                    foreach ($categories as $_category) {
-                        $userId = $category->getOwner($_category);
-                        $catUser = new User($faqConfig);
-                        $catUser->getUserById($userId);
-                        $catOwnerEmail = $catUser->getUserData('email');
-
-                        if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
-                            $mailer->addCc($catOwnerEmail);
-                            $send[$catOwnerEmail] = 1;
-                        }
-                    }
-                }
-
-                $mailer->subject = $faqConfig->getTitle() . ': New comment for "' . $title . '"';
-                $mailer->message = strip_tags($commentMail);
-
-                $result = $mailer->send();
-                unset($mailer);
-
-                $response->setStatusCode(Response::HTTP_OK);
-                $response->setData(['success' => Translation::get('msgCommentThanks')]);
-            } else {
-                try {
-                    $faqSession->userTracking('error_save_comment', $id);
-                } catch (Exception) {
-                    // @todo handle the exception
-                }
-
-                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData(['error' => Translation::get('err_SaveComment')]);
-            }
-        } else {
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $response->setData(['error' => 'Please add your name, your e-mail address and a comment!']);
-        }
-
-        break;
 
     case 'add-faq':
         if (

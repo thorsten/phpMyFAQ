@@ -1,5 +1,6 @@
 export * from './autocomplete';
 export * from './bookmarks';
+export * from './comment';
 export * from './contact';
 export * from './forms';
 export * from './register';
