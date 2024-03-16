@@ -63,7 +63,7 @@ abstract class AbstractController
      * @param Response|null $response
      * @throws TemplateException
      */
-    protected function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
+    public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
@@ -82,7 +82,7 @@ abstract class AbstractController
      * @param string[] $headers
      * @return JsonResponse
      */
-    protected function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
+    public function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
         return new JsonResponse($data, $status, $headers);
     }
