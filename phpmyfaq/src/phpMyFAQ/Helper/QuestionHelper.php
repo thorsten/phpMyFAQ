@@ -21,7 +21,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
-use phpMyFAQ\Question;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -30,12 +29,12 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  * Class QuestionHelper
  * @package phpMyFAQ\Helper
  */
-class QuestionHelper
+readonly class QuestionHelper
 {
     /**
      * QuestionHelper constructor.
      */
-    public function __construct(private readonly Configuration $configuration, private readonly Category $category)
+    public function __construct(private Configuration $configuration, private Category $category)
     {
     }
 
@@ -45,13 +44,17 @@ class QuestionHelper
      */
     public function sendSuccessMail(array $questionData, array $categories): void
     {
-        $questionMail = Translation::get('msgNewQuestionAdded') . "\n\n User: " .
-            $questionData['username'] .
-            ', ' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
-            ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
-            Translation::get('msgAskYourQuestion') . ': ' .
-            wordwrap((string) $questionData['question'], 72) . "\n\n" .
-            $this->configuration->getDefaultUrl() . 'admin/';
+        $questionMail = sprintf(
+            "%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s",
+            Translation::get('msgNewQuestionAdded'),
+            $questionData['username'],
+            $questionData['email'],
+            Translation::get('msgCategory'),
+            $categories[$questionData['category_id']]['name'],
+            Translation::get('msgAskYourQuestion'),
+            wordwrap((string) $questionData['question'], 72),
+            $this->configuration->getDefaultUrl() . 'admin/'
+        );
 
         $userId = $this->category->getOwner($questionData['category_id']);
         $oUser = new User($this->configuration);
@@ -63,6 +66,7 @@ class QuestionHelper
         $mail = new Mail($this->configuration);
         $mail->setReplyTo($questionData['email'], $questionData['username']);
         $mail->addTo($mainAdminEmail);
+
         // Let the category owner get a copy of the message
         if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
             $mail->addCc($userEmail);

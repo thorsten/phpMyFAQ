@@ -72,6 +72,8 @@ enum PermissionType: string
 
     case PASSWORD_CHANGE = 'passwd';
 
+    case QUESTION_ADD = 'addquestion';
+
     case QUESTION_DELETE = 'delquestion';
 
     case REPORTS = 'reports';

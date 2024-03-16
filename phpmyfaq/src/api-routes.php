@@ -37,6 +37,7 @@ use phpMyFAQ\Controller\Frontend\CaptchaController;
 use phpMyFAQ\Controller\Frontend\CommentController as CommentFrontendController;
 use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\FaqController as FaqFrontendController;
+use phpMyFAQ\Controller\Frontend\QuestionController as QuestionFrontendController;
 use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
 use phpMyFAQ\Controller\Frontend\ShareController;
 use phpMyFAQ\Controller\Frontend\UserController;
@@ -185,10 +186,13 @@ $routes->add(
     'api.private.comment',
     new Route('comment/create', ['_controller' => [CommentFrontendController::class, 'create'], '_methods' => 'POST'])
 );
-
 $routes->add(
     'api.private.faq.create',
-    new Route("faq/create", ['_controller' => [FaqFrontendController::class, 'create'], '_methods' => 'POST'])
+    new Route('faq/create', ['_controller' => [FaqFrontendController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.private.question.create',
+    new Route('question/create', ['_controller' => [QuestionFrontendController::class, 'create'], '_methods' => 'POST'])
 );
 $routes->add(
     'api.private.register',

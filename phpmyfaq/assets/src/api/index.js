@@ -3,7 +3,7 @@ export * from './bookmarks';
 export * from './comment';
 export * from './contact';
 export * from './faq';
-export * from './forms';
+export * from './question';
 export * from './register';
 export * from './setup';
 export * from './share';

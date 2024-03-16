@@ -13,64 +13,63 @@
  * @since     2023-02-02
  */
 
-import { addElement, serialize } from '../utils';
+import { addElement } from '../utils';
+import { createQuestion } from '../api';
 
 export const handleQuestion = () => {
-  const form = document.querySelector('#formValues');
-  const loader = document.getElementById('loader');
-  const formData = new FormData(form);
+  const questionSubmit = document.getElementById('pmf-submit-question');
 
-  loader.classList.remove('d-none');
-  fetch(`api.service.php?action=ask-question`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(serialize(formData)),
-  })
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
+  if (questionSubmit) {
+    questionSubmit.addEventListener('click', async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const formValidation = document.querySelector('.needs-validation');
+      if (!formValidation.checkValidity()) {
+        formValidation.classList.add('was-validated');
+      } else {
+        const form = document.querySelector('#pmf-question-form');
+        const loader = document.getElementById('loader');
+        const formData = new FormData(form);
+        const response = await createQuestion(formData);
+
+        // Smart answers
+        if (response.result) {
+          const resultMessage = response.result;
+          const message = document.getElementById('pmf-question-response');
+          const hints = document.getElementsByClassName('hint-search-suggestion');
+
+          Array.from(hints).forEach((hint) => {
+            hint.classList.remove('d-none');
+          });
+
+          // Add smart answers
+          message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
+          // Add hidden input
+          form.insertAdjacentElement('afterbegin', addElement('input', { type: 'hidden', name: 'save', value: 1 }));
+        }
+
+        // Final result
+        if (response.success) {
+          loader.classList.add('d-none');
+          const message = document.getElementById('pmf-question-response');
+
+          message.insertAdjacentElement(
+            'beforeend',
+            addElement('div', { classList: 'alert alert-success', innerText: response.success })
+          );
+          form.reset();
+        }
+
+        if (response.error) {
+          loader.classList.add('d-none');
+          const message = document.getElementById('pmf-question-response');
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          );
+        }
       }
-      throw new Error('Network response was not ok: ', { cause: { response } });
-    })
-    .then((response) => {
-      loader.classList.add('d-none');
-      const message = document.getElementById('answers');
-
-      // Smart answers
-      if (response.result) {
-        const resultMessage = response.result;
-        const form = document.getElementById('formValues');
-        const hints = document.getElementsByClassName('hint-search-suggestion');
-
-        Array.from(hints).forEach((hint) => {
-          hint.classList.remove('d-none');
-        });
-
-        // Add smart answers
-        message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
-        // Add hidden input
-        form.insertAdjacentElement('afterbegin', addElement('input', { type: 'hidden', name: 'save', value: 1 }));
-      }
-
-      // Final result
-      if (response.success) {
-        const successMessage = response.success;
-        message.insertAdjacentElement(
-          'afterend',
-          addElement('div', { classList: 'alert alert-success', innerText: successMessage })
-        );
-      }
-    })
-    .catch(async (error) => {
-      loader.classList.add('d-none');
-      const message = document.getElementById('answers');
-      const errorMessage = await error.cause.response.json();
-      message.insertAdjacentElement(
-        'afterend',
-        addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
-      );
     });
+  }
 };
