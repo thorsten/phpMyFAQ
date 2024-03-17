@@ -28,11 +28,7 @@ export const createQuestion = async (data) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      return await response.json();
-    }
+    return await response.json();
   } catch (error) {
     console.error(error);
   }

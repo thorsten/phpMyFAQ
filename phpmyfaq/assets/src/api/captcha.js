@@ -1,5 +1,3 @@
-import { serialize } from '../utils';
-
 export const fetchCaptchaImage = async (action, timestamp) => {
   try {
     const response = await fetch('api/captcha', {
