@@ -81,7 +81,7 @@ switch ($ajaxAction) {
             if (
                 is_uploaded_file($file['tmp_name']) &&
                 !($file['size'] > $faqConfig->get('records.maxAttachmentSize')) &&
-                $file['type'] !== "text/html"
+                $file['type'] !== 'text/html' && $file['type'] !== 'application/octet-stream'
             ) {
                 $attachment = AttachmentFactory::create();
                 $attachment->setRecordId($recordId);
@@ -101,7 +101,7 @@ switch ($ajaxAction) {
                 ];
             } else {
                 $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $response->setData('The image is too large.');
+                $response->setData('The file is too large or unsupported.');
                 $response->send();
                 return;
             }

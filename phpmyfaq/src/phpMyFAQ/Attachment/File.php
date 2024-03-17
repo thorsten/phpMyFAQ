@@ -103,7 +103,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
             $targetFile = $this->buildFilePath();
 
             if (null !== $this->id && $this->createSubDirs($targetFile)) {
-                // Doing this check we're sure not to unnecessary
+                // Doing this check, we're sure not to unnecessarily
                 // overwrite existing unencrypted file duplicates.
                 if (!$this->linkedRecords()) {
                     $source = new VanillaFile($filePath);
