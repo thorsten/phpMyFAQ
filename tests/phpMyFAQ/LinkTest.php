@@ -274,7 +274,7 @@ class LinkTest extends TestCase
 
         $this->link = new Link('http://faq.example.org/my-test-faq/index.php?action=add', $this->configuration);
         $this->assertEquals(
-            'http://faq.example.org/my-test-faq/addcontent.html',
+            'http://faq.example.org/my-test-faq/add-faq.html',
             $this->link->toString()
         );
 
@@ -305,7 +305,7 @@ class LinkTest extends TestCase
         $this->link = new Link($url, $this->configuration);
         $this->assertEquals($url, $this->link->toString(true));
 
-        $url = 'https://faq.example.org/my-test-faq/addcontent.html';
+        $url = 'https://faq.example.org/my-test-faq/add-faq.html';
         $this->link = new Link($url, $this->configuration);
         $this->assertEquals($url, $this->link->toString(true));
 

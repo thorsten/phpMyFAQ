@@ -614,11 +614,11 @@ $tplNavigation = [
     'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
     'allCategories' => '<a class="pmf-nav-link" href="./show-categories.html">' .
         Translation::get('msgShowAllCategories') . '</a>',
-    'msgAddContent' => '<a class="pmf-nav-link" href="./addcontent.html">' .
+    'msgAddContent' => '<a class="pmf-nav-link" href="./add-faq.html">' .
         Translation::get('msgAddContent') . '</a>',
     'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
         ?
-        '<a class="pmf-nav-link" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+        '<a class="pmf-nav-link" href="./add-question.html">' . Translation::get('msgQuestion') . '</a>'
         :
         '',
     'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')

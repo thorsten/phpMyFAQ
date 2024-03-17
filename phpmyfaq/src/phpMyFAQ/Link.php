@@ -108,9 +108,9 @@ class Link
 
     private const LINK_HTML_EXTENSION = '.html';
 
-    private const LINK_HTML_ADDCONTENT = 'addcontent.html';
+    private const LINK_HTML_ADDCONTENT = 'add-faq.html';
 
-    private const LINK_HTML_ASK = 'ask.html';
+    private const LINK_HTML_ASK = 'add-question.html';
 
     private const LINK_HTML_CONTACT = 'contact.html';
 
