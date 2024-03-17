@@ -46,8 +46,6 @@ class ConfigurationTabController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $mode = $request->get('mode');
 
         $configurationList = Translation::getConfigurationItems($mode);
@@ -57,7 +55,7 @@ class ConfigurationTabController extends AbstractController
             [
                 'mode' => $mode,
                 'configurationList' => $configurationList,
-                'configurationData' => $configuration->getAll(),
+                'configurationData' => $this->configuration->getAll(),
                 'specialCases' => [
                     'ldapSupport' => extension_loaded('ldap'),
                     'useSslForLogins' => Request::createFromGlobals()->isSecure(),
@@ -76,12 +74,9 @@ class ConfigurationTabController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $jsonResponse = new JsonResponse();
-
         $csrfToken = $request->get('pmf-csrf-token');
         $configurationData = $request->get('edit');
-        $oldConfigurationData = $configuration->getAll();
+        $oldConfigurationData = $this->configuration->getAll();
 
         if (!Token::getInstance()->verifyToken('configuration', $csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
@@ -104,6 +99,14 @@ class ConfigurationTabController extends AbstractController
 
             if (isset($configurationData['main.currentVersion'])) {
                 unset($configurationData['main.currentVersion']); // don't update the version number
+            }
+
+            if (isset($configurationData['records.attachmentsPath'])) {
+                $configurationData['records.attachmentsPath'] = str_replace(
+                    '../',
+                    '',
+                    $configurationData['records.attachmentsPath']
+                );
             }
 
             if (
@@ -140,7 +143,7 @@ class ConfigurationTabController extends AbstractController
                 }
             }
 
-            $configuration->update($newConfigValues);
+            $this->configuration->update($newConfigValues);
 
             return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
         }
@@ -154,7 +157,6 @@ class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
         $response = new Response();
 
         $languages = LanguageHelper::getAvailableLanguages();
@@ -163,7 +165,7 @@ class ConfigurationTabController extends AbstractController
                 str_replace(
                     [ 'language_', '.php', ],
                     '',
-                    (string) $configuration->get('main.language')
+                    (string) $this->configuration->get('main.language')
                 ),
                 false,
                 true

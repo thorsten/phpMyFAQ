@@ -950,13 +950,13 @@ class Faq
             $this->configuration->getDb()->escape($faqEntity->getQuestion()),
             $this->configuration->getDb()->escape($faqEntity->getAnswer()),
             $this->configuration->getDb()->escape($faqEntity->getAuthor()),
-            $faqEntity->getEmail(),
+            $this->configuration->getDb()->escape($faqEntity->getEmail()),
             $faqEntity->isComment() ? 'y' : 'n',
             $faqEntity->getUpdatedDate()->format('YmdHis'),
             '00000000000000',
             '99991231235959',
             date('Y-m-d H:i:s'),
-            $faqEntity->getNotes()
+            $this->configuration->getDb()->escape($faqEntity->getNotes())
         );
 
         $this->configuration->getDb()->query($query);
@@ -1017,14 +1017,14 @@ class Faq
             $this->configuration->getDb()->escape($faqEntity->getQuestion()),
             $this->configuration->getDb()->escape($faqEntity->getAnswer()),
             $this->configuration->getDb()->escape($faqEntity->getAuthor()),
-            $faqEntity->getEmail(),
+            $this->configuration->getDb()->escape($faqEntity->getEmail()),
             $faqEntity->isComment() ? 'y' : 'n',
             $faqEntity->getUpdatedDate()->format('YmdHis'),
             $faqEntity->getValidFrom()->format('YmdHis'),
             $faqEntity->getValidTo()->format('YmdHis'),
-            $faqEntity->getNotes(),
+            $this->configuration->getDb()->escape($faqEntity->getNotes()),
             $faqEntity->getId(),
-            $faqEntity->getLanguage()
+            $this->configuration->getDb()->escape($faqEntity->getLanguage())
         );
 
         return (bool) $this->configuration->getDb()->query($query);
