@@ -25,24 +25,15 @@ namespace phpMyFAQ;
 use Exception;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
 
 /*
- * SQL constants definitions
- */
-define('FAQ_SQL_ACTIVE_YES', 'yes');
-define('FAQ_SQL_ACTIVE_NO', 'no');
-
-/*
  * Query type definitions
  */
 define('FAQ_QUERY_TYPE_DEFAULT', 'faq_default');
-define('FAQ_QUERY_TYPE_APPROVAL', 'faq_approval');
-define('FAQ_QUERY_TYPE_EXPORT_PDF', 'faq_export_pdf');
-define('FAQ_QUERY_TYPE_EXPORT_XHTML', 'faq_export_xhtml');
-define('FAQ_QUERY_TYPE_EXPORT_XML', 'faq_export_xml');
 
 /*
  * Sorting type definitions
@@ -141,6 +132,7 @@ class Faq
         $currentTable = $orderBy == 'visits' ? 'fv' : 'fd';
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
             SELECT
@@ -196,7 +188,7 @@ class Faq
             $now,
             $categoryId,
             $this->configuration->getLanguage()->getLanguage(),
-            $this->queryPermission($this->groupSupport),
+            $queryHelper->queryPermission($this->groupSupport),
             $currentTable,
             $this->configuration->getDb()->escape($orderBy),
             $this->configuration->getDb()->escape($sortBy)
@@ -338,36 +330,6 @@ class Faq
     }
 
     /**
-     * Returns a part of a query to check permissions.
-     *
-     *
-     */
-    protected function queryPermission(bool $hasGroupSupport = false): string
-    {
-        if ($hasGroupSupport) {
-            if (-1 === $this->user) {
-                return sprintf(
-                    'AND fdg.group_id IN (%s)',
-                    implode(', ', $this->groups)
-                );
-            }
-            return sprintf(
-                'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
-                $this->user,
-                implode(', ', $this->groups)
-            );
-        }
-
-        if (-1 !== $this->user) {
-            return sprintf(
-                'AND ( fdu.user_id = %d OR fdu.user_id = -1 )',
-                $this->user
-            );
-        }
-        return 'AND fdu.user_id = -1';
-    }
-
-    /**
      * This function returns all not expired records from one category.
      *
      * @param int    $categoryId Entity ID
@@ -398,6 +360,7 @@ class Faq
         }
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
             SELECT
@@ -451,7 +414,7 @@ class Faq
             $now,
             $categoryId,
             $this->configuration->getLanguage()->getLanguage(),
-            $this->queryPermission($this->groupSupport),
+            $queryHelper->queryPermission($this->groupSupport),
             $order
         );
 
@@ -584,6 +547,7 @@ class Faq
         $output = '';
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
             SELECT
@@ -636,7 +600,7 @@ class Faq
             $now,
             $records,
             $this->configuration->getLanguage()->getLanguage(),
-            $this->queryPermission($this->groupSupport),
+            $queryHelper->queryPermission($this->groupSupport),
             $this->configuration->getDb()->escape($orderBy),
             $this->configuration->getDb()->escape($sortBy)
         );
@@ -834,6 +798,7 @@ class Faq
         int $faqRevisionId = null,
         bool $isAdmin = false
     ): mixed {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
@@ -862,7 +827,7 @@ class Faq
             $faqId,
             isset($faqRevisionId) ? 'AND revision_id = ' . $faqRevisionId : '',
             $faqLanguage,
-            ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
+            ($isAdmin) ? 'AND 1=1' : $queryHelper->queryPermission($this->groupSupport)
         );
 
         return $this->configuration->getDb()->query($query);
@@ -877,6 +842,7 @@ class Faq
     {
         $faqRecords = [];
 
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "SELECT
                  fd.id AS id,
@@ -921,7 +887,7 @@ class Faq
             Database::getTablePrefix(),
             implode(',', $faqIds),
             $this->configuration->getLanguage()->getLanguage(),
-            $this->queryPermission($this->groupSupport)
+            $queryHelper->queryPermission($this->groupSupport)
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -1247,48 +1213,13 @@ class Faq
     }
 
     /**
-     * Checks, if comments are disabled for the FAQ record.
-     *
-     * @param int    $recordId    Id of FAQ or news entry
-     * @param string $recordLang  Language
-     * @param string $commentType Type of comment: faq or news
-     * @return bool true, if comments are disabled
-     */
-    public function commentDisabled(int $recordId, string $recordLang, string $commentType = 'faq'): bool
-    {
-        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
-
-        $query = sprintf(
-            "
-            SELECT
-                comment
-            FROM
-                %s%s
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $table,
-            $recordId,
-            $this->configuration->getDb()->escape($recordLang)
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
-            return $row->comment !== 'y';
-        }
-        return true;
-    }
-
-    /**
      * Returns an array with all data from a FAQ record.
      *
      * @param int $solutionId Solution ID
      */
     public function getRecordBySolutionId(int $solutionId): void
     {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             'SELECT
                 *
@@ -1309,7 +1240,7 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,
-            $this->queryPermission($this->groupSupport)
+            $queryHelper->queryPermission($this->groupSupport)
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -1444,6 +1375,7 @@ class Faq
         $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,' .
             'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,' .
             'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             '
             SELECT
@@ -1491,7 +1423,7 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $where,
-            $this->queryPermission($this->groupSupport),
+            $queryHelper->queryPermission($this->groupSupport),
             $groupBy,
             $orderBy
         );
@@ -1739,6 +1671,7 @@ class Faq
         global $sids;
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
             'SELECT
                 fd.id AS id,
@@ -1788,7 +1721,7 @@ class Faq
         }
 
         $query .= '
-                ' . $this->queryPermission($this->groupSupport) . '
+                ' . $queryHelper->queryPermission($this->groupSupport) . '
 
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fv.last_visit,fdg.group_id,fdu.user_id
@@ -1858,6 +1791,7 @@ class Faq
         $data = [];
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
             '            SELECT
                 fd.id AS id,
@@ -1903,7 +1837,7 @@ class Faq
         }
 
         $query .= '
-                ' . $this->queryPermission($this->groupSupport) . '
+                ' . $queryHelper->queryPermission($this->groupSupport) . '
             ORDER BY
                 avg DESC';
 
@@ -1979,6 +1913,7 @@ class Faq
         global $sids;
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
             '            SELECT
                 fd.id AS id,
@@ -2021,7 +1956,7 @@ class Faq
         }
 
         $query .= '
-                ' . $this->queryPermission($this->groupSupport) . '
+                ' . $queryHelper->queryPermission($this->groupSupport) . '
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
             ORDER BY
@@ -2086,7 +2021,8 @@ class Faq
     ): array {
         $faqs = [];
 
-        $query = $this->getSQLQuery($queryType, $nCatid, $bDownwards, $lang, $date);
+        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $query = $queryHelper->getQuery($queryType, $nCatid, $bDownwards, $lang, $date);
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
@@ -2119,131 +2055,6 @@ class Faq
     }
 
     /**
-     * Build the SQL query for retrieving faq records according to the constraints provided.
-     */
-    private function getSQLQuery(
-        string $queryType,
-        int $categoryId,
-        bool $bDownwards,
-        string $lang,
-        string $date,
-        int $faqId = 0
-    ): string {
-        $query = sprintf(
-            "
-            SELECT
-                fd.id AS id,
-                fd.solution_id AS solution_id,
-                fd.revision_id AS revision_id,
-                fd.lang AS lang,
-                fcr.category_id AS category_id,
-                fd.active AS active,
-                fd.sticky AS sticky,
-                fd.keywords AS keywords,
-                fd.thema AS thema,
-                fd.content AS content,
-                fd.author AS author,
-                fd.email AS email,
-                fd.comment AS comment,
-                fd.updated AS updated,
-                fd.notes AS notes,
-                fv.visits AS visits,
-                fv.last_visit AS last_visit
-            FROM
-                %sfaqdata fd,
-                %sfaqvisits fv,
-                %sfaqcategoryrelations fcr
-            WHERE
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.record_lang
-            AND ",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix()
-        );
-        // faqvisits data selection
-        if ($faqId !== 0) {
-            // Select ONLY the faq with the provided $faqid
-            $query .= "fd.id = '" . $faqId . "' AND ";
-        }
-
-        $query .= 'fd.id = fv.id
-            AND
-                fd.lang = fv.lang';
-        $needAndOp = true;
-        if (($categoryId !== 0) && $categoryId > 0) {
-            $query .= ' AND';
-            $query .= ' (fcr.category_id = ' . $categoryId;
-            if ($bDownwards) {
-                $query .= $this->getCatidWhereSequence($categoryId, 'OR');
-            }
-
-            $query .= ')';
-            $needAndOp = true;
-        }
-
-        if (($date !== '' && $date !== '0') && Utils::isLikeOnPMFDate($date)) {
-            $query .= ' AND';
-            $query .= " fd.updated LIKE '" . $date . "'";
-            $needAndOp = true;
-        }
-
-        if (($lang !== '' && $lang !== '0') && Utils::isLanguage($lang)) {
-            $query .= ' AND';
-            $query .= " fd.lang = '" . $this->configuration->getDb()->escape($lang) . "'";
-            $needAndOp = true;
-        }
-
-        switch ($queryType) {
-            case FAQ_QUERY_TYPE_APPROVAL:
-                $query .= ' AND';
-                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_NO . "'";
-                break;
-            case FAQ_QUERY_TYPE_EXPORT_PDF:
-            case FAQ_QUERY_TYPE_EXPORT_XHTML:
-            case FAQ_QUERY_TYPE_EXPORT_XML:
-            default:
-                $query .= ' AND';
-                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
-                break;
-        }
-
-        match ($queryType) {
-            FAQ_QUERY_TYPE_EXPORT_PDF,
-            FAQ_QUERY_TYPE_EXPORT_XHTML,
-            FAQ_QUERY_TYPE_EXPORT_XML => $query .= "\nORDER BY fcr.category_id, fd.id",
-            default => $query .= "\nORDER BY fcr.category_id, fd.id",
-        };
-
-        return $query;
-    }
-
-    /**
-     * Build a logic sequence, for a WHERE statement, of those category IDs
-     * children of the provided category ID, if any.
-     *
-     * @param Category|null $category
-     */
-    private function getCatidWhereSequence(int $nCatid, string $logicOp = 'OR', Category $category = null): string
-    {
-        $sqlWhereFilter = '';
-
-        if (!isset($category)) {
-            $category = new Category($this->configuration);
-        }
-
-        $aChildren = array_values($category->getChildren($nCatid));
-
-        foreach ($aChildren as $aChild) {
-            $sqlWhereFilter .= ' ' . $logicOp . ' fcr.category_id = ' . $aChild;
-            $sqlWhereFilter .= $this->getCatidWhereSequence($aChild, 'OR', $category);
-        }
-
-        return $sqlWhereFilter;
-    }
-
-    /**
      * Returns all records of one category.
      *
      *
@@ -2254,6 +2065,7 @@ class Faq
 
         $output = '';
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
             SELECT
@@ -2308,7 +2120,7 @@ class Faq
             $now,
             $categoryId,
             $this->configuration->getLanguage()->getLanguage(),
-            $this->queryPermission($this->groupSupport),
+            $queryHelper->queryPermission($this->groupSupport),
             $this->configuration->get('records.orderby'),
             $this->configuration->get('records.sortby')
         );
@@ -2501,6 +2313,7 @@ class Faq
         global $sids;
 
         $now = date('YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
             SELECT
@@ -2554,7 +2367,7 @@ class Faq
             $this->configuration->getLanguage()->getLanguage(),
             $now,
             $now,
-            $this->queryPermission($this->groupSupport)
+            $queryHelper->queryPermission($this->groupSupport)
         );
 
         $result = $this->configuration->getDb()->query($query);

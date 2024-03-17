@@ -9,6 +9,7 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
+use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
@@ -112,7 +113,7 @@ class FaqController extends AbstractController
             $faqEntity
                 ->setLanguage($languageCode)
                 ->setQuestion($questionText)
-                ->setActive((bool)($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO))
+                ->setActive((bool)($autoActivate ? QueryHelper::FAQ_SQL_ACTIVE_YES : QueryHelper::FAQ_SQL_ACTIVE_NO))
                 ->setSticky(false)
                 ->setAnswer($answer)
                 ->setKeywords($keywords)

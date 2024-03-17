@@ -26,12 +26,12 @@ use phpMyFAQ\Entity\Comment;
  * Class Comments
  * @package phpMyFAQ
  */
-class Comments
+readonly class Comments
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 
@@ -328,5 +328,41 @@ class Comments
         }
 
         return $comments;
+    }
+    /**
+     * Checks, if comments are disabled for the FAQ record.
+     *
+     * @param int    $recordId ID of FAQ or news entry
+     * @param string $recordLang  Language
+     * @param string $commentType Type of comment: faq or news
+     * @return bool false, if comments are disabled
+     */
+    public function isCommentAllowed(int $recordId, string $recordLang, string $commentType = 'faq'): bool
+    {
+        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
+
+        $query = sprintf(
+            "
+            SELECT
+                comment
+            FROM
+                %s%s
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            Database::getTablePrefix(),
+            $table,
+            $recordId,
+            $this->configuration->getDb()->escape($recordLang)
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+            return $row->comment === 'y';
+        }
+
+        return false;
     }
 }

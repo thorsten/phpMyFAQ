@@ -115,7 +115,7 @@ class CommentController extends AbstractController
 
         if (
             !empty($username) && !empty($mailer) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
-            !$faq->commentDisabled($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
+            !$comment->isCommentAllowed($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
         ) {
             try {
                 $session->userTracking('save_comment', $id);
