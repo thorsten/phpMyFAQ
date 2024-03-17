@@ -178,7 +178,12 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
     }
 } else {
     // Try to authenticate with cookie information
-    $user = CurrentUser::getCurrentUser($faqConfig);
+    try {
+        $user = CurrentUser::getCurrentUser($faqConfig);
+    } catch (Exception $e) {
+        $faqConfig->getLogger()->error('Failed to authenticate via cookie: ' . $e->getMessage());
+        $error = $e->getMessage();
+    }
 }
 
 if (isset($userAuth) && $userAuth instanceof UserAuthentication) {
@@ -194,6 +199,7 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $user->deleteFromSession(true);
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
+
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         $redirect = new RedirectResponse($ssoLogout);
         $redirect->send();
@@ -203,6 +209,9 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
         $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
         $redirect->send();
     }
+
+    $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+    $redirect->send();
 }
 
 //
@@ -497,10 +506,13 @@ $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
 $categoryHelper->setCategoryRelation($categoryRelation);
 
-$keywordsArray = array_merge(explode(',', (string) $keywords), explode(',', (string) $faqConfig->get('main.metaKeywords')));
-$keywordsArray = array_filter($keywordsArray, 'strlen');
-shuffle($keywordsArray);
-$keywords = implode(',', $keywordsArray);
+$keywordArray = array_merge(
+    explode(',', (string) $keywords),
+    explode(',', (string) $faqConfig->get('main.metaKeywords'))
+);
+$keywordArray = array_filter($keywordArray, 'strlen');
+shuffle($keywordArray);
+$keywords = implode(',', $keywordArray);
 
 $loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error . '</p>';
 
@@ -525,7 +537,6 @@ if ($faqConfig->isSignInWithMicrosoftActive()) {
         ]
     );
 }
-
 
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
@@ -726,25 +737,6 @@ if (DEBUG) {
 
 if ($faqConfig->get('main.enableCookieConsent')) {
     $template->parseBlock('index', 'cookieConsentEnabled');
-}
-
-//
-// Redirect old "action=artikel" URLs via 301 to new location
-//
-if ('artikel' === $action) {
-    $url = sprintf(
-        '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-        Strings::htmlspecialchars($faqConfig->getDefaultUrl()),
-        $category->getCategoryIdFromFaq($id),
-        $id,
-        $lang
-    );
-    $link = new Link($url, $faqConfig);
-    $link->itemTitle = $faq->getRecordTitle($id);
-    $response = new RedirectResponse($link->toString());
-    $response->setStatusCode(Response::HTTP_MOVED_PERMANENTLY);
-    $response->send();
-    exit();
 }
 
 if ('twofactor' === $action) {
