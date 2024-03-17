@@ -58,6 +58,13 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
         if (isset($editData['edit']['main.currentVersion'])) {
             unset($editData['edit']['main.currentVersion']); // don't update the version number
         }
+        if (isset($editData['edit']['records.attachmentsPath'])) {
+            $editData['edit']['records.attachmentsPath'] = str_replace(
+                '../',
+                '',
+                $editData['edit']['records.attachmentsPath']
+            );
+        }
 
         if (
             isset($editData['edit']['main.referenceURL']) &&
