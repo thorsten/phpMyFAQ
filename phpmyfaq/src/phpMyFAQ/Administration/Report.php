@@ -27,12 +27,12 @@ use phpMyFAQ\Date;
  *
  * @package phpMyFAQ
  */
-class Report
+readonly class Report
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

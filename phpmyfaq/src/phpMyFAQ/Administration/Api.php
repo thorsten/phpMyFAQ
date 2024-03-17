@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Administration;
 
 use Exception;
-use JsonException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core;
 use phpMyFAQ\System;
@@ -43,16 +42,14 @@ class Api
 
     private ?string $remoteHashes = null;
 
-    private readonly HttpClientInterface $httpClient;
+    private HttpClientInterface $httpClient;
 
     /**
      * Api constructor.
      */
     public function __construct(private readonly Configuration $configuration)
     {
-        $this->httpClient = HttpClient::create([
-            'max_redirects' => 2,
-        ]);
+        $this->setHttpClient(HttpClient::create(['max_redirects' => 2]));
     }
 
     /**
@@ -60,7 +57,7 @@ class Api
      * as an array.
      *
      * @return string[]
-     * @throws Core\Exception|DecodingExceptionInterface|TransportExceptionInterface
+     * @throws Exception|DecodingExceptionInterface|TransportExceptionInterface
      */
     public function getVersions(): array
     {
@@ -99,7 +96,7 @@ class Api
     /**
      * Returns true, if an installed version can be verified. Otherwise, false.
      *
-     * @throws Core\Exception|TransportExceptionInterface|\JsonException
+     * @throws Exception|TransportExceptionInterface|\JsonException
      */
     public function isVerified(): bool
     {
@@ -119,7 +116,7 @@ class Api
             ServerExceptionInterface |
             TransportExceptionInterface $e
         ) {
-            throw new Core\Exception('phpMyFAQ Verification API is not available: ' .  $e->getMessage());
+            throw new Exception('phpMyFAQ Verification API is not available: ' .  $e->getMessage());
         }
 
         return false;
@@ -127,7 +124,7 @@ class Api
 
     /**
      * @return string[]
-     * @throws JsonException
+     * @throws \JsonException
      * @throws Exception
      */
     public function getVerificationIssues(): array
@@ -137,5 +134,10 @@ class Api
             json_decode($system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
             json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
         );
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient): void
+    {
+        $this->httpClient = $httpClient;
     }
 }
