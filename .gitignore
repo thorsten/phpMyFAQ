@@ -81,6 +81,7 @@ backup/*
 # PHPUnit
 .phpunit.cache
 coverage.txt
+html-coverage/
 tests/logs
 tests/test.db
 tests/test.db-journal
