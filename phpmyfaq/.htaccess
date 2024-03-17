@@ -92,7 +92,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^tags/([0-9]+)/([^\/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
 
     # User pages
-    RewriteRule ^user/(ucp|bookmarks|request-removal|logout) index.php?action=$1 [L,QSA]
+    RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
 
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]

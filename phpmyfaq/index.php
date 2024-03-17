@@ -555,7 +555,7 @@ $tplMainPage = [
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => System::getPoweredByString(true),
-    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
+    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="user/register">' .
         Translation::get('msgRegistration') . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
     'msgFullName' => Translation::get('ad_user_loggedin') . $user->getLogin(),
@@ -701,7 +701,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         [
             'msgRegisterUser' => $faqConfig->get('security.enableRegistration')
                 ?
-                '<a class="dropdown-item" href="?action=register">' .
+                '<a class="dropdown-item" href="user/register">' .
                 Translation::get('msgRegisterUser') . '</a>'
                 :
                 '',

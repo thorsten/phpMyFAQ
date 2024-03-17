@@ -104,6 +104,8 @@ class Link
 
     private const LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
 
+    private const LINK_GET_ACTION_REGISTER = 'register';
+
     private const LINK_HTML_EXTENSION = '.html';
 
     private const LINK_HTML_ADDCONTENT = 'addcontent.html';
@@ -125,6 +127,8 @@ class Link
     private const LINK_HTML_SHOWCAT = 'show-categories.html';
 
     private const LINK_HTML_BOOKMARKS = 'user/bookmarks';
+
+    private const LINK_HTML_REGISTER = 'user/register';
 
     /**
      * @var int[] List of allowed action parameters
@@ -409,6 +413,10 @@ class Link
 
                     case self::LINK_GET_ACTION_BOOKMARKS:
                         $url .= self::LINK_HTML_BOOKMARKS;
+                        break;
+
+                    case self::LINK_GET_ACTION_REGISTER:
+                        $url .= self::LINK_HTML_REGISTER;
                         break;
 
                     case self::LINK_GET_ACTION_SEARCH:
