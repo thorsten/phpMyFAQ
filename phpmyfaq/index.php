@@ -692,7 +692,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
     if ($faqConfig->get('main.maintenanceMode')) {
         $msgLoginUser = '<a class="dropdown-item" href="./admin/">%s</a>';
     } else {
-        $msgLoginUser = '<a class="dropdown-item" href="?action=login">%s</a>';
+        $msgLoginUser = '<a class="dropdown-item" href="./login">%s</a>';
     }
 
     $template->parseBlock(

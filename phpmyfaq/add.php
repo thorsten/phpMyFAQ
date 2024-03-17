@@ -41,7 +41,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
     $response->send();
 }
 

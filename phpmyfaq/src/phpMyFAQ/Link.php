@@ -118,13 +118,13 @@ class Link
 
     private const LINK_HTML_HELP = 'help.html';
 
-    private const LINK_HTML_LOGIN = 'login.html';
+    private const LINK_HTML_LOGIN = 'login';
 
     private const LINK_HTML_OPEN = 'open-questions.html';
 
     private const LINK_HTML_SEARCH = 'search.html';
 
-    private const LINK_HTML_SHOWCAT = 'show-categories.html';
+    private const LINK_HTML_SHOW_CATEGORIES = 'show-categories.html';
 
     private const LINK_HTML_BOOKMARKS = 'user/bookmarks';
 
@@ -232,6 +232,7 @@ class Link
      *           being requested, as obtained from the original URI given by the user or referring resource
      *
      * @param string|null $path
+     * @return string
      */
     public function getSystemUri(string|null $path = null): string
     {
@@ -280,6 +281,7 @@ class Link
      * Returns the relative URI.
      *
      * @param string|null $path
+     * @return string
      */
     public static function getSystemRelativeUri(string|null $path = null): string
     {
@@ -473,7 +475,7 @@ class Link
                             || (isset($getParams[self::LINK_GET_CATEGORY])
                                 && (0 == $getParams[self::LINK_GET_CATEGORY]))
                         ) {
-                            $url .= self::LINK_HTML_SHOWCAT;
+                            $url .= self::LINK_HTML_SHOW_CATEGORIES;
                         } else {
                             $url .= self::LINK_CATEGORY .
                                 $getParams[self::LINK_GET_CATEGORY];
@@ -501,7 +503,7 @@ class Link
                 }
 
                 if (isset($getParams[self::LINK_GET_SIDS])) {
-                    $url = $this->appendSids($url, $getParams[self::LINK_GET_SIDS]);
+                    $url = $this->appendSids($url, (int)$getParams[self::LINK_GET_SIDS]);
                 }
 
                 if (isset($getParams['fragment'])) {
@@ -671,8 +673,8 @@ class Link
         // Lower the case (aesthetic)
         $itemTitle = Strings::strtolower($itemTitle);
         // Use '_' for some other characters for:
-        // 1. avoiding regexp match break;
-        // 2. improving the reading.
+        // 1. Avoiding regexp match break;
+        // 2. Improving the reading.
         $itemTitle = str_replace(['-', "'", '/', '&#39'], '_', $itemTitle);
         // 1. Remove any CR LF sequence
         // 2. Use a '-' for the word separation
