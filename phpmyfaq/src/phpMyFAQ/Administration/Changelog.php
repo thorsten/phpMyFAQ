@@ -25,12 +25,12 @@ use phpMyFAQ\Database;
  *
  * @package phpMyFAQ
  */
-class Changelog
+readonly class Changelog
 {
     /**
      * Changelog constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 

@@ -19,18 +19,19 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Strings;
 
 /**
  * Class Revision
  *
  * @package phpMyFAQ
  */
-class Revision
+readonly class Revision
 {
     /**
      * Revision constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 
@@ -55,7 +56,7 @@ class Revision
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->configuration->getDb()->escape($faqLanguage)
         );
 
         $this->configuration->getDb()->query($query);
@@ -84,7 +85,7 @@ class Revision
                 revision_id",
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->configuration->getDb()->escape($faqLanguage)
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -104,17 +105,20 @@ class Revision
 
     /**
      * Deletes all revisions for a given FAQ ID and FAQ language
-     * @return mixed
+     *
+     * @param int    $faqId
+     * @param string $faqLanguage
+     * @return bool
      */
-    public function delete(int $faqId, string $faqLanguage)
+    public function delete(int $faqId, string $faqLanguage): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->configuration->getDb()->escape($faqLanguage)
         );
 
-        return $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 }

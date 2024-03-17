@@ -27,12 +27,12 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @package phpMyFAQ
  */
-class AdminLog
+readonly class AdminLog
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 
