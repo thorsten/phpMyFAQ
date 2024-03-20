@@ -79,7 +79,6 @@ $routes->add(
     )
 );
 
-
 $routes->add(
     'admin.api.category.permissions',
     new Route('/category/permissions/{categories}', ['_controller' => [CategoryController::class, 'permissions']])
