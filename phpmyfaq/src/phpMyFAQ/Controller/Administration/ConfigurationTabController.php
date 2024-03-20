@@ -102,11 +102,15 @@ class ConfigurationTabController extends AbstractController
             }
 
             if (isset($configurationData['records.attachmentsPath'])) {
-                $configurationData['records.attachmentsPath'] = str_replace(
-                    '../',
-                    '',
-                    $configurationData['records.attachmentsPath']
-                );
+                if (false !== realpath($configurationData['records.attachmentsPath'])) {
+                    $configurationData['records.attachmentsPath'] = str_replace(
+                        Request::createFromGlobals()->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
+                        '',
+                        realpath($configurationData['records.attachmentsPath'])
+                    );
+                } else {
+                    unset($configurationData['records.attachmentsPath']);
+                }
             }
 
             if (
