@@ -19,6 +19,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -59,11 +60,15 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             unset($editData['edit']['main.currentVersion']); // don't update the version number
         }
         if (isset($editData['edit']['records.attachmentsPath'])) {
-            $editData['edit']['records.attachmentsPath'] = str_replace(
-                '../',
-                '',
-                $editData['edit']['records.attachmentsPath']
-            );
+            if (false !== realpath($editData['edit']['records.attachmentsPath'])) {
+                $editData['edit']['records.attachmentsPath'] = str_replace(
+                    Request::createFromGlobals()->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
+                    '',
+                    realpath($editData['edit']['records.attachmentsPath'])
+                );
+            } else {
+                unset($editData['edit']['records.attachmentsPath']);
+            }
         }
 
         if (
