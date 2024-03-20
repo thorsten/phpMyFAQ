@@ -49,7 +49,7 @@ class Api
      */
     public function __construct(private readonly Configuration $configuration)
     {
-        $this->setHttpClient(HttpClient::create(['max_redirects' => 2]));
+        $this->setHttpClient(HttpClient::create(['max_redirects' => 2, 'timeout' => 30]));
     }
 
     /**
