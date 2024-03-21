@@ -287,8 +287,8 @@ class Forms
     public function insertInputIntoDatabase(array $input): bool
     {
         $query = sprintf(
-            'INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
-                    input_required) VALUES (%d, %d, %s, %s, %s, %d, %d)',
+            "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
+                    input_required) VALUES (%d, %d, '%s', '%s', '%s', %d, %d)",
             Database::getTablePrefix(),
             $input['form_id'],
             $input['input_id'],
