@@ -13,8 +13,13 @@
  * @link      https://www.phpmyfaq.de
  * @since     2014-03-09
  */
-import { pushNotification } from '../utils';
-import { Modal } from 'bootstrap';
+
+import {
+  fetchActivateInput, fetchAddTranslation,
+  fetchDeleteTranslation,
+  fetchEditTranslation,
+  fetchSetInputAsRequired,
+} from '../api/forms';
 
 export const handleFormEdit = () => {
   const forms = document.getElementById('forms');
@@ -23,60 +28,20 @@ export const handleFormEdit = () => {
     document.querySelectorAll('#active').forEach(function (element) {
       element.addEventListener('change', async (event) => {
         const checked = element.checked ? 1 : 0;
-        const response = await fetch('api/forms/activate', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            csrf: element.getAttribute('data-pmf-csrf-token'),
-            formid: element.getAttribute('data-pmf-formid'),
-            inputid: element.getAttribute('data-pmf-inputid'),
-            checked: checked,
-          }),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            pushNotification(result.success);
-          } else {
-            console.error(result.error);
-          }
-        } else {
-          throw new Error('Network response was not ok: ', response.text());
-        }
+        const csrf = element.getAttribute('data-pmf-csrf-token');
+        const inputId = element.getAttribute('data-pmf-inputid');
+        const formId = element.getAttribute('data-pmf-formid');
+        await fetchActivateInput(csrf, formId, inputId, checked);
       });
     });
     // Handle required checkboxes
     document.querySelectorAll('#required').forEach(function (element) {
       element.addEventListener('change', async (event) => {
         const checked = element.checked ? 1 : 0;
-        const response = await fetch('api/forms/required', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            csrf: element.getAttribute('data-pmf-csrf-token'),
-            formid: element.getAttribute('data-pmf-formid'),
-            inputid: element.getAttribute('data-pmf-inputid'),
-            checked: checked,
-          }),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            pushNotification(result.success);
-          } else {
-            console.error(result.error);
-          }
-        } else {
-          throw new Error('Network response was not ok: ', response.text());
-        }
+        const csrf = element.getAttribute('data-pmf-csrf-token');
+        const inputId = element.getAttribute('data-pmf-inputid');
+        const formId = element.getAttribute('data-pmf-formid');
+        await fetchSetInputAsRequired(csrf, formId, inputId, checked);
       });
     });
 
@@ -128,31 +93,10 @@ export const handleFormTranslations = () => {
           element.classList.remove('bg-success');
           element.children[0].classList.add('bi-pencil');
           element.children[0].classList.remove('bi-check');
-          const response = await fetch('api/forms/translation-edit', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json, text/plain, */*',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              csrf: element.getAttribute('data-pmf-csrf'),
-              formId: element.getAttribute('data-pmf-formId'),
-              inputId: element.getAttribute('data-pmf-inputId'),
-              lang: element.getAttribute('data-pmf-lang'),
-              label: input.value,
-            }),
-          });
-
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success) {
-              pushNotification(result.success);
-            } else {
-              console.error(result.error);
-            }
-          } else {
-            throw new Error('Network response was not ok: ', response.text());
-          }
+          const csrf = element.getAttribute('data-pmf-csrf');
+          const formId = element.getAttribute('data-pmf-formId');
+          const inputId = element.getAttribute('data-pmf-inputId');
+          await fetchEditTranslation(csrf, formId, inputId, lang, input.value);
         }
       });
     });
@@ -160,31 +104,11 @@ export const handleFormTranslations = () => {
     const deleteButtons = document.querySelectorAll('#deleteTranslation');
     deleteButtons.forEach(function (element) {
       element.addEventListener('click', async () => {
-        const response = await fetch('api/forms/translation-delete', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            csrf: element.getAttribute('data-pmf-csrf'),
-            formId: element.getAttribute('data-pmf-formId'),
-            inputId: element.getAttribute('data-pmf-inputId'),
-            lang: element.getAttribute('data-pmf-lang'),
-          }),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            pushNotification(result.success);
-            document.getElementById('item_' + element.getAttribute('data-pmf-lang')).remove();
-          } else {
-            console.error(result.error);
-          }
-        } else {
-          throw new Error('Network response was not ok: ', response.text());
-        }
+        const csrf = element.getAttribute('data-pmf-csrf');
+        const inputId = element.getAttribute('data-pmf-inputId');
+        const formId = element.getAttribute('data-pmf-formId');
+        const lang = element.getAttribute('data-pmf-lang');
+        await fetchDeleteTranslation(csrf, formId, inputId, lang);
       });
     });
     // Add Translation
@@ -193,34 +117,10 @@ export const handleFormTranslations = () => {
     const translationInput = document.getElementById('translationText');
     addTranslationButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      const response = await fetch('api/forms/translation-add', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          csrf: addTranslationButton.getAttribute('data-pmf-csrf'),
-          formId: addTranslationButton.getAttribute('data-pmf-formId'),
-          inputId: addTranslationButton.getAttribute('data-pmf-inputId'),
-          lang: languageSelect.value,
-          translation: translationInput.value,
-        }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          pushNotification(result.success);
-          setTimeout(function () {
-            window.location.reload();
-          }, 3000);
-        } else {
-          console.error(result.error);
-        }
-      } else {
-        throw new Error('Network response was not ok: ', response.text());
-      }
+      const csrf = addTranslationButton.getAttribute('data-pmf-csrf');
+      const inputId = addTranslationButton.getAttribute('data-pmf-inputId');
+      const formId = addTranslationButton.getAttribute('data-pmf-formId');
+      await fetchAddTranslation(csrf, formId, inputId, languageSelect.value, translationInput.value);
     });
   }
 };
