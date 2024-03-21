@@ -1395,6 +1395,7 @@ $PMF_LANG['msgExportSessions'] = 'Sessions exportieren';
 $PMF_LANG['msgExportSessionsFrom'] = 'Von';
 $PMF_LANG['msgExportSessionsTo'] = 'Bis';
 
+// added v4.0.0-alpha - 2024-03-21 by Jan
 $PMF_LANG['msgEditForms'] = 'Formulare bearbeiten';
 $PMF_LANG['msgEditFormsSuccessful'] = 'Die Änderung wurde erfolgreich gespeichert.';
 $PMF_LANG['msgInputType'] = 'Typ';
