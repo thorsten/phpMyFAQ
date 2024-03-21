@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Admin Form Controller
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -27,21 +28,17 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Forms;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class FormController extends AbstractController
 {
     #[Route('admin/api/forms/activate')]
     public function activateInput(Request $request)
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-
         $data = json_decode($request->getContent());
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_INT);
         $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
-
         $forms = new Forms(Configuration::getConfigurationInstance());
-
         if (!Token::getInstance()->verifyToken('activate-input', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -58,14 +55,11 @@ class FormController extends AbstractController
     public function setInputAsRequired(Request $request)
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-
         $data = json_decode($request->getContent());
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_INT);
         $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
-
         $forms = new Forms(Configuration::getConfigurationInstance());
-
         if (!Token::getInstance()->verifyToken('require-input', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -82,15 +76,12 @@ class FormController extends AbstractController
     public function editTranslation(Request $request)
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-
         $data = json_decode($request->getContent());
         $label = Filter::filterVar($data->label, FILTER_SANITIZE_SPECIAL_CHARS);
         $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-
         $forms = new Forms(Configuration::getConfigurationInstance());
-
         if (!Token::getInstance()->verifyToken('edit-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -107,21 +98,21 @@ class FormController extends AbstractController
     public function deleteTranslation(Request $request)
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-
         $data = json_decode($request->getContent());
         $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-
         $forms = new Forms(Configuration::getConfigurationInstance());
-
         if (!Token::getInstance()->verifyToken('delete-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
             $forms->deleteTranslation($formId, $inputId, $lang);
-            return $this->json(['success' => Translation::get('msgFormsDeleteTranslationSuccessful')], Response::HTTP_OK);
+            return $this->json(
+                ['success' => Translation::get('msgFormsDeleteTranslationSuccessful')],
+                Response::HTTP_OK
+            );
         } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
@@ -131,15 +122,12 @@ class FormController extends AbstractController
     public function addTranslation(Request $request)
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
-
         $data = json_decode($request->getContent());
         $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
-
         $forms = new Forms(Configuration::getConfigurationInstance());
-
         if (!Token::getInstance()->verifyToken('add-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }

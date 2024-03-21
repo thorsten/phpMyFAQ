@@ -42,7 +42,8 @@ class Forms
     public function getFormData(int $formid): array
     {
         $query = sprintf(
-            "SELECT form_id, input_id, input_type, input_label, input_active, input_required, input_lang FROM %sfaqforms WHERE form_id = %d",
+            "SELECT form_id, input_id, input_type, input_label, input_active, input_required, input_lang
+                    FROM %sfaqforms WHERE form_id = %d",
             Database::getTablePrefix(),
             $formid
         );
@@ -65,8 +66,7 @@ class Forms
             if ($entry->input_lang === $this->translation->getCurrentLanguage()) {
                 $filteredEntries[] = $entry;
                 $idsAlreadyFiltered[] = $entry->input_id;
-            }
-            else {
+            } else {
                 $formDataHasntMatchingLanguage[] = $entry;
             }
         }
@@ -228,7 +228,8 @@ class Forms
     public function addTranslation(int $formId, int $inputId, string $lang, string $translation): bool
     {
         $selectQuery = sprintf(
-            "SELECT input_type, input_active, input_required FROM %sfaqforms WHERE input_id=%d AND form_id=%d AND input_lang='default'",
+            "SELECT input_type, input_active, input_required FROM %sfaqforms WHERE input_id=%d AND form_id=%d
+                    AND input_lang='default'",
             Database::getTablePrefix(),
             $inputId,
             $formId
