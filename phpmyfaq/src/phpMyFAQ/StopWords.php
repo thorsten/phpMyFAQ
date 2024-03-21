@@ -87,7 +87,7 @@ class StopWords
         $sql = sprintf(
             $sql,
             $this->getTableName(),
-            $word,
+            $this->configuration->getDb()->escape($word),
             $id,
             $this->language
         );
@@ -118,7 +118,7 @@ class StopWords
         $sql = sprintf(
             "SELECT id FROM %s WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
             $this->getTableName(),
-            $word,
+            $this->configuration->getDb()->escape($word),
             $this->language
         );
 
@@ -139,7 +139,7 @@ class StopWords
         $sql = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM %s WHERE lang = '%s'",
             $this->getTableName(),
-            $lang
+            $this->configuration->getDb()->escape($lang)
         );
 
         $result = $this->configuration->getDb()->query($sql);

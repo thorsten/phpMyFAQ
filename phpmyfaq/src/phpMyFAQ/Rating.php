@@ -183,7 +183,7 @@ readonly class Rating
             "SELECT id FROM %sfaqvoting WHERE artikel = %d AND (ip = '%s' AND datum > '%s')",
             Database::getTablePrefix(),
             $id,
-            $ip,
+            $this->configuration->getDb()->escape($ip),
             $check
         );
         return !$this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
