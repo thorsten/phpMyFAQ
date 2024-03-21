@@ -1415,4 +1415,20 @@ $PMF_LANG['msgExportSessions'] = 'Export Sessions';
 $PMF_LANG['msgExportSessionsFrom'] = 'From';
 $PMF_LANG['msgExportSessionsTo'] = 'To';
 
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Edit forms';
+$PMF_LANG['msgEditFormsSuccessful'] = 'The modification was successfully changed.';
+$PMF_LANG['msgInputType'] = 'Typ';
+$PMF_LANG['msgRequiredInputField'] = 'Required input';
+$PMF_LANG['permission::edit_forms'] = 'Edit forms';
+$PMF_LANG['msgInputLabel'] = 'Label';
+$PMF_LANG['msgFormsEditTranslations'] = 'Adjust translations';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'The translation was successfully saved.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'The translation was successfully deleted.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'The new translation was successfully saved.';
+$PMF_LANG['msgSelectLanguage'] = 'Select language';
+$PMF_LANG['msgTranslationText'] = 'Translation text';
+$PMF_LANG['msgAddTranslation'] = 'Add translation';
+$PMF_LANG['msgHintDeactivateForms'] = 'The forms can be deactivated completely in the <a class="alert-link" href="?action=config">administration</a>.';
+
 return $PMF_LANG;
