@@ -17,10 +17,10 @@ import { pushNotification } from '../utils';
 import { Modal } from 'bootstrap';
 
 export const handleFormEdit = () => {
-  const forms =  document.getElementById('forms');
+  const forms = document.getElementById('forms');
   if (forms) {
     // Handle activate checkboxes
-    document.querySelectorAll('#active').forEach(function(element) {
+    document.querySelectorAll('#active').forEach(function (element) {
       element.addEventListener('change', async (event) => {
         const checked = element.checked ? 1 : 0;
         const response = await fetch('api/forms/activate', {
@@ -50,7 +50,7 @@ export const handleFormEdit = () => {
       });
     });
     // Handle required checkboxes
-    document.querySelectorAll('#required').forEach(function(element) {
+    document.querySelectorAll('#required').forEach(function (element) {
       element.addEventListener('change', async (event) => {
         const checked = element.checked ? 1 : 0;
         const response = await fetch('api/forms/required', {
@@ -93,7 +93,7 @@ export const handleFormEdit = () => {
       tabContentAskQuestion.classList.add('active');
       tabContentAddContent.classList.remove('active');
     });
-    tabAddContent.addEventListener('click', function(event ) {
+    tabAddContent.addEventListener('click', function (event) {
       event.preventDefault();
       tabAddContent.classList.add('active');
       tabAskQuestion.classList.remove('active');
@@ -105,14 +105,14 @@ export const handleFormEdit = () => {
       modal.show();
     });
   }
-}
+};
 
 export const handleFormTranslations = () => {
   const table = document.getElementById('formTranslations');
   if (table) {
     // Edit translation
     const editButtons = document.querySelectorAll('#editTranslation');
-    editButtons.forEach(function(element) {
+    editButtons.forEach(function (element) {
       element.addEventListener('click', async () => {
         const lang = element.getAttribute('data-pmf-lang');
         const input = document.getElementById('labelInput_' + lang);
@@ -122,8 +122,7 @@ export const handleFormTranslations = () => {
           element.classList.add('bg-success');
           element.children[0].classList.remove('bi-pencil');
           element.children[0].classList.add('bi-check');
-        }
-        else {
+        } else {
           input.disabled = true;
           element.classList.add('bg-primary');
           element.classList.remove('bg-success');
@@ -140,7 +139,7 @@ export const handleFormTranslations = () => {
               formId: element.getAttribute('data-pmf-formId'),
               inputId: element.getAttribute('data-pmf-inputId'),
               lang: element.getAttribute('data-pmf-lang'),
-              label: input.value
+              label: input.value,
             }),
           });
 
@@ -171,7 +170,7 @@ export const handleFormTranslations = () => {
             csrf: element.getAttribute('data-pmf-csrf'),
             formId: element.getAttribute('data-pmf-formId'),
             inputId: element.getAttribute('data-pmf-inputId'),
-            lang: element.getAttribute('data-pmf-lang')
+            lang: element.getAttribute('data-pmf-lang'),
           }),
         });
 
@@ -205,7 +204,7 @@ export const handleFormTranslations = () => {
           formId: addTranslationButton.getAttribute('data-pmf-formId'),
           inputId: addTranslationButton.getAttribute('data-pmf-inputId'),
           lang: languageSelect.value,
-          translation: translationInput.value
+          translation: translationInput.value,
         }),
       });
 
@@ -213,7 +212,7 @@ export const handleFormTranslations = () => {
         const result = await response.json();
         if (result.success) {
           pushNotification(result.success);
-          setTimeout(function(){
+          setTimeout(function () {
             window.location.reload();
           }, 3000);
         } else {
@@ -222,6 +221,6 @@ export const handleFormTranslations = () => {
       } else {
         throw new Error('Network response was not ok: ', response.text());
       }
-    })
+    });
   }
-}
+};

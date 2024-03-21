@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * The main forms class.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jan Harms <model_railroader@gmx-topmail.de>
+ * @copyright 2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-03-21
+ */
+
 namespace phpMyFAQ;
 
 use phpMyFAQ\Language\LanguageCodes;
@@ -18,6 +34,11 @@ class Forms
         $this->translation = new Translation();
     }
 
+    /**
+     * Get inputs of a given form.
+     *
+     * @param int $formId Form ID
+     */
     public function getFormData(int $formid): array
     {
         $query = sprintf(
@@ -61,11 +82,20 @@ class Forms
         return $filteredEntries;
     }
 
+    /**
+     * Sort function for usort | Sorting form data by input-id
+     */
     private function sortByInputId($a, $b)
     {
         return $a->input_id - $b->input_id;
     }
 
+    /**
+     * Get languages that are already translated for a given input
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     */
     public function getTranslatedLanguages(int $formId, int $inputId): array
     {
         $translations = $this->getTranslations($formId, $inputId);
@@ -78,6 +108,13 @@ class Forms
         return $languages;
     }
 
+    /**
+     * Save the (de-)activation of a given input
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     * @param int $activated Activation status
+     */
     public function saveActivateInputStatus(int $formId, int $inputId, int $activated): bool
     {
         $query = sprintf(
@@ -91,6 +128,13 @@ class Forms
         return (bool)$this->config->getDb()->query($query);
     }
 
+    /**
+     * Save the requirement status of a given input
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     * @param int $activated Requirement status
+     */
     public function saveRequiredInputStatus(int $formId, int $inputId, int $required): bool
     {
         $query = sprintf(
@@ -104,6 +148,12 @@ class Forms
         return (bool)$this->config->getDb()->query($query);
     }
 
+    /**
+     * Get translations strings of a given input
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     */
     public function getTranslations(int $formid, int $inputid): array
     {
         $query = sprintf(
@@ -125,6 +175,14 @@ class Forms
         return $translations;
     }
 
+    /**
+     * Edit a translation string
+     *
+     * @param string $label New translation string
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     * @param string $lang Edited language
+     */
     public function editTranslation(string $label, int $formId, int $inputId, string $lang): bool
     {
         $query = sprintf(
@@ -139,6 +197,13 @@ class Forms
         return (bool) $this->config->getDb()->query($query);
     }
 
+    /**
+     * Delete a translation string
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     * @param string $lang Deleted language
+     */
     public function deleteTranslation(int $formId, int $inputId, string $lang): bool
     {
         $query = sprintf(
@@ -152,6 +217,14 @@ class Forms
         return (bool) $this->config->getDb()->query($query);
     }
 
+    /**
+     * Add a translation string
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     * @param string $lang Added language
+     * @param string $translation New translation string
+     */
     public function addTranslation(int $formId, int $inputId, string $lang, string $translation): bool
     {
         $selectQuery = sprintf(
@@ -180,6 +253,12 @@ class Forms
         return (bool) $this->config->getDb()->query($requestQuery);
     }
 
+    /**
+     * Check if a given input is required
+     *
+     * @param int $formId Form ID
+     * @param int $inputId Input ID
+     */
     public function checkIfRequired(int $formId, int $inputId): bool
     {
         $query = sprintf(

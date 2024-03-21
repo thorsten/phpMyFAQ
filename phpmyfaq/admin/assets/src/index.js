@@ -21,7 +21,9 @@ import {
   handleStopWords,
   handleElasticsearch,
   handleCheckForUpdates,
-  handleSaveConfiguration, handleFormEdit, handleFormTranslations,
+  handleSaveConfiguration,
+  handleFormEdit,
+  handleFormTranslations,
 } from './configuration';
 import {
   handleAttachmentUploads,
