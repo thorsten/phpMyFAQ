@@ -30,6 +30,7 @@ use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
@@ -305,7 +306,6 @@ class Installer extends Setup
         'main.enableWysiwygEditorFrontend' => 'false',
         'main.enableMarkdownEditor' => 'false',
         'main.templateSet' => 'default',
-        'main.optionalMailAddress' => 'false',
         'main.dateFormat' => 'Y-m-d H:i',
         'main.maintenanceMode' => 'false',
         'main.enableGravatarSupport' => 'false',
@@ -417,6 +417,146 @@ class Installer extends Setup
         'upgrade.lastDownloadedPackage' => '',
         'upgrade.onlineUpdateEnabled' => 'false',
         'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
+    ];
+
+    public array $formInputs = [
+        // Ask Question inputs
+        [
+            'form_id' => 1,
+            'input_id' => 1,
+            'input_type' => 'title',
+            'input_label' => 'msgQuestion',
+            'input_active' => 1,
+            'input_required' => -1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 1,
+            'input_id' => 2,
+            'input_type' => 'message',
+            'input_label' => 'msgNewQuestion',
+            'input_active' => 1,
+            'input_required' => -1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 1,
+            'input_id' => 3,
+            'input_type' => 'text',
+            'input_label' => 'msgNewContentName',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 1,
+            'input_id' => 4,
+            'input_type' => 'email',
+            'input_label' => 'msgNewContentMail',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 1,
+            'input_id' => 5,
+            'input_type' => 'select',
+            'input_label' => 'msgNewContentCategory',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 1,
+            'input_id' => 6,
+            'input_type' => 'textarea',
+            'input_label' => 'msgAskYourQuestion',
+            'input_active' => -1,
+            'input_required' => -1,
+            'input_lang' => 'default'
+        ],
+        // Add New FAQ inputs
+        [
+            'form_id' => 2,
+            'input_id' => 1,
+            'input_type' => 'title',
+            'input_label' => 'msgNewContentHeader',
+            'input_active' => 1,
+            'input_required' => -1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 2,
+            'input_type' => 'message',
+            'input_label' => 'msgNewContentAddon',
+            'input_active' => 1,
+            'input_required' => -1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 3,
+            'input_type' => 'text',
+            'input_label' => 'msgNewContentName',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 4,
+            'input_type' => 'email',
+            'input_label' => 'msgNewContentMail',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 5,
+            'input_type' => 'select',
+            'input_label' => 'msgNewContentCategory',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 6,
+            'input_type' => 'textarea',
+            'input_label' => 'msgNewContentTheme',
+            'input_active' => -1,
+            'input_required' => -1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 7,
+            'input_type' => 'textarea',
+            'input_label' => 'msgNewContentArticle',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 8,
+            'input_type' => 'text',
+            'input_label' => 'msgNewContentKeywords',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ],
+        [
+            'form_id' => 2,
+            'input_id' => 9,
+            'input_type' => 'title',
+            'input_label' => 'msgNewContentLink',
+            'input_active' => 1,
+            'input_required' => 1,
+            'input_lang' => 'default'
+        ]
     ];
 
     /**
@@ -1008,6 +1148,12 @@ class Installer extends Setup
         // add default rights
         foreach ($this->mainRights as $mainRight) {
             $user->perm->grantUserRight(1, $user->perm->addRight($mainRight));
+        }
+
+        // add inputs in table faqforms
+        $forms = new Forms($configuration);
+        foreach ($this->formInputs as $input) {
+            $forms->insertInputIntoDatabase($input);
         }
 
         // Add an anonymous user account
