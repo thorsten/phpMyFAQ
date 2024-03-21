@@ -21,7 +21,7 @@ import {
   handleStopWords,
   handleElasticsearch,
   handleCheckForUpdates,
-  handleSaveConfiguration,
+  handleSaveConfiguration, handleFormEdit, handleFormTranslations,
 } from './configuration';
 import {
   handleAttachmentUploads,
@@ -127,4 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Statistics -> User-tracking
   await handleSessions();
+
+  await handleFormEdit();
+  await handleFormTranslations();
 });
