@@ -9,17 +9,18 @@ metadata:
 spec:
   internalTrafficPolicy: Cluster
   ipFamilies:
-  - IPv4
+    - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-  - name: http
-    port: 80
-    protocol: TCP
-  - name: https
-    port: 443
-    protocol: TCP
+    - name: http
+      port: 80
+      protocol: TCP
+    - name: https
+      port: 443
+      protocol: TCP
   selector:
     app: phpmyfaq
   sessionAffinity: None
   type: ClusterIP
 ---
+
