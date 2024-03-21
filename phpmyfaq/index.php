@@ -145,7 +145,7 @@ if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)
 // Validating token from 2FA if given; else: returns error message
 //
 if ($token !== '' && !is_null($userid)) {
-    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
+    if (strlen((string)$token) === 6 && is_numeric((string)$token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userid);
         $tfa = new TwoFactor($faqConfig);
@@ -210,7 +210,7 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
 //
 // Get current user and group id - default: -1
 //
-[ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+[$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
 
 //
 // Found a session ID in _GET or _COOKIE?
@@ -349,7 +349,7 @@ if ($id !== 0) {
 } else {
     $title = ' - ' . System::getPoweredByString();
     $keywords = '';
-    $metaDescription = str_replace('"', '', (string) $faqConfig->get('main.metaDescription'));
+    $metaDescription = str_replace('"', '', (string)$faqConfig->get('main.metaDescription'));
 }
 
 //
@@ -364,7 +364,7 @@ if ($solutionId) {
     $lang = $faqData['lang'];
     $title = ' - ' . $faq->getRecordTitle($id);
     $keywords = ',' . $faq->getRecordKeywords($id);
-    $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags((string) $faqData['content']), 12));
+    $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags((string)$faqData['content']), 12));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         Strings::htmlentities($faqConfig->getDefaultUrl()),
@@ -499,7 +499,7 @@ $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
 $categoryHelper->setCategoryRelation($categoryRelation);
 
-$keywordsArray = array_merge(explode(',', (string) $keywords), explode(',', (string) $faqConfig->get('main.metaKeywords')));
+$keywordsArray = array_merge(explode(',', (string)$keywords), explode(',', (string)$faqConfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
@@ -781,19 +781,19 @@ if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404'
 
 $response->setContent($template->render());
 $response->setCache([
-    'must_revalidate'  => false,
-    'no_cache'         => false,
-    'no_store'         => false,
-    'no_transform'     => false,
-    'public'           => true,
-    'private'          => false,
+    'must_revalidate' => false,
+    'no_cache' => false,
+    'no_store' => false,
+    'no_transform' => false,
+    'public' => true,
+    'private' => false,
     'proxy_revalidate' => false,
-    'max_age'          => 600,
-    's_maxage'         => 600,
-    'stale_if_error'   => 86400,
+    'max_age' => 600,
+    's_maxage' => 600,
+    'stale_if_error' => 86400,
     'stale_while_revalidate' => 60,
-    'immutable'        => true,
-    'last_modified'    => new DateTime()
+    'immutable' => true,
+    'last_modified' => new DateTime()
 ]);
 
 $response->send();

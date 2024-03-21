@@ -30,6 +30,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\FaqMetaData;
 use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\QuestionHelper;
@@ -57,6 +58,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use phpMyFAQ\Enums\Forms\FormIds;
+use phpMyFAQ\Enums\Forms\AskQuestionInputIds;
+use phpMyFAQ\Enums\Forms\AddNewFaqInputIds;
 
 //
 // Bootstrapping
@@ -346,6 +350,7 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $category = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
+        $forms = new Forms($faqConfig);
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 
@@ -364,7 +369,10 @@ switch ($action) {
 
         $contentLink = Filter::filterVar($postData['contentlink'], FILTER_VALIDATE_URL);
         $keywords = Filter::filterVar($postData['keywords'], FILTER_SANITIZE_SPECIAL_CHARS);
-        if (isset($postData['rubrik[]'])) {
+        if (
+            isset($postData['rubrik[]'])
+            && $forms->checkIfRequired(FormIds::ADD_NEW_FAQ->value, AddNewFaqInputIds::CATEGORY->value)
+        ) {
             if (is_string($postData['rubrik[]'])) {
                 $postData['rubrik[]'] = [ $postData['rubrik[]'] ];
             }
@@ -372,6 +380,8 @@ switch ($action) {
             $categories = Filter::filterArray(
                 $postData['rubrik[]']
             );
+        } else {
+            $categories = $category->getAllCategories();
         }
 
         // Check on translation
@@ -380,6 +390,30 @@ switch ($action) {
             $answer = trim((string) Filter::filterVar($postData['translated_answer'], FILTER_SANITIZE_SPECIAL_CHARS));
         }
         $faqLanguage = Filter::filterVar($postData['lang'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+        // Check if author is required
+        if (
+            $forms->checkIfRequired(FormIds::ADD_NEW_FAQ->value, AddNewFaqInputIds::NAME->value)
+            && is_null($author)
+        ) {
+            $author = $faqConfig->get('main.metaPublisher');
+        }
+
+        // Check if email address is required
+        if (
+            $forms->checkIfRequired(FormIds::ADD_NEW_FAQ->value, AddNewFaqInputIds::EMAIL->value)
+            && is_null($email)
+        ) {
+            $email = $faqConfig->getAdminEmail();
+        }
+
+        // Check if answer is required
+        if (
+            $forms->checkIfRequired(FormIds::ADD_NEW_FAQ->value, AddNewFaqInputIds::ANSWER->value)
+            && is_null($answer)
+        ) {
+            $answer = '';
+        }
 
         if (
             !is_null($author) && !is_null($email) && ($question !== '' && $question !== '0') &&
@@ -512,6 +546,7 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
         $questionObject = new Question($faqConfig);
+        $forms = new Forms($faqConfig);
         $categories = $cat->getAllCategories();
 
         $postData = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
@@ -524,8 +559,27 @@ switch ($action) {
         $save = Filter::filterVar($postData['save'] ?? 0, FILTER_VALIDATE_INT);
 
         // If e-mail address is set to optional
-        if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
+        if (
+            $forms->checkIfRequired(FormIds::ASK_QUESTION->value, AskQuestionInputIds::EMAIL->value)
+            && is_null($email)
+        ) {
             $email = $faqConfig->getAdminEmail();
+        }
+
+        // If authors name is set to optional
+        if (
+            $forms->checkIfRequired(FormIds::ASK_QUESTION->value, AskQuestionInputIds::NAME->value)
+            && is_null($author)
+        ) {
+            $author = $faqConfig->get('main.metaPublisher');
+        }
+
+        // If category is set to optional
+        if (
+            $forms->checkIfRequired(FormIds::ASK_QUESTION->value, AskQuestionInputIds::CATEGORY->value)
+            && is_null($ucategory)
+        ) {
+            $ucategory = $cat->getAllCategories()[0]['id'];
         }
 
         // If smart answering is disabled, save question immediately

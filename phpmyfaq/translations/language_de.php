@@ -1395,4 +1395,19 @@ $PMF_LANG['msgExportSessions'] = 'Sessions exportieren';
 $PMF_LANG['msgExportSessionsFrom'] = 'Von';
 $PMF_LANG['msgExportSessionsTo'] = 'Bis';
 
+$PMF_LANG['msgEditForms'] = 'Formulare bearbeiten';
+$PMF_LANG['msgEditFormsSuccessful'] = 'Die Änderung wurde erfolgreich gespeichert.';
+$PMF_LANG['msgInputType'] = 'Typ';
+$PMF_LANG['msgRequiredInputField'] = 'Pflichtfeld';
+$PMF_LANG['permission::edit_forms'] = 'Formulare bearbeiten';
+$PMF_LANG['msgInputLabel'] = 'Beschriftung';
+$PMF_LANG['msgFormsEditTranslations'] = 'Übersetzungen anpassen';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'Das Speichern der Übersetzung war erfolgreich.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'Das Löschen der Übersetzung war erfolgreich.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'Die neue Übersetzung wurde erfolgreich hinzugefügt.';
+$PMF_LANG['msgSelectLanguage'] = 'Sprache auswählen';
+$PMF_LANG['msgTranslationText'] = 'Übersetzungstext';
+$PMF_LANG['msgAddTranslation'] = 'Übersetzung hinzufügen';
+$PMF_LANG['msgHintDeactivateForms'] = 'Die gesamte Nutzung der jeweiligen Formulare lässt sich in der <a class="alert-link" href="?action=config">Administration</a> deaktivieren.';
+
 return $PMF_LANG;

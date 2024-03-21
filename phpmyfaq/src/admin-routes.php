@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\FaqController;
+use phpMyFAQ\Controller\Administration\FormController;
 use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
@@ -567,6 +568,30 @@ $routes->add(
 $routes->add(
     'admin.api.session.export',
     new Route('/session/export', ['_controller' => [SessionController::class, 'export'], '_methods' => 'POST'])
+);
+
+//
+// Forms API
+//
+$routes->add(
+    'admin.api.forms.activate',
+    new Route('/forms/activate', ['_controller' => [FormController::class, 'activateInput'], '_methods' => 'POST'])
+);
+$routes->add(
+    'admin.api.forms.required',
+    new Route('/forms/required', ['_controller' => [FormController::class, 'setInputAsRequired'], '_methods' => 'POST'])
+);
+$routes->add(
+    'admin.api.forms.translation-edit',
+    new Route('/forms/translation-edit', ['_controller' => [FormController::class, 'editTranslation'], '_methods' => 'POST'])
+);
+$routes->add(
+    'admin.api.forms.translation-delete',
+    new Route('/forms/translation-delete', ['_controller' => [FormController::class, 'deleteTranslation'], '_methods' => 'POST'])
+);
+$routes->add(
+    'admin.api.forms.translation-add',
+    new Route('/forms/translation-add', ['_controller' => [FormController::class, 'addTranslation'], '_methods' => 'POST'])
 );
 
 return $routes;

@@ -326,4 +326,9 @@ class LanguageCodes
     {
         return array_search($value, static::$languageCodes, true);
     }
+
+    public static function getAllSupported(): array
+    {
+        return static::$supportedLanguageCodes;
+    }
 }

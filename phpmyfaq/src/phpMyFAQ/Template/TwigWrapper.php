@@ -25,6 +25,7 @@ use Twig\Error\SyntaxError;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\TemplateWrapper;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 readonly class TwigWrapper
@@ -67,5 +68,10 @@ readonly class TwigWrapper
     public function getExtension(string $class): ExtensionInterface
     {
         return $this->twigEnvironment->getExtension($class); /** @phpstan-ignore-line */
+    }
+
+    public function addFilter(TwigFilter $filter): void
+    {
+        $this->twigEnvironment->addFilter($filter);
     }
 }
