@@ -277,4 +277,27 @@ class Forms
             return false;
         }
     }
+
+    /**
+     * Inserts a given input into the database (Only used in install-routine)
+     *
+     * @param array $input Input array
+     */
+    public function insertInputIntoDatabase(array $input): bool
+    {
+        $query = sprintf(
+            'INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
+                    input_required) VALUES (%d, %d, %s, %s, %s, %d, %d)',
+            Database::getTablePrefix(),
+            $input['form_id'],
+            $input['input_id'],
+            $input['input_type'],
+            $input['input_label'],
+            $input['input_lang'],
+            $input['input_active'],
+            $input['input_required']
+        );
+
+        return (bool) $this->config->getDb()->query($query);
+    }
 }

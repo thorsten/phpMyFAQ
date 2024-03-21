@@ -23,6 +23,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filesystem;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use RecursiveDirectoryIterator;
@@ -538,6 +539,7 @@ class Update extends Setup
             $this->configuration->delete('socialnetworks.twitterAccessTokenSecret');
             $this->configuration->delete('socialnetworks.disableAll');
             $this->configuration->delete('mail.remoteSMTPEncryption');
+            $this->configuration->delete('main.optionalMailAddress');
 
             // Bookmarks support
             $this->queries[] = match (Database::getType()) {
@@ -585,6 +587,13 @@ class Update extends Setup
 
             // Enable/Disable cookie consent
             $this->configuration->add('main.enableCookieConsent', true);
+
+            // Add function for editing forms
+            $forms = new Forms($this->configuration);
+            $installer = new Installer(new System());
+            foreach ($installer->formInputs as $input) {
+                $forms->insertInputIntoDatabase($input);
+            }
 
             // Add parent category ID to faqcategory_order
             switch (Database::getType()) {
