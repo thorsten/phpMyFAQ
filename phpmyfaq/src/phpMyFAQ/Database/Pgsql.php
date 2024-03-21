@@ -64,7 +64,7 @@ class Pgsql implements DatabaseDriver
         string $user,
         string $password,
         string $database = '',
-        int $port = null
+        int|null $port = null
     ): ?bool {
         $connectionString = sprintf(
             'host=%s port=%d dbname=%s user=%s password=%s',

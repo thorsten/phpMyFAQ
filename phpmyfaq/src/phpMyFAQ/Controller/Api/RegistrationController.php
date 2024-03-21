@@ -103,13 +103,13 @@ class RegistrationController extends AbstractController
         $this->hasValidToken();
 
         $configuration = Configuration::getConfigurationInstance();
-
         $registration = new RegistrationHelper($configuration);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        $userName = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
-        $fullName = Filter::filterVar($data->fullname, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
+
+        $userName = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
+        $fullName = trim((string) Filter::filterVar($data->fullname, FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL));
         $isVisible = Filter::filterVar($data->{'is-visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $isVisible = $isVisible === 'true';
 
@@ -121,7 +121,7 @@ class RegistrationController extends AbstractController
             return $this->json($result, Response::HTTP_CONFLICT);
         }
 
-        if (!is_null($userName) && !is_null($fullName) && !is_null($email)) {
+        if (!empty($userName) && !empty($fullName) && !empty($email)) {
             $result = $registration->createUser($userName, $fullName, $email, $isVisible);
             return $this->json($result, Response::HTTP_CREATED);
         } else {

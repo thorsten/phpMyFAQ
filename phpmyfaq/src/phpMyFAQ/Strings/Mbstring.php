@@ -71,7 +71,7 @@ class Mbstring extends StringsAbstract
      * @param int      $start Start
      * @param int|null $length Length
      */
-    public function substr(string $str, int $start, int $length = null): string
+    public function substr(string $str, int $start, int|null $length = null): string
     {
         $length = null == $length ? mb_strlen($str) : $length;
 

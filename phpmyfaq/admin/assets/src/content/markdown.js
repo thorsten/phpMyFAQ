@@ -7,7 +7,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023 phpMyFAQ Team
+ * @copyright 2023-2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-05
@@ -21,7 +21,7 @@ export const handleMarkdownForm = () => {
   // Store the height of the textarea
   if (answer) {
     if (answerHeight !== 'undefined') {
-      answer.style.height = parseInt(answerHeight);
+      answer.style.height = answerHeight;
     }
 
     answer.addEventListener('mouseup', (event) => {
@@ -33,33 +33,35 @@ export const handleMarkdownForm = () => {
   if (markdownTabs) {
     const tab = document.querySelector('a[data-markdown-tab="preview"]');
 
-    tab.addEventListener('shown.bs.tab', (event) => {
+    tab.addEventListener('shown.bs.tab', async () => {
       const preview = document.getElementById('markdown-preview');
       preview.style.height = answer.style.height;
 
-      fetch(window.location.pathname + 'api/content/markdown', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: answer.value,
-        }),
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
-          preview.innerHTML = response.success;
-        })
-        .catch(async (error) => {
-          const errorMessage = await error.cause.response.json();
-          console.error(errorMessage);
+      try {
+        const response = await fetch(window.location.pathname + 'api/content/markdown', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: answer.value,
+          }),
         });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        preview.innerHTML = responseData.success;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+        } else {
+          console.error('Unknown error:', error);
+        }
+      }
     });
   }
 };

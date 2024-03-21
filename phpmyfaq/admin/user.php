@@ -598,6 +598,11 @@ if (
                     <td class="text-center">
                         <i class="fa <?= $user->getUserData('is_visible') ? 'bi-person-fill' : 'bi-person' ?>"></i>
                     </td>
+                    <td>
+                        <a href="mailto:<?= Strings::htmlentities($user->getUserData('email')) ?>">
+                            <?= Strings::htmlentities($user->getUserData('email')) ?>
+                        </a>
+                    </td>
 
                     <td>
                         <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>"

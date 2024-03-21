@@ -27,15 +27,13 @@ use SodiumException;
  *
  * @package phpMyFAQ
  */
-class Backup
+readonly class Backup
 {
     /**
      * Constructor.
      */
-    public function __construct(
-        private readonly Configuration $configuration,
-        private readonly DatabaseHelper $databaseHelper
-    ) {
+    public function __construct(private Configuration $configuration, private DatabaseHelper $databaseHelper)
+    {
     }
 
     /**

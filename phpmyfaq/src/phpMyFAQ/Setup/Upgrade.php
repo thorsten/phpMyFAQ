@@ -137,7 +137,7 @@ class Upgrade extends Setup
     {
         $url = $this->getDownloadHost() . $this->getPath() . $this->getFilename($version);
 
-        $client = HttpClient::create();
+        $client = HttpClient::create(['timeout' => 30]);
 
         try {
             $response = $client->request('GET', $url);
@@ -170,7 +170,7 @@ class Upgrade extends Setup
      */
     public function verifyPackage(string $path, string $version): bool
     {
-        $httpClient = HttpClient::create();
+        $httpClient = HttpClient::create(['timeout' => 30]);
         $response = $httpClient->request(
             'GET',
             DownloadHostType::PHPMYFAQ->value . 'info/' . $version

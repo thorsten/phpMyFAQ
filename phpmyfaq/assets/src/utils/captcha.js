@@ -12,30 +12,24 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-01-02
  */
+import { fetchCaptchaImage } from '../api/captcha';
 
 export const handleReloadCaptcha = (reloadButton) => {
-  reloadButton.addEventListener('click', (event) => {
+  reloadButton.addEventListener('click', async (event) => {
     event.preventDefault();
 
     const action = event.target.getAttribute('data-action');
-    const date = Math.floor(new Date().getTime() / 1000);
+    const timestamp = Math.floor(new Date().getTime() / 1000);
 
-    fetch(`index.php?action=${action}&gen=img&ck=${date}`)
-      .then(async (response) => {
-        if (response.status === 200) {
-          return response;
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then((response) => {
-        const captcha = document.getElementById('captcha');
-        const captchaImage = document.getElementById('captchaImage');
-        captchaImage.setAttribute('src', `index.php?action=${action}&gen=img&ck=${date}`);
-        captcha.value = '';
-        captcha.focus();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await fetchCaptchaImage(action, timestamp);
+      const captcha = document.getElementById('captcha');
+      const captchaImage = document.getElementById('captchaImage');
+      captchaImage.setAttribute('src', './api/captcha');
+      captcha.value = '';
+      captcha.focus();
+    } catch (error) {
+      console.error(error);
+    }
   });
 };

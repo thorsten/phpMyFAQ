@@ -31,18 +31,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGuests'))) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
     $response->send();
 }
 
 $request = Request::createFromGlobals();
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
-
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
 
 try {
     $faqSession->userTracking('ask_question', 0);

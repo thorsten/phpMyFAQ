@@ -18,33 +18,32 @@ export const handleBookmarks = () => {
 
   if (bookmarkTrashIcons) {
     bookmarkTrashIcons.forEach((element) => {
-      element.addEventListener('click', (event) => {
+      element.addEventListener('click', async (event) => {
         event.preventDefault();
         const bookmarkId = event.target.getAttribute('data-pmf-bookmark-id');
 
-        fetch(`api/bookmark/${bookmarkId}`, {
-          method: 'DELETE',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
-        })
-          .then(async (response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error('Network response was not ok: ', { cause: { response } });
-          })
-          .then((response) => {
-            const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`);
-            bookmarkToDelete.remove();
-          })
-          .catch(async (error) => {
-            const errorMessage = await error.cause.response.json();
-            return errorMessage.error;
+        try {
+          const response = await fetch(`api/bookmark/${bookmarkId}`, {
+            method: 'DELETE',
+            cache: 'no-cache',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
           });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const responseData = await response.json();
+          const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`);
+          bookmarkToDelete.remove();
+        } catch (error) {
+          // Handle error here
+          console.error('Error deleting bookmark:', error);
+        }
       });
     });
   }

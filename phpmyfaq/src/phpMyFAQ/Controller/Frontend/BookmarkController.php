@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Bookmark;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -37,13 +36,11 @@ class BookmarkController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $id = Filter::filterVar($request->get('bookmarkId'), FILTER_VALIDATE_INT);
 
-        $currentUser = CurrentUser::getCurrentUser($configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $bookmark = new Bookmark($configuration, $currentUser);
+        $bookmark = new Bookmark($this->configuration, $currentUser);
 
         return $this->json(['success' => $bookmark->remove($id)], JsonResponse::HTTP_OK);
     }

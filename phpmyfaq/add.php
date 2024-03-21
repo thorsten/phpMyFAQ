@@ -41,7 +41,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 // Check user permissions
 if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests')) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . '?action=login');
+    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
     $response->send();
 }
 
@@ -55,11 +55,6 @@ $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
-
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
 
 try {
     $faqSession->userTracking('new_entry', 0);

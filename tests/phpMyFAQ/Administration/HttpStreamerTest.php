@@ -8,17 +8,20 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 
 class HttpStreamerTest extends TestCase
 {
-
-    /**
-     * @throws Exception
-     */
     public function testSend(): void
     {
         $export = new HttpStreamer('pdf', 'test content');
 
         $this->expectOutputString('test content');
 
-        $export->send(HeaderUtils::DISPOSITION_ATTACHMENT);
+        try {
+            $export->send(HeaderUtils::DISPOSITION_ATTACHMENT);
+        } catch (Exception $e) {
+            $this->assertEquals(
+                'Error: unable to send my headers: someone already sent other headers!',
+                $e->getMessage()
+            );
+        }
 
         $headers = xdebug_get_headers();
 

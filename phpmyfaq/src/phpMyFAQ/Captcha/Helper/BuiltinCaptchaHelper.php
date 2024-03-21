@@ -57,7 +57,7 @@ class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
             $html .= '<div class="row mb-2">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
             $html .= '    <div class="col-sm-4">';
-            $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage($action));
+            $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage());
             $html .= '    </div>';
             $html .= '    <div class="col-sm-5">';
             $html .= '        <div class="input-group">';

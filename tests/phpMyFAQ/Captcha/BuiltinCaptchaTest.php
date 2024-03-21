@@ -49,9 +49,8 @@ class BuiltinCaptchaTest extends TestCase
     public function testRenderCaptchaImage(): void
     {
         $expected = '<img id="captchaImage" class="rounded border" ' .
-            'src="test-me.php?action=foobar&amp;gen=img&amp;ck=1" ' .
-            'height="50" width="200" alt="Chuck Norris has counted to infinity. Twice.">';
-        $this->assertEquals($expected, $this->captcha->renderCaptchaImage('foobar'));
+            'src="./api/captcha" height="50" width="200" alt="Chuck Norris has counted to infinity. Twice.">';
+        $this->assertEquals($expected, $this->captcha->renderCaptchaImage());
     }
 
     public function testSetUserIsLoggedIn(): void

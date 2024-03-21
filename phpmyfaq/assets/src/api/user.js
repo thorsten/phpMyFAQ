@@ -28,11 +28,7 @@ export const updateUserControlPanelData = async (data) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      return await response.json();
-    }
+    return await response.json();
   } catch (error) {
     console.error(error);
   }
@@ -51,11 +47,7 @@ export const updateUserPassword = async (data) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      return await response.json();
-    }
+    return await response.json();
   } catch (error) {
     console.error(error);
   }
@@ -74,11 +66,7 @@ export const requestUserRemoval = async (data) => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      return await response.json();
-    }
+    return await response.json();
   } catch (error) {
     console.error(error);
   }

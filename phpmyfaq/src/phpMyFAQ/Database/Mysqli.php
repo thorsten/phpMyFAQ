@@ -64,7 +64,7 @@ class Mysqli implements DatabaseDriver
         string $user,
         string $password,
         string $database = '',
-        int $port = null
+        int|null $port = null
     ): ?bool {
         try {
             if (str_starts_with($host, '/')) {

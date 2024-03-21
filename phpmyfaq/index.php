@@ -64,8 +64,6 @@ $request = Request::createFromGlobals();
 $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
 
-$showCaptcha = Filter::filterVar($request->query->get('gen'), FILTER_SANITIZE_SPECIAL_CHARS);
-
 $faqConfig = Configuration::getConfigurationInstance();
 
 //
@@ -75,7 +73,7 @@ $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
-if (!Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
+if (!Language::isASupportedLanguage($faqLangCode)) {
     $faqLangCode = 'en';
 }
 
@@ -180,7 +178,12 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
     }
 } else {
     // Try to authenticate with cookie information
-    $user = CurrentUser::getCurrentUser($faqConfig);
+    try {
+        $user = CurrentUser::getCurrentUser($faqConfig);
+    } catch (Exception $e) {
+        $faqConfig->getLogger()->error('Failed to authenticate via cookie: ' . $e->getMessage());
+        $error = $e->getMessage();
+    }
 }
 
 if (isset($userAuth) && $userAuth instanceof UserAuthentication) {
@@ -196,6 +199,7 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $user->deleteFromSession(true);
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
+
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         $redirect = new RedirectResponse($ssoLogout);
         $redirect->send();
@@ -205,6 +209,9 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
         $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
         $redirect->send();
     }
+
+    $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+    $redirect->send();
 }
 
 //
@@ -528,7 +535,6 @@ if ($faqConfig->isSignInWithMicrosoftActive()) {
     );
 }
 
-
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
     'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),
@@ -557,7 +563,7 @@ $tplMainPage = [
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => System::getPoweredByString(true),
-    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
+    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="user/register">' .
         Translation::get('msgRegistration') . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
     'msgFullName' => Translation::get('ad_user_loggedin') . $user->getLogin(),
@@ -605,11 +611,11 @@ $tplNavigation = [
     'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
     'allCategories' => '<a class="pmf-nav-link" href="./show-categories.html">' .
         Translation::get('msgShowAllCategories') . '</a>',
-    'msgAddContent' => '<a class="pmf-nav-link" href="./addcontent.html">' .
+    'msgAddContent' => '<a class="pmf-nav-link" href="./add-faq.html">' .
         Translation::get('msgAddContent') . '</a>',
     'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
         ?
-        '<a class="pmf-nav-link" href="./ask.html">' . Translation::get('msgQuestion') . '</a>'
+        '<a class="pmf-nav-link" href="./add-question.html">' . Translation::get('msgQuestion') . '</a>'
         :
         '',
     'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
@@ -694,7 +700,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
     if ($faqConfig->get('main.maintenanceMode')) {
         $msgLoginUser = '<a class="dropdown-item" href="./admin/">%s</a>';
     } else {
-        $msgLoginUser = '<a class="dropdown-item" href="?action=login">%s</a>';
+        $msgLoginUser = '<a class="dropdown-item" href="./login">%s</a>';
     }
 
     $template->parseBlock(
@@ -703,7 +709,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         [
             'msgRegisterUser' => $faqConfig->get('security.enableRegistration')
                 ?
-                '<a class="dropdown-item" href="?action=register">' .
+                '<a class="dropdown-item" href="user/register">' .
                 Translation::get('msgRegisterUser') . '</a>'
                 :
                 '',
@@ -728,25 +734,6 @@ if (DEBUG) {
 
 if ($faqConfig->get('main.enableCookieConsent')) {
     $template->parseBlock('index', 'cookieConsentEnabled');
-}
-
-//
-// Redirect old "action=artikel" URLs via 301 to new location
-//
-if ('artikel' === $action) {
-    $url = sprintf(
-        '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-        Strings::htmlspecialchars($faqConfig->getDefaultUrl()),
-        $category->getCategoryIdFromFaq($id),
-        $id,
-        $lang
-    );
-    $link = new Link($url, $faqConfig);
-    $link->itemTitle = $faq->getRecordTitle($id);
-    $response = new RedirectResponse($link->toString());
-    $response->setStatusCode(Response::HTTP_MOVED_PERMANENTLY);
-    $response->send();
-    exit();
 }
 
 if ('twofactor' === $action) {

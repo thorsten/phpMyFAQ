@@ -60,7 +60,7 @@ class Sqlsrv implements DatabaseDriver
         string $user,
         string $password,
         string $database = '',
-        int $port = null
+        int|null $port = null
     ): ?bool {
         $this->setConnectionOptions($user, $password, $database);
 

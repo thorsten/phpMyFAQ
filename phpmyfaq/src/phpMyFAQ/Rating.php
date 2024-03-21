@@ -24,17 +24,17 @@ use phpMyFAQ\Language\Plurals;
  *
  * @package phpMyFAQ
  */
-class Rating
+readonly class Rating
 {
     /**
      * Plural form support.
      */
-    private readonly Plurals $plr;
+    private Plurals $plr;
 
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
         $this->plr = new Plurals();
     }
@@ -183,7 +183,7 @@ class Rating
             "SELECT id FROM %sfaqvoting WHERE artikel = %d AND (ip = '%s' AND datum > '%s')",
             Database::getTablePrefix(),
             $id,
-            $ip,
+            $this->configuration->getDb()->escape($ip),
             $check
         );
         return !$this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));

@@ -33,8 +33,15 @@ use phpMyFAQ\Controller\Api\TitleController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
+use phpMyFAQ\Controller\Frontend\CaptchaController;
+use phpMyFAQ\Controller\Frontend\CommentController as CommentFrontendController;
 use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\FaqController as FaqFrontendController;
+use phpMyFAQ\Controller\Frontend\QuestionController as QuestionFrontendController;
+use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
+use phpMyFAQ\Controller\Frontend\ShareController;
 use phpMyFAQ\Controller\Frontend\UserController;
+use phpMyFAQ\Controller\Frontend\VotingController;
 use phpMyFAQ\Controller\Setup\SetupController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
@@ -156,46 +163,78 @@ $routes->add(
     new Route("v$apiVersion/version", ['_controller' => [VersionController::class, 'index']])
 );
 
+//
 // Private REST API
+//
 $routes->add(
-    'api.autocomplete',
+    'api.private.autocomplete',
     new Route('autocomplete', ['_controller' => [AutoCompleteController::class, 'search']])
 );
 $routes->add(
-    'api.bookmark',
+    'api.private.bookmark',
     new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
 );
 $routes->add(
-    'api.contact',
+    'api.private.captcha',
+    new Route('captcha', ['_controller' => [CaptchaController::class, 'renderImage']])
+);
+$routes->add(
+    'api.private.contact',
     new Route('contact', ['_controller' => [ContactController::class, 'create'], '_methods' => 'POST'])
 );
 $routes->add(
-    'api.user.password',
+    'api.private.comment',
+    new Route('comment/create', ['_controller' => [CommentFrontendController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.private.faq.create',
+    new Route('faq/create', ['_controller' => [FaqFrontendController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.private.question.create',
+    new Route('question/create', ['_controller' => [QuestionFrontendController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.private.register',
+    new Route('register', ['_controller' => [RegistrationFrontendController::class, 'create']])
+);
+$routes->add(
+    'api.private.share',
+    new Route('share', ['_controller' => [ShareController::class, 'create'], '_methods' => 'POST'])
+);
+$routes->add(
+    'api.private.user.password',
     new Route('user/password/update', ['_controller' => [UserController::class, 'updatePassword'], '_methods' => 'PUT'])
 );
 $routes->add(
-    'api.user.request-removal',
+    'api.private.user.request-removal',
     new Route(
         'user/request-removal',
         ['_controller' => [UserController::class, 'requestUserRemoval'], '_methods' => 'POST']
     )
 );
 $routes->add(
-    'api.user.update',
+    'api.private.user.update',
     new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
 );
-
-// Setup REST API
 $routes->add(
-    'api.setup.check',
+    'api.private.voting',
+    new Route('voting', ['_controller' => [VotingController::class, 'create'], '_methods' => 'POST'])
+);
+
+//
+// Setup REST API
+//
+$routes->add(
+    'api.private.setup.check',
     new Route('setup/check', ['_controller' => [SetupController::class, 'check'], '_methods' => 'POST'])
 );
 $routes->add(
-    'api.setup.backup',
+    'api.private.setup.backup',
     new Route('setup/backup', ['_controller' => [SetupController::class, 'backup'], '_methods' => 'POST'])
 );
 $routes->add(
-    'api.setup.update-database',
+    'api.private.setup.update-database',
     new Route(
         'setup/update-database',
         [

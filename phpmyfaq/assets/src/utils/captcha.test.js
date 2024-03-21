@@ -24,7 +24,13 @@ describe('handleReloadCaptcha', () => {
 
     await Promise.resolve();
 
-    expect(fetch).toHaveBeenCalledWith('index.php?action=refresh&gen=img&ck=' + date);
+    expect(fetch).toHaveBeenCalledWith('api/captcha', {
+      body: '{"action":"refresh","timestamp":' + date + '}',
+      cache: 'no-cache',
+      method: 'POST',
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
     expect(captcha.value).toBe('');
   });
 });

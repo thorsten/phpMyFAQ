@@ -16,11 +16,11 @@
 import 'bootstrap';
 import Masonry from 'masonry-layout';
 
-import { handleBookmarks, saveFormData } from './api';
+import { handleBookmarks } from './api';
 import { handleContactForm } from './contact';
-import { handleComments, handleSaveComment, handleUserVoting } from './faq';
+import { handleAddFaq, handleComments, handleSaveComment, handleShare, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
-import { handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
+import { handleRegister, handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
 
@@ -58,6 +58,21 @@ handleSaveComment();
 handleComments();
 
 //
+// Handle sharing
+//
+handleShare();
+
+//
+// Handle Add a FAQ
+//
+handleAddFaq();
+
+//
+// Handle Add a Question
+//
+handleQuestion();
+
+//
 // Handle Bookmarks
 //
 handleBookmarks();
@@ -78,9 +93,14 @@ handleUserPassword();
 handleRequestRemoval();
 
 //
-// Handle contact form
+// Handle the contact form
 //
 handleContactForm();
+
+//
+// Handle the registration form
+//
+handleRegister();
 
 //
 // Masonry on startpage
@@ -92,28 +112,3 @@ window.onload = () => {
     new Masonry(masonryElement, { columnWidth: 0 });
   }
 };
-
-//
-// Forms
-//
-const formHandler = document.getElementById('pmf-submit-values');
-if (formHandler) {
-  formHandler.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const form = document.querySelector('.needs-validation');
-    if (!form.checkValidity()) {
-      form.classList.add('was-validated');
-    } else {
-      const action = formHandler.getAttribute('data-pmf-form');
-      if (action === 'ask-question') {
-        // Ask questions
-        handleQuestion();
-      } else {
-        // Everything else
-        saveFormData(formHandler.getAttribute('data-pmf-form'));
-        document.getElementById('formValues').reset();
-      }
-    }
-  });
-}

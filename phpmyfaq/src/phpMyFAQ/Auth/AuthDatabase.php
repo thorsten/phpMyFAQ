@@ -68,7 +68,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen((string) $error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_ADD . 'error(): ' . $error;
             $this->configuration->getLogger()->error(User::ERROR_USER_ADD . 'error(): ' . $error);
 
@@ -153,7 +153,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function checkCredentials(string $login, string $password, array $optionalData = null): bool
+    public function checkCredentials(string $login, string $password, array|null $optionalData = null): bool
     {
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
@@ -165,7 +165,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen((string) $error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
             $this->configuration->getLogger()->error(User::ERROR_USER_NOT_FOUND . 'error(): ' . $error);
 
@@ -202,7 +202,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function isValidLogin(string $login, array $optionalData = null): int
+    public function isValidLogin(string $login, array|null $optionalData = null): int
     {
         $check = sprintf(
             "SELECT login FROM %sfaquserlogin WHERE login = '%s'",

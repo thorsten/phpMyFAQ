@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Configuration;
 use PHPUnit\Framework\TestCase;
 
 class ReportTest extends TestCase
@@ -27,5 +28,15 @@ class ReportTest extends TestCase
         }
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testConvertEncodingWithHtmlEntitiesAndCommas(): void
+    {
+        $inputString = '&lt;p&gt;This is a test, &amp;sample string.&lt;/p&gt;';
+        $expectedOutput = '<p>This is a test  &sample string.</p>';
+        $report = new Report(Configuration::getConfigurationInstance());
+        $actualOutput = $report->convertEncoding($inputString);
+
+        $this->assertEquals($expectedOutput, $actualOutput);
     }
 }

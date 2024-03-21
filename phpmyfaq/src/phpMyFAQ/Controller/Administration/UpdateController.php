@@ -85,7 +85,7 @@ class UpdateController extends AbstractController
         $this->userIsAuthenticated();
 
         try {
-            $versions = HttpClient::create()->request(
+            $versions = HttpClient::create(['timeout' => 30])->request(
                 'GET',
                 'https://api.phpmyfaq.de/versions'
             );

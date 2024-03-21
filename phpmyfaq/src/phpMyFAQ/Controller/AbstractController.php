@@ -18,9 +18,11 @@
 namespace phpMyFAQ\Controller;
 
 use OpenApi\Attributes as OA;
+use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
@@ -43,12 +45,14 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
+    protected ?Configuration $configuration = null;
     /**
      * Check if the FAQ should be secured.
      * @throws Exception
      */
     public function __construct()
     {
+        $this->configuration = Configuration::getConfigurationInstance();
         $this->isSecured();
     }
 
@@ -59,7 +63,7 @@ abstract class AbstractController
      * @param Response|null $response
      * @throws TemplateException
      */
-    protected function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
+    public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
@@ -78,7 +82,7 @@ abstract class AbstractController
      * @param string[] $headers
      * @return JsonResponse
      */
-    protected function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
+    public function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
         return new JsonResponse($data, $status, $headers);
     }
@@ -88,9 +92,8 @@ abstract class AbstractController
      */
     protected function hasValidToken(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
         $request = Request::createFromGlobals();
-        if ($configuration->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+        if ($this->configuration->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
             throw new UnauthorizedHttpException('"x-pmf-token" is not valid.');
         }
     }
@@ -100,9 +103,8 @@ abstract class AbstractController
      */
     protected function isSecured(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $currentUser = CurrentUser::getCurrentUser($configuration);
-        if (!$currentUser->isLoggedIn() && $configuration->get('security.enableLoginOnly')) {
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        if (!$currentUser->isLoggedIn() && $this->configuration->get('security.enableLoginOnly')) {
             throw new UnauthorizedHttpException('You are not allowed to view this content.');
         }
     }
@@ -113,8 +115,7 @@ abstract class AbstractController
      */
     protected function userIsAuthenticated(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        if (!CurrentUser::getCurrentUser($configuration)->isLoggedIn()) {
+        if (!CurrentUser::getCurrentUser($this->configuration)->isLoggedIn()) {
             throw new UnauthorizedHttpException('User is not authenticated.');
         }
     }
@@ -125,8 +126,7 @@ abstract class AbstractController
      */
     protected function userIsSuperAdmin(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        if (!CurrentUser::getCurrentUser($configuration)->isSuperAdmin()) {
+        if (!CurrentUser::getCurrentUser($this->configuration)->isSuperAdmin()) {
             throw new UnauthorizedHttpException('User is not super admin.');
         }
     }
@@ -137,8 +137,7 @@ abstract class AbstractController
      */
     protected function userHasGroupPermission(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $currentUser = CurrentUser::getCurrentUser($configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
@@ -155,8 +154,7 @@ abstract class AbstractController
      */
     protected function userHasUserPermission(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $currentUser = CurrentUser::getCurrentUser($configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
@@ -177,5 +175,30 @@ abstract class AbstractController
         if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permissionType->value));
         }
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     */
+    protected function captchaCodeIsValid(Request $request): bool
+    {
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $captcha = Captcha::getInstance($this->configuration);
+        $captcha->setUserIsLoggedIn($currentUser->isLoggedIn());
+
+        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        if ($this->configuration->get('security.enableGoogleReCaptchaV2')) {
+            $code = Filter::filterVar($data->{'g-recaptcha-response'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        } else {
+            $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+
+        if ($captcha->checkCaptchaCode($code)) {
+            return true;
+        }
+
+        return false;
     }
 }

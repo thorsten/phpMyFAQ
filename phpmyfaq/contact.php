@@ -17,9 +17,11 @@
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -32,13 +34,11 @@ try {
     // @todo handle the exception
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
-
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 

@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -33,11 +32,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ContactController extends AbstractController
 {
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     */
     #[Route('api/contact', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $stopWords = new StopWords($configuration);
+        $stopWords = new StopWords($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -45,9 +47,13 @@ class ContactController extends AbstractController
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
+        if (!$this->captchaCodeIsValid($request)) {
+            return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
+        }
+
         // If e-mail address is set to optional
-        if (!$configuration->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $configuration->getAdminEmail();
+        if (!$this->configuration->get('main.optionalMailAddress') && is_null($email)) {
+            $email = $this->configuration->getAdminEmail();
         }
 
         if (
@@ -67,11 +73,11 @@ class ContactController extends AbstractController
                 $question
             );
 
-            $mailer = new Mail($configuration);
+            $mailer = new Mail($this->configuration);
             try {
                 $mailer->setReplyTo($email, $author);
-                $mailer->addTo($configuration->getAdminEmail());
-                $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $configuration);
+                $mailer->addTo($this->configuration->getAdminEmail());
+                $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $this->configuration);
                 $mailer->message = $question;
                 $mailer->send();
                 unset($mailer);

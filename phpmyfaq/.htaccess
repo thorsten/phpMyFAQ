@@ -51,9 +51,11 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     ErrorDocument 404 /index.php?action=404
 
     # General pages
-    RewriteRule addcontent.html$ index.php?action=add [L,QSA]
+    RewriteRule add-faq.html$ index.php?action=add [L,QSA]
+    RewriteRule add-question.html$ index.php?action=ask [L,QSA]
     RewriteRule show-categories.html$ index.php?action=show [L,QSA]
-    RewriteRule ^(search|ask|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
+    RewriteRule ^(search|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
+    RewriteRule ^(login) index.php?action=login [L,QSA]
 
     # start page
     RewriteRule ^index.html$ index.php [PT]
@@ -92,13 +94,13 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^tags/([0-9]+)/([^\/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
 
     # User pages
-    RewriteRule ^user/(ucp|bookmarks|request-removal|logout) index.php?action=$1 [L,QSA]
+    RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
 
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
 
     # Private APIs
-    RewriteRule ^api/(autocomplete|bookmark/([0-9]+)|user/data/update|user/password/update|user/request-removal|contact) api/index.php [L,QSA]
+    RewriteRule ^api/(autocomplete|bookmark/([0-9]+)|user/data/update|user/password/update|user/request-removal|contact|voting|register|captcha|share|comment/create|faq/create|question/create) api/index.php [L,QSA]
 
     # Setup APIs
     RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]

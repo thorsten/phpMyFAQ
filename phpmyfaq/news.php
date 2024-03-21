@@ -24,6 +24,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -39,11 +40,6 @@ $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
 $comment = new Comments($faqConfig);
-
-if ($showCaptcha !== '') {
-    $captcha->drawCaptchaImage();
-    exit;
-}
 
 $request = Request::createFromGlobals();
 $newsId = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
@@ -69,6 +65,9 @@ $newsHeader = $news['header'];
 $oGlossary = new Glossary($faqConfig);
 $newsContent = $oGlossary->insertItemsIntoContent($newsContent ?? '');
 $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader ?? '');
+
+$helper = new FaqHelper($faqConfig);
+$newsContent = $helper->cleanUpContent($newsContent);
 
 // Add an information link if existing
 if (strlen((string) $news['link']) > 0) {
