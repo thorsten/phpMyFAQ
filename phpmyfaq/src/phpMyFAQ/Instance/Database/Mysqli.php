@@ -204,6 +204,15 @@ class Mysqli extends Database implements Driver
             user_id INT(11) NOT NULL,
             PRIMARY KEY (record_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 
+        'faqforms' => 'CREATE TABLE %sfaqforms (
+            form_id INT(1) NOT NULL,
+            input_id INT(11) NOT NULL,
+            input_type VARCHAR(1000) NOT NULL,
+            input_label VARCHAR(100) NOT NULL,
+            input_active INT(1) NOT NULL,
+            input_required INT(1) NOT NULL,
+            input_lang VARCHAR(11) NOT NULL)',
+
         'faqglossary' => 'CREATE TABLE %sfaqglossary (
             id INT(11) NOT NULL ,
             lang VARCHAR(5) NOT NULL ,
