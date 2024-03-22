@@ -278,6 +278,10 @@ class Installer extends Setup
             'name' => 'administrate_groups',
             'description' => 'Right to administrate groups'
         ],
+        [
+            'name' => 'edit_forms',
+            'description' => 'Right to edit forms'
+        ]
     ];
 
     /**
