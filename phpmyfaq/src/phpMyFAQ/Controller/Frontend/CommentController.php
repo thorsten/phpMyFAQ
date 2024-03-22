@@ -30,6 +30,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
@@ -136,80 +137,14 @@ class CommentController extends AbstractController
                 ->setDate($request->server->get('REQUEST_TIME'));
 
             if ($comment->addComment($commentEntity)) {
-                $emailTo = $this->configuration->getAdminEmail();
+                $notification = new Notification($this->configuration);
                 if ('faq' == $type) {
-                    $faq->getRecord($id);
-                    if ($faq->faqRecord['email'] != '') {
-                        $emailTo = $faq->faqRecord['email'];
-                    }
-
-                    $title = $faq->getRecordTitle($id);
-
-                    $faqUrl = sprintf(
-                        '%s?action=faq&cat=%d&id=%d&artlang=%s',
-                        $this->configuration->getDefaultUrl(),
-                        $category->getCategoryIdFromFaq($faq->faqRecord['id']),
-                        $faq->faqRecord['id'],
-                        $faq->faqRecord['lang']
-                    );
-                    $link = new Link($faqUrl, $this->configuration);
-                    $link->itemTitle = $faq->faqRecord['title'];
+                    $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
                     $news = new News($this->configuration);
                     $newsData = $news->getNewsEntry($id);
-                    if ($newsData['authorEmail'] != '') {
-                        $emailTo = $newsData['authorEmail'];
-                    }
-
-                    $title = $newsData['header'];
-
-                    $newsUrl = sprintf(
-                        '%s?action=news&newsid=%d&newslang=%s',
-                        $this->configuration->getDefaultUrl(),
-                        $newsData['id'],
-                        $newsData['lang']
-                    );
-                    $link = new Link($newsUrl, $this->configuration);
-                    $link->itemTitle = $newsData['header'];
+                    $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
-                $urlToContent = $link->toString();
-
-                $commentMail =
-                    sprintf('User: %s, mailto:%s<br>', $commentEntity->getUsername(), $commentEntity->getEmail()) .
-                    sprintf('Title: %s<br>', $title) .
-                    sprintf('New comment posted here: %s<br><br>', $urlToContent) .
-                    sprintf('%s', wordwrap((string) $commentText, 72));
-
-                $send = [];
-                $mailer = new Mail($this->configuration);
-                $mailer->setReplyTo($commentEntity->getEmail(), $commentEntity->getUsername());
-                $mailer->addTo($emailTo);
-
-                $send[$emailTo] = 1;
-                $send[$this->configuration->getAdminEmail()] = 1;
-
-                if ($type === CommentType::FAQ) {
-                    // Let the category owner of a FAQ get a copy of the message
-                    $category = new Category($this->configuration);
-                    $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
-                    foreach ($categories as $_category) {
-                        $userId = $category->getOwner($_category);
-                        $catUser = new User($this->configuration);
-                        $catUser->getUserById($userId);
-                        $catOwnerEmail = $catUser->getUserData('email');
-
-                        if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
-                            $mailer->addCc($catOwnerEmail);
-                            $send[$catOwnerEmail] = 1;
-                        }
-                    }
-                }
-
-                $mailer->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
-                $mailer->message = strip_tags($commentMail);
-
-                $mailer->send();
-                unset($mailer);
 
                 return $this->json(['success' => Translation::get('msgCommentThanks')], Response::HTTP_OK);
             } else {

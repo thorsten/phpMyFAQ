@@ -16,6 +16,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Entity\Comment;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -45,7 +47,7 @@ readonly class Notification
     }
 
     /**
-     * Sends a mail to user who added a question.
+     * Sends mail to user who added a question.
      *
      * @param string $email Email address of the user
      * @param string $userName Name of the user
@@ -106,5 +108,111 @@ readonly class Notification
 
             $this->mail->send();
         }
+    }
+
+    /**
+     * Sends mail to user who added a comment.
+     * @param Faq $faq
+     * @param Comment $comment
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function sendFaqCommentNotification(Faq $faq, Comment $comment): void
+    {
+        $category = new Category($this->configuration);
+        $emailTo = $this->configuration->getAdminEmail();
+        if ($faq->faqRecord['email'] != '') {
+            $emailTo = $faq->faqRecord['email'];
+        }
+
+        $title = $faq->faqRecord['title'];
+
+        $faqUrl = sprintf(
+            '%s?action=faq&cat=%d&id=%d&artlang=%s',
+            $this->configuration->getDefaultUrl(),
+            $category->getCategoryIdFromFaq($faq->faqRecord['id']),
+            $faq->faqRecord['id'],
+            $faq->faqRecord['lang']
+        );
+        $link = new Link($faqUrl, $this->configuration);
+        $link->itemTitle = $faq->faqRecord['title'];
+
+        $urlToContent = $link->toString();
+
+        $commentMail =
+            sprintf('User: %s, mailto:%s<br>', $comment->getUsername(), $comment->getEmail()) .
+            sprintf('Title: %s<br>', $title) .
+            sprintf('New comment posted here: %s<br><br>', $urlToContent) .
+            sprintf('%s', wordwrap($comment->getComment(), 72));
+
+        $send = [];
+
+        $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
+        $this->mail->addTo($emailTo);
+
+        $send[$emailTo] = 1;
+        $send[$this->configuration->getAdminEmail()] = 1;
+
+        // Let the category owner of a FAQ get a copy of the message
+        $category = new Category($this->configuration);
+        $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
+        foreach ($categories as $_category) {
+            $userId = $category->getOwner($_category);
+            $catUser = new User($this->configuration);
+            $catUser->getUserById($userId);
+            $catOwnerEmail = $catUser->getUserData('email');
+
+            if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
+                $this->mail->addCc($catOwnerEmail);
+                $send[$catOwnerEmail] = 1;
+            }
+        }
+
+        $this->mail->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
+        $this->mail->message = strip_tags($commentMail);
+
+        $this->mail->send();
+    }
+
+    /**
+     * @param array $newsData
+     * @param Comment $comment
+     * @return void
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function sendNewsCommentNotification(array $newsData, Comment $comment): void
+    {
+        if ($newsData['authorEmail'] != '') {
+            $this->mail->addTo($newsData['authorEmail']);
+        }
+
+        $title = $newsData['header'];
+
+        $newsUrl = sprintf(
+            '%s?action=news&newsid=%d&newslang=%s',
+            $this->configuration->getDefaultUrl(),
+            $newsData['id'],
+            $newsData['lang']
+        );
+        $link = new Link($newsUrl, $this->configuration);
+        $link->itemTitle = $newsData['header'];
+        $urlToContent = $link->toString();
+
+        $commentMail =
+            sprintf('User: %s, mailto:%s<br>', $comment->getUsername(), $comment->getEmail()) .
+            sprintf('Title: %s<br>', $title) .
+            sprintf('New comment posted here: %s<br><br>', $urlToContent) .
+            sprintf('%s', wordwrap($comment->getComment(), 72));
+
+        $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
+
+        $send = [];
+        $send[$this->configuration->getAdminEmail()] = 1;
+
+        $this->mail->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
+        $this->mail->message = strip_tags($commentMail);
+
+        $this->mail->send();
     }
 }
