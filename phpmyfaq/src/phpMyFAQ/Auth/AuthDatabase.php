@@ -20,6 +20,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\User;
@@ -45,14 +46,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function create(string $login, string $password, string $domain = ''): bool
     {
         if ($this->isValidLogin($login) > 0) {
-            $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
-            $this->configuration->getLogger()->error(User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE);
-
-            return false;
+            throw new Exception(User::ERROR_USER_ADD . ': ' . User::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
 
         $add = sprintf(
@@ -69,17 +68,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $error = $this->databaseDriver->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_ADD . 'error(): ' . $error;
-            $this->configuration->getLogger()->error(User::ERROR_USER_ADD . 'error(): ' . $error);
-
-            return false;
+            throw new Exception(User::ERROR_USER_ADD . ': ' . $error);
         }
 
         if (!$add) {
-            $this->errors[] = User::ERROR_USER_ADD;
-            $this->configuration->getLogger()->error(User::ERROR_USER_ADD);
-
-            return false;
+            throw new Exception(User::ERROR_USER_ADD);
         }
 
         return true;
@@ -87,9 +80,14 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function update(string $login, string $password): bool
     {
+        if ($this->isValidLogin($login) < 1) {
+            throw new Exception(User::ERROR_USER_CHANGE . ': ' . User::ERROR_USER_NOT_FOUND);
+        }
+
         $change = sprintf(
             "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
@@ -102,17 +100,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $error = $this->databaseDriver->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
-            $this->configuration->getLogger()->error(User::ERROR_USER_CHANGE . 'error(): ' . $error);
-
-            return false;
+            throw new Exception(User::ERROR_USER_CHANGE . ': ' . $error);
         }
 
         if (!$change) {
-            $this->errors[] = User::ERROR_USER_CHANGE;
-            $this->configuration->getLogger()->error(User::ERROR_USER_CHANGE);
-
-            return false;
+            throw new Exception(User::ERROR_USER_CHANGE);
         }
 
         return true;

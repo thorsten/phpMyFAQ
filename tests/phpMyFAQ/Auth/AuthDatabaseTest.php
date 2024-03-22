@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Auth;
 
+use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 
@@ -20,6 +21,9 @@ class AuthDatabaseTest extends TestCase
         $this->authDatabase->delete('testUser');
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCreate(): void
     {
         $login = 'testUser';
@@ -28,14 +32,43 @@ class AuthDatabaseTest extends TestCase
         $this->assertTrue($this->authDatabase->create($login, $password));
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testCreateThrowsException(): void
+    {
+        $login = 'testUser';
+        $password = 'testPassword';
+        $this->authDatabase->create($login, $password);
+
+        $this->expectException(Exception::class);
+        $this->authDatabase->create($login, $password);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testUpdate(): void
     {
         $login = 'testUser';
         $password = 'newTestPassword';
+        $this->authDatabase->create($login, $password);
 
         $this->assertTrue($this->authDatabase->update($login, $password));
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testUpdateThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->authDatabase->update('nonExistingUser', 'newPassword');
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testDelete(): void
     {
         $login = 'testUser';

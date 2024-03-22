@@ -74,8 +74,9 @@ class AuthSso extends Auth implements AuthDriverInterface
     public function checkCredentials(string $login, string $password, array $optionalData = null): bool
     {
         if (!isset($_SERVER['REMOTE_USER'])) {
-            return false;
+            throw new Exception('Remote User not set!');
         }
+
         // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
         $remoteUser = explode('\\', (string) $_SERVER['REMOTE_USER']);
         if (is_array($remoteUser) && count($remoteUser) > 1) {
@@ -90,6 +91,7 @@ class AuthSso extends Auth implements AuthDriverInterface
 
             return true;
         }
+
         return false;
     }
 
