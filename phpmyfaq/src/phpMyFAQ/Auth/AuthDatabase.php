@@ -101,7 +101,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen((string) $error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
             $this->configuration->getLogger()->error(User::ERROR_USER_CHANGE . 'error(): ' . $error);
 
@@ -133,7 +133,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen((string) $error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = User::ERROR_USER_DELETE . 'error(): ' . $error;
             $this->configuration->getLogger()->error(User::ERROR_USER_DELETE . 'error(): ' . $error);
 
