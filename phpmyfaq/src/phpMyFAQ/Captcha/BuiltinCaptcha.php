@@ -145,7 +145,7 @@ class BuiltinCaptcha implements CaptchaInterface
     /**
      * Gives the HTML output code for the Captcha.
      *
-     * @param string $action The action parameter
+     * @return string
      */
     public function renderCaptchaImage(): string
     {
