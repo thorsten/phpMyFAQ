@@ -46,13 +46,13 @@ class AuthHttp extends Auth implements AuthDriverInterface
     public function create(string $login, string $password, string $domain = ''): bool
     {
         $user = new User($this->configuration);
-        $result = $user->createUser($login);
+        $user->createUser($login);
 
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_HTTP->value);
         $user->setUserData(['display_name' => $login]);
 
-        return $result;
+        return true;
     }
 
     /**

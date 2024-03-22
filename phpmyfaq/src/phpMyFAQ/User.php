@@ -973,7 +973,7 @@ class User
             $this->getUserId()
         );
 
-        return $this->configuration->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**

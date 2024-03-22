@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 class AuthDatabaseTest extends TestCase
 {
     private AuthDatabase $authDatabase;
+
     protected function setUp(): void
     {
         $this->authDatabase = new AuthDatabase(Configuration::getConfigurationInstance());

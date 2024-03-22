@@ -19,4 +19,8 @@
       <directory suffix=".php">./phpmyfaq/src/libs</directory>
     </exclude>
   </source>
+  <php>
+    <server name="PHP_AUTH_USER" value="testUser" />
+    <server name="PHP_AUTH_PW" value="testPassword" />
+  </php>
 </phpunit>

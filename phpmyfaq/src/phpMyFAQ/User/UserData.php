@@ -226,7 +226,7 @@ class UserData
             Database::getTablePrefix(),
             date('YmdHis', $_SERVER['REQUEST_TIME']),
             $this->configuration->getDb()->escape($this->data['display_name']),
-            $this->configuration->getDb()->escape($this->data['email']),
+            $this->configuration->getDb()->escape($this->data['email'] ?? ''),
             $this->data['is_visible'],
             $this->data['twofactor_enabled'],
             $this->data['secret'],
