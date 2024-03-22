@@ -18,7 +18,11 @@ class AuthDatabaseTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->authDatabase->delete('testUser');
+        try {
+            $this->authDatabase->delete('testUser');
+        } catch (Exception $e) {
+            // Ignore
+        }
     }
 
     /**
@@ -78,6 +82,12 @@ class AuthDatabaseTest extends TestCase
         $this->assertTrue($this->authDatabase->delete($login));
     }
 
+    public function testDeleteThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->authDatabase->delete('nonExistingUser');
+    }
+
     public function testCheckCredentials(): void
     {
         $login = 'testUser';
@@ -87,6 +97,15 @@ class AuthDatabaseTest extends TestCase
         $this->assertTrue($this->authDatabase->checkCredentials($login, $password));
     }
 
+    public function testCheckCredentialsThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->authDatabase->checkCredentials('nonExistingUser', 'password');
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testIsValidLogin(): void
     {
         $login = 'testUser';
@@ -94,5 +113,13 @@ class AuthDatabaseTest extends TestCase
         $this->authDatabase->create($login, $password);
 
         $this->assertEquals(1, $this->authDatabase->isValidLogin($login));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsValidLoginReturnsZero(): void
+    {
+        $this->assertEquals(0, $this->authDatabase->isValidLogin('nonExistingUser'));
     }
 }

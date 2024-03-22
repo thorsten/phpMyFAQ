@@ -112,9 +112,14 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function delete(string $login): bool
     {
+        if ($this->isValidLogin($login) < 1) {
+            throw new Exception(User::ERROR_USER_DELETE . User::ERROR_USER_NOT_FOUND);
+        }
+
         $delete = sprintf(
             "DELETE FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
@@ -126,17 +131,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $error = $this->databaseDriver->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_DELETE . 'error(): ' . $error;
-            $this->configuration->getLogger()->error(User::ERROR_USER_DELETE . 'error(): ' . $error);
-
-            return false;
+            throw new Exception(User::ERROR_USER_DELETE . ': ' . $error);
         }
 
         if (!$delete) {
-            $this->errors[] = User::ERROR_USER_DELETE;
-            $this->configuration->getLogger()->error(User::ERROR_USER_DELETE);
-
-            return false;
+            throw new Exception(User::ERROR_USER_DELETE . ': ' . $error);
         }
 
         return true;
@@ -144,6 +143,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function checkCredentials(string $login, string $password, array|null $optionalData = null): bool
     {
@@ -158,24 +158,17 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $error = $this->databaseDriver->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
-            $this->configuration->getLogger()->error(User::ERROR_USER_NOT_FOUND . 'error(): ' . $error);
-
-            return false;
+            throw new Exception(User::ERROR_USER_NOT_FOUND . ': ' . $error);
         }
 
         $numRows = $this->databaseDriver->numRows($check);
         if ($numRows < 1) {
-            $this->errors[] = User::ERROR_USER_NOT_FOUND;
-            $this->configuration->getLogger()->error(User::ERROR_USER_NOT_FOUND);
-
-            return false;
+            throw new Exception(User::ERROR_USER_NOT_FOUND);
         }
 
         // if login not unique, raise an error, but continue
         if ($numRows > 1) {
-            $this->errors[] = User::ERROR_USER_LOGIN_NOT_UNIQUE;
-            $this->configuration->getLogger()->error(User::ERROR_USER_LOGIN_NOT_UNIQUE);
+            throw new Exception(User::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
 
         // if multiple accounts are ok, just 1 valid required
@@ -185,14 +178,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             }
         }
 
-        $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
-        $this->configuration->getLogger()->error(User::ERROR_USER_INCORRECT_PASSWORD);
-
-        return false;
+        throw new Exception(User::ERROR_USER_INCORRECT_PASSWORD);
     }
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function isValidLogin(string $login, array|null $optionalData = null): int
     {
@@ -206,11 +197,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $error = $this->databaseDriver->error();
 
-        if (strlen((string) $error) > 0) {
-            $this->errors[] = $error;
-            $this->configuration->getLogger()->error($error);
-
-            return 0;
+        if (strlen($error) > 0) {
+            throw new Exception($error);
         }
 
         return $this->databaseDriver->numRows($check);

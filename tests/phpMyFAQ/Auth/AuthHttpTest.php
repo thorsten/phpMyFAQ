@@ -27,6 +27,19 @@ class AuthHttpTest extends TestCase
         $this->assertTrue($this->authHttp->create($login, $password));
     }
 
+    public function testUpdate(): void
+    {
+        $login = 'testUser';
+        $password = 'newTestPassword';
+        $this->assertTrue($this->authHttp->update($login, $password));
+    }
+
+    public function testDelete(): void
+    {
+        $login = 'testUser';
+        $this->assertTrue($this->authHttp->delete($login));
+    }
+
     /**
      * @throws Exception
      */
