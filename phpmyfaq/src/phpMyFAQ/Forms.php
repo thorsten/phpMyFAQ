@@ -24,13 +24,11 @@ use Symfony\Component\VarDumper\Cloner\Data;
 
 class Forms
 {
-    private Configuration $config;
 
-    private $translation;
+    private Translation $translation;
 
-    public function __construct(Configuration $config)
+    public function __construct(private Configuration $config)
     {
-        $this->config = $config;
         $this->translation = new Translation();
     }
 
@@ -85,7 +83,7 @@ class Forms
     /**
      * Sort function for usort | Sorting form data by input-id
      */
-    private function sortByInputId($a, $b)
+    private function sortByInputId(object $a, object $b)
     {
         return $a->input_id - $b->input_id;
     }
@@ -244,8 +242,8 @@ class Forms
             Database::getTablePrefix(),
             $formId,
             $inputId,
-            $inputData->input_type,
-            $translation,
+            $this->config->getDb()->escape($inputData->input_type),
+            $this->config->getDb()->escape($translation),
             $inputData->input_active,
             $inputData->input_required,
             LanguageCodes::getKey($lang)
@@ -290,13 +288,13 @@ class Forms
             "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
                     input_required) VALUES (%d, %d, '%s', '%s', '%s', %d, %d)",
             Database::getTablePrefix(),
-            $input['form_id'],
-            $input['input_id'],
-            $input['input_type'],
-            $input['input_label'],
-            $input['input_lang'],
-            $input['input_active'],
-            $input['input_required']
+            $this->config->getDb()->escape($input['form_id']),
+            $this->config->getDb()->escape($input['input_id']),
+            $this->config->getDb()->escape($input['input_type']),
+            $this->config->getDb()->escape($input['input_label']),
+            $this->config->getDb()->escape($input['input_lang']),
+            $this->config->getDb()->escape($input['input_active']),
+            $this->config->getDb()->escape($input['input_required'])
         );
 
         return (bool) $this->config->getDb()->query($query);

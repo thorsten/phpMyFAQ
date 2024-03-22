@@ -279,7 +279,7 @@ class Installer extends Setup
             'description' => 'Right to administrate groups'
         ],
         [
-            'name' => 'edit_forms',
+            'name' => 'forms_edit',
             'description' => 'Right to edit forms'
         ]
     ];

@@ -26,6 +26,8 @@ use phpMyFAQ\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ZipArchive;
@@ -260,7 +262,7 @@ class Update extends Setup
                     Database::getTablePrefix()
                 );
             } else {
-                $this->queries[] =  sprintf(
+                $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquser 
                         ADD refresh_token TEXT NULL DEFAULT NULL,
                         ADD access_token TEXT NULL DEFAULT NULL,
@@ -633,14 +635,67 @@ class Update extends Setup
 
     private function applyUpdates400Alpha2(): void
     {
-        // Add function for editing forms
-        $forms = new Forms($this->configuration);
-        $installer = new Installer(new System());
-        foreach ($installer->formInputs as $input) {
-            $forms->insertInputIntoDatabase($input);
-        }
+        if (version_compare($this->version, '4.0.0-alpha2', '<')) {
+            // Add function for editing forms
+            $forms = new Forms($this->configuration);
+            $installer = new Installer(new System());
+            foreach ($installer->formInputs as $input) {
+                $forms->insertInputIntoDatabase($input);
+            }
 
-        $this->configuration->delete('main.optionalMailAddress');
+            // Add new permission for editing forms
+            $user = new User($this->configuration);
+            $rightData = [
+                'name' => 'forms_edit',
+                'description' => 'Right to edit forms'
+            ];
+            $user->perm->grantUserRight(1, $user->perm->addRight($rightData));
+
+            $this->configuration->delete('main.optionalMailAddress');
+
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                        form_id INT(1) NOT NULL,
+                        input_id INT(11) NOT NULL,
+                        input_type VARCHAR(1000) NOT NULL,
+                        input_label VARCHAR(100) NOT NULL,
+                        input_active INT(1) NOT NULL,
+                        input_required INT(1) NOT NULL,
+                        input_lang VARCHAR(11) NOT NULL)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlsrv':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                        form_id INTEGER NOT NULL,
+                        input_id INTEGER NOT NULL,
+                        input_type NVARCHAR(1000) NOT NULL,
+                        input_label NVARCHAR(100) NOT NULL,
+                        input_active INTEGER NOT NULL,
+                        input_required INTEGER NOT NULL,
+                        input_lang NVARCHAR(11) NOT NULL)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlite3':
+                case 'pgsql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                        form_id INTEGER NOT NULL,
+                        input_id INTEGER NOT NULL,
+                        input_type VARCHAR(1000) NOT NULL,
+                        input_label VARCHAR(100) NOT NULL,
+                        input_active INTEGER NOT NULL,
+                        input_required INTEGER NOT NULL,
+                        input_lang VARCHAR(11) NOT NULL)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+            }
+        }
     }
 
     private function updateVersion(): void

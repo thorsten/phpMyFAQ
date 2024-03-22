@@ -90,5 +90,5 @@ enum PermissionType: string
 
     case USER_DELETE = 'delete_user';
 
-    case FORMS_EDIT = 'edit_forms';
+    case FORMS_EDIT = 'forms_edit';
 }
