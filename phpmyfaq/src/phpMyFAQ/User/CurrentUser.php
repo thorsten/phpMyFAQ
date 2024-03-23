@@ -102,24 +102,20 @@ class CurrentUser extends User
     }
 
     /**
-     * Checks the given login and password in all auth-objects. Returns true
-     * on success, otherwise false. Raises errors that can be checked using
-     * the error() method. On success, the CurrentUser instance will be
-     * labeled as logged in. The name of the successful auth container will
-     * be stored in the user table. A new auth object may be added by using
-     * addAuth() method. The given password must not be encrypted, since the
-     * auth object takes care of the encryption method.
+     * Checks the given login and password in all auth-objects.
+     * Returns true for success, otherwise false.
+     * On success, the CurrentUser instance will be labeled as logged in.
+     * The name of the successful auth container will be stored in the user table.
+     * A new auth object may be added by using addAuth() method.
+     * The given password must not be encrypted, since the auth object takes care of the encryption method.
      *
      * @param string $login Login name
      * @param string $password Password
+     * @throws Exception
      */
     public function login(string $login, string $password): bool
     {
-        $optData = [];
-        $loginError = 0;
-        $passwordError = 0;
-        $count = 0;
-
+        // Check if the login is an email address and convert it to a username if needed
         if (
             $this->configuration->get('security.loginWithEmailAddress') &&
             Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
@@ -132,72 +128,47 @@ class CurrentUser extends User
         // First check for brute force attack
         $this->getUserByLogin($login);
         if ($this->isFailedLastLoginAttempt()) {
-            $this->errors[] = parent::ERROR_USER_TOO_MANY_FAILED_LOGINS;
-            $this->configuration->getLogger()->info(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
-            return false;
+            throw new Exception(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
         }
 
-        // Additional code for LDAP: user\\domain
-        // If LDAP configuration and ldap_use_domain_prefix are true,
-        // and LDAP credentials are provided (password is not empty)
+        // Extract domain if LDAP is active and ldap_use_domain_prefix is true
         if (
             $this->configuration->isLdapActive() &&
             $this->configuration->get('ldap.ldap_use_domain_prefix') &&
             '' !== $password &&
             ($pos = strpos($login, '\\')) !== false
         ) {
-            if ($pos !== 0) {
-                $optData['domain'] = substr($login, 0, $pos);
-            }
+            $optData['domain'] = $pos !== 0 ? substr($login, 0, $pos) : '';
             $login = substr($login, $pos + 1);
         }
 
-        // Additional code for SSO
+        // Handle SSO authentication
         if ($this->configuration->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
-            // if SSO configuration is enabled, REMOTE_USER is provided, and we try to log in using SSO (no password)
-            if (($pos = strpos($login, '@')) !== false && $pos !== 0) {
-                $login = substr($login, 0, $pos);
-            }
-
-            if (($pos = strpos($login, '\\')) !== false && $pos !== 0) {
-                $login = substr($login, $pos + 1);
-            }
+            $login = strtok($login, '@\\');
         }
 
-        // authenticate user by login and password
+        // Attempt to authenticate user by login and password
         foreach ($this->authContainer as $authSource => $auth) {
-            ++$count;
-
-            // $auth is an invalid Auth object, so continue
             if (!$this->checkAuth($auth)) {
-                --$count;
-                continue;
+                continue; // Skip invalid Auth objects
             }
 
-            // $login does not exist, so continue
-            if ($auth->isValidLogin($login, $optData) === 0) {
-                ++$loginError;
-                continue;
+            if ($auth->isValidLogin($login, $optData ?? []) === 0) {
+                continue; // Login does not exist, try next auth method
             }
 
-            // $login exists, but $pass is incorrect, so stop!
-            if (!$auth->checkCredentials($login, $password, $optData)) {
-                ++$passwordError;
-                // Don't stop, as another auth method could work
-                continue;
+            if (!$auth->checkCredentials($login, $password, $optData ?? [])) {
+                continue; // Incorrect password, try next auth method
             }
 
-            // but hey, this must be a valid match, so get a user object
+            // Login successful, proceed with post-login actions
             $this->getUserByLogin($login);
-
-            // only save this successful login to session when 2FA is not enabled
             if ((int)$this->getUserData('twofactor_enabled') !== 1) {
                 $this->setLoggedIn(true);
                 $this->updateSessionId(true);
                 $this->saveToSession();
             }
 
-            // save remember me cookie if set
             if ($this->rememberMe) {
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
@@ -208,30 +179,30 @@ class CurrentUser extends User
                 );
             }
 
-            // Set auth source
             if (!$this->setAuthSource($authSource)) {
                 $this->setSuccess(false);
                 return false;
             }
 
-            // Login successful if 2FA is not enabled
             if ((int)$this->getUserData('twofactor_enabled') !== 1) {
                 $this->setSuccess(true);
             }
 
-            return true;
+            return true; // Login successful
         }
 
-        // raise errors and return false
-        if ($loginError === $count) {
-            $this->setSuccess(false);
-            $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
+        // No successful login, handle errors
+        if ($this->configuration->get('security.loginWithEmailAddress')) {
+            $this->setLoginAttempt(); // Only set a login attempt if email addresses are allowed
         }
 
-        if ($passwordError > 0) {
-            $this->getUserByLogin($login);
-            $this->setLoginAttempt();
-            $this->errors[] = parent::ERROR_USER_INCORRECT_PASSWORD;
+        if (
+            $this->configuration->get('security.loginWithEmailAddress') &&
+            !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
+        ) {
+            throw new Exception(parent::ERROR_USER_INCORRECT_LOGIN);
+        } elseif (!$this->isFailedLastLoginAttempt()) {
+            throw new Exception(parent::ERROR_USER_INCORRECT_PASSWORD);
         }
 
         return false;
@@ -510,6 +481,7 @@ class CurrentUser extends User
      * returned. On success, a valid CurrentUser object is returned.
      *
      * @static
+     * @throws Exception
      */
     public static function getFromSession(Configuration $configuration): ?CurrentUser
     {
