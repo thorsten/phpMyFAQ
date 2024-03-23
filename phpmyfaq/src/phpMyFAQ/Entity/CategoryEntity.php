@@ -52,7 +52,7 @@ class CategoryEntity
     /**
      * @param bool $active
      */
-    public function setActive($active): CategoryEntity
+    public function setActive(bool $active): CategoryEntity
     {
         $this->active = $active;
 
@@ -127,7 +127,7 @@ class CategoryEntity
     /**
      * @param int $parentId
      */
-    public function setParentId($parentId): CategoryEntity
+    public function setParentId(int $parentId): CategoryEntity
     {
         $this->parentId = $parentId;
 
@@ -142,7 +142,7 @@ class CategoryEntity
     /**
      * @param int $userId
      */
-    public function setUserId($userId): CategoryEntity
+    public function setUserId(int $userId): CategoryEntity
     {
         $this->userId = $userId;
 

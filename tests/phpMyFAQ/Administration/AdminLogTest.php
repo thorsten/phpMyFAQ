@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
 use PHPUnit\Framework\TestCase;
@@ -62,6 +64,9 @@ class AdminLogTest extends TestCase
         $this->assertEquals(2, $this->adminLog->getNumberOfEntries());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetAll(): void
     {
         $_SERVER['REQUEST_TIME'] = $this->now;
@@ -69,20 +74,24 @@ class AdminLogTest extends TestCase
         $this->adminLog->log(new User($this->configuration), 'bar');
 
         $result = $this->adminLog->getAll();
+
+        $adminLogEntity = new AdminLogEntity();
+        $one = $adminLogEntity->setId(1)
+            ->setTime($this->now)
+            ->setUserId(-1)
+            ->setText('foo')
+            ->setIp('127.0.0.1');
+        $adminLogEntity = new AdminLogEntity();
+        $two = $adminLogEntity->setId(2)
+            ->setTime($this->now)
+            ->setUserId(-1)
+            ->setText('bar')
+            ->setIp('127.0.0.1');
+
         $this->assertEquals(
             [
-                2 => [
-                    'time' => $this->now,
-                    'usr' => -1,
-                    'text' => 'bar',
-                    'ip' => '127.0.0.1'
-                ],
-                1 => [
-                    'time' => $this->now,
-                    'usr' => -1,
-                    'text' => 'foo',
-                    'ip' => '127.0.0.1'
-                ]
+                2 => $two,
+                1 => $one
             ],
             $result
         );
