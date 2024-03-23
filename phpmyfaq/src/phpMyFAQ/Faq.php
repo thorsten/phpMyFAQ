@@ -1205,10 +1205,10 @@ class Faq
 
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
             if (($row->active === 'y') || ($row->active === 'yes')) {
-                return false;
+                return true;
             }
         } else {
-            return true;
+            return false;
         }
     }
 
