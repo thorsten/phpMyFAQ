@@ -171,7 +171,7 @@ class User
      * Constructor.
      *
      * @throws Core\Exception
-     */
+*/
     public function __construct(protected ?Configuration $configuration)
     {
         $permission = Permission::selectPerm($this->configuration->get('security.permLevel'), $this->configuration);

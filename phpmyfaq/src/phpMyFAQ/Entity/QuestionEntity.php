@@ -24,58 +24,23 @@ namespace phpMyFAQ\Entity;
  */
 class QuestionEntity
 {
-    /**
-     * @var int
-     */
-    public $id;
+    public int $id;
 
-    /**
-     * @var string
-     */
-    public $lang;
+    public string $language;
 
-    /**
-     * @var string
-     */
-    public $username;
+    public string $username;
 
-    /**
-     * @var string
-     */
-    public $email;
+    public string $email;
 
-    /**
-     * @var int
-     */
-    public $categoryId;
+    public int $categoryId;
 
-    /**
-     * @var string
-     */
-    public $question;
+    public string $question;
 
-    /**
-     * @var string
-     */
-    public $created;
+    public string $created;
 
-    /**
-     * @var int
-     */
-    public $answerId;
+    public int $answerId;
 
-    /**
-     * @var string
-     */
-    public $isVisible;
-
-    /**
-     * QuestionEntity constructor.
-     */
-    public function __construct()
-    {
-        return $this;
-    }
+    public bool $isVisible;
 
     public function getId(): int
     {
@@ -88,14 +53,14 @@ class QuestionEntity
         return $this;
     }
 
-    public function getLang(): string
+    public function getLanguage(): string
     {
-        return $this->lang;
+        return $this->language;
     }
 
-    public function setLang(string $lang): QuestionEntity
+    public function setLanguage(string $language): QuestionEntity
     {
-        $this->lang = $lang;
+        $this->language = $language;
         return $this;
     }
 
@@ -165,12 +130,12 @@ class QuestionEntity
         return $this;
     }
 
-    public function isVisible(): string
+    public function isVisible(): bool
     {
         return $this->isVisible;
     }
 
-    public function setIsVisible(string $isVisible): QuestionEntity
+    public function setIsVisible(bool $isVisible): QuestionEntity
     {
         $this->isVisible = $isVisible;
         return $this;
