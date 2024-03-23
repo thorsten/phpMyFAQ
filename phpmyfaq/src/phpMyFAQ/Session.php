@@ -17,8 +17,10 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Core\Exception;
+use Exception;
+use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\User\CurrentUser;
+use Random\RandomException;
 use stdClass;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +41,7 @@ class Session
     /** @var string Name of the session GET parameter */
     final public const PMF_GET_KEY_NAME_SESSIONID = 'sid';
 
-    /** @var string Entra ID session key */
+    /** @var string EntraID session key */
     final public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
 
     /** @var string */
@@ -54,11 +56,6 @@ class Session
 
     private ?CurrentUser $currentUser = null;
 
-    /**
-     * Constructor.
-     *
-     * @throws \Exception
-     */
     public function __construct(private readonly Configuration $configuration)
     {
         $this->createCurrentSessionKey();
@@ -101,7 +98,7 @@ class Session
     /**
      * Sets the current UUID session key
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setCurrentSessionKey(): Session
     {
@@ -116,8 +113,6 @@ class Session
 
     /**
      * Creates the current UUID session key
-     *
-     * @throws \Exception
      */
     public function createCurrentSessionKey(): void
     {
@@ -238,7 +233,6 @@ class Session
      *
      * @param int $sessionIdToCheck Session ID
      * @param string $ip IP
-     * @throws Exception
      */
     public function checkSessionId(int $sessionIdToCheck, string $ip): void
     {
@@ -252,7 +246,7 @@ class Session
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) == 0) {
-            $this->userTracking('old_session', $sessionIdToCheck);
+            $this->userTracking(SessionActionType::OLD_SESSION->value, $sessionIdToCheck);
         } else {
             // Update global session id
             $this->setCurrentSessionId($sessionIdToCheck);
@@ -284,96 +278,97 @@ class Session
      *
      * @param string          $action Action string
      * @param int|string|null $data
-     * @throws Exception
      */
     public function userTracking(string $action, int|string $data = null): void
     {
         if ($this->configuration->get('main.enableUserTracking')) {
-            $request = Request::createFromGlobals();
-            $bots = 0;
-            $banned = false;
-            $this->currentSessionId = Filter::filterVar(
-                $request->query->get(self::PMF_GET_KEY_NAME_SESSIONID),
-                FILTER_VALIDATE_INT
-            );
-            $cookieId = Filter::filterVar($request->query->get(self::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
+            return;
+        }
 
-            if (!is_null($cookieId)) {
-                $this->setCurrentSessionId($cookieId);
+        $request = Request::createFromGlobals();
+        $bots = 0;
+        $banned = false;
+        $this->currentSessionId = Filter::filterVar(
+            $request->query->get(self::PMF_GET_KEY_NAME_SESSIONID),
+            FILTER_VALIDATE_INT
+        );
+        $cookieId = Filter::filterVar($request->query->get(self::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
+
+        if (!is_null($cookieId)) {
+            $this->setCurrentSessionId($cookieId);
+        }
+
+        if ($action === SessionActionType::OLD_SESSION->value) {
+            $this->setCurrentSessionId(0);
+        }
+
+        foreach ($this->getBotIgnoreList() as $bot) {
+            if (Strings::strstr($request->headers->get('user-agent'), $bot)) {
+                ++$bots;
             }
+        }
 
-            if ($action === 'old_session') {
-                $this->setCurrentSessionId(0);
-            }
+        // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
+        $remoteAddress = Request::createFromGlobals()->getClientIp();
+        $localAddresses = ['127.0.0.1', '::1'];
 
-            foreach ($this->getBotIgnoreList() as $bot) {
-                if (Strings::strstr($request->headers->get('user-agent'), $bot)) {
-                    ++$bots;
-                }
-            }
+        if (in_array($remoteAddress, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $remoteAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
 
-            // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
-            $remoteAddress = Request::createFromGlobals()->getClientIp();
-            $localAddresses = ['127.0.0.1', '::1'];
+        // clean up as well
+        $remoteAddress = preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
 
-            if (in_array($remoteAddress, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $remoteAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            }
+        // Anonymize IP address
+        $remoteAddress = IpUtils::anonymize($remoteAddress);
 
-            // clean up as well
-            $remoteAddress = preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
+        $network = new Network($this->configuration);
+        if ($network->isBanned($remoteAddress)) {
+            $banned = true;
+        }
 
-            // Anonymize IP address
-            $remoteAddress = IpUtils::anonymize($remoteAddress);
-
-            $network = new Network($this->configuration);
-            if ($network->isBanned($remoteAddress)) {
-                $banned = true;
-            }
-
-            if (0 === $bots && false === $banned) {
-                if ($this->currentSessionId === null) {
-                    $this->currentSessionId = $this->configuration->getDb()->nextId(
-                        Database::getTablePrefix() . 'faqsessions',
-                        'sid'
-                    );
-                    // Check: force the session cookie to contains the current $sid
-                    if (!is_null($cookieId) && (!$cookieId != $this->getCurrentSessionId())) {
-                        self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $this->getCurrentSessionId());
-                    }
-
-                    $query = sprintf(
-                        "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
-                        Database::getTablePrefix(),
-                        $this->getCurrentSessionId(),
-                        $this->currentUser->getUserId(),
-                        $remoteAddress,
-                        $_SERVER['REQUEST_TIME']
-                    );
-
-                    $this->configuration->getDb()->query($query);
+        if (0 === $bots && false === $banned) {
+            if ($this->currentSessionId === null) {
+                $this->currentSessionId = $this->configuration->getDb()->nextId(
+                    Database::getTablePrefix() . 'faqsessions',
+                    'sid'
+                );
+                // Check: force the session cookie to contains the current $sid
+                if (!is_null($cookieId) && (!$cookieId != $this->getCurrentSessionId())) {
+                    self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $this->getCurrentSessionId());
                 }
 
-                $data = $this->getCurrentSessionId() . ';' .
-                    str_replace(';', ',', $action) . ';' .
-                    $data . ';' .
-                    $remoteAddress . ';' .
-                    str_replace(';', ',', $_SERVER['QUERY_STRING'] ?? '') . ';' .
-                    str_replace(';', ',', $_SERVER['HTTP_REFERER'] ?? '') . ';' .
-                    str_replace(';', ',', urldecode((string) $_SERVER['HTTP_USER_AGENT'])) . ';' .
-                    $_SERVER['REQUEST_TIME'] . ";\n";
+                $query = sprintf(
+                    "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
+                    Database::getTablePrefix(),
+                    $this->getCurrentSessionId(),
+                    $this->currentUser->getUserId(),
+                    $remoteAddress,
+                    $_SERVER['REQUEST_TIME']
+                );
 
-                $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
+                $this->configuration->getDb()->query($query);
+            }
 
-                if (!is_file($file)) {
-                    touch($file);
-                }
+            $data = $this->getCurrentSessionId() . ';' .
+                str_replace(';', ',', $action) . ';' .
+                $data . ';' .
+                $remoteAddress . ';' .
+                str_replace(';', ',', $_SERVER['QUERY_STRING'] ?? '') . ';' .
+                str_replace(';', ',', $_SERVER['HTTP_REFERER'] ?? '') . ';' .
+                str_replace(';', ',', urldecode((string) $_SERVER['HTTP_USER_AGENT'])) . ';' .
+                $_SERVER['REQUEST_TIME'] . ";\n";
 
-                if (is_writable($file)) {
-                    file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
-                } else {
-                    throw new Exception('Cannot write to ' . $file);
-                }
+            $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
+
+            if (!is_file($file)) {
+                touch($file);
+            }
+
+            if (is_writable($file)) {
+                file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
+            } else {
+                $this->configuration->getLogger()->error('Cannot write to ' . $file);
             }
         }
     }
@@ -396,7 +391,7 @@ class Session
             [
                 'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
                 'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
-                'domain' => parse_url((string) $this->configuration->getDefaultUrl(), PHP_URL_HOST),
+                'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => $strict ? 'strict' : '',
                 'secure' => $secure,
                 'httponly' => true,
@@ -412,57 +407,6 @@ class Session
     public function getCookie(string $name): string
     {
         return $_COOKIE[$name];
-    }
-
-    /**
-     * Returns the number of anonymous users and registered ones.
-     * These are the numbers of unique users who have performed
-     * some activities within the last five minutes.
-     *
-     * @param int $activityTimeWindow Optionally set the time window size in sec.
-     *                                Default: 300sec, 5 minutes
-     *
-     * @return array<int>
-     */
-    public function getUsersOnline(int $activityTimeWindow = 300): array
-    {
-        $users = [0, 0];
-
-        if ($this->configuration->get('main.enableUserTracking')) {
-            $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
-
-            if (!$this->configuration->get('security.enableLoginOnly')) {
-                // Count all sids within the time window for public installations
-                $query = sprintf(
-                    'SELECT count(sid) AS anonymous_users FROM %sfaqsessions WHERE user_id = -1 AND time > %d',
-                    Database::getTablePrefix(),
-                    $timeNow
-                );
-
-                $result = $this->configuration->getDb()->query($query);
-
-                if (isset($result)) {
-                    $row = $this->configuration->getDb()->fetchObject($result);
-                    $users[0] = $row->anonymous_users;
-                }
-            }
-
-            // Count all faq user records within the time window
-            $query = sprintf(
-                'SELECT count(session_id) AS registered_users FROM %sfaquser WHERE session_timestamp > %d',
-                Database::getTablePrefix(),
-                $timeNow
-            );
-
-            $result = $this->configuration->getDb()->query($query);
-
-            if (isset($result)) {
-                $row = $this->configuration->getDb()->fetchObject($result);
-                $users[1] = $row->registered_users;
-            }
-        }
-
-        return $users;
     }
 
     /**
@@ -512,21 +456,24 @@ class Session
 
     /**
      * Returns a UUID Version 4 compatible universally unique identifier.
-     *
-     * @throws \Exception
      */
     public function uuid(): string
     {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            random_int(0, 0xffff),
-            random_int(0, 0xffff),
-            random_int(0, 0xffff),
-            random_int(0, 0x0fff) | 0x4000,
-            random_int(0, 0x3fff) | 0x8000,
-            random_int(0, 0xffff),
-            random_int(0, 0xffff),
-            random_int(0, 0xffff)
-        );
+        try {
+            return sprintf(
+                '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                random_int(0, 0xffff),
+                random_int(0, 0xffff),
+                random_int(0, 0xffff),
+                random_int(0, 0x0fff) | 0x4000,
+                random_int(0, 0x3fff) | 0x8000,
+                random_int(0, 0xffff),
+                random_int(0, 0xffff),
+                random_int(0, 0xffff)
+            );
+        } catch (RandomException $e) {
+            $this->configuration->getLogger()->error('Cannot generate UUID: ' . $e->getMessage());
+            return '';
+        }
     }
 }

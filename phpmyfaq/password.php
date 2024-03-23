@@ -22,11 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('forgot_password', 0);
-} catch (Exception $exception) {
-    $faqConfig->getLogger()->error('Tracking of forgot password', ['exception' => $exception->getMessage()]);
-}
+$faqSession->userTracking('forgot_password', 0);
 
 if ($faqConfig->get('security.enableRegistration')) {
     $template->parseBlock(

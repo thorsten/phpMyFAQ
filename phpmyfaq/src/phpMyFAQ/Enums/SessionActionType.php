@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 404 error page
+ * Session actions enum
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,19 +9,16 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2019-2024 phpMyFAQ Team
+ * @copyright 2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2019-01-25
+ * @since     2024-03-23
  */
 
-use phpMyFAQ\Enums\SessionActionType;
+namespace phpMyFAQ\Enums;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    http_response_code(400);
-    exit();
+enum SessionActionType: string
+{
+    case NOT_FOUND = '404';
+    case OLD_SESSION = 'old_session';
 }
-
-$faqSession->userTracking(SessionActionType::NOT_FOUND->value, 0);
-
-$template->parse('mainPageContent', []);

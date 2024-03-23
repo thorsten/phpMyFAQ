@@ -27,11 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('sitemap', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('sitemap', 0);
 
 $request = Request::createFromGlobals();
 $letter = Filter::filterVar($request->query->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);

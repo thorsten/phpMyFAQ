@@ -46,11 +46,7 @@ $newsId = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT)
 
 $oNews = new News($faqConfig);
 
-try {
-    $faqSession->userTracking('news_view', $newsId);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('news_view', $newsId);
 
 // Define the header of the page
 $newsMainHeader = $faqConfig->getTitle() . Translation::get('msgNews');

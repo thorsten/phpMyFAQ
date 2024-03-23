@@ -47,11 +47,7 @@ class VotingController extends AbstractController
         $userIp = Filter::filterVar($request->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP);
 
         if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
-            try {
-                $session->userTracking('save_voting', $faqId);
-            } catch (Exception $exception) {
-                $this->configuration->getLogger()->error('Error saving voting', ['exception' => $exception]);
-            }
+            $session->userTracking('save_voting', $faqId);
 
             $votingData = [
                 'record_id' => $faqId,
@@ -73,20 +69,10 @@ class VotingController extends AbstractController
                 Response::HTTP_OK
             );
         } elseif (!$rating->check($faqId, $userIp)) {
-            try {
-                $session->userTracking('error_save_voting', $faqId);
-            } catch (Exception $exception) {
-                return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
-
+            $session->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get('err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
         } else {
-            try {
-                $session->userTracking('error_save_voting', $faqId);
-            } catch (Exception $exception) {
-                return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
-
+            $session->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get('err_noVote')], Response::HTTP_BAD_REQUEST);
         }
     }

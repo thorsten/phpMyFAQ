@@ -29,11 +29,7 @@ if (!is_null($error)) {
     $loginMessage = '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 }
 
-try {
-    $faqSession->userTracking('login', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('login', 0);
 
 if ($faqConfig->get('security.enableRegistration')) {
     $template->parseBlock(

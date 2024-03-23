@@ -42,11 +42,7 @@ if (!$faqConfig->get('main.enableSendToFriend')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('send2friend', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('send2friend', 0);
 
 $request = Request::createFromGlobals();
 $faqCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);

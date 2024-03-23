@@ -23,11 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('overview', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('overview', 0);
 
 $faqHelper = new FaqHelper($faqConfig);
 

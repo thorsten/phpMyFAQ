@@ -91,11 +91,7 @@ class FaqController extends AbstractController
             $stopWords->checkBannedWord(strip_tags($questionText)) &&
             ($answer !== '' && $answer !== '0') && $stopWords->checkBannedWord(strip_tags($answer))
         ) {
-            try {
-                $session->userTracking('save_new_entry', 0);
-            } catch (Exception) {
-                // @todo handle the exception
-            }
+            $session->userTracking('save_new_entry', 0);
 
             if (!empty($contentLink) && Strings::substr($contentLink, 7) !== '') {
                 $answer = sprintf(

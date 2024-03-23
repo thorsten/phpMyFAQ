@@ -47,11 +47,7 @@ $categoryHelper = new CategoryHelper();
 $categoryHelper->setPlurals(new Plurals());
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
-    try {
-        $faqSession->userTracking('show_category', $selectedCategoryId);
-    } catch (Exception) {
-        // @todo handle the exception
-    }
+    $faqSession->userTracking('show_category', $selectedCategoryId);
 
     $categoryData = $category->getCategoryData($selectedCategoryId);
     $records = $faq->renderRecordsByCategoryId(
@@ -126,11 +122,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     );
 } else {
     $selectedCategoryId = 0;
-    try {
-        $faqSession->userTracking('show_all_categories', 0);
-    } catch (Exception) {
-        // @todo handle the exception
-    }
+    $faqSession->userTracking('show_all_categories', 0);
 
     $categoryHelper
         ->setConfiguration($faqConfig)

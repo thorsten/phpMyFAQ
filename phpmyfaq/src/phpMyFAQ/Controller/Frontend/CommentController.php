@@ -118,15 +118,7 @@ class CommentController extends AbstractController
             !empty($username) && !empty($mailer) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
             $comment->isCommentAllowed($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
         ) {
-            try {
-                $session->userTracking('save_comment', $id);
-            } catch (Exception $exception) {
-                $this->configuration->getLogger()->error(
-                    'Tracking of save new comment',
-                    ['exception' => $exception->getMessage()]
-                );
-            }
-
+            $session->userTracking('save_comment', $id);
             $commentEntity = new Comment();
             $commentEntity
                 ->setRecordId($id)
@@ -148,11 +140,7 @@ class CommentController extends AbstractController
 
                 return $this->json(['success' => Translation::get('msgCommentThanks')], Response::HTTP_OK);
             } else {
-                try {
-                    $session->userTracking('error_save_comment', $id);
-                } catch (Exception) {
-                    // @todo handle the exception
-                }
+                $session->userTracking('error_save_comment', $id);
                 return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
             }
         } else {

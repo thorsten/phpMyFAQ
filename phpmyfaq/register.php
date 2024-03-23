@@ -34,11 +34,7 @@ if (!$faqConfig->get('security.enableRegistration')) {
     $redirect->send();
 }
 
-try {
-    $faqSession->userTracking('registration', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('registration', 0);
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
