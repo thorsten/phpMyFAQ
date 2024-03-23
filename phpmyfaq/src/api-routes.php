@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Controller\Api\AttachmentController;
+use phpMyFAQ\Controller\Api\BackupController;
 use phpMyFAQ\Controller\Api\CategoryController;
 use phpMyFAQ\Controller\Api\CommentController;
 use phpMyFAQ\Controller\Api\FaqController;
@@ -55,6 +56,10 @@ $routes = new RouteCollection();
 $routes->add(
     'api.attachments',
     new Route("v{$apiVersion}/attachments/{recordId}", ['_controller' => [AttachmentController::class, 'list']])
+);
+$routes->add(
+    'api.backup',
+    new Route("v{$apiVersion}/backup/{type}", ['_controller' => [BackupController::class, 'download']])
 );
 $routes->add(
     'api.categories',

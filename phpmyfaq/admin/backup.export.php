@@ -50,33 +50,15 @@ $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPEC
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::BACKUP->value)) {
-    $tables = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
-    $tableNames = '';
-
     $dbHelper = new DatabaseHelper($faqConfig);
     $backup = new Backup($faqConfig, $dbHelper);
 
     switch ($action) {
         case 'backup_content':
-            foreach ($tables as $table) {
-                if (
-                    (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) || (Database::getTablePrefix(
-                    ) . 'faqsessions' === trim((string) $table))
-                ) {
-                    continue;
-                }
-                $tableNames .= $table . ' ';
-            }
+            $tableNames = $backup->getBackupTableNames(BackupType::BACKUP_TYPE_DATA);
             break;
         case 'backup_logs':
-            foreach ($tables as $table) {
-                if (
-                    (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) || (Database::getTablePrefix(
-                    ) . 'faqsessions' === trim((string) $table))
-                ) {
-                    $tableNames .= $table . ' ';
-                }
-            }
+            $tableNames = $backup->getBackupTableNames(BackupType::BACKUP_TYPE_LOGS);
             break;
     }
 
