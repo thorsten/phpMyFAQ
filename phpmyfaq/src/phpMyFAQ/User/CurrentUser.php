@@ -596,13 +596,13 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        return $this->configuration->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**
      * Saves remember me token in the database.
      */
-    protected function setRememberMe(string $rememberMe): bool
+    public function setRememberMe(string $rememberMe): bool
     {
         $update = sprintf(
             "UPDATE %sfaquser SET remember_me = '%s' WHERE user_id = %d",
@@ -611,7 +611,7 @@ class CurrentUser extends User
             $this->getUserId()
         );
 
-        return $this->configuration->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**

@@ -111,7 +111,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetchAssoc();
+        return $result->fetchArray(SQLITE3_ASSOC);
     }
 
     /**
