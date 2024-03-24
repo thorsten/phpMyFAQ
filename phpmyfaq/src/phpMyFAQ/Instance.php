@@ -51,7 +51,7 @@ class Instance
      *
      * @return int $id
      */
-    public function addInstance(InstanceEntity $instanceEntity): int
+    public function create(InstanceEntity $instance): int
     {
         $this->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
 
@@ -59,9 +59,9 @@ class Instance
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             Database::getTablePrefix(),
             $this->getId(),
-            $this->configuration->getDb()->escape($instanceEntity->getUrl()),
-            $this->configuration->getDb()->escape($instanceEntity->getInstance()),
-            $this->configuration->getDb()->escape($instanceEntity->getComment()),
+            $this->configuration->getDb()->escape($instance->getUrl()),
+            $this->configuration->getDb()->escape($instance->getInstance()),
+            $this->configuration->getDb()->escape($instance->getComment()),
             $this->configuration->getDb()->now(),
             $this->configuration->getDb()->now()
         );
@@ -94,7 +94,7 @@ class Instance
      *
      * @return stdClass[]
      */
-    public function getAllInstances(): array
+    public function getAll(): array
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances ORDER BY id',
@@ -109,7 +109,7 @@ class Instance
     /**
      * Returns the instance.
      */
-    public function getInstanceById(int $id): object
+    public function getById(int $id): object
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
@@ -125,25 +125,25 @@ class Instance
     /**
      * Updates the instance data.
      */
-    public function updateInstance(int $id, InstanceEntity $instanceEntity): bool
+    public function update(int $id, InstanceEntity $instance): bool
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($instanceEntity->getInstance()),
-            $this->configuration->getDb()->escape($instanceEntity->getComment()),
-            $this->configuration->getDb()->escape($instanceEntity->getUrl()),
+            $this->configuration->getDb()->escape($instance->getInstance()),
+            $this->configuration->getDb()->escape($instance->getComment()),
+            $this->configuration->getDb()->escape($instance->getUrl()),
             $id
         );
 
-        return $this->configuration->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**
      * Deletes an instance.
      *
      */
-    public function removeInstance(int $id): bool
+    public function delete(int $id): bool
     {
         $deletes = [
             sprintf(
@@ -185,7 +185,7 @@ class Instance
             $this->configuration->getDb()->escape(trim($value))
         );
 
-        return $this->configuration->getDb()->query($insert);
+        return (bool) $this->configuration->getDb()->query($insert);
     }
 
     /**
