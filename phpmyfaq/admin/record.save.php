@@ -177,9 +177,9 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->val
 
         // Insert the tags
         if ($tags != '') {
-            $tagging->saveTags($recordId, explode(',', trim((string) $tags)));
+            $tagging->create($recordId, explode(',', trim((string) $tags)));
         } else {
-            $tagging->deleteTagsFromRecordId($recordId);
+            $tagging->deleteByRecordId($recordId);
         }
 
         // Add user permissions

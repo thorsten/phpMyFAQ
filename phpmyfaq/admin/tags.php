@@ -41,7 +41,7 @@ $tags = new Tags($faqConfig);
 
 if ('delete-tag' === $action) {
     $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    if ($tags->deleteTag($tagId)) {
+    if ($tags->delete($tagId)) {
         $deleteSuccess = true;
     } else {
         $deleteSuccess = false;
