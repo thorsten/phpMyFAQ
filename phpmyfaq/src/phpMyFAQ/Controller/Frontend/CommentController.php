@@ -126,9 +126,9 @@ class CommentController extends AbstractController
                 ->setUsername($username)
                 ->setEmail($mailer)
                 ->setComment(nl2br(strip_tags((string) $commentText)))
-                ->setDate($request->server->get('REQUEST_TIME'));
+                ->setDate($request->server->get('tim'));
 
-            if ($comment->addComment($commentEntity)) {
+            if ($comment->create($commentEntity)) {
                 $notification = new Notification($this->configuration);
                 if ('faq' == $type) {
                     $notification->sendFaqCommentNotification($faq, $commentEntity);
