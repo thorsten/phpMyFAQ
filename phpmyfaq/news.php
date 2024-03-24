@@ -52,7 +52,7 @@ $faqSession->userTracking('news_view', $newsId);
 $newsMainHeader = $faqConfig->getTitle() . Translation::get('msgNews');
 
 // Get all data from the news record
-$news = $oNews->getNewsEntry($newsId);
+$news = $oNews->get($newsId);
 
 $newsContent = $news['content'];
 $newsHeader = $news['header'];

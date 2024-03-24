@@ -134,7 +134,7 @@ $template->parse(
         'writeTopTenHeader' => Translation::get('msgTopTen'),
         'writeNewestHeader' => Translation::get('msgLatestArticles'),
         'writeNewsHeader' => $writeNewsHeader,
-        'writeNews' => $news->getNews($archived),
+        'writeNews' => $news->getAll($archived),
         'showAllNews' => $showAllNews,
         'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($faqLangCode)),
         'formActionUrl' => '?' . $sids . 'action=search',

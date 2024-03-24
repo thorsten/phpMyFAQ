@@ -134,7 +134,7 @@ class CommentController extends AbstractController
                     $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
                     $news = new News($this->configuration);
-                    $newsData = $news->getNewsEntry($id);
+                    $newsData = $news->get($id);
                     $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
