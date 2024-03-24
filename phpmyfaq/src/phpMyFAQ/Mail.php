@@ -20,7 +20,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
-use phpMyFAQ\Mail\SMTP;
+use phpMyFAQ\Mail\Smtp;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -700,7 +700,7 @@ class Mail
      * @static
      * @param string $mua Type of the MUA.
      */
-    public static function getMUA(string $mua): Builtin|SMTP
+    public static function getMUA(string $mua): Builtin|Smtp
     {
         $className = ucfirst(
             str_replace(

@@ -5,7 +5,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail\Builtin;
-use phpMyFAQ\Mail\SMTP;
+use phpMyFAQ\Mail\Smtp;
 use PHPUnit\Framework\TestCase;
 
 class MailTest extends TestCase
@@ -191,7 +191,7 @@ class MailTest extends TestCase
     public function testGetMUAWithSMTP(): void
     {
         $result = Mail::getMUA('smtp');
-        $this->assertInstanceOf(SMTP::class, $result);
+        $this->assertInstanceOf(Smtp::class, $result);
     }
 
     /**
