@@ -67,7 +67,7 @@ class StopWords
                 "INSERT INTO %s VALUES(%d, '%s', '%s')",
                 $this->getTableName(),
                 $this->configuration->getDb()->nextId($this->tableName, 'id'),
-                $this->language,
+                $this->configuration->getDb()->escape($this->language),
                 $word
             );
             $this->configuration->getDb()->query($sql);
@@ -89,7 +89,7 @@ class StopWords
             $this->getTableName(),
             $this->configuration->getDb()->escape($word),
             $id,
-            $this->language
+            $this->configuration->getDb()->escape($this->language)
         );
 
         return (bool) $this->configuration->getDb()->query($sql);
@@ -104,7 +104,7 @@ class StopWords
             "DELETE FROM %s WHERE id = %d AND lang = '%s'",
             $this->getTableName(),
             $id,
-            $this->language
+            $this->configuration->getDb()->escape($this->language)
         );
 
         return (bool) $this->configuration->getDb()->query($sql);
@@ -119,7 +119,7 @@ class StopWords
             "SELECT id FROM %s WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
             $this->getTableName(),
             $this->configuration->getDb()->escape($word),
-            $this->language
+            $this->configuration->getDb()->escape($this->language)
         );
 
         $result = $this->configuration->getDb()->query($sql);
@@ -166,8 +166,8 @@ class StopWords
     public function clean(string $input): array
     {
         $words = explode(' ', $input);
-        $stop_words = $this->getByLang(null, true);
-        $retval = [];
+        $stopWords = $this->getByLang(null, true);
+        $result = [];
 
         foreach ($words as $word) {
             $word = Strings::strtolower($word);
@@ -177,16 +177,16 @@ class StopWords
             if (1 >= Strings::strlen($word)) {
                 continue;
             }
-            if (in_array($word, $stop_words)) {
+            if (in_array($word, $stopWords)) {
                 continue;
             }
-            if (in_array($word, $retval)) {
+            if (in_array($word, $result)) {
                 continue;
             }
-            $retval[] = $word;
+            $result[] = $word;
         }
 
-        return $retval;
+        return $result;
     }
 
     /**
