@@ -147,6 +147,7 @@ $secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'exp
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
 
 $secLevelEntries['config'] = $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('edit_forms', 'forms', 'msgEditForms', $action);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editinstances+addinstances+delinstances',
     'instances',

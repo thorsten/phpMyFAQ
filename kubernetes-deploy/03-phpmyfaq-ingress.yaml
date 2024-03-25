@@ -6,8 +6,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: selfsigned-issuer # provided by cert-manager install/config
     cert-manager.io/common-name: faq.sample.domain
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/backend-protocol: 'HTTPS'
 spec:
   ingressClassName: nginx
   tls:
@@ -15,14 +15,15 @@ spec:
         - faq.sample.domain
       secretName: faq-tls-<ENV_ROLE>
   rules:
-  - host: faq.sample.domain
-    http:
-      paths:
-      - backend:
-          service:
-            name: phpmyfaq
-            port:
-              number: 443
-        path: /
-        pathType: Prefix
+    - host: faq.sample.domain
+      http:
+        paths:
+          - backend:
+              service:
+                name: phpmyfaq
+                port:
+                  number: 443
+            path: /
+            pathType: Prefix
 ---
+

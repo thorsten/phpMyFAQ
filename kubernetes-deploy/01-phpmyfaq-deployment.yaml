@@ -22,40 +22,40 @@ spec:
         app: phpmyfaq
     spec:
       containers:
-      - image: ${registry}:phpmyfaq:3.2
-        imagePullPolicy: Always
-        name: phpmyfaq
-        env:
-        - name: PMF_DB_HOST # use any mysql kubernetes deployment. Ej. MYSQL BITNAMY HELM CHART
-          value: ${host}
-        - name: PMF_DB_NAME
-          value: "db_phpmyfaq"
-        - name: PMF_DB_USER
-          value: "phpmyfaq"
-        - name: PMF_DB_PASS
-          value: ${pass}
-        - name: PHP_LOG_ERRORS
-          value: "On"
-        ports:
-        - containerPort: 80
-          protocol: TCP
-          name: http
-        - containerPort: 443
-          protocol: TCP
-          name: https
-        volumeMounts:
-        - mountPath: /etc/apache2/ssl/cert-key.pem
-          name: certs
-          subPath: tls.key
-        - mountPath: /etc/apache2/ssl/cert.pem
-          name: certs
-          subPath: tls.crt
-        - mountPath: /var/www/html
-          name: data
-          subPath: html
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
+        - image: ${registry}:phpmyfaq:3.2
+          imagePullPolicy: Always
+          name: phpmyfaq
+          env:
+            - name: PMF_DB_HOST # use any mysql kubernetes deployment. Ej. MYSQL BITNAMY HELM CHART
+              value: ${host}
+            - name: PMF_DB_NAME
+              value: 'db_phpmyfaq'
+            - name: PMF_DB_USER
+              value: 'phpmyfaq'
+            - name: PMF_DB_PASS
+              value: ${pass}
+            - name: PHP_LOG_ERRORS
+              value: 'On'
+          ports:
+            - containerPort: 80
+              protocol: TCP
+              name: http
+            - containerPort: 443
+              protocol: TCP
+              name: https
+          volumeMounts:
+            - mountPath: /etc/apache2/ssl/cert-key.pem
+              name: certs
+              subPath: tls.key
+            - mountPath: /etc/apache2/ssl/cert.pem
+              name: certs
+              subPath: tls.crt
+            - mountPath: /var/www/html
+              name: data
+              subPath: html
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       volumes:
         - name: certs
           secret:

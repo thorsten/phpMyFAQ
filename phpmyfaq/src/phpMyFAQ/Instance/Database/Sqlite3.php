@@ -199,6 +199,15 @@ class Sqlite3 extends Database implements Driver
             user_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, user_id))',
 
+        'faqforms' => 'CREATE TABLE %sfaqforms (
+            form_id INTEGER NOT NULL,
+            input_id INTEGER NOT NULL,
+            input_type VARCHAR(1000) NOT NULL,
+            input_label VARCHAR(100) NOT NULL,
+            input_active INTEGER NOT NULL,
+            input_required INTEGER NOT NULL,
+            input_lang VARCHAR(11) NOT NULL)',
+
         'faqglossary' => 'CREATE TABLE %sfaqglossary (
             id INTEGER NOT NULL ,
             lang VARCHAR(5) NOT NULL ,

@@ -23,6 +23,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filesystem;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use RecursiveDirectoryIterator;
@@ -118,6 +119,7 @@ class Update extends Setup
 
         // 4.0 updates
         $this->applyUpdates400Alpha();
+        $this->applyUpdates400Alpha2();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -627,6 +629,18 @@ class Update extends Setup
                     break;
             }
         }
+    }
+
+    private function applyUpdates400Alpha2(): void
+    {
+        // Add function for editing forms
+        $forms = new Forms($this->configuration);
+        $installer = new Installer(new System());
+        foreach ($installer->formInputs as $input) {
+            $forms->insertInputIntoDatabase($input);
+        }
+
+        $this->configuration->delete('main.optionalMailAddress');
     }
 
     private function updateVersion(): void
