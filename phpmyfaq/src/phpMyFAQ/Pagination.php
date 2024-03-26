@@ -182,7 +182,7 @@ class Pagination
             $this->rewriteUrl = $options['rewriteUrl'];
         }
 
-        // Let this call to be last cuz it  needs some options to be set before
+        // Let this call to be last cuz it needs some options to be set before
         $this->currentPage = $this->getCurrentPageFromUrl($this->baseUrl);
     }
 
