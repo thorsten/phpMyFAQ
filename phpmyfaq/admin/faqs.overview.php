@@ -31,7 +31,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
@@ -53,6 +52,8 @@ $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
 
 $templateVars = [
     'msgHeaderFAQOverview' => Translation::get('ad_entry_aor'),
+    'msgOnlyInactiveFAQs' => Translation::get('msgOnlyInactiveFAQs'),
+    'msgOnlyNewFAQs' => Translation::get('msgOnlyNewFAQs'),
     'msgSearch' => Translation::get('ad_menu_searchfaqs'),
     'csrfTokenSearch' => Token::getInstance()->getTokenInput('edit-faq'),
     'errorNoRecords' => Translation::get('err_noArticles'),

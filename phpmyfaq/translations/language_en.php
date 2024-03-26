@@ -1415,4 +1415,8 @@ $PMF_LANG['msgExportSessions'] = 'Export Sessions';
 $PMF_LANG['msgExportSessionsFrom'] = 'From';
 $PMF_LANG['msgExportSessionsTo'] = 'To';
 
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Only inactive FAQs';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Only new FAQs';
+
 return $PMF_LANG;

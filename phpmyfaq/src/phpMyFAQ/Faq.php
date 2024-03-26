@@ -248,7 +248,7 @@ class Faq
         return $faqData;
     }
 
-    public function getAllFaqsByCategory(int $categoryId): array
+    public function getAllFaqsByCategory(int $categoryId, bool $onlyInactive = false, bool $onlyNew = false): array
     {
         $faqData = [];
 
@@ -291,6 +291,8 @@ class Faq
                 fcr.category_id = %d
             AND
                 fd.lang = '%s'
+            %s
+            %s
             ORDER BY
                 fd.id ASC",
             Database::getTablePrefix(),
@@ -300,6 +302,8 @@ class Faq
             Database::getTablePrefix(),
             $categoryId,
             $this->configuration->getLanguage()->getLanguage(),
+            $onlyInactive ? "AND fd.active = 'no'" : '',
+            $onlyNew ? sprintf("AND fd.created > '%s'", date('Y-m-d H:i:s', strtotime('-1 month'))) : ''
         );
 
         $result = $this->configuration->getDb()->query($query);

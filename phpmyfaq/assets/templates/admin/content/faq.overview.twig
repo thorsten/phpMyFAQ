@@ -3,6 +3,22 @@
     <i aria-hidden="true" class="bi bi-list-alt"></i>
     {{ msgHeaderFAQOverview }}
   </h1>
+  <div class="col-2">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-inactive">
+      <label class="form-check-label" for="pmf-checkbox-filter-inactive">
+        {{ msgOnlyInactiveFAQs }}
+      </label>
+    </div>
+  </div>
+  <div class="col-2">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-new">
+      <label class="form-check-label" for="pmf-checkbox-filter-new">
+        {{ msgOnlyNewFAQs }}
+      </label>
+    </div>
+  </div>
   <div class="pmf-faq-overview-search col-4">
     <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="?action=faq-overview"
           method="post" role="form">

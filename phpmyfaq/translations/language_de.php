@@ -1395,4 +1395,8 @@ $PMF_LANG['msgExportSessions'] = 'Sessions exportieren';
 $PMF_LANG['msgExportSessionsFrom'] = 'Von';
 $PMF_LANG['msgExportSessionsTo'] = 'Bis';
 
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Nur inaktive FAQs';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Nur neue FAQs';
+
 return $PMF_LANG;

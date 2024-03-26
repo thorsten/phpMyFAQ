@@ -14,11 +14,13 @@
  */
 
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
-import { addElement } from '../../../../assets/src/utils';
 import { pushNotification } from '../utils';
+import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
   const collapsedCategories = document.querySelectorAll('.accordion-collapse');
+  const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive');
+  const filterForNew = document.getElementById('pmf-checkbox-filter-new');
 
   if (collapsedCategories) {
     collapsedCategories.forEach((category) => {
@@ -30,7 +32,10 @@ export const handleFaqOverview = async () => {
       });
 
       category.addEventListener('shown.bs.collapse', async () => {
-        const faqs = await fetchAllFaqsByCategory(categoryId);
+        const onlyInactive = filterForInactive.checked;
+        const onlyNew = filterForNew.checked;
+
+        const faqs = await fetchAllFaqsByCategory(categoryId, onlyInactive, onlyNew);
         await populateCategoryTable(categoryId, faqs.faqs);
         const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
         const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');

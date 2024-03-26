@@ -73,11 +73,14 @@ class FaqController extends AbstractController
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
 
-        $faq = new Faq(Configuration::getConfigurationInstance());
+        $onlyInactive = Filter::filterVar($request->query->get('only-inactive'), FILTER_VALIDATE_BOOLEAN, false);
+        $onlyNew = Filter::filterVar($request->query->get('only-new'), FILTER_VALIDATE_BOOLEAN, false);
+
+        $faq = new Faq($this->configuration);
 
         return $this->json(
             [
-                'faqs' => $faq->getAllFaqsByCategory($categoryId),
+                'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
             ],
             Response::HTTP_OK
         );
