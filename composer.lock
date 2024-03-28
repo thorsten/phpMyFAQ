@@ -259,7 +259,7 @@
             "version": "v8.8.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:elastic/elastic-transport-php.git",
+                "url": "https://github.com/elastic/elastic-transport-php.git",
                 "reference": "cdf9f63a16ec6bfb4c881ab89aa0e2a61fb7c20b"
             },
             "dist": {
@@ -303,20 +303,24 @@
                 "psr-7",
                 "transport"
             ],
+            "support": {
+                "issues": "https://github.com/elastic/elastic-transport-php/issues",
+                "source": "https://github.com/elastic/elastic-transport-php/tree/v8.8.0"
+            },
             "time": "2023-11-08T10:51:51+00:00"
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v8.12.0",
+            "version": "v8.13.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:elastic/elasticsearch-php.git",
-                "reference": "6f4a2ee4ff2cb9f75a6ee00f574aa2d9c1bb14fd"
+                "url": "https://github.com/elastic/elasticsearch-php.git",
+                "reference": "221723e9497515ec82833995a97c8546d9b6499a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/6f4a2ee4ff2cb9f75a6ee00f574aa2d9c1bb14fd",
-                "reference": "6f4a2ee4ff2cb9f75a6ee00f574aa2d9c1bb14fd",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/221723e9497515ec82833995a97c8546d9b6499a",
+                "reference": "221723e9497515ec82833995a97c8546d9b6499a",
                 "shasum": ""
             },
             "require": {
@@ -332,12 +336,13 @@
                 "ext-zip": "*",
                 "mockery/mockery": "^1.5",
                 "nyholm/psr7": "^1.5",
+                "php-http/message-factory": "^1.0",
                 "php-http/mock-client": "^1.5",
                 "phpstan/phpstan": "^1.4",
                 "phpunit/phpunit": "^9.5",
                 "psr/http-factory": "^1.0",
                 "symfony/finder": "~4.0",
-                "symfony/http-client": "^5.0|^6.0"
+                "symfony/http-client": "^5.0|^6.0|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -356,7 +361,11 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2024-01-26T14:58:39+00:00"
+            "support": {
+                "issues": "https://github.com/elastic/elasticsearch-php/issues",
+                "source": "https://github.com/elastic/elasticsearch-php/tree/v8.13.0"
+            },
+            "time": "2024-03-27T15:09:06+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -1514,16 +1523,16 @@
         },
         {
             "name": "php-http/promise",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/promise.git",
-                "reference": "2916a606d3b390f4e9e8e2b8dd68581508be0f07"
+                "reference": "fc85b1fba37c169a69a07ef0d5a8075770cc1f83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/promise/zipball/2916a606d3b390f4e9e8e2b8dd68581508be0f07",
-                "reference": "2916a606d3b390f4e9e8e2b8dd68581508be0f07",
+                "url": "https://api.github.com/repos/php-http/promise/zipball/fc85b1fba37c169a69a07ef0d5a8075770cc1f83",
+                "reference": "fc85b1fba37c169a69a07ef0d5a8075770cc1f83",
                 "shasum": ""
             },
             "require": {
@@ -1560,9 +1569,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/promise/issues",
-                "source": "https://github.com/php-http/promise/tree/1.3.0"
+                "source": "https://github.com/php-http/promise/tree/1.3.1"
             },
-            "time": "2024-01-04T18:49:48+00:00"
+            "time": "2024-03-15T13:55:21+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
