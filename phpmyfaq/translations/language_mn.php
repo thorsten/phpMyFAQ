@@ -992,7 +992,6 @@ $PMF_LANG['msgShowHelp'] = 'Үгнүүдийг таслалаар тусгаар
 $PMF_LANG['msgUpdateFaqDate'] = 'шинэчлэх';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'засах';
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Mail address as mandatory field (үндсэн: идэвхгүй)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Instant Response on startpage (үндсэн: идэвхгүй)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt

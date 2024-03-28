@@ -790,7 +790,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'zachowaj';
 $PMF_LANG['msgEditFaqDat'] = 'edytuj';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Liczba notowanych haseł');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sortowanie FAQ wg najlepszych');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Mail jako obowiązkowe pole (domyślnie: wyłączony)');
 $PMF_LANG['securityControlCenter'] = 'Konfiguracja bezpieczeństwa';
 $PMF_LANG['ad_search_delsuc'] = 'Szukana fraza została usunięta.';
 $PMF_LANG['ad_search_delfail'] = 'Szukana fraza nie została usunięta.';

@@ -762,7 +762,6 @@ $PMF_LANG['msgShowHelp'] = 'Separe as palavras por vírgulas.';
 $PMF_LANG['msgUpdateFaqDate'] = 'Atualizar';
 $PMF_LANG['msgKeepFaqDate'] = 'Manter';
 $PMF_LANG['msgEditFaqDat'] = 'Editar';
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Marcar como obrigatório o campo do endereço de <em>e-mail</em> <small>(pré-definição: desativada)</small>');
 $LANG_CONF['search.relevance'] = array('select', 'Ordenar por relevância');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Ativar a utilização da relevância? <small>(pré-definição: desativada)</small>');
 $PMF_LANG['searchControlCenter'] = 'Pesquisa';

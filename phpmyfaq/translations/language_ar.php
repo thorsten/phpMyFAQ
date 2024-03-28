@@ -622,7 +622,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'تحرير';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top faq\'s');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Mail address as mandatory field (default: deactivated)');
 $PMF_LANG['msgTransToolRemove'] = 'حذف';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';

@@ -205,11 +205,6 @@ class UserController extends AbstractController
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
-        // If e-mail address is set to optional
-        if (!$this->configuration->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $this->configuration->getAdminEmail();
-        }
-
         // Validate User ID, Username and email
         if (
             !$user->getUserById($userId) ||

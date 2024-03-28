@@ -980,7 +980,6 @@ $PMF_LANG['msgShowHelp'] = "Bitte Begriffe mit Komma trennen.";
 $PMF_LANG['msgUpdateFaqDate'] = "aktualisieren";
 $PMF_LANG['msgKeepFaqDate'] = "behalten";
 $PMF_LANG['msgEditFaqDat'] = "ändern";
-$LANG_CONF['main.optionalMailAddress'] = ["checkbox", "Angabe der E-Mailadresse als Pflichtfeld "];
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ["select", "Sortierung nach Relevanz"];

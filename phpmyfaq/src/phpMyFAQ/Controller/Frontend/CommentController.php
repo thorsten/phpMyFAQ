@@ -100,11 +100,6 @@ class CommentController extends AbstractController
             return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 
-        // If e-mail address is set to optional
-        if (!$this->configuration->get('main.optionalMailAddress') && empty($mailer)) {
-            $mailer = $this->configuration->getAdminEmail();
-        }
-
         // Check display name and e-mail address for not logged-in users
         if (!$user->isLoggedIn()) {
             $user = new User($this->configuration);

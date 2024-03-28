@@ -688,7 +688,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'behåll';
 $PMF_LANG['msgEditFaqDat'] = 'redigera';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Antal söktermer');
 $LANG_CONF['records.orderingPopularFaqs'] = array("select", "Sortera de mest populära inläggen");
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'E-post-adress är obligatorisk (standard: valfri)');
 $PMF_LANG['msgEdit'] = 'Redigera';
 $PMF_LANG['msgDelete'] = 'Ta bort';
 $PMF_LANG['msgYes'] = 'ja';

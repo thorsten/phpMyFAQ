@@ -980,7 +980,6 @@ $PMF_LANG["msgShowHelp"] = "Merci de séparer les mots avec une virgule.";
 $PMF_LANG["msgUpdateFaqDate"] = "Mettre à jour";
 $PMF_LANG["msgKeepFaqDate"] = "Conserver";
 $PMF_LANG["msgEditFaqDat"] = "Editer";
-$LANG_CONF["main.optionalMailAddress"] = ["checkbox", "Adresse email comme champ obligatoire"];
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF["search.relevance"] = ["select", "Tri par pertinence"];

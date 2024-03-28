@@ -742,7 +742,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'houden';
 $PMF_LANG['msgEditFaqDat'] = 'bewerk';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Aantal genoteerde zoektermen');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sortering van de top FAQ\'s');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'E-mail adres als verplicht veld (standaard: gedeactiveerd)');
 $PMF_LANG['msgTransToolRemove'] = 'Verwijder';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Aantal meervoud';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Deze taal kent slechts een meervoudsvorm';

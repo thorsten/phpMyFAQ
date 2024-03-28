@@ -539,7 +539,6 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'كلمه كلیدی- پ�
 $PMF_LANG['msgLoginUser'] = 'ورود';
 $LANG_CONF['search.numberSearchTerms'] = array('input', ' تعداد کلمات کلیدی فهرست شده');
 $LANG_CONF['records.orderingPopularFAQs'] = array('select', 'مرتب‌ کردن پرسش‌های متداول برتر\'s');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'اجبار در ورود آدرس ایمیل (پیش فرض: غیر فعال)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'پاسخ سریع در صفحه آغازین (پیش‌فرض: غیرفعال)');
 $LANG_CONF['search.relevance'] = array('select', 'مرتب کردن بر اساس رابطه');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'پشتیبانی از رابطه فعال شود؟ (پیش‌فرض: غبرفعال)');

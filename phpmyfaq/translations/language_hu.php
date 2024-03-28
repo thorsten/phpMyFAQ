@@ -577,7 +577,6 @@ $PMF_LANG['msgLoginUser'] = 'Bejelentkezés';
 $PMF_LANG['socialNetworksControlCenter'] = 'Közösségi beállítások';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Találatok száma');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top FAQ\'s');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Mail address as mandatory field (default: deactivated)');
 $LANG_CONF['search.relevance'] = array('select', 'Relevancia szerint sorba');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Activate relevance support? (default: disabled)');
 $PMF_LANG['msgTransToolRemove'] = 'Eltávolítás';

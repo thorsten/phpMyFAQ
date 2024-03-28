@@ -785,7 +785,6 @@ $PMF_LANG['msgShowHelp'] = 'Erottele sanat pilkulla.';
 $PMF_LANG['msgUpdateFaqDate'] = 'päivitä';
 $PMF_LANG['msgKeepFaqDate'] = 'pidä';
 $PMF_LANG['msgEditFaqDat'] = 'muokkaa';
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Sähköpostiosoite pakollisena kenttänä (oletus: ei käytössä)');
 $LANG_CONF['search.relevance'] = array('select', 'Järjestä relevanssin mukaan');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Aktivoi relevanssituki? (oletus: pois käytöstä)');
 $PMF_LANG['searchControlCenter'] = 'Haun asetukset';

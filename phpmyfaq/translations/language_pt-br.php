@@ -755,7 +755,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'manter';
 $PMF_LANG['msgEditFaqDat'] = 'editar';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Número de termos de busca listados');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Ordenação das Top FAQs');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'E-mail como campo obrigatório (padrão: desativado)');
 $PMF_LANG['msgTransToolRemove'] = 'Remover';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Número de formas plurais';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Este idioma tem apenas um formato de plural';

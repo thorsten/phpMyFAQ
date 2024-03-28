@@ -775,6 +775,5 @@ $PMF_LANG['msgShowHelp'] = 'Sila pisahkan perkataan dengan koma.';
 $PMF_LANG['msgUpdateFaqDate'] = 'kemaskini';
 $PMF_LANG['msgKeepFaqDate'] = 'pegang';
 $PMF_LANG['msgEditFaqDat'] = 'edit';
-$LANG_CONF['main.optionalMailAddress'] = array("checkbox", "Alamat surat menyurat sebagai ruangan mandatori (lalai: tidak aktif)");
 
 return $PMF_LANG;

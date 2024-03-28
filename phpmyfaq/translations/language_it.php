@@ -869,7 +869,6 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Domanda - Ris
 $PMF_LANG['msgLoginUser'] = 'Accedi';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Numero di termini di ricerca inseriti');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top FAQ');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Campo email obbligatorio (default: disattivato)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Risposta Istantanea su pagina iniziale (default: disattivato)');
 $LANG_CONF['search.relevance'] = array('select', 'Ordina per importanza');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Attivare supporto importanza? (default: disattivo)');

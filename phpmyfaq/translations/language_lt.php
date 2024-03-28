@@ -1004,6 +1004,5 @@ $PMF_LANG['msgShowHelp'] = 'Prašome atskirti žodžius kableliu.';
 $PMF_LANG['msgUpdateFaqDate'] = 'atnaujinti';
 $PMF_LANG['msgKeepFaqDate'] = 'palikti';
 $PMF_LANG['msgEditFaqDat'] = 'redaguoti';
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'El. pašto adresas yra būtinas laukas (numatyta r.: išjungta)');
 
 return $PMF_LANG;

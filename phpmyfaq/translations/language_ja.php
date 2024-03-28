@@ -776,7 +776,6 @@ $PMF_LANG['msgShowHelp'] = '単語をカンマで区切ってください。';
 $PMF_LANG['msgUpdateFaqDate'] = '更新';
 $PMF_LANG['msgKeepFaqDate'] = '維持';
 $PMF_LANG['msgEditFaqDat'] = '編集';
-$LANG_CONF['main.optionalMailAddress'] = array("checkbox", "Mail address as mandatory field (default: deactivated)");
 $PMF_LANG['ad_entry_savedfail'] = '<strong>データベースエラー</strong>が発生しました。';
 $PMF_LANG['searchControlCenter'] = '検索';
 $PMF_LANG['search.relevance.thema-content-keywords'] = '質問 - 回答 - キーワード';

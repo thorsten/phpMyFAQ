@@ -768,7 +768,6 @@ $PMF_LANG['msgKeepFaqDate'] = '保持';
 $PMF_LANG['msgEditFaqDat'] = '编辑';
 $LANG_CONF['search.numberSearchTerms'] = array('input', '列出的搜索条目数目');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', '为顶级问答排序');
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', '邮件地址作为强制要求 (默认: 不激活)');
 $PMF_LANG['securityControlCenter'] = '安全设置';
 $PMF_LANG['ad_search_delsuc'] = '搜索语句删除成功';
 $PMF_LANG['ad_search_delfail'] = '搜索语句未被删除。';

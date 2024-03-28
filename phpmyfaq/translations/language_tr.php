@@ -968,7 +968,6 @@ $PMF_LANG['msgShowHelp'] = "Lütfen kelimeleri virgülle ayırın";
 $PMF_LANG['msgUpdateFaqDate'] = "güncelle";
 $PMF_LANG['msgKeepFaqDate'] = "sakla";
 $PMF_LANG['msgEditFaqDat'] = "düzenle";
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Mail address as mandatory field');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array('select', 'Sort by relevance');

@@ -540,7 +540,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'pastreaza';
 $PMF_LANG['msgEditFaqDat'] = 'editeaza';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Numarul listei de termeni cautati');
 $LANG_CONF['records.orderingPopularFaqs'] = array("select", "Sorteaza  topul intrebarilor");
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Adresa de email camp obligatoriu (normal:dezactivat)');
 $PMF_LANG['msgTransToolRemove'] = 'Sterge';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Numarul formelor plurale';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Aceasta limba are decat o forma plurala';

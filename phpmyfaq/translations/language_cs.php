@@ -779,7 +779,6 @@ $PMF_LANG['msgShowHelp'] = 'Prosím oddělte slova čárkou.';
 $PMF_LANG['msgUpdateFaqDate'] = 'vložit datum editace';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechat původní datum';
 $PMF_LANG['msgEditFaqDat'] = 'vložit vlastní datum';
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'Emailová adresa jako povinné pole (výchozí: deaktivováno)');
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Okamžitá odpověď na úvodní straně (výchozí: deaktivováno)');
 $LANG_CONF['search.relevance'] = array('select', 'Řadit podle důležitosti');
 $LANG_CONF['search.enableRelevance'] = array("checkbox", "Aktivovat podporu důležitosti? (výchozí: vypnuto)");

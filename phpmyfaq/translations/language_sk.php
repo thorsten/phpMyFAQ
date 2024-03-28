@@ -985,6 +985,5 @@ $PMF_LANG['msgShowHelp'] = 'Prosím oddeľte slová čiarkou.';
 $PMF_LANG['msgUpdateFaqDate'] = 'aktualizovať';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechať';
 $PMF_LANG['msgEditFaqDat'] = 'upraviť';
-$LANG_CONF['main.optionalMailAddress'] = array('checkbox', 'E-mailová adresa ako povinné pole (prednastavené: deaktivované)');
 
 return $PMF_LANG;

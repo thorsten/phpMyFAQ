@@ -51,11 +51,6 @@ class ContactController extends AbstractController
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
-        // If e-mail address is set to optional
-        if (!$this->configuration->get('main.optionalMailAddress') && is_null($email)) {
-            $email = $this->configuration->getAdminEmail();
-        }
-
         if (
             $author !== '' &&
             $author !== '0' &&

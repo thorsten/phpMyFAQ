@@ -704,7 +704,6 @@ $PMF_LANG['msgKeepFaqDate'] = 'conserver';
 $PMF_LANG['msgEditFaqDat'] = 'édition';
 $LANG_CONF['search.numberSearchTerms'] = array("input", "Nombre de termes trouvés");
 $LANG_CONF['records.orderingPopularFaqs'] = array("select", "Trier par FaqHelper les plus populaires");
-$LANG_CONF['main.optionalMailAddress'] = array("checkbox", "Adresse courriel comme champ obligatoire (défaut : désactivé)");
 $PMF_LANG['ad_record_sticky'] = 'Épingler cette faq :';
 $PMF_LANG['ad_entry_sticky'] = 'Épingler cette faq ';
 $PMF_LANG['stickyRecordsHeader'] = 'FAQs épinglées';

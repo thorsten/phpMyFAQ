@@ -967,7 +967,6 @@ $PMF_LANG['msgShowHelp'] = "請用逗號(,)來分隔字串。 (Please seperate w
 $PMF_LANG['msgUpdateFaqDate'] = "更新";
 $PMF_LANG['msgKeepFaqDate'] = "保留";
 $PMF_LANG['msgEditFaqDat'] = "編輯";
-$LANG_CONF['main.optionalMailAddress'] = array("checkbox", "郵件地址為命令的欄位 (預設: 關閉) Mail address as mandatory field (default: deactivated)");
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt 開發者
 $LANG_CONF['search.relevance'] = array("select", "Sort by relevance");

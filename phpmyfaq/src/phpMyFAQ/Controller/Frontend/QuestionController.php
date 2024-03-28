@@ -68,11 +68,6 @@ class QuestionController extends AbstractController
         $userQuestion = trim(strip_tags((string) $data->question));
         $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
 
-        // Handle optional email address
-        if (!$this->configuration->get('main.optionalMailAddress') && empty($email)) {
-            $email = $this->configuration->getAdminEmail();
-        }
-
         // If smart answering is disabled, save the question immediately
         if (false === $this->configuration->get('main.enableSmartAnswering')) {
             $save = true;
