@@ -24,7 +24,6 @@ use Symfony\Component\VarDumper\Cloner\Data;
 
 class Forms
 {
-
     private Translation $translation;
 
     public function __construct(private Configuration $config)
