@@ -56,11 +56,7 @@ $captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
 
-try {
-    $faqSession->userTracking('new_entry', 0);
-} catch (Exception $exception) {
-    $faqConfig->getLogger()->error('Tracking of new entry', ['exception' => $exception->getMessage()]);
-}
+$faqSession->userTracking('new_entry', 0);
 
 // Get possible user input
 $selectedQuestion = Filter::filterVar($request->query->get('question'), FILTER_VALIDATE_INT);

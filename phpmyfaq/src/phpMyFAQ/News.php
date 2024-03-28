@@ -18,6 +18,7 @@
 namespace phpMyFAQ;
 
 use Exception;
+use phpMyFAQ\Entity\NewsMessage;
 
 /**
  * Class News
@@ -42,7 +43,7 @@ readonly class News
      * @param bool $active Show active news
      * @throws Exception
      */
-    public function getNews(bool $showArchive = false, bool $active = true): string
+    public function getAll(bool $showArchive = false, bool $active = true): string
     {
         $output = '';
         $news = $this->getLatestData($showArchive, $active);
@@ -172,7 +173,7 @@ readonly class News
      *
      * @return array<mixed>
      */
-    public function getNewsHeader(): array
+    public function getHeader(): array
     {
         $headers = [];
         $now = date('YmdHis');
@@ -213,7 +214,7 @@ readonly class News
      * @param bool $admin Is admin
      * @return array<mixed>
      */
-    public function getNewsEntry(int $id, bool $admin = false): array
+    public function get(int $id, bool $admin = false): array
     {
         $news = [];
 
@@ -267,9 +268,9 @@ readonly class News
     /**
      * Adds a new news entry.
      *
-     * @param array<mixed> $data Array with news data
+     * @param NewsMessage $data NewsMessage object with news data
      */
-    public function addNewsEntry(array $data): bool
+    public function create(NewsMessage $data): bool
     {
         $query = sprintf(
             "
@@ -281,30 +282,30 @@ readonly class News
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
-            $data['date'],
-            $data['lang'],
-            $this->configuration->getDb()->escape($data['header']),
-            $this->configuration->getDb()->escape($data['content']),
-            $this->configuration->getDb()->escape($data['authorName']),
-            $this->configuration->getDb()->escape($data['authorEmail']),
-            $data['dateStart'],
-            $data['dateEnd'],
-            $data['active'],
-            $data['comment'],
-            $this->configuration->getDb()->escape($data['link']),
-            $this->configuration->getDb()->escape($data['linkTitle']),
-            $data['target']
+            $data->getCreated()->format('YmdHis'),
+            $this->configuration->getDb()->escape($data->getLanguage()),
+            $this->configuration->getDb()->escape($data->getHeader()),
+            $this->configuration->getDb()->escape($data->getMessage()),
+            $this->configuration->getDb()->escape($data->getAuthor()),
+            $this->configuration->getDb()->escape($data->getEmail()),
+            $data->getDateStart() ? $data->getDateStart()->format('YmdHis') : '',
+            $data->getDateEnd() ? $data->getDateEnd()->format('YmdHis') : '',
+            $data->isActive() ? 'y' : 'n',
+            $data->isComment() ? 'y' : 'n',
+            $this->configuration->getDb()->escape($data->getLink() ?? ''),
+            $this->configuration->getDb()->escape($data->getLinkTitle() ?? ''),
+            $this->configuration->getDb()->escape($data->getLinkTarget() ?? '')
         );
+
         return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
      * Updates a new news entry identified by its ID.
      *
-     * @param int          $id News ID
-     * @param array<mixed> $data Array with news data
+     * @param NewsMessage $data NewsMessage object with news data
      */
-    public function updateNewsEntry(int $id, array $data): bool
+    public function update(NewsMessage $data): bool
     {
         $query = sprintf(
             "
@@ -327,20 +328,20 @@ readonly class News
             WHERE
                 id = %d",
             Database::getTablePrefix(),
-            $data['date'],
-            $data['lang'],
-            $this->configuration->getDb()->escape($data['header']),
-            $this->configuration->getDb()->escape($data['content']),
-            $this->configuration->getDb()->escape($data['authorName']),
-            $this->configuration->getDb()->escape($data['authorEmail']),
-            $data['dateStart'],
-            $data['dateEnd'],
-            $data['active'],
-            $data['comment'],
-            $this->configuration->getDb()->escape($data['link']),
-            $this->configuration->getDb()->escape($data['linkTitle']),
-            $data['target'],
-            $id
+            $data->getCreated()->format('YmdHis'),
+            $this->configuration->getDb()->escape($data->getLanguage()),
+            $this->configuration->getDb()->escape($data->getHeader()),
+            $this->configuration->getDb()->escape($data->getMessage()),
+            $this->configuration->getDb()->escape($data->getAuthor()),
+            $this->configuration->getDb()->escape($data->getEmail()),
+            $data->getDateStart() ? $data->getDateStart()->format('YmdHis') : '',
+            $data->getDateEnd() ? $data->getDateEnd()->format('YmdHis') : '',
+            $data->isActive() ? 'y' : 'n',
+            $data->isComment() ? 'y' : 'n',
+            $this->configuration->getDb()->escape($data->getLink() ?? ''),
+            $this->configuration->getDb()->escape($data->getLinkTitle() ?? ''),
+            $this->configuration->getDb()->escape($data->getLinkTarget() ?? ''),
+            $data->getId()
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -351,7 +352,7 @@ readonly class News
      * @param int $id News ID
      * @todo   check if there are comments attached to the deleted news
      */
-    public function deleteNews(int $id): bool
+    public function delete(int $id): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqnews WHERE id = %d AND lang = '%s'",

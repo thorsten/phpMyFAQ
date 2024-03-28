@@ -39,11 +39,7 @@ $request = Request::createFromGlobals();
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
 
-try {
-    $faqSession->userTracking('ask_question', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('ask_question', 0);
 
 $category->buildCategoryTree();
 

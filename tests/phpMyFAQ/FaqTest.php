@@ -2,8 +2,11 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\FaqEntity;
 use PHPUnit\Framework\TestCase;
 
 class FaqTest extends TestCase
@@ -38,6 +41,18 @@ class FaqTest extends TestCase
         $this->faq = new Faq($this->configuration);
     }
 
+    /**
+     * @throws AttachmentException
+     * @throws FileException
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $faqEntity = $this->getFaqEntity();
+        $this->faq->deleteRecord(1, $faqEntity->getLanguage());
+    }
+
     public function testSetGroups(): void
     {
         $this->assertInstanceOf(Faq::class, $this->faq->setGroups([-1]));
@@ -52,5 +67,110 @@ class FaqTest extends TestCase
     {
         $this->assertTrue($this->faq->hasTitleAHash('H#llo World!'));
         $this->assertFalse($this->faq->hasTitleAHash('Hallo World!'));
+    }
+
+    public function testCreate(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+
+        // Call the method being tested
+        $result = $this->faq->create($faqEntity);
+
+        // Assert that the method returns an integer
+        $this->assertIsInt($result);
+        $this->assertGreaterThan(0, $result);
+    }
+
+    public function testGetNextSolutionId(): void
+    {
+        $this->assertIsInt($this->faq->getNextSolutionId());
+        $this->assertGreaterThan(0, $this->faq->getNextSolutionId());
+
+        $this->faq->create($this->getFaqEntity());
+
+        $this->assertGreaterThan(1, $this->faq->getNextSolutionId());
+    }
+
+    public function testUpdate(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->faq->create($faqEntity));
+
+        $faqEntity->setRevisionId(0);
+        $faqEntity->setQuestion('Updated question');
+        $faqEntity->setAnswer('Updated answer');
+
+        $result = $this->faq->update($faqEntity);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @throws AttachmentException
+     * @throws FileException
+     */
+    public function testDeleteRecord(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->faq->create($faqEntity));
+
+        $result = $this->faq->deleteRecord($faqEntity->getId(), $faqEntity->getLanguage());
+
+        $this->assertTrue($result);
+    }
+
+    public function testGetSolutionIdFromId(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->faq->create($faqEntity));
+
+        $this->assertIsInt($this->faq->getSolutionIdFromId($faqEntity->getId(), $faqEntity->getLanguage()));
+        $this->assertGreaterThan(0, $this->faq->getSolutionIdFromId($faqEntity->getId(), $faqEntity->getLanguage()));
+    }
+
+    public function testHasTranslation(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->faq->create($faqEntity));
+
+        $this->assertTrue($this->faq->hasTranslation($faqEntity->getId(), $faqEntity->getLanguage()));
+        $this->assertFalse($this->faq->hasTranslation($faqEntity->getId(), 'de'));
+    }
+
+    public function testIsActive(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->faq->create($faqEntity));
+
+        $this->assertTrue($this->faq->isActive($faqEntity->getId(), $faqEntity->getLanguage()));
+    }
+
+    public function testGetRecordBySolutionId(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setSolutionId(42);
+        $this->faq->create($faqEntity);
+
+        $this->faq->getRecordBySolutionId(42);
+
+        $this->assertEquals(1, $faqEntity->getId());
+    }
+
+    private function getFaqEntity(): FaqEntity
+    {
+        $faqEntity = new FaqEntity();
+        $faqEntity
+            ->setLanguage('en')
+            ->setActive(true)
+            ->setSticky(true)
+            ->setKeywords('Keywords')
+            ->setQuestion('Question')
+            ->setAnswer('Answer')
+            ->setAuthor('Author')
+            ->setEmail('foo@bar.baz')
+            ->setComment(true)
+            ->setNotes('');
+
+        return $faqEntity;
     }
 }

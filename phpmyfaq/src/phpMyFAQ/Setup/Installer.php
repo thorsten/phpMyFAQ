@@ -1170,7 +1170,7 @@ class Installer extends Setup
             ->setInstance($link->getSystemRelativeUri('setup/index.php'))
             ->setComment('phpMyFAQ ' . System::getVersion());
         $faqInstance = new Instance($configuration);
-        $faqInstance->addInstance($instanceEntity);
+        $faqInstance->create($instanceEntity);
 
         $faqInstanceMaster = new Master($configuration);
         $faqInstanceMaster->createMaster($faqInstance);

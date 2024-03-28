@@ -19,7 +19,7 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Entity\TagEntity as EntityTags;
+use phpMyFAQ\Entity\Tag as Tag;
 
 /**
  * Class Tags
@@ -111,14 +111,14 @@ class Tags
      * @param int $recordId Record ID
      * @param array<int, string> $tags Array of tags
      */
-    public function saveTags(int $recordId, array $tags): bool
+    public function create(int $recordId, array $tags): bool
     {
         $currentTags = $this->getAllTags();
         $registeredTags = [];
 
         // Delete all tag references for the faq record
         if ($tags !== []) {
-            $this->deleteTagsFromRecordId($recordId);
+            $this->deleteByRecordId($recordId);
         }
 
         // Store tags and references for the faq record
@@ -245,7 +245,7 @@ class Tags
      *
      * @param int $recordId Record ID
      */
-    public function deleteTagsFromRecordId(int $recordId): bool
+    public function deleteByRecordId(int $recordId): bool
     {
         $query = sprintf(
             'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
@@ -253,30 +253,28 @@ class Tags
             $recordId
         );
 
-        $this->configuration->getDb()->query($query);
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
      * Updates a tag.
      */
-    public function updateTag(EntityTags $entityTags): bool
+    public function update(Tag $tag): bool
     {
         $query = sprintf(
             "UPDATE %sfaqtags SET tagging_name = '%s' WHERE tagging_id = %d",
             Database::getTablePrefix(),
-            $entityTags->getName(),
-            $entityTags->getId()
+            $tag->getName(),
+            $tag->getId()
         );
 
-        return $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
      * Deletes a given tag.
      */
-    public function deleteTag(int $tagId): bool
+    public function delete(int $tagId): bool
     {
         $query = sprintf(
             'DELETE FROM %sfaqtags WHERE tagging_id = %d',
@@ -292,9 +290,7 @@ class Tags
             $tagId
         );
 
-        $this->configuration->getDb()->query($query);
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**

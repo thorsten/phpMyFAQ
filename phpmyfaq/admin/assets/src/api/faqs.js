@@ -13,9 +13,17 @@
  * @since     2023-12-27
  */
 
-export const fetchAllFaqsByCategory = async (categoryId) => {
+export const fetchAllFaqsByCategory = async (categoryId, onlyInactive, onlyNew) => {
   try {
-    const response = await fetch(`./api/faqs/${categoryId}`, {
+    const currentUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    const url = new URL(`${currentUrl}api/faqs/${categoryId}`);
+    if (onlyInactive) {
+      url.searchParams.set('only-inactive', onlyInactive);
+    }
+    if (onlyNew) {
+      url.searchParams.set('only-new', onlyNew);
+    }
+    const response = await fetch(url.toString(), {
       method: 'GET',
       cache: 'no-cache',
       headers: {

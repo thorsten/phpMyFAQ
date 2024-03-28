@@ -20,11 +20,13 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
-use phpMyFAQ\Session\Token;use phpMyFAQ\Strings;
+use phpMyFAQ\Session\Token;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -216,7 +218,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         </thead>
         <tbody>
     <?php
-    $newsHeader = $news->getNewsHeader();
+    $newsHeader = $news->getHeader();
     $date = new Date($faqConfig);
     if (is_countable($newsHeader) ? count($newsHeader) : 0) {
         foreach ($newsHeader as $newsItem) {
@@ -251,7 +253,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
 } elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $newsData = $news->getNewsEntry($id, true);
+    $newsData = $news->get($id, true);
     ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
@@ -473,9 +475,23 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_SPECIAL_CHARS);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    $newsData = ['lang' => $newsLang, 'header' => $header, 'content' => html_entity_decode((string) $content), 'authorName' => $author, 'authorEmail' => $email, 'active' => (is_null($active)) ? 'n' : 'y', 'comment' => (is_null($comment)) ? 'n' : 'y', 'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000', 'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959', 'link' => $link, 'linkTitle' => $linkTitle, 'date' => date('YmdHis'), 'target' => (is_null($target)) ? '' : $target];
+    $newsMessage = new NewsMessage();
+    $newsMessage
+        ->setLanguage($newsLang)
+        ->setHeader($header)
+        ->setMessage(html_entity_decode((string) $content))
+        ->setAuthor($author)
+        ->setEmail($email)
+        ->setActive(!is_null($active))
+        ->setComment(!is_null($comment))
+        ->setDateStart(new DateTime($dateStart))
+        ->setDateEnd(new DateTime($dateEnd))
+        ->setLink($link ?? '')
+        ->setLinkTitle($linkTitle ?? '')
+        ->setLinkTarget($target ?? '')
+        ->setCreated(new DateTime());
 
-    if ($news->addNewsEntry($newsData)) {
+    if ($news->create($newsMessage)) {
         echo Alert::success('ad_news_updatesuc');
     } else {
         echo Alert::danger('ad_news_insertfail', $faqConfig->getDb()->error());
@@ -497,6 +513,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         <div class="row">
             <div class="col-12">
     <?php
+    $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
     $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -510,24 +527,24 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_SPECIAL_CHARS);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    $newsData = [
-        'lang' => $newsLang,
-        'header' => $header,
-        'content' => html_entity_decode((string) $content),
-        'authorName' => $author,
-        'authorEmail' => $email,
-        'active' => (is_null($active)) ? 'n' : 'y',
-        'comment' => (is_null($comment)) ? 'n' : 'y',
-        'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', (string) $dateStart) . '000000',
-        'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', (string) $dateEnd) . '235959',
-        'link' => $link,
-        'linkTitle' => $linkTitle,
-        'date' => date('YmdHis'),
-        'target' => (is_null($target)) ? '' : $target,
-    ];
+    $newsMessage = new NewsMessage();
+    $newsMessage
+        ->setId($newsId)
+        ->setLanguage($newsLang)
+        ->setHeader($header)
+        ->setMessage(html_entity_decode((string) $content))
+        ->setAuthor($author)
+        ->setEmail($email)
+        ->setActive(!is_null($active))
+        ->setComment(!is_null($comment))
+        ->setDateStart(new DateTime($dateStart))
+        ->setDateEnd(new DateTime($dateEnd))
+        ->setLink($link ?? '')
+        ->setLinkTitle($linkTitle ?? '')
+        ->setLinkTarget($target ?? '')
+        ->setCreated(new DateTime());
 
-    $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    if ($news->updateNewsEntry((int) $newsId, $newsData)) {
+    if ($news->update($newsMessage)) {
         echo Alert::success('ad_news_updatesuc');
     } else {
         echo Alert::danger('ad_news_updatefail', $faqConfig->getDb()->error());
@@ -539,7 +556,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <?php
 } elseif ('delete-news' == $action && $user->perm->hasPermission($user->getUserId(), 'delnews')) {
     ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
             <i aria-hidden="true" class="bi bi-pencil"></i>
             <?= Translation::get('ad_news_data') ?>
@@ -560,7 +578,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     <form action="?action=delete-news" method="post" accept-charset="utf-8">
     <input type="hidden" name="id" value="<?= $deleteId ?>">
     <input type="hidden" name="really" value="yes">
-    <?= Token::getInstance()->getTokenInput('delete-news') ?>
+        <?= Token::getInstance()->getTokenInput('delete-news') ?>
         <button class="btn btn-warning" type="submit" name="submit">
             <?= Translation::get('ad_news_yesdelete') ?>
         </button>
@@ -574,7 +592,7 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     } else {
         if (Token::getInstance()->verifyToken('delete-news', $csrfToken)) {
             $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-            $news->deleteNews((int)$deleteId);
+            $news->delete((int)$deleteId);
             echo Alert::success('ad_news_delsuc');
             printf('<div class="row">&rarr; <a href="?action=news">%s</a></p>', Translation::get('msgNews'));
         }

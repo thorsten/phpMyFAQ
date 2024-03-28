@@ -33,11 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 
 if ($user->isLoggedIn()) {
-    try {
-        $faqSession->userTracking('user_control_panel', $user->getUserId());
-    } catch (Exception $exception) {
-        $faqConfig->getLogger()->error('Tracking of user control panel', ['exception' => $exception->getMessage()]);
-    }
+    $faqSession->userTracking('user_control_panel', $user->getUserId());
 
     if ($faqConfig->get('main.enableGravatarSupport')) {
         $gravatar = new Gravatar();

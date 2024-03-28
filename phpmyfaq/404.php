@@ -15,15 +15,13 @@
  * @since     2019-01-25
  */
 
+use phpMyFAQ\Enums\SessionActionType;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-try {
-    $faqSession->userTracking('404', 0);
-} catch (Exception $exception) {
-    $faqConfig->getLogger()->error('Tracking of 404 page', ['exception' => $exception->getMessage()]);
-}
+$faqSession->userTracking(SessionActionType::NOT_FOUND->value, 0);
 
 $template->parse('mainPageContent', []);

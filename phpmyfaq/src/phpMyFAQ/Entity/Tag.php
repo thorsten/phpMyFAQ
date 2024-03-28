@@ -22,7 +22,7 @@ namespace phpMyFAQ\Entity;
  *
  * @package phpMyFAQ\Entity
  */
-class TagEntity
+class Tag
 {
     private ?int $id = null;
 
@@ -33,7 +33,7 @@ class TagEntity
         return $this->id;
     }
 
-    public function setId(int $id): TagEntity
+    public function setId(int $id): Tag
     {
         $this->id = $id;
         return $this;
@@ -44,7 +44,7 @@ class TagEntity
         return $this->name;
     }
 
-    public function setName(string $name): TagEntity
+    public function setName(string $name): Tag
     {
         $this->name = $name;
         return $this;

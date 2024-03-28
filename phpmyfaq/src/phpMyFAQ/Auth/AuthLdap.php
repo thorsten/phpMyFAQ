@@ -112,8 +112,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     public function checkCredentials($login, $password, array $optionalData = null): bool
     {
         if ('' === trim((string) $password)) {
-            $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
-            return false;
+            throw new Exception(User::ERROR_USER_INCORRECT_PASSWORD);
         }
 
         // Get active LDAP server for current user
@@ -148,10 +147,11 @@ class AuthLdap extends Auth implements AuthDriverInterface
         );
 
         if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode((string) $password))) {
-            $this->errors[] = $this->ldapCore->error;
-            return false;
+            throw new Exception($this->ldapCore->error);
         }
+
         $this->create($login, htmlspecialchars_decode((string) $password));
+
         return true;
     }
 

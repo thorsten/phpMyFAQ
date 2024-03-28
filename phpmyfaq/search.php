@@ -39,11 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('fulltext_search', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('fulltext_search', 0);
 
 $faqConfig = Configuration::getConfigurationInstance();
 
@@ -201,11 +197,7 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
 // Change a little the $searchCategory value;
 $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
-try {
-    $faqSession->userTracking('fulltext_search', $inputSearchTerm);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('fulltext_search', $inputSearchTerm);
 
 if (
     is_numeric(

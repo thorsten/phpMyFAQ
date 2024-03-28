@@ -26,11 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('request_removal', 0);
-} catch (Exception $exception) {
-    $faqConfig->getLogger()->error('Tracking of request removal', ['exception' => $exception->getMessage()]);
-}
+$faqSession->userTracking('request_removal', 0);
 
 $template->parse(
     'mainPageContent',

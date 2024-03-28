@@ -20,7 +20,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
-use phpMyFAQ\Mail\SMTP;
+use phpMyFAQ\Mail\Smtp;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -256,10 +256,9 @@ class Mail
         // Check for the permitted number of items into the $target array
         if (count($target) > 2) {
             $keys = array_keys($target);
-            trigger_error(
-                sprintf('<strong>Mail Class</strong>: a valid e-mail address, %s, ', $keys[0]) .
-                sprintf('has been already added as \'%s\'!', $targetAlias),
-                E_USER_ERROR
+            throw new Exception(
+                sprintf('<strong>Mail Class</strong>: too many e-mail addresses, %s, ', $keys[0]) .
+                sprintf('have been already added as \'%s\'!', $targetAlias)
             );
         }
 
@@ -285,9 +284,7 @@ class Mail
 
         // Don't allow duplicated addresses
         if (array_key_exists($address, $target)) {
-            throw new Exception(
-                '<strong>Mail Class</strong>: ' . $address . ' has been already added in ' . $targetAlias . '!'
-            );
+            throw new Exception('"' . $address . '" has been already added in ' . $targetAlias . '!');
         }
 
         if (isset($name)) {
@@ -333,47 +330,6 @@ class Mail
             return false;
         }
         return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
-    }
-
-    /**
-     * Add an attachment.
-     *
-     * @param string      $path File path.
-     * @param string|null $name File name. Defaults to the basename.
-     * @param string      $mimetype File MIME type. Defaults to 'application/octet-stream'.
-     * @param string      $disposition Attachment disposition. Defaults to 'attachment'.
-     * @param string      $cid Content ID, required when disposition is 'inline'. Defaults to ''.
-     * @return bool True if successful, false otherwise.
-     */
-    public function addAttachment(
-        string $path,
-        string $name = null,
-        string $mimetype = 'application/octet-stream',
-        string $disposition = 'attachment',
-        string $cid = ''
-    ): bool {
-        if (!file_exists($path)) {
-            // File isn't found
-            return false;
-        }
-        if (('inline' == $disposition) && ($cid === '' || $cid === '0')) {
-            // Content ID is required
-            return false;
-        } else {
-            if ($name === null || $name === '' || $name === '0') {
-                $name = basename($path);
-            }
-
-            $this->attachments[] = [
-                'cid' => $cid,
-                'disposition' => $disposition,
-                'mimetype' => $mimetype,
-                'name' => $name,
-                'path' => $path
-            ];
-
-            return true;
-        }
     }
 
     /**
@@ -744,7 +700,7 @@ class Mail
      * @static
      * @param string $mua Type of the MUA.
      */
-    public static function getMUA(string $mua): Builtin|SMTP
+    public static function getMUA(string $mua): Builtin|Smtp
     {
         $className = ucfirst(
             str_replace(
@@ -773,7 +729,7 @@ class Mail
 
     /**
      * If the email spam protection has been activated from the general
-     * phpMyFAQ configuration this method converts an email address e.g.
+     * phpMyFAQ configuration, this method converts an email address e.g.,
      * from "user@example.org" to "user_AT_example_DOT_org". Otherwise,
      * it will return the plain email address.
      *

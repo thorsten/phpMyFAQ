@@ -56,7 +56,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         $updatedData->setComment(Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Original data
-        $originalData = $currentClient->getInstanceById($instanceId);
+        $originalData = $currentClient->getById($instanceId);
 
         if ($originalData->url !== $updatedData->getUrl()) {
             $moveInstance = true;
@@ -65,7 +65,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         if (is_null($updatedData->getUrl())) {
             echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
         } else {
-            if ($updatedClient->updateInstance($instanceId, $updatedData)) {
+            if ($updatedClient->update($instanceId, $updatedData)) {
                 if ($moveInstance) {
                     $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
                     $updatedClient->deleteClientFolder($originalData->url);
@@ -78,7 +78,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
     }
 
     $masterConfig = [];
-    foreach ($instance->getAllInstances() as $site) {
+    foreach ($instance->getAll() as $site) {
         $masterConfig[$site->id] = $instance->getInstanceConfig($site->id)['isMaster'];
     }
 
@@ -86,7 +86,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         'userPermInstanceAdd' => $user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_ADD->value),
         'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
         'ad_instance_add' => Translation::get('ad_instance_add'),
-        'allInstances' => $instance->getAllInstances(),
+        'allInstances' => $instance->getAll(),
         'csrfTokenDeleteInstance' => Token::getInstance()->getTokenString('delete-instance'),
         'csrfTokenAddInstance' => Token::getInstance()->getTokenString('add_instance'),
         'masterConfig' => $masterConfig,

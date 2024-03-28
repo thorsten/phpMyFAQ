@@ -20,6 +20,7 @@ namespace phpMyFAQ\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\User;
+use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -50,6 +51,7 @@ readonly class AdminLog
 
     /**
      * Returns all data from the admin log.
+     * @return AdminLogEntity[]
      */
     public function getAll(): array
     {
@@ -68,7 +70,14 @@ readonly class AdminLog
         $result = $this->configuration->getDb()->query($query);
 
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $data[$row->id] = ['time' => $row->time, 'usr' => $row->usr, 'text' => $row->text, 'ip' => $row->ip];
+            $adminLog = new AdminLogEntity();
+            $adminLog
+                ->setId($row->id)
+                ->setTime($row->time)
+                ->setUserId($row->usr)
+                ->setText($row->text)
+                ->setIp($row->ip);
+            $data[$row->id] = $adminLog;
         }
 
         return $data;

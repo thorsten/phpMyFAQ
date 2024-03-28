@@ -26,11 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('glossary', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('glossary', 0);
 
 $request = Request::createFromGlobals();
 $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);

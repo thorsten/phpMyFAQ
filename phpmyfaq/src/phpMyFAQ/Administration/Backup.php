@@ -20,6 +20,7 @@ namespace phpMyFAQ\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
+use phpMyFAQ\Enums\BackupType;
 use SodiumException;
 
 /**
@@ -104,6 +105,38 @@ readonly class Backup
         }
 
         return $backup;
+    }
+
+    public function getBackupTableNames(BackupType $type): string
+    {
+        $tables = $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
+        $tableNames = '';
+
+        switch ($type) {
+            case BackupType::BACKUP_TYPE_DATA:
+                foreach ($tables as $table) {
+                    if (
+                        (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) ||
+                        (Database::getTablePrefix() . 'faqsessions' === trim((string) $table))
+                    ) {
+                        continue;
+                    }
+                    $tableNames .= $table . ' ';
+                }
+                break;
+            case BackupType::BACKUP_TYPE_LOGS:
+                foreach ($tables as $table) {
+                    if (
+                        (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) ||
+                        (Database::getTablePrefix() . 'faqsessions' === trim((string) $table))
+                    ) {
+                        $tableNames .= $table . ' ';
+                    }
+                }
+                break;
+        }
+
+        return $tableNames;
     }
 
     /**

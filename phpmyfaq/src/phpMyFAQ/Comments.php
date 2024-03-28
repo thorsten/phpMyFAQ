@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use DateTimeInterface;
 use Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Services\Gravatar;
@@ -116,7 +117,7 @@ readonly class Comments
                     ->setId($row->id_comment)
                     ->setRecordId($row->id)
                     ->setComment($row->comment)
-                    ->setDate(Date::createIsoDate($row->datum, DATE_ISO8601, false))
+                    ->setDate(Date::createIsoDate($row->datum, DateTimeInterface::ATOM, false))
                     ->setUsername($row->usr)
                     ->setEmail($row->email)
                     ->setType($type);
@@ -156,7 +157,7 @@ readonly class Comments
     /**
      * Adds a new comment.
      */
-    public function addComment(Comment $comment): bool
+    public function create(Comment $comment): bool
     {
         $query = sprintf(
             "

@@ -49,6 +49,60 @@ paths:
             application/json:
               schema: {}
               example: []
+  '/api/v3.0/backup/{type}':
+    get:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: createBackup
+      parameters:
+        - name: type
+          in: path
+          description: 'The backup type. Can be "data" or "logs".'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'The current backup as a file.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+        '400':
+          description: 'If the backup type is wrong'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+        '401':
+          description: 'If the user is not authenticated and/or does not have sufficient permissions.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
   /api/v3.0/categories:
     get:
       tags:
@@ -820,14 +874,11 @@ paths:
           application/json:
             schema:
               required:
-                - language
                 - category-id
                 - question
                 - author
                 - email
               properties:
-                language:
-                  type: string
                 category-id:
                   type: integer
                 question:
@@ -837,7 +888,7 @@ paths:
                 email:
                   type: string
               type: object
-            example: "{\n                \"language\": \"de\",\n                \"category-id\": \"1\",\n                \"question\": \"Is this the world we created?\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\"\n            }"
+            example: "{\n                \"category-id\": \"1\",\n                \"question\": \"Is this the world we created?\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\"\n            }"
       responses:
         '201':
           description: 'Used to add a new question in one existing category.'

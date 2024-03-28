@@ -30,6 +30,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
@@ -117,15 +118,7 @@ class CommentController extends AbstractController
             !empty($username) && !empty($mailer) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
             $comment->isCommentAllowed($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
         ) {
-            try {
-                $session->userTracking('save_comment', $id);
-            } catch (Exception $exception) {
-                $this->configuration->getLogger()->error(
-                    'Tracking of save new comment',
-                    ['exception' => $exception->getMessage()]
-                );
-            }
-
+            $session->userTracking('save_comment', $id);
             $commentEntity = new Comment();
             $commentEntity
                 ->setRecordId($id)
@@ -133,91 +126,21 @@ class CommentController extends AbstractController
                 ->setUsername($username)
                 ->setEmail($mailer)
                 ->setComment(nl2br(strip_tags((string) $commentText)))
-                ->setDate($request->server->get('REQUEST_TIME'));
+                ->setDate($request->server->get('tim'));
 
-            if ($comment->addComment($commentEntity)) {
-                $emailTo = $this->configuration->getAdminEmail();
+            if ($comment->create($commentEntity)) {
+                $notification = new Notification($this->configuration);
                 if ('faq' == $type) {
-                    $faq->getRecord($id);
-                    if ($faq->faqRecord['email'] != '') {
-                        $emailTo = $faq->faqRecord['email'];
-                    }
-
-                    $title = $faq->getRecordTitle($id);
-
-                    $faqUrl = sprintf(
-                        '%s?action=faq&cat=%d&id=%d&artlang=%s',
-                        $this->configuration->getDefaultUrl(),
-                        $category->getCategoryIdFromFaq($faq->faqRecord['id']),
-                        $faq->faqRecord['id'],
-                        $faq->faqRecord['lang']
-                    );
-                    $link = new Link($faqUrl, $this->configuration);
-                    $link->itemTitle = $faq->faqRecord['title'];
+                    $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
                     $news = new News($this->configuration);
-                    $newsData = $news->getNewsEntry($id);
-                    if ($newsData['authorEmail'] != '') {
-                        $emailTo = $newsData['authorEmail'];
-                    }
-
-                    $title = $newsData['header'];
-
-                    $newsUrl = sprintf(
-                        '%s?action=news&newsid=%d&newslang=%s',
-                        $this->configuration->getDefaultUrl(),
-                        $newsData['id'],
-                        $newsData['lang']
-                    );
-                    $link = new Link($newsUrl, $this->configuration);
-                    $link->itemTitle = $newsData['header'];
+                    $newsData = $news->get($id);
+                    $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
-                $urlToContent = $link->toString();
-
-                $commentMail =
-                    sprintf('User: %s, mailto:%s<br>', $commentEntity->getUsername(), $commentEntity->getEmail()) .
-                    sprintf('Title: %s<br>', $title) .
-                    sprintf('New comment posted here: %s<br><br>', $urlToContent) .
-                    sprintf('%s', wordwrap((string) $commentText, 72));
-
-                $send = [];
-                $mailer = new Mail($this->configuration);
-                $mailer->setReplyTo($commentEntity->getEmail(), $commentEntity->getUsername());
-                $mailer->addTo($emailTo);
-
-                $send[$emailTo] = 1;
-                $send[$this->configuration->getAdminEmail()] = 1;
-
-                if ($type === CommentType::FAQ) {
-                    // Let the category owner of a FAQ get a copy of the message
-                    $category = new Category($this->configuration);
-                    $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
-                    foreach ($categories as $_category) {
-                        $userId = $category->getOwner($_category);
-                        $catUser = new User($this->configuration);
-                        $catUser->getUserById($userId);
-                        $catOwnerEmail = $catUser->getUserData('email');
-
-                        if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
-                            $mailer->addCc($catOwnerEmail);
-                            $send[$catOwnerEmail] = 1;
-                        }
-                    }
-                }
-
-                $mailer->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
-                $mailer->message = strip_tags($commentMail);
-
-                $mailer->send();
-                unset($mailer);
 
                 return $this->json(['success' => Translation::get('msgCommentThanks')], Response::HTTP_OK);
             } else {
-                try {
-                    $session->userTracking('error_save_comment', $id);
-                } catch (Exception) {
-                    // @todo handle the exception
-                }
+                $session->userTracking('error_save_comment', $id);
                 return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
             }
         } else {

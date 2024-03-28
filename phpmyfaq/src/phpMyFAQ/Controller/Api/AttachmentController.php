@@ -69,15 +69,12 @@ class AttachmentController extends AbstractController
     )]
     public function list(Request $request): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-        $faqConfig = Configuration::getConfigurationInstance();
-
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
         $attachments = [];
         $result = [];
 
         try {
-            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+            $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $recordId);
         } catch (AttachmentException) {
             $result = [];
         }
@@ -85,7 +82,7 @@ class AttachmentController extends AbstractController
         foreach ($attachments as $attachment) {
             $result[] = [
                 'filename' => $attachment->getFilename(),
-                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
+                'url' => $this->configuration->getDefaultUrl() . $attachment->buildUrl(),
             ];
         }
 

@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -24,11 +25,15 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $logging = new AdminLog($faqConfig);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -44,16 +49,16 @@ if (
     'adminlog' === $action
 ) {
     $date = new Date($faqConfig);
-    $perpage = 15;
+    $perPage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
     if (is_null($pages)) {
-        $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
+        $pages = round(($logging->getNumberOfEntries() + ($perPage / 3)) / $perPage, 0);
     }
 
-    $start = ($page - 1) * $perpage;
-    $lastPage = $start + $perpage;
+    $start = ($page - 1) * $perPage;
+    $lastPage = $start + $perPage;
 
     $baseUrl = sprintf(
         '%sadmin/?action=adminlog&amp;page=%d',
@@ -65,7 +70,7 @@ if (
     $options = [
         'baseUrl' => $baseUrl,
         'total' => $logging->getNumberOfEntries(),
-        'perPage' => $perpage,
+        'perPage' => $perPage,
         'pageParamName' => 'page',
     ];
     $pagination = new Pagination($options);
@@ -73,7 +78,8 @@ if (
     $loggingData = $logging->getAll();
     ?>
 
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
             <i aria-hidden="true" class="bi bi-list-ol"></i> <?= Translation::get('ad_menu_adminlog') ?>
         </h1>
@@ -105,8 +111,8 @@ if (
     <?php
     $counter = $displayedCounter = 0;
 
-    foreach ($loggingData as $loggingId => $loggingValue) {
-        if ($displayedCounter >= $perpage) {
+    foreach ($loggingData as $value) {
+        if ($displayedCounter >= $perPage) {
             ++$displayedCounter;
             continue;
         }
@@ -117,15 +123,15 @@ if (
         }
         ++$displayedCounter;
 
-        $user->getUserById($loggingValue['usr'], true);
+        $user->getUserById($value->getUserId(), true);
         ?>
         <tr>
-            <td><?= $loggingId ?></td>
-            <td><?= $date->format(date('Y-m-d H:i', $loggingValue['time'])) ?></td>
+            <td><?= $value->getId() ?></td>
+            <td><?= $date->format(date('Y-m-d H:i', $value->getTime())) ?></td>
             <td><?= Strings::htmlentities($user->getLogin()) ?></td>
-            <td><?= $loggingValue['ip'] ?></td>
+            <td><?= $value->getIp() ?></td>
             <td><small><?php
-            $text = Strings::htmlentities($loggingValue['text']);
+            $text = Strings::htmlentities($value->getText());
             $text = str_replace('Loginerror', Translation::get('ad_log_lger'), $text);
             $text = str_replace('Session expired', Translation::get('ad_log_sess'), $text);
             $text = str_replace('Useredit', Translation::get('ad_log_edit'), $text);

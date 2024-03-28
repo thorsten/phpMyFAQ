@@ -22,11 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('open_questions', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('open_questions', 0);
 
 try {
     $template->parse(

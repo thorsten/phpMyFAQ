@@ -46,7 +46,7 @@ class ExportTest extends TestCase
      */
     public function testCreatePdf(): void
     {
-        $pdf = Export::create($this->faq, $this->category, $this->configuration, 'pdf');
+        $pdf = Export::create($this->faq, $this->category, $this->configuration);
         $this->assertInstanceOf(Pdf::class, $pdf);
     }
 

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class VanillaTest
  */
-class VanillaTest extends TestCase
+class VanillaFileTest extends TestCase
 {
     /** @var VanillaFile*/
     private VanillaFile $instance;

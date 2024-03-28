@@ -42,7 +42,7 @@ readonly class Rating
     /**
      * Returns all ratings of FAQ records.
      *
-     * @return array<array<mixed>>
+     * @return array
      */
     public function getAllRatings(): array
     {
@@ -212,7 +212,7 @@ readonly class Rating
     /**
      * Adds a new voting record.
      *
-     * @param int[] $votingData
+     * @param array $votingData
      */
     public function addVoting(array $votingData): bool
     {
@@ -223,7 +223,7 @@ readonly class Rating
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
-            $votingData['user_ip']
+            $this->configuration->getDb()->escape($votingData['user_ip'])
         );
         $this->configuration->getDb()->query($query);
 
@@ -233,7 +233,7 @@ readonly class Rating
     /**
      * Updates an existing voting record.
      *
-     * @param int[] $votingData
+     * @param array $votingData
      */
     public function update(array $votingData): bool
     {
@@ -242,7 +242,7 @@ readonly class Rating
             Database::getTablePrefix(),
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
-            $votingData['user_ip'],
+            $this->configuration->getDb()->escape($votingData['user_ip']),
             $votingData['record_id']
         );
         $this->configuration->getDb()->query($query);

@@ -19,6 +19,7 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -103,6 +104,10 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         // get right id
         if (!is_numeric($right) && is_string($right)) {
             $right = $this->getRightId($right);
+        }
+
+        if ($right instanceof PermissionType) {
+            $right = $this->getRightId($right->value);
         }
 
         // check user right and group right

@@ -116,15 +116,13 @@ class FaqHelper extends Helper
     }
 
     /**
-     * Renders a preview of the answer.
-     *
-     * @throws Exception
+     * Renders a preview of the answer
      */
     public function renderAnswerPreview(string $answer, int $numWords): string
     {
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $parsedownExtra = new ParsedownExtra();
-            return Utils::chopString(strip_tags((string) $parsedownExtra->text($answer)), $numWords);
+            $parseDown = new ParsedownExtra();
+            return Utils::chopString(strip_tags((string) $parseDown->text($answer)), $numWords);
         }
         return Utils::chopString(strip_tags($answer), $numWords);
     }

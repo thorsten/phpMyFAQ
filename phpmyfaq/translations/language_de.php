@@ -1411,4 +1411,8 @@ $PMF_LANG['msgTranslationText'] = 'Übersetzungstext';
 $PMF_LANG['msgAddTranslation'] = 'Übersetzung hinzufügen';
 $PMF_LANG['msgHintDeactivateForms'] = 'Die gesamte Nutzung der jeweiligen Formulare lässt sich in der <a class="alert-link" href="?action=config">Administration</a> deaktivieren.';
 
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Nur inaktive FAQs';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Nur neue FAQs';
+
 return $PMF_LANG;

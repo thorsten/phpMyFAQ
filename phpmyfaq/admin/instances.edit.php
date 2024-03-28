@@ -32,7 +32,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
     $instanceId = Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 
     $instance = new Instance($faqConfig);
-    $instanceData = $instance->getInstanceById($instanceId, 'array');
+    $instanceData = $instance->getById($instanceId, 'array');
 
     $templateVars = [
         'ad_menu_instances' => Translation::get('ad_menu_instances'),

@@ -171,7 +171,7 @@ class User
      * Constructor.
      *
      * @throws Core\Exception
-     */
+*/
     public function __construct(protected ?Configuration $configuration)
     {
         $permission = Permission::selectPerm($this->configuration->get('security.permLevel'), $this->configuration);
@@ -973,7 +973,7 @@ class User
             $this->getUserId()
         );
 
-        return $this->configuration->getDb()->query($update);
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**

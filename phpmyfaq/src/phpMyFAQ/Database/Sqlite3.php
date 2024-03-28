@@ -50,12 +50,17 @@ class Sqlite3 implements DatabaseDriver
     /** @var string */
     private const ERROR_MESSAGE =
         "Do not call numRows() after you've fetched one or more result records, because " .
-        (\phpMyFAQ\Database\Sqlite3::class . '::numRows() has to reset the results at its end.');
+        (Sqlite3::class . '::numRows() has to reset the results at its end.');
 
     /**
      * Connects to the database.
      *
+     * @param string   $host
+     * @param string   $user
+     * @param string   $password
+     * @param string   $database
      * @param int|null $port
+     * @return bool|null
      */
     public function connect(
         string $host,
@@ -106,7 +111,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetchAssoc();
+        return $result->fetchArray(SQLITE3_ASSOC);
     }
 
     /**

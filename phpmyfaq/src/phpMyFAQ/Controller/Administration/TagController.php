@@ -20,7 +20,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Entity\TagEntity;
+use phpMyFAQ\Entity\Tag;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
@@ -55,11 +55,11 @@ class TagController extends AbstractController
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
         $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $tagEntity = new TagEntity();
+        $tagEntity = new Tag();
         $tagEntity->setId($id);
         $tagEntity->setName($newTag);
 
-        if ($tags->updateTag($tagEntity)) {
+        if ($tags->update($tagEntity)) {
             return $this->json(['updated' => Translation::get('ad_entryins_suc')], Response::HTTP_OK);
         } else {
             return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);

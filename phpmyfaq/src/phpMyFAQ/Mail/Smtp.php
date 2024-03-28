@@ -26,7 +26,7 @@ use Symfony\Component\Mime\Email;
 /**
  * Class SMTP
  */
-class SMTP implements MailUserAgentInterface
+class Smtp implements MailUserAgentInterface
 {
     private string $user;
 

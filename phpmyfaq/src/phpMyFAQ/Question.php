@@ -36,9 +36,10 @@ readonly class Question
     /**
      * Adds a new question.
      *
-     * @param string[] $questionData
+     * @param QuestionEntity $questionData
+     * @return bool
      */
-    public function addQuestion(array $questionData): bool
+    public function addQuestion(QuestionEntity $questionData): bool
     {
         $query = sprintf(
             "
@@ -50,12 +51,12 @@ readonly class Question
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', 'id'),
             $this->configuration->getLanguage()->getLanguage(),
-            $this->configuration->getDb()->escape($questionData['username']),
-            $this->configuration->getDb()->escape($questionData['email']),
-            $questionData['category_id'],
-            $this->configuration->getDb()->escape($questionData['question']),
+            $this->configuration->getDb()->escape($questionData->getUsername()),
+            $this->configuration->getDb()->escape($questionData->getEmail()),
+            $questionData->getCategoryId(),
+            $this->configuration->getDb()->escape($questionData->getQuestion()),
             date('YmdHis'),
-            $questionData['is_visible'],
+            $questionData->isVisible() ? 'Y' : 'N',
             0
         );
 
@@ -169,14 +170,14 @@ readonly class Question
                 $question = new QuestionEntity();
                 $question
                     ->setId($row->id)
-                    ->setLang($row->lang)
+                    ->setLanguage($row->lang)
                     ->setUsername($row->username)
                     ->setEmail($row->email)
                     ->setCategoryId($row->category_id)
                     ->setQuestion($row->question)
                     ->setCreated($row->created)
                     ->setAnswerId($row->answer_id)
-                    ->setIsVisible($row->is_visible);
+                    ->setIsVisible($row->is_visible === 'Y');
 
                 $questions[] = $question;
             }

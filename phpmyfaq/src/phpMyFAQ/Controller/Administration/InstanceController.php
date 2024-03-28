@@ -78,7 +78,7 @@ class InstanceController extends AbstractController
             ->setComment($comment);
 
         $faqInstance = new Instance($configuration);
-        $instanceId = $faqInstance->addInstance($data);
+        $instanceId = $faqInstance->create($data);
 
         $faqInstanceClient = new Client($configuration);
         $faqInstanceClient->createClient($faqInstance);
@@ -134,7 +134,7 @@ class InstanceController extends AbstractController
 
             Database::setTablePrefix($databaseConfiguration->getPrefix());
         } else {
-            $faqInstance->removeInstance($instanceId);
+            $faqInstance->delete($instanceId);
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -168,11 +168,11 @@ class InstanceController extends AbstractController
         if (null !== $instanceId) {
             $client = new Client($configuration);
             $client->setFileSystem(new Filesystem());
-            $clientData = $client->getInstanceById($instanceId);
+            $clientData = $client->getById($instanceId);
             if (
                 1 !== $instanceId &&
                 $client->deleteClientFolder($clientData->url) &&
-                $client->removeInstance($instanceId)
+                $client->delete($instanceId)
             ) {
                 $payload = ['deleted' => $instanceId];
                 return $this->json($payload, Response::HTTP_OK);

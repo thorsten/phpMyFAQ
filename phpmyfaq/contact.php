@@ -28,11 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-try {
-    $faqSession->userTracking('contact', 0);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('contact', 0);
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);

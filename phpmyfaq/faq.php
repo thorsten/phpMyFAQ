@@ -104,11 +104,7 @@ if (isset($faq->faqRecord['id'])) {
     $faqId = $faq->faqRecord['id'];
 }
 
-try {
-    $faqSession->userTracking('article_view', $faqId);
-} catch (Exception) {
-    // @todo handle the exception
-}
+$faqSession->userTracking('article_view', $faqId);
 
 $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews((int) $faqId);
