@@ -170,8 +170,9 @@ abstract class AbstractController
      */
     protected function userHasPermission(PermissionType $permissionType): void
     {
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
-        if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType)) {
+        $configuration = Configuration::getConfigurationInstance();
+        $currentUser = CurrentUser::getCurrentUser($configuration);
+        if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permissionType->value));
         }
     }

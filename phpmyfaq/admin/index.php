@@ -396,6 +396,12 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'attachments':
                 require 'attachments.php';
                 break;
+            case 'forms':
+                require 'forms.php';
+                break;
+            case 'forms-translations':
+                require 'forms.translations.php';
+                break;
 
             default:
                 echo 'Dave, this conversation can serve no purpose anymore. Goodbye.';

@@ -23,8 +23,11 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filesystem;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ZipArchive;
@@ -118,6 +121,7 @@ class Update extends Setup
 
         // 4.0 updates
         $this->applyUpdates400Alpha();
+        $this->applyUpdates400Alpha2();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -258,7 +262,7 @@ class Update extends Setup
                     Database::getTablePrefix()
                 );
             } else {
-                $this->queries[] =  sprintf(
+                $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquser 
                         ADD refresh_token TEXT NULL DEFAULT NULL,
                         ADD access_token TEXT NULL DEFAULT NULL,
@@ -622,6 +626,71 @@ class Update extends Setup
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqcategory_order_new RENAME TO %sfaqcategory_order',
                         Database::getTablePrefix(),
+                        Database::getTablePrefix()
+                    );
+                    break;
+            }
+        }
+    }
+
+    private function applyUpdates400Alpha2(): void
+    {
+        if (version_compare($this->version, '4.0.0-alpha2', '<')) {
+            // Add function for editing forms
+            $forms = new Forms($this->configuration);
+            $installer = new Installer(new System());
+            foreach ($installer->formInputs as $input) {
+                $forms->insertInputIntoDatabase($input);
+            }
+
+            // Add new permission for editing forms
+            $user = new User($this->configuration);
+            $rightData = [
+                'name' => 'forms_edit',
+                'description' => 'Right to edit forms'
+            ];
+            $user->perm->grantUserRight(1, $user->perm->addRight($rightData));
+
+            $this->configuration->delete('main.optionalMailAddress');
+
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                        form_id INT(1) NOT NULL,
+                        input_id INT(11) NOT NULL,
+                        input_type VARCHAR(1000) NOT NULL,
+                        input_label VARCHAR(100) NOT NULL,
+                        input_active INT(1) NOT NULL,
+                        input_required INT(1) NOT NULL,
+                        input_lang VARCHAR(11) NOT NULL)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlsrv':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                        form_id INTEGER NOT NULL,
+                        input_id INTEGER NOT NULL,
+                        input_type NVARCHAR(1000) NOT NULL,
+                        input_label NVARCHAR(100) NOT NULL,
+                        input_active INTEGER NOT NULL,
+                        input_required INTEGER NOT NULL,
+                        input_lang NVARCHAR(11) NOT NULL)',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlite3':
+                case 'pgsql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                        form_id INTEGER NOT NULL,
+                        input_id INTEGER NOT NULL,
+                        input_type VARCHAR(1000) NOT NULL,
+                        input_label VARCHAR(100) NOT NULL,
+                        input_active INTEGER NOT NULL,
+                        input_required INTEGER NOT NULL,
+                        input_lang VARCHAR(11) NOT NULL)',
                         Database::getTablePrefix()
                     );
                     break;
