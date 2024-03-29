@@ -633,15 +633,14 @@ class Update extends Setup
         }
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     private function applyUpdates400Alpha2(): void
     {
         if (version_compare($this->version, '4.0.0-alpha2', '<')) {
-            // Add function for editing forms
-            $forms = new Forms($this->configuration);
-            $installer = new Installer(new System());
-            foreach ($installer->formInputs as $input) {
-                $forms->insertInputIntoDatabase($input);
-            }
+            $this->configuration->delete('main.optionalMailAddress');
 
             // Add new permission for editing forms
             $user = new User($this->configuration);
@@ -650,8 +649,6 @@ class Update extends Setup
                 'description' => 'Right to edit forms'
             ];
             $user->perm->grantUserRight(1, $user->perm->addRight($rightData));
-
-            $this->configuration->delete('main.optionalMailAddress');
 
             switch (Database::getType()) {
                 case 'mysqli':
@@ -694,6 +691,13 @@ class Update extends Setup
                         Database::getTablePrefix()
                     );
                     break;
+            }
+
+            // Add function for editing forms
+            $forms = new Forms($this->configuration);
+            $installer = new Installer(new System());
+            foreach ($installer->formInputs as $input) {
+                $this->queries[] = $forms->getInsertQueries($input);
             }
         }
     }

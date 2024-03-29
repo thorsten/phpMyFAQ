@@ -283,7 +283,14 @@ class Forms
      */
     public function insertInputIntoDatabase(array $input): bool
     {
-        $query = sprintf(
+        $query = $this->getInsertQueries($input);
+
+        return (bool) $this->config->getDb()->query($query);
+    }
+
+    public function getInsertQueries(array $input): string
+    {
+        return sprintf(
             "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
                     input_required) VALUES (%d, %d, '%s', '%s', '%s', %d, %d)",
             Database::getTablePrefix(),
@@ -295,7 +302,5 @@ class Forms
             $this->config->getDb()->escape($input['input_active']),
             $this->config->getDb()->escape($input['input_required'])
         );
-
-        return (bool) $this->config->getDb()->query($query);
     }
 }
