@@ -54,7 +54,7 @@ class Update extends Setup
     /**
      * Checks if the "faqconfig" table is available
      */
-    public function isConfigTableAvailable(DatabaseDriver $databaseDriver): bool
+    public function isConfigTableNotAvailable(DatabaseDriver $databaseDriver): bool
     {
         $query = sprintf('SELECT * FROM %s%s', Database::getTablePrefix(), 'faqconfig');
         $result = $databaseDriver->query($query);
@@ -81,7 +81,7 @@ class Update extends Setup
 
         foreach ($files as $file) {
             $file = realpath($file);
-            if (!str_contains($file, $configDir . DIRECTORY_SEPARATOR)) {
+            if (str_contains($file, $configDir . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
                     $zipArchive->addEmptyDir(
                         str_replace($configDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR)
@@ -98,7 +98,7 @@ class Update extends Setup
             throw new Exception('Cannot store config backup file.');
         }
 
-        return $this->configuration->getDefaultUrl() . 'content/' . $this->getBackupFilename();
+        return $this->configuration->getDefaultUrl() . 'content/core/config/' . $this->getBackupFilename();
     }
 
     /**

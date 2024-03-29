@@ -66,7 +66,7 @@ $templateVars = [
     'currentYear' => date('Y'),
     'currentStep' => $step,
     'documentationUrl' => System::getDocumentationUrl(),
-    'configTableNotAvailable' => $update->isConfigTableAvailable($faqConfig->getDb()),
+    'configTableNotAvailable' => $update->isConfigTableNotAvailable($faqConfig->getDb()),
 ];
 
 echo $template->render($templateVars);

@@ -37,11 +37,9 @@ class SetupController extends AbstractController
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $update = new Update(new System(), $configuration);
+        $update = new Update(new System(), $this->configuration);
         $update->setVersion($installedVersion);
 
         if (!$update->checkMaintenanceMode()) {
@@ -75,14 +73,14 @@ class SetupController extends AbstractController
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $update = new Update(new System(), Configuration::getConfigurationInstance());
+        $update = new Update(new System(), $this->configuration);
         $update->setVersion(System::getVersion());
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $configPath = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content';
-        if (!version_compare($installedVersion, '4.0.0-dev') < 0) {
-            $configPath = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'config';
+        $configPath = PMF_ROOT_DIR . '/content/core/config';
+        if (!version_compare($installedVersion, '4.0.0-alpha') < 0) {
+            $configPath = PMF_ROOT_DIR . '/config';
         }
 
         try {
@@ -96,7 +94,6 @@ class SetupController extends AbstractController
 
     public function updateDatabase(Request $request): StreamedResponse|JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
 
         if (empty($request->getContent())) {
             $response = new JsonResponse();
@@ -107,10 +104,11 @@ class SetupController extends AbstractController
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $update = new Update(new System(), $configuration);
+        $update = new Update(new System(), $this->configuration);
         $update->setVersion($installedVersion);
 
         $response = new StreamedResponse();
+        $configuration = $this->configuration;
         $response->setCallback(static function () use ($update, $configuration) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
