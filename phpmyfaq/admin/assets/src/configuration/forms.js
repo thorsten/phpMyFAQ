@@ -15,7 +15,8 @@
  */
 
 import {
-  fetchActivateInput, fetchAddTranslation,
+  fetchActivateInput,
+  fetchAddTranslation,
   fetchDeleteTranslation,
   fetchEditTranslation,
   fetchSetInputAsRequired,
@@ -64,10 +65,6 @@ export const handleFormEdit = () => {
       tabAskQuestion.classList.remove('active');
       tabContentAddContent.classList.add('active');
       tabContentAskQuestion.classList.remove('active');
-    });
-    document.getElementById('button').addEventListener('click', function () {
-      const modal = new Modal(document.getElementById('translations'));
-      modal.show();
     });
   }
 };
