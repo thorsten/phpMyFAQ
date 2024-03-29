@@ -17,10 +17,7 @@
 
 namespace phpMyFAQ\Search\Database;
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Search\SearchDatabase;
-use stdClass;
 
 /**
  * Class Sqlsrv
@@ -37,7 +34,7 @@ class Sqlsrv extends SearchDatabase implements DatabaseInterface
      */
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
             $query = sprintf(
@@ -57,7 +54,7 @@ class Sqlsrv extends SearchDatabase implements DatabaseInterface
                 $this->getConditions()
             );
 
-            $this->resultSet = $this->config->getDb()->query($query);
+            $this->resultSet = $this->configuration->getDb()->query($query);
         }
 
         return $this->resultSet;

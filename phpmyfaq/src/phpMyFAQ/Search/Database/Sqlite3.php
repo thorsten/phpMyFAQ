@@ -20,9 +20,7 @@
 namespace phpMyFAQ\Search\Database;
 
 use Exception;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
-use stdClass;
 
 /**
  * Class Sqlite3
@@ -39,7 +37,7 @@ class Sqlite3 extends SearchDatabase implements DatabaseInterface
      */
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
             $query = sprintf(
@@ -59,7 +57,7 @@ class Sqlite3 extends SearchDatabase implements DatabaseInterface
                 $this->getConditions()
             );
 
-            $this->resultSet = $this->config->getDb()->query($query);
+            $this->resultSet = $this->configuration->getDb()->query($query);
         }
 
         return $this->resultSet;

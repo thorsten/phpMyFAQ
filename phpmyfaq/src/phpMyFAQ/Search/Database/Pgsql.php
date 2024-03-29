@@ -20,7 +20,6 @@ namespace phpMyFAQ\Search\Database;
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
-use stdClass;
 
 /**
  * Class Pgsql
@@ -46,10 +45,10 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
      */
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = $this->config->get('search.enableRelevance');
+            $enableRelevance = $this->configuration->get('search.enableRelevance');
 
             $columns = $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult() : '';
@@ -70,15 +69,15 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 ($enableRelevance)
-                    ? ", plainto_tsquery('" . $this->config->getDb()->escape($searchTerm) . "') query "
+                    ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
                     : '',
                 $this->getMatchingColumns(),
-                $this->config->getDb()->escape($searchTerm),
+                $this->configuration->getDb()->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy
             );
 
-            $this->resultSet = $this->config->getDb()->query($query);
+            $this->resultSet = $this->configuration->getDb()->query($query);
         }
 
         return $this->resultSet;
@@ -90,7 +89,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
     public function getMatchingColumnsAsResult(): string
     {
         $resultColumns = '';
-        $config = $this->config->get('search.relevance');
+        $config = $this->configuration->get('search.relevance');
         $list = explode(',', (string) $config);
 
         // Set weight
@@ -125,7 +124,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
      */
     public function getMatchingOrder(): string
     {
-        $list = explode(',', (string) $this->config->get('search.relevance'));
+        $list = explode(',', (string) $this->configuration->get('search.relevance'));
         $order = '';
 
         foreach ($list as $field) {
@@ -148,7 +147,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
      */
     public function getMatchingColumns(): string
     {
-        $enableRelevance = $this->config->get('search.enableRelevance');
+        $enableRelevance = $this->configuration->get('search.enableRelevance');
 
         if ($enableRelevance) {
             $matchColumns = '';
