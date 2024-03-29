@@ -15,6 +15,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
@@ -45,6 +46,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
+    $ratingData = new RatingData($faqConfig);
     $ratings = new Rating($faqConfig);
 
     if ($csrfToken && !Token::getInstance()->verifyToken('clear-statistics', $csrfToken)) {
@@ -61,8 +63,8 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         }
     }
 
-    $ratingData = $ratings->getAll();
-    $numberOfRatings = is_countable($ratingData) ? count($ratingData) : 0;
+    $data = $ratingData->getAll();
+    $numberOfRatings = is_countable($data) ? count($data) : 0;
     $currentCategory = 0;
 
     $templateVars = [
@@ -74,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         'msgDeleteAllVotings' => 'Statistics successfully deleted.',
         'msgDeleteAllVotingsError' => 'Statistics not deleted.',
         'currentCategory' => $currentCategory,
-        'ratingData' => $ratingData,
+        'ratingData' => $data,
         'numberOfRatings' => $numberOfRatings,
         'categoryNames' => $category->categoryName,
         'green' => Translation::get('ad_rs_green'),
