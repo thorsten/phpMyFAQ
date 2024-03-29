@@ -34,7 +34,7 @@ class Search
 {
     private ?int $categoryId = null;
 
-    private ?\phpMyFAQ\Category $category = null;
+    private ?Category $category = null;
 
     private readonly string $table;
 
@@ -59,7 +59,7 @@ class Search
     /**
      * Getter for category.
      *
-     * @return int
+     * @return int|null
      */
     public function getCategoryId(): ?int
     {
@@ -111,10 +111,10 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     * @throws Exception
-     * @return mixed[]
+     * @return array
+     *@throws Exception
      */
-    public function searchDatabase(string $searchTerm, $allLanguages = true): array
+    public function searchDatabase(string $searchTerm, bool $allLanguages = true): array
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
