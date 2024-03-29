@@ -110,7 +110,7 @@ class QuestionController extends AbstractController
         ];
 
         $questionObject = new Question($configuration);
-        $questionObject->addQuestion($questionData);
+        $questionObject->add($questionData);
 
         $category = new Category($configuration);
         $category->getCategoryData($categoryId);

@@ -64,7 +64,7 @@ $selectedCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDA
 $question = '';
 $readonly = '';
 if (!is_null($selectedQuestion)) {
-    $questionData = $questionObject->getQuestion($selectedQuestion);
+    $questionData = $questionObject->get($selectedQuestion);
     $question = Strings::htmlentities($questionData['question']);
     if (Strings::strlen($question) !== 0) {
         $readonly = ' readonly';

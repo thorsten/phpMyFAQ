@@ -94,7 +94,7 @@ if ((
 
     if ('takequestion' === $action) {
         $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $question = $questionObject->getQuestion($questionId);
+        $question = $questionObject->get($questionId);
         $selectedCategory = $question['category_id'];
         $faqData['title'] = $question['question'];
         $notifyUser = $question['username'];

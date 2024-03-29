@@ -56,7 +56,7 @@ class QuestionController extends AbstractController
             }
 
             foreach ($questionIds as $questionId) {
-                $question->deleteQuestion((int)$questionId);
+                $question->delete((int)$questionId);
             }
 
             return $this->json(['success' => Translation::get('ad_open_question_deleted')], Response::HTTP_OK);

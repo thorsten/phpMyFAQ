@@ -123,7 +123,7 @@ class FaqController extends AbstractController
             $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
             if ($openQuestionId) {
                 if ($this->configuration->get('records.enableDeleteQuestion')) {
-                    $question->deleteQuestion($openQuestionId);
+                    $question->delete($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $question->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
                 }

@@ -164,7 +164,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
             $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
-                    $questionObject->deleteQuestion($openQuestionId);
+                    $questionObject->delete($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $questionObject->updateQuestionAnswer($openQuestionId, $recordId, $categories['rubrik'][0]);
                 }

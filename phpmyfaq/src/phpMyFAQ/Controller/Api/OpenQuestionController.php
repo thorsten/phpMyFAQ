@@ -64,7 +64,7 @@ class OpenQuestionController extends AbstractController
         $configuration = Configuration::getConfigurationInstance();
 
         $question = new Question($configuration);
-        $result = $question->getAllOpenQuestions();
+        $result = $question->getAll();
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);

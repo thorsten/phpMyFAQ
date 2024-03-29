@@ -62,7 +62,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             echo '<div id="returnMessage"></div>';
 
-            $openQuestions = $question->getAllOpenQuestions();
+            $openQuestions = $question->getAll();
 
             if ((is_countable($openQuestions) ? count($openQuestions) : 0) > 0) {
                 ?>

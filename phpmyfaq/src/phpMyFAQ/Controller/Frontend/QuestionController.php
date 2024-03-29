@@ -118,7 +118,7 @@ class QuestionController extends AbstractController
             }
 
             $question = new Question($this->configuration);
-            $question->addQuestion($questionEntity);
+            $question->add($questionEntity);
             $notification = new Notification($this->configuration);
             $notification->sendQuestionSuccessMail($questionEntity, $categories);
 

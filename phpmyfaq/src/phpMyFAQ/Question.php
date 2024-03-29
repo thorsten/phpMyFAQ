@@ -39,7 +39,7 @@ readonly class Question
      * @param QuestionEntity $questionData
      * @return bool
      */
-    public function addQuestion(QuestionEntity $questionData): bool
+    public function add(QuestionEntity $questionData): bool
     {
         $query = sprintf(
             "
@@ -60,15 +60,13 @@ readonly class Question
             0
         );
 
-        $this->configuration->getDb()->query($query);
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
      * Deletes a question for the table "faqquestions".
      */
-    public function deleteQuestion(int $questionId): bool
+    public function delete(int $questionId): bool
     {
         $delete = sprintf(
             "DELETE FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
@@ -77,9 +75,7 @@ readonly class Question
             $this->configuration->getLanguage()->getLanguage()
         );
 
-        $this->configuration->getDb()->query($delete);
-
-        return true;
+        return (bool) $this->configuration->getDb()->query($delete);
     }
 
     /**
@@ -87,23 +83,8 @@ readonly class Question
      *
      * @return array<string, int|string>
      */
-    public function getQuestion(int $questionId): array
+    public function get(int $questionId): array
     {
-        $question = [
-            'id' => 0,
-            'lang' => '',
-            'username' => '',
-            'email' => '',
-            'category_id' => '',
-            'question' => '',
-            'created' => '',
-            'is_visible' => '',
-        ];
-
-        if (!is_int($questionId)) {
-            return $question;
-        }
-
         $question = [];
 
         $query = sprintf(
@@ -145,7 +126,7 @@ readonly class Question
      *
      * @return QuestionEntity[]
      */
-    public function getAllOpenQuestions(bool $showAll = true): array
+    public function getAll(bool $showAll = true): array
     {
         $questions = [];
 
@@ -217,7 +198,7 @@ readonly class Question
         $query = sprintf(
             "UPDATE %sfaqquestions SET is_visible = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $isVisible,
+            $this->configuration->getDb()->escape($isVisible),
             $questionId,
             $this->configuration->getLanguage()->getLanguage()
         );
