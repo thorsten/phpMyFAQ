@@ -61,7 +61,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         }
     }
 
-    $ratingData = $ratings->getAllRatings();
+    $ratingData = $ratings->getAll();
     $numberOfRatings = is_countable($ratingData) ? count($ratingData) : 0;
     $currentCategory = 0;
 

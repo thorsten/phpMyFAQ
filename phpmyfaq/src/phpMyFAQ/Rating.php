@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Language\Plurals;
 
 /**
@@ -44,7 +45,7 @@ readonly class Rating
      *
      * @return array
      */
-    public function getAllRatings(): array
+    public function getAll(): array
     {
         $ratings = [];
 
@@ -150,7 +151,7 @@ readonly class Rating
     /**
      * Calculates the rating of the user voting.
      */
-    public function getVotingResult(int $id): string
+    public function get(int $id): string
     {
         $query = sprintf(
             'SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d',
@@ -212,42 +213,42 @@ readonly class Rating
     /**
      * Adds a new voting record.
      *
-     * @param array $votingData
+     * @param Vote $votingData
+     * @return bool
      */
-    public function addVoting(array $votingData): bool
+    public function create(Vote $votingData): bool
     {
         $query = sprintf(
             "INSERT INTO %sfaqvoting VALUES (%d, %d, %d, 1, %d, '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
-            $votingData['record_id'],
-            $votingData['vote'],
+            $votingData->getFaqId(),
+            $votingData->getVote(),
             $_SERVER['REQUEST_TIME'],
-            $this->configuration->getDb()->escape($votingData['user_ip'])
+            $this->configuration->getDb()->escape($votingData->getIp())
         );
-        $this->configuration->getDb()->query($query);
 
-        return true;
+        return (bool)$this->configuration->getDb()->query($query);
     }
 
     /**
      * Updates an existing voting record.
      *
-     * @param array $votingData
+     * @param Vote $votingData
+     * @return bool
      */
-    public function update(array $votingData): bool
+    public function update(Vote $votingData): bool
     {
         $query = sprintf(
             "UPDATE %sfaqvoting SET vote = vote + %d, usr = usr + 1, datum = %d, ip = '%s' WHERE artikel = %d",
             Database::getTablePrefix(),
-            $votingData['vote'],
+            $votingData->getVote(),
             $_SERVER['REQUEST_TIME'],
-            $this->configuration->getDb()->escape($votingData['user_ip']),
-            $votingData['record_id']
+            $this->configuration->getDb()->escape($votingData->getIp()),
+            $votingData->getFaqId()
         );
-        $this->configuration->getDb()->query($query);
 
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -255,7 +256,7 @@ readonly class Rating
      */
     public function deleteAll(): bool
     {
-        return $this->configuration->getDb()->query(
+        return (bool) $this->configuration->getDb()->query(
             sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix())
         );
     }

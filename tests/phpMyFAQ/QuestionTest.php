@@ -3,12 +3,10 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Setup\Update;
 use PHPUnit\Framework\TestCase;
 
 class QuestionTest extends TestCase
 {
-    private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private Question $question;
     protected function setUp(): void
@@ -17,12 +15,12 @@ class QuestionTest extends TestCase
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($this->dbHandle);
-        $language = new Language($this->configuration);
+        $configuration = new Configuration($this->dbHandle);
+        $language = new Language($configuration);
         $language->setLanguage(false, 'en');
-        $this->configuration->setLanguage($language);
+        $configuration->setLanguage($language);
 
-        $this->question = new Question($this->configuration);
+        $this->question = new Question($configuration);
     }
 
     protected function tearDown(): void

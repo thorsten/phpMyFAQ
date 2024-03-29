@@ -340,7 +340,7 @@ $template->parse(
         'linkToPdf' => $faqServices->getPdfLink(),
         'saveVotingID' => $faqId,
         'msgAverageVote' => Translation::get('msgAverageVote'),
-        'renderVotingResult' => $rating->getVotingResult($faqId),
+        'renderVotingResult' => $rating->get($faqId),
         'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
         'msgVoteUsability' => Translation::get('msgVoteUsability'),
         'msgVoteBad' => Translation::get('msgVoteBad'),

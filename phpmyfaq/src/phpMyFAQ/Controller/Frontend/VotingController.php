@@ -19,6 +19,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Session;
@@ -49,14 +50,14 @@ class VotingController extends AbstractController
         if (isset($vote) && $rating->check($faqId, $userIp) && $vote > 0 && $vote < 6) {
             $session->userTracking('save_voting', $faqId);
 
-            $votingData = [
-                'record_id' => $faqId,
-                'vote' => $vote,
-                'user_ip' => $userIp,
-            ];
+            $votingData = new Vote();
+            $votingData
+                ->setFaqId($faqId)
+                ->setVote($vote)
+                ->setIp($userIp);
 
             if ($rating->getNumberOfVotings($faqId) === 0) {
-                $rating->addVoting($votingData);
+                $rating->create($votingData);
             } else {
                 $rating->update($votingData);
             }
@@ -64,7 +65,7 @@ class VotingController extends AbstractController
             return $this->json(
                 [
                     'success' => Translation::get('msgVoteThanks'),
-                    'rating' => $rating->getVotingResult($faqId),
+                    'rating' => $rating->get($faqId),
                 ],
                 Response::HTTP_OK
             );
