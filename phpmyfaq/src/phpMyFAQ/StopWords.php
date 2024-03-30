@@ -18,6 +18,8 @@
 
 namespace phpMyFAQ;
 
+use function _PHPStan_5f1729e44\React\Async\waterfall;
+
 /**
  * Class StopWords
  *
@@ -70,9 +72,8 @@ class StopWords
                 $this->configuration->getDb()->escape($this->language),
                 $word
             );
-            $this->configuration->getDb()->query($sql);
 
-            return true;
+            return (bool) $this->configuration->getDb()->query($sql);
         }
 
         return false;
@@ -209,6 +210,7 @@ class StopWords
         }
 
         $bannedWords = $this->getBannedWords();
+
         // We just search a match of, at least, one banned word into $content
         foreach ($bannedWords as $bannedWord) {
             foreach ($checkWords as $checkWord) {

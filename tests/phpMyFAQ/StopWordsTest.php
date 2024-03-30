@@ -1,0 +1,114 @@
+<?php
+
+namespace phpMyFAQ;
+
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\TestCase;
+
+class StopWordsTest extends TestCase
+{
+    private Sqlite3 $dbHandle;
+    private StopWords $stopWords;
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Translation::create()
+            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
+
+        $this->dbHandle = new Sqlite3();
+        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $configuration = new Configuration($this->dbHandle);
+        $language = new Language($configuration);
+        $language->setLanguage(false, 'en');
+        $configuration->setLanguage($language);
+
+        $this->stopWords = new StopWords($configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->dbHandle->query(
+            sprintf("DELETE FROM %s WHERE lang = '%s'", $this->stopWords->getTableName(), 'test')
+        );
+    }
+
+    public function testSetLanguage(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->assertEquals('test', $this->stopWords->getLanguage());
+    }
+
+    public function testAdd(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->assertTrue($this->stopWords->add('test'));
+        $this->assertFalse($this->stopWords->add('test'));
+    }
+
+    public function testGetTableName(): void
+    {
+        $this->assertEquals('faqstopwords', $this->stopWords->getTableName());
+    }
+
+    public function testUpdate(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->assertTrue($this->stopWords->add('test'));
+        $this->assertTrue($this->stopWords->update(1, 'test2'));
+    }
+
+    public function testRemove(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->stopWords->add('test');
+        $this->assertTrue($this->stopWords->remove(1));
+    }
+
+    public function testMatch(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->stopWords->add('test');
+        $this->assertTrue($this->stopWords->match('test'));
+        $this->assertFalse($this->stopWords->match('test2'));
+    }
+
+    public function testMatchWithEmptyWord(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->stopWords->add('test');
+        $this->assertFalse($this->stopWords->match(''));
+    }
+
+    public function testGetByLang(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->stopWords->add('test');
+        $this->assertIsArray($this->stopWords->getByLang());
+    }
+
+    public function testClean(): void
+    {
+        $input = 'This is a test 42 string of Foobar test words';
+        $result = $this->stopWords->clean($input);
+
+        $this->assertIsArray($result);
+        $this->assertEquals(['test', 'string', 'foobar', 'words'], $result);
+    }
+
+    public function testCheckBannedWord(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->stopWords->add('test');
+        $this->assertTrue($this->stopWords->checkBannedWord('test'));
+        $this->assertFalse($this->stopWords->checkBannedWord('abolon'));
+    }
+}
