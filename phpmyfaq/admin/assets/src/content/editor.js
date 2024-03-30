@@ -83,6 +83,7 @@ export const renderEditor = () => {
       height: '50vh',
       paste_data_images: true,
       visualblocks_default_state: true,
+      convert_unsafe_embeds: true,
       end_container_on_empty_block: true,
       extended_valid_elements: 'code[class],video[*],audio[*],source[*]',
       removeformat: [{ selector: '*', attributes: ['style'], split: false, expand: false, deep: true }],
