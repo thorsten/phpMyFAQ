@@ -11,6 +11,7 @@ class SitemapTest extends TestCase
     private Sitemap $sitemap;
 
     private Sqlite3 $db;
+
     protected function setUp(): void
     {
         parent::setUp();
