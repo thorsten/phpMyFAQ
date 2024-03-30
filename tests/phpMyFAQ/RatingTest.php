@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class RatingTest extends TestCase
 {
     private Sqlite3 $dbHandle;
-    
+
     private Rating $rating;
 
     /**

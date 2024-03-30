@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Permission;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User\CurrentUser;
@@ -50,7 +51,6 @@ class BasicPermission extends Permission implements PermissionInterface
      */
     public function grantUserRight(int $userId, int $rightId): bool
     {
-        // is right for users?
         $rightData = $this->getRightData($rightId);
 
         if (!isset($rightData['for_users'])) {
@@ -58,19 +58,13 @@ class BasicPermission extends Permission implements PermissionInterface
         }
 
         $insert = sprintf(
-            '
-            INSERT INTO
-                %sfaquser_right
-            (user_id, right_id)
-                VALUES
-            (%d, %d)',
+            'INSERT INTO %sfaquser_right (user_id, right_id) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $userId,
             $rightId
         );
 
-        $res = $this->configuration->getDb()->query($insert);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($insert);
     }
 
     /**
@@ -82,7 +76,7 @@ class BasicPermission extends Permission implements PermissionInterface
      */
     public function getRightData(int $rightId): array
     {
-        // get right data
+        // get the right data
         $select = sprintf(
             '
             SELECT
@@ -122,6 +116,7 @@ class BasicPermission extends Permission implements PermissionInterface
      *
      * @param int   $userId User ID
      * @param mixed $right  Right ID or right name
+     * @throws Exception
      */
     public function hasPermission(int $userId, mixed $right): bool
     {
@@ -205,7 +200,8 @@ class BasicPermission extends Permission implements PermissionInterface
         );
 
         $res = $this->configuration->getDb()->query($select);
-        return $this->configuration->getDb()->numRows($res) == 1;
+
+        return $this->configuration->getDb()->numRows($res) === 1;
     }
 
     /**
@@ -438,7 +434,6 @@ class BasicPermission extends Permission implements PermissionInterface
             $userId
         );
 
-        $res = $this->configuration->getDb()->query($delete);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($delete);
     }
 }
