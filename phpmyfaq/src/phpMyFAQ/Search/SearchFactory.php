@@ -30,9 +30,9 @@ class SearchFactory
     /**
      * Factory for generating search instances.
      *
-     * @param string[] $searchHandler Array with search handlers, e.g. array('database' => 'mysqli')
+     * @param string[] $searchHandler Array with search handlers, e.g., array ('database' => 'mysqli')
      */
-    public static function create(Configuration $configuration, array $searchHandler): DatabaseInterface
+    public static function create(Configuration $configuration, array $searchHandler): SearchDatabase
     {
         $searchClass = sprintf(
             '\phpMyFAQ\Search\%s\%s',

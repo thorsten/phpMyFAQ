@@ -32,7 +32,7 @@ abstract class AbstractSearch
      *
      * @var stdClass[]
      */
-    protected $resultSet;
+    protected mixed $resultSet;
 
     /**
      * AbstractSearch constructor.

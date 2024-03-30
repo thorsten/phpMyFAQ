@@ -19,6 +19,8 @@ class RelationTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
+        $configuration->set('search.enableRelevance', false);
+
         $language = new Language($configuration);
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);

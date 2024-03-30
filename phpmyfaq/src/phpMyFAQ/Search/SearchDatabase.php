@@ -85,7 +85,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             FROM 
                 %s %s %s
             WHERE
-                %s = %d',
+                %s = %s',
             $this->getResultColumns(),
             $this->getTable(),
             $this->getJoinedTable(),
