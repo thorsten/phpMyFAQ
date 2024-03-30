@@ -3,6 +3,9 @@
 namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\DatabaseConfiguration;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
@@ -17,15 +20,26 @@ class SearchFactoryTest extends TestCase
 
     /**
      * Prepares the environment before running a test.
-     */
+     *
+     * @throws Exception
+*/
     protected function setUp(): void
     {
         parent::setUp();
 
         Strings::init();
 
-        $dbHandle = new Sqlite3();
-        $this->configuration = new Configuration($dbHandle);
+        $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
+        Database::setTablePrefix($dbConfig->getPrefix());
+        $db = Database::factory($dbConfig->getType());
+        $db->connect(
+            $dbConfig->getServer(),
+            $dbConfig->getUser(),
+            $dbConfig->getPassword(),
+            $dbConfig->getDatabase(),
+            $dbConfig->getPort()
+        );
+        $this->configuration = new Configuration($db);
     }
 
     /**
@@ -36,11 +50,10 @@ class SearchFactoryTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
-        $search = SearchFactory::create($this->configuration, array('database' => 'sqlite3'));
+        $search = SearchFactory::create($this->configuration, array('database' => Database::getType()));
 
         $this->assertInstanceOf('phpMyFAQ\Search\Database\Sqlite3', $search);
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Search\SearchFactory;
 use PHPUnit\Framework\MockObject\Exception;
@@ -16,21 +17,29 @@ class RelationTest extends TestCase
      */
     public function testGetAllRelatedByQuestion(): void
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
+        Database::setTablePrefix($dbConfig->getPrefix());
+        $db = Database::factory($dbConfig->getType());
+        $db->connect(
+            $dbConfig->getServer(),
+            $dbConfig->getUser(),
+            $dbConfig->getPassword(),
+            $dbConfig->getDatabase(),
+            $dbConfig->getPort()
+        );
+        $configuration = new Configuration($db);
         $configuration->set('search.enableRelevance', false);
 
         $language = new Language($configuration);
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 
-        $dbHandle->query(
+        $db->query(
             'INSERT INTO faqdata ' .
             '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES ' .
             '(1, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')'
         );
-        $dbHandle->query(
+        $db->query(
             'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (1, \'en\', 1, \'en\')'
         );
 
