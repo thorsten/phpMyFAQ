@@ -3,8 +3,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration\DatabaseConfiguration;
-use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Search\SearchFactory;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -12,7 +10,6 @@ use stdClass;
 class RelationTest extends TestCase
 {
     /**
-     * @throws Exception
      * @throws \Exception
      */
     public function testGetAllRelatedByQuestion(): void
