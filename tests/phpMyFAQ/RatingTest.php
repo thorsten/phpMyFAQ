@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 class RatingTest extends TestCase
 {
     private Sqlite3 $dbHandle;
+    
     private Rating $rating;
 
     /**
@@ -96,6 +97,11 @@ class RatingTest extends TestCase
         $this->rating->update($votingData);
 
         $this->assertEquals(2, $this->rating->getNumberOfVotings(1));
+    }
+
+    public function testGetNumberOfVotingsWithNoVotes(): void
+    {
+        $this->assertEquals(0, $this->rating->getNumberOfVotings(1));
     }
 
     public function testUpdate(): void

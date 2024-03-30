@@ -6,6 +6,19 @@ use PHPUnit\Framework\TestCase;
 
 class ServicesTest extends TestCase
 {
+    public function testSetQuestion(): void
+    {
+        // Create a mock Configuration object
+        $configuration = $this->createMock(Configuration::class);
+
+        // Create a Services object
+        $services = new Services($configuration);
+        $services->setQuestion('What is phpMyFAQ?');
+
+        // Test getQuestion method
+        $this->assertEquals('What+is+phpMyFAQ%3F', $services->getQuestion());
+    }
+
     public function testGetSuggestLink(): void
     {
         // Create a mock Configuration object

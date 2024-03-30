@@ -111,4 +111,12 @@ class StopWordsTest extends TestCase
         $this->assertTrue($this->stopWords->checkBannedWord('test'));
         $this->assertFalse($this->stopWords->checkBannedWord('abolon'));
     }
+
+    public function testCheckBannedWordWithEmptyString(): void
+    {
+        $this->stopWords->setLanguage('test');
+        $this->stopWords->add('test');
+        $this->assertTrue($this->stopWords->checkBannedWord(''));
+    }
+
 }

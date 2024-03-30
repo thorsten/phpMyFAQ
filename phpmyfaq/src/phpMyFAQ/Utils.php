@@ -210,18 +210,13 @@ class Utils
      */
     public static function debug(string $string): string
     {
-        // sometimes Zend Optimizer causes segfaults with debug_backtrace()
-        if (extension_loaded('Zend Optimizer')) {
-            $ret = '<code>' . Strings::htmlentities($string) . "</code><br>\n";
-        } else {
-            $debug = debug_backtrace();
-            $ret = '';
-            if (isset($debug[2]['class'])) {
-                $ret = $debug[2]['file'] . ': ';
-                $ret .= $debug[2]['class'] . $debug[1]['type'];
-                $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-                $ret .= ':<br><code>' . Strings::htmlentities($string) . "</code><br>\n";
-            }
+        $debug = debug_backtrace();
+        $ret = '';
+        if (isset($debug[2]['class'])) {
+            $ret = $debug[2]['file'] . ': ';
+            $ret .= $debug[2]['class'] . $debug[1]['type'];
+            $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
+            $ret .= ':<br><code>' . Strings::htmlentities($string) . "</code><br>\n";
         }
 
         return $ret;

@@ -51,25 +51,4 @@ class Alert
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
         );
     }
-
-    /**
-     * Renders a Bootstrap info alert component.
-     */
-    public static function info(string $translationKey): string
-    {
-        return sprintf('<div class="alert alert-info">%s</div>', Translation::get($translationKey));
-    }
-
-    /**
-     * Renders a Bootstrap warning alert component.
-     */
-    public static function warning(string $translationKey, ?string $warningMessage = null): string
-    {
-        return sprintf(
-            '<div class="alert alert-warning alert-dismissible fade show">%s%s%s</div>',
-            Translation::get($translationKey),
-            $warningMessage !== null ? '<br>' . $warningMessage : '',
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-        );
-    }
 }

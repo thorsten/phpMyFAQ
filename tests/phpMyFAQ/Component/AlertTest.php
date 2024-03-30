@@ -40,29 +40,12 @@ class AlertTest extends TestCase
         );
     }
 
-    public function testWarning(): void
-    {
-        $this->assertEquals(
-            '<div class="alert alert-warning alert-dismissible fade show">Hilfe' .
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
-            Alert::warning('msgHelp')
-        );
-    }
-
     public function testSuccess(): void
     {
         $this->assertEquals(
             '<div class="alert alert-success alert-dismissible fade show">Hilfe' .
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',
             Alert::success('msgHelp')
-        );
-    }
-
-    public function testInfo(): void
-    {
-        $this->assertEquals(
-            '<div class="alert alert-info">Hilfe</div>',
-            Alert::info('msgHelp')
         );
     }
 }
