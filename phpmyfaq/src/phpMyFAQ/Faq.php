@@ -537,7 +537,7 @@ class Faq
     /**
      * This function returns all not expired records from the given record ids.
      *
-     * @param array  $recordIds Array of record ids
+     * @param int[]  $recordIds Array of record ids
      * @param string $orderBy   Order by
      * @param string $sortBy    Sort by
      */
@@ -612,13 +612,13 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         $num = $this->configuration->getDb()->numRows($result);
-        $pages = ceil($num / $this->configuration->get('records.numberOfRecordsPerPage'));
+        $numberPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
+        $pages = ceil($num / $numberPerPage);
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $this->configuration->get('records.numberOfRecordsPerPage')) -
-                $this->configuration->get('records.numberOfRecordsPerPage');
+            $first = ($page * $numberPerPage) - $numberPerPage;
         }
 
         if ($num > 0) {
@@ -636,10 +636,7 @@ class Faq
             $displayedCounter = 0;
 
             $lastFaqId = 0;
-            while (
-                ($row = $this->configuration->getDb()->fetchObject($result)) &&
-                $displayedCounter < $this->configuration->get('records.numberOfRecordsPerPage')
-            ) {
+            while (($row = $this->configuration->getDb()->fetchObject($result)) && $displayedCounter < $numberPerPage) {
                 ++$counter;
                 if ($counter <= $first) {
                     continue;
@@ -679,7 +676,7 @@ class Faq
 
             $output .= '</ul><span id="totFaqRecords" style="display: none;">' . $num . '</span>';
         } else {
-            return false;
+            return '';
         }
 
         if ($num > $this->configuration->get('records.numberOfRecordsPerPage')) {
@@ -840,6 +837,7 @@ class Faq
     /**
      * Return records from given IDs
      *
+     * @param int[] $faqIds
      * @throws Exception
      */
     public function getRecordsByIds(array $faqIds): array
