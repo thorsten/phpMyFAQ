@@ -548,7 +548,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getAllUserRights(int $userId): array
     {
-        if ($userId <= 0 || !is_numeric($userId)) {
+        if ($userId <= 0) {
             return [];
         }
 
@@ -568,7 +568,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getUserGroupRights(int $userId): array
     {
-        if ($userId <= 0 || !is_numeric($userId)) {
+        if ($userId <= 0) {
             return [];
         }
 
@@ -617,18 +617,12 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function autoJoin(int $userId): bool
     {
-        if ($userId <= 0 || !is_numeric($userId)) {
+        if ($userId <= 0) {
             return false;
         }
 
         $select = sprintf(
-            '
-            SELECT
-                group_id
-            FROM
-                %sfaqgroup
-            WHERE
-                auto_join = 1',
+            'SELECT group_id FROM %sfaqgroup WHERE auto_join = 1',
             Database::getTablePrefix()
         );
 
@@ -652,14 +646,14 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
     /**
      * Adds a new member $userId to the group $groupId.
-     * Returns true on success, otherwise false.
+     * Returns true if successful, otherwise false.
      *
      * @param int $userId  User ID
      * @param int $groupId Group ID
      */
     public function addToGroup(int $userId, int $groupId): bool
     {
-        if ($userId <= 0 || $groupId <= 0 || !is_numeric($userId) || !is_numeric($groupId)) {
+        if ($userId <= 0 || $groupId <= 0) {
             return false;
         }
 
@@ -669,12 +663,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
         // add user to group
         $insert = sprintf(
-            '
-            INSERT INTO
-                %sfaquser_group
-            (user_id, group_id)
-               VALUES
-            (%d, %d)',
+            'INSERT INTO %sfaquser_group (user_id, group_id) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $userId,
             $groupId
@@ -694,21 +683,12 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupData(int $groupId): array
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return [];
         }
 
         $select = sprintf(
-            '
-            SELECT
-                group_id,
-                name,
-                description,
-                auto_join
-            FROM
-                %sfaqgroup
-            WHERE
-                group_id = %d',
+            'SELECT group_id, name, description, auto_join FROM %sfaqgroup WHERE group_id = %d',
             Database::getTablePrefix(),
             $groupId
         );
@@ -729,22 +709,17 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function removeFromAllGroups(int $userId): bool
     {
-        if ($userId <= 0 || !is_numeric($userId)) {
+        if ($userId <= 0) {
             return false;
         }
 
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaquser_group
-            WHERE
-                user_id  = %d',
+            'DELETE FROM %sfaquser_group WHERE user_id  = %d',
             Database::getTablePrefix(),
             $userId
         );
 
-        $res = $this->configuration->getDb()->query($delete);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($delete);
     }
 
     /**
@@ -755,22 +730,17 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function refuseAllGroupRights(int $groupId): bool
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return false;
         }
 
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaqgroup_right
-            WHERE
-                group_id  = %d',
+            'DELETE FROM %sfaqgroup_right WHERE group_id  = %d',
             Database::getTablePrefix(),
             $groupId
         );
 
-        $res = $this->configuration->getDb()->query($delete);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($delete);
     }
 
     /**
@@ -791,7 +761,6 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->configuration->getDb()->query($delete);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($delete);
     }
 }

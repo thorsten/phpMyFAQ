@@ -254,4 +254,182 @@ class MediumPermissionTest extends TestCase
         // Cleanup
         $this->mediumPermission->deleteGroup(1);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllGroups(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+
+        $user = new CurrentUser($this->configuration);
+        $user->getUserById(1);
+
+        $this->assertEquals([1], $this->mediumPermission->getAllGroups($user));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testGetGroupName(): void
+    {
+        $this->assertEquals('-', $this->mediumPermission->getGroupName(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->assertEquals('TestGroup', $this->mediumPermission->getGroupName(1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testGetAllUserRights(): void
+    {
+        $this->assertEquals([], $this->mediumPermission->getAllUserRights(0));
+        $this->assertIsArray($this->mediumPermission->getAllUserRights(1));
+    }
+
+    public function testGetUserGroupRights(): void
+    {
+        $this->assertEmpty($this->mediumPermission->getUserGroupRights(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        $this->assertEquals([1], $this->mediumPermission->getUserGroupRights(1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testAutoJoin(): void
+    {
+        $this->assertFalse($this->mediumPermission->autoJoin(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->assertTrue($this->mediumPermission->autoJoin(1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testAddToGroup(): void
+    {
+        $this->assertFalse($this->mediumPermission->addToGroup(0, 0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->assertTrue($this->mediumPermission->addToGroup(1, 1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testGetGroupData(): void
+    {
+        $this->assertEquals([], $this->mediumPermission->getGroupData(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->assertEquals(
+            [
+                'name' => 'TestGroup',
+                'description' => 'TestDescription',
+                'auto_join' => 1,
+                'group_id' => 1,
+            ],
+            $this->mediumPermission->getGroupData(1)
+        );
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testRemoveFromAllGroups(): void
+    {
+        $this->assertFalse($this->mediumPermission->removeFromAllGroups(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+
+        $this->assertTrue($this->mediumPermission->removeFromAllGroups(1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testRefuseAllGroupRights(): void
+    {
+        $this->assertFalse($this->mediumPermission->refuseAllGroupRights(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        $this->assertTrue($this->mediumPermission->refuseAllGroupRights(1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testRemoveAllUsersFromGroup(): void
+    {
+        $this->assertFalse($this->mediumPermission->removeAllUsersFromGroup(0));
+
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => true,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->addToGroup(1, 1);
+
+        $this->assertTrue($this->mediumPermission->removeAllUsersFromGroup(1));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+    }
 }
