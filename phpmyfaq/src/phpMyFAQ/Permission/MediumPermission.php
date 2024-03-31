@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\User\CurrentUser;
@@ -34,7 +35,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      *
      * @var array<string, string|bool>
      */
-    public $defaultGroupData = [
+    public array $defaultGroupData = [
         'name' => 'DEFAULT_GROUP',
         'description' => 'Short group description.',
         'auto_join' => false,
@@ -91,6 +92,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      *
      * @param int   $userId Group ID
      * @param mixed $right  Rights
+     * @throws Exception
      */
     public function hasPermission(int $userId, mixed $right): bool
     {
@@ -128,7 +130,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function checkUserGroupRight(int $userId, int $rightId): bool
     {
         // check input
-        if ($rightId <= 0 || $userId <= 0 || !is_numeric($rightId) || !is_numeric($userId)) {
+        if ($rightId <= 0 || $userId <= 0) {
             return false;
         }
 
@@ -159,7 +161,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         );
 
         $res = $this->configuration->getDb()->query($select);
-        return $this->configuration->getDb()->numRows($res) == 1;
+        return $this->configuration->getDb()->numRows($res) === 1;
     }
 
     /**
@@ -172,7 +174,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function grantGroupRight(int $groupId, int $rightId): bool
     {
         // check input
-        if ($rightId <= 0 || $groupId <= 0 || !is_numeric($rightId) || !is_numeric($groupId)) {
+        if ($rightId <= 0 || $groupId <= 0) {
             return false;
         }
 
@@ -184,19 +186,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
         // grant right
         $insert = sprintf(
-            '
-            INSERT INTO
-                %sfaqgroup_right
-            (group_id, right_id)
-                VALUES
-            (%d, %d)',
+            'INSERT INTO %sfaqgroup_right (group_id, right_id) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $groupId,
             $rightId
         );
 
-        $res = $this->configuration->getDb()->query($insert);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($insert);
     }
 
     /**
@@ -208,7 +204,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function addGroup(array $groupData): int
     {
-        // check if group already exists
+        // check if a group already exists
         if ($this->getGroupId($groupData['name']) > 0) {
             return 0;
         }
@@ -216,16 +212,11 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $nextId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqgroup', 'group_id');
         $groupData = $this->checkGroupData($groupData);
         $insert = sprintf(
-            "
-            INSERT INTO
-                %sfaqgroup
-            (group_id, name, description, auto_join)
-                VALUES
-            (%d, '%s', '%s', '%s')",
+            "INSERT INTO %sfaqgroup (group_id, name, description, auto_join) VALUES (%d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $nextId,
-            $groupData['name'],
-            $groupData['description'],
+            $this->configuration->getDb()->escape($groupData['name']),
+            $this->configuration->getDb()->escape($groupData['description']),
             (int)$groupData['auto_join']
         );
 
@@ -246,19 +237,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function getGroupId(string $name): int
     {
         $select = sprintf(
-            "
-            SELECT
-                group_id
-            FROM
-                %sfaqgroup
-            WHERE
-                name = '%s'",
+            "SELECT group_id FROM %sfaqgroup WHERE name = '%s'",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($name)
         );
 
         $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        if ($this->configuration->getDb()->numRows($res) !== 1) {
             return 0;
         }
 
@@ -326,28 +311,23 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupId
         );
 
-        $res = $this->configuration->getDb()->query($update);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**
      * Removes the group given by $groupId from the database.
-     * Returns true on success, otherwise false.
+     * Returns true if successful, otherwise false.
      *
      * @param int $groupId Group ID
      */
     public function deleteGroup(int $groupId): bool
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return false;
         }
 
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaqgroup
-            WHERE
-                group_id = %d',
+            'DELETE FROM %sfaqgroup WHERE group_id = %d',
             Database::getTablePrefix(),
             $groupId
         );
@@ -358,11 +338,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         }
 
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaquser_group
-            WHERE
-                group_id = %d',
+            'DELETE FROM %sfaquser_group WHERE group_id = %d',
             Database::getTablePrefix(),
             $groupId
         );
@@ -373,17 +349,12 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         }
 
         $delete = sprintf(
-            '
-            DELETE FROM
-                %sfaqgroup_right
-            WHERE
-                group_id = %d',
+            'DELETE FROM %sfaqgroup_right WHERE group_id = %d',
             Database::getTablePrefix(),
             $groupId
         );
 
-        $res = $this->configuration->getDb()->query($delete);
-        return (bool) $res;
+        return (bool) $this->configuration->getDb()->query($delete);
     }
 
     /**
@@ -396,7 +367,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupMembers(int $groupId): array
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return [];
         }
 
@@ -437,7 +408,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getUserGroups(int $userId): array
     {
-        if ($userId <= 0 || !is_numeric($userId)) {
+        if ($userId <= 0) {
             return [-1];
         }
 
@@ -480,7 +451,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $allGroups = $this->getAllGroups($currentUser);
 
         foreach ($allGroups as $allGroup) {
-            if (-1 != $allGroup) {
+            if (-1 !== $allGroup) {
                 $options .= sprintf(
                     '<option value="%d" %s>%s</option>',
                     $allGroup,
@@ -637,10 +608,10 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     /**
      * Adds the user $userId to all groups with the auto_join
      * option. By using the auto_join option, user administration
-     * can be much easier. For example by setting this option only
+     * can be much easier. For example, by setting this option only
      * for a single group called 'All Users'. The autoJoin() method
      * then has to be called every time a new user registers.
-     * Returns true on success, otherwise false.
+     * Returns true if successful, otherwise false.
      *
      * @param int $userId User ID
      */
