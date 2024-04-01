@@ -48,11 +48,11 @@ class Revision
             WHERE 
                 id = %d 
               AND 
-                laqng = '%s'",
+                lang = '%s'",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->config->getDb()->escape($faqLanguage)
         );
 
         $this->config->getDb()->query($query);
@@ -81,7 +81,7 @@ class Revision
                 revision_id",
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->config->getDb()->escape($faqLanguage)
         );
 
         $result = $this->config->getDb()->query($query);
@@ -109,7 +109,7 @@ class Revision
             "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $faqLanguage
+            $this->config->getDb()->escape($faqLanguage)
         );
 
         return $this->config->getDb()->query($query);
