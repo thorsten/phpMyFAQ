@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
@@ -48,11 +49,20 @@ class AuthTest extends TestCase
         $this->assertEquals("EncryptionTypes method could not be found.\n", $this->auth->error());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectAuth(): void
     {
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthDatabase', $this->auth->selectAuth('database'));
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthHttp', $this->auth->selectAuth('http'));
         $this->assertInstanceOf('phpMyFAQ\Auth\AuthSso', $this->auth->selectAuth('sso'));
+    }
+
+    public function testSelectAuthWithNonExistingAuth(): void
+    {
+        $this->expectException(Exception::class);
+        $this->auth->selectAuth('foobar');
     }
 
     public function testSetReadOnly(): void

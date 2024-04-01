@@ -1,12 +1,10 @@
 <?php
 
-
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\TestCase;
-
 
 class BookmarkTest extends TestCase
 {
@@ -17,6 +15,12 @@ class BookmarkTest extends TestCase
         parent::setUp();
 
         Strings::init();
+
+        Translation::create()
+            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
@@ -33,6 +37,9 @@ class BookmarkTest extends TestCase
     {
         $result = $this->bookmark->saveFaqAsBookmarkById(1);
         $this->assertTrue($result);
+
+        // Clean up
+        $this->bookmark->remove(1);
     }
 
     public function testIsFaqBookmark(): void
@@ -40,5 +47,36 @@ class BookmarkTest extends TestCase
         $this->bookmark->saveFaqAsBookmarkById(1);
         $result = $this->bookmark->isFaqBookmark(1);
         $this->assertTrue($result);
+
+        // Clean up
+        $this->bookmark->remove(1);
+    }
+
+    public function testGetAll(): void
+    {
+        $this->bookmark->saveFaqAsBookmarkById(1);
+        $result = $this->bookmark->getAll();
+        $this->assertIsArray($result);
+        $this->assertEquals(1, count($result));
+
+        // Clean up
+        $this->bookmark->remove(1);
+    }
+
+    public function testRemove(): void
+    {
+        $this->bookmark->saveFaqAsBookmarkById(1);
+        $this->assertTrue($this->bookmark->remove(1));
+    }
+
+    public function testRenderBookmarkTree(): void
+    {
+        $this->bookmark->saveFaqAsBookmarkById(1);
+        $result = $this->bookmark->renderBookmarkTree();
+        $this->assertIsString($result);
+        $this->assertStringContainsString('<div class="list-group mb-4">', $result);
+
+        // Clean up
+        $this->bookmark->remove(1);
     }
 }
