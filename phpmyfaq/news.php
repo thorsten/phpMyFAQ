@@ -20,10 +20,12 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Helper\CommentHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
@@ -35,6 +37,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
@@ -116,6 +120,12 @@ if ($news['active'] && (!$expired)) {
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
+$commentHelper = new CommentHelper();
+$commentHelper->setConfiguration($faqConfig);
+
+$comment = new Comments($faqConfig);
+$comments = $comment->getCommentsData($newsId, CommentType::NEWS);
+
 $template->parse(
     'mainPageContent',
     [
@@ -147,6 +157,6 @@ $template->parse(
             Translation::get('msgCaptcha'),
             $user->isLoggedIn()
         ),
-        'renderComments' => $comment->getComments($newsId, CommentType::NEWS),
+        'renderComments' => $commentHelper->getComments($comments),
     ]
 );

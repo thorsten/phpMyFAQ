@@ -46,7 +46,7 @@ class FaqHelper extends Helper
      */
     public function __construct(Configuration $configuration)
     {
-        $this->config = $configuration;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -70,7 +70,7 @@ class FaqHelper extends Helper
      */
     public function renderSendToFriend(string $url): string
     {
-        if ($url === '' || $url === '0' || !$this->config->get('main.enableSendToFriend')) {
+        if ($url === '' || $url === '0' || !$this->configuration->get('main.enableSendToFriend')) {
             return '';
         }
 
@@ -95,9 +95,9 @@ class FaqHelper extends Helper
             $faq->faqRecord['id']
         );
 
-        $oLink = new Link($this->config->getDefaultUrl() . $faqUrl, $this->config);
+        $oLink = new Link($this->configuration->getDefaultUrl() . $faqUrl, $this->configuration);
         $oLink->itemTitle = $faq->faqRecord['title'];
-        $availableLanguages = $this->config->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
+        $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
 
         if ((is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
             $html = '<form method="post">';
@@ -120,7 +120,7 @@ class FaqHelper extends Helper
      */
     public function renderAnswerPreview(string $answer, int $numWords): string
     {
-        if ($this->config->get('main.enableMarkdownEditor')) {
+        if ($this->configuration->get('main.enableMarkdownEditor')) {
             $parseDown = new ParsedownExtra();
             return Utils::chopString(strip_tags((string) $parseDown->text($answer)), $numWords);
         }
@@ -141,7 +141,7 @@ class FaqHelper extends Helper
 
         // Get all FAQs
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
-        $date = new Date($this->config);
+        $date = new Date($this->configuration);
 
         if ((is_countable($faq->faqRecords) ? count($faq->faqRecords) : 0) !== 0) {
             $lastCategory = 0;
@@ -181,7 +181,7 @@ class FaqHelper extends Helper
     {
         $output = '';
 
-        $availableLanguages = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         foreach ($availableLanguages as $availableLanguage) {
             if ($availableLanguage !== $faqLang) {
                 $output .= sprintf(
@@ -207,7 +207,7 @@ class FaqHelper extends Helper
     {
         return sprintf(
             '%s?action=faq&cat=%d&id=%d&artlang=%s',
-            $this->config->getDefaultUrl() . 'index.php',
+            $this->configuration->getDefaultUrl() . 'index.php',
             $categoryId,
             $faqEntity->getId(),
             $faqEntity->getLanguage()
@@ -227,7 +227,7 @@ class FaqHelper extends Helper
                 ->allowRelativeLinks()
                 ->allowStaticElements()
                 ->allowRelativeMedias()
-                ->forceHttpsUrls($this->config->get('security.useSslOnly'))
+                ->forceHttpsUrls($this->configuration->get('security.useSslOnly'))
                 ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
                 ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
                 ->allowMediaHosts(

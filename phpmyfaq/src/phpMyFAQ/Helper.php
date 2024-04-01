@@ -56,7 +56,7 @@ abstract class Helper
      */
     protected mixed $sessionId = null;
 
-    protected Configuration $config;
+    protected Configuration $configuration;
 
     /**
      * Entity Setter.
@@ -122,7 +122,7 @@ abstract class Helper
      */
     public function setConfiguration(Configuration $configuration): Helper
     {
-        $this->config = $configuration;
+        $this->configuration = $configuration;
         return $this;
     }
 }

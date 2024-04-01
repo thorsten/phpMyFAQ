@@ -51,7 +51,7 @@ class SearchHelper extends Helper
      */
     public function __construct(Configuration $configuration)
     {
-        $this->config = $configuration;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -82,7 +82,7 @@ class SearchHelper extends Helper
     public function createAutoCompleteResult(SearchResultSet $searchResultSet): array
     {
         $results = [];
-        $maxResults = $this->config->get('records.numberOfRecordsPerPage');
+        $maxResults = $this->configuration->get('records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
         if (0 < $numOfResults) {
@@ -95,7 +95,7 @@ class SearchHelper extends Helper
                 // Build the link to the faq record
                 $currentUrl = sprintf(
                     '%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
-                    $this->config->getDefaultUrl() . 'index.php',
+                    $this->configuration->getDefaultUrl() . 'index.php',
                     $this->sessionId,
                     $result->category_id,
                     $result->id,
@@ -104,7 +104,7 @@ class SearchHelper extends Helper
                 );
 
                 $question = html_entity_decode((string) $result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
-                $link = new Link($currentUrl, $this->config);
+                $link = new Link($currentUrl, $this->configuration);
                 $link->itemTitle = $result->question;
                 $faq = new stdClass();
                 $faq->category = $this->Category->getPath($result->category_id);
@@ -125,7 +125,7 @@ class SearchHelper extends Helper
      */
     public function renderAdminSuggestionResult(SearchResultSet $searchResultSet): array
     {
-        $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
+        $confPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
         $results = [];
 
@@ -137,15 +137,15 @@ class SearchHelper extends Helper
                 }
 
                 if (!isset($result->solution_id)) {
-                    $faq = new Faq($this->config);
+                    $faq = new Faq($this->configuration);
                     $solutionId = $faq->getSolutionIdFromId($result->id, $result->lang);
                 } else {
                     $solutionId = $result->solution_id;
                 }
 
                 // Build the link to the faq record
-                $currentUrl = $this->config->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
-                $adminUrl = $this->config->getDefaultUrl() . sprintf(
+                $currentUrl = $this->configuration->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
+                $adminUrl = $this->configuration->getDefaultUrl() . sprintf(
                     'admin/?action=editentry&id=%d&lang=%s',
                     $result->id,
                     $result->lang
@@ -168,7 +168,7 @@ class SearchHelper extends Helper
     public function renderSearchResult(SearchResultSet $searchResultSet, int $currentPage): string
     {
         $html = '';
-        $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
+        $confPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
         $totalPages = (int)ceil($numOfResults / $confPerPage);
@@ -194,7 +194,7 @@ class SearchHelper extends Helper
             $html .= "<ul class=\"phpmyfaq-search-results list-unstyled\">\n";
             $counter = 0;
             $displayedCounter = 0;
-            $faqHelper = new FaqHelper($this->config);
+            $faqHelper = new FaqHelper($this->configuration);
             foreach ($searchResultSet->getResultSet() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     break;
@@ -223,7 +223,7 @@ class SearchHelper extends Helper
                 $searchTerm = preg_quote($searchTerm, '/');
                 $searchItems = explode(' ', $searchTerm);
 
-                if ($this->config->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
+                if ($this->configuration->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
                     foreach ($searchItems as $searchItem) {
                         if (Strings::strlen($searchItem) > 2) {
                             $question = Utils::setHighlightedString($question, $searchItem);
@@ -235,7 +235,7 @@ class SearchHelper extends Helper
                 // Build the link to the faq record
                 $currentUrl = sprintf(
                     '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $this->sessionId,
                     $result->category_id,
                     $result->id,
@@ -243,7 +243,7 @@ class SearchHelper extends Helper
                     urlencode($searchTerm)
                 );
 
-                $oLink = new Link($currentUrl, $this->config);
+                $oLink = new Link($currentUrl, $this->configuration);
                 $oLink->text = $question;
                 $oLink->itemTitle = $result->question;
                 $oLink->tooltip = $result->question;
@@ -317,12 +317,12 @@ class SearchHelper extends Helper
 
                 $url = sprintf(
                     '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $this->config->getDefaultUrl(),
+                    $this->configuration->getDefaultUrl(),
                     $result->category_id,
                     $result->id,
                     $result->lang
                 );
-                $link = new Link($url, $this->config);
+                $link = new Link($url, $this->configuration);
                 $link->itemTitle = Strings::htmlentities($result->question);
                 $link->text = Strings::htmlentities($result->question);
                 $link->tooltip = Strings::htmlentities($result->question);

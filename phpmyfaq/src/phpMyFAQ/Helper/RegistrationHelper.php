@@ -39,7 +39,7 @@ class RegistrationHelper extends Helper
      */
     public function __construct(Configuration $configuration)
     {
-        $this->config = $configuration;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -52,7 +52,7 @@ class RegistrationHelper extends Helper
      */
     public function createUser(string $userName, string $fullName, string $email, bool $isVisible): array
     {
-        $user = new User($this->config);
+        $user = new User($this->configuration);
 
         if (!$user->createUser($userName, '')) {
             return [
@@ -65,7 +65,7 @@ class RegistrationHelper extends Helper
             [$fullName, $email, $isVisible === 'on' ? 1 : 0]
         );
         $user->setStatus('blocked');
-        $isNowActive = !$this->config->get('spam.manualActivation') && $user->activateUser();
+        $isNowActive = !$this->configuration->get('spam.manualActivation') && $user->activateUser();
         if ($isNowActive) {
             // @todo add translation strings
             $adminMessage = 'This user has been automatically activated, you can still' .
@@ -78,13 +78,13 @@ class RegistrationHelper extends Helper
             $fullName,
             $userName,
             $adminMessage,
-            $this->config->getDefaultUrl()
+            $this->configuration->getDefaultUrl()
         );
-        $mail = new Mail($this->config);
+        $mail = new Mail($this->configuration);
         $mail->setReplyTo($email, $fullName);
-        $mail->addTo($this->config->getAdminEmail());
+        $mail->addTo($this->configuration->getAdminEmail());
 
-        $mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->config);
+        $mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->configuration);
         $mail->message = $text;
         $mail->send();
         unset($mail);
@@ -101,7 +101,7 @@ class RegistrationHelper extends Helper
      */
     public function isDomainAllowed(string $email): bool
     {
-        $whitelistedDomains = $this->config->get('security.domainWhiteListForRegistrations');
+        $whitelistedDomains = $this->configuration->get('security.domainWhiteListForRegistrations');
 
         if (Strings::strlen($whitelistedDomains) === 0) {
             return true;

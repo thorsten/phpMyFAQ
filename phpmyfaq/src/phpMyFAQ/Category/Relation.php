@@ -318,9 +318,9 @@ class Relation
                     "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
                     Database::getTablePrefix(),
                     $category,
-                    $language,
+                    $this->configuration->getDb()->escape($language),
                     $faqId,
-                    $language
+                    $this->configuration->getDb()->escape($language)
                 )
             );
         }

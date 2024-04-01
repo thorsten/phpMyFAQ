@@ -120,7 +120,7 @@ class CategoryHelper extends Helper
      */
     public function renderCategoryTree(int $parentId = 0): string
     {
-        $categoryRelation = new Relation($this->config, $this->Category);
+        $categoryRelation = new Relation($this->configuration, $this->Category);
         $categoryRelation->setGroups($this->Category->getGroups());
 
         $categoryTree = $this->Category->getOrderedCategories();
@@ -171,12 +171,12 @@ class CategoryHelper extends Helper
                 if ($categoryNumbers[$categoryId]['faqs'] > 0) {
                     $url = sprintf(
                         '%sindex.php?%saction=show&amp;cat=%d',
-                        $this->config->getDefaultUrl(),
+                        $this->configuration->getDefaultUrl(),
                         $sids,
                         $node['id']
                     );
 
-                    $link = new Link($url, $this->config);
+                    $link = new Link($url, $this->configuration);
                     $link->itemTitle = Strings::htmlentities($node['name']);
                     $link->text = Strings::htmlentities($node['name']);
                     $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
@@ -215,10 +215,10 @@ class CategoryHelper extends Helper
         foreach ($availableCategoryTranslations as $language => $category) {
             $url = sprintf(
                 '%sindex.php?action=show&amp;lang=%s',
-                $this->config->getDefaultUrl(),
+                $this->configuration->getDefaultUrl(),
                 LanguageCodes::getKey($language)
             );
-            $link = new Link($url, $this->config);
+            $link = new Link($url, $this->configuration);
             $link->itemTitle = Strings::htmlentities($category);
             $link->text = Strings::htmlentities($category);
             $name = $link->toHtmlAnchor();
@@ -267,7 +267,7 @@ class CategoryHelper extends Helper
     {
         $recipients = [];
 
-        $user = new User($this->config);
+        $user = new User($this->configuration);
 
         foreach ($categories as $category) {
             $userId = $this->Category->getOwner($category);
@@ -307,7 +307,7 @@ class CategoryHelper extends Helper
     public function renderAvailableTranslationsOptions(int $categoryId): string
     {
         $options = '';
-        $availableTranslations = $this->config->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $availableTranslations = $this->configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
         $availableLanguages = LanguageHelper::getAvailableLanguages();
 
         foreach ($availableTranslations as $availableTranslation) {

@@ -30,6 +30,7 @@ use phpMyFAQ\Faq\FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\AttachmentHelper;
+use phpMyFAQ\Helper\CommentHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Link;
@@ -204,6 +205,10 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Number of comments
 $numComments = $comment->getNumberOfComments();
+$comments = $comment->getCommentsData($faqId, CommentType::FAQ);
+
+$commentHelper = new CommentHelper();
+$commentHelper->setConfiguration($faqConfig);
 
 // Does the user have the right to add a comment?
 if (
@@ -367,7 +372,7 @@ $template->parse(
                 Translation::get('msgCaptcha'),
                 $user->isLoggedIn()
             ),
-        'renderComments' => $comment->getComments($faqId, CommentType::FAQ),
+        'renderComments' => $commentHelper->getComments($comments),
         'msg_about_faq' => Translation::get('msg_about_faq'),
         'alert' => $bookmarkAlert ?? '',
     ]

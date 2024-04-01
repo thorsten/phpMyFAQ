@@ -36,51 +36,7 @@ readonly class Comments
     {
     }
 
-    /**
-     * Returns all user comments (HTML formatted) from a record by type.
-     *
-     * @param int $id Comment ID
-     * @param string $type Comment type: {faq|news}
-     * @throws Exception
-     * @todo   Move this code to a helper class
-     */
-    public function getComments(int $id, string $type): string
-    {
-        $comments = $this->getCommentsData($id, $type);
-        $date = new Date($this->configuration);
-        $mail = new Mail($this->configuration);
-        $gravatar = new Gravatar();
 
-        $output = '';
-        foreach ($comments as $comment) {
-            $output .= '<div class="row mt-2 mb-2">';
-            $output .= '  <div class="col-sm-1">';
-            $output .= '    <div class="thumbnail">';
-            $output .= $gravatar->getImage($comment->getEmail(), ['class' => 'img-thumbnail']);
-            $output .= '   </div>';
-            $output .= '  </div>';
-
-            $output .= '  <div class="col-sm-11">';
-            $output .= '    <div class="card">';
-            $output .= '     <div class="card-header card-header-comments">';
-            $output .= sprintf(
-                '<strong><a href="mailto:%s">%s</a></strong>',
-                $mail->safeEmail($comment->getEmail()),
-                Strings::htmlentities($comment->getUsername())
-            );
-            $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($comment->getDate()));
-            $output .= '     </div>';
-            $output .= sprintf(
-                '<div class="card-body">%s</div>',
-                $this->showShortComment($comment->getId(), $comment->getComment())
-            );
-            $output .= '   </div>';
-            $output .= '  </div>';
-            $output .= '</div>';
-        }
-
-        return $output;
-    }
 
     /**
      * Returns all user comments from a record by type.
@@ -128,31 +84,7 @@ readonly class Comments
         return $comments;
     }
 
-    /**
-     * Adds some fancy HTML if a comment is too long.
-     * @todo Move this code to a helper class
-     */
-    private function showShortComment(int $id, string $comment): string
-    {
-        $words = explode(' ', nl2br($comment));
-        $numWords = 0;
 
-        $comment = '';
-        foreach ($words as $word) {
-            $comment .= Strings::htmlentities($word . ' ');
-            if (15 === $numWords) {
-                $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
-                    '<a href="#" data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
-                    '">' . Translation::get('msgShowMore') . '</a>' .
-                    '<span class="comment-more-' . $id . ' d-none">';
-            }
-
-            ++$numWords;
-        }
-
-        // Convert URLs to HTML anchors
-        return Utils::parseUrl($comment) . '</span>';
-    }
 
     /**
      * Adds a new comment.

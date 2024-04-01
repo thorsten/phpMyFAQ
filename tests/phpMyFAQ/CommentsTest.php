@@ -2,8 +2,6 @@
 
 namespace phpMyFAQ;
 
-use DateTime;
-use DateTimeInterface;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
@@ -13,15 +11,20 @@ class CommentsTest extends TestCase
 {
     private Comments $comments;
 
+    private Configuration $configuration;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        $this->configuration = new Configuration($dbHandle);
+        $language = new Language($this->configuration);
+        $language->setLanguage(false, 'en');
+        $this->configuration->setLanguage($language);
 
-        $this->comments = new Comments($configuration);
+        $this->comments = new Comments($this->configuration);
     }
 
     protected function tearDown(): void
@@ -38,6 +41,14 @@ class CommentsTest extends TestCase
         $this->assertTrue($this->comments->create($comment));
     }
 
+    public function testGetCommentsData(): void
+    {
+        $comment = $this->getComment();
+        $this->comments->create($comment);
+
+        $this->assertCount(1, $this->comments->getCommentsData(1, CommentType::FAQ));
+    }
+
     public function testDelete(): void
     {
         $comment = $this->getComment();
@@ -52,6 +63,22 @@ class CommentsTest extends TestCase
         $this->comments->create($comment);
 
         $this->assertSame([1 => 1], $this->comments->getNumberOfComments());
+    }
+
+    public function testGetNumberOfCommentsByCategory(): void
+    {
+        $comment = $this->getComment();
+        $this->comments->create($comment);
+
+        $category = new Category($this->configuration);
+        $category->setLanguage('en');
+        $relation = new \phpMyFAQ\Category\Relation($this->configuration, $category);
+        $relation->add([1], 1, 'en');
+
+        $this->assertEquals([1 => 1], $this->comments->getNumberOfCommentsByCategory());
+
+        // Cleanup
+        $relation->delete(1, 'en');
     }
 
     public function testGetAllComments(): void
