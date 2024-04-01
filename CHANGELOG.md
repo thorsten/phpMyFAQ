@@ -6,6 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v3.2.7 - unreleased
+
+- updated bundled dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.6 - 2024-03-25
 
 - fixed multiple security vulnerabilities (Thorsten)
