@@ -52,7 +52,7 @@ readonly class Revision
             WHERE 
                 id = %d 
               AND 
-                laqng = '%s'",
+                lang = '%s'",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
