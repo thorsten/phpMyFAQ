@@ -138,7 +138,7 @@ class Token
         $token = $this->getSession($page);
 
         // if the time is greater than the expiry form submission window
-        if (!$token instanceof \phpMyFAQ\Session\Token || time() > $token->getExpiry()) {
+        if (!$token instanceof Token || time() > $token->getExpiry()) {
             $this->removeToken($page);
             return false;
         }
@@ -177,12 +177,13 @@ class Token
      */
     private function setSession(string $page, int $expiry): Token
     {
+        $randomToken = md5(base64_encode(random_bytes(32)));
         $token = new self();
         $token
             ->setPage($page)
             ->setExpiry(time() + $expiry)
-            ->setSessionToken(md5(base64_encode(random_bytes(32))))
-            ->setCookieToken(md5(base64_encode(random_bytes(32))));
+            ->setSessionToken($randomToken)
+            ->setCookieToken($randomToken);
 
         setcookie(
             $token->getCookieName($page),
