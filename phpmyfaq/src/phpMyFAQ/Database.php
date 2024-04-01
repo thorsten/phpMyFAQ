@@ -57,7 +57,6 @@ class Database
 
         if (class_exists($class)) {
             self::$databaseDriver = new $class();
-
             return self::$databaseDriver;
         }
 
