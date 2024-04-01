@@ -432,7 +432,7 @@ class Category
      * @param int $parentId Parent id
      * @param int $indent Indention
      */
-    public function buildCategoryTree(int $parentId = 0, int $indent = 0)
+    public function buildCategoryTree(int $parentId = 0, int $indent = 0): void
     {
         $tt = [];
         $x = 0;

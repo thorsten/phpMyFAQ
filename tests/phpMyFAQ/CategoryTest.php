@@ -3,6 +3,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\CategoryEntity;
 use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
@@ -65,5 +66,128 @@ class CategoryTest extends TestCase
     {
         $this->category->setGroups([]);
         $this->assertSame([-1], $this->category->getGroups());
+    }
+
+    public function testGetOrderedCategories(): void
+    {
+        $category = $this->createCategory();
+
+        $this->category->create($category);
+
+        $this->assertEquals(
+            [
+                1 => [
+                    'id' => 1,
+                    'lang' => 'en',
+                    'parent_id' => 0,
+                    'name' => 'Category 1',
+                    'description' => 'Description 1',
+                    'user_id' => 1,
+                    'group_id' => 1,
+                    'active' => 1,
+                    'show_home' => 1,
+                    'image' => 'image.png',
+                    'level' => 0
+                ]
+            ],
+            $this->category->getOrderedCategories(false)
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testSetUser(): void
+    {
+        $user = 1;
+
+        $result = $this->category->setUser($user);
+
+        $this->assertSame($user, $this->category->getUser());
+        $this->assertInstanceOf(Category::class, $result);
+    }
+
+    public function testGetAllCategories(): void
+    {
+        $category = $this->createCategory();
+
+        $this->category->create($category);
+
+        $this->assertEquals(
+            [
+                1 => [
+                    'id' => 1,
+                    'lang' => 'en',
+                    'parent_id' => 0,
+                    'name' => 'Category 1',
+                    'description' => 'Description 1',
+                    'user_id' => 1,
+                    'group_id' => 1,
+                    'active' => 1,
+                    'show_home' => 1,
+                    'image' => 'image.png',
+                    'level' => 0
+                ]
+            ],
+            $this->category->getAllCategories()
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testGetAllCategoryIds(): void
+    {
+        $category = $this->createCategory();
+
+        $this->category->create($category);
+
+        $this->assertEquals([1], $this->category->getAllCategoryIds());
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testAdminCategoryTree(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $category = $this->createCategory(2);
+        $this->category->create($category);
+
+        $category = $this->createCategory(3);
+        $this->category->create($category);
+
+        $categories = $this->category->getOrderedCategories(false);
+
+        $this->assertEquals(
+            [ 1 => [], 2 => [], 3 => []],
+            $this->category->buildAdminCategoryTree($categories)
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+        $this->category->delete(2, 'en');
+        $this->category->delete(3, 'en');
+    }
+
+
+    private function createCategory(int $id = 1): CategoryEntity
+    {
+        $category = new CategoryEntity();
+        $category
+            ->setId($id)
+            ->setLang('en')
+            ->setParentId(0)
+            ->setName('Category ' . $id)
+            ->setDescription('Description ' . $id)
+            ->setUserId(1)
+            ->setGroupId(1)
+            ->setActive(true)
+            ->setShowHome(true)
+            ->setImage('image.png');
+
+        return $category;
     }
 }
