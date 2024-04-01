@@ -17,7 +17,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
@@ -37,7 +37,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
     $category->setGroups($currentAdminGroups);
     $category->getMissingCategories();
 
-    $categoryPermission = new CategoryPermission($faqConfig);
+    $categoryPermission = new Permission($faqConfig);
 
     $userHelper = new UserHelper($user);
 
@@ -58,8 +58,8 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
         $showcat = 'no';
     }
 
-    $userPermission = $categoryPermission->get(CategoryPermission::USER, [$id]);
-    $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$id]);
+    $userPermission = $categoryPermission->get(Permission::USER, [$id]);
+    $groupPermission = $categoryPermission->get(Permission::GROUP, [$id]);
 
     $templateVars = [
         'categoryName' => $category->categoryName[$id]['name'],

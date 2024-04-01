@@ -19,7 +19,7 @@ use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
@@ -63,7 +63,7 @@ if ((
     $category->setGroups($currentAdminGroups);
     $category->buildCategoryTree();
 
-    $categoryRelation = new CategoryRelation($faqConfig, $category);
+    $categoryRelation = new Relation($faqConfig, $category);
 
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);

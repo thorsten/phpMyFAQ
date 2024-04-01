@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Language\Plurals;
 
 /**
@@ -32,7 +32,7 @@ abstract class Helper
      */
     protected ?Category $Category = null;
 
-    protected CategoryRelation $categoryRelation;
+    protected Relation $categoryRelation;
 
     /**
      * Tagging class.
@@ -69,7 +69,7 @@ abstract class Helper
         return $this;
     }
 
-    public function setCategoryRelation(CategoryRelation $categoryRelation): Helper
+    public function setCategoryRelation(Relation $categoryRelation): Helper
     {
         $this->categoryRelation = $categoryRelation;
         return $this;

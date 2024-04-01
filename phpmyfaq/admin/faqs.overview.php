@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
@@ -40,7 +40,7 @@ $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 $category->buildCategoryTree();
 
-$categoryRelation = new CategoryRelation($faqConfig, $category);
+$categoryRelation = new Relation($faqConfig, $category);
 $categoryRelation->setGroups($currentAdminGroups);
 
 $comments = new Comments($faqConfig);

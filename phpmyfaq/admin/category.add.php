@@ -17,7 +17,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -42,7 +42,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 
-    $categoryPermission = new CategoryPermission($faqConfig);
+    $categoryPermission = new Permission($faqConfig);
 
     $userHelper = new UserHelper($currentUser);
 
@@ -73,13 +73,13 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     ];
 
     if ($parentId > 0) {
-        $userAllowed = $categoryPermission->get(CategoryPermission::USER, [$parentId]);
-        $groupsAllowed = $categoryPermission->get(CategoryPermission::GROUP, [$parentId]);
+        $userAllowed = $categoryPermission->get(Permission::USER, [$parentId]);
+        $groupsAllowed = $categoryPermission->get(Permission::GROUP, [$parentId]);
         $templateVars = [
             ...$templateVars,
             'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang']),
-            'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [$parentId])[0],
-            'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [$parentId]),
+            'userAllowed' => $categoryPermission->get(Permission::USER, [$parentId])[0],
+            'groupsAllowed' => $categoryPermission->get(Permission::GROUP, [$parentId]),
             'categoryName' => $category->categoryName[$parentId]['name'],
             'msgMainCategory' => Translation::get('msgMainCategory'),
         ];

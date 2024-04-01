@@ -15,9 +15,9 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryImage;
-use phpMyFAQ\Category\CategoryOrder;
-use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\Order;
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
@@ -42,10 +42,10 @@ $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHA
 // Image upload
 //
 $uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
-$categoryImage = new CategoryImage($faqConfig);
+$categoryImage = new Image($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 
-$categoryPermission = new CategoryPermission($faqConfig);
+$categoryPermission = new Permission($faqConfig);
 
 if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     $templateVars = [
@@ -117,9 +117,9 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         $categoryId = $category->create($categoryEntity);
 
         if ($categoryId) {
-            $categoryPermission->add(CategoryPermission::USER, [$categoryId], $permissions['restricted_user']);
+            $categoryPermission->add(Permission::USER, [$categoryId], $permissions['restricted_user']);
             $categoryPermission->add(
-                CategoryPermission::GROUP,
+                Permission::GROUP,
                 [$categoryId],
                 $permissions['restricted_groups']
             );
@@ -137,7 +137,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             }
 
             // Category Order entry
-            $categoryOrder = new CategoryOrder($faqConfig);
+            $categoryOrder = new Order($faqConfig);
             $categoryOrder->add($categoryId, $parentId);
 
             // All the other translations
@@ -222,11 +222,11 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         if (!$category->hasLanguage($categoryEntity->getId(), $categoryEntity->getLang())) {
             if (
                 $category->create($categoryEntity) && $categoryPermission->add(
-                    CategoryPermission::USER,
+                    Permission::USER,
                     [$categoryEntity->getId()],
                     $permissions['restricted_user']
                 ) && $categoryPermission->add(
-                    CategoryPermission::GROUP,
+                    Permission::GROUP,
                     [$categoryEntity->getId()],
                     $permissions['restricted_groups']
                 )
@@ -245,15 +245,15 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             }
         } else {
             if ($category->update($categoryEntity)) {
-                $categoryPermission->delete(CategoryPermission::USER, [$categoryEntity->getId()]);
-                $categoryPermission->delete(CategoryPermission::GROUP, [$categoryEntity->getId()]);
+                $categoryPermission->delete(Permission::USER, [$categoryEntity->getId()]);
+                $categoryPermission->delete(Permission::GROUP, [$categoryEntity->getId()]);
                 $categoryPermission->add(
-                    CategoryPermission::USER,
+                    Permission::USER,
                     [$categoryEntity->getId()],
                     $permissions['restricted_user']
                 );
                 $categoryPermission->add(
-                    CategoryPermission::GROUP,
+                    Permission::GROUP,
                     [$categoryEntity->getId()],
                     $permissions['restricted_groups']
                 );

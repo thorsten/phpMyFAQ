@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
@@ -120,7 +120,7 @@ class CategoryHelper extends Helper
      */
     public function renderCategoryTree(int $parentId = 0): string
     {
-        $categoryRelation = new CategoryRelation($this->config, $this->Category);
+        $categoryRelation = new Relation($this->config, $this->Category);
         $categoryRelation->setGroups($this->Category->getGroups());
 
         $categoryTree = $this->Category->getOrderedCategories();

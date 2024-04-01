@@ -25,7 +25,7 @@ use phpMyFAQ\Core\Exception;
  *
  * @package phpMyFAQ\Category
  */
-class CategoryImage
+class Image
 {
     /** @var string */
     private const UPLOAD_DIR = PMF_CONTENT_DIR . '/user/images/';
@@ -50,7 +50,7 @@ class CategoryImage
      *
      *
      */
-    public function setUploadedFile(array $uploadedFile): CategoryImage
+    public function setUploadedFile(array $uploadedFile): Image
     {
         if (isset($uploadedFile['error']) && UPLOAD_ERR_OK === $uploadedFile['error']) {
             $this->isUpload = true;
@@ -83,7 +83,7 @@ class CategoryImage
     /**
      * Returns the filename.
      */
-    public function setFileName(string $fileName): CategoryImage
+    public function setFileName(string $fileName): Image
     {
         $this->fileName = $fileName;
 

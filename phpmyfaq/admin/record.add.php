@@ -19,8 +19,8 @@
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -104,7 +104,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categoryPermission = new CategoryPermission($faqConfig);
+        $categoryPermission = new Permission($faqConfig);
         $tagging = new Tags($faqConfig);
         $notification = new Notification($faqConfig);
 
@@ -138,7 +138,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
             $visits = new Visits($faqConfig);
             $visits->logViews($recordId);
 
-            $categoryRelation = new CategoryRelation($faqConfig, $category);
+            $categoryRelation = new Relation($faqConfig, $category);
             $categoryRelation->add($categories['rubrik'], $recordId, $faqData->getLanguage());
 
             // Insert the tags
@@ -148,12 +148,12 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
 
             // Add user permissions
             $faqPermission->add(FaqPermission::USER, $recordId, $permissions['restricted_user']);
-            $categoryPermission->add(CategoryPermission::USER, $categories['rubrik'], $permissions['restricted_user']);
+            $categoryPermission->add(Permission::USER, $categories['rubrik'], $permissions['restricted_user']);
             // Add group permission
             if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
                 $categoryPermission->add(
-                    CategoryPermission::GROUP,
+                    Permission::GROUP,
                     $categories['rubrik'],
                     $permissions['restricted_groups']
                 );

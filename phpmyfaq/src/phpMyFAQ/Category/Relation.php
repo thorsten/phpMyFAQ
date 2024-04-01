@@ -26,7 +26,7 @@ use phpMyFAQ\Database;
  *
  * @package phpMyFAQ\Category
  */
-class CategoryRelation
+class Relation
 {
     /** @var int[] */
     private array $groups;
@@ -41,7 +41,7 @@ class CategoryRelation
     /**
      * @param int[] $groups
      */
-    public function setGroups(array $groups): CategoryRelation
+    public function setGroups(array $groups): Relation
     {
         $this->groups = $groups;
         return $this;

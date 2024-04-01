@@ -22,7 +22,7 @@
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
@@ -499,7 +499,7 @@ $template = new Template(
     $faqConfig->get('main.templateSet')
 );
 
-$categoryRelation = new CategoryRelation($faqConfig, $category);
+$categoryRelation = new Relation($faqConfig, $category);
 
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);

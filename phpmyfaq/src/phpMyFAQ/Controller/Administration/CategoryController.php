@@ -18,10 +18,10 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryImage;
-use phpMyFAQ\Category\CategoryOrder;
-use phpMyFAQ\Category\CategoryPermission;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\Order;
+use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -59,15 +59,15 @@ class CategoryController extends AbstractController
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categoryRelation = new CategoryRelation($this->configuration, $category);
+        $categoryRelation = new Relation($this->configuration, $category);
 
-        $categoryImage = new CategoryImage($this->configuration);
+        $categoryImage = new Image($this->configuration);
         $categoryImage->setFileName($category->getCategoryData($data->categoryId)->getImage());
 
-        $categoryOrder = new CategoryOrder($this->configuration);
+        $categoryOrder = new Order($this->configuration);
         $categoryOrder->remove($data->categoryId);
 
-        $categoryPermission = new CategoryPermission($this->configuration);
+        $categoryPermission = new Permission($this->configuration);
 
         if (
             (
@@ -75,8 +75,8 @@ class CategoryController extends AbstractController
                     ? count($category->getCategoryLanguagesTranslated($data->categoryId)) : 0
             ) === 1
         ) {
-            $categoryPermission->delete(CategoryPermission::USER, [$data->categoryId]);
-            $categoryPermission->delete(CategoryPermission::GROUP, [$data->categoryId]);
+            $categoryPermission->delete(Permission::USER, [$data->categoryId]);
+            $categoryPermission->delete(Permission::GROUP, [$data->categoryId]);
             $categoryImage->delete();
         }
 
@@ -101,7 +101,7 @@ class CategoryController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $categoryPermission = new CategoryPermission($this->configuration);
+        $categoryPermission = new Permission($this->configuration);
 
         $categoryData = $request->get('categories');
 
@@ -117,8 +117,8 @@ class CategoryController extends AbstractController
 
         return $this->json(
             [
-                'user' => $categoryPermission->get(CategoryPermission::USER, $categories),
-                'group' => $categoryPermission->get(CategoryPermission::GROUP, $categories)
+                'user' => $categoryPermission->get(Permission::USER, $categories),
+                'group' => $categoryPermission->get(Permission::GROUP, $categories)
             ],
             Response::HTTP_OK
         );
@@ -159,7 +159,7 @@ class CategoryController extends AbstractController
 
         [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $categoryOrder = new CategoryOrder($this->configuration);
+        $categoryOrder = new Order($this->configuration);
         $categoryOrder->setCategoryTree($data->categoryTree);
 
         $parentId = $categoryOrder->getParentId($data->categoryTree, (int)$data->categoryId);

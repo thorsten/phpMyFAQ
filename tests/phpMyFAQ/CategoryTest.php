@@ -190,4 +190,122 @@ class CategoryTest extends TestCase
 
         return $category;
     }
+
+    public function testGetCategoryData(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->assertEquals(
+            $category,
+            $this->category->getCategoryData(1)
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testGetCategoryIdFromName(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->assertEquals(
+            1,
+            $this->category->getCategoryIdFromName('Category 1')
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testCheckIfCategoryExists(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->assertEquals(1, $this->category->checkIfCategoryExists($category));
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testUpdate(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $category->setName('Updated Category');
+        $category->setDescription('Updated Description');
+        $category->setUserId(2);
+        $category->setGroupId(2);
+        $category->setActive(false);
+        $category->setShowHome(false);
+        $category->setImage('updated.png');
+
+        $this->category->update($category);
+
+        $this->assertEquals(
+            $category,
+            $this->category->getCategoryData(1)
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testMoveOwnership(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->category->moveOwnership(1, 2);
+
+        $category->setUserId(2);
+
+        $this->assertEquals(
+            $category,
+            $this->category->getCategoryData(1)
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testHasLanguage(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->assertTrue($this->category->hasLanguage(1, 'en'));
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testUpdateParentCategory(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->category->updateParentCategory(1, 2);
+
+        $category->setParentId(2);
+
+        $this->assertEquals(
+            $category,
+            $this->category->getCategoryData(1)
+        );
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
+    public function testDelete(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $this->assertTrue($this->category->delete(1, 'en'));
+    }
 }

@@ -18,8 +18,8 @@
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Visits;
 
@@ -68,7 +68,7 @@ class FaqMetaData
      */
     public function save(): void
     {
-        $categoryRelation = new CategoryRelation($this->configuration, new Category($this->configuration));
+        $categoryRelation = new Relation($this->configuration, new Category($this->configuration));
         $categoryRelation->add($this->categories, $this->faqId, $this->faqLanguage);
 
         // Activate visits
@@ -77,17 +77,17 @@ class FaqMetaData
 
         // Set permissions
         $faqPermission = new FaqPermission($this->configuration);
-        $categoryPermission = new CategoryPermission($this->configuration);
+        $categoryPermission = new Permission($this->configuration);
 
-        $userPermissions = $categoryPermission->get(CategoryPermission::USER, $this->categories);
+        $userPermissions = $categoryPermission->get(Permission::USER, $this->categories);
 
         $faqPermission->add(FaqPermission::USER, $this->faqId, $userPermissions);
-        $categoryPermission->add(CategoryPermission::USER, $this->categories, $userPermissions);
+        $categoryPermission->add(Permission::USER, $this->categories, $userPermissions);
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
-            $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $this->categories);
+            $groupPermissions = $categoryPermission->get(Permission::GROUP, $this->categories);
             $faqPermission->add(FaqPermission::GROUP, $this->faqId, $groupPermissions);
-            $categoryPermission->add(CategoryPermission::GROUP, $this->categories, $groupPermissions);
+            $categoryPermission->add(Permission::GROUP, $this->categories, $groupPermissions);
         }
     }
 }

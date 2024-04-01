@@ -7,9 +7,9 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 
-class CategoryOrderTest extends TestCase
+class OrderTest extends TestCase
 {
-    private CategoryOrder $categoryOrder;
+    private Order $categoryOrder;
 
     protected function setUp(): void
     {
@@ -17,7 +17,7 @@ class CategoryOrderTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.currentVersion', System::getVersion());
-        $this->categoryOrder = new CategoryOrder($configuration);
+        $this->categoryOrder = new Order($configuration);
     }
 
     protected function tearDown(): void

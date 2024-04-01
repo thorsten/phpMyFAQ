@@ -24,7 +24,7 @@ use phpMyFAQ\Database;
  *
  * @package phpMyFAQ\Category
  */
-class CategoryPermission
+class Permission
 {
     /** @var string */
     final public const USER = 'user';

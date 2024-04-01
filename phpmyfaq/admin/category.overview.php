@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryOrder;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
@@ -36,7 +36,7 @@ $category = new Category($faqConfig, [], false);
 $category->buildCategoryTree();
 $categoryInfo = $category->getAllCategories();
 
-$categoryOrder = new CategoryOrder($faqConfig);
+$categoryOrder = new Order($faqConfig);
 $orderedCategories = $categoryOrder->getAllCategories();
 $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 

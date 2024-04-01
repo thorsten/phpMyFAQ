@@ -11,8 +11,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ImageTest extends TestCase
 {
-    /** @var CategoryImage */
-    private CategoryImage $instance;
+    /** @var Image */
+    private Image $instance;
 
     protected function setUp(): void
     {
@@ -20,7 +20,7 @@ class ImageTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $pmfConfig = new Configuration($dbHandle);
         $pmfConfig->set('records.maxAttachmentSize', 1234567890);
-        $this->instance = new CategoryImage($pmfConfig);
+        $this->instance = new Image($pmfConfig);
     }
 
     public function testNoUploadGetFileName(): void

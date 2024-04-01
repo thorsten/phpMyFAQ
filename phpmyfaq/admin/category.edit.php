@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryPermission;
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -44,12 +44,12 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 
-    $categoryPermission = new CategoryPermission($faqConfig);
+    $categoryPermission = new Permission($faqConfig);
 
     $userHelper = new UserHelper($currentUser);
 
     $categoryData = $category->getCategoryData($categoryId);
-    $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
+    $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
 
     if ($userPermission[0] == -1) {
         $allUsers = true;
@@ -59,7 +59,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         $restrictedUsers = true;
     }
 
-    $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
+    $groupPermission = $categoryPermission->get(Permission::GROUP, [$categoryId]);
     if ($groupPermission[0] == -1) {
         $allGroups = true;
         $restrictedGroups = false;

@@ -26,7 +26,7 @@ use stdClass;
  *
  * @package phpMyFAQ\Category
  */
-readonly class CategoryOrder
+readonly class Order
 {
     /**
      * Constructor.

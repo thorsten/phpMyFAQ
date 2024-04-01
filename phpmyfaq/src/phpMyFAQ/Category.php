@@ -316,95 +316,6 @@ class Category
     }
 
     /**
-     * Gets all categories and write them in an array.
-     *
-     * @return array<int, array<string, mixed>>
-     */
-    public function getHomeCategories(): array
-    {
-        $categories = [];
-        $where = '';
-
-        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $where = "AND fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
-        }
-
-        $query = sprintf(
-            '
-            SELECT
-                fc.id AS id,
-                fc.lang AS lang,
-                fc.parent_id AS parent_id,
-                fc.name AS name,
-                fc.description AS description,
-                fc.user_id AS user_id,
-                fc.group_id AS group_id,
-                fc.active AS active,
-                fc.image AS image,
-                fc.show_home AS show_home,
-                fco.position AS position
-            FROM
-                %sfaqcategories fc
-            LEFT JOIN
-                %sfaqcategory_group fg
-            ON
-                fc.id = fg.category_id
-            LEFT JOIN
-                %sfaqcategory_order fco
-            ON
-                fc.id = fco.category_id
-            LEFT JOIN
-                %sfaqcategory_user fu
-            ON
-                fc.id = fu.category_id
-            WHERE 
-                ( fg.group_id IN (%s)
-            OR
-                (fu.user_id = %d AND fg.group_id IN (%s)))
-            AND
-                fc.active = 1
-            AND
-                fc.show_home = 1
-                %s
-            GROUP BY
-                fc.id, fc.lang, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
-                fc.show_home, fco.position
-            ORDER BY
-                fco.position, fc.id ASC
-
-                ',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            implode(', ', $this->groups),
-            $this->user,
-            implode(', ', $this->groups),
-            $where
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
-            $url = sprintf('%sindex.php?action=show&cat=%d', $this->configuration->getDefaultUrl(), $row['id']);
-            $link = new Link($url, $this->configuration);
-            $link->itemTitle = $row['name'];
-            $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
-
-            $category = [
-                'url' => Strings::htmlentities($link->toString()),
-                'name' => $row['name'],
-                'description' => $row['description'],
-                'image' => $image
-            ];
-
-            $categories[] = $category;
-        }
-
-        return $categories;
-    }
-
-    /**
      * Gets all category IDs
      */
     public function getAllCategoryIds(): array
@@ -672,14 +583,6 @@ class Category
     public function expand(int $id): void
     {
         $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
-    }
-
-    /**
-     * Total height of the expanded tree.
-     */
-    public function height(): int
-    {
-        return count($this->treeTab);
     }
 
     /**
@@ -1006,19 +909,19 @@ class Category
     /**
      * Move the categories' ownership for users.
      *
-     * @param int $from Old user id
-     * @param int $to New user id
+     * @param int $currentOwner Old user id
+     * @param int $newOwner New user id
      */
-    public function moveOwnership(int $from, int $to): bool
+    public function moveOwnership(int $currentOwner, int $newOwner): bool
     {
         $query = sprintf(
             'UPDATE %sfaqcategories SET user_id = %d WHERE user_id = %d',
             Database::getTablePrefix(),
-            $to,
-            $from
+            $newOwner,
+            $currentOwner
         );
 
-        return (bool)$this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -1075,7 +978,7 @@ class Category
             $this->configuration->getDb()->escape($categoryLang)
         );
 
-        return (bool)$this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**

@@ -15,6 +15,7 @@
  * @since     2002-08-23
  */
 
+use phpMyFAQ\Category\Startpage;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
@@ -45,7 +46,13 @@ if (!is_null($archived)) {
     $archived = false;
 }
 
-$startPageCategories = $category->getHomeCategories();
+$startPageCategory = new Startpage($faqConfig);
+$startPageCategory
+    ->setLanguage($faqLangCode)
+    ->setUser($currentUser)
+    ->setGroups($currentGroups);
+
+$startPageCategories = $startPageCategory->getCategories();
 if ((is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0) {
     $template->parseBlock(
         'mainPageContent',

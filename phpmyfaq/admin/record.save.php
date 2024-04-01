@@ -19,7 +19,7 @@ use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\CategoryRelation;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
@@ -171,7 +171,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->val
             $categories['rubrik'] = [];
         }
 
-        $categoryRelation = new CategoryRelation($faqConfig, $category);
+        $categoryRelation = new Relation($faqConfig, $category);
         $categoryRelation->deleteByFaq($recordId, $recordLang);
         $categoryRelation->add($categories['rubrik'], $recordId, $recordLang);
 
