@@ -6,6 +6,11 @@ use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        $_SERVER['SERVER_PORT'] = 443;
+    }
+
     public function testGetInstance(): void
     {
         $token1 = Token::getInstance();
@@ -15,6 +20,9 @@ class TokenTest extends TestCase
         $this->assertSame($token1, $token2);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testGetTokenInput(): void
     {
         $token = Token::getInstance();
@@ -33,7 +41,6 @@ class TokenTest extends TestCase
      */
     public function testVerifyToken(): void
     {
-        $_SERVER['SERVER_PORT'] = 443;
         $token = Token::getInstance();
         $page = 'example_page';
 
