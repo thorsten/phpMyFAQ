@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Mysqli;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 
@@ -38,17 +38,27 @@ class DatabaseTest extends TestCase
         $this->assertEquals($expectedType, $actualType);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCheckOnEmptyTable(): void
     {
-        $expected = 0;
-
-        Database::getInstance();
+        $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
+        Database::setTablePrefix($dbConfig->getPrefix());
+        $db = Database::factory($dbConfig->getType());
+        $db->connect(
+            $dbConfig->getServer(),
+            $dbConfig->getUser(),
+            $dbConfig->getPassword(),
+            $dbConfig->getDatabase(),
+            $dbConfig->getPort()
+        );
 
         $actual = Database::checkOnEmptyTable('faqconfig');
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(0, $actual);
     }
 
-    public function testErrorPage()
+    public function testErrorPage(): void
     {
         ob_start();
         Database::errorPage('Error message');
