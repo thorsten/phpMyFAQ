@@ -76,7 +76,7 @@ class FaqController extends AbstractController
         $onlyInactive = Filter::filterVar($request->query->get('only-inactive'), FILTER_VALIDATE_BOOLEAN, false);
         $onlyNew = Filter::filterVar($request->query->get('only-new'), FILTER_VALIDATE_BOOLEAN, false);
 
-        $faq = new Faq($this->configuration);
+        $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
 
         return $this->json(
             [
@@ -105,7 +105,7 @@ class FaqController extends AbstractController
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new Faq(Configuration::getConfigurationInstance());
+            $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
             $success = false;
 
             foreach ($faqIds as $faqId) {
@@ -132,8 +132,6 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $jsonResponse = new JsonResponse();
-
         $data = json_decode($request->getContent());
 
         $faqIds = Filter::filterArray($data->faqIds);
@@ -145,7 +143,7 @@ class FaqController extends AbstractController
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new Faq(Configuration::getConfigurationInstance());
+            $faq = new \phpMyFAQ\Administration\Faq(Configuration::getConfigurationInstance());
             $success = false;
 
             foreach ($faqIds as $faqId) {
