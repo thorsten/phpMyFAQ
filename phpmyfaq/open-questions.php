@@ -15,6 +15,8 @@
  * @since     2002-09-17
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,6 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqSession->userTracking('open_questions', 0);
 
+$faqConfig = Configuration::getConfigurationInstance();
+
+$questionHelper = new QuestionHelper($faqConfig);
+$questionHelper->setCategory($category);
+
 try {
     $template->parse(
         'mainPageContent',
@@ -32,7 +39,7 @@ try {
             'msgQuestionText' => Translation::get('msgQuestionText'),
             'msgDate_User' => Translation::get('msgDate_User'),
             'msgQuestion2' => Translation::get('msgQuestion2'),
-            'renderOpenQuestionTable' => $faq->renderOpenQuestions()
+            'renderOpenQuestionTable' => $questionHelper->renderOpenQuestions()
         ]
     );
 } catch (Exception) {

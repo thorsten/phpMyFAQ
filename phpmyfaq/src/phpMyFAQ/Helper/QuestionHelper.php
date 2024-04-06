@@ -20,10 +20,13 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Date;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\Utils;
@@ -35,6 +38,8 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  */
 readonly class QuestionHelper
 {
+    private Category $category;
+
     /**
      * QuestionHelper constructor.
      */
@@ -73,5 +78,99 @@ readonly class QuestionHelper
         $smartAnswer .= '</ul>';
 
         return $smartAnswer;
+    }
+
+    public function renderOpenQuestions(): string
+    {
+        global $sids;
+
+        $date = new Date($this->configuration);
+        $mail = new Mail($this->configuration);
+
+        $query = sprintf(
+            "SELECT COUNT(id) AS num FROM %sfaqquestions WHERE lang = '%s' AND is_visible != 'Y'",
+            Database::getTablePrefix(),
+            $this->configuration->getLanguage()->getLanguage()
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
+        $numOfInvisibles = $row->num;
+
+        if ($numOfInvisibles > 0) {
+            $extraout = sprintf(
+                '<tr><td colspan="3"><small>%s %s</small></td></tr>',
+                Translation::get('msgQuestionsWaiting'),
+                $numOfInvisibles
+            );
+        } else {
+            $extraout = '';
+        }
+
+        $query = sprintf(
+            "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
+            Database::getTablePrefix(),
+            $this->configuration->getLanguage()->getLanguage()
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $output = '';
+
+        if ($result && $this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+                $output .= '<tr class="openquestions">';
+                $output .= sprintf(
+                    '<td><small>%s</small><br><a href="mailto:%s">%s</a></td>',
+                    $date->format(Date::createIsoDate($row->created)),
+                    $mail->safeEmail($row->email),
+                    Strings::htmlentities($row->username)
+                );
+                $output .= sprintf(
+                    '<td><strong>%s:</strong><br>%s</td>',
+                    isset($this->category->categoryName[$row->category_id]['name']) ?
+                        Strings::htmlentities($this->category->categoryName[$row->category_id]['name']) :
+                        '',
+                    Strings::htmlentities($row->question)
+                );
+                if ($this->configuration->get('records.enableCloseQuestion') && $row->answer_id) {
+                    $output .= sprintf(
+                        '<td><a id="PMF_openQuestionAnswered" href="?%saction=faq&amp;cat=%d&amp;id=%d">%s</a></td>',
+                        $sids,
+                        $row->category_id,
+                        $row->answer_id,
+                        Translation::get('msg2answerFAQ')
+                    );
+                } else {
+                    $output .= sprintf(
+                        '<td class="text-end">' .
+                        '<a class="btn btn-primary" href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                        $sids,
+                        $row->id,
+                        $row->category_id,
+                        Translation::get('msg2answer')
+                    );
+                }
+
+                $output .= '</tr>';
+            }
+        } else {
+            $output = sprintf(
+                '<tr><td colspan="3">%s</td></tr>',
+                Translation::get('msgNoQuestionsAvailable')
+            );
+        }
+
+        return $output . $extraout;
+    }
+
+    public function setCategory(Category $category): QuestionHelper
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getCategory(): Category
+    {
+        return $this->category;
     }
 }
