@@ -7,3 +7,12 @@
     background-color: #f5f5f5;
   }
 }
+
+.autocomplete {
+  .empty {
+    background-color: white;
+    border: lightgray 1px solid;
+    cursor: pointer;
+    padding: 10px;
+  }
+}
