@@ -23,9 +23,12 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use Twig\Extension\DebugExtension;
+use Twig\TwigFilter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -34,6 +37,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+
+$templateVars = [];
 
 if (
     !$user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_ADD->value) &&
@@ -179,34 +184,18 @@ if (
         $groupAction = $defaultGroupAction;
     } else {
         $groupData = $perm->getGroupData($groupId);
-        ?>
-      <header class="row">
-        <div class="col-lg-12">
-          <h2 class="page-header">
-            <i aria-hidden="true" class="bi bi-people-fill"></i>
-              <?= Translation::get('ad_group_deleteGroup') ?> "<?= Strings::htmlentities($groupData['name']) ?>"
-          </h2>
-        </div>
-      </header>
-
-      <div class="row">
-        <div class="col-lg-12">
-          <p><?= Translation::get('ad_group_deleteQuestion') ?></p>
-          <form action="?action=group&amp;group_action=delete" method="post">
-            <input type="hidden" name="group_id" value="<?= $groupId ?>">
-            <?= Token::getInstance()->getTokenInput('delete-group') ?>
-            <p>
-              <button class="btn btn-inverse" type="submit" name="cancel">
-                  <?= Translation::get('ad_gen_cancel') ?>
-              </button>
-              <button class="btn btn-primary" type="submit">
-                  <?= Translation::get('ad_gen_save') ?>
-              </button>
-            </p>
-          </form>
-        </div>
-      </div>
-        <?php
+        $showDeleteGroupForm = true;
+        $templateVars = [
+            ...$templateVars,
+            'ad_group_deleteGroup' => Translation::get('ad_group_deleteGroup'),
+            'groupName' => Strings::htmlentities($groupData['name']),
+            'ad_group_deleteQuestion' => Translation::get('ad_group_deleteQuestion'),
+            'groupId' => $groupId,
+            'csrfDeleteGroup' => Token::getInstance()->getTokenString('delete-group'),
+            'ad_gen_no' => Translation::get('ad_gen_no'),
+            'ad_gen_yes' => Translation::get('ad_gen_yes'),
+            'showDeleteGroupForm' => $showDeleteGroupForm
+        ];
     }
 }
 
@@ -288,287 +277,62 @@ if (!isset($message)) {
 // show new group form
 if ($groupAction == 'add' && $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_ADD->value)) {
     $user = new CurrentUser($faqConfig);
-    ?>
-
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-people-fill"></i>
-        <?= Translation::get('ad_group_add') ?>
-    </h1>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-12">
-      <div id="user_message"><?= $message ?></div>
-      <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
-        <?= Token::getInstance()->getTokenInput('add-group') ?>
-
-        <div class="row mb-2">
-          <label class="col-lg-3 col-form-label" for="group_name">
-              <?= Translation::get('ad_group_name') ?>
-          </label>
-          <div class="col-lg-3">
-            <input type="text" name="group_name" id="group_name" autofocus class="form-control"
-                   value="<?= ($groupName ?? '') ?>" tabindex="1">
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label class="col-lg-3 col-form-label" for="group_description">
-              <?= Translation::get('ad_group_description') ?>
-          </label>
-          <div class="col-lg-3">
-            <textarea name="group_description" id="group_description" cols="15" rows="3" tabindex="2"
-                      class="form-control"
-            ><?= ($groupDescription ?? '') ?></textarea>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label class="col-lg-3 col-form-label" for="group_auto_join">
-              <?= Translation::get('ad_group_autoJoin') ?>
-          </label>
-          <div class="col-lg-3">
-            <div class="form-check">
-              <label>
-                <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                       <?= ((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="offset-lg-2 col-lg-3">
-            <button class="btn btn-info" type="reset" name="cancel">
-                <?= Translation::get('ad_gen_cancel') ?>
-            </button>
-            <button class="btn btn-primary" type="submit">
-                <?= Translation::get('ad_gen_save') ?>
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-    <?php
+    $templateVars = [
+        ...$templateVars,
+        'ad_group_add' => Translation::get('ad_group_add'),
+        'csrfAddGroup' => Token::getInstance()->getTokenString('add-group'),
+        'ad_group_name' => Translation::get('ad_group_name'),
+        'groupName' => $groupName ?? '',
+        'ad_group_description' => Translation::get('ad_group_description'),
+        'groupDescription' => $groupDescription ?? '',
+        'ad_group_autoJoin' => Translation::get('ad_group_autoJoin'),
+        'autoJoinCheckbox' => ((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : ''),
+        'ad_gen_cancel' => Translation::get('ad_gen_cancel'),
+        'ad_gen_save' => Translation::get('ad_gen_save'),
+        'groupAction' => $groupAction
+    ];
 }
 
 // show list of users
 if ('list' === $groupAction) {
-    ?>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-people-fill"></i>
-      <?= Translation::get('ad_menu_group_administration') ?>
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <a class="btn btn-outline-success" href="?action=group&amp;group_action=add">
-          <i aria-hidden="true" class="bi bi-people-fill"></i>
-          <?= Translation::get('ad_group_add_link') ?>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div id="user_message"><?= $message ?></div>
-
-  <div class="row">
-
-    <div class="col-lg-4" id="group_list">
-      <div class="card shadow mb-4">
-        <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
-              method="post">
-          <h5 class="card-header py-3">
-            <i aria-hidden="true" class="bi bi-people-fill"></i> <?= Translation::get('ad_groups') ?>
-          </h5>
-          <div class="card-body">
-            <select name="group_list_select" id="group_list_select" class="form-select"
-                    size="10" tabindex="1">
-            </select>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button class="btn btn-danger" type="submit">
-                  <?= Translation::get('ad_gen_delete') ?>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <div id="group_data" class="card shadow mb-4">
-        <h5 class="card-header py-3">
-          <i class="bi bi-info-circle" aria-hidden="true"></i> <?= Translation::get('ad_group_details') ?>
-        </h5>
-        <form action="?action=group&group_action=update_data" method="post">
-          <input id="update_group_id" type="hidden" name="group_id" value="0">
-          <div class="card-body">
-            <div class="row mb-2">
-              <label class="col-4 col-form-label" for="update_group_name">
-                  <?= Translation::get('ad_group_name') ?>
-              </label>
-              <div class="col-8">
-                <input id="update_group_name" type="text" name="name" class="form-control"
-                       tabindex="1" value="<?= ($groupName ?? '') ?>">
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-4 col-form-label" for="update_group_description">
-                  <?= Translation::get('ad_group_description') ?>
-              </label>
-              <div class="col-8">
-                <textarea id="update_group_description" name="description" class="form-control" rows="3" tabindex="2"
-                ><?= $groupDescription ?? '' ?></textarea>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="offset-4">
-                <div class="form-check">
-                    <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
-                           class="form-check-input" tabindex="3"<?php
-                            echo((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
-                    <label class="form-check-label" for="update_group_auto_join">
-                        <?= Translation::get('ad_group_autoJoin') ?>
-                    </label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button class="btn btn-primary" type="submit">
-                  <?= Translation::get('ad_gen_save') ?>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="col-lg-4" id="groupMemberships">
-      <form id="group_membership" name="group_membership" method="post"
-            action="?action=group&amp;group_action=update_members">
-        <input id="update_member_group_id" type="hidden" name="group_id" value="0">
-        <div class="card shadow mb-4">
-          <h5 class="card-header py-3">
-            <i aria-hidden="true" class="bi bi-person-vcard"></i> <?= Translation::get('ad_group_membership') ?>
-          </h5>
-          <div class="card-body">
-            <div class="row">
-              <div class="text-center">
-                <span class="select_all">
-                  <button type="button" class="btn btn-primary btn-sm" id="select_all_group_user_list">
-                      <i aria-hidden="true" class="bi bi-person-fill-add"></i>
-                  </button>
-                </span>
-                <span class="unselect_all">
-                  <button type="button" class="btn btn-primary btn-sm" id="unselect_all_group_user_list">
-                      <i aria-hidden="true" class="bi bi-person-fill-slash"></i>
-                  </button>
-                </span>
-              </div>
-            </div>
-
-            <div class="row">
-              <select id="group_user_list" class="form-control" size="7"
-                      multiple>
-                <option value="0">...user list...</option>
-              </select>
-            </div>
-
-            <div class="row">
-              <div class="text-center mt-2">
-                <input class="btn btn-success pmf-add-member" type="button"
-                       value="<?= Translation::get('ad_group_addMember') ?>">
-                <input class="btn btn-danger pmf-remove-member" type="button"
-                       value="<?= Translation::get('ad_group_removeMember') ?>">
-              </div>
-            </div>
-          </div>
-
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <i aria-hidden="true" class="bi bi-user-circle"></i> <?= Translation::get('ad_group_members'); ?></li>
-          </ul>
-
-          <div class="card-body">
-            <div class="row">
-              <div class="text-center">
-                <span class="select_all">
-                    <button type="button" class="btn btn-primary btn-sm" id="select_all_members">
-                        <i aria-hidden="true" class="bi bi-person-fill-add"></i>
-                    </button>
-                </span>
-                <span class="unselect_all">
-                  <button type="button" class="btn btn-primary btn-sm" id="unselect_all_members">
-                      <i aria-hidden="true" class="bi bi-person-fill-slash"></i>
-                  </button>
-                </span>
-              </div>
-            </div>
-
-            <div class="row">
-              <select id="group_member_list" name="group_members[]" class="form-control" multiple size="7">
-                <option value="0">...member list...</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button class="btn btn-primary" type="submit">
-                  <?= Translation::get('ad_gen_save') ?>
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <div class="col-lg-4" id="groupDetails">
-
-      <div id="groupRights" class="card shadow mb-4">
-        <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
-          <input id="rights_group_id" type="hidden" name="group_id" value="0">
-          <h5 class="card-header py-3" id="user_rights_legend">
-            <i aria-hidden="true" class="bi bi-lock"></i> <?= Translation::get('ad_group_rights') ?>
-
-          </h5>
-
-          <div class="card-body">
-              <div class="text-center mb-3">
-              <a class="btn btn-primary btn-sm" href="#" id="checkAll">
-                <?= Translation::get('ad_user_checkall') ?> / <?= Translation::get('ad_user_uncheckall') ?>
-              </a>
-            </div>
-              <?php foreach ($user->perm->getAllRightsData() as $right) : ?>
-                <div class="form-check">
-                  <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"
-                         name="group_rights[]" value="<?= $right['right_id'] ?>"
-                         class="form-check-input permission">
-                  <label class="form-check-label" for="group_right_<?= $right['right_id'] ?>">
-                      <?php
-                      try {
-                          echo Translation::get('permission::' . $right['name']);
-                      } catch (ErrorException) {
-                          echo $right['description'];
-                      }
-                      ?>
-                  </label>
-                </div>
-              <?php endforeach; ?>
-          </div>
-          <div class="card-footer">
-            <div class="card-button text-end">
-              <button class="btn btn-primary" type="submit">
-                  <?= Translation::get('ad_gen_save') ?>
-              </button>
-            </div>
-          </div>
-      </div>
-      </form>
-    </div>
-  </div>
-    <?php
+    $templateVars = [
+        ...$templateVars,
+        'ad_menu_group_administration' => Translation::get('ad_menu_group_administration'),
+        'ad_group_add_link' => Translation::get('ad_group_add_link'),
+        'message' => $message,
+        'ad_groups' => Translation::get('ad_groups'),
+        'ad_gen_delete' => Translation::get('ad_gen_delete'),
+        'ad_group_details' => Translation::get('ad_group_details'),
+        'ad_group_name' => Translation::get('ad_group_name'),
+        'groupName' => $groupName ?? '',
+        'ad_group_description' => Translation::get('ad_group_description'),
+        'groupDescription' => $groupDescription ?? '',
+        'autoJoinCheckbox' => ((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : ''),
+        'ad_group_autoJoin' => Translation::get('ad_group_autoJoin'),
+        'ad_gen_save' => Translation::get('ad_gen_save'),
+        'ad_group_membership' => Translation::get('ad_group_membership'),
+        'ad_group_addMember' => Translation::get('ad_group_addMember'),
+        'ad_group_members' => Translation::get('ad_group_members'),
+        'ad_group_removeMember' => Translation::get('ad_group_removeMember'),
+        'ad_group_rights' => Translation::get('ad_group_rights'),
+        'ad_user_checkall' => Translation::get('ad_user_checkall'),
+        'ad_user_uncheckall' => Translation::get('ad_user_uncheckall'),
+        'rightData' => $user->perm->getAllRightsData(),
+        'groupAction' => $groupAction
+    ];
 }
+
+$filter = new TwigFilter('permission', function ($string) {
+    $translationCode = sprintf(
+        'permission::%s',
+        $string
+    );
+    return Translation::get($translationCode);
+});
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twig->addFilter($filter);
+$template = $twig->loadTemplate('./admin/user/group.twig');
+
+echo $template->render($templateVars);
