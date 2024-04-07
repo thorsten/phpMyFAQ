@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 
@@ -63,7 +63,7 @@ class SearchResultSet
      */
     public function __construct(
         protected CurrentUser $currentUser,
-        private readonly FaqPermission $faqPermission,
+        private readonly Permission $faqPermission,
         protected Configuration $configuration
     ) {
     }
@@ -91,7 +91,7 @@ class SearchResultSet
 
             // check permissions for groups
             if ('medium' === $this->configuration->get('security.permLevel')) {
-                $groupPermissions = $this->faqPermission->get(FaqPermission::GROUP, $result->id);
+                $groupPermissions = $this->faqPermission->get(Permission::GROUP, $result->id);
                 foreach ($groupPermissions as $groupPermission) {
                     if (in_array($groupPermission, $currentGroupIds)) {
                         $permission = true;
@@ -101,7 +101,7 @@ class SearchResultSet
 
             // check permission for user
             if ('basic' === $this->configuration->get('security.permLevel')) {
-                $userPermission = $this->faqPermission->get(FaqPermission::USER, $result->id);
+                $userPermission = $this->faqPermission->get(Permission::USER, $result->id);
                 $permission = in_array(-1, $userPermission) || in_array(
                     $this->currentUser->getUserId(),
                     $userPermission

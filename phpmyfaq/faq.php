@@ -26,7 +26,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\AttachmentHelper;
@@ -60,7 +60,7 @@ $rating = new Rating($faqConfig);
 $comment = new Comments($faqConfig);
 $markDown = new ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
-$faqPermission = new FaqPermission($faqConfig);
+$faqPermission = new Permission($faqConfig);
 $attachmentHelper = new AttachmentHelper();
 
 if (is_null($user)) {

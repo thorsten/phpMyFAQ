@@ -20,7 +20,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language\Plurals;
@@ -52,7 +52,7 @@ class AutoCompleteController extends AbstractController
         $category->transform(0);
         $category->buildCategoryTree();
 
-        $faqPermission = new FaqPermission($this->configuration);
+        $faqPermission = new Permission($this->configuration);
         $faqSearch = new Search($this->configuration);
         $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
 

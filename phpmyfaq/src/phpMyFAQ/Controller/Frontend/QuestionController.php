@@ -22,7 +22,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\QuestionHelper;
@@ -101,7 +101,7 @@ class QuestionController extends AbstractController
                 $faqSearch->setCategory(new Category($this->configuration));
                 $faqSearch->setCategoryId((int) $selectedCategory);
 
-                $faqPermission = new FaqPermission($this->configuration);
+                $faqPermission = new Permission($this->configuration);
                 $faqSearchResult = new SearchResultSet($user, $faqPermission, $this->configuration);
 
                 $searchResult = array_merge(...array_map(

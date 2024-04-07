@@ -8,7 +8,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\FaqMetaData;
+use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -129,7 +129,7 @@ class FaqController extends AbstractController
                 }
             }
 
-            $faqMetaData = new FaqMetaData($this->configuration);
+            $faqMetaData = new MetaData($this->configuration);
             $faqMetaData
                 ->setFaqId($recordId)
                 ->setFaqLanguage($faqEntity->getLanguage())

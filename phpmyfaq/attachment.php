@@ -17,7 +17,7 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Translation;
@@ -44,15 +44,15 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 
-$faqPermission = new FaqPermission($faqConfig);
+$faqPermission = new Permission($faqConfig);
 
 $userPermission = [];
 $groupPermission = [];
 
 try {
     $attachment = AttachmentFactory::create($id);
-    $userPermission = $faqPermission->get(FaqPermission::USER, $attachment->getRecordId());
-    $groupPermission = $faqPermission->get(FaqPermission::GROUP, $attachment->getRecordId());
+    $userPermission = $faqPermission->get(Permission::USER, $attachment->getRecordId());
+    $groupPermission = $faqPermission->get(Permission::GROUP, $attachment->getRecordId());
 } catch (AttachmentException $attachmentException) {
     $attachmentErrors[] = Translation::get('msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
 }

@@ -18,7 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
@@ -87,7 +87,7 @@ if (is_null($user)) {
 }
 
 $faqSearch = new Search($faqConfig);
-$faqPermission = new FaqPermission($faqConfig);
+$faqPermission = new Permission($faqConfig);
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 $tagging = new Tags($faqConfig);
 $tagHelper = new TagsHelper();

@@ -25,8 +25,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\FaqPermission;
-use phpMyFAQ\Faq\FaqImport;
+use phpMyFAQ\Faq\Permission;
+use phpMyFAQ\Faq\Import;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
@@ -52,12 +52,12 @@ class FaqController extends AbstractController
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
-        $faqPermission = new FaqPermission(Configuration::getConfigurationInstance());
+        $faqPermission = new Permission(Configuration::getConfigurationInstance());
 
         return $this->json(
             [
-                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
-                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
+                'user' => $faqPermission->get(Permission::USER, $faqId),
+                'group' => $faqPermission->get(Permission::GROUP, $faqId),
             ],
             Response::HTTP_OK
         );
@@ -212,7 +212,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faqPermission = new FaqPermission($configuration);
+        $faqPermission = new Permission($configuration);
         $faqSearch = new Search($configuration);
         $faqSearch->setCategory(new Category($configuration));
 
@@ -273,7 +273,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faqImport = new FaqImport(Configuration::getConfigurationInstance());
+        $faqImport = new Import(Configuration::getConfigurationInstance());
 
         $errors = [];
 

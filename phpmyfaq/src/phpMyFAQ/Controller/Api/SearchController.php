@@ -22,7 +22,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
@@ -77,7 +77,7 @@ class SearchController extends AbstractController
         $search = new Search($faqConfig);
         $search->setCategory(new Category($faqConfig));
 
-        $faqPermission = new FaqPermission($faqConfig);
+        $faqPermission = new Permission($faqConfig);
         $searchResultSet = new SearchResultSet($user, $faqPermission, $faqConfig);
 
         $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);

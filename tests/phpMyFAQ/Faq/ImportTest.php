@@ -9,9 +9,9 @@ use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class FaqImportTest extends TestCase
+class ImportTest extends TestCase
 {
-    private FaqImport $faqImport;
+    private Import $faqImport;
 
     /**
      * @throws Exception
@@ -31,7 +31,7 @@ class FaqImportTest extends TestCase
         $configuration = new Configuration($dbHandle);
 
 
-        $this->faqImport = new FaqImport($configuration);
+        $this->faqImport = new Import($configuration);
     }
     public function testParseCSV(): void
     {

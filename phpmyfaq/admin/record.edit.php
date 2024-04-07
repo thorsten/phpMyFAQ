@@ -25,7 +25,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -70,7 +70,7 @@ if ((
 
     $faq = new Faq($faqConfig);
 
-    $faqPermission = new FaqPermission($faqConfig);
+    $faqPermission = new Permission($faqConfig);
 
     $questionObject = new Question($faqConfig);
 
@@ -210,7 +210,7 @@ if ((
     }
 
     // User permissions
-    $userPermission = $faqPermission->get(FaqPermission::USER, $faqData['id']);
+    $userPermission = $faqPermission->get(Permission::USER, $faqData['id']);
     if (count($userPermission) == 0 || $userPermission[0] == -1) {
         $allUsers = true;
         $restrictedUsers = false;
@@ -221,7 +221,7 @@ if ((
     }
 
     // Group permissions
-    $groupPermission = $faqPermission->get(FaqPermission::GROUP, $faqData['id']);
+    $groupPermission = $faqPermission->get(Permission::GROUP, $faqData['id']);
     if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
         $allGroups = true;
         $restrictedGroups = false;
