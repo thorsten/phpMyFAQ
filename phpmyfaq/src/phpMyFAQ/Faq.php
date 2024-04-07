@@ -1384,13 +1384,13 @@ class Faq
     }
 
     /**
-     * Returns the FAQ record title from the ID and language.
+     * Returns the FAQ question from the ID.
      *
      * @param int $id Record id
      */
-    public function getRecordTitle(int $id): string
+    public function getQuestion(int $id): string
     {
-        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
+        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] === $id)) {
             return $this->faqRecord['title'];
         }
 
@@ -1416,13 +1416,13 @@ class Faq
     }
 
     /**
-     * Returns the keywords of a FAQ record from the ID and language.
+     * Returns the keywords of a FAQ from the ID.
      *
      * @param int $id record id
      */
-    public function getRecordKeywords(int $id): string
+    public function getKeywords(int $id): string
     {
-        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
+        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] === $id)) {
             return $this->faqRecord['keywords'];
         }
 
@@ -1448,12 +1448,12 @@ class Faq
     }
 
     /**
-     * Returns a answer preview of the FAQ record.
+     * Returns an answer preview of the FAQ.
      *
      * @param int $recordId  FAQ record ID
      * @param int $wordCount Number of words, default: 12
      */
-    public function getRecordPreview(int $recordId, int $wordCount = 12): string
+    public function getAnswerPreview(int $recordId, int $wordCount = 12): string
     {
         if (isset($this->faqRecord['id']) && ((int)$this->faqRecord['id'] === $recordId)) {
             $answerPreview = $this->faqRecord['content'];
@@ -1489,12 +1489,12 @@ class Faq
     }
 
     /**
-     * Returns the number of activated and not expired records, optionally
+     * Returns the number of activated and not expired FAQs, optionally
      * not limited to the current language.
      *
      * @param string|null $language Language
      */
-    public function getNumberOfRecords(string $language = null): int
+    public function getNumberOfFaqs(string $language = null): int
     {
         $now = date('YmdHis');
 
@@ -1549,15 +1549,12 @@ class Faq
 
         if ($result !== []) {
             foreach ($result as $row) {
+                $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
+                $output['preview'][] = Strings::htmlentities($row['question']);
+                $output['url'][] = Strings::htmlentities($row['url']);
                 if ('visits' == $type) {
-                    $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
-                    $output['preview'][] = Strings::htmlentities($row['question']);
-                    $output['url'][] = Strings::htmlentities($row['url']);
                     $output['visits'][] = $this->plurals->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
-                    $output['preview'][] = Strings::htmlentities($row['question']);
-                    $output['url'][] = Strings::htmlentities($row['url']);
                     $output['voted'][] = sprintf(
                         '%s %s 5 - %s',
                         round($row['avg'], 2),
@@ -1696,7 +1693,7 @@ class Faq
     }
 
     /**
-     * This function generates a data-set with the most voted FAQs.
+     * This function generates data-set with the most voted FAQs.
      *
      * @param int    $count    Number of records
      * @param string|null $language Language
@@ -1709,8 +1706,8 @@ class Faq
 
         $now = date('YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
-        $query =
-            '            SELECT
+        $query = sprintf(
+            "SELECT
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS thema,
@@ -1719,27 +1716,35 @@ class Faq
                 (fv.vote/fv.usr) AS avg,
                 fv.usr AS user
             FROM
-                ' . Database::getTablePrefix() . 'faqvoting fv,
-                ' . Database::getTablePrefix() . 'faqdata fd
+                %sfaqvoting fv,
+                %sfaqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
+                %sfaqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
+                %sfaqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
+                %sfaqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
-                AND fd.id = fv.artikel
-                AND fd.active = \'yes\'';
+                fd.date_start <= '%s'
+            AND fd.date_end   >= '%s'
+            AND fd.id = fv.artikel
+            AND fd.active = 'yes'",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $now,
+            $now
+        );
 
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '

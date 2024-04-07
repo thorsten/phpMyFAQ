@@ -110,7 +110,7 @@ $faqSession->userTracking('article_view', $faqId);
 $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews((int) $faqId);
 
-$question = $faq->getRecordTitle($faqId);
+$question = $faq->getQuestion($faqId);
 $question = Strings::htmlentities($question);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
@@ -317,7 +317,7 @@ $faqServices = new Services($faqConfig);
 $faqServices->setCategoryId($cat);
 $faqServices->setFaqId($id);
 $faqServices->setLanguage($lang);
-$faqServices->setQuestion($faq->getRecordTitle($id));
+$faqServices->setQuestion($faq->getQuestion($id));
 
 // Check if category ID and FAQ ID are linked together
 if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
