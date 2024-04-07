@@ -97,11 +97,11 @@ readonly class Notification
                 $faqLanguage
             );
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = $this->faq->getRecordTitle($faqId);
+            $link->itemTitle = $this->faq->getQuestion($faqId);
 
             $this->mail->message = html_entity_decode((string) Translation::get('msgMailCheck')) .
                 "<p><strong>" . Translation::get('msgAskYourQuestion') . ":</strong> " .
-                $this->faq->getRecordTitle($faqId) . "</p>" .
+                $this->faq->getQuestion($faqId) . "</p>" .
                 "<p><strong>" . Translation::get('msgNewContentArticle') . ":</strong> " .
                 $this->faq->faqRecord['content'] . "</p>" .
                 "<hr>" .

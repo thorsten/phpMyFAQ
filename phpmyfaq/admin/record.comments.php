@@ -91,7 +91,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELET
                             $faqComment->getRecordId(),
                             $faqLangCode
                                  ) ?>">
-                            <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
+                            <?= $faq->getQuestion($faqComment->getRecordId()) ?>
                         </a>
                     <br>
                         <?= Strings::htmlentities($faqComment->getComment()) ?>

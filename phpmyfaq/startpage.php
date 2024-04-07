@@ -143,7 +143,7 @@ $template->parse(
         'writeNewsHeader' => $writeNewsHeader,
         'writeNews' => $news->getAll($archived),
         'showAllNews' => $showAllNews,
-        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($faqLangCode)),
+        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfFaqs($faqLangCode)),
         'formActionUrl' => '?' . $sids . 'action=search',
         'searchBox' => Translation::get('msgSearch'),
         'categoryId' => ($cat === 0) ? '%' : (int)$cat,

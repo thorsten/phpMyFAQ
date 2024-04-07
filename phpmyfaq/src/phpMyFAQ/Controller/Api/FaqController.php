@@ -24,7 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\FaqMetaData;
+use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -646,7 +646,7 @@ class FaqController extends AbstractController
 
         $faqId = $faq->create($faqData);
 
-        $faqMetaData = new FaqMetaData($configuration);
+        $faqMetaData = new MetaData($configuration);
         $faqMetaData
             ->setFaqId($faqId)
             ->setFaqLanguage($languageCode)

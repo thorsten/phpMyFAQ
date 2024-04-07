@@ -26,7 +26,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -49,7 +49,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)) {
-    $faqPermission = new FaqPermission($faqConfig);
+    $faqPermission = new Permission($faqConfig);
 
     // FAQ data
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -147,11 +147,11 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
             }
 
             // Add user permissions
-            $faqPermission->add(FaqPermission::USER, $recordId, $permissions['restricted_user']);
+            $faqPermission->add(Permission::USER, $recordId, $permissions['restricted_user']);
             $categoryPermission->add(Permission::USER, $categories['rubrik'], $permissions['restricted_user']);
             // Add group permission
             if ($faqConfig->get('security.permLevel') !== 'basic') {
-                $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
+                $faqPermission->add(Permission::GROUP, $recordId, $permissions['restricted_groups']);
                 $categoryPermission->add(
                     Permission::GROUP,
                     $categories['rubrik'],

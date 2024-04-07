@@ -341,7 +341,7 @@ if ($id !== 0) {
     $faq->getRecord($id);
     $title = ' - ' . $faq->faqRecord['title'];
     $keywords = ',' . $faq->faqRecord['keywords'];
-    $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
+    $metaDescription = str_replace('"', '', strip_tags($faq->getAnswerPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         Strings::htmlentities($faqConfig->getDefaultUrl()),
@@ -369,8 +369,8 @@ if ($solutionId) {
     $faqData = $faq->getIdFromSolutionId($solutionId);
     $id = $faqData['id'];
     $lang = $faqData['lang'];
-    $title = ' - ' . $faq->getRecordTitle($id);
-    $keywords = ',' . $faq->getRecordKeywords($id);
+    $title = ' - ' . $faq->getQuestion($id);
+    $keywords = ',' . $faq->getKeywords($id);
     $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags((string)$faqData['content']), 12));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',

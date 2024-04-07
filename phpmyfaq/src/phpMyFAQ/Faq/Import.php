@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @package phpMyFAQ\Faq
  */
 
-readonly class FaqImport
+readonly class Import
 {
     public function __construct(private Configuration $configuration)
     {
@@ -92,7 +92,7 @@ readonly class FaqImport
 
         $faqId = $faq->create($faqEntity);
 
-        $faqMetaData = new FaqMetaData($this->configuration);
+        $faqMetaData = new MetaData($this->configuration);
         $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
 
         return true;

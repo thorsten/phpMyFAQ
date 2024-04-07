@@ -25,7 +25,7 @@ use phpMyFAQ\Filter;
  *
  * @package phpMyFAQ\Faq
  */
-class FaqPermission
+class Permission
 {
     /** @var string */
     final public const USER = 'user';

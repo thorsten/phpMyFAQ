@@ -24,7 +24,7 @@ use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq\FaqPermission;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Tags;
@@ -91,7 +91,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->val
     $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // Permissions
-    $faqPermission = new FaqPermission($faqConfig);
+    $faqPermission = new Permission($faqConfig);
     $permissions = $faqPermission->createPermissionArray();
 
     if (!is_null($question) && !is_null($categories)) {
@@ -183,12 +183,12 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->val
         }
 
         // Add user permissions
-        $faqPermission->delete(FaqPermission::USER, $recordId);
-        $faqPermission->add(FaqPermission::USER, $recordId, $permissions['restricted_user']);
+        $faqPermission->delete(Permission::USER, $recordId);
+        $faqPermission->add(Permission::USER, $recordId, $permissions['restricted_user']);
         // Add group permission
         if ($faqConfig->get('security.permLevel') !== 'basic') {
-            $faqPermission->delete(FaqPermission::GROUP, $recordId);
-            $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions['restricted_groups']);
+            $faqPermission->delete(Permission::GROUP, $recordId);
+            $faqPermission->add(Permission::GROUP, $recordId, $permissions['restricted_groups']);
         }
 
         // If Elasticsearch is enabled, update an active or delete inactive FAQ document
