@@ -13,18 +13,59 @@
  * @since     2023-01-21
  */
 
-import 'vanilla-cookieconsent';
+import * as cc from 'vanilla-cookieconsent';
 
-const cc = initCookieConsent();
-
-cc.run({
-  current_lang: 'en',
-  autoclear_cookies: true, // default: false
-  page_scripts: true, // default: false
-  cookie_name: 'phpmyfaq_cc_cookie',
-  auto_language: 'browser',
+/*cc.run({
+  language: {
+    default: 'en',
+    translations: {
+      en: {
+        consentModal: {
+          title: 'phpMyFAQ use cookies!',
+          description:
+            'Hi, phpMyFAQ uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link">Let me choose</button>',
+          primaryBtn: {
+            text: 'Accept all',
+            role: 'accept_all',
+          },
+          secondaryBtn: {
+            text: 'Reject all',
+            role: 'accept_necessary',
+          },
+        },
+        preferencesModal: {
+          title: 'Cookie preferences',
+          acceptAllBtn: 'Accept all',
+          savePreferencesBtn: 'Reject all',
+          closeIconLabel: 'Close',
+          cookie_table_headers: [{ col1: 'Name' }, { col2: 'Domain' }, { col3: 'Expiration' }, { col4: 'Description' }],
+          sections: [
+            {
+              title: 'Cookie usage 📢',
+              description:
+                'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="./privacy.html" class="cc-link">privacy policy</a>.',
+            },
+            {
+              title: 'Strictly necessary cookies',
+              description:
+                'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
+              toggle: {
+                value: 'necessary',
+                enabled: true,
+                readonly: true,
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+  //autoclear_cookies: true, // default: false
+  //page_scripts: true, // default: false
+  //cookie_name: 'phpmyfaq_cc_cookie',
   // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
   // delay: 0,                               // default: 0
+  // auto_language: null                     // default: null; could also be 'browser' or 'document'
   // autorun: true,                          // default: true
   // force_consent: false,                   // default: false
   // hide_from_bots: true,                   // default: true
@@ -47,48 +88,177 @@ cc.run({
 
   onChange: (cookie, changed_preferences) => {
     // ...
+  }
+});*/
+
+cc.run({
+
+  // root: 'body',
+  autoShow: true,
+  // disablePageInteraction: true,
+  // hideFromBots: true,
+  mode: 'opt-in',
+  // revision: 0,
+
+  cookie: {
+    name: 'phpmyfaq_cc_cookie',
+    // domain: location.hostname,
+    // path: '/',
+    // sameSite: "Lax",
+    expiresAfterDays: 182,
   },
 
-  languages: {
-    en: {
-      consent_modal: {
-        title: 'phpMyFAQ use cookies!',
-        description:
-          'Hi, phpMyFAQ uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link">Let me choose</button>',
-        primary_btn: {
-          text: 'Accept all',
-          role: 'accept_all',
+  // https://cookieconsent.orestbida.com/reference/configuration-reference.html#guioptions
+  guiOptions: {
+    consentModal: {
+      layout: 'cloud inline',
+      position: 'bottom right',
+      equalWeightButtons: true,
+      flipButtons: false
+    },
+    preferencesModal: {
+      layout: 'box',
+      equalWeightButtons: true,
+      flipButtons: false
+    }
+  },
+
+  onFirstConsent: ({cookie}) => {
+    console.log('onFirstConsent fired',cookie);
+  },
+
+  onConsent: ({cookie}) => {
+    console.log('onConsent fired!', cookie)
+  },
+
+  onChange: ({changedCategories, changedServices}) => {
+    console.log('onChange fired!', changedCategories, changedServices);
+  },
+
+  onModalReady: ({modalName}) => {
+    console.log('ready:', modalName);
+  },
+
+  onModalShow: ({modalName}) => {
+    console.log('visible:', modalName);
+  },
+
+  onModalHide: ({modalName}) => {
+    console.log('hidden:', modalName);
+  },
+
+  categories: {
+    necessary: {
+      enabled: true,  // this category is enabled by default
+      readOnly: true  // this category cannot be disabled
+    },
+    analytics: {
+      autoClear: {
+        cookies: [
+          {
+            name: /^_ga/,   // regex: match all cookies starting with '_ga'
+          },
+          {
+            name: '_gid',   // string: exact cookie name
+          }
+        ]
+      },
+
+      // https://cookieconsent.orestbida.com/reference/configuration-reference.html#category-services
+      services: {
+        ga: {
+          label: 'Google Analytics',
+          onAccept: () => {},
+          onReject: () => {}
         },
-        secondary_btn: {
-          text: 'Reject all',
-          role: 'accept_necessary',
+        youtube: {
+          label: 'Youtube Embed',
+          onAccept: () => {},
+          onReject: () => {}
+        },
+      }
+    },
+    ads: {}
+  },
+
+  language: {
+    default: 'en',
+    autoDetect: 'browser',
+    translations: {
+      en: {
+        consentModal: {
+          title: 'phpMyFAQ use cookies!',
+          description:
+            'Hi, phpMyFAQ uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
+          acceptAllBtn: 'Accept all',
+          acceptNecessaryBtn: 'Reject all',
+          showPreferencesBtn: 'Let me choose',
+          footer: `
+                        <a href="contact.html" target="_blank">Impressum</a>
+                        <a href="privacy.html" target="_blank">Privacy Policy</a>
+                    `,
+        },
+        preferencesModal: {
+          title: 'Cookie preferences',
+          acceptAllBtn: 'Accept all',
+          savePreferencesBtn: 'Reject all',
+          closeIconLabel: 'Close',
+          cookie_table_headers: [{ col1: 'Name' }, { col2: 'Domain' }, { col3: 'Expiration' }, { col4: 'Description' }],
+          sections: [
+            {
+              title: 'Cookie usage 📢',
+              description:
+                'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="./privacy.html" class="cc-link">privacy policy</a>.',
+            },
+            {
+              title: 'Strictly necessary cookies',
+              description:
+                'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
+              linkedCategory: 'necessary'
+            },
+          ],
         },
       },
-      settings_modal: {
-        title: 'Cookie preferences',
-        save_settings_btn: 'Save settings',
-        accept_all_btn: 'Accept all',
-        reject_all_btn: 'Reject all',
-        close_btn_label: 'Close',
-        cookie_table_headers: [{ col1: 'Name' }, { col2: 'Domain' }, { col3: 'Expiration' }, { col4: 'Description' }],
-        blocks: [
-          {
-            title: 'Cookie usage 📢',
-            description:
-              'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="./privacy.html" class="cc-link">privacy policy</a>.',
-          },
-          {
-            title: 'Strictly necessary cookies',
-            description:
-              'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
-            toggle: {
-              value: 'necessary',
-              enabled: true,
-              readonly: true,
+      de: {
+        consentModal: {
+          title: 'phpMyFAQ nutzt Cookies!',
+          description:
+            'Hallo, phpMyFAQ nutzt technisch notwendige und funktionale Cookies, um den Betrieb zu gewährleisten und Marketing-Cookies, um den Erfolg unserer Seite messen zu können. Diese werden erst nach Zustimmung gesetzt.',
+          acceptAllBtn: 'Alle akzeptieren',
+          acceptNecessaryBtn: 'Alle ablehnen',
+          showPreferencesBtn: 'Anpassen',
+          footer: `
+                        <a href="contact.html" target="_blank">Impressum</a>
+                        <a href="privacy.html" target="_blank">Datenschutzerklärung</a>
+                    `,
+        },
+        preferencesModal: {
+          title: 'Cookie-Einstellungen',
+          acceptAllBtn: 'Alle akzeptieren',
+          savePreferencesBtn: 'Alle ablehnen',
+          closeIconLabel: 'Schließen',
+          sections: [
+            {
+              title: 'Cookie-Einstellungen 📢',
+              description:
+                'Ich nutze Cookies, um den ordnungsgemäßen Betrieb der Seite zu garantieren und deine Benutzererfahrung zu verbessern. Du kannst die Verwendung von Cookies für jede Kategorie aktivieren und deaktivieren. Weitere Informationen finden Sie in unserer <a href="./privacy.html" class="cc-link">Datenschutzerklärung</a>.',
             },
-          },
-        ],
+            {
+              title: 'Technisch notwendige und funktionale Cookies',
+              description:
+                'Diese Cookies sind für den reibungslosen Betrieb der Website unbedingt erforderlich. Ohne diese würde die Website nicht ordnungsgemäß funktionieren.',
+              linkedCategory: 'necessary'
+            },
+          ],
+        },
       },
     },
-  },
+  }
 });
+
+const cookiePreferences = document.getElementById('showCookieConsent');
+if(cookiePreferences) {
+  cookiePreferences.addEventListener('click', function() {
+    cc.showPreferences();
+  });
+}

@@ -1310,6 +1310,9 @@ $PMF_LANG['msgAuthenticationSource'] = 'Auth-Dienst';
 $LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'E-Mail-Adresse im Export anzeigen'];
 $PMF_LANG['msgNewQuestionAdded'] = 'Es wurde eine neue Frage hinzugefügt. Sie können diese hier oder im Adminbereich überprüfen:';
 
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Cookie-Einstellungen';
+
 // added v4.0.0-alpha - 2023-07-02 by Thorsten
 $LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Online Update aktiviert'];
 $LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Release-Umgebung'];
