@@ -38,7 +38,7 @@
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.0",
     "tinymce": "^6.3.1",
-    "vanilla-cookieconsent": "^2.8.9"
+    "vanilla-cookieconsent": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
