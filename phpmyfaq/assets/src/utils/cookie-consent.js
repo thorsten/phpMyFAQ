@@ -15,82 +15,6 @@
 
 import * as cc from 'vanilla-cookieconsent';
 
-/*cc.run({
-  language: {
-    default: 'en',
-    translations: {
-      en: {
-        consentModal: {
-          title: 'phpMyFAQ use cookies!',
-          description:
-            'Hi, phpMyFAQ uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link">Let me choose</button>',
-          primaryBtn: {
-            text: 'Accept all',
-            role: 'accept_all',
-          },
-          secondaryBtn: {
-            text: 'Reject all',
-            role: 'accept_necessary',
-          },
-        },
-        preferencesModal: {
-          title: 'Cookie preferences',
-          acceptAllBtn: 'Accept all',
-          savePreferencesBtn: 'Reject all',
-          closeIconLabel: 'Close',
-          cookie_table_headers: [{ col1: 'Name' }, { col2: 'Domain' }, { col3: 'Expiration' }, { col4: 'Description' }],
-          sections: [
-            {
-              title: 'Cookie usage 📢',
-              description:
-                'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="./privacy.html" class="cc-link">privacy policy</a>.',
-            },
-            {
-              title: 'Strictly necessary cookies',
-              description:
-                'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
-              toggle: {
-                value: 'necessary',
-                enabled: true,
-                readonly: true,
-              },
-            },
-          ],
-        },
-      },
-    },
-  },
-  //autoclear_cookies: true, // default: false
-  //page_scripts: true, // default: false
-  //cookie_name: 'phpmyfaq_cc_cookie',
-  // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
-  // delay: 0,                               // default: 0
-  // auto_language: null                     // default: null; could also be 'browser' or 'document'
-  // autorun: true,                          // default: true
-  // force_consent: false,                   // default: false
-  // hide_from_bots: true,                   // default: true
-  // remove_cookie_tables: false             // default: false
-  // cookie_expiration: 182,                 // default: 182 (days)
-  // cookie_necessary_only_expiration: 182   // default: disabled
-  // cookie_domain: location.hostname,       // default: current domain
-  // cookie_path: '/',                       // default: root
-  // cookie_same_site: 'Lax',                // default: 'Lax'
-  // use_rfc_cookie: false,                  // default: false
-  // revision: 0,                            // default: 0
-
-  onFirstAction: (user_preferences, cookie) => {
-    // callback triggered only once
-  },
-
-  onAccept: (cookie) => {
-    // ...
-  },
-
-  onChange: (cookie, changed_preferences) => {
-    // ...
-  }
-});*/
-
 cc.run({
 
   // root: 'body',
@@ -164,7 +88,6 @@ cc.run({
         ]
       },
 
-      // https://cookieconsent.orestbida.com/reference/configuration-reference.html#category-services
       services: {
         ga: {
           label: 'Google Analytics',
