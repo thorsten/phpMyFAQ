@@ -15,14 +15,12 @@
  * @since     2023-01-22
  */
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
-
-$response = new Response();
 
 $privacyUrl = $faqConfig->get('main.privacyURL');
 
@@ -32,6 +30,6 @@ if (strlen((string) $privacyUrl) > 0) {
     $redirectUrl = $faqConfig->get('main.referenceURL');
 }
 
-$response->isRedirect($redirectUrl);
+$response = new RedirectResponse($redirectUrl);
 $response->send();
 exit();
