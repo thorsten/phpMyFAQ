@@ -11,7 +11,7 @@
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matthias Sommerfeld <mso@bluebirdy.de>
  * @author Henning Schulzrinne <hgs@cs.columbia.edu>
- * @author Zięba Bogusław Chaffinch <hgs@cs.columbia.edu>
+ * @author Zięba Bogusław Chaffinch
  * @copyright 2004-2024 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
@@ -37,7 +37,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pl';
 $PMF_LANG['language'] = 'polski';
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+// ltr: left to right (e.g., English language); rtl: right to left (e.g., Arabic language)
 $PMF_LANG["dir"] = "ltr";
 $PMF_LANG["nplurals"] = "2";
 
