@@ -32,7 +32,7 @@ abstract class AttachmentAbstract
      *
      * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * The key to encrypt with.
@@ -54,7 +54,7 @@ abstract class AttachmentAbstract
     /**
      * Record ID.
      */
-    protected int $recordId;
+    protected ?int $recordId = null;
 
     /**
      * Record language.
