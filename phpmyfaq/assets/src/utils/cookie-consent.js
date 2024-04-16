@@ -31,7 +31,6 @@ cc.run({
     // sameSite: "Lax",
     expiresAfterDays: 182,
   },
-
   guiOptions: {
     consentModal: {
       layout: 'box inline',
