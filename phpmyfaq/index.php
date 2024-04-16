@@ -672,7 +672,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
             Strings::htmlentities($faqConfig->get('main.privacyURL')),
             Translation::get('msgPrivacyNote')
         ),
-        'cookiePreferences' => '<a id="showCookieConsent" class="pmf-nav-link-footer" href="#">'
+        'cookiePreferences' => '<a id="showCookieConsent" class="pmf-nav-link-footer">'
             . Translation::get('cookiePreferences') . '</a>',
         'faqOverview' => '<a class="pmf-nav-link-footer" href="index.php?' . $sids . 'action=overview">' .
             Translation::get('faqOverview') . '</a>',
