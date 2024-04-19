@@ -5,7 +5,7 @@
     "acceptAllBtn": "Accept all",
     "acceptNecessaryBtn": "Reject all",
     "showPreferencesBtn": "Let me choose",
-    "footer": "<a href=\"contact.html\" target=\"_blank\">Impressum</a><a href=\"privacy.html\" target=\"_blank\">Privacy Policy</a>"
+    "footer": "<a href=\"contact.html\" target=\"_blank\">Imprint</a><a href=\"privacy.html\" target=\"_blank\">Privacy Policy</a>"
   },
   "preferencesModal": {
     "title": "Cookie preferences",
