@@ -215,7 +215,7 @@ abstract class AttachmentAbstract
      */
     public function getRecordId(): int
     {
-        return $this->recordId;
+        return $this->recordId ?? 0;
     }
 
     /**
