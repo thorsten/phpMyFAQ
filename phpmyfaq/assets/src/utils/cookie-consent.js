@@ -16,7 +16,6 @@
 import * as cc from 'vanilla-cookieconsent';
 
 cc.run({
-
   // root: 'body',
   autoShow: true,
   // disablePageInteraction: true,
@@ -36,53 +35,48 @@ cc.run({
       layout: 'box inline',
       position: 'top center',
       equalWeightButtons: true,
-      flipButtons: false
+      flipButtons: false,
     },
     preferencesModal: {
       layout: 'box',
       equalWeightButtons: true,
-      flipButtons: false
-    }
+      flipButtons: false,
+    },
   },
 
-  onFirstConsent: ({cookie}) => {
-  },
+  onFirstConsent: ({ cookie }) => {},
 
-  onConsent: ({cookie}) => {
-  },
+  onConsent: ({ cookie }) => {},
 
-  onChange: ({changedCategories, changedServices}) => {
-  },
+  onChange: ({ changedCategories, changedServices }) => {},
 
-  onModalReady: ({modalName}) => {
-  },
+  onModalReady: ({ modalName }) => {},
 
-  onModalShow: ({modalName}) => {
-  },
+  onModalShow: ({ modalName }) => {},
 
-  onModalHide: ({modalName}) => {
-  },
+  onModalHide: ({ modalName }) => {},
 
   categories: {
     necessary: {
-      enabled: true,  // this category is enabled by default
-      readOnly: true  // this category cannot be disabled
-    }
+      enabled: true, // this category is enabled by default
+      readOnly: true, // this category cannot be disabled
+    },
   },
 
   language: {
     default: 'en',
     autoDetect: 'document',
     translations: {
+      de: './lang/cookie-consent/de.json',
       en: './lang/cookie-consent/en.json',
-      de: './lang/cookie-consent/de.json'
+      pl: './lang/cookie-consent/pl.json',
     },
-  }
+  },
 });
 
 const cookiePreferences = document.getElementById('showCookieConsent');
-if(cookiePreferences) {
-  cookiePreferences.addEventListener('click', function(event) {
+if (cookiePreferences) {
+  cookiePreferences.addEventListener('click', function (event) {
     event.preventDefault();
     cc.showPreferences();
   });

@@ -7252,10 +7252,10 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-vanilla-cookieconsent@^2.8.9:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/vanilla-cookieconsent/-/vanilla-cookieconsent-2.9.2.tgz#d4ac2169fdde5e76f7b8345d0dbfb9b946fe99f0"
-  integrity sha512-SHAS5W0DBvvcUtjmVvvYkhmLPmTlgwKzFvViUp5mBimbZCdZKbDQzwyk/TgYq02+61RrtxmDdLGzDWNFpSbsGQ==
+vanilla-cookieconsent@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/vanilla-cookieconsent/-/vanilla-cookieconsent-3.0.1.tgz#059d1b2c712476ae4172d4ec7fa9d553a16be12d"
+  integrity sha512-gqc4x7O9t1I4xWr7x6/jtQWPr4PZK26SmeA0iyTv1WyoECfAGnu5JEOExmMEP+5Fz66AT9OiCBO3GII4wDQHLw==
 
 w3c-xmlserializer@^4.0.0:
   version "4.0.0"
