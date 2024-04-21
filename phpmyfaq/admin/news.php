@@ -35,8 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-// @todo check permissions
-
 $news = new News($faqConfig);
 
 $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
