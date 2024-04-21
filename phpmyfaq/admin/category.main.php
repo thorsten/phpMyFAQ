@@ -63,6 +63,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
 
         $categoryEntity = new CategoryEntity();
         $categoryEntity
+            ->setParentId($parentId)
             ->setLang($categoryLang)
             ->setName(Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setDescription(Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
