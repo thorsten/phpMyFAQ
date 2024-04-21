@@ -960,10 +960,11 @@ class Category
     public function checkIfCategoryExists(array $categoryData): int
     {
         $query = sprintf(
-            "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s'",
+            "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s' AND parent_id = %d",
             Database::getTablePrefix(),
             $this->config->getDb()->escape($categoryData['name']),
-            $this->config->getDb()->escape($categoryData['lang'])
+            $this->config->getDb()->escape($categoryData['lang']),
+            $categoryData['parent_id']
         );
 
         $result = $this->config->getDb()->query($query);
