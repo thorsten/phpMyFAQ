@@ -63,8 +63,9 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $categoryHelper
             ->setConfiguration($faqConfig)
             ->setCategory($subCategory);
+
         if (empty($records)) {
-            $records = $categoryHelper->renderCategoryTree();
+            $records = sprintf('<div class="mb-5 alert alert-info">%s</div>', Translation::get('err_noArticles'));
         }
 
         if ((is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) !== 0) {

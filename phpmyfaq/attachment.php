@@ -95,7 +95,7 @@ if ($user->isLoggedIn()) {
 }
 
 if (
-    $attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
+    $attachment && $attachment->getRecordId() > 0 && ($faqConfig->get('records.allowDownloadsForGuests') ||
         (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))
 ) {
     try {
@@ -103,10 +103,10 @@ if (
     } catch (AttachmentException $e) {
         $attachmentErrors[] = $e->getMessage();
     }
-
     exit(0);
+} else {
+    $attachmentErrors[] = Translation::get('msgAttachmentInvalid');
 }
-$attachmentErrors[] = Translation::get('err_NotAuth');
 
 // If we're here, there was an error with file download
 $template->parseBlock('mainPageContent', 'attachmentErrors', ['item' => implode('<br>', $attachmentErrors)]);

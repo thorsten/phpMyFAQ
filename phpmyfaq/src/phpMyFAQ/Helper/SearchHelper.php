@@ -248,11 +248,17 @@ class SearchHelper extends Helper
                 $oLink->itemTitle = $result->question;
                 $oLink->tooltip = $result->question;
 
+                $path = isset($categoryInfo[0]['id'])
+                    ?
+                    Strings::htmlentities($this->Category->getPath($categoryInfo[0]['id']))
+                    :
+                    '';
+
                 $html .= '<li class="mb-2">';
                 $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf(
                     '<strong>%s</strong><br><i class="bi bi-question-circle-o"></i> %s<br>',
-                    Strings::htmlentities($this->Category->getPath($categoryInfo[0]['id'])),
+                    $path,
                     $oLink->toHtmlAnchor()
                 );
                 $html .= sprintf(
