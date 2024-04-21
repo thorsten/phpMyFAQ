@@ -8,11 +8,11 @@
 
   <div class="row">
     <div class="col-12">
-      <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate
+      <form id="faqEditor" name="faqEditor" novalidate
             data-pmf-enable-editor="{{ enableWysiwyg }}"
             data-pmf-editor-language="en"
             data-pmf-default-url="{{ defaultUrl }}">
-        <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_save-news }}" />
+        <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_saveNews }}" />
 
         <div class="row mb-2">
           <label class="col-3 col-form-label" for="newsheader">
@@ -26,7 +26,7 @@
         <div class="row mb-2">
           <label class="col-3 col-form-label" for="news">{{ ad_news_text }}:</label>
           <div class="col-9">
-            <textarea name="news" rows="5" class="form-control" id="editor"></textarea>
+            <textarea rows="5" class="form-control" id="editor"></textarea>
           </div>
         </div>
 
@@ -90,19 +90,19 @@
           <label class="col-3 col-form-label">{{ ad_news_link_target }}</label>
           <div class="col-9 radio">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="target" id="blank" value="blank">
+              <input class="form-check-input" type="radio" id="target" value="blank">
               <label class="form-check-label" for="blank">
                 {{ ad_news_link_window }}
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="target" id="self" value="self">
+              <input class="form-check-input" type="radio" id="target" value="self">
               <label class="form-check-label" for="self">
                 {{ ad_news_link_faq }}
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="target" id="parent" value="parent">
+              <input class="form-check-input" type="radio" id="target" value="parent">
               <label class="form-check-label" for="parent">
                 {{ ad_news_link_parent }}
               </label>
@@ -137,12 +137,11 @@
             <a class="btn btn-secondary" href="?action=news">
               {{ ad_entry_back }}
             </a>
-            <button class="btn btn-primary" type="submit">
+            <a class="btn btn-primary" id="submitAddNews">
               {{ ad_news_add }}
-            </button>
+            </a>
           </div>
         </div>
-
       </form>
     </div>
   </div>
@@ -150,8 +149,9 @@
 {% if action == 'news' and permissionEditNews == true %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-pencil"></i> {{ msgNews }}
+      <i aria-hidden="true" class="bi bi-newspaper"></i> {{ msgNews }}
     </h1>
+    {% if permissionAddNews == true %}
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <a href="?action=add-news">
@@ -161,6 +161,7 @@
         </a>
       </div>
     </div>
+    {% endif %}
   </div>
 
   <div class="row">
@@ -171,23 +172,34 @@
           <th>{{ ad_news_headline }}</th>
           <th>{{ ad_news_date }}</th>
           <th colspan="2">&nbsp;</th>
+          <th>{{ ad_entry_active }}</th>
         </tr>
         </thead>
         <tbody>
-        {% if newsHeader|length > 0 %}
-          {% for newsItem in newsHeader %}
+        {% if news|length > 0 %}
+          {% for newsItem in news %}
             <tr>
               <td>{{ newsItem.header|escape }}</td>
               <td>{{ newsItem.date|formatDate }}</td>
               <td>
+                {% if permissionEditNews == true %}
                 <a class="btn btn-primary" href="?action=edit-news&amp;id={{ newsItem.id }}">
                   <span title="{{ ad_news_update }}" class="bi bi-pencil"></span>
                 </a>
+                {% endif %}
               </td>
               <td>
-                <a class="btn btn-danger" href="?action=delete-news&amp;id={{ newsItem.id }}">
+                {% if permissionDeleteNews == true %}
+                <a class="btn btn-danger" data-pmf-newsid="{{ newsItem.id }}" id="deleteNews">
                   <span title="{{ ad_news_delete }}" class="bi bi-trash"></span>
                 </a>
+                {% endif %}
+              </td>
+              <td>
+                {% if permissionEditNews == true %}
+                <input type="checkbox" id="activate" data-pmf-id="{{ newsItem.id }}" data-pmf-csrf-token="{{ csrfToken_activateNews }}"
+                       {% if newsItem.active == 'y' %} checked {% endif %} />
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
@@ -198,6 +210,34 @@
         {% endif %}
         </tbody>
       </table>
+    </div>
+  </div>
+  <div class="modal fade" id="confirmDeleteNewsModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteNewsModal"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteNewsLabel">
+            <i aria-hidden="true" class="bi bi-trash"></i> {{ msgDeleteNews }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="newsId" id="newsId" value="">
+          <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token-delete" value="{{ csrfToken_deleteNews }}" />
+          <div class="row">
+            <p>{{ ad_news_del }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+            {{ ad_news_nodelete }}
+          </button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="pmf-delete-news-action">
+            {{ ad_news_yesdelete }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 {% endif %}
@@ -211,12 +251,12 @@
 
   <div class="row">
   <div class="col-12">
-  <form id="faqEditor" action="?action=update-news" method="post" accept-charset="utf-8" class="needs-validation"
+  <form id="faqEditor" accept-charset="utf-8" class="needs-validation"
         data-pmf-enable-editor="{{ enableWysiwyg }}"
         data-pmf-editor-language="en"
         data-pmf-default-url="{{ defaultUrl }}">
-    <input type="hidden" name="id" value="{{ newsData.id }}">
-    <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_update-news }}" />
+    <input type="hidden" id="id" value="{{ newsData.id }}">
+    <input type="hidden" id="pmf-csrf-token" value="{{ csrfToken_updateNews }}" />
 
     <div class="row mb-2">
       <label class="col-3 col-form-label" for="newsheader">
@@ -234,7 +274,7 @@
       </label>
       <div class="col-9">
         <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-        <textarea id="editor" name="news" class="form-control" rows="5">{{ newsDataContent|raw }}</textarea>
+        <textarea id="editor" class="form-control" rows="5">{{ newsDataContent|raw }}</textarea>
       </div>
     </div>
 
@@ -243,7 +283,7 @@
         {{ ad_news_author_name }}
       </label>
       <div class="col-9">
-        <input type="text" name="authorName"
+        <input type="text" id="authorName"
                value="{{ newsData.authorName|escape }}" class="form-control">
       </div>
     </div>
@@ -253,7 +293,7 @@
         {{ ad_news_author_email }}
       </label>
       <div class="col-9">
-        <input type="email" name="authorEmail"
+        <input type="email" id="authorEmail"
                value="{{ newsData.authorEmail|escape }}" class="form-control">
       </div>
     </div>
@@ -300,21 +340,21 @@
       <label class="col-3 col-form-label">{{ ad_news_link_target }}</label>
       <div class="col-9 radio">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="target" id="blank" value="blank"
-            {% if newsData.target == 'target' %} checked {% endif %}>
+          <input class="form-check-input" type="radio" id="target" value="blank"
+            {% if newsData.target == 'blank' %} checked {% endif %}>
           <label class="form-check-label" for="blank">
             {{ ad_news_link_window }}
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="target" id="self" value="self"
+          <input class="form-check-input" type="radio" id="target" value="self"
             {% if newsData.target == 'self' %} checked {% endif %}>
           <label class="form-check-label" for="self">
             {{ ad_news_link_faq }}
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="target" id="parent" value="parent"
+          <input class="form-check-input" type="radio" id="target" value="parent"
             {% if newsData.target == 'parent' %} checked {% endif %}>
           <label class="form-check-label" for="parent">
             {{ ad_news_link_parent }}
@@ -348,9 +388,9 @@
         <a class="btn btn-secondary" href="?action=news">
           {{ ad_entry_back }}
         </a>
-        <button class="btn btn-primary" type="submit">
+        <a class="btn btn-primary" id="submitEditNews">
           {{ ad_news_edit }}
-        </button>
+        </a>
       </div>
     </div>
   </form>
@@ -373,84 +413,3 @@
     </div>
   {% endfor %}
 {% endif %}
-{% if action == 'save-news' and permissionAddNews == true %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-pencil"></i>
-    {{ ad_news_data }}
-  </h1>
-</div>
-
-<div class="row">
-  <div class="col-12">
-    {% if createNewsStatus == true %}
-      <div class="alert alert-success alert-dismissible fade show">{{ ad_news_updatesuc }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% else %}
-      <div class="alert alert-danger alert-dismissible fade show">{{ ad_news_insertfail }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endif %}
-    <div class="row">&rarr; <a href="?action=news">{{ msgNews }}</a>
-    </div>
-  </div>
-  {% endif %}
-  {% if action == 'update-news' and permissionEditNews == true %}
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-pencil"></i>
-      {{ ad_news_data }}
-    </h1>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      {% if statusUpdateNews == true %}
-        <div class="alert alert-success alert-dismissible fade show">{{ ad_news_updatesuc }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% else %}
-        <div class="alert alert-danger alert-dismissible fade show">{{ ad_news_insertfail }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% endif %}
-      <div class="row">&rarr; <a href="?action=news">{{ msgNews }}</a>
-      </div>
-    </div>
-    {% endif %}
-    {% if action == 'delete-news' and permissionDeleteNews == true %}
-    <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2">
-        <i aria-hidden="true" class="bi bi-pencil"></i>
-        {{ ad_news_data }}
-      </h1>
-    </div>
-
-    <div class="row">
-      <div class="col-12">
-        {% if precheck == 'no' %}
-        <div class="row">{{ ad_news_del }}</div>
-        <div class="text-center">
-          <form action="?action=delete-news" method="post" accept-charset="utf-8">
-            <input type="hidden" name="id" value="{{ deleteId }}">
-            <input type="hidden" name="really" value="yes">
-            <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_deleteNews }}" />
-            <button class="btn btn-warning" type="submit" name="submit">
-              {{ ad_news_yesdelete }}
-            </button>
-            <a class="btn btn-inverse" onclick="history.back();">
-              {{ ad_news_nodelete }}
-            </a>
-          </form>
-        </div>
-        {% else %}
-        {% if verifyCsrf_deleteNews == true %}
-        <div class="alert alert-success alert-dismissible fade show">{{ ad_news_delsuc }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div class="row">&rarr; <a href="?action=news">{{ msgNews }}</a>
-          {% endif %}
-          {% endif %}
-          {% endif %}

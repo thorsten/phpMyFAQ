@@ -1434,4 +1434,7 @@ $PMF_LANG['msgHintDeactivateForms'] = 'The forms can be deactivated completely i
 $PMF_LANG['msgOnlyInactiveFAQs'] = 'Only inactive FAQs';
 $PMF_LANG['msgOnlyNewFAQs'] = 'Only new FAQs';
 
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Delete news';
+
 return $PMF_LANG;

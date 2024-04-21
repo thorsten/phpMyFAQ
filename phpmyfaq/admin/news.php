@@ -35,6 +35,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+// @todo check permissions
+
 $news = new News($faqConfig);
 
 $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -47,7 +49,7 @@ $templateVars = [
     'defaultUrl' => $faqConfig->getDefaultUrl(),
     'enableWysiwyg' => $faqConfig->get('main.enableWysiwygEditor'),
     'ad_news_add' => Translation::get('ad_news_add'),
-    'csrfToken_save-news' => Token::getInstance()->getTokenString('save-news'),
+    'csrfToken_saveNews' => Token::getInstance()->getTokenString('save-news'),
     'ad_news_author_name' => Translation::get('ad_news_author_name'),
     'ad_news_set_active' => Translation::get('ad_news_set_active'),
     'ad_news_link_url' => Translation::get('ad_news_link_url'),
@@ -82,7 +84,12 @@ $templateVars = [
     'ad_news_nodelete' => Translation::get('ad_news_nodelete'),
     'ad_news_yesdelete' => Translation::get('ad_news_yesdelete'),
     'ad_news_delsuc' => Translation::get('ad_news_delsuc'),
-    'ad_news_updatesuc' => Translation::get('ad_news_updatesuc')
+    'ad_news_updatesuc' => Translation::get('ad_news_updatesuc'),
+    'msgDeleteNews' => Translation::get('msgDeleteNews'),
+    'csrfToken_deleteNews' => Token::getInstance()->getTokenString('delete-news'),
+    'csrfToken_updateNews' => Token::getInstance()->getTokenString('update-news'),
+    'ad_entry_active' => Translation::get('ad_entry_active'),
+    'csrfToken_activateNews' => Token::getInstance()->getTokenString('activate-news')
 ];
 
 $filterCreateIsoDate = new TwigFilter('createIsoDate', function ($string) {
@@ -102,12 +109,11 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
         'userName' => $user->getUserData('display_name')
     ];
 } elseif ('news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
-    $newsHeader = $news->getHeader();
-    $date = new Date($faqConfig);
+    $newsHeaders = $news->getHeader();
 
     $templateVars = [
         ...$templateVars,
-        'newsHeader' => $newsHeader,
+        'news' => $newsHeaders,
     ];
 } elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -123,106 +129,16 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
     $templateVars = [
         ...$templateVars,
         'newsData' => $newsData,
-        'csrfToken_update-news' => Token::getInstance()->getTokenString('update-news'),
         'newsDataContent' => (isset($newsData['content']) ? htmlspecialchars(
             (string)$newsData['content'],
-            ENT_QUOTES) : ''
-        ),
+            ENT_QUOTES
+        ) : ''),
         'dateStart' => $dateStart,
         'dateEnd' => $dateEnd,
         'comments' => $comments,
         'newsId' => $newsId,
         'commentTypeNews' => CommentType::NEWS
     ];
-} elseif ('save-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) {
-    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
-    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
-    $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_SPECIAL_CHARS);
-    $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
-    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
-    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
-    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_SPECIAL_CHARS);
-    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_SPECIAL_CHARS);
-
-    $newsMessage = new NewsMessage();
-    $newsMessage
-        ->setLanguage($newsLang)
-        ->setHeader($header)
-        ->setMessage(html_entity_decode((string)$content))
-        ->setAuthor($author)
-        ->setEmail($email)
-        ->setActive(!is_null($active))
-        ->setComment(!is_null($comment))
-        ->setDateStart(new DateTime($dateStart))
-        ->setDateEnd(new DateTime($dateEnd))
-        ->setLink($link ?? '')
-        ->setLinkTitle($linkTitle ?? '')
-        ->setLinkTarget($target ?? '')
-        ->setCreated(new DateTime());
-
-    $templateVars = [
-        ...$templateVars,
-        'createNewsStatus' => $news->create($newsMessage)
-    ];
-} elseif ('update-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
-
-    $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
-    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
-    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_SPECIAL_CHARS);
-    $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_SPECIAL_CHARS);
-    $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
-    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
-    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
-    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_SANITIZE_SPECIAL_CHARS);
-    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_SPECIAL_CHARS);
-    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_SPECIAL_CHARS);
-    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_SPECIAL_CHARS);
-
-    $newsMessage = new NewsMessage();
-    $newsMessage
-        ->setId($newsId)
-        ->setLanguage($newsLang)
-        ->setHeader($header)
-        ->setMessage(html_entity_decode((string)$content))
-        ->setAuthor($author)
-        ->setEmail($email)
-        ->setActive(!is_null($active))
-        ->setComment(!is_null($comment))
-        ->setDateStart(new DateTime($dateStart))
-        ->setDateEnd(new DateTime($dateEnd))
-        ->setLink($link ?? '')
-        ->setLinkTitle($linkTitle ?? '')
-        ->setLinkTarget($target ?? '')
-        ->setCreated(new DateTime());
-
-    $templateVars = [
-        ...$templateVars,
-        'statusUpdateNews' => $news->update($newsMessage)
-    ];
-} elseif ('delete-news' == $action && $user->perm->hasPermission($user->getUserId(), 'delnews')) {
-    $precheck = Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
-    $deleteId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
-    $templateVars = [
-        ...$templateVars,
-        'precheck' => $precheck,
-        'deleteId' => $deleteId,
-        'csrfToken_deleteNews' => Token::getInstance()->getTokenString('delete-news'),
-        'verifyCsrf_deleteNews' => Token::getInstance()->verifyToken('delete-news', $csrfToken)
-    ];
-
-    if ('no' !== $precheck) {
-        if (Token::getInstance()->verifyToken('delete-news', $csrfToken)) {
-            $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-            $news->delete((int)$deleteId);
-        }
-    }
 } else {
     require __DIR__ . '/no-permission.php';
     exit();
