@@ -1,0 +1,27 @@
+{
+  "consentModal": {
+    "title": "phpMyFAQ używaj plików cookie!",
+    "description": "Hi, phpMyFAQ wykorzystuje niezbędne pliki cookie, aby zapewnić jego prawidłowe działanie oraz śledzące pliki cookie, aby zrozumieć, w jaki sposób z nim współdziałasz. Te ostatnie zostaną ustalone dopiero po uzyskaniu zgody. <button type=\"button\" data-cc=\"c-settings\" class=\"cc-link\">Pozwól mi wybrać</button>",
+    "acceptAllBtn": "Akceptuj wszystkie",
+    "acceptNecessaryBtn": "Odrzuć wszystko",
+    "showPreferencesBtn": "Pozwól mi wybrać",
+    "footer": "<a href=\"contact.html\" target=\"_blank\">Nadruk</a><a href=\"privacy.html\" target=\"_blank\">Polityka prywatności</a>"
+  },
+  "preferencesModal": {
+    "title": "Preferencje plików cookie",
+    "acceptAllBtn": "Akceptuj wszystkie",
+    "savePreferencesBtn": "Odrzuć wszystkie",
+    "closeIconLabel": "Zamknij",
+    "sections": [
+      {
+        "title": "Wykorzystanie plików cookie \uD83D\uDCE2",
+        "description": "Używamy plików cookie, aby zapewnić podstawowe funkcjonalności witryny i poprawić komfort korzystania z Internetu. Dla każdej kategorii możesz zdecydować się na włączenie/wyłączenie, kiedy tylko chcesz. Aby uzyskać więcej informacji na temat plików cookie i innych wrażliwych danych, przeczytaj całość <a href=\"./privacy.html\" class=\"cc-link\">polityki prywatności</a>."
+      },
+      {
+        "title": "Tylko niezbędne pliki cookie",
+        "description": "Te pliki cookie są niezbędne do prawidłowego funkcjonowania tej witryny. Bez tych plików cookie witryna nie będzie działać poprawnie.",
+        "linkedCategory": "necessary"
+      }
+    ]
+  }
+}

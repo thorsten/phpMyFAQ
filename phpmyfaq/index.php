@@ -634,6 +634,8 @@ $tplNavigation = [
         Strings::htmlentities($faqConfig->get('main.privacyURL')),
         Translation::get('msgPrivacyNote')
     ),
+    'cookiePreferences' => '<a id="showCookieConsent" class="pmf-nav-link-footer">'
+        . Translation::get('cookiePreferences') . '</a>',
     'faqOverview' => '<a class="pmf-nav-link-footer" href="./overview.html">' .
         Translation::get('faqOverview') . '</a>',
     'showSitemap' => '<a class="pmf-nav-link-footer" href="./sitemap/A/' . $faqLangCode . '.html">' .

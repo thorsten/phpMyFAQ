@@ -14,7 +14,7 @@
  */
 
 import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
-import { handleSessions, handleStatistics } from './statistics';
+import { handleDeleteAdminLog, handleSessions, handleStatistics } from './statistics';
 import {
   handleConfiguration,
   handleInstances,
@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleStickyFaqs();
 
   // Statistics
+  handleDeleteAdminLog();
   handleStatistics();
 
   // Configuration -> FAQ configuration

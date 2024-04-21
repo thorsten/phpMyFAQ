@@ -59,7 +59,7 @@ $PMF_LANG["msgFullCategories"] = "Categories";
 $PMF_LANG["msgFullCategoriesIn"] = "Categories with FAQs in ";
 $PMF_LANG["msgSubCategories"] = "Subcategories";
 $PMF_LANG["msgEntries"] = "FAQs";
-$PMF_LANG["msgEntriesIn"] = "Questions in ";
+$PMF_LANG["msgEntriesIn"] = "Content in ";
 $PMF_LANG["msgViews"] = "views";
 $PMF_LANG["msgPage"] = "Page ";
 $PMF_LANG["msgPages"] = " Pages";
@@ -1329,6 +1329,9 @@ $PMF_LANG['msgAuthenticationSource'] = 'Authentication service';
 // added v3.2.0-RC - 2023-05-27 by Jan
 $LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Show email address in exports'];
 $PMF_LANG['msgNewQuestionAdded'] = 'A new question was added. You can check them here or in the admin section:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Cookie-Preferences';
 
 // added v4.0.0-alpha - 2023-07-02 by Thorsten
 $LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Online Update enabled'];

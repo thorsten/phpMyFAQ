@@ -33,6 +33,12 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PHPUnit v11 (Thorsten)
 - updated Polish translation (Zięba Bogusław Chaffinch)
 
+### phpMyFAQ v3.2.7 - unreleased
+
+- updated and improved cookie consent (Jan Harms, Thorsten, Zięba Bogusław Chaffinch)
+- updated bundled dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v3.2.6 - 2024-03-25
 
 - fixed multiple security vulnerabilities (Thorsten)
