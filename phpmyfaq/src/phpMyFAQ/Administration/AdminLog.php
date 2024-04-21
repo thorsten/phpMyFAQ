@@ -58,12 +58,7 @@ readonly class AdminLog
         $data = [];
 
         $query = sprintf(
-            '
-            SELECT
-                id, time, usr, text, ip
-            FROM
-                %sfaqadminlog
-            ORDER BY id DESC',
+            'SELECT id, time, usr AS user, text, ip FROM %sfaqadminlog ORDER BY id DESC',
             Database::getTablePrefix()
         );
 
@@ -74,7 +69,7 @@ readonly class AdminLog
             $adminLog
                 ->setId($row->id)
                 ->setTime($row->time)
-                ->setUserId($row->usr)
+                ->setUserId($row->user)
                 ->setText($row->text)
                 ->setIp($row->ip);
             $data[$row->id] = $adminLog;

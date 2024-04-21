@@ -327,8 +327,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             // functions for session administration
             case 'adminlog':
-            case 'deleteadminlog':
-                require 'stat.adminlog.php';
+                require 'statistics.admin-log.php';
                 break;
             case 'viewsessions':
             case 'clear-visits':

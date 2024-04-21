@@ -33,6 +33,7 @@ use phpMyFAQ\Controller\Administration\MarkdownController;
 use phpMyFAQ\Controller\Administration\QuestionController;
 use phpMyFAQ\Controller\Administration\SearchController;
 use phpMyFAQ\Controller\Administration\SessionController;
+use phpMyFAQ\Controller\Administration\StatisticsController;
 use phpMyFAQ\Controller\Administration\StopWordController;
 use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
@@ -570,6 +571,17 @@ $routes->add(
 );
 
 //
+// Statistics API
+//
+$routes->add(
+    'admin.api.statistics.adminlog.delete',
+    new Route(
+        '/statistics/admin-log',
+        ['_controller' => [StatisticsController::class, 'deleteAdminLog'], '_methods' => 'DELETE']
+    )
+);
+
+//
 // Forms API
 //
 $routes->add(
@@ -582,15 +594,24 @@ $routes->add(
 );
 $routes->add(
     'admin.api.forms.translation-edit',
-    new Route('/forms/translation-edit', ['_controller' => [FormController::class, 'editTranslation'], '_methods' => 'POST'])
+    new Route(
+        '/forms/translation-edit',
+        ['_controller' => [FormController::class, 'editTranslation'], '_methods' => 'POST']
+    )
 );
 $routes->add(
     'admin.api.forms.translation-delete',
-    new Route('/forms/translation-delete', ['_controller' => [FormController::class, 'deleteTranslation'], '_methods' => 'POST'])
+    new Route(
+        '/forms/translation-delete',
+        ['_controller' => [FormController::class, 'deleteTranslation'], '_methods' => 'POST']
+    )
 );
 $routes->add(
     'admin.api.forms.translation-add',
-    new Route('/forms/translation-add', ['_controller' => [FormController::class, 'addTranslation'], '_methods' => 'POST'])
+    new Route(
+        '/forms/translation-add',
+        ['_controller' => [FormController::class, 'addTranslation'], '_methods' => 'POST']
+    )
 );
 
 return $routes;
