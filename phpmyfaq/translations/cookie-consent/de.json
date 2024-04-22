@@ -1,0 +1,27 @@
+{
+  "consentModal": {
+    "title": "phpMyFAQ nutzt Cookies!",
+    "description": "Hallo, phpMyFAQ nutzt technisch notwendige und funktionale Cookies, um die ordnungsgemäße Funktion der Seite zu gewährleisten.",
+    "acceptAllBtn": "Alle akzeptieren",
+    "acceptNecessaryBtn": "Alle ablehnen",
+    "showPreferencesBtn": "Anpassen",
+    "footer": "<a href=\"contact.html\" target=\"_blank\">Impressum</a><a href=\"privacy.html\" target=\"_blank\">Datenschutzerklärung</a>"
+  },
+  "preferencesModal": {
+    "title": "Cookie-Einstellungen",
+    "acceptAllBtn": "Alle akzeptieren",
+    "savePreferencesBtn": "Alle ablehnen",
+    "closeIconLabel": "Schließen",
+    "sections": [
+      {
+        "title": "Cookie-Einstellungen 📢",
+        "description": "Ich nutze Cookies, um den ordnungsgemäßen Betrieb der Seite zu garantieren und deine Benutzererfahrung zu verbessern. Du kannst die Verwendung von Cookies für jede Kategorie aktivieren und deaktivieren. Weitere Informationen findest du in unserer <a href=\"./privacy.html\" class=\"cc-link\">Datenschutzerklärung</a>."
+      },
+      {
+        "title": "Technisch notwendige und funktionale Cookies",
+        "description": "Diese Cookies sind für den reibungslosen Betrieb der Website unbedingt erforderlich. Ohne diese würde die Website nicht ordnungsgemäß funktionieren.",
+        "linkedCategory": "necessary"
+      }
+    ]
+  }
+}
