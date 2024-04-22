@@ -125,7 +125,8 @@ readonly class Notification
     {
         $category = new Category($this->configuration);
         $emailTo = $this->configuration->getAdminEmail();
-        if ($faq->faqRecord['email'] != '') {
+
+        if ($faq->faqRecord['email'] !== '') {
             $emailTo = $faq->faqRecord['email'];
         }
 

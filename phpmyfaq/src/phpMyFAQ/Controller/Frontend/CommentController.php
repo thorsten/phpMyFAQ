@@ -55,7 +55,6 @@ class CommentController extends AbstractController
 
         $faq = new Faq($this->configuration);
         $comment = new Comments($this->configuration);
-        $category = new Category($this->configuration);
         $stopWords = new StopWords($this->configuration);
         $session = new Session($this->configuration);
         $session->setCurrentUser($user);
@@ -111,7 +110,7 @@ class CommentController extends AbstractController
 
         if (
             !empty($username) && !empty($mailer) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
-            $comment->isCommentAllowed($id, $languageCode, $type) && !$faq->isActive($id, $languageCode, $type)
+            $comment->isCommentAllowed($id, $languageCode, $type) && $faq->isActive($id, $languageCode, $type)
         ) {
             $session->userTracking('save_comment', $id);
             $commentEntity = new Comment();
@@ -121,11 +120,12 @@ class CommentController extends AbstractController
                 ->setUsername($username)
                 ->setEmail($mailer)
                 ->setComment(nl2br(strip_tags((string) $commentText)))
-                ->setDate($request->server->get('tim'));
+                ->setDate($request->server->get('REQUEST_TIME'));
 
             if ($comment->create($commentEntity)) {
                 $notification = new Notification($this->configuration);
                 if ('faq' == $type) {
+                    $faq->getRecord($id);
                     $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
                     $news = new News($this->configuration);
