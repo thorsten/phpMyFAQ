@@ -624,11 +624,11 @@ $routes->add(
 );
 $routes->add(
     'admin.api.news.delete',
-    new Route('/news/delete', ['_controller' => [NewsController::class, 'deleteNews'], '_methods' => 'POST'])
+    new Route('/news/delete', ['_controller' => [NewsController::class, 'deleteNews'], '_methods' => 'DELETE'])
 );
 $routes->add(
     'admin.api.news.update',
-    new Route('/news/update', ['_controller' => [NewsController::class, 'updateNews'], '_methods' => 'POST'])
+    new Route('/news/update', ['_controller' => [NewsController::class, 'updateNews'], '_methods' => 'PUT'])
 );
 $routes->add(
     'admin.api.news.activate',
