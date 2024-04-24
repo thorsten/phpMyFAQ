@@ -46,7 +46,7 @@ export const addNews = async (data = {}) => {
 export const deleteNews = async (csrfToken, id) => {
   try {
     const response = await fetch('api/news/delete', {
-      method: 'POST',
+      method: 'DELETE',
       cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export const deleteNews = async (csrfToken, id) => {
 export const updateNews = async (data = {}) => {
   try {
     const response = await fetch('api/news/update', {
-      method: 'POST',
+      method: 'PUT',
       cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
