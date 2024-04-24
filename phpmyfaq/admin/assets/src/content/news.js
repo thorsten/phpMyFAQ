@@ -25,7 +25,7 @@ export const handleAddNews = () => {
     submit.addEventListener('click', async (event) => {
       event.preventDefault();
       let target = '';
-      document.querySelectorAll('#target').forEach(function (item) {
+      document.querySelectorAll('#target').forEach(item) => {
         if (item.checked) {
           target = item.value;
         }
@@ -54,8 +54,8 @@ export const handleAddNews = () => {
 export const handleNews = () => {
   const deleteNewsButton = document.getElementById('deleteNews');
   if (deleteNewsButton) {
-    document.querySelectorAll('#deleteNews').forEach(function(item) {
-      item.addEventListener('click', function(event) {
+    document.querySelectorAll('#deleteNews').forEach(item) => {
+      item.addEventListener('click', (event) => {
         event.preventDefault();
         const modal = new Modal(document.getElementById('confirmDeleteNewsModal'));
         document.getElementById('newsId').value = item.getAttribute('data-pmf-newsid');
@@ -68,7 +68,7 @@ export const handleNews = () => {
       const id = document.getElementById('newsId').value;
       await deleteNews(csrfToken, id);
     });
-    document.querySelectorAll('#activate').forEach(function (item) {
+    document.querySelectorAll('#activate').forEach(item) => {
       item.addEventListener('click', async () => {
         await activateNews(item.getAttribute('data-pmf-id'), item.checked, item.getAttribute('data-pmf-csrf-token'));
       });
@@ -82,7 +82,7 @@ export const handleEditNews = () => {
     submit.addEventListener('click', async (event) => {
       event.preventDefault();
       let target = '';
-      document.querySelectorAll('#target').forEach(function (item) {
+      document.querySelectorAll('#target').forEach(item) => {
         if (item.checked) {
           target = item.value;
         }
