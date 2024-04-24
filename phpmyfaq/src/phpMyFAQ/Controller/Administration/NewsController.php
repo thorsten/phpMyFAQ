@@ -37,8 +37,7 @@ class NewsController extends AbstractController
         $this->userHasPermission(PermissionType::NEWS_ADD);
         $data = json_decode($request->getContent());
 
-        $faqConfig = Configuration::getConfigurationInstance();
-        $news = new News($faqConfig);
+        $news = new News($this->configuration);
 
         if (!Token::getInstance()->verifyToken('save-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
@@ -76,7 +75,7 @@ class NewsController extends AbstractController
         if ($news->create($newsMessage)) {
             return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('ad_news_insertfail')], Response::HTTP_BAD_GATEWAY);
         }
     }
 
@@ -86,8 +85,7 @@ class NewsController extends AbstractController
         $this->userHasPermission(PermissionType::NEWS_DELETE);
         $data = json_decode($request->getContent());
 
-        $faqConfig = Configuration::getConfigurationInstance();
-        $news = new News($faqConfig);
+        $news = new News($this->configuration);
 
         if (!Token::getInstance()->verifyToken('delete-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
@@ -98,7 +96,7 @@ class NewsController extends AbstractController
         if ($news->delete((int)$deleteId)) {
             return $this->json(['success' => Translation::get('ad_news_delsuc')], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
         }
     }
 
@@ -108,8 +106,7 @@ class NewsController extends AbstractController
         $this->userHasPermission(PermissionType::NEWS_DELETE);
         $data = json_decode($request->getContent());
 
-        $faqConfig = Configuration::getConfigurationInstance();
-        $news = new News($faqConfig);
+        $news = new News($this->configuration);
 
         if (!Token::getInstance()->verifyToken('update-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
@@ -149,7 +146,7 @@ class NewsController extends AbstractController
         if ($news->update($newsMessage)) {
             return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
         }
     }
 
@@ -159,8 +156,7 @@ class NewsController extends AbstractController
         $this->userHasPermission(PermissionType::NEWS_EDIT);
         $data = json_decode($request->getContent());
 
-        $faqConfig = Configuration::getConfigurationInstance();
-        $news = new News($faqConfig);
+        $news = new News($this->configuration);
 
         if (!Token::getInstance()->verifyToken('activate-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
@@ -172,7 +168,7 @@ class NewsController extends AbstractController
         if ($news->activate($id, $status)) {
             return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
         }
     }
 }
