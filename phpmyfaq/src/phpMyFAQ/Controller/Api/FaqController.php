@@ -81,12 +81,11 @@ class FaqController extends AbstractController
     )]
     public function getByCategoryId(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -158,12 +157,11 @@ class FaqController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -226,18 +224,17 @@ class FaqController extends AbstractController
     )]
     public function getByTagId(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
         $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
 
-        $tags = new Tags($configuration);
+        $tags = new Tags($this->configuration);
         $recordIds = $tags->getFaqsByTagId($tagId);
 
         try {
@@ -282,12 +279,11 @@ class FaqController extends AbstractController
     )]
     public function getPopular(): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -334,13 +330,11 @@ class FaqController extends AbstractController
     )]
     public function getLatest(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -392,12 +386,11 @@ class FaqController extends AbstractController
     )]
     public function getSticky(): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -456,16 +449,17 @@ class FaqController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $configuration->getLanguage()->getLanguage()]);
+        $faq->getAllRecords(
+            FAQ_SORTING_TYPE_CATID_FAQID,
+            ['lang' => $this->configuration->getLanguage()->getLanguage()]
+        );
         $result = $faq->faqRecords;
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
@@ -570,22 +564,20 @@ class FaqController extends AbstractController
     {
         $this->hasValidToken();
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        $currentLanguage = $configuration->getLanguage()->getLanguage();
+        $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -646,7 +638,7 @@ class FaqController extends AbstractController
 
         $faqId = $faq->create($faqData);
 
-        $faqMetaData = new MetaData($configuration);
+        $faqMetaData = new MetaData($this->configuration);
         $faqMetaData
             ->setFaqId($faqId)
             ->setFaqLanguage($languageCode)
@@ -742,21 +734,20 @@ class FaqController extends AbstractController
     {
         $this->hasValidToken();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        $currentLanguage = $configuration->getLanguage()->getLanguage();
+        $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
