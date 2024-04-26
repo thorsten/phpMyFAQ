@@ -275,7 +275,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'record.delatt.php';
                 break;
             case 'question':
-                require 'record.questions.php';
+                require 'open-questions.php';
                 break;
             case 'comments':
                 require 'record.comments.php';

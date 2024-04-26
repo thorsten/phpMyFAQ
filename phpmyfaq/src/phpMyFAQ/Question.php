@@ -156,7 +156,7 @@ readonly class Question
                     ->setEmail($row->email)
                     ->setCategoryId($row->category_id)
                     ->setQuestion($row->question)
-                    ->setCreated($row->created)
+                    ->setCreated(Date::createIsoDate($row->created))
                     ->setAnswerId($row->answer_id)
                     ->setIsVisible($row->is_visible === 'Y');
 

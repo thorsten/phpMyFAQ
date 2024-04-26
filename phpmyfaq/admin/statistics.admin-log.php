@@ -22,7 +22,6 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Template\UserNameTwigExtension;
 use phpMyFAQ\Translation;
