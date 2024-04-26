@@ -43,7 +43,7 @@ import {
   handleDeleteGlossary,
   handleAddGlossary,
   onOpenUpdateGlossaryModal,
-  handleUpdateGlossary,
+  handleUpdateGlossary, handleAddNews, handleNews, handleEditNews,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -133,4 +133,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await handleFormEdit();
   await handleFormTranslations();
+
+  // News
+  await handleAddNews();
+  await handleNews();
+  await handleEditNews();
 });

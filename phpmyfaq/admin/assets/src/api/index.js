@@ -5,3 +5,4 @@ export * from './group';
 export * from './statistics';
 export * from './tags';
 export * from './user';
+export * from './news';

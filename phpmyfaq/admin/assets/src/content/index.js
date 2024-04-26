@@ -9,6 +9,7 @@ export * from './faqs.autocomplete';
 export * from './glossary';
 export * from './markdown';
 export * from './media.browser';
+export * from './news';
 export * from './faqs.overview';
 export * from './question';
 export * from './tags';

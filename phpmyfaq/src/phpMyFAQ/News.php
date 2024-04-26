@@ -363,4 +363,22 @@ readonly class News
 
         return (bool) $this->configuration->getDb()->query($query);
     }
+
+    /**
+     * Activates/Deactivates a news message
+     *
+     * @param int $id News ID
+     * @param bool $status Status of activation
+     */
+    public function activate(int $id, bool $status): bool
+    {
+        $query = sprintf(
+            "UPDATE %sfaqnews SET active = '%s' WHERE id = %d",
+            Database::getTablePrefix(),
+            $status ? 'y' : 'n',
+            $id
+        );
+
+        return (bool) $this->configuration->getDb()->query($query);
+    }
 }

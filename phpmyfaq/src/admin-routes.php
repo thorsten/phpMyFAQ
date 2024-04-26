@@ -40,6 +40,7 @@ use phpMyFAQ\Controller\Administration\UpdateController;
 use phpMyFAQ\Controller\Administration\UserController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use phpMyFAQ\Controller\Administration\NewsController;
 
 $routes = new RouteCollection();
 
@@ -612,6 +613,26 @@ $routes->add(
         '/forms/translation-add',
         ['_controller' => [FormController::class, 'addTranslation'], '_methods' => 'POST']
     )
+);
+
+//
+// News API
+//
+$routes->add(
+    'admin.api.news.add',
+    new Route('/news/add', ['_controller' => [NewsController::class, 'addNews'], '_methods' => 'POST'])
+);
+$routes->add(
+    'admin.api.news.delete',
+    new Route('/news/delete', ['_controller' => [NewsController::class, 'deleteNews'], '_methods' => 'DELETE'])
+);
+$routes->add(
+    'admin.api.news.update',
+    new Route('/news/update', ['_controller' => [NewsController::class, 'updateNews'], '_methods' => 'PUT'])
+);
+$routes->add(
+    'admin.api.news.activate',
+    new Route('/news/activate', ['_controller' => [NewsController::class, 'activateNews'], '_methods' => 'POST'])
 );
 
 return $routes;
