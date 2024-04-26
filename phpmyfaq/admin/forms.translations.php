@@ -49,6 +49,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
     }
 
     // Twig filter for language codes
+    // Not seperated as TwigExtension because of special function and handling of 'default' value in this context
     $filter = new TwigFilter('languageCode', function ($string) {
         if ($string === 'default') {
             return $string;

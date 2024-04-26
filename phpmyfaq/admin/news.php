@@ -24,6 +24,8 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Template\FormatDateTwigExtension;
+use phpMyFAQ\Template\IsoDateTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Twig\Extension\DebugExtension;
@@ -90,16 +92,6 @@ $templateVars = [
     'csrfToken_activateNews' => Token::getInstance()->getTokenString('activate-news')
 ];
 
-$filterCreateIsoDate = new TwigFilter('createIsoDate', function ($string) {
-    return Date::createIsoDate($string);
-});
-
-$filterFormatDate = new TwigFilter('formatDate', function ($string) {
-    $faqConfig = Configuration::getConfigurationInstance();
-    $date = new Date($faqConfig);
-    return $date->format($string);
-});
-
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) {
     $templateVars = [
         ...$templateVars,
@@ -144,8 +136,8 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'add
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
-$twig->addFilter($filterFormatDate);
-$twig->addFilter($filterCreateIsoDate);
+$twig->addExtension(new IsoDateTwigExtension());
+$twig->addExtension(new FormatDateTwigExtension());
 $template = $twig->loadTemplate('./admin/content/news.twig');
 
 echo $template->render($templateVars);
