@@ -28,7 +28,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use Twig\Extension\DebugExtension;
-use Twig\TwigFilter;
+use phpMyFAQ\Template\PermissionTranslationTwigExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -322,17 +322,9 @@ if ('list' === $groupAction) {
     ];
 }
 
-$filter = new TwigFilter('permission', function ($string) {
-    $translationCode = sprintf(
-        'permission::%s',
-        $string
-    );
-    return Translation::get($translationCode);
-});
-
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
-$twig->addFilter($filter);
+$twig->addExtension(new PermissionTranslationTwigExtension());
 $template = $twig->loadTemplate('./admin/user/group.twig');
 
 echo $template->render($templateVars);
