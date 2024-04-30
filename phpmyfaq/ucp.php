@@ -48,16 +48,21 @@ if ($user->isLoggedIn()) {
         $gravatarImg = '';
     }
 
-    $tfa = new TwoFactor($faqConfig);
-    $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
-    if ('' === $secret) {
-        try {
-            $secret = $tfa->generateSecret();
-        } catch (TwoFactorAuthException $e) {
-            $faqConfig->getLogger()->error('Cannot generate 2FA secret: ' . $e->getMessage());
+    $qrCode = '';
+    try {
+        $tfa = new TwoFactor($faqConfig);
+        $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
+        if ('' === $secret) {
+            try {
+                $secret = $tfa->generateSecret();
+            } catch (TwoFactorAuthException $e) {
+                $faqConfig->getLogger()->error('Cannot generate 2FA secret: ' . $e->getMessage());
+            }
+            $tfa->saveSecret($secret);
         }
-
-        $tfa->saveSecret($secret);
+        $qrCode = $tfa->getQrCode($secret);
+    } catch (TwoFactorAuthException $e) {
+        // handle exception
     }
 
     $template->parse(
@@ -86,7 +91,7 @@ if ($user->isLoggedIn()) {
             'msgTwofactorConfig' => Translation::get('msgTwofactorConfig'),
             'msgTwofactorConfigModelTitle' => Translation::get('msgTwofactorConfigModelTitle'),
             'twofactor_secret' => $secret,
-            'qr_code_secret' => $tfa->getQrCode($secret),
+            'qr_code_secret' => $qrCode,
             'qr_code_secret_alt' => Translation::get('qr_code_secret_alt'),
             'msgTwofactorNewSecret' => Translation::get('msgTwofactorNewSecret'),
         ]
