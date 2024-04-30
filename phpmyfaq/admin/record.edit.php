@@ -374,7 +374,6 @@ if ((
                                     </div>
                                 <?php }
                                 if (isset($selectedRevisionId) && isset($faqData['revision_id']) && $selectedRevisionId !== $faqData['revision_id']) {
-                                    $faq->language = $faqData['lang'];
                                     $faq->getRecord($faqData['id'], $selectedRevisionId, true);
                                     $faqData = $faq->faqRecord;
                                     $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
@@ -383,13 +382,14 @@ if ((
                             }
                             ?>
 
-                            <form id="faqEditor" action="?action=<?= $queryString ?>" method="post"
+                            <form id="faqEditor" method="post"
                                   data-pmf-enable-editor="<?= $faqConfig->get('main.enableWysiwygEditor') ?>"
                                   data-pmf-editor-language="en"
                                   data-pmf-default-url="<?= $faqConfig->getDefaultUrl() ?>">
-                                <input type="hidden" name="revision_id" id="revision_id"
+
+                                <input type="hidden" name="revisionId" id="revisionId"
                                        value="<?= $faqData['revision_id'] ?>">
-                                <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
+                                <input type="hidden" name="faqId" id="faqId" value="<?= $faqData['id'] ?>">
                                 <input type="hidden" name="openQuestionId" id="openQuestionId"
                                        value="<?= $questionId ?>">
                                 <input type="hidden" name="notifyUser" id="notifyUser"
@@ -462,7 +462,7 @@ if ((
                                     <?= Translation::get('ad_entry_category') ?>
                                 </label>
                                 <div class="col-lg-10">
-                                    <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple
+                                    <select name="categories[]" id="phpmyfaq-categories" size="5" multiple
                                             class="form-control">
                                         <?= $categoryHelper->renderOptions($categories) ?>
                                     </select>
@@ -816,7 +816,7 @@ if ((
                         <?php endif; ?>
                     </div>
 
-                    <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')) : ?>
+                    <?php if ($queryString !== 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')) : ?>
                         <h5 class="mt-2">
                             <?= Translation::get('ad_entry_new_revision') ?>
                         </h5>
@@ -861,10 +861,10 @@ if ((
 
                     <div class="form-group">
                         <!-- solution id -->
-                        <label class="col-form-label" for="solution_id">
+                        <label class="col-form-label" for="solutionId">
                             <?= Translation::get('ad_entry_solution_id') ?>:
                         </label>
-                        <input type="number" name="solution_id" id="solution_id" size="5" class="form-control"
+                        <input type="number" name="solutionId" id="solutionId" size="5" class="form-control"
                                value="<?= $faqData['solution_id'] ?? $faq->getNextSolutionId() ?>" readonly>
                     </div>
                 </div>

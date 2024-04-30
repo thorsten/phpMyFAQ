@@ -265,9 +265,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'editpreview':
                 require 'record.edit.php';
                 break;
-            case 'insertentry':
-                require 'record.add.php';
-                break;
             case 'saveentry':
                 require 'record.save.php';
                 break;

@@ -261,4 +261,9 @@ class FaqEntity
         $this->updatedDate = $updatedDate;
         return $this;
     }
+
+    public function getJson(): string
+    {
+        return json_encode(get_object_vars($this));
+    }
 }

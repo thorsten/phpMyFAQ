@@ -233,6 +233,11 @@ export const renderEditor = () => {
       image_dimensions: true,
       images_upload_url: '/admin/api/content/images',
       automatic_uploads: true,
+      setup: (editor) => {
+        editor.on('change', () => {
+          tinymce.triggerSave();
+        });
+      },
     });
   }
 };

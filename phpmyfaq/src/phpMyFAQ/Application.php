@@ -75,7 +75,7 @@ readonly class Application
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            throw new Exception('x' . $exception->getMessage());
         }
     }
 
@@ -101,14 +101,24 @@ readonly class Application
         } catch (UnauthorizedHttpException) {
             $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
         } catch (BadRequestException $exception) {
-            $response = new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            $response = new Response(
+                sprintf(
+                    'An error occurred: %s at line %d at %s<br>%s',
+                    $exception->getMessage(),
+                    $exception->getLine(),
+                    $exception->getFile(),
+                    implode('<br>', $exception->getTrace())
+                ),
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (ErrorException | Exception $exception) {
             $response = new Response(
                 sprintf(
-                    'An error occurred: %s at line %d at %s',
+                    'An error occurred: %s at line %d at %s<br>%s',
                     $exception->getMessage(),
                     $exception->getLine(),
-                    $exception->getFile()
+                    $exception->getFile(),
+                    implode('<br>', $exception->getTrace())
                 ),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

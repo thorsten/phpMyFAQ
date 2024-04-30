@@ -19,6 +19,7 @@ namespace phpMyFAQ\Faq;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FaqPermission
@@ -132,31 +133,27 @@ class Permission
     {
         $permissions = [];
 
-        if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
+        $data = json_decode(Request::createFromGlobals()->getContent())->data;
+
+        if ('all' === Filter::filterVar($data->userpermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_user' => [-1],
             ];
         } else {
             $permissions += [
                 'restricted_user' => [
-                    Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                    Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT),
                 ],
             ];
         }
 
-        if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($data->grouppermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_groups' => [-1],
             ];
         } else {
-            $permissions += Filter::filterInputArray(
-                INPUT_POST,
-                [
-                    'restricted_groups' => [
-                        'filter' => FILTER_VALIDATE_INT,
-                        'flags' => FILTER_REQUIRE_ARRAY,
-                    ],
-                ]
+            $permissions += Filter::filterArray(
+                $data->restricted_groups
             );
         }
 

@@ -1440,4 +1440,7 @@ $PMF_LANG['msgOnlyNewFAQs'] = 'Only new FAQs';
 // added v4.0.0-alpha.2 - 2024-04-21 by Jan
 $PMF_LANG['msgDeleteNews'] = 'Delete news';
 
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
+
 return $PMF_LANG;

@@ -77,7 +77,7 @@ class FaqTest extends TestCase
         $result = $this->faq->create($faqEntity);
 
         // Assert that the method returns an integer
-        $this->assertIsInt($result);
+        $this->assertIsInt($result->getId());
         $this->assertGreaterThan(0, $result);
     }
 
@@ -94,7 +94,7 @@ class FaqTest extends TestCase
     public function testUpdate(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setId($this->faq->create($faqEntity));
+        $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
         $faqEntity->setRevisionId(0);
         $faqEntity->setQuestion('Updated question');
@@ -102,7 +102,7 @@ class FaqTest extends TestCase
 
         $result = $this->faq->update($faqEntity);
 
-        $this->assertTrue($result);
+        $this->assertInstanceOf(FaqEntity::class, $result);
     }
 
     /**
@@ -112,7 +112,7 @@ class FaqTest extends TestCase
     public function testDeleteRecord(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setId($this->faq->create($faqEntity));
+        $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
         $result = $this->faq->deleteRecord($faqEntity->getId(), $faqEntity->getLanguage());
 
@@ -122,7 +122,7 @@ class FaqTest extends TestCase
     public function testGetSolutionIdFromId(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setId($this->faq->create($faqEntity));
+        $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
         $this->assertIsInt($this->faq->getSolutionIdFromId($faqEntity->getId(), $faqEntity->getLanguage()));
         $this->assertGreaterThan(0, $this->faq->getSolutionIdFromId($faqEntity->getId(), $faqEntity->getLanguage()));
@@ -131,7 +131,7 @@ class FaqTest extends TestCase
     public function testHasTranslation(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setId($this->faq->create($faqEntity));
+        $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
         $this->assertTrue($this->faq->hasTranslation($faqEntity->getId(), $faqEntity->getLanguage()));
         $this->assertFalse($this->faq->hasTranslation($faqEntity->getId(), 'de'));
@@ -140,7 +140,7 @@ class FaqTest extends TestCase
     public function testIsActive(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setId($this->faq->create($faqEntity));
+        $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
         $this->assertTrue($this->faq->isActive($faqEntity->getId(), $faqEntity->getLanguage()));
     }
