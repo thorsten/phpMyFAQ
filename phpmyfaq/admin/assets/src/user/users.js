@@ -295,7 +295,7 @@ export const handleUsers = async () => {
       modalDeleteConfirmation.show();
       const username = document.getElementById('pmf-username-delete');
       const userid = document.getElementById('pmf-user-id-delete');
-      username.innerHTML = document.getElementById('display_name').value;
+      username.innerText = document.getElementById('display_name').value;
       userid.value = document.getElementById('current_user_id').value;
       document.getElementById('source_page').value = 'users';
     });

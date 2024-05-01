@@ -77,7 +77,7 @@ export const handleUserList = () => {
 
         const deleteModal = new Modal(document.getElementById('pmf-modal-user-confirm-delete'));
         deleteModal.show();
-        document.getElementById('pmf-username-delete').innerHTML = button.getAttribute('data-username');
+        document.getElementById('pmf-username-delete').innerText = button.getAttribute('data-username');
         document.getElementById('pmf-user-id-delete').value = button.getAttribute('data-user-id');
         document.getElementById('source_page').value = 'user-list';
       });
