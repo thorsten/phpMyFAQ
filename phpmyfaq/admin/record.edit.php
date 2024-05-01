@@ -398,7 +398,6 @@ if ((
                                        value="<?= Strings::htmlentities($notifyEmail) ?>">
                                 <?= Token::getInstance()->getTokenInput('edit-faq') ?>
 
-
                                 <!-- Question -->
                                 <div class="form-group mb-2">
                                     <input type="text" name="question" id="question"
@@ -486,7 +485,10 @@ if ((
                                         <?= Translation::get('ad_menu_attachments') ?>:
                                     </label>
                                     <div class="col-lg-10">
-                                        <ul class="list-unstyled adminAttachments">
+                                        <?php
+                                        $csrfToken = Token::getInstance()->getTokenString('delete-attachment');
+                                        ?>
+                                        <ul class="list adminAttachments" data-pmf-csrf-token="<?= $csrfToken ?>">
                                             <?php
                                             $attList = AttachmentFactory::fetchByRecordId(
                                                 $faqConfig,
@@ -494,17 +496,25 @@ if ((
                                             );
                                             foreach ($attList as $att) {
                                                 printf(
-                                                    '<li><a href="../%s">%s</a> ',
+                                                    '<li id="attachment-id-%d"><a href="../%s">%s</a> ',
+                                                    $att->getId(),
                                                     $att->buildUrl(),
                                                     Strings::htmlentities($att->getFilename())
                                                 );
-                                                if ($user->perm->hasPermission($currentUserId, 'delattachment')) {
-                                                    printf(
-                                                        '<a class="badge bg-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="bi bi-trash"></i></a>',
-                                                        $faqData['id'],
-                                                        $att->getId(),
-                                                        $faqData['lang']
-                                                    );
+                                                if ($user->perm->hasPermission($currentUserId, PermissionType::ATTACHMENT_DELETE->value)) {
+
+                                                    ?>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-danger pmf-delete-attachment-button"
+                                                        data-pmf-attachment-id="<?= $att->getId() ?>"
+                                                        data-pmf-csrf-token="<?= $csrfToken ?>"
+                                                    >
+                                                        <i aria-hidden="true" class="bi bi-trash"
+                                                           data-pmf-attachment-id="<?= $att->getId() ?>"
+                                                           data-pmf-csrf-token="<?= $csrfToken ?>">
+                                                        </i>
+                                                    </button>
+                                                    <?php
                                                 }
                                                 echo "</li>\n";
                                             }

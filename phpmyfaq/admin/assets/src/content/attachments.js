@@ -12,12 +12,14 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-22
  */
+import { deleteAttachments } from '../api/attachment';
+import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleDeleteAttachments = () => {
   const attachmentTable = document.getElementById('attachment-table');
 
   if (attachmentTable) {
-    attachmentTable.addEventListener('click', (event) => {
+    attachmentTable.addEventListener('click', async (event) => {
       event.preventDefault();
 
       const isButton = event.target.className.includes('btn-delete-attachment');
@@ -25,28 +27,17 @@ export const handleDeleteAttachments = () => {
         const attachmentId = event.target.getAttribute('data-attachment-id');
         const csrf = event.target.getAttribute('data-csrf');
 
-        fetch('./api/content/attachments', {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ attId: attachmentId, csrf: csrf }),
-        })
-          .then(async (response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error('Network response was not ok: ', { cause: { response } });
-          })
-          .then((response) => {
-            const row = document.getElementById(`attachment_${attachmentId}`);
-            row.addEventListener('click', () => (row.style.opacity = '0'));
-            row.addEventListener('transitionend', () => row.remove());
-          })
-          .catch(async (error) => {
-            console.error(await error.cause.response.json());
-          });
+        const response = await deleteAttachments(attachmentId, csrf);
+
+        if (response.success) {
+          pushNotification(response.success);
+          const row = document.getElementById(`attachment_${attachmentId}`);
+          row.addEventListener('click', () => (row.style.opacity = '0'));
+          row.addEventListener('transitionend', () => row.remove());
+        }
+        if (response.error) {
+          pushErrorNotification(response.error);
+        }
       }
     });
   }

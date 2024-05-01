@@ -12,6 +12,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-07-22
  */
+import { deleteAttachments } from '../api/attachment';
+import { pushNotification } from '../utils';
 
 const showHelp = (option) => {
   const optionHelp = document.getElementById(`${option}Help`);
@@ -21,6 +23,7 @@ const showHelp = (option) => {
 };
 
 export const handleFaqForm = () => {
+  const deleteAttachmentButtons = document.querySelectorAll('.pmf-delete-attachment-button');
   const inputTags = document.getElementById('tags');
   const inputSearchKeywords = document.getElementById('keywords');
 
@@ -29,6 +32,28 @@ export const handleFaqForm = () => {
   }
   if (inputSearchKeywords) {
     inputSearchKeywords.addEventListener('focus', () => showHelp('keywords'));
+  }
+  if (deleteAttachmentButtons) {
+    deleteAttachmentButtons.forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const attachmentId = event.target.getAttribute('data-pmf-attachment-id');
+        const csrfToken = event.target.getAttribute('data-pmf-csrf-token');
+
+        const response = await deleteAttachments(attachmentId, csrfToken);
+
+        if (response.success) {
+          const listItemToDelete = document.getElementById(`attachment-id-${attachmentId}`);
+          listItemToDelete.addEventListener('click', () => (listItemToDelete.style.opacity = '0'));
+          listItemToDelete.addEventListener('transitionend', () => listItemToDelete.remove());
+          pushNotification(response.success);
+        }
+        if (response.error) {
+          pushNotification(response.error);
+        }
+      });
+    });
   }
 
   const categoryOptions = document.querySelector('#phpmyfaq-categories');
