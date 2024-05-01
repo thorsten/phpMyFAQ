@@ -281,7 +281,7 @@ class Session
      */
     public function userTracking(string $action, int|string $data = null): void
     {
-        if ($this->configuration->get('main.enableUserTracking')) {
+        if (!$this->configuration->get('main.enableUserTracking')) {
             return;
         }
 
