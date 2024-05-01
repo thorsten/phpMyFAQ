@@ -26,9 +26,12 @@ use phpMyFAQ\Pagination;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\PermissionTranslationTwigExtension;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -36,807 +39,160 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (
-    $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
-    $user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value) ||
-    $user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value)
+    !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value) ||
+    !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value) ||
+    !$user->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value)
 ) {
-    $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+    require __DIR__ . '/no-permission.php';
+    exit();
+}
 
-    // set some parameters
-    $selectSize = 10;
-    $defaultUserAction = 'list';
-    $defaultUserStatus = 'active';
-    $userActionList = [
-        'update_rights',
-        'update_data',
-        'delete_confirm',
-        'delete',
-        'addsave',
-        'list',
-        'listallusers'
+$templateVars = [];
+
+$userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+
+// set some parameters
+$selectSize = 10;
+$defaultUserAction = 'list';
+$userActionList = [
+    'list',
+    'listallusers'
+];
+
+// what shall we do?
+// actions defined by url: user_action=
+$userAction = Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_SPECIAL_CHARS, $defaultUserAction);
+$currentUser = new CurrentUser($faqConfig);
+
+// show a list of all users
+if ($userAction == 'listallusers') {
+    if (!$user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)) {
+        require __DIR__ . '/no-permission.php';
+        exit();
+    }
+    $allUsers = $user->getAllUsers(false);
+    $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
+    $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
+    $perPage = 10;
+    $numPages = ceil($numUsers / $perPage);
+    $lastPage = $page * $perPage;
+    $firstPage = $lastPage - $perPage;
+
+    $baseUrl = sprintf(
+        '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
+        $faqConfig->getDefaultUrl(),
+        $page
+    );
+
+    // Pagination options
+    $options = [
+        'baseUrl' => $baseUrl,
+        'total' => $numUsers,
+        'perPage' => $perPage,
+        'pageParamName' => 'page',
     ];
+    $pagination = new Pagination($options);
 
-    // what shall we do?
-    // actions defined by url: user_action=
-    $userAction = Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_SPECIAL_CHARS, $defaultUserAction);
+    $counter = $displayedCounter = 0;
+    $users = [];
+    foreach ($allUsers as $listedUserId) {
+        $user->getUserById($listedUserId, true);
+        $tempUser = [];
 
-    $currentUser = new CurrentUser($faqConfig);
-
-    // actions defined by submit button
-    if (isset($_POST['user_action_deleteConfirm'])) {
-        $userAction = 'delete_confirm';
-    }
-    if (isset($_POST['cancel'])) {
-        $userAction = $defaultUserAction;
-    }
-
-    // update user rights
-    if (
-        $userAction == 'update_rights' &&
-        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)
-    ) {
-        $message = '';
-        $userAction = $defaultUserAction;
-        $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-        $csrfOkay = true;
-        $csrfToken = Filter::filterInput(INPUT_POST, 'pmf-csrf-token', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance()->verifyToken('update-user-rights', $csrfToken)) {
-            $csrfOkay = false;
+        if ($displayedCounter >= $perPage) {
+            continue;
         }
-
-        if (0 === (int)$userId || !$csrfOkay) {
-            $message .= Alert::danger('ad_user_error_noId');
-        } else {
-            $user = new User($faqConfig);
-            $perm = $user->perm;
-            // @todo: Add Filter::filterInput[]
-            $userRights = $_POST['user_rights'] ?? [];
-            if (!$perm->refuseAllUserRights($userId)) {
-                $message .= Alert::danger('ad_msg_mysqlerr');
-            }
-            foreach ($userRights as $rightId) {
-                $perm->grantUserRight($userId, $rightId);
-            }
-
-            $idUser = $user->getUserById($userId, true);
-            // Terminate session in case of different permissions after the update
-            $user->terminateSessionId();
-            $message .= sprintf(
-                '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                Translation::get('ad_msg_savedsuc_1'),
-                Strings::htmlentities($user->getLogin(), ENT_QUOTES),
-                Translation::get('ad_msg_savedsuc_2')
-            );
-            $user = new CurrentUser($faqConfig);
+        ++$counter;
+        if ($counter <= $firstPage) {
+            continue;
         }
-    }
+        ++$displayedCounter;
 
-    // update user data
-    if (
-        $userAction == 'update_data' &&
-        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)
-    ) {
-        $message = '';
-        $userAction = $defaultUserAction;
-        $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-        if ($userId === 0) {
-            $message .= Alert::danger('ad_user_error_noId');
-        } else {
-            $userData = [];
-            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_SPECIAL_CHARS);
-            $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_SPECIAL_CHARS);
-            $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_SPECIAL_CHARS, $defaultUserStatus);
-            $isSuperAdmin = Filter::filterInput(INPUT_POST, 'is_superadmin', FILTER_SANITIZE_SPECIAL_CHARS);
-            $isSuperAdmin = $isSuperAdmin === 'on';
-            $deleteTwofactor = Filter::filterInput(INPUT_POST, 'overwrite_twofactor', FILTER_SANITIZE_SPECIAL_CHARS);
-            $deleteTwofactor = $deleteTwofactor === 'on';
-
-            $user = new User($faqConfig);
-            $user->getUserById($userId, true);
-
-            $stats = $user->getStatus();
-
-            // reset two-factor authentication if required
-            if ($deleteTwofactor) {
-                $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
-            }
-
-            // set new password and sent email if a user is switched to active
-            if ($stats == 'blocked' && $userStatus == 'active') {
-                if (!$user->activateUser()) {
-                    $userStatus = 'invalid_status';
-                }
-            }
-
-            // Set super-admin flag
-            $user->setSuperAdmin($isSuperAdmin);
-
-            if (
-                !$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus(
-                    $userStatus
-                )
-            ) {
-                $message .= Alert::danger('ad_msg_mysqlerr');
-            } else {
-                $message .= sprintf(
-                    '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                    Translation::get('ad_msg_savedsuc_1'),
-                    Strings::htmlentities($user->getLogin(), ENT_QUOTES),
-                    Translation::get('ad_msg_savedsuc_2')
-                );
-            }
-        }
-    }
-
-    // delete user confirmation
-    if (
-        $userAction == 'delete_confirm' &&
-        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value)
-    ) {
-        $message = '';
-        $user = new CurrentUser($faqConfig);
-
-        $userId = Filter::filterInput(INPUT_GET, 'user_delete_id', FILTER_VALIDATE_INT, 0);
-        if ($userId == 0) {
-            $message .= Alert::danger('ad_user_error_noId');
-            $userAction = $defaultUserAction;
-        } else {
-            $user->getUserById($userId, true);
-            // account is protected
-            if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message .= Alert::danger('ad_user_error_protectedAccount');
-                $userAction = $defaultUserAction;
-            } else {
-                ?>
-
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">
-                        <i aria-hidden="true" class="bi bi-person"></i>
-                        <?= Translation::get('ad_user_deleteUser') ?>
-                        <?= Strings::htmlentities($user->getLogin(), ENT_QUOTES) ?>
-                    </h1>
-                </div>
-
-                <p class="alert alert-danger">
-                    <?= Translation::get('ad_user_del_3') . ' ' . Translation::get(
-                        'ad_user_del_1'
-                    ) . ' ' . Translation::get('ad_user_del_2') ?>
-                </p>
-                <form action="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="user_id" value="<?= $userId ?>">
-                    <?= Token::getInstance()->getTokenInput('delete-user') ?>
-                    <p class="text-center">
-                        <button class="btn btn-danger" type="submit">
-                            <?= Translation::get('ad_gen_yes') ?>
-                        </button>
-                        <a class="btn btn-info" href="?action=user">
-                            <?= Translation::get('ad_gen_no') ?>
-                        </a>
-                    </p>
-                </form>
-                <?php
-            }
-        }
-    }
-
-    // delete user
-    if ($userAction == 'delete' && $user->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value)) {
-        $message = '';
-        $user = new User($faqConfig);
-        $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-        $csrfOkay = true;
-        $csrfToken = Filter::filterInput(INPUT_POST, 'pmf-csrf-token', FILTER_SANITIZE_SPECIAL_CHARS);
-        $userAction = $defaultUserAction;
-
-        if (!Token::getInstance()->verifyToken('delete-user', $csrfToken)) {
-            $csrfOkay = false;
-        }
-
-        if (0 === (int)$userId || !$csrfOkay) {
-            $message .= Alert::danger('ad_user_error_noId');
-        } else {
-            if (!$user->getUserById($userId, true)) {
-                $message .= Alert::danger('ad_user_error_noId');
-            }
-            if (!$user->deleteUser()) {
-                $message .= Alert::danger('ad_user_error_delete');
-            } else {
-                // Move the category ownership to admin (id == 1)
-                $oCat = new Category($faqConfig, [], false);
-                $oCat->setUser($currentAdminUser);
-                $oCat->setGroups($currentAdminGroups);
-                $oCat->moveOwnership((int)$userId, 1);
-
-                // Remove the user from groups
-                if ('basic' !== $faqConfig->get('security.permLevel')) {
-                    $oPerm = Permission::selectPerm('medium', $faqConfig);
-                    $oPerm->removeFromAllGroups($userId);
-                }
-
-                $message .= Alert::success('ad_user_deleted');
-            }
-            $userError = $user->error();
-            if ($userError != '') {
-                $message .= sprintf('<p class="alert alert-danger">%s</p>', $userError);
-            }
-        }
-    }
-
-    if (!isset($message)) {
-        $message = '';
-    }
-
-    // show a list of users
-    if ($userAction === 'list') { ?>
-        <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">
-                <i aria-hidden="true" class="bi bi-person"></i>
-                <?= Translation::get('ad_user') ?>
-            </h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group mr-2">
-                    <?php
-                    if ($currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value)) : ?>
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                data-bs-target="#addUserModal">
-                            <i class="bi bi-person-add" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
-                        </button>
-                        <?php
-                    endif ?>
-                    <?php
-                    if ($currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)) : ?>
-                        <a class="btn btn-outline-info" href="?action=user&amp;user_action=listallusers">
-                            <i class="bi bi-people" aria-label="true"></i> <?= Translation::get('list_all_users') ?>
-                        </a>
-                        <?php
-                    endif ?>
-                </div>
-            </div>
-        </div>
-
-        <div id="pmf-user-message"><?= $message ?></div>
-
-        <div class="row mb-2">
-            <div class="col-6 offset-3">
-                <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
-                      method="post" role="form" class="form_inline">
-                    <input type="hidden" id="current_user_id" value="<?= $userId ?>">
-                    <div class="card shadow mb-4">
-                        <h5 class="card-header py-3">
-                            <i aria-hidden="true" class="bi bi-search"></i> <?= Translation::get('msgSearch') ?>
-                        </h5>
-                        <div class="card-body">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="pmf-user-list-autocomplete" aria-controls=""
-                                       name="user_list_search" placeholder="<?= Translation::get('ad_auth_user') ?>"
-                                       spellcheck="false" autocomplete="off" autocapitalize="off" maxlength="2048">
-                                <label for="pmf-user-list-autocomplete"><?= Translation::get('ad_auth_user') ?></label>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="row mb-2">
-
-            <div class="col-lg-8">
-                <div class="card shadow mb-4">
-                    <h5 class="card-header py-3" id="user_data_legend">
-                        <i aria-hidden="true" class="bi bi-person"></i> <?= Translation::get('ad_user_profou') ?>
-                    </h5>
-                    <form action="?action=user&amp;user_action=update_data" method="post">
-                        <div class="card-body">
-                            <input type="hidden" id="last_modified" name="last_modified" value="">
-                            <input id="update_user_id" type="hidden" name="user_id" value="0">
-                            <?= Token::getInstance()->getTokenInput('update-user-data') ?>
-
-                            <div class="row mb-2">
-                                <label for="auth_source" class="col-lg-4 col-form-label">
-                                    <?= Translation::get('msgAuthenticationSource') ?>
-                                </label>
-                                <div class="col-lg-8">
-                                    <input id="auth_source" class="form-control-plaintext" type="text" value="n/a"
-                                           readonly>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <label for="user_status" class="col-lg-4 col-form-label">
-                                    <?= Translation::get('ad_user_status') ?>
-                                </label>
-                                <div class="col-lg-8">
-                                    <select id="user_status" class="form-select" name="user_status" disabled>
-                                        <option value="active"><?= Translation::get('ad_user_active') ?></option>
-                                        <option value="blocked"><?= Translation::get('ad_user_blocked') ?></option>
-                                        <option value="protected"><?= Translation::get('ad_user_protected') ?></option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <label class="col-lg-4 col-form-label" for="display_name">
-                                    <?= Translation::get('ad_user_realname') ?>
-                                </label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="display_name" name="display_name" value=""
-                                           class="form-control" required disabled>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <label class="col-lg-4 col-form-label" for="email">
-                                    <?= Translation::get('ad_entry_email') ?>
-                                </label>
-                                <div class="col-lg-8">
-                                    <input type="email" id="email" name="email" value="" class="form-control" required
-                                           disabled>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="offset-lg-4 col-lg-8">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="is_superadmin"
-                                               name="is_superadmin">
-                                        <label class="form-check-label" for="is_superadmin">
-                                            <?= Translation::get('ad_user_is_superadmin') ?>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="offset-lg-4 col-lg-8">
-                                    <a class="btn btn-danger pmf-admin-overwrite-password" data-bs-toggle="modal"
-                                       href="#pmf-modal-user-password-overwrite">
-                                        <?= Translation::get('ad_user_overwrite_passwd') ?>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="offset-lg-4 col-lg-8">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="overwrite_twofactor"
-                                               name="overwrite_twofactor" disabled>
-                                        <label class="form-check-label" for="overwrite_twofactor">
-                                            <?= Translation::get('ad_user_overwrite_twofactor') ?>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="card-footer text-end">
-                            <?php if ($userId > 0) : ?>
-                            <a class="btn btn-danger"
-                               href="?action=user&amp;user_action=delete_confirm&user_delete_id=<?= $userId ?>">
-                                <?= Translation::get('ad_user_delete') ?>
-                            </a>
-                            <?php endif; ?>
-                            <button class="btn btn-success" type="submit">
-                                <?= Translation::get('ad_gen_save') ?>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4" id="userRights">
-                <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post"
-                      accept-charset="utf-8">
-                    <input type="hidden" name="user_id" id="rights_user_id" value="0">
-                    <?= Token::getInstance()->getTokenInput('update-user-rights') ?>
-
-                    <div class="card shadow h-50 mb-4">
-                        <div class="card-header d-flex justify-content-between flex-wrap align-items-center py-3">
-                            <h5 class="" id="user_rights_legend">
-                                <i aria-hidden="true" class="bi bi-lock"></i> <?= Translation::get('ad_user_rights') ?>
-                            </h5>
-                            <div class="card-button">
-                                <button class="btn btn-success" type="submit">
-                                    <?= Translation::get('ad_gen_save') ?>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="text-center mb-3">
-                                <button type="button" class="btn btn-primary btn-sm" id="checkAll">
-                                    <?= Translation::get('ad_user_checkall') ?>
-                                    /
-                                    <?= Translation::get('ad_user_uncheckall') ?>
-                                </button>
-                            </div>
-                            <?php
-                            foreach ($user->perm->getAllRightsData() as $right) : ?>
-                                <div class="form-check">
-                                    <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
-                                           name="user_rights[]" value="<?= $right['right_id'] ?>"
-                                           class="form-check-input permission">
-                                    <label class="form-check-label" for="user_right_<?= $right['right_id'] ?>">
-                                        <?= Translation::get('permission::' . $right['name']) ?>
-                                    </label>
-                                </div>
-                                <?php
-                            endforeach; ?>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-button text-end">
-                                <button class="btn btn-success" type="submit">
-                                    <?= Translation::get('ad_gen_save') ?>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <?php
-    }
-
-    // show a list of all users
-    if (
-        $userAction == 'listallusers' &&
-        $user->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value)
-    ) {
-        $allUsers = $user->getAllUsers(false);
-        $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
-        $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
-        $perPage = 10;
-        $numPages = ceil($numUsers / $perPage);
-        $lastPage = $page * $perPage;
-        $firstPage = $lastPage - $perPage;
-
-        $baseUrl = sprintf(
-            '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
-            $faqConfig->getDefaultUrl(),
-            $page
-        );
-
-        // Pagination options
-        $options = [
-            'baseUrl' => $baseUrl,
-            'total' => $numUsers,
-            'perPage' => $perPage,
-            'pageParamName' => 'page',
+        $tempUser = [
+            'display_name' => Strings::htmlentities($user->getUserData('display_name')),
+            'id' => $user->getUserId(),
+            'email' => Strings::htmlentities($user->getUserData('email')),
+            'status' => $user->getStatus(),
+            'isSuperAdmin' => $user->isSuperAdmin(),
+            'isVisible' => $user->getUserData('is_visible'),
+            'login' => Strings::htmlentities($user->getLogin())
         ];
-        $pagination = new Pagination($options);
-        ?>
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-        <i aria-hidden="true" class="bi bi-people-fill"></i>
-        <?= Translation::get('ad_user') ?>
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <?php
-            if ($currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value)) : ?>
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                        data-bs-target="#addUserModal">
-                    <i class="bi bi-person-add" aria-label="true"></i> <?= Translation::get('ad_user_add') ?>
-                </button>
-                <?php
-            endif ?>
-            <button type="button" class="btn btn-outline-info" id="pmf-button-export-users">
-                <i class="bi bi-download" aria-label="true"></i> Export users as CSV
-            </button>
-        </div>
-    </div>
-</div>
-
-        <div id="pmf-user-message"><?= $message ?></div>
-
-        <table class="table table-striped align-middle" id="pmf-admin-user-table">
-            <thead class="thead-dark">
-            <tr>
-                <th><?= Translation::get('msgNewContentName') ?></th>
-                <th><?= Translation::get('msgNewContentMail') ?></th>
-                <th><?= Translation::get('ad_auth_user') ?></th>
-                <th><?= Translation::get('ad_user_status') ?></th>
-                <th><?= Translation::get('ad_user_is_superadmin') ?></th>
-                <th><?= Translation::get('ad_user_is_visible') ?></th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <?php
-            if ($perPage < $numUsers) : ?>
-                <tfoot>
-                <tr>
-                    <td colspan="8"><?= $pagination->render() ?></td>
-                </tr>
-                </tfoot>
-                <?php
-            endif;
-            ?>
-        <tbody>
-        <?php
-        $counter = $displayedCounter = 0;
-        foreach ($allUsers as $listedUserId) {
-            $user->getUserById($listedUserId, true);
-
-            if ($displayedCounter >= $perPage) {
-                continue;
-            }
-                ++$counter;
-            if ($counter <= $firstPage) {
-                continue;
-            }
-                ++$displayedCounter;
-
-            ?>
-                <tr class="row_user_id_<?= $user->getUserId() ?>">
-                    <td><?= Strings::htmlentities($user->getUserData('display_name')) ?></td>
-                    <td>
-                        <a href="mailto:<?= Strings::htmlentities($user->getUserData('email')) ?>">
-                            <?= Strings::htmlentities($user->getUserData('email')) ?>
-                        </a>
-                    </td>
-                    <td><?= Strings::htmlentities($user->getLogin()) ?></td>
-
-                    <td class="text-center"><i class="fa <?php
-                    switch ($user->getStatus()) {
-                        case 'active':
-                            echo 'bi-person-fill-check text-success';
-                            break;
-                        case 'blocked':
-                            echo 'bi-person-fill-slash text-danger';
-                            break;
-                        case 'protected':
-                            echo 'bi-person-fill-lock text-warning';
-                            break;
-                    }
-                    ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
-                    <td class="text-center">
-                        <i class="fa <?= $user->isSuperAdmin() ? 'bi-person-fill-check text-success' : 'bi-person' ?>"></i>
-                    </td>
-                    <td class="text-center">
-                        <i class="fa <?= $user->getUserData('is_visible') ? 'bi-person-fill' : 'bi-person' ?>"></i>
-                    </td>
-                    <td>
-                        <a href="mailto:<?= Strings::htmlentities($user->getUserData('email')) ?>">
-                            <?= Strings::htmlentities($user->getUserData('email')) ?>
-                        </a>
-                    </td>
-
-                    <td>
-                        <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id') ?>"
-                           class="btn">
-                            <i class="bi bi-pencil text-info"></i> <?= Translation::get('ad_user_edit') ?>
-                        </a>
-                        <?php
-                        if ($user->getStatus() === 'blocked') : ?>
-                            <button type="button" class="btn btn-activate-user"
-                                    id="btn_activate_user_id_<?= $user->getUserData('user_id') ?>"
-                                    data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
-                                    data-user-id="<?= $user->getUserData('user_id') ?>">
-                                <i class="bi bi-unlock-fill text-success"
-                                   data-csrf-token="<?= Token::getInstance()->getTokenString('activate-user') ?>"
-                                   data-user-id="<?= $user->getUserData('user_id') ?>"></i>
-                                <?= Translation::get('ad_news_set_active') ?>
-                            </button>
-                            <?php
-                        endif;
-                        ?>
-                        <?php
-                        if (
-                            $user->getStatus() !== 'protected' &&
-                            $currentUser->perm->hasPermission(
-                                $currentUser->getUserId(),
-                                PermissionType::USER_DELETE->value
-                            )
-                        ) {
-                            $csrfToken = Token::getInstance()->getTokenString('delete-user');
-                            ?>
-                            <button type="button" class="btn btn-delete-user"
-                                    id="btn_user_id_<?= $user->getUserData('user_id') ?>"
-                                    data-csrf-token="<?= $csrfToken ?>"
-                                    data-user-id="<?= $user->getUserData('user_id') ?>">
-                                <i class="bi bi-trash text-danger" data-csrf-token="<?= $csrfToken ?>"
-                                   data-user-id="<?= $user->getUserData('user_id') ?>"></i>
-                                <?= Translation::get('ad_user_delete') ?>
-                            </button>
-                            <?php } ?>
-                     </td>
-                </tr>
-                <?php
-        }
-        ?>
-            </tbody>
-        </table>
-        <?php
+        $users[] = $tempUser;
     }
 
     $user = CurrentUser::getCurrentUser($faqConfig);
-    ?>
 
-    <!-- Modal to add a new user -->
-    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">
-                        <i aria-hidden="true" class="bi bi-person-plus"></i> <?= Translation::get('ad_adus_adduser') ?>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="#" method="post" role="form" id="pmf-add-user-form" class="needs-validation"
-                          autocomplete="off"
-                          novalidate>
-
-                        <input type="hidden" id="add_user_csrf" name="add_user_csrf"
-                               value="<?= Token::getInstance()->getTokenString('add-user') ?>">
-
-                        <div class="alert alert-danger d-none" id="pmf-add-user-error-message"></div>
-
-                        <div class="row mb-2">
-                            <label class="col-lg-4 col-form-label" for="add_user_name">
-                                <?= Translation::get('ad_adus_name') ?>
-                            </label>
-                            <div class="col-lg-8">
-                                <input type="text" name="add_user_name" id="add_user_name" required tabindex="1"
-                                       class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <label class="col-lg-4 col-form-label"
-                                   for="add_user_realname"><?= Translation::get('ad_user_realname') ?></label>
-                            <div class="col-lg-8">
-                                <input type="text" name="add_user_realname" id="add_user_realname" required tabindex="2"
-                                       class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <label class="col-lg-4 col-form-label" for="add_user_email">
-                                <?= Translation::get('ad_entry_email') ?>
-                            </label>
-                            <div class="col-lg-8">
-                                <input type="email" name="user_email" id="add_user_email" required tabindex="3"
-                                       class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-lg-4"></div>
-                            <div class="col-lg-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="add_user_automatic_password"
-                                           name="add_user_automatic_password" value="">
-                                    <label class="form-check-label" for="add_user_automatic_password">
-                                        <?= Translation::get('ad_add_user_change_password') ?>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="add_user_show_password_inputs">
-                            <div class="row mb-2">
-                                <label class="col-lg-4 col-form-label"
-                                       for="add_user_password"><?= Translation::get('ad_adus_password') ?></label>
-                                <div class="col-lg-8">
-                                    <div class="input-group">
-                                        <input type="password" name="add_user_password" id="add_user_password"
-                                            class="form-control" minlength="8"
-                                            autocomplete="off" tabindex="4"
-                                               data-pmf-toggle="add_user_password_togglePassword">
-                                        <span class="input-group-text" id="add_user_password_togglePassword">
-                                            <i class="bi bi-eye-slash" id="add_user_password_togglePassword_icon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <label class="col-lg-4 col-form-label"
-                                       for="add_user_password_confirm"><?= Translation::get('ad_passwd_con') ?></label>
-                               <div class="col-lg-8">
-                                    <div class="input-group">
-                                        <input type="password" name="add_user_password_confirm"
-                                            id="add_user_password_confirm" minlength="8"
-                                            class="form-control" autocomplete="off" tabindex="5"
-                                               data-pmf-toggle="add_user_password_confirm_togglePassword">
-                                        <span class="input-group-text" id="add_user_password_confirm_togglePassword">
-                                            <i class="bi bi-eye-slash"
-                                               id="add_user_password_confirm_togglePassword_icon"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <?php if ($user->isSuperAdmin()) { ?>
-                        <div class="row mb-2">
-                            <div class="col-lg-4"></div>
-                            <div class="col-lg-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="add_user_is_superadmin"
-                                           name="user_is_superadmin">
-                                    <label class="form-check-label" for="add_user_is_superadmin">
-                                        <?= Translation::get('ad_user_is_superadmin') ?>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <?php } ?>
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <?= Translation::get('ad_gen_cancel') ?>
-                    </button>
-                    <button type="button" class="btn btn-primary" id="pmf-add-user-action">
-                        <?= Translation::get('ad_gen_save') ?>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal to overwrite password -->
-    <div class="modal fade" id="pmf-modal-user-password-overwrite">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4><?= Translation::get('ad_menu_passwd') ?></h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="#" method="post" accept-charset="utf-8" autocomplete="off">
-                        <input type="hidden" name="csrf" id="modal_csrf"
-                               value="<?= Token::getInstance()->getTokenString('overwrite-password') ?>">
-                        <input type="hidden" name="user_id" id="modal_user_id" value="<?= $userId ?>">
-
-                        <div class="row mb-2">
-                            <label class="col-5 col-form-label" for="npass">
-                                <?= Translation::get('ad_passwd_new') ?>
-                            </label>
-                            <div class="col-7">
-                              <div class="input-group">
-                                <input type="password" autocomplete="off" name="npass" id="npass"
-                                       class="form-control" data-pmf-toggle="npass_togglePassword" required>
-                                <span class="input-group-text" id="npass_togglePassword">
-                                    <i class="bi bi-eye-slash" id="npass_togglePassword_icon"></i>
-                                </span>
-                               </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <label class="col-5 col-form-label" for="bpass">
-                                <?= Translation::get('ad_passwd_con') ?>
-                            </label>
-                            <div class="col-7">
-                              <div class="input-group">
-                                <input type="password" autocomplete="off" name="bpass" id="bpass"
-                                       class="form-control" data-pmf-toggle="bpass_togglePassword" required>
-                                <span class="input-group-text" id="bpass_togglePassword">
-                                    <i class="bi bi-eye-slash" id="bpass_togglePassword_icon"></i>
-                                </span>
-                               </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" id="pmf-user-password-overwrite-action">
-                        <?= Translation::get('ad_user_overwrite_passwd') ?>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <?php
-} else {
-    require __DIR__ . '/no-permission.php';
+    $templateVars = [
+        ...$templateVars,
+        'perPage' => $perPage,
+        'numUsers' => $numUsers,
+        'pagination' => $pagination->render(),
+        'users' => $users,
+        'userIsSuperAdmin' => $user->isSuperAdmin()
+    ];
 }
+
+$templateVars = [
+    ...$templateVars,
+    'userAction' => $userAction,
+    'ad_user' => Translation::get('ad_user'),
+    'permissionAddUser' => $currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_ADD->value),
+    'ad_user_add' => Translation::get('ad_user_add'),
+    'permissionEditUser' => $currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_EDIT->value),
+    'list_all_users' => Translation::get('list_all_users'),
+    'userId' => $userId,
+    'msgSearch' => Translation::get('msgSearch'),
+    'ad_auth_user' => Translation::get('ad_auth_user'),
+    'ad_user_profou' => Translation::get('ad_user_profou'),
+    'csrfToken_updateUserData' => Token::getInstance()->getTokenString('update-user-data'),
+    'msgAuthenticationSource' => Translation::get('msgAuthenticationSource'),
+    'ad_user_status' => Translation::get('ad_user_status'),
+    'ad_user_active' => Translation::get('ad_user_active'),
+    'ad_user_blocked' => Translation::get('ad_user_blocked'),
+    'ad_user_protected' => Translation::get('ad_user_protected'),
+    'ad_user_realname' => Translation::get('ad_user_realname'),
+    'ad_entry_email' => Translation::get('ad_entry_email'),
+    'ad_user_is_superadmin' => Translation::get('ad_user_is_superadmin'),
+    'ad_user_overwrite_passwd' => Translation::get('ad_user_overwrite_passwd'),
+    'ad_user_overwrite_twofactor' => Translation::get('ad_user_overwrite_twofactor'),
+    'ad_user_delete' => Translation::get('ad_user_delete'),
+    'ad_gen_save' => Translation::get('ad_gen_save'),
+    'csrfToken_updateUserRights' => Token::getInstance()->getTokenString('update-user-rights'),
+    'ad_user_rights' => Translation::get('ad_user_rights'),
+    'ad_user_checkall' => Translation::get('ad_user_checkall'),
+    'ad_user_uncheckall' => Translation::get('ad_user_uncheckall'),
+    'userRights' => $user->perm->getAllRightsData(),
+    'msgExportUsersAsCSV' => Translation::get('msgExportUsersAsCSV'),
+    'msgNewContentName' => Translation::get('msgNewContentName'),
+    'msgNewContentMail' => Translation::get('msgNewContentMail'),
+    'ad_user_is_visible' => Translation::get('ad_user_is_visible'),
+    'ad_user_edit' => Translation::get('ad_user_edit'),
+    'csrfToken_activateUser' => Token::getInstance()->getTokenString('activate-user'),
+    'ad_news_set_active' => Translation::get('ad_news_set_active'),
+    'permissionDeleteUser' =>
+        $currentUser->perm->hasPermission($user->getUserId(), PermissionType::USER_DELETE->value),
+    'csrfToken_deleteUser' => Token::getInstance()->getTokenString('delete-user'),
+    'ad_adus_adduser' => Translation::get('ad_adus_adduser'),
+    'csrfToken_addUser' => Token::getInstance()->getTokenString('add-user'),
+    'ad_adus_name' => Translation::get('ad_adus_name'),
+    'ad_add_user_change_password' => Translation::get('ad_add_user_change_password'),
+    'ad_adus_password' => Translation::get('ad_adus_password'),
+    'ad_passwd_con' => Translation::get('ad_passwd_con'),
+    'ad_gen_cancel' => Translation::get('ad_gen_cancel'),
+    'ad_menu_passwd' => Translation::get('ad_menu_passwd'),
+    'csrfToken_overwritePassword' => Token::getInstance()->getTokenString('overwrite-password'),
+    'ad_passwd_new' => Translation::get('ad_passwd_new'),
+    'msgWarning' => Translation::get('msgWarning'),
+    'ad_gen_yes' => Translation::get('ad_gen_yes'),
+    'ad_gen_no' => Translation::get('ad_gen_no'),
+    'ad_user_deleteUser' => Translation::get('ad_user_deleteUser'),
+    'msgUserList' => Translation::get('msgUserList')
+];
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twig->addExtension(new PermissionTranslationTwigExtension());
+$template = $twig->loadTemplate('./admin/user/users.twig');
+
+echo $template->render($templateVars);

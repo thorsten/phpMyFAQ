@@ -16,9 +16,9 @@
  */
 
 import { Modal } from 'bootstrap';
-import { fetchAllUsers, fetchUserData, fetchUserRights, postUserData } from '../api';
+import { fetchAllUsers, fetchUserData, fetchUserRights, deleteUser, postUserData } from '../api';
 import { addElement, capitalize } from '../../../../assets/src/utils';
-import { pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
 
 /**
  * Updates the current loaded user
@@ -57,6 +57,13 @@ const setUserData = async (userId) => {
     twoFactorEnabled.setAttribute('checked', 'checked');
     twoFactorEnabled.removeAttribute('disabled');
   }
+
+  if (userData.status !== 'protected') {
+    const deleteUser = document.getElementById('pmf-delete-user');
+    deleteUser.classList.remove('disabled');
+  }
+  const saveUser = document.getElementById('pmf-user-save');
+  saveUser.classList.remove('disabled');
 };
 
 const setUserRights = async (userId) => {
@@ -69,10 +76,34 @@ const setUserRights = async (userId) => {
   document.getElementById('rights_user_id').value = userId;
 };
 
+const clearUserForm = async () => {
+  updateInput('current_user_id', '');
+  updateInput('pmf-user-list-autocomplete', '');
+  updateInput('last_modified', '');
+  updateInput('update_user_id', '');
+  updateInput('modal_user_id', '');
+  updateInput('auth_source', '');
+  updateInput('user_status', '');
+  updateInput('display_name', '');
+  updateInput('email', '');
+  updateInput('overwrite_twofactor', '');
+
+  document.querySelectorAll('.permission').forEach((item) => {
+    if (item.checked) {
+      item.removeAttribute('checked');
+    }
+  });
+
+  document.getElementById('pmf-user-save').classList.add('disabled');
+  document.getElementById('pmf-delete-user').classList.add('disabled');
+};
+
 const updateInput = (id, value) => {
   const input = document.getElementById(id);
-  input.value = value;
-  input.removeAttribute('disabled');
+  if (input) {
+    input.value = value;
+    input.removeAttribute('disabled');
+  }
 };
 
 export const handleUsers = async () => {
@@ -144,51 +175,26 @@ export const handleUsers = async () => {
           if (response.ok) {
             return response.json();
           }
+          if (response.status === 400) {
+            const json = await response.json();
+            json.forEach((item) => {
+              pushErrorNotification(item);
+            });
+          }
           throw new Error('Network response was not ok: ', { cause: { response } });
         })
         .then((response) => {
           modal.style.display = 'none';
           modal.classList.remove('show');
           modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
-
-          const tableBody = document.querySelector('#pmf-admin-user-table tbody');
-          const row = addElement('tr', { id: `row_user_id_${response.id}` }, [
-            addElement('td', { innerText: response.realName }),
-            addElement('td', {}, [addElement('a', { href: 'mailto:' + response.email, innerText: response.email })]),
-            addElement('td', { innerText: response.userName }),
-            addElement('td', { className: 'text-center' }, [
-              addElement('i', {
-                className: response.status ? 'bi bi-check-circle-o text-success' : 'bi bi-ban text-danger',
-              }),
-            ]),
-            addElement('td', { className: 'text-center' }, [
-              addElement('i', { className: response.isSuperAdmin ? 'bi bi-user-secret' : 'bi bi-user-times' }),
-            ]),
-            addElement('td', { className: 'text-center' }, [
-              addElement('i', { className: response.isVisible ? 'bi bi-user' : 'bi bi-user-o' }),
-            ]),
-            addElement('td', {}, [
-              addElement('a', { className: 'btn', href: `?action=user&user_id=${response.id}` }, [
-                addElement('i', { className: 'bi bi-pencil text-info' }),
-                addElement('span', { innerText: ' ' + response.editTranslationString }),
-              ]),
-            ]),
-            addElement('td', {}),
-            addElement('td', {}),
-          ]);
-          tableBody.appendChild(row);
           pushNotification(response.success);
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
         })
         .catch(async (error) => {
-          const errors = await error.cause.response.json();
-          let errorMessage = '';
-
-          errors.forEach((error) => {
-            errorMessage += `${error}<br>`;
-          });
-
-          addUserError.classList.remove('d-none');
-          addUserError.innerHTML = errorMessage;
+          console.error('Error adding user: ' + error);
+          throw error;
         });
     });
   }
@@ -204,7 +210,7 @@ export const handleUsers = async () => {
           const replacer = (key, value) => (value === null ? '' : value);
           const header = Object.keys(userData[0]);
           let csv = userData.map((row) =>
-            header.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(',')
+            header.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(','),
           );
           csv.unshift(header.join(','));
           csv = csv.join('\r\n');
@@ -216,7 +222,7 @@ export const handleUsers = async () => {
           hiddenElement.setAttribute('target', '_blank');
           hiddenElement.setAttribute(
             'download',
-            'phpmyfaq-users-' + new Date().toISOString().substring(0, 10) + '.csv'
+            'phpmyfaq-users-' + new Date().toISOString().substring(0, 10) + '.csv',
           );
           hiddenElement.click();
         })
@@ -263,7 +269,7 @@ export const handleUsers = async () => {
         .then((response) => {
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            addElement('div', { classList: 'alert alert-success', innerText: response.success }),
           );
           modal.hide();
         })
@@ -272,9 +278,102 @@ export const handleUsers = async () => {
           console.error(errorMessage.error);
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error }),
           );
         });
     });
   }
+
+  // Delete user
+  const deleteUserButton = document.getElementById('pmf-delete-user');
+  const deleteUser_yes = document.getElementById('pmf-delete-user-yes');
+
+  if (deleteUserButton) {
+    deleteUserButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      const modalDeleteConfirmation = new Modal(document.getElementById('pmf-modal-user-confirm-delete'));
+      modalDeleteConfirmation.show();
+      const username = document.getElementById('pmf-username-delete');
+      const userid = document.getElementById('pmf-user-id-delete');
+      username.innerText = document.getElementById('display_name').value;
+      userid.value = document.getElementById('current_user_id').value;
+      document.getElementById('source_page').value = 'users';
+    });
+    deleteUser_yes.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const source = document.getElementById('source_page');
+      if (source.value === 'users') {
+        const userId = document.getElementById('pmf-user-id-delete').value;
+        const csrfToken = document.getElementById('csrf-token-delete-user').value;
+        const response = await deleteUser(userId, csrfToken);
+        const json = await response.json();
+        if (json.success) {
+          pushNotification(json.success);
+          await clearUserForm();
+        }
+        if (json.error) {
+          pushErrorNotification(json.error);
+        }
+      }
+    });
+  }
+
+  // Edit user
+  const editUserButton = document.getElementById('pmf-user-save');
+  if (editUserButton) {
+    editUserButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const userId = document.getElementById('update_user_id').value;
+      let userData = {
+        csrfToken: document.getElementById('pmf-csrf-token').value,
+        display_name: document.getElementById('display_name').value,
+        email: document.getElementById('email').value,
+        last_modified: document.getElementById('last_modified').value,
+        user_status: document.getElementById('user_status').value,
+        is_superadmin: document.getElementById('is_superadmin').checked,
+        overwrite_twofactor: document.getElementById('overwrite_twofactor').checked,
+        userId: userId
+      };
+
+      console.log(userData);
+
+      const response = await postUserData('./api/user/edit', userData);
+      const json = await response.json();
+      if (json.success) {
+        pushNotification(json.success);
+      }
+      if (json.error) {
+        pushErrorNotification(json.error);
+      }
+      await updateUser(userId);
+    });
+  }
+
+  // Update user rights
+  document.querySelectorAll('#pmf-user-rights-save').forEach((item) => {
+    item.addEventListener('click', async (event) => {
+      event.preventDefault();
+      let rightData = [];
+      document.querySelectorAll('.permission').forEach(async (checkbox) => {
+        if (checkbox.checked) {
+          rightData.push(checkbox.value);
+        }
+      });
+      const userId = document.getElementById('rights_user_id').value
+      let data = {
+        csrfToken: document.getElementById('pmf-csrf-token-rights').value,
+        userId: userId,
+        userRights: rightData
+      }
+      const response = await postUserData('./api/user/update-rights', data);
+      const json = await response.json();
+      if (json.success) {
+        pushNotification(json.success);
+      }
+      if (json.error) {
+        pushErrorNotification(json.error);
+      }
+      await updateUser(userId);
+    });
+  });
 };
