@@ -15,15 +15,20 @@
  * @since     2011-01-12
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->value)) {
     $templateVars = [
