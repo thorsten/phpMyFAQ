@@ -233,7 +233,10 @@ class UserController extends AbstractController
 
         $user->getUserById($userId, true);
         if ($user->getStatus() == 'protected' || $userId == 1) {
-            $json = $this->json(['error' => Translation::get('ad_user_error_protectedAccount')], Response::HTTP_BAD_REQUEST);
+            $json = $this->json(
+                ['error' => Translation::get('ad_user_error_protectedAccount')],
+                Response::HTTP_BAD_REQUEST
+            );
         } elseif (!$user->deleteUser()) {
             $json = $this->json(['error' => Translation::get('ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         } else {
