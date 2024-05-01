@@ -78,7 +78,7 @@ class FaqTest extends TestCase
 
         // Assert that the method returns an integer
         $this->assertIsInt($result->getId());
-        $this->assertGreaterThan(0, $result);
+        $this->assertGreaterThan(0, $result->getId());
     }
 
     public function testGetNextSolutionId(): void
