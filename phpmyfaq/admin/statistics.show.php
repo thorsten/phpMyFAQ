@@ -37,7 +37,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $templateVars = [
         'ad_sess_session' => Translation::get('ad_sess_session'),
         'sessionId' => $sessionId,
-        'permissionLogsView' => $user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value),
         'ad_sess_back' => Translation::get('ad_sess_back'),
         'ad_sess_referer' => Translation::get('ad_sess_referer'),
         'ad_sess_browser' => Translation::get('ad_sess_browser'),
