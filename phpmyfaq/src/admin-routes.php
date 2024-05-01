@@ -530,6 +530,14 @@ $routes->add(
     new Route('/user/delete', ['_controller' => [UserController::class, 'deleteUser'], '_methods' => 'DELETE'])
 );
 $routes->add(
+    'admin.api.user.edit',
+    new Route('/user/edit', ['_controller' => [UserController::class, 'editUser'], '_methods' => 'POST'])
+);
+$routes->add(
+    'admin.api.user.update-rights',
+    new Route('/user/update-rights', ['_controller' => [UserController::class, 'updateUserRights'], '_methods' => 'POST'])
+);
+$routes->add(
     'admin.api.user.permissions',
     new Route('/user/permissions/{userId}', ['_controller' => [UserController::class, 'userPermissions']])
 );

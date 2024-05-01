@@ -16,7 +16,9 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
-import { pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
+import { postDeleteUser } from '../api';
+import { Modal } from 'bootstrap';
 
 const activateUser = async (userId, csrfToken) => {
   try {
@@ -51,40 +53,6 @@ const activateUser = async (userId, csrfToken) => {
   }
 };
 
-const deleteUser = async (userId, csrfToken) => {
-  const message = document.getElementById('pmf-user-message');
-
-  try {
-    const response = await fetch('./api/user/delete', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrfToken: csrfToken,
-        userId: userId,
-      }),
-    });
-
-    if (response.ok) {
-      const responseData = await response.json();
-      const row = document.querySelector(`.row_user_id_${userId}`);
-      row.addEventListener('click', () => (row.style.opacity = '0'));
-      row.addEventListener('transitionend', () => row.remove());
-      pushNotification(responseData);
-    } else {
-      throw new Error('Network response was not ok: ', { cause: { response } });
-    }
-  } catch (error) {
-    const errorMessage = await error.cause.response.json();
-    message.insertAdjacentElement(
-      'afterend',
-      addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
-    );
-  }
-};
-
 export const handleUserList = () => {
   const activateButtons = document.querySelectorAll('.btn-activate-user');
   const deleteButtons = document.querySelectorAll('.btn-delete-user');
@@ -107,11 +75,32 @@ export const handleUserList = () => {
       button.addEventListener('click', (event) => {
         event.preventDefault();
 
-        const csrfToken = event.target.getAttribute('data-csrf-token');
-        const userId = event.target.getAttribute('data-user-id');
-
-        deleteUser(userId, csrfToken);
+        const deleteModal = new Modal(document.getElementById('pmf-modal-user-confirm-delete'));
+        deleteModal.show();
+        document.getElementById('pmf-username-delete').innerHTML = button.getAttribute('data-username');
+        document.getElementById('pmf-user-id-delete').value = button.getAttribute('data-user-id');
+        document.getElementById('source_page').value = 'user-list';
       });
+    });
+
+    const deleteUser_yes = document.getElementById('pmf-delete-user-yes');
+    deleteUser_yes.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const source = document.getElementById('source_page');
+      if (source.value === 'user-list') {
+        const userId = document.getElementById('pmf-user-id-delete').value;
+        const csrfToken = document.getElementById('csrf-token-delete-user').value;
+        const response = await postDeleteUser(userId, csrfToken);
+        const json = await response.json();
+        if (json.success) {
+          pushNotification(json.success);
+          const row = document.getElementById('row_user_id_' + userId);
+          row.remove();
+        }
+        if (json.error) {
+          pushErrorNotification(json.error);
+        }
+      }
     });
   }
 };

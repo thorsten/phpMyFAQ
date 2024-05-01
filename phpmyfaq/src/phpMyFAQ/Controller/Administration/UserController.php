@@ -233,9 +233,9 @@ class UserController extends AbstractController
 
         $user->getUserById($userId, true);
         if ($user->getStatus() == 'protected' || $userId == 1) {
-            $message = '<p class="alert alert-error">' . Translation::get('ad_user_error_protectedAccount') . '</p>';
+            $json = $this->json(['error' => Translation::get('ad_user_error_protectedAccount')], Response::HTTP_BAD_REQUEST);
         } elseif (!$user->deleteUser()) {
-            $message = Translation::get('ad_user_error_delete');
+            $json = $this->json(['error' => Translation::get('ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         } else {
             $category = new Category($configuration, [], false);
             $category->moveOwnership((int) $userId, 1);
@@ -246,13 +246,10 @@ class UserController extends AbstractController
                 $permissions->removeFromAllGroups($userId);
             }
 
-            $message = Translation::get('ad_user_deleted');
+            $json = $this->json(['success' => Translation::get('ad_user_deleted')], Response::HTTP_OK);
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_OK);
-        $jsonResponse->setData($message);
-
-        return $jsonResponse;
+        return $json;
     }
 
     /**
@@ -325,27 +322,103 @@ class UserController extends AbstractController
                     // @todo catch exception
                 }
 
-                $successMessage = [
-                    'success' => Translation::get('ad_adus_suc'),
-                    'id' => $newUser->getUserId(),
-                    'status' => $newUser->getStatus(),
-                    'isSuperAdmin' => (bool)$userIsSuperAdmin,
-                    'isVisible' => (bool) $newUser->userdata->get('is_visible'),
-                    'realName' => $userRealName,
-                    'userName' => $userName,
-                    'email' => $userEmail,
-                    'editTranslationString' => Translation::get('ad_user_edit')
-                ];
+                return $this->json(['success' => Translation::get('ad_adus_suc')], Response::HTTP_OK);
             }
-
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData($successMessage);
-            return $jsonResponse;
         }
 
-        $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-        $jsonResponse->setData($errorMessage);
+        return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
+    }
 
-        return $jsonResponse;
+    #[Route('admin/api/user/edit')]
+    public function editUser(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::USER_EDIT);
+
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance()->verifyToken('update-user-data', $data->csrfToken)) {
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
+        if ($userId === 0) {
+            return $this->json(['error' => Translation::get('ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        } else {
+            $userData = [];
+            $userData['display_name'] = Filter::filterVar($data->display_name, FILTER_SANITIZE_SPECIAL_CHARS);
+            $userData['email'] = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
+            $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
+            $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');
+            $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
+            $isSuperAdmin = $isSuperAdmin === 'on';
+            $deleteTwofactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
+            $deleteTwofactor = $deleteTwofactor === 'on';
+
+            $user = new User($this->configuration);
+            $user->getUserById($userId, true);
+
+            $stats = $user->getStatus();
+
+            // reset two-factor authentication if required
+            if ($deleteTwofactor) {
+                $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
+            }
+
+            // set new password and sent email if a user is switched to active
+            if ($stats == 'blocked' && $userStatus == 'active') {
+                if (!$user->activateUser()) {
+                    $userStatus = 'invalid_status';
+                }
+            }
+
+            // Set super-admin flag
+            $user->setSuperAdmin($isSuperAdmin);
+
+            if (
+                !$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus(
+                    $userStatus
+                )
+            ) {
+                return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
+            } else {
+                $success = Translation::get('ad_msg_savedsuc_1') . ' ' .
+                    Strings::htmlentities($user->getLogin(), ENT_QUOTES) . ' ' .
+                    Translation::get('ad_msg_savedsuc_2');
+                return $this->json(['success' => $success], Response::HTTP_OK);
+            }
+        }
+    }
+
+    #[Route('admin/api/user/update-rights')]
+    public function updateUserRights(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::USER_EDIT);
+
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance()->verifyToken('update-user-rights', $data->csrfToken)) {
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
+
+        if (0 === (int)$userId) {
+            return $this->json(['error' => Translation::get('ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        } else {
+            $user = new User($this->configuration);
+            $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
+            if (!$user->perm->refuseAllUserRights($userId)) {
+                return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
+            }
+            foreach ($userRights as $rightId) {
+                $user->perm->grantUserRight($userId, $rightId);
+            }
+
+            $user->terminateSessionId();
+            $success = Translation::get('ad_msg_savedsuc_1') .
+                ' ' . Strings::htmlentities($user->getLogin(), ENT_QUOTES) . ' ' .
+                Translation::get('ad_msg_savedsuc_2');
+            return $this->json(['success' => $success], Response::HTTP_OK);
+        }
     }
 }

@@ -1439,5 +1439,8 @@ $PMF_LANG['msgOnlyNewFAQs'] = 'Only new FAQs';
 
 // added v4.0.0-alpha.2 - 2024-04-21 by Jan
 $PMF_LANG['msgDeleteNews'] = 'Delete news';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Export users as csv';
+$PMF_LANG['msgWarning'] = 'Warning';
+$PMF_LANG['msgUserList'] = 'List of users';
 
 return $PMF_LANG;

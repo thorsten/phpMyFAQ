@@ -126,3 +126,24 @@ export const postUserData = async (url = '', data = {}) => {
     throw error;
   }
 };
+
+export const postDeleteUser = async (userId, csrfToken) => {
+  try {
+    return await fetch('./api/user/delete', {
+      method: 'DELETE',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({
+        csrfToken: csrfToken,
+        userId: userId
+      }),
+    });
+  } catch (error) {
+    console.error('Error posting user data:', error);
+    throw error;
+  }
+};
