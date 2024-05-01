@@ -265,9 +265,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'editpreview':
                 require 'record.edit.php';
                 break;
-            case 'delatt':
-                require 'record.delatt.php';
-                break;
             case 'question':
                 require 'open-questions.php';
                 break;

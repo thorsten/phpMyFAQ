@@ -50,7 +50,7 @@ export const handleAttachmentUploads = () => {
     });
 
     // handle upload button
-    fileUploadButton.addEventListener('click', (event) => {
+    fileUploadButton.addEventListener('click', async (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
 
@@ -63,52 +63,72 @@ export const handleAttachmentUploads = () => {
       formData.append('record_id', document.getElementById('attachment_record_id').value);
       formData.append('record_lang', document.getElementById('attachment_record_lang').value);
 
-      fetch('./api/content/attachments/upload', {
-        method: 'POST',
-        cache: 'no-cache',
-        body: formData,
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((attachments) => {
-          const modal = document.getElementById('attachmentModal');
-          const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
-          const attachmentList = document.querySelector('.adminAttachments');
-          const fileSize = document.getElementById('filesize');
-          const fileList = document.querySelectorAll('.pmf-attachment-upload-files li');
-          attachments.forEach((attachment) => {
-            attachmentList.insertAdjacentElement(
-              'afterend',
-              addElement('li', {}, [
-                addElement('a', {
-                  className: 'me-2',
-                  href: `../index.php?action=attachment&id=${attachment.attachmentId}`,
-                  innerText: attachment.fileName,
-                }),
-                addElement('a', {
-                  className: 'badge bg-danger',
-                  href: `?action=delatt&record_id=${attachment.faqId}&id=${attachment.attachmentId}&lang=attachment.faqLanguage`,
-                  innerHTML: '<i aria-hidden="true" class="bi bi-trash"></i>',
-                }),
-              ])
-            );
-          });
-          fileSize.innerHTML = '';
-          fileList.forEach((li) => {
-            li.remove();
-          });
-          modal.style.display = 'none';
-          modal.classList.remove('show');
-          modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
-        })
-        .catch(async (error) => {
+      try {
+        const response = await fetch('./api/content/attachments/upload', {
+          method: 'POST',
+          cache: 'no-cache',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = new Error('Network response was not ok');
+          error.cause = { response };
+          throw error;
+        }
+
+        const attachments = await response.json();
+        const modal = document.getElementById('attachmentModal');
+        const modalBackdrop = document.querySelector('.modal-backdrop.fade.show');
+        const attachmentList = document.querySelector('.adminAttachments');
+        const fileSize = document.getElementById('filesize');
+        const fileList = document.querySelectorAll('.pmf-attachment-upload-files li');
+
+        attachments.forEach((attachment) => {
+          const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token');
+          attachmentList.insertAdjacentElement(
+            'beforeend',
+            addElement('li', {}, [
+              addElement('a', {
+                className: 'me-2',
+                href: `../index.php?action=attachment&id=${attachment.attachmentId}`,
+                innerText: attachment.fileName,
+              }),
+              addElement(
+                'button',
+                {
+                  type: 'button',
+                  className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
+                  'data-pmfAttachmentId': attachment.attachmentId,
+                  'data-pmfCsrfToken': csrfToken,
+                },
+                [
+                  addElement('i', {
+                    className: 'bi bi-trash',
+                    'data-pmfAttachmentId': attachment.attachmentId,
+                    'data-pmfCsrfToken': csrfToken,
+                  }),
+                ]
+              ),
+            ])
+          );
+        });
+
+        fileSize.innerHTML = '';
+        fileList.forEach((li) => {
+          li.remove();
+        });
+
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        modalBackdrop.remove();
+      } catch (error) {
+        if (error.cause && error.cause.response) {
           const errors = await error.cause.response.json();
           console.log(errors);
-        });
+        } else {
+          console.log('An error occurred:', error);
+        }
+      }
     });
   }
 };
